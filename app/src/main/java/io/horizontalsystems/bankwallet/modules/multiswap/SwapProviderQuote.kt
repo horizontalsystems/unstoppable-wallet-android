@@ -13,6 +13,7 @@ data class SwapProviderQuote(
     val fields by swapQuote::fields
     val priceImpact by swapQuote::priceImpact
     val actionRequired by swapQuote::actionRequired
+    val cautions by swapQuote::cautions
 
     val createdAt = System.currentTimeMillis()
 }

@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.InvalidAuthTokenException
 import io.horizontalsystems.bankwallet.core.NoAuthTokenException
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
-import io.horizontalsystems.bankwallet.core.managers.SubscriptionManager
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.marketkit.models.Analytics
@@ -14,6 +13,7 @@ import io.horizontalsystems.marketkit.models.AnalyticsPreview
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.rx2.await
@@ -22,7 +22,6 @@ class CoinAnalyticsService(
     val fullCoin: FullCoin,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
-    private val subscriptionManager: SubscriptionManager,
     private val accountManager: IAccountManager,
 ) {
 
@@ -41,7 +40,8 @@ class CoinAnalyticsService(
     }
 
     suspend fun start() {
-        subscriptionManager.authTokenFlow.collect {
+        fetch()
+        UserSubscriptionManager.activeSubscriptionStateFlow.collect {
             fetch()
         }
     }
@@ -51,19 +51,15 @@ class CoinAnalyticsService(
     }
 
     private suspend fun fetch() {
-        if (!subscriptionManager.hasSubscription()) {
-            preview()
-        } else {
-            _stateFlow.emit(DataState.Loading)
+        _stateFlow.emit(DataState.Loading)
 
-            try {
-                marketKit.analyticsSingle(fullCoin.coin.uid, currency.code).await()
-                    .let {
-                        _stateFlow.emit(DataState.Success(AnalyticData(analytics = it)))
-                    }
-            } catch (error: Throwable) {
-                handleError(error)
-            }
+        try {
+            marketKit.analyticsSingle(fullCoin.coin.uid, currency.code).await()
+                .let {
+                    _stateFlow.emit(DataState.Success(AnalyticData(analytics = it)))
+                }
+        } catch (error: Throwable) {
+            handleError(error)
         }
     }
 

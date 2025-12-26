@@ -11,10 +11,13 @@ import java.math.BigDecimal
 
 object ReceiveModule {
 
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+    class Factory(
+        private val wallet: Wallet,
+        private val isTransparentAddress: Boolean,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ReceiveAddressViewModel(wallet, App.adapterManager) as T
+            return ReceiveAddressViewModel(wallet, App.adapterManager, isTransparentAddress) as T
         }
     }
 
@@ -24,21 +27,40 @@ object ReceiveModule {
         object AccountNotActive : AdditionalData()
     }
 
+    abstract class AbstractUiState {
+        abstract val viewState: ViewState
+        abstract val alertText: AlertText?
+        abstract val uri: String
+        abstract val address: String
+        abstract val mainNet: Boolean
+        abstract val blockchainName: String?
+        abstract val addressType: String?
+        abstract val addressFormat: String?
+        abstract val additionalItems: List<AdditionalData>
+        abstract val watchAccount: Boolean
+        abstract val amount: BigDecimal?
+        abstract val amountString: String?
+    }
+
     data class UiState(
-        val viewState: ViewState,
-        val address: String,
+        override val viewState: ViewState,
+        override val address: String,
+        override val mainNet: Boolean,
         val usedAddresses: List<UsedAddress>,
         val usedChangeAddresses: List<UsedAddress>,
-        val uri: String,
-        val networkName: String,
-        val watchAccount: Boolean,
-        val additionalItems: List<AdditionalData>,
-        val amount: BigDecimal?,
-        val alertText: AlertText?,
-    )
+        val showTronAlert: Boolean,
+        override val uri: String,
+        override val blockchainName: String?,
+        override val addressType: String?,
+        override val addressFormat: String?,
+        override val watchAccount: Boolean,
+        override val additionalItems: List<AdditionalData>,
+        override val amount: BigDecimal?,
+        override val amountString: String?,
+        override val alertText: AlertText?,
+    ) : AbstractUiState()
 
     sealed class AlertText {
-        class Normal(val content: String) : AlertText()
         class Critical(val content: String) : AlertText()
     }
 

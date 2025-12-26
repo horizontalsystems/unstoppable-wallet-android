@@ -73,6 +73,7 @@ class CreateAccountViewModel(
         accountManager.save(account)
         activateDefaultWallets(account)
         predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zcash)
+        predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Monero)
         success = accountType
     }
 
@@ -142,9 +143,11 @@ class CreateAccountViewModel(
         val tokenQueries = listOfNotNull(
             TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
             TokenQuery(BlockchainType.Ethereum, TokenType.Native),
+            TokenQuery(BlockchainType.Monero, TokenType.Native),
+            TokenQuery(BlockchainType.Tron, TokenType.Native),
             TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
-            TokenQuery(BlockchainType.Ethereum, TokenType.Eip20("0xdac17f958d2ee523a2206206994597c13d831ec7")),
-            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0xe9e7cea3dedca5984780bafc599bd69add087d56")),
+            TokenQuery(BlockchainType.Tron, TokenType.Eip20("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t")),//USDT(TRC20)
+            TokenQuery(BlockchainType.Ethereum, TokenType.Eip20("0xdac17f958d2ee523a2206206994597c13d831ec7")),//USDT(erc20)
         )
         walletActivator.activateWallets(account, tokenQueries)
     }

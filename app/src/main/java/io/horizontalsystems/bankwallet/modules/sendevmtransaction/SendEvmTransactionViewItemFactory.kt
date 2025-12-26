@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatSection
+import io.horizontalsystems.bankwallet.entities.isMaxValue
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -362,7 +363,7 @@ class SendEvmTransactionViewItemFactory(
                         coinService.amountData(value),
                         ValueType.Regular,
                         coinService.token,
-                        Translator.getString(R.string.Approve_YouApprove),
+                        Translator.getString(R.string.Approve_Allowance),
                         coinService.token.badge
                     )
                 )
@@ -394,6 +395,9 @@ class SendEvmTransactionViewItemFactory(
         methodName: String?,
     ): List<SectionViewItem> {
         val viewItems = buildList {
+            methodName?.let {
+                add(ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Method), it, ValueType.Regular))
+            }
             add(
                 getAmount(
                     coinServiceFactory.baseCoinService.amountData(transactionData.value),
@@ -418,11 +422,7 @@ class SendEvmTransactionViewItemFactory(
                 )
             }
 
-            methodName?.let {
-                add(ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Method), it, ValueType.Regular))
-            }
-
-            add(ViewItem.Input(transactionData.input.toHexString()))
+            add(ViewItem.Input("Input", transactionData.input.toHexString()))
         }
 
         return listOf(SectionViewItem(viewItems))
@@ -493,15 +493,27 @@ class SendEvmTransactionViewItemFactory(
         token: Token,
         title: String,
         badge: String?
-    ) =
-        ViewItem.AmountWithTitle(
-            amountData.secondary?.getFormatted(),
-            amountData.primary.getFormatted(),
-            valueType,
-            token,
-            title,
-            badge
-        )
+    ): ViewItem.AmountWithTitle {
+        return if (amountData.primary.coinValue.value.isMaxValue(amountData.primary.coinValue.decimal)) {
+            ViewItem.AmountWithTitle(
+                null,
+                "∞ ${token.coin.code}",
+                valueType,
+                token,
+                title,
+                badge
+            )
+        } else {
+            ViewItem.AmountWithTitle(
+                amountData.secondary?.getFormatted(),
+                amountData.primary.getFormatted(),
+                valueType,
+                token,
+                title,
+                badge
+            )
+        }
+    }
 
     private fun getGuaranteedAmount(amountData: SendModule.AmountData, token: Token) =
         ViewItem.Amount(
@@ -568,9 +580,10 @@ sealed class ViewItem {
     ) : ViewItem()
 
     class Address(val title: String, val value: String, val showAdd: Boolean, val blockchainType: BlockchainType, val statSection: StatSection) : ViewItem()
-    class Input(val value: String) : ViewItem()
+    class Input(val title: String, val value: String) : ViewItem()
     class TokenItem(val token: Token) : ViewItem()
     class ContactItem(val contact: Contact) : ViewItem()
+    class Fee(val networkFee: SendModule.AmountData) : ViewItem()
 }
 
 data class AmountValues(val coinAmount: String, val fiatAmount: String?)

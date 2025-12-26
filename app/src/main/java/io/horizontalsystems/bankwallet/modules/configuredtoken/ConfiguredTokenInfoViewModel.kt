@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
-import io.horizontalsystems.bankwallet.core.bep2TokenUrl
+import io.horizontalsystems.bankwallet.core.assetUrl
 import io.horizontalsystems.bankwallet.core.eip20TokenUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -29,14 +29,14 @@ class ConfiguredTokenInfoViewModel(
             is TokenType.Eip20 -> {
                 ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.eip20TokenUrl(type.address))
             }
-            is TokenType.Bep2 -> {
-                ConfiguredTokenInfoType.Contract(type.symbol, token.blockchain.type.imageUrl, token.blockchain.bep2TokenUrl(type.symbol))
-            }
             is TokenType.Spl -> {
                 ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.eip20TokenUrl(type.address))
             }
             is TokenType.Jetton -> {
                 ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.jettonUrl(type.address))
+            }
+            is TokenType.Asset -> {
+                ConfiguredTokenInfoType.Contract("${type.code}-${type.issuer}", token.blockchain.type.imageUrl, token.blockchain.assetUrl(type.code, type.issuer))
             }
             is TokenType.Derived -> {
                 ConfiguredTokenInfoType.Bips(token.blockchain.name)
@@ -45,6 +45,7 @@ class ConfiguredTokenInfoViewModel(
                 ConfiguredTokenInfoType.Bch
             }
             TokenType.Native -> when (token.blockchainType) {
+                BlockchainType.Monero,
                 BlockchainType.Zcash -> {
                     ConfiguredTokenInfoType.BirthdayHeight(getBirthdayHeight(token))
                 }

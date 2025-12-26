@@ -2,6 +2,8 @@ package io.horizontalsystems.bankwallet.core.stats
 
 import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
@@ -30,8 +32,6 @@ import io.horizontalsystems.bankwallet.modules.settings.appearance.PriceChangeIn
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
-import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 import java.time.Instant
 import java.util.concurrent.Executors
 
-fun stat(page: StatPage, section: StatSection? = null, event: StatEvent) {
+fun stat(page: StatPage, event: StatEvent, section: StatSection? = null) {
     App.statsManager.logStat(page, section, event)
 }
 
@@ -55,8 +55,16 @@ class StatsManager(
     private val appConfigProvider: AppConfigProvider,
     private val backgroundManager: BackgroundManager,
 ) {
-
     private val scope = CoroutineScope(Dispatchers.IO)
+    private var uiStatsEnabled = localStorage.uiStatsEnabled ?: statsEnabledByDefault()
+
+    private val _uiStatsEnabledFlow = MutableStateFlow(uiStatsEnabled)
+    val uiStatsEnabledFlow = _uiStatsEnabledFlow.asStateFlow()
+
+    private val gson by lazy { Gson() }
+    private val executor = Executors.newCachedThreadPool()
+    private val syncInterval = 60 * 60 // 1H in seconds
+    private val sqliteMaxVariableNumber = 999
 
     init {
         scope.launch {
@@ -68,21 +76,7 @@ class StatsManager(
         }
     }
 
-    var uiStatsEnabled = getInitialUiStatsEnabled()
-        private set
-
-    private val _uiStatsEnabledFlow = MutableStateFlow(uiStatsEnabled)
-    val uiStatsEnabledFlow = _uiStatsEnabledFlow.asStateFlow()
-
-    private val gson by lazy { Gson() }
-    private val executor = Executors.newCachedThreadPool()
-    private val syncInterval = 60 * 60 // 1H in seconds
-    private val sqliteMaxVariableNumber = 999
-
-    private fun getInitialUiStatsEnabled(): Boolean {
-        val uiStatsEnabled = localStorage.uiStatsEnabled
-        if (uiStatsEnabled != null) return uiStatsEnabled
-
+    private fun statsEnabledByDefault(): Boolean {
         val signatures = listOf(
             "b797339fb356afce5160fe49274ee17a1c1816db", // appcenter
             "5afb2517b06caac7f108ba9d96ad826f1c4ba30c", // hs
@@ -241,16 +235,20 @@ val AccountType.statAccountType: String
             "btc_address"
         }
 
-        is AccountType.Cex -> {
-            "cex"
-        }
-
         is AccountType.EvmAddress -> {
             "evm_address"
         }
 
         is AccountType.EvmPrivateKey -> {
             "evm_private_key"
+        }
+
+        is AccountType.StellarSecretKey -> {
+            "stellar_secret_key"
+        }
+
+        is AccountType.MoneroWatchAccount -> {
+            "monero_watch_account"
         }
 
         is AccountType.HdExtendedKey -> {
@@ -271,6 +269,10 @@ val AccountType.statAccountType: String
 
         is AccountType.TonAddress -> {
             "ton_address"
+        }
+
+        is AccountType.StellarAddress -> {
+            "stellar_address"
         }
 
         is AccountType.TronAddress -> {
@@ -321,9 +323,11 @@ val MarketModule.Tab.statTab: StatTab
     get() = when (this) {
         MarketModule.Tab.Posts -> StatTab.News
         MarketModule.Tab.Watchlist -> StatTab.Watchlist
+        MarketModule.Tab.Earn -> StatTab.Earn
         MarketModule.Tab.Coins -> StatTab.Coins
         MarketModule.Tab.Platform -> StatTab.Platforms
         MarketModule.Tab.Pairs -> StatTab.Pairs
+        MarketModule.Tab.Sectors -> StatTab.Sectors
     }
 
 val MarketSearchSection.statSection: StatSection
@@ -342,6 +346,10 @@ val TimePeriod.statPeriod: StatPeriod
         TimePeriod.TimePeriod_3M -> TODO()
         TimePeriod.TimePeriod_6M -> TODO()
         TimePeriod.TimePeriod_1Y -> TODO()
+        TimePeriod.TimePeriod_2Y -> TODO()
+        TimePeriod.TimePeriod_3Y -> TODO()
+        TimePeriod.TimePeriod_4Y -> TODO()
+        TimePeriod.TimePeriod_5Y -> TODO()
     }
 
 val FilterTransactionType.statTab: StatTab

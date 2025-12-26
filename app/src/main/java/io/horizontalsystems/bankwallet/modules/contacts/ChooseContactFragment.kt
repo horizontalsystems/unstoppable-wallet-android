@@ -27,7 +27,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -40,7 +39,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -50,10 +49,9 @@ class ChooseContactFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ChooseContactScreen(
-            navController.getInput(),
-            navController
-        )
+        withInput<BlockchainType>(navController) { blockchainType ->
+            ChooseContactScreen(blockchainType, navController)
+        }
     }
 
     @Parcelize
@@ -62,11 +60,10 @@ class ChooseContactFragment : BaseComposeFragment() {
 
 @Composable
 fun ChooseContactScreen(
-    blockchainType: BlockchainType?,
+    blockchainType: BlockchainType,
     navController: NavController
 ) {
-    val blockchainTypeNonNull = blockchainType ?: return
-    val viewModel = viewModel<ChooseContactViewModel>(factory = ChooseContactViewModel.Factory(blockchainTypeNonNull))
+    val viewModel = viewModel<ChooseContactViewModel>(factory = ChooseContactViewModel.Factory(blockchainType))
 
     val items = viewModel.items
 
@@ -100,7 +97,7 @@ fun ChooseContactScreen(
                                 }
                                 innerTextField()
                             },
-                            cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+                            cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
                         )
                         SideEffect {
                             focusRequester.requestFocus()
@@ -155,7 +152,7 @@ fun ChooseContactScreen(
                                     }
                                     .padding(horizontal = 16.dp, vertical = 12.dp)
                             ) {
-                                body_leah(text = contact.name)
+                                headline2_leah(text = contact.name)
                                 VSpacer(height = 1.dp)
                                 subhead2_grey(text = contact.address.shorten())
                             }

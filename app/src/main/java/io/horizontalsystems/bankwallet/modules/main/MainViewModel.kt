@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -12,23 +13,28 @@ import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
+import io.horizontalsystems.bankwallet.core.managers.DonationShowManager
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
+import io.horizontalsystems.bankwallet.core.managers.WalletEventType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.AddressUri
 import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.modules.balance.OpenSendTokenSelect
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment
 import io.horizontalsystems.core.IPinComponent
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
@@ -40,10 +46,12 @@ class MainViewModel(
     private val termsManager: ITermsManager,
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
+    private val donationShowManager: DonationShowManager,
     private val localStorage: ILocalStorage,
     wcSessionManager: WCSessionManager,
     private val wcManager: WCManager,
-    private val networkManager: INetworkManager
+    private val networkManager: INetworkManager,
+    private val actionCompletedDelegate: ActionCompletedDelegate
 ) : ViewModelUiState<MainModule.UiState>() {
 
     private var wcPendingRequestsCount = 0
@@ -85,11 +93,12 @@ class MainViewModel(
     private var deeplinkPage: DeeplinkPage? = null
     private var mainNavItems = navigationItems()
     private var showRateAppDialog = false
-    private var contentHidden = pinComponent.isLocked
     private var showWhatsNew = false
+    private var showDonationPage = false
     private var activeWallet = accountManager.activeAccount
     private var wcSupportState: WCManager.SupportState? = null
     private var torEnabled = localStorage.torEnabled
+    private var openSendTokenSelect: OpenSendTokenSelect? = null
 
     val wallets: List<Account>
         get() = accountManager.accounts.filter { !it.isWatchAccount }
@@ -103,7 +112,7 @@ class MainViewModel(
             syncNavigation()
         }
 
-        termsManager.termsAcceptedSignalFlow.collectWith(viewModelScope) {
+        termsManager.termsAcceptedSharedFlow.collectWith(viewModelScope) {
             updateSettingsBadge()
         }
 
@@ -123,7 +132,7 @@ class MainViewModel(
             }
         }
         viewModelScope.launch {
-            pinComponent.pinSetFlowable.asFlow().collect {
+            pinComponent.pinSetFlow.collect {
                 updateSettingsBadge()
             }
         }
@@ -149,6 +158,15 @@ class MainViewModel(
             }
         }
 
+        viewModelScope.launch {
+            actionCompletedDelegate.walletEvents.collect { event ->
+                //ContactAddedToRecent event triggered after successful send transaction
+                if (event == WalletEventType.ContactAddedToRecent && donationShowManager.shouldShow()) {
+                    showDonationPage()
+                }
+            }
+        }
+
         updateSettingsBadge()
         updateTransactionsTabEnabled()
     }
@@ -158,19 +176,25 @@ class MainViewModel(
         deeplinkPage = deeplinkPage,
         mainNavItems = mainNavItems,
         showRateAppDialog = showRateAppDialog,
-        contentHidden = contentHidden,
         showWhatsNew = showWhatsNew,
+        showDonationPage = showDonationPage,
         activeWallet = activeWallet,
         wcSupportState = wcSupportState,
-        torEnabled = torEnabled
+        torEnabled = torEnabled,
+        openSend = openSendTokenSelect,
     )
 
-    private fun isTransactionsTabEnabled(): Boolean =
-        !accountManager.isAccountsEmpty && accountManager.activeAccount?.type !is AccountType.Cex
+    private fun isTransactionsTabEnabled(): Boolean = !accountManager.isAccountsEmpty
 
 
     fun whatsNewShown() {
         showWhatsNew = false
+        emitState()
+    }
+
+    fun donationShown() {
+        donationShowManager.updateDonatePageShownDate()
+        showDonationPage = false
         emitState()
     }
 
@@ -186,8 +210,6 @@ class MainViewModel(
     }
 
     fun onResume() {
-        contentHidden = pinComponent.isLocked
-        emitState()
         viewModelScope.launch {
             if (!pinComponent.isLocked && releaseNotesManager.shouldShowChangeLog()) {
                 showWhatsNew()
@@ -296,22 +318,16 @@ class MainViewModel(
                         }
                     }
 
-                    deeplinkString.contains("nft-collection") -> {
-                        val blockchainTypeUid = deepLink.getQueryParameter("blockchainTypeUid")
-                        if (uid != null && blockchainTypeUid != null) {
-                            deeplinkPage = DeeplinkPage(R.id.nftCollectionFragment, NftCollectionFragment.Input(uid, blockchainTypeUid))
-
-                            stat(page = StatPage.Widget, event = StatEvent.Open(StatPage.TopNftCollections))
-                        }
-                    }
-
                     deeplinkString.contains("top-platforms") -> {
                         val title = deepLink.getQueryParameter("title")
                         if (title != null && uid != null) {
                             val platform = Platform(uid, title)
                             deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, platform)
 
-                            stat(page = StatPage.Widget, event = StatEvent.Open(StatPage.TopPlatform))
+                            stat(
+                                page = StatPage.Widget,
+                                event = StatEvent.Open(StatPage.TopPlatform)
+                            )
                         }
                     }
                 }
@@ -326,11 +342,6 @@ class MainViewModel(
                     tab = MainNavigation.Settings
                 }
             }
-
-//            deeplinkString.startsWith("tc:") -> {
-//                deeplinkPage = DeeplinkPage(R.id.tcListFragment, TonConnectMainFragment.Input(deeplinkString))
-//                tab = MainNavigation.Settings
-//            }
 
             deeplinkString.startsWith("https://unstoppable.money/referral") -> {
                 val userId: String? = deepLink.getQueryParameter("userId")
@@ -374,6 +385,12 @@ class MainViewModel(
         emitState()
     }
 
+    private suspend fun showDonationPage() {
+        delay(2000)
+        showDonationPage = true
+        emitState()
+    }
+
     private fun updateSettingsBadge() {
         val showDotBadge =
             !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet) || accountManager.hasNonStandardAccount
@@ -394,11 +411,53 @@ class MainViewModel(
     }
 
     fun handleDeepLink(uri: Uri) {
+        val deeplinkString = uri.toString()
+        if (deeplinkString.startsWith("unstoppable.money:") || deeplinkString.startsWith("tc:")) {
+            val returnParam = uri.getQueryParameter("ret")
+            // when app is opened from camera app, it returns "none" as ret param
+            // so we don't need closing app in this case
+            val closeApp = returnParam != "none"
+            viewModelScope.launch {
+                App.tonConnectManager.handle(uri.toString(), closeApp)
+            }
+            return
+        }
+
+        if (
+            deeplinkString.startsWith("bitcoin:")
+            || deeplinkString.startsWith("ethereum:")
+            || deeplinkString.startsWith("toncoin:")
+        ) {
+            AddressUriParser.addressUri(deeplinkString)?.let { addressUri ->
+                val allowedBlockchainTypes = addressUri.allowedBlockchainTypes
+                var allowedTokenTypes: List<TokenType>? = null
+                addressUri.value<String>(AddressUri.Field.TokenUid)?.let { uid ->
+                    TokenType.fromId(uid)?.let { tokenType ->
+                        allowedTokenTypes = listOf(tokenType)
+                    }
+                }
+
+                openSendTokenSelect = OpenSendTokenSelect(
+                    blockchainTypes = allowedBlockchainTypes,
+                    tokenTypes = allowedTokenTypes,
+                    address = addressUri.address,
+                    amount = addressUri.amount
+                )
+                emitState()
+                return
+            }
+        }
+
         val (tab, deeplinkPageData) = getNavigationDataForDeeplink(uri)
         deeplinkPage = deeplinkPageData
         currentMainTab = tab
         selectedTabIndex = items.indexOf(tab)
         syncNavigation()
+    }
+
+    fun onSendOpened() {
+        openSendTokenSelect = null
+        emitState()
     }
 
 }

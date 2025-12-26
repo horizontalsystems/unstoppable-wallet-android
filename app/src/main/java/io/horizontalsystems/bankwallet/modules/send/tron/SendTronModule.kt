@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendTronAdapter
 import io.horizontalsystems.bankwallet.core.isNative
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
@@ -18,9 +19,10 @@ object SendTronModule {
 
     class Factory(
         private val wallet: Wallet,
-        private val predefinedAddress: String?,
+        private val address: Address,
+        private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
-        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendTronAdapter) ?: throw IllegalStateException("SendTronAdapter is null")
+        val adapter = App.adapterManager.getAdapterForWallet<ISendTronAdapter>(wallet) ?: throw IllegalStateException("SendTronAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -35,7 +37,7 @@ object SendTronModule {
                         adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
                         wallet.token.type.isNative,
                     )
-                    val addressService = SendTronAddressService(adapter, wallet.token, predefinedAddress)
+                    val addressService = SendTronAddressService(adapter, wallet.token)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalArgumentException()
 
@@ -49,8 +51,10 @@ object SendTronModule {
                         addressService,
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
-                        predefinedAddress == null,
+                        !hideAddress,
                         App.connectivityManager,
+                        address,
+                        App.recentAddressManager
                     ) as T
                 }
 

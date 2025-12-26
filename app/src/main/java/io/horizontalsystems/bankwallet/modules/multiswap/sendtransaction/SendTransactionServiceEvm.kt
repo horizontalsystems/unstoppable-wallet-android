@@ -1,16 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -44,9 +39,9 @@ import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettings
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.decorations.TransactionDecoration
@@ -67,9 +62,14 @@ class SendTransactionServiceEvm(
     blockchainType: BlockchainType,
     initialGasPrice: GasPrice? = null,
     initialNonce: Long? = null
-) : ISendTransactionService() {
+) : AbstractSendTransactionService(true) {
     private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
-    private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
+    private val evmKitWrapper by lazy {
+        val account =
+            App.accountManager.activeAccount ?: throw IllegalArgumentException("No active account")
+        App.evmBlockchainManager.getEvmKitManager(blockchainType)
+            .getEvmKitWrapper(account, blockchainType)
+    }
     private val gasPriceService: IEvmGasPriceService by lazy {
         val evmKit = evmKitWrapper.evmKit
         if (evmKit.chain.isEIP1559Supported) {
@@ -114,6 +114,7 @@ class SendTransactionServiceEvm(
         SendTransactionSettings.Evm(null, evmKitWrapper.evmKit.receiveAddress)
     )
     override val sendTransactionSettingsFlow = _sendTransactionSettingsFlow.asStateFlow()
+    override val mevProtectionAvailable = evmKitWrapper.merkleTransactionAdapter != null
 
     private var transaction: SendEvmSettingsService.Transaction? = null
     private var feeAmountData: SendModule.AmountData? = null
@@ -123,11 +124,13 @@ class SendTransactionServiceEvm(
     private var fields = listOf<DataField>()
 
     override fun createState() = SendTransactionServiceState(
+        uuid = uuid,
         networkFee = feeAmountData,
         cautions = cautions,
         sendable = sendable,
         loading = loading,
-        fields = fields
+        fields = fields,
+        extraFees = extraFees
     )
 
     override fun start(coroutineScope: CoroutineScope) {
@@ -137,7 +140,10 @@ class SendTransactionServiceEvm(
         coroutineScope.launch {
             gasPriceService.stateFlow.collect { gasPriceState ->
                 _sendTransactionSettingsFlow.update {
-                    SendTransactionSettings.Evm(gasPriceState.dataOrNull, evmKitWrapper.evmKit.receiveAddress)
+                    SendTransactionSettings.Evm(
+                        gasPriceState.dataOrNull,
+                        evmKitWrapper.evmKit.receiveAddress
+                    )
                 }
             }
         }
@@ -206,14 +212,16 @@ class SendTransactionServiceEvm(
         emitState()
     }
 
-    override fun setSendTransactionData(data: SendTransactionData) {
+    override suspend fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Evm)
 
         feeService.setGasLimit(data.gasLimit)
         feeService.setTransactionData(data.transactionData)
+
+        setExtraFeesMap(data.feesMap)
     }
 
-    override suspend fun sendTransaction() : SendTransactionResult.Evm {
+    override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult.Evm {
         val transaction = transaction ?: throw Exception()
         if (transaction.errors.isNotEmpty()) throw Exception()
 
@@ -223,7 +231,7 @@ class SendTransactionServiceEvm(
         val nonce = transaction.nonce
 
         val fullTransaction = evmKitWrapper
-            .sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
+            .sendSingle(transactionData, gasPrice, gasLimit, nonce, mevProtectionEnabled).await()
         return SendTransactionResult.Evm(fullTransaction)
     }
 
@@ -267,63 +275,55 @@ fun SendEvmFeeSettingsScreen(
     nonceViewModel: SendEvmNonceViewModel,
     navController: NavController
 ) {
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxSize()
-            .background(color = ComposeAppTheme.colors.tyler)
-    ) {
-        AppBar(
-            title = stringResource(R.string.SendEvmSettings_Title),
-            navigationIcon = {
-                HsIconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_back),
-                        contentDescription = "back button",
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                }
-            },
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Reset),
-                    enabled = !viewModel.isRecommendedSettingsSelected,
-                    onClick = { viewModel.onClickReset() }
-                )
+    HSScaffold(
+        title = stringResource(R.string.SendEvmSettings_Title),
+        onBack = navController::popBackStack,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Reset),
+                enabled = !viewModel.isRecommendedSettingsSelected,
+                onClick = { viewModel.onClickReset() },
+                tint = ComposeAppTheme.colors.jacob
             )
         )
+    ) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
+        ) {
+            when (feeSettingsViewModel) {
+                is LegacyFeeSettingsViewModel -> {
+                    LegacyFeeSettings(feeSettingsViewModel, navController)
+                }
 
-        when (feeSettingsViewModel) {
-            is LegacyFeeSettingsViewModel -> {
-                LegacyFeeSettings(feeSettingsViewModel, navController)
+                is Eip1559FeeSettingsViewModel -> {
+                    Eip1559FeeSettings(feeSettingsViewModel, navController)
+                }
             }
 
-            is Eip1559FeeSettingsViewModel -> {
-                Eip1559FeeSettings(feeSettingsViewModel, navController)
+            val nonceUiState = nonceViewModel.uiState
+            if (nonceUiState.showInSettings) {
+                VSpacer(24.dp)
+                EvmSettingsInput(
+                    title = stringResource(id = R.string.SendEvmSettings_Nonce),
+                    info = stringResource(id = R.string.SendEvmSettings_Nonce_Info),
+                    value = nonceUiState.nonce?.toBigDecimal() ?: BigDecimal.ZERO,
+                    decimals = 0,
+                    navController = navController,
+                    warnings = nonceUiState.warnings,
+                    errors = nonceUiState.errors,
+                    onValueChange = {
+                        nonceViewModel.onEnterNonce(it.toLong())
+                    },
+                    onClickIncrement = nonceViewModel::onIncrementNonce,
+                    onClickDecrement = nonceViewModel::onDecrementNonce
+                )
             }
+
+            Cautions(viewModel.cautions)
+
+            VSpacer(32.dp)
         }
-
-        val nonceUiState = nonceViewModel.uiState
-        if (nonceUiState.showInSettings) {
-            Spacer(modifier = Modifier.height(24.dp))
-            EvmSettingsInput(
-                title = stringResource(id = R.string.SendEvmSettings_Nonce),
-                info = stringResource(id = R.string.SendEvmSettings_Nonce_Info),
-                value = nonceUiState.nonce?.toBigDecimal() ?: BigDecimal.ZERO,
-                decimals = 0,
-                navController = navController,
-                warnings = nonceUiState.warnings,
-                errors = nonceUiState.errors,
-                onValueChange = {
-                    nonceViewModel.onEnterNonce(it.toLong())
-                },
-                onClickIncrement = nonceViewModel::onIncrementNonce,
-                onClickDecrement = nonceViewModel::onDecrementNonce
-            )
-        }
-
-        Cautions(viewModel.cautions)
-
-        Spacer(modifier = Modifier.height(32.dp))
     }
 }

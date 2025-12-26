@@ -1,49 +1,45 @@
-Unstoppable wallet is purposely built as a decentralized management tool for cryptocurrencies.
+不可阻挡的钱包是有目的地构建为加密货币的分散管理工具。
 
 It is engineered to serve privacy-conscious individuals looking to manage and invest in cryptocurrencies in a sovereign and professional manner.
 
-Unstoppable is built with the following in mind:
+不可阻挡的构建时牢记以下几点：
 
-- Capital Should Be Free >> It’s built to provide users with genuinely independent control over their capital.
+- 资本应该是免费的 >> 它是为了让用户真正独立地控制自己的资本。
 
-- Capital Should Be Borderless >> It works outside the traditional finance layer and acts as a Swiss knife to the world of decentralized finances (DeFi).
+- 资本应该是无国界的 >> 它在传统的金融层之外运作，充当瑞士的一把刀，通向分散的金融界（DeFi）。
 
-- Capital Should Be Private >> It doesn’t leak private data, it has no means to track users, and takes extra measures to ensure privacy on multiple layers.
+- 资本应该是私有的 >> 它不泄露私人数据，它没有跟踪用户的途径， 并采取额外措施确保多层的隐私。
 
-If the above rhymes well with you then Unstoppable is for you! And we are here to focus on your unique needs and serve you in the best possible manner.
+如果上面的节奏与你很好，那么不可阻挡是为了你！ 我们来到这里是为了集中注意你们的独特需要，以尽可能最好的方式为你们服务。
 
-If you're merely looking for a plain way to store Bitcoin or Ethereum this app might not be for you.
+战利品：
 
-WALLET FEATURES:
+- 非托管多个钱包>> 以非托管方式管理多个组合式钱包间的任何加密货币。 这个钱包就像你自己的银行，你是唯一的客户，也是唯一的客户。 它的设计是为了维护资产的安全和轻松恢复，即使手机被盗或被篡改。 这个钱包就像你自己的银行，你是唯一的客户，也是唯一的客户。 它的设计是为了维护资产的安全和轻松恢复，即使手机被盗或被篡改。
 
-- Non-Custodial Multi-wallet >> Manage any number of cryptocurrencies across multiple portfolio-style wallets in a non-custodial manner. This wallet is like your own bank where you are the only client and the only one in charge. It’s designed to keep assets secure and easy to restore even if the phone is stolen and tampered with.
+- 面向投资的Wallet >> 不可阻挡将无法匹配的加密货币市场分析带到您的设备：高级排序、管理的分类、广泛的搜索过滤和基于事件提醒功能。
 
-- Investment Oriented Wallet >> Unstoppable brings unmatched cryptocurrency market analytics to your device: advanced sorting, curated categorization, extensive search filtering, and event-based alerting features.
-
-- Universal Wallet >> It supports all mainstream blockchains and is built in a standard compliant manner enabling users to use just one wallet app for everything crypto.
+- Universal Wallet >> 它支持所有主流区块链，并且是以符合标准的方式构建的，使得用户只能使用一个钱包应用程序来处理所有加密事务。
 
 - A Bitcoin Wallet >> The wallet packs some of the most advanced Bitcoin features available: SPV enabled, BIP 44/49/84/69 compliant, Bitcoin timelocks, custom transaction fees, and more.
 
-- A DeFi Wallet >> Full support for decentralized token swaps on Ethereum, Binance Smart Chain, Avalanche, Solana, and more. Also, the ability to interact with any smart contract-powered service on the blockchain via the WalletConnect protocol.
+- A DeFi Wallet >> Full support for decentralized token swaps on Ethereum, Binance Smart Chain, Avalanche, Solana, and more. 此外，通过WalletConnect 协议与区块链上任何智能合同驱动服务的交互能力。
 
-- Ethereum Wallet >> Full support for Ethereum blockchain, its growing ecosystem of tokens (ERC20, NFT tokens, etc.), and other decentralized services such as ENS (Ethereum Name Service).
+- Etherum Wallet >> 完全支持Ethereum 区块链，它不断增长的代币生态系统（ERC20，NFT 代币等）。 和其他分散服务，如ENS（以英语命名服务）。
 
-- Ethereum L2 Wallet >> Artbitrum, Optimism, Polygon support.
+- Etherum L2 Wallet >> Artbitrum, Optimism, Polygon support.
 
-- Avalanche Wallet >> Full support for Avalanche C-Chain blockchain.
+- Avalanche Wallet >> 完全支持Avalanche C-Chain blockchain。
 
-- Binance Wallet >> Full support for original Binance Chain (incl. BEP2) and Binance Smart Chain.
+- Binance Wallet >> 完全支持原始Binance Chain (including BEP2) and Binance Smart Chain
 
-- NFT Wallet >> Full support for Non Fungible tokens (NFTs).
+- Crypto Academy >> 应用程序包括两门课程，旨在以简单易懂的方式登载新来到加密货币世界的人和DeFi生态系统，涵盖加密货币安全的基本方面。 储存、隐私、交易和交换。
 
-- Crypto Academy >> The app includes two courses meant to onboard newcomers into the world of cryptocurrencies and the DeFi ecosystem in an easy-to-digest manner covering essential aspects of cryptocurrency security, storage, privacy, transacting, and exchanging.
+- 聚焦隐私>> 设计允许隐私，即使是在最隐私破损的场景中。 没有用户帐户保存您的记录，没有身份检查会使您的财务暴露在世界上。 而且与传统金融层没有互动。 The app is partially TOR enabled and VPN support is coming soon. - 隐私硬币 >> 以特殊方式完全支持主要隐私硬币 (ZCash, DASH)。 能够支持完全保护的Zcash 交易以及将比特币交易私有化的少数钱包之一。
 
-- Wallet for Privacy Coins >> Fully supports major privacy coins (ZCash, DASH) in an SPV manner. One of the very few wallets capable of supporting fully shielded Zcash transactions as well as the ability to privatize Bitcoin transactions.
+- 分散钱包>> 设计以分散方式与大多数主要区块链合作，在这种情况下，应用程序不依赖钱包提供商的某些服务器来发送/接收交易，但直接与 blockchain 网络交互。
 
-- Decentralized Wallet >> Designed to work with most major blockchains in a decentralized manner where an app doesn't depend on some server of a wallet provider to send/receive transactions but interacts with blockchain networks directly.
+- 聚焦隐私>> 设计允许隐私，即使是在最隐私破损的场景中。 没有用户帐户保存您的记录，没有身份检查会使您的财务暴露在世界上。 而且与传统金融层没有互动。 该应用已部分启用 TOR，VPN 支持即将推出。
 
-- Privacy Focused >> Designed to allow for privacy even in the most privacy-breaching scenarios. There are no user accounts keeping your records, no identity checks that risk exposing your financials to the world, and no interaction with traditional finance layers. The app is partially TOR enabled and VPN support is coming soon.
+- 完全开源>> 是迄今建立的最透明的钱包应用程序。 应用的整个4年生产过程都可以在网上公开访问，并且可以100%的代码供任何人评价或在其他项目中重新使用。 由第三方核实和审计。 应用的整个4年生产过程都可以在网上公开访问，并且可以100%的代码供任何人评价或在其他项目中重新使用。 由第三方核实和审计。
 
-- Fully Open Source >> The most transparent wallet application built to date. The entire 4-year production process of the app is openly accessible online along with 100% of its code for anyone to evaluate or reuse in other projects. Verified and audited by third parties.
-
-Be Unstoppable!  😎
+无法阻止！

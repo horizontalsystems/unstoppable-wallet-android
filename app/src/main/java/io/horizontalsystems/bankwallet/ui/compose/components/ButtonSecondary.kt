@@ -72,8 +72,8 @@ fun ButtonSecondaryYellow(
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
             contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            disabledBackgroundColor = ComposeAppTheme.colors.blade,
+            disabledContentColor = ComposeAppTheme.colors.andy,
         ),
         content = {
             Text(
@@ -115,7 +115,7 @@ fun ButtonSecondaryWithIcon(
                     modifier = Modifier.padding(start = 2.dp),
                     painter = iconRight,
                     contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
+                    tint = ComposeAppTheme.colors.leah
                 )
             }
         },
@@ -139,7 +139,7 @@ fun ButtonSecondaryTransparent(
             backgroundColor = ComposeAppTheme.colors.transparent,
             contentColor = ComposeAppTheme.colors.leah,
             disabledBackgroundColor = ComposeAppTheme.colors.transparent,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            disabledContentColor = ComposeAppTheme.colors.andy,
         ),
         content = {
             if (iconRight != null) {
@@ -283,10 +283,10 @@ object SecondaryButtonDefaults {
 
     @Composable
     fun buttonColors(
-        backgroundColor: Color = ComposeAppTheme.colors.steel20,
+        backgroundColor: Color = ComposeAppTheme.colors.blade,
         contentColor: Color = ComposeAppTheme.colors.leah,
-        disabledBackgroundColor: Color = ComposeAppTheme.colors.steel20,
-        disabledContentColor: Color = ComposeAppTheme.colors.grey50,
+        disabledBackgroundColor: Color = ComposeAppTheme.colors.blade,
+        disabledContentColor: Color = ComposeAppTheme.colors.andy,
     ): ButtonColors = HsButtonColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,

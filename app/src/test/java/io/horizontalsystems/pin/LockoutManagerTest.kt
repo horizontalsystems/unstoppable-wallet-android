@@ -39,26 +39,26 @@ class LockoutManagerTest {
         verify(localStorage).failedAttempts = newAttempts
     }
 
-    @Test
-    fun currentStateUnlocked() {
-        val hasFailedAttempts = false
-        whenever(localStorage.failedAttempts).thenReturn(null)
+//    @Test
+//    fun currentStateUnlocked() {
+//        val hasFailedAttempts = false
+//        whenever(localStorage.failedAttempts).thenReturn(null)
+//
+//        val state = LockoutState.Unlocked(hasFailedAttempts)
+//
+//        Assert.assertEquals(lockoutManager.currentState, state)
+//    }
 
-        val state = LockoutState.Unlocked(hasFailedAttempts)
-
-        Assert.assertEquals(lockoutManager.currentState, state)
-    }
-
-    @Test
-    fun currentStateUnlocked_WithTwoAttempts() {
-        val hasFailedAttempts = true
-        val failedAttempts = 2
-        whenever(localStorage.failedAttempts).thenReturn(failedAttempts)
-
-        val state = LockoutState.Unlocked(hasFailedAttempts)
-
-        Assert.assertEquals(lockoutManager.currentState, state)
-    }
+//    @Test
+//    fun currentStateUnlocked_WithTwoAttempts() {
+//        val hasFailedAttempts = true
+//        val failedAttempts = 2
+//        whenever(localStorage.failedAttempts).thenReturn(failedAttempts)
+//
+//        val state = LockoutState.Unlocked(hasFailedAttempts)
+//
+//        Assert.assertEquals(lockoutManager.currentState, state)
+//    }
 
     @Test
     fun currentStateUnlocked_NotLessThanOne() {

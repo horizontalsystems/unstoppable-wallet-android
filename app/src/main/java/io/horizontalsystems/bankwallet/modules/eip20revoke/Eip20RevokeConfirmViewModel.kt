@@ -8,16 +8,20 @@ import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
+import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
+import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.multiswap.FiatService
+import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
-import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceEvm
+import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,7 +35,7 @@ class Eip20RevokeConfirmViewModel(
     private val spenderAddress: String,
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
-    val sendTransactionService: SendTransactionServiceEvm,
+    val sendTransactionService: AbstractSendTransactionService,
     private val currencyManager: CurrencyManager,
     private val fiatService: FiatService,
     private val contactsRepository: ContactsRepository,
@@ -79,15 +83,37 @@ class Eip20RevokeConfirmViewModel(
 
         sendTransactionService.start(viewModelScope)
 
+        when {
+            token.blockchainType.isEvm -> prepareEvmRevokeTransaction()
+            token.blockchainType == BlockchainType.Tron -> prepareTronRevokeTransaction()
+            else -> throw IllegalArgumentException("Unsupported blockchain type for EIP-20 revoke")
+        }
+    }
+
+    private fun prepareTronRevokeTransaction() {
+        val trc20Adapter = adapterManager.getAdapterForToken<Trc20Adapter>(token)
+            ?: throw IllegalStateException("Trc20Adapter not found for token")
+        viewModelScope.launch {
+            val triggerSmartContract =
+                trc20Adapter.approveTrc20TriggerSmartContract(spenderAddress, BigDecimal.ZERO)
+            sendTransactionService.setSendTransactionData(
+                SendTransactionData.Tron.WithContract(triggerSmartContract)
+            )
+        }
+    }
+
+    private fun prepareEvmRevokeTransaction() {
         val eip20Adapter =
             walletManager.activeWallets.firstOrNull { it.token == token }?.let { wallet ->
-                adapterManager.getAdapterForWallet(wallet) as? Eip20Adapter
-            }
-
-        checkNotNull(eip20Adapter)
-
-        val transactionData = eip20Adapter.buildRevokeTransactionData(Address(spenderAddress))
-        sendTransactionService.setSendTransactionData(SendTransactionData.Evm(transactionData, null))
+                adapterManager.getAdapterForWallet<Eip20Adapter>(wallet)
+            } ?: throw IllegalStateException("Eip20Adapter not found for token")
+        viewModelScope.launch {
+            val transactionData =
+                eip20Adapter.buildRevokeTransactionData(Address(spenderAddress))
+            sendTransactionService.setSendTransactionData(
+                SendTransactionData.Evm(transactionData, null)
+            )
+        }
     }
 
     suspend fun revoke() = withContext(Dispatchers.Default) {
@@ -101,7 +127,7 @@ class Eip20RevokeConfirmViewModel(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val sendTransactionService = SendTransactionServiceEvm(token.blockchainType)
+            val sendTransactionService = SendTransactionServiceFactory.create(token)//SendTransactionServiceEvm(token.blockchainType)
 
             return Eip20RevokeConfirmViewModel(
                 token,

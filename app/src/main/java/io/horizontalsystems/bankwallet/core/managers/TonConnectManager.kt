@@ -9,12 +9,17 @@ import io.horizontalsystems.tonkit.tonconnect.TonConnectKit
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-class TonConnectManager(context: Context, val adapterFactory: AdapterFactory) {
-    val kit = TonConnectKit.getInstance(context)
+class TonConnectManager(
+    context: Context,
+    val adapterFactory: AdapterFactory,
+    appName: String,
+    appVersion: String,
+) {
+    val kit = TonConnectKit.getInstance(context, appName, appVersion)
     val transactionSigner = TonKit.getTransactionSigner(TonKit.getTonApi(Network.MainNet))
 
     val sendRequestFlow by kit::sendRequestFlow
-    private val _dappRequestFlow = MutableSharedFlow<DAppRequestEntity>()
+    private val _dappRequestFlow = MutableSharedFlow<DAppRequestEntityWrapper>()
     val dappRequestFlow
         get() = _dappRequestFlow.asSharedFlow()
 
@@ -22,12 +27,17 @@ class TonConnectManager(context: Context, val adapterFactory: AdapterFactory) {
         kit.start()
     }
 
-    suspend fun handle(scannedText: String) {
+    suspend fun handle(scannedText: String, closeAppOnResult: Boolean = false) {
         try {
             val dAppRequest = kit.readData(scannedText)
-            _dappRequestFlow.emit(dAppRequest)
+            _dappRequestFlow.emit(DAppRequestEntityWrapper(dAppRequest, closeAppOnResult))
         } catch (e: Throwable) {
 
         }
     }
 }
+
+data class DAppRequestEntityWrapper(
+    val dAppRequest: DAppRequestEntity,
+    val closeAppOnResult: Boolean
+)

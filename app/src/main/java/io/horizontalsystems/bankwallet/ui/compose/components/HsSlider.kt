@@ -57,10 +57,10 @@ fun HsSlider(
                 thumbColor = ComposeAppTheme.colors.grey,
                 activeTickColor = ComposeAppTheme.colors.transparent,
                 inactiveTickColor = ComposeAppTheme.colors.transparent,
-                activeTrackColor = ComposeAppTheme.colors.steel20,
-                inactiveTrackColor = ComposeAppTheme.colors.steel20,
+                activeTrackColor = ComposeAppTheme.colors.blade,
+                inactiveTrackColor = ComposeAppTheme.colors.blade,
                 disabledActiveTickColor = ComposeAppTheme.colors.transparent,
-                disabledInactiveTrackColor = ComposeAppTheme.colors.steel20
+                disabledInactiveTrackColor = ComposeAppTheme.colors.blade
             )
         )
         Image(

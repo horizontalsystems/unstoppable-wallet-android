@@ -4,11 +4,11 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.signer.Signer
@@ -19,6 +19,7 @@ import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.merkleiokit.MerkleTransactionAdapter
 import io.horizontalsystems.nftkit.core.NftKit
 import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.uniswapkit.TokenFactory.UnsupportedChainError
@@ -164,9 +165,21 @@ class EvmKitManager(
 //            nftKit = nftKitInstance
 //        }
 
+        val merkleTransactionAdapter = MerkleTransactionAdapter.getInstance(
+            merkleIoPubKey = "pk_mbs_5f012edb2cf20a96b49429a3ed285a45",
+            address = address,
+            chain = chain,
+            context = App.instance,
+            walletId = account.id,
+            transactionManager = evmKit.transactionManager,
+            sourceTag = "unstoppable-wallet-android"
+        )
+
+        merkleTransactionAdapter?.registerInKit(evmKit)
+
         evmKit.start()
 
-        return EvmKitWrapper(evmKit, nftKit, blockchainType, signer)
+        return EvmKitWrapper(evmKit, nftKit, blockchainType, signer, merkleTransactionAdapter)
     }
 
     @Synchronized
@@ -213,24 +226,29 @@ class EvmKitWrapper(
     val evmKit: EthereumKit,
     val nftKit: NftKit?,
     val blockchainType: BlockchainType,
-    val signer: Signer?
+    val signer: Signer?,
+    val merkleTransactionAdapter: MerkleTransactionAdapter?
 ) {
 
     fun sendSingle(
         transactionData: TransactionData,
         gasPrice: GasPrice,
         gasLimit: Long,
-        nonce: Long?
+        nonce: Long?,
+        mevProtectionEnabled: Boolean
     ): Single<FullTransaction> {
-        return if (signer != null) {
-            evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
-                .flatMap { rawTransaction ->
-                    val signature = signer.signature(rawTransaction)
+        if (signer == null) return Single.error(Exception())
+        if (mevProtectionEnabled && merkleTransactionAdapter == null) return Single.error(Exception())
+
+        return evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
+            .flatMap { rawTransaction ->
+                val signature = signer.signature(rawTransaction)
+
+                if (mevProtectionEnabled && merkleTransactionAdapter != null) {
+                    merkleTransactionAdapter.send(rawTransaction, signature)
+                } else {
                     evmKit.send(rawTransaction, signature)
                 }
-        } else {
-            Single.error(Exception())
-        }
+            }
     }
-
 }

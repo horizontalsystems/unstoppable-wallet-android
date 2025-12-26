@@ -143,7 +143,7 @@ fun LockTimeInterval?.stringResId(): Int {
 }
 
 fun String.shorten(): String {
-    val prefixes = listOf("0x", "bc", "bnb", "ltc", "bitcoincash:", "ecash:")
+    val prefixes = listOf("0x", "bc", "bnb", "ltc", "bitcoincash:", "ecash:", "xpub", "ypub", "zpub")
 
     var prefix = ""
     for (p in prefixes) {
@@ -191,10 +191,12 @@ fun NavGraphBuilder.composablePage(
 
 fun NavGraphBuilder.composablePopup(
     route: String,
+    arguments: List<NamedNavArgument> = emptyList(),
     content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
 ) {
     composable(
         route,
+        arguments = arguments,
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Up,

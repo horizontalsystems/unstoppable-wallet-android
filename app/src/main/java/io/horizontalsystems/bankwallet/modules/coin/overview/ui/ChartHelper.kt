@@ -9,6 +9,7 @@ import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.CurveAnimator2
 import io.horizontalsystems.chartview.CurveAnimatorBars
 import io.horizontalsystems.chartview.models.ChartIndicator
+import io.horizontalsystems.chartview.models.ChartVolume
 import java.math.BigDecimal
 import kotlin.math.abs
 import kotlin.math.absoluteValue
@@ -34,7 +35,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
     var mainCurvePressedColor = colors.leah
     var mainCurveGradientPressedColors = Pair(colors.leah.copy(alpha = 0f), colors.leah.copy(alpha = 0.5f))
     var mainBarsColor = colors.jacob
-    var mainBarsPressedColor = colors.grey50
+    var mainBarsPressedColor = colors.andy
 
     init {
         setExtremum()
@@ -89,7 +90,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
         when {
             chartData.disabled -> {
                 mainCurveColor = colors.grey
-                mainCurveGradientColors = Pair(colors.grey50.copy(alpha = 0f), colors.grey50.copy(alpha = 0.5f))
+                mainCurveGradientColors = Pair(colors.andy.copy(alpha = 0f), colors.andy.copy(alpha = 0.5f))
             }
 
             !chartData.isMovementChart -> {
@@ -168,7 +169,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
         movingAverageCurves.clear()
         movingAverageCurves.putAll(
             target.movingAverages
-                .map { (id, movingAverage: ChartIndicator) ->
+                .map { (id, movingAverage: ChartIndicator.MovingAverage) ->
                     id to CurveAnimator2(
                         movingAverage.line,
                         minKey,
@@ -247,7 +248,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
         if (target.movingAverages.keys != movingAverageCurves.keys) {
             initMovingAverages()
         } else {
-            target.movingAverages.forEach { (id, u: ChartIndicator) ->
+            target.movingAverages.forEach { (id, u: ChartIndicator.MovingAverage) ->
                 movingAverageCurves[id]?.setTo(
                     u.line,
                     minKey,
@@ -273,7 +274,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
             )
         }
 
-        if (target.rsi == null) {
+        if (target.rsi == null || target.rsi?.points.isNullOrEmpty()) {
             rsiCurve = null
         } else if (rsiCurve == null) {
             initRsiCurve()
@@ -339,15 +340,17 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
 
         if (hasVolumes) {
             val volumeByTimestamp = target.volumeByTimestamp()
-            val volumeMin = volumeByTimestamp.minOf { it.value }
-            val volumeMax = volumeByTimestamp.maxOf { it.value }
-            volumeBars?.setValues(
-                volumeByTimestamp,
-                minKey,
-                maxKey,
-                volumeMin,
-                volumeMax
-            )
+            if (volumeByTimestamp.isNotEmpty()) {
+                val volumeMin = volumeByTimestamp.minOf { it.value }
+                val volumeMax = volumeByTimestamp.maxOf { it.value }
+                volumeBars?.setValues(
+                    volumeByTimestamp,
+                    minKey,
+                    maxKey,
+                    volumeMin,
+                    volumeMax
+                )
+            }
         }
 
         defineColors()
@@ -411,7 +414,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
             timestamp = selectedTimestamp,
             mainValue = nearestChartPoint.value,
             dominance = nearestChartPoint.dominance,
-            volume = nearestChartPoint.volume,
+            volume = nearestChartPoint.chartVolume,
             movingAverages = selectedMovingAverages,
             rsi = selectedRsi,
             macd = selectedMacd,
@@ -425,7 +428,7 @@ data class SelectedItem(
     val timestamp: Long,
     val mainValue: Float,
     val dominance: Float?,
-    val volume: Float?,
+    val volume: ChartVolume?,
     val movingAverages: List<MA>,
     val rsi: Float?,
     val macd: Macd?

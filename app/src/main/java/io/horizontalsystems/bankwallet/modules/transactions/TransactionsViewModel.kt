@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.badge
@@ -37,9 +38,10 @@ class TransactionsViewModel(
     private val transactionAdapterManager: TransactionAdapterManager,
     private val walletManager: IWalletManager,
     private val transactionFilterService: TransactionFilterService,
+    private val localStorage: ILocalStorage,
 ) : ViewModelUiState<TransactionsUiState>() {
 
-    var tmpItemToShow: TransactionItem? = null
+    var tmpTransactionRecordToShow: TransactionRecord? = null
 
     val filterResetEnabled = MutableLiveData<Boolean>()
     val filterTokensLiveData = MutableLiveData<List<Filter<FilterToken?>>>()
@@ -122,7 +124,7 @@ class TransactionsViewModel(
         }
 
         viewModelScope.launch {
-            service.itemsObservable.asFlow().collect { items ->
+            service.itemsFlow.collect { items ->
                 handleUpdatedItems(items)
             }
         }
@@ -130,7 +132,13 @@ class TransactionsViewModel(
         viewModelScope.launch(Dispatchers.Default) {
             balanceHiddenManager.balanceHiddenFlow.collect {
                 transactionViewItem2Factory.updateCache()
-                service.refreshList()
+                handleUpdatedItems(service.itemsFlow.value)
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.Default) {
+            localStorage.amountRoundingEnabledFlow.collect{
+                service.reload()
             }
         }
     }
@@ -246,11 +254,13 @@ data class TransactionViewItem(
                 BlockchainType.Avalanche -> R.drawable.logo_chain_avalanche_trx_24
                 BlockchainType.Optimism -> R.drawable.logo_chain_optimism_trx_24
                 BlockchainType.Base -> R.drawable.logo_chain_base_trx_24
+                BlockchainType.ZkSync -> R.drawable.logo_chain_zksync_trx_32
                 BlockchainType.ArbitrumOne -> R.drawable.logo_chain_arbitrum_one_trx_24
                 BlockchainType.Gnosis -> R.drawable.logo_chain_gnosis_trx_32
                 BlockchainType.Fantom -> R.drawable.logo_chain_fantom_trx_32
                 BlockchainType.Tron -> R.drawable.logo_chain_tron_trx_32
                 BlockchainType.Ton -> R.drawable.logo_chain_ton_trx_32
+                BlockchainType.Stellar -> R.drawable.logo_chain_stellar_trx_32
                 else -> null
             }
         }

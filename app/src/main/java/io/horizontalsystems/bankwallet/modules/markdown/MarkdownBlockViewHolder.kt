@@ -13,7 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.request.ImageRequest
 import coil.request.SuccessResult
-import io.horizontalsystems.bankwallet.databinding.*
+import io.horizontalsystems.bankwallet.databinding.ViewHolderMarkdownFooterBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderMarkdownH1Binding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderMarkdownH2Binding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderMarkdownH3Binding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderMarkdownImageBinding
+import io.horizontalsystems.bankwallet.databinding.ViewHolderMarkdownParagraphBinding
 import io.horizontalsystems.bankwallet.ui.helpers.LayoutHelper
 import org.apache.commons.io.FilenameUtils
 import java.net.URL
@@ -22,9 +27,13 @@ abstract class MarkdownBlockViewHolder(itemView: View) : RecyclerView.ViewHolder
     abstract fun bind(item: MarkdownBlock)
 }
 
-class ViewHolderFooter(binding: ViewHolderMarkdownFooterBinding) :
+class ViewHolderFooter(private val binding: ViewHolderMarkdownFooterBinding) :
     MarkdownBlockViewHolder(binding.root) {
-    override fun bind(item: MarkdownBlock) {}
+    override fun bind(item: MarkdownBlock) {
+        if (item !is MarkdownBlock.Footer) return
+
+        binding.h1.text = item.text
+    }
 }
 
 class ViewHolderH1(private val binding: ViewHolderMarkdownH1Binding) :

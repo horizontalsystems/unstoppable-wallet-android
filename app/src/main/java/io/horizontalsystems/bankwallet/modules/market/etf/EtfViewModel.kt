@@ -1,17 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.market.etf
 
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.chart.stringResId
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
-import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.etf.EtfModule.EtfViewItem
 import io.horizontalsystems.bankwallet.modules.market.etf.EtfModule.RankedEtf
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
 import io.horizontalsystems.marketkit.models.Etf
 import io.horizontalsystems.marketkit.models.EtfPoint
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -28,50 +31,72 @@ class EtfViewModel(
     private val marketKit: MarketKitWrapper
 ) : ViewModelUiState<EtfModule.UiState>() {
 
-    val timeDurations = listOf(
-        TimeDuration.OneDay,
-        TimeDuration.SevenDay,
-        TimeDuration.ThirtyDay,
-        TimeDuration.ThreeMonths,
-    )
     val sortByOptions = listOf(
         EtfModule.SortBy.HighestAssets,
         EtfModule.SortBy.LowestAssets,
         EtfModule.SortBy.Inflow,
         EtfModule.SortBy.Outflow
     )
+    private val timePeriods = listOf(
+        HsTimePeriod.Month1,
+        HsTimePeriod.Month3,
+        HsTimePeriod.Month6,
+        HsTimePeriod.Year1,
+    )
     private var viewState: ViewState = ViewState.Loading
     private var isRefreshing: Boolean = false
     private var viewItems: List<EtfViewItem> = listOf()
     private var marketDataJob: Job? = null
     private var sortBy: EtfModule.SortBy = sortByOptions.first()
-    private var timeDuration: TimeDuration = timeDurations.first()
     private var cachedEtfs: List<RankedEtf> = listOf()
     private var chartDataLoading = true
     private var etfPoints = listOf<EtfPoint>()
+    private var tabKey: String = "btc"
+    private var chartTabItems = listOf<TabItem<HsTimePeriod?>>()
+    private var currentChartPeriod: HsTimePeriod? = HsTimePeriod.Month1
+    private val chartIntervals: List<HsTimePeriod?> = timePeriods + listOf<HsTimePeriod?>(null)
+    private var listTimePeriod: EtfListTimePeriod = EtfListTimePeriod.OneDay
 
     override fun createState() = EtfModule.UiState(
         viewItems = viewItems,
         viewState = viewState,
         isRefreshing = isRefreshing,
-        timeDuration = timeDuration,
         sortBy = sortBy,
         chartDataLoading = chartDataLoading,
         etfPoints = etfPoints,
-        currency = currencyManager.baseCurrency
+        currency = currencyManager.baseCurrency,
+        chartTabs = chartTabItems,
+        selectedChartInterval = currentChartPeriod,
+        listTimePeriod = listTimePeriod
     )
 
     init {
-        syncItems()
+        setChartTabs(currentChartPeriod)
+    }
+
+    fun loadData(tabKey: String) {
+        this.tabKey = tabKey
+        cachedEtfs = listOf() // Reset cached ETFs to ensure fresh data
         fetchChartData()
+        syncItems()
     }
 
     private fun fetchChartData() {
         viewModelScope.launch(Dispatchers.Default) {
-            etfPoints = marketKit.etfPoints(currencyManager.baseCurrency.code).await().sortedBy { it.date }
-            chartDataLoading = false
+            try {
+                etfPoints = marketKit.etfPoints(
+                    tabKey,
+                    currencyManager.baseCurrency.code,
+                    currentChartPeriod?.value ?: "all"
+                ).await()
+                    .sortedBy { it.date }
+                chartDataLoading = false
 
-            emitState()
+                emitState()
+            } catch (e: Throwable) {
+                chartDataLoading = false
+                emitState()
+            }
         }
     }
 
@@ -88,9 +113,9 @@ class EtfViewModel(
         marketDataJob?.cancel()
         marketDataJob = viewModelScope.launch(Dispatchers.IO) {
             try {
-                cachedEtfs = marketKit.etfs(currencyManager.baseCurrency.code).await()
+                cachedEtfs = marketKit.etfs(tabKey, currencyManager.baseCurrency.code).await()
                     .sortedByDescending { it.totalAssets }
-                    .mapIndexed{ index, etf -> RankedEtf(etf, index + 1) }
+                    .mapIndexed { index, etf -> RankedEtf(etf, index + 1) }
                 updateViewItems()
 
                 viewState = ViewState.Success
@@ -108,27 +133,25 @@ class EtfViewModel(
             EtfModule.SortBy.HighestAssets -> cachedEtfs.sortedByDescending { it.etf.totalAssets }
             EtfModule.SortBy.LowestAssets -> cachedEtfs.sortedBy { it.etf.totalAssets }
             EtfModule.SortBy.Inflow -> cachedEtfs.sortedByDescending {
-                it.etf.priceChangeValue(
-                    timeDuration
-                )
+                it.etf.priceChangeValue(listTimePeriod)
             }
 
-            EtfModule.SortBy.Outflow -> cachedEtfs.sortedBy { it.etf.priceChangeValue(timeDuration) }
+            EtfModule.SortBy.Outflow -> cachedEtfs.sortedBy { it.etf.priceChangeValue(listTimePeriod) }
         }
         viewItems = sorted.map { etf ->
-            etfViewItem(etf, timeDuration)
+            etfViewItem(etf, listTimePeriod)
         }
     }
 
-    private fun etfViewItem(rankedEtf: RankedEtf, timeDuration: TimeDuration) = EtfViewItem(
+    private fun etfViewItem(rankedEtf: RankedEtf, listTimePeriod: EtfListTimePeriod) = EtfViewItem(
         title = rankedEtf.etf.ticker,
         iconUrl = "https://cdn.blocksdecoded.com/etf-tresuries/${rankedEtf.etf.ticker}@3x.png",
         subtitle = rankedEtf.etf.name,
         value = rankedEtf.etf.totalAssets?.let {
             App.numberFormatter.formatFiatShort(it, currencyManager.baseCurrency.symbol, 0)
         },
-        subvalue = rankedEtf.etf.priceChangeValue(timeDuration)?.let {
-            MarketDataValue.DiffNew(
+        subvalue = rankedEtf.etf.priceChangeValue(listTimePeriod)?.let {
+            MarketDataValue.Diff(
                 Value.Currency(
                     CurrencyValue(currencyManager.baseCurrency, it)
                 )
@@ -140,6 +163,7 @@ class EtfViewModel(
     private fun refreshWithMinLoadingSpinnerPeriod() {
         isRefreshing = true
         emitState()
+        fetchChartData()
         syncItems()
         viewModelScope.launch {
             delay(1000)
@@ -156,8 +180,8 @@ class EtfViewModel(
         refreshWithMinLoadingSpinnerPeriod()
     }
 
-    fun onSelectTimeDuration(selected: TimeDuration) {
-        timeDuration = selected
+    fun onSelectTimeDuration(selectedTimeDuration: EtfListTimePeriod) {
+        listTimePeriod = selectedTimeDuration
         syncItems()
     }
 
@@ -166,13 +190,27 @@ class EtfViewModel(
         syncItems()
     }
 
+    fun onSelectChartInterval(interval: HsTimePeriod?) {
+        currentChartPeriod = interval
+        setChartTabs(interval)
+        fetchChartData()
+    }
+
+    private fun setChartTabs(interval: HsTimePeriod?) {
+        chartTabItems = chartIntervals.map {
+            val titleResId = it?.stringResId ?: R.string.CoinPage_TimeDuration_All
+            TabItem(Translator.getString(titleResId), it == interval, it)
+        }
+    }
+
 }
 
-private fun Etf.priceChangeValue(timeDuration: TimeDuration): BigDecimal? {
+private fun Etf.priceChangeValue(timeDuration: EtfListTimePeriod): BigDecimal? {
     return when (timeDuration) {
-        TimeDuration.OneDay -> inflows[HsTimePeriod.Day1]
-        TimeDuration.SevenDay -> inflows[HsTimePeriod.Week1]
-        TimeDuration.ThirtyDay -> inflows[HsTimePeriod.Month1]
-        TimeDuration.ThreeMonths -> inflows[HsTimePeriod.Month3]
+        EtfListTimePeriod.OneDay -> inflows[HsTimePeriod.Day1]
+        EtfListTimePeriod.SevenDay -> inflows[HsTimePeriod.Week1]
+        EtfListTimePeriod.ThirtyDay -> inflows[HsTimePeriod.Month1]
+        EtfListTimePeriod.ThreeMonths -> inflows[HsTimePeriod.Month3]
+        EtfListTimePeriod.All -> totalInflow
     }
 }

@@ -8,6 +8,7 @@ import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.MarketInfo
+import io.horizontalsystems.marketkit.models.Stock
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Single
 import kotlinx.coroutines.rx2.await
@@ -21,7 +22,6 @@ class MarketFiltersService(
     private val blockchainTypes = listOf(
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
-        BlockchainType.BinanceChain,
         BlockchainType.ArbitrumOne,
         BlockchainType.Avalanche,
         BlockchainType.Gnosis,
@@ -33,7 +33,9 @@ class MarketFiltersService(
         BlockchainType.Unsupported("okex-chain"),
         BlockchainType.Optimism,
         BlockchainType.Base,
+        BlockchainType.ZkSync,
         BlockchainType.Polygon,
+        BlockchainType.Stellar,
         BlockchainType.Unsupported("solana"),
         BlockchainType.Unsupported("sora"),
         BlockchainType.Unsupported("tomochain"),
@@ -44,8 +46,9 @@ class MarketFiltersService(
     val blockchains = marketKit.blockchains(blockchainTypes.map { it.uid })
     val currencyCode = baseCurrency.code
 
-    var coinCount = CoinList.Top250.itemsCount
+    var coinCount = CoinList.Top100.itemsCount
     var filterMarketCap: Pair<Long?, Long?>? = null
+    var sectorIds: List<Int> = listOf()
     var filterVolume: Pair<Long?, Long?>? = null
     var filterPeriod = TimePeriod.TimePeriod_1D
     var filterPriceChange: Pair<Long?, Long?>? = null
@@ -54,12 +57,16 @@ class MarketFiltersService(
     var filterOutperformedBtcOn = false
     var filterOutperformedEthOn = false
     var filterOutperformedBnbOn = false
+    var filterOutperformedGoldOn = false
+    var filterOutperformedSnpOn = false
     var filterPriceCloseToAth = false
     var filterPriceCloseToAtl = false
     var filterListedOnTopExchanges = false
     var filterSolidCex = false
     var filterSolidDex = false
     var filterGoodDistribution = false
+    var sp500PriceChanges: Stock? = null
+    var goldPriceChanges: Stock? = null
 
     override fun fetchAsync(): Single<List<MarketItem>> {
         return getTopMarketList()
@@ -78,6 +85,18 @@ class MarketFiltersService(
 
     suspend fun fetchNumberOfItems(): Int {
         return getTopMarketList().await().size
+    }
+
+    suspend fun getSectors(): List<SectorItem> {
+        return marketKit.categoriesSingle().blockingGet().map { coinCategory ->
+            SectorItem(coinCategory.id, coinCategory.name)
+        }
+    }
+
+    suspend fun setStockPriceChanges() {
+        val stocks = marketKit.getStocks(currencyCode).blockingGet()
+        sp500PriceChanges = stocks.first { it.uid == "snp" }
+        goldPriceChanges = stocks.first { it.uid == "tether-gold" }
     }
 
     private fun getTopMarketList(): Single<Map<Int, MarketInfo>> {
@@ -108,12 +127,15 @@ class MarketFiltersService(
         return filterByRange(filterMarketCap, marketCap.toLong())
                 && filterByRange(filterVolume, totalVolume.toLong())
                 && inBlockchain(marketInfo.fullCoin.tokens)
+                && inSectors(marketInfo.categoryIds, sectorIds)
                 && filterByRange(filterPriceChange, priceChangeValue.toLong())
                 && (!filterPriceCloseToAth || closeToAllTime(marketInfo.athPercentage))
                 && (!filterPriceCloseToAtl || closeToAllTime(marketInfo.atlPercentage))
                 && (!filterOutperformedBtcOn || outperformed(priceChangeValue, "bitcoin"))
                 && (!filterOutperformedEthOn || outperformed(priceChangeValue, "ethereum"))
                 && (!filterOutperformedBnbOn || outperformed(priceChangeValue, "binancecoin"))
+                && (!filterOutperformedGoldOn || outperformedStock(priceChangeValue, goldPriceChanges))
+                && (!filterOutperformedSnpOn || outperformedStock(priceChangeValue, sp500PriceChanges))
                 && (!filterListedOnTopExchanges || marketInfo.listedOnTopExchanges == true)
                 && (!filterSolidCex || marketInfo.solidCex == true)
                 && (!filterSolidDex || marketInfo.solidDex == true)
@@ -149,6 +171,37 @@ class MarketFiltersService(
         return (coinMarket.priceChangeValue(filterPeriod) ?: BigDecimal.ZERO) < value
     }
 
+    private fun outperformedStock(value: BigDecimal?, stock: Stock?): Boolean {
+        if (value == null) return false
+        val priceValue: BigDecimal? = stock?.let { snp ->
+            when (filterPeriod) {
+                TimePeriod.TimePeriod_1D -> snp.priceChange.oneDay
+
+                TimePeriod.TimePeriod_1W -> snp.priceChange.sevenDays
+
+                TimePeriod.TimePeriod_2W -> snp.priceChange.fourteenDays
+
+                TimePeriod.TimePeriod_1M -> snp.priceChange.thirtyDays
+
+                TimePeriod.TimePeriod_3M -> snp.priceChange.ninetyDays
+
+                TimePeriod.TimePeriod_6M -> snp.priceChange.twoHundredDays
+
+                TimePeriod.TimePeriod_1Y -> snp.priceChange.oneYear
+
+                TimePeriod.TimePeriod_2Y -> snp.priceChange.twoYears
+
+                TimePeriod.TimePeriod_3Y -> snp.priceChange.threeYears
+
+                TimePeriod.TimePeriod_4Y -> snp.priceChange.fourYears
+
+                TimePeriod.TimePeriod_5Y -> snp.priceChange.fiveYears
+            }
+        }
+
+        return (priceValue ?: BigDecimal.ZERO) < value
+    }
+
     private fun closeToAllTime(value: BigDecimal?): Boolean {
         return value != null && value.abs() < BigDecimal.TEN
     }
@@ -156,6 +209,12 @@ class MarketFiltersService(
     private fun inAdvice(tokenAdvice: Advice?): Boolean {
         if (filterTradingSignal.isEmpty()) return true
         return filterTradingSignal.contains(tokenAdvice)
+    }
+
+    private fun inSectors(ids: List<Int>?, selectedSectorIds: List<Int>): Boolean {
+        if (selectedSectorIds.isEmpty()) return true
+        if (ids == null) return false
+        return ids.intersect(selectedSectorIds.toSet()).isNotEmpty()
     }
 
     private fun inBlockchain(tokens: List<Token>): Boolean {

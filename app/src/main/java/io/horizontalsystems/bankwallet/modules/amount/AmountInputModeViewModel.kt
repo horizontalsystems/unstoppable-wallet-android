@@ -15,27 +15,37 @@ class AmountInputModeViewModel(
     private val coinUid: String
 ) : ViewModel() {
 
-    private var hasXRate = xRateService.getRate(coinUid) != null
+    private var hasValidRate: Boolean = xRateService.getCoinPrice(coinUid)?.expired == false
 
     var inputType by mutableStateOf(
         when {
-            hasXRate -> localStorage.amountInputType ?: AmountInputType.COIN
+            hasValidRate -> localStorage.amountInputType ?: AmountInputType.COIN
             else -> AmountInputType.COIN
         }
     )
         private set
 
     init {
-        xRateService.getRateFlow(coinUid)
-            .onFirstWith(viewModelScope) {
-                hasXRate = true
+        xRateService.getCoinPriceFlow(coinUid)
+            .onFirstWith(viewModelScope) { coinPrice ->
+                hasValidRate = coinPrice.expired == false
             }
     }
 
     fun onToggleInputType() {
-        if (!hasXRate) return
+        if (!hasValidRate) return
 
         inputType = inputType.reversed()
+        localStorage.amountInputType = inputType
+    }
+
+    fun onCoinInput() {
+        inputType = AmountInputType.COIN
+        localStorage.amountInputType = inputType
+    }
+
+    fun onFiatInput() {
+        inputType = AmountInputType.CURRENCY
         localStorage.amountInputType = inputType
     }
 }

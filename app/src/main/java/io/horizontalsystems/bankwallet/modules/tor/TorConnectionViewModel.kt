@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ITorManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
+import io.horizontalsystems.bankwallet.modules.settings.privacy.tor.TorStatus
 import io.horizontalsystems.bankwallet.modules.tor.TorConnectionModule.TorViewState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

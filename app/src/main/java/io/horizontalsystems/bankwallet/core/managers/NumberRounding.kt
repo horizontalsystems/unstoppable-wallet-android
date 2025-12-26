@@ -16,7 +16,13 @@ class NumberRounding {
                 BigDecimalRounded.Regular(BigDecimal.ZERO)
             }
             else -> {
-                BigDecimalRounded.Regular(simpleRoundingStrategy(value, minimumFractionDigits, maximumFractionDigits))
+                BigDecimalRounded.Regular(
+                    simpleRoundingStrategy(
+                        value = value,
+                        minimumFractionDigits = minimumFractionDigits,
+                        maximumFractionDigits = maximumFractionDigits,
+                        maxFractionNonZeroDigits = 8
+                    ))
             }
         }
     }
@@ -33,7 +39,13 @@ class NumberRounding {
                 BigDecimalRounded.LessThen(mostLowValue)
             }
             value < BigDecimal("19999.5") -> {
-                BigDecimalRounded.Regular(simpleRoundingStrategy(value, 0, maximumFractionDigitsCoerced))
+                BigDecimalRounded.Regular(
+                    simpleRoundingStrategy(
+                        value = value,
+                        minimumFractionDigits = 0,
+                        maximumFractionDigits = maximumFractionDigitsCoerced,
+                        maxFractionNonZeroDigits = 4
+                    ))
             }
             else -> {
                 largeNumberStrategy(value)
@@ -83,10 +95,13 @@ class NumberRounding {
     private fun simpleRoundingStrategy(
         value: BigDecimal,
         minimumFractionDigits: Int,
-        maximumFractionDigits: Int
+        maximumFractionDigits: Int,
+        maxFractionNonZeroDigits: Int,
     ): BigDecimal {
         val decimals = when {
-            value < BigDecimal("1") -> getNumberOfZerosAfterDot(value) + 4
+            value < BigDecimal("1") ->  {
+                minOf(maximumFractionDigits, getNumberOfZerosAfterDot(value) + maxFractionNonZeroDigits)
+            }
             value < BigDecimal("1.01") -> 4
             value < BigDecimal("1.1") -> 3
             value < BigDecimal("20") -> 2
@@ -96,7 +111,7 @@ class NumberRounding {
 
         val coerced = decimals.coerceIn(minimumFractionDigits, maximumFractionDigits)
 
-        return value.setScale(coerced, RoundingMode.HALF_UP).stripTrailingZeros()
+        return value.setScale(coerced, RoundingMode.DOWN).stripTrailingZeros()
     }
 
     private fun getShortened(value: BigDecimal): BigDecimalRounded.Large {

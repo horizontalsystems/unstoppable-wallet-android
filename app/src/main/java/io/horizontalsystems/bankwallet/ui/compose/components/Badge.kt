@@ -12,11 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Dark
 import java.math.BigDecimal
 
 @Composable
@@ -24,8 +27,8 @@ fun Badge(modifier: Modifier = Modifier, text: String) {
     BadgeText(
         modifier = modifier,
         text = text,
-        background = ComposeAppTheme.colors.jeremy,
-        textColor = ComposeAppTheme.colors.bran,
+        background = ComposeAppTheme.colors.blade,
+        textColor = ComposeAppTheme.colors.leah,
     )
 }
 
@@ -37,11 +40,11 @@ fun BadgeWithDiff(
 ) {
     BadgeBase(
         modifier = modifier,
-        background = ComposeAppTheme.colors.jeremy
+        background = SolidColor(ComposeAppTheme.colors.blade)
     ) {
         Text(
             text = text,
-            color = ComposeAppTheme.colors.bran,
+            color = ComposeAppTheme.colors.leah,
             style = ComposeAppTheme.typography.microSB,
             maxLines = 1,
         )
@@ -66,7 +69,7 @@ fun BadgeText(
 ) {
     BadgeBase(
         modifier = modifier,
-        background = background,
+        background = SolidColor(background),
     ) {
         Text(
             text = text,
@@ -79,9 +82,30 @@ fun BadgeText(
 }
 
 @Composable
+fun BadgeOrangeGradient(
+    modifier: Modifier = Modifier,
+    text: String,
+) {
+    val gradientColors = listOf(Color(0xFFFFAA00), Color(0xFFFE4A11))
+    BadgeBase(
+        modifier = modifier,
+        background = Brush.horizontalGradient(gradientColors),
+    ) {
+        Text(
+            text = text,
+            color = Dark,
+            style = ComposeAppTheme.typography.microSB,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+
+@Composable
 fun BadgeBase(
     modifier: Modifier = Modifier,
-    background: Color,
+    background: Brush,
     content: @Composable RowScope.() -> Unit,
 ) {
     Row(

@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.market.posts
 
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.marketkit.models.Post
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject

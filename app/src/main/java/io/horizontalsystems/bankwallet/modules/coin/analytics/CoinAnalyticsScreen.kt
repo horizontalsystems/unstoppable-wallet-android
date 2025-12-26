@@ -22,6 +22,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsBlockHeader
@@ -29,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsChart
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsContainer
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsContentNumber
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsFooterCell
+import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.TechnicalAdviceBlock
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment
 import io.horizontalsystems.bankwallet.modules.coin.detectors.DetectorsFragment
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
@@ -36,6 +41,8 @@ import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHolder
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
@@ -79,13 +86,6 @@ fun CoinAnalyticsScreen(
                             )
                         }
 
-                        is AnalyticsViewItem.Preview -> {
-                            AnalyticsDataPreview(
-                                previewBlocks = item.blocks,
-                                navController = navController
-                            )
-                        }
-
                         is AnalyticsViewItem.Analytics -> {
                             AnalyticsData(
                                 item.blocks,
@@ -116,26 +116,15 @@ private fun AnalyticsData(
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(blocks) { block ->
-            AnalyticsBlock(
-                block,
-                navController,
-                fragmentManager,
-            )
-        }
-        item {
-            Spacer(modifier = Modifier.height(32.dp))
-        }
-    }
-}
-
-@Composable
-private fun AnalyticsDataPreview(
-    previewBlocks: List<CoinAnalyticsModule.PreviewBlockViewItem>,
-    navController: NavController,
-) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(previewBlocks) { block ->
-            AnalyticsPreviewBlock(block, navController)
+            if (block.showAsPreview) {
+                AnalyticsPreviewBlock(block, navController)
+            } else {
+                AnalyticsBlock(
+                    block,
+                    navController,
+                    fragmentManager,
+                )
+            }
         }
         item {
             Spacer(modifier = Modifier.height(32.dp))
@@ -163,6 +152,7 @@ private fun AnalyticsBlock(
             block.title?.let {
                 AnalyticsBlockHeader(
                     title = stringResource(it),
+                    isPreview = false,
                     onInfoClick = block.info?.let { info ->
                         {
                             navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
@@ -214,7 +204,7 @@ private fun AnalyticsBlock(
 private fun FooterCell(
     item: CoinAnalyticsModule.FooterType,
     index: Int,
-    navController: NavController
+    navController: NavController,
 ) {
     when (item) {
         is CoinAnalyticsModule.FooterType.FooterItem -> {
@@ -278,7 +268,7 @@ private fun FooterCell(
 
 @Composable
 private fun AnalyticsPreviewBlock(
-    block: CoinAnalyticsModule.PreviewBlockViewItem,
+    block: CoinAnalyticsModule.BlockViewItem,
     navController: NavController
 ) {
     AnalyticsContainer(
@@ -295,6 +285,7 @@ private fun AnalyticsPreviewBlock(
             block.title?.let {
                 AnalyticsBlockHeader(
                     title = stringResource(it),
+                    isPreview = true,
                     onInfoClick = block.info?.let { info ->
                         {
                             navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
@@ -305,34 +296,79 @@ private fun AnalyticsPreviewBlock(
         },
         bottomRows = {
             block.footerItems.forEachIndexed { index, item ->
-                FooterCell(item, index, navController)
+                if (item is CoinAnalyticsModule.FooterType.FooterItem) {
+                    PreviewFooterCell(item.title, item.action != null, index)
+                } else if (item is CoinAnalyticsModule.FooterType.DetectorFooterItem) {
+                    PreviewFooterCell(item.title, item.action != null, index)
+                }
             }
+        },
+        onClick = {
+            navController.slideFromBottom(
+                R.id.defenseSystemFeatureDialog,
+                DefenseSystemFeatureDialog.Input(PremiumFeature.TokenInsightsFeature, true)
+            )
+            stat(
+                page = StatPage.CoinAnalytics,
+                event = StatEvent.OpenPremium(block.statTrigger ?: StatPremiumTrigger.Other)
+            )
         }
     ) {
-        if (block.showValueDots) {
+        if (block.value != null) {
             AnalyticsContentNumber(
                 number = stringResource(R.string.CoinAnalytics_ThreeDots),
             )
         }
-        block.chartType?.let { chartType ->
+        block.analyticChart?.let { chart ->
             VSpacer(12.dp)
-            if (chartType == CoinAnalyticsModule.PreviewChartType.StackedBars) {
-                val lockedSlices = listOf(
-                    StackBarSlice(value = 50.34f, color = Color(0xBF808085)),
-                    StackBarSlice(value = 37.75f, color = Color(0x80808085)),
-                    StackBarSlice(value = 11.9f, color = Color(0x40808085)),
-                )
-                StackedBarChart(lockedSlices, modifier = Modifier.padding(horizontal = 16.dp))
-            } else {
-                AnalyticsChart(
-                    CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(chartType == CoinAnalyticsModule.PreviewChartType.Line),
-                )
+            when (chart.analyticChart) {
+                is CoinAnalyticsModule.AnalyticChart.StackedBars -> {
+                    val lockedSlices = listOf(
+                        StackBarSlice(value = 50.34f, color = Color(0xBF808085)),
+                        StackBarSlice(value = 37.75f, color = Color(0x80808085)),
+                        StackBarSlice(value = 11.9f, color = Color(0x40808085)),
+                    )
+                    StackedBarChart(lockedSlices, modifier = Modifier.padding(horizontal = 16.dp))
+                }
+
+                is CoinAnalyticsModule.AnalyticChart.Bars -> {
+                    AnalyticsChart(
+                        CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(false),
+                    )
+                }
+
+                is CoinAnalyticsModule.AnalyticChart.Line -> {
+                    AnalyticsChart(
+                        CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(true),
+                    )
+                }
+
+                is CoinAnalyticsModule.AnalyticChart.TechAdvice -> {
+                    TechnicalAdviceBlock(
+                        detailText = "",
+                        advice = null
+                    )
+                }
             }
-        }
-        if (block.showValueDots || block.chartType != null) {
             VSpacer(12.dp)
         }
     }
+}
+
+@Composable
+private fun PreviewFooterCell(
+    title: CoinAnalyticsModule.BoxItem,
+    showRightArrow: Boolean,
+    index: Int
+) {
+    AnalyticsFooterCell(
+        title = title,
+        value = CoinAnalyticsModule.BoxItem.Dots,
+        showTopDivider = index != 0,
+        showRightArrow = showRightArrow,
+        cellAction = null,
+        onActionClick = { }
+    )
 }
 
 private fun handleActionClick(
@@ -376,10 +412,6 @@ private fun handleActionClick(
 
         CoinAnalyticsModule.ActionType.OpenTvl -> {
             navController.slideFromBottom(R.id.tvlFragment)
-        }
-
-        CoinAnalyticsModule.ActionType.Preview -> {
-            navController.slideFromBottom(R.id.subscriptionInfoFragment)
         }
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {

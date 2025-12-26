@@ -54,7 +54,7 @@ fun CellNews(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = date,
-                color = ComposeAppTheme.colors.grey50,
+                color = ComposeAppTheme.colors.andy,
                 style = ComposeAppTheme.typography.micro,
                 maxLines = 1,
             )

@@ -36,9 +36,9 @@ class RotatingCircleProgressView : View {
         lastUpdateTime = System.currentTimeMillis()
 
         pathPaint.style = Paint.Style.STROKE
-        pathPaint.strokeCap = Paint.Cap.BUTT
+        pathPaint.strokeCap = Paint.Cap.ROUND
         pathPaint.strokeWidth = mThickness
-        pathPaint.color = context.getColor(R.color.steel_10)
+        pathPaint.color = context.getColor(R.color.andy)
 
         mCirclePaint.style = Paint.Style.STROKE
         mCirclePaint.strokeCap = Paint.Cap.BUTT

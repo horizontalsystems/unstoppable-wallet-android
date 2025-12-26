@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -12,7 +13,6 @@ import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmTransa
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.SwapTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
@@ -111,7 +112,6 @@ object TransactionViewItemFactoryHelper {
     private fun getAmountColor(incoming: Boolean?): ColorName {
         return when (incoming) {
             true -> ColorName.Remus
-            false -> ColorName.Lucian
             else -> ColorName.Leah
         }
     }
@@ -123,7 +123,7 @@ object TransactionViewItemFactoryHelper {
         hideAmount: Boolean,
         nftMetadata: NftAssetBriefMetadata?,
     ): TransactionInfoViewItem {
-        val valueFormatted = if (hideAmount) "*****" else value.decimalValue.let { decimalValue ->
+        val valueFormatted = if (hideAmount) "* * *" else value.decimalValue.let { decimalValue ->
             val sign = when {
                 incoming == null -> ""
                 decimalValue < BigDecimal.ZERO -> "-"
@@ -161,7 +161,7 @@ object TransactionViewItemFactoryHelper {
         amount: SwapTransactionRecord.Amount? = null,
         hasRecipient: Boolean = false,
     ): TransactionInfoViewItem {
-        val valueInFiat = if (hideAmount) "*****" else rate?.let {
+        val valueInFiat = if (hideAmount) "* * *" else rate?.let {
             value.decimalValue?.let { decimalValue ->
                 numberFormatter.formatFiatFull(
                     (it.value * decimalValue).abs(),
@@ -171,7 +171,7 @@ object TransactionViewItemFactoryHelper {
         } ?: "---"
         val fiatValueColored = ColoredValue(valueInFiat, ColorName.Grey)
         val coinValueFormatted =
-            if (hideAmount) "*****" else value.decimalValue?.let { decimalValue ->
+            if (hideAmount) "* * *" else value.decimalValue?.let { decimalValue ->
                 val sign = when (incoming) {
                     true -> "+"
                     false -> "-"
@@ -191,7 +191,7 @@ object TransactionViewItemFactoryHelper {
             } ?: "---"
 
         val color = if (hasRecipient && incoming == true) {
-            ColorName.Lucian
+            ColorName.Leah
         } else {
             getAmountColor(incoming)
         }
@@ -241,6 +241,8 @@ object TransactionViewItemFactoryHelper {
         hideAmount: Boolean,
         nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf(),
         blockchainType: BlockchainType,
+        showHistoricalRate: Boolean = true,
+        toAddress: String? = null
     ): List<TransactionInfoViewItem> {
         val mint = fromAddress == zeroAddress
         val title: String =
@@ -256,7 +258,8 @@ object TransactionViewItemFactoryHelper {
             }
 
             else -> {
-                amount = getAmount(coinPrice, value, true, hideAmount, AmountType.Received)
+                val amountType = if (mint) AmountType.Minted else AmountType.Received
+                amount = getAmount(coinPrice, value, true, hideAmount, amountType)
                 rate = getHistoricalRate(coinPrice, value)
             }
         }
@@ -283,7 +286,27 @@ object TransactionViewItemFactoryHelper {
             }
         }
 
-        rate?.let { items.add(it) }
+        toAddress?.let {
+            val contact = getContact(toAddress, blockchainType)
+            items.add(
+                TransactionInfoViewItem.Address(
+                    Translator.getString(R.string.TransactionInfo_To),
+                    toAddress,
+                    contact == null,
+                    blockchainType,
+                    StatSection.AddressTo
+                )
+            )
+            contact?.let {
+                items.add(
+                    TransactionInfoViewItem.ContactItem(it)
+                )
+            }
+        }
+
+        if (showHistoricalRate) {
+            rate?.let { items.add(it) }
+        }
 
         return items
     }
@@ -297,6 +320,7 @@ object TransactionViewItemFactoryHelper {
         sentToSelf: Boolean = false,
         nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf(),
         blockchainType: BlockchainType,
+        showHistoricalRate: Boolean = true
     ): List<TransactionInfoViewItem> {
         val burn = toAddress == zeroAddress
 
@@ -349,7 +373,9 @@ object TransactionViewItemFactoryHelper {
             }
         }
 
-        rate?.let { items.add(it) }
+        if (showHistoricalRate) {
+            rate?.let { items.add(it) }
+        }
 
         return items
     }
@@ -493,7 +519,7 @@ object TransactionViewItemFactoryHelper {
         } ?: ""
 
         val coinAmountString = when {
-            hideAmount -> "*****"
+            hideAmount -> "* * *"
             value.isMaxValue -> "∞ ${value.coinCode}"
 
             else -> coinAmountFormatted
@@ -502,7 +528,7 @@ object TransactionViewItemFactoryHelper {
         val coinAmountColoredValue = ColoredValue(coinAmountString, getAmountColor(null))
 
         val fiatAmountString = when {
-            hideAmount -> "*****"
+            hideAmount -> "* * *"
             value.isMaxValue -> Translator.getString(R.string.Transaction_Unlimited)
             else -> fiatAmountFormatted
         }
@@ -635,14 +661,25 @@ object TransactionViewItemFactoryHelper {
                 items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
             }
 
-            is BitcoinOutgoingTransactionRecord ->
-                transaction.fee?.let { items.add(getFee(it, rates[it.coinUid])) }
+            is StellarTransactionRecord -> {
+                transaction.fee?.let { fee ->
+                    items.add(getFeeItem(fee, rates[fee.coinUid], status))
+                }
+            }
 
-            is BinanceChainOutgoingTransactionRecord ->
-                items.add(getFee(transaction.fee, rates[transaction.fee.coinUid]))
+            is BitcoinOutgoingTransactionRecord ->
+                if (transaction.fee?.zeroValue == false) {
+                    items.add(getFee(transaction.fee, rates[transaction.fee.coinUid]))
+                }
 
             is SolanaOutgoingTransactionRecord -> {
-                if (transaction.fee != null) {
+                transaction.fee?.let {
+                    items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                }
+            }
+
+            is ZcashShieldingTransactionRecord -> {
+                if (transaction.fee?.zeroValue == false) {
                     items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
                 }
             }

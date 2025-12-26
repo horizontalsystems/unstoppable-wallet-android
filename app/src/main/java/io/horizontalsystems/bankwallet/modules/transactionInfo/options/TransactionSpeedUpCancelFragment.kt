@@ -16,7 +16,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -34,7 +33,9 @@ class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        TransactionSpeedUpCancelScreen(navController, navController.requireInput())
+        withInput<Input>(navController) { input ->
+            TransactionSpeedUpCancelScreen(navController, input)
+        }
     }
 
     @Parcelize

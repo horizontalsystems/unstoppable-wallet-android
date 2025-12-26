@@ -4,29 +4,31 @@ import androidx.lifecycle.viewModelScope
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.ServiceWCWhitelist
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableAccount
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableEvmKit
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.RequestNotFoundError
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.UnsupportedChainId
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCUtils
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Invalid
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Killed
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Ready
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.WaitingForApproveSession
 import io.horizontalsystems.core.SingleLiveEvent
-import io.horizontalsystems.ethereumkit.core.signer.Signer
-import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.ethereumkit.models.Chain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.URL
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -36,8 +38,12 @@ class WCSessionViewModel(
     private val connectivityManager: ConnectivityManager,
     private val account: Account?,
     private val topic: String?,
-    private val evmBlockchainManager: EvmBlockchainManager
+    private val wcManager: WCManager,
+    private val networkManager: INetworkManager,
+    appConfigProvider: AppConfigProvider
 ) : ViewModelUiState<WCSessionUiState>() {
+
+    val marketApiBaseUrl = appConfigProvider.marketApiBaseUrl
 
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val showErrorLiveEvent = SingleLiveEvent<String?>()
@@ -51,36 +57,27 @@ class WCSessionViewModel(
     private var showError: String? = null
     private var status: Status? = null
     private var pendingRequests = listOf<WCRequestViewItem>()
-
-    private val supportedChains = EvmBlockchainManager.blockchainTypes.map { evmBlockchainManager.getChain(it) }
-
-    private val supportedMethods = listOf(
-        "eth_sendTransaction",
-        "personal_sign",
-//        "eth_accounts",
-//        "eth_requestAccounts",
-//        "eth_call",
-//        "eth_getBalance",
-//        "eth_sendRawTransaction",
-        "eth_sign",
-        "eth_signTransaction",
-        "eth_signTypedData",
-        "eth_signTypedData_v4",
-        "wallet_addEthereumChain",
-        "wallet_switchEthereumChain"
-    )
-
-    private val supportedEvents = listOf("chainChanged", "accountsChanged", "connect", "disconnect", "message")
+    private var blockchainTypes: List<BlockchainType>? = null
+    private var connected: Boolean = topic != null
+    private var whiteListState = WCWhiteListState.InProgress
+    private var whiteListCache: List<ServiceWCWhitelist.WCWhiteList>? = null
+    private var hasSubscription = false
+    private var closeDialog = false
 
     override fun createState() = WCSessionUiState(
         peerMeta = peerMeta,
         closeEnabled = closeEnabled,
         connecting = connecting,
+        connected = connected,
         buttonStates = buttonStates,
         hint = hint,
         showError = showError,
         status = status,
         pendingRequests = pendingRequests,
+        blockchainTypes = blockchainTypes,
+        whiteListState = whiteListState,
+        hasSubscription = hasSubscription,
+        closeDialog = closeDialog
     )
 
     private var sessionServiceState: WCSessionServiceState = WCSessionServiceState.Idle
@@ -174,38 +171,31 @@ class WCSessionViewModel(
             }
         }
 
+        viewModelScope.launch(Dispatchers.IO) {
+            whiteListCache = getWCWhiteList()
+            checkWhiteListStatus()
+        }
+
+        viewModelScope.launch {
+            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
+                hasSubscription = it != null
+                emitState()
+            }
+        }
+
         loadSessionProposal(topic)
-    }
-
-    private fun validate(proposal: Wallet.Model.SessionProposal): ValidationError? {
-        val chains = proposal.requiredNamespaces.mapNotNull { it.value.chains }.flatten()
-        val methods = proposal.requiredNamespaces.map { it.value.methods }.flatten()
-        val events = proposal.requiredNamespaces.map { it.value.events }.flatten()
-
-        val supportedChains = supportedChains.map { "eip155:${it.id}" }
-
-        val unsupportedChains = chains - supportedChains.toSet()
-        if (unsupportedChains.isNotEmpty()) {
-            return ValidationError.UnsupportedChains(unsupportedChains)
-        }
-
-        val unsupportedMethods = methods - supportedMethods.toSet()
-        if (unsupportedMethods.isNotEmpty()) {
-            return ValidationError.UnsupportedMethods(unsupportedMethods)
-        }
-
-        val unsupportedEvents = events - supportedEvents.toSet()
-        if (unsupportedEvents.isNotEmpty()) {
-            return ValidationError.UnsupportedEvents(unsupportedEvents)
-        }
-
-        return null
     }
 
     private fun loadSessionProposal(topic: String?) {
         if (topic != null) {
             val existingSession = sessionManager.sessions.firstOrNull { it.topic == topic }
             if (existingSession != null) {
+                blockchainTypes = existingSession.namespaces.values.flatMap { namespace ->
+                    namespace.chains?.mapNotNull { chain ->
+                        determineBlockchainType(chain)
+                    } ?: emptyList()
+                }
+
                 peerMeta = existingSession.metaData?.let {
                     PeerMetaItem(
                         it.name,
@@ -219,6 +209,10 @@ class WCSessionViewModel(
                 session = existingSession
                 pendingRequests = getPendingRequestViewItems(topic)
                 sessionServiceState = Ready
+
+                if (whiteListCache != null) {
+                    checkWhiteListStatus()
+                }
             }
         } else {
             WCDelegate.sessionProposalEvent?.let { (sessionProposal, _) ->
@@ -229,8 +223,26 @@ class WCSessionViewModel(
                     sessionProposal.icons.lastOrNull()?.toString(),
                     account?.name,
                 )
+
+                blockchainTypes = sessionProposal.optionalNamespaces.flatMap {
+                    it.value.chains?.mapNotNull { chain ->
+                        determineBlockchainType(chain)
+                    } ?: emptyList()
+                }
+
                 proposal = sessionProposal
-                sessionServiceState = validate(sessionProposal)?.let { Invalid(it) } ?: WaitingForApproveSession
+
+                sessionServiceState = try {
+                    wcManager.validate(sessionProposal.requiredNamespaces)
+
+                    WaitingForApproveSession
+                } catch (e: Throwable) {
+                    Invalid(e)
+                }
+
+                if (whiteListCache != null) {
+                    checkWhiteListStatus()
+                }
             } ?: run {
                 sessionServiceState = Invalid(RequestNotFoundError)
             }
@@ -239,22 +251,76 @@ class WCSessionViewModel(
 
     private fun getPendingRequestViewItems(topic: String): List<WCRequestViewItem> {
         return Web3Wallet.getPendingListOfSessionRequests(topic).map { request ->
+            val methodData = wcManager.getMethodData(request)
+
             WCRequestViewItem(
-                requestId = request.request.id,
-                title = title(request.request.method),
-                subtitle = request.chainId?.let { WCUtils.getChainData(it) }?.chain?.name ?: "",
+                title = methodData?.title ?: "Unsupported",
+                subtitle = methodData?.network ?: "",
                 request = request
             )
         }
     }
 
-    private fun title(method: String?): String = when (method) {
-        "personal_sign" -> "Personal Sign Request"
-        "eth_sign" -> "Standard Sign Request"
-        "eth_signTypedData" -> "Typed Sign Request"
-        "eth_sendTransaction" -> "Approve Transaction"
-        "eth_signTransaction" -> "Sign Transaction"
-        else -> "Unsupported"
+    private suspend fun getWCWhiteList(): List<ServiceWCWhitelist.WCWhiteList> {
+        val url = URL(marketApiBaseUrl)
+        val path = "/v1/defi-protocols/dapps"
+        return try {
+            networkManager.getWCWhiteList("${url.protocol}://${url.host}", path)
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    private fun checkWhiteListStatus() {
+        val urlToCheck = getCurrentUrl()
+        val whiteList = whiteListCache
+        whiteListState = when {
+            urlToCheck.isNullOrEmpty() || whiteList.isNullOrEmpty() -> WCWhiteListState.Error
+            isUrlInWhiteList(urlToCheck, whiteList) -> WCWhiteListState.InWhiteList
+            else -> WCWhiteListState.NotInWhiteList
+        }
+        emitState()
+    }
+
+    private fun getCurrentUrl(): String? {
+        return when {
+            // For new proposals
+            proposal != null -> proposal?.url
+            // For existing sessions
+            session != null -> session?.metaData?.url
+            // Fallback to peerMeta
+            peerMeta != null -> peerMeta?.url
+            else -> null
+        }
+    }
+
+    private fun isUrlInWhiteList(
+        url: String,
+        whiteList: List<ServiceWCWhitelist.WCWhiteList>
+    ): Boolean {
+        val normalizedUrl = normalizeUrl(url)
+
+        return whiteList.any { whiteListItem ->
+            val normalizedWhiteListUrl = normalizeUrl(whiteListItem.url)
+
+            // Exact match
+            normalizedUrl == normalizedWhiteListUrl ||
+                    // Domain match (handles subdomains)
+                    normalizedUrl.endsWith(".$normalizedWhiteListUrl") ||
+                    normalizedUrl.endsWith(normalizedWhiteListUrl) ||
+                    // Reverse check for subdomain cases
+                    normalizedWhiteListUrl.endsWith(".$normalizedUrl") ||
+                    normalizedWhiteListUrl.endsWith(normalizedUrl)
+        }
+    }
+
+    private fun normalizeUrl(url: String): String {
+        return url.lowercase()
+            .removePrefix("https://")
+            .removePrefix("http://")
+            .removePrefix("www.")
+            .removeSuffix("/")
+            .trim()
     }
 
     private fun sync(
@@ -281,6 +347,8 @@ class WCSessionViewModel(
         val proposal = proposal ?: return
 
         if (!connectivityManager.isConnected) {
+            showError = Translator.getString(R.string.Hud_Text_NoInternet)
+            emitState()
             showNoInternetErrorLiveEvent.postValue(Unit)
             return
         }
@@ -289,6 +357,7 @@ class WCSessionViewModel(
             reject(proposal.proposerPublicKey) {
                 sessionServiceState = Killed
             }
+            closeDialog = true
         }
     }
 
@@ -296,6 +365,8 @@ class WCSessionViewModel(
         val proposal = proposal ?: return
 
         if (!connectivityManager.isConnected) {
+            showError = Translator.getString(R.string.Hud_Text_NoInternet)
+            emitState()
             showNoInternetErrorLiveEvent.postValue(Unit)
             return
         }
@@ -308,6 +379,7 @@ class WCSessionViewModel(
         viewModelScope.launch {
             try {
                 approve(proposal.proposerPublicKey)
+                connected = true
             } catch (t: Throwable) {
                 WCDelegate.sessionProposalEvent = null
                 showErrorLiveEvent.postValue(t.message)
@@ -317,6 +389,8 @@ class WCSessionViewModel(
 
     fun disconnect() {
         if (!connectivityManager.isConnected) {
+            showError = Translator.getString(R.string.Hud_Text_NoInternet)
+            emitState()
             showNoInternetErrorLiveEvent.postValue(Unit)
             return
         }
@@ -327,6 +401,10 @@ class WCSessionViewModel(
             topic = sessionNonNull.topic,
             onSuccess = {
                 sessionServiceState = Killed
+                closeDialog = true
+            },
+            onError = {
+                closeDialog = true
             }
         )
     }
@@ -335,8 +413,7 @@ class WCSessionViewModel(
         val accountNonNull = account ?: return
         return suspendCoroutine { continuation ->
             if (Web3Wallet.getSessionProposals().isNotEmpty()) {
-                val blockchains = getSupportedBlockchains(accountNonNull)
-                val namespaces = getSupportedNamespaces(blockchains.map { it.getAccount() })
+                val namespaces = wcManager.getSupportedNamespaces(accountNonNull)
                 val sessionProposal: Wallet.Model.SessionProposal = try {
                     requireNotNull(
                         Web3Wallet.getSessionProposals()
@@ -355,14 +432,17 @@ class WCSessionViewModel(
                     namespaces = sessionNamespaces
                 )
 
-                Web3Wallet.approveSession(approveProposal,
+                Web3Wallet.approveSession(
+                    approveProposal,
                     onError = { error ->
                         continuation.resumeWithException(error.throwable)
                         WCDelegate.sessionProposalEvent = null
+                        closeDialog = true
                     },
                     onSuccess = {
                         continuation.resume(Unit)
                         WCDelegate.sessionProposalEvent = null
+                        closeDialog = true
                     })
             }
         }
@@ -380,7 +460,8 @@ class WCSessionViewModel(
                     reason = rejectionReason
                 )
 
-                Web3Wallet.rejectSession(reject,
+                Web3Wallet.rejectSession(
+                    reject,
                     onSuccess = {
                         continuation.resume(Unit)
                         WCDelegate.sessionProposalEvent = null
@@ -407,7 +488,7 @@ class WCSessionViewModel(
         connection: Boolean?
     ) {
         buttonStates = WCSessionButtonStates(
-            connect = getConnectButtonState(state, connection),
+            connect = getConnectButtonState(state),
             disconnect = getDisconnectButtonState(state, connection),
             cancel = getCancelButtonState(state),
             remove = getRemoveButtonState(state, connection),
@@ -424,10 +505,9 @@ class WCSessionViewModel(
 
     private fun getConnectButtonState(
         state: WCSessionServiceState,
-        connectionState: Boolean?
     ): WCButtonState {
         return when {
-            state == WaitingForApproveSession && connectionState == true -> WCButtonState.Enabled
+            state == WaitingForApproveSession -> WCButtonState.Enabled
             else -> WCButtonState.Hidden
         }
     }
@@ -439,6 +519,31 @@ class WCSessionViewModel(
         return when {
             state == Ready && connectionState == true -> WCButtonState.Enabled
             else -> WCButtonState.Hidden
+        }
+    }
+
+    private fun determineBlockchainType(chain: String): BlockchainType? {
+        val chainParts = chain.split(":")
+        val first = chainParts[0]
+
+        return when (first) {
+            "eip155" -> {
+                val chainId = chainParts[1].toIntOrNull()
+                chainId?.let {
+                    App.evmBlockchainManager.getBlockchain(it)
+                }?.type
+            }
+
+            "stellar" -> {
+                val s = chainParts[1]
+                if (s == "pubnet") {
+                    BlockchainType.Stellar
+                } else {
+                    null
+                }
+            }
+
+            else -> null
         }
     }
 
@@ -457,7 +562,9 @@ class WCSessionViewModel(
         state: WCSessionServiceState
     ) {
         val error: String? = when {
-            state is Invalid && (state.error !is ValidationError) -> state.error.message ?: state.error::class.java.simpleName
+            state is Invalid && (state.error !is ValidationError) -> state.error.message
+                ?: state.error::class.java.simpleName
+
             else -> null
         }
 
@@ -473,7 +580,6 @@ class WCSessionViewModel(
 
             connection == null -> return null
             state is Invalid -> return getErrorMessage(state.error)
-            state == WaitingForApproveSession -> Translator.getString(R.string.WalletConnect_Approve_Hint)
         }
         return null
     }
@@ -484,61 +590,43 @@ class WCSessionViewModel(
             is NoSuitableAccount -> Translator.getString(R.string.WalletConnect_Error_NoSuitableAccount)
             is NoSuitableEvmKit -> Translator.getString(R.string.WalletConnect_Error_NoSuitableEvmKit)
             is RequestNotFoundError -> Translator.getString(R.string.WalletConnect_Error_RequestNotFoundError)
+            is ValidationError.UnsupportedChainNamespace -> Translator.getString(
+                R.string.WalletConnect_Error_UnsupportedChains,
+                error.chainNamespace
+            )
+
             is ValidationError.UnsupportedChains -> Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedChains,
-                error.chains.joinToString { it })
+                error.chains.joinToString()
+            )
 
             is ValidationError.UnsupportedMethods -> Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedMethods,
-                error.methods.joinToString { it })
+                error.methods.joinToString()
+            )
 
             is ValidationError.UnsupportedEvents -> Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedEvents,
-                error.events.joinToString { it })
+                error.events.joinToString()
+            )
 
             else -> null
         }
-    }
-
-    private fun getEvmAddress(account: Account, chain: Chain) =
-        when (val accountType = account.type) {
-            is AccountType.Mnemonic -> {
-                val seed: ByteArray = accountType.seed
-                Signer.address(seed, chain)
-            }
-
-            is AccountType.EvmPrivateKey -> {
-                Signer.address(accountType.key)
-            }
-
-            is AccountType.EvmAddress -> {
-                Address(accountType.address)
-            }
-
-            else -> throw UnsupportedAccountException()
-        }
-
-    private fun getSupportedNamespaces(accounts: List<String>) = mapOf(
-        "eip155" to Wallet.Model.Namespace.Session(
-            chains = supportedChains.map { "eip155:${it.id}" },
-            methods = supportedMethods,
-            events = supportedEvents,
-            accounts = accounts
-        )
-    )
-
-    private fun getSupportedBlockchains(account: Account) = supportedChains.map {
-        val address = getEvmAddress(account, it).eip55
-        WCBlockchain(it.id, it.name, address)
     }
 
     fun setRequestToOpen(request: Wallet.Model.SessionRequest) {
         WCDelegate.sessionRequestEvent = request
     }
 
+    fun errorShown() {
+        showError = null
+        emitState()
+    }
+
 }
 
 sealed class ValidationError : Throwable() {
+    class UnsupportedChainNamespace(val chainNamespace: String) : ValidationError()
     class UnsupportedChains(val chains: List<String>) : ValidationError()
     class UnsupportedMethods(val methods: List<String>) : ValidationError()
     class UnsupportedEvents(val events: List<String>) : ValidationError()

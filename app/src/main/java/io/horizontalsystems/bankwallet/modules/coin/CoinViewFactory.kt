@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewItem
+import io.horizontalsystems.bankwallet.modules.roi.RoiManager
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.core.helpers.DateHelper
@@ -36,7 +37,6 @@ data class MarketTickerViewItem(
 
 sealed class RoiViewItem {
     class HeaderRowViewItem(
-        val title: String,
         val periods: List<HsTimePeriod>,
     ) : RoiViewItem()
 
@@ -81,18 +81,24 @@ data class CoinLink(
 
 class CoinViewFactory(
     private val currency: Currency,
-    private val numberFormatter: IAppNumberFormatter
+    private val numberFormatter: IAppNumberFormatter,
+    private val roiManager: RoiManager
 ) {
 
     fun getRoi(performance: Map<String, Map<HsTimePeriod, BigDecimal>>): List<RoiViewItem> {
+        val selectedCoins = roiManager.getSelectedCoins()
+
         val rows = mutableListOf<RoiViewItem>()
 
         val timePeriods = performance.map { it.value.keys }.flatten().distinct()
-        rows.add(RoiViewItem.HeaderRowViewItem("ROI", timePeriods))
-        performance.forEach { (vsCurrency, performanceVsCurrency) ->
-            if (performanceVsCurrency.isNotEmpty()) {
-                val values = timePeriods.map { performanceVsCurrency[it] }
-                rows.add(RoiViewItem.RowViewItem("vs ${vsCurrency.uppercase()}", values))
+        rows.add(RoiViewItem.HeaderRowViewItem(timePeriods))
+
+        selectedCoins.forEach { performanceCoin ->
+            performance[performanceCoin.uid]?.let { performanceVsCurrency ->
+                if (performanceVsCurrency.isNotEmpty()) {
+                    val values = timePeriods.map { performanceVsCurrency[it] }
+                    rows.add(RoiViewItem.RowViewItem(performanceCoin.code.uppercase(), values))
+                }
             }
         }
 

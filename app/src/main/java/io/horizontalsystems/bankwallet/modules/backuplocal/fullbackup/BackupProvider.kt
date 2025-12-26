@@ -19,18 +19,21 @@ import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.EvmSyncSourceStorage
+import io.horizontalsystems.bankwallet.core.storage.MoneroNodeStorage
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.LaunchPage
+import io.horizontalsystems.bankwallet.entities.MoneroNodeRecord
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
@@ -66,7 +69,8 @@ class BackupFileValidator {
         val fullBackup = gson.fromJson(json, FullBackup::class.java)
         val walletBackup = gson.fromJson(json, BackupLocalModule.WalletBackup::class.java)
 
-        val isSingleWalletBackup = fullBackup.settings == null && walletBackup.crypto != null && walletBackup.type != null && walletBackup.version in 1..2
+        val isSingleWalletBackup =
+            fullBackup.settings == null && walletBackup.crypto != null && walletBackup.type != null && walletBackup.version in 1..2
         val isFullBackup = fullBackup.settings != null && fullBackup.version == 2 && walletBackup.crypto == null && walletBackup.type == null
 
         if (!isSingleWalletBackup && !isFullBackup) {
@@ -101,6 +105,8 @@ class BackupProvider(
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val evmSyncSourceStorage: EvmSyncSourceStorage,
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
+    private val moneroNodeManager: MoneroNodeManager,
+    private val moneroNodeStorage: MoneroNodeStorage,
     private val contactsRepository: ContactsRepository
 ) {
     private val encryptDecryptManager by lazy { EncryptDecryptManager() }
@@ -128,11 +134,6 @@ class BackupProvider(
     fun accountType(backup: BackupLocalModule.WalletBackup, passphrase: String): AccountType {
         val decrypted = decrypted(backup.crypto, passphrase)
         return BackupLocalModule.getAccountTypeFromData(backup.type, decrypted)
-    }
-
-    fun restoreCexAccount(accountType: AccountType, accountName: String) {
-        val account = accountFactory.account(accountName, accountType, AccountOrigin.Restored, true, true)
-        accountManager.save(account)
     }
 
     fun restoreSingleWalletBackup(
@@ -261,6 +262,18 @@ class BackupProvider(
             blockchainSettingsStorage.save(settings.solanaSyncSource.name, BlockchainType.Solana)
         }
 
+        settings.moneroNodes?.custom?.forEach { node ->
+            val password = node.password?.let {
+                val decryptedPassword = decrypted(it, passphrase)
+                String(decryptedPassword, Charsets.UTF_8)
+            }
+            moneroNodeStorage.save(MoneroNodeRecord(node.url, node.login, password, node.trusted))
+        }
+
+        settings.moneroNodes?.selected?.forEach { node ->
+            blockchainSettingsStorage.saveMoneroNode(node.url)
+        }
+
         if (settings.appIcon != (localStorage.appIcon ?: AppIcon.Main).titleText) {
             AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
         }
@@ -347,8 +360,6 @@ class BackupProvider(
 
             val account = if (type.isWatchAccountType) {
                 accountFactory.watchAccount(name, type)
-            } else if (type is AccountType.Cex) {
-                accountFactory.account(name, type, AccountOrigin.Restored, true, true)
             } else {
                 accountFactory.account(name, type, AccountOrigin.Restored, backup.manualBackup, backup.fileBackup)
             }
@@ -454,6 +465,13 @@ class BackupProvider(
 
         val solanaSyncSource = SolanaSyncSource(BlockchainType.Solana.uid, solanaRpcSourceManager.rpcSource.name)
 
+        val selectedMoneroNode = MoneroNodeBackup(BlockchainType.Monero.uid, moneroNodeManager.currentNode.host, null, null, false)
+        val customMoneroNodes = moneroNodeStorage.getAll().map { nodeRecord ->
+            val password = nodeRecord.password?.let { encrypted(it, passphrase) }
+            MoneroNodeBackup(BlockchainType.Monero.uid, nodeRecord.url, nodeRecord.username, password, false)
+        }
+        val moneroNodes = MoneroNodes(listOf(selectedMoneroNode), customMoneroNodes)
+
         val chartIndicators = chartIndicators()
 
         val settings = Settings(
@@ -473,6 +491,7 @@ class BackupProvider(
             priceChangeMode = localStorage.priceChangeInterval,
             evmSyncSources = evmSyncSources,
             solanaSyncSource = solanaSyncSource,
+            moneroNodes = moneroNodes,
         )
 
         val contacts = if (contactsRepository.contacts.isNotEmpty())
@@ -668,6 +687,20 @@ data class SolanaSyncSource(
     val name: String
 )
 
+data class MoneroNodeBackup(
+    @SerializedName("blockchain_type_id")
+    val blockchainTypeId: String,
+    val url: String,
+    val login: String?,
+    val password: BackupLocalModule.BackupCrypto?,
+    val trusted: Boolean,
+)
+
+data class MoneroNodes(
+    val selected: List<MoneroNodeBackup>,
+    val custom: List<MoneroNodeBackup>
+)
+
 data class RsiBackup(
     val period: Int,
     val enabled: Boolean
@@ -724,7 +757,9 @@ data class Settings(
     @SerializedName("evm_sync_sources")
     val evmSyncSources: EvmSyncSources,
     @SerializedName("solana_sync_source")
-    val solanaSyncSource: SolanaSyncSource?
+    val solanaSyncSource: SolanaSyncSource?,
+    @SerializedName("monero_nodes")
+    val moneroNodes: MoneroNodes?
 )
 
 sealed class RestoreException(message: String) : Exception(message) {

@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
+import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitWrapper
 import io.horizontalsystems.bankwallet.core.tokenIconPlaceholder
 import io.horizontalsystems.bankwallet.entities.TransactionValue
@@ -51,13 +51,15 @@ class TronTransactionConverter(
                 when (val contract = decoration.contract) {
                     is TransferContract -> {
                         if (contract.ownerAddress != tronKit.address) {
+                            val transactionValue = baseCoinValue(contract.amount, false)
+                            val spam = SpamManager.isSpam(listOf(TransferEvent(contract.ownerAddress.base58, transactionValue)))
                             TronIncomingTransactionRecord(
                                 transaction = transaction,
                                 baseToken = baseToken,
                                 source = source,
                                 from = contract.ownerAddress.base58,
-                                value = baseCoinValue(contract.amount, false),
-                                spam = contract.amount < BigInteger.TEN
+                                value = transactionValue,
+                                spam = spam
                             )
                         } else {
                             TronOutgoingTransactionRecord(
@@ -107,25 +109,29 @@ class TronTransactionConverter(
 
                 val contractAddress = decoration.toAddress
 
+                val incomingEvents = getInternalEvents(internalTransactions) + getIncomingEip20Events(incomingEip20Transfers)
+                val outgoingEvents = getOutgoingEip20Events(outgoingEip20Transfers)
+
                 when {
                     decoration.fromAddress == address && contractAddress != null -> {
                         TronContractCallTransactionRecord(
                             transaction, baseToken, source,
                             contractAddress.base58,
                             decoration.data?.hexStringToByteArrayOrNull()?.let { evmLabelManager.methodLabel(it) },
-                            getInternalEvents(internalTransactions) +
-                                    getIncomingEip20Events(incomingEip20Transfers),
+                            incomingEvents,
                             getTransactionValueEvents(decoration) +
-                                    getOutgoingEip20Events(outgoingEip20Transfers)
+                                    outgoingEvents
                         )
                     }
 
                     decoration.fromAddress != address && decoration.toAddress != address -> {
+                        val spam = SpamManager.isSpam(incomingEvents + outgoingEvents)
+
                         TronExternalContractCallTransactionRecord(
-                            transaction, baseToken, source, App.spamManager,
-                            getInternalEvents(internalTransactions) +
-                                    getIncomingEip20Events(incomingEip20Transfers),
-                            getOutgoingEip20Events(outgoingEip20Transfers)
+                            transaction, baseToken, source,
+                            incomingEvents,
+                            outgoingEvents,
+                            spam
                         )
                     }
 

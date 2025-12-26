@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.providers
 
+import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
@@ -8,7 +9,8 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 class PredefinedBlockchainSettingsProvider(
     private val manager: RestoreSettingsManager,
-    private val zcashBirthdayProvider: ZcashBirthdayProvider
+    private val zcashBirthdayProvider: ZcashBirthdayProvider,
+    private val moneroBirthdayProvider: MoneroBirthdayProvider
 ) {
 
     fun prepareNew(account: Account, blockchainType: BlockchainType) {
@@ -16,6 +18,9 @@ class PredefinedBlockchainSettingsProvider(
         when (blockchainType) {
             BlockchainType.Zcash -> {
                 settings.birthdayHeight = zcashBirthdayProvider.getLatestCheckpointBlockHeight()
+            }
+            BlockchainType.Monero -> {
+                settings.birthdayHeight = moneroBirthdayProvider.restoreHeightForNewWallet()
             }
             else -> {}
         }

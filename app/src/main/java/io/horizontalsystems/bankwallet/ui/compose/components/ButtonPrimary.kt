@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Orange
 
 @Composable
 fun ButtonPrimaryDefaultWithIcon(
@@ -48,9 +49,9 @@ fun ButtonPrimaryDefaultWithIcon(
         onClick = onClick,
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.leah,
-            contentColor = ComposeAppTheme.colors.claude,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            contentColor = ComposeAppTheme.colors.blade,
+            disabledBackgroundColor = ComposeAppTheme.colors.blade,
+            disabledContentColor = ComposeAppTheme.colors.andy,
         ),
         content = {
             if (iconTint != null) {
@@ -88,9 +89,9 @@ fun ButtonPrimaryDefault(
         onClick = onClick,
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.leah,
-            contentColor = ComposeAppTheme.colors.claude,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            contentColor = ComposeAppTheme.colors.blade,
+            disabledBackgroundColor = ComposeAppTheme.colors.blade,
+            disabledContentColor = ComposeAppTheme.colors.andy,
         ),
         content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         enabled = enabled
@@ -108,7 +109,7 @@ fun ButtonPrimaryTransparent(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     val contentColor = when {
-        !enabled -> ComposeAppTheme.colors.grey50
+        !enabled -> ComposeAppTheme.colors.andy
         isPressed -> ComposeAppTheme.colors.grey
         else -> ComposeAppTheme.colors.leah
     }
@@ -162,8 +163,45 @@ fun ButtonPrimaryYellow(
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
             contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            disabledBackgroundColor = ComposeAppTheme.colors.blade,
+            disabledContentColor = ComposeAppTheme.colors.andy,
+        ),
+        content = {
+            if (loadingIndicator) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    color = ComposeAppTheme.colors.grey,
+                    strokeWidth = 2.dp
+                )
+                HSpacer(width = 8.dp)
+            }
+
+            Text(
+                title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        },
+        enabled = enabled
+    )
+}
+
+@Composable
+fun ButtonPrimaryOrange(
+    modifier: Modifier = Modifier,
+    title: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true,
+    loadingIndicator: Boolean = false
+) {
+    ButtonPrimary(
+        modifier = modifier,
+        onClick = onClick,
+        buttonColors = ButtonPrimaryDefaults.textButtonColors(
+            backgroundColor = Orange,
+            contentColor = ComposeAppTheme.colors.tyler,
+            disabledBackgroundColor = ComposeAppTheme.colors.blade,
+            disabledContentColor = ComposeAppTheme.colors.andy,
         ),
         content = {
             if (loadingIndicator) {
@@ -200,8 +238,8 @@ fun ButtonPrimaryYellowWithIcon(
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
             contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            disabledBackgroundColor = ComposeAppTheme.colors.blade,
+            disabledContentColor = ComposeAppTheme.colors.andy,
         ),
         content = {
             if (iconTint != null) {
@@ -239,9 +277,9 @@ fun ButtonPrimaryRed(
         onClick = onClick,
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.lucian,
-            contentColor = ComposeAppTheme.colors.claude,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            contentColor = ComposeAppTheme.colors.lawrence,
+            disabledBackgroundColor = ComposeAppTheme.colors.blade,
+            disabledContentColor = ComposeAppTheme.colors.andy,
         ),
         content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         enabled = enabled
@@ -263,8 +301,8 @@ fun ButtonPrimaryYellowWithSpinner(
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
             backgroundColor = ComposeAppTheme.colors.yellowD,
             contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            disabledBackgroundColor = ComposeAppTheme.colors.blade,
+            disabledContentColor = ComposeAppTheme.colors.andy,
         ),
         content = {
             if (showSpinner) {
@@ -318,7 +356,7 @@ fun ButtonPrimary(
     modifier: Modifier = Modifier,
     buttonColors: ButtonColors,
     enabled: Boolean = true,
-    shape: Shape = RoundedCornerShape(25.dp),
+    shape: Shape = RoundedCornerShape(28.dp),
     border: BorderStroke? = null,
     contentPadding: PaddingValues = ButtonPrimaryDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit
@@ -364,13 +402,13 @@ object ButtonPrimaryDefaults {
      * The default min width applied for the [Button].
      * Note that you can override it by applying Modifier.widthIn directly on [Button].
      */
-    val MinWidth = 50.dp
+    val MinWidth = 56.dp
 
     /**
      * The default min width applied for the [Button].
      * Note that you can override it by applying Modifier.heightIn directly on [Button].
      */
-    val MinHeight = 50.dp
+    val MinHeight = 56.dp
 
     @Composable
     fun textButtonColors(

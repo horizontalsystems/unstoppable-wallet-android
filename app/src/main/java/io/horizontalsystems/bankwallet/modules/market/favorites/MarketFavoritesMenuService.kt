@@ -23,13 +23,6 @@ class MarketFavoritesMenuService(
             marketWidgetManager.updateWatchListWidgets()
         }
 
-    var showSignals: Boolean
-        get() = localStorage.marketFavoritesShowSignals
-        set(value) {
-            localStorage.marketFavoritesShowSignals = value
-            marketWidgetManager.updateWatchListWidgets()
-        }
-
     var manualSortOrder: List<String>
         get() = localStorage.marketFavoritesManualSortingOrder
         set(value) {

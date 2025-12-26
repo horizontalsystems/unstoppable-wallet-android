@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule.ContactValidationException
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
+import io.horizontalsystems.bankwallet.modules.contacts.model.ContactNameAddress
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -74,6 +75,16 @@ class ContactsRepository(
                 it.invoke(contact)
             }
         }
+    }
+
+    fun getContactAddressesByBlockchain(blockchainType: BlockchainType): List<ContactNameAddress> {
+        return contacts.flatMap { contact ->
+            contact.addresses.map {
+                ContactNameAddress(contact.name, it)
+            }
+        }
+            .filter { it.contactAddress.blockchain.type == blockchainType }
+            .sortedBy { it.name }
     }
 
     fun initialize() {

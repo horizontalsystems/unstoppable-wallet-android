@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendZcashAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
@@ -20,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,7 +36,9 @@ class SendZCashViewModel(
     private val addressService: SendZCashAddressService,
     private val memoService: SendZCashMemoService,
     private val contactsRepo: ContactsRepository,
-    private val showAddressInput: Boolean
+    private val showAddressInput: Boolean,
+    private val address: Address,
+    private val recentAddressManager: RecentAddressManager
 ) : ViewModelUiState<SendZCashUiState>() {
     val blockchainType = wallet.token.blockchainType
     val coinMaxAllowedDecimals = wallet.token.decimals
@@ -66,6 +70,10 @@ class SendZCashViewModel(
         memoService.stateFlow.collectWith(viewModelScope) {
             handleUpdatedMemoState(it)
         }
+
+        viewModelScope.launch {
+            addressService.setAddress(address)
+        }
     }
 
     override fun createState() = SendZCashUiState(
@@ -76,6 +84,7 @@ class SendZCashViewModel(
         memoIsAllowed = memoState.memoIsAllowed,
         canBeSend = amountState.canBeSend && addressState.canBeSend,
         showAddressInput = showAddressInput,
+        address = address
     )
 
     fun onEnterAmount(amount: BigDecimal?) {
@@ -142,7 +151,7 @@ class SendZCashViewModel(
         try {
             sendResult = SendResult.Sending
 
-            val send = adapter.send(
+            adapter.send(
                 amountState.amount!!,
                 addressState.address!!.hex,
                 memoState.memo,
@@ -150,7 +159,9 @@ class SendZCashViewModel(
             )
 
             logger.info("success")
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sent()
+
+            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Zcash)
         } catch (e: Throwable) {
             logger.warning("failed", e)
             sendResult = SendResult.Failed(createCaution(e))
@@ -172,4 +183,5 @@ data class SendZCashUiState(
     val memoIsAllowed: Boolean,
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
+    val address: Address,
 )

@@ -41,7 +41,8 @@ class ManageWalletsService(
         get() = account?.type
 
     private var fullCoins = listOf<FullCoin>()
-    private var items = listOf<Item>()
+    var items = listOf<Item>()
+        private set
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -127,13 +128,13 @@ class ManageWalletsService(
     }
 
     private fun hasInfo(token: Token, enabled: Boolean) = when (token.type) {
-        is TokenType.Native -> token.blockchainType is BlockchainType.Zcash && enabled
+        is TokenType.Native -> token.blockchainType in listOf(BlockchainType.Zcash, BlockchainType.Monero) && enabled
         is TokenType.Derived,
         is TokenType.AddressTyped,
         is TokenType.Eip20,
-        is TokenType.Bep2,
         is TokenType.Spl,
-        is TokenType.Jetton -> true
+        is TokenType.Jetton,
+        is TokenType.Asset -> true
         else -> false
     }
 

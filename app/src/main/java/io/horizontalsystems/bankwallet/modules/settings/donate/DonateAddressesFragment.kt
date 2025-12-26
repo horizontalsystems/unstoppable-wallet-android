@@ -2,11 +2,12 @@ package io.horizontalsystems.bankwallet.modules.settings.donate
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -25,16 +26,15 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 
 class DonateAddressesFragment : BaseComposeFragment() {
@@ -52,36 +52,28 @@ class DonateAddressesFragment : BaseComposeFragment() {
 fun DonateScreen(
     onBackPress: () -> Unit
 ) {
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Settings_Donate_Addresses),
-                navigationIcon = {
-                    HsBackButton(onClick = onBackPress)
-                },
-            )
-        }
+    HSScaffold(
+        title = stringResource(R.string.Settings_Donate_Addresses),
+        onBack = onBackPress,
     ) {
-        Column(Modifier.padding(it)) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                VSpacer(12.dp)
-                App.appConfigProvider.donateAddresses.forEach { (blockchainType, address) ->
-                    DonateAddress(
-                        coinImageUrl = blockchainType.imageUrl,
-                        coinName = blockchainType.title,
-                        address = address,
-                        chainUid = blockchainType.uid
-                    )
-                    VSpacer(24.dp)
-                }
-
-                VSpacer(8.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .verticalScroll(rememberScrollState())
+        ) {
+            VSpacer(12.dp)
+            App.appConfigProvider.donateAddresses.forEach { (blockchainType, address) ->
+                DonateAddress(
+                    coinImageUrl = blockchainType.imageUrl,
+                    coinName = blockchainType.title,
+                    address = address,
+                    chainUid = blockchainType.uid
+                )
+                VSpacer(24.dp)
             }
+
+            VSpacer(8.dp)
         }
     }
 }

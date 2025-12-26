@@ -5,8 +5,12 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.StyleSpan
 import android.text.style.URLSpan
-import org.commonmark.node.*
-import java.net.URL
+import org.commonmark.node.AbstractVisitor
+import org.commonmark.node.Emphasis
+import org.commonmark.node.Link
+import org.commonmark.node.Node
+import org.commonmark.node.StrongEmphasis
+import org.commonmark.node.Text
 
 class MarkdownVisitorString(private val markdownUrl: String) : AbstractVisitor() {
     val spannableStringBuilder = SpannableStringBuilder()
@@ -20,9 +24,7 @@ class MarkdownVisitorString(private val markdownUrl: String) : AbstractVisitor()
     }
 
     override fun visit(link: Link) {
-        val url = URL(URL(markdownUrl), link.destination).toString()
-
-        spannableStringBuilder.append(getWrappedContent(link, URLSpan(url)))
+        spannableStringBuilder.append(getWrappedContent(link, URLSpan(link.destination)))
     }
 
     override fun visit(emphasis: Emphasis) {

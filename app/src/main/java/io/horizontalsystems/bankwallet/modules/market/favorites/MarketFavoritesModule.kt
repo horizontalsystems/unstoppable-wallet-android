@@ -5,11 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.SignalsControlManager
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
+import io.horizontalsystems.marketkit.models.Analytics
 
 object MarketFavoritesModule {
 
@@ -23,7 +26,8 @@ object MarketFavoritesModule {
                 menuService,
                 App.currencyManager,
                 App.backgroundManager,
-                App.priceManager
+                App.priceManager,
+                SignalsControlManager(App.localStorage)
             )
             return MarketFavoritesViewModel(service) as T
         }
@@ -36,7 +40,6 @@ object MarketFavoritesModule {
         val sortingField: WatchlistSorting,
         val period: TimeDuration,
         val showSignal: Boolean,
-        val showSignalsInfo: Boolean
     )
 
 }
@@ -50,3 +53,9 @@ enum class WatchlistSorting(@StringRes val titleResId: Int): WithTranslatableTit
 
     override val title = TranslatableString.ResString(titleResId)
 }
+
+data class MarketItemWrapper(
+    val marketItem: MarketItem,
+    val favorited: Boolean,
+    val signal: Analytics.TechnicalAdvice.Advice? =  null
+)

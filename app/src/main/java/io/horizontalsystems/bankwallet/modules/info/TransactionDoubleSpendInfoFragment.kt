@@ -3,15 +3,11 @@ package io.horizontalsystems.bankwallet.modules.info
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,17 +21,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoHeader
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrence
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
@@ -43,12 +40,13 @@ class TransactionDoubleSpendInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-        InfoScreen(
-            txHash = input.transactionHash,
-            conflictingTxHash = input.conflictingTransactionHash,
-            onBackClick = { navController.popBackStack() }
-        )
+        withInput<Input>(navController) { input ->
+            InfoScreen(
+                txHash = input.transactionHash,
+                conflictingTxHash = input.conflictingTransactionHash,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
     }
 
     @Parcelize
@@ -64,50 +62,42 @@ private fun InfoScreen(
     conflictingTxHash: String,
     onBackClick: () -> Unit
 ) {
-
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
-            AppBar(
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = onBackClick
-                    )
-                )
+    HSScaffold(
+        title = "",
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = onBackClick
             )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                InfoHeader(R.string.Info_DoubleSpend_Title)
-                TextImportantWarning(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    text = stringResource(R.string.Info_DoubleSpend_Description),
-                )
-                ConflictingTransactions(txHash, conflictingTxHash)
-                Spacer(Modifier.height(44.dp))
-            }
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+        ) {
+            InfoHeader(R.string.Info_DoubleSpend_Title)
+            TextImportantWarning(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                text = stringResource(R.string.Info_DoubleSpend_Description),
+            )
+            ConflictingTransactions(txHash, conflictingTxHash)
+            VSpacer(44.dp)
         }
     }
 }
 
 @Composable
 fun ConflictingTransactions(transactionHash: String, conflictingHash: String) {
-    Spacer(Modifier.height(12.dp))
+    VSpacer(12.dp)
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(16.dp))
     ) {
         TransactionHashCell(R.string.Info_DoubleSpend_ThisTx, transactionHash)
-        Divider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10
-        )
+        HsDivider(modifier = Modifier.fillMaxWidth())
         TransactionHashCell(R.string.Info_DoubleSpend_ConflictingTx, conflictingHash)
     }
 }
