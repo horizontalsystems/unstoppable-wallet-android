@@ -4,6 +4,7 @@
 
     <!--Common-->
 
+    <string name="Error_BrowserNotFound">No app was found to open this link</string>
     <string name="Error_ParameterNotSet">Parameter is not set</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
 
