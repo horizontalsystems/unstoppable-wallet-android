@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ServiceState
 import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -22,7 +21,6 @@ class TotalService(
     private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
     private val baseTokenManager: BaseTokenManager,
-    private val localStorage: ILocalStorage,
 ) : ServiceState<TotalService.State>() {
     private var totalCurrencyValue: CurrencyValue? = null
     private var totalCoinValue: CoinValue? = null
@@ -31,8 +29,7 @@ class TotalService(
     override fun createState() = State(
         currencyValue = totalCurrencyValue,
         coinValue = totalCoinValue,
-        dimmed = dimmed,
-        showFullAmount = !localStorage.amountRoundingEnabled
+        dimmed = dimmed
     )
 
     private var baseToken: Token? = null
@@ -53,12 +50,6 @@ class TotalService(
         coroutineScope.launch {
             baseTokenManager.baseTokenFlow.collect {
                 handleUpdatedBaseToken(it)
-            }
-        }
-
-        coroutineScope.launch {
-            localStorage.amountRoundingEnabledFlow.collect{
-                emitState()
             }
         }
     }
@@ -170,7 +161,6 @@ class TotalService(
     data class State(
         val currencyValue: CurrencyValue?,
         val coinValue: CoinValue?,
-        val dimmed: Boolean,
-        val showFullAmount: Boolean
+        val dimmed: Boolean
     )
 }

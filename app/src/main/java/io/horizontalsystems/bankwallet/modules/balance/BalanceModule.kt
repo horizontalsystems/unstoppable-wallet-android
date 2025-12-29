@@ -29,7 +29,6 @@ object BalanceModule {
                 App.currencyManager,
                 App.marketKit,
                 App.baseTokenManager,
-                App.localStorage,
             )
             return BalanceViewModel(
                 BalanceService.getInstance("wallet"),

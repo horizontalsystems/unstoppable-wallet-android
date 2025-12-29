@@ -60,6 +60,7 @@ class BalanceViewModel(
     private var errorMessage: String? = null
     private var balanceTabButtonsEnabled = localStorage.balanceTabButtonsEnabled
     private var balanceHidden = balanceHiddenManager.balanceHiddenFlow.value
+    private var amountRoundingEnabled = localStorage.amountRoundingEnabledFlow.value
     private var totalUiState = createTotalUiState(totalService.stateFlow.value)
 
     private val sortTypes =
@@ -116,6 +117,9 @@ class BalanceViewModel(
 
         viewModelScope.launch(Dispatchers.Default) {
             localStorage.amountRoundingEnabledFlow.collect{
+                amountRoundingEnabled = it
+
+                totalUiState = createTotalUiState(totalService.stateFlow.value)
                 refreshViewItems(service.balanceItemsFlow.value)
             }
         }
@@ -141,8 +145,8 @@ class BalanceViewModel(
     }
 
     private fun createTotalUiState(totalState: TotalService.State) = TotalUIState(
-        primaryAmountStr = getPrimaryAmount(totalState, totalState.showFullAmount) ?: "---",
-        secondaryAmountStr = getSecondaryAmount(totalState, totalState.showFullAmount) ?: "---",
+        primaryAmountStr = getPrimaryAmount(totalState, !amountRoundingEnabled) ?: "---",
+        secondaryAmountStr = getSecondaryAmount(totalState, !amountRoundingEnabled) ?: "---",
         dimmed = totalState.dimmed
     )
 
@@ -207,7 +211,7 @@ class BalanceViewModel(
                         service.isWatchAccount,
                         balanceViewType,
                         service.networkAvailable,
-                        localStorage.amountRoundingEnabled
+                        amountRoundingEnabled
                     )
                 }
             } else {
