@@ -65,7 +65,8 @@ class SendBitcoinViewModel(
     private var fee: BigDecimal? = feeService.bitcoinFeeInfoFlow.value?.fee
     private var utxoData = SendBitcoinModule.UtxoData()
     private var memo: String? = null
-    private val rbfEnabled = blockchainType.rbfSupported && localStorage.rbfEnabled
+    private val rbfEnabled: Boolean
+        get() = blockchainType.rbfSupported && localStorage.rbfEnabled
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
