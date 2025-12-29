@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 @Composable
 fun BalanceCardInner2(
     viewItem: BalanceViewItem2,
+    balanceHidden: Boolean,
     type: BalanceCardSubtitleType,
     onClickSyncError: (() -> Unit)? = null,
     onClick: (() -> Unit)?
@@ -80,7 +81,7 @@ fun BalanceCardInner2(
         right = {
             val title = if (viewItem.notActivated) {
                 null
-            } else if (viewItem.balanceHidden || viewItem.primaryValue == null) {
+            } else if (balanceHidden || viewItem.primaryValue == null) {
                 "* * *".hs
             } else {
                 viewItem.primaryValue.value.hs(dimmed = viewItem.primaryValue.dimmed)
@@ -89,7 +90,7 @@ fun BalanceCardInner2(
             val subtitle = when {
                 viewItem.syncedUntilTextValue != null -> viewItem.syncedUntilTextValue.hs
                 viewItem.notActivated -> stringResource(R.string.Tron_TokenPage_AddressNotActivated).hs(color = ComposeAppTheme.colors.jacob)
-                viewItem.balanceHidden || viewItem.secondaryValue == null -> null
+                balanceHidden || viewItem.secondaryValue == null -> null
                 else -> viewItem.secondaryValue.value.hs(dimmed = viewItem.secondaryValue.dimmed)
             }
 

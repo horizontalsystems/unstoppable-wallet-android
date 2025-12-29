@@ -9,7 +9,6 @@ import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -186,11 +185,8 @@ class BalanceService(
         adapterRepository.clear()
     }
 
-    val disabledWalletSubject = PublishSubject.create<Wallet>()
     fun disable(wallet: Wallet) {
         activeWalletRepository.disable(wallet)
-
-        disabledWalletSubject.onNext(wallet)
     }
 
     fun enable(wallet: Wallet) {
