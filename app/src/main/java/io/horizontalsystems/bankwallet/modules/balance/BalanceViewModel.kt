@@ -52,6 +52,7 @@ class BalanceViewModel(
     private val balanceHiddenManager: BalanceHiddenManager
 ) : ViewModelUiState<BalanceUiState>() {
 
+    private var balanceItems = service.balanceItemsFlow.value
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
     private var viewState: ViewState? = null
     private var balanceViewItems = listOf<BalanceViewItem2>()
@@ -74,18 +75,19 @@ class BalanceViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
-            service.balanceItemsFlow
-                .collect { items ->
-                    totalService.setItems(items?.map {
-                        TotalService.BalanceItem(
-                            it.balanceData.total,
-                            service.networkAvailable && it.state !is AdapterState.Synced,
-                            it.coinPrice
-                        )
-                    })
+            service.balanceItemsFlow.collect { items ->
+                totalService.setItems(items?.map {
+                    TotalService.BalanceItem(
+                        it.balanceData.total,
+                        service.networkAvailable && it.state !is AdapterState.Synced,
+                        it.coinPrice
+                    )
+                })
 
-                    refreshViewItems(items)
-                }
+                balanceItems = items
+
+                refreshViewItems()
+            }
         }
 
         viewModelScope.launch {
@@ -111,7 +113,7 @@ class BalanceViewModel(
 
         viewModelScope.launch(Dispatchers.Default) {
             priceManager.priceChangeIntervalFlow.collect {
-                refreshViewItems(service.balanceItemsFlow.value)
+                refreshViewItems()
             }
         }
 
@@ -120,7 +122,7 @@ class BalanceViewModel(
                 amountRoundingEnabled = it
 
                 totalUiState = createTotalUiState(totalService.stateFlow.value)
-                refreshViewItems(service.balanceItemsFlow.value)
+                refreshViewItems()
             }
         }
 
@@ -190,20 +192,19 @@ class BalanceViewModel(
         totalUiState = totalUiState
     )
 
-    private suspend fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
+    private fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
         this.balanceViewType = balanceViewType
 
-        service.balanceItemsFlow.value?.let {
-            refreshViewItems(it)
-        }
+        refreshViewItems()
     }
 
-    private fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>?) {
+    private fun refreshViewItems() {
         refreshViewItemsJob?.cancel()
         refreshViewItemsJob = viewModelScope.launch(Dispatchers.Default) {
-            if (balanceItems != null) {
+            val balanceItemsTmp = balanceItems
+            if (balanceItemsTmp != null) {
                 viewState = ViewState.Success
-                balanceViewItems = balanceItems.map { balanceItem ->
+                balanceViewItems = balanceItemsTmp.map { balanceItem ->
                     ensureActive()
                     balanceViewItemFactory.viewItem2(
                         balanceItem,
