@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.entities.isMaxValue
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
@@ -151,17 +150,9 @@ class SendEvmTransactionViewItemFactory(
                 ViewItem.Address(
                     Translator.getString(R.string.Send_Confirmation_To),
                     addressValue,
-                    contact == null,
-                    blockchainType,
-                    StatSection.AddressTo
+                    contact?.name
                 )
             )
-
-            contact?.let {
-                add(
-                    ViewItem.ContactItem(it)
-                )
-            }
         }
 
         sections.add(SectionViewItem(viewItems))
@@ -192,16 +183,9 @@ class SendEvmTransactionViewItemFactory(
                 ViewItem.Address(
                     Translator.getString(R.string.SwapSettings_RecipientAddressTitle),
                     addressValue,
-                    contact == null,
-                    blockchainType,
-                    StatSection.AddressRecipient
+                    contact?.name
                 )
             )
-            contact?.let {
-                otherViewItems.add(
-                    ViewItem.ContactItem(it)
-                )
-            }
         }
 
         when (amountIn) {
@@ -313,7 +297,7 @@ class SendEvmTransactionViewItemFactory(
                 coinService.amountData(value),
                 ValueType.Outgoing,
                 coinService.token,
-                Translator.getString(R.string.Send_Confirmation_YouSend),
+                coinService.token.coin.code,
                 coinService.token.badge
             )
         )
@@ -323,16 +307,9 @@ class SendEvmTransactionViewItemFactory(
             ViewItem.Address(
                 Translator.getString(R.string.Send_Confirmation_To),
                 addressValue,
-                contact == null,
-                blockchainType,
-                StatSection.AddressTo
+                contact?.name
             )
         )
-        contact?.let {
-            viewItems.add(
-                ViewItem.ContactItem(it)
-            )
-        }
 
         return listOf(SectionViewItem(viewItems))
     }
@@ -375,16 +352,9 @@ class SendEvmTransactionViewItemFactory(
                 ViewItem.Address(
                     Translator.getString(R.string.Approve_Spender),
                     addressValue,
-                    contact == null,
-                    blockchainType,
-                    StatSection.AddressSpender
+                    contact?.name
                 )
             )
-            contact?.let {
-                add(
-                    ViewItem.ContactItem(it)
-                )
-            }
         }
 
         return listOf(SectionViewItem(viewItems))
@@ -411,16 +381,9 @@ class SendEvmTransactionViewItemFactory(
                 ViewItem.Address(
                     Translator.getString(R.string.Send_Confirmation_To),
                     toValue,
-                    contact == null,
-                    blockchainType,
-                    StatSection.AddressTo
+                    contact?.name
                 )
             )
-            contact?.let {
-                add(
-                    ViewItem.ContactItem(it)
-                )
-            }
 
             add(ViewItem.Input("Input", transactionData.input.toHexString()))
         }
@@ -447,16 +410,9 @@ class SendEvmTransactionViewItemFactory(
                 ViewItem.Address(
                     Translator.getString(R.string.Send_Confirmation_To),
                     toValue,
-                    contact == null,
-                    blockchainType,
-                    StatSection.AddressTo
+                    contact?.name
                 )
             )
-            contact?.let {
-                add(
-                    ViewItem.ContactItem(it)
-                )
-            }
         }
 
         return listOf(
@@ -579,10 +535,9 @@ sealed class ViewItem {
         val type: ValueType,
     ) : ViewItem()
 
-    class Address(val title: String, val value: String, val showAdd: Boolean, val blockchainType: BlockchainType, val statSection: StatSection) : ViewItem()
+    class Address(val title: String, val address: String, val contact: String? = null) : ViewItem()
     class Input(val title: String, val value: String) : ViewItem()
     class TokenItem(val token: Token) : ViewItem()
-    class ContactItem(val contact: Contact) : ViewItem()
     class Fee(val networkFee: SendModule.AmountData) : ViewItem()
 }
 

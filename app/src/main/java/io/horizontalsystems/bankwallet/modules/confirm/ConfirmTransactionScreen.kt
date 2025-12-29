@@ -37,7 +37,7 @@ fun ConfirmTransactionScreen(
                 add(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Settings_Title),
-                        icon = R.drawable.ic_manage_2_24,
+                        icon = R.drawable.manage_24,
                         onClick = onClickSettings
                     )
                 )

@@ -5,16 +5,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.stringResId
+import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 @Composable
 fun SendBitcoinConfirmationScreen(
     navController: NavController,
     sendViewModel: SendBitcoinViewModel,
-    amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int
 ) {
     var confirmationData by remember { mutableStateOf(sendViewModel.getConfirmationData()) }
@@ -34,21 +37,38 @@ fun SendBitcoinConfirmationScreen(
         navController = navController,
         coinMaxAllowedDecimals = sendViewModel.coinMaxAllowedDecimals,
         feeCoinMaxAllowedDecimals = sendViewModel.coinMaxAllowedDecimals,
-        amountInputType = amountInputModeViewModel.inputType,
         rate = sendViewModel.coinRate,
         feeCoinRate = sendViewModel.coinRate,
         sendResult = sendViewModel.sendResult,
-        blockchainType = sendViewModel.blockchainType,
         coin = confirmationData.coin,
         feeCoin = confirmationData.coin,
         amount = confirmationData.amount,
         address = confirmationData.address,
         contact = confirmationData.contact,
         fee = confirmationData.fee,
-        lockTimeInterval = confirmationData.lockTimeInterval,
         memo = confirmationData.memo,
-        rbfEnabled = confirmationData.rbfEnabled,
         onClickSend = sendViewModel::onClickSend,
-        sendEntryPointDestId = sendEntryPointDestId
-    )
+        sendEntryPointDestId = sendEntryPointDestId,
+    ) {
+        sendViewModel.uiState.utxoData?.let { utxo ->
+            QuoteInfoRow(
+                title = stringResource(R.string.Send_Utxos),
+                value = utxo.value.hs,
+            )
+        }
+        confirmationData.lockTimeInterval?.let { interval ->
+            QuoteInfoRow(
+                title = stringResource(R.string.Send_DialogLockTime),
+                value = stringResource(interval.stringResId()).hs,
+            )
+        }
+        confirmationData.rbfEnabled?.let { enabled ->
+            val value =
+                stringResource(if (enabled) R.string.Send_RbfEnabled else R.string.Send_RbfDisabled)
+            QuoteInfoRow(
+                title = stringResource(R.string.Send_Rbf),
+                value = value.hs,
+            )
+        }
+    }
 }

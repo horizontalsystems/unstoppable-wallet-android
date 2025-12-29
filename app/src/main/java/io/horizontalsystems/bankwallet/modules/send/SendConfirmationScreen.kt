@@ -1,20 +1,30 @@
 package io.horizontalsystems.bankwallet.modules.send
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -23,34 +33,31 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
-import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
-import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
+import io.horizontalsystems.bankwallet.modules.fee.FeeItem
+import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.AddressCell
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.SectionTitleCell
-import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
-import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
-import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoRbfCell
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1Italic_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.hodler.LockTimeInterval
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
@@ -60,23 +67,20 @@ fun SendConfirmationScreen(
     navController: NavController,
     coinMaxAllowedDecimals: Int,
     feeCoinMaxAllowedDecimals: Int,
-    amountInputType: AmountInputType,
     rate: CurrencyValue?,
     feeCoinRate: CurrencyValue?,
     sendResult: SendResult?,
-    blockchainType: BlockchainType,
     coin: Coin,
     feeCoin: Coin,
     amount: BigDecimal,
     address: Address?,
     contact: Contact?,
     fee: BigDecimal?,
-    lockTimeInterval: LockTimeInterval?,
     memo: String?,
-    rbfEnabled: Boolean?,
     onClickSend: () -> Unit,
     sendEntryPointDestId: Int,
-    title: String? = null
+    title: String? = null,
+    additionalFields: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
     val closeUntilDestId = if (sendEntryPointDestId == 0) {
         R.id.sendXFragment
@@ -136,102 +140,25 @@ fun SendConfirmationScreen(
                     .verticalScroll(rememberScrollState())
                     .padding(bottom = 106.dp)
             ) {
-                Spacer(modifier = Modifier.height(12.dp))
-                val topSectionItems = buildList<@Composable () -> Unit> {
-                    add {
-                        SectionTitleCell(
-                            stringResource(R.string.Send_Confirmation_YouSend),
-                            coin.name,
-                            R.drawable.ic_arrow_up_right_12
-                        )
-                    }
-                    add {
-                        val coinAmount = App.numberFormatter.formatCoinFull(
-                            amount,
-                            coin.code,
-                            coinMaxAllowedDecimals
-                        )
+                VSpacer(12.dp)
+                ConfirmationTopSection(
+                    coin = coin,
+                    amount = amount,
+                    coinMaxAllowedDecimals = coinMaxAllowedDecimals,
+                    rate = rate,
+                    address = address,
+                    contact = contact,
+                )
 
-                        val currencyAmount = rate?.let { rate ->
-                            rate.copy(value = amount.times(rate.value))
-                                .getFormattedFull()
-                        }
-
-                        ConfirmAmountCell(currencyAmount, coinAmount, coin)
-                    }
-                    address?.let {
-                        add {
-                            TransactionInfoAddressCell(
-                                title = stringResource(R.string.Send_Confirmation_To),
-                                value = address.hex,
-                                showAdd = contact == null,
-                                blockchainType = blockchainType,
-                                navController = navController,
-                                onCopy = {
-                                    stat(
-                                        page = StatPage.SendConfirmation,
-                                        section = StatSection.AddressTo,
-                                        event = StatEvent.Copy(StatEntity.Address)
-                                    )
-                                },
-                                onAddToExisting = {
-                                    stat(
-                                        page = StatPage.SendConfirmation,
-                                        section = StatSection.AddressTo,
-                                        event = StatEvent.Open(StatPage.ContactAddToExisting)
-                                    )
-                                },
-                                onAddToNew = {
-                                    stat(
-                                        page = StatPage.SendConfirmation,
-                                        section = StatSection.AddressTo,
-                                        event = StatEvent.Open(StatPage.ContactNew)
-                                    )
-                                }
-                            )
-                        }
-                    }
-                    contact?.let {
-                        add {
-                            TransactionInfoContactCell(name = contact.name)
-                        }
-                    }
-                    if (lockTimeInterval != null) {
-                        add {
-                            HSHodler(lockTimeInterval = lockTimeInterval)
-                        }
-                    }
-
-                    if (rbfEnabled == false) {
-                        add {
-                            TransactionInfoRbfCell(rbfEnabled)
-                        }
-                    }
-                }
-
-                CellUniversalLawrenceSection(topSectionItems)
-
-                Spacer(modifier = Modifier.height(28.dp))
-
-                val bottomSectionItems = buildList<@Composable () -> Unit> {
-                    add {
-                        HSFeeRaw(
-                            coinCode = feeCoin.code,
-                            coinDecimal = feeCoinMaxAllowedDecimals,
-                            fee = fee,
-                            amountInputType = amountInputType,
-                            rate = feeCoinRate,
-                            navController = navController
-                        )
-                    }
-                    if (!memo.isNullOrBlank()) {
-                        add {
-                            MemoCell(memo)
-                        }
-                    }
-                }
-
-                CellUniversalLawrenceSection(bottomSectionItems)
+                ConfirmationBottomSection(
+                    feeCoin = feeCoin,
+                    feeCoinMaxAllowedDecimals = feeCoinMaxAllowedDecimals,
+                    fee = fee,
+                    feeCoinRate = feeCoinRate,
+                    navController = navController,
+                    memo = memo,
+                    additionalFields = additionalFields
+                )
             }
 
             SendButton(
@@ -245,6 +172,118 @@ fun SendConfirmationScreen(
 
                     stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
                 }
+            )
+        }
+    }
+}
+
+@Composable
+fun ConfirmationBottomSection(
+    feeCoin: Coin,
+    feeCoinMaxAllowedDecimals: Int,
+    fee: BigDecimal?,
+    feeCoinRate: CurrencyValue?,
+    navController: NavController,
+    memo: String?,
+    customFeeInfo: String? = null,
+    additionalFields: (@Composable ColumnScope.() -> Unit)? = null,
+) {
+    var formattedFee by remember { mutableStateOf<FeeItem?>(null) }
+
+    LaunchedEffect(fee, feeCoinRate) {
+        formattedFee = getFormattedFee(fee, feeCoinRate, feeCoin.code, feeCoinMaxAllowedDecimals)
+    }
+
+    VSpacer(16.dp)
+
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(ComposeAppTheme.colors.lawrence)
+            .padding(vertical = 8.dp)
+    ) {
+        additionalFields?.let {
+            it()
+        }
+
+        if (!memo.isNullOrBlank()) {
+            MemoCell(memo)
+        }
+        DataFieldFeeTemplate(
+            navController = navController,
+            primary = formattedFee?.primary ?: "---",
+            secondary = formattedFee?.secondary,
+            title = stringResource(id = R.string.FeeSettings_NetworkFee),
+            infoText = customFeeInfo ?: stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+        )
+    }
+}
+
+@Composable
+fun ConfirmationTopSection(
+    coin: Coin,
+    amount: BigDecimal,
+    coinMaxAllowedDecimals: Int,
+    rate: CurrencyValue?,
+    address: Address?,
+    contact: Contact?,
+) {
+    val coinAmount = App.numberFormatter.formatCoinFull(
+        amount,
+        null,
+        coinMaxAllowedDecimals
+    )
+
+    val fiatAmount = rate?.let { rate ->
+        rate.copy(value = amount.times(rate.value))
+            .getFormattedFull()
+    }
+    Box {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(ComposeAppTheme.colors.lawrence)
+        ) {
+            CellPrimary(
+                left = {
+                    CoinImage(
+                        coin = coin,
+                        modifier = Modifier.size(32.dp)
+                    )
+                },
+                middle = {
+                    CellMiddleInfo(
+                        subtitle = coin.code.hs(color = ComposeAppTheme.colors.leah),
+                        description = (stringResource(id = R.string.CoinPlatforms_Native)).hs //todo pass bip
+                    )
+                },
+                right = {
+                    CellRightInfo(
+                        titleSubheadSb = coinAmount.hs,
+                        description = fiatAmount?.hs
+                    )
+                }
+            )
+            address?.let {
+                HsDivider()
+                AddressCell(
+                    address = it.hex,
+                    contact = contact?.name
+                )
+            }
+        }
+        if (address != null) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_arrow_down_20),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 57.dp) //top cell is 67.dp - iconWidth/2(which is equal 10.dp)
+                    .clip(CircleShape)
+                    .background(ComposeAppTheme.colors.lawrence)
             )
         }
     }
@@ -304,18 +343,25 @@ fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, coin: Coin) {
 
 @Composable
 fun MemoCell(value: String) {
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
-    ) {
-        subhead2_grey(
-            modifier = Modifier.padding(end = 16.dp),
-            text = stringResource(R.string.Send_Confirmation_HintMemo),
-        )
-        Spacer(Modifier.weight(1f))
-        subhead1Italic_leah(
-            text = value,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+    QuoteInfoRow(
+        title = stringResource(R.string.Send_Confirmation_HintMemo),
+        value = value.hs(color = ComposeAppTheme.colors.leah),
+    )
+}
+
+fun getFormattedFee(
+    fee: BigDecimal?,
+    rate: CurrencyValue?,
+    coinCode: String,
+    coinDecimal: Int,
+): FeeItem? {
+
+    if (fee == null) return null
+
+    val coinAmount = App.numberFormatter.formatCoinFull(fee, coinCode, coinDecimal)
+    val currencyAmount = rate?.let {
+        it.copy(value = fee.times(it.value)).getFormattedFull()
     }
+
+    return  FeeItem(coinAmount, currencyAmount)
 }

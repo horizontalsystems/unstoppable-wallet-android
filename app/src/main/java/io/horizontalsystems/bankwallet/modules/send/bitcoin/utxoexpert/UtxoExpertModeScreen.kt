@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
@@ -62,33 +63,11 @@ fun UtxoExpertModeScreen(
         HSScaffold(
             title = stringResource(R.string.Send_Utxos),
             onBack = onBackClick,
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                CellUniversalLawrenceSection {
-                    UtxoInfoCell(
-                        title = stringResource(R.string.Send_Utxo_AvailableBalance),
-                        value = uiState.availableBalanceInfo.value,
-                        subValue = uiState.availableBalanceInfo.subValue
-                    )
-                }
-                Box(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    UtxoList(
-                        utxos = uiState.utxoItems,
-                        onItemClicked = {
-                            viewModel.onUnspentOutputClicked(it)
-                            updateUnspentOutputs(viewModel.customOutputs)
-                        }
-                    )
-                }
+            bottomBar = {
                 Box(
                     modifier = Modifier
                         .height(62.dp)
+                        .systemBarsPadding()
                         .fillMaxWidth()
                 ) {
                     HsDivider(modifier = Modifier.fillMaxWidth())
@@ -115,6 +94,31 @@ fun UtxoExpertModeScreen(
                             }
                         )
                     }
+                }
+            }
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                CellUniversalLawrenceSection {
+                    UtxoInfoCell(
+                        title = stringResource(R.string.Send_Utxo_AvailableBalance),
+                        value = uiState.availableBalanceInfo.value,
+                        subValue = uiState.availableBalanceInfo.subValue
+                    )
+                }
+                Box(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    UtxoList(
+                        utxos = uiState.utxoItems,
+                        onItemClicked = {
+                            viewModel.onUnspentOutputClicked(it)
+                            updateUnspentOutputs(viewModel.customOutputs)
+                        }
+                    )
                 }
             }
         }
