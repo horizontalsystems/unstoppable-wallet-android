@@ -6,10 +6,6 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
-import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
@@ -22,8 +18,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.math.BigDecimal
-import java.util.concurrent.CopyOnWriteArrayList
 
 class BalanceService(
     private val activeWalletRepository: BalanceActiveWalletRepository,
@@ -38,15 +35,8 @@ class BalanceService(
     val networkAvailable by connectivityManager::isConnected
     val baseCurrency by xRateRepository::baseCurrency
 
-    var sortType: BalanceSortType
-        get() = localStorage.sortType
-        set(value) {
-            localStorage.sortType = value
-
-            sortAndEmitItems()
-
-            stat(page = StatPage.Balance, event = StatEvent.SwitchSortType(value.statSortType))
-        }
+    var sortType = localStorage.sortType
+        private set
 
     var isWatchAccount = false
         private set
@@ -56,7 +46,9 @@ class BalanceService(
 
     private var hideZeroBalances = false
 
-    private val allBalanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
+    private val allBalanceItems = mutableListOf<BalanceModule.BalanceItem>()
+
+    private val mutex = Mutex()
 
     /* getBalanceItems should return new immutable list */
     private fun getBalanceItems(): List<BalanceModule.BalanceItem> = if (hideZeroBalances) {
@@ -93,7 +85,13 @@ class BalanceService(
         }
     }
 
-    @Synchronized
+    fun setSortType(value: BalanceSortType) {
+        sortType = value
+        localStorage.sortType = value
+
+        sortAndEmitItems()
+    }
+
     private fun sortAndEmitItems() {
         val sorted = balanceSorter.sort(allBalanceItems, sortType)
         allBalanceItems.clear()
@@ -104,7 +102,7 @@ class BalanceService(
         }
     }
 
-    private suspend fun handleAdaptersReady() {
+    private suspend fun handleAdaptersReady() = mutex.withLock {
         for (i in 0 until allBalanceItems.size) {
             val balanceItem = allBalanceItems[i]
 
@@ -118,8 +116,7 @@ class BalanceService(
         sortAndEmitItems()
     }
 
-    @Synchronized
-    private fun handleAdapterUpdate(wallet: Wallet) {
+    private suspend fun handleAdapterUpdate(wallet: Wallet) = mutex.withLock {
         val indexOfFirst = allBalanceItems.indexOfFirst { it.wallet == wallet }
         if (indexOfFirst != -1) {
             val itemToUpdate = allBalanceItems[indexOfFirst]
@@ -133,8 +130,7 @@ class BalanceService(
         }
     }
 
-    @Synchronized
-    private fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) {
+    private suspend fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) = mutex.withLock {
         for (i in 0 until allBalanceItems.size) {
             val balanceItem = allBalanceItems[i]
 
@@ -146,8 +142,7 @@ class BalanceService(
         sortAndEmitItems()
     }
 
-    @Synchronized
-    private fun handleWalletsUpdate(wallets: List<Wallet>) {
+    private suspend fun handleWalletsUpdate(wallets: List<Wallet>) = mutex.withLock {
         isWatchAccount = accountManager.activeAccount?.isWatchAccount == true
         hideZeroBalances = accountManager.activeAccount?.type?.hideZeroBalances == true
 
