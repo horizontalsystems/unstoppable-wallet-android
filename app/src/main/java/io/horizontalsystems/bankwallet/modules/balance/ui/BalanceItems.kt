@@ -195,7 +195,6 @@ fun BalanceItems(
     accountViewItem: AccountViewItem,
     navController: NavController,
     uiState: BalanceUiState,
-    totalState: TotalUIState,
     onScanClick: () -> Unit,
 ) {
     val rateAppViewModel = viewModel<RateAppViewModel>(factory = RateAppModule.Factory())
@@ -257,7 +256,7 @@ fun BalanceItems(
         ) {
             item {
                 TotalBalanceRow(
-                    totalState = totalState,
+                    totalState = uiState.totalUiState,
                     onClickTitle = remember {
                         {
                             viewModel.toggleBalanceVisibility()
@@ -274,7 +273,8 @@ fun BalanceItems(
                             stat(page = StatPage.Balance, event = StatEvent.ToggleConversionCoin)
                         }
                     },
-                    loading = uiState.loading
+                    loading = uiState.loading,
+                    balanceHidden = uiState.balanceHidden
                 )
             }
 
@@ -707,33 +707,30 @@ fun TotalBalanceRow(
     totalState: TotalUIState,
     onClickTitle: () -> Unit,
     onClickSubtitle: () -> Unit,
-    loading: Boolean
+    loading: Boolean,
+    balanceHidden: Boolean
 ) {
-    when (totalState) {
-        TotalUIState.Hidden -> {
-            CardsElementAmountText(
-                title = "* * *".hs,
-                body = "".hs,
-                onClickTitle = onClickTitle,
-                onClickSubtitle = onClickSubtitle
-            )
+    if (balanceHidden) {
+        CardsElementAmountText(
+            title = "* * *".hs,
+            body = "".hs,
+            onClickTitle = onClickTitle,
+            onClickSubtitle = onClickSubtitle
+        )
+    } else {
+        val color = if (loading) {
+            ComposeAppTheme.colors.andy
+        } else if (totalState.dimmed) {
+            ComposeAppTheme.colors.grey
+        } else {
+            null
         }
 
-        is TotalUIState.Visible -> {
-            val color = if (loading) {
-                ComposeAppTheme.colors.andy
-            } else if (totalState.dimmed) {
-                ComposeAppTheme.colors.grey
-            } else {
-                null
-            }
-
-            CardsElementAmountText(
-                title = totalState.primaryAmountStr.hs(color = color),
-                body = totalState.secondaryAmountStr.hs(color = color),
-                onClickTitle = onClickTitle,
-                onClickSubtitle = onClickSubtitle,
-            )
-        }
+        CardsElementAmountText(
+            title = totalState.primaryAmountStr.hs(color = color),
+            body = totalState.secondaryAmountStr.hs(color = color),
+            onClickTitle = onClickTitle,
+            onClickSubtitle = onClickSubtitle,
+        )
     }
 }

@@ -152,7 +152,6 @@ fun BalanceForAccount(
                         accountViewItem,
                         navController,
                         uiState,
-                        viewModel.totalUiState,
                     ) {
                         onScanClick(viewModel, qrScannerLauncher, context, navController)
                     }

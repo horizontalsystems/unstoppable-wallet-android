@@ -29,7 +29,6 @@ object BalanceModule {
                 App.currencyManager,
                 App.marketKit,
                 App.baseTokenManager,
-                App.balanceHiddenManager,
                 App.localStorage,
             )
             return BalanceViewModel(
@@ -42,7 +41,8 @@ object BalanceModule {
                 App.priceManager,
                 App.adapterManager,
                 App.instance.isSwapEnabled,
-                totalService
+                totalService,
+                App.balanceHiddenManager
             ) as T
         }
     }

@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -47,7 +48,8 @@ class BalanceViewModel(
     private val priceManager: PriceManager,
     private val adapterManager: IAdapterManager,
     val isSwapEnabled: Boolean,
-    private val totalService: TotalService
+    private val totalService: TotalService,
+    private val balanceHiddenManager: BalanceHiddenManager
 ) : ViewModelUiState<BalanceUiState>() {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
@@ -57,6 +59,8 @@ class BalanceViewModel(
     private var openSendTokenSelect: OpenSendTokenSelect? = null
     private var errorMessage: String? = null
     private var balanceTabButtonsEnabled = localStorage.balanceTabButtonsEnabled
+    private var balanceHidden = balanceHiddenManager.balanceHiddenFlow.value
+    private var totalUiState = createTotalUiState(totalService.stateFlow.value)
 
     private val sortTypes =
         listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
@@ -66,9 +70,6 @@ class BalanceViewModel(
         private set
 
     private var refreshViewItemsJob: Job? = null
-
-    var totalUiState by mutableStateOf(createTotalUIState(totalService.stateFlow.value))
-        private set
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
@@ -88,7 +89,7 @@ class BalanceViewModel(
 
         viewModelScope.launch {
             totalService.stateFlow.collect {
-                totalUiState = createTotalUIState(it)
+                totalUiState = createTotalUiState(it)
 
                 emitState()
             }
@@ -119,27 +120,31 @@ class BalanceViewModel(
             }
         }
 
+        viewModelScope.launch {
+            balanceHiddenManager.balanceHiddenFlow.collect {
+                balanceHidden = it
+
+                emitState()
+            }
+        }
+
         totalService.start()
         service.start()
     }
 
-    private fun createTotalUIState(state: TotalService.State) = if (state.hidden) {
-        TotalUIState.Hidden
-    } else {
-        TotalUIState.Visible(
-            primaryAmountStr = getPrimaryAmount(state, state.showFullAmount) ?: "---",
-            secondaryAmountStr = getSecondaryAmount(state, state.showFullAmount) ?: "---",
-            dimmed = state.dimmed
-        )
-    }
-
     fun toggleBalanceVisibility() {
-        totalService.toggleBalanceVisibility()
+        balanceHiddenManager.toggleBalanceHidden()
     }
 
     fun toggleTotalType() {
         totalService.toggleType()
     }
+
+    private fun createTotalUiState(totalState: TotalService.State) = TotalUIState(
+        primaryAmountStr = getPrimaryAmount(totalState, totalState.showFullAmount) ?: "---",
+        secondaryAmountStr = getSecondaryAmount(totalState, totalState.showFullAmount) ?: "---",
+        dimmed = totalState.dimmed
+    )
 
     private fun getPrimaryAmount(
         totalState: TotalService.State,
@@ -177,7 +182,8 @@ class BalanceViewModel(
         loading = balanceViewItems.any {
             it.loading
         },
-        balanceHidden = totalUiState == TotalUIState.Hidden
+        balanceHidden = balanceHidden,
+        totalUiState = totalUiState
     )
 
     private suspend fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
@@ -396,6 +402,7 @@ data class BalanceUiState(
     val networkAvailable: Boolean,
     val loading: Boolean,
     val balanceHidden: Boolean,
+    val totalUiState: TotalUIState
 )
 
 data class OpenSendTokenSelect(
@@ -406,16 +413,11 @@ data class OpenSendTokenSelect(
     val memo: String? = null
 )
 
-sealed class TotalUIState {
-    data class Visible(
-        val primaryAmountStr: String,
-        val secondaryAmountStr: String,
-        val dimmed: Boolean
-    ) : TotalUIState()
-
-    object Hidden : TotalUIState()
-
-}
+data class TotalUIState(
+    val primaryAmountStr: String,
+    val secondaryAmountStr: String,
+    val dimmed: Boolean
+)
 
 enum class HeaderNote {
     None,
