@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.core.utils.ToncoinUriParser
 import io.horizontalsystems.bankwallet.entities.Account
@@ -250,7 +251,8 @@ class BalanceViewModel(
         emitState()
 
         viewModelScope.launch(Dispatchers.Default) {
-            service.sortType = sortType
+            service.setSortType(sortType)
+            stat(page = StatPage.Balance, event = StatEvent.SwitchSortType(sortType.statSortType))
         }
     }
 
