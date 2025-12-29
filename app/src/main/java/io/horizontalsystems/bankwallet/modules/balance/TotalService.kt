@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ServiceState
-import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -23,11 +22,8 @@ class TotalService(
     private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
     private val baseTokenManager: BaseTokenManager,
-    private val balanceHiddenManager: BalanceHiddenManager,
     private val localStorage: ILocalStorage,
 ) : ServiceState<TotalService.State>() {
-    private var balanceHidden = balanceHiddenManager.balanceHidden
-
     private var totalCurrencyValue: CurrencyValue? = null
     private var totalCoinValue: CoinValue? = null
     private var dimmed = false
@@ -36,8 +32,7 @@ class TotalService(
         currencyValue = totalCurrencyValue,
         coinValue = totalCoinValue,
         dimmed = dimmed,
-        showFullAmount = !localStorage.amountRoundingEnabled,
-        hidden = balanceHidden
+        showFullAmount = !localStorage.amountRoundingEnabled
     )
 
     private var baseToken: Token? = null
@@ -58,12 +53,6 @@ class TotalService(
         coroutineScope.launch {
             baseTokenManager.baseTokenFlow.collect {
                 handleUpdatedBaseToken(it)
-            }
-        }
-
-        coroutineScope.launch {
-            balanceHiddenManager.balanceHiddenFlow.collect {
-                handleUpdatedBalanceHidden(it)
             }
         }
 
@@ -90,16 +79,6 @@ class TotalService(
 
     fun toggleType() {
         baseTokenManager.toggleBaseToken()
-    }
-
-    fun toggleBalanceVisibility() {
-        balanceHiddenManager.toggleBalanceHidden()
-    }
-
-    private fun handleUpdatedBalanceHidden(balanceHidden: Boolean) {
-        this.balanceHidden = balanceHidden
-
-        emitState()
     }
 
     private fun handleUpdatedCurrency(currency: Currency) {
@@ -192,7 +171,6 @@ class TotalService(
         val currencyValue: CurrencyValue?,
         val coinValue: CoinValue?,
         val dimmed: Boolean,
-        val showFullAmount: Boolean,
-        val hidden: Boolean
+        val showFullAmount: Boolean
     )
 }
