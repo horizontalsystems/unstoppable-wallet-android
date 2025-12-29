@@ -88,7 +88,9 @@ class BalanceViewModel(
 
         viewModelScope.launch {
             totalService.stateFlow.collect {
-                refreshViewItems(service.balanceItemsFlow.value)
+                totalUiState = createTotalUIState(it)
+
+                emitState()
             }
         }
 
@@ -117,19 +119,14 @@ class BalanceViewModel(
             }
         }
 
-        viewModelScope.launch {
-            totalService.stateFlow.collect {
-                totalUiState = createTotalUIState(it)
-            }
-        }
-
         totalService.start()
         service.start()
     }
 
-    private fun createTotalUIState(state: TotalService.State) = when (state) {
-        TotalService.State.Hidden -> TotalUIState.Hidden
-        is TotalService.State.Visible -> TotalUIState.Visible(
+    private fun createTotalUIState(state: TotalService.State) = if (state.hidden) {
+        TotalUIState.Hidden
+    } else {
+        TotalUIState.Visible(
             primaryAmountStr = getPrimaryAmount(state, state.showFullAmount) ?: "---",
             secondaryAmountStr = getSecondaryAmount(state, state.showFullAmount) ?: "---",
             dimmed = state.dimmed
@@ -145,7 +142,7 @@ class BalanceViewModel(
     }
 
     private fun getPrimaryAmount(
-        totalState: TotalService.State.Visible,
+        totalState: TotalService.State,
         fullFormat: Boolean
     ) = totalState.currencyValue?.let {
         if (fullFormat) {
@@ -156,7 +153,7 @@ class BalanceViewModel(
     }
 
     private fun getSecondaryAmount(
-        totalState: TotalService.State.Visible,
+        totalState: TotalService.State,
         fullFormat: Boolean
     ) = totalState.coinValue?.let {
         if (fullFormat) {
@@ -179,7 +176,8 @@ class BalanceViewModel(
         networkAvailable = service.networkAvailable,
         loading = balanceViewItems.any {
             it.loading
-        }
+        },
+        balanceHidden = totalUiState == TotalUIState.Hidden
     )
 
     private suspend fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
@@ -200,7 +198,6 @@ class BalanceViewModel(
                     balanceViewItemFactory.viewItem2(
                         balanceItem,
                         service.baseCurrency,
-                        totalService.balanceHidden,
                         service.isWatchAccount,
                         balanceViewType,
                         service.networkAvailable,
@@ -398,6 +395,7 @@ data class BalanceUiState(
     val sortTypes: List<BalanceSortType>,
     val networkAvailable: Boolean,
     val loading: Boolean,
+    val balanceHidden: Boolean,
 )
 
 data class OpenSendTokenSelect(

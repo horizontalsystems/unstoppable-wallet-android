@@ -89,7 +89,6 @@ data class BalanceViewItem2(
     val badge: String?,
     val errorMessage: String?,
     val isWatchAccount: Boolean,
-    val balanceHidden: Boolean,
     val notActivated: Boolean,
     val loading: Boolean
 )
@@ -409,7 +408,6 @@ class BalanceViewItemFactory {
     fun viewItem2(
         item: BalanceModule.BalanceItem,
         currency: Currency,
-        hideBalance: Boolean,
         watchAccount: Boolean,
         balanceViewType: BalanceViewType,
         networkAvailable: Boolean,
@@ -450,7 +448,6 @@ class BalanceViewItemFactory {
             badge = wallet.badge,
             errorMessage = errorMessage,
             isWatchAccount = watchAccount,
-            balanceHidden = hideBalance,
             notActivated = item.warning is BalanceModule.BalanceWarning.TronInactiveAccountWarning,
             loading = state is AdapterState.Syncing || state is AdapterState.SearchingTxs
         )

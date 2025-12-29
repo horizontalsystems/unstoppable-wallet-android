@@ -453,6 +453,7 @@ fun BalanceItems(
                     BoxBordered(top = true, bottom = index == balanceViewItems.size - 1) {
                         BalanceCardSwipable(
                             viewItem = item,
+                            balanceHidden = uiState.balanceHidden,
                             revealed = revealedCardId == item.wallet.hashCode(),
                             onReveal = { walletHashCode ->
                                 if (revealedCardId != walletHashCode) {

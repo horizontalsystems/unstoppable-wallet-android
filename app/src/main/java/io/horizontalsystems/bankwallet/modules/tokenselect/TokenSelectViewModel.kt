@@ -43,15 +43,14 @@ class TokenSelectViewModel(
     private val allTab = SelectChainTab(title = Translator.getString(R.string.Market_All), null)
     private var selectedChainTab: SelectChainTab = allTab
 
-    override fun createState(): TokenSelectUiState {
-        return TokenSelectUiState(
-            items = balanceViewItems,
-            noItems = noItems,
-            hasAssets = hasAssets,
-            selectedTab = selectedChainTab,
-            tabs = getTabs()
-        )
-    }
+    override fun createState() = TokenSelectUiState(
+        items = balanceViewItems,
+        noItems = noItems,
+        hasAssets = hasAssets,
+        selectedTab = selectedChainTab,
+        tabs = getTabs(),
+        balanceHidden = balanceHiddenManager.balanceHidden
+    )
 
     override fun onCleared() {
         service.clear()
@@ -71,6 +70,12 @@ class TokenSelectViewModel(
                     ?.distinct()
 
                 refreshViewItems(items)
+            }
+        }
+
+        viewModelScope.launch {
+            balanceHiddenManager.balanceHiddenFlow.collect {
+                emitState()
             }
         }
     }
@@ -134,7 +139,6 @@ class TokenSelectViewModel(
                 balanceViewItemFactory.viewItem2(
                     item = balanceItem,
                     currency = service.baseCurrency,
-                    hideBalance = balanceHiddenManager.balanceHidden,
                     watchAccount = service.isWatchAccount,
                     balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
                     networkAvailable = service.networkAvailable,
@@ -187,6 +191,7 @@ data class TokenSelectUiState(
     val hasAssets: Boolean,
     val selectedTab: SelectChainTab,
     val tabs: List<SelectChainTab>,
+    val balanceHidden: Boolean,
 )
 
 data class SelectChainTab(
