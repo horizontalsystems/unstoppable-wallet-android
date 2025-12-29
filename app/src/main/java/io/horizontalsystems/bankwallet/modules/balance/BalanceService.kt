@@ -12,7 +12,9 @@ import io.horizontalsystems.marketkit.models.CoinPrice
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -46,21 +48,15 @@ class BalanceService(
 
     private var hideZeroBalances = false
 
-    private val allBalanceItems = mutableListOf<BalanceModule.BalanceItem>()
+    private var allBalanceItems = listOf<BalanceModule.BalanceItem>()
 
     private val mutex = Mutex()
-
-    /* getBalanceItems should return new immutable list */
-    private fun getBalanceItems(): List<BalanceModule.BalanceItem> = if (hideZeroBalances) {
-        allBalanceItems.filter { it.wallet.token.type.isNative || it.balanceData.total > BigDecimal.ZERO }
-    } else {
-        allBalanceItems.toList()
-    }
 
     private val _balanceItemsFlow = MutableStateFlow<List<BalanceModule.BalanceItem>?>(null)
     val balanceItemsFlow = _balanceItemsFlow.asStateFlow()
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var sortAndEmitJob: Job? = null
 
     fun start() {
         coroutineScope.launch {
@@ -93,16 +89,24 @@ class BalanceService(
     }
 
     private fun sortAndEmitItems() {
-        val sorted = balanceSorter.sort(allBalanceItems, sortType)
-        allBalanceItems.clear()
-        allBalanceItems.addAll(sorted)
+        sortAndEmitJob?.cancel()
+        sortAndEmitJob = coroutineScope.launch {
+            allBalanceItems = balanceSorter.sort(allBalanceItems, sortType)
 
-        _balanceItemsFlow.update {
-            getBalanceItems()
+            ensureActive()
+
+            _balanceItemsFlow.update {
+                if (hideZeroBalances) {
+                    allBalanceItems.filter { it.wallet.token.type.isNative || it.balanceData.total > BigDecimal.ZERO }
+                } else {
+                    allBalanceItems
+                }
+            }
         }
     }
 
     private suspend fun handleAdaptersReady() = mutex.withLock {
+        val allBalanceItems = this.allBalanceItems.toMutableList()
         for (i in 0 until allBalanceItems.size) {
             val balanceItem = allBalanceItems[i]
 
@@ -113,12 +117,15 @@ class BalanceService(
             )
         }
 
+        this.allBalanceItems = allBalanceItems
+
         sortAndEmitItems()
     }
 
     private suspend fun handleAdapterUpdate(wallet: Wallet) = mutex.withLock {
         val indexOfFirst = allBalanceItems.indexOfFirst { it.wallet == wallet }
         if (indexOfFirst != -1) {
+            val allBalanceItems = allBalanceItems.toMutableList()
             val itemToUpdate = allBalanceItems[indexOfFirst]
 
             allBalanceItems[indexOfFirst] = itemToUpdate.copy(
@@ -126,11 +133,14 @@ class BalanceService(
                 state = adapterRepository.state(wallet),
             )
 
+            this.allBalanceItems = allBalanceItems
+
             sortAndEmitItems()
         }
     }
 
     private suspend fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) = mutex.withLock {
+        val allBalanceItems = allBalanceItems.toMutableList()
         for (i in 0 until allBalanceItems.size) {
             val balanceItem = allBalanceItems[i]
 
@@ -138,6 +148,8 @@ class BalanceService(
                 allBalanceItems[i] = balanceItem.copy(coinPrice = latestRates[balanceItem.wallet.coin.uid])
             }
         }
+
+        this.allBalanceItems = allBalanceItems
 
         sortAndEmitItems()
     }
@@ -159,8 +171,7 @@ class BalanceService(
             )
         }
 
-        this.allBalanceItems.clear()
-        this.allBalanceItems.addAll(balanceItems)
+        allBalanceItems = balanceItems
 
         sortAndEmitItems()
     }
