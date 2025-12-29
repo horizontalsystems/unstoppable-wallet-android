@@ -252,7 +252,7 @@ fun DataBlock(
                     item.coinAmount
                 )
 
-                is ViewItem.Address -> CopiableValueCell(item.title, item.value, onCopy)
+                is ViewItem.Address -> CopiableValueCell(item.title, item.address, onCopy)
                 is ViewItem.Input -> CopiableValueCell(item.title, item.value, onCopy)
                 is ViewItem.Fee -> FeeCell(
                     primaryValue = item.networkFee.primary.getFormatted(),

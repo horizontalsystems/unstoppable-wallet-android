@@ -14,7 +14,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 fun DataFieldFee(
     navController: NavController,
     primary: String,
-    secondary: String,
+    secondary: String?,
 ) {
     DataFieldFeeTemplate(
         navController = navController,
@@ -29,14 +29,14 @@ fun DataFieldFee(
 fun DataFieldFeeTemplate(
     navController: NavController,
     primary: String,
-    secondary: String,
+    secondary: String?,
     title: String,
     infoText: String?,
 ) {
     QuoteInfoRow(
         title = title,
         value = primary.hs(color = ComposeAppTheme.colors.leah),
-        valueSecondary = secondary.hs(color = ComposeAppTheme.colors.grey),
+        valueSecondary = secondary?.hs(color = ComposeAppTheme.colors.grey),
         onInfoClick = infoText?.let {
             {
                 navController.slideFromBottom(
