@@ -581,7 +581,7 @@
 
     <!-- Send Evm Settings -->
 
-    <string name="SendEvmSettings_Title">Advanced</string>
+    <string name="SendEvmSettings_Title">Fee Settings</string>
     <string name="SendEvmSettings_Nonce">Transaction Nonce</string>
     <string name="SendEvmSettings_Nonce_Info">The nonce is a unique integer value for a transaction within the user\'s wallet. It normally increments with each submitted transaction and does not need changing. Advanced users can set it equal to a nonce of a pending transaction in order to cancel and replace that transaction, as long as the new transaction has a sufficiently higher fee to prevent the old one from being confirmed instead (for example, they may want to speed up its confirmation, or to change transaction parameters entirely). When multiple pending transactions have the same nonce, only one gets confirmed, typically the one with the highest fee.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Used Nonce</string>

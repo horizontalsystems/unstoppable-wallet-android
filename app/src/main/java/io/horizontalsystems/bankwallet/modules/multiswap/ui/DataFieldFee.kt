@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialog
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 @Composable
@@ -35,8 +34,8 @@ fun DataFieldFeeTemplate(
 ) {
     QuoteInfoRow(
         title = title,
-        value = primary.hs(color = ComposeAppTheme.colors.leah),
-        valueSecondary = secondary?.hs(color = ComposeAppTheme.colors.grey),
+        value = primary.hs,
+        valueSecondary = secondary?.hs,
         onInfoClick = infoText?.let {
             {
                 navController.slideFromBottom(
