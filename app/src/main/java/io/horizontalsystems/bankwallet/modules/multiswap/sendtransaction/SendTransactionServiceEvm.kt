@@ -304,7 +304,6 @@ fun SendEvmFeeSettingsScreen(
 
             val nonceUiState = nonceViewModel.uiState
             if (nonceUiState.showInSettings) {
-                VSpacer(24.dp)
                 EvmSettingsInput(
                     title = stringResource(id = R.string.SendEvmSettings_Nonce),
                     info = stringResource(id = R.string.SendEvmSettings_Nonce_Info),
