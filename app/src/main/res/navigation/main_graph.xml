@@ -14,6 +14,9 @@
         android:id="@+id/sendEvmSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment" />
     <fragment
+        android:id="@+id/sendEvmNonceSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceSettingsFragment" />
+    <fragment
         android:id="@+id/filterCoinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactions.FilterCoinFragment" />
    <fragment
@@ -318,6 +321,9 @@
     <fragment
         android:id="@+id/swapTransactionSettings"
         android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionSettingsFragment" />
+    <fragment
+        android:id="@+id/swapTransactionNonceSettings"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionNonceSettingsFragment" />
     <fragment
         android:id="@+id/swapConfirm"
         android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapConfirmFragment" />

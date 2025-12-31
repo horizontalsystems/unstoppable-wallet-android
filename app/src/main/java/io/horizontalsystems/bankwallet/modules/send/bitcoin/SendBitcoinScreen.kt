@@ -159,7 +159,7 @@ fun SendBitcoinScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
-                        icon = R.drawable.ic_manage_2,
+                        icon = R.drawable.manage_24,
                         onClick = { composeNavController.navigate(SendBtcAdvancedSettingsPage) }
                     ),
                 )
