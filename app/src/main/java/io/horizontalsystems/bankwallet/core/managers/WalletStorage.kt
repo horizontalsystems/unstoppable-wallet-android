@@ -19,17 +19,17 @@ class WalletStorage(
         val enabledWallets = storage.enabledWallets(account.id)
 
         val queries = enabledWallets.mapNotNull { TokenQuery.fromId(it.tokenQueryId) }
-        val tokens = marketKit.tokens(queries)
+        val tokensMap = marketKit.tokens(queries).associate { it.tokenQuery.id to it }
 
         val blockchainUids = queries.map { it.blockchainType.uid }
         val blockchains = marketKit.blockchains(blockchainUids)
 
         return enabledWallets.mapNotNull { enabledWallet ->
-            val tokenQuery = TokenQuery.fromId(enabledWallet.tokenQueryId) ?: return@mapNotNull null
-
-            tokens.find { it.tokenQuery == tokenQuery }?.let { token ->
-                return@mapNotNull Wallet(token, account)
+            tokensMap[enabledWallet.tokenQueryId]?.let {
+                return@mapNotNull Wallet(it, account)
             }
+
+            val tokenQuery = TokenQuery.fromId(enabledWallet.tokenQueryId) ?: return@mapNotNull null
 
             if (enabledWallet.coinName != null && enabledWallet.coinCode != null && enabledWallet.coinDecimals != null) {
                 val coinUid = tokenQuery.customCoinUid
