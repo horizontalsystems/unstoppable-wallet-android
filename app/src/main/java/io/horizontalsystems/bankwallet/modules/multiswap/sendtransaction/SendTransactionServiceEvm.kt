@@ -22,9 +22,9 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Eip1559FeeSettings
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeModule
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.LegacyFeeSettings
+import io.horizontalsystems.bankwallet.modules.evmfee.NumberInputWithButtons
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
@@ -42,6 +42,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.decorations.TransactionDecoration
@@ -244,11 +245,22 @@ class SendTransactionServiceEvm(
     }
 
     @Composable
-    override fun GetSettingsContent(navController: NavController) {
+    override fun GetNonceSettingsContent(navController: NavController) {
         val nonceViewModel = viewModel<SendEvmNonceViewModel>(initializer = {
             SendEvmNonceViewModel(nonceService)
         })
+        val sendSettingsViewModel = viewModel<SendEvmSettingsViewModel>(
+            factory = SendEvmSettingsModule.Factory(settingsService, baseCoinService)
+        )
+        SendEvmNonceSettingsScreen(
+            viewModel = sendSettingsViewModel,
+            nonceViewModel = nonceViewModel,
+            navController = navController
+        )
+    }
 
+    @Composable
+    override fun GetSettingsContent(navController: NavController) {
         val feeSettingsViewModel = viewModel<ViewModel>(
             factory = EvmFeeModule.Factory(
                 feeService,
@@ -262,7 +274,6 @@ class SendTransactionServiceEvm(
         SendEvmFeeSettingsScreen(
             viewModel = sendSettingsViewModel,
             feeSettingsViewModel = feeSettingsViewModel,
-            nonceViewModel = nonceViewModel,
             navController = navController
         )
     }
@@ -272,7 +283,6 @@ class SendTransactionServiceEvm(
 fun SendEvmFeeSettingsScreen(
     viewModel: SendEvmSettingsViewModel,
     feeSettingsViewModel: ViewModel,
-    nonceViewModel: SendEvmNonceViewModel,
     navController: NavController
 ) {
     HSScaffold(
@@ -302,23 +312,56 @@ fun SendEvmFeeSettingsScreen(
                 }
             }
 
+            Cautions(viewModel.cautions)
+
+            VSpacer(32.dp)
+        }
+    }
+}
+
+@Composable
+fun SendEvmNonceSettingsScreen(
+    viewModel: SendEvmSettingsViewModel,
+    nonceViewModel: SendEvmNonceViewModel,
+    navController: NavController
+) {
+    HSScaffold(
+        title = stringResource(R.string.SendEvmSettings_Nonce),
+        onBack = navController::popBackStack,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Reset),
+                enabled = !viewModel.isRecommendedSettingsSelected,
+                onClick = { viewModel.onClickReset() },
+                tint = ComposeAppTheme.colors.jacob
+            )
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
+        ) {
             val nonceUiState = nonceViewModel.uiState
-            if (nonceUiState.showInSettings) {
-                EvmSettingsInput(
-                    title = stringResource(id = R.string.SendEvmSettings_Nonce),
-                    info = stringResource(id = R.string.SendEvmSettings_Nonce_Info),
-                    value = nonceUiState.nonce?.toBigDecimal() ?: BigDecimal.ZERO,
-                    decimals = 0,
-                    navController = navController,
-                    warnings = nonceUiState.warnings,
-                    errors = nonceUiState.errors,
-                    onValueChange = {
-                        nonceViewModel.onEnterNonce(it.toLong())
-                    },
-                    onClickIncrement = nonceViewModel::onIncrementNonce,
-                    onClickDecrement = nonceViewModel::onDecrementNonce
-                )
+            TextBlock(
+                text = stringResource(R.string.SendEvmSettings_Nonce_Info),
+            )
+            VSpacer(8.dp)
+            val textColor = when {
+                nonceUiState.errors.isNotEmpty() -> ComposeAppTheme.colors.lucian
+                nonceUiState.warnings.isNotEmpty() -> ComposeAppTheme.colors.jacob
+                else -> ComposeAppTheme.colors.leah
             }
+            NumberInputWithButtons(
+                value = nonceUiState.nonce?.toBigDecimal() ?: BigDecimal.ZERO,
+                decimals = 0,
+                textColor = textColor,
+                onValueChange = {
+                    nonceViewModel.onEnterNonce(it.toLong())
+                },
+                onClickIncrement = nonceViewModel::onIncrementNonce,
+                onClickDecrement = nonceViewModel::onDecrementNonce
+            )
 
             Cautions(viewModel.cautions)
 

@@ -225,8 +225,8 @@ private fun EvmSettingsInput(
 ) {
     HeaderText(text = title) {
         navController.slideFromBottom(
-            R.id.feeSettingsInfoDialog,
-            FeeSettingsInfoDialog.Input(title, info)
+            R.id.swapInfoDialog,
+            SwapInfoDialog.Input(title, info)
         )
     }
 
@@ -241,7 +241,7 @@ private fun EvmSettingsInput(
 }
 
 @Composable
-private fun NumberInputWithButtons(
+fun NumberInputWithButtons(
     value: BigDecimal,
     decimals: Int,
     textColor: Color,
