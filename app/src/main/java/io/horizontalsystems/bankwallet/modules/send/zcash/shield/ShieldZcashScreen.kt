@@ -37,7 +37,7 @@ fun ShieldZcashScreen(
         rate = viewModel.coinRate,
         feeCoinRate = viewModel.coinRate,
         sendResult = viewModel.sendResult,
-        coin = confirmationData.coin,
+        token = confirmationData.token,
         feeCoin = confirmationData.feeCoin,
         amount = confirmationData.amount,
         address = null,

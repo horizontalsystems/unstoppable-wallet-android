@@ -245,7 +245,7 @@ class SendBitcoinViewModel(
             fee = fee!!,
             address = address,
             contact = contact,
-            coin = wallet.token.coin,
+            token = wallet.token,
             feeCoin = wallet.token.coin,
             lockTimeInterval = pluginState.lockTimeInterval,
             memo = memo,

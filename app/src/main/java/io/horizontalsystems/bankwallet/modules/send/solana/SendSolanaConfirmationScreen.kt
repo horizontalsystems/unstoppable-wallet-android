@@ -35,7 +35,7 @@ fun SendSolanaConfirmationScreen(
         rate = sendViewModel.coinRate,
         feeCoinRate = sendViewModel.feeCoinRate,
         sendResult = sendViewModel.sendResult,
-        coin = confirmationData.coin,
+        token = confirmationData.token,
         feeCoin = confirmationData.feeCoin,
         amount = confirmationData.amount,
         address = confirmationData.address,

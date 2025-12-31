@@ -119,7 +119,7 @@ class SendTonViewModel(
             fee = feeState.fee!!,
             address = address,
             contact = contact,
-            coin = wallet.coin,
+            token = wallet.token,
             feeCoin = feeToken.coin,
             memo = memo,
         )

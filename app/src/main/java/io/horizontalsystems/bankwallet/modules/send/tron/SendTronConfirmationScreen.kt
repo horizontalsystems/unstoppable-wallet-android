@@ -77,7 +77,7 @@ fun SendTronConfirmationScreen(
     val rate = sendViewModel.coinRate
     val feeCoinRate = sendViewModel.feeCoinRate
     val sendResult = sendViewModel.sendResult
-    val coin = confirmationData.coin
+    val token = confirmationData.token
     val feeCoin = confirmationData.feeCoin
     val amount = confirmationData.amount
     val address = confirmationData.address
@@ -140,7 +140,7 @@ fun SendTronConfirmationScreen(
             ) {
                 VSpacer(12.dp)
                 ConfirmationTopSection(
-                    coin = coin,
+                    token = token,
                     amount = amount,
                     coinMaxAllowedDecimals = coinMaxAllowedDecimals,
                     rate = rate,
