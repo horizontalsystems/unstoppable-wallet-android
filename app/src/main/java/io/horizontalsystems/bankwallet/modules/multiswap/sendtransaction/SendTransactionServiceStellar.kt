@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.math.BigDecimal
 
-class SendTransactionServiceStellar(val stellarKit: StellarKit) : AbstractSendTransactionService(false) {
+class SendTransactionServiceStellar(val stellarKit: StellarKit) : AbstractSendTransactionService(false, false) {
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Stellar())
 
     private var fee: BigDecimal? = stellarKit.sendFee

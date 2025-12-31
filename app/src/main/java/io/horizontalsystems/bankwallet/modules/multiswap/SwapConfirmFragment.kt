@@ -117,7 +117,7 @@ fun SwapConfirmScreen(navController: NavController) {
         null
     }
 
-    val onClickNonceSettings = if (uiState.hasSettings) {
+    val onClickNonceSettings = if (uiState.hasNonceSettings) {
         {
             navController.slideFromRight(R.id.swapTransactionNonceSettings)
         }
