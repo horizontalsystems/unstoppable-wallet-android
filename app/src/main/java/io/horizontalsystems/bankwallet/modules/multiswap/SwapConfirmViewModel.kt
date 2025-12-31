@@ -177,6 +177,7 @@ class SwapConfirmViewModel(
             quoteFields = quoteFields,
             transactionFields = sendTransactionState.fields,
             hasSettings = sendTransactionService.hasSettings,
+            hasNonceSettings = sendTransactionService.hasNonceSettings,
             mevProtectionAvailable = mevProtectionAvailable,
             mevProtectionEnabled = mevProtectionEnabled,
         )
@@ -278,6 +279,7 @@ data class SwapConfirmUiState(
     val transactionFields: List<DataField>,
     val extraFees: Map<FeeType, SendModule.AmountData>,
     val hasSettings: Boolean,
+    val hasNonceSettings: Boolean,
     val mevProtectionAvailable: Boolean,
     val mevProtectionEnabled: Boolean,
 ) {

@@ -63,7 +63,7 @@ class SendTransactionServiceEvm(
     blockchainType: BlockchainType,
     initialGasPrice: GasPrice? = null,
     initialNonce: Long? = null
-) : AbstractSendTransactionService(true) {
+) : AbstractSendTransactionService(true, true) {
     private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
     private val evmKitWrapper by lazy {
         val account =

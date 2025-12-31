@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 
-class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(false) {
+class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(false, false) {
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Tron())
     private val adapter = App.adapterManager.getAdapterForToken<ISendTronAdapter>(token)!!
     private val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalArgumentException()
