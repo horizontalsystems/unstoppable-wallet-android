@@ -33,6 +33,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -59,6 +60,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 
@@ -70,7 +72,7 @@ fun SendConfirmationScreen(
     rate: CurrencyValue?,
     feeCoinRate: CurrencyValue?,
     sendResult: SendResult?,
-    coin: Coin,
+    token: Token,
     feeCoin: Coin,
     amount: BigDecimal,
     address: Address?,
@@ -142,7 +144,7 @@ fun SendConfirmationScreen(
             ) {
                 VSpacer(12.dp)
                 ConfirmationTopSection(
-                    coin = coin,
+                    token = token,
                     amount = amount,
                     coinMaxAllowedDecimals = coinMaxAllowedDecimals,
                     rate = rate,
@@ -222,7 +224,7 @@ fun ConfirmationBottomSection(
 
 @Composable
 fun ConfirmationTopSection(
-    coin: Coin,
+    token: Token,
     amount: BigDecimal,
     coinMaxAllowedDecimals: Int,
     rate: CurrencyValue?,
@@ -249,14 +251,14 @@ fun ConfirmationTopSection(
             CellPrimary(
                 left = {
                     CoinImage(
-                        coin = coin,
+                        token = token,
                         modifier = Modifier.size(32.dp)
                     )
                 },
                 middle = {
                     CellMiddleInfo(
-                        subtitle = coin.code.hs(color = ComposeAppTheme.colors.leah),
-                        description = (stringResource(id = R.string.CoinPlatforms_Native)).hs //todo pass bip
+                        subtitle = token.coin.code.hs(color = ComposeAppTheme.colors.leah),
+                        description = (token.badge ?: stringResource(id = R.string.CoinPlatforms_Native)).hs
                     )
                 },
                 right = {

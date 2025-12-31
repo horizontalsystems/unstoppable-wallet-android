@@ -132,7 +132,7 @@ class SendZCashViewModel(
             fee = fee,
             address = address,
             contact = contact,
-            coin = wallet.coin,
+            token = wallet.token,
             feeCoin = wallet.coin,
             memo = memoState.memo
         )

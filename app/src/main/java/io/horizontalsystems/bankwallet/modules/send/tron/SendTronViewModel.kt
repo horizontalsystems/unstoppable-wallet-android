@@ -130,7 +130,7 @@ class SendTronViewModel(
             resourcesConsumed = null,
             address = address,
             contact = contact,
-            coin = wallet.coin,
+            token = wallet.token,
             feeCoin = feeToken.coin,
             isInactiveAddress = addressState.isInactiveAddress
         )
