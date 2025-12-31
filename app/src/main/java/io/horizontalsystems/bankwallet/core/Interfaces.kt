@@ -501,7 +501,6 @@ interface IWalletManager {
     fun delete(wallets: List<Wallet>)
     fun clear()
     fun handle(newWallets: List<Wallet>, deletedWallets: List<Wallet>)
-    fun getWallets(account: Account): List<Wallet>
 }
 
 interface IAppNumberFormatter {
