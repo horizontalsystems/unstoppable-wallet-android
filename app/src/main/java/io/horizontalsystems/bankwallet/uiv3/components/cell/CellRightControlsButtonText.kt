@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
@@ -37,6 +38,8 @@ fun CellRightControlsButtonText(
             text = text.text,
             style = ComposeAppTheme.typography.subheadSB,
             color = text.color ?: ComposeAppTheme.colors.leah,
+            textAlign = TextAlign.End,
+            modifier = Modifier.weight(1f)
         )
 
         val clickModifier = if (onIconClick != null) {
