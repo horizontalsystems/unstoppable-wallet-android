@@ -77,6 +77,7 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
     val uiState = viewModel.uiState
 
     ConfirmTransactionScreen(
+        title = stringResource(R.string.Swap_ConfirmApprove_Title),
         onClickBack = navController::popBackStack,
         onClickSettings = {
             navController.slideFromRight(R.id.eip20ApproveTransactionSettingsFragment)
@@ -87,7 +88,6 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
             var buttonEnabled by remember { mutableStateOf(true) }
-            val view = LocalView.current
 
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
@@ -208,7 +208,7 @@ private fun ConfirmTokenUnlimitedSection(token: Token) {
 }
 
 @Composable
-private fun ConfirmTokenSection(
+fun ConfirmTokenSection(
     token: Token,
     amount: BigDecimal,
     fiatAmount: BigDecimal?,
@@ -248,7 +248,7 @@ private fun ConfirmTokenSection(
 }
 
 @Composable
-private fun SpenderCell(
+fun SpenderCell(
     address: String,
     contact: String?,
     onCopyClick: () -> Unit
