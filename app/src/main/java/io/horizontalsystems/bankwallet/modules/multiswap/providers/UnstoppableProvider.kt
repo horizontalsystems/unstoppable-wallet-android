@@ -213,8 +213,6 @@ object UnstoppableProvider : IMultiSwapProvider {
             false
         )
 
-        val cautions = mutableListOf<HSCaution>()
-
         val approvalAddress = bestRoute.approvalAddress?.let { router ->
             try {
                 Address(router)
@@ -246,8 +244,7 @@ object UnstoppableProvider : IMultiSwapProvider {
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            actionRequired = actionApprove,
-            cautions = cautions
+            actionRequired = actionApprove
         )
     }
 

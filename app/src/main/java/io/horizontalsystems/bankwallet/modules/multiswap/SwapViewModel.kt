@@ -43,7 +43,6 @@ class SwapViewModel(
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountInputEnabled = false
     private val currency = currencyManager.baseCurrency
-    private var cautionViewItems = listOf<CautionViewItem>()
 
     init {
         quoteService.start()
@@ -133,7 +132,7 @@ class SwapViewModel(
         timeRemainingProgress = timerState.remaining?.let { remaining ->
             remaining / quoteLifetime.toFloat()
         },
-        cautions = cautionViewItems
+        cautions = listOf()
     )
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
@@ -164,8 +163,6 @@ class SwapViewModel(
         fiatServiceIn.setAmount(quoteState.amountIn)
         fiatServiceOut.setToken(quoteState.tokenOut)
         fiatServiceOut.setAmount(quoteState.quote?.amountOut)
-
-        cautionViewItems = quoteState.quote?.cautions?.map(HSCaution::toCautionViewItem) ?: listOf()
 
         emitState()
 

@@ -157,7 +157,6 @@ object AllBridgeProvider : IMultiSwapProvider {
         val tokenPairIn = tokenPairs.first { it.token == tokenIn }
         val bridgeAddress = tokenPairIn.abToken.bridgeAddress
 
-        val cautions = mutableListOf<HSCaution>()
         val allowance: BigDecimal?
         val actionRequired: ISwapProviderAction?
 
@@ -201,7 +200,6 @@ object AllBridgeProvider : IMultiSwapProvider {
             tokenOut = tokenOut,
             amountIn = amountIn,
             actionRequired = actionRequired,
-            cautions = cautions,
         )
     }
 
