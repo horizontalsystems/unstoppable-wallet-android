@@ -25,41 +25,71 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun CellRightControlsButtonText(
-    text: HSString,
-    icon: Painter,
+    title: HSString? = null,
+    subtitle: HSString? = null,
+    description: HSString? = null,
+    icon: Painter? = null,
     iconTint: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
-    onIconClick: (() -> Unit)? = null
+    onIconClick: (() -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
 ) {
     Row(
+        modifier = Modifier.clickable(
+            enabled = onClick != null,
+            interactionSource = null,
+            indication = null,
+            onClick = {
+                onClick?.invoke()
+            }
+        ),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = text.text,
-            style = ComposeAppTheme.typography.subheadSB,
-            color = text.color ?: ComposeAppTheme.colors.leah,
-            textAlign = TextAlign.End,
-            modifier = Modifier.weight(1f)
-        )
-
-        val clickModifier = if (onIconClick != null) {
-            Modifier.clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(bounded = false, color = ComposeAppTheme.colors.leah),
-                onClick = onIconClick
+        title?.let {
+            Text(
+                text = it.text,
+                style = ComposeAppTheme.typography.headline2,
+                color = it.color ?: ComposeAppTheme.colors.leah,
+                textAlign = TextAlign.End,
             )
-        } else {
-            Modifier
         }
+        subtitle?.let {
+            Text(
+                text = it.text,
+                style = ComposeAppTheme.typography.subheadSB,
+                color = it.color ?: ComposeAppTheme.colors.leah,
+                textAlign = TextAlign.End,
+                modifier = Modifier.weight(1f)
+            )
+        }
+        description?.let {
+            Text(
+                text = it.text,
+                style = ComposeAppTheme.typography.captionSB,
+                color = it.color ?: ComposeAppTheme.colors.grey,
+                textAlign = TextAlign.End,
+            )
+        }
+        icon?.let {
+            val clickModifier = if (onIconClick != null) {
+                Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = ripple(bounded = false, color = ComposeAppTheme.colors.leah),
+                    onClick = onIconClick
+                )
+            } else {
+                Modifier
+            }
 
-        Icon(
-            modifier = Modifier
-                .size(20.dp)
-                .then(clickModifier)            ,
-            painter = icon,
-            contentDescription = null,
-            tint = iconTint
-        )
+            Icon(
+                modifier = Modifier
+                    .size(20.dp)
+                    .then(clickModifier)            ,
+                painter = icon,
+                contentDescription = null,
+                tint = iconTint
+            )
+        }
     }
 }
 
@@ -68,9 +98,9 @@ fun CellRightControlsButtonText(
 fun Prev_CellRightControlsButtonText() {
     ComposeAppTheme {
         CellRightControlsButtonText(
-            "Text".hs,
-            painterResource(id = R.drawable.copy_filled_24),
-            ComposeAppTheme.colors.leah
+            subtitle = "Text".hs,
+            icon = painterResource(id = R.drawable.copy_filled_24),
+            iconTint = ComposeAppTheme.colors.leah
         )
     }
 }

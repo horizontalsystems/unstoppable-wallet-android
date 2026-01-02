@@ -402,7 +402,7 @@ fun DomainCell(
         },
         right = {
             CellRightControlsButtonText(
-                text = address.hs,
+                subtitle = address.hs,
                 icon = painterResource(id = R.drawable.copy_filled_24),
                 iconTint = ComposeAppTheme.colors.leah
             ) {
