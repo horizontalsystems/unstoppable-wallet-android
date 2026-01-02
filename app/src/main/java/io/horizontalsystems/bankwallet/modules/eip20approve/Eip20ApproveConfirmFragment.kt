@@ -261,7 +261,7 @@ fun SpenderCell(
         },
         right = {
             CellRightControlsButtonText(
-                text = (contact ?: address).hs,
+                subtitle = (contact ?: address).hs,
                 icon = painterResource(id = R.drawable.copy_filled_24),
                 iconTint = ComposeAppTheme.colors.leah,
                 onIconClick = onCopyClick

@@ -1,18 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -67,17 +66,13 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.CardsSwapInfo
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
-import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HSRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemTimeoutIndicator
@@ -93,6 +88,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellGroup
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsButtonText
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -328,13 +329,48 @@ private fun SwapScreenInner(
 
                 VSpacer(height = 12.dp)
                 if (quote != null) {
-                    CardsSwapInfo {
-                        ProviderField(quote.provider, onClickProvider, onClickProviderSettings)
-                        PriceField(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut, StatPage.Swap)
-                        PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
-                        quote.fields.forEach {
-                            it.GetContent(navController)
-                        }
+                    CellGroup(
+                        paddingValues = PaddingValues(horizontal = 16.dp)
+                    ) {
+                        CellSecondary(
+                            left = {
+                                CellLeftImage(
+                                    painter = painterResource(quote.provider.icon),
+                                    type = ImageType.Rectangle,
+                                    size = 24,
+                                )
+                            },
+                            middle = {
+                                CellMiddleInfoTextIcon(
+                                    text = quote.provider.title.hs,
+                                    icon = painterResource(R.drawable.arrow_s_down_24),
+                                    iconTint = ComposeAppTheme.colors.grey,
+                                    onIconClick = onClickProvider
+                                )
+                            },
+                            right = {
+                                var showRegularPrice by remember { mutableStateOf(true) }
+                                val swapPriceUIHelper = SwapPriceUIHelper(
+                                    quote.tokenIn,
+                                    quote.tokenOut,
+                                    quote.amountIn,
+                                    quote.amountOut
+                                )
+
+                                val priceStr = if (showRegularPrice) {
+                                    swapPriceUIHelper.priceStr
+                                } else {
+                                    swapPriceUIHelper.priceInvStr
+                                }
+
+                                CellRightControlsButtonText(
+                                    description = priceStr.hs(color = ComposeAppTheme.colors.leah),
+                                    onClick = {
+                                        showRegularPrice = !showRegularPrice
+                                    }
+                                )
+                            }
+                        )
                     }
                 }
 
@@ -438,44 +474,6 @@ fun PriceImpactField(
             )
         }
     )
-}
-
-@Composable
-private fun ProviderField(
-    swapProvider: IMultiSwapProvider,
-    onClickProvider: () -> Unit,
-    onClickProviderSettings: () -> Unit,
-) {
-    HSRow(
-        modifier = Modifier
-            .height(40.dp)
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        borderBottom = true,
-    ) {
-        Selector(
-            icon = {
-                Image(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(swapProvider.icon),
-                    contentDescription = null
-                )
-            },
-            text = {
-                subhead1_leah(text = swapProvider.title)
-            },
-            onClickSelect = onClickProvider
-        )
-        HFillSpacer(minWidth = 16.dp)
-        Icon(
-            modifier = Modifier.clickable(
-                onClick = onClickProviderSettings
-            ),
-            painter = painterResource(R.drawable.ic_manage_2),
-            contentDescription = "",
-            tint = ComposeAppTheme.colors.grey
-        )
-    }
 }
 
 @Composable

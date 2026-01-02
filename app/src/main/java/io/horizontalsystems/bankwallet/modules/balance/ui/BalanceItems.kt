@@ -386,7 +386,7 @@ fun BalanceItems(
                         right = {
                             accountViewItem.watchAddress?.let { watchAddress ->
                                 CellRightControlsButtonText(
-                                    text = watchAddress.shorten().hs(color = ComposeAppTheme.colors.leah),
+                                    subtitle = watchAddress.shorten().hs(color = ComposeAppTheme.colors.leah),
                                     icon = painterResource(id = R.drawable.copy_filled_24),
                                     iconTint = ComposeAppTheme.colors.leah,
                                 )

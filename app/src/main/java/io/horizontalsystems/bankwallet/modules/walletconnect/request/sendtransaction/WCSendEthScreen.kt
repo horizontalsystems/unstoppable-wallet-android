@@ -282,7 +282,7 @@ fun CopiableValueCell(
         },
         right = {
             CellRightControlsButtonText(
-                text = shortedValue.hs,
+                subtitle = shortedValue.hs,
                 icon = painterResource(id = R.drawable.copy_filled_24),
                 iconTint = ComposeAppTheme.colors.leah
             ) {
