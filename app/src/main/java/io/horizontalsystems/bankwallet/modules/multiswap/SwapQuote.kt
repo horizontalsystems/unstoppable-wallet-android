@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
-import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.ISwapSetting
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
@@ -16,5 +15,4 @@ data class SwapQuote(
     val tokenOut: Token,
     val amountIn: BigDecimal,
     val actionRequired: ISwapProviderAction?,
-    val cautions: List<HSCaution> = listOf(),
 )

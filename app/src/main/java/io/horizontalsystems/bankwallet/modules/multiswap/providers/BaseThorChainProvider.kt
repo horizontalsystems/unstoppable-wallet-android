@@ -130,7 +130,6 @@ abstract class BaseThorChainProvider(
 
         val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, settingRecipient.value)
 
-        val cautions = mutableListOf<HSCaution>()
         val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
 
         val routerAddress = quoteSwap.router?.let { router ->
@@ -164,8 +163,7 @@ abstract class BaseThorChainProvider(
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            actionRequired = actionApprove,
-            cautions = cautions
+            actionRequired = actionApprove
         )
     }
 
