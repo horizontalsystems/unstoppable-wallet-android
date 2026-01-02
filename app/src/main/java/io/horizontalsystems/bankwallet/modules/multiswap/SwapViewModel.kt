@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
-import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -128,7 +127,6 @@ class SwapViewModel(
         timeRemainingProgress = timerState.remaining?.let { remaining ->
             remaining / quoteLifetime.toFloat()
         },
-        cautions = listOf()
     )
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
@@ -259,8 +257,7 @@ data class SwapUiState(
     val fiatPriceImpactLevel: PriceImpactLevel?,
     val timeRemaining: Long?,
     val timeout: Boolean,
-    val timeRemainingProgress: Float?,
-    val cautions: List<CautionViewItem>,
+    val timeRemainingProgress: Float?
 ) {
     val currentStep: SwapStep = when {
         quoting -> SwapStep.Quoting
