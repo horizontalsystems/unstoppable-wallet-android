@@ -148,7 +148,7 @@ class SwapConfirmViewModel(
         var cautions = sendTransactionState.cautions
 
         if (cautions.isEmpty()) {
-            priceImpactState.priceImpactCaution?.let { hsCaution ->
+            priceImpactState.fiatPriceImpactCaution?.let { hsCaution ->
                 cautions = listOf(hsCaution.toCautionViewItem())
             }
 
@@ -172,8 +172,8 @@ class SwapConfirmViewModel(
             extraFees = sendTransactionState.extraFees,
             cautions = cautions,
             validQuote = sendTransactionState.sendable,
-            priceImpact = priceImpactState.priceImpact,
-            priceImpactLevel = priceImpactState.priceImpactLevel,
+            priceImpact = priceImpactState.fiatPriceImpact,
+            priceImpactLevel = priceImpactState.fiatPriceImpactLevel,
             quoteFields = quoteFields,
             transactionFields = sendTransactionState.fields,
             hasSettings = sendTransactionService.hasSettings,
@@ -215,7 +215,7 @@ class SwapConfirmViewModel(
                 fiatServiceOutMin.setAmount(amountOutMin)
                 sendTransactionService.setSendTransactionData(finalQuote.sendTransactionData)
 
-                priceImpactService.setPriceImpact(finalQuote.priceImpact, swapProvider.title)
+                priceImpactService.setProviderTitle(swapProvider.title)
             } catch (e: CancellationException) {
                 // Do nothing
             } catch (t: Throwable) {

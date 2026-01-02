@@ -157,7 +157,6 @@ abstract class BaseThorChainProvider(
 
         return SwapQuote(
             amountOut = quoteSwap.expected_amount_out.movePointLeft(8),
-            priceImpact = null,
             fields = fields,
             settings = listOf(settingRecipient, settingSlippage),
             tokenIn = tokenIn,

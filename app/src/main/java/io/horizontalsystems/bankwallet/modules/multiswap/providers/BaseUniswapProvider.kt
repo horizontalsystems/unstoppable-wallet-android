@@ -48,7 +48,6 @@ abstract class BaseUniswapProvider : IMultiSwapProvider {
 
         return SwapQuote(
             amountOut = bestTrade.tradeData.amountOut!!,
-            priceImpact = bestTrade.tradeData.priceImpact,
             fields = fields,
             settings = listOf(bestTrade.settingRecipient, bestTrade.settingSlippage, bestTrade.settingDeadline),
             tokenIn = tokenIn,

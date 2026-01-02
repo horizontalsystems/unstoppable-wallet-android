@@ -8,7 +8,6 @@ import java.math.BigDecimal
 
 data class SwapQuote(
     val amountOut: BigDecimal,
-    val priceImpact: BigDecimal?,
     val fields: List<DataField>,
     val settings: List<ISwapSetting>,
     val tokenIn: Token,

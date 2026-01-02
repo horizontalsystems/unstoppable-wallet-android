@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -116,11 +115,8 @@ class SwapViewModel(
         quotes = quoteState.quotes,
         preferredProvider = quoteState.preferredProvider,
         quote = quoteState.quote,
-        error = networkState.error ?: quoteState.error ?: balanceState.error ?: priceImpactState.error,
+        error = networkState.error ?: quoteState.error ?: balanceState.error,
         availableBalance = balanceState.balance,
-        priceImpact = priceImpactState.priceImpact,
-        priceImpactLevel = priceImpactState.priceImpactLevel,
-        priceImpactCaution = priceImpactState.priceImpactCaution,
         fiatPriceImpact = priceImpactState.fiatPriceImpact,
         fiatPriceImpactLevel = priceImpactState.fiatPriceImpactLevel,
         fiatAmountIn = fiatAmountIn,
@@ -157,7 +153,7 @@ class SwapViewModel(
         balanceService.setToken(quoteState.tokenIn)
         balanceService.setAmount(quoteState.amountIn)
 
-        priceImpactService.setPriceImpact(quoteState.quote?.priceImpact, quoteState.quote?.provider?.title)
+        priceImpactService.setProviderTitle(quoteState.quote?.provider?.title)
 
         fiatServiceIn.setToken(quoteState.tokenIn)
         fiatServiceIn.setAmount(quoteState.amountIn)
@@ -255,9 +251,6 @@ data class SwapUiState(
     val quote: SwapProviderQuote?,
     val error: Throwable?,
     val availableBalance: BigDecimal?,
-    val priceImpact: BigDecimal?,
-    val priceImpactLevel: PriceImpactLevel?,
-    val priceImpactCaution: HSCaution?,
     val fiatAmountIn: BigDecimal?,
     val fiatAmountOut: BigDecimal?,
     val fiatPriceImpact: BigDecimal?,

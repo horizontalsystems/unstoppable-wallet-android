@@ -238,7 +238,6 @@ object UnstoppableProvider : IMultiSwapProvider {
 
         return SwapQuote(
             amountOut = bestRoute.expectedBuyAmount ?: BigDecimal.ZERO,
-            priceImpact = null,
             fields = fields,
             settings = listOf(settingRecipient, settingSlippage),
             tokenIn = tokenIn,
