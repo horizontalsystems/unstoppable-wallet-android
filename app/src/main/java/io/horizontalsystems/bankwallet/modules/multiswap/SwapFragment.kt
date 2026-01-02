@@ -65,7 +65,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
@@ -76,7 +75,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemTimeoutIndicator
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
@@ -86,6 +84,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.micro_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
+import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
+import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
+import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellGroup
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
@@ -375,15 +376,13 @@ private fun SwapScreenInner(
                 if (uiState.currentStep is SwapStep.ActionRequired) {
                     uiState.currentStep.action.getDescription()?.let { actionDescription ->
                         VSpacer(height = 16.dp)
-                        TextImportantWarning(
+                        AlertCard(
                             modifier = Modifier.padding(horizontal = 16.dp),
+                            format = AlertFormat.Structured,
+                            type = AlertType.Caution,
                             text = actionDescription
                         )
                     }
-                }
-
-                if (uiState.cautions.isNotEmpty()) {
-                    Cautions(cautions = uiState.cautions)
                 }
 
                 VSpacer(height = 32.dp)
