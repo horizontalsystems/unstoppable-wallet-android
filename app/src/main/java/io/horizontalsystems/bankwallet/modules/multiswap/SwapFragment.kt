@@ -216,7 +216,7 @@ private fun SwapScreenInner(
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                VSpacer(height = 12.dp)
+                VSpacer(height = 16.dp)
                 SwapInput(
                     amountIn = uiState.amountIn,
                     fiatAmountIn = uiState.fiatAmountIn,
@@ -240,7 +240,7 @@ private fun SwapScreenInner(
                 VSpacer(height = 8.dp)
                 AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
 
-                VSpacer(height = 12.dp)
+                VSpacer(height = 16.dp)
 
                 when (val currentStep = uiState.currentStep) {
                     is SwapStep.InputRequired -> {
@@ -327,7 +327,7 @@ private fun SwapScreenInner(
                     }
                 }
 
-                VSpacer(height = 12.dp)
+                VSpacer(height = 16.dp)
                 if (quote != null) {
                     CellGroup(
                         paddingValues = PaddingValues(horizontal = 16.dp)
@@ -375,7 +375,7 @@ private fun SwapScreenInner(
                 }
 
                 if (uiState.error is PriceImpactForbidden) {
-                    VSpacer(height = 12.dp)
+                    VSpacer(height = 16.dp)
                     TextImportantError(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         icon = R.drawable.ic_attention_20,
@@ -383,7 +383,7 @@ private fun SwapScreenInner(
                         text = stringResource(id = R.string.Swap_PriceImpactTooHigh, uiState.error.providerTitle ?: "")
                     )
                 } else if (uiState.priceImpactLevel == PriceImpactLevel.High) {
-                    VSpacer(height = 12.dp)
+                    VSpacer(height = 16.dp)
                     TextImportantError(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         icon = R.drawable.ic_attention_20,
@@ -392,7 +392,7 @@ private fun SwapScreenInner(
                     )
                 } else if (uiState.currentStep is SwapStep.ActionRequired) {
                     uiState.currentStep.action.getDescription()?.let { actionDescription ->
-                        VSpacer(height = 12.dp)
+                        VSpacer(height = 16.dp)
                         TextImportantWarning(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             text = actionDescription
