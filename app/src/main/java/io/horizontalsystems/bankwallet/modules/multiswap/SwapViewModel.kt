@@ -122,11 +122,7 @@ class SwapViewModel(
         fiatAmountOut = fiatAmountOut,
         currency = currency,
         fiatAmountInputEnabled = fiatAmountInputEnabled,
-        timeRemaining = timerState.remaining,
         timeout = timerState.timeout,
-        timeRemainingProgress = timerState.remaining?.let { remaining ->
-            remaining / quoteLifetime.toFloat()
-        },
     )
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
@@ -255,9 +251,7 @@ data class SwapUiState(
     val currency: Currency,
     val fiatAmountInputEnabled: Boolean,
     val fiatPriceImpactLevel: PriceImpactLevel?,
-    val timeRemaining: Long?,
     val timeout: Boolean,
-    val timeRemainingProgress: Float?
 ) {
     val currentStep: SwapStep = when {
         quoting -> SwapStep.Quoting

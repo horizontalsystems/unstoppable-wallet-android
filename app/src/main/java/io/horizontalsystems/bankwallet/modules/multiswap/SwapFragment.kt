@@ -74,7 +74,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCirc
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemTimeoutIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
@@ -200,13 +199,6 @@ private fun SwapScreenInner(
     HSScaffold(
         title = stringResource(R.string.Swap),
         onBack = onClickClose,
-        menuItems = buildList {
-            uiState.timeRemainingProgress?.let { timeRemainingProgress ->
-                add(
-                    MenuItemTimeoutIndicator(timeRemainingProgress)
-                )
-            }
-        }
     ) {
         val focusManager = LocalFocusManager.current
         val keyboardState by observeKeyboardState()
