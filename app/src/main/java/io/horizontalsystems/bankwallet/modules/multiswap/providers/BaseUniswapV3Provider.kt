@@ -48,7 +48,6 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
 
         return SwapQuote(
             amountOut = bestTrade.tradeDataV3.tokenAmountOut.decimalAmount!!,
-            priceImpact = bestTrade.tradeDataV3.priceImpact,
             fields = fields,
             settings = listOf(bestTrade.settingRecipient, bestTrade.settingSlippage, bestTrade.settingDeadline),
             tokenIn = tokenIn,

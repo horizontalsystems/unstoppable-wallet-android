@@ -89,7 +89,6 @@ object OneInchProvider : IMultiSwapProvider {
         val amountOut = quote.toTokenAmount.toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
         return SwapQuote(
             amountOut = amountOut,
-            priceImpact = null,
             fields = fields,
             settings = listOf(settingRecipient, settingSlippage),
             tokenIn = tokenIn,

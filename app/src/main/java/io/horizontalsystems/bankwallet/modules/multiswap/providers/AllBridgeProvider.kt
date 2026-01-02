@@ -193,7 +193,6 @@ object AllBridgeProvider : IMultiSwapProvider {
 
         return SwapQuote(
             amountOut = amountOut,
-            priceImpact = null,
             fields = fields,
             settings = listOfNotNull(settingRecipient, settingSlippage),
             tokenIn = tokenIn,

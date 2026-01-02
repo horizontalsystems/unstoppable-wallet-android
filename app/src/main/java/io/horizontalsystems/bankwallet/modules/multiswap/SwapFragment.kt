@@ -76,7 +76,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemTimeoutIndicator
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
@@ -277,7 +276,6 @@ private fun SwapScreenInner(
                             SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
                             is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
                             is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
-                            is PriceImpactForbidden -> stringResource(id = R.string.Swap_ErrorHighPriceImpact)
                             is UnknownHostException -> stringResource(id = R.string.Hud_Text_NoInternet)
                             is TokenNotEnabled -> stringResource(id = R.string.Swap_ErrorTokenNotEnabled)
                             is WalletSyncing -> stringResource(id = R.string.Swap_ErrorWalletSyncing)
@@ -374,23 +372,7 @@ private fun SwapScreenInner(
                     }
                 }
 
-                if (uiState.error is PriceImpactForbidden) {
-                    VSpacer(height = 16.dp)
-                    TextImportantError(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        icon = R.drawable.ic_attention_20,
-                        title = stringResource(id = R.string.Swap_PriceImpact),
-                        text = stringResource(id = R.string.Swap_PriceImpactTooHigh, uiState.error.providerTitle ?: "")
-                    )
-                } else if (uiState.priceImpactLevel == PriceImpactLevel.High) {
-                    VSpacer(height = 16.dp)
-                    TextImportantError(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        icon = R.drawable.ic_attention_20,
-                        title = stringResource(id = R.string.Swap_PriceImpact),
-                        text = stringResource(id = R.string.Swap_PriceImpactHigh)
-                    )
-                } else if (uiState.currentStep is SwapStep.ActionRequired) {
+                if (uiState.currentStep is SwapStep.ActionRequired) {
                     uiState.currentStep.action.getDescription()?.let { actionDescription ->
                         VSpacer(height = 16.dp)
                         TextImportantWarning(
