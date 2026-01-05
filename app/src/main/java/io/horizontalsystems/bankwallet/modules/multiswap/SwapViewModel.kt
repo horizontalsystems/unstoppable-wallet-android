@@ -41,6 +41,7 @@ class SwapViewModel(
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountInputEnabled = false
     private val currency = currencyManager.baseCurrency
+    private var requoteOnTimeout = true
 
     init {
         quoteService.start()
@@ -88,7 +89,7 @@ class SwapViewModel(
             timerService.stateFlow.collect {
                 timerState = it
 
-                emitState()
+                requoteIfTimeout()
             }
         }
         viewModelScope.launch {
@@ -103,6 +104,12 @@ class SwapViewModel(
         tokenIn?.let {
             quoteService.setTokenIn(it)
             defaultTokenService.setTokenIn(it)
+        }
+    }
+
+    private fun requoteIfTimeout() {
+        if (requoteOnTimeout && timerState.timeout) {
+            reQuote()
         }
     }
 
@@ -122,7 +129,6 @@ class SwapViewModel(
         fiatAmountOut = fiatAmountOut,
         currency = currency,
         fiatAmountInputEnabled = fiatAmountInputEnabled,
-        timeout = timerState.timeout,
     )
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
@@ -205,12 +211,20 @@ class SwapViewModel(
 
     fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
-    fun reQuote() = quoteService.reQuote()
+    private fun reQuote() = quoteService.reQuote()
     fun onActionStarted() = quoteService.onActionStarted()
     fun onActionCompleted() = quoteService.onActionCompleted()
 
     fun getCurrentQuote() = quoteState.quote
     fun getSettings() = quoteService.getSwapSettings()
+    fun enableRequoteOnTimeout() {
+        requoteOnTimeout = true
+        requoteIfTimeout()
+    }
+
+    fun disableRequoteOnTimeout() {
+        requoteOnTimeout = false
+    }
 
     class Factory(private val tokenIn: Token?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -251,7 +265,6 @@ data class SwapUiState(
     val currency: Currency,
     val fiatAmountInputEnabled: Boolean,
     val fiatPriceImpactLevel: PriceImpactLevel?,
-    val timeout: Boolean,
 ) {
     val currentStep: SwapStep = when {
         quoting -> SwapStep.Quoting

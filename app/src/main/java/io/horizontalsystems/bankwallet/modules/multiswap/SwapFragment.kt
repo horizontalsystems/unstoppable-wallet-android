@@ -148,7 +148,6 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapSettings))
         },
-        onTimeout = viewModel::reQuote,
         onClickNext = {
             navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
                 if (it.success) {
@@ -164,7 +163,9 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         onActionCompleted = {
             viewModel.onActionCompleted()
         },
-        navController = navController
+        navController = navController,
+        onResume = viewModel::enableRequoteOnTimeout,
+        onPause = viewModel::disableRequoteOnTimeout,
     )
 }
 
@@ -180,18 +181,18 @@ private fun SwapScreenInner(
     onEnterAmountPercentage: (Int) -> Unit,
     onClickProvider: () -> Unit,
     onClickProviderSettings: () -> Unit,
-    onTimeout: () -> Unit,
     onClickNext: () -> Unit,
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,
     navController: NavController,
+    onResume: () -> Unit,
+    onPause: () -> Unit,
 ) {
-    LifecycleResumeEffect(uiState.timeout) {
-        if (uiState.timeout) {
-            onTimeout.invoke()
+    LifecycleResumeEffect(Unit) {
+        onResume.invoke()
+        onPauseOrDispose {
+            onPause.invoke()
         }
-
-        onPauseOrDispose { }
     }
 
     val quote = uiState.quote
