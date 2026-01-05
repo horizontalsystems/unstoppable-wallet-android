@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
@@ -106,10 +107,12 @@ fun TokenBalanceScreen(
 
     val loading = uiState.balanceViewItem?.syncingProgress?.progress != null
 
-    LaunchedEffect(uiState.attentionIcon?.type == AttentionIconType.SyncError) {
+    LifecycleResumeEffect(uiState.attentionIcon?.type) {
         if (uiState.attentionIcon?.type == AttentionIconType.SyncError) {
             openSyncErrorDialog(uiState, navController)
         }
+
+        onPauseOrDispose { }
     }
 
     LaunchedEffect(uiState.alertUnshieldedBalance) {
