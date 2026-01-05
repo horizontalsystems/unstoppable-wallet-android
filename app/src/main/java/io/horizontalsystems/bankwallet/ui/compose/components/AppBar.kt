@@ -43,6 +43,12 @@ data class MenuItem(
     val onClick: () -> Unit,
 ) : IMenuItem()
 
+data class MenuItemDropdown(
+    val title: TranslatableString,
+    @DrawableRes val icon: Int,
+    val items: List<MenuItem>,
+) : IMenuItem()
+
 @Composable
 fun AppBarMenuButton(
     @DrawableRes icon: Int,
@@ -166,6 +172,7 @@ fun AppBar(
                     }
 
                     is MenuItemLoading -> TODO()
+                    is MenuItemDropdown -> TODO()
                 }
             }
         },
