@@ -5,22 +5,30 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.ripple
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,8 +40,11 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.IMenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemDropdown
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemTimeoutIndicator
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -178,11 +189,64 @@ fun HSTopAppBar(
                                 )
                             }
                         }
+
+                        is MenuItemDropdown -> {
+                            MenuDropdown(menuItem)
+                        }
                     }
                 }
             }
         }
     )
+}
+
+@Composable
+fun MenuDropdown(menuItemDropdown: MenuItemDropdown)     {
+    var expanded by remember { mutableStateOf(false) }
+    Box(
+        modifier = Modifier.size(40.dp),
+    ) {
+        Icon(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(24.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = ripple(
+                        bounded = false,
+                        color = ComposeAppTheme.colors.leah
+                    ),
+                    onClick = {
+                        expanded = true
+                    }
+                ),
+            painter = painterResource(menuItemDropdown.icon),
+            contentDescription = null,
+            tint = Color.Unspecified
+        )
+    }
+
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = { expanded = false },
+        shape = RoundedCornerShape(16.dp),
+        containerColor = ComposeAppTheme.colors.lawrence,
+        modifier = Modifier.defaultMinSize(minWidth = 200.dp)
+    ) {
+        menuItemDropdown.items.forEachIndexed { i,  menuItem ->
+            BoxBordered(top = i != 0) {
+                DropdownMenuItem(
+                    text = {
+                        body_leah(menuItem.title.getString())
+                    },
+                    onClick = {
+                        expanded = false
+                        menuItem.onClick.invoke()
+                    }
+                )
+            }
+        }
+    }
 }
 
 @Preview
