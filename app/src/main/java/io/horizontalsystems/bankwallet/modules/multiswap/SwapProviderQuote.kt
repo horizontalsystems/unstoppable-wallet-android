@@ -4,7 +4,8 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapPro
 
 data class SwapProviderQuote(
     val provider: IMultiSwapProvider,
-    val swapQuote: SwapQuote
+    val swapQuote: SwapQuote,
+    val createdAt: Long = System.currentTimeMillis()
 ) {
     val tokenIn by swapQuote::tokenIn
     val tokenOut by swapQuote::tokenOut
@@ -12,6 +13,4 @@ data class SwapProviderQuote(
     val amountOut by swapQuote::amountOut
     val fields by swapQuote::fields
     val actionRequired by swapQuote::actionRequired
-
-    val createdAt = System.currentTimeMillis()
 }
