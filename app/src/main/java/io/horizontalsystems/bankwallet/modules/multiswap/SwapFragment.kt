@@ -361,7 +361,8 @@ private fun SwapScreenInner(
                                         showRegularPrice = !showRegularPrice
                                     }
                                 )
-                            }
+                            },
+                            onClick = onClickProvider
                         )
                     }
                 }
