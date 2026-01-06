@@ -4,7 +4,6 @@ import android.util.Base64
 import com.google.gson.JsonElement
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.APIClient
@@ -296,8 +295,6 @@ object UnstoppableProvider : IMultiSwapProvider {
         val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         val slippage = settingSlippage.value
 
-        val cautions = mutableListOf<HSCaution>()
-
         val bestRoute = quoteSwapBestRoute(
             tokenIn,
             tokenOut,
@@ -332,7 +329,6 @@ object UnstoppableProvider : IMultiSwapProvider {
             ),
             priceImpact = null,
             fields = fields,
-            cautions = cautions,
         )
     }
 

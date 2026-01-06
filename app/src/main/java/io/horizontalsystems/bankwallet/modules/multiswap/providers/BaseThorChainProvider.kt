@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
@@ -202,8 +201,6 @@ abstract class BaseThorChainProvider(
         val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         val slippage = settingSlippage.value
 
-        val cautions = mutableListOf<HSCaution>()
-
         val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, settingRecipient.value)
 
         val amountOut = quoteSwap.expected_amount_out.movePointLeft(8)
@@ -231,7 +228,6 @@ abstract class BaseThorChainProvider(
             ),
             priceImpact = null,
             fields = fields,
-            cautions = cautions,
         )
     }
 
