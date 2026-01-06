@@ -216,6 +216,7 @@ fun MenuDropdown(menuItemDropdown: MenuItemDropdown)     {
                         bounded = false,
                         color = ComposeAppTheme.colors.leah
                     ),
+                    enabled = menuItemDropdown.enabled,
                     onClick = {
                         expanded = true
                     }
