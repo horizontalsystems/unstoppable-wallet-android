@@ -51,6 +51,7 @@ class SwapConfirmViewModel(
     private var fiatAmountOutMin: BigDecimal? = null
 
     private var mevProtectionEnabled = false
+    private var initialLoading = true
     private var loading = true
     private var timerState = timerService.stateFlow.value
     private var sendTransactionState = sendTransactionService.stateFlow.value
@@ -109,6 +110,7 @@ class SwapConfirmViewModel(
             sendTransactionService.stateFlow.collect { transactionState ->
                 sendTransactionState = transactionState
 
+                initialLoading = initialLoading && transactionState.loading
                 loading = transactionState.loading
 
                 emitState()
@@ -158,6 +160,7 @@ class SwapConfirmViewModel(
         }
 
         return SwapConfirmUiState(
+            initialLoading = initialLoading,
             loading = loading,
             tokenIn = tokenIn,
             tokenOut = tokenOut,
@@ -259,6 +262,7 @@ class SwapConfirmViewModel(
 
 
 data class SwapConfirmUiState(
+    val initialLoading: Boolean,
     val loading: Boolean,
     val tokenIn: Token,
     val tokenOut: Token,

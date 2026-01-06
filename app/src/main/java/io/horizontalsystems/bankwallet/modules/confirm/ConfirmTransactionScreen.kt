@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.confirm
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -25,6 +27,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 @Composable
 fun ConfirmTransactionScreen(
     title: String = stringResource(R.string.Swap_Confirm_Title),
+    initialLoading: Boolean = false,
     onClickBack: (() -> Unit)?,
     onClickSettings: (() -> Unit)?,
     onClickClose: (() -> Unit)?,
@@ -62,6 +65,7 @@ fun ConfirmTransactionScreen(
                     MenuItemDropdown(
                         title = TranslatableString.ResString(R.string.Settings_Title),
                         icon = R.drawable.manage_24,
+                        enabled = !initialLoading,
                         items = dropdownMenuItems
                     )
                 )
@@ -77,33 +81,39 @@ fun ConfirmTransactionScreen(
             }
         },
     ) {
-        Box() {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                VSpacer(height = 12.dp)
-
-                content.invoke(this)
-
-                VSpacer(height = 362.dp)
-            }
-            Column(
-                modifier = Modifier.align(Alignment.BottomCenter)
-            ) {
-
-                defenseSlot?.let {
-                    it.invoke(this)
-                    VSpacer(height = 16.dp)
-                }
-
-                ButtonsGroupWithShade {
+        Crossfade(initialLoading) {
+            if (it) {
+                Loading()
+            } else {
+                Box {
                     Column(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        content = buttonsSlot
-                    )
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        VSpacer(height = 12.dp)
+
+                        content.invoke(this)
+
+                        VSpacer(height = 362.dp)
+                    }
+                    Column(
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                    ) {
+
+                        defenseSlot?.let {
+                            it.invoke(this)
+                            VSpacer(height = 16.dp)
+                        }
+
+                        ButtonsGroupWithShade {
+                            Column(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                content = buttonsSlot
+                            )
+                        }
+                    }
                 }
             }
         }

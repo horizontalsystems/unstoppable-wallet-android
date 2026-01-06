@@ -46,6 +46,7 @@ data class MenuItem(
 data class MenuItemDropdown(
     val title: TranslatableString,
     @DrawableRes val icon: Int,
+    val enabled: Boolean = true,
     val items: List<MenuItem>,
 ) : IMenuItem()
 

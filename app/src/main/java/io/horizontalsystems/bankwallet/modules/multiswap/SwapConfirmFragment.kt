@@ -126,6 +126,7 @@ fun SwapConfirmScreen(navController: NavController) {
     }
 
     ConfirmTransactionScreen(
+        initialLoading = uiState.initialLoading,
         onClickBack = navController::popBackStack,
         onClickSettings = onClickSettings,
         onClickNonceSettings = onClickNonceSettings,
