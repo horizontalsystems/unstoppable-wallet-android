@@ -123,7 +123,9 @@ class SwapConfirmViewModel(
             timerService.stateFlow.collect {
                 timerState = it
 
-                emitState()
+                if (timerState.timeout) {
+                    refresh(silent = true)
+                }
             }
         }
 
@@ -156,8 +158,6 @@ class SwapConfirmViewModel(
         }
 
         return SwapConfirmUiState(
-            expiresIn = timerState.remaining,
-            expired = timerState.timeout,
             loading = loading,
             tokenIn = tokenIn,
             tokenOut = tokenOut,
@@ -187,9 +187,11 @@ class SwapConfirmViewModel(
         timerService.stop()
     }
 
-    fun refresh() {
-        loading = true
-        emitState()
+    fun refresh(silent: Boolean = false) {
+        if (!silent) {
+            loading = true
+            emitState()
+        }
 
         sendTransactionService.refreshUuid()
         fetchFinalQuote()
@@ -257,8 +259,6 @@ class SwapConfirmViewModel(
 
 
 data class SwapConfirmUiState(
-    val expiresIn: Long?,
-    val expired: Boolean,
     val loading: Boolean,
     val tokenIn: Token,
     val tokenOut: Token,
