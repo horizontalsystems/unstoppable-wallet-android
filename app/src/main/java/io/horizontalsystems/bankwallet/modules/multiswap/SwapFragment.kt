@@ -95,6 +95,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.delay
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
@@ -115,17 +116,26 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
+    val onClickCoinFrom = {
+        navController.slideFromBottomForResult<Token>(
+            R.id.swapSelectCoinFragment,
+            SwapSelectCoinFragment.Input(uiState.tokenOut, context.getString(R.string.Swap_YouPay))
+        ) {
+            viewModel.onSelectTokenIn(it)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        if (tokenIn == null) {
+            delay(300)
+            onClickCoinFrom.invoke()
+        }
+    }
+
     SwapScreenInner(
         uiState = uiState,
         onClickClose = navController::popBackStack,
-        onClickCoinFrom = {
-            navController.slideFromBottomForResult<Token>(
-                R.id.swapSelectCoinFragment,
-                SwapSelectCoinFragment.Input(uiState.tokenOut, context.getString(R.string.Swap_YouPay))
-            ) {
-                viewModel.onSelectTokenIn(it)
-            }
-        },
+        onClickCoinFrom = onClickCoinFrom,
         onClickCoinTo = {
             navController.slideFromBottomForResult<Token>(
                 R.id.swapSelectCoinFragment,
