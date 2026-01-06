@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.hexToByteArray
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.APIClient
@@ -262,8 +261,6 @@ object AllBridgeProvider : IMultiSwapProvider {
         sendTransactionSettings: SendTransactionSettings?,
         swapQuote: SwapQuote,
     ): SwapFinalQuote {
-        val cautions = mutableListOf<HSCaution>()
-
         val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
         var settingSlippage: SwapSettingSlippage? = null
 
@@ -305,8 +302,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             amountOutMin = amountOutMin,
             sendTransactionData = sendTransactionData,
             priceImpact = null,
-            fields = fields,
-            cautions = cautions
+            fields = fields
         )
     }
 

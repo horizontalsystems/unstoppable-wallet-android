@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -208,7 +208,6 @@ class SwapConfirmViewModel(
                 amountOut = finalQuote.amountOut
                 amountOutMin = finalQuote.amountOutMin
                 quoteFields = finalQuote.fields
-                cautionViewItems = finalQuote.cautions.map(HSCaution::toCautionViewItem)
                 emitState()
 
                 fiatServiceOut.setAmount(amountOut)
