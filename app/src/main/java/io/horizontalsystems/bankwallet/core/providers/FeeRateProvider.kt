@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.providers
 
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.feeratekit.FeeRateKit
 import io.horizontalsystems.feeratekit.model.FeeProviderConfig
@@ -17,7 +18,8 @@ class FeeRateProvider(appConfig: AppConfigProvider) {
                 ethEvmAuth = null,
                 bscEvmUrl = FeeProviderConfig.defaultBscEvmUrl(),
                 mempoolSpaceUrl = appConfig.mempoolSpaceUrl,
-                blockCypherUrl = appConfig.blockCypherUrl
+                blockCypherUrl = appConfig.blockCypherUrl,
+                torEnabled = App.torKitManager.isTorEnabled
             )
         )
     }
