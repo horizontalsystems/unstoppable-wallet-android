@@ -153,16 +153,6 @@ fun SwapConfirmScreen(navController: NavController) {
                 )
                 VSpacer(height = 12.dp)
                 subhead1_leah(text = "Quote is invalid")
-            } else if (uiState.expired) {
-                ButtonPrimaryDefault(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = stringResource(R.string.Button_Refresh),
-                    onClick = {
-                        viewModel.refresh()
-                    },
-                )
-                VSpacer(height = 12.dp)
-                subhead1_leah(text = stringResource(id = R.string.SwapConfirm_QuoteExpired))
             } else {
                 var buttonEnabled by remember { mutableStateOf(true) }
                 ButtonPrimaryYellow(
@@ -195,8 +185,6 @@ fun SwapConfirmScreen(navController: NavController) {
                         }
                     },
                 )
-                VSpacer(height = 12.dp)
-                subhead1_leah(text = "Quote expires in ${uiState.expiresIn}")
             }
         }
     ) {
