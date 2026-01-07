@@ -93,6 +93,8 @@ class SwapDefenseSystemService(
                     level = DefenseAlertLevel.WARNING,
                     title = TranslatableString.ResString(R.string.SwapDefense_Attention_Title),
                     body = TranslatableString.ResString(R.string.SwapDefense_Attention_Description),
+                    actionText = TranslatableString.ResString(R.string.Button_Activate),
+                    requiredPaidAction = LossProtection,
                 )
             }
         }

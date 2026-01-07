@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.subscriptions.core.IPaidAction
 
 @Composable
 fun DefenseSystemMessage(
@@ -252,6 +253,8 @@ data class DefenseSystemMessage(
     val level: DefenseAlertLevel,
     val title: TranslatableString,
     val body: TranslatableString,
+    val actionText: TranslatableString? = null,
+    val requiredPaidAction: IPaidAction? = null
 )
 
 enum class DefenseAlertLevel {
