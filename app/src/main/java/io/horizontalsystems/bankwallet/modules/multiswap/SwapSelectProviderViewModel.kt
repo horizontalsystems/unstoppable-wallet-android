@@ -18,7 +18,7 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
     private val currency = currencyManager.baseCurrency
     private var token: Token = quotes.first().tokenOut
     private var rate: BigDecimal? = marketKit.coinPrice(token.coin.uid, currency.code)?.value
-    private var quoteViewItems = getViewItems(quotes)
+    private var quoteViewItems = getViewItems(quotes.sorted())
 
     init {
         viewModelScope.launch {
@@ -26,10 +26,14 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
                 .asFlow()
                 .collect {
                     rate = it.value
-                    quoteViewItems = getViewItems(quotes)
+                    quoteViewItems = getViewItems(quotes.sorted())
                     emitState()
                 }
         }
+    }
+
+    private fun List<SwapProviderQuote>.sorted(): List<SwapProviderQuote> {
+        return this.sortedByDescending { it.amountOut }
     }
 
     private fun getViewItems(quotes: List<SwapProviderQuote>) =
@@ -40,8 +44,17 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
                 quote.tokenOut.coin.code,
                 quote.tokenOut.decimals
             )
-            QuoteViewItem(quote, fiatAmount, tokenAmount)
+            QuoteViewItem(
+                quote,
+                fiatAmount,
+                tokenAmount,
+                getPriceImpactData(quote)
+                )
         }
+
+    private fun getPriceImpactData(quote: SwapProviderQuote): PriceImpactData? {
+        return PriceImpactData(20.toBigDecimal(), PriceImpactLevel.Warning) //todo implement price impact calculation
+    }
 
     override fun createState() = SwapSelectProviderUiState(
         quoteViewItems = quoteViewItems
@@ -65,4 +78,14 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
 
 data class SwapSelectProviderUiState(val quoteViewItems: List<QuoteViewItem>)
 
-data class QuoteViewItem(val quote: SwapProviderQuote, val fiatAmount: String?, val tokenAmount: String)
+data class QuoteViewItem(
+    val quote: SwapProviderQuote,
+    val fiatAmount: String?,
+    val tokenAmount: String,
+    val priceImpactData: PriceImpactData?
+)
+
+data class PriceImpactData(
+    val priceImpact: BigDecimal,
+    val priceImpactLevel: PriceImpactLevel? = null
+)
