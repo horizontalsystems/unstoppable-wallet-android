@@ -334,7 +334,7 @@ private fun SwapScreenInner(
                             },
                             middle = {
                                 CellMiddleInfoTextIcon(
-                                    text = quote.provider.title.hs,
+                                    text = quote.provider.titleShort.hs,
                                     icon = painterResource(R.drawable.arrow_s_down_24),
                                     iconTint = ComposeAppTheme.colors.grey,
                                     onIconClick = onClickProvider
