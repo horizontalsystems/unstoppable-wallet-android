@@ -47,6 +47,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -132,7 +133,13 @@ fun SwapConfirmScreen(navController: NavController) {
         onClickNonceSettings = onClickNonceSettings,
         onClickClose = null,
         defenseSlot = {
-            SwapConfirmDefenseMessage()
+            uiState.swapDefenseSystemMessage?.let { message ->
+                SwapConfirmDefenseMessage(
+                    level = message.level,
+                    title = message.title,
+                    body = message.body,
+                )
+            }
         },
         buttonsSlot = {
             if (uiState.loading) {
@@ -438,41 +445,31 @@ fun TokenRowUnlimited(
 
 @Composable
 private fun SwapConfirmDefenseMessage(
-    state: DefenseSystemState = DefenseSystemState.WARNING,
+    level: DefenseSystemState = DefenseSystemState.WARNING,
+    title: TranslatableString,
+    body: TranslatableString,
     onClick: () -> Unit = {},
 ) {
-    val title: Int = when (state) {
-        DefenseSystemState.WARNING -> R.string.SwapConfirm_DefenseMessage_Warning_Title
-        DefenseSystemState.DANGER -> R.string.SwapConfirm_DefenseMessage_Danger_Title
-        DefenseSystemState.SAFE -> R.string.SwapConfirm_DefenseMessage_Safe_Title
-        DefenseSystemState.IDLE -> R.string.SwapConfirm_DefenseMessage_NotAvailable_Title
-    }
-    val content: Int? = when (state) {
-        DefenseSystemState.WARNING -> R.string.SwapConfirm_DefenseMessage_Warning_Description
-        DefenseSystemState.DANGER -> R.string.SwapConfirm_DefenseMessage_Danger_Description
-        DefenseSystemState.SAFE -> R.string.SwapConfirm_DefenseMessage_Safe_Description
-        DefenseSystemState.IDLE -> R.string.SwapConfirm_DefenseMessage_NotAvailable_Description
-    }
-    val icon = when (state) {
+    val icon = when (level) {
         DefenseSystemState.WARNING -> R.drawable.warning_filled_24
         DefenseSystemState.DANGER -> R.drawable.warning_filled_24
         DefenseSystemState.SAFE -> R.drawable.shield_check_filled_24
         DefenseSystemState.IDLE -> R.drawable.close_e_filled_24
     }
-    val actionText: Int? = when (state) {
+    val actionText: Int? = when (level) {
         DefenseSystemState.WARNING -> R.string.Button_Activate
         DefenseSystemState.IDLE -> R.string.Button_LearnMore
         else -> null
     }
-    val onActionClick = when (state) {
+    val onActionClick = when (level) {
         DefenseSystemState.IDLE -> onClick
         DefenseSystemState.WARNING -> onClick
         else -> null
     }
     DefenseSystemMessage(
-        state = state,
-        title = stringResource(title),
-        content = content?.let { stringResource(it) },
+        state = level,
+        title = title.getString(),
+        content = body.getString(),
         icon = icon,
         actionText = actionText?.let{ stringResource(it)},
         onClick = onActionClick

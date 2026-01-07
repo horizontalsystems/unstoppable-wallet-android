@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
@@ -246,6 +247,12 @@ private fun DefenseSystemTextCell() {
         },
     )
 }
+
+data class DefenseSystemMessage(
+    val level: DefenseSystemState,
+    val title: TranslatableString,
+    val body: TranslatableString,
+)
 
 enum class DefenseSystemState {
     WARNING,
