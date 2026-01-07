@@ -33,7 +33,6 @@ import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -54,13 +53,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
-import io.horizontalsystems.bankwallet.ui.compose.components.PremiumHeader
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
@@ -73,7 +68,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMess
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.subscriptions.core.LossProtection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -288,34 +282,6 @@ fun SwapConfirmScreen(navController: NavController) {
                     title = stringResource(id = R.string.Fee_Total),
                     value = totalFee.getFormattedFull(),
                 )
-            }
-        }
-
-        if (uiState.mevProtectionAvailable) {
-            VSpacer(16.dp)
-
-            PremiumHeader()
-
-            SectionPremiumUniversalLawrence {
-                CellUniversal {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(id = R.drawable.ic_shield_24),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.jacob
-                    )
-                    HSpacer(width = 16.dp)
-                    body_leah(text = stringResource(R.string.Mev_Protection))
-                    HFillSpacer(minWidth = 8.dp)
-                    HsSwitch(
-                        checked = uiState.mevProtectionEnabled,
-                        onCheckedChange = {
-                            navController.paidAction(LossProtection) {
-                                viewModel.toggleMevProtection(it)
-                            }
-                        }
-                    )
-                }
             }
         }
 

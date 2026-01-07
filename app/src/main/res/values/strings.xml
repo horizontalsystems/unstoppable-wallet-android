@@ -794,6 +794,10 @@
     <string name="SwapDefense_PriceImpact_High_Description">You’ll lose a big part (-%s%%) of your funds on this swap.</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Title">Unfavorable price!</string>
     <string name="SwapDefense_PriceImpact_Forbidden_Description">This swap would result in a major loss (-%s%%) due to very low liquidity.</string>
+    <string name="SwapDefense_Attention_Title">Attention!</string>
+    <string name="SwapDefense_Attention_Description">Protection is off. Bots may interfere with your swap and make you lose money.</string>
+    <string name="SwapDefense_Safe_Title">Protected</string>
+    <string name="SwapDefense_Safe_Description">I’m blocking bots from taking value in your swap.</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Settings</string>

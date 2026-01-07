@@ -52,7 +52,6 @@ class SwapConfirmViewModel(
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountOutMin: BigDecimal? = null
 
-    private var mevProtectionEnabled = false
     private var initialLoading = true
     private var loading = true
     private var timerState = timerService.stateFlow.value
@@ -65,7 +64,6 @@ class SwapConfirmViewModel(
     private var quoteFields: List<DataField> = listOf()
     private var cautionViewItems: List<CautionViewItem> = listOf()
     private var fetchFinalQuoteJob: Job? = null
-    private val mevProtectionAvailable = sendTransactionService.mevProtectionAvailable
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -150,6 +148,7 @@ class SwapConfirmViewModel(
         }
 
         sendTransactionService.start(viewModelScope)
+        swapDefenseSystemService.start(viewModelScope)
 
         fetchFinalQuote()
     }
@@ -195,8 +194,6 @@ class SwapConfirmViewModel(
             transactionFields = sendTransactionState.fields,
             hasSettings = sendTransactionService.hasSettings,
             hasNonceSettings = sendTransactionService.hasNonceSettings,
-            mevProtectionAvailable = mevProtectionAvailable,
-            mevProtectionEnabled = mevProtectionEnabled,
             swapDefenseSystemMessage = swapDefenseState.systemMessage,
         )
     }
@@ -246,13 +243,7 @@ class SwapConfirmViewModel(
     suspend fun swap() = withContext(Dispatchers.Default) {
         stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
 
-        sendTransactionService.sendTransaction(mevProtectionEnabled)
-    }
-
-    fun toggleMevProtection(enabled: Boolean) {
-        mevProtectionEnabled = enabled
-
-        emitState()
+        sendTransactionService.sendTransaction(swapDefenseState.mevProtectionEnabled)
     }
 
     companion object {
@@ -270,7 +261,7 @@ class SwapConfirmViewModel(
                 sendTransactionService,
                 TimerService(),
                 PriceImpactService(),
-                SwapDefenseSystemService()
+                SwapDefenseSystemService(sendTransactionService.supportsMevProtection)
             )
         }
     }
@@ -299,8 +290,6 @@ data class SwapConfirmUiState(
     val extraFees: Map<FeeType, SendModule.AmountData>,
     val hasSettings: Boolean,
     val hasNonceSettings: Boolean,
-    val mevProtectionAvailable: Boolean,
-    val mevProtectionEnabled: Boolean,
     val swapDefenseSystemMessage: DefenseSystemMessage?,
 ) {
     val totalFee by lazy {

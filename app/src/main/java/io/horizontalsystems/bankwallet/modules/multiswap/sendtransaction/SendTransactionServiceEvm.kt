@@ -115,7 +115,7 @@ class SendTransactionServiceEvm(
         SendTransactionSettings.Evm(null, evmKitWrapper.evmKit.receiveAddress)
     )
     override val sendTransactionSettingsFlow = _sendTransactionSettingsFlow.asStateFlow()
-    override val mevProtectionAvailable = evmKitWrapper.merkleTransactionAdapter != null
+    override val supportsMevProtection = evmKitWrapper.merkleTransactionAdapter != null
 
     private var transaction: SendEvmSettingsService.Transaction? = null
     private var feeAmountData: SendModule.AmountData? = null
