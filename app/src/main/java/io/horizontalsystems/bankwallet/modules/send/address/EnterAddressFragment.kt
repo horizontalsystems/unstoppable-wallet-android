@@ -43,8 +43,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemState
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
@@ -172,12 +172,12 @@ private fun AddressDefenseMessage(
     val isDanger = checkResults.any { it.value.checkResult == AddressCheckResult.Detected }
     val invalidAddress = addressValidationError != null
 
-    val state = when {
-        addressValidationInProgress -> DefenseSystemState.IDLE
-        invalidAddress -> DefenseSystemState.DANGER
-        noSubscription -> DefenseSystemState.WARNING
-        isDanger -> DefenseSystemState.DANGER
-        else -> DefenseSystemState.SAFE
+    val level = when {
+        addressValidationInProgress -> DefenseAlertLevel.IDLE
+        invalidAddress -> DefenseAlertLevel.DANGER
+        noSubscription -> DefenseAlertLevel.WARNING
+        isDanger -> DefenseAlertLevel.DANGER
+        else -> DefenseAlertLevel.SAFE
     }
 
     val title: Int = when {
@@ -196,11 +196,11 @@ private fun AddressDefenseMessage(
         else -> R.string.AddressEnter_Safe_Content
     }
 
-    val icon = when (state) {
-        DefenseSystemState.WARNING -> R.drawable.warning_filled_24
-        DefenseSystemState.DANGER -> R.drawable.warning_filled_24
-        DefenseSystemState.SAFE -> R.drawable.shield_check_filled_24
-        DefenseSystemState.IDLE -> null
+    val icon = when (level) {
+        DefenseAlertLevel.WARNING -> R.drawable.warning_filled_24
+        DefenseAlertLevel.DANGER -> R.drawable.warning_filled_24
+        DefenseAlertLevel.SAFE -> R.drawable.shield_check_filled_24
+        DefenseAlertLevel.IDLE -> null
     }
 
     val actionText = when {
@@ -209,7 +209,7 @@ private fun AddressDefenseMessage(
     }
 
     DefenseSystemMessage(
-        state = state,
+        level = level,
         title = stringResource(title),
         content = content?.let { stringResource(it) },
         above = false,
