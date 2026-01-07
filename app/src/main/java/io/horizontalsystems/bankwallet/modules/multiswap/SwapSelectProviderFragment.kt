@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -33,6 +34,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightSelectors
+import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 class SwapSelectProviderFragment : BaseComposeFragment() {
@@ -125,6 +127,7 @@ private fun SwapSelectProviderScreenInner(
                             CellRightSelectors(
                                 subtitle = viewItem.tokenAmount.hs,
                                 description1 = viewItem.fiatAmount?.hs,
+                                description2 = getPriceImpact(viewItem.priceImpactData),
                                 icon = painterResource(icon),
                                 iconTint = iconTint
                             )
@@ -136,6 +139,20 @@ private fun SwapSelectProviderScreenInner(
             VSpacer(32.dp)
         }
     }
+}
+
+@Composable
+private fun getPriceImpact(priceImpactData: PriceImpactData?): HSString? {
+    if (priceImpactData == null) {
+        return null
+    }
+    val color = when (priceImpactData.priceImpactLevel) {
+        PriceImpactLevel.Normal -> null
+        PriceImpactLevel.Warning -> ComposeAppTheme.colors.jacob
+        else -> ComposeAppTheme.colors.lucian
+    }
+    val value = App.numberFormatter.format(priceImpactData.priceImpact, 0, 2, prefix = "-", suffix = "%")
+    return "($value)".hs(color = color)
 }
 
 @Preview
