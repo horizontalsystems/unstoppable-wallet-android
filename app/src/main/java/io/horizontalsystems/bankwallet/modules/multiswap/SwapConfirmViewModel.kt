@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTra
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
+import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -38,7 +39,8 @@ class SwapConfirmViewModel(
     private val fiatServiceOutMin: FiatService,
     val sendTransactionService: AbstractSendTransactionService,
     private val timerService: TimerService,
-    private val priceImpactService: PriceImpactService
+    private val priceImpactService: PriceImpactService,
+    private val swapDefenseSystemService: SwapDefenseSystemService
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
@@ -56,6 +58,7 @@ class SwapConfirmViewModel(
     private var timerState = timerService.stateFlow.value
     private var sendTransactionState = sendTransactionService.stateFlow.value
     private var priceImpactState = priceImpactService.stateFlow.value
+    private var swapDefenseState = swapDefenseSystemService.stateFlow.value
 
     private var amountOut: BigDecimal? = null
     private var amountOutMin: BigDecimal? = null
@@ -80,6 +83,7 @@ class SwapConfirmViewModel(
         viewModelScope.launch {
             fiatServiceIn.stateFlow.collect {
                 fiatAmountIn = it.fiatAmount
+                priceImpactService.setFiatAmountIn(fiatAmountIn)
                 emitState()
             }
         }
@@ -87,6 +91,7 @@ class SwapConfirmViewModel(
         viewModelScope.launch {
             fiatServiceOut.stateFlow.collect {
                 fiatAmountOut = it.fiatAmount
+                priceImpactService.setFiatAmountOut(fiatAmountOut)
                 emitState()
             }
         }
@@ -136,6 +141,13 @@ class SwapConfirmViewModel(
                 handleUpdatedPriceImpactState(it)
             }
         }
+        viewModelScope.launch {
+            swapDefenseSystemService.stateFlow.collect {
+                swapDefenseState = it
+
+                emitState()
+            }
+        }
 
         sendTransactionService.start(viewModelScope)
 
@@ -144,6 +156,8 @@ class SwapConfirmViewModel(
 
     private fun handleUpdatedPriceImpactState(priceImpactState: PriceImpactService.State) {
         this.priceImpactState = priceImpactState
+
+        swapDefenseSystemService.setPriceImpact(priceImpactState.fiatPriceImpact, priceImpactState.fiatPriceImpactLevel)
 
         emitState()
     }
@@ -183,6 +197,7 @@ class SwapConfirmViewModel(
             hasNonceSettings = sendTransactionService.hasNonceSettings,
             mevProtectionAvailable = mevProtectionAvailable,
             mevProtectionEnabled = mevProtectionEnabled,
+            swapDefenseSystemMessage = swapDefenseState.systemMessage,
         )
     }
 
@@ -254,7 +269,8 @@ class SwapConfirmViewModel(
                 FiatService(App.marketKit),
                 sendTransactionService,
                 TimerService(),
-                PriceImpactService()
+                PriceImpactService(),
+                SwapDefenseSystemService()
             )
         }
     }
@@ -285,6 +301,7 @@ data class SwapConfirmUiState(
     val hasNonceSettings: Boolean,
     val mevProtectionAvailable: Boolean,
     val mevProtectionEnabled: Boolean,
+    val swapDefenseSystemMessage: DefenseSystemMessage?,
 ) {
     val totalFee by lazy {
         val networkFiatValue = networkFee?.secondary  ?: return@lazy null
