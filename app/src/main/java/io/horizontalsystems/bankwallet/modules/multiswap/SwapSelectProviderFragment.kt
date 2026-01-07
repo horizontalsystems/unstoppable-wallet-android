@@ -1,22 +1,22 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -27,15 +27,13 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightSelectors
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 class SwapSelectProviderFragment : BaseComposeFragment() {
     @Composable
@@ -78,66 +76,64 @@ private fun SwapSelectProviderScreenInner(
 ) {
     HSScaffold(
         title = stringResource(R.string.Swap_Providers),
-        menuItems = listOf(
-            MenuItem(
-                title = TranslatableString.ResString(R.string.Button_Done),
-                onClick = onClickClose,
-                tint = ComposeAppTheme.colors.jacob
-            )
-        ),
+        onBack = onClickClose,
     ) {
-        LazyColumn(
-            contentPadding = PaddingValues(horizontal = 16.dp),
+        Column(
+            Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            item {
-                VSpacer(height = 12.dp)
-            }
-            itemsIndexed(quotes) { i, viewItem ->
-                val borderColor = if (viewItem.quote == currentQuote) {
-                    ComposeAppTheme.colors.yellow50
-                } else {
-                    ComposeAppTheme.colors.blade
-                }
-
-                RowUniversal(
-                    modifier = Modifier
-                        .padding(top = if (i == 0) 0.dp else 8.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .border(1.dp, borderColor, RoundedCornerShape(16.dp))
-                        .padding(horizontal = 16.dp),
-                    onClick = { onSelectQuote.invoke(viewItem.quote) }
-                ) {
+            VSpacer(12.dp)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .imePadding()
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(ComposeAppTheme.colors.lawrence),
+            ) {
+                quotes.forEachIndexed { index, viewItem ->
                     val provider = viewItem.quote.provider
-                    Image(
-                        modifier = Modifier.size(32.dp),
-                        painter = painterResource(provider.icon),
-                        contentDescription = null
+                    val icon = if (viewItem.quote == currentQuote) {
+                        R.drawable.selector_checked_20
+                    } else {
+                        R.drawable.selector_unchecked_20
+                    }
+                    val iconTint = if (viewItem.quote == currentQuote) {
+                        ComposeAppTheme.colors.jacob
+                    } else {
+                        ComposeAppTheme.colors.andy
+                    }
+                    if (index > 0) {
+                        HsDivider()
+                    }
+                    CellPrimary(
+                        left = {
+                            Image(
+                                modifier = Modifier.size(32.dp),
+                                painter = painterResource(provider.icon),
+                                contentDescription = null
+                            )
+                        },
+                        middle = {
+                            CellMiddleInfo(
+                                subtitle = provider.title.hs,
+                                description = "DEX".hs,
+                            )
+                        },
+                        right = {
+                            CellRightSelectors(
+                                subtitle = viewItem.tokenAmount.hs,
+                                description1 = viewItem.fiatAmount?.hs,
+                                icon = painterResource(icon),
+                                iconTint = iconTint
+                            )
+                        },
+                        onClick = { onSelectQuote.invoke(viewItem.quote) }
                     )
-                    HSpacer(width = 16.dp)
-                    Column {
-                        subhead2_leah(
-                            text = provider.title,
-                            textAlign = TextAlign.End
-                        )
-                    }
-                    HFillSpacer(minWidth = 8.dp)
-                    Column(horizontalAlignment = Alignment.End) {
-                        subhead2_leah(
-                            text = viewItem.tokenAmount,
-                            textAlign = TextAlign.End
-                        )
-                        viewItem.fiatAmount?.let { fiatAmount ->
-                            VSpacer(4.dp)
-                            subhead2_grey(text = fiatAmount, textAlign = TextAlign.End)
-                        }
-                    }
                 }
             }
-
-            item {
-                VSpacer(height = 32.dp)
-            }
-
+            VSpacer(32.dp)
         }
     }
 }
