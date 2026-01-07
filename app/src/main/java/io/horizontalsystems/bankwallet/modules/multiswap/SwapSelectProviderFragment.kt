@@ -53,16 +53,15 @@ fun SwapSelectProviderScreen(navController: NavController) {
         viewModelStoreOwner = previousBackStackEntry!!,
     )
     val viewModel = viewModel<SwapSelectProviderViewModel>(
-        factory = SwapSelectProviderViewModel.Factory(swapViewModel.uiState.quotes)
+        factory = SwapSelectProviderViewModel.Factory(swapViewModel.uiState.quotes, swapViewModel.uiState.quote)
     )
 
     val uiState = viewModel.uiState
-    val currentQuote = swapViewModel.uiState.quote
 
     SwapSelectProviderScreenInner(
         onClickClose = navController::popBackStack,
         quotes = uiState.quoteViewItems,
-        currentQuote = currentQuote,
+        currentQuote = uiState.selectedQuote,
     ) {
         navController.paidAction(PrioritySupport) {
             swapViewModel.onSelectQuote(it)
