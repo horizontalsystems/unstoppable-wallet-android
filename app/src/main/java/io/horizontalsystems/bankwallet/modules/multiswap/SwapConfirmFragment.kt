@@ -28,6 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.R.drawable.close_e_filled_24
+import io.horizontalsystems.bankwallet.R.drawable.shield_check_filled_24
+import io.horizontalsystems.bankwallet.R.drawable.warning_filled_24
+import io.horizontalsystems.bankwallet.R.id.defenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
@@ -45,8 +49,9 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog.Input
+import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -128,10 +133,29 @@ fun SwapConfirmScreen(navController: NavController) {
         onClickClose = null,
         defenseSlot = {
             uiState.swapDefenseSystemMessage?.let { message ->
-                SwapConfirmDefenseMessage(
+                val icon = when (message.level) {
+                    DefenseAlertLevel.WARNING -> warning_filled_24
+                    DefenseAlertLevel.DANGER -> warning_filled_24
+                    DefenseAlertLevel.SAFE -> shield_check_filled_24
+                    DefenseAlertLevel.IDLE -> close_e_filled_24
+                }
+
+                val onClick = message.requiredPaidAction?.let {
+                    {
+                        navController.slideFromBottom(
+                            defenseSystemFeatureDialog,
+                            Input(PremiumFeature.getFeature(paidAction = message.requiredPaidAction), true)
+                        )
+                    }
+                }
+
+                DefenseSystemMessage(
                     level = message.level,
-                    title = message.title,
-                    body = message.body,
+                    title = message.title.getString(),
+                    content = message.body.getString(),
+                    icon = icon,
+                    actionText = message.actionText?.getString(),
+                    onClick = onClick
                 )
             }
         },
@@ -407,37 +431,4 @@ fun TokenRowUnlimited(
             caption_grey(text = stringResource(id = R.string.Transaction_Unlimited))
         }
     }
-}
-
-@Composable
-private fun SwapConfirmDefenseMessage(
-    level: DefenseAlertLevel = DefenseAlertLevel.WARNING,
-    title: TranslatableString,
-    body: TranslatableString,
-    onClick: () -> Unit = {},
-) {
-    val icon = when (level) {
-        DefenseAlertLevel.WARNING -> R.drawable.warning_filled_24
-        DefenseAlertLevel.DANGER -> R.drawable.warning_filled_24
-        DefenseAlertLevel.SAFE -> R.drawable.shield_check_filled_24
-        DefenseAlertLevel.IDLE -> R.drawable.close_e_filled_24
-    }
-    val actionText: Int? = when (level) {
-        DefenseAlertLevel.WARNING -> R.string.Button_Activate
-        DefenseAlertLevel.IDLE -> R.string.Button_LearnMore
-        else -> null
-    }
-    val onActionClick = when (level) {
-        DefenseAlertLevel.IDLE -> onClick
-        DefenseAlertLevel.WARNING -> onClick
-        else -> null
-    }
-    DefenseSystemMessage(
-        level = level,
-        title = title.getString(),
-        content = body.getString(),
-        icon = icon,
-        actionText = actionText?.let{ stringResource(it)},
-        onClick = onActionClick
-    )
 }
