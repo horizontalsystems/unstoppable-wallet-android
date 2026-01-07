@@ -35,7 +35,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 @Composable
 fun DefenseSystemMessage(
-    state: DefenseSystemState,
+    level: DefenseAlertLevel,
     title: String,
     content: String?,
     above: Boolean = true,
@@ -54,23 +54,23 @@ fun DefenseSystemMessage(
         Modifier
     }
 
-    val contentColor = when (state) {
-        DefenseSystemState.SAFE,
-        DefenseSystemState.WARNING -> Color.Black
+    val contentColor = when (level) {
+        DefenseAlertLevel.SAFE,
+        DefenseAlertLevel.WARNING -> Color.Black
 
         else -> Color.White
     }
 
     if (above) {
-        DefenseView(state, clickableModifier, icon, contentColor, title, content, actionText)
+        DefenseView(level, clickableModifier, icon, contentColor, title, content, actionText)
     } else {
-        DefenseViewBelow(state, clickableModifier, icon, contentColor, title, content, actionText)
+        DefenseViewBelow(level, clickableModifier, icon, contentColor, title, content, actionText)
     }
 }
 
 @Composable
 private fun DefenseView(
-    state: DefenseSystemState,
+    level: DefenseAlertLevel,
     clickableModifier: Modifier,
     icon: Int?,
     contentColor: Color,
@@ -85,7 +85,7 @@ private fun DefenseView(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
-                .background(state.bubbleColor)
+                .background(level.bubbleColor)
                 .then(clickableModifier)
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
@@ -143,7 +143,7 @@ private fun DefenseView(
                 .offset(x = 48.dp, y = (-8).dp)
                 .size(16.dp)
                 .rotate(45f)
-                .background(state.bubbleColor)
+                .background(level.bubbleColor)
         )
     }
 
@@ -152,7 +152,7 @@ private fun DefenseView(
 
 @Composable
 private fun DefenseViewBelow(
-    state: DefenseSystemState,
+    level: DefenseAlertLevel,
     clickableModifier: Modifier,
     icon: Int?,
     contentColor: Color,
@@ -170,13 +170,13 @@ private fun DefenseViewBelow(
                 .offset(x = 48.dp, y = (8).dp)
                 .size(16.dp)
                 .rotate(45f)
-                .background(state.bubbleColor)
+                .background(level.bubbleColor)
         )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
-                .background(state.bubbleColor)
+                .background(level.bubbleColor)
                 .then(clickableModifier)
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
@@ -249,12 +249,12 @@ private fun DefenseSystemTextCell() {
 }
 
 data class DefenseSystemMessage(
-    val level: DefenseSystemState,
+    val level: DefenseAlertLevel,
     val title: TranslatableString,
     val body: TranslatableString,
 )
 
-enum class DefenseSystemState {
+enum class DefenseAlertLevel {
     WARNING,
     IDLE,
     DANGER,

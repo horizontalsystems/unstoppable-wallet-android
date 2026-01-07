@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.multiswap
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ServiceState
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemState
 import java.math.BigDecimal
 
 class SwapDefenseSystemService : ServiceState<SwapDefenseSystemService.State>() {
@@ -34,14 +34,14 @@ class SwapDefenseSystemService : ServiceState<SwapDefenseSystemService.State>() 
             when (fiatPriceImpactLevel) {
                 PriceImpactLevel.High -> {
                     DefenseSystemMessage(
-                        level = DefenseSystemState.DANGER,
+                        level = DefenseAlertLevel.DANGER,
                         title = TranslatableString.ResString(R.string.SwapDefense_PriceImpact_High_Title),
                         body = TranslatableString.ResString(R.string.SwapDefense_PriceImpact_High_Description, fiatPriceImpact),
                     )
                 }
                 PriceImpactLevel.Forbidden -> {
                     DefenseSystemMessage(
-                        level = DefenseSystemState.DANGER,
+                        level = DefenseAlertLevel.DANGER,
                         title = TranslatableString.ResString(R.string.SwapDefense_PriceImpact_Forbidden_Title),
                         body = TranslatableString.ResString(R.string.SwapDefense_PriceImpact_Forbidden_Description, fiatPriceImpact),
                     )

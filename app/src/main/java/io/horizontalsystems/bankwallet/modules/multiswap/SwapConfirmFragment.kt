@@ -68,8 +68,8 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIc
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemState
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
@@ -445,29 +445,29 @@ fun TokenRowUnlimited(
 
 @Composable
 private fun SwapConfirmDefenseMessage(
-    level: DefenseSystemState = DefenseSystemState.WARNING,
+    level: DefenseAlertLevel = DefenseAlertLevel.WARNING,
     title: TranslatableString,
     body: TranslatableString,
     onClick: () -> Unit = {},
 ) {
     val icon = when (level) {
-        DefenseSystemState.WARNING -> R.drawable.warning_filled_24
-        DefenseSystemState.DANGER -> R.drawable.warning_filled_24
-        DefenseSystemState.SAFE -> R.drawable.shield_check_filled_24
-        DefenseSystemState.IDLE -> R.drawable.close_e_filled_24
+        DefenseAlertLevel.WARNING -> R.drawable.warning_filled_24
+        DefenseAlertLevel.DANGER -> R.drawable.warning_filled_24
+        DefenseAlertLevel.SAFE -> R.drawable.shield_check_filled_24
+        DefenseAlertLevel.IDLE -> R.drawable.close_e_filled_24
     }
     val actionText: Int? = when (level) {
-        DefenseSystemState.WARNING -> R.string.Button_Activate
-        DefenseSystemState.IDLE -> R.string.Button_LearnMore
+        DefenseAlertLevel.WARNING -> R.string.Button_Activate
+        DefenseAlertLevel.IDLE -> R.string.Button_LearnMore
         else -> null
     }
     val onActionClick = when (level) {
-        DefenseSystemState.IDLE -> onClick
-        DefenseSystemState.WARNING -> onClick
+        DefenseAlertLevel.IDLE -> onClick
+        DefenseAlertLevel.WARNING -> onClick
         else -> null
     }
     DefenseSystemMessage(
-        state = level,
+        level = level,
         title = title.getString(),
         content = body.getString(),
         icon = icon,

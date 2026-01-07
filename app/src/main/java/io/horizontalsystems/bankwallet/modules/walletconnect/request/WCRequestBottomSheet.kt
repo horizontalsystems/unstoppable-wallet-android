@@ -59,8 +59,8 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
+import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemState
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.BlockchainType
 
@@ -294,41 +294,41 @@ private fun WCDefenseSystemMessage(
     whiteListState: WCWhiteListState,
     onActivateClick: () -> Unit = {},
 ) {
-    val state = when {
-        !activated -> DefenseSystemState.WARNING
-        whiteListState == WCWhiteListState.NotInWhiteList -> DefenseSystemState.DANGER
-        whiteListState == WCWhiteListState.InWhiteList -> DefenseSystemState.SAFE
-        whiteListState == WCWhiteListState.InProgress -> DefenseSystemState.IDLE
-        else -> DefenseSystemState.IDLE
+    val level = when {
+        !activated -> DefenseAlertLevel.WARNING
+        whiteListState == WCWhiteListState.NotInWhiteList -> DefenseAlertLevel.DANGER
+        whiteListState == WCWhiteListState.InWhiteList -> DefenseAlertLevel.SAFE
+        whiteListState == WCWhiteListState.InProgress -> DefenseAlertLevel.IDLE
+        else -> DefenseAlertLevel.IDLE
     }
 
-    val title: Int = when (state) {
-        DefenseSystemState.WARNING -> R.string.WalletConnect_Attention
-        DefenseSystemState.DANGER -> R.string.WalletConnect_Danger
-        DefenseSystemState.SAFE -> R.string.WalletConnect_Safe
-        DefenseSystemState.IDLE -> R.string.WalletConnect_Checking
+    val title: Int = when (level) {
+        DefenseAlertLevel.WARNING -> R.string.WalletConnect_Attention
+        DefenseAlertLevel.DANGER -> R.string.WalletConnect_Danger
+        DefenseAlertLevel.SAFE -> R.string.WalletConnect_Safe
+        DefenseAlertLevel.IDLE -> R.string.WalletConnect_Checking
     }
 
-    val content: Int? = when (state) {
-        DefenseSystemState.WARNING -> R.string.WalletConnect_DefenseMessage_Warning
-        DefenseSystemState.DANGER -> R.string.WalletConnect_DefenseMessage_Danger
-        DefenseSystemState.SAFE -> R.string.WalletConnect_DefenseMessage_Safe
-        DefenseSystemState.IDLE -> null
+    val content: Int? = when (level) {
+        DefenseAlertLevel.WARNING -> R.string.WalletConnect_DefenseMessage_Warning
+        DefenseAlertLevel.DANGER -> R.string.WalletConnect_DefenseMessage_Danger
+        DefenseAlertLevel.SAFE -> R.string.WalletConnect_DefenseMessage_Safe
+        DefenseAlertLevel.IDLE -> null
     }
 
-    val icon = when (state) {
-        DefenseSystemState.WARNING -> R.drawable.warning_filled_24
-        DefenseSystemState.DANGER -> R.drawable.warning_filled_24
-        DefenseSystemState.SAFE -> R.drawable.shield_check_filled_24
-        DefenseSystemState.IDLE -> null
+    val icon = when (level) {
+        DefenseAlertLevel.WARNING -> R.drawable.warning_filled_24
+        DefenseAlertLevel.DANGER -> R.drawable.warning_filled_24
+        DefenseAlertLevel.SAFE -> R.drawable.shield_check_filled_24
+        DefenseAlertLevel.IDLE -> null
     }
 
     DefenseSystemMessage(
-        state = state,
+        level = level,
         title = stringResource(title),
         content = content?.let { stringResource(it) },
         icon = icon,
-        actionText = if (state == DefenseSystemState.WARNING) stringResource(R.string.Button_Activate) else null,
+        actionText = if (level == DefenseAlertLevel.WARNING) stringResource(R.string.Button_Activate) else null,
         onClick = onActivateClick
     )
 }
