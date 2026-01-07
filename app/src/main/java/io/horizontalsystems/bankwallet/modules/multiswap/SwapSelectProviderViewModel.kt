@@ -11,7 +11,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
-class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) : ViewModelUiState<SwapSelectProviderUiState>() {
+class SwapSelectProviderViewModel(
+    private val quotes: List<SwapProviderQuote>,
+    private val quote: SwapProviderQuote?
+) : ViewModelUiState<SwapSelectProviderUiState>() {
     private val currencyManager = App.currencyManager
     private val marketKit = App.marketKit
 
@@ -57,7 +60,8 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
     }
 
     override fun createState() = SwapSelectProviderUiState(
-        quoteViewItems = quoteViewItems
+        quoteViewItems = quoteViewItems,
+        selectedQuote = quote
     )
 
     private fun getFiatValue(amount: BigDecimal?): CurrencyValue? {
@@ -68,15 +72,18 @@ class SwapSelectProviderViewModel(private val quotes: List<SwapProviderQuote>) :
         }
     }
 
-    class Factory(private val quotes: List<SwapProviderQuote>) : ViewModelProvider.Factory {
+    class Factory(private val quotes: List<SwapProviderQuote>, private val quote: SwapProviderQuote?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapSelectProviderViewModel(quotes) as T
+            return SwapSelectProviderViewModel(quotes, quote) as T
         }
     }
 }
 
-data class SwapSelectProviderUiState(val quoteViewItems: List<QuoteViewItem>)
+data class SwapSelectProviderUiState(
+    val quoteViewItems: List<QuoteViewItem>,
+    val selectedQuote: SwapProviderQuote?
+)
 
 data class QuoteViewItem(
     val quote: SwapProviderQuote,
