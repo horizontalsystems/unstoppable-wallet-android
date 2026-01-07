@@ -13,6 +13,15 @@ interface IMultiSwapProvider {
     val icon: Int
     val priority: Int
 
+    val titleShort: String
+        get() {
+            return if (title.length > 10) {
+                title.take(7) + "..."
+            } else {
+                title
+            }
+        }
+
     suspend fun start() = Unit
 
     fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
