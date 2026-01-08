@@ -195,4 +195,12 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         Translator.getString(R.string.hashDitApiKey)
     }
 
+    val uswapApiBaseUrl by lazy {
+        Translator.getString(R.string.uswapApiBaseUrl)
+    }
+
+    val uswapApiKey by lazy {
+        Translator.getString(R.string.uswapApiKey)
+    }
+
 }
