@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.PancakeSwapPr
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.PancakeSwapV3Provider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.QuickSwapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.UProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UniswapV3Provider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UnstoppableProvider
@@ -37,7 +38,11 @@ class SwapQuoteService {
         ThorChainProvider,
         MayaProvider,
         AllBridgeProvider,
-        UnstoppableProvider,
+        UnstoppableProvider(UProvider.Near),
+        UnstoppableProvider(UProvider.QuickEx),
+        UnstoppableProvider(UProvider.LetsExchange),
+        UnstoppableProvider(UProvider.StealthEx),
+        UnstoppableProvider(UProvider.Swapuz),
     )
 
     private var amountIn: BigDecimal? = null
