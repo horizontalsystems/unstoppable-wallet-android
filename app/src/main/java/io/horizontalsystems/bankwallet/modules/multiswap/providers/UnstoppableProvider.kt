@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import android.util.Base64
 import com.google.gson.JsonElement
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.isEvm
@@ -34,10 +33,10 @@ import retrofit2.http.Query
 import java.math.BigDecimal
 import java.math.BigInteger
 
-object UnstoppableProvider : IMultiSwapProvider {
-    override val id = "unstoppable"
-    override val title = "Unstoppable"
-    override val icon = R.drawable.unstoppable
+class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider {
+    override val id = "u_${provider.id}"
+    override val title = provider.title
+    override val icon = provider.icon
     override val priority = 0
 
     private val unstoppableAPI = APIClient.build(
@@ -88,89 +87,72 @@ object UnstoppableProvider : IMultiSwapProvider {
         "thorchain-1" to null
     )
 
-    private var assetsMap = mapOf<Token, Asset>()
+    private val assetsMap = mutableMapOf<Token, String>()
 
     override suspend fun start() {
-        val providers = unstoppableAPI.providers().map { it.provider }
+        val tokens = unstoppableAPI.tokens(provider.id).tokens
+        for (token in tokens) {
+            val blockchainType = blockchainTypes[token.chainId] ?: continue
 
-        providers.forEach { provider ->
-            val tokens = unstoppableAPI.tokens(provider).tokens
-            for (token in tokens) {
-                val blockchainType = blockchainTypes[token.chainId] ?: continue
-
-                when (blockchainType) {
-                    BlockchainType.ArbitrumOne,
-                    BlockchainType.Avalanche,
-                    BlockchainType.Base,
-                    BlockchainType.BinanceSmartChain,
-                    BlockchainType.Ethereum,
-                    BlockchainType.Optimism,
-                    BlockchainType.Polygon,
-                    BlockchainType.Tron,
-                        -> {
-                        val tokenType = if (!token.address.isNullOrBlank()) {
-                            TokenType.Eip20(token.address)
-                        } else {
-                            TokenType.Native
-                        }
-
-                        App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                            registerAsset(it, token.identifier, provider)
-                        }
+            when (blockchainType) {
+                BlockchainType.ArbitrumOne,
+                BlockchainType.Avalanche,
+                BlockchainType.Base,
+                BlockchainType.BinanceSmartChain,
+                BlockchainType.Ethereum,
+                BlockchainType.Optimism,
+                BlockchainType.Polygon,
+                BlockchainType.Tron,
+                    -> {
+                    val tokenType = if (!token.address.isNullOrBlank()) {
+                        TokenType.Eip20(token.address)
+                    } else {
+                        TokenType.Native
                     }
 
-                    BlockchainType.Bitcoin,
-                    BlockchainType.BitcoinCash,
-                    BlockchainType.Litecoin,
-                    BlockchainType.Zcash,
-                        -> {
-                        var nativeTokenQueries = blockchainType.nativeTokenQueries
-
-                        // filter out taproot for ltc
-                        if (blockchainType == BlockchainType.Litecoin) {
-                            nativeTokenQueries = nativeTokenQueries.filterNot {
-                                it.tokenType.derivation == TokenType.Derivation.Bip86
-                            }
-                        }
-
-                        val tokens = App.marketKit.tokens(nativeTokenQueries)
-                        tokens.forEach {
-                            registerAsset(it, token.identifier, provider)
-                        }
+                    App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
+                        registerAsset(it, token.identifier)
                     }
-
-                    BlockchainType.Solana -> {
-                        val tokenType = if (!token.address.isNullOrBlank()) {
-                            TokenType.Spl(token.address)
-                        } else {
-                            TokenType.Native
-                        }
-
-                        App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                            registerAsset(it, token.identifier, provider)
-                        }
-                    }
-                    else -> null
                 }
+
+                BlockchainType.Bitcoin,
+                BlockchainType.BitcoinCash,
+                BlockchainType.Litecoin,
+                BlockchainType.Zcash,
+                    -> {
+                    var nativeTokenQueries = blockchainType.nativeTokenQueries
+
+                    // filter out taproot for ltc
+                    if (blockchainType == BlockchainType.Litecoin) {
+                        nativeTokenQueries = nativeTokenQueries.filterNot {
+                            it.tokenType.derivation == TokenType.Derivation.Bip86
+                        }
+                    }
+
+                    val tokens = App.marketKit.tokens(nativeTokenQueries)
+                    tokens.forEach {
+                        registerAsset(it, token.identifier)
+                    }
+                }
+
+                BlockchainType.Solana -> {
+                    val tokenType = if (!token.address.isNullOrBlank()) {
+                        TokenType.Spl(token.address)
+                    } else {
+                        TokenType.Native
+                    }
+
+                    App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
+                        registerAsset(it, token.identifier)
+                    }
+                }
+                else -> Unit
             }
         }
     }
 
-    private fun registerAsset(
-        token: Token,
-        identifier: String,
-        provider: String
-    ) {
-        val providers = mutableListOf(provider)
-
-        assetsMap[token]?.let {
-            providers.addAll(it.providers)
-        }
-
-        assetsMap = buildMap {
-            putAll(assetsMap)
-            put(token, Asset(identifier, providers))
-        }
+    private fun registerAsset(token: Token, identifier: String) {
+        assetsMap[token] = identifier
     }
 
     override fun supports(blockchainType: BlockchainType): Boolean {
@@ -188,10 +170,7 @@ object UnstoppableProvider : IMultiSwapProvider {
 
         if (sendNotSupported.contains(tokenFrom.blockchainType)) return false
 
-        val tokenFromProviders = assetsMap[tokenFrom]?.providers ?: return false
-        val tokenToProviders = assetsMap[tokenTo]?.providers ?: return false
-
-        return tokenFromProviders.intersect(tokenToProviders).isNotEmpty()
+        return assetsMap.contains(tokenFrom) && assetsMap.contains(tokenTo)
     }
 
     override suspend fun fetchQuote(
@@ -269,10 +248,10 @@ object UnstoppableProvider : IMultiSwapProvider {
 
         val quote = unstoppableAPI.quote(
             UnstoppableAPI.Request.Quote(
-                sellAsset = assetIn.identifier,
-                buyAsset = assetOut.identifier,
+                sellAsset = assetIn,
+                buyAsset = assetOut,
                 sellAmount = amountIn.toPlainString(),
-                providers = assetIn.providers.intersect(assetOut.providers),
+                providers = setOf(provider.id),
                 slippage = slippage.toInt(),
                 destinationAddress = destination,
                 sourceAddress = sourceAddress,
@@ -389,8 +368,6 @@ object UnstoppableProvider : IMultiSwapProvider {
 
         throw IllegalArgumentException("Not supported blockchainType: $blockchainType")
     }
-
-    data class Asset(val identifier: String, val providers: List<String>)
 }
 
 interface UnstoppableAPI {
