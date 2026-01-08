@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
+import io.horizontalsystems.ethereumkit.core.stripHexPrefix
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.ethereumkit.spv.core.toLong
@@ -188,7 +189,7 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
             amountIn,
             settingSlippage.value,
             settingRecipient.value,
-            false
+            true
         )
 
         val approvalAddress = bestRoute.approvalAddress?.let { router ->
@@ -231,19 +232,19 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
         amountIn: BigDecimal,
         slippage: BigDecimal,
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
-        includeTx: Boolean
+        dry: Boolean
     ): UnstoppableAPI.Response.Quote.Route {
         val assetIn = assetsMap[tokenIn]!!
         val assetOut = assetsMap[tokenOut]!!
         val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
 
-        val sourceAddress = if (includeTx) {
-            SwapHelper.getSendingAddressForToken(tokenIn)
-        } else {
+        val sourceAddress = if (dry) {
             // In this case only NEAR needs sourceAddress. It uses it as refundAddress
             // refundAddress is not checked for its balance, so it can be any valid user address
             // So getReceiveAddressForToken used since it gives non null address compared to getSendingAddressForToken
             SwapHelper.getReceiveAddressForToken(tokenIn)
+        } else {
+            SwapHelper.getSendingAddressForToken(tokenIn)
         }
 
         val quote = unstoppableAPI.quote(
@@ -255,7 +256,8 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                 slippage = slippage.toInt(),
                 destinationAddress = destination,
                 sourceAddress = sourceAddress,
-                includeTx = includeTx
+                refundAddress = sourceAddress,
+                dry = dry
             )
         )
 
@@ -280,7 +282,7 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
             amountIn,
             slippage,
             settingRecipient.value,
-            true
+            false
         )
 
         val amountOut = bestRoute.expectedBuyAmount ?: BigDecimal.ZERO
@@ -324,7 +326,7 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                 val jsonObject = bestRoute.tx.asJsonObject
                 val transactionData = TransactionData(
                     to = Address(jsonObject["to"].asString),
-                    value = BigInteger(jsonObject["value"].asString),
+                    value = BigInteger(jsonObject["value"].asString.stripHexPrefix(), 16),
                     input = (jsonObject["data"].asString).hexStringToByteArray()
                 )
 
@@ -393,7 +395,8 @@ interface UnstoppableAPI {
             val slippage: Int,
             val destinationAddress: String,
             val sourceAddress: String?,
-            val includeTx: Boolean,
+            val refundAddress: String?,
+            val dry: Boolean,
         )
     }
 
