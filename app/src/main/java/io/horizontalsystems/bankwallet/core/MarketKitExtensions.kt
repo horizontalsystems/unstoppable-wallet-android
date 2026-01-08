@@ -42,31 +42,6 @@ val Token.iconPlaceholder: Int
         else -> R.drawable.coin_placeholder
     }
 
-val Token.swappable: Boolean
-    get() = when (blockchainType) {
-        BlockchainType.Ethereum,
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.Polygon,
-        BlockchainType.Avalanche,
-        BlockchainType.Optimism,
-        BlockchainType.Base,
-        BlockchainType.ZkSync,
-        BlockchainType.Gnosis,
-        BlockchainType.Fantom,
-        BlockchainType.ArbitrumOne,
-        BlockchainType.Bitcoin,
-        BlockchainType.BitcoinCash,
-        BlockchainType.Litecoin,
-        BlockchainType.Dash,
-        BlockchainType.Stellar,
-        BlockchainType.Solana,
-        BlockchainType.Tron,
-        BlockchainType.Zcash,
-            -> true
-
-        else -> false
-    }
-
 val Token.protocolInfo: String
     get() = when (type) {
         TokenType.Native -> {
