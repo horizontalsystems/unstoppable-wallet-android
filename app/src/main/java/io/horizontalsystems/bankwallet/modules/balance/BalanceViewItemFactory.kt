@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.diff
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.swappable
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.warningText
@@ -396,7 +395,7 @@ class BalanceViewItemFactory {
             syncedUntilTextValue = syncedUntil,
             coinIconVisible = state !is AdapterState.NotSynced,
             badge = wallet.badge,
-            swapVisible = App.instance.isSwapEnabled && wallet.token.swappable,
+            swapVisible = App.instance.isSwapEnabled,
             errorMessage = errorMessage,
             isWatchAccount = watchAccount,
             warning = item.warning?.warningText,
