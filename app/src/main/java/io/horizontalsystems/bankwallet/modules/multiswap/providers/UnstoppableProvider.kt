@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.ethereumkit.core.stripHexPrefix
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -162,15 +163,6 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
     }
 
     override fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
-        val sendNotSupported = listOf(
-            BlockchainType.Bitcoin,
-            BlockchainType.BitcoinCash,
-            BlockchainType.Litecoin,
-            BlockchainType.Zcash
-        )
-
-        if (sendNotSupported.contains(tokenFrom.blockchainType)) return false
-
         return assetsMap.contains(tokenFrom) && assetsMap.contains(tokenTo)
     }
 
@@ -335,14 +327,26 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                     gasLimit = jsonObject["gas"]?.asString?.hexStringToByteArray()?.toLong(),
                     feesMap = mapOf()
                 )
+            } else {
+                throw IllegalStateException("No tx found")
             }
         }
 
         when (blockchainType) {
             BlockchainType.Bitcoin,
             BlockchainType.BitcoinCash,
-            BlockchainType.Litecoin,
-                -> TODO()
+            BlockchainType.Litecoin -> {
+                return SendTransactionData.Btc(
+                    address = bestRoute.inboundAddress,
+                    memo = bestRoute.memo,
+                    amount = amountIn,
+                    recommendedGasRate = null,
+                    minimumSendAmount = null,
+                    changeToFirstInput = true,
+                    utxoFilters = UtxoFilters(),
+                    feesMap = mapOf()
+                )
+            }
 
             BlockchainType.Solana -> {
                 if (bestRoute.tx?.isJsonPrimitive == true) {
@@ -352,6 +356,8 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                             Base64.DEFAULT
                         )
                     )
+                } else {
+                    throw IllegalStateException("No tx found")
                 }
             }
             BlockchainType.Tron -> {
@@ -362,6 +368,8 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                     )
 
                     return SendTransactionData.Tron.WithCreateTransaction(rawTransaction)
+                } else {
+                    throw IllegalStateException("No tx found")
                 }
             }
             BlockchainType.Zcash -> TODO()
@@ -422,7 +430,9 @@ interface UnstoppableAPI {
             data class Route(
                 val expectedBuyAmount: BigDecimal?,
                 val approvalAddress: String?,
-                val tx: JsonElement?
+                val tx: JsonElement?,
+                val inboundAddress: String,
+                val memo: String?,
             )
         }
     }

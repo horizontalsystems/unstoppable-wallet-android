@@ -151,7 +151,9 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         changeToFirstInput = data.changeToFirstInput
         utxoFilters = data.utxoFilters
 
-        feeRateService.setRecommendedAndMin(data.recommendedGasRate, data.recommendedGasRate)
+        data.recommendedGasRate?.let {
+            feeRateService.setRecommendedAndMin(it, it)
+        }
 
         feeService.setMemo(memo)
         feeService.setChangeToFirstInput(changeToFirstInput)
