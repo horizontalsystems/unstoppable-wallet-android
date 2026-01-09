@@ -582,6 +582,7 @@
     <!-- Send Evm Settings -->
 
     <string name="SendEvmSettings_Title">Fee Settings</string>
+    <string name="SendEvmSettings_SetRecipient">Set Recipient</string>
     <string name="SendEvmSettings_Nonce">Transaction Nonce</string>
     <string name="SendEvmSettings_Nonce_Info">Custom nonce for EVM transactions. Controls the order of your transactions and can be used to replace pending ones.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Used Nonce</string>

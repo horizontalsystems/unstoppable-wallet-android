@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.send.address
+package io.horizontalsystems.bankwallet.modules.enteraddress
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +20,8 @@ import io.horizontalsystems.bankwallet.modules.address.AddressHandlerUdn
 import io.horizontalsystems.bankwallet.modules.address.AddressParserChain
 import io.horizontalsystems.bankwallet.modules.address.EnsResolverHolder
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+import io.horizontalsystems.bankwallet.modules.send.address.AddressExtractor
+import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressValidator
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.subscriptions.core.ScamProtection
@@ -37,7 +39,6 @@ class EnterAddressViewModel(
     contactsRepository: ContactsRepository,
     recentAddressManager: RecentAddressManager,
     localStorage: ILocalStorage,
-    addressCheckerSkippable: Boolean,
     private val domainParser: AddressParserChain,
     private val addressValidator: EnterAddressValidator,
     private val addressCheckManager: AddressCheckManager,
@@ -58,11 +59,7 @@ class EnterAddressViewModel(
     private var parseAddressJob: Job? = null
 
     private val addressExtractor = AddressExtractor(token.blockchainType, addressUriParser)
-    private val addressCheckEnabled = if (addressCheckerSkippable) {
-        localStorage.recipientAddressCheckEnabled
-    } else {
-        true
-    }
+    private val addressCheckEnabled = localStorage.recipientAddressCheckEnabled
 
     init {
         initialAddress?.let {
@@ -198,7 +195,6 @@ class EnterAddressViewModel(
     class Factory(
         private val token: Token,
         private val address: String?,
-        private val addressCheckerSkippable: Boolean
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -231,7 +227,6 @@ class EnterAddressViewModel(
                 App.contactsRepository,
                 recentAddressManager,
                 App.localStorage,
-                addressCheckerSkippable,
                 addressParserChain,
                 addressValidator,
                 addressCheckManager,

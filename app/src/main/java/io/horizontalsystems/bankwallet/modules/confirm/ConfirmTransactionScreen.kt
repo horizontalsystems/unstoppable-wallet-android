@@ -32,6 +32,7 @@ fun ConfirmTransactionScreen(
     onClickSettings: (() -> Unit)?,
     onClickClose: (() -> Unit)?,
     onClickNonceSettings: (() -> Unit)? = null,
+    onClickRecipientSettings: (() -> Unit)? = null,
     defenseSlot: (@Composable ColumnScope.() -> Unit)? = null,
     buttonsSlot: @Composable() (ColumnScope.() -> Unit),
     content: @Composable() (ColumnScope.() -> Unit)
@@ -54,6 +55,15 @@ fun ConfirmTransactionScreen(
                     add(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.SendEvmSettings_Nonce),
+                            onClick = it
+                        )
+                    )
+                }
+
+                onClickRecipientSettings?.let {
+                    add(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.SendEvmSettings_SetRecipient),
                             onClick = it
                         )
                     )

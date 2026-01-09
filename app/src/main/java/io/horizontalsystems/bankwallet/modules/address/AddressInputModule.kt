@@ -97,7 +97,6 @@ object AddressInputModule {
             val addressUriParser = AddressUriParser(blockchainType, tokenQuery.tokenType)
             val addressViewModel = AddressViewModel(
                 blockchainType,
-                App.contactsRepository,
                 addressUriParser,
                 addressParserChain,
                 initial

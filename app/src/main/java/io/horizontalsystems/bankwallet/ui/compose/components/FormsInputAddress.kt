@@ -34,17 +34,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.contacts.ChooseContactFragment
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
 fun FormsInputAddress(
@@ -54,9 +50,6 @@ fun FormsInputAddress(
     state: DataState<Address>? = null,
     showStateIcon: Boolean = true,
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
-    navController: NavController,
-    chooseContactEnable: Boolean,
-    blockchainType: BlockchainType?,
     onValueChange: (String) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -167,21 +160,6 @@ fun FormsInputAddress(
                     }
                 )
             } else {
-                if (chooseContactEnable && blockchainType != null) {
-                    ButtonSecondaryCircle(
-                        modifier = Modifier.padding(end = 8.dp),
-                        icon = R.drawable.ic_user_20,
-                        onClick = {
-                            navController.slideFromRightForResult<ChooseContactFragment.Result>(
-                                R.id.chooseContact,
-                                blockchainType
-                            ) {
-                                val textProcessed = textPreprocessor.process(it.address)
-                                onValueChange.invoke(textProcessed)
-                            }
-                        }
-                    )
-                }
                 val qrScannerLauncher =
                     rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                         if (result.resultCode == Activity.RESULT_OK) {

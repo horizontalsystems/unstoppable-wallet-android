@@ -105,7 +105,6 @@ fun RecipientAddress(
         initial = initial,
         tokenQuery = token.tokenQuery,
         coinCode = token.coin.code,
-        navController = navController,
         onError = onError,
         onValueChange = onValueChange,
     )
