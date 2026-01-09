@@ -125,11 +125,20 @@ fun SwapConfirmScreen(navController: NavController) {
         null
     }
 
+    val onClickRecipientSettings = if (true) {
+        {
+            navController.slideFromRight(R.id.swapTransactionRecipientSettings)
+        }
+    } else {
+        null
+    }
+
     ConfirmTransactionScreen(
         initialLoading = uiState.initialLoading,
         onClickBack = navController::popBackStack,
         onClickSettings = onClickSettings,
         onClickNonceSettings = onClickNonceSettings,
+        onClickRecipientSettings = onClickRecipientSettings,
         onClickClose = null,
         defenseSlot = {
             uiState.swapDefenseSystemMessage?.let { message ->
