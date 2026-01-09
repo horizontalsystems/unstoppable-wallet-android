@@ -86,7 +86,8 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
         //LTC:litecoin
         "litecoin" to BlockchainType.Litecoin,
         //THOR:thorchain-1
-        "thorchain-1" to null
+        "thorchain-1" to null,
+        "stellar" to BlockchainType.Stellar
     )
 
     private val assetsMap = mutableMapOf<Token, String>()
@@ -148,7 +149,26 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                         registerAsset(it, token.identifier)
                     }
                 }
-                else -> Unit
+
+                BlockchainType.Stellar -> {
+                    val tokenType = if (!token.address.isNullOrBlank()) {
+                        TODO()
+                    } else {
+                        TokenType.Native
+                    }
+
+                    App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
+                        registerAsset(it, token.identifier)
+                    }
+                }
+                BlockchainType.Dash -> TODO()
+                BlockchainType.ECash -> TODO()
+                BlockchainType.Fantom -> TODO()
+                BlockchainType.Gnosis -> TODO()
+                BlockchainType.Monero -> TODO()
+                BlockchainType.Ton -> TODO()
+                is BlockchainType.Unsupported -> TODO()
+                BlockchainType.ZkSync -> TODO()
             }
         }
     }
@@ -378,6 +398,16 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                     throw IllegalStateException("No tx found")
                 }
             }
+            BlockchainType.Stellar -> {
+                val memo = bestRoute.txExtraAttribute["memo"]
+                    ?: throw IllegalStateException("No memo found")
+
+                return SendTransactionData.Stellar.Regular(
+                    address = bestRoute.inboundAddress,
+                    memo = memo,
+                    amount = amountIn
+                )
+            }
             BlockchainType.Zcash -> TODO()
             else -> Unit
         }
@@ -439,6 +469,7 @@ interface UnstoppableAPI {
                 val tx: JsonElement?,
                 val inboundAddress: String,
                 val memo: String?,
+                val txExtraAttribute: Map<String, String>,
             )
         }
     }
