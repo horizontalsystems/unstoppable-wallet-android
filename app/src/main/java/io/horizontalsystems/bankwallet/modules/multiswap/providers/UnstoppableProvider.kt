@@ -230,15 +230,6 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
         val assetOut = assetsMap[tokenOut]!!
         val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
 
-        val sourceAddress = if (dry) {
-            // In this case only NEAR needs sourceAddress. It uses it as refundAddress
-            // refundAddress is not checked for its balance, so it can be any valid user address
-            // So getReceiveAddressForToken used since it gives non null address compared to getSendingAddressForToken
-            SwapHelper.getReceiveAddressForToken(tokenIn)
-        } else {
-            SwapHelper.getSendingAddressForToken(tokenIn)
-        }
-
         val quote = unstoppableAPI.quote(
             UnstoppableAPI.Request.Quote(
                 sellAsset = assetIn,
@@ -247,8 +238,8 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                 providers = setOf(provider.id),
                 slippage = slippage.toInt(),
                 destinationAddress = destination,
-                sourceAddress = sourceAddress,
-                refundAddress = sourceAddress,
+                sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn),
+                refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn),
                 dry = dry
             )
         )
@@ -418,7 +409,7 @@ interface UnstoppableAPI {
             val slippage: Int,
             val destinationAddress: String,
             val sourceAddress: String?,
-            val refundAddress: String?,
+            val refundAddress: String,
             val dry: Boolean,
         )
     }
