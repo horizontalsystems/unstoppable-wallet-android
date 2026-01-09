@@ -336,6 +336,21 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
             BlockchainType.Bitcoin,
             BlockchainType.BitcoinCash,
             BlockchainType.Litecoin -> {
+                // supported only providers that accepts any type of outputs
+                // providers with specific requirements like thorchain is not supported
+                // if thorchain support needed then it should be handled separately
+                val simpleBtcTransactionProviders = listOf(
+                    UProvider.Near,
+                    UProvider.QuickEx,
+                    UProvider.LetsExchange,
+                    UProvider.StealthEx,
+                    UProvider.Swapuz
+                )
+
+                if (!simpleBtcTransactionProviders.contains(provider)) {
+                    throw IllegalStateException("Only simple BTC tx providers are supported")
+                }
+
                 return SendTransactionData.Btc(
                     address = bestRoute.inboundAddress,
                     memo = bestRoute.memo,
