@@ -134,15 +134,25 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         emitState()
     }
 
-    override fun createState() = SendTransactionServiceState(
-        uuid = uuid,
-        networkFee = networkFee,
-        cautions = listOfNotNull(amountState.amountCaution, feeRateState.feeRateCaution).map(HSCaution::toCautionViewItem),
-        sendable = amountState.canBeSend && feeRateState.canBeSend && addressState.canBeSend,
-        loading = false,
-        fields = fields,
-        extraFees = extraFees
-    )
+    override fun createState(): SendTransactionServiceState {
+        val sendable = amountState.canBeSend && feeRateState.canBeSend && addressState.canBeSend
+
+        val hasError = amountState.amountCaution?.isError() == true ||
+                feeRateState.feeRateCaution?.isError() == true &&
+                addressState.addressError != null
+
+        val loading = !sendable && !hasError
+
+        return SendTransactionServiceState(
+            uuid = uuid,
+            networkFee = networkFee,
+            cautions = listOfNotNull(amountState.amountCaution, feeRateState.feeRateCaution).map(HSCaution::toCautionViewItem),
+            sendable = sendable,
+            loading = loading,
+            fields = fields,
+            extraFees = extraFees
+        )
+    }
 
     override suspend fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Btc)
