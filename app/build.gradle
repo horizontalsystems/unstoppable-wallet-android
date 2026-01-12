@@ -317,7 +317,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:tron-kit-android:16ae04a'
     // Zcash SDK
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
-    implementation "cash.z.ecc.android:zcash-android-sdk:2.4.0"
+    implementation "cash.z.ecc.android:zcash-android-sdk:2.4.4"
     implementation("io.github.binance:binance-connector-java:3.4.1") {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
     }
