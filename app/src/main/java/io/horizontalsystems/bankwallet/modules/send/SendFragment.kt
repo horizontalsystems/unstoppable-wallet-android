@@ -7,9 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.fragment.app.viewModels
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
+import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -18,7 +21,9 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinNavHost
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroModule
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroScreen
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroViewModel
@@ -120,11 +125,18 @@ class SendFragment : BaseFragment() {
                     BlockchainType.Gnosis,
                     BlockchainType.Fantom,
                     BlockchainType.ArbitrumOne -> {
+                        val adapter = App.adapterManager.getAdapterForWallet<ISendEthereumAdapter>(wallet) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
+
+                        val sendEvmViewModel by viewModels<SendEvmViewModel> {
+                            SendEvmModule.Factory(wallet, address, hideAddress, adapter)
+                        }
+
                         setContent {
                             SendEvmScreen(
                                 title = title,
                                 navController = findNavController(),
                                 amountInputModeViewModel = amountInputModeViewModel,
+                                viewModel = sendEvmViewModel,
                                 address = address,
                                 wallet = wallet,
                                 amount = amount,
