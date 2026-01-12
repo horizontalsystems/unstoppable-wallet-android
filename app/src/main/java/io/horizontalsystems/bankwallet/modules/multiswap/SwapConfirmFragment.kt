@@ -144,7 +144,6 @@ fun SwapConfirmScreen(navController: NavController) {
         onClickSlippageSettings = onClickSlippageSettings,
         onClickNonceSettings = onClickNonceSettings,
         onClickRecipientSettings = onClickRecipientSettings,
-        onClickClose = null,
         defenseSlot = {
             uiState.swapDefenseSystemMessage?.let { message ->
                 val icon = when (message.level) {

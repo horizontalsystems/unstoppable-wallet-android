@@ -30,7 +30,6 @@ fun ConfirmTransactionScreen(
     initialLoading: Boolean = false,
     onClickBack: (() -> Unit)?,
     onClickSettings: (() -> Unit)?,
-    onClickClose: (() -> Unit)?,
     onClickNonceSettings: (() -> Unit)? = null,
     onClickSlippageSettings: (() -> Unit)? = null,
     onClickRecipientSettings: (() -> Unit)? = null,
@@ -87,15 +86,6 @@ fun ConfirmTransactionScreen(
                         icon = R.drawable.manage_24,
                         enabled = !initialLoading,
                         items = dropdownMenuItems
-                    )
-                )
-            }
-            onClickClose?.let {
-                add(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = onClickClose
                     )
                 )
             }

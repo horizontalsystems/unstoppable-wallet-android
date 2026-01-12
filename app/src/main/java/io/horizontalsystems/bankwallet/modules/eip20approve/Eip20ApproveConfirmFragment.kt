@@ -35,7 +35,6 @@ import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.Unlimi
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -82,9 +81,6 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
         onClickSettings = {
             navController.slideFromRight(R.id.eip20ApproveTransactionSettingsFragment)
         },
-        onClickClose = {
-            navController.popBackStack(R.id.eip20ApproveFragment, true)
-        },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
             var buttonEnabled by remember { mutableStateOf(true) }
@@ -118,14 +114,6 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
                     }
                 },
                 enabled = uiState.approveEnabled && buttonEnabled
-            )
-            VSpacer(16.dp)
-            ButtonPrimaryDefault(
-                modifier = Modifier.fillMaxWidth(),
-                title = stringResource(R.string.Button_Cancel),
-                onClick = {
-                    navController.popBackStack(R.id.eip20ApproveFragment, true)
-                }
             )
         }
     ) {

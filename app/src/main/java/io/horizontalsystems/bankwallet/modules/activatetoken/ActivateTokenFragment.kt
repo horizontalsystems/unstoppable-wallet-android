@@ -30,7 +30,6 @@ import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenError
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenViewModel
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -72,7 +71,6 @@ fun ActivateTokenScreen(
 
     ConfirmTransactionScreen(
         onClickBack = null,
-        onClickClose = navController::popBackStack,
         onClickSettings = null,
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
@@ -103,12 +101,6 @@ fun ActivateTokenScreen(
                     }
                 },
                 enabled = uiState.activateEnabled && buttonEnabled
-            )
-            VSpacer(16.dp)
-            ButtonPrimaryDefault(
-                modifier = Modifier.fillMaxWidth(),
-                title = stringResource(R.string.Button_Cancel),
-                onClick = navController::popBackStack
             )
         }
     ) {
