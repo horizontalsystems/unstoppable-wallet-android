@@ -218,7 +218,11 @@ fun MenuDropdown(menuItemDropdown: MenuItemDropdown)     {
                     ),
                     enabled = menuItemDropdown.enabled,
                     onClick = {
-                        expanded = true
+                        if (menuItemDropdown.items.size == 1) {
+                            menuItemDropdown.items.first().onClick.invoke()
+                        } else {
+                            expanded = true
+                        }
                     }
                 ),
             painter = painterResource(menuItemDropdown.icon),
@@ -234,7 +238,7 @@ fun MenuDropdown(menuItemDropdown: MenuItemDropdown)     {
         containerColor = ComposeAppTheme.colors.lawrence,
         modifier = Modifier.defaultMinSize(minWidth = 200.dp)
     ) {
-        menuItemDropdown.items.forEachIndexed { i,  menuItem ->
+        menuItemDropdown.items.forEachIndexed { i, menuItem ->
             BoxBordered(top = i != 0) {
                 DropdownMenuItem(
                     text = {
