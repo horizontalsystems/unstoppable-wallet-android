@@ -165,10 +165,6 @@ class SwapConfirmViewModel(
         var cautions = sendTransactionState.cautions
 
         if (cautions.isEmpty()) {
-            priceImpactState.fiatPriceImpactCaution?.let { hsCaution ->
-                cautions = listOf(hsCaution.toCautionViewItem())
-            }
-
             cautions += cautionViewItems
         }
 
