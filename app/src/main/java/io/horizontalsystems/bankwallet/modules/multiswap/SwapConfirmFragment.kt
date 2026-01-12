@@ -62,7 +62,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
@@ -180,8 +179,6 @@ fun SwapConfirmScreen(navController: NavController) {
                     enabled = false,
                     onClick = { },
                 )
-                VSpacer(height = 12.dp)
-                subhead1_leah(text = stringResource(id = R.string.SwapConfirm_FetchingFinalQuote))
             } else if (!uiState.validQuote) {
                 ButtonPrimaryDefault(
                     modifier = Modifier.fillMaxWidth(),
@@ -190,8 +187,6 @@ fun SwapConfirmScreen(navController: NavController) {
                         viewModel.refresh()
                     },
                 )
-                VSpacer(height = 12.dp)
-                subhead1_leah(text = "Quote is invalid")
             } else {
                 var buttonEnabled by remember { mutableStateOf(true) }
                 ButtonPrimaryYellow(
