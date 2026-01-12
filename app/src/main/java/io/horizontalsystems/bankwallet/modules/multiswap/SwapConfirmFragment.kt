@@ -117,6 +117,10 @@ fun SwapConfirmScreen(navController: NavController) {
         null
     }
 
+    val onClickSlippageSettings = {
+        navController.slideFromRight(R.id.swapTransactionSlippageSettings)
+    }
+
     val onClickNonceSettings = if (uiState.hasNonceSettings) {
         {
             navController.slideFromRight(R.id.swapTransactionNonceSettings)
@@ -137,6 +141,7 @@ fun SwapConfirmScreen(navController: NavController) {
         initialLoading = uiState.initialLoading,
         onClickBack = navController::popBackStack,
         onClickSettings = onClickSettings,
+        onClickSlippageSettings = onClickSlippageSettings,
         onClickNonceSettings = onClickNonceSettings,
         onClickRecipientSettings = onClickRecipientSettings,
         onClickClose = null,

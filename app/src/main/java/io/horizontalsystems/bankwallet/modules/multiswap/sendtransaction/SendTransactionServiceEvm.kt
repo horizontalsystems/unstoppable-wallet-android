@@ -274,6 +274,13 @@ class SendTransactionServiceEvm(
     }
 
     @Composable
+    override fun GetSlippageSettingsContent(navController: NavController) {
+        SendEvmSlippageSettingsScreen(
+            navController = navController
+        )
+    }
+
+    @Composable
     override fun GetRecipientSettingsContent(navController: NavController) {
         SendEvmRecipientSettingsScreen(
             token = token,
@@ -386,6 +393,60 @@ fun SendEvmNonceSettingsScreen(
             )
 
             Cautions(viewModel.cautions)
+
+            VSpacer(32.dp)
+        }
+    }
+}
+
+@Composable
+fun SendEvmSlippageSettingsScreen(
+    navController: NavController
+) {
+    HSScaffold(
+        title = stringResource(R.string.SendEvmSettings_SlippageTolerance),
+        onBack = navController::popBackStack,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Reset),
+                enabled = false,
+                onClick = {
+                    //viewModel.onClickReset()
+                },
+                tint = ComposeAppTheme.colors.jacob
+            )
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
+        ) {
+            TextBlock(
+                text = stringResource(R.string.SendEvmSettings_SlippageTolerance_Info),
+            )
+            VSpacer(8.dp)
+            val textColor = when {
+//                uiState.errors.isNotEmpty() -> ComposeAppTheme.colors.lucian
+//                uiState.warnings.isNotEmpty() -> ComposeAppTheme.colors.jacob
+                else -> ComposeAppTheme.colors.leah
+            }
+            NumberInputWithButtons(
+                value = BigDecimal.ZERO,//viewModel.initialValue ?: BigDecimal.ZERO,
+                decimals = 0,
+                textColor = textColor,
+                onValueChange = {
+//                    nonceViewModel.onEnterNonce(it.toLong())
+                },
+                onClickIncrement = {
+                    //viewModel::onIncrement
+                },
+                onClickDecrement = {
+//                    viewModel::onDecrement
+                }
+            )
+
+            //Cautions(viewModel.cautions)
 
             VSpacer(32.dp)
         }

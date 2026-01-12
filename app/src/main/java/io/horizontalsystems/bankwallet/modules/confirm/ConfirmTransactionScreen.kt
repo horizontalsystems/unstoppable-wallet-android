@@ -32,6 +32,7 @@ fun ConfirmTransactionScreen(
     onClickSettings: (() -> Unit)?,
     onClickClose: (() -> Unit)?,
     onClickNonceSettings: (() -> Unit)? = null,
+    onClickSlippageSettings: (() -> Unit)? = null,
     onClickRecipientSettings: (() -> Unit)? = null,
     defenseSlot: (@Composable ColumnScope.() -> Unit)? = null,
     buttonsSlot: @Composable() (ColumnScope.() -> Unit),
@@ -46,6 +47,15 @@ fun ConfirmTransactionScreen(
                     add(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Settings_Title),
+                            onClick = it
+                        )
+                    )
+                }
+
+                onClickSlippageSettings?.let {
+                    add(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.SendEvmSettings_SlippageTolerance),
                             onClick = it
                         )
                     )

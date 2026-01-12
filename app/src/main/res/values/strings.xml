@@ -585,6 +585,8 @@
     <string name="SendEvmSettings_SetRecipient">Set Recipient</string>
     <string name="SendEvmSettings_Nonce">Transaction Nonce</string>
     <string name="SendEvmSettings_Nonce_Info">Custom nonce for EVM transactions. Controls the order of your transactions and can be used to replace pending ones.</string>
+    <string name="SendEvmSettings_SlippageTolerance">Slippage Tolerance</string>
+    <string name="SendEvmSettings_SlippageTolerance_Info">The maximum acceptable price deviation for your swap. Beyond this limit the transaction is reverted.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Used Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">An executed transaction with this nonce already exists.</string>
 
