@@ -6,13 +6,17 @@ import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.stellar
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.stellar.StellarSenderRegular
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.stellar.StellarSenderTransactionEnvelope
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.stellarkit.StellarKit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class SendTransactionServiceStellar(val stellarKit: StellarKit) : AbstractSendTransactionService(false, false) {
+class SendTransactionServiceStellar(
+    private val stellarKit: StellarKit,
+    private val token: Token
+) : AbstractSendTransactionService(false, false) {
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Stellar())
 
     private val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Stellar, TokenType.Native)) ?: throw IllegalArgumentException()
@@ -30,7 +34,8 @@ class SendTransactionServiceStellar(val stellarKit: StellarKit) : AbstractSendTr
                     data.address,
                     data.amount,
                     data.memo,
-                    stellarKit
+                    stellarKit,
+                    token
                 )
             }
 
@@ -54,8 +59,8 @@ class SendTransactionServiceStellar(val stellarKit: StellarKit) : AbstractSendTr
             getAmountData(CoinValue(feeToken, it))
         },
         cautions = listOf(),
-        sendable = stellarSendHandler?.sendable ?: false,
-        loading = false,
+        sendable = stellarSendHandler != null,
+        loading = stellarSendHandler == null,
         fields = listOf(),
         extraFees = extraFees
     )
