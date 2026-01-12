@@ -79,7 +79,7 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
     ConfirmTransactionScreen(
         title = stringResource(R.string.Swap_ConfirmRevoke_Title),
         onClickBack = navController::popBackStack,
-        onClickSettings = {
+        onClickFeeSettings = {
             navController.slideFromRight(R.id.eip20RevokeTransactionSettingsFragment)
         },
         buttonsSlot = {

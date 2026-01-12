@@ -215,7 +215,7 @@ fun WCSignEthereumTransactionRequestScreen(
     ConfirmTransactionScreen(
         title = stringResource(id = R.string.WalletConnect_SignMessageRequest_Title),
         onClickBack = navController::popBackStack,
-        onClickSettings = null,
+        onClickFeeSettings = null,
         buttonsSlot = {
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),

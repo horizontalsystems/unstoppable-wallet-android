@@ -71,7 +71,7 @@ fun ActivateTokenScreen(
 
     ConfirmTransactionScreen(
         onClickBack = null,
-        onClickSettings = null,
+        onClickFeeSettings = null,
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
             var buttonEnabled by remember { mutableStateOf(true) }

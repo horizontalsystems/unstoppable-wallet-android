@@ -29,7 +29,7 @@ fun ConfirmTransactionScreen(
     title: String = stringResource(R.string.Swap_Confirm_Title),
     initialLoading: Boolean = false,
     onClickBack: (() -> Unit)?,
-    onClickSettings: (() -> Unit)?,
+    onClickFeeSettings: (() -> Unit)?,
     onClickNonceSettings: (() -> Unit)? = null,
     onClickSlippageSettings: (() -> Unit)? = null,
     onClickRecipientSettings: (() -> Unit)? = null,
@@ -42,10 +42,10 @@ fun ConfirmTransactionScreen(
         onBack = onClickBack,
         menuItems = buildList {
             val dropdownMenuItems = buildList {
-                onClickSettings?.let {
+                onClickFeeSettings?.let {
                     add(
                         MenuItem(
-                            title = TranslatableString.ResString(R.string.Settings_Title),
+                            title = TranslatableString.ResString(R.string.SendEvmSettings_EditFee),
                             onClick = it
                         )
                     )
