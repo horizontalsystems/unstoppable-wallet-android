@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ServiceState
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import java.math.BigDecimal
 
 class PriceImpactService : ServiceState<PriceImpactService.State>() {
@@ -11,14 +8,12 @@ class PriceImpactService : ServiceState<PriceImpactService.State>() {
     private var fiatAmountOut: BigDecimal? = null
     private var fiatPriceImpact: BigDecimal? = null
     private var fiatPriceImpactLevel: PriceImpactLevel? = null
-    private var fiatPriceImpactCaution: HSCaution? = null
 
     private var providerTitle: String? = null
 
     override fun createState() = State(
         fiatPriceImpact = fiatPriceImpact,
-        fiatPriceImpactLevel = fiatPriceImpactLevel,
-        fiatPriceImpactCaution = fiatPriceImpactCaution
+        fiatPriceImpactLevel = fiatPriceImpactLevel
     )
 
     fun setProviderTitle(providerTitle: String?) {
@@ -32,26 +27,6 @@ class PriceImpactService : ServiceState<PriceImpactService.State>() {
 
         fiatPriceImpact = priceImpactData?.priceImpact
         fiatPriceImpactLevel = priceImpactData?.priceImpactLevel
-
-        fiatPriceImpactCaution = when (fiatPriceImpactLevel) {
-            PriceImpactLevel.Forbidden -> {
-                HSCaution(
-                    s = TranslatableString.ResString(R.string.Swap_PriceImpact),
-                    type = HSCaution.Type.Error,
-                    description = TranslatableString.ResString(R.string.Swap_PriceImpactTooHigh, providerTitle ?: "")
-                )
-            }
-            PriceImpactLevel.Warning -> {
-                HSCaution(
-                    s = TranslatableString.ResString(R.string.Swap_PriceImpact),
-                    type = HSCaution.Type.Warning,
-                    description = TranslatableString.ResString(R.string.Swap_PriceImpactWarning)
-                )
-            }
-            else -> {
-                null
-            }
-        }
     }
 
     fun setFiatAmountIn(fiatAmountIn: BigDecimal?) {
@@ -72,7 +47,6 @@ class PriceImpactService : ServiceState<PriceImpactService.State>() {
 
     data class State(
         val fiatPriceImpact: BigDecimal?,
-        val fiatPriceImpactLevel: PriceImpactLevel?,
-        val fiatPriceImpactCaution: HSCaution?
+        val fiatPriceImpactLevel: PriceImpactLevel?
     )
 }
