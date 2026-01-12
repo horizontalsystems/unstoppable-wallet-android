@@ -35,7 +35,7 @@ object SendTransactionServiceFactory {
             BlockchainType.Stellar -> {
                 val activeAccount = App.accountManager.activeAccount!!
                 val stellarKitWrapper = App.stellarKitManager.getStellarKitWrapper(activeAccount)
-                SendTransactionServiceStellar(stellarKitWrapper.stellarKit)
+                SendTransactionServiceStellar(stellarKitWrapper.stellarKit, token)
             }
 
             BlockchainType.Solana -> {
