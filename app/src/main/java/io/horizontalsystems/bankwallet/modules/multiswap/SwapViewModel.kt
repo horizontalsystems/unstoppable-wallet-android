@@ -71,7 +71,7 @@ class SwapViewModel(
                 fiatAmountInputEnabled = it.coinPrice != null && !it.coinPrice.expired
                 fiatAmountIn = it.fiatAmount
                 quoteService.setAmount(it.amount)
-                priceImpactService.setFiatAmountIn(fiatAmountIn)
+                priceImpactService.setAmountIn(fiatAmountIn)
 
                 emitState()
             }
@@ -80,7 +80,7 @@ class SwapViewModel(
             fiatServiceOut.stateFlow.collect {
                 fiatAmountOut = it.fiatAmount
 
-                priceImpactService.setFiatAmountOut(fiatAmountOut)
+                priceImpactService.setAmountOut(fiatAmountOut)
 
                 emitState()
             }
@@ -123,8 +123,8 @@ class SwapViewModel(
         quote = quoteState.quote,
         error = networkState.error ?: quoteState.error ?: balanceState.error,
         availableBalance = balanceState.balance,
-        fiatPriceImpact = priceImpactState.fiatPriceImpact,
-        fiatPriceImpactLevel = priceImpactState.fiatPriceImpactLevel,
+        fiatPriceImpact = priceImpactState.priceImpact,
+        fiatPriceImpactLevel = priceImpactState.priceImpactLevel,
         fiatAmountIn = fiatAmountIn,
         fiatAmountOut = fiatAmountOut,
         currency = currency,
