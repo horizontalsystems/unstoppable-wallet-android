@@ -10,26 +10,19 @@ object PriceImpactCalculator {
     private val forbiddenPriceImpact = BigDecimal(50)
 
     fun getPriceImpactData(amountOut: BigDecimal?, amountIn: BigDecimal?): PriceImpactData? {
-        var priceImpact = calculateDiff(amountOut, amountIn)
-        val priceImpactAbs = priceImpact?.abs()
+        val priceImpact = calculateDiff(amountOut, amountIn) ?: return null
 
-        var priceImpactLevel: PriceImpactLevel?
+        val priceImpactAbs = priceImpact.abs()
+        if (priceImpactAbs < normalPriceImpact) return null
 
-        if (priceImpactAbs == null || priceImpactAbs < normalPriceImpact) {
-            priceImpact = null
-            priceImpactLevel = null
-        } else {
-            priceImpactLevel = when {
-                priceImpactAbs < warningPriceImpact -> PriceImpactLevel.Normal
-                priceImpactAbs < highPriceImpact -> PriceImpactLevel.Warning
-                priceImpactAbs < forbiddenPriceImpact -> PriceImpactLevel.High
-                else -> PriceImpactLevel.Forbidden
-            }
+        val priceImpactLevel = when {
+            priceImpactAbs < warningPriceImpact -> PriceImpactLevel.Normal
+            priceImpactAbs < highPriceImpact -> PriceImpactLevel.Warning
+            priceImpactAbs < forbiddenPriceImpact -> PriceImpactLevel.High
+            else -> PriceImpactLevel.Forbidden
         }
 
-        return priceImpact?.let {
-            PriceImpactData(it, priceImpactLevel)
-        }
+        return PriceImpactData(priceImpact, priceImpactLevel)
     }
 
     private fun calculateDiff(amountOut: BigDecimal?, amountIn: BigDecimal?): BigDecimal? {
