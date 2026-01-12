@@ -94,7 +94,7 @@ private fun SendEvmConfirmationScreen(
 
     ConfirmTransactionScreen(
         onClickBack = { navController.popBackStack() },
-        onClickSettings = {
+        onClickFeeSettings = {
             navController.slideFromBottom(R.id.sendEvmSettingsFragment)
         },
         onClickNonceSettings = {

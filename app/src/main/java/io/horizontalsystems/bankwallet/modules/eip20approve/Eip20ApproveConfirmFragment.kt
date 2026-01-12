@@ -78,7 +78,7 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
     ConfirmTransactionScreen(
         title = stringResource(R.string.Swap_ConfirmApprove_Title),
         onClickBack = navController::popBackStack,
-        onClickSettings = {
+        onClickFeeSettings = {
             navController.slideFromRight(R.id.eip20ApproveTransactionSettingsFragment)
         },
         buttonsSlot = {

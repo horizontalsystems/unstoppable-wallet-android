@@ -67,7 +67,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
 
     ConfirmTransactionScreen(
         onClickBack = navController::popBackStack,
-        onClickSettings = null,
+        onClickFeeSettings = null,
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
             val view = LocalView.current
