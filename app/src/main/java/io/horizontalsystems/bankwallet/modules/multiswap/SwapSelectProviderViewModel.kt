@@ -9,17 +9,11 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 class SwapSelectProviderViewModel(
     private val quotes: List<SwapProviderQuote>,
     private val quote: SwapProviderQuote?
 ) : ViewModelUiState<SwapSelectProviderUiState>() {
-    private val normalPriceImpact = BigDecimal(1)
-    private val warningPriceImpact = BigDecimal(6)
-    private val highPriceImpact = BigDecimal(11)
-    private val forbiddenPriceImpact = BigDecimal(50)
-
     private val currencyManager = App.currencyManager
     private val marketKit = App.marketKit
 
@@ -66,7 +60,7 @@ class SwapSelectProviderViewModel(
                 quote.tokenOut.coin.code,
                 quote.tokenOut.decimals
             )
-            val priceImpactData = getPriceImpactData(fiatAmountOut?.value, fiatAmountIn?.value)
+            val priceImpactData = PriceImpactCalculator.getPriceImpactData(fiatAmountOut?.value, fiatAmountIn?.value)
             QuoteViewItem(
                 quote = quote,
                 fiatAmount = fiatAmountOut?.getFormattedFull(),
@@ -75,40 +69,6 @@ class SwapSelectProviderViewModel(
             )
         }
     }
-
-    private fun getPriceImpactData(amountOut: BigDecimal?, amountIn: BigDecimal?): PriceImpactData? {
-        var priceImpact = calculateDiff(amountOut, amountIn)
-        val priceImpactAbs = priceImpact?.abs()
-
-        var priceImpactLevel: PriceImpactLevel?
-
-        if (priceImpactAbs == null || priceImpactAbs < normalPriceImpact) {
-            priceImpact = null
-            priceImpactLevel = null
-        } else {
-            priceImpactLevel = when {
-                priceImpactAbs < warningPriceImpact -> PriceImpactLevel.Normal
-                priceImpactAbs < highPriceImpact -> PriceImpactLevel.Warning
-                priceImpactAbs < forbiddenPriceImpact -> PriceImpactLevel.High
-                else -> PriceImpactLevel.Forbidden
-            }
-        }
-
-        return priceImpact?.let {
-            PriceImpactData(it, priceImpactLevel)
-        }
-    }
-
-    private fun calculateDiff(amountOut: BigDecimal?, amountIn: BigDecimal?): BigDecimal? {
-        if (amountOut == null || amountIn == null || amountIn.compareTo(BigDecimal.ZERO) == 0) return null
-
-        return (amountOut - amountIn)
-            .divide(amountIn, RoundingMode.DOWN)
-            .times(BigDecimal("100"))
-            .setScale(2, RoundingMode.DOWN)
-            .stripTrailingZeros()
-    }
-
 
     override fun createState() = SwapSelectProviderUiState(
         quoteViewItems = quoteViewItems,
@@ -139,9 +99,4 @@ data class QuoteViewItem(
     val fiatAmount: String?,
     val tokenAmount: String,
     val priceImpactData: PriceImpactData?
-)
-
-data class PriceImpactData(
-    val priceImpact: BigDecimal,
-    val priceImpactLevel: PriceImpactLevel? = null
 )
