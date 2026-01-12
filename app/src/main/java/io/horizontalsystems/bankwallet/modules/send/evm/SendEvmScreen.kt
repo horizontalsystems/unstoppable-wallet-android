@@ -40,6 +40,7 @@ fun SendEvmScreen(
     title: String,
     navController: NavController,
     amountInputModeViewModel: AmountInputModeViewModel,
+    viewModel: SendEvmViewModel,
     address: Address,
     wallet: Wallet,
     amount: BigDecimal?,
@@ -47,9 +48,6 @@ fun SendEvmScreen(
     riskyAddress: Boolean,
     sendEntryPointDestId: Int,
 ) {
-    val viewModel = viewModel<SendEvmViewModel>(
-        factory = SendEvmModule.Factory(wallet, address, hideAddress)
-    )
     val uiState = viewModel.uiState
 
     val availableBalance = uiState.availableBalance
