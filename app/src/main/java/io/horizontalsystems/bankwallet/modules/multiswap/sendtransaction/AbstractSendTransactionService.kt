@@ -29,6 +29,8 @@ abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasN
     @Composable
     open fun GetNonceSettingsContent(navController: NavController) = Unit
     @Composable
+    open fun GetSlippageSettingsContent(navController: NavController) = Unit
+    @Composable
     open fun GetRecipientSettingsContent(navController: NavController) = Unit
     abstract suspend fun sendTransaction(mevProtectionEnabled: Boolean = false): SendTransactionResult
 

@@ -325,6 +325,9 @@
         android:id="@+id/swapTransactionNonceSettings"
         android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionNonceSettingsFragment" />
     <fragment
+        android:id="@+id/swapTransactionSlippageSettings"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionSlippageSettingsFragment" />
+    <fragment
         android:id="@+id/swapTransactionRecipientSettings"
         android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionRecipientSettingsFragment" />
     <fragment
