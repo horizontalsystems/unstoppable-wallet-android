@@ -87,7 +87,6 @@ private fun TransactionSpeedUpCancelScreen(
         onClickSettings = {
             navController.slideFromBottom(R.id.transactionSpeedUpCancelTransactionSettings)
         },
-        onClickClose = null,
         buttonsSlot = {
             val buttonTitle = viewModel.buttonTitle
             val coroutineScope = rememberCoroutineScope()

@@ -100,7 +100,6 @@ private fun SendEvmConfirmationScreen(
         onClickNonceSettings = {
             navController.slideFromBottom(R.id.sendEvmNonceSettingsFragment)
         },
-        onClickClose = null,
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
             val view = LocalView.current
