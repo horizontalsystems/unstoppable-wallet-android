@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.horizontalsystems.bankwallet.core.App
@@ -115,6 +114,8 @@ class SwapConfirmViewModel(
 
                 initialLoading = initialLoading && transactionState.loading
                 loading = transactionState.loading
+
+                swapDefenseSystemService.setSendable(sendTransactionState.sendable)
 
                 emitState()
 
