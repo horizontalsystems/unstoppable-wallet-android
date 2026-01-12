@@ -81,7 +81,7 @@ class SwapConfirmViewModel(
         viewModelScope.launch {
             fiatServiceIn.stateFlow.collect {
                 fiatAmountIn = it.fiatAmount
-                priceImpactService.setFiatAmountIn(fiatAmountIn)
+                priceImpactService.setAmountIn(fiatAmountIn)
                 emitState()
             }
         }
@@ -89,7 +89,7 @@ class SwapConfirmViewModel(
         viewModelScope.launch {
             fiatServiceOut.stateFlow.collect {
                 fiatAmountOut = it.fiatAmount
-                priceImpactService.setFiatAmountOut(fiatAmountOut)
+                priceImpactService.setAmountOut(fiatAmountOut)
                 emitState()
             }
         }
@@ -156,7 +156,7 @@ class SwapConfirmViewModel(
     private fun handleUpdatedPriceImpactState(priceImpactState: PriceImpactService.State) {
         this.priceImpactState = priceImpactState
 
-        swapDefenseSystemService.setPriceImpact(priceImpactState.fiatPriceImpact, priceImpactState.fiatPriceImpactLevel)
+        swapDefenseSystemService.setPriceImpact(priceImpactState.priceImpact, priceImpactState.priceImpactLevel)
 
         emitState()
     }
@@ -184,8 +184,8 @@ class SwapConfirmViewModel(
             extraFees = sendTransactionState.extraFees,
             cautions = cautions,
             validQuote = sendTransactionState.sendable,
-            priceImpact = priceImpactState.fiatPriceImpact,
-            priceImpactLevel = priceImpactState.fiatPriceImpactLevel,
+            priceImpact = priceImpactState.priceImpact,
+            priceImpactLevel = priceImpactState.priceImpactLevel,
             quoteFields = quoteFields,
             transactionFields = sendTransactionState.fields,
             hasSettings = sendTransactionService.hasSettings,
