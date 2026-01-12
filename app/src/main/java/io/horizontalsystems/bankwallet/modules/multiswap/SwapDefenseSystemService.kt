@@ -17,6 +17,7 @@ class SwapDefenseSystemService(
 ) : ServiceState<SwapDefenseSystemService.State>() {
     private var fiatPriceImpact: BigDecimal? = null
     private var fiatPriceImpactLevel: PriceImpactLevel? = null
+    private var sendable = false
 
     private var systemMessage: DefenseSystemMessage? = null
     private var mevProtectionEnabled = false
@@ -47,11 +48,21 @@ class SwapDefenseSystemService(
         emitState()
     }
 
+    fun setSendable(sendable: Boolean) {
+        this.sendable = sendable
+
+        refresh()
+
+        emitState()
+    }
+
     private fun refresh() {
+        systemMessage = null
+
+        if (!sendable) return
+
         val fiatPriceImpact = fiatPriceImpact
         val fiatPriceImpactLevel = fiatPriceImpactLevel
-
-        systemMessage = null
 
         if (fiatPriceImpact != null && fiatPriceImpactLevel != null) {
             systemMessage = when (fiatPriceImpactLevel) {
