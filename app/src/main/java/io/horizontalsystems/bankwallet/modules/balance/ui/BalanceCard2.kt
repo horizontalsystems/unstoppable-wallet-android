@@ -115,7 +115,7 @@ private fun WalletIcon2(
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 1100,
+                durationMillis = 1500,
                 easing = LinearEasing
             )
         )
@@ -143,7 +143,7 @@ private fun WalletIcon2(
                                 useCenter = false,
                                 style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round)
                             )
-                            rotate(degrees = -90f) {
+                            rotate(degrees = rotate) {
                                 drawArc(
                                     color = leah,
                                     startAngle = 0f,
@@ -157,6 +157,13 @@ private fun WalletIcon2(
 
                     SyncingProgressType.Spinner -> {
                         inset(-1.dp.toPx()) {
+                            drawArc(
+                                color = andy,
+                                startAngle = 0f,
+                                sweepAngle = 360f,
+                                useCenter = false,
+                                style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round)
+                            )
                             rotate(degrees = rotate) {
                                 drawArc(
                                     color = leah,
