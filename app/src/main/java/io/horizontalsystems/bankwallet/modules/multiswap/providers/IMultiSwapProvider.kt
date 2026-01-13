@@ -33,8 +33,7 @@ interface IMultiSwapProvider {
     suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
-        amountIn: BigDecimal,
-        settings: Map<String, Any?>
+        amountIn: BigDecimal
     ): SwapQuote
 
     suspend fun fetchFinalQuote(

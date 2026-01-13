@@ -8,8 +8,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTra
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingDeadline
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Chain
@@ -28,28 +26,15 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
     final override suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
-        amountIn: BigDecimal,
-        settings: Map<String, Any?>
+        amountIn: BigDecimal
     ): SwapQuote {
-        val bestTrade = fetchBestTrade(tokenIn, tokenOut, amountIn, settings)
+        val bestTrade = fetchBestTrade(tokenIn, tokenOut, amountIn, mapOf())
 
         val routerAddress = uniswapV3Kit.routerAddress(bestTrade.chain)
         val allowance = EvmSwapHelper.getAllowance(tokenIn, routerAddress)
 
-        val fields = buildList {
-            bestTrade.settingRecipient.value?.let {
-                add(DataFieldRecipient(it))
-            }
-            add(DataFieldSlippage(bestTrade.settingSlippage.value))
-            if (allowance != null && allowance < amountIn) {
-                add(DataFieldAllowance(allowance, tokenIn))
-            }
-        }
-
         return SwapQuote(
             amountOut = bestTrade.tradeDataV3.tokenAmountOut.decimalAmount!!,
-            fields = fields,
-            settings = listOf(bestTrade.settingRecipient, bestTrade.settingSlippage, bestTrade.settingDeadline),
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,

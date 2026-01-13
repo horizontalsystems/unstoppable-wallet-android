@@ -101,12 +101,11 @@ fun SwapConfirmScreen(navController: NavController) {
     )
 
     val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
-    val settings = remember { swapViewModel.getSettings() }
 
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapConfirmViewModel>(
         viewModelStoreOwner = currentBackStackEntry!!,
-        initializer = SwapConfirmViewModel.init(currentQuote, settings)
+        initializer = SwapConfirmViewModel.init(currentQuote)
     )
 
     val uiState = viewModel.uiState
