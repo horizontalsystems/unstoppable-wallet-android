@@ -13,8 +13,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTra
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
@@ -190,17 +188,13 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        settings: Map<String, Any?>,
     ): SwapQuote {
-        val settingRecipient = SwapSettingRecipient(settings, tokenOut)
-        val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
-
         val bestRoute = quoteSwapBestRoute(
             tokenIn,
             tokenOut,
             amountIn,
-            settingSlippage.value,
-            settingRecipient.value,
+            BigDecimal("1"),
+            null,
             true
         )
 
@@ -217,20 +211,8 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
             EvmSwapHelper.actionApprove(allowance, amountIn, it, tokenIn)
         }
 
-        val fields = buildList {
-            settingRecipient.value?.let {
-                add(DataFieldRecipient(it))
-            }
-            add(DataFieldSlippage(settingSlippage.value))
-            if (allowance != null && allowance < amountIn) {
-                add(DataFieldAllowance(allowance, tokenIn))
-            }
-        }
-
         return SwapQuote(
             amountOut = bestRoute.expectedBuyAmount ?: BigDecimal.ZERO,
-            fields = fields,
-            settings = listOf(settingRecipient, settingSlippage),
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,

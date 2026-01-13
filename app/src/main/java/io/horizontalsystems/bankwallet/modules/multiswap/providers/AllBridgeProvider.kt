@@ -13,8 +13,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTra
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Address
@@ -146,54 +144,29 @@ object AllBridgeProvider : IMultiSwapProvider {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        settings: Map<String, Any?>,
     ): SwapQuote {
-        val settingRecipient = SwapSettingRecipient(settings, tokenOut)
-        var settingSlippage: SwapSettingSlippage? = null
-
         val amountOut = estimateAmountOut(tokenIn, tokenOut, amountIn)
 
         val tokenPairIn = tokenPairs.first { it.token == tokenIn }
         val bridgeAddress = tokenPairIn.abToken.bridgeAddress
 
-        val allowance: BigDecimal?
         val actionRequired: ISwapProviderAction?
 
         if (tokenIn.blockchainType.isEvm) {
             val proxyAddress = getProxyAddress(bridgeAddress)
             val finalAddress = proxyAddress ?: bridgeAddress
 
-            allowance = EvmSwapHelper.getAllowance(tokenIn, finalAddress)
+            val allowance = EvmSwapHelper.getAllowance(tokenIn, finalAddress)
             actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, finalAddress, tokenIn)
         } else if (tokenIn.blockchainType == BlockchainType.Tron) {
-            allowance = SwapHelper.getAllowanceTrc20(tokenIn, bridgeAddress)
+            val allowance = SwapHelper.getAllowanceTrc20(tokenIn, bridgeAddress)
             actionRequired = SwapHelper.actionApproveTrc20(allowance, amountIn, bridgeAddress, tokenIn)
         } else {
-            allowance = null
             actionRequired = null
-        }
-
-        val crosschain = tokenIn.blockchainType != tokenOut.blockchainType
-        if (!crosschain) {
-            settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
-        }
-
-        val fields = buildList {
-            settingRecipient.value?.let {
-                add(DataFieldRecipient(it))
-            }
-            settingSlippage?.value?.let {
-                add(DataFieldSlippage(it))
-            }
-            if (allowance != null && allowance < amountIn) {
-                add(DataFieldAllowance(allowance, tokenIn))
-            }
         }
 
         return SwapQuote(
             amountOut = amountOut,
-            fields = fields,
-            settings = listOfNotNull(settingRecipient, settingSlippage),
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,

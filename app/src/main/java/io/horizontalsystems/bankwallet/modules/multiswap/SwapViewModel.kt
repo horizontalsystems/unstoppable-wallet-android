@@ -209,14 +209,12 @@ class SwapViewModel(
         stat(page = StatPage.Swap, event = StatEvent.SwapSwitchPairs)
     }
 
-    fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
     private fun reQuote() = quoteService.reQuote()
     fun onActionStarted() = quoteService.onActionStarted()
     fun onActionCompleted() = quoteService.onActionCompleted()
 
     fun getCurrentQuote() = quoteState.quote
-    fun getSettings() = quoteService.getSwapSettings()
     fun enableRequoteOnTimeout() {
         requoteOnTimeout = true
         requoteIfTimeout()

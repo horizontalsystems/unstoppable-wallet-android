@@ -10,8 +10,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTra
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.core.scaleUp
@@ -55,14 +53,10 @@ object OneInchProvider : IMultiSwapProvider {
     override suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
-        amountIn: BigDecimal,
-        settings: Map<String, Any?>
+        amountIn: BigDecimal
     ): SwapQuote {
         val blockchainType = tokenIn.blockchainType
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
-
-        val settingRecipient = SwapSettingRecipient(settings, tokenOut)
-        val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
 
         val quote = oneInchKit.getQuoteAsync(
             chain = evmBlockchainHelper.chain,
@@ -76,21 +70,10 @@ object OneInchProvider : IMultiSwapProvider {
 
         val routerAddress = OneInchKit.routerAddress(evmBlockchainHelper.chain)
         val allowance = EvmSwapHelper.getAllowance(tokenIn, routerAddress)
-        val fields = buildList {
-            settingRecipient.value?.let {
-                add(DataFieldRecipient(it))
-            }
-            add(DataFieldSlippage(settingSlippage.value))
-            if (allowance != null && allowance < amountIn) {
-                add(DataFieldAllowance(allowance, tokenIn))
-            }
-        }
 
         val amountOut = quote.toTokenAmount.toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
         return SwapQuote(
             amountOut = amountOut,
-            fields = fields,
-            settings = listOf(settingRecipient, settingSlippage),
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,

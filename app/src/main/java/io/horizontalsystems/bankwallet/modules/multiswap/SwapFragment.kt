@@ -58,7 +58,6 @@ import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -153,11 +152,6 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
-        onClickProviderSettings = {
-            navController.slideFromRight(R.id.swapSettings)
-
-            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapSettings))
-        },
         onClickNext = {
             navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
                 if (it.success) {
@@ -190,7 +184,6 @@ private fun SwapScreenInner(
     onEnterFiatAmount: (BigDecimal?) -> Unit,
     onEnterAmountPercentage: (Int) -> Unit,
     onClickProvider: () -> Unit,
-    onClickProviderSettings: () -> Unit,
     onClickNext: () -> Unit,
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,

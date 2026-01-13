@@ -32,7 +32,6 @@ import kotlin.coroutines.cancellation.CancellationException
 class SwapConfirmViewModel(
     private val swapProvider: IMultiSwapProvider,
     private val swapQuote: SwapQuote,
-    private val swapSettings: Map<String, Any?>,
     private val currencyManager: CurrencyManager,
     private val fiatServiceIn: FiatService,
     private val fiatServiceOut: FiatService,
@@ -224,7 +223,7 @@ class SwapConfirmViewModel(
                     tokenIn,
                     tokenOut,
                     amountIn,
-                    swapSettings,
+                    mapOf(),
                     sendTransactionSettings,
                     swapQuote
                 )
@@ -268,13 +267,12 @@ class SwapConfirmViewModel(
     }
 
     companion object {
-        fun init(quote: SwapProviderQuote, settings: Map<String, Any?>): CreationExtras.() -> SwapConfirmViewModel = {
+        fun init(quote: SwapProviderQuote): CreationExtras.() -> SwapConfirmViewModel = {
             val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
 
             SwapConfirmViewModel(
                 quote.provider,
                 quote.swapQuote,
-                settings,
                 App.currencyManager,
                 FiatService(App.marketKit),
                 FiatService(App.marketKit),

@@ -11,6 +11,5 @@ data class SwapProviderQuote(
     val tokenOut by swapQuote::tokenOut
     val amountIn by swapQuote::amountIn
     val amountOut by swapQuote::amountOut
-    val fields by swapQuote::fields
     val actionRequired by swapQuote::actionRequired
 }

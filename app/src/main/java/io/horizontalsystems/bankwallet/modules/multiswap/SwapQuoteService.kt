@@ -70,7 +70,6 @@ class SwapQuoteService {
 
     private var coroutineScope = CoroutineScope(Dispatchers.Default)
     private var quotingJob: Job? = null
-    private var settings: Map<String, Any?> = mapOf()
 
     fun start() {
         coroutineScope.launch {
@@ -169,7 +168,7 @@ class SwapQuoteService {
                 async {
                     try {
                         withTimeout(5000) {
-                            val quote = provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
+                            val quote = provider.fetchQuote(tokenIn, tokenOut, amountIn)
                             SwapProviderQuote(provider = provider, swapQuote = quote)
                         }
                     } catch (e: Throwable) {
@@ -241,12 +240,6 @@ class SwapQuoteService {
         runQuotation(silent = true)
     }
 
-    fun setSwapSettings(settings: Map<String, Any?>) {
-        this.settings = settings
-
-        runQuotation()
-    }
-
     fun onActionStarted() {
         preferredProvider = quote?.provider
     }
@@ -254,8 +247,6 @@ class SwapQuoteService {
     fun onActionCompleted() {
         runQuotation()
     }
-
-    fun getSwapSettings() = settings
 
     data class State(
         val amountIn: BigDecimal?,

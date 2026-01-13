@@ -13,8 +13,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTra
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
@@ -122,14 +120,9 @@ abstract class BaseThorChainProvider(
     override suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
-        amountIn: BigDecimal,
-        settings: Map<String, Any?>,
+        amountIn: BigDecimal
     ): SwapQuote {
-        val settingRecipient = SwapSettingRecipient(settings, tokenOut)
-
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, settingRecipient.value)
-
-        val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, null)
 
         val routerAddress = quoteSwap.router?.let { router ->
             try {
@@ -144,20 +137,8 @@ abstract class BaseThorChainProvider(
             EvmSwapHelper.actionApprove(allowance, amountIn, it, tokenIn)
         }
 
-        val fields = buildList {
-            settingRecipient.value?.let {
-                add(DataFieldRecipient(it))
-            }
-            add(DataFieldSlippage(settingSlippage.value))
-            if (allowance != null && allowance < amountIn) {
-                add(DataFieldAllowance(allowance, tokenIn))
-            }
-        }
-
         return SwapQuote(
             amountOut = quoteSwap.expected_amount_out.movePointLeft(8),
-            fields = fields,
-            settings = listOf(settingRecipient, settingSlippage),
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
