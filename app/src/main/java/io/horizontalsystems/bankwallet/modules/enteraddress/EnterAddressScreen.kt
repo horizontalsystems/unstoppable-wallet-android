@@ -4,12 +4,21 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -24,29 +33,101 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputAddress
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
 import io.horizontalsystems.marketkit.models.Token
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EnterAddress(
+fun EnterAddressScreen(
+    navController: NavController,
+    token: Token,
+    title: String,
+    buttonTitle: String,
+    allowNull: Boolean,
+    initialAddress: String?,
+    onResult: (address: Address?, risky: Boolean) -> Unit
+) {
+    var hasValidationError by remember { mutableStateOf(false) }
+    var riskyAddress by remember { mutableStateOf(false) }
+    var address by remember { mutableStateOf<Address?>(null) }
+    var validationInProgress by remember { mutableStateOf(false) }
+
+    HSScaffold(
+        title = title,
+        onBack = navController::popBackStack,
+    ) {
+        Column(
+            modifier = Modifier.windowInsetsPadding(WindowInsets.ime)
+        ) {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .weight(1f)
+                    .fillMaxSize()
+            ) {
+                EnterAddress(
+                    modifier = Modifier,
+                    navController = navController,
+                    token = token,
+                    initialAddress = initialAddress,
+                    onValueChange = {
+                        address = it
+                    },
+                    onValidationError = { error ->
+                        hasValidationError = error != null
+                    },
+                    onRiskyAddress = {
+                        riskyAddress = it
+                    },
+                    onValidationInProgress = {
+                        validationInProgress = it
+                    }
+                )
+
+                VSpacer(32.dp)
+            }
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
+                    title = if (hasValidationError) {
+                        stringResource(R.string.Send_Address_Error_InvalidAddress)
+                    } else {
+                        buttonTitle
+                    },
+                    onClick = {
+                        onResult.invoke(address, riskyAddress)
+                    },
+                    enabled = (allowNull || address != null) && !validationInProgress && !hasValidationError
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun EnterAddress(
     modifier: Modifier = Modifier,
     navController: NavController,
     token: Token,
-    initialAddress: String? = null,
-    onValueChange: ((Address?) -> Unit)? = null,
-    onValidationError: ((Throwable?) -> Unit)? = null,
-    onRiskyAddress: ((Boolean) -> Unit)? = null,
-    onValidationInProgress: ((Boolean) -> Unit)? = null,
+    initialAddress: String?,
+    onValueChange: ((Address?) -> Unit)?,
+    onValidationError: ((Throwable?) -> Unit)?,
+    onRiskyAddress: ((Boolean) -> Unit)?,
+    onValidationInProgress: ((Boolean) -> Unit)?,
 ) {
     val viewModel = viewModel<EnterAddressViewModel>(
         factory = EnterAddressViewModel.Factory(
