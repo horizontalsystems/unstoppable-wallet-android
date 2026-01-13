@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
@@ -40,8 +41,9 @@ interface IMultiSwapProvider {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
-        swapQuote: SwapQuote
+        swapQuote: SwapQuote,
+        recipient: Address?,
+        slippage: BigDecimal
     ): SwapFinalQuote
 }

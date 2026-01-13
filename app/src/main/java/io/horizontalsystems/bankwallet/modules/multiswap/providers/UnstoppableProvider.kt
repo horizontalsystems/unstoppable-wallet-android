@@ -11,8 +11,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
@@ -253,20 +251,17 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
         swapQuote: SwapQuote,
+        recipient: io.horizontalsystems.bankwallet.entities.Address?,
+        slippage: BigDecimal,
     ): SwapFinalQuote {
-        val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
-        val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
-        val slippage = settingSlippage.value
-
         val bestRoute = quoteSwapBestRoute(
             tokenIn,
             tokenOut,
             amountIn,
             slippage,
-            settingRecipient.value,
+            recipient,
             false
         )
 
@@ -275,7 +270,7 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
         val amountOutMin = amountOut.subtract(amountOut.multiply(slippage.movePointLeft(2)))
 
         val fields = buildList {
-            settingRecipient.value?.let {
+            recipient?.let {
                 add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
             }
             add(DataFieldSlippage(slippage))
