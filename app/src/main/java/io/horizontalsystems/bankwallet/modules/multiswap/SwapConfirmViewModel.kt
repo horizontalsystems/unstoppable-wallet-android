@@ -49,6 +49,7 @@ class SwapConfirmViewModel(
     private val amountIn = swapQuote.amountIn
     private var fiatAmountIn: BigDecimal? = null
     private var recipient: Address? = null
+    private var slippage: BigDecimal = BigDecimal.ONE
 
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountOutMin: BigDecimal? = null
@@ -195,6 +196,7 @@ class SwapConfirmViewModel(
             hasNonceSettings = sendTransactionService.hasNonceSettings,
             swapDefenseSystemMessage = swapDefenseState.systemMessage,
             recipient = recipient,
+            slippage = slippage,
         )
     }
 
@@ -259,6 +261,12 @@ class SwapConfirmViewModel(
         refresh()
     }
 
+    fun setSlippage(slippage: BigDecimal) {
+        this.slippage = slippage
+
+        refresh()
+    }
+
     companion object {
         fun init(quote: SwapProviderQuote, settings: Map<String, Any?>): CreationExtras.() -> SwapConfirmViewModel = {
             val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
@@ -305,6 +313,7 @@ data class SwapConfirmUiState(
     val hasNonceSettings: Boolean,
     val swapDefenseSystemMessage: DefenseSystemMessage?,
     val recipient: Address?,
+    val slippage: BigDecimal,
 ) {
     val totalFee by lazy {
         val networkFiatValue = networkFee?.secondary  ?: return@lazy null

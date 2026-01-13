@@ -28,8 +28,6 @@ abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasN
     open fun GetSettingsContent(navController: NavController) = Unit
     @Composable
     open fun GetNonceSettingsContent(navController: NavController) = Unit
-    @Composable
-    open fun GetSlippageSettingsContent(navController: NavController) = Unit
     abstract suspend fun sendTransaction(mevProtectionEnabled: Boolean = false): SendTransactionResult
 
     fun refreshUuid() {
