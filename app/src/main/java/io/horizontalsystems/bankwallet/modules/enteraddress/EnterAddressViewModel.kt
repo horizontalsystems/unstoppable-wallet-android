@@ -42,10 +42,11 @@ class EnterAddressViewModel(
     private val domainParser: AddressParserChain,
     private val addressValidator: EnterAddressValidator,
     private val addressCheckManager: AddressCheckManager,
+    private val allowNull: Boolean,
 ) : ViewModelUiState<EnterAddressUiState>() {
     private var address: Address? = null
     private val canBeSendToAddress: Boolean
-        get() = address != null && !addressValidationInProgress && addressValidationError == null
+        get() = (allowNull || address != null) && !addressValidationInProgress && addressValidationError == null
     private val recentAddress: String? = recentAddressManager.getRecentAddress(token.blockchainType)
     private val contactNameAddresses =
         contactsRepository.getContactAddressesByBlockchain(token.blockchainType)
@@ -196,6 +197,7 @@ class EnterAddressViewModel(
     class Factory(
         private val token: Token,
         private val address: String?,
+        private val allowNull: Boolean,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -231,6 +233,7 @@ class EnterAddressViewModel(
                 addressParserChain,
                 addressValidator,
                 addressCheckManager,
+                allowNull
             ) as T
         }
     }
@@ -246,7 +249,9 @@ data class EnterAddressUiState(
     val addressValidationError: Throwable?,
     val checkResults: Map<AddressCheckType, AddressCheckData>,
     val addressCheckEnabled: Boolean,
-)
+) {
+    val risky = checkResults.any { result -> result.value.checkResult == AddressCheckResult.Detected }
+}
 
 data class AddressCheckData(
     val inProgress: Boolean,

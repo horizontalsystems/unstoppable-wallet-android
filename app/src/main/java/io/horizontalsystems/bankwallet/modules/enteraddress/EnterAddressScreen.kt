@@ -14,11 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -59,10 +54,18 @@ fun EnterAddressScreen(
     initialAddress: String?,
     onResult: (address: Address?, risky: Boolean) -> Unit
 ) {
-    var hasValidationError by remember { mutableStateOf(false) }
-    var riskyAddress by remember { mutableStateOf(false) }
-    var address by remember { mutableStateOf<Address?>(null) }
-    var validationInProgress by remember { mutableStateOf(false) }
+    val viewModel = viewModel<EnterAddressViewModel>(
+        factory = EnterAddressViewModel.Factory(
+            token = token,
+            address = initialAddress,
+            allowNull = allowNull,
+        )
+    )
+    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
+        factory = AddressParserModule.Factory(token = token, prefilledAmount = null)
+    )
+
+    val uiState = viewModel.uiState
 
     HSScaffold(
         title = title,
@@ -73,28 +76,37 @@ fun EnterAddressScreen(
         ) {
             Column(
                 modifier = Modifier
-                    .verticalScroll(rememberScrollState())
                     .weight(1f)
+                    .verticalScroll(rememberScrollState())
                     .fillMaxSize()
             ) {
-                EnterAddress(
-                    modifier = Modifier,
-                    navController = navController,
-                    token = token,
-                    initialAddress = initialAddress,
-                    onValueChange = {
-                        address = it
-                    },
-                    onValidationError = { error ->
-                        hasValidationError = error != null
-                    },
-                    onRiskyAddress = {
-                        riskyAddress = it
-                    },
-                    onValidationInProgress = {
-                        validationInProgress = it
+                FormsInputAddress(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    value = uiState.value,
+                    hint = stringResource(id = R.string.Send_Hint_Address),
+                    state = uiState.inputState,
+                    showStateIcon = false,
+                    textPreprocessor = paymentAddressViewModel,
+                ) {
+                    viewModel.onEnterAddress(it)
+                }
+
+                if (uiState.value.isBlank()) {
+                    AddressSuggestions(uiState.contacts) {
+                        viewModel.onEnterAddress(it)
                     }
-                )
+                } else if (uiState.addressCheckEnabled || uiState.addressValidationError != null) {
+                    AddressDefenseMessage(
+                        uiState.addressValidationInProgress,
+                        uiState.addressValidationError,
+                        uiState.checkResults,
+                    ) {
+                        navController.slideFromBottom(
+                            R.id.defenseSystemFeatureDialog,
+                            DefenseSystemFeatureDialog.Input(PremiumFeature.SecureSendFeature, true)
+                        )
+                    }
+                }
 
                 VSpacer(32.dp)
             }
@@ -103,15 +115,14 @@ fun EnterAddressScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp),
-                    title = if (hasValidationError) {
+                    title = if (uiState.addressValidationError != null)
                         stringResource(R.string.Send_Address_Error_InvalidAddress)
-                    } else {
-                        buttonTitle
-                    },
+                    else
+                        buttonTitle,
                     onClick = {
-                        onResult.invoke(address, riskyAddress)
+                        onResult.invoke(uiState.address, uiState.risky)
                     },
-                    enabled = (allowNull || address != null) && !validationInProgress && !hasValidationError
+                    enabled = uiState.canBeSendToAddress
                 )
             }
         }
@@ -119,77 +130,7 @@ fun EnterAddressScreen(
 }
 
 @Composable
-private fun EnterAddress(
-    modifier: Modifier = Modifier,
-    navController: NavController,
-    token: Token,
-    initialAddress: String?,
-    onValueChange: ((Address?) -> Unit)?,
-    onValidationError: ((Throwable?) -> Unit)?,
-    onRiskyAddress: ((Boolean) -> Unit)?,
-    onValidationInProgress: ((Boolean) -> Unit)?,
-) {
-    val viewModel = viewModel<EnterAddressViewModel>(
-        factory = EnterAddressViewModel.Factory(
-            token = token,
-            address = initialAddress,
-        )
-    )
-
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(token, null)
-    )
-
-    val uiState = viewModel.uiState
-
-    LaunchedEffect(uiState.address) {
-        onValueChange?.invoke(uiState.address)
-    }
-
-    LaunchedEffect(uiState.addressValidationError) {
-        onValidationError?.invoke(uiState.addressValidationError)
-    }
-
-    LaunchedEffect(uiState.checkResults) {
-        val riskyAddress = uiState.checkResults.any { result -> result.value.checkResult == AddressCheckResult.Detected }
-        onRiskyAddress?.invoke(riskyAddress)
-    }
-
-    LaunchedEffect(uiState.addressValidationInProgress) {
-        onValidationInProgress?.invoke(uiState.addressValidationInProgress)
-    }
-
-    FormsInputAddress(
-        modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-        value = uiState.value,
-        hint = stringResource(id = R.string.Send_Hint_Address),
-        state = uiState.inputState,
-        showStateIcon = false,
-        textPreprocessor = paymentAddressViewModel,
-    ) {
-        viewModel.onEnterAddress(it)
-    }
-
-    if (uiState.value.isBlank()) {
-        AddressSuggestions(uiState.contacts) {
-            viewModel.onEnterAddress(it)
-        }
-    } else if (uiState.addressCheckEnabled || uiState.addressValidationError != null) {
-        AddressDefenseMessage(
-            uiState.addressValidationInProgress,
-            uiState.addressValidationError,
-            uiState.checkResults,
-        ) {
-            navController.slideFromBottom(
-                R.id.defenseSystemFeatureDialog,
-                DefenseSystemFeatureDialog.Input(PremiumFeature.SecureSendFeature, true)
-            )
-        }
-    }
-}
-
-@Composable
-fun AddressDefenseMessage(
+private fun AddressDefenseMessage(
     addressValidationInProgress: Boolean,
     addressValidationError: Throwable?,
     checkResults: Map<AddressCheckType, AddressCheckData>,
