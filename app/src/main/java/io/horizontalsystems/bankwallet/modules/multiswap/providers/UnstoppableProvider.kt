@@ -368,7 +368,7 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                     amount = amountIn,
                     recommendedGasRate = null,
                     minimumSendAmount = null,
-                    changeToFirstInput = true,
+                    changeToFirstInput = false,
                     utxoFilters = UtxoFilters(),
                     feesMap = mapOf()
                 )
