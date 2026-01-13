@@ -223,9 +223,10 @@ class SwapConfirmViewModel(
                     tokenIn,
                     tokenOut,
                     amountIn,
-                    mapOf(),
                     sendTransactionSettings,
-                    swapQuote
+                    swapQuote,
+                    recipient,
+                    slippage
                 )
 
                 ensureActive()

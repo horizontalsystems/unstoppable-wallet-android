@@ -8,8 +8,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.core.scaleUp
@@ -91,9 +89,10 @@ object OneInchProvider : IMultiSwapProvider {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
         swapQuote: SwapQuote,
+        recipient: io.horizontalsystems.bankwallet.entities.Address?,
+        slippage: BigDecimal,
     ): SwapFinalQuote {
         check(sendTransactionSettings is SendTransactionSettings.Evm)
         checkNotNull(sendTransactionSettings.gasPriceInfo)
@@ -103,10 +102,6 @@ object OneInchProvider : IMultiSwapProvider {
 
         val gasPrice = sendTransactionSettings.gasPriceInfo.gasPrice
 
-        val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
-        val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
-        val slippage = settingSlippage.value
-
         val swap = oneInchKit.getSwapAsync(
             chain = evmBlockchainHelper.chain,
             receiveAddress = sendTransactionSettings.receiveAddress,
@@ -114,7 +109,7 @@ object OneInchProvider : IMultiSwapProvider {
             toToken = getTokenAddress(tokenOut),
             amount = amountIn.scaleUp(tokenIn.decimals),
             slippagePercentage = slippage.toFloat(),
-            recipient = settingRecipient.value?.hex?.let { Address(it) },
+            recipient = recipient?.hex?.let { Address(it) },
             gasPrice = gasPrice,
             referrer = PARTNER_ADDRESS,
             fee = PARTNER_FEE
@@ -126,10 +121,10 @@ object OneInchProvider : IMultiSwapProvider {
         val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
 
         val fields = buildList {
-            settingRecipient.value?.let {
+            recipient?.let {
                 add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
             }
-            add(DataFieldSlippage(settingSlippage.value))
+            add(DataFieldSlippage(slippage))
         }
 
         return SwapFinalQuote(

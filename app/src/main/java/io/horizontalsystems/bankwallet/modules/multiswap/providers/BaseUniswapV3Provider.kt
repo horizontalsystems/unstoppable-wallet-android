@@ -1,13 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.multiswap.EvmBlockchainHelper
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingDeadline
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.getEthereumKitAddress
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Chain
@@ -28,7 +27,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal
     ): SwapQuote {
-        val bestTrade = fetchBestTrade(tokenIn, tokenOut, amountIn, mapOf())
+        val bestTrade = fetchBestTrade(tokenIn, tokenOut, amountIn, null, TradeOptions.defaultAllowedSlippage)
 
         val routerAddress = uniswapV3Kit.routerAddress(bestTrade.chain)
         val allowance = EvmSwapHelper.getAllowance(tokenIn, routerAddress)
@@ -46,9 +45,10 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
         swapQuote: SwapQuote,
+        recipient: Address?,
+        slippage: BigDecimal,
     ): SwapFinalQuote {
         check(sendTransactionSettings is SendTransactionSettings.Evm)
 
@@ -56,7 +56,8 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             tokenIn,
             tokenOut,
             amountIn,
-            swapSettings
+            recipient,
+            slippage
         )
 
         val transactionData = uniswapV3Kit.transactionData(
@@ -65,15 +66,14 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             bestTrade.tradeDataV3
         )
 
-        val slippage = bestTrade.settingSlippage.value
         val amountOut = bestTrade.tradeDataV3.tokenAmountOut.decimalAmount!!
         val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
 
         val fields = buildList {
-            bestTrade.settingRecipient.value?.let {
+            recipient?.let {
                 add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
             }
-            add(DataFieldSlippage(bestTrade.settingSlippage.value))
+            add(DataFieldSlippage(slippage))
         }
 
         return SwapFinalQuote(
@@ -92,21 +92,18 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        settings: Map<String, Any?>,
+        recipient: Address?,
+        slippage: BigDecimal,
     ): UniswapV3BestTrade {
         val blockchainType = tokenIn.blockchainType
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
         val chain = evmBlockchainHelper.chain
         val rpcSourceHttp = evmBlockchainHelper.getRpcSourceHttp()
 
-        val settingRecipient = SwapSettingRecipient(settings, tokenOut)
-        val settingSlippage = SwapSettingSlippage(settings, TradeOptions.defaultAllowedSlippage)
-        val settingDeadline = SwapSettingDeadline(settings, TradeOptions.defaultTtl)
-
         val tradeOptions = TradeOptions(
-            allowedSlippagePercent = settingSlippage.value,
-            ttl = settingDeadline.valueOrDefault(),
-            recipient = settingRecipient.getEthereumKitAddress(),
+            allowedSlippagePercent = slippage,
+            ttl = TradeOptions.defaultTtl,
+            recipient = recipient.getEthereumKitAddress(),
         )
 
         val tradeDataV3 = uniswapV3Kit.bestTradeExactIn(
@@ -118,13 +115,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             tradeOptions,
         )
 
-        return UniswapV3BestTrade(
-            settingRecipient,
-            settingSlippage,
-            settingDeadline,
-            tradeDataV3,
-            chain
-        )
+        return UniswapV3BestTrade(tradeDataV3, chain)
     }
 
     @Throws
@@ -148,9 +139,6 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
 }
 
 private data class UniswapV3BestTrade(
-    val settingRecipient: SwapSettingRecipient,
-    val settingSlippage: SwapSettingSlippage,
-    val settingDeadline: SwapSettingDeadline,
     val tradeDataV3: TradeDataV3,
     val chain: Chain
 )

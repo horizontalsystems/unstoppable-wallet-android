@@ -11,8 +11,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThornodeAPI.R
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
@@ -174,22 +172,19 @@ abstract class BaseThorChainProvider(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
         swapQuote: SwapQuote,
+        recipient: io.horizontalsystems.bankwallet.entities.Address?,
+        slippage: BigDecimal,
     ): SwapFinalQuote {
-        val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
-        val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
-        val slippage = settingSlippage.value
-
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, settingRecipient.value)
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, recipient)
 
         val amountOut = quoteSwap.expected_amount_out.movePointLeft(8)
 
         val amountOutMin = amountOut.subtract(amountOut.multiply(slippage.movePointLeft(2)))
 
         val fields = buildList {
-            settingRecipient.value?.let {
+            recipient?.let {
                 add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
             }
             add(DataFieldSlippage(slippage))

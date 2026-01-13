@@ -11,8 +11,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAct
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.AllBridgeAPI.Response
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Address
@@ -230,23 +228,17 @@ object AllBridgeProvider : IMultiSwapProvider {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
         swapQuote: SwapQuote,
+        recipient: io.horizontalsystems.bankwallet.entities.Address?,
+        slippage: BigDecimal,
     ): SwapFinalQuote {
-        val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
-        var settingSlippage: SwapSettingSlippage? = null
-
-        val crosschain = tokenIn.blockchainType != tokenOut.blockchainType
-        if (!crosschain) {
-            settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
-        }
-
-        val slippage = settingSlippage?.value
-
         val amountOut = estimateAmountOut(tokenIn, tokenOut, amountIn)
 
-        val amountOutMin = slippage?.let {
+        val crosschain = tokenIn.blockchainType != tokenOut.blockchainType
+        val amountOutMin = if (crosschain) {
+            null
+        } else {
             amountOut - amountOut / BigDecimal(100) * slippage
         }
 
@@ -255,16 +247,14 @@ object AllBridgeProvider : IMultiSwapProvider {
             tokenOut,
             amountIn,
             amountOutMin ?: amountOut,
-            settingRecipient.value
+            recipient
         )
 
         val fields = buildList {
-            settingRecipient.value?.let {
+            recipient?.let {
                 add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
             }
-            settingSlippage?.value?.let {
-                add(DataFieldSlippage(it))
-            }
+            add(DataFieldSlippage(slippage))
         }
 
         return SwapFinalQuote(
