@@ -56,6 +56,7 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
+import java.util.Base64
 import java.util.regex.Pattern
 import kotlin.math.max
 
@@ -316,6 +317,50 @@ class ZcashAdapter(
         val transferProposal = transferProposal(amount, address, memo)
         send(transferProposal)
     }
+
+    suspend fun createProposal(outputs: List<TransferOutput>): Proposal {
+        val paymentUri = createPaymentUri(outputs)
+        return synchronizer.proposeFulfillingPaymentUri(
+            zcashAccount,
+            paymentUri,
+        )
+    }
+
+    private fun createPaymentUri(outputs: List<TransferOutput>): String {
+        val queryParams = mutableListOf<String>()
+
+        outputs.forEachIndexed { index, output ->
+            if (index == 0) {
+                queryParams.add("address=${output.address}")
+                queryParams.add("amount=${output.amount.toPlainString()}")
+                if (output.memo.isNotEmpty()) {
+                    queryParams.add("memo=${encodeBase64Url(output.memo)}")
+                }
+            } else {
+                queryParams.add("address.$index=${output.address}")
+                queryParams.add("amount.$index=${output.amount.toPlainString()}")
+                if (output.memo.isNotEmpty()) {
+                    queryParams.add("memo.$index=${encodeBase64Url(output.memo)}")
+                }
+            }
+        }
+
+        return "zcash:?${queryParams.joinToString("&")}"
+    }
+
+    private fun encodeBase64Url(string: String): String {
+        val encoded = Base64.getEncoder().encodeToString(string.toByteArray(Charsets.UTF_8))
+        return encoded
+            .replace("+", "-")
+            .replace("/", "_")
+            .replace("=", "")
+    }
+
+    data class TransferOutput(
+        val amount: BigDecimal,
+        val address: String,
+        val memo: String = ""
+    )
 
     // Subscribe to a synchronizer on its own scope and begin responding to events
     private fun subscribe(synchronizer: SdkSynchronizer) {
