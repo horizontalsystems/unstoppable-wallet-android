@@ -49,6 +49,7 @@ import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionRecipientSettingsFragment
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionSlippageSettingsFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog.Input
@@ -132,7 +133,12 @@ fun SwapConfirmScreen(navController: NavController) {
         onClickFeeSettings = onClickSettings,
         onClickNonceSettings = onClickNonceSettings,
         onClickSlippageSettings = {
-            navController.slideFromRight(R.id.swapTransactionSlippageSettings)
+            navController.slideFromRightForResult<SwapTransactionSlippageSettingsFragment.Result>(
+                R.id.swapTransactionSlippageSettings,
+                SwapTransactionSlippageSettingsFragment.Input(uiState.slippage)
+            ) {
+                viewModel.setSlippage(it.slippage)
+            }
         },
         onClickRecipientSettings = {
             navController.slideFromRightForResult<SwapTransactionRecipientSettingsFragment.Result>(
