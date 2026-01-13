@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
@@ -47,6 +48,7 @@ class SwapConfirmViewModel(
     private val tokenOut = swapQuote.tokenOut
     private val amountIn = swapQuote.amountIn
     private var fiatAmountIn: BigDecimal? = null
+    private var recipient: Address? = null
 
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountOutMin: BigDecimal? = null
@@ -192,6 +194,7 @@ class SwapConfirmViewModel(
             hasSettings = sendTransactionService.hasSettings,
             hasNonceSettings = sendTransactionService.hasNonceSettings,
             swapDefenseSystemMessage = swapDefenseState.systemMessage,
+            recipient = recipient,
         )
     }
 
@@ -215,7 +218,14 @@ class SwapConfirmViewModel(
         fetchFinalQuoteJob?.cancel()
         fetchFinalQuoteJob = viewModelScope.launch(Dispatchers.Default) {
             try {
-                val finalQuote = swapProvider.fetchFinalQuote(tokenIn, tokenOut, amountIn, swapSettings, sendTransactionSettings, swapQuote)
+                val finalQuote = swapProvider.fetchFinalQuote(
+                    tokenIn,
+                    tokenOut,
+                    amountIn,
+                    swapSettings,
+                    sendTransactionSettings,
+                    swapQuote
+                )
 
                 ensureActive()
 
@@ -241,6 +251,12 @@ class SwapConfirmViewModel(
         stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
 
         sendTransactionService.sendTransaction(swapDefenseState.mevProtectionEnabled)
+    }
+
+    fun setRecipient(recipient: Address?) {
+        this.recipient = recipient
+
+        refresh()
     }
 
     companion object {
@@ -288,6 +304,7 @@ data class SwapConfirmUiState(
     val hasSettings: Boolean,
     val hasNonceSettings: Boolean,
     val swapDefenseSystemMessage: DefenseSystemMessage?,
+    val recipient: Address?,
 ) {
     val totalFee by lazy {
         val networkFiatValue = networkFee?.secondary  ?: return@lazy null

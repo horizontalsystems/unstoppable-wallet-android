@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
@@ -47,6 +48,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionRecipientSettingsFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog.Input
@@ -116,21 +118,9 @@ fun SwapConfirmScreen(navController: NavController) {
         null
     }
 
-    val onClickSlippageSettings = {
-        navController.slideFromRight(R.id.swapTransactionSlippageSettings)
-    }
-
     val onClickNonceSettings = if (uiState.hasNonceSettings) {
         {
             navController.slideFromRight(R.id.swapTransactionNonceSettings)
-        }
-    } else {
-        null
-    }
-
-    val onClickRecipientSettings = if (true) {
-        {
-            navController.slideFromRight(R.id.swapTransactionRecipientSettings)
         }
     } else {
         null
@@ -140,9 +130,18 @@ fun SwapConfirmScreen(navController: NavController) {
         initialLoading = uiState.initialLoading,
         onClickBack = navController::popBackStack,
         onClickFeeSettings = onClickSettings,
-        onClickSlippageSettings = onClickSlippageSettings,
         onClickNonceSettings = onClickNonceSettings,
-        onClickRecipientSettings = onClickRecipientSettings,
+        onClickSlippageSettings = {
+            navController.slideFromRight(R.id.swapTransactionSlippageSettings)
+        },
+        onClickRecipientSettings = {
+            navController.slideFromRightForResult<SwapTransactionRecipientSettingsFragment.Result>(
+                R.id.swapTransactionRecipientSettings,
+                SwapTransactionRecipientSettingsFragment.Input(uiState.tokenIn, uiState.recipient)
+            ) {
+                viewModel.setRecipient(it.address)
+            }
+        },
         defenseSlot = {
             uiState.swapDefenseSystemMessage?.let { message ->
                 val icon = when (message.level) {

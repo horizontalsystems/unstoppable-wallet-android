@@ -98,6 +98,7 @@ class EnterAddressViewModel(
 
         if (value.isBlank()) {
             this.value = ""
+            addressValidationInProgress = false
             emitState()
         } else {
             try {
