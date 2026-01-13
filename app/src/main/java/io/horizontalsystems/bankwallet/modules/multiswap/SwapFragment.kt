@@ -314,7 +314,8 @@ private fun SwapScreenInner(
                             onClick = {
                                 onActionStarted.invoke()
                                 action.execute(navController, onActionCompleted)
-                            }
+                            },
+                            loadingIndicator = action.inProgress
                         )
                     }
 
