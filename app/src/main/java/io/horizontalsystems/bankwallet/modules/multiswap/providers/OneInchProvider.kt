@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.core.scaleUp
 import io.horizontalsystems.ethereumkit.models.Address
@@ -122,7 +122,7 @@ object OneInchProvider : IMultiSwapProvider {
 
         val fields = buildList {
             recipient?.let {
-                add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
+                add(DataFieldRecipient(it))
             }
             add(DataFieldSlippage(slippage))
         }
