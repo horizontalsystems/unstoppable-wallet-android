@@ -30,7 +30,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
-class SwapTransactionSlippageSettingsFragment : BaseComposeFragment() {
+class SwapSettingsSlippageFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
@@ -78,7 +78,7 @@ fun SwapSlippageSettingsScreen(
                     enabled = uiState.applyEnabled,
                     onClick = {
                         navController.setNavigationResultX(
-                            SwapTransactionSlippageSettingsFragment.Result(uiState.slippage)
+                            SwapSettingsSlippageFragment.Result(uiState.slippage)
                         )
                         navController.popBackStack()
                     }

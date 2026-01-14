@@ -48,8 +48,8 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionRecipientSettingsFragment
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionSlippageSettingsFragment
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsRecipientFragment
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsSlippageFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog.Input
@@ -132,17 +132,17 @@ fun SwapConfirmScreen(navController: NavController) {
         onClickFeeSettings = onClickSettings,
         onClickNonceSettings = onClickNonceSettings,
         onClickSlippageSettings = {
-            navController.slideFromRightForResult<SwapTransactionSlippageSettingsFragment.Result>(
-                R.id.swapTransactionSlippageSettings,
-                SwapTransactionSlippageSettingsFragment.Input(uiState.slippage)
+            navController.slideFromRightForResult<SwapSettingsSlippageFragment.Result>(
+                R.id.swapSettingsSlippage,
+                SwapSettingsSlippageFragment.Input(uiState.slippage)
             ) {
                 viewModel.setSlippage(it.slippage)
             }
         },
         onClickRecipientSettings = {
-            navController.slideFromRightForResult<SwapTransactionRecipientSettingsFragment.Result>(
-                R.id.swapTransactionRecipientSettings,
-                SwapTransactionRecipientSettingsFragment.Input(uiState.tokenIn, uiState.recipient)
+            navController.slideFromRightForResult<SwapSettingsRecipientFragment.Result>(
+                R.id.swapSettingsRecipient,
+                SwapSettingsRecipientFragment.Input(uiState.tokenIn, uiState.recipient)
             ) {
                 viewModel.setRecipient(it.address)
             }

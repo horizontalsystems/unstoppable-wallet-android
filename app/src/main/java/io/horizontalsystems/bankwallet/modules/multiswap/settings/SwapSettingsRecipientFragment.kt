@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.modules.enteraddress.EnterAddressScreen
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 
-class SwapTransactionRecipientSettingsFragment : BaseComposeFragment() {
+class SwapSettingsRecipientFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->

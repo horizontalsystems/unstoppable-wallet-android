@@ -322,11 +322,11 @@
         android:id="@+id/swapTransactionNonceSettings"
         android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionNonceSettingsFragment" />
     <fragment
-        android:id="@+id/swapTransactionSlippageSettings"
-        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionSlippageSettingsFragment" />
+        android:id="@+id/swapSettingsSlippage"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsSlippageFragment" />
     <fragment
-        android:id="@+id/swapTransactionRecipientSettings"
-        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionRecipientSettingsFragment" />
+        android:id="@+id/swapSettingsRecipient"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsRecipientFragment" />
     <fragment
         android:id="@+id/swapConfirm"
         android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapConfirmFragment" />
