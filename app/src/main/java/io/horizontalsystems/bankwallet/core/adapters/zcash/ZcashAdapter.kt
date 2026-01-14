@@ -326,6 +326,10 @@ class ZcashAdapter(
         )
     }
 
+    suspend fun sendProposal(proposal: Proposal) {
+        send(proposal)
+    }
+
     private fun createPaymentUri(outputs: List<TransferOutput>): String {
         val queryParams = mutableListOf<String>()
 

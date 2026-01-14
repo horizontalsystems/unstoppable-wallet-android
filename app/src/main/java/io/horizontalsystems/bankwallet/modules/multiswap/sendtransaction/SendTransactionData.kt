@@ -53,6 +53,22 @@ sealed class SendTransactionData {
 
         data class WithTransactionEnvelope(val transactionEnvelope: String) : Stellar()
     }
+
+    sealed class Zcash : SendTransactionData() {
+        data class Regular(
+            val address: String,
+            val amount: BigDecimal,
+            val memo: String,
+        ) : Zcash()
+
+        data class ShieldedMemo(
+            val address: String,
+            val amount: BigDecimal,
+            val memo: String,
+            val memoShieldedAddress: String,
+        ) : Zcash()
+    }
+
 }
 
 enum class FeeType(val stringResId: Int) {
