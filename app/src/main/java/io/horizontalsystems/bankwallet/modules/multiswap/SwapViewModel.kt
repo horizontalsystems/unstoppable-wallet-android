@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -27,6 +28,7 @@ class SwapViewModel(
     private val timerService: TimerService,
     private val networkAvailabilityService: NetworkAvailabilityService,
     private val defaultTokenService: SwapDefaultTokenService,
+    private val swapTermsManager: SwapTermsManager,
     tokenIn: Token?
 ) : ViewModelUiState<SwapUiState>() {
 
@@ -42,6 +44,7 @@ class SwapViewModel(
     private var fiatAmountInputEnabled = false
     private val currency = currencyManager.baseCurrency
     private var requoteOnTimeout = true
+    private var swapTermsAccepted = swapTermsManager.termsAccepted
 
     init {
         quoteService.start()
@@ -98,6 +101,13 @@ class SwapViewModel(
             }
         }
 
+        viewModelScope.launch {
+            swapTermsManager.swapTermsAcceptedStateFlow.collect { accepted ->
+                swapTermsAccepted = accepted
+                emitState()
+            }
+        }
+
         fiatServiceIn.setCurrency(currency)
         fiatServiceOut.setCurrency(currency)
         networkAvailabilityService.start(viewModelScope)
@@ -129,6 +139,7 @@ class SwapViewModel(
         fiatAmountOut = fiatAmountOut,
         currency = currency,
         fiatAmountInputEnabled = fiatAmountInputEnabled,
+        showSwapTermsDialog = !swapTermsAccepted && quoteState.preferredProvider != null, //todo fix logic to show only for CEX providers with AML
     )
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
@@ -241,6 +252,7 @@ class SwapViewModel(
                 TimerService(),
                 NetworkAvailabilityService(App.connectivityManager),
                 SwapDefaultTokenService(App.marketKit),
+                App.swapTermsManager,
                 tokenIn
             ) as T
         }
@@ -263,6 +275,7 @@ data class SwapUiState(
     val currency: Currency,
     val fiatAmountInputEnabled: Boolean,
     val fiatPriceImpactLevel: PriceImpactLevel?,
+    val showSwapTermsDialog: Boolean,
 ) {
     val currentStep: SwapStep = when {
         quoting -> SwapStep.Quoting

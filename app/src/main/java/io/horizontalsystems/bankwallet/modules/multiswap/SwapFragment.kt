@@ -153,13 +153,17 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
         onClickNext = {
-            navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
-                if (it.success) {
-                    navController.popBackStack()
+            if (uiState.showSwapTermsDialog) {
+                navController.slideFromRight(R.id.swapTermsFragment)
+            } else {
+                navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
+                    if (it.success) {
+                        navController.popBackStack()
+                    }
                 }
-            }
 
-            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
+                stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
+            }
         },
         onActionStarted = {
             viewModel.onActionStarted()

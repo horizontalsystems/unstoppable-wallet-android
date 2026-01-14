@@ -109,6 +109,7 @@ interface ILocalStorage {
     var balanceAutoHideEnabled: Boolean
     var balanceTotalCoinUid: String?
     var termsAccepted: Boolean
+    var swapTermsAccepted: Boolean
     var checkedTerms: List<String>
     var mainShowedOnce: Boolean
     var notificationId: String?
