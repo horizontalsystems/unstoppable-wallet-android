@@ -34,7 +34,7 @@ abstract class BaseThorChainProvider(
     private val affiliateBps: Int?,
 ) : IMultiSwapProvider {
 
-    private val thornodeAPI =
+    protected val thornodeAPI =
         APIClient.retrofit(baseUrl, 60).create(ThornodeAPI::class.java)
 
     private val blockchainTypes = mapOf(
@@ -47,7 +47,7 @@ abstract class BaseThorChainProvider(
         "LTC" to BlockchainType.Litecoin,
         "BASE" to BlockchainType.Base,
         "DASH" to BlockchainType.Dash,
-//        "ZEC" to BlockchainType.Zcash,
+        "ZEC" to BlockchainType.Zcash,
     )
 
     private var assets = listOf<Asset>()
@@ -84,8 +84,7 @@ abstract class BaseThorChainProvider(
                 BlockchainType.Bitcoin,
                 BlockchainType.Litecoin,
                 BlockchainType.Dash,
-//                BlockchainType.Zcash,
-                    -> {
+                BlockchainType.Zcash -> {
                     var nativeTokenQueries = blockchainType.nativeTokenQueries
 
                     // filter out taproot for ltc
@@ -120,7 +119,7 @@ abstract class BaseThorChainProvider(
         tokenOut: Token,
         amountIn: BigDecimal
     ): SwapQuote {
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, null)
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, null, refundAddress = null)
 
         val routerAddress = quoteSwap.router?.let { router ->
             try {
@@ -149,7 +148,8 @@ abstract class BaseThorChainProvider(
         tokenOut: Token,
         amountIn: BigDecimal,
         slippage: BigDecimal?,
-        recipient: io.horizontalsystems.bankwallet.entities.Address?
+        recipient: io.horizontalsystems.bankwallet.entities.Address?,
+        refundAddress: String?
     ): Response.QuoteSwap {
         val assetIn = assets.first { it.token == tokenIn }
         val assetOut = assets.first { it.token == tokenOut }
@@ -164,9 +164,12 @@ abstract class BaseThorChainProvider(
             affiliateBps = affiliateBps,
             streamingInterval = 1,
             streamingQuantity = 0,
-            liquidityToleranceBps = slippage?.movePointRight(2)?.toLong()
+            liquidityToleranceBps = slippage?.movePointRight(2)?.toLong(),
+            refundAddress = refundAddress
         )
     }
+
+    protected open fun getRefundAddress(tokenIn: Token): String? = null
 
     override suspend fun fetchFinalQuote(
         tokenIn: Token,
@@ -177,7 +180,7 @@ abstract class BaseThorChainProvider(
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         slippage: BigDecimal,
     ): SwapFinalQuote {
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, recipient)
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, recipient, getRefundAddress(tokenIn))
 
         val amountOut = quoteSwap.expected_amount_out.movePointLeft(8)
 
@@ -207,7 +210,7 @@ abstract class BaseThorChainProvider(
         )
     }
 
-    private fun getSendTransactionData(
+    protected open suspend fun getSendTransactionData(
         tokenIn: Token,
         amountIn: BigDecimal,
         quoteSwap: Response.QuoteSwap,
@@ -304,6 +307,9 @@ interface ThornodeAPI {
     @GET("pools")
     suspend fun pools(): List<Response.Pool>
 
+    @GET("inbound_addresses")
+    suspend fun inboundAddresses(): List<Response.InboundAddress>
+
     @GET("quote/swap")
     suspend fun quoteSwap(
         @Query("from_asset") fromAsset: String,
@@ -315,6 +321,7 @@ interface ThornodeAPI {
         @Query("streaming_interval") streamingInterval: Long,
         @Query("streaming_quantity") streamingQuantity: Long,
         @Query("liquidity_tolerance_bps") liquidityToleranceBps: Long?,
+        @Query("refund_address") refundAddress: String?,
 
     ): Response.QuoteSwap
 
@@ -364,27 +371,22 @@ interface ThornodeAPI {
         data class Pool(
             val asset: String,
             val status: String,
-// "short_code": "b",
-// "decimals": 6,
-// "pending_inbound_asset": "101713319",
-// "pending_inbound_rune": "464993836",
-// "balance_asset": "3197744873",
-// "balance_rune": "13460619152985",
-// "asset_tor_price": "123456",
-// "pool_units": "14694928607473",
-// "LP_units": "14694928607473",
-// "synth_units": "0",
-// "synth_supply": "0",
-// "savers_depth": "199998",
-// "savers_units": "199998",
-// "savers_fill_bps": "4500",
-// "savers_capacity_remaining": "1000",
-// "synth_mint_paused": true,
-// "synth_supply_remaining": "123456",
-// "loan_collateral": "123456",
-// "loan_collateral_remaining": "123456",
-// "loan_cr": "123456",
-// "derived_depth_bps": "123456"
+        )
+
+        data class InboundAddress(
+            val chain: String,
+            val address: String,
+            val router: String?,
+            val halted: Boolean,
+            val gas_rate: String,
+            val dust_threshold: String?,
+            val shielded_memo_config: ShieldedMemoConfig?,
+        )
+
+        data class ShieldedMemoConfig(
+            val unified_address: String,
+            val uivk: String,
+            val enabled: Boolean,
         )
     }
 }

@@ -89,7 +89,7 @@ class ZcashAdapter(
 
     override val receiveAddress: String
 
-    override val receiveAddressTransparent: String?
+    override val receiveAddressTransparent: String
 
     override val isMainNet: Boolean = true
 

@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.adapters.BitcoinCashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.DashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronApproveTransactionRecord
@@ -43,7 +44,7 @@ object SwapHelper {
         val blockchainType = token.blockchainType
 
         App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
-            return it.receiveAddress
+            return if (it is ZcashAdapter) it.receiveAddressTransparent else it.receiveAddress
         }
 
         val accountManager = App.accountManager
@@ -86,6 +87,10 @@ object SwapHelper {
                 BlockchainType.Solana -> {
                     App.solanaKitManager.getAddress(account.type)
                 }
+
+//                BlockchainType.Zcash -> {
+//                    //TODO: statically get Zcash address
+//                }
 
                 else -> throw SwapError.NoDestinationAddress()
             }
