@@ -363,6 +363,9 @@
     <fragment
         android:id="@+id/buySubscriptionFragment"
         android:name="io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostFragment"/>
+    <fragment
+        android:id="@+id/swapTermsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment" />
     <dialog
         android:id="@+id/backupRequiredDialog"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog" />

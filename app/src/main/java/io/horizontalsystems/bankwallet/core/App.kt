@@ -62,6 +62,7 @@ import io.horizontalsystems.bankwallet.core.managers.SolanaWalletManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.StellarAccountManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
+import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
 import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
 import io.horizontalsystems.bankwallet.core.managers.TermsManager
 import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
@@ -184,6 +185,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var wcManager: WCManager
         lateinit var wcWalletRequestHandler: WCWalletRequestHandler
         lateinit var termsManager: ITermsManager
+        lateinit var swapTermsManager: SwapTermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKitWrapper
         lateinit var priceManager: PriceManager
@@ -415,6 +417,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         wcWalletRequestHandler = WCWalletRequestHandler(evmBlockchainManager)
 
         termsManager = TermsManager(localStorage)
+        swapTermsManager = SwapTermsManager(localStorage)
 
         marketWidgetManager = MarketWidgetManager()
         marketFavoritesManager = MarketFavoritesManager(appDatabase, localStorage, marketWidgetManager)
