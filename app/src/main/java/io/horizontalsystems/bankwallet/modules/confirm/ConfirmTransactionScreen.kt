@@ -51,19 +51,19 @@ fun ConfirmTransactionScreen(
                     )
                 }
 
-                onClickSlippageSettings?.let {
+                onClickNonceSettings?.let {
                     add(
                         MenuItem(
-                            title = TranslatableString.ResString(R.string.SendEvmSettings_SlippageTolerance),
+                            title = TranslatableString.ResString(R.string.SendEvmSettings_Nonce),
                             onClick = it
                         )
                     )
                 }
 
-                onClickNonceSettings?.let {
+                onClickSlippageSettings?.let {
                     add(
                         MenuItem(
-                            title = TranslatableString.ResString(R.string.SendEvmSettings_Nonce),
+                            title = TranslatableString.ResString(R.string.SendEvmSettings_SlippageTolerance),
                             onClick = it
                         )
                     )
