@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedException
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 
@@ -42,7 +43,12 @@ object SendTransactionServiceFactory {
                 SendTransactionServiceSolana(token)
             }
 
-            BlockchainType.Zcash,
+            BlockchainType.Zcash -> {
+                val adapter = App.adapterManager.getAdapterForToken<ZcashAdapter>(token)
+                    ?: throw IllegalStateException("ZcashAdapter is null")
+                SendTransactionServiceZcash(adapter, token)
+            }
+
             BlockchainType.Ton,
             BlockchainType.Monero,
             is BlockchainType.Unsupported,
