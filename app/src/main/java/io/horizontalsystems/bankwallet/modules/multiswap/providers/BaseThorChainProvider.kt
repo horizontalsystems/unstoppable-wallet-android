@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThornodeAPI.R
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
@@ -185,7 +185,7 @@ abstract class BaseThorChainProvider(
 
         val fields = buildList {
             recipient?.let {
-                add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
+                add(DataFieldRecipient(it))
             }
             add(DataFieldSlippage(slippage))
         }
