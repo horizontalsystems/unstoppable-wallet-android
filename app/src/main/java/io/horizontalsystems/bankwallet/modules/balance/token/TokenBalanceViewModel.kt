@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.AttentionIcon
+import io.horizontalsystems.bankwallet.modules.balance.AttentionIconType
 import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
@@ -55,7 +56,7 @@ class TokenBalanceViewModel(
     private var loadingTransactions = true
     private var alertUnshieldedBalance: BigDecimal? = null
     private var attentionIcon: AttentionIcon? = null
-
+    private var showTronNotActiveAlert: Boolean? = null
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -102,7 +103,8 @@ class TokenBalanceViewModel(
         error = error,
         warningMessage = waringMessage,
         alertUnshieldedBalance = alertUnshieldedBalance,
-        attentionIcon = attentionIcon
+        attentionIcon = attentionIcon,
+        showTronNotActiveAlert = showTronNotActiveAlert ?: false,
     )
 
     private fun setReceiveAddressForWatchAccount() {
@@ -147,6 +149,10 @@ class TokenBalanceViewModel(
                 it.copy(value = it.value + " " + balanceViewItem.wallet.coin.code)
             }
         )
+
+        if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive && showTronNotActiveAlert == null) {
+            showTronNotActiveAlert = true
+        }
 
         updateErrorState()
         emitState()
@@ -227,6 +233,11 @@ class TokenBalanceViewModel(
         setLastAlertedUnshieldedBalance(wallet, alertUnshieldedBalance)
         this.alertUnshieldedBalance = null
 
+        emitState()
+    }
+
+    fun hideTronNotActiveAlert() {
+        showTronNotActiveAlert = false
         emitState()
     }
 
