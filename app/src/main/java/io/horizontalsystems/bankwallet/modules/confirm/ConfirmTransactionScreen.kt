@@ -101,7 +101,7 @@ fun ConfirmTransactionScreen(
                             .fillMaxSize()
                             .verticalScroll(rememberScrollState())
                     ) {
-                        VSpacer(height = 12.dp)
+                        VSpacer(height = 16.dp)
 
                         content.invoke(this)
 

@@ -142,7 +142,7 @@ fun SendConfirmationScreen(
                     .verticalScroll(rememberScrollState())
                     .padding(bottom = 106.dp)
             ) {
-                VSpacer(12.dp)
+                VSpacer(16.dp)
                 ConfirmationTopSection(
                     token = token,
                     amount = amount,

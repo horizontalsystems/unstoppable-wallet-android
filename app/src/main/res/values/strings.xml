@@ -495,7 +495,7 @@
     <string name="Send_Utxo_UnselectAll">Unsellect All</string>
     <string name="Send_Utxo_SelectAll">Sellect All</string>
 
-    <string name="Send_Confirmation_Title">Confirm</string>
+    <string name="Send_Confirmation_Title">Confirm Send</string>
     <string name="Send_Confirmation_YouSend">You Send</string>
     <string name="Send_Confirmation_YouReceive">You Receive</string>
     <string name="Send_Confirmation_Mint">Mint</string>
@@ -786,7 +786,7 @@
     <string name="Swap_YouGet">You Get</string>
     <string name="Swap_ConfirmApprove_Title">Confirm Approve</string>
     <string name="Swap_ConfirmRevoke_Title">Confirm Revoke</string>
-    <string name="Swap_Confirm_Title">Confirm</string>
+    <string name="Swap_Confirm_Title">Confirm Swap</string>
     <string name="SwapConfirm_QuoteExpired">Quote expired</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
     <string name="SwapWarning_SlippageNotApplicable_Title">Slippage is not applicable</string>
