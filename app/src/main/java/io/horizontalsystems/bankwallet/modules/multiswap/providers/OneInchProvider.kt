@@ -26,6 +26,8 @@ object OneInchProvider : IMultiSwapProvider {
     override val title = "1inch"
     override val icon = R.drawable.oneinch
     override val priority = 100
+    override val type = SwapProviderType.DEX
+    override val aml = true
     private val oneInchKit by lazy { OneInchKit.getInstance(App.appConfigProvider.oneInchApiKey) }
     private const val PARTNER_FEE: Float = 0.5F
     private const val PARTNER_ADDRESS: String = "0xe42BBeE8389548fAe35C09072065b7fEc582b590"

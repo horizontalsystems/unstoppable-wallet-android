@@ -123,7 +123,7 @@ private fun SwapSelectProviderScreenInner(
                         middle = {
                             CellMiddleInfo(
                                 subtitle = provider.title.hs,
-                                description = "DEX".hs,
+                                description = provider.type.title.hs,
                             )
                         },
                         right = {

@@ -13,6 +13,8 @@ interface IMultiSwapProvider {
     val title: String
     val icon: Int
     val priority: Int
+    val type: SwapProviderType
+    val aml: Boolean
 
     val titleShort: String
         get() {
@@ -46,4 +48,9 @@ interface IMultiSwapProvider {
         recipient: Address?,
         slippage: BigDecimal
     ): SwapFinalQuote
+}
+
+enum class SwapProviderType(val title: String) {
+    DEX("DEX"),
+    P2P("P2P")
 }
