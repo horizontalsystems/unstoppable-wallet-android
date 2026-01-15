@@ -157,6 +157,7 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                         registerAsset(it, token.identifier)
                     }
                 }
+
                 BlockchainType.Dash -> TODO()
                 BlockchainType.ECash -> TODO()
                 BlockchainType.Fantom -> TODO()
@@ -341,7 +342,7 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
 
                 return SendTransactionData.Btc(
                     address = bestRoute.inboundAddress,
-                    memo = bestRoute.memo,
+                    memo = bestRoute.txExtraAttribute?.get("memo"),
                     amount = amountIn,
                     recommendedGasRate = null,
                     minimumSendAmount = null,
@@ -363,6 +364,7 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                     throw IllegalStateException("No tx found")
                 }
             }
+
             BlockchainType.Tron -> {
                 if (bestRoute.tx != null) {
                     val rawTransaction = APIClient.gson.fromJson(
@@ -375,8 +377,9 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                     throw IllegalStateException("No tx found")
                 }
             }
+
             BlockchainType.Stellar -> {
-                val memo = bestRoute.txExtraAttribute["memo"]
+                val memo = bestRoute.txExtraAttribute?.get("memo")
                     ?: throw IllegalStateException("No memo found")
 
                 return SendTransactionData.Stellar.Regular(
@@ -385,7 +388,27 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                     amount = amountIn
                 )
             }
-            BlockchainType.Zcash -> TODO()
+
+            BlockchainType.Zcash -> {
+                val simpleZcashTransactionProviders = listOf(
+                    UProvider.Near,
+                    UProvider.QuickEx,
+                    UProvider.LetsExchange,
+                    UProvider.StealthEx,
+                    UProvider.Swapuz
+                )
+
+                if (!simpleZcashTransactionProviders.contains(provider)) {
+                    throw IllegalStateException("Only simple ZEC tx providers are supported")
+                }
+
+                return SendTransactionData.Zcash.Regular(
+                    address = bestRoute.inboundAddress,
+                    amount = amountIn,
+                    memo = bestRoute.txExtraAttribute?.get("memo") ?: ""
+                )
+            }
+
             else -> Unit
         }
 
@@ -446,7 +469,7 @@ interface UnstoppableAPI {
                 val tx: JsonElement?,
                 val inboundAddress: String,
                 val memo: String?,
-                val txExtraAttribute: Map<String, String>,
+                val txExtraAttribute: Map<String, String>?,
             )
         }
     }
