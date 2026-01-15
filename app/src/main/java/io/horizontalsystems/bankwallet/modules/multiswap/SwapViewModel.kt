@@ -44,7 +44,7 @@ class SwapViewModel(
     private var fiatAmountInputEnabled = false
     private val currency = currencyManager.baseCurrency
     private var requoteOnTimeout = true
-    private var swapTermsAccepted = swapTermsManager.termsAccepted
+    private var swapTermsAccepted = swapTermsManager.swapTermsAcceptedStateFlow.value
 
     init {
         quoteService.start()
@@ -139,7 +139,7 @@ class SwapViewModel(
         fiatAmountOut = fiatAmountOut,
         currency = currency,
         fiatAmountInputEnabled = fiatAmountInputEnabled,
-        showSwapTermsDialog = !swapTermsAccepted && quoteState.preferredProvider != null, //todo fix logic to show only for CEX providers with AML
+        swapTermsAccepted = swapTermsAccepted
     )
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
@@ -275,7 +275,7 @@ data class SwapUiState(
     val currency: Currency,
     val fiatAmountInputEnabled: Boolean,
     val fiatPriceImpactLevel: PriceImpactLevel?,
-    val showSwapTermsDialog: Boolean,
+    val swapTermsAccepted: Boolean,
 ) {
     val currentStep: SwapStep = when {
         quoting -> SwapStep.Quoting
@@ -284,6 +284,7 @@ data class SwapUiState(
         tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
         amountIn == null -> SwapStep.InputRequired(InputType.Amount)
         quote?.actionRequired != null -> SwapStep.ActionRequired(quote.actionRequired!!)
+        !swapTermsAccepted && quote?.provider?.aml == true -> SwapStep.AcceptTerms
         else -> SwapStep.Proceed
     }
 }
@@ -293,6 +294,7 @@ sealed class SwapStep {
     object Quoting : SwapStep()
     data class Error(val error: Throwable) : SwapStep()
     object Proceed : SwapStep()
+    object AcceptTerms : SwapStep()
     data class ActionRequired(val action: ISwapProviderAction) : SwapStep()
 }
 
