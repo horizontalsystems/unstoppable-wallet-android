@@ -58,7 +58,9 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
         "bitcoincash" to BlockchainType.BitcoinCash,
         "litecoin" to BlockchainType.Litecoin,
         "stellar" to BlockchainType.Stellar,
-        "ton" to BlockchainType.Ton
+        "ton" to BlockchainType.Ton,
+        "dash" to BlockchainType.Dash,
+        "ecash" to BlockchainType.ECash,
     )
 
     private val assetsMap = mutableMapOf<Token, String>()
@@ -93,6 +95,8 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                 BlockchainType.BitcoinCash,
                 BlockchainType.Litecoin,
                 BlockchainType.Zcash,
+                BlockchainType.Dash,
+                BlockchainType.ECash,
                     -> {
                     var nativeTokenQueries = blockchainType.nativeTokenQueries
 
@@ -146,8 +150,6 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                     }
                 }
 
-                BlockchainType.Dash -> TODO()
-                BlockchainType.ECash -> TODO()
                 BlockchainType.Fantom -> TODO()
                 BlockchainType.Gnosis -> TODO()
                 BlockchainType.Monero -> TODO()
@@ -311,7 +313,10 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
         when (blockchainType) {
             BlockchainType.Bitcoin,
             BlockchainType.BitcoinCash,
-            BlockchainType.Litecoin -> {
+            BlockchainType.Litecoin,
+            BlockchainType.Dash,
+            BlockchainType.ECash,
+                 -> {
                 // supported only providers that accepts any type of outputs
                 // providers with specific requirements like thorchain is not supported
                 // if thorchain support needed then it should be handled separately
