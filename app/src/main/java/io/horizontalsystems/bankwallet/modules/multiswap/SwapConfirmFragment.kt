@@ -127,6 +127,7 @@ fun SwapConfirmScreen(navController: NavController) {
     }
 
     ConfirmTransactionScreen(
+        title = stringResource(R.string.Swap_Confirm_Title),
         initialLoading = uiState.initialLoading,
         onClickBack = navController::popBackStack,
         onClickFeeSettings = onClickSettings,

@@ -166,6 +166,7 @@ fun SendBitcoinScreen(
             )
 
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                VSpacer(16.dp)
                 if (uiState.showAddressInput) {
                     HSAddressCell(
                         title = stringResource(R.string.Send_Confirmation_To),

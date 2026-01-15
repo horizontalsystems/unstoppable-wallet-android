@@ -70,6 +70,7 @@ fun ActivateTokenScreen(
     val token = uiState.token
 
     ConfirmTransactionScreen(
+        title = stringResource(R.string.Send_Confirmation_Title),
         onClickBack = null,
         onClickFeeSettings = null,
         buttonsSlot = {

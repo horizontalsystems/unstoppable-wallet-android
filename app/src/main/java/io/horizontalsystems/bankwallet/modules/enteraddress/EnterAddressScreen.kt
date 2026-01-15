@@ -81,7 +81,7 @@ fun EnterAddressScreen(
                     .fillMaxSize()
             ) {
                 FormsInputAddress(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
                     value = uiState.value,
                     hint = stringResource(id = R.string.Send_Hint_Address),
                     state = uiState.inputState,

@@ -93,6 +93,7 @@ private fun SendEvmConfirmationScreen(
     val uiState = viewModel.uiState
 
     ConfirmTransactionScreen(
+        title = stringResource(R.string.Send_Confirmation_Title),
         onClickBack = { navController.popBackStack() },
         onClickFeeSettings = {
             navController.slideFromBottom(R.id.sendEvmSettingsFragment)
