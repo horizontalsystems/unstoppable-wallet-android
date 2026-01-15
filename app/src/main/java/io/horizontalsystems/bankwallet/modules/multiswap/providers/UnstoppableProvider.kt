@@ -24,6 +24,7 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tronkit.hexStringToByteArray
 import io.horizontalsystems.tronkit.network.CreatedTransaction
+import org.json.JSONObject
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -43,47 +44,21 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
     ).create(UnstoppableAPI::class.java)
 
     private val blockchainTypes = mapOf(
-        //AVAX:43114
         "43114" to BlockchainType.Avalanche,
-        //OP:10
         "10" to BlockchainType.Optimism,
-        //BASE:8453
         "8453" to BlockchainType.Base,
-        //TRON:728126428
         "728126428" to BlockchainType.Tron,
-        //ARB:42161
         "42161" to BlockchainType.ArbitrumOne,
-        //BSC:56
         "56" to BlockchainType.BinanceSmartChain,
-        //BERA:80094
-        "80094" to null,
-        //SOL:solana
         "solana" to BlockchainType.Solana,
-        //POL:137
         "137" to BlockchainType.Polygon,
-        //XRP:ripple
-        "ripple" to null,
-        //DOGE:dogecoin
-        "dogecoin" to null,
-        //GNO:100
-        "100" to null,
-        //BTC:bitcoin
         "bitcoin" to BlockchainType.Bitcoin,
-        //ETH:1
         "1" to BlockchainType.Ethereum,
-        //ZEC:zcash
         "zcash" to BlockchainType.Zcash,
-        //NEAR:near
-        "near" to null,
-        //BCH:bitcoincash
         "bitcoincash" to BlockchainType.BitcoinCash,
-        //GAIA:cosmoshub-4
-        "cosmoshub-4" to null,
-        //LTC:litecoin
         "litecoin" to BlockchainType.Litecoin,
-        //THOR:thorchain-1
-        "thorchain-1" to null,
-        "stellar" to BlockchainType.Stellar
+        "stellar" to BlockchainType.Stellar,
+        "ton" to BlockchainType.Ton
     )
 
     private val assetsMap = mutableMapOf<Token, String>()
@@ -148,7 +123,20 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
 
                 BlockchainType.Stellar -> {
                     val tokenType = if (!token.address.isNullOrBlank()) {
-                        TODO()
+                        null
+                    } else {
+                        TokenType.Native
+                    }
+
+                    tokenType?.let {
+                        App.marketKit.token(TokenQuery(blockchainType, it))
+                    }?.let {
+                        registerAsset(it, token.identifier)
+                    }
+                }
+                BlockchainType.Ton -> {
+                    val tokenType = if (!token.address.isNullOrBlank()) {
+                        TokenType.Jetton(token.address)
                     } else {
                         TokenType.Native
                     }
@@ -163,7 +151,6 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                 BlockchainType.Fantom -> TODO()
                 BlockchainType.Gnosis -> TODO()
                 BlockchainType.Monero -> TODO()
-                BlockchainType.Ton -> TODO()
                 is BlockchainType.Unsupported -> TODO()
                 BlockchainType.ZkSync -> TODO()
             }
@@ -387,6 +374,14 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                     memo = memo,
                     amount = amountIn
                 )
+            }
+
+            BlockchainType.Ton -> {
+                if (bestRoute.tx != null) {
+                    return SendTransactionData.Ton.SendRequest(JSONObject(bestRoute.tx.toString()))
+                } else {
+                    throw IllegalStateException("No tx found")
+                }
             }
 
             BlockchainType.Zcash -> {

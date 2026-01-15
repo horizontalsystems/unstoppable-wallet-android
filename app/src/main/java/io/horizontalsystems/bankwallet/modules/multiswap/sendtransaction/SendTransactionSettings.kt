@@ -8,5 +8,6 @@ sealed class SendTransactionSettings {
     class Btc : SendTransactionSettings()
     class Tron : SendTransactionSettings()
     class Stellar : SendTransactionSettings()
+    class Ton : SendTransactionSettings()
     class Zcash : SendTransactionSettings()
 }

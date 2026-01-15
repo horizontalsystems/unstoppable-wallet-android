@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core
 import android.os.Parcelable
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.tonapps.wallet.data.core.entity.SendRequestEntity
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinFeeInfo
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
@@ -435,8 +436,11 @@ interface ISendSolanaAdapter {
 
 interface ISendTonAdapter {
     val availableBalance: BigDecimal
+    suspend fun sign(request: SendRequestEntity): String
     suspend fun send(amount: BigDecimal, address: FriendlyAddress, memo: String?)
     suspend fun estimateFee(amount: BigDecimal, address: FriendlyAddress, memo: String?) : BigDecimal
+    suspend fun send(boc: String)
+    suspend fun estimateFee(boc: String) : BigDecimal
 }
 
 interface ISendStellarAdapter {

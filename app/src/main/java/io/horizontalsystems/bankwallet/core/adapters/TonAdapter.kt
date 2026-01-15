@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
-import io.horizontalsystems.bankwallet.core.ISendTonAdapter
 import io.horizontalsystems.bankwallet.core.managers.TonKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toAdapterState
 import io.horizontalsystems.bankwallet.entities.TransactionValue
@@ -24,7 +23,7 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import kotlin.math.absoluteValue
 
-class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9), ISendTonAdapter {
+class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9) {
 
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()

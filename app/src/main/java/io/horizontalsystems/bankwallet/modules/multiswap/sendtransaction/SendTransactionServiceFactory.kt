@@ -43,13 +43,16 @@ object SendTransactionServiceFactory {
                 SendTransactionServiceSolana(token)
             }
 
+            BlockchainType.Ton -> {
+                SendTransactionServiceTon(token)
+            }
+
             BlockchainType.Zcash -> {
                 val adapter = App.adapterManager.getAdapterForToken<ZcashAdapter>(token)
                     ?: throw IllegalStateException("ZcashAdapter is null")
                 SendTransactionServiceZcash(adapter)
             }
 
-            BlockchainType.Ton,
             BlockchainType.Monero,
             is BlockchainType.Unsupported,
                 -> throw UnsupportedException("")
