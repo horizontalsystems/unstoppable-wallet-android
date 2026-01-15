@@ -115,6 +115,16 @@ fun TokenBalanceScreen(
         onPauseOrDispose { }
     }
 
+    LaunchedEffect(uiState.showTronNotActiveAlert) {
+        if (uiState.showTronNotActiveAlert) {
+            coroutineScope.launch {
+                delay(300)
+                isTronAlertVisible = true
+                viewModel.hideTronNotActiveAlert()
+            }
+        }
+    }
+
     LaunchedEffect(uiState.alertUnshieldedBalance) {
         if (uiState.alertUnshieldedBalance != null) {
             bottomSheetContent = ZcashLockedValue(

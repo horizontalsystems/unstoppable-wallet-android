@@ -65,6 +65,7 @@ class TokenBalanceModule {
         val warningMessage: String?,
         val alertUnshieldedBalance: BigDecimal?,
         val attentionIcon: AttentionIcon?,
+        val showTronNotActiveAlert: Boolean,
     )
 
     data class TokenBalanceError(
