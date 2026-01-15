@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchException
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceFactory
@@ -53,6 +54,7 @@ class SwapConfirmViewModel(
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountOutMin: BigDecimal? = null
 
+    private var error: Throwable? = null
     private var initialLoading = true
     private var loading = true
     private var timerState = timerService.stateFlow.value
@@ -63,7 +65,6 @@ class SwapConfirmViewModel(
     private var amountOut: BigDecimal? = null
     private var amountOutMin: BigDecimal? = null
     private var quoteFields: List<DataField> = listOf()
-    private var cautionViewItems: List<CautionViewItem> = listOf()
     private var fetchFinalQuoteJob: Job? = null
 
     init {
@@ -167,8 +168,8 @@ class SwapConfirmViewModel(
     override fun createState(): SwapConfirmUiState {
         var cautions = sendTransactionState.cautions
 
-        if (cautions.isEmpty()) {
-            cautions += cautionViewItems
+        error?.let {
+            cautions += CautionViewItem(it.javaClass.simpleName, it.message ?: "", CautionViewItem.Type.Error)
         }
 
         return SwapConfirmUiState(
@@ -186,7 +187,7 @@ class SwapConfirmViewModel(
             networkFee = sendTransactionState.networkFee,
             extraFees = sendTransactionState.extraFees,
             cautions = cautions,
-            validQuote = sendTransactionState.sendable,
+            validQuote = error == null && sendTransactionState.sendable,
             priceImpact = priceImpactState.priceImpact,
             priceImpactLevel = priceImpactState.priceImpactLevel,
             quoteFields = quoteFields,
@@ -219,6 +220,8 @@ class SwapConfirmViewModel(
         fetchFinalQuoteJob?.cancel()
         fetchFinalQuoteJob = viewModelScope.launch(Dispatchers.Default) {
             try {
+                error = null
+
                 val finalQuote = swapProvider.fetchFinalQuote(
                     tokenIn,
                     tokenOut,
@@ -242,9 +245,16 @@ class SwapConfirmViewModel(
 
                 priceImpactService.setProviderTitle(swapProvider.title)
             } catch (e: CancellationException) {
-                // Do nothing
+                throw e
+            } catch (e: OneInchException) {
+                // in this case we should keep state as loading
+                // temp solution. need find better one
             } catch (t: Throwable) {
-//                Log.e("AAA", "fetchFinalQuote error", t)
+                loading = false
+                initialLoading = false
+                error = t
+
+                emitState()
             }
         }
     }

@@ -95,7 +95,8 @@ object OneInchProvider : IMultiSwapProvider {
         slippage: BigDecimal,
     ): SwapFinalQuote {
         check(sendTransactionSettings is SendTransactionSettings.Evm)
-        checkNotNull(sendTransactionSettings.gasPriceInfo)
+        if (sendTransactionSettings.gasPriceInfo == null)
+            throw OneInchException()
 
         val blockchainType = tokenIn.blockchainType
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
@@ -139,3 +140,5 @@ object OneInchProvider : IMultiSwapProvider {
         )
     }
 }
+
+class OneInchException : Exception()
