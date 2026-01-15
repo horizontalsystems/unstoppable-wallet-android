@@ -14,8 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.math.BigDecimal
 
 class SendTransactionServiceZcash(
-    private val adapter: ZcashAdapter,
-    private val token: Token
+    private val adapter: ZcashAdapter
 ) : AbstractSendTransactionService(false, false) {
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Zcash())
 

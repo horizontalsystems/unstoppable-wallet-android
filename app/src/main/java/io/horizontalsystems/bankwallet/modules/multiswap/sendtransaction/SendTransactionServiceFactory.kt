@@ -46,7 +46,7 @@ object SendTransactionServiceFactory {
             BlockchainType.Zcash -> {
                 val adapter = App.adapterManager.getAdapterForToken<ZcashAdapter>(token)
                     ?: throw IllegalStateException("ZcashAdapter is null")
-                SendTransactionServiceZcash(adapter, token)
+                SendTransactionServiceZcash(adapter)
             }
 
             BlockchainType.Ton,
