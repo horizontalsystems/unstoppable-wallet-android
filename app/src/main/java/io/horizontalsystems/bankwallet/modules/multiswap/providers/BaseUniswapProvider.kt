@@ -19,6 +19,8 @@ import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 abstract class BaseUniswapProvider : IMultiSwapProvider {
+    override val type = SwapProviderType.DEX
+    override val aml = true
     private val uniswapKit by lazy { UniswapKit.getInstance() }
 
     final override suspend fun fetchQuote(

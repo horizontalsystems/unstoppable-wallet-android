@@ -31,6 +31,8 @@ object AllBridgeProvider : IMultiSwapProvider {
     override val title = "AllBridge"
     override val icon = R.drawable.allbridge
     override val priority = 0
+    override val type = SwapProviderType.DEX
+    override val aml = true
     private val feePaymentMethod = FeePaymentMethod.StableCoin
 
     private val proxies = mapOf(

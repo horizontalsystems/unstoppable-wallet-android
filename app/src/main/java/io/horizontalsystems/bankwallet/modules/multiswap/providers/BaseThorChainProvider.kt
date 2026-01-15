@@ -33,6 +33,8 @@ abstract class BaseThorChainProvider(
     private val affiliate: String?,
     private val affiliateBps: Int?,
 ) : IMultiSwapProvider {
+    override val type = SwapProviderType.DEX
+    override val aml = false
 
     protected val thornodeAPI =
         APIClient.retrofit(baseUrl, 60).create(ThornodeAPI::class.java)
