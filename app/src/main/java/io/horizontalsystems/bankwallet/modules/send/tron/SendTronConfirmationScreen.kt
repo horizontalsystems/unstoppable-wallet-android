@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -148,8 +147,6 @@ fun SendTronConfirmationScreen(
                     contact = contact,
                 )
 
-                VSpacer(16.dp)
-
                 ConfirmationBottomSection(
                     feeCoin = feeCoin,
                     feeCoinMaxAllowedDecimals = feeCoinMaxAllowedDecimals,
@@ -283,9 +280,8 @@ private fun ResourcesConsumed(
 
 @Composable
 private fun Cautions(cautions: List<HSCaution>) {
-    Spacer(modifier = Modifier.height(32.dp))
 
-    val modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
+    val modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
 
     Column(
         modifier = Modifier
