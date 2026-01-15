@@ -109,7 +109,10 @@ fun TokenBalanceScreen(
 
     LifecycleResumeEffect(uiState.attentionIcon?.type) {
         if (uiState.attentionIcon?.type == AttentionIconType.SyncError) {
-            openSyncErrorDialog(uiState, navController)
+            coroutineScope.launch {
+                delay(300)
+                openSyncErrorDialog(uiState, navController)
+            }
         }
 
         onPauseOrDispose { }
