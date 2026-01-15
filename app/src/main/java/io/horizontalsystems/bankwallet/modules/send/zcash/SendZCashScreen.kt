@@ -69,6 +69,7 @@ fun SendZCashScreen(
             title = title,
             onBack = { navController.popBackStack() }
         ) {
+            VSpacer(16.dp)
             if (uiState.showAddressInput) {
                 HSAddressCell(
                     title = stringResource(R.string.Send_Confirmation_To),

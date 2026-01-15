@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,6 +39,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
@@ -133,47 +133,45 @@ fun SendConfirmationScreen(
     HSScaffold(
         title = title ?: stringResource(R.string.Send_Confirmation_Title),
         onBack = navController::popBackStack,
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(bottom = 106.dp)
-            ) {
-                VSpacer(16.dp)
-                ConfirmationTopSection(
-                    token = token,
-                    amount = amount,
-                    coinMaxAllowedDecimals = coinMaxAllowedDecimals,
-                    rate = rate,
-                    address = address,
-                    contact = contact,
-                )
+        bottomBar = {
+            ButtonsGroupWithShade {
+                SendButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    sendResult = sendResult,
+                    onClickSend = {
+                        onClickSend()
 
-                ConfirmationBottomSection(
-                    feeCoin = feeCoin,
-                    feeCoinMaxAllowedDecimals = feeCoinMaxAllowedDecimals,
-                    fee = fee,
-                    feeCoinRate = feeCoinRate,
-                    navController = navController,
-                    memo = memo,
-                    additionalFields = additionalFields
+                        stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
+                    }
                 )
             }
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 106.dp)
+        ) {
+            VSpacer(16.dp)
+            ConfirmationTopSection(
+                token = token,
+                amount = amount,
+                coinMaxAllowedDecimals = coinMaxAllowedDecimals,
+                rate = rate,
+                address = address,
+                contact = contact,
+            )
 
-            SendButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
-                sendResult = sendResult,
-                onClickSend = {
-                    onClickSend()
-
-                    stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
-                }
+            ConfirmationBottomSection(
+                feeCoin = feeCoin,
+                feeCoinMaxAllowedDecimals = feeCoinMaxAllowedDecimals,
+                fee = fee,
+                feeCoinRate = feeCoinRate,
+                navController = navController,
+                memo = memo,
+                additionalFields = additionalFields
             )
         }
     }
