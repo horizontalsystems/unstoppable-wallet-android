@@ -6,6 +6,7 @@ import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.network.CreatedTransaction
+import org.json.JSONObject
 import java.math.BigDecimal
 
 sealed class SendTransactionData {
@@ -52,6 +53,16 @@ sealed class SendTransactionData {
         ) : Stellar()
 
         data class WithTransactionEnvelope(val transactionEnvelope: String) : Stellar()
+    }
+
+    sealed class Ton : SendTransactionData() {
+        data class Regular(
+            val address: String,
+            val amount: BigDecimal,
+            val memo: String?
+        ) : Ton()
+
+        data class SendRequest(val requestJson: JSONObject) : Ton()
     }
 
     sealed class Zcash : SendTransactionData() {

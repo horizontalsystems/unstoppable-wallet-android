@@ -150,6 +150,8 @@ class TonKitManager(
             }
         }
     }
+
+    fun getAddress(type: AccountType) = type.toTonWallet().address.toUserFriendly(false)
 }
 
 object TonHelper {
