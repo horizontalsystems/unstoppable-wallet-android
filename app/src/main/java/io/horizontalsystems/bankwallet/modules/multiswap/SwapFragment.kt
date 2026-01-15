@@ -153,18 +153,17 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
+        onClickTerms = {
+            navController.slideFromRight(R.id.swapTermsFragment)
+        },
         onClickNext = {
-            if (uiState.showSwapTermsDialog) {
-                navController.slideFromRight(R.id.swapTermsFragment)
-            } else {
-                navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
-                    if (it.success) {
-                        navController.popBackStack()
-                    }
+            navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
+                if (it.success) {
+                    navController.popBackStack()
                 }
-
-                stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
             }
+
+            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
         },
         onActionStarted = {
             viewModel.onActionStarted()
@@ -189,6 +188,7 @@ private fun SwapScreenInner(
     onEnterFiatAmount: (BigDecimal?) -> Unit,
     onEnterAmountPercentage: (Int) -> Unit,
     onClickProvider: () -> Unit,
+    onClickTerms: () -> Unit,
     onClickNext: () -> Unit,
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,
@@ -314,6 +314,16 @@ private fun SwapScreenInner(
                                 action.execute(navController, onActionCompleted)
                             },
                             loadingIndicator = action.inProgress
+                        )
+                    }
+
+                    SwapStep.AcceptTerms -> {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth(),
+                            title = stringResource(R.string.Swap_Proceed),
+                            onClick = onClickTerms
                         )
                     }
 

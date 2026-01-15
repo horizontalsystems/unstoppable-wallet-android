@@ -13,9 +13,6 @@ class SwapTermsManager(private val localStorage: ILocalStorage) {
 
     val terms = SwapTermType.entries
 
-    val termsAccepted: Boolean
-        get() = localStorage.swapTermsAccepted
-
     fun acceptTerms() {
         localStorage.swapTermsAccepted = true
         _termsAcceptedFlow.update { true }
