@@ -192,10 +192,10 @@ fun EvmSettingsInput(
     onClickIncrement: () -> Unit,
     onClickDecrement: () -> Unit
 ) {
-    val borderColor = when (caution?.type) {
-        HSCaution.Type.Error -> ComposeAppTheme.colors.red50
-        HSCaution.Type.Warning -> ComposeAppTheme.colors.yellow50
-        else -> ComposeAppTheme.colors.blade
+    val textColor = when (caution?.type) {
+        HSCaution.Type.Error -> ComposeAppTheme.colors.lucian
+        HSCaution.Type.Warning -> ComposeAppTheme.colors.jacob
+        else -> ComposeAppTheme.colors.leah
     }
 
     EvmSettingsInput(
@@ -203,7 +203,7 @@ fun EvmSettingsInput(
         info = info,
         value = value,
         decimals = decimals,
-        textColor = borderColor,
+        textColor = textColor,
         navController = navController,
         onValueChange = onValueChange,
         onClickIncrement = onClickIncrement,
@@ -448,8 +448,8 @@ private fun FeeField(
         },
         right = {
             CellRightInfo(
-                titleSubheadSb = primary.hs,
-                description = secondary?.hs
+                eyebrow = primary.hs(color = ComposeAppTheme.colors.leah),
+                subtitle = secondary?.hs
             )
         },
     )

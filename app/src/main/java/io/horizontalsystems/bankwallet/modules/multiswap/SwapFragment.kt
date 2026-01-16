@@ -79,9 +79,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.micro_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_jacob
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
 import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
@@ -653,12 +653,12 @@ private fun CoinSelector(
         text = {
             if (token != null) {
                 Column {
-                    subhead1_leah(text = token.coin.code)
+                    headline2_leah(text = token.coin.code)
                     VSpacer(height = 1.dp)
-                    micro_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
+                    subhead_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
                 }
             } else {
-                subhead1_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
+                headline2_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
             }
         },
         onClickSelect = onClickCoin
@@ -817,11 +817,11 @@ fun AmountInput(
 @Composable
 fun getPriceImpactColor(priceImpactLevel: PriceImpactLevel?): Color {
     return when (priceImpactLevel) {
-        PriceImpactLevel.Normal -> ComposeAppTheme.colors.grey
+        PriceImpactLevel.Normal -> ComposeAppTheme.colors.leah
         PriceImpactLevel.Warning -> ComposeAppTheme.colors.jacob
         PriceImpactLevel.High -> ComposeAppTheme.colors.lucian
         PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
 
-        else -> ComposeAppTheme.colors.grey
+        else -> ComposeAppTheme.colors.leah
     }
 }

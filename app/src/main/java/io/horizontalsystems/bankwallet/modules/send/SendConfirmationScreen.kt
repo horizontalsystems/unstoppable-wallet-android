@@ -255,14 +255,14 @@ fun ConfirmationTopSection(
                 },
                 middle = {
                     CellMiddleInfo(
-                        subtitle = token.coin.code.hs(color = ComposeAppTheme.colors.leah),
-                        description = (token.badge ?: stringResource(id = R.string.CoinPlatforms_Native)).hs
+                        eyebrow = token.coin.code.hs(color = ComposeAppTheme.colors.leah),
+                        subtitle = (token.badge ?: stringResource(id = R.string.CoinPlatforms_Native)).hs
                     )
                 },
                 right = {
                     CellRightInfo(
-                        titleSubheadSb = coinAmount.hs,
-                        description = fiatAmount?.hs
+                        eyebrow = coinAmount.hs(color = ComposeAppTheme.colors.leah),
+                        subtitle = fiatAmount?.hs
                     )
                 }
             )

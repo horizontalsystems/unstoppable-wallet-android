@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stringResId
 import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 @Composable
@@ -53,13 +54,13 @@ fun SendBitcoinConfirmationScreen(
         sendViewModel.uiState.utxoData?.let { utxo ->
             QuoteInfoRow(
                 title = stringResource(R.string.Send_Utxos),
-                value = utxo.value.hs,
+                value = utxo.value.hs(ComposeAppTheme.colors.leah),
             )
         }
         confirmationData.lockTimeInterval?.let { interval ->
             QuoteInfoRow(
                 title = stringResource(R.string.Send_DialogLockTime),
-                value = stringResource(interval.stringResId()).hs,
+                value = stringResource(interval.stringResId()).hs(ComposeAppTheme.colors.leah),
             )
         }
         confirmationData.rbfEnabled?.let { enabled ->
@@ -67,7 +68,7 @@ fun SendBitcoinConfirmationScreen(
                 stringResource(if (enabled) R.string.Send_RbfEnabled else R.string.Send_RbfDisabled)
             QuoteInfoRow(
                 title = stringResource(R.string.Send_Rbf),
-                value = value.hs,
+                value = value.hs(ComposeAppTheme.colors.leah),
             )
         }
     }

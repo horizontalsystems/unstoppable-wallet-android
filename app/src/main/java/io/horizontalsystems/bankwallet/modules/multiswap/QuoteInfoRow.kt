@@ -38,8 +38,8 @@ fun QuoteInfoRow(
         },
         right = {
             CellRightInfo(
-                titleSubheadSb = value,
-                description = valueSecondary
+                eyebrow = value,
+                subtitle = valueSecondary
             )
         },
         onClick = onCellClick
