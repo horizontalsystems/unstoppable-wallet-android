@@ -7,7 +7,9 @@ import io.horizontalsystems.bankwallet.core.adapters.BitcoinCashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.DashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
+import io.horizontalsystems.bankwallet.core.adapters.toMoneroSeed
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
+import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronApproveTransactionRecord
@@ -94,6 +96,10 @@ object SwapHelper {
 
                 BlockchainType.Ton -> {
                     App.tonKitManager.getAddress(account.type)
+                }
+
+                BlockchainType.Monero -> {
+                    MoneroKit.getAddress(account.type.toMoneroSeed(), 0, 1)
                 }
 
 //                BlockchainType.Zcash -> {
