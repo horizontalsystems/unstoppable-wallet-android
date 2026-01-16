@@ -500,19 +500,6 @@ sealed class ViewItem {
         val type: ValueType,
     ) : ViewItem()
 
-    class ValueMulti(
-        val title: String,
-        val primaryValue: String,
-        val secondaryValue: String,
-        val type: ValueType,
-    ) : ViewItem()
-
-    class AmountMulti(
-        val amounts: List<AmountValues>,
-        val type: ValueType,
-        val token: Token
-    ) : ViewItem()
-
     class Amount(
         val fiatAmount: String?,
         val coinAmount: String,
