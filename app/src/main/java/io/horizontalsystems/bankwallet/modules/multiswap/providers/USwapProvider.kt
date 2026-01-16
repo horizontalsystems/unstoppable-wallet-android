@@ -164,7 +164,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     }
                 }
 
-                is BlockchainType.Unsupported -> TODO()
+                is BlockchainType.Unsupported -> Unit
             }
         }
     }
