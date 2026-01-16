@@ -5,14 +5,9 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.AllBridgeProv
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.MayaProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.PancakeSwapProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.PancakeSwapV3Provider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.QuickSwapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.USwapProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.UniswapProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.UniswapV3Provider
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,11 +25,6 @@ import java.math.BigDecimal
 class SwapQuoteService {
     private val allProviders = listOf(
         OneInchProvider,
-        PancakeSwapProvider,
-        PancakeSwapV3Provider,
-        QuickSwapProvider,
-        UniswapProvider,
-        UniswapV3Provider,
         ThorChainProvider,
         MayaProvider,
         AllBridgeProvider,
