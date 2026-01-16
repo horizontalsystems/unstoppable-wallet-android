@@ -64,6 +64,9 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         "dash" to BlockchainType.Dash,
         "ecash" to BlockchainType.ECash,
         "monero" to BlockchainType.Monero,
+        "100" to BlockchainType.Gnosis,
+//        "" to BlockchainType.Fantom,
+//        "" to BlockchainType.ZkSync,
     )
 
     private val assetsMap = mutableMapOf<Token, String>()
@@ -82,6 +85,9 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                 BlockchainType.Optimism,
                 BlockchainType.Polygon,
                 BlockchainType.Tron,
+                BlockchainType.Fantom,
+                BlockchainType.Gnosis,
+                BlockchainType.ZkSync,
                     -> {
                     val tokenType = if (!token.address.isNullOrBlank()) {
                         TokenType.Eip20(token.address)
@@ -158,10 +164,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     }
                 }
 
-                BlockchainType.Fantom -> TODO()
-                BlockchainType.Gnosis -> TODO()
                 is BlockchainType.Unsupported -> TODO()
-                BlockchainType.ZkSync -> TODO()
             }
         }
     }
