@@ -10,9 +10,9 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.PancakeSwapV3
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.QuickSwapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.USwapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UniswapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UniswapV3Provider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.UnstoppableProvider
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,11 +38,11 @@ class SwapQuoteService {
         ThorChainProvider,
         MayaProvider,
         AllBridgeProvider,
-        UnstoppableProvider(UProvider.Near),
-        UnstoppableProvider(UProvider.QuickEx),
-        UnstoppableProvider(UProvider.LetsExchange),
-        UnstoppableProvider(UProvider.StealthEx),
-        UnstoppableProvider(UProvider.Swapuz),
+        USwapProvider(UProvider.Near),
+        USwapProvider(UProvider.QuickEx),
+        USwapProvider(UProvider.LetsExchange),
+        USwapProvider(UProvider.StealthEx),
+        USwapProvider(UProvider.Swapuz),
     )
 
     private var amountIn: BigDecimal? = null
