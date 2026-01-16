@@ -69,10 +69,15 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
 //        "" to BlockchainType.ZkSync,
     )
 
-    private val assetsMap = mutableMapOf<Token, String>()
+    private var assetsMap = mapOf<Token, String>()
 
     override suspend fun start() {
-        val tokens = unstoppableAPI.tokens(provider.id).tokens
+        assetsMap = getAssetsMap(provider.id)
+    }
+
+    private suspend fun getAssetsMap(providerId: String): Map<Token, String> {
+        val assetsMap = mutableMapOf<Token, String>()
+        val tokens = unstoppableAPI.tokens(providerId).tokens
         for (token in tokens) {
             val blockchainType = blockchainTypes[token.chainId] ?: continue
 
@@ -96,7 +101,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     }
 
                     App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                        registerAsset(it, token.identifier)
+                        assetsMap[it] = token.identifier
                     }
                 }
 
@@ -118,7 +123,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
 
                     val tokens = App.marketKit.tokens(nativeTokenQueries)
                     tokens.forEach {
-                        registerAsset(it, token.identifier)
+                        assetsMap[it] = token.identifier
                     }
                 }
 
@@ -130,7 +135,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     }
 
                     App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                        registerAsset(it, token.identifier)
+                        assetsMap[it] = token.identifier
                     }
                 }
 
@@ -144,9 +149,10 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     tokenType?.let {
                         App.marketKit.token(TokenQuery(blockchainType, it))
                     }?.let {
-                        registerAsset(it, token.identifier)
+                        assetsMap[it] = token.identifier
                     }
                 }
+
                 BlockchainType.Ton -> {
                     val tokenType = if (!token.address.isNullOrBlank()) {
                         TokenType.Jetton(token.address)
@@ -155,22 +161,21 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     }
 
                     App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                        registerAsset(it, token.identifier)
+                        assetsMap[it] = token.identifier
                     }
                 }
+
                 BlockchainType.Monero -> {
                     App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))?.let {
-                        registerAsset(it, token.identifier)
+                        assetsMap[it] = token.identifier
                     }
                 }
 
                 is BlockchainType.Unsupported -> Unit
             }
         }
-    }
 
-    private fun registerAsset(token: Token, identifier: String) {
-        assetsMap[token] = identifier
+        return assetsMap
     }
 
     override fun supports(blockchainType: BlockchainType): Boolean {
