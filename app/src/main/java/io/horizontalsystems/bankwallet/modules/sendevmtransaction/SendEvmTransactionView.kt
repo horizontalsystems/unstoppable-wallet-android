@@ -4,9 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -39,7 +37,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.NftIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
@@ -103,8 +100,6 @@ fun SectionView(viewItems: List<ViewItem>, navController: NavController, statPag
             when (item) {
                 is ViewItem.Subhead -> Subhead(item)
                 is ViewItem.Value -> TitleValue(item)
-                is ViewItem.ValueMulti -> TitleValueMulti(item)
-                is ViewItem.AmountMulti -> AmountMulti(item)
                 is ViewItem.Amount -> Amount(item)
                 is ViewItem.AmountWithTitle -> AmountWithTitle(item)
                 is ViewItem.NftAmount -> NftAmount(item)
@@ -195,78 +190,6 @@ fun TitleValue(item: ViewItem.Value) {
             style = ComposeAppTheme.typography.subhead,
             color = setColorByType(item.type)
         )
-    }
-}
-
-@Composable
-private fun TitleValueMulti(item: ViewItem.ValueMulti) {
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp)
-    ) {
-        subhead2_grey(
-            text = item.title
-        )
-        Spacer(Modifier.weight(1f))
-        Column(horizontalAlignment = Alignment.End) {
-            Text(
-                text = item.primaryValue,
-                maxLines = 1,
-                style = ComposeAppTheme.typography.subhead,
-                color = setColorByType(item.type)
-            )
-            Text(
-                text = item.secondaryValue,
-                maxLines = 1,
-                style = ComposeAppTheme.typography.caption,
-                color = ComposeAppTheme.colors.grey
-            )
-        }
-    }
-}
-
-@Composable
-private fun AmountMulti(item: ViewItem.AmountMulti) {
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp)
-    ) {
-        CoinImage(
-            token = item.token,
-            modifier = Modifier.size(32.dp)
-        )
-        Column(
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .fillMaxWidth()
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = item.amounts[0].coinAmount,
-                    maxLines = 1,
-                    style = ComposeAppTheme.typography.subhead,
-                    color = setColorByType(item.type)
-                )
-                Spacer(Modifier.weight(1f))
-                subhead2_grey(
-                    text = item.amounts[0].fiatAmount ?: ""
-                )
-            }
-            if (item.amounts.size > 1) {
-                Spacer(Modifier.height(3.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    caption_grey(
-                        text = item.amounts[1].coinAmount
-                    )
-                    Spacer(Modifier.weight(1f))
-                    caption_grey(
-                        text = item.amounts[1].fiatAmount ?: ""
-                    )
-                }
-            }
-        }
     }
 }
 
@@ -400,28 +323,6 @@ private fun Preview_TitleValue() {
     val item = ViewItem.Value("Title", "Value", ValueType.Incoming)
     ComposeAppTheme {
         TitleValue(item)
-    }
-}
-
-@Preview
-@Composable
-private fun Preview_AmountMulti() {
-    val token = Token(
-        coin = Coin("uid", "KuCoin", "KCS"),
-        blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null),
-        type = TokenType.Eip20("eef"),
-        decimals = 18
-    )
-    val item = ViewItem.AmountMulti(
-        listOf(
-            AmountValues("0.104 KCS (est)", "$0.99"),
-            AmountValues("0.103 KCS (min)", "$0.95"),
-        ),
-        ValueType.Incoming,
-        token
-    )
-    ComposeAppTheme {
-        AmountMulti(item)
     }
 }
 

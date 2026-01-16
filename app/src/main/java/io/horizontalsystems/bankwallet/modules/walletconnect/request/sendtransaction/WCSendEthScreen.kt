@@ -225,20 +225,7 @@ fun DataBlock(
     sections.forEach { section ->
         section.viewItems.forEach { item ->
             when (item) {
-                is ViewItem.AmountMulti -> {
-                    item.amounts.forEach { amount ->
-                        TitleValueCell(
-                            stringResource(R.string.WalletConnect_Value),
-                            amount.coinAmount
-                        )
-                    }
-                }
-
                 is ViewItem.Value -> TitleValueCell(item.title, item.value)
-
-                is ViewItem.ValueMulti -> {
-                    TitleValueCell(item.title, item.primaryValue, item.secondaryValue)
-                }
 
                 is ViewItem.Amount -> TitleValueCell(
                     stringResource(R.string.WalletConnect_Value),
