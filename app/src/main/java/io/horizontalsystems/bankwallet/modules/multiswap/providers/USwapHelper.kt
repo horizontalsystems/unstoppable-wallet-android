@@ -43,14 +43,16 @@ class USwapHelper {
         val records = uSwapAssetDao.getByProvider(providerId)
         if (records.isEmpty()) return null
 
+        val queries = records.mapNotNull { TokenQuery.fromId(it.tokenQueryId) }
+        val tokensMap = App.marketKit.tokens(queries).associate { it.tokenQuery.id to it }
+
         val assetsMap = mutableMapOf<Token, String>()
         for (record in records) {
-            val tokenQuery = TokenQuery.fromId(record.tokenQueryId) ?: continue
-            val token = App.marketKit.token(tokenQuery) ?: continue
+            val token = tokensMap[record.tokenQueryId] ?: continue
             assetsMap[token] = record.assetIdentifier
         }
 
-        return if (assetsMap.isNotEmpty()) assetsMap else null
+        return assetsMap.ifEmpty { null }
     }
 
     private fun saveToCacheDb(providerId: String, assetsMap: Map<Token, String>) {
