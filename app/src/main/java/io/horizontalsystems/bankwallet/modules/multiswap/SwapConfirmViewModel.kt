@@ -123,7 +123,7 @@ class SwapConfirmViewModel(
                 emitState()
 
                 if (sendTransactionState.sendable) {
-                    timerService.start(10)
+                    timerService.start(20)
                 }
             }
         }
