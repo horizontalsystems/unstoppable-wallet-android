@@ -35,7 +35,7 @@ import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
-import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
+import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.TransactionInputsSortInfoPage
@@ -107,17 +107,13 @@ fun SendBtcAdvancedSettingsScreen(
             ) {
 
                 VSpacer(12.dp)
-                CellUniversalLawrenceSection(
-                    listOf {
-                        HSFeeRaw(
-                            coinCode = wallet.coin.code,
-                            coinDecimal = sendBitcoinViewModel.coinMaxAllowedDecimals,
-                            fee = sendUiState.fee,
-                            amountInputType = amountInputType,
-                            rate = rate,
-                            navController = fragmentNavController
-                        )
-                    }
+                HSFee(
+                    coinCode = wallet.coin.code,
+                    coinDecimal = sendBitcoinViewModel.coinMaxAllowedDecimals,
+                    fee = sendUiState.fee,
+                    amountInputType = amountInputType,
+                    rate = rate,
+                    navController = fragmentNavController
                 )
 
                 if (feeRateVisible) {

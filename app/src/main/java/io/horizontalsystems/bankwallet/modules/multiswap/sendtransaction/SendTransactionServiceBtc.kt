@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
-import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
+import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinAddressService
@@ -33,7 +33,6 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaut
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.settings.SendBtcSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -234,17 +233,13 @@ fun SendBtcFeeSettingsScreen(
                 .fillMaxSize()
         ) {
             VSpacer(12.dp)
-            CellUniversalLawrenceSection(
-                listOf {
-                    HSFeeRaw(
-                        coinCode = viewModel.token.coin.code,
-                        coinDecimal = viewModel.coinMaxAllowedDecimals,
-                        fee = uiState.fee,
-                        amountInputType = AmountInputType.COIN,
-                        rate = uiState.rate,
-                        navController = navController
-                    )
-                }
+            HSFee(
+                coinCode = viewModel.token.coin.code,
+                coinDecimal = viewModel.coinMaxAllowedDecimals,
+                fee = uiState.fee,
+                amountInputType = AmountInputType.COIN,
+                rate = uiState.rate,
+                navController = navController
             )
 
             if (viewModel.feeRateChangeable) {

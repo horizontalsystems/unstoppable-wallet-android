@@ -1,19 +1,26 @@
 package io.horizontalsystems.bankwallet.modules.fee
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import java.math.BigDecimal
 
 @Composable
@@ -24,20 +31,23 @@ fun HSFee(
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
     navController: NavController,
-    viewState: ViewState? = null
 ) {
-    CellUniversalLawrenceSection(
-        listOf {
-            HSFeeRaw(
-                coinCode = coinCode,
-                coinDecimal = coinDecimal,
-                fee = fee,
-                amountInputType = amountInputType,
-                rate = rate,
-                navController = navController,
-                viewState = viewState
-            )
-        })
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(ComposeAppTheme.colors.lawrence)
+            .padding(vertical = 8.dp)
+    ) {
+        HSFeeRaw(
+            coinCode = coinCode,
+            coinDecimal = coinDecimal,
+            fee = fee,
+            amountInputType = amountInputType,
+            rate = rate,
+            navController = navController,
+        )
+    }
 }
 
 @Composable
@@ -50,7 +60,6 @@ fun HSFeeRaw(
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
     navController: NavController,
-    viewState: ViewState? = null
 ) {
 
     var formatted by remember { mutableStateOf<FeeItem?>(null) }
@@ -59,39 +68,12 @@ fun HSFeeRaw(
         formatted = getFormatted(fee, rate, coinCode, coinDecimal, amountInputType)
     }
 
-    FeeCell(
+    DataFieldFeeTemplate(
+        navController = navController,
+        primary = formatted?.primary ?: "---",
+        secondary = formatted?.secondary ?: "---",
         title = title,
-        info = info,
-        value = formatted,
-        viewState = viewState,
-        navController = navController
-    )
-}
-
-@Composable
-fun HSFeeRawWithViewState(
-    title: String = stringResource(R.string.Send_Fee),
-    info: String = stringResource(R.string.Send_Fee_Info),
-    coinCode: String,
-    coinDecimal: Int,
-    fee: BigDecimal?,
-    viewState: ViewState,
-    amountInputType: AmountInputType,
-    rate: CurrencyValue?,
-    navController: NavController
-) {
-    var formatted by remember { mutableStateOf<FeeItem?>(null) }
-
-    LaunchedEffect(fee, amountInputType, rate) {
-        formatted = getFormatted(fee, rate, coinCode, coinDecimal, amountInputType)
-    }
-
-    FeeCell(
-        title = title,
-        info = info,
-        value = formatted,
-        viewState = viewState,
-        navController = navController
+        infoText = info
     )
 }
 
