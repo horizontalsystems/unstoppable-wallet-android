@@ -32,7 +32,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
-import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
+import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.modules.send.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.SendResult
@@ -214,22 +214,15 @@ class ResendBitcoinFragment : BaseComposeFragment() {
 
                     CellUniversalLawrenceSection(topSectionItems)
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    val bottomSectionItems = buildList<@Composable () -> Unit> {
-                        add {
-                            HSFeeRaw(
-                                coinCode = uiState.feeCoin.code,
-                                coinDecimal = uiState.coinMaxAllowedDecimals,
-                                fee = uiState.fee,
-                                amountInputType = AmountInputType.COIN,
-                                rate = uiState.coinRate,
-                                navController = navController
-                            )
-                        }
-                    }
-
-                    CellUniversalLawrenceSection(bottomSectionItems)
+                    VSpacer(16.dp)
+                    HSFee(
+                        coinCode = uiState.feeCoin.code,
+                        coinDecimal = uiState.coinMaxAllowedDecimals,
+                        fee = uiState.fee,
+                        amountInputType = AmountInputType.COIN,
+                        rate = uiState.coinRate,
+                        navController = navController
+                    )
 
                     Spacer(modifier = Modifier.height(24.dp))
                     EvmSettingsInput(

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.bitcoin
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -15,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -49,7 +52,6 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.utxoexpert.UtxoExper
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -220,30 +222,30 @@ fun SendBitcoinScreen(
                     }
 
                     VSpacer(16.dp)
-                    CellUniversalLawrenceSection(
-                        buildList {
-                            uiState.utxoData?.let { utxoData ->
-                                add {
-                                    UtxoCell(
-                                        utxoData = utxoData,
-                                        onClick = {
-                                            composeNavController.navigate(UtxoExpertModePage)
-                                        }
-                                    )
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(ComposeAppTheme.colors.lawrence)
+                            .padding(vertical = 8.dp)
+                    ) {
+                        uiState.utxoData?.let { utxoData ->
+                            UtxoCell(
+                                utxoData = utxoData,
+                                onClick = {
+                                    composeNavController.navigate(UtxoExpertModePage)
                                 }
-                            }
-                            add {
-                                HSFeeRaw(
-                                    coinCode = wallet.coin.code,
-                                    coinDecimal = viewModel.coinMaxAllowedDecimals,
-                                    fee = fee,
-                                    amountInputType = amountInputType,
-                                    rate = rate,
-                                    navController = fragmentNavController
-                                )
-                            }
+                            )
                         }
-                    )
+                        HSFeeRaw(
+                            coinCode = wallet.coin.code,
+                            coinDecimal = viewModel.coinMaxAllowedDecimals,
+                            fee = fee,
+                            amountInputType = amountInputType,
+                            rate = rate,
+                            navController = fragmentNavController
+                        )
+                    }
 
                     feeRateCaution?.let {
                         FeeRateCaution(
