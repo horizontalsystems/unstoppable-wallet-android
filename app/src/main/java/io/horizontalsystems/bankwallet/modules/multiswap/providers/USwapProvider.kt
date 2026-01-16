@@ -32,7 +32,7 @@ import retrofit2.http.Query
 import java.math.BigDecimal
 import java.math.BigInteger
 
-class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider {
+class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     override val id = "u_${provider.id}"
     override val title = provider.title
     override val icon = provider.icon
