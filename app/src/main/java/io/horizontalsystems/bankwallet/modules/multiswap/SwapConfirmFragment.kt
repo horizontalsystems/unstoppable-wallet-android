@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +19,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -57,14 +55,12 @@ import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead_leah
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
@@ -223,24 +219,25 @@ fun SwapConfirmScreen(navController: NavController) {
             }
         }
     ) {
-        Box() {
-            SectionUniversalLawrence {
+        Box {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(ComposeAppTheme.colors.lawrence)
+            ) {
                 TokenRow(
                     token = uiState.tokenIn,
                     amount = uiState.amountIn,
                     fiatAmount = uiState.fiatAmountIn,
                     currency = uiState.currency,
-                    borderTop = false,
-                    title = stringResource(R.string.Send_Confirmation_YouSend),
-                    amountColor = ComposeAppTheme.colors.leah,
                 )
+                HsDivider()
                 TokenRow(
                     token = uiState.tokenOut,
                     amount = uiState.amountOut,
                     fiatAmount = uiState.fiatAmountOut,
                     currency = uiState.currency,
-                    title = stringResource(R.string.Swap_ToAmountTitle),
-                    amountColor = ComposeAppTheme.colors.remus,
                 )
             }
             Icon(
@@ -329,15 +326,10 @@ fun TokenRow(
     amount: BigDecimal?,
     fiatAmount: BigDecimal?,
     currency: Currency,
-    borderTop: Boolean = true,
-    title: String,
-    amountColor: Color,
 ) = TokenRowPure(
     fiatAmount,
-    borderTop,
     currency,
-    title,
-    amountColor,
+    token.coin.name,
     token.coin.imageUrl,
     token.coin.alternativeImageUrl,
     token.iconPlaceholder,
@@ -348,40 +340,36 @@ fun TokenRow(
 @Composable
 fun TokenRowPure(
     fiatAmount: BigDecimal?,
-    borderTop: Boolean = true,
     currency: Currency,
     title: String,
-    amountColor: Color,
     imageUrl: String?,
     alternativeImageUrl: String?,
     imagePlaceholder: Int?,
     badge: String?,
     amountFormatted: String?,
 ) {
-    CellUniversal(borderTop = borderTop) {
-        HsImageCircle(
-            modifier = Modifier.size(32.dp),
-            url = imageUrl,
-            alternativeUrl = alternativeImageUrl,
-            placeholder = imagePlaceholder
-        )
-        HSpacer(width = 16.dp)
-        Column {
-            subhead_leah(text = title)
-            VSpacer(height = 1.dp)
-            subhead_grey(text = badge ?: stringResource(id = R.string.CoinPlatforms_Native))
-        }
-        HFillSpacer(minWidth = 16.dp)
-        Column(horizontalAlignment = Alignment.End) {
-            Text(
-                text = amountFormatted ?: "---",
-                style = ComposeAppTheme.typography.subhead,
-                color = amountColor,
+    CellPrimary(
+        left = {
+            HsImageCircle(
+                modifier = Modifier.size(32.dp),
+                url = imageUrl,
+                alternativeUrl = alternativeImageUrl,
+                placeholder = imagePlaceholder
             )
-            fiatAmount?.let {
-                VSpacer(height = 1.dp)
-                subhead_grey(text = CurrencyValue(currency, fiatAmount).getFormattedFull())
-            }
+        },
+        middle = {
+            CellMiddleInfo(
+                eyebrow = title.hs(color = ComposeAppTheme.colors.leah),
+                subtitle = (badge ?: stringResource(id =R.string.CoinPlatforms_Native)).hs
+            )
+        },
+        right = {
+            CellRightInfo(
+                eyebrow = amountFormatted?.hs(ComposeAppTheme.colors.leah) ?: "---".hs(ComposeAppTheme.colors.leah),
+                subtitle = fiatAmount?.let {
+                    CurrencyValue(currency, fiatAmount).getFormattedFull()
+                }?.hs
+            )
         }
-    }
+    )
 }

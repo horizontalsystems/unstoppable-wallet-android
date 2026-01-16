@@ -234,7 +234,7 @@ private fun AmountWithTitle(item: ViewItem.AmountWithTitle) {
         },
         right = {
             CellRightInfo(
-                eyebrow = item.coinAmount.hs,
+                eyebrow = item.coinAmount.hs(color = ComposeAppTheme.colors.leah),
                 subtitle = item.fiatAmount?.hs
             )
         }
