@@ -58,13 +58,13 @@ import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
@@ -153,17 +153,25 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
-        onClickTerms = {
-            navController.slideFromRight(R.id.swapTermsFragment)
-        },
         onClickNext = {
-            navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
-                if (it.success) {
-                    navController.popBackStack()
+            val navigateToSwapConfirm = {
+                navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
+                    if (it.success) {
+                        navController.popBackStack()
+                    }
                 }
+                stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
             }
 
-            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
+            if (uiState.needToAcceptTerms) {
+                navController.slideFromRightForResult<SwapTermsFragment.Result>(R.id.swapTermsFragment) {
+                    if (it.accepted) {
+                        navigateToSwapConfirm.invoke()
+                    }
+                }
+            } else {
+                navigateToSwapConfirm.invoke()
+            }
         },
         onActionStarted = {
             viewModel.onActionStarted()
@@ -188,7 +196,6 @@ private fun SwapScreenInner(
     onEnterFiatAmount: (BigDecimal?) -> Unit,
     onEnterAmountPercentage: (Int) -> Unit,
     onClickProvider: () -> Unit,
-    onClickTerms: () -> Unit,
     onClickNext: () -> Unit,
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,
@@ -314,16 +321,6 @@ private fun SwapScreenInner(
                                 action.execute(navController, onActionCompleted)
                             },
                             loadingIndicator = action.inProgress
-                        )
-                    }
-
-                    SwapStep.AcceptTerms -> {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
-                            title = stringResource(R.string.Swap_Proceed),
-                            onClick = onClickTerms
                         )
                     }
 

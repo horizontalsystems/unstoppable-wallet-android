@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.swapterms
 
+import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.highlightText
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -29,29 +31,28 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
+import kotlinx.parcelize.Parcelize
 
 class SwapTermsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapTermsScreen {
-            navController.popBackStack()
-        }
+        SwapTermsScreen(navController)
     }
+
+    @Parcelize
+    data class Result(val accepted: Boolean) : Parcelable
 }
 
 @Composable
-fun SwapTermsScreen(
-    viewModel: SwapTermsViewModel = viewModel(factory = SwapTermsModule.Factory()),
-    onCloseClick: () -> Unit
-) {
-    val titleColor = ComposeAppTheme.colors.leah
+fun SwapTermsScreen(navController: NavController) {
+    val viewModel = viewModel<SwapTermsViewModel>(factory = SwapTermsModule.Factory())
     val uiState = viewModel.uiState
     val terms = uiState.terms
 
     HSScaffold(
         title = stringResource(R.string.SwapTerms_Title),
-        onBack = onCloseClick,
+        onBack = navController::popBackStack,
         bottomBar = {
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
@@ -62,7 +63,9 @@ fun SwapTermsScreen(
                     enabled = uiState.buttonEnabled,
                     onClick = {
                         viewModel.onConfirm()
-                        onCloseClick()
+
+                        navController.setNavigationResultX(SwapTermsFragment.Result(true))
+                        navController.popBackStack()
                     }
                 )
             }
@@ -120,7 +123,7 @@ fun SwapTermsScreen(
                     middle = {
                         CellMiddleInfo(
                             subtitle = stringResource(terms[1].title).hs(
-                                color = titleColor
+                                color = ComposeAppTheme.colors.leah
                             ),
                             description = stringResource(terms[1].description).hs
                         )
