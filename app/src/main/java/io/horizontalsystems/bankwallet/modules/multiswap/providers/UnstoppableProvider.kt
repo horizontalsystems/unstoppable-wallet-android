@@ -63,6 +63,7 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
         "ton" to BlockchainType.Ton,
         "dash" to BlockchainType.Dash,
         "ecash" to BlockchainType.ECash,
+        "monero" to BlockchainType.Monero,
     )
 
     private val assetsMap = mutableMapOf<Token, String>()
@@ -151,10 +152,14 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                         registerAsset(it, token.identifier)
                     }
                 }
+                BlockchainType.Monero -> {
+                    App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))?.let {
+                        registerAsset(it, token.identifier)
+                    }
+                }
 
                 BlockchainType.Fantom -> TODO()
                 BlockchainType.Gnosis -> TODO()
-                BlockchainType.Monero -> TODO()
                 is BlockchainType.Unsupported -> TODO()
                 BlockchainType.ZkSync -> TODO()
             }
@@ -408,6 +413,26 @@ class UnstoppableProvider(private val provider: UProvider) : IMultiSwapProvider 
                     address = bestRoute.inboundAddress,
                     amount = amountIn,
                     memo = bestRoute.txExtraAttribute?.get("memo") ?: ""
+                )
+            }
+
+            BlockchainType.Monero -> {
+                val simpleMoneroTransactionProviders = listOf(
+                    UProvider.Near,
+                    UProvider.QuickEx,
+                    UProvider.LetsExchange,
+                    UProvider.StealthEx,
+                    UProvider.Swapuz
+                )
+
+                if (!simpleMoneroTransactionProviders.contains(provider)) {
+                    throw IllegalStateException("Only simple XMR tx providers are supported")
+                }
+
+                return SendTransactionData.Monero(
+                    address = bestRoute.inboundAddress,
+                    amount = amountIn,
+                    memo = bestRoute.txExtraAttribute?.get("memo")
                 )
             }
 

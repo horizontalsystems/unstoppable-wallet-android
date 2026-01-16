@@ -11,4 +11,5 @@ sealed class SendTransactionResult {
     object Solana : SendTransactionResult()
     object Ton : SendTransactionResult()
     object Zcash : SendTransactionResult()
+    object Monero : SendTransactionResult()
 }

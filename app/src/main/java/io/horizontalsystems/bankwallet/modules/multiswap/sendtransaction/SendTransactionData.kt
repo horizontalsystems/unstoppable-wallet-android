@@ -80,6 +80,12 @@ sealed class SendTransactionData {
         ) : Zcash()
     }
 
+    data class Monero(
+        val address: String,
+        val amount: BigDecimal,
+        val memo: String?,
+    ) : SendTransactionData()
+
 }
 
 enum class FeeType(val stringResId: Int) {
