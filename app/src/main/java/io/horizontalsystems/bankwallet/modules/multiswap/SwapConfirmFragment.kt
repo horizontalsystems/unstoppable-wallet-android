@@ -57,18 +57,14 @@ import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead_leah
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
@@ -275,16 +271,12 @@ fun SwapConfirmScreen(navController: NavController) {
                 )
                 PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
                 uiState.amountOutMin?.let { amountOutMin ->
-                    val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->
-                        CurrencyValue(uiState.currency, fiatAmountOutMin).getFormattedFull()
-                    } ?: "---"
                     val infoTitle = stringResource(id = R.string.Swap_MinimumReceived)
                     val infoText = stringResource(id = R.string.Swap_MinimumReceivedDescription)
-
-                    SwapInfoRow(
+                    QuoteInfoRow(
                         title = stringResource(id = R.string.Swap_MinimumReceived),
-                        value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull(),
-                        subvalue = subvalue,
+                        value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull()
+                            .hs(ComposeAppTheme.colors.leah),
                         onInfoClick = {
                             navController.slideFromBottom(
                                 R.id.swapInfoDialog,
@@ -315,9 +307,12 @@ fun SwapConfirmScreen(navController: NavController) {
                 )
             }
             uiState.totalFee?.let { totalFee ->
-                SwapInfoRow(
+                DataFieldFeeTemplate(
+                    navController = navController,
                     title = stringResource(id = R.string.Fee_Total),
-                    value = totalFee.getFormattedFull(),
+                    primary = totalFee.getFormattedFull(),
+                    secondary = null,
+                    infoText = null
                 )
             }
         }
@@ -326,30 +321,6 @@ fun SwapConfirmScreen(navController: NavController) {
             Cautions(cautions = uiState.cautions)
         }
     }
-}
-
-@Composable
-private fun SwapInfoRow(
-    title: String,
-    value: String,
-    subvalue: String? = null,
-    onInfoClick: (() -> Unit)? = null,
-) {
-    CellSecondary(
-        middle = {
-            CellMiddleInfoTextIcon(
-                text = title.hs(color = ComposeAppTheme.colors.grey),
-                icon = painterResource(R.drawable.ic_info_filled_20),
-                iconTint = ComposeAppTheme.colors.grey,
-                onIconClick = onInfoClick
-            )
-        },
-        right = {
-            CellRightInfo(
-                titleSubheadSb = value.hs(ComposeAppTheme.colors.leah),
-            )
-        },
-    )
 }
 
 @Composable
@@ -396,9 +367,9 @@ fun TokenRowPure(
         )
         HSpacer(width = 16.dp)
         Column {
-            subhead2_leah(text = title)
+            subhead_leah(text = title)
             VSpacer(height = 1.dp)
-            caption_grey(text = badge ?: stringResource(id = R.string.CoinPlatforms_Native))
+            subhead_grey(text = badge ?: stringResource(id = R.string.CoinPlatforms_Native))
         }
         HFillSpacer(minWidth = 16.dp)
         Column(horizontalAlignment = Alignment.End) {
@@ -409,39 +380,8 @@ fun TokenRowPure(
             )
             fiatAmount?.let {
                 VSpacer(height = 1.dp)
-                caption_grey(text = CurrencyValue(currency, fiatAmount).getFormattedFull())
+                subhead_grey(text = CurrencyValue(currency, fiatAmount).getFormattedFull())
             }
-        }
-    }
-}
-
-@Composable
-fun TokenRowUnlimited(
-    token: Token,
-    borderTop: Boolean = true,
-    title: String,
-    amountColor: Color,
-) {
-    CellUniversal(borderTop = borderTop) {
-        CoinImage(
-            token = token,
-            modifier = Modifier.size(32.dp)
-        )
-        HSpacer(width = 16.dp)
-        Column {
-            subhead2_leah(text = title)
-            VSpacer(height = 1.dp)
-            caption_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
-        }
-        HFillSpacer(minWidth = 16.dp)
-        Column(horizontalAlignment = Alignment.End) {
-            Text(
-                text = "∞ ${token.coin.code}",
-                style = ComposeAppTheme.typography.subhead,
-                color = amountColor,
-            )
-            VSpacer(height = 1.dp)
-            caption_grey(text = stringResource(id = R.string.Transaction_Unlimited))
         }
     }
 }

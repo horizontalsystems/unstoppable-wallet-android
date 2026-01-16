@@ -145,8 +145,8 @@ fun AddressCell(
         },
         middle = {
             CellMiddleInfo(
-                subtitle = (contact ?: address).hs(color = ComposeAppTheme.colors.leah),
-                description = description?.hs
+                eyebrow = (contact ?: address).hs(color = ComposeAppTheme.colors.leah),
+                subtitle = description?.hs
             )
         },
     )
@@ -228,14 +228,14 @@ private fun AmountWithTitle(item: ViewItem.AmountWithTitle) {
         },
         middle = {
             CellMiddleInfo(
-                subtitle = item.title.hs(color = ComposeAppTheme.colors.leah),
-                description = (item.badge ?: stringResource(id =R.string.CoinPlatforms_Native)).hs
+                eyebrow = item.title.hs(color = ComposeAppTheme.colors.leah),
+                subtitle = (item.badge ?: stringResource(id =R.string.CoinPlatforms_Native)).hs
             )
         },
         right = {
             CellRightInfo(
-                titleSubheadSb = item.coinAmount.hs,
-                description = item.fiatAmount?.hs
+                eyebrow = item.coinAmount.hs,
+                subtitle = item.fiatAmount?.hs
             )
         }
     )
