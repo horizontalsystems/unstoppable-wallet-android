@@ -743,6 +743,7 @@
     <!--Swap-->
 
     <string name="Swap">Swap</string>
+    <string name="Swap_AML">AML</string>
     <string name="Swap_FromAmountTitle">You Pay</string>
     <string name="Swap_ToAmountTitle">You Get</string>
     <string name="Swap_FiatPriceImpact" translatable="false">(%s%%)</string>
