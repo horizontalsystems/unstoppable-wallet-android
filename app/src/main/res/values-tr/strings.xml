@@ -6,7 +6,6 @@
     <string name="Alert_Cancel">İptal</string>
     <string name="Alert_Copy">Kopyala</string>
     <string name="Alert_Loading">Yükleniyor...</string>
-    <string name="Suspended">ASKIYA ALINDI</string>
     <string name="Button_Show">Göster</string>
     <string name="Button_Hide">Gizle</string>
     <string name="Button_Cancel">İptal</string>
@@ -33,7 +32,6 @@
     <string name="Button_Reset">Sıfırla</string>
     <string name="Button_Understand">Anlıyorum</string>
     <string name="Button_Switch">Değiştir</string>
-    <string name="Button_Remove">Kaldır</string>
     <string name="Button_Save">Kaydet</string>
     <string name="Button_IAgree">Kabul Ediyorum</string>
     <string name="Button_Continue">Devam</string>
@@ -44,7 +42,6 @@
     <string name="Button_Delete">Sil</string>
     <string name="Button_LearnMore">Daha fazla bilgi edin</string>
     <string name="Button_Sign">kaydol</string>
-    <string name="Button_GetApiKeys">API Anahtarı alın</string>
     <string name="Button_TryAgain">Tekrar deneyin</string>
     <string name="Button_Share">Paylaş</string>
     <string name="Button_Apply">Uygula</string>
@@ -135,10 +132,6 @@
     <string name="Market_All">Hepsi</string>
     <string name="Market_Search_Sections_RecentTitle">SON</string>
     <string name="Market_Search_Sections_PopularTitle">POPÜLER</string>
-    <string name="Market_FilterSection_MarketParameters">PİYASA PARAMETRELERİ</string>
-    <string name="Market_FilterSection_PriceParameters">FİYAT PARAMETRELERİ</string>
-    <string name="Market_FilterSection_NetworkParameters">AĞ PARAMETRELERİ</string>
-    <string name="Market_FilterSection_Indicators">GÖSTERGELER</string>
     <string name="Market_Field_HighestCap">En Yüksek</string>
     <string name="Market_Field_LowestCap">En Düşük</string>
     <string name="Market_Field_HighestVolume">En Yüksek HacIm</string>
@@ -170,7 +163,6 @@
     <!--Market Overview-->
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">En İyi Platformlar</string>
-    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ekosistemi</string>
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">%s zincirindeki tüm protokollerin piyasa değeri</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_TotalMarketCapShort">Toplam Piyasa Değeri</string>
@@ -186,13 +178,10 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">Hepsi</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!-- ETF-->
-    <string name="MarketEtf_Title">Toplam Net Giriş</string>
-    <string name="MarketEtf_Description">Bir ETF\'nin net girişi, nakit girişlerinin çıkışlardan çıkarılmasıyla eşittir</string>
     <string name="MarketEtf_HighestAssets">En Yüksek Varlıklar</string>
     <string name="MarketEtf_LowestAssets">En Düşük Varlıklar</string>
     <string name="MarketEtf_Inflow">Giriş</string>
     <string name="MarketEtf_Outflow">Çıkış</string>
-    <string name="MarketEtf_TotalNetAssets">Toplam Net Varlıklar</string>
     <!--Market Search-->
     <string name="EmptyResults">Sonuç bulunamadı</string>
     <string name="Market_Filters">Filtreler</string>
@@ -212,8 +201,6 @@
     <string name="Market_Filter_OutperformedEth">ETH\'yi Geride Bıraktı</string>
     <string name="Market_Filter_OutperformedBnb">BNB\'yi Geride Bıraktı</string>
     <string name="Market_Filter_PriceCloseTo">Kapanış fiyatı</string>
-    <string name="Market_Filter_PriceCloseToAth">ATH\'ye Yakın Fiyat</string>
-    <string name="Market_Filter_PriceCloseToAtl">ATL\'ye Yakın Fiyat</string>
     <string name="Market_Filter_ListedOnTopExchanges">En İyi Borsalarda Listelenmiş</string>
     <string name="Market_Filter_SolidCex">İyi CEX Hacmi</string>
     <string name="Market_Filter_SolidCex_Description">Genel Puan iyi veya mükemmel</string>
@@ -264,13 +251,9 @@
     <!--TVL Rank-->
     <!--Balance-->
     <string name="Wallet_Title">Cüzdanı</string>
-    <string name="Balance_Withdraw">Hesaptan Çek</string>
     <string name="Balance_Title">Bakiye</string>
     <string name="Balance_Send">Gönder</string>
-    <string name="Balance_ChooseCoin">Kripto Parayı Seç</string>
-    <string name="Balance_Deposit">Al</string>
     <string name="Balance_Receive">Al</string>
-    <string name="Balance_Address">Adres</string>
     <string name="Balance_RatePerCoin">%1$s için %2$s</string>
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
@@ -289,21 +272,14 @@
     <string name="Balance_Receive_AddressFormat">Adres Formatı</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Geliştirilmiş kullanıcı deneyimi ve uyumluluğu nedeniyle Bitcoin Cash (BCH) almak için Nakit Adresi formatı tercih edilmektedir. Ancak gönderenin adres formatı ne olursa olsun, BCH\'yi almak için her iki adres formatı da birbirinin yerine kullanılabilir.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Bitcoin\'de daha iyi bir verimlilik ve güvenlik için yerel SegWit formatı tercih edilir. Tüm adres formatları (Taproot, SegWit, Legacy), gönderenin adres formatına bakılmaksızın BTC almak için birbirinin yerine kullanılabilir ve farklı para birimlerinde kesintisiz işlemlere olanak tanır.</string>
-    <string name="Balance_Receive_Account">Hesap</string>
-    <string name="Balance_Receive_NotActive">Aktif değil</string>
     <string name="Balance_Receive_Amount">Tutar</string>
     <string name="Balance_Receive_SetAmount">Miktarı Ayarla</string>
-    <string name="Balance_LockedAmount_Title">Kilitli</string>
-    <string name="Balance_ProcessingBalance_Title">İşleniyor</string>
-    <string name="Balance_NotRelayedAmount_Title">Yayınlama</string>
     <string name="Balance_Error_InvalidQrCode">Tanıyamıyorum</string>
     <string name="Balance_Receive_WatchAddressAlert">Bu adres izlenen hesabın adresidir</string>
-    <string name="Balance_Receive_AddressMemoAlert">Gerekli Memo (Etiket) sağlayın ve yalnızca ağ uyumlu jetonları gönderin. Diğerleri kaybolur.</string>
     <string name="Balance_Receive_UsedAddresses">Kullanılan Adresler</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s adresi gizlilik ve güvenlik nedeniyle değişiyor. Bu cüzdanın kullanılan adreslerinin bir listesi aşağıda verilmiştir.</string>
     <string name="Balance_Receive_ReceiveAddresses">Alıcının adresi</string>
     <string name="Balance_Receive_ChangeAddresses">Değişiklik Adresleri</string>
-    <string name="Balance_SendHint_CoinName">Kripto Para Adı</string>
     <string name="Balance_ReceiveHint_Search">Ara</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Gönder</string>
@@ -333,25 +309,9 @@
     <string name="Send_Confirmation_Method">Yöntem</string>
     <string name="Send_Confirmation_Send_Button">Gönder</string>
     <string name="Send_Confirmation_Action">İşlem</string>
-    <string name="Send_Processing">İşleniyor!</string>
-    <string name="Send_Processing_Description">İşlem başarıyla gönderildi. Ayrıntılar için durumunu kontrol edin.</string>
-    <string name="Send_Address_Recent">Son İşlemler</string>
-    <string name="Send_Address_Error_CheckLocked">Kilitli</string>
-    <string name="Send_Address_Error_Incorrect">Geçersiz</string>
     <string name="Send_Address_Error_InvalidAddress">Geçersiz adres</string>
-    <string name="Send_Address_Error_Correct">Doğru</string>
     <string name="Send_Address_Error_Detected">Tespit Edildi</string>
     <string name="Send_Address_Error_Clear">Temizle</string>
-    <string name="Send_Address_AddressCheck">Adres Kontrolü</string>
-    <string name="Send_Address_PhishingCheck_Info1">Sağlanan hedef adresi olası oltalama riskleri için analiz eder.</string>
-    <string name="Send_Address_PhishingCheck_Info2">Temiz: Şüpheli aktivite tespit edilmedi.</string>
-    <string name="Send_Address_PhishingCheck_Info3">Tespit Edildi: Birisi sizi yanlış bir adrese para göndermeye kandırmaya çalışıyor gibi görünüyor. Adresin doğru olduğundan kesinlikle emin olmadıkça devam etmeyin. Önce küçük bir test işlemi göndermeyi düşünün.</string>
-    <string name="Send_Address_BlacklistCheck_Info1">Hedef adresin resmi veya gayri resmi kara listelerde listelenip listelenmediğini kontrol eder.</string>
-    <string name="Send_Address_BlacklistCheck_Info2">Temiz: Kara liste işareti yok.</string>
-    <string name="Send_Address_BlacklistCheck_Info3">Tespit Edildi: Adres kara listeye alınmıştır ve yasal veya güvenlik riskleriyle ilişkili olabilir. Dikkatli ilerleyin. Birçok kripto borsası, kara listeye alınmış adreslerle etkileşime girmiş cüzdanlardan para yatıran veya çeken kullanıcıları kısıtlar. Bunu aklınızda bulundurun.</string>
-    <string name="Send_Address_SanctionCheck_Info1">Chainalysis.com\'dan alınan verileri kullanarak, alıcının adresinin uluslararası yaptırımlara tabi olup olmadığını doğrular.</string>
-    <string name="Send_Address_SanctionCheck_Info2">Temiz: Yaptırım tespit edilmedi.</string>
-    <string name="Send_Address_SanctionCheck_Info3">Tespit Edildi: Potansiyel yasal risk. Bu adresle yapılan işlemler belirli yargı bölgelerinde kısıtlanabilir veya yasadışı olabilir.</string>
     <string name="Send_Address_ErrorMessage_PhishingDetected">Oltalama Adresi Tespit Edildi!</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected">Kara Listeye Alınmış Adres Tespit Edildi!</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected">Yaptırım Uygulanan Adres Tespit Edildi!</string>
@@ -371,14 +331,12 @@
     <string name="Send_Error_SendToSelf">Kendine gönderme desteklenmiyor</string>
     <string name="Send_DialogAvailableBalance">Mevcut Bakiye</string>
     <string name="Send_DialogSpeed">İşlem hızı</string>
-    <string name="Send_DialogProceed">İleri</string>
     <string name="Send_LockTime_Off">Kapat</string>
     <string name="Send_LockTime_Hour">1 saat</string>
     <string name="Send_LockTime_Month">1 ay</string>
     <string name="Send_LockTime_HalfYear">6 ay</string>
     <string name="Send_LockTime_Year">1 yıl</string>
     <string name="Send_Sending">Gönderiliyor</string>
-    <string name="Send_Token_InsufficientFeeAlert">%1$s (%2$s) için ișlem ücreti %3$s hesabından ödenir. Asgari %4$s gerekiyor.</string>
     <string name="Send_Warning_LowFee">Uyarı! Takılma riski</string>
     <string name="Send_Error_LowFee">Ücret Hatası</string>
     <string name="Send_Error_LowFee_Description">Ücret Oranı çok düşük.</string>
@@ -419,16 +377,12 @@
     <string name="FeeInfo_AverageDescription">Genellikle bu ücret, işlemin Bitcoin için dakikalar/saatler içinde ve Ethereum için dakikalar içinde işleme alınması için yeterli olacaktır.</string>
     <string name="FeeInfo_Fast">Hızlı</string>
     <string name="FeeInfo_FastDescription">Önceliğin önemli olduğu işlemler için yüksek ücret değeri kullanmanızı öneririz. Bir işlemin Bitcoin için 10 dakika, Ethereum için 1-2 dakika içerisinde tamamlanması için yeterli olacaktır.</string>
-    <string name="FeeInfo_TronFee_Title">Masraf</string>
     <string name="FeeInfo_TronFee_Description">Ağda belirli bir işlemi göndermenin tahmini maliyeti. (Enerji, Bant Genişliği ve Aktivasyon Ücreti hariç)</string>
     <string name="FeeInfo_TronActivationFee_Title">Aktivasyon ücreti</string>
     <string name="FeeInfo_TronActivationFee_Description">Bu adres aktif değil. TRX veya TRC-10 jetonlarını aktif olmayan bir hesap adresine transfer etmek, hesabı aktif hale getirecektir.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Tüketilen Kaynaklar</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Band Width, blockchain veritabanında saklanan işlem baytlarının boyutunu ölçen birimdir. İşlem ne kadar büyük olursa, o kadar fazla bant genişliği kaynağı tüketilir.\n\nEnergy, TRON sanal makinesinin TRON ağında belirli işlemleri gerçekleştirmek için ihtiyaç duyduğu hesaplama miktarını ölçen birimdir.\n\nAkıllı sözleşmeden beri işlemlerin yürütülmesi için bilgi işlem kaynakları gerekir, her akıllı sözleşme işleminin energy ücretini ödemesi gerekir.</string>
     <!--Tron-->
-    <string name="Tron_AddressNotActive_Warning">Bu adres aktif değil</string>
-    <string name="Tron_AddressNotActive_Title">Aktif Adres Değil</string>
-    <string name="Tron_AddressNotActive_Info">TRON blok zincirinde yeni oluşturulan hesaplar etkin değildir ve sorgulanamaz veya araştırılamaz. Etkinleştirilmeleri gerekiyor.\n\nTRX veya TRC-10 jetonlarını etkin olmayan bir hesap adresine aktarmak, hesabı etkinleştirir. Tron zincirinde yeni bir hesabın etkinleştirilmesi 1 TRX ücret gerektirir</string>
     <string name="Tron_SelfSendTrxNotAllowed">TRX kendinize aktarılamıyor</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">0 %s aktarılamıyor</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Hesap aktif değil</string>
@@ -450,13 +404,10 @@
     <string name="WalletConnect_NewConnect">Yeni bağlantı</string>
     <string name="WalletConnect_SendTransactionRequest_ButtonSend">Gönder</string>
     <string name="WalletConnect_SignMessageRequest_Title">İmza Talebi</string>
-    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">İmza için mesaj</string>
-    <string name="WalletConnect_SignMessageRequest_ButtonSign">kaydol</string>
     <string name="WalletConnect_Error_NoWallet">WalletConnect\'i kullanmadan önce bir cüzdan oluşturmanız veya içe aktarmanız gerekir</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Desteklenmeyen Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Uygun hesap yok</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Uygun evm kiti yok</string>
-    <string name="WalletConnect_Error_DataParsingError">Veri ayrıştırma hatası</string>
     <string name="WalletConnect_Error_UnsupportedChains">Desteklenmeyen zincirler: %s</string>
     <string name="WalletConnect_Error_UnsupportedMethods">Desteklenmeyen yöntemler: %s</string>
     <string name="WalletConnect_Error_UnsupportedEvents">Desteklenmeyen olaylar: %s</string>
@@ -466,7 +417,6 @@
     <string name="WalletConnect_ActiveWallet">Cüzdanı</string>
     <string name="WalletConnect_NotSupportedDescription">Mevcut cüzdan türünüz %s WalletConnect\'i desteklemiyor</string>
     <string name="WalletConnect_Unnamed">İsimsiz</string>
-    <string name="WalletConnect_Pairings">Eşleştirme</string>
     <string name="WalletConnect_PairedDApps">Eşleştirilmiş dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Hepsini Sil</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Eşleştirilmiş tüm dAps\'leri silmek istiyor musunuz?</string>
@@ -491,19 +441,15 @@
     <string name="Swap_FromAmountTitle">Ödediğiniz</string>
     <string name="Swap_ToAmountTitle">Kazandığınız</string>
     <string name="Swap_TokenSelectorTitle">Seç</string>
-    <string name="Swap_Allowance">Ödenek</string>
     <string name="Swap_Price">Fiyat</string>
     <string name="Swap_AvailableBalance">Mevcut Bakiye</string>
     <string name="Swap_PriceImpact">Fiyat Etkisi</string>
-    <string name="Swap_PriceImpactTooHigh">Rayiç fiyat ile beklenen uzlaşma fiyatı arasındaki fark çok yüksek.</string>
-    <string name="Swap_PriceImpactWarning">Önemli! Son derece olumsuz bir fiyat alıyorsunuz. Bunun nedeni son derece düşük likiditedir.</string>
     <string name="Swap_MinimumReceived">Garantili Tutar</string>
     <string name="Swap_Slippage">Kayma</string>
     <string name="Swap_Recipient">Alıcı</string>
     <string name="Swap_ErrorNoProviders">Sağlayıcı Yok</string>
     <string name="Swap_ErrorNoQuote">Teklif Yok</string>
     <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
-    <string name="Swap_ErrorHighPriceImpact">Yüksek fiyat etkisi</string>
     <string name="Swap_ErrorTokenNotEnabled">Jeton Etkin Değil</string>
     <string name="Swap_ErrorWalletSyncing">Cüzdan senkronize ediliyor</string>
     <string name="Swap_ErrorWalletNotSynced">Cüzdan Senkronize Edilmedi</string>
@@ -511,8 +457,6 @@
     <string name="Swap_SelectTokenIn">Giriş Tokeni Seç</string>
     <string name="Swap_SelectTokenOut">Çıkış Tokeni Seç</string>
     <string name="Swap_EnterAmount">Miktar Girin</string>
-    <string name="Swap_Unlock">Kilidi Aç</string>
-    <string name="Swap_Unlocking">Kilidi Açılıyor...</string>
     <string name="Swap_Revoke">İptal et</string>
     <string name="Swap_Revoking">İptal ediliyor...</string>
     <string name="Swap_Approve">Onayla</string>
@@ -525,17 +469,10 @@
     <string name="Swap_YouPay">Ödediğiniz</string>
     <string name="Swap_YouGet">Kazandığınız</string>
     <string name="Swap_Confirm_Title">Onayla</string>
-    <string name="SwapConfirm_QuoteExpired">Alıntı süresi doldu</string>
-    <string name="SwapConfirm_FetchingFinalQuote">Son teklifi alınıyor</string>
     <!-- Swap Settings -->
-    <string name="SwapSettings_Title">Swap Ayarları</string>
     <string name="SwapSettings_SlippageTitle">Slipaj Toleransı</string>
-    <string name="SwapSettings_DeadlineTitle">İşlem Son Günü</string>
-    <string name="SwapSettings_DeadlineDescription">Bundan daha uzun süre beklemede olursa, İşleminiz geri alınacaktır.</string>
     <string name="SwapSettings_RecipientAddressTitle">Alıcı Adresi</string>
     <string name="SwapSettings_Apply">Uygula</string>
-    <string name="SwapSettings_DeadlineMinute">%s dk</string>
-    <string name="SwapSettings_Error_DeadlineZero">Geçersiz Son Tarih</string>
     <string name="SwapSettings_Error_SlippageZero">Geçersiz Kayma</string>
     <string name="SwapSettings_Error_SlippageTooLow">İşleminizin başarısız olması muhtemeldir.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Slipaj Toleransı %s%% üzerinde olamaz</string>
@@ -547,14 +484,12 @@
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">%s alışverişi yapabilir veya yeni tutarı iptal edip onaylamanız gerekir</string>
     <string name="Approve_Spender">Harcayan</string>
-    <string name="Approve_YouApprove">Sen Onaylıyorsun</string>
     <string name="Approve_YouRevoke">Sen iptal et</string>
     <!--Swap Unlock Access-->
     <string name="Swap_Approve_PageTitle">Onayla</string>
     <string name="Swap_Approve_Info">Akıllı bir sözleşmeye, adınıza token ticareti yapabilmesi için izin verin ve izin verilen miktarı belirtin. Bakiyenize herhangi bir etkisi olmaz, ancak onay için küçük bir ücret alınır.\n\nGelecekteki işlemler için daha yüksek bir miktarın önceden onaylanması, talep üzerine onaylara göre maliyet açısından daha avantajlıdır.</string>
     <string name="Swap_Approve_Unlimited">Sınırsız</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_AllowanceTitle">Ödenek</string>
     <string name="SwapInfo_PriceImpactTitle">Fiyat Etkisi</string>
     <string name="SwapInfo_PriceImpactDescription">Gösterilen bir fiyattan beklenen fiyat sapması, tipik olarak swap tutarı ile artar.</string>
     <!--Deposit-->
@@ -679,32 +614,13 @@
     <string name="Settings_AppStatus">Uygulama Durumu</string>
     <string name="Settings_RateUs">Bizi Değerlendirin</string>
     <string name="Settings_LaunchScreen">Başlangıç Ekranı</string>
-    <string name="Settings_Appearance">Görünüm</string>
     <string name="Settings_AppSettings">Uygulama Ayarları</string>
     <string name="Settings_Subscription">Abonelik</string>
-    <string name="Settings_Contact_ViaTelegram">Telegram aracılığıyla</string>
-    <string name="Settings_Contact_ViaEmail">E-posta yoluyla</string>
     <string name="Settings_AutoLock">Otomatik kilit</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
-    <string name="Settings_JoinUnstoppables_Description">Özel videolar aracılığıyla kripto para birimini öğrenin ve ustalaşın. Bizi resmi olmayan bir şekilde tanıyın. Üzerinde çalıştığımız şeyleri ilk gören siz olun.</string>
-    <string name="Settings_PersonalSupport">Kişisel Destek</string>
-    <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Takımımızla kişisel destek sohbeti başlatmak için Telegram hesap adınızı girin. Sorununuzu gördüğümüzde hemen size geri dönecek ve çalışmaya başlayacağız.</string>
-    <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Zaten özel bir sohbet talep ettiniz, bunu Telegram\'da bulun</string>
-    <string name="Settings_PersonalSupport_Account">Hesap</string>
-    <string name="Settings_PersonalSupport_Requested">Talep Edildi</string>
-    <string name="Settings_PersonalSupport_Request">İstek</string>
-    <string name="Settings_PersonalSupport_NewRequest">Yeni istek</string>
-    <string name="Settings_PersonalSupport_Requestfailed">Talep Başarısız oldu</string>
-    <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
-    <string name="Settings_VipSupport_StartChat">VIP Gruba Katılın</string>
-    <string name="Settings_Donate_Info">Desteğinizle birlikte bu uygulamayı daha da iyi hale getirebiliriz!</string>
     <string name="Settings_Donate">Bağış yapmak</string>
-    <string name="Settings_GetYourTokens">Tokenlarınızı alın</string>
     <string name="Settings_DonateToken">Bağış yapmak %s</string>
-    <string name="Settings_DonateWith">Bağış yapın</string>
-    <string name="Settings_Donate_GetAddress">Bağış Adresi</string>
     <string name="Settings_Donate_Addresses">Adresler</string>
-    <string name="Settings_Donate_OrSelectCoinToDonate">Ya bağış yapmak için bir coin seçin</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Hemen</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 dakika</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 dakika</string>
@@ -719,26 +635,17 @@
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Aktif</string>
     <string name="SettingsSubscription_RestorePurchase">Satın Almayı Geri Yükle</string>
-    <string name="SettingsSubscription_SubscriptionPlan">Abonelik Planı</string>
-    <string name="SettingsSubscription_SubscriptionInfo">Bir sonraki ödeme tarihi: %s. Aboneliğinizi Abonelik Yönetimi bölümünden yönetebilirsiniz.</string>
     <string name="SettingsSubscription_ManageSubscription">Aboneliği Yönet</string>
     <string name="Period_Days">%s gün</string>
     <!--Premium Screens-->
-    <string name="Premium_ChoosePlanForYou">Planı seçin</string>
     <string name="Premium_EnjoyFreePeriod">İlk %s ÜCRETSİZ olarak kullanın.</string>
     <string name="Premium_CancelSubscriptionInfo">Aboneliğinizi istediğiniz zaman iptal edebilirsiniz.</string>
     <string name="Premium_GetFreePeriod">%s ÜCRETSİZ Alın</string>
     <string name="Premium_Subscribe">Abone Ol</string>
-    <string name="Premium_AddPromoCode">Promosyon Kodu Ekle</string>
     <string name="Premium_TryForFree">ÜCRETSİZ Deneyin</string>
     <string name="Premium_Upgrade">Yükselt</string>
-    <string name="Premium_Restore">Geri Yükle</string>
-    <string name="Premium_Annually">Yıllık</string>
-    <string name="Premium_Monthly">Aylık</string>
     <string name="Premium_ThankYouForSubscription">Aboneliğiniz için \nteşekkürler!</string>
-    <string name="Premium_YouHaveActivatedPlan">%s planını etkinleştirdiniz.</string>
     <string name="Premium_GoToApp">Uygulamaya Git</string>
-    <string name="Premium_UpgradeText">Premium özelliklerle deneyiminizi yükseltin!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Uygulamanın tüm gücünün keyfini çıkarın.</string>
     <string name="Premium_SelectSubscription">Abonelik Seçin</string>
     <string name="Premium_UpgradeFeature_TokenInsights">Token Analitiği</string>
@@ -764,7 +671,6 @@
     <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Takas sırasında botları ve front-running saldırılarını engeller. İşlemlerinizi adil ve güvenli tutar.</string>
     <string name="Premium_HighlyRatedSecurity">Yüksek güvenlik derecesi, olağanüstü gizlilik ve gerçek anlamda emanet edilmeyen bir cüzdan.</string>
     <string name="Premium_ApprovedBy">Tarafından Onaylanmış ve Denetlenmiş:</string>
-    <string name="Premium_WhatUsersSay">Kullanıcılar ne diyor:</string>
     <string name="Premium_SubscriptionPeriod_Month">ay</string>
     <string name="Premium_SubscriptionPeriod_Year">yıl</string>
     <string name="Premium_SubscriptionPeriod_Annually">Yıllık</string>
@@ -800,8 +706,6 @@
     <string name="BackupManager_AppSettingsTitle">Uygulama Ayarları</string>
     <string name="BackupManager_AppSettingsDescription">Dil, Para Birimi, Görünüm...</string>
     <!-- Privacy  -->
-    <string name="Privacy_BulletedText1">Cüzdan herhangi bir kişisel veri toplamaz.</string>
-    <string name="Privacy_BulletedText2">Kullanıcı hesapları veya kullanıcı verilerini depolayan veritabanları yoktur.</string>
     <string name="ShareUiData">UI Verilerini Paylaş</string>
     <!-- Security Center -->
     <!--Evm Network-->
@@ -865,7 +769,6 @@
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">Bizimle İletişime Geçin</string>
     <!--Setting_Notifications-->
     <!-- Settings Launch Screen -->
     <string name="SettingsLaunchScreen_Auto">Oto</string>
@@ -877,8 +780,6 @@
     <string name="SettingsTheme_Light">Açık</string>
     <string name="SettingsTheme_System">Sistem</string>
     <!--Errors-->
-    <string name="Binance_Backend_Error_MemoRequired">Aktarım işleminde alıcı boş olmayan not istiyor</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Notun yalnızca rakam içermesini gerektirir</string>
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">Internet Bağlantısı Yok</string>
     <string name="Hud_Text_Copied">Kopyalandı</string>
@@ -887,18 +788,15 @@
     <string name="Hud_Text_AddressAdded">Adres eklendi</string>
     <string name="Hud_Text_Done">Bitti</string>
     <string name="Hud_Text_Verified">Onaylandı</string>
-    <string name="Hud_Text_EmailAddressCopied">E-posta adresi kopyalandı</string>
     <string name="Hud_Added_To_Watchlist">İzleme Listesine Eklendi</string>
     <string name="Hud_Added_To_Wallet">Cüzdana Eklendi</string>
     <string name="Hud_Removed_From_Wallet">Cüzdandan Kaldırıldı</string>
     <string name="Hud_Removed_from_Watchlist">İzleme Listesinden Kaldır</string>
     <string name="Hud_Removed">Kaldır</string>
-    <string name="Hud_WaitForSynchronization">Senkronizasyonu bekleyin</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Cüzdanlar</string>
     <string name="ManageCoins_Search">Ad, kod veya sözleşme adresi</string>
     <string name="ManageCoins_AddToken">Token Ekle</string>
-    <string name="ManageCoins_NoResults">Hiçbir sonuç bulunamadı. Akıllı sözleşme adresini biliyorsanız tokeni manüel olarak eklemeyi deneyin.</string>
     <string name="ManageCoins_BipsDescription">%1$s cüzdanının gelen ödemeleri almak için kullanabileceği 4 yaygın adres biçimi vardır:
 \n
 \n- BIP-44 (eski)
@@ -926,8 +824,6 @@
     <string name="ImportWallet_BackupFile">Dosyadan</string>
     <string name="ImportWallet_BackupFile_Description">Bir yedek dosyadan içe aktar.</string>
     <string name="ImportWallet_RecoveryPhrase">Kurtarma İfadesinden</string>
-    <string name="ImportWallet_ExchangeWallet">Exchange Wallet\'tan</string>
-    <string name="ImportWallet_ExchangeWallet_Description">Merkezi borsada bir cüzdana bağlanın.</string>
     <string name="ImportWallet_WarningInvalidJson">Geçersiz Json Dosyası</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">Bu dosya, cüzdanın geçerli bir yedeği değil veya dosya bozulmuş ve geri yüklenemez.</string>
     <string name="ImportWallet_SelectAnotherFile">Başka Bir Dosya Seçin</string>
@@ -936,7 +832,6 @@
     <string name="ImportBackupFile_EnterPassword_Description">Cüzdanınızı içe aktarmak için yedek parolayı girin.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Geçersiz şifre</string>
     <string name="ImportBackupFile_BackupPassword">Yedek Şifre</string>
-    <string name="Watch_Address_Watch">İzle</string>
     <string name="Watch_Select_Blockchains">Blok Zincirleri Seç</string>
     <string name="Watch_Select_Coins">Kripto Parayı Seç</string>
     <string name="Watch_Error_InvalidAddressFormat">Adres formatı desteklenmiyor</string>
@@ -960,14 +855,12 @@
     <string name="ManageAccount_DeleteWarning">Bu cüzdan adresini izlemeyi bırakmak istiyor musunuz?</string>
     <string name="Balance_Receive_BackupRequired_Description">%1$s yedeğini almanız gerekiyor</string>
     <!--Network Settings-->
-    <string name="NetworkSettings_SwithesAutomatically">otomatik olarak değişir</string>
     <!-- Show Key -->
     <string name="ShowKey_Passphrase">Parola</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">Bir güvenlik önlemi olarak, özel anahtar için kopyalama eylemi kullanılmamasını öneririz.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Riski alıyorum</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Kopyalama</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">Cüzdanı yedekle</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Manuel Yedekleme</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Yerel Yedekleme</string>
     <string name="BackupRecoveryPhrase_Later">Sonra</string>
@@ -1026,8 +919,6 @@
     <string name="AddToken_Blockchain">Blockchains</string>
     <string name="AddToken_CoinAlreadyInListWarning">Bu token zaten kripto para yöneticisi listesindedir</string>
     <string name="AddToken_InvalidContractAddress">Geçersiz sözleşme adresi</string>
-    <string name="AddToken_InvalidBep2Symbol">Geçersiz BEP2 symbolu</string>
-    <string name="AddEvmToken_Bep2NotFound">BEP2 sembolü bulunamadı</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Sözleşme adresi %s blockchain\'de bulunamadı</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Description">Ödemeleri almak için adres biçimini seçin. Mevcut bir cüzdanı geri yüklerken doğru bir format seçilmelidir.</string>
@@ -1064,17 +955,10 @@
     <string name="CoinPage_Reports">Raporlar</string>
     <string name="CoinPage_FundsInvested">Yatırılan Fonlar</string>
     <string name="CoinPage_Overview">İzleme</string>
-    <string name="CoinPage_Contracts">Kişiler</string>
     <string name="CoinPage_CoinTypes">Coin çeşitleri</string>
     <string name="CoinPage_Links">Bağlantılar</string>
     <string name="CoinPage_Guide">Kılavuzu</string>
     <string name="CoinPage_Website">Web sitesi</string>
-    <string name="CoinPage_Twitter_NotAvailable">Twitter mevcut değil</string>
-    <string name="CoinPage_Twitter_NoTweets">Henüz tweet yok</string>
-    <string name="CoinPage_Twitter_Quoted">Alıntılandı%s</string>
-    <string name="CoinPage_Twitter_Retweeted">Yeniden Tweetlendi%s</string>
-    <string name="CoinPage_Twitter_Replied">Yanıtlanıyor%s</string>
-    <string name="CoinPage_Twitter_SeeOnTwitter">Twitter\'da görün</string>
     <string name="CoinPage_MarketCap">Piyasa Değeri</string>
     <string name="CoinPage_DilutedMarketCap">Seyreltilmiş P. Değeri</string>
     <string name="CoinPage_inCirculation">Dolaşımda</string>
@@ -1241,8 +1125,6 @@
     <string name="TechnicalAdvice_MacdAdvice">MACD. Ortalama fiyat değişimini dikkate alarak trendin gücünü değerlendirir. Histogramın günlük değeri %1$s (%2$s). Varlığın fiyatı genel olarak %3$s hareket edebilir.</string>
     <string name="TechnicalAdvice_InfoTitle">Teknik Göstergeleri</string>
     <string name="TechnicalAdvice_InfoDescription">Bollinger Bantları + RSI stratejisini kullanarak işlem sinyallerini belirliyoruz. Tüm hesaplamalar günlük mum grafiklerine dayanmakta ve ortalama uzun vadeli bir strateji için tavsiyeler sunmaktadır. Stratejinin özü, varlık fiyatının Bollinger Bantları kanalından çıkarak aşırı seviyelere ulaşması ve RSI\'nin aşırı alım/aşırı satım bölgesinde olması gerektiğidir. Fiyat kanala geri döndükten sonra, fiyatın ortalama değerlere geri dönme veya kanalı diğer taraftan kırmaya yönelik yüksek bir olasılığı vardır. Stratejinin güçlü piyasa hareketleri sırasında birkaç yanlış sinyal verebileceğini unutmayın, doğru bir sinyal ortaya çıkmadan önce.\n\nLütfen ticarette risk yönetimini uygulamanın çok önemli olduğunu ve piyasa durumu değişirse kayıpları kesmeyi unutmayın!</string>
-    <string name="TechnicalAdvice_ShowDetails">Detayları Göster</string>
-    <string name="TechnicalAdvice_HideDetails">Detayları Gizle</string>
     <string name="TechnicalAdvice_Indicators_StrongBuy">Kuvvetli Al</string>
     <string name="TechnicalAdvice_Indicators_Buy">Al</string>
     <string name="TechnicalAdvice_Indicators_Neutral">Tarafsız</string>
@@ -1253,16 +1135,6 @@
     <string name="Detectors_TokenDetectors">Token Tespit Ediciler</string>
     <string name="Detectors_GeneralDetectors">Genel Tespit Ediciler</string>
     <string name="Detectors_IssuesCount">Sorunlar: %d</string>
-    <string name="ActivateSubscription_Wallet">Cüzdanı</string>
-    <string name="ActivateSubscription_Address">Adres</string>
-    <string name="ActivateSubscription_NoSubscriptionError">Cüzdan adresinizin premium özelliklere aboneliği yok, aboneliği etkinleştirmek için satın almanız gerekiyor.</string>
-    <string name="SubscriptionInfo_Title">Premium Ayrıcalıkları</string>
-    <string name="SubscriptionInfo_Analytics_Title">Kripto Para Analitiği</string>
-    <string name="SubscriptionInfo_Analytics_Info">Her token hakkında kapsamlı piyasa ve zincir içi istatistiklere erişin.</string>
-    <string name="SubscriptionInfo_Indicators_Title">Fiyat Trend Göstergeleri</string>
-    <string name="SubscriptionInfo_Indicators_Info">Teknik analiz göstergelerine dayanarak yükselen tokenları keşfedin.</string>
-    <string name="SubscriptionInfo_PersonalSupport_Title">Kişisel Destek</string>
-    <string name="SubscriptionInfo_PersonalSupport_Info">Kişisel yardım için ekibimizle doğrudan Telegram üzerinden iletişime geçin.</string>
     <!-- NFT Collection -->
     <!-- NFT Collection Events -->
     <!--Rate list-->
@@ -1275,7 +1147,6 @@
     <string name="BalanceSyncError_Title">Senk. hatası</string>
     <string name="BalanceSyncError_ButtonRetry">Yeniden Dene</string>
     <string name="BalanceSyncError_ButtonChangeSource">Kaynağı Değiştir</string>
-    <string name="BalanceSyncError_ButtonReport">Şikayet Et</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">KATIL UNSTOPPABLES</string>
     <string name="ProUsersInfo_Features_TxCount">İşlem Sayısı</string>

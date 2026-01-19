@@ -9,11 +9,8 @@
     <color name="blade">@color/carbon</color>
     <color name="leah">@color/steel_light</color>
     <color name="lawrence">@color/steel_dark</color>
-    <color name="lawrence_pressed">#353842</color>
 
     <color name="andy">@color/smoke</color>
     <color name="raina">@color/steel_10</color>
 
-    <color name="tylerGradientStart">#ff13151a</color>
-    <color name="tylerGradientEnd">#0013151a</color>
 </resources>

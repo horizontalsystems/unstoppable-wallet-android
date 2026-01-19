@@ -5,7 +5,6 @@
     <string name="Alert_Cancel">إلغاء</string>
     <string name="Alert_Copy">نسخ</string>
     <string name="Alert_Loading">جاري التحميل...</string>
-    <string name="Suspended">معلق</string>
     <string name="Button_Cancel">إلغاء</string>
     <string name="Button_Next">التالي</string>
     <string name="Button_Enable">تمكين</string>
@@ -27,7 +26,6 @@
     <string name="Button_Reset">إعادة تعيين</string>
     <string name="Button_Understand">فهمت</string>
     <string name="Button_Switch">تبديل</string>
-    <string name="Button_Remove">إزالة</string>
     <string name="Button_Save">حفظ</string>
     <string name="Button_IAgree">أنا أوافق</string>
     <string name="Button_Continue">متابعة</string>
@@ -98,14 +96,12 @@
     <string name="Send_Advanced">إعدادات متقدمة</string>
     <string name="Send_Confirmation_Title">تأكيد</string>
     <string name="Send_Confirmation_Send_Button">إرسال</string>
-    <string name="Send_DialogProceed">التالي</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">إعدادات متقدمة</string>
     <!-- Fee Settings -->
     <!--Fee Info -->
     <!--Tron-->
     <!--WalletConnect-->
-    <string name="WalletConnect_SignMessageRequest_ButtonSign">توقيع</string>
     <string name="WalletConnect_Pairings_Delete">حذف</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Error_Title">خطأ</string>
@@ -180,7 +176,6 @@
     <!-- Blockchain Settings -->
     <!-- Tor -->
     <!--Coin Page-->
-    <string name="ActivateSubscription_Title">تفعيل</string>
     <!-- NFT Collection -->
     <!-- NFT Collection Events -->
     <!--Rate list-->

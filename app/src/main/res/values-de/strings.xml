@@ -6,7 +6,6 @@
     <string name="Alert_Cancel">Abbrechen</string>
     <string name="Alert_Copy">Kopieren</string>
     <string name="Alert_Loading">Wird geladen ...</string>
-    <string name="Suspended">INAKTIV</string>
     <string name="Button_Show">Anzeigen</string>
     <string name="Button_Hide">Ausblenden</string>
     <string name="Button_Cancel">Abbrechen</string>
@@ -33,7 +32,6 @@
     <string name="Button_Reset">Reset</string>
     <string name="Button_Understand">Ich verstehe</string>
     <string name="Button_Switch">Wechseln</string>
-    <string name="Button_Remove">Entfernen</string>
     <string name="Button_Save">Speichern</string>
     <string name="Button_IAgree">Ich stimme zu</string>
     <string name="Button_Continue">Weiter</string>
@@ -44,7 +42,6 @@
     <string name="Button_Delete">Löschen</string>
     <string name="Button_LearnMore">Mehr erfahren</string>
     <string name="Button_Sign">Schild</string>
-    <string name="Button_GetApiKeys">API-Schlüssel erhalten</string>
     <string name="Button_TryAgain">Erneut versuchen</string>
     <string name="Button_Share">Teilen</string>
     <string name="Button_Apply">Anwenden</string>
@@ -125,7 +122,6 @@
     <string name="SelectContacts_All">Alle</string>
     <string name="Restore_BirthdayHeight">Geburtstagshöhe</string>
     <string name="Restore_BirthdayHeight_Invalid">Ungültige Geburtstagshöhe</string>
-    <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Geben Sie die Geburtstagshöhe der Brieftasche für eine schnellere Synchronisierung ein.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
     <string name="Restore_ZCash_RestoreAsNew">Als Neu wiederherstellen</string>
@@ -144,10 +140,6 @@
     <string name="Market_All">Alle</string>
     <string name="Market_Search_Sections_RecentTitle">AKTUELLEN</string>
     <string name="Market_Search_Sections_PopularTitle">POPULAR</string>
-    <string name="Market_FilterSection_MarketParameters">MARKET-PARAMETER</string>
-    <string name="Market_FilterSection_PriceParameters">PREISPARAMETER</string>
-    <string name="Market_FilterSection_NetworkParameters">NETZWERK-PARAMETER</string>
-    <string name="Market_FilterSection_Indicators">INDICATORS</string>
     <string name="Market_Field_HighestCap">Höchste Kappe</string>
     <string name="Market_Field_LowestCap">Niedrigste Kappe</string>
     <string name="Market_Field_HighestVolume">Höchste Lautstärke</string>
@@ -187,7 +179,6 @@
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">Top Plattformen</string>
     <string name="MarketTopPlatforms_Protocols">Protocols: %s</string>
-    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ökosystem</string>
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Marktkappe aller Protokolle der %s Kette</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_TotalMarketCapShort">Total Cap</string>
@@ -203,13 +194,10 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">Alle</string>
     <string name="MarketGlobalMetrics_NoCoin">Dieses Projekt hat keine Münze</string>
     <!-- ETF-->
-    <string name="MarketEtf_Title">Gesamt-Nettoeinfluss</string>
-    <string name="MarketEtf_Description">Der Nettozufluss eines ETF entspricht seinen Geldzuflüssen abzüglich Abflüsse</string>
     <string name="MarketEtf_HighestAssets">Höchste Assets</string>
     <string name="MarketEtf_LowestAssets">Niedrigste Assets</string>
     <string name="MarketEtf_Inflow">Einleitung</string>
     <string name="MarketEtf_Outflow">Abfluss</string>
-    <string name="MarketEtf_TotalNetAssets">Gesamte Netto-Assets</string>
     <string name="MarketEtf_BitcoinEtf">Bitcoin ETF</string>
     <string name="MarketEtf_EthereumEtf">Ethereum ETF</string>
     <string name="MarketEtf_EtfDescription">Nettozufluss aller %s ETFs, einschließlich Spot- und Futures-basierter Fonds.</string>
@@ -235,8 +223,6 @@
     <string name="Market_Filter_OutperformedGold">Ausgelassenes Gold</string>
     <string name="Market_Filter_OutperformedSnp">Ausgelassene S&amp;P 500</string>
     <string name="Market_Filter_PriceCloseTo">Preis nah an</string>
-    <string name="Market_Filter_PriceCloseToAth">Preis nahe an ATH</string>
-    <string name="Market_Filter_PriceCloseToAtl">Preis nahe zum ATL</string>
     <string name="Market_Filter_ListedOnTopExchanges">An Top Exchanges gelistet</string>
     <string name="Market_Filter_SolidCex">Gutes CEX-Volume</string>
     <string name="Market_Filter_SolidCex_Description">Gesamtpunktzahl ist gut oder ausgezeichnet</string>
@@ -324,13 +310,9 @@
     <string name="TvlRank_MultiChain">Mehrere Ketten</string>
     <!--Balance-->
     <string name="Wallet_Title">Wallet</string>
-    <string name="Balance_Withdraw">Abheben</string>
     <string name="Balance_Title">Saldo</string>
     <string name="Balance_Send">Senden</string>
-    <string name="Balance_ChooseCoin">Münze auswählen</string>
-    <string name="Balance_Deposit">Einzahlung</string>
     <string name="Balance_Receive">Erhalten</string>
-    <string name="Balance_Address">Adresse</string>
     <string name="Balance_RatePerCoin">%1$s pro %2$s</string>
     <string name="Balance_SyncedUntil">bis %s</string>
     <string name="Balance_Syncing">Synchronisiere…</string>
@@ -354,35 +336,25 @@
     <string name="Balance_Receive_AddressTypeZcashDescription">Wählen Sie, wie Sie Zcash erhalten möchten.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Das Cash Address Format wird bevorzugt für den Erhalt von Bitcoin Cash (BCH) aufgrund seiner verbesserten Benutzerfreundlichkeit und Kompatibilität bevorzugt. Beide Adressformate können jedoch unabhängig vom Adressformat des Absenders austauschbar genutzt werden, um BCH zu empfangen.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Das Native SegWit Format wird in Bitcoin bevorzugt für einen verbesserten Durchsatz und mehr Sicherheit. Alle Adressformate (Taproot, SegWit, Legacy) können unabhängig vom Adressformat des Absenders zum Empfang von BTC verwendet werden ermöglicht nahtlose Transaktionen über verschiedene Münztypen.</string>
-    <string name="Balance_Receive_Account">Konto</string>
-    <string name="Balance_Receive_NotActive">Nicht aktiv</string>
     <string name="Balance_Receive_Amount">Betrag</string>
     <string name="Balance_Receive_SetAmount">Setze Betrag</string>
-    <string name="Balance_LockedAmount_Title">Gesperrt</string>
-    <string name="Balance_ProcessingBalance_Title">Verarbeitung</string>
-    <string name="Balance_NotRelayedAmount_Title">Übertragung</string>
     <string name="Balance_Receive_Memo">Notiz (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Kann nicht erkennen</string>
     <string name="Balance_Receive_WatchAddressAlert">Diese Adresse ist die Adresse des beobachteten Kontos</string>
-    <string name="Balance_Receive_AddressMemoAlert">Benötigte Memo (Tag) bereitstellen und nur Netzwerk-kompatible Token senden. Andere gehen verloren.</string>
     <string name="Balance_Receive_UsedAddresses">Verwendete Adressen</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s Adressen ändern sich aus Gründen der Privatsphäre und der Sicherheit. Unten finden Sie eine Liste der verwendeten Adressen in dieser Wallet.</string>
     <string name="Balance_Receive_ReceiveAddresses">Adressen erhalten</string>
     <string name="Balance_ReceiveAddress">Empfangsadresse</string>
     <string name="Balance_Receive_ChangeAddresses">Adressen ändern</string>
-    <string name="Balance_SendHint_CoinName">Münzname</string>
     <string name="Balance_ReceiveHint_Search">Suchen</string>
     <string name="Balance_Receive_ActivationRequired">Um eine Adresse zu erhalten, müssen Sie den Token aktivieren. Dies wird vom Stellar-Netzwerk benötigt.</string>
     <string name="Balance_Receive_Trustline">Trustline</string>
-    <string name="Balance_Reserved_Title">Reserviert</string>
-    <string name="Balance_WalletAddress">Wallet-Adresse</string>
     <string name="Balance_Receive_Subaddresses">Unteradressen</string>
     <string name="Balance_Receive_SubaddressesInfo">Mit Unteradressen können Sie mehrere eindeutige Adressen innerhalb einer Brieftasche für Komfort und verbesserte Privatsphäre verwenden.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Transaktionen: %s</string>
     <string name="Balance_Receive_HaveYouOwnedCoins">Hast du zuvor %s Münzen besessen?</string>
     <string name="Balance_Receive_YesAlreadyOwn">Ja, ich besitze bereits</string>
     <string name="Balance_Receive_IDontHave">Nein, ich habe nicht</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Title">Transparent</string>
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Transparente ZEC erkannt</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparenter Betrag</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Transparentes Guthaben kann momentan in unserer Brieftasche nicht verwendet werden. Dieses Geld kann jedoch von anderen Brieftaschen mit t-address Unterstützung ausgegeben werden</string>
@@ -422,28 +394,12 @@
     <string name="Send_Confirmation_Method">Methode</string>
     <string name="Send_Confirmation_Send_Button">Senden</string>
     <string name="Send_Confirmation_Action">Aktion</string>
-    <string name="Send_Processing">Verarbeitung!</string>
-    <string name="Send_Processing_Description">Transaktion erfolgreich gesendet. Überprüfen Sie den Status für Details.</string>
-    <string name="Send_Address_Recent">Neueste</string>
-    <string name="Send_Address_Error_CheckLocked">Gesperrt</string>
-    <string name="Send_Address_Error_Incorrect">Ungültig</string>
     <string name="Send_Address_Error_InvalidAddress">Ungültige Adresse</string>
-    <string name="Send_Address_Error_Correct">Richtig</string>
     <string name="Send_Address_Error_Detected">Erkannt</string>
     <string name="Send_Address_Error_Clear">Leeren</string>
-    <string name="Send_Address_AddressCheck">Adressprüfung</string>
     <string name="Send_Address_PhishingCheck">Phishing-Prüfung</string>
-    <string name="Send_Address_PhishingCheck_Info1">Analysiert die angegebene Zieladresse auf mögliche Phishing-Risiken.</string>
-    <string name="Send_Address_PhishingCheck_Info2">Klar: Keine verdächtige Aktivität erkannt.</string>
-    <string name="Send_Address_PhishingCheck_Info3">Erkannt: Es scheint, als ob jemand versuchen könnte, Sie dazu zu bewegen, Geld an eine falsche Adresse zu schicken. Fahren Sie nicht fort, es sei denn, Sie sind sich absolut sicher, dass die Adresse korrekt ist. Denken Sie daran, zuerst eine kleine Testtransaktion zu senden.</string>
     <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
-    <string name="Send_Address_BlacklistCheck_Info1">Prüft, ob die Zieladresse auf offiziellen oder inoffiziellen Blacklisten aufgeführt ist.</string>
-    <string name="Send_Address_BlacklistCheck_Info2">Löschen: Keine Blacklist-Flags.</string>
-    <string name="Send_Address_BlacklistCheck_Info3">Erkannt: Die Adresse ist auf die schwarze Liste gesetzt und kann mit Rechts- oder Sicherheitsrisiken assoziiert werden. Fahren Sie mit Vorsicht fort. Viele Kryptotauschen beschränken Benutzer, die Geldbörsen einzahlen oder abheben, die mit Adressen auf der schwarzen Liste interagiert haben. Bitte beachten Sie, dass dies im Hinterkopf liegt.</string>
     <string name="Send_Address_SanctionCheck">Sanktionsüberprüfung</string>
-    <string name="Send_Address_SanctionCheck_Info1">Überprüft, ob die Adresse des Empfängers internationalen Sanktionen unterliegt, wobei Daten von Chainalysis.com verwendet werden.</string>
-    <string name="Send_Address_SanctionCheck_Info2">Klar: Keine Sanktionen gefunden.</string>
-    <string name="Send_Address_SanctionCheck_Info3">Erkannt: Potenzielle rechtliche Risiken. Transaktionen mit dieser Adresse können in bestimmten Rechtsordnungen eingeschränkt oder rechtswidrig sein.</string>
     <string name="Send_Address_ErrorMessage_PhishingDetected">Phishing-Adresse erkannt!</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected">Gesperrte Adresse erkannt!</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected">Gesankte Adresse erkannt!</string>
@@ -463,14 +419,12 @@
     <string name="Send_Error_SendToSelf">Senden von %s an Ihre eigene Adresse ist nicht zulässig. Bitte geben Sie eine andere Empfängeradresse ein.</string>
     <string name="Send_DialogAvailableBalance">Verfügbares Guthaben</string>
     <string name="Send_DialogSpeed">Transaktionsgeschwindigkeit</string>
-    <string name="Send_DialogProceed">Weiter</string>
     <string name="Send_LockTime_Off">Aus</string>
     <string name="Send_LockTime_Hour">1 Stunde</string>
     <string name="Send_LockTime_Month">1 Monat</string>
     <string name="Send_LockTime_HalfYear">6 Monate</string>
     <string name="Send_LockTime_Year">1 Jahr</string>
     <string name="Send_Sending">Senden</string>
-    <string name="Send_Token_InsufficientFeeAlert">Transaktionsgebühren für %1$s (%2$s) in %3$sbezahlt. Sie benötigen %4$s.</string>
     <string name="Send_Warning_LowFee">Warnung! Risiko stecken zu lassen</string>
     <string name="Send_Error_LowFee">Gebührenfehler</string>
     <string name="Send_Error_LowFee_Description">Die Gebühr ist zu niedrig.</string>
@@ -517,16 +471,12 @@
     <string name="FeeInfo_AverageDescription">Normalerweise der empfohlene Gebührenwert sollte ausreichen, um eine Transaktion innerhalb von Minuten oder einer Stunde für Bitcoin und innerhalb von Minuten für Ethereum zu bearbeiten.</string>
     <string name="FeeInfo_Fast">Hoch</string>
     <string name="FeeInfo_FastDescription">Bei Transaktionen, deren Priorität wichtig ist, empfehlen wir, den hohen Gebührenwert zu verwenden. Es wird erwartet, dass eine Transaktion innerhalb von 10 Minuten für Bitcoin und innerhalb von 1-2 Minuten für Ethereum abgeschlossen wird.</string>
-    <string name="FeeInfo_TronFee_Title">Gebühr</string>
     <string name="FeeInfo_TronFee_Description">Die geschätzten Kosten für den Versand der Transaktion im Netzwerk. (Ohne Energie, Bandbreite und Aktivierungsgebühr)</string>
     <string name="FeeInfo_TronActivationFee_Title">Aktivierungsgebühr</string>
     <string name="FeeInfo_TronActivationFee_Description">Diese Adresse ist nicht aktiv. Die Übertragung von TRX- oder TRC-10-Token an eine inaktive Account-Adresse wird das Konto aktivieren.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Verbrauchte Ressourcen</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandbreite ist die Einheit, die die Größe der in der Blockchain-Datenbank gespeicherten Transaktionsbytes misst. Je größer die Transaktion, desto mehr Ressourcen werden verbraucht.\n\nEnergie ist die Einheit, die die Anzahl der Berechnungen misst, die von der virtuellen TRON Maschine benötigt werden, um bestimmte Operationen im TRON Netzwerk durchzuführen.\n\nDa intelligente Vertragsgeschäfte die Durchführung von Rechenressourcen erfordern, muss jede intelligente Vertragsabwicklung die Energie-Gebühr bezahlen.</string>
     <!--Tron-->
-    <string name="Tron_AddressNotActive_Warning">Diese Adresse ist nicht aktiv</string>
-    <string name="Tron_AddressNotActive_Title">Keine aktive Adresse</string>
-    <string name="Tron_AddressNotActive_Info">Neu erstellte Konten in der TRON-Blockchain sind inaktiv und können nicht abgefragt oder untersucht werden. Sie müssen aktiviert werden.\n\nDie Übertragung von TRX- oder TRC-10-Token an eine inaktive Konto-Adresse wird das Konto aktivieren. Die Aktivierung eines neuen Kontos auf der Tron Kette erfordert eine Gebühr von 1 TRX</string>
     <string name="Tron_SelfSendTrxNotAllowed">TRX kann nicht auf sich selbst übertragen werden</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Kann 0 %s nicht übertragen</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Konto nicht aktiv</string>
@@ -549,14 +499,11 @@
     <string name="WalletConnect_SendTransactionRequest_Title">Transaktion senden</string>
     <string name="WalletConnect_SendTransactionRequest_ButtonSend">Senden</string>
     <string name="WalletConnect_SignMessageRequest_Title">Signaturanfrage</string>
-    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Zu unterzeichnende Nachricht</string>
-    <string name="WalletConnect_SignMessageRequest_ButtonSign">Signieren</string>
     <string name="WalletConnect_Error_NoWallet">Sie müssen eine Wallet erstellen oder importieren bevor Sie WalletConnect verwenden können</string>
     <string name="WalletConnect_Error_NeedBackup">Erstellen Sie eine Sicherung Ihrer Wiederherstellungsphrase und der zugehörigen Passphrase. Dadurch können Sie Ihre Brieftasche wiederherstellen, wenn Ihr Telefon verloren, gestohlen oder beschädigt ist.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Nicht unterstützte Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Kein passendes Konto</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Kein passendes evm Kit</string>
-    <string name="WalletConnect_Error_DataParsingError">Datenverarbeitungsfehler</string>
     <string name="WalletConnect_Error_UnsupportedChains">Nicht unterstützte Ketten: %s</string>
     <string name="WalletConnect_Error_UnsupportedMethods">Nicht unterstützte Methoden: %s</string>
     <string name="WalletConnect_Error_UnsupportedEvents">Nicht unterstützte Ereignisse: %s</string>
@@ -566,7 +513,6 @@
     <string name="WalletConnect_ActiveWallet">Wallet</string>
     <string name="WalletConnect_NotSupportedDescription">Ihr aktueller Brieftyp %s unterstützt WalletConnect nicht</string>
     <string name="WalletConnect_Unnamed">Unbenannt</string>
-    <string name="WalletConnect_Pairings">Pairings</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Alle löschen</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Möchten Sie alle gepaart dApss löschen?</string>
@@ -586,7 +532,6 @@
     <string name="WalletConnect_Message">Nachricht</string>
     <string name="WalletConnect_Checking">Überprüfe…</string>
     <string name="WalletConnect_RequestFailed">Anfrage fehlgeschlagen</string>
-    <string name="WalletConnect_AllowDapp">Erlaube %s</string>
     <string name="WalletConnect_Value">Wert</string>
     <string name="WalletConnect_TokenAllowance">Token-Erlaubnis</string>
     <string name="WalletConnect_ConfirmTransaction">Transaktion bestätigen</string>
@@ -616,19 +561,15 @@
     <string name="Swap_FromAmountTitle">Sie zahlen</string>
     <string name="Swap_ToAmountTitle">Du bekommst</string>
     <string name="Swap_TokenSelectorTitle">Auswählen</string>
-    <string name="Swap_Allowance">Zulässigkeit</string>
     <string name="Swap_Price">Preis</string>
     <string name="Swap_AvailableBalance">Verfügbares Guthaben</string>
     <string name="Swap_PriceImpact">Preisauswirkungen</string>
-    <string name="Swap_PriceImpactTooHigh">Unaufhaltsam hat Swap-Aktion für diesen Handel deaktiviert, da du einen extrem ungünstigen Preis bekommst. Dies ist auf extrem niedrige Liquidität zurückzuführen.\nWenn Sie trotzdem wechseln möchten, verwenden Sie bitte stattdessen die %s -Website.</string>
-    <string name="Swap_PriceImpactWarning">Wichtig! Du bekommst einen extrem ungünstigen Preis. Dies ist auf extrem niedrige Liquidität zurückzuführen.</string>
     <string name="Swap_MinimumReceived">Garantiebetrag</string>
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Empfänger</string>
     <string name="Swap_ErrorNoProviders">Keine Anbieter</string>
     <string name="Swap_ErrorNoQuote">Kein Angebot</string>
     <string name="Swap_ErrorInsufficientBalance">Unzureichender Kontostand</string>
-    <string name="Swap_ErrorHighPriceImpact">Hohe Preisauswirkungen</string>
     <string name="Swap_ErrorTokenNotEnabled">Token nicht aktiviert</string>
     <string name="Swap_ErrorWalletSyncing">Wallet wird synchronisiert</string>
     <string name="Swap_ErrorWalletNotSynced">Wallet nicht synchronisiert</string>
@@ -636,38 +577,22 @@
     <string name="Swap_SelectTokenIn">Wähle Token in</string>
     <string name="Swap_SelectTokenOut">Wähle Token Out</string>
     <string name="Swap_EnterAmount">Betrag eingeben</string>
-    <string name="Swap_Unlock">Entsperren</string>
-    <string name="Swap_Unlocking">Entsperren...</string>
     <string name="Swap_Revoke">Revoke</string>
     <string name="Swap_Revoking">Widerrufen...</string>
     <string name="Swap_Approve">Bestätigen</string>
     <string name="Swap_Approving">Genehmigung</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_Quoting">Zitieren</string>
-    <string name="Swap_Initializing">Initialisiere</string>
     <string name="Swap_Providers">Anbieter</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max.)</string>
     <string name="Swap_YouPay">Sie bezahlen</string>
     <string name="Swap_YouGet">Sie erhalten</string>
     <string name="Swap_Confirm_Title">Bestätigen</string>
-    <string name="SwapConfirm_QuoteExpired">Angebot abgelaufen</string>
-    <string name="SwapConfirm_FetchingFinalQuote">Abrufen des endgültigen Angebots</string>
-    <string name="SwapWarning_SlippageNotApplicable_Title">Slippage ist nicht anwendbar</string>
-    <string name="SwapWarning_SlippageNotApplicable_Description">Die minimale Slippage für dieses Angebot ist %s%%</string>
-    <string name="SwapWarning_SlippageNotAvailable_Title">Keine Slippage Kontrolle</string>
-    <string name="SwapWarning_SlippageNotAvailable_Description">Cross-Chain-Swaps sind von Fremdliquidität und Verzögerungen abhängig, die den Endbetrag beeinflussen können.</string>
     <!-- Swap Settings -->
-    <string name="SwapSettings_Title">Swap-Einstellungen</string>
     <string name="SwapSettings_SlippageTitle">Slippage Toleranz</string>
-    <string name="SwapSettings_SlippageDescription">Wenn der Preis über diesen Prozentsatz hinausgeht, wird der Swap-Kurs nicht durchlaufen.</string>
-    <string name="SwapSettings_DeadlineTitle">Transaktionsfrist</string>
-    <string name="SwapSettings_DeadlineDescription">Ihre Transaktion wird rückgängig gemacht, wenn sie länger aussteht.</string>
     <string name="SwapSettings_RecipientAddressTitle">Empfängeradresse</string>
-    <string name="SwapSettings_RecipientAddressDescription">Der ausgetauschte Betrag wird an die angegebene Adresse gesendet.</string>
     <string name="SwapSettings_Apply">Übernehmen</string>
-    <string name="SwapSettings_DeadlineMinute">%s min</string>
-    <string name="SwapSettings_Error_DeadlineZero">Null Frist</string>
     <string name="SwapSettings_Error_SlippageZero">Null Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ihre Transaktion wird wahrscheinlich fehlschlagen.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Slippage Toleranz darf nicht mehr als %s%% sein</string>
@@ -686,17 +611,13 @@
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">Du kannst %sumtauschen oder den neuen Betrag widerrufen und genehmigen</string>
     <string name="Approve_Spender">Spender</string>
-    <string name="Approve_YouApprove">Sie genehmigen</string>
     <string name="Approve_YouRevoke">Du widerrufen</string>
     <string name="Approve_Allowance">Zulassungsbetrag</string>
-    <string name="Approve_Revoke">Betrag widerrufen</string>
     <!--Swap Unlock Access-->
     <string name="Swap_Approve_PageTitle">Genehmigen</string>
     <string name="Swap_Approve_Info">Erteilen Sie in Ihrem Namen die Erlaubnis zu einem intelligenten Vertrag für den Token-Handel, der den zulässigen Betrag angibt. Kein Einfluss auf Ihr Guthaben, sondern erhebt eine geringe Zulassungsgebühr.\n\nVorabgenehmigung eines höheren Betrags für zukünftige Geschäfte ist kosteneffektiv im Vergleich zu On-Demand-Zulassungen.</string>
     <string name="Swap_Approve_Unlimited">Unbegrenzt</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_AllowanceTitle">Vergütung</string>
-    <string name="SwapInfo_AllowanceDescription">Die Freigabe ist der Betrag, den Sie den Austausch in Ihrem Namen für Swaps verwenden lassen. Bevor Sie einen Swap, müssen Sie zuerst eine Zertifikatstransaktion genehmigen.</string>
     <string name="SwapInfo_PriceImpactTitle">Preisauswirkungen</string>
     <string name="SwapInfo_PriceImpactDescription">Die erwartete Preisabweichung von einem angezeigten Preis steigt typischerweise mit dem Swap-Betrag.</string>
     <!--Deposit-->
@@ -707,7 +628,6 @@
     <string name="Transactions_WaitForSync">Bitte warten Sie, bis die Synchronisation beendet ist.</string>
     <string name="Transactions_Pending">Ausstehend</string>
     <string name="Transactions_Receive">Erhalten</string>
-    <string name="Transactions_AccountCreated">Konto erstellt</string>
     <string name="Transactions_ChangeTrust">Vertrauen ändern</string>
     <string name="Transactions_Completed">Abgeschlossen</string>
     <string name="Transactions_Processing">In Bearbeitung</string>
@@ -725,7 +645,6 @@
     <string name="Transactions_ContractCreation">Vertragserstellung</string>
     <string name="Transactions_ContractDeploy">Vertragsvergabe</string>
     <string name="Transactions_To">auf %s</string>
-    <string name="Transactions_By">von %s</string>
     <string name="Transactions_From">von %s</string>
     <string name="Transaction_Unlimited_CoinCode">unbegrenzt %s</string>
     <string name="Transaction_Unlimited">unbegrenzt</string>
@@ -809,7 +728,6 @@
     <string name="Info_LockTime_NoDateDescription">Der Absender hat dieses Guthaben mit einem Ausgabesperre gesendet, der am angezeigten Datum ablaufen wird.\n\nKeine Sorge, die erhaltenen Bitcoins sind bereits deiner, aber bis die Sperrfrist abläuft, können Sie sie nicht im Bitcoin-Netzwerk ausgeben.</string>
     <string name="Info_Reserved_Title">Reserviert</string>
     <string name="Info_Reserved_Description">Das Stellar Netzwerk sperrt 1 XLM, um die Brieftasche und 0.5 XLM als Reserve für jedes in Ihrer Brieftasche aktivierte Token zu aktivieren.</string>
-    <string name="Info_Reserved_CurrentlyLocked">Derzeit gesperrt:</string>
     <string name="Info_Reserved_WalletAction">Wallet-Aktivierung</string>
     <string name="Info_NotRelayed_Title">Übertragen</string>
     <string name="Info_NotRelayed_Description">Die Transaktion, die diesen Betrag hält, wird gesendet, aber vom Netzwerk noch nicht akzeptiert.</string>
@@ -841,53 +759,27 @@
     <string name="Settings_RateUs">Bewerte uns</string>
     <string name="Settings_LaunchScreen">Bildschirm starten</string>
     <string name="Settings_LaunchScreen_Tip">Wählen Sie aus, auf welchem Bildschirm die App standardmäßig geöffnet wird.</string>
-    <string name="Settings_Appearance">Erscheinung</string>
     <string name="Settings_AppSettings">App-Einstellungen</string>
     <string name="Settings_Subscription">Abonnement</string>
-    <string name="Settings_Contact_ViaTelegram">via Telegramm</string>
-    <string name="Settings_Contact_ViaEmail">per E-Mail</string>
     <string name="Settings_AutoLock">Auto-Sperren</string>
     <string name="Settings_JoinUnstoppables">Schließen Sie unaufhaltsam an</string>
     <string name="Settings_Support">Unterstützung</string>
     <string name="Settings_VipSupport">VIP Support</string>
-    <string name="Settings_BotSupport">BOT-Unterstützung</string>
-    <string name="Settings_JoinUnstoppables_Description">Lernen Sie Kryptographie über exklusive Videos. Lernen Sie uns informell kennen. Sei der Erste, der Dinge sieht, an denen wir arbeiten.</string>
-    <string name="Settings_PersonalSupport">Persönlicher Support</string>
-    <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Geben Sie Ihren Telegram-Kontonamen ein, um einen persönlichen Support-Chat mit unserem Team zu starten. Wir werden uns mit Ihnen in Verbindung setzen und anfangen, an Ihrem Problem zu arbeiten, sobald wir es sehen.</string>
-    <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Sie haben bereits einen privaten Chat angefordert, finden Sie ihn auf Telegram</string>
-    <string name="Settings_PersonalSupport_Account">Konto</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@Benutzername</string>
-    <string name="Settings_PersonalSupport_Requested">Angefragt</string>
-    <string name="Settings_PersonalSupport_Request">Anfrage</string>
-    <string name="Settings_PersonalSupport_NewRequest">Neue Anfrage</string>
-    <string name="Settings_PersonalSupport_Requestfailed">Anfrage fehlgeschlagen</string>
-    <string name="Settings_PersonalSupport_OpenTelegram">Telegramm öffnen</string>
-    <string name="Settings_VipSupport_StartChat">VIP Gruppe beitreten</string>
-    <string name="Settings_VipSupport_Description">Treten Sie unserer VIP Gruppe bei, um direkten Support zu erhalten, an Diskussionen über kommende Updates teilzunehmen und sich enger mit dem unaufhaltsamen Team zu verbinden.</string>
-    <string name="Settings_Donate_Info">Gemeinsam können wir mit Ihrer Unterstützung diese App noch besser machen!</string>
     <string name="Settings_Donate">Spenden</string>
-    <string name="Settings_GetYourTokens">Holen Sie sich Ihre Token</string>
     <string name="Settings_DonateToken">Spende %s</string>
-    <string name="Settings_DonateWith">Spenden mit</string>
-    <string name="Settings_Donate_GetAddress">Spendenadresse</string>
     <string name="Settings_Donate_Addresses">Adressen</string>
     <string name="Settings_Donate_DonationAddresses">Spendenadressen</string>
-    <string name="Settings_Donate_OrSelectCoinToDonate">Oder wählen Sie eine Münze zum Spenden</string>
-    <string name="Settings_CryptoQuiz">Crypto-Quiz</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Sofort</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 Minute</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 Minuten</string>
     <string name="SettingsSecurity_AutoLock_After15Min">15 Minuten</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 Minuten</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 Stunde</string>
-    <string name="Mev_Protection">MEV-Schutz</string>
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">Adressprüfung</string>
     <string name="SettingsAddressChecker_RecipientCheck">Empfängerprüfung</string>
     <string name="SettingsAddressChecker_CheckTheRecipientInfo">Prüft die Empfängeradresse auf Sicherheitsrisiken vor dem Versand.</string>
     <string name="SettingsAddressChecker_CheckAddress">Adresse prüfen</string>
-    <string name="SettingsAddressChecker_SelectBlockchain">Blockchain auswählen</string>
-    <string name="SettingsAddressChecker_SelectCoin">Münze auswählen</string>
     <string name="SettingsAddressChecker_OnSubject">auf %s</string>
     <string name="SettingsAddressChecker_SanctionsCheck">Sanktionsüberprüfung</string>
     <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
@@ -928,29 +820,19 @@
     <string name="SettingsSubscription_Active">Aktiv</string>
     <string name="SettingsSubscription_GetPremium">Premium erhalten</string>
     <string name="SettingsSubscription_RestorePurchase">Einkauf wiederherstellen</string>
-    <string name="SettingsSubscription_SubscriptionPlan">Abonnementplan</string>
-    <string name="SettingsSubscription_SubscriptionInfo">Nächstes Zahlungsdatum: %s. Sie können Ihr Abonnement im Abschnitt Abonnements verwalten verwalten.</string>
     <string name="SettingsSubscription_ManageSubscription">Abonnement verwalten</string>
     <string name="Period_Days">%s Tage</string>
     <string name="Premium_TitleForDroid">Premium (kostenlos für F-Droid)</string>
     <!--Premium Screens-->
     <string name="Premium_Title">Prämie</string>
-    <string name="Premium_ChoosePlanForYou">Wählen Sie den Plan</string>
     <string name="Premium_EnjoyFreePeriod">Genieße die erste %s KOSTENLOS.</string>
     <string name="Premium_CancelSubscriptionInfo">Sie können Ihr Abonnement jederzeit kündigen.</string>
     <string name="Premium_GetFreePeriod">Get %s FREE</string>
     <string name="Premium_Subscribe">Abonnieren</string>
-    <string name="Premium_AddPromoCode">Promo-Code hinzufügen</string>
     <string name="Premium_TryForFree">Kostenlos testen</string>
-    <string name="Premium_ViewAllFeatures">Alle Funktionen anzeigen</string>
     <string name="Premium_Upgrade">Upgrade</string>
-    <string name="Premium_Restore">Wiederherstellen</string>
-    <string name="Premium_Annually">Jährlich</string>
-    <string name="Premium_Monthly">Monatlich</string>
     <string name="Premium_ThankYouForSubscription">Vielen Dank für Ihr \nAbonnement!</string>
-    <string name="Premium_YouHaveActivatedPlan">Du hast das %s Paket aktiviert.</string>
     <string name="Premium_GoToApp">Gehe zu App</string>
-    <string name="Premium_UpgradeText">Verbessern Sie Ihre Erfahrung mit Premium-Funktionen!</string>
     <string name="Premium_Banner_BlackFridayText">Upgrade auf Premium mit unserem größten Rabatt des Jahres</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Genießen Sie die volle Kraft der App.</string>
     <string name="Premium_SelectSubscription">Abonnement auswählen</string>
@@ -984,7 +866,6 @@
     <string name="Premium_Vip">VIP</string>
     <string name="Premium_HighlyRatedSecurity">Hervorragende Sicherheit, außergewöhnliche Privatsphäre und eine wahrhaft freigehaltene Brieftasche.</string>
     <string name="Premium_ApprovedBy">Genehmigt und geprüft von:</string>
-    <string name="Premium_WhatUsersSay">Was Nutzer sagen:</string>
     <string name="Premium_BlackFridayOfferEnds">Black Friday-Angebot endet am 7. Dezember</string>
     <string name="Premium_SubscriptionPeriod_Month">monat</string>
     <string name="Premium_SubscriptionPeriod_Year">jahr</string>
@@ -1010,7 +891,6 @@
     <string name="Appearance_BalanceAutoHide_Description">Verstecken Sie die Sende, Empfangs- und Swap-Schaltflächen aus der Registerkarte Guthaben.</string>
     <string name="Appearance_PriceChangeInterval">Preisänderung %</string>
     <string name="Appearance_PriceChangeInterval_Tip">Wählen Sie die Zeitspanne für die Anzeige der Tokenpreisänderung.</string>
-    <string name="Appearance_HideButtonsInfo">Die Einstellungen „Verstecke Schaltflächen ausblenden“ verstecken die Schaltflächen Senden, Empfangen und Tauschen auf der Registerkarte „Salden“.</string>
     <string name="BalanceViewType_CoinValue">Münzwert</string>
     <string name="BalanceViewType_FiatValue">Fiat-Wert</string>
     <string name="SettingsAboutApp_Title">Über App</string>
@@ -1038,9 +918,6 @@
     <string name="BackupManager_AppSettingsDescription">Sprache, Währung, Aussehen …</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unaufhaltsam sammelt keine persönlichen Daten wie Ihr Guthaben oder Ihre Brieftaschen-Adressen. Wir verwenden nur anonyme Daten, um die App zu verbessern.</string>
-    <string name="Privacy_BulletedText1">Die Brieftasche sammelt keine persönlichen Daten.</string>
-    <string name="Privacy_BulletedText2">Es gibt keine Benutzerkonten oder Datenbanken, die Benutzerdaten speichern.</string>
-    <string name="Privacy_BulletedText3">Wenn erlaubt, teilt die Brieftasche App-Nutzungsgewohnheiten mit dem unaufhaltsamen Team. Dies ist zu verstehen, welche Funktionen von unseren Benutzern verwendet werden (oder nicht). Als datenschutzorientierte App brauchen wir eine Möglichkeit, unsere Bemühungen zu bewerten, und ohne dies haben wir keine Ahnung, ob die von uns erstellten Funktionen genutzt werden oder nicht.</string>
     <string name="ShareUiData">UI-Daten teilen</string>
     <string name="ShareUiDataDescription">Mit dieser Einstellung können Sie die Analyse ausschalten und Ihre Aktivität vollständig privat halten.</string>
     <!-- Security Center -->
@@ -1128,7 +1005,6 @@
     <string name="SettingsShare_Title">Teilen</string>
     <string name="SettingsShare_Text">Unaufhaltsam sein</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">Kontaktiere uns</string>
     <!--Setting_Notifications-->
     <!-- Settings Launch Screen -->
     <string name="SettingsLaunchScreen_Auto">Auto</string>
@@ -1140,8 +1016,6 @@
     <string name="SettingsTheme_Light">Hell</string>
     <string name="SettingsTheme_System">System</string>
     <!--Errors-->
-    <string name="Binance_Backend_Error_MemoRequired">Empfänger benötigt eine nicht leere Memo bei Überweisungsüberweisung</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Benötigt die Memo nur Ziffern</string>
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">Kein Internet</string>
     <string name="Hud_Text_Copied">Kopiert</string>
@@ -1151,18 +1025,15 @@
     <string name="Hud_Text_AddressAdded">Adresse hinzugefügt</string>
     <string name="Hud_Text_Done">Fertig</string>
     <string name="Hud_Text_Verified">Verifiziert</string>
-    <string name="Hud_Text_EmailAddressCopied">E-Mail-Adresse kopiert</string>
     <string name="Hud_Added_To_Watchlist">Zu Favoriten hinzugefügt</string>
     <string name="Hud_Added_To_Wallet">Zur Wallet hinzugefügt</string>
     <string name="Hud_Removed_From_Wallet">Aus Wallet entfernt</string>
     <string name="Hud_Removed_from_Watchlist">Aus Favoriten entfernt</string>
     <string name="Hud_Removed">Entfernt</string>
-    <string name="Hud_WaitForSynchronization">Warten auf Synchronisierung</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">Münzmanager</string>
     <string name="ManageCoins_Search">Name, Code oder Vertragsadresse</string>
     <string name="ManageCoins_AddToken">Token hinzufügen</string>
-    <string name="ManageCoins_NoResults">Keine Ergebnisse gefunden. Versuchen Sie, Token manuell hinzuzufügen, wenn Sie seine intelligente Vertragsadresse kennen.</string>
     <string name="ManageCoins_BipsDescription">Es gibt 4 gängige Adressformate %1$s Brieftaschen zum Empfang eingehender Zahlungen:
 \n
 \n- BIP-44 (älter)
@@ -1191,8 +1062,6 @@
     <string name="ImportWallet_BackupFile_Description">Importieren Sie eine Sicherungsdatei aus Ihrem lokalen Ordner.</string>
     <string name="ImportWallet_RecoveryPhrase">von Wiederherstellungsphrase</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Importieren Sie eine Brieftasche mit einer Wiederherstellungsphrase oder einem privaten Schlüssel.</string>
-    <string name="ImportWallet_ExchangeWallet">von Exchange Wallet</string>
-    <string name="ImportWallet_ExchangeWallet_Description">Verbinden Sie sich mit einer Brieftasche bei zentralisiertem Austausch.</string>
     <string name="ImportWallet_WarningInvalidJson">Ungültige Json-Datei</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">Diese Datei ist kein gültiges Backup der Brieftasche oder die Datei wurde beschädigt und kann nicht wiederhergestellt werden.</string>
     <string name="ImportWallet_SelectAnotherFile">Wähle eine andere Datei</string>
@@ -1203,7 +1072,6 @@
     <string name="ImportBackupFile_BackupPassword">Passwort sichern</string>
     <string name="WatchWallet">Wallet ansehen</string>
     <string name="Watch_Address_Hint">Fügen Sie Ihre Adresse ein (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) oder XPUB</string>
-    <string name="Watch_Address_Watch">Beobachten</string>
     <string name="Watch_ViewKey">Privater Ansichtsschlüssel</string>
     <string name="Watch_BirthdayHeight">Höhe wiederherstellen</string>
     <string name="Watch_Select_Blockchains">Blockchains auswählen</string>
@@ -1230,15 +1098,12 @@
     <string name="ManageAccount_DeleteWarning">Möchten Sie die Beobachtung dieser Wallet-Adresse beenden?</string>
     <string name="Balance_Receive_BackupRequired_Description">Sie müssen %1$s sichern</string>
     <!--Network Settings-->
-    <string name="NetworkSettings_SwithesAutomatically">wechselt automatisch</string>
     <!-- Show Key -->
     <string name="ShowKey_Passphrase">Passwort</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">Als Sicherheitsmaßnahme empfehlen wir, keine Kopieraktion auf den privaten Schlüssel zu verwenden.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Ich werde es riskieren</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Nicht kopieren</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">Wiederherstellungsphrase sichern</string>
-    <string name="BackupRecoveryPhrase_Description">Erstellen Sie eine Sicherung Ihrer Wiederherstellungsphrase und der zugehörigen Passphrase. Dadurch können Sie Ihre Brieftasche wiederherstellen, wenn Ihr Telefon verloren, gestohlen oder beschädigt ist.</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Manuelle Sicherung</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Lokale Sicherung</string>
     <string name="BackupRecoveryPhrase_Later">Später</string>
@@ -1316,8 +1181,6 @@
     <string name="AddToken_Blockchain">Nach Blockchain filtern</string>
     <string name="AddToken_CoinAlreadyInListWarning">Dieses Token ist bereits in der Liste des Münzmanagers</string>
     <string name="AddToken_InvalidContractAddress">Ungültige Vertragsadresse</string>
-    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
-    <string name="AddEvmToken_Bep2NotFound">BEP2-Symbol nicht gefunden</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Vertragsadresse nicht in %s Blockchain gefunden</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Description">Bei Unsicherheit mit der empfohlenen Option fortfahren. Beim Wiederherstellen einer bestehenden Wallet sollte ein korrektes Format gewählt werden.</string>
@@ -1359,7 +1222,6 @@
     <string name="CoinPage_Reports">Berichte</string>
     <string name="CoinPage_FundsInvested">Investierte Gelder</string>
     <string name="CoinPage_Overview">Übersicht</string>
-    <string name="CoinPage_Contracts">Verträge</string>
     <string name="CoinPage_Blockchains">Blockchains</string>
     <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">Münztypen</string>
@@ -1367,12 +1229,6 @@
     <string name="CoinPage_Guide">Anleitung</string>
     <string name="CoinPage_Website">Webseite</string>
     <string name="CoinPage_Whitepaper">Whitepaper</string>
-    <string name="CoinPage_Twitter_NotAvailable">Kein Twitter verfügbar</string>
-    <string name="CoinPage_Twitter_NoTweets">Noch keine Tweets</string>
-    <string name="CoinPage_Twitter_Quoted">Zitiert %s</string>
-    <string name="CoinPage_Twitter_Retweeted">Retweeted %s</string>
-    <string name="CoinPage_Twitter_Replied">Antworten auf %s</string>
-    <string name="CoinPage_Twitter_SeeOnTwitter">Auf Twitter ansehen</string>
     <string name="CoinPage_MarketCap">Marktkappe</string>
     <string name="CoinPage_DilutedMarketCap">Verworfene MCap</string>
     <string name="CoinPage_inCirculation">Im Kreis</string>
@@ -1558,8 +1414,6 @@
     <string name="TechnicalAdvice_MacdAdvice">MACD. Bewertet die Stärke des Trends unter Berücksichtigung der durchschnittlichen Preisänderung. Der tägliche Wert des Histogramms beträgt %1$s (%2$s). Der Preis des Vermögenswerts könnte sich global %3$s bewegen.</string>
     <string name="TechnicalAdvice_InfoTitle">Technische Indikatoren</string>
     <string name="TechnicalAdvice_InfoDescription">Wir verwenden die Bollinger Bands + RSI Strategie, um Handelssignale zu ermitteln. Alle Berechnungen basieren auf den täglichen Kerzenleuchten und geben eine mittelfristige Beratung. Der Kern der Strategie besteht darin, dass der Vermögenspreis ein Extrem erreichen sollte. aus dem Bollinger Bands Kanal herausbrechen, und der RSI sollte in der überkauften/überverkauften Zone sein. Nach dem Preis kehrt zum Kanal zurück Es besteht eine hohe Wahrscheinlichkeit, dass der Preis zu den Mittelwerten zurückkehrt oder versucht, den Kanal von der anderen Seite zu brechen. Beachten Sie, dass die Strategie während starker Marktbewegungen mehrere falsche Signale geben kann, bevor ein korrektes Signal erscheint.\n\nBitte denken Sie daran, dass es sehr wichtig ist, das Risikomanagement auf den Handel anzuwenden und die Verluste zu reduzieren, wenn sich die Marktsituation ändert!</string>
-    <string name="TechnicalAdvice_ShowDetails">Details anzeigen</string>
-    <string name="TechnicalAdvice_HideDetails">Details ausblenden</string>
     <string name="TechnicalAdvice_Indicators_StrongBuy">Stark Kaufen</string>
     <string name="TechnicalAdvice_Indicators_Buy">Kaufen</string>
     <string name="TechnicalAdvice_Indicators_Neutral">Neutral</string>
@@ -1570,19 +1424,6 @@
     <string name="Detectors_TokenDetectors">Token-Detektoren</string>
     <string name="Detectors_GeneralDetectors">Allgemeine Detektoren</string>
     <string name="Detectors_IssuesCount">Probleme %d</string>
-    <string name="ActivateSubscription_Title">Aktivieren</string>
-    <string name="ActivateSubscription_Wallet">Wallet</string>
-    <string name="ActivateSubscription_Address">Adresse</string>
-    <string name="ActivateSubscription_NoSubscriptionError">Ihre Wallet-Adresse hat kein Abonnement für Premium-Funktionen, Sie müssen sie kaufen, um das Abonnement zu aktivieren.</string>
-    <string name="SubscriptionInfo_Title">Premium-Funktionen</string>
-    <string name="SubscriptionInfo_Analytics_Title">Analyse der Kryptowährung</string>
-    <string name="SubscriptionInfo_Analytics_Info">Greifen Sie auf umfassende Markt- und On-Kettenstatistiken zu jedem Token.</string>
-    <string name="SubscriptionInfo_Indicators_Title">Preis-Trend-Indikatoren</string>
-    <string name="SubscriptionInfo_Indicators_Info">Entdecke hochgelobte Token, die auf technischen Analyseindikatoren basieren.</string>
-    <string name="SubscriptionInfo_PersonalSupport_Title">Persönlicher Support</string>
-    <string name="SubscriptionInfo_PersonalSupport_Info">Kontaktieren Sie unser Team direkt über Telegram für persönliche Hilfe.</string>
-    <string name="SubscriptionInfo_GetPremium">Premium erhalten</string>
-    <string name="SubscriptionInfo_HavePremium">Ich habe bereits Premium</string>
     <!-- NFT Collection -->
     <!-- NFT Collection Events -->
     <!--Rate list-->
@@ -1595,7 +1436,6 @@
     <string name="BalanceSyncError_Title">Sync-Fehler</string>
     <string name="BalanceSyncError_ButtonRetry">Wiederholen</string>
     <string name="BalanceSyncError_ButtonChangeSource">Quelle ändern</string>
-    <string name="BalanceSyncError_ButtonReport">Bericht</string>
     <string name="BalanceSyncError_Text">Sync-Fehler</string>
     <string name="BalanceSyncError_ChangableSourceErrorText">Fehler beim Abrufen der Daten aus der aktuellen Quelle. Sie können erneut versuchen oder zu einer anderen Sync-Quelle wechseln.</string>
     <string name="BalanceSyncError_ErrorText">Fehler beim Abrufen der Daten aus der aktuellen Quelle. Bitte versuchen Sie es später erneut.</string>

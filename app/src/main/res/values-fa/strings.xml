@@ -25,7 +25,6 @@
     <string name="Button_Reset">تنظیم مجدد</string>
     <string name="Button_Understand">می فهمم</string>
     <string name="Button_Switch">تغییر</string>
-    <string name="Button_Remove">حذف</string>
     <string name="Button_Save">ذخیره</string>
     <string name="Button_IAgree">موافقم</string>
     <string name="Button_Continue">ادامه</string>
@@ -88,7 +87,6 @@
     <string name="Market_Tab_Watchlist_EmptyList">فهرست تماشا شما خالی است.</string>
     <!--Market Overview-->
     <!--Market Top Platforms-->
-    <string name="MarketPlatformCoins_PlatformEcosystem"> Ecosystem %s</string>
     <!--Market Global Metrics-->
     <!-- ETF-->
     <!--Market Search-->
@@ -105,9 +103,7 @@
     <!--Balance-->
     <string name="Balance_Title">بالانس</string>
     <string name="Balance_Send">ارسال</string>
-    <string name="Balance_ChooseCoin">سکه را انتخاب کنید</string>
     <string name="Balance_Receive">دريافت</string>
-    <string name="Balance_Address">آدرس</string>
     <string name="Balance_RatePerCoin">%1$sدر هر%2$s</string>
     <string name="Balance_SyncedUntil">تا %s</string>
     <string name="Balance_Syncing">همزمانی…</string>
@@ -117,8 +113,6 @@
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Balance_Sort_Az">نام</string>
     <string name="Balance_Sort_24hPriceChange">تغییر قیمت</string>
-    <string name="Balance_ProcessingBalance_Title">پردازش</string>
-    <string name="Balance_SendHint_CoinName">نام سکه</string>
     <!--Send NFT-->
     <string name="SendNft_Title">ارسال</string>
     <!--Send-->
@@ -143,14 +137,12 @@
     <string name="Send_Error_SendToSelf">ارسال به خود پشتیبانی نشده است</string>
     <string name="Send_DialogAvailableBalance">موجودی در دسترس</string>
     <string name="Send_DialogSpeed">سرعت تراکنش</string>
-    <string name="Send_DialogProceed">بعدي</string>
     <string name="Send_LockTime_Off">خاموش</string>
     <string name="Send_LockTime_Hour">۱ ساعت</string>
     <string name="Send_LockTime_Month">۱ ماه</string>
     <string name="Send_LockTime_HalfYear">۶ ماه</string>
     <string name="Send_LockTime_Year">1 سال</string>
     <string name="Send_Sending">در حال ارسال</string>
-    <string name="Send_Token_InsufficientFeeAlert">هزینه تراکنش برای %s (%s) پرداخت شده در %s. شما نیاز دارید %s.</string>
     <string name="Send_Warning_LowFee">هشدار! خطر گیر افتادن</string>
     <string name="Send_Warning_LowFee_Description">تراکنش ممکن است گیر کند یا موفقیت آمیز نباشد</string>
     <!-- Send Evm Settings -->
@@ -170,7 +162,6 @@
     <string name="FeeInfo_AverageDescription">به طور معمول ، این دامنه کارمزد باید کافی باشد تا تراکنش طی چند دقیقه/ساعت برای بیت کوین و در عرض چند دقیقه برای اتریوم پردازش شود.</string>
     <string name="FeeInfo_Fast">بالا</string>
     <string name="FeeInfo_FastDescription">برای تراکنش هایی که اولویت مهم است، استفاده از ارزش کارمزد بالا را توصیه می کنیم. انتظار می رود که یک تراکنش در عرض 10 دقیقه برای بیت کوین و در عرض 1 تا 2 دقیقه برای اتریوم کافی باشد.</string>
-    <string name="FeeInfo_TronFee_Title">هزينه</string>
     <!--Tron-->
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">اتصال جدید</string>
@@ -186,11 +177,8 @@
     <string name="WalletConnect_NewConnect">اتصال جدید</string>
     <string name="WalletConnect_SendTransactionRequest_ButtonSend">ارسال</string>
     <string name="WalletConnect_SignMessageRequest_Title">امضای درخواست</string>
-    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">پیام برای امضا</string>
-    <string name="WalletConnect_SignMessageRequest_ButtonSign">نشانه</string>
     <string name="WalletConnect_Error_NoSuitableAccount">حساب مناسبی وجود ندارد</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">بدون کیت evm مناسب</string>
-    <string name="WalletConnect_Error_DataParsingError">خطای تجزیه داده ها</string>
     <string name="WalletConnect_Error_RequestNotFoundError">خطای درخواست یافت نشد</string>
     <string name="WalletConnect_NoConnection">شما هیچ برنامه متصل ندارید</string>
     <string name="WalletConnect_PendingRequests">درخواست های معلق</string>
@@ -212,15 +200,12 @@
     <string name="Swap_FromAmountTitle">شما می پردازید</string>
     <string name="Swap_ToAmountTitle">شما دریافت می کنید</string>
     <string name="Swap_TokenSelectorTitle">انتخاب</string>
-    <string name="Swap_Allowance">کمک هزینه</string>
     <string name="Swap_Price">قیمت</string>
     <string name="Swap_AvailableBalance">موجودی در دسترس</string>
     <string name="Swap_PriceImpact">تأثیر قیمت</string>
-    <string name="Swap_PriceImpactTooHigh">تفاوت بین قیمت بازار و قیمت مانده حساب مورد انتظار بسیار زیاد است.</string>
     <string name="Swap_MinimumReceived">مقدار تضمین شده</string>
     <string name="Swap_Recipient">گیرنده</string>
     <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
-    <string name="Swap_ErrorHighPriceImpact">تأثیر بالای قیمت</string>
     <string name="Swap_Proceed">بعدي</string>
     <string name="Swap_Revoke">ابطال</string>
     <string name="Swap_Approve">تایید</string>
@@ -232,12 +217,8 @@
     <string name="Swap_Confirm_Title">تاييد</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">تحمل لغزش</string>
-    <string name="SwapSettings_DeadlineTitle">مهلت تراکنش</string>
-    <string name="SwapSettings_DeadlineDescription">اگر تراکنش شما بیش از این مدت معوق باشد برگشت می خورد.</string>
     <string name="SwapSettings_RecipientAddressTitle">آدرس گیرنده</string>
     <string name="SwapSettings_Apply">درخواست دادن</string>
-    <string name="SwapSettings_DeadlineMinute">%s دقیقه</string>
-    <string name="SwapSettings_Error_DeadlineZero">مهلت صفر</string>
     <string name="SwapSettings_Error_SlippageZero">لغزش صفر</string>
     <string name="SwapSettings_Error_SlippageTooLow">تراکنش شما احتمالاً ناموفق است.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">تحمل لغزش نمی تواند بیشتر باشد از %s%%</string>
@@ -247,11 +228,9 @@
     <string name="Activate_InsufficientBalance_Title">موجودی ناکافی</string>
     <!--Approve-->
     <string name="Approve_Spender">خرج کننده</string>
-    <string name="Approve_YouApprove">شما تایید کردید</string>
     <!--Swap Unlock Access-->
     <string name="Swap_Approve_PageTitle">تایید</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_AllowanceTitle">مستمری</string>
     <string name="SwapInfo_PriceImpactTitle">تأثیر قیمت</string>
     <!--Deposit-->
     <string name="Deposit_Title">دریافت %s</string>
@@ -342,8 +321,6 @@
     <string name="Settings_AppStatus">وضعیت برنامه</string>
     <string name="Settings_RateUs">به ما امتیاز بدهید</string>
     <string name="Settings_LaunchScreen">صفحه شروع</string>
-    <string name="Settings_Appearance">ظاهر</string>
-    <string name="Settings_PersonalSupport_Request">درخواست</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">۱ ساعت</string>
     <!--Address Checker-->
     <!--Banners-->
@@ -394,8 +371,6 @@
     <string name="SettingsTheme_Light">روشن</string>
     <string name="SettingsTheme_System">سیستم</string>
     <!--Errors-->
-    <string name="Binance_Backend_Error_MemoRequired">دریافت کننده در انتقال تراکنش ها به نمونه غیر خالی نیاز دارد</string>
-    <string name="Binance_Backend_Error_RequiresDigits">به نمونه شامل تنها رقم نیاز دارد</string>
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">اینترنت ندارید</string>
     <string name="Hud_Text_Copied">کپی شد</string>
@@ -403,13 +378,11 @@
     <string name="Hud_Text_Restored">بازگرداني</string>
     <string name="Hud_Text_AddressAdded">نشانی افزوده شد</string>
     <string name="Hud_Text_Done">انجام شد</string>
-    <string name="Hud_Text_EmailAddressCopied">آدرس ایمیل کپی شد</string>
     <string name="Hud_Added_To_Watchlist">به فهرست تماشا افزوده شد</string>
     <string name="Hud_Removed_from_Watchlist">از فهرست تماشا برداشته شد</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">مدیر سكه</string>
     <string name="ManageCoins_AddToken">اضافه کردن نشان</string>
-    <string name="ManageCoins_NoResults">نتیجه ای پیدا نشد. اگر آدرس قرارداد هوشمند آن را می‌دانید، سعی کنید توکن را به صورت دستی اضافه کنید.</string>
     <!-- Experimental Feature -->
     <!-- Bitcoin Hodling -->
     <!-- Testnet Settings -->
@@ -420,7 +393,6 @@
     <string name="ManageAccounts_WatchAddress">مشاهده آدرس</string>
     <!-- Import Wallet -->
     <!-- Import Backup File -->
-    <string name="Watch_Address_Watch">مشاهده</string>
     <string name="Watch_Select_Blockchains">انتخاب زنجیره های بلوکی</string>
     <string name="Watch_Select_Coins">سکه ها را انتخاب کنید</string>
     <!--Manage Account-->
@@ -437,13 +409,11 @@
     <string name="ManageAccount_Wallets">کیف پول ها</string>
     <string name="ManageAccount_WatchAddresses">مشاهده آدرس</string>
     <!--Network Settings-->
-    <string name="NetworkSettings_SwithesAutomatically">سوئیچ به طور خودکار</string>
     <!-- Show Key -->
     <string name="ShowKey_Passphrase">عبارت عبور</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">به عنوان یک اقدام امنیتی، توصیه می کنیم از عملکرد کپی در کلید خصوصی استفاده نکنید.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">من آن را به خطر می اندازم</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">Backup Wallet</string>
     <string name="BackupRecoveryPhrase_Later">بعداً</string>
     <!-- Local Backup -->
     <!-- Recovery Phrase -->
@@ -488,7 +458,6 @@
     <string name="Coin_Tab_Overview">قیمت</string>
     <string name="CoinPage_Overview">نمای کلی</string>
     <string name="CoinPage_Website">وب سایت پروژه</string>
-    <string name="CoinPage_Twitter_NoTweets">هنوز توییتی وجود ندارد</string>
     <string name="CoinPage_AddToWallet">Added To Wallet</string>
     <string name="CoinPage_Performance_Week1">1Week</string>
     <string name="CoinPage_Performance_Month1">1Month</string>
@@ -500,7 +469,6 @@
     <string name="CoinAnalytics_CountItems">%d مورد</string>
     <string name="TechnicalAdvice_Indicators_RiskyToTrade">پرمخاطره</string>
     <string name="TechnicalAdvice_Details">جزئیات</string>
-    <string name="ActivateSubscription_Address">آدرس</string>
     <!-- NFT Collection -->
     <!-- NFT Collection Events -->
     <!--Rate list-->
@@ -511,7 +479,6 @@
     <string name="BalanceSyncError_Title">خطا ی همگام سازی</string>
     <string name="BalanceSyncError_ButtonRetry">دوباره تلاش کنید</string>
     <string name="BalanceSyncError_ButtonChangeSource">تغییر منبع</string>
-    <string name="BalanceSyncError_ButtonReport">گزارش</string>
     <!--Release notes-->
     <string name="ProUsersInfo_UnstoppablePass">غیرقابل توقف %s</string>
     <!--Widget-->
