@@ -408,6 +408,9 @@
     <dialog
         android:id="@+id/buySubscriptionDialog"
         android:name="io.horizontalsystems.bankwallet.modules.usersubscription.PremiumFeaturesDialog"/>
+    <dialog
+        android:id="@+id/errorBottomSheet"
+        android:name="io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet"/>
 
     <!--Wallet Connect-->
     <fragment

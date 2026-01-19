@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,6 +45,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsRecipientFragment
@@ -64,7 +66,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
-import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
@@ -186,33 +187,29 @@ fun SwapConfirmScreen(navController: NavController) {
                 )
             } else {
                 var buttonEnabled by remember { mutableStateOf(true) }
+                var swapButtonTitle by remember { mutableIntStateOf(R.string.Swap) }
                 ButtonPrimaryYellow(
                     modifier = Modifier.fillMaxWidth(),
-                    title = stringResource(R.string.Swap),
+                    title = stringResource(swapButtonTitle),
                     enabled = buttonEnabled,
                     onClick = {
                         coroutineScope.launch {
                             buttonEnabled = false
-                            HudHelper.showInProcessMessage(
-                                view,
-                                R.string.Swap_Swapping,
-                                SnackbarDuration.INDEFINITE
-                            )
+                            swapButtonTitle = R.string.Swap_Swapping
 
-                            val result = try {
+                            try {
                                 viewModel.swap()
 
                                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                                 delay(1200)
-                                SwapConfirmFragment.Result(true)
+                                navController.setNavigationResultX(SwapConfirmFragment.Result(true))
+                                navController.popBackStack()
                             } catch (t: Throwable) {
-                                HudHelper.showErrorMessage(view, t.javaClass.simpleName)
-                                SwapConfirmFragment.Result(false)
+                                navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                             }
 
+                            swapButtonTitle = R.string.Swap
                             buttonEnabled = true
-                            navController.setNavigationResultX(result)
-                            navController.popBackStack()
                         }
                     },
                 )

@@ -33,11 +33,13 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.badge
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
@@ -91,14 +93,6 @@ fun SendConfirmationScreen(
     }
     val view = LocalView.current
     when (sendResult) {
-        SendResult.Sending -> {
-            HudHelper.showInProcessMessage(
-                view,
-                R.string.Send_Sending,
-                SnackbarDuration.INDEFINITE
-            )
-        }
-
         is SendResult.Sent -> {
             HudHelper.showSuccessMessage(
                 view,
@@ -108,13 +102,15 @@ fun SendConfirmationScreen(
         }
 
         is SendResult.Failed -> {
-            HudHelper.showErrorMessage(
-                view,
-                sendResult.caution.getDescription() ?: sendResult.caution.getString()
+            navController.slideFromBottom(
+                R.id.errorBottomSheet,
+                ErrorBottomSheet.Input(
+                    sendResult.caution.getDescription() ?: sendResult.caution.getString()
+                )
             )
         }
 
-        null -> Unit
+        else -> Unit
     }
 
     LaunchedEffect(sendResult) {
