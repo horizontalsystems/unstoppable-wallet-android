@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
-import io.horizontalsystems.bankwallet.entities.USwapAssetRecord
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -18,57 +17,7 @@ class USwapHelper {
         mapOf("x-api-key" to App.appConfigProvider.uswapApiKey)
     ).create(UnstoppableAPI::class.java)
 
-    private val uSwapAssetDao = App.appDatabase.uSwapAssetDao()
-
     suspend fun getAssetsMap(providerId: String): Map<Token, String> {
-        val cachedMap = getCachedAssetsMap(providerId)
-        if (cachedMap != null) {
-            return cachedMap
-        }
-
-        val assetsMap = fetchAssetsMapFromApi(providerId)
-        saveToCacheDb(providerId, assetsMap)
-        return assetsMap
-    }
-
-    private fun getCachedAssetsMap(providerId: String): Map<Token, String>? {
-        val oldestTimestamp = uSwapAssetDao.getOldestTimestamp(providerId) ?: return null
-        val cacheAge = System.currentTimeMillis() - oldestTimestamp
-
-        if (cacheAge > CACHE_LIFETIME_MS) {
-            uSwapAssetDao.deleteByProvider(providerId)
-            return null
-        }
-
-        val records = uSwapAssetDao.getByProvider(providerId)
-        if (records.isEmpty()) return null
-
-        val assetsMap = mutableMapOf<Token, String>()
-        for (record in records) {
-            val tokenQuery = TokenQuery.fromId(record.tokenQueryId) ?: continue
-            val token = App.marketKit.token(tokenQuery) ?: continue
-            assetsMap[token] = record.assetIdentifier
-        }
-
-        return if (assetsMap.isNotEmpty()) assetsMap else null
-    }
-
-    private fun saveToCacheDb(providerId: String, assetsMap: Map<Token, String>) {
-        val timestamp = System.currentTimeMillis()
-        val records = assetsMap.map { (token, assetIdentifier) ->
-            USwapAssetRecord(
-                providerId = providerId,
-                tokenQueryId = token.tokenQuery.id,
-                assetIdentifier = assetIdentifier,
-                timestamp = timestamp
-            )
-        }
-
-        uSwapAssetDao.deleteByProvider(providerId)
-        uSwapAssetDao.insertAll(records)
-    }
-
-    private suspend fun fetchAssetsMapFromApi(providerId: String): Map<Token, String> {
         val assetsMap = mutableMapOf<Token, String>()
         val tokens = api.tokens(providerId).tokens
 
@@ -197,8 +146,6 @@ class USwapHelper {
     )
 
     companion object {
-        private const val CACHE_LIFETIME_MS = 60 * 60 * 1000L // 1 hour
-
         private val blockchainTypes = mapOf(
             "43114" to BlockchainType.Avalanche,
             "10" to BlockchainType.Optimism,
