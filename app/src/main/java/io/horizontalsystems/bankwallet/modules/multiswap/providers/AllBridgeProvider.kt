@@ -21,6 +21,7 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tronkit.hexStringToByteArray
 import io.horizontalsystems.tronkit.network.CreatedTransaction
+import org.json.JSONObject
 import retrofit2.http.GET
 import retrofit2.http.Query
 import java.math.BigDecimal
@@ -84,6 +85,32 @@ object AllBridgeProvider : IMultiSwapProvider {
     private fun getProxyAddress(bridgeAddress: String) = proxies[bridgeAddress]
 
     override suspend fun start() {
+        tokensMap = SwapProviderCacheHelper.getOrFetch(
+            providerId = id,
+            deserialize = { json ->
+                try {
+                    val obj = JSONObject(json)
+                    ABToken(
+                        obj.getString("tokenAddress"),
+                        obj.getString("bridgeAddress"),
+                        obj.getInt("decimals")
+                    )
+                } catch (e: Exception) {
+                    null
+                }
+            },
+            serialize = { abToken ->
+                JSONObject().apply {
+                    put("tokenAddress", abToken.tokenAddress)
+                    put("bridgeAddress", abToken.bridgeAddress)
+                    put("decimals", abToken.decimals)
+                }.toString()
+            },
+            fetch = { fetchTokensMap() }
+        )
+    }
+
+    private suspend fun fetchTokensMap(): Map<Token, ABToken> {
         val tokensMap = mutableMapOf<Token, ABToken>()
 
         val tokens = allBridgeAPI.tokens()
@@ -128,7 +155,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             }
         }
 
-        this.tokensMap = tokensMap
+        return tokensMap
     }
 
     override fun supports(blockchainType: BlockchainType): Boolean {
