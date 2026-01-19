@@ -13,7 +13,6 @@
     <string name="Alert_Loading">Loading...</string>
     <string name="Alert_Skip" translatable="false">SKIP</string>
     <string name="Alert_Select" translatable="false">SELECT</string>
-    <string name="Suspended">SUSPENDED</string>
 
     <string name="Button_Show">Show</string>
     <string name="Button_Hide">Hide</string>
@@ -41,7 +40,6 @@
     <string name="Button_Reset">Reset</string>
     <string name="Button_Understand">I Understand</string>
     <string name="Button_Switch">Switch</string>
-    <string name="Button_Remove">Remove</string>
     <string name="Button_Save">Save</string>
     <string name="Button_IAgree">I Agree</string>
     <string name="Button_Continue">Continue</string>
@@ -52,7 +50,6 @@
     <string name="Button_Delete">Delete</string>
     <string name="Button_LearnMore">Learn More</string>
     <string name="Button_Sign">Sign</string>
-    <string name="Button_GetApiKeys">Get API Keys</string>
     <string name="Button_TryAgain">Try Again</string>
     <string name="Button_Share">Share</string>
     <string name="Button_Apply">Apply</string>
@@ -156,7 +153,6 @@
 
     <string name="Restore_BirthdayHeight">Birthday Height</string>
     <string name="Restore_BirthdayHeight_Invalid">Invalid Birthday Height</string>
-    <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Enter wallet\'s birthday height for faster synchronization.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
     <string name="Restore_ZCash_RestoreAsNew">Restore as New</string>
@@ -178,10 +174,6 @@
     <string name="Market_All">All</string>
     <string name="Market_Search_Sections_RecentTitle">RECENT</string>
     <string name="Market_Search_Sections_PopularTitle">POPULAR</string>
-    <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
-    <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
-    <string name="Market_FilterSection_NetworkParameters">NETWORK PARAMETERS</string>
-    <string name="Market_FilterSection_Indicators">INDICATORS</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
@@ -225,7 +217,6 @@
     <string name="MarketTopPlatforms_Title">Top Platforms</string>
     <string name="MarketTopPlatforms_Protocols">Protocols: %s</string>
 
-    <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecosystem</string>
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
 
     <!--Market Global Metrics-->
@@ -244,13 +235,10 @@
 
     <!-- ETF-->
 
-    <string name="MarketEtf_Title">Total Net Inflow</string>
-    <string name="MarketEtf_Description">The net inflow of an ETF equals its cash inflows minus outflows</string>
     <string name="MarketEtf_HighestAssets">Highest Assets</string>
     <string name="MarketEtf_LowestAssets">Lowest Assets</string>
     <string name="MarketEtf_Inflow">Inflow</string>
     <string name="MarketEtf_Outflow">Outflow</string>
-    <string name="MarketEtf_TotalNetAssets">Total Net Assets</string>
     <string name="MarketEtf_BitcoinEtf">Bitcoin ETF</string>
     <string name="MarketEtf_EthereumEtf">Ethereum ETF</string>
     <string name="MarketEtf_EtfDescription">Net inflow of all %s ETFs, including spot and futures-based funds.</string>
@@ -277,8 +265,6 @@
     <string name="Market_Filter_OutperformedGold">Outperformed Gold</string>
     <string name="Market_Filter_OutperformedSnp">Outperformed S&amp;P 500</string>
     <string name="Market_Filter_PriceCloseTo">Price Close To</string>
-    <string name="Market_Filter_PriceCloseToAth">Price Close To ATH</string>
-    <string name="Market_Filter_PriceCloseToAtl">Price Close To ATL</string>
     <string name="Market_Filter_ListedOnTopExchanges">Listed on Top Exchanges</string>
     <string name="Market_Filter_SolidCex">Good CEX Volume</string>
     <string name="Market_Filter_SolidCex_Description">Overall Score is Good or Excellent</string>
@@ -308,7 +294,6 @@
     <string name="Market_Filter_Top_100_Description" translatable="false">M.Cap > $1B</string>
     <string name="Market_Filter_Top_200_Description" translatable="false">M.Cap > $500M </string>
     <string name="Market_Filter_Top_300_Description" translatable="false">M.Cap > $250M </string>
-    <string name="Market_Filter_Top_500_Description" translatable="false">M.Cap > $100M </string>
     <string name="Market_Filter_Top_1000_Description" translatable="false">M.Cap > $25M </string>
     <string name="Market_Filter_Top_1500_Description" translatable="false">M.Cap > $10M </string>
     <string name="Market_Filter_Top_2000_Description" translatable="false">M.Cap > $5M </string>
@@ -400,13 +385,9 @@
     <!--Balance-->
 
     <string name="Wallet_Title">Wallet</string>
-    <string name="Balance_Withdraw">Withdraw</string>
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Send">Send</string>
-    <string name="Balance_ChooseCoin">Choose Coin</string>
-    <string name="Balance_Deposit">Deposit</string>
     <string name="Balance_Receive">Receive</string>
-    <string name="Balance_Address">Address</string>
     <string name="Balance_RatePerCoin">%1$s per %2$s</string>
     <string name="Balance_SyncedUntil">until %s</string>
     <string name="Balance_Syncing">Syncing…</string>
@@ -430,28 +411,19 @@
     <string name="Balance_Receive_AddressTypeZcashDescription">Choose how you want to receive Zcash.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">The Cash Address format is preferred for receiving Bitcoin Cash (BCH) due to its improved user experience and compatibility. However, both address formats can be used interchangeably to receive BCH, regardless of the sender\'s address format.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">The Native SegWit format is preferred in Bitcoin for improved throughput and security. All address formats (Taproot, SegWit, Legacy) can be used interchangeably to receive BTC regardless of the sender\'s address format, enabling seamless transactions across different coin types.</string>
-    <string name="Balance_Receive_Account">Account</string>
-    <string name="Balance_Receive_NotActive">Not active</string>
     <string name="Balance_Receive_Amount">Amount</string>
     <string name="Balance_Receive_SetAmount">Set Amount</string>
-    <string name="Balance_LockedAmount_Title">Locked</string>
-    <string name="Balance_ProcessingBalance_Title">Processing</string>
-    <string name="Balance_NotRelayedAmount_Title">Broadcasting</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Can\'t recognize</string>
     <string name="Balance_Receive_WatchAddressAlert">This address is the address of the watched account</string>
-    <string name="Balance_Receive_AddressMemoAlert">Provide required Memo (Tag) and send only network-compatible tokens. Others will be lost.</string>
     <string name="Balance_Receive_UsedAddresses">Used Addresses</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s addresses change for privacy and security. Below a list of used addresses in this wallet.</string>
     <string name="Balance_Receive_ReceiveAddresses">Receive Addresses</string>
     <string name="Balance_ReceiveAddress">Receive Address</string>
     <string name="Balance_Receive_ChangeAddresses">Change Addresses</string>
-    <string name="Balance_SendHint_CoinName">Coin Name</string>
     <string name="Balance_ReceiveHint_Search">Search</string>
     <string name="Balance_Receive_ActivationRequired">To receive an address you need to activate the token. This is required by the Stellar network.</string>
     <string name="Balance_Receive_Trustline">Trustline</string>
-    <string name="Balance_Reserved_Title">Reserved</string>
-    <string name="Balance_WalletAddress">Wallet Address</string>
     <string name="Balance_Receive_Subaddresses">Subadresses</string>
     <string name="Balance_Receive_SubaddressesInfo">Subaddresses let you use multiple unique addresses within one wallet for convenience and enhanced privacy.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Transactions: %s</string>
@@ -459,7 +431,6 @@
     <string name="Balance_Receive_YesAlreadyOwn">Yes, I already own</string>
     <string name="Balance_Receive_IDontHave">No, I don\'t have</string>
 
-    <string name="Balance_Zcash_UnshieldedBalance_Title">Transparent</string>
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Detected Transparent ZEC</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent amount</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">You have a ZEC balance held in a transparent address. To use it in Unstoppable, it must be shielded for full privacy.</string>
@@ -508,30 +479,14 @@
     <string name="Send_Confirmation_HintMemo" translatable="false">Memo</string>
     <string name="Send_Confirmation_Send_Button">Send</string>
     <string name="Send_Confirmation_Action">Action</string>
-    <string name="Send_Processing">Processing!</string>
-    <string name="Send_Processing_Description">Transaction sent successfully. Check its status for details.</string>
 
-    <string name="Send_Address_Recent">Recent</string>
-    <string name="Send_Address_Error_CheckLocked">Locked</string>
-    <string name="Send_Address_Error_Incorrect">Invalid</string>
     <string name="Send_Address_Error_InvalidAddress">Invalid Address</string>
     <string name="Send_Address_Error_InvalidAddress_Description">Looks like this address doesn’t fit the selected network. Please double-check it.</string>
-    <string name="Send_Address_Error_Correct">Correct</string>
     <string name="Send_Address_Error_Detected">Detected</string>
     <string name="Send_Address_Error_Clear">Clear</string>
-    <string name="Send_Address_AddressCheck">Address Check</string>
     <string name="Send_Address_PhishingCheck">Phishing Check</string>
-    <string name="Send_Address_PhishingCheck_Info1">Analyzes the provided destination address for potential phishing risks.</string>
-    <string name="Send_Address_PhishingCheck_Info2">Clear: No suspicious activity detected.</string>
-    <string name="Send_Address_PhishingCheck_Info3">Detected: It appears that someone may be trying to trick you into sending funds to an incorrect address. Do not proceed unless absolutely certain that the address is correct. Consider sending a small test transaction first.</string>
     <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
-    <string name="Send_Address_BlacklistCheck_Info1">Checks if the destination address is listed on official or unofficial blacklists.</string>
-    <string name="Send_Address_BlacklistCheck_Info2">Clear: No blacklist flags.</string>
-    <string name="Send_Address_BlacklistCheck_Info3">Detected: The address is blacklisted and may be associated with legal or security risks. Proceed with caution. Many crypto exchanges restrict users who deposit or withdraw funds from wallets that have interacted with blacklisted addresses. Keep that in mind.</string>
     <string name="Send_Address_SanctionCheck">Sanctions Check</string>
-    <string name="Send_Address_SanctionCheck_Info1">Verifies whether the recipient’s address is subject to international sanctions, using data from Chainalysis.com.</string>
-    <string name="Send_Address_SanctionCheck_Info2">Clear: No sanctions detected.</string>
-    <string name="Send_Address_SanctionCheck_Info3">Detected: Potential legal risk. Transactions with this address may be restricted or illegal in certain jurisdictions.</string>
     <string name="Send_Address_ErrorMessage_PhishingDetected">Phishing Address Detected!</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected">Blacklisted Address Detected!</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected">Sanctioned Address Detected!</string>
@@ -563,7 +518,6 @@
     <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">Transaction Speed</string>
     <string name="Send_DialogMemoHint" translatable="false">Memo</string>
-    <string name="Send_DialogProceed">Next</string>
     <string name="Send_DialogLockTime" translatable="false">TimeLock</string>
     <string name="Send_LockTime_Off">Off</string>
     <string name="Send_LockTime_Hour">1 hour</string>
@@ -574,7 +528,6 @@
     <string name="Send_UnexpectedError">Unexpected error</string>
     <string name="Send_UnexpectedError_Description">Something went wrong while sending your transaction. Please try again or copy the error code and contact support.</string>
 
-    <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %1$s (%2$s) paid in %3$s. You need %4$s.</string>
     <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
     <string name="Send_Error_LowFee">Fee Error</string>
     <string name="Send_Error_LowFee_Description">Fee Rate is too low.</string>
@@ -634,7 +587,6 @@
     <string name="FeeInfo_AverageDescription">Typically, the recommended fee value should be sufficient for a transaction to be processed within minutes or an hour for Bitcoin and within minutes for Ethereum.</string>
     <string name="FeeInfo_Fast">High</string>
     <string name="FeeInfo_FastDescription">For transactions where priority is important, we recommend using the high fee value. It\'s expected to be sufficient for a transaction to be completed within 10 minutes for Bitcoin and within 1-2 minutes for Ethereum.</string>
-    <string name="FeeInfo_TronFee_Title">Fee</string>
     <string name="FeeInfo_TronFee_Description">The estimated cost of sending given transaction on the network. (Without excluding Energy, Bandwidth and Activating Fee)</string>
     <string name="FeeInfo_TronActivationFee_Title">Activation Fee</string>
     <string name="FeeInfo_TronActivationFee_Description">This address is not active. Transferring TRX or TRC-10 tokens to an inactive account address will activate the account.</string>
@@ -642,9 +594,6 @@
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth is the unit that measures the size of the transaction bytes stored in the blockchain database. The larger the transaction, the more bandwidth resources will be consumed.\n\nEnergy is the unit that measures the amount of computation required by the TRON virtual machine to perform specific operations on the TRON network.\n\nSince smart contract transactions require computing resources to execute, each smart contract transaction requires to pay for the energy fee.</string>
 
     <!--Tron-->
-    <string name="Tron_AddressNotActive_Warning">This address is not active</string>
-    <string name="Tron_AddressNotActive_Title">Not Active Address</string>
-    <string name="Tron_AddressNotActive_Info">Newly created accounts on the TRON blockchain are inactive and cannot be queried or explored. They need to be activated.\n\nTransferring TRX or TRC-10 tokens to an inactive account address will activate the account. Activating a new account on the Tron chain requires a fee of 1 TRX</string>
     <string name="Tron_SelfSendTrxNotAllowed">Cannot transfer TRX to yourself</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Cannot transfer 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActivated">Not Activated</string>
@@ -663,7 +612,6 @@
 
     <!--WalletConnect-->
     <string name="WalletConnect_Title" translatable="false">WalletConnect</string>
-    <string name="WalletConnect_Url" translatable="false">URL</string>
     <string name="WalletConnect_Status">Status</string>
     <string name="WalletConnect_Approve_Hint">By clicking connect, you allow this app to view your public address. This is important security step to protect your data from potential phishing risks.</string>
     <string name="WalletConnect_Reconnect_Hint">Unable to connect using this link. Please double-check it and try again.</string>
@@ -675,15 +623,11 @@
     <string name="WalletConnect_SendTransactionRequest_Title">Send Transaction</string>
     <string name="WalletConnect_SendTransactionRequest_ButtonSend">Send</string>
     <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
-    <string name="WalletConnect_SignMessageRequest_dApp" translatable="false">dApp</string>
-    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
-    <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
     <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
     <string name="WalletConnect_Error_NeedBackup">Create a backup of your recovery phrase and the associated passphrase. These will allow you to restore your wallet if your phone is lost, stolen, or damaged.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">No suitable account</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable evm kit</string>
-    <string name="WalletConnect_Error_DataParsingError">Data parsing error</string>
     <string name="WalletConnect_Error_UnsupportedChains">Unsupported chains: %s</string>
     <string name="WalletConnect_Error_UnsupportedMethods">Unsupported methods: %s</string>
     <string name="WalletConnect_Error_UnsupportedEvents">Unsupported events: %s</string>
@@ -693,7 +637,6 @@
     <string name="WalletConnect_ActiveWallet">Wallet</string>
     <string name="WalletConnect_NotSupportedDescription">You current wallet type %s does not support WalletConnect</string>
     <string name="WalletConnect_Unnamed">Unnamed</string>
-    <string name="WalletConnect_Pairings">Pairings</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
@@ -713,7 +656,6 @@
     <string name="WalletConnect_Message">Message</string>
     <string name="WalletConnect_Checking">Checking…</string>
     <string name="WalletConnect_RequestFailed">Request Failed</string>
-    <string name="WalletConnect_AllowDapp">Allow %s</string>
     <string name="WalletConnect_Value">Value</string>
     <string name="WalletConnect_TokenAllowance">Token Allowance</string>
     <string name="WalletConnect_ConfirmTransaction">Confirm Transaction</string>
@@ -752,13 +694,9 @@
     <string name="Swap_FiatPriceImpact" translatable="false">(%s%%)</string>
     <string name="Swap_Percent" translatable="false">%s%%</string>
     <string name="Swap_TokenSelectorTitle">Select</string>
-    <string name="Swap_Allowance">Allowance</string>
     <string name="Swap_Price">Price</string>
     <string name="Swap_AvailableBalance">Available Balance</string>
     <string name="Swap_PriceImpact">Price Impact</string>
-    <string name="Swap_PriceImpactHigh">Important! You\'re getting an extremely unfavorable price. This is due to extremely low liquidity.</string>
-    <string name="Swap_PriceImpactTooHigh">Unstoppable has disabled swap action for this trade because you\'re getting an extremely unfavorable price. This is due to extremely low liquidity.\nIf you still want to swap please use %s website instead.</string>
-    <string name="Swap_PriceImpactWarning">Important! You\'re getting an extremely unfavorable price. This is due to extremely low liquidity.</string>
     <string name="Swap_MinimumReceived">Guaranteed Amount</string>
     <string name="Swap_MinimumReceivedDescription">This amount is in the process of validation. As soon as the transaction status is validated you will be able to use these coins. The minimum amount a user is going </string>
     <string name="Swap_Slippage">Slippage</string>
@@ -766,7 +704,6 @@
     <string name="Swap_ErrorNoProviders">No Providers</string>
     <string name="Swap_ErrorNoQuote">No Quote</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
-    <string name="Swap_ErrorHighPriceImpact">High price impact</string>
     <string name="Swap_ErrorTokenNotEnabled">Token Not Enabled</string>
     <string name="Swap_ErrorWalletSyncing">Wallet is Syncing</string>
     <string name="Swap_ErrorWalletNotSynced">Wallet Not Synced</string>
@@ -774,15 +711,12 @@
     <string name="Swap_SelectTokenIn">Select Token In</string>
     <string name="Swap_SelectTokenOut">Select Token Out</string>
     <string name="Swap_EnterAmount">Enter Amount</string>
-    <string name="Swap_Unlock">Unlock</string>
-    <string name="Swap_Unlocking">Unlocking...</string>
     <string name="Swap_Revoke">Revoke</string>
     <string name="Swap_Revoking">Revoking...</string>
     <string name="Swap_Approve">Approve</string>
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_Quoting">Quoting</string>
-    <string name="Swap_Initializing">Initializing</string>
     <string name="Swap_Providers">Providers</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
@@ -791,12 +725,6 @@
     <string name="Swap_ConfirmApprove_Title">Confirm Approve</string>
     <string name="Swap_ConfirmRevoke_Title">Confirm Revoke</string>
     <string name="Swap_Confirm_Title">Confirm Swap</string>
-    <string name="SwapConfirm_QuoteExpired">Quote expired</string>
-    <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
-    <string name="SwapWarning_SlippageNotApplicable_Title">Slippage is not applicable</string>
-    <string name="SwapWarning_SlippageNotApplicable_Description">Minimum slippage applicable  for this quote is %s%%</string>
-    <string name="SwapWarning_SlippageNotAvailable_Title">No Slippage Control</string>
-    <string name="SwapWarning_SlippageNotAvailable_Description">Cross-chain swaps depend on third-party liquidity and delays, which may affect the final amount.</string>
     <string name="Swap_SlippageDescription">This amount is in the process of validation. As soon as the transaction status is validated you will be able to use these coinsThe minimum amount a user is going </string>
     <string name="SwapDefense_PriceImpact_High_Title">Too expensive!</string>
     <string name="SwapDefense_PriceImpact_High_Description">You’ll lose a big part (-%s%%) of your funds on this swap.</string>
@@ -816,17 +744,10 @@
     <string name="SwapTerms_UserResponsibility_Info">I understand that using non-DEX providers introduces additional risks and that these risks are my responsibility. Unstoppable can not guarantee provider behavior.</string>
 
     <!-- Swap Settings -->
-    <string name="SwapSettings_Title">Swap Settings</string>
     <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>
-    <string name="SwapSettings_SlippageDescription">If the price moves beyond this percentage, the swap won’t go through.</string>
-    <string name="SwapSettings_DeadlineTitle">Transaction Deadline</string>
-    <string name="SwapSettings_DeadlineDescription">Your transaction will revert if it is pending for more than this long.</string>
     <string name="SwapSettings_RecipientAddressTitle">Recipient Address</string>
-    <string name="SwapSettings_RecipientAddressDescription">The swapped amount will be sent to the specified address.</string>
     <string name="SwapSettings_Apply">Apply</string>
-    <string name="SwapSettings_DeadlineMinute">%s min</string>
 
-    <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Your transaction is likely to fail.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Slippage Tolerance can’t be more than %s%%</string>
@@ -850,10 +771,8 @@
 
     <string name="Approve_RevokeAndApproveInfo">You can exchange %s, or you need to revoke and approve the new amount</string>
     <string name="Approve_Spender">Spender</string>
-    <string name="Approve_YouApprove">You Approve</string>
     <string name="Approve_YouRevoke">You Revoke</string>
     <string name="Approve_Allowance">Allowance Amount</string>
-    <string name="Approve_Revoke">Revoke Amount</string>
 
 
     <!--Swap Unlock Access-->
@@ -864,8 +783,6 @@
 
     <!--Uniswap Info -->
 
-    <string name="SwapInfo_AllowanceTitle">Allowance</string>
-    <string name="SwapInfo_AllowanceDescription">Allowance is the amount you let the exchange use on your behalf for swaps. Before making a swap, you first need to approve an allowance transaction.</string>
     <string name="SwapInfo_PriceImpactTitle">Price Impact</string>
     <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
 
@@ -880,7 +797,6 @@
     <string name="Transactions_WaitForSync">Please wait for the sync to finish.</string>
     <string name="Transactions_Pending">Pending</string>
     <string name="Transactions_Receive">Received</string>
-    <string name="Transactions_AccountCreated">Account Created</string>
     <string name="Transactions_ChangeTrust">Change Trust</string>
     <string name="Transactions_Completed">Completed</string>
     <string name="Transactions_Processing">Processing</string>
@@ -898,7 +814,6 @@
     <string name="Transactions_ContractCreation">Contract Creation</string>
     <string name="Transactions_ContractDeploy">Contract Deploy</string>
     <string name="Transactions_To">to %s</string>
-    <string name="Transactions_By">by %s</string>
     <string name="Transactions_From">from %s</string>
     <string name="Transaction_Unlimited_CoinCode">unlimited %s</string>
     <string name="Transaction_Unlimited">unlimited</string>
@@ -994,7 +909,6 @@
 
     <string name="Info_Reserved_Title">Locked Balance</string>
     <string name="Info_Reserved_Description">The Stellar network locks 1 XLM to activate the wallet and 0.5 XLM as a reserve for each token activated in your wallet.</string>
-    <string name="Info_Reserved_CurrentlyLocked">Currently locked:</string>
     <string name="Info_Reserved_WalletAction">Wallet activation</string>
 
     <string name="Info_NotRelayed_Title">Broadcast</string>
@@ -1038,47 +952,22 @@
     <string name="Settings_Faq" translatable="false">FAQ</string>
     <string name="Settings_AppStatus">App Status</string>
     <string name="Settings_WalletConnect" translatable="false">WalletConnect</string>
-    <string name="Settings_TonConnect" translatable="false">TON Connect</string>
     <string name="Settings_RateUs">Rate Us</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="Settings_LaunchScreen_Tip">Choose which screen the app opens on by default.</string>
-    <string name="Settings_Appearance">Appearance</string>
     <string name="Settings_AppSettings">App Settings</string>
     <string name="Settings_Subscription">Subscription</string>
-    <string name="Settings_Contact_ViaTelegram">via Telegram</string>
-    <string name="Settings_Contact_ViaEmail">via E-mail</string>
     <string name="Settings_AutoLock">Auto-Lock</string>
     <string name="Settings_Telegram" translatable="false">Telegram</string>
     <string name="Settings_Twitter" translatable="false">Twitter</string>
     <string name="Settings_JoinUnstoppables">Join Unstoppables</string>
     <string name="Settings_Support">Support</string>
     <string name="Settings_VipSupport">VIP Support</string>
-    <string name="Settings_BotSupport">BOT Support</string>
-    <string name="Settings_JoinUnstoppables_Description">Learn and master crypto via exclusive videos. Get to know us informally. Be the first to see things we work on.</string>
 
-    <string name="Settings_PersonalSupport">Personal Support</string>
-    <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
-    <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">You\'ve already requested a private chat, find it on Telegram</string>
-    <string name="Settings_PersonalSupport_Account">Account</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
-    <string name="Settings_PersonalSupport_Requested">Requested</string>
-    <string name="Settings_PersonalSupport_Request">Request</string>
-    <string name="Settings_PersonalSupport_NewRequest">New Request</string>
-    <string name="Settings_PersonalSupport_Requestfailed">Request failed</string>
-    <string name="Settings_PersonalSupport_OpenTelegram">Open Telegram</string>
-    <string name="Settings_VipSupport_StartChat">Join VIP Group</string>
-    <string name="Settings_VipSupport_Description">Join our VIP Group to get direct support, take part in discussions about upcoming updates, and connect more closely with the Unstoppable team.</string>
-
-    <string name="Settings_Donate_Info">Together, with your support, we can make this app even better!</string>
     <string name="Settings_Donate">Donate</string>
-    <string name="Settings_GetYourTokens">Get your tokens</string>
     <string name="Settings_DonateToken">Donate %s</string>
-    <string name="Settings_DonateWith">Donate with</string>
-    <string name="Settings_Donate_GetAddress">Donation Address</string>
     <string name="Settings_Donate_Addresses">Addresses</string>
     <string name="Settings_Donate_DonationAddresses">Donation Addresses</string>
-    <string name="Settings_Donate_OrSelectCoinToDonate">Or select a coin to donate</string>
-    <string name="Settings_CryptoQuiz">Crypto Quiz</string>
 
     <string name="SettingsSecurity_AutoLock_Immediate">Immediate</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
@@ -1087,15 +976,11 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hour</string>
 
-    <string name="Mev_Protection">MEV Protection</string>
-
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">Address Checker</string>
     <string name="SettingsAddressChecker_RecipientCheck">Recipient Check</string>
     <string name="SettingsAddressChecker_CheckTheRecipientInfo">Scans the recipient address for security risks prior to sending.</string>
     <string name="SettingsAddressChecker_CheckAddress">Check Address</string>
-    <string name="SettingsAddressChecker_SelectBlockchain">Select Blockchain</string>
-    <string name="SettingsAddressChecker_SelectCoin">Select Coin</string>
     <string name="SettingsAddressChecker_OnSubject">on %s</string>
     <string name="SettingsAddressChecker_SanctionsCheck">Sanctions Check</string>
     <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
@@ -1140,8 +1025,6 @@
     <string name="SettingsSubscription_Active">Active</string>
     <string name="SettingsSubscription_GetPremium">Get Premium</string>
     <string name="SettingsSubscription_RestorePurchase">Restore Purchase</string>
-    <string name="SettingsSubscription_SubscriptionPlan">Subscription Plan</string>
-    <string name="SettingsSubscription_SubscriptionInfo">Next payment date: %s. You can manage your subscription in the Manage Subscription section.</string>
     <string name="SettingsSubscription_ManageSubscription">Manage Subscription</string>
 
     <string name="Period_Days">%s days</string>
@@ -1150,22 +1033,14 @@
 
     <!--Premium Screens-->
     <string name="Premium_Title">Premium</string>
-    <string name="Premium_ChoosePlanForYou">Choose the plan</string>
     <string name="Premium_EnjoyFreePeriod">Enjoy the first %s FREE.</string>
     <string name="Premium_CancelSubscriptionInfo">Cancel any time</string>
     <string name="Premium_GetFreePeriod">Get %s FREE</string>
     <string name="Premium_Subscribe">Subscribe</string>
-    <string name="Premium_AddPromoCode">Add Promo Code</string>
     <string name="Premium_TryForFree">Try for FREE</string>
-    <string name="Premium_ViewAllFeatures">View All Features</string>
     <string name="Premium_Upgrade">Upgrade</string>
-    <string name="Premium_Restore">Restore</string>
-    <string name="Premium_Annually">Annually</string>
-    <string name="Premium_Monthly">Monthly</string>
     <string name="Premium_ThankYouForSubscription">Thank you for your \nsubscription!</string>
-    <string name="Premium_YouHaveActivatedPlan">You have activated the %s plan.</string>
     <string name="Premium_GoToApp">Go to App</string>
-    <string name="Premium_UpgradeText">Upgrade your experience with Premium features!</string>
     <string name="Premium_Banner_BlackFridayText">Upgrade to Premium with our biggest discount of the year</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Enjoy the full power of the app.</string>
     <string name="Premium_SelectSubscription">Select Subscription</string>
@@ -1204,7 +1079,6 @@
 
     <string name="Premium_HighlyRatedSecurity">Highly rated security, exceptional privacy, and a truly non-custodial wallet.</string>
     <string name="Premium_ApprovedBy">Approved and Audited By:</string>
-    <string name="Premium_WhatUsersSay">What users are saying:</string>
     <string name="Premium_BlackFridayOfferEnds">Black Friday offer ends on December 7</string>
 
     <string name="Premium_SubscriptionPeriod_Month">month</string>
@@ -1232,7 +1106,6 @@
     <string name="Appearance_BalanceAutoHide_Description">Hide the Send, Receive, and Swap buttons from the Balance tab.</string>
     <string name="Appearance_PriceChangeInterval">Price Change %</string>
     <string name="Appearance_PriceChangeInterval_Tip">Select the time period for token price change display.</string>
-    <string name="Appearance_HideButtonsInfo">The “Hide Buttons” configuration hides the Send, Receive, and Swap buttons on Balance tab.</string>
 
     <string name="BalanceViewType_CoinValue">Coin Value</string>
     <string name="BalanceViewType_FiatValue">Fiat Value</string>
@@ -1272,9 +1145,6 @@
     <!-- Privacy  -->
 
     <string name="Privacy_Information">Unstoppable doesn\’t collect personal data like your balances or wallet addresses. We only use anonymous data to improve the app.</string>
-    <string name="Privacy_BulletedText1">The wallet does not gather any personal data.</string>
-    <string name="Privacy_BulletedText2">There are no user accounts or databases storing user data.</string>
-    <string name="Privacy_BulletedText3">If allowed, the wallet will share app usage habits with the Unstoppable team. This is to understand which features are being used (or not) by our users. Being a privacy focused app we need some way to evaluate our efforts and without this we have no idea whether the features we built are being used or not.</string>
     <string name="ShareUiData">Share UI data</string>
     <string name="ShareUiDataDescription">This setting lets you turn off analytics and keep your activity fully private.</string>
 
@@ -1378,8 +1248,6 @@
     <string name="SettingsTerms_TransactionsIrreversible">Blockchain transactions are irreversible. Always review transaction details before confirming.</string>
     <string name="SettingsTerms_OpenSource">The app is verifiably open source, with all source code published online. Everything stated above can be publicly verified by anyone.</string>
     <string name="SettingsTerms_LegalObligations">You are solely responsible for the security of your funds, your conduct, and compliance with applicable laws in your jurisdiction. Use of the app does not exempt you from tax, financial reporting, or other legal obligations.</string>
-    <string name="SettingsTerms_ProhibitedUse">To maintain a safe ecosystem, you agree not to use the app for any illegal activity, including money laundering or sanction evasion, fraud, scams, hiding stolen assets, or the financing of prohibited organizations.</string>
-    <string name="SettingsTerms_UserResponsibility">By proceeding, you acknowledge that security of your funds and legal compliance are ultimately your responsibility.</string>
 
 
     <!--Setting_Tell Friends-->
@@ -1388,8 +1256,6 @@
     <string name="SettingsShare_Text">Be Unstoppable</string>
 
     <!--Setting_Contact-->
-
-    <string name="SettingsContact_Title">Contact Us</string>
 
     <!--Setting_Notifications-->
 
@@ -1408,9 +1274,6 @@
 
     <!--Errors-->
 
-    <string name="Binance_Backend_Error_MemoRequired">Receiver requires non-empty memo in transfer transaction</string>
-    <string name="Binance_Backend_Error_RequiresDigits">Requires the memo to contain only digits</string>
-
     <!--Hud texts-->
 
     <string name="Hud_Text_NoInternet">No Internet</string>
@@ -1421,21 +1284,18 @@
     <string name="Hud_Text_AddressAdded">Address Added</string>
     <string name="Hud_Text_Done">Done</string>
     <string name="Hud_Text_Verified">Verified</string>
-    <string name="Hud_Text_EmailAddressCopied">Email address copied</string>
     <string name="Hud_Added_To_Watchlist">Added To Favorites</string>
     <string name="Hud_Added_To_Wallet">Added To Wallet</string>
     <string name="Hud_Removed_From_Wallet">Removed from Wallet</string>
     <string name="Hud_Removed_from_Watchlist">Removed from Favorites</string>
     <string name="Hud_Removed">Removed</string>
     <string name="Hud_UnknownError" translatable="false">%s</string>
-    <string name="Hud_WaitForSynchronization">Wait for synchronization</string>
 
     <!--Manage Coins-->
 
     <string name="ManageCoins_title">Coin Manager</string>
     <string name="ManageCoins_Search">Name, code or contract address</string>
     <string name="ManageCoins_AddToken">Add Token</string>
-    <string name="ManageCoins_NoResults">No results found. Try to add token manually if you know its smart contract address.</string>
     <string name="ManageCoins_BipsDescription">There are 4 common address formats %1$s wallets can use to receive incoming payments:
 \n
 \n- BIP-44 (older)
@@ -1469,8 +1329,6 @@
     <string name="ImportWallet_BackupFile_Description">Import a backup file from your local folder.</string>
     <string name="ImportWallet_RecoveryPhrase">from Recovery Phrase</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Import a wallet using a recovery phrase or a private key.</string>
-    <string name="ImportWallet_ExchangeWallet">from Exchange Wallet</string>
-    <string name="ImportWallet_ExchangeWallet_Description">Connect to a wallet on centralized exchange.</string>
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">This file is not a valid backup of the wallet, or the file has been corrupted and cannot be restored.</string>
     <string name="ImportWallet_SelectAnotherFile">Select Another File</string>
@@ -1483,7 +1341,6 @@
 
     <string name="WatchWallet">Watch Wallet</string>
     <string name="Watch_Address_Hint">Paste your address (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) or XPUB</string>
-    <string name="Watch_Address_Watch">Watch</string>
     <string name="Watch_ViewKey">Private View Key</string>">
     <string name="Watch_BirthdayHeight">Restore Height</string>">
     <string name="Watch_Select_Blockchains">Choose Blockchains</string>
@@ -1513,7 +1370,6 @@
     <string name="Balance_Receive_BackupRequired_Description">You need to backup %1$s</string>
 
     <!--Network Settings-->
-    <string name="NetworkSettings_SwithesAutomatically">switches automatically</string>
 
     <!-- Show Key -->
     <string name="ShowKey_Passphrase">Passphrase</string>
@@ -1522,8 +1378,6 @@
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Don\'t copy</string>
 
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">Backup Recovery Phrase</string>
-    <string name="BackupRecoveryPhrase_Description">Create a backup of your recovery phrase and the associated passphrase. These will allow you to restore your wallet if your phone is lost, stolen, or damaged.</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Manual Backup</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Local Backup</string>
     <string name="BackupRecoveryPhrase_Later">Later</string>
@@ -1627,8 +1481,6 @@
 
     <string name="AddToken_CoinAlreadyInListWarning">This token is already in the Coin Manager list</string>
     <string name="AddToken_InvalidContractAddress">Invalid contract address</string>
-    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
-    <string name="AddEvmToken_Bep2NotFound">BEP2 symbol not found</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Contract address not found in %s blockchain</string>
 
     <!-- Address Format Settings List -->
@@ -1689,7 +1541,6 @@
     <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
     <string name="CoinPage_Overview">Overview</string>
-    <string name="CoinPage_Contracts">Contracts</string>
     <string name="CoinPage_Blockchains">Blockchains</string>
     <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">Coin Types</string>
@@ -1699,12 +1550,6 @@
     <string name="CoinPage_Whitepaper">Whitepaper</string>
     <string name="CoinPage_Reddit" translatable="false">Reddit</string>
     <string name="CoinPage_Twitter" translatable="false">Twitter</string>
-    <string name="CoinPage_Twitter_NotAvailable">No twitter available</string>
-    <string name="CoinPage_Twitter_NoTweets">No tweets yet</string>
-    <string name="CoinPage_Twitter_Quoted">Quoted %s</string>
-    <string name="CoinPage_Twitter_Retweeted">Retweeted %s</string>
-    <string name="CoinPage_Twitter_Replied">Replying to %s</string>
-    <string name="CoinPage_Twitter_SeeOnTwitter">See on Twitter</string>
     <string name="CoinPage_Telegram" translatable="false">Telegram</string>
     <string name="CoinPage_Github" translatable="false">Github</string>
     <string name="CoinPage_MarketCap">Market Cap</string>
@@ -1854,9 +1699,6 @@
     <string name="Coin_Analytics_30DayRank">30-Day Rank</string>
     <string name="Coin_Analytics_30DayUniqueAddress">30-Day Unique Addresses</string>
     <string name="Coin_Analytics_30DayVolume">30-Day Volume</string>
-    <string name="Coin_Analytics_Blockchain1" translatable="false">Blockchain 1</string>
-    <string name="Coin_Analytics_Blockchain2" translatable="false">Blockchain 2</string>
-    <string name="Coin_Analytics_Blockchain3" translatable="false">Blockchain 3</string>
     <string name="Coin_Analytics_OverallScore">Overall Score</string>
     <string name="Coin_Analytics_OverallScore_Excellent">Excellent</string>
     <string name="Coin_Analytics_OverallScore_Good">Good</string>
@@ -1917,8 +1759,6 @@
     <string name="TechnicalAdvice_MacdAdvice">MACD. Assesses the strength of the trend considering the average price change. The daily value of the histogram is %1$s (%2$s). The price of the asset globally may move %3$s.</string>
     <string name="TechnicalAdvice_InfoTitle">Technical Indicators</string>
     <string name="TechnicalAdvice_InfoDescription">We use the Bollinger Bands + RSI strategy to determine trading signals. All calculations are based on daily candlesticks and provide advice for a moderately long term. The essence of the strategy is that the asset price should reach an extreme, breaking out of the Bollinger Bands channel, and the RSI should be in the overbought/oversold zone. After the price returns to the channel, there is a high probability of the price returning to the mean values or attempting to break the channel from the other side. Note that the strategy may give several false signals during strong market movements before a correct signal appears.\n\nPlease remember that it is very important to apply risk management to trading and remember to cut losses if the market situation changes!</string>
-    <string name="TechnicalAdvice_ShowDetails">Show Details</string>
-    <string name="TechnicalAdvice_HideDetails">Hide Details</string>
     <string name="TechnicalAdvice_Indicators_StrongBuy">Strong Buy</string>
     <string name="TechnicalAdvice_Indicators_Buy">Buy</string>
     <string name="TechnicalAdvice_Indicators_Neutral">Neutral</string>
@@ -1930,21 +1770,6 @@
     <string name="Detectors_TokenDetectors">Token Detectors</string>
     <string name="Detectors_GeneralDetectors">General Detectors</string>
     <string name="Detectors_IssuesCount">Issues %d</string>
-
-    <string name="ActivateSubscription_Title">Activate</string>
-    <string name="ActivateSubscription_Wallet">Wallet</string>
-    <string name="ActivateSubscription_Address">Address</string>
-    <string name="ActivateSubscription_NoSubscriptionError">Your wallet address does not have a subscription to premium features, you need to purchase it to activate the subscription.</string>
-
-    <string name="SubscriptionInfo_Title">Premium Features</string>
-    <string name="SubscriptionInfo_Analytics_Title">Cryptocurrency Analytics</string>
-    <string name="SubscriptionInfo_Analytics_Info">Access comprehensive market and on-chain stats about each token.</string>
-    <string name="SubscriptionInfo_Indicators_Title">Price Trend Indicators</string>
-    <string name="SubscriptionInfo_Indicators_Info">Discover uptrending tokens based on technical analysis indicators.</string>
-    <string name="SubscriptionInfo_PersonalSupport_Title">Personal Support</string>
-    <string name="SubscriptionInfo_PersonalSupport_Info">Contact our team directly over Telegram for personal assistance.</string>
-    <string name="SubscriptionInfo_GetPremium">Get Premium</string>
-    <string name="SubscriptionInfo_HavePremium">I already have Premium</string>
 
     <!-- NFT Collection -->
 
@@ -1963,7 +1788,6 @@
     <string name="BalanceSyncError_Title">Sync Error</string>
     <string name="BalanceSyncError_ButtonRetry">Retry</string>
     <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
-    <string name="BalanceSyncError_ButtonReport">Report</string>
     <string name="BalanceSyncError_Text">Sync error</string>
     <string name="BalanceSyncError_ChangableSourceErrorText">Failed to fetch data from the current source. You can retry or switch to a different sync source.</string>
     <string name="BalanceSyncError_ErrorText">Failed to fetch data from the current source. Please try again later.</string>

@@ -6,7 +6,6 @@
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
     <string name="Alert_Loading">로딩중...</string>
-    <string name="Suspended">일시 정지</string>
     <string name="Button_Show">표시</string>
     <string name="Button_Hide">숨기기</string>
     <string name="Button_Cancel">취소</string>
@@ -33,7 +32,6 @@
     <string name="Button_Reset">초기화</string>
     <string name="Button_Understand">이해합니다</string>
     <string name="Button_Switch">전환</string>
-    <string name="Button_Remove">삭제</string>
     <string name="Button_Save">저장</string>
     <string name="Button_IAgree">동의함</string>
     <string name="Button_Continue">계속</string>
@@ -44,7 +42,6 @@
     <string name="Button_Delete">삭제</string>
     <string name="Button_LearnMore">자세히 보기</string>
     <string name="Button_Sign">가입</string>
-    <string name="Button_GetApiKeys">API 키 가져오기</string>
     <string name="Button_TryAgain">다시 시도하십시오.</string>
     <string name="Button_Share">공유</string>
     <string name="Button_Apply">적용</string>
@@ -125,7 +122,6 @@
     <string name="SelectContacts_All">모든</string>
     <string name="Restore_BirthdayHeight">생일 신장</string>
     <string name="Restore_BirthdayHeight_Invalid">잘못된 벌스데이 높이</string>
-    <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">더 빠른 동기화를 위해 지갑의 생일 키를 입력하세요.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000(선택 사항)</string>
     <string name="Restore_ZCash_RestoreAsNew">새 것으로 복원</string>
@@ -144,10 +140,6 @@
     <string name="Market_All">모든</string>
     <string name="Market_Search_Sections_RecentTitle">확인됨</string>
     <string name="Market_Search_Sections_PopularTitle">인기 있는</string>
-    <string name="Market_FilterSection_MarketParameters">시장 매개변수</string>
-    <string name="Market_FilterSection_PriceParameters">가격 매개변수</string>
-    <string name="Market_FilterSection_NetworkParameters">네트워크 매개변수</string>
-    <string name="Market_FilterSection_Indicators">지표</string>
     <string name="Market_Field_HighestCap">가장 높은 시가총액</string>
     <string name="Market_Field_LowestCap">가장 낮은 시가총액</string>
     <string name="Market_Field_HighestVolume">가장 높은 거래량</string>
@@ -187,7 +179,6 @@
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">주요 플랫폼</string>
     <string name="MarketTopPlatforms_Protocols">프로토콜: %s</string>
-    <string name="MarketPlatformCoins_PlatformEcosystem">%s 생태계</string>
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">%s 체인상의 모든 프로토콜의 시가총액</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_TotalMarketCapShort">시가 총액</string>
@@ -203,13 +194,10 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">모든</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!-- ETF-->
-    <string name="MarketEtf_Title">총 순유입액</string>
-    <string name="MarketEtf_Description">ETF의 순유입액은 현금 유입에서 유출을 뺀 것과 같습니다</string>
     <string name="MarketEtf_HighestAssets">최고 자산</string>
     <string name="MarketEtf_LowestAssets">최저 자산</string>
     <string name="MarketEtf_Inflow">유입</string>
     <string name="MarketEtf_Outflow">유출</string>
-    <string name="MarketEtf_TotalNetAssets">총 순자산</string>
     <string name="MarketEtf_BitcoinEtf">Bitcoin ETF</string>
     <string name="MarketEtf_EthereumEtf">Ethereum ETF</string>
     <string name="MarketEtf_EtfDescription">현물 및 선물 기반 상품을 포함한 모든 %s ETF의 순유입입니다.</string>
@@ -235,8 +223,6 @@
     <string name="Market_Filter_OutperformedGold">금 대비 초과 성과</string>
     <string name="Market_Filter_OutperformedSnp">S&amp;P 500 대비 초과 성과</string>
     <string name="Market_Filter_PriceCloseTo">가격 임박</string>
-    <string name="Market_Filter_PriceCloseToAth">최고가에 가까운 가격</string>
-    <string name="Market_Filter_PriceCloseToAtl">ATL 가격에 근접</string>
     <string name="Market_Filter_ListedOnTopExchanges">주요 거래소에 상장됨</string>
     <string name="Market_Filter_SolidCex">좋은 중앙화된 거래소 (CEX) 거래량</string>
     <string name="Market_Filter_SolidCex_Description">좋은 분배</string>
@@ -324,13 +310,9 @@
     <string name="TvlRank_MultiChain">다중 체인</string>
     <!--Balance-->
     <string name="Wallet_Title">지갑</string>
-    <string name="Balance_Withdraw">빼다</string>
     <string name="Balance_Title">잔액</string>
     <string name="Balance_Send">전송</string>
-    <string name="Balance_ChooseCoin">코인 선택</string>
-    <string name="Balance_Deposit">수신</string>
     <string name="Balance_Receive">수신</string>
-    <string name="Balance_Address">주소</string>
     <string name="Balance_RatePerCoin">%1$s 당 %2$s</string>
     <string name="Balance_SyncedUntil">%s 까지</string>
     <string name="Balance_Syncing">동기화...</string>
@@ -354,35 +336,25 @@
     <string name="Balance_Receive_AddressTypeZcashDescription">Zcash 수신 방식을 선택하세요.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">향상된 사용자 경험과 호환성으로 인해 비트코인 캐시(BCH)를 수신하는 데 현금 주소 형식이 선호됩니다. 그러나 두 주소 형식은 보낸 사람의 주소 형식에 관계없이 BCH를 수신하는 데 상호 교환적으로 사용될 수 있습니다.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">향상된 처리량과 보안을 위해 Bitcoin에서는 기본 SegWit 형식이 선호됩니다. 모든 주소 형식(Taproot, SegWit, Legacy)을 사용하여 보낸 사람의 주소 형식에 관계없이 BTC를 수신할 수 있으므로 다양한 코인 유형에 걸쳐 원활한 거래가 가능합니다.</string>
-    <string name="Balance_Receive_Account">계정</string>
-    <string name="Balance_Receive_NotActive">비활성화됨</string>
     <string name="Balance_Receive_Amount">금액</string>
     <string name="Balance_Receive_SetAmount">금액 설정</string>
-    <string name="Balance_LockedAmount_Title">잠김</string>
-    <string name="Balance_ProcessingBalance_Title">처리 중</string>
-    <string name="Balance_NotRelayedAmount_Title">방송</string>
     <string name="Balance_Receive_Memo">메모 (태그)</string>
     <string name="Balance_Error_InvalidQrCode">인식할 수 없음</string>
     <string name="Balance_Receive_WatchAddressAlert">이 주소는 관찰 중인 계정의 주소입니다</string>
-    <string name="Balance_Receive_AddressMemoAlert">필요한 메모 (태그)를 제공하고 호환되는 네트워크 토큰만 보내십시오. 그렇지 않으면 소멸됩니다.</string>
     <string name="Balance_Receive_UsedAddresses">사용된 주소들</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s 주소는 개인 정보 보호와 보안을 위해 변경됩니다. 이 지갑에서 사용된 주소 목록은 아래와 같습니다.</string>
     <string name="Balance_Receive_ReceiveAddresses">받는 주소들</string>
     <string name="Balance_ReceiveAddress">수신 주소</string>
     <string name="Balance_Receive_ChangeAddresses">거스름돈 주소</string>
-    <string name="Balance_SendHint_CoinName">코인 이름</string>
     <string name="Balance_ReceiveHint_Search">검색</string>
     <string name="Balance_Receive_ActivationRequired">주소를 받으려면 토큰을 활성화해야 합니다. 이는 Stellar 네트워크에서 요구되는 절차입니다.</string>
     <string name="Balance_Receive_Trustline">신뢰 라인</string>
-    <string name="Balance_Reserved_Title">예약됨</string>
-    <string name="Balance_WalletAddress">지갑 주소</string>
     <string name="Balance_Receive_Subaddresses">서브주소</string>
     <string name="Balance_Receive_SubaddressesInfo">서브주소를 사용하면 하나의 지갑에서 여러 개의 고유 주소를 사용할 수 있어 편리하며 프라이버시도 강화됩니다.</string>
     <string name="Balance_Receive_SubaddressesTransactions">트랜잭션: %s</string>
     <string name="Balance_Receive_HaveYouOwnedCoins">이전에 %s 코인을 보유한 적이 있습니까?</string>
     <string name="Balance_Receive_YesAlreadyOwn">예, 이미 소유하고 있습니다</string>
     <string name="Balance_Receive_IDontHave">아니요, 없어요</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Title">透明</string>
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">투명 ZEC 감지됨</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">투명 주소에 보유 중인 ZEC 잔액이 있습니다. Unstoppable에서 사용하려면 완전한 프라이버시 보호를 위해 보호(Shield) 처리해야 합니다.</string>
@@ -422,28 +394,12 @@
     <string name="Send_Confirmation_Method">메소드</string>
     <string name="Send_Confirmation_Send_Button">전송</string>
     <string name="Send_Confirmation_Action">작업</string>
-    <string name="Send_Processing">처리 중!</string>
-    <string name="Send_Processing_Description">트랜잭션이 성공적으로 전송되었습니다. 자세한 내용은 상태를 확인하세요.</string>
-    <string name="Send_Address_Recent">최근의</string>
-    <string name="Send_Address_Error_CheckLocked">잠김</string>
-    <string name="Send_Address_Error_Incorrect">무효</string>
     <string name="Send_Address_Error_InvalidAddress">잘못된 주소</string>
-    <string name="Send_Address_Error_Correct">정확함</string>
     <string name="Send_Address_Error_Detected">감지됨</string>
     <string name="Send_Address_Error_Clear">안전함</string>
-    <string name="Send_Address_AddressCheck">주소 확인</string>
     <string name="Send_Address_PhishingCheck">Phishing Check</string>
-    <string name="Send_Address_PhishingCheck_Info1">제공된 목적지 주소의 잠재적 피싱 위험을 분석합니다.</string>
-    <string name="Send_Address_PhishingCheck_Info2">안전함: 의심스러운 활동이 감지되지 않았습니다.</string>
-    <string name="Send_Address_PhishingCheck_Info3">감지됨: 누군가 잘못된 주소로 자금을 보내도록 속이려는 시도가 있는 것 같습니다. 주소가 정확하다고 확신하지 않는 한 진행하지 마세요. 먼저 소액 테스트 트랜잭션을 보내는 것을 고려해 보세요.</string>
     <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
-    <string name="Send_Address_BlacklistCheck_Info1">목적지 주소가 공식 또는 비공식 블랙리스트에 등록되어 있는지 확인합니다.</string>
-    <string name="Send_Address_BlacklistCheck_Info2">안전함: 블랙리스트 표시가 없습니다.</string>
-    <string name="Send_Address_BlacklistCheck_Info3">감지됨: 해당 주소는 블랙리스트에 등록되어 있으며 법적 또는 보안 위험과 관련되어 있을 수 있습니다. 주의하여 진행하세요. 많은 암호화폐 거래소는 블랙리스트에 등록된 주소와 상호 작용한 지갑에서 자금을 입금하거나 출금하는 사용자를 제한합니다. 이 점을 염두에 두세요.</string>
     <string name="Send_Address_SanctionCheck">Sanctions Check</string>
-    <string name="Send_Address_SanctionCheck_Info1">수신자의 주소가 Chainalysis.com의 데이터를 사용하여 국제 제재 대상인지 확인합니다.</string>
-    <string name="Send_Address_SanctionCheck_Info2">Clear: No sanctions detected.안전함: 제재가 감지되지 않았습니다.</string>
-    <string name="Send_Address_SanctionCheck_Info3">감지됨: 잠재적 법적 위험. 이 주소와의 거래는 특정 관할권에서 제한되거나 불법일 수 있습니다.</string>
     <string name="Send_Address_ErrorMessage_PhishingDetected">피싱 주소 감지됨!</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected">블랙리스트 등록 주소 감지됨!</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected">제재 대상 주소 감지됨!</string>
@@ -463,14 +419,12 @@
     <string name="Send_Error_SendToSelf">자체로 전송이 지원되지 않음</string>
     <string name="Send_DialogAvailableBalance">사용 가능한 잔액</string>
     <string name="Send_DialogSpeed">거래 속도</string>
-    <string name="Send_DialogProceed">다음</string>
     <string name="Send_LockTime_Off">끄기</string>
     <string name="Send_LockTime_Hour">1시간</string>
     <string name="Send_LockTime_Month">1 개월</string>
     <string name="Send_LockTime_HalfYear">6개월</string>
     <string name="Send_LockTime_Year">1 년</string>
     <string name="Send_Sending">전송중</string>
-    <string name="Send_Token_InsufficientFeeAlert">%1$s (%2$s) 에 대한 거래 수수료는 %3$s로 지불되었습니다. 귀하는 %4$s가 필요합니다.</string>
     <string name="Send_Warning_LowFee">경고! 갇힐 위험</string>
     <string name="Send_Error_LowFee">수수료 오류</string>
     <string name="Send_Error_LowFee_Description">요금이 너무 낮습니다.</string>
@@ -515,16 +469,12 @@
     <string name="FeeInfo_AverageDescription">일반적으로 권장 수수료 값은 비트코인의 경우 분/시간 이내, 이더리움의 경우 몇 분 이내로 거래를 처리하기에 충분해야 합니다.</string>
     <string name="FeeInfo_Fast">빠르게</string>
     <string name="FeeInfo_FastDescription">우선 순위가 중요한 거래의 경우 높은 수수료 값을 사용하는 것이 좋습니다. 비트코인의 경우 10분 이내, 이더리움의 경우 1~2분 이내에 거래가 완료될 것으로 예상됩니다.</string>
-    <string name="FeeInfo_TronFee_Title">수수료</string>
     <string name="FeeInfo_TronFee_Description">네트워크에서 거래하는 데 드는 예상 비용입니다. (energy, bandwidth 및 활성화 수수료 제외)</string>
     <string name="FeeInfo_TronActivationFee_Title">활성화 수수료</string>
     <string name="FeeInfo_TronActivationFee_Description">이 주소는 활성화되지 않았습니다. 비활성화된 계정 주소로 TRX 또는 TRC-10 토큰을 전송하면 계정이 활성화됩니다</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">소모된 자원</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth 은 블록체인 데이터베이스에 저장된 트랜잭션 바이트 크기를 측정하는 단위입니다. 거래가 클수록 대역폭 자원이 더 많이 사용됩니다.\n\nEnergy 는 TRON 가상 머신이 TRON 네트워크에서 특정 작업을 수행하기 위해 필요한 계산 양을 측정하는 단위입니다. \n\n스마트 계약 트랜잭션은 실행에 계산 자원이 필요하기 때문에 각 스마트 계약 트랜잭션에는 energy 수수료를 지불해야합니다.</string>
     <!--Tron-->
-    <string name="Tron_AddressNotActive_Warning">이 주소는 활성화되어 있지 않습니다</string>
-    <string name="Tron_AddressNotActive_Title">비활성 주소</string>
-    <string name="Tron_AddressNotActive_Info">TRON 블록체인에 새로 생성된 계정은 비활성화되어 있어서 조회하거나 탐색할 수 없습니다. 이 계정은 활성화되어야 합니다.\n\n비활성화된 계정 주소로 TRX 또는 TRC-10 토큰을 전송하면 계정이 활성화됩니다. 새로운 TRON 체인 계정을 활성화하려면 1 TRX의 수수료가 필요합니다.</string>
     <string name="Tron_SelfSendTrxNotAllowed">TRX를 자신에게 전송할 수 없습니다</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">0 %s을(를) 전송할 수 없습니다.</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">계정이 활성화되지 않음</string>
@@ -547,14 +497,11 @@
     <string name="WalletConnect_SendTransactionRequest_Title">트랜잭션 전송</string>
     <string name="WalletConnect_SendTransactionRequest_ButtonSend">전송</string>
     <string name="WalletConnect_SignMessageRequest_Title">서명 요청</string>
-    <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">서명할 메시지</string>
-    <string name="WalletConnect_SignMessageRequest_ButtonSign">가입</string>
     <string name="WalletConnect_Error_NoWallet">WalletConnect를 사용하려면 먼저 지갑을 생성하거나 가져와야 합니다</string>
     <string name="WalletConnect_Error_NeedBackup">휴대전화 분실, 도난, 파손 등의 경우 지갑을 복구할 수 있도록 복구 문구 및 관련 비밀번호의 백업 사본을 만드십시오.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">지원되지 않는 블록체인입니다</string>
     <string name="WalletConnect_Error_NoSuitableAccount">적합한 계정이 없습니다.</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">적합한 evm 키트가 없습니다.</string>
-    <string name="WalletConnect_Error_DataParsingError">데이터 파싱 오류</string>
     <string name="WalletConnect_Error_UnsupportedChains">지원되지 않는 체인: %s</string>
     <string name="WalletConnect_Error_UnsupportedMethods">지원되지 않는 메서드: %s</string>
     <string name="WalletConnect_Error_UnsupportedEvents">지원되지 않는 이벤트: %s</string>
@@ -564,7 +511,6 @@
     <string name="WalletConnect_ActiveWallet">지갑</string>
     <string name="WalletConnect_NotSupportedDescription">현재 지갑 유형 %s은(는) WalletConnect를 지원하지 않습니다.</string>
     <string name="WalletConnect_Unnamed">이름없음</string>
-    <string name="WalletConnect_Pairings">동기화</string>
     <string name="WalletConnect_PairedDApps">페어링된 dApp</string>
     <string name="WalletConnect_Pairings_DeleteAll">모두 삭제</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">페어링된 모든 dAps를 삭제하시겠습니까?</string>
@@ -584,7 +530,6 @@
     <string name="WalletConnect_Message">메시지</string>
     <string name="WalletConnect_Checking">확인 중...</string>
     <string name="WalletConnect_RequestFailed">요청 실패</string>
-    <string name="WalletConnect_AllowDapp">%s 허용</string>
     <string name="WalletConnect_Value">값</string>
     <string name="WalletConnect_TokenAllowance">토큰 허용량</string>
     <string name="WalletConnect_ConfirmTransaction">트랜잭션 확인</string>
@@ -607,19 +552,15 @@
     <string name="Swap_FromAmountTitle">지불하기</string>
     <string name="Swap_ToAmountTitle">얻기</string>
     <string name="Swap_TokenSelectorTitle">선택</string>
-    <string name="Swap_Allowance">허용량</string>
     <string name="Swap_Price">금액</string>
     <string name="Swap_AvailableBalance">사용 가능한 잔액</string>
     <string name="Swap_PriceImpact">가격 영향</string>
-    <string name="Swap_PriceImpactTooHigh">시장 가격과 예상 결제 가격의 차이가 너무 큽니다.</string>
-    <string name="Swap_PriceImpactWarning">중요한 사항입니다! 매우 불리한 가격을 받고 있습니다. 이는 유동성이 극도로 낮기 때문입니다.</string>
     <string name="Swap_MinimumReceived">보증 금액</string>
     <string name="Swap_Slippage">미끄러짐</string>
     <string name="Swap_Recipient">수령인</string>
     <string name="Swap_ErrorNoProviders">제공자 없음</string>
     <string name="Swap_ErrorNoQuote">제안이 없습니다</string>
     <string name="Swap_ErrorInsufficientBalance">잔액이 부족합니다</string>
-    <string name="Swap_ErrorHighPriceImpact">높은 가격 영향</string>
     <string name="Swap_ErrorTokenNotEnabled">토큰 활성화되지 않음</string>
     <string name="Swap_ErrorWalletSyncing">지갑 동기화 중</string>
     <string name="Swap_ErrorWalletNotSynced">지갑이 동기화되지 않음</string>
@@ -627,8 +568,6 @@
     <string name="Swap_SelectTokenIn">토큰 인 선택</string>
     <string name="Swap_SelectTokenOut">토큰 아웃 선택</string>
     <string name="Swap_EnterAmount">금액 입력</string>
-    <string name="Swap_Unlock">잠금 해제</string>
-    <string name="Swap_Unlocking">잠금 해제...</string>
     <string name="Swap_Revoke">취소</string>
     <string name="Swap_Revoking">철회...</string>
     <string name="Swap_Approve">승인</string>
@@ -641,17 +580,10 @@
     <string name="Swap_YouPay">지불하기</string>
     <string name="Swap_YouGet">얻기</string>
     <string name="Swap_Confirm_Title">확인</string>
-    <string name="SwapConfirm_QuoteExpired">견적이 만료되었습니다</string>
-    <string name="SwapConfirm_FetchingFinalQuote">최종 견적을 가져오는 중</string>
     <!-- Swap Settings -->
-    <string name="SwapSettings_Title">스왑 설정</string>
     <string name="SwapSettings_SlippageTitle">토큰 범위 설정</string>
-    <string name="SwapSettings_DeadlineTitle">거래 마감 시간</string>
-    <string name="SwapSettings_DeadlineDescription">귀하의 거래가 이 시간 이상 보류되면 원상 복귀됩니다.</string>
     <string name="SwapSettings_RecipientAddressTitle">귀하의 거래가 이 시간 이상 보류되면 원상 복귀됩니다</string>
     <string name="SwapSettings_Apply">적용</string>
-    <string name="SwapSettings_DeadlineMinute">최소 %s</string>
-    <string name="SwapSettings_Error_DeadlineZero">올바르지 않은 마감 시간</string>
     <string name="SwapSettings_Error_SlippageZero">올바르지 않은 슬립</string>
     <string name="SwapSettings_Error_SlippageTooLow">귀하의 거래가 실패할 것 같습니다.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">슬리피지 허용 오차는 %s%%를 초과할 수 없습니다.</string>
@@ -663,14 +595,12 @@
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">%s을(를) 교환하거나 새 금액을 취소하고 승인해야 합니다.</string>
     <string name="Approve_Spender">스펜더</string>
-    <string name="Approve_YouApprove">승인합니다</string>
     <string name="Approve_YouRevoke">당신은 취소</string>
     <!--Swap Unlock Access-->
     <string name="Swap_Approve_PageTitle">승인</string>
     <string name="Swap_Approve_Info">스마트 계약에 토큰 거래 권한을 부여하여 지정된 허용 금액을 설정합니다. 귀하의 잔액에 영향을 주지 않지만 승인을 위한 소액 수수료가 발생합니다. \n\n미래 거래를 위해 미리 더 높은 금액을 승인하는 것은 요청에 따른 승인보다 비용 효율적입니다.</string>
     <string name="Swap_Approve_Unlimited">무제한</string>
     <!--Uniswap Info -->
-    <string name="SwapInfo_AllowanceTitle">허용량</string>
     <string name="SwapInfo_PriceImpactTitle">가격 영향</string>
     <string name="SwapInfo_PriceImpactDescription">표시된 가격과의 예상 가격 편차는 일반적으로 스왑 금액에 따라 증가합니다.</string>
     <!--Deposit-->
@@ -799,32 +729,13 @@
     <string name="Settings_AppStatus">앱 상태</string>
     <string name="Settings_RateUs">앱 평가</string>
     <string name="Settings_LaunchScreen">시작 화면</string>
-    <string name="Settings_Appearance">모양</string>
     <string name="Settings_AppSettings">앱 설정</string>
     <string name="Settings_Subscription">구독</string>
-    <string name="Settings_Contact_ViaTelegram">텔레그램을 통해</string>
-    <string name="Settings_Contact_ViaEmail">이메일로</string>
     <string name="Settings_AutoLock">자동 잠금</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
-    <string name="Settings_JoinUnstoppables_Description">독점 비디오로 암호화폐를 배우고 정복하세요. 비공식적으로 우리를 알아가세요. 우리가 작업하는 것들을 가장 먼저 보실 수 있습니다.</string>
-    <string name="Settings_PersonalSupport">개인 지원</string>
-    <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Telegram 계정 이름을 입력하여 저희 팀과 개인 지원 채팅을 시작하세요. 문제가 확인되는 즉시 연락을 드리고 문제 해결을 시작하겠습니다.</string>
-    <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">이미 비공개 채팅을 요청하셨습니다. Telegram에서 찾아보세요.</string>
-    <string name="Settings_PersonalSupport_Account">계정</string>
-    <string name="Settings_PersonalSupport_Requested">신청 완료</string>
-    <string name="Settings_PersonalSupport_Request">요청</string>
-    <string name="Settings_PersonalSupport_NewRequest">요청</string>
-    <string name="Settings_PersonalSupport_Requestfailed">요청 실패</string>
-    <string name="Settings_PersonalSupport_OpenTelegram">오픈 텔레그램</string>
-    <string name="Settings_VipSupport_StartChat">VIP 그룹 참여하기</string>
-    <string name="Settings_Donate_Info">함께, 여러분의 지원으로 우리는 이 앱을 더 좋게 만들 수 있습니다!</string>
     <string name="Settings_Donate">후원하기</string>
-    <string name="Settings_GetYourTokens">토큰 받기</string>
     <string name="Settings_DonateToken">기부하기 %s</string>
-    <string name="Settings_DonateWith">기부하기</string>
-    <string name="Settings_Donate_GetAddress">기부 주소</string>
     <string name="Settings_Donate_Addresses">구애</string>
-    <string name="Settings_Donate_OrSelectCoinToDonate">기부할 코인을 선택하세요</string>
     <string name="SettingsSecurity_AutoLock_Immediate">즉시</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1분</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5분</string>
@@ -840,27 +751,18 @@
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">활성</string>
     <string name="SettingsSubscription_RestorePurchase">구매 복원</string>
-    <string name="SettingsSubscription_SubscriptionPlan">구독 플랜</string>
-    <string name="SettingsSubscription_SubscriptionInfo">다음 결제일: %s. 구독 관리 섹션에서 구독을 관리할 수 있습니다.</string>
     <string name="SettingsSubscription_ManageSubscription">구독 관리</string>
     <string name="Period_Days">%s일</string>
     <!--Premium Screens-->
     <string name="Premium_Title">프리미엄</string>
-    <string name="Premium_ChoosePlanForYou">플랜 선택하기</string>
     <string name="Premium_EnjoyFreePeriod">첫 %s 무료로 이용하세요.</string>
     <string name="Premium_CancelSubscriptionInfo">언제든지 구독을 취소할 수 있습니다.</string>
     <string name="Premium_GetFreePeriod">%s 무료로 받기</string>
     <string name="Premium_Subscribe">구독하기</string>
-    <string name="Premium_AddPromoCode">프로모 코드 추가</string>
     <string name="Premium_TryForFree">업그레이드</string>
     <string name="Premium_Upgrade">업그레이드</string>
-    <string name="Premium_Restore">복구</string>
-    <string name="Premium_Annually">연간</string>
-    <string name="Premium_Monthly">월간</string>
     <string name="Premium_ThankYouForSubscription">구독해 주셔서 감사합니다!</string>
-    <string name="Premium_YouHaveActivatedPlan">%s 플랜이 활성화되었습니다.</string>
     <string name="Premium_GoToApp">앱으로 이동</string>
-    <string name="Premium_UpgradeText">프리미엄 기능으로 경험을 업그레이드하세요!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">앱의 모든 기능을 마음껏 즐기세요.</string>
     <string name="Premium_SelectSubscription">구독 선택</string>
     <string name="Premium_UpgradeFeature_TokenInsights">토큰 분석</string>
@@ -892,7 +794,6 @@
     <string name="Premium_Vip">VIP</string>
     <string name="Premium_HighlyRatedSecurity">높은 평가를 받는 보안, 탁월한 개인 정보 보호, 그리고 진정한 비수탁형 지갑.</string>
     <string name="Premium_ApprovedBy">다음 기관에서 승인 및 감사:</string>
-    <string name="Premium_WhatUsersSay">사용자들의 평가:</string>
     <string name="Premium_SubscriptionPeriod_Month">월</string>
     <string name="Premium_SubscriptionPeriod_Year">년</string>
     <string name="Premium_SubscriptionPeriod_Annually">연간</string>
@@ -933,8 +834,6 @@
     <string name="BackupManager_AppSettingsTitle">앱 설정</string>
     <string name="BackupManager_AppSettingsDescription">언어, 통화, 외관...</string>
     <!-- Privacy  -->
-    <string name="Privacy_BulletedText1">이 지갑은 개인 데이터를 수집하지 않습니다.</string>
-    <string name="Privacy_BulletedText2">사용자 계정이나 사용자 데이터를 저장하는 데이터베이스가 없습니다.</string>
     <string name="ShareUiData">UI 데이터 공유</string>
     <!-- Security Center -->
     <!--Evm Network-->
@@ -1006,7 +905,6 @@
     <string name="SettingsShare_Title">공유</string>
     <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
-    <string name="SettingsContact_Title">문의하기</string>
     <!--Setting_Notifications-->
     <!-- Settings Launch Screen -->
     <string name="SettingsLaunchScreen_Auto">자동</string>
@@ -1018,8 +916,6 @@
     <string name="SettingsTheme_Light">밝은</string>
     <string name="SettingsTheme_System">시스템</string>
     <!--Errors-->
-    <string name="Binance_Backend_Error_MemoRequired">수신자는 송금 내역에 메모 기록을 필요로 합니다</string>
-    <string name="Binance_Backend_Error_RequiresDigits">메모에는 숫자만 포함하셔야 합니다</string>
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">인터넷에 연결되지 않음</string>
     <string name="Hud_Text_Copied">복사됨</string>
@@ -1028,18 +924,15 @@
     <string name="Hud_Text_AddressAdded">주소 추가됨</string>
     <string name="Hud_Text_Done">완료</string>
     <string name="Hud_Text_Verified">확인</string>
-    <string name="Hud_Text_EmailAddressCopied">이메일 주소 복사됨</string>
     <string name="Hud_Added_To_Watchlist">관심목록에 추가되었습니다</string>
     <string name="Hud_Added_To_Wallet">지갑에 추가됨</string>
     <string name="Hud_Removed_From_Wallet">지갑에서 제거됨</string>
     <string name="Hud_Removed_from_Watchlist">관심목록에서 제거</string>
     <string name="Hud_Removed">제거됨</string>
-    <string name="Hud_WaitForSynchronization">동기화 대기 중</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">코인 매니저</string>
     <string name="ManageCoins_Search">이름, 코드 또는 계약 주소</string>
     <string name="ManageCoins_AddToken">토큰 추가</string>
-    <string name="ManageCoins_NoResults">검색 결과가 없습니다. 스마트 계약 주소를 알고 있는 경우 토큰을 수동으로 추가해 보십시오.</string>
     <string name="ManageCoins_BipsDescription">%1$s 지갑이 입금을 받는 데 사용할 수 있는 4가지 일반적인 주소 형식이 있습니다.
 \n
 \n- BIP44(이전)
@@ -1062,8 +955,6 @@
     <string name="ImportWallet_BackupFile">파일에서</string>
     <string name="ImportWallet_BackupFile_Description">백업 파일에서 가져오기.</string>
     <string name="ImportWallet_RecoveryPhrase">복구 문구에서</string>
-    <string name="ImportWallet_ExchangeWallet">거래소 지갑에서</string>
-    <string name="ImportWallet_ExchangeWallet_Description">중앙집중형 거래소의 지갑에 연결하세요.</string>
     <string name="ImportWallet_WarningInvalidJson">잘못된 Json 파일입니다.</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">이 파일은 지갑의 유효한 백업이 아니거나 파일이 손상되어 복원할 수 없습니다.</string>
     <string name="ImportWallet_SelectAnotherFile">다른 파일 선택</string>
@@ -1073,7 +964,6 @@
     <string name="ImportBackupFile_Error_InvalidPassword">유효하지 않은 암호</string>
     <string name="ImportBackupFile_BackupPassword">백업 비밀번호</string>
     <string name="Watch_Address_Hint">공개 주소 또는 XPUB를 붙여넣으세요</string>
-    <string name="Watch_Address_Watch">관찰</string>
     <string name="Watch_ViewKey">개인 조회 키</string>
     <string name="Watch_Select_Blockchains">블록체인 선택</string>
     <string name="Watch_Select_Coins">코인 선택하기</string>
@@ -1098,14 +988,12 @@
     <string name="ManageAccount_DeleteWarning">이 지갑 주소 보기를 중지하시겠습니까?</string>
     <string name="Balance_Receive_BackupRequired_Description">백업해야 합니다: %1$s을(를)</string>
     <!--Network Settings-->
-    <string name="NetworkSettings_SwithesAutomatically">자동으로 전환</string>
     <!-- Show Key -->
     <string name="ShowKey_Passphrase">암호문구</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">보안 조치로 개인 키에 복사 작업을 사용하지 않는 것이 좋습니다.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">위험을 감수하겠습니다</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">복사 금지</string>
     <!-- Backup Recovery Phrase -->
-    <string name="BackupRecoveryPhrase_Title">백업용 지갑</string>
     <string name="BackupRecoveryPhrase_ManualBackup">수동으로 백업합니다</string>
     <string name="BackupRecoveryPhrase_LocalBackup">로컬 백업</string>
     <string name="BackupRecoveryPhrase_Later">나중에</string>
@@ -1181,8 +1069,6 @@
     <string name="AddToken_Blockchain">블록 체인</string>
     <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
     <string name="AddToken_InvalidContractAddress">잘못된 계약 주소</string>
-    <string name="AddToken_InvalidBep2Symbol">잘못된 BEP2 기호</string>
-    <string name="AddEvmToken_Bep2NotFound">BEP2 기호를 찾을 수 없음</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">%s 블록체인에서 계약 주소를 찾을 수 없습니다.</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Description">지불을 받기 위한 주소 형식을 선택하십시오. 기존 지갑을 복원할 때 올바른 형식을 선택해야 합니다.</string>
@@ -1222,19 +1108,12 @@
     <string name="CoinPage_Reports">보고서</string>
     <string name="CoinPage_FundsInvested">투자된 자금</string>
     <string name="CoinPage_Overview">개요</string>
-    <string name="CoinPage_Contracts">계약</string>
     <string name="CoinPage_Blockchains">블록체인</string>
     <string name="CoinPage_CoinTypes">코인 유형</string>
     <string name="CoinPage_Links">링크</string>
     <string name="CoinPage_Guide">가이드</string>
     <string name="CoinPage_Website">웹사이트</string>
     <string name="CoinPage_Whitepaper">백서</string>
-    <string name="CoinPage_Twitter_NotAvailable">트위터 사용 불가</string>
-    <string name="CoinPage_Twitter_NoTweets">아직 트윗이 없습니다</string>
-    <string name="CoinPage_Twitter_Quoted">인용됨 %s</string>
-    <string name="CoinPage_Twitter_Retweeted">리트윗됨 %s</string>
-    <string name="CoinPage_Twitter_Replied">답글 작성함 %s</string>
-    <string name="CoinPage_Twitter_SeeOnTwitter">트위터에서 확인하세요</string>
     <string name="CoinPage_MarketCap">시가총액</string>
     <string name="CoinPage_DilutedMarketCap">희석화 시가 총액</string>
     <string name="CoinPage_inCirculation">유통 중</string>
@@ -1408,8 +1287,6 @@
     <string name="TechnicalAdvice_MacdAdvice">MACD. 평균 가격 변화를 고려하여 추세의 강도를 평가합니다. 히스토그램의 일일 값은 %1$s입니다 (%2$s). 전반적으로 자산의 가격이 %3$s 움직일 수 있습니다.</string>
     <string name="TechnicalAdvice_InfoTitle">기술적 지표</string>
     <string name="TechnicalAdvice_InfoDescription">우리는 볼린저 밴드 + RSI 전략을 사용하여 거래 신호를 결정합니다. 모든 계산은 일일 양봉을 기반으로 하며, 중장기적인 조언을 제공합니다. 이 전략의 본질은 자산 가격이 극단에 도달하여 볼린저 밴드 채널을 벗어나야 하며, RSI가 과매수/과매도 구간에 있어야 한다는 것입니다. 가격이 채널로 복귀한 후, 가격이 평균값으로 복귀하거나 다른 측면에서 채널을 뚫으려는 높은 확률이 있습니다. 강한 시장 움직임 중에는 올바른 신호가 나타나기 전에 여러 가질 수도 있음을 유의하십시오.\n\n거래에 위험 관리를 적용하는 것이 매우 중요하며, 시장 상황이 변할 경우 손실을 줄이는 것을 기억하세요!</string>
-    <string name="TechnicalAdvice_ShowDetails">세부 정보 보기</string>
-    <string name="TechnicalAdvice_HideDetails">세부 사항 숨기기</string>
     <string name="TechnicalAdvice_Indicators_StrongBuy">강한 매수</string>
     <string name="TechnicalAdvice_Indicators_Buy">매수</string>
     <string name="TechnicalAdvice_Indicators_Neutral">보통</string>
@@ -1420,11 +1297,6 @@
     <string name="Detectors_TokenDetectors">토큰 탐지기</string>
     <string name="Detectors_GeneralDetectors">일반 탐지기</string>
     <string name="Detectors_IssuesCount">문제점 %d</string>
-    <string name="ActivateSubscription_Title">활성화</string>
-    <string name="ActivateSubscription_Wallet">지갑</string>
-    <string name="ActivateSubscription_Address">주소</string>
-    <string name="ActivateSubscription_NoSubscriptionError">귀하의 월렛 주소는 프리미엄 기능을 구독하지 않았습니다. 구독을 활성화하려면 구매해야 합니다.</string>
-    <string name="SubscriptionInfo_PersonalSupport_Title">개인 지원</string>
     <!-- NFT Collection -->
     <!-- NFT Collection Events -->
     <!--Rate list-->
@@ -1437,7 +1309,6 @@
     <string name="BalanceSyncError_Title">동기화 오류</string>
     <string name="BalanceSyncError_ButtonRetry">재시도</string>
     <string name="BalanceSyncError_ButtonChangeSource">출처를 변경하다</string>
-    <string name="BalanceSyncError_ButtonReport">보고</string>
     <string name="BalanceSyncError_ChangableSourceErrorText">현재 소스에서 데이터를 가져오지 못했습니다. 다시 시도하거나 다른 동기화 소스로 변경할 수 있습니다.</string>
     <string name="BalanceSyncError_ErrorText">현재 소스에서 데이터를 가져오지 못했습니다. 나중에 다시 시도하세요.</string>
     <!--Release notes-->
