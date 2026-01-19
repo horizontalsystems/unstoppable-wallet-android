@@ -121,9 +121,16 @@ private fun SwapSelectProviderScreenInner(
                             )
                         },
                         middle = {
+                            var description = provider.type.title
+
+                            if (provider.aml) {
+                                description += ", "
+                                description += stringResource(R.string.Swap_AML)
+                            }
+
                             CellMiddleInfo(
                                 subtitle = provider.title.hs,
-                                description = provider.type.title.hs,
+                                description = description.hs,
                             )
                         },
                         right = {
