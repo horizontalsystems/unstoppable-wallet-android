@@ -72,12 +72,17 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     private var assetsMap = mapOf<Token, String>()
 
     override suspend fun start() {
-        assetsMap = getAssetsMap(provider.id)
+        assetsMap = SwapProviderCacheHelper.getOrFetch(
+            providerId = id,
+            deserialize = { it },
+            serialize = { it },
+            fetch = { fetchAssetsMap() }
+        )
     }
 
-    private suspend fun getAssetsMap(providerId: String): Map<Token, String> {
+    private suspend fun fetchAssetsMap(): Map<Token, String> {
         val assetsMap = mutableMapOf<Token, String>()
-        val tokens = unstoppableAPI.tokens(providerId).tokens
+        val tokens = unstoppableAPI.tokens(provider.id).tokens
         for (token in tokens) {
             val blockchainType = blockchainTypes[token.chainId] ?: continue
 

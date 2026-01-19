@@ -55,6 +55,15 @@ abstract class BaseThorChainProvider(
     private var assetsMap = mapOf<Token, String>()
 
     override suspend fun start() {
+        assetsMap = SwapProviderCacheHelper.getOrFetch(
+            providerId = id,
+            deserialize = { it },
+            serialize = { it },
+            fetch = { fetchAssetsMap() }
+        )
+    }
+
+    private suspend fun fetchAssetsMap(): Map<Token, String> {
         val assetsMap = mutableMapOf<Token, String>()
 
         val pools = thornodeAPI.pools().filter { it.status.lowercase() == "available" }
@@ -104,7 +113,7 @@ abstract class BaseThorChainProvider(
             }
         }
 
-        this.assetsMap = assetsMap
+        return assetsMap
     }
 
     override fun supports(blockchainType: BlockchainType): Boolean {
