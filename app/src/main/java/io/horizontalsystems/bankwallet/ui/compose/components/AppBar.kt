@@ -93,7 +93,7 @@ fun AppBar(
 ) {
     val titleComposable: @Composable () -> Unit = {
         title?.let {
-            title3_leah(
+            headline1_leah(
                 text = title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
