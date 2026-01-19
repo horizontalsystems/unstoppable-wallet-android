@@ -19,9 +19,15 @@ import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAct
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.math.BigDecimal
+import java.util.concurrent.ConcurrentHashMap
 
 object SwapHelper {
+
+    private val zcashAddressCache = ConcurrentHashMap<String, String>()
+    private val zcashAddressMutex = Mutex()
 
     suspend fun getAllowanceTrc20(token: Token, spenderAddress: String): BigDecimal? {
         if (token.type !is TokenType.Eip20) return null
@@ -46,7 +52,7 @@ object SwapHelper {
         return null
     }
 
-    fun getReceiveAddressForToken(token: Token): String {
+    suspend fun getReceiveAddressForToken(token: Token): String {
         val blockchainType = token.blockchainType
 
         App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
@@ -102,9 +108,14 @@ object SwapHelper {
                     MoneroKit.getAddress(account.type.toMoneroSeed(), 0, 1)
                 }
 
-//                BlockchainType.Zcash -> {
-//                    //TODO: statically get Zcash address
-//                }
+                BlockchainType.Zcash -> {
+                    zcashAddressCache[account.id] ?: zcashAddressMutex.withLock {
+                        zcashAddressCache[account.id]
+                            ?: ZcashAdapter.getTransparentAddress(account).also {
+                                zcashAddressCache[account.id] = it
+                            }
+                    }
+                }
 
                 else -> throw SwapError.NoDestinationAddress()
             }

@@ -25,6 +25,7 @@ import cash.z.ecc.android.sdk.model.Zip32AccountIndex
 import cash.z.ecc.android.sdk.tool.DerivationTool
 import cash.z.ecc.android.sdk.type.AddressType
 import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
+import io.horizontalsystems.bankwallet.entities.Account as WalletAccount
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
@@ -47,6 +48,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bitcoincore.extensions.toReversedHex
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -73,7 +75,6 @@ class ZcashAdapter(
     private val decimalCount = 8
     private val network: ZcashNetwork = ZcashNetwork.Mainnet
     private val feeChangeHeight: Long = 1_077_550
-    private val lightWalletEndpoint = LightWalletEndpoint(host = "zec.rocks", port = 443, isSecure = true)
 
     private val synchronizer: CloseableSynchronizer
     private val transactionsProvider: ZcashTransactionsProvider
@@ -506,6 +507,7 @@ class ZcashAdapter(
 
     companion object {
         val minimalShieldThreshold = BigDecimal("0.0004") // minimal transparent balance to shielding
+        private val lightWalletEndpoint = LightWalletEndpoint(host = "zec.rocks", port = 443, isSecure = true)
 
         private const val ALIAS_PREFIX = "zcash_"
 
@@ -517,6 +519,61 @@ class ZcashAdapter(
             runBlocking {
                 Synchronizer.erase(App.instance, ZcashNetwork.Mainnet, getValidAliasFromAccountId(accountId))
             }
+        }
+
+        suspend fun getTransparentAddress(account: WalletAccount): String {
+            val seed = (account.type as? AccountType.Mnemonic)?.seed
+                ?: throw IllegalArgumentException("Unsupported account type for Zcash")
+
+            val alias = getValidAliasFromAccountId(account.id)
+            val network = ZcashNetwork.Mainnet
+            val context = App.instance
+            val existingWallet = App.localStorage.zcashAccountIds.contains(account.id)
+            val restoreSettings = App.restoreSettingsManager.settings(account, BlockchainType.Zcash)
+
+            val walletInitMode = if (existingWallet) {
+                WalletInitMode.ExistingWallet
+            } else when (account.origin) {
+                AccountOrigin.Created -> WalletInitMode.NewWallet
+                AccountOrigin.Restored -> WalletInitMode.RestoreWallet
+            }
+
+            val birthday = when (account.origin) {
+                AccountOrigin.Created -> {
+                    BlockHeight.ofLatestCheckpoint(context, network)
+                }
+
+                AccountOrigin.Restored -> restoreSettings.birthdayHeight
+                    ?.let { height ->
+                        max(network.saplingActivationHeight.value, height)
+                    }
+                    ?.let {
+                        BlockHeight.new(it)
+                    }
+            }
+
+            val synchronizer = Synchronizer.newBlocking(
+                context = context,
+                zcashNetwork = network,
+                alias = alias,
+                lightWalletEndpoint = lightWalletEndpoint,
+                setup = AccountCreateSetup(
+                    accountName = account.name,
+                    keySource = null,
+                    seed = FirstClassByteArray(seed)
+                ),
+                birthday = birthday,
+                walletInitMode = walletInitMode,
+                isTorEnabled = false,
+                isExchangeRateEnabled = false
+            )
+
+            val account = synchronizer.getAccounts().first()
+            val transparentAddress = synchronizer.getTransparentAddress(account)
+
+            synchronizer.close()
+
+            return transparentAddress
         }
     }
 }
