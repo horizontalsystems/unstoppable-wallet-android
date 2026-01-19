@@ -41,15 +41,17 @@ object SwapProviderCacheHelper {
         val records = dao.getByProvider(providerId)
         if (records.isEmpty()) return null
 
+        val queries = records.mapNotNull { TokenQuery.fromId(it.tokenQueryId) }
+        val tokensMap = App.marketKit.tokens(queries).associate { it.tokenQuery.id to it }
+
         val result = mutableMapOf<Token, T>()
         for (record in records) {
-            val tokenQuery = TokenQuery.fromId(record.tokenQueryId) ?: continue
-            val token = App.marketKit.token(tokenQuery) ?: continue
+            val token = tokensMap[record.tokenQueryId] ?: continue
             val data = deserialize(record.data) ?: continue
             result[token] = data
         }
 
-        return if (result.isNotEmpty()) result else null
+        return result.ifEmpty { null }
     }
 
     private fun <T> saveToCache(
