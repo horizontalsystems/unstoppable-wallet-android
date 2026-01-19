@@ -52,10 +52,10 @@ abstract class BaseThorChainProvider(
         "ZEC" to BlockchainType.Zcash,
     )
 
-    private var assets = listOf<Asset>()
+    private var assetsMap = mapOf<Token, String>()
 
     override suspend fun start() {
-        val assets = mutableListOf<Asset>()
+        val assetsMap = mutableMapOf<Token, String>()
 
         val pools = thornodeAPI.pools().filter { it.status.lowercase() == "available" }
         for (pool in pools) {
@@ -78,7 +78,7 @@ abstract class BaseThorChainProvider(
                     }
 
                     App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let { token ->
-                        assets.add(Asset(pool.asset, token))
+                        assetsMap[token] = pool.asset
                     }
                 }
 
@@ -97,14 +97,14 @@ abstract class BaseThorChainProvider(
                     }
 
                     val tokens = App.marketKit.tokens(nativeTokenQueries)
-                    assets.addAll(tokens.map { Asset(pool.asset, it) })
+                    assetsMap.putAll(tokens.map { it to pool.asset })
                 }
 
                 else -> Unit
             }
         }
 
-        this.assets = assets
+        this.assetsMap = assetsMap
     }
 
     override fun supports(blockchainType: BlockchainType): Boolean {
@@ -113,7 +113,7 @@ abstract class BaseThorChainProvider(
     }
 
     override fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
-        return assets.any { it.token == tokenFrom } && assets.any { it.token == tokenTo }
+        return assetsMap.contains(tokenFrom) && assetsMap.contains(tokenTo)
     }
 
     override suspend fun fetchQuote(
@@ -153,13 +153,13 @@ abstract class BaseThorChainProvider(
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         refundAddress: String?
     ): Response.QuoteSwap {
-        val assetIn = assets.first { it.token == tokenIn }
-        val assetOut = assets.first { it.token == tokenOut }
+        val assetIn = assetsMap[tokenIn]!!
+        val assetOut = assetsMap[tokenOut]!!
         val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
 
         return thornodeAPI.quoteSwap(
-            fromAsset = assetIn.asset,
-            toAsset = assetOut.asset,
+            fromAsset = assetIn,
+            toAsset = assetOut,
             amount = amountIn.movePointRight(8).toLong(),
             destination = destination,
             affiliate = affiliate,
@@ -300,9 +300,6 @@ abstract class BaseThorChainProvider(
             else -> throw IllegalArgumentException()
         }
     }
-
-    data class Asset(val asset: String, val token: Token)
-
 }
 
 interface ThornodeAPI {
