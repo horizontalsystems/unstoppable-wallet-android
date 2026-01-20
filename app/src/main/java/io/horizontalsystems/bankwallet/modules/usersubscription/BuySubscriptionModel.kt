@@ -10,7 +10,6 @@ import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
-import io.horizontalsystems.subscriptions.core.SwapControl
 import io.horizontalsystems.subscriptions.core.SwapProtection
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
@@ -29,7 +28,6 @@ object BuySubscriptionModel {
             ScamProtection -> R.string.Premium_UpgradeFeature_ScamProtection
             PrioritySupport -> R.string.Premium_UpgradeFeature_PrioritySupport
             SwapProtection -> R.string.Premium_UpgradeFeature_SwapProtection
-            SwapControl -> R.string.Premium_UpgradeFeature_SwapControl
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 
@@ -43,7 +41,6 @@ object BuySubscriptionModel {
             ScamProtection -> R.string.Premium_UpgradeFeature_ScamProtection_Description
             PrioritySupport -> R.string.Premium_UpgradeFeature_PrioritySupport_Description
             SwapProtection -> R.string.Premium_UpgradeFeature_SwapProtection_Description
-            SwapControl -> R.string.Premium_UpgradeFeature_SwapControl_Description
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 
@@ -57,7 +54,6 @@ object BuySubscriptionModel {
             ScamProtection -> R.drawable.prem_radar_24
             PrioritySupport -> R.drawable.prem_message_24
             SwapProtection -> R.drawable.prem_usd_24
-            SwapControl -> R.drawable.prem_swap_control_24
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 

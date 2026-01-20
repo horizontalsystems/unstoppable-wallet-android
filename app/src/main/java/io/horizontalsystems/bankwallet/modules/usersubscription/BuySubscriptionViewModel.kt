@@ -9,7 +9,6 @@ import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.Subscription
-import io.horizontalsystems.subscriptions.core.SwapControl
 import io.horizontalsystems.subscriptions.core.SwapProtection
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
@@ -23,7 +22,7 @@ class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
         SecureSend, ScamProtection, SwapProtection, RobberyProtection,
     )
 
-    private val advancedControlsFeatures = listOf(SwapControl, PrioritySupport)
+    private val advancedControlsFeatures = listOf(PrioritySupport)
 
     private val marketInsightsFeatures = listOf(
         TokenInsights, AdvancedSearch, TradeSignals

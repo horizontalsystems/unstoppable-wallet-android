@@ -28,6 +28,3 @@ object SwapProtection : IPaidAction
 
 @Parcelize
 object PrioritySupport : IPaidAction
-
-@Parcelize
-object SwapControl : IPaidAction

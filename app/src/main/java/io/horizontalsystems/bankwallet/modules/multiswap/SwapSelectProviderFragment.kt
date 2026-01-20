@@ -24,7 +24,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -37,7 +36,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightSelectors
 import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
-import io.horizontalsystems.subscriptions.core.SwapControl
 
 class SwapSelectProviderFragment : BaseComposeFragment() {
     @Composable
@@ -63,10 +61,8 @@ fun SwapSelectProviderScreen(navController: NavController) {
         quotes = uiState.quoteViewItems,
         currentQuote = uiState.selectedQuote,
     ) {
-        navController.paidAction(SwapControl) {
-            swapViewModel.onSelectQuote(it)
-            navController.popBackStack()
-        }
+        swapViewModel.onSelectQuote(it)
+        navController.popBackStack()
 
         stat(page = StatPage.SwapProvider, event = StatEvent.SwapSelectProvider(it.provider.id))
     }
