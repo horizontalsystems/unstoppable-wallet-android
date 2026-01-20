@@ -157,7 +157,7 @@ private fun AdvancedSearchScreen(
             sheetState = modalBottomSheetState,
             containerColor = ComposeAppTheme.colors.transparent
         ) {
-            BottomSheetContent(
+            BSContent(
                 bottomSheetType = bottomSheetType,
                 viewModel = viewModel,
                 onClose = {
@@ -176,7 +176,7 @@ private fun AdvancedSearchScreen(
 }
 
 @Composable
-private fun BottomSheetContent(
+private fun BSContent(
     bottomSheetType: MarketFiltersModule.FilterDropdown,
     viewModel: MarketFiltersViewModel,
     onClose: () -> Unit,
