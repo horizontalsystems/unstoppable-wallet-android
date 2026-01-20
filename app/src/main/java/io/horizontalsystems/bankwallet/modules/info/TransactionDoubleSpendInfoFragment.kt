@@ -12,10 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -32,6 +30,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
@@ -105,7 +104,6 @@ fun ConflictingTransactions(transactionHash: String, conflictingHash: String) {
 @Composable
 private fun TransactionHashCell(titleRes: Int, transactionHash: String) {
     val view = LocalView.current
-    val clipboardManager = LocalClipboardManager.current
     CellSingleLineLawrence() {
         Row(verticalAlignment = Alignment.CenterVertically) {
             subhead2_grey(
@@ -118,7 +116,7 @@ private fun TransactionHashCell(titleRes: Int, transactionHash: String) {
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = transactionHash.shorten(),
                 onClick = {
-                    clipboardManager.setText(AnnotatedString(transactionHash))
+                    TextHelper.copyText(transactionHash)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                 }
             )

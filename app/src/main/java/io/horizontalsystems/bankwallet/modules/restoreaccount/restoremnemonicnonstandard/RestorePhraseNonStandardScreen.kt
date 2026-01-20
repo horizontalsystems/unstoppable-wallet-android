@@ -43,7 +43,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -92,6 +91,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_lucian
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
@@ -277,12 +277,11 @@ fun RestorePhraseNonStandard(
                                 }
                             )
 
-                            val clipboardManager = LocalClipboardManager.current
                             ButtonSecondaryDefault(
                                 modifier = Modifier.padding(end = 16.dp),
                                 title = stringResource(id = R.string.Send_Button_Paste),
                                 onClick = {
-                                    clipboardManager.getText()?.text?.let { textInClipboard ->
+                                    TextHelper.getCopiedText()?.let { textInClipboard ->
                                         textState = textState.copy(
                                             text = textInClipboard,
                                             selection = TextRange(textInClipboard.length)

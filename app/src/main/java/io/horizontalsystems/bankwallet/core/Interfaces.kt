@@ -236,7 +236,7 @@ interface INetworkManager {
 
 interface IClipboardManager {
     fun copyText(text: String)
-    fun getCopiedText(): String
+    fun getCopiedText(): String?
     val hasPrimaryClip: Boolean
 }
 

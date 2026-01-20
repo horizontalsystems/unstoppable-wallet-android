@@ -17,11 +17,9 @@ import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -54,6 +52,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.body_lucian
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
 import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
 import io.horizontalsystems.bankwallet.uiv3.components.AlertType
@@ -388,13 +387,12 @@ private fun AccountActionItem(
 
         badge?.let {
             val view = LocalView.current
-            val clipboardManager = LocalClipboardManager.current
 
             ButtonSecondaryDefault(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 title = it,
                 onClick = {
-                    clipboardManager.setText(AnnotatedString(it))
+                    TextHelper.copyText(it)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                 }
             )
