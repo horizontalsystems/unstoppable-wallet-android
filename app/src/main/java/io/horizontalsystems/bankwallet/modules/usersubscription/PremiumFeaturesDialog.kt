@@ -186,16 +186,16 @@ fun PremiumFeaturesScreen(
 
                 FeaturesSection(
                     navController = navController,
-                    icon = R.drawable.market_gradient_filled_24,
-                    title = stringResource(R.string.Premium_MarketInsights),
-                    features = uiState.marketInsightsFeatures,
+                    icon = R.drawable.plus_gradient_filled_24,
+                    title = stringResource(R.string.Premium_AdvancedControls),
+                    features = uiState.advancedControlsFeatures,
                 )
 
                 FeaturesSection(
                     navController = navController,
-                    icon = R.drawable.heart_gradient_filled_24,
-                    title = stringResource(R.string.Premium_Vip),
-                    features = uiState.vipFeatures,
+                    icon = R.drawable.market_gradient_filled_24,
+                    title = stringResource(R.string.Premium_MarketInsights),
+                    features = uiState.marketInsightsFeatures,
                 )
 
                 VSpacer(32.dp)

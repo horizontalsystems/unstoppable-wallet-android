@@ -844,7 +844,7 @@
     <string name="Premium_UpgradeFeature_SecureSend">Protección Antifraude</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Verificación de Lista Negra</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">Soporte VIP</string>
-    <string name="Premium_UpgradeFeature_LossProtection">Protección contra pérdida</string>
+    <string name="Premium_UpgradeFeature_SwapProtection">Protección contra pérdida</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Acceso a listas top-100 según criterios clave</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Filtrado multinivel con múltiples parámetros</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Monitoreo automático de tendencias del mercado para tus tokens</string>
@@ -852,7 +852,7 @@
     <string name="Premium_UpgradeFeature_SecureSend_Description">Protección automática eficaz contra fraudes y ataques de phishing</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantía de legalidad para tus operaciones con criptomonedas</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Acceso al equipo de la cartera para soporte técnico rápido.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_Description">Evita que los bots roben durante los intercambios (swaps).</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_Description">Evita que los bots roben durante los intercambios (swaps).</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Muestra datos detallados: volumen, liquidez y tendencias - para tomar decisiones de inversión más inteligentes.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Te da acceso directo al soporte prioritario: ayuda rápida y personalizada del equipo de Unstoppable.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Te da acceso directo al soporte prioritario: ayuda rápida y personalizada del equipo de Unstoppable.</string>
@@ -860,10 +860,10 @@
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Verifica las wallets del destinatario en busca de phishing o fraude. Te alerta antes de enviar a direcciones de alto riesgo.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Detecta dApps falsas o maliciosas antes de la conexión. Previene el phishing y mantiene tus activos seguros.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Te da acceso directo al soporte prioritario: ayuda rápida y personalizada del equipo de Unstoppable.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Detiene los bots y los ataques de front-running durante los intercambios (swaps). Mantiene tus transacciones justas y seguras.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Detiene los bots y los ataques de front-running durante los intercambios (swaps). Mantiene tus transacciones justas y seguras.</string>
     <string name="Premium_DefenseSystem">Sistema de Defensa</string>
     <string name="Premium_MarketInsights">Itinerarios del mercado</string>
-    <string name="Premium_Vip">VIP</string>
+    <string name="Premium_AdvancedControls">VIP</string>
     <string name="Premium_HighlyRatedSecurity">Seguridad altamente valorada, privacidad excepcional y una cartera verdaderamente no custodial.</string>
     <string name="Premium_ApprovedBy">Aprobado y Auditado Por:</string>
     <string name="Premium_BlackFridayOfferEnds">La oferta de Black Friday termina el 7 de diciembre</string>

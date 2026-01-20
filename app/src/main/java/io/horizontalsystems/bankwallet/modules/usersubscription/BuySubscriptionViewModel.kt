@@ -4,12 +4,13 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.IPaidAction
-import io.horizontalsystems.subscriptions.core.LossProtection
 import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.Subscription
+import io.horizontalsystems.subscriptions.core.SwapControl
+import io.horizontalsystems.subscriptions.core.SwapProtection
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
@@ -19,13 +20,14 @@ class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
     private var subscription: Subscription? = null
     private var hasFreeTrial = false
     private val defenseSystemFeatures = listOf(
-        SecureSend, ScamProtection, LossProtection, RobberyProtection,
+        SecureSend, ScamProtection, SwapProtection, RobberyProtection,
     )
+
+    private val advancedControlsFeatures = listOf(SwapControl, PrioritySupport)
+
     private val marketInsightsFeatures = listOf(
         TokenInsights, AdvancedSearch, TradeSignals
     )
-
-    private val vipFeatures = listOf(PrioritySupport)
 
 
     init {
@@ -40,7 +42,7 @@ class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
     override fun createState() = BuySubscriptionUiState(
         defenseSystemFeatures = defenseSystemFeatures,
         marketInsightsFeatures = marketInsightsFeatures,
-        vipFeatures = vipFeatures,
+        advancedControlsFeatures = advancedControlsFeatures,
         hasFreeTrial = hasFreeTrial,
     )
 
@@ -60,6 +62,6 @@ class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
 data class BuySubscriptionUiState(
     val defenseSystemFeatures: List<IPaidAction>,
     val marketInsightsFeatures: List<IPaidAction>,
-    val vipFeatures: List<IPaidAction>,
+    val advancedControlsFeatures: List<IPaidAction>,
     val hasFreeTrial: Boolean
 )

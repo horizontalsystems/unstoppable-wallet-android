@@ -844,7 +844,7 @@
     <string name="Premium_UpgradeFeature_SecureSend">詐騙防護</string>
     <string name="Premium_UpgradeFeature_ScamProtection">黑名單檢查</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">VIP 支持</string>
-    <string name="Premium_UpgradeFeature_LossProtection">丢失保护</string>
+    <string name="Premium_UpgradeFeature_SwapProtection">丢失保护</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">按關鍵標準獲取前100名列表</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">多參數多層級篩選</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">自動監控您代幣的市場趨勢</string>
@@ -852,7 +852,7 @@
     <string name="Premium_UpgradeFeature_SecureSend_Description">有效自動防護詐騙和釣魚攻擊</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">確保您的加密貨幣操作合法性</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">直接聯繫錢包團隊獲取快速技術支援。</string>
-    <string name="Premium_UpgradeFeature_LossProtection_Description">阻止机器人在兑换过程中窃取资产。</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_Description">阻止机器人在兑换过程中窃取资产。</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">显示代币的详细数据—包括交易量、流动性和趋势，帮助您做出更明智的投资决策。</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">通过交易量、区块链或行业等筛选条件查找代币，并包含 CEX/DEX 活跃度及上架相关指标。</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">实时发送交易机会提醒，立即突出潜在盈利机会或市场风险。</string>
@@ -860,10 +860,10 @@
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">检查收款钱包是否存在钓鱼或欺诈风险，并在您向高风险地址转账前发出提醒。</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">在连接前检测伪造或恶意 dApp，防止钓鱼攻击，保护您的资产安全。</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">为您提供直接访问的优先支持服务，可快速获得 Unstoppable 团队的个性化协助。</string>
-    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">在兑换过程中阻止机器人和抢跑攻击，确保您的交易公平且安全。</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">在兑换过程中阻止机器人和抢跑攻击，确保您的交易公平且安全。</string>
     <string name="Premium_DefenseSystem">防御系统</string>
     <string name="Premium_MarketInsights">市场洞察力</string>
-    <string name="Premium_Vip">VIP</string>
+    <string name="Premium_AdvancedControls">VIP</string>
     <string name="Premium_HighlyRatedSecurity">高評價的安全性、卓越的隱私性和真正的非託管錢包。</string>
     <string name="Premium_ApprovedBy">經以下機構批准和審核：</string>
     <string name="Premium_BlackFridayOfferEnds">黑色星期五报价于12月7日结束</string>
