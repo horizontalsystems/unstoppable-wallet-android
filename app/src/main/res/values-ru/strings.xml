@@ -846,7 +846,7 @@
     <string name="Premium_UpgradeFeature_SecureSend">Безопасная отправка</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Scam-защита</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">Поддержка VIP</string>
-    <string name="Premium_UpgradeFeature_LossProtection">Защита от потерь</string>
+    <string name="Premium_UpgradeFeature_SwapProtection">Защита от потерь</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Доступ к топ-100 спискам по ключевым критериям</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Многоуровневая фильтрация по множеству параметров</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Авто-мониторинг рыночных трендов для ваших токенов</string>
@@ -854,7 +854,7 @@
     <string name="Premium_UpgradeFeature_SecureSend_Description">Предупреждает о рискованных адресах.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Сообщает, если сайт dApp - фальшивый.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Быстрый и удобный доступ к команде.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_Description">Блокирует действия ботов, ворующих средства во время свапов.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_Description">Блокирует действия ботов, ворующих средства во время свапов.</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Показывает данные токена - объём, ликвидность и тренды. Помогает принимать более точные инвестиционные решения.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Находите токены с фильтрами по объёму, сети, сектору и CEX/DEX активности.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Отправляет уведомления о торговых возможностях в реальном времени. </string>
@@ -862,10 +862,10 @@
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Проверяет адреса на фишинг. Предупреждает о рисках при отправке.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Обнаруживает поддельные dApp до подключения. Предотвращает фишинг и защищает активы.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Предоставляет прямой доступ к поддержке.Получайте быструю персональную помощь от команды Unstoppable.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Блокирует ботов и атаки при свапах. Делает транзакции честными и безопасными.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Блокирует ботов и атаки при свапах. Делает транзакции честными и безопасными.</string>
     <string name="Premium_DefenseSystem">Система защиты</string>
     <string name="Premium_MarketInsights">Рынки</string>
-    <string name="Premium_Vip">VIP</string>
+    <string name="Premium_AdvancedControls">VIP</string>
     <string name="Premium_HighlyRatedSecurity">Высокий уровень безопасности, полная конфиденциальность и по-настоящему некостодиальный кошелек.</string>
     <string name="Premium_ApprovedBy">Одобрено и проверено:</string>
     <string name="Premium_BlackFridayOfferEnds">Черная пятница заканчивается 7 декабря</string>

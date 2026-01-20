@@ -844,7 +844,7 @@
     <string name="Premium_UpgradeFeature_SecureSend">Scam-Schutz</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Blacklist-Prüfung</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">VIP Support</string>
-    <string name="Premium_UpgradeFeature_LossProtection">Verlustschutz</string>
+    <string name="Premium_UpgradeFeature_SwapProtection">Verlustschutz</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Zugriff auf Top-100 Listen nach Schlüsselkriterien</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Mehrere Ebenen filtern über mehrere Parameter</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Automatische Überwachung der Markttrends für Ihre Tokens</string>
@@ -852,7 +852,7 @@
     <string name="Premium_UpgradeFeature_SecureSend_Description">Effektiver Auto-Schutz gegen Betrug und Phishing-Angriffe</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Garantie der Rechtmäßigkeit für Ihre Kryptooperationen</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Zugang zum Brieftaschen-Team für schnellen technischen Support.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_Description">Verhindert, dass Bots bei Swaps Gelder stehlen.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_Description">Verhindert, dass Bots bei Swaps Gelder stehlen.</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Zeigt detaillierte Token-Daten - Volumen, Liquidität, Trends – und unterstützt smartere Anlageentscheidungen.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Finden Sie Tokens per Volumen-, Chain- oder Sektorfilter – inklusive CEX/DEX-Aktivität und Listings.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Direkter Zugang zum Prioritäts-Support — schnelle, persönliche Hilfe vom Unstoppable-Team.</string>
@@ -860,10 +860,10 @@
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Prüft Empfänger-Wallets auf Phishing oder Betrug und warnt Sie, bevor Sie an riskante Adressen senden.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Erkennt gefälschte oder schädliche dApps vor der Verbindung – verhindert Phishing und schützt Ihre Assets.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Direkter Zugang zum Prioritäts-Support - schnelle, persönliche Hilfe vom Unstoppable-Team.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Stoppt Bots und Front-Running bei Swaps - hält Ihre Transaktionen fair und sicher.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Stoppt Bots und Front-Running bei Swaps - hält Ihre Transaktionen fair und sicher.</string>
     <string name="Premium_DefenseSystem">Abwehrsystem</string>
     <string name="Premium_MarketInsights">Markteinsichten</string>
-    <string name="Premium_Vip">VIP</string>
+    <string name="Premium_AdvancedControls">VIP</string>
     <string name="Premium_HighlyRatedSecurity">Hervorragende Sicherheit, außergewöhnliche Privatsphäre und eine wahrhaft freigehaltene Brieftasche.</string>
     <string name="Premium_ApprovedBy">Genehmigt und geprüft von:</string>
     <string name="Premium_BlackFridayOfferEnds">Black Friday-Angebot endet am 7. Dezember</string>

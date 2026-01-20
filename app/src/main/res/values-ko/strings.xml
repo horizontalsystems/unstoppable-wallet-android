@@ -772,7 +772,7 @@
     <string name="Premium_UpgradeFeature_SecureSend">사기 방지</string>
     <string name="Premium_UpgradeFeature_ScamProtection">블랙리스트 확인</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">VIP 그룹</string>
-    <string name="Premium_UpgradeFeature_LossProtection">손실 방지</string>
+    <string name="Premium_UpgradeFeature_SwapProtection">손실 방지</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">주요 기준별 상위 100개 목록 접근</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">다양한 매개변수에 대한 다중 레벨 필터링</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">보유 토큰의 시장 트렌드 자동 모니터링</string>
@@ -780,7 +780,7 @@
     <string name="Premium_UpgradeFeature_SecureSend_Description">사기 및 피싱 공격에 대한 효과적인 자동 보호</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">암호화폐 거래의 합법성 보장</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">지갑 팀에 접근하여 신속한 기술 지원을 받으세요.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_Description">스왑 중 봇이 자금을 탈취하지 못하도록 차단합니다.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_Description">스왑 중 봇이 자금을 탈취하지 못하도록 차단합니다.</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">거래량, 유동성, 트렌드 등 토큰의 세부 데이터를 보여주어 더 현명한 투자 결정을 내릴 수 있도록 돕습니다.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">거래량, 체인, 섹터별 필터를 사용해 토큰을 찾을 수 있습니다. CEX/DEX 거래 활동과 상장 관련 지표도 포함되어 있습니다.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">실시간으로 거래 기회를 알림으로 제공합니다. 수익 가능성이나 시장 위험을 즉시 파악할 수 있습니다.</string>
@@ -788,10 +788,10 @@
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">수신 지갑을 피싱 또는 사기 위험이 있는지 검사하고, 위험한 주소로 전송하기 전에 경고합니다.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">연결 전에 위조되거나 악성 dApp을 감지하여 피싱을 방지하고 자산을 보호합니다.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">우선 지원 팀에 직접 연결되어 신속하고 개인화된 도움을 받을 수 있습니다. Unstoppable 팀이 빠르게 지원합니다.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">스왑 중 봇이나 프런트러닝 공격을 차단하여 거래를 공정하고 안전하게 유지합니다.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">스왑 중 봇이나 프런트러닝 공격을 차단하여 거래를 공정하고 안전하게 유지합니다.</string>
     <string name="Premium_DefenseSystem">방어 시스템</string>
     <string name="Premium_MarketInsights">시장 인사이트</string>
-    <string name="Premium_Vip">VIP</string>
+    <string name="Premium_AdvancedControls">VIP</string>
     <string name="Premium_HighlyRatedSecurity">높은 평가를 받는 보안, 탁월한 개인 정보 보호, 그리고 진정한 비수탁형 지갑.</string>
     <string name="Premium_ApprovedBy">다음 기관에서 승인 및 감사:</string>
     <string name="Premium_SubscriptionPeriod_Month">월</string>

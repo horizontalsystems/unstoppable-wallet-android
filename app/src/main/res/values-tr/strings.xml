@@ -661,14 +661,14 @@
     <string name="Premium_UpgradeFeature_SecureSend_Description">Dolandırıcılık ve oltalama saldırılarına karşı etkili otomatik koruma</string>
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Kripto işlemlerinizin yasallığı için garanti</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Acesso à equipe da carteira para suporte técnico rápido.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_Description">Botların takas işlemlerinde sizi zarara uğratmasını engeller.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_Description">Botların takas işlemlerinde sizi zarara uğratmasını engeller.</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Token için ayrıntılı veriler gösterir - hacim, likidite ve trendler. Daha akıllı yatırım kararları almanıza yardımcı olur.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Size öncelikli desteğe doğrudan erişim sağlar. Unstoppable ekibinden hızlı ve kişisel yardım alın.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Size öncelikli desteğe doğrudan erişim sağlar. Unstoppable ekibinden hızlı ve kişisel yardım alın.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Alıcı cüzdanları oltalama veya dolandırıcılık açısından kontrol eder. Riskli adreslere göndermeden önce sizi uyarır.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Bağlanmadan önce sahte veya kötü amaçlı dApp’leri tespit eder. Oltalama saldırılarını önler ve varlıklarınızı korur.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Size doğrudan öncelikli desteğe erişim sağlar. Unstoppable ekibinden hızlı ve kişisel yardım alın.</string>
-    <string name="Premium_UpgradeFeature_LossProtection_BigDescription">Takas sırasında botları ve front-running saldırılarını engeller. İşlemlerinizi adil ve güvenli tutar.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Takas sırasında botları ve front-running saldırılarını engeller. İşlemlerinizi adil ve güvenli tutar.</string>
     <string name="Premium_HighlyRatedSecurity">Yüksek güvenlik derecesi, olağanüstü gizlilik ve gerçek anlamda emanet edilmeyen bir cüzdan.</string>
     <string name="Premium_ApprovedBy">Tarafından Onaylanmış ve Denetlenmiş:</string>
     <string name="Premium_SubscriptionPeriod_Month">ay</string>

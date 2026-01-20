@@ -37,7 +37,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightSelectors
 import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
-import io.horizontalsystems.subscriptions.core.PrioritySupport
+import io.horizontalsystems.subscriptions.core.SwapControl
 
 class SwapSelectProviderFragment : BaseComposeFragment() {
     @Composable
@@ -63,7 +63,7 @@ fun SwapSelectProviderScreen(navController: NavController) {
         quotes = uiState.quoteViewItems,
         currentQuote = uiState.selectedQuote,
     ) {
-        navController.paidAction(PrioritySupport) {
+        navController.paidAction(SwapControl) {
             swapViewModel.onSelectQuote(it)
             navController.popBackStack()
         }

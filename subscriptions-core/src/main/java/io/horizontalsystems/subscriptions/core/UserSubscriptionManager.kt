@@ -19,7 +19,7 @@ object UserSubscriptionManager {
                 SecureSend,
                 ScamProtection,
                 PrioritySupport,
-                LossProtection,
+                SwapProtection,
             )
         ),
     )

@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.ServiceState
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
-import io.horizontalsystems.subscriptions.core.LossProtection
+import io.horizontalsystems.subscriptions.core.SwapProtection
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +25,7 @@ class SwapDefenseSystemService(
     fun start(coroutineScope: CoroutineScope) {
         coroutineScope.launch(Dispatchers.Default) {
             UserSubscriptionManager.activeSubscriptionStateFlow.collect {
-                mevProtectionEnabled = UserSubscriptionManager.isActionAllowed(LossProtection)
+                mevProtectionEnabled = UserSubscriptionManager.isActionAllowed(SwapProtection)
 
                 refresh()
 
@@ -105,7 +105,7 @@ class SwapDefenseSystemService(
                     title = TranslatableString.ResString(R.string.SwapDefense_Attention_Title),
                     body = TranslatableString.ResString(R.string.SwapDefense_Attention_Description),
                     actionText = TranslatableString.ResString(R.string.Button_Activate),
-                    requiredPaidAction = LossProtection,
+                    requiredPaidAction = SwapProtection,
                 )
             }
         }

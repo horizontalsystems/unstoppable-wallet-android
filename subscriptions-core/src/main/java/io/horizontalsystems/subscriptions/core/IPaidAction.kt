@@ -24,7 +24,10 @@ object SecureSend : IPaidAction
 object ScamProtection : IPaidAction
 
 @Parcelize
-object LossProtection : IPaidAction
+object SwapProtection : IPaidAction
 
 @Parcelize
 object PrioritySupport : IPaidAction
+
+@Parcelize
+object SwapControl : IPaidAction

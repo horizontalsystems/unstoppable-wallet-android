@@ -50,11 +50,12 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.IPaidAction
-import io.horizontalsystems.subscriptions.core.LossProtection
 import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
+import io.horizontalsystems.subscriptions.core.SwapControl
+import io.horizontalsystems.subscriptions.core.SwapProtection
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.parcelize.Parcelize
@@ -104,10 +105,15 @@ enum class PremiumFeature(
         R.string.Premium_UpgradeFeature_SecureSend_BigDescription,
         R.drawable.prem_securesend
     ),
-    LossProtectionFeature(
-        R.string.Premium_UpgradeFeature_LossProtection,
-        R.string.Premium_UpgradeFeature_LossProtection_BigDescription,
-        R.drawable.prem_lossprotection
+    SwapProtectionFeature(
+        R.string.Premium_UpgradeFeature_SwapProtection,
+        R.string.Premium_UpgradeFeature_SwapProtection_BigDescription,
+        R.drawable.prem_swapprotection
+    ),
+    SwapControlFeature(
+        R.string.Premium_UpgradeFeature_SwapControl,
+        R.string.Premium_UpgradeFeature_SwapControl_Description,
+        R.drawable.prem_swapcontrol
     ),
     ScamProtectionFeature(
         R.string.Premium_UpgradeFeature_ScamProtection,
@@ -149,7 +155,8 @@ enum class PremiumFeature(
             SecureSend -> SecureSendFeature
             ScamProtection -> ScamProtectionFeature
             PrioritySupport -> PrioritySupportFeature
-            LossProtection -> LossProtectionFeature
+            SwapProtection -> SwapProtectionFeature
+            SwapControl -> SwapControlFeature
             else -> throw IllegalArgumentException("Unknown paid action")
         }
     }
