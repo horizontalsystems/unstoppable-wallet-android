@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
-import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AddressUri
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.balance.OpenSendTokenSelect
@@ -95,16 +94,9 @@ class MainViewModel(
     private var showRateAppDialog = false
     private var showWhatsNew = false
     private var showDonationPage = false
-    private var activeWallet = accountManager.activeAccount
     private var wcSupportState: WCManager.SupportState? = null
     private var torEnabled = localStorage.torEnabled
     private var openSendTokenSelect: OpenSendTokenSelect? = null
-
-    val wallets: List<Account>
-        get() = accountManager.accounts.filter { !it.isWatchAccount }
-
-    val watchWallets: List<Account>
-        get() = accountManager.accounts.filter { it.isWatchAccount }
 
     init {
         localStorage.marketsTabEnabledFlow.collectWith(viewModelScope) { enabled ->
@@ -159,13 +151,6 @@ class MainViewModel(
             }
         }
 
-        accountManager.activeAccountStateFlow.collectWith(viewModelScope) {
-            (it as? ActiveAccountState.ActiveAccount)?.let { state ->
-                activeWallet = state.account
-                emitState()
-            }
-        }
-
         viewModelScope.launch {
             actionCompletedDelegate.walletEvents.collect { event ->
                 //ContactAddedToRecent event triggered after successful send transaction
@@ -186,7 +171,6 @@ class MainViewModel(
         showRateAppDialog = showRateAppDialog,
         showWhatsNew = showWhatsNew,
         showDonationPage = showDonationPage,
-        activeWallet = activeWallet,
         wcSupportState = wcSupportState,
         torEnabled = torEnabled,
         openSend = openSendTokenSelect,
@@ -208,12 +192,6 @@ class MainViewModel(
 
     fun closeRateDialog() {
         showRateAppDialog = false
-        emitState()
-    }
-
-    fun onSelect(account: Account) {
-        accountManager.setActiveAccountId(account.id)
-        activeWallet = account
         emitState()
     }
 
