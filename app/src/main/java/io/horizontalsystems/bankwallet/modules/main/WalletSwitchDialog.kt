@@ -9,13 +9,12 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.WalletSwitchBottomSheet
@@ -43,10 +42,8 @@ class WalletSwitchDialog : BaseComposableBottomSheetFragment() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WalletSwitchScreen(navController: NavController) {
-    val accountManager = App.accountManager
-    val wallets = accountManager.accounts.filter { !it.isWatchAccount }
-    val watchWallets = accountManager.accounts.filter { it.isWatchAccount }
-    val activeWallet = accountManager.activeAccount
+    val viewModel = viewModel<WalletSwitchViewModel>(factory = WalletSwitchViewModel.Factory())
+    val uiState = viewModel.uiState
 
     ComposeAppTheme {
         BottomSheetContent(
@@ -56,11 +53,11 @@ private fun WalletSwitchScreen(navController: NavController) {
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         ) {
             WalletSwitchBottomSheet(
-                wallets = wallets,
-                watchingAddresses = watchWallets,
-                selectedAccount = activeWallet,
-                onSelectListener = { account: Account ->
-                    accountManager.setActiveAccountId(account.id)
+                wallets = uiState.wallets,
+                watchingAddresses = uiState.watchWallets,
+                selectedAccount = uiState.activeWallet,
+                onSelectListener = { account ->
+                    viewModel.onSelect(account)
                     navController.popBackStack()
 
                     stat(
