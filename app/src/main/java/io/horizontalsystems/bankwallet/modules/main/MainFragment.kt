@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.main
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -13,20 +12,14 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -44,7 +37,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -68,12 +60,9 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSup
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
-import io.horizontalsystems.bankwallet.ui.extensions.WalletSwitchBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItem
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItemDefaults
-import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class MainFragment : BaseComposeFragment() {
     private val mainActivityViewModel by activityViewModels<MainActivityViewModel>()
@@ -126,7 +115,6 @@ private fun MainScreenWithRootedDeviceCheck(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MainScreen(
     mainActivityViewModel: MainActivityViewModel,
@@ -143,10 +131,6 @@ private fun MainScreen(
     }
 
     val uiState = viewModel.uiState
-    val coroutineScope = rememberCoroutineScope()
-
-    val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var isBottomSheetVisible by remember { mutableStateOf(false) }
 
     Scaffold(
         containerColor = ComposeAppTheme.colors.tyler,
@@ -172,15 +156,11 @@ private fun MainScreen(
                             },
                             onLongClick = if (destination.selected && destination.mainNavItem == MainNavigation.Balance) {
                                 {
-                                    coroutineScope.launch {
-                                        modalBottomSheetState.show()
-                                        isBottomSheetVisible = true
-
-                                        stat(
-                                            page = StatPage.Main,
-                                            event = StatEvent.Open(StatPage.SwitchWallet)
-                                        )
-                                    }
+                                    fragmentNavController.slideFromBottom(R.id.walletSwitchDialog)
+                                    stat(
+                                        page = StatPage.Main,
+                                        event = StatEvent.Open(StatPage.SwitchWallet)
+                                    )
                                 }
                             } else null,
                             enabled = destination.enabled,
@@ -205,12 +185,6 @@ private fun MainScreen(
             }
         }
     ) { paddingValues ->
-        BackHandler(enabled = modalBottomSheetState.isVisible) {
-            coroutineScope.launch {
-                modalBottomSheetState.hide()
-                isBottomSheetVisible = false
-            }
-        }
         Column {
             when (uiState.mainNavItems[uiState.selectedTabIndex].mainNavItem) {
                 MainNavigation.Market -> MarketScreen(fragmentNavController)
@@ -222,38 +196,6 @@ private fun MainScreen(
 
                 MainNavigation.Settings -> SettingsScreen(fragmentNavController)
             }
-        }
-    }
-    if (isBottomSheetVisible) {
-        BottomSheetContent(
-            onDismissRequest = {
-                isBottomSheetVisible = false
-            },
-            sheetState = modalBottomSheetState
-        ) {
-            WalletSwitchBottomSheet(
-                wallets = viewModel.wallets,
-                watchingAddresses = viewModel.watchWallets,
-                selectedAccount = uiState.activeWallet,
-                onSelectListener = {
-                    coroutineScope.launch {
-                        modalBottomSheetState.hide()
-                        isBottomSheetVisible = false
-                        viewModel.onSelect(it)
-
-                        stat(
-                            page = StatPage.SwitchWallet,
-                            event = StatEvent.Select(StatEntity.Wallet)
-                        )
-                    }
-                },
-                onCancelClick = {
-                    coroutineScope.launch {
-                        modalBottomSheetState.hide()
-                        isBottomSheetVisible = false
-                    }
-                }
-            )
         }
     }
 
