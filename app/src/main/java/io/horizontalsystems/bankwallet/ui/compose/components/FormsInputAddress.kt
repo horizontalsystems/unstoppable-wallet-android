@@ -27,7 +27,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -41,6 +40,7 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 
 @Composable
 fun FormsInputAddress(
@@ -179,14 +179,13 @@ fun FormsInputAddress(
                     }
                 )
 
-                val clipboardManager = LocalClipboardManager.current
                 ButtonSecondaryDefault(
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .height(28.dp),
                     title = stringResource(id = R.string.Send_Button_Paste),
                     onClick = {
-                        clipboardManager.getText()?.text?.let { textInClipboard ->
+                        TextHelper.getCopiedText()?.let { textInClipboard ->
                             val textProcessed = textPreprocessor.process(textInClipboard)
                             onValueChange.invoke(textProcessed)
                         }
