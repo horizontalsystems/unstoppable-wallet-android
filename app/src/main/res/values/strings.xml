@@ -758,7 +758,7 @@
     <!-- Swap Confirmation -->
 
     <string name="ActivationRequired_DialogTitle">Activate Token</string>
-    <string name="ActivationRequired_DialogDescription">To receive %s, you need to activate the token. The Stellar network requires a trustline to be established for each token. Without it, your wallet cannot receive %s — the transaction will be rejected and the funds will not be delivered.</string>
+    <string name="ActivationRequired_DialogDescription">To receive %1$s, you need to activate the token. The Stellar network requires a trustline to be established for each token. Without it, your wallet cannot receive %2$s — the transaction will be rejected and the funds will not be delivered.</string>
 
     <string name="Activate_YouActivate">You Activate</string>
     <string name="Activate_Activating">Activating</string>
