@@ -9,7 +9,7 @@ class MigrationManager(
     private val termsManager: ITermsManager,
 ) {
 
-    private val latestMigrationVersion = 2
+    private val latestMigrationVersion = 3
 
     fun runMigrations() {
         val lastMigrationVersion = localStorage.lastMigrationVersion
@@ -24,7 +24,7 @@ class MigrationManager(
             migrateToTermsV2()
         }
 
-        if ((lastMigrationVersion ?: 0) < 2) {
+        if ((lastMigrationVersion ?: 0) < 3) {
             migrateToTermsV3()
         }
 
