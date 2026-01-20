@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -55,6 +54,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.SnackbarDuration
@@ -286,15 +286,14 @@ fun ContactsScreen(
             }
         }
         bottomSheetType?.let { type ->
-            ModalBottomSheet(
+            BottomSheetContent(
                 onDismissRequest = {
                     coroutineScope.launch {
                         bottomSheetState.hide()
                     }
                     bottomSheetType = null
                 },
-                sheetState = bottomSheetState,
-                containerColor = ComposeAppTheme.colors.transparent
+                sheetState = bottomSheetState
             ) {
                 when (type) {
                     ContactsScreenBottomSheetType.ReplaceAddressConfirmation -> {

@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
@@ -72,6 +71,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.extensions.WalletSwitchBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItem
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItemDefaults
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -225,12 +225,11 @@ private fun MainScreen(
         }
     }
     if (isBottomSheetVisible) {
-        ModalBottomSheet(
+        BottomSheetContent(
             onDismissRequest = {
                 isBottomSheetVisible = false
             },
-            sheetState = modalBottomSheetState,
-            containerColor = ComposeAppTheme.colors.transparent
+            sheetState = modalBottomSheetState
         ) {
             WalletSwitchBottomSheet(
                 wallets = viewModel.wallets,
