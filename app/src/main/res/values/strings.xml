@@ -1054,7 +1054,6 @@
     <string name="Premium_UpgradeFeature_ScamProtection">Scam Protection</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">Priority Support</string>
     <string name="Premium_UpgradeFeature_SwapProtection">Swap Protection</string>
-    <string name="Premium_UpgradeFeature_SwapControl">Provider Control</string>
 
     <string name="Premium_UpgradeFeature_TokenInsights_Description">In-depth analytics and token data</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Powerful filters for smarter token discovery.</string>
@@ -1064,7 +1063,6 @@
     <string name="Premium_UpgradeFeature_ScamProtection_Description">Warns you when connecting to fake or malicious dApps.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Direct access to our support team.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_Description">Prevents bots and MEV attacks during swaps.</string>
-    <string name="Premium_UpgradeFeature_SwapControl_Description">Advanced settings to control how and where swaps execute.</string>
 
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Shows detailed token data — volume, liquidity, and trends. Helps you make smarter investment decisions.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Find tokens with filters by volume, chain, or sector. Includes metrics for CEX/DEX activity and listings.</string>
@@ -1074,7 +1072,6 @@
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Detects fake or malicious dApps before connection. Prevents phishing and keeps your assets safe.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Gives you direct access to priority support. Get fast, personal help from the Unstoppable team.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Stops bots and front-running attacks during swaps. Keeps your transactions fair and secure.</string>
-    <string name="Premium_UpgradeFeature_SwapControl_BigDescription">By default, we select the best available offer. With Premium, you can choose a different provider.</string>
 
     <string name="Premium_DefenseSystem">Defense System</string>
     <string name="Premium_MarketInsights">Market Insights</string>

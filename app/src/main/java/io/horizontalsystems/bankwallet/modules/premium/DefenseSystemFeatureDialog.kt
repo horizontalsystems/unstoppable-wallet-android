@@ -54,7 +54,6 @@ import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
-import io.horizontalsystems.subscriptions.core.SwapControl
 import io.horizontalsystems.subscriptions.core.SwapProtection
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
@@ -110,11 +109,6 @@ enum class PremiumFeature(
         R.string.Premium_UpgradeFeature_SwapProtection_BigDescription,
         R.drawable.prem_swapprotection
     ),
-    SwapControlFeature(
-        R.string.Premium_UpgradeFeature_SwapControl,
-        R.string.Premium_UpgradeFeature_SwapControl_Description,
-        R.drawable.prem_swapcontrol
-    ),
     ScamProtectionFeature(
         R.string.Premium_UpgradeFeature_ScamProtection,
         R.string.Premium_UpgradeFeature_ScamProtection_BigDescription,
@@ -156,7 +150,6 @@ enum class PremiumFeature(
             ScamProtection -> ScamProtectionFeature
             PrioritySupport -> PrioritySupportFeature
             SwapProtection -> SwapProtectionFeature
-            SwapControl -> SwapControlFeature
             else -> throw IllegalArgumentException("Unknown paid action")
         }
     }
