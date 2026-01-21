@@ -13,5 +13,6 @@ data class SwapFinalQuote(
     val amountOutMin: BigDecimal?,
     val sendTransactionData: SendTransactionData,
     val priceImpact: BigDecimal?,
-    val fields: List<DataField>
+    val fields: List<DataField>,
+    val estimatedTime: Long?
 )

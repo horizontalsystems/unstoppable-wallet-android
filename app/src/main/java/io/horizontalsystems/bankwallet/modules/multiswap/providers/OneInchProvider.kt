@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.blockTime
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.modules.multiswap.EvmBlockchainHelper
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
@@ -138,7 +139,8 @@ object OneInchProvider : IMultiSwapProvider {
             amountOutMin,
             SendTransactionData.Evm(TransactionData(swapTx.to, swapTx.value, swapTx.data), swapTx.gasLimit),
             null,
-            fields
+            fields,
+            tokenIn.blockchainType.blockTime
         )
     }
 }

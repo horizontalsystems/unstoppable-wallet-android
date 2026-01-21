@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.blockTime
 import io.horizontalsystems.bankwallet.core.hexToByteArray
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.APIClient
@@ -276,7 +277,8 @@ object AllBridgeProvider : IMultiSwapProvider {
             amountOutMin = amountOutMin,
             sendTransactionData = sendTransactionData,
             priceImpact = null,
-            fields = fields
+            fields = fields,
+            estimatedTime = if (crosschain) null else tokenIn.blockchainType.blockTime
         )
     }
 

@@ -218,6 +218,7 @@ abstract class BaseThorChainProvider(
             ),
             priceImpact = null,
             fields = fields,
+            estimatedTime = quoteSwap.total_swap_seconds
         )
     }
 
@@ -366,7 +367,7 @@ interface ThornodeAPI {
 //  "max_streaming_quantity": 8,
 //  "streaming_swap_blocks": 7,
 //  "streaming_swap_seconds": 42,
-//  "total_swap_seconds": 1674
+            val total_swap_seconds: Long?,
         ) {
             data class Fees(
                 val affiliate: BigDecimal,

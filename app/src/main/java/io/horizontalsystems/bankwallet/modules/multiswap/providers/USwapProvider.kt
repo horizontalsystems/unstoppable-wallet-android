@@ -300,6 +300,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             ),
             priceImpact = null,
             fields = fields,
+            estimatedTime = bestRoute.estimatedTime?.total
         )
     }
 
@@ -510,7 +511,12 @@ interface UnstoppableAPI {
                 val inboundAddress: String,
                 val memo: String?,
                 val txExtraAttribute: Map<String, String>?,
-            )
+                val estimatedTime: EstimatedTime?,
+            ) {
+                data class EstimatedTime(
+                    val total: Long
+                )
+            }
         }
     }
 }
