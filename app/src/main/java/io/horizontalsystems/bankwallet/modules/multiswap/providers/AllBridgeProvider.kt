@@ -248,10 +248,10 @@ object AllBridgeProvider : IMultiSwapProvider {
         val amountOut = estimateAmountOut(tokenIn, tokenOut, amountIn)
 
         val crosschain = tokenIn.blockchainType != tokenOut.blockchainType
-        val amountOutMin = if (crosschain) {
-            null
-        } else {
-            amountOut - amountOut / BigDecimal(100) * slippage
+        val finalSlippage = if (crosschain) null else slippage
+
+        val amountOutMin = finalSlippage?.let {
+            amountOut - amountOut / BigDecimal(100) * it
         }
 
         val sendTransactionData = getSendTransactionData(
@@ -266,7 +266,9 @@ object AllBridgeProvider : IMultiSwapProvider {
             recipient?.let {
                 add(DataFieldRecipient(it))
             }
-            add(DataFieldSlippage(slippage))
+            finalSlippage?.let {
+                add(DataFieldSlippage(it))
+            }
         }
 
         return SwapFinalQuote(
@@ -278,7 +280,8 @@ object AllBridgeProvider : IMultiSwapProvider {
             sendTransactionData = sendTransactionData,
             priceImpact = null,
             fields = fields,
-            estimatedTime = if (crosschain) null else tokenIn.blockchainType.blockTime
+            estimatedTime = if (crosschain) null else tokenIn.blockchainType.blockTime,
+            slippage = if (crosschain) null else slippage
         )
     }
 

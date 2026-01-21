@@ -216,7 +216,8 @@ abstract class BaseThorChainProvider(
             ),
             priceImpact = null,
             fields = fields,
-            estimatedTime = quoteSwap.total_swap_seconds
+            estimatedTime = quoteSwap.total_swap_seconds,
+            slippage = slippage
         )
     }
 

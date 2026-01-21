@@ -127,12 +127,14 @@ fun SwapConfirmScreen(navController: NavController) {
         onClickBack = navController::popBackStack,
         onClickFeeSettings = onClickSettings,
         onClickNonceSettings = onClickNonceSettings,
-        onClickSlippageSettings = {
-            navController.slideFromRightForResult<SwapSettingsSlippageFragment.Result>(
-                R.id.swapSettingsSlippage,
-                SwapSettingsSlippageFragment.Input(uiState.slippage)
-            ) {
-                viewModel.setSlippage(it.slippage)
+        onClickSlippageSettings = uiState.slippage?.let { slippage ->
+            {
+                navController.slideFromRightForResult<SwapSettingsSlippageFragment.Result>(
+                    R.id.swapSettingsSlippage,
+                    SwapSettingsSlippageFragment.Input(slippage)
+                ) {
+                    viewModel.setSlippage(it.slippage)
+                }
             }
         },
         onClickRecipientSettings = {

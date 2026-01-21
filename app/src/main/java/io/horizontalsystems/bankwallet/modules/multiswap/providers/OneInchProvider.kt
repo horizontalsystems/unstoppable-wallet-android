@@ -140,7 +140,8 @@ object OneInchProvider : IMultiSwapProvider {
             SendTransactionData.Evm(TransactionData(swapTx.to, swapTx.value, swapTx.data), swapTx.gasLimit),
             null,
             fields,
-            tokenIn.blockchainType.blockTime
+            tokenIn.blockchainType.blockTime,
+            slippage
         )
     }
 }

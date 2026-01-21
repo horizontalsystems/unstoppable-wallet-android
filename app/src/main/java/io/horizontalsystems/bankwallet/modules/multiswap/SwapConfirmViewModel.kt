@@ -47,7 +47,7 @@ class SwapConfirmViewModel(
     private val amountIn = swapQuote.amountIn
     private var fiatAmountIn: BigDecimal? = null
     private var recipient: Address? = null
-    private var slippage: BigDecimal = BigDecimal.ONE
+    private var slippage: BigDecimal? = null
 
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountOutMin: BigDecimal? = null
@@ -228,7 +228,7 @@ class SwapConfirmViewModel(
                     sendTransactionSettings,
                     swapQuote,
                     recipient,
-                    slippage
+                    slippage ?: BigDecimal.ONE
                 )
 
                 ensureActive()
@@ -237,6 +237,7 @@ class SwapConfirmViewModel(
                 amountOutMin = finalQuote.amountOutMin
                 estimatedTime = finalQuote.estimatedTime
                 quoteFields = finalQuote.fields
+                slippage = finalQuote.slippage
                 emitState()
 
                 fiatServiceOut.setAmount(amountOut)
@@ -272,6 +273,8 @@ class SwapConfirmViewModel(
     }
 
     fun setSlippage(slippage: BigDecimal) {
+        if (slippage == this.slippage) return
+
         this.slippage = slippage
 
         refresh()
@@ -321,6 +324,6 @@ data class SwapConfirmUiState(
     val hasNonceSettings: Boolean,
     val swapDefenseSystemMessage: DefenseSystemMessage?,
     val recipient: Address?,
-    val slippage: BigDecimal,
+    val slippage: BigDecimal?,
     val estimatedTime: Long?,
 )
