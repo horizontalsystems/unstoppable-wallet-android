@@ -60,7 +60,11 @@ class SwapSelectProviderViewModel(
                 quote.tokenOut.coin.code,
                 quote.tokenOut.decimals
             )
-            val priceImpactData = PriceImpactCalculator.getPriceImpactData(fiatAmountOut?.value, fiatAmountIn?.value)
+            val priceImpactData = PriceImpactCalculator.getPriceImpactData(
+                fiatAmountOut?.value,
+                fiatAmountIn?.value,
+                PriceImpactLevel.Warning
+            )
             QuoteViewItem(
                 quote = quote,
                 fiatAmount = fiatAmountOut?.getFormattedFull(),

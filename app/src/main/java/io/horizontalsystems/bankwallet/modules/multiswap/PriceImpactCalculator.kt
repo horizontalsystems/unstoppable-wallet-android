@@ -4,25 +4,21 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 object PriceImpactCalculator {
-    private val normalPriceImpact = BigDecimal(1)
-    private val warningPriceImpact = BigDecimal(6)
-    private val highPriceImpact = BigDecimal(11)
-    private val forbiddenPriceImpact = BigDecimal(50)
-
-    fun getPriceImpactData(amountOut: BigDecimal?, amountIn: BigDecimal?): PriceImpactData? {
+    fun getPriceImpactData(
+        amountOut: BigDecimal?,
+        amountIn: BigDecimal?,
+        minLevel: PriceImpactLevel
+    ): PriceImpactData? {
         val priceImpact = calculateDiff(amountOut, amountIn) ?: return null
 
         val priceImpactAbs = priceImpact.abs()
-        if (priceImpactAbs < normalPriceImpact) return null
+        if (priceImpactAbs < minLevel.lowerInclusive.toBigDecimal()) return null
 
-        val priceImpactLevel = when {
-            priceImpactAbs < warningPriceImpact -> PriceImpactLevel.Normal
-            priceImpactAbs < highPriceImpact -> PriceImpactLevel.Warning
-            priceImpactAbs < forbiddenPriceImpact -> PriceImpactLevel.High
-            else -> PriceImpactLevel.Forbidden
+        return PriceImpactLevel.valuesSorted().firstOrNull {
+            priceImpactAbs >= it.lowerInclusive.toBigDecimal() && priceImpactAbs < it.upperExclusive.toBigDecimal()
+        }?.let {
+            PriceImpactData(priceImpact, it)
         }
-
-        return PriceImpactData(priceImpact, priceImpactLevel)
     }
 
     private fun calculateDiff(amountOut: BigDecimal?, amountIn: BigDecimal?): BigDecimal? {

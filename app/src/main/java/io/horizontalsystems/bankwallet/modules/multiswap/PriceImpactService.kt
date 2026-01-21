@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap
 import io.horizontalsystems.bankwallet.core.ServiceState
 import java.math.BigDecimal
 
-class PriceImpactService : ServiceState<PriceImpactService.State>() {
+class PriceImpactService(private val minLevel: PriceImpactLevel) : ServiceState<PriceImpactService.State>() {
     private var amountIn: BigDecimal? = null
     private var amountOut: BigDecimal? = null
     private var priceImpact: BigDecimal? = null
@@ -23,7 +23,7 @@ class PriceImpactService : ServiceState<PriceImpactService.State>() {
     }
 
     private fun refreshPriceImpact() {
-        val priceImpactData = PriceImpactCalculator.getPriceImpactData(amountOut, amountIn)
+        val priceImpactData = PriceImpactCalculator.getPriceImpactData(amountOut, amountIn, minLevel)
 
         priceImpact = priceImpactData?.priceImpact
         priceImpactLevel = priceImpactData?.priceImpactLevel
