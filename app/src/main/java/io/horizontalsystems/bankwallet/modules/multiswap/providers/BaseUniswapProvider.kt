@@ -87,7 +87,8 @@ abstract class BaseUniswapProvider : IMultiSwapProvider {
             SendTransactionData.Evm(transactionData, null),
             bestTrade.tradeData.priceImpact,
             fields,
-            tokenIn.blockchainType.blockTime
+            tokenIn.blockchainType.blockTime,
+            slippage
         )
     }
 

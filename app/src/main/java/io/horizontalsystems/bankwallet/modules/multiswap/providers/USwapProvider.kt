@@ -300,7 +300,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             ),
             priceImpact = null,
             fields = fields,
-            estimatedTime = bestRoute.estimatedTime?.total
+            estimatedTime = bestRoute.estimatedTime?.total,
+            slippage = slippage
         )
     }
 

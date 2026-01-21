@@ -88,7 +88,8 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             SendTransactionData.Evm(transactionData, null),
             bestTrade.tradeDataV3.priceImpact,
             fields,
-            tokenIn.blockchainType.blockTime
+            tokenIn.blockchainType.blockTime,
+            slippage
         )
     }
 
