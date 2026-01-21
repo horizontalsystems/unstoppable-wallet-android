@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import java.math.BigDecimal
 
 class SwapTransactionSlippageViewModel(
@@ -90,7 +91,7 @@ class SwapTransactionSlippageViewModel(
     }
 
     companion object {
-        val DEFAULT_SLIPPAGE: BigDecimal = BigDecimal("1")
+        val DEFAULT_SLIPPAGE: BigDecimal = IMultiSwapProvider.DEFAULT_SLIPPAGE
         val MIN_SLIPPAGE: BigDecimal = BigDecimal("0.01")
         val MAX_SLIPPAGE: BigDecimal = BigDecimal("50")
         val WARNING_THRESHOLD: BigDecimal = BigDecimal("5")

@@ -283,7 +283,9 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             recipient?.let {
                 add(DataFieldRecipient(it))
             }
-            add(DataFieldSlippage(slippage))
+            DataFieldSlippage.getField(slippage)?.let {
+                add(it)
+            }
         }
 
         return SwapFinalQuote(

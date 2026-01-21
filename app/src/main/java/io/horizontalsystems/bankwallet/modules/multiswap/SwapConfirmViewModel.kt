@@ -228,7 +228,7 @@ class SwapConfirmViewModel(
                     sendTransactionSettings,
                     swapQuote,
                     recipient,
-                    slippage ?: BigDecimal.ONE
+                    slippage ?: IMultiSwapProvider.DEFAULT_SLIPPAGE
                 )
 
                 ensureActive()

@@ -76,7 +76,9 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             recipient?.let {
                 add(DataFieldRecipient(it))
             }
-            add(DataFieldSlippage(slippage))
+            DataFieldSlippage.getField(slippage)?.let {
+                add(it)
+            }
         }
 
         return SwapFinalQuote(

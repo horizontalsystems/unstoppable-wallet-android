@@ -266,8 +266,8 @@ object AllBridgeProvider : IMultiSwapProvider {
             recipient?.let {
                 add(DataFieldRecipient(it))
             }
-            finalSlippage?.let {
-                add(DataFieldSlippage(it))
+            DataFieldSlippage.getField(finalSlippage)?.let {
+                add(it)
             }
         }
 
