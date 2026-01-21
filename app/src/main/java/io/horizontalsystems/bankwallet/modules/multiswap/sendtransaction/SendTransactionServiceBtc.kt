@@ -149,7 +149,6 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
             sendable = sendable,
             loading = loading,
             fields = fields,
-            extraFees = extraFees
         )
     }
 
@@ -175,8 +174,6 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         amountService.setAmount(data.amount)
 
         addressService.setAddress(Address(data.address))
-
-        setExtraFeesMap(data.feesMap)
     }
 
     @Composable

@@ -18,7 +18,6 @@ abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasN
     open val supportsMevProtection: Boolean = false
     abstract val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings>
     protected var uuid = UUID.randomUUID().toString()
-    protected var extraFees = mapOf<FeeType, SendModule.AmountData>()
 
     private val baseCurrency = App.currencyManager.baseCurrency
 
@@ -32,12 +31,6 @@ abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasN
 
     fun refreshUuid() {
         uuid = UUID.randomUUID().toString()
-    }
-
-    protected fun setExtraFeesMap(feesMap: Map<FeeType, CoinValue>) {
-        extraFees = feesMap.mapValues { (_, coinValue) ->
-            getAmountData(coinValue)
-        }
     }
 
     protected fun getAmountData(coinValue: CoinValue): SendModule.AmountData {
@@ -63,5 +56,4 @@ data class SendTransactionServiceState(
     val sendable: Boolean,
     val loading: Boolean,
     val fields: List<DataField>,
-    val extraFees: Map<FeeType, SendModule.AmountData>
 )

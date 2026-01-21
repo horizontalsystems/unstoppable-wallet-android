@@ -81,7 +81,6 @@ class SendTransactionServiceTon(
         sendable = transactionType != null,
         loading = transactionType == null,
         fields = listOf(),
-        extraFees = extraFees
     )
 
     sealed class TransactionType {

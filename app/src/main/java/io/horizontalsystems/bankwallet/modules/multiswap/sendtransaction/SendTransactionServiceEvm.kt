@@ -131,7 +131,6 @@ class SendTransactionServiceEvm(
         sendable = sendable,
         loading = loading,
         fields = fields,
-        extraFees = extraFees
     )
 
     override fun start(coroutineScope: CoroutineScope) {
@@ -218,8 +217,6 @@ class SendTransactionServiceEvm(
 
         feeService.setGasLimit(data.gasLimit)
         feeService.setTransactionData(data.transactionData)
-
-        setExtraFeesMap(data.feesMap)
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult.Evm {
