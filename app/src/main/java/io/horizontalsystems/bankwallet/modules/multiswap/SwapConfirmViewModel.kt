@@ -290,7 +290,7 @@ class SwapConfirmViewModel(
                 FiatService(App.marketKit),
                 sendTransactionService,
                 TimerService(),
-                PriceImpactService(),
+                PriceImpactService(PriceImpactLevel.Normal),
                 SwapDefenseSystemService(sendTransactionService.supportsMevProtection)
             )
         }

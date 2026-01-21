@@ -240,7 +240,7 @@ class SwapViewModel(
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val swapQuoteService = SwapQuoteService()
             val tokenBalanceService = TokenBalanceService(App.adapterManager)
-            val priceImpactService = PriceImpactService()
+            val priceImpactService = PriceImpactService(PriceImpactLevel.Warning)
 
             return SwapViewModel(
                 swapQuoteService,
