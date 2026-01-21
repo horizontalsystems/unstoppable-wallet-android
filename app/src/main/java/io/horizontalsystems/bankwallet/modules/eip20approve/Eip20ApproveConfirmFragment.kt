@@ -202,7 +202,7 @@ fun ConfirmTokenSection(
     fiatAmount: BigDecimal?,
     currency: Currency,
 ) {
-    val coinAmount = CoinValue(token, amount).getFormattedFull()
+    val coinAmount = CoinValue(token, amount).getFormatted()
     val fiatAmountFormatted =
         fiatAmount?.let { CurrencyValue(currency, fiatAmount).getFormattedFull() }
 

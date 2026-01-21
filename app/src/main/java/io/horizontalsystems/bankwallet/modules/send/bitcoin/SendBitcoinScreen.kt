@@ -40,7 +40,6 @@ import io.horizontalsystems.bankwallet.modules.address.HSAddressCell
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
-import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
@@ -167,119 +166,115 @@ fun SendBitcoinScreen(
             ),
         ) {
             Column(
-                modifier = Modifier.windowInsetsPadding(WindowInsets.ime)
+                modifier = Modifier
+                    .windowInsetsPadding(WindowInsets.ime)
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
             ) {
+                VSpacer(16.dp)
+                if (uiState.showAddressInput) {
+                    HSAddressCell(
+                        title = stringResource(R.string.Send_Confirmation_To),
+                        value = uiState.address.hex,
+                        riskyAddress = riskyAddress
+                    ) {
+                        fragmentNavController.popBackStack()
+                    }
+                    VSpacer(16.dp)
+                }
+
+                HSAmountInput(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    focusRequester = focusRequester,
+                    availableBalance = availableBalance ?: BigDecimal.ZERO,
+                    caution = amountCaution,
+                    coinCode = wallet.coin.code,
+                    coinDecimal = viewModel.coinMaxAllowedDecimals,
+                    fiatDecimal = viewModel.fiatMaxAllowedDecimals,
+                    onClickHint = {
+                        amountInputModeViewModel.onToggleInputType()
+                    },
+                    onValueChange = {
+                        viewModel.onEnterAmount(it)
+                    },
+                    inputType = amountInputType,
+                    rate = rate,
+                    amountUnique = amountUnique
+                )
+
+                VSpacer(8.dp)
+                AvailableBalance(
+                    coinCode = wallet.coin.code,
+                    coinDecimal = viewModel.coinMaxAllowedDecimals,
+                    fiatDecimal = viewModel.fiatMaxAllowedDecimals,
+                    availableBalance = availableBalance,
+                    amountInputType = amountInputType,
+                    rate = rate
+                )
+
+                VSpacer(16.dp)
+                HSMemoInput(maxLength = 120) {
+                    viewModel.onEnterMemo(it)
+                }
+
+                VSpacer(16.dp)
                 Column(
                     modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
-                        .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(ComposeAppTheme.colors.lawrence)
+                        .padding(vertical = 8.dp)
                 ) {
-                    VSpacer(16.dp)
-                    if (uiState.showAddressInput) {
-                        HSAddressCell(
-                            title = stringResource(R.string.Send_Confirmation_To),
-                            value = uiState.address.hex,
-                            riskyAddress = riskyAddress
-                        ) {
-                            fragmentNavController.popBackStack()
-                        }
-                        VSpacer(16.dp)
+                    uiState.utxoData?.let { utxoData ->
+                        UtxoCell(
+                            utxoData = utxoData,
+                            onClick = {
+                                composeNavController.navigate(UtxoExpertModePage)
+                            }
+                        )
                     }
-
-                    HSAmountInput(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        focusRequester = focusRequester,
-                        availableBalance = availableBalance ?: BigDecimal.ZERO,
-                        caution = amountCaution,
+                    HSFeeRaw(
                         coinCode = wallet.coin.code,
                         coinDecimal = viewModel.coinMaxAllowedDecimals,
-                        fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                        onClickHint = {
-                            amountInputModeViewModel.onToggleInputType()
-                        },
-                        onValueChange = {
-                            viewModel.onEnterAmount(it)
-                        },
-                        inputType = amountInputType,
-                        rate = rate,
-                        amountUnique = amountUnique
-                    )
-
-                    VSpacer(8.dp)
-                    AvailableBalance(
-                        coinCode = wallet.coin.code,
-                        coinDecimal = viewModel.coinMaxAllowedDecimals,
-                        fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                        availableBalance = availableBalance,
+                        fee = fee,
                         amountInputType = amountInputType,
-                        rate = rate
+                        rate = rate,
+                        navController = fragmentNavController
                     )
-
-                    VSpacer(16.dp)
-                    HSMemoInput(maxLength = 120) {
-                        viewModel.onEnterMemo(it)
-                    }
-
-                    VSpacer(16.dp)
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(ComposeAppTheme.colors.lawrence)
-                            .padding(vertical = 8.dp)
-                    ) {
-                        uiState.utxoData?.let { utxoData ->
-                            UtxoCell(
-                                utxoData = utxoData,
-                                onClick = {
-                                    composeNavController.navigate(UtxoExpertModePage)
-                                }
-                            )
-                        }
-                        HSFeeRaw(
-                            coinCode = wallet.coin.code,
-                            coinDecimal = viewModel.coinMaxAllowedDecimals,
-                            fee = fee,
-                            amountInputType = amountInputType,
-                            rate = rate,
-                            navController = fragmentNavController
-                        )
-                    }
-
-                    feeRateCaution?.let {
-                        FeeRateCaution(
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
-                            feeRateCaution = feeRateCaution
-                        )
-                    }
-
-                    VSpacer(32.dp)
                 }
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        title = stringResource(R.string.Button_Next),
-                        onClick = {
-                            if (riskyAddress) {
-                                keyboardController?.hide()
-                                fragmentNavController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
-                                    R.id.addressRiskyBottomSheetAlert,
-                                    AddressRiskyBottomSheetAlert.Input(
-                                        alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
-                                    )
-                                ) {
-                                    openConfirm(fragmentNavController, sendEntryPointDestId)
-                                }
-                            } else {
+
+                feeRateCaution?.let {
+                    FeeRateCaution(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                        feeRateCaution = feeRateCaution
+                    )
+                }
+
+                VSpacer(16.dp)
+
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    title = stringResource(R.string.Button_Next),
+                    onClick = {
+                        if (riskyAddress) {
+                            keyboardController?.hide()
+                            fragmentNavController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
+                                R.id.addressRiskyBottomSheetAlert,
+                                AddressRiskyBottomSheetAlert.Input(
+                                    alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
+                                )
+                            ) {
                                 openConfirm(fragmentNavController, sendEntryPointDestId)
                             }
-                        },
-                        enabled = proceedEnabled
-                    )
-                }
+                        } else {
+                            openConfirm(fragmentNavController, sendEntryPointDestId)
+                        }
+                    },
+                    enabled = proceedEnabled
+                )
+                VSpacer(32.dp)
             }
         }
     }
