@@ -128,7 +128,9 @@ object OneInchProvider : IMultiSwapProvider {
             recipient?.let {
                 add(DataFieldRecipient(it))
             }
-            add(DataFieldSlippage(slippage))
+            DataFieldSlippage.getField(slippage)?.let {
+                add(it)
+            }
         }
 
         return SwapFinalQuote(

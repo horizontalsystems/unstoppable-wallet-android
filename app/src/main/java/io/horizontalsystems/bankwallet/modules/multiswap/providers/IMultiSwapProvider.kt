@@ -48,6 +48,10 @@ interface IMultiSwapProvider {
         recipient: Address?,
         slippage: BigDecimal
     ): SwapFinalQuote
+
+    companion object {
+        val DEFAULT_SLIPPAGE: BigDecimal = BigDecimal("1")
+    }
 }
 
 enum class SwapProviderType(val title: String) {
