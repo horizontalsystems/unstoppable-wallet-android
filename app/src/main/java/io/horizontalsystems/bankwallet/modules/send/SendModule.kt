@@ -34,7 +34,7 @@ object SendModule {
         fun getFormatted(): String {
             val prefix = if (approximate) "~" else ""
             return when (this) {
-                is CoinValueInfo -> prefix + coinValue.getFormattedFull()
+                is CoinValueInfo -> prefix + coinValue.getFormatted()
                 is CurrencyValueInfo -> App.numberFormatter.formatFiatFull(
                     currencyValue.value, currencyValue.currency.symbol
                 )

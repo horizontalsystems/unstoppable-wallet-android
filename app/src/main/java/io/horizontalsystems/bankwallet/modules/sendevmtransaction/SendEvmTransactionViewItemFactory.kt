@@ -401,7 +401,7 @@ class SendEvmTransactionViewItemFactory(
                     baseCoinService.amountData(value),
                     ValueType.Outgoing,
                     baseCoinService.token,
-                    Translator.getString(R.string.Send_Confirmation_YouSend),
+                    baseCoinService.token.coin.code,
                     baseCoinService.token.badge,
                 )
             )

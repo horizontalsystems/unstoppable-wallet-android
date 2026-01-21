@@ -326,12 +326,12 @@ fun TokenRow(
 ) = TokenRowPure(
     fiatAmount,
     currency,
-    token.coin.name,
+    token.coin.code,
     token.coin.imageUrl,
     token.coin.alternativeImageUrl,
     token.iconPlaceholder,
     token.badge,
-    amount?.let { CoinValue(token, it).getFormattedFull() }
+    amount?.let { CoinValue(token, it).getFormatted() }
 )
 
 @Composable

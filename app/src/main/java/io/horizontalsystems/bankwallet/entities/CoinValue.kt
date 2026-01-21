@@ -27,6 +27,10 @@ data class CoinValue(val coin: Coin, val decimal: Int, val value: BigDecimal) {
     fun getFormattedFull(): String {
         return App.numberFormatter.formatCoinFull(value, coin.code, 8)
     }
+
+    fun getFormatted(): String {
+        return App.numberFormatter.formatCoinFull(value, null, 8)
+    }
 }
 
 fun BigDecimal.isMaxValue(decimals: Int): Boolean {
