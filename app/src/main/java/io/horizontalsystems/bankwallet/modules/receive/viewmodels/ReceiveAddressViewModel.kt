@@ -107,7 +107,7 @@ class ReceiveAddressViewModel(
     private suspend fun setData() {
         val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
         if (adapter != null) {
-            address = getReceiveAddress(adapter, isTransparentAddress)
+            address = getFreshReceiveAddress(adapter, isTransparentAddress)
             addressUriService.setAddress(address)
             usedAddresses = adapter.usedAddresses(false)
             usedChangeAddresses = adapter.usedAddresses(true)
@@ -119,14 +119,14 @@ class ReceiveAddressViewModel(
         emitState()
     }
 
-    private fun getReceiveAddress(
+    private suspend fun getFreshReceiveAddress(
         adapter: IReceiveAdapter,
         transparentAddress: Boolean
     ): String {
-        return if (transparentAddress && adapter.receiveAddressTransparent != null) {
-            adapter.receiveAddressTransparent ?: ""
+        return if (transparentAddress) {
+            adapter.getFreshReceiveAddressTransparent() ?: adapter.receiveAddressTransparent ?: ""
         } else {
-            adapter.receiveAddress
+            adapter.getFreshReceiveAddress()
         }
     }
 

@@ -19,6 +19,7 @@ import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import cash.z.ecc.android.sdk.model.PercentDecimal
 import cash.z.ecc.android.sdk.model.Proposal
 import cash.z.ecc.android.sdk.model.TransactionSubmitResult
+import cash.z.ecc.android.sdk.model.UnifiedAddressRequest
 import cash.z.ecc.android.sdk.model.Zatoshi
 import cash.z.ecc.android.sdk.model.ZcashNetwork
 import cash.z.ecc.android.sdk.model.Zip32AccountIndex
@@ -246,6 +247,33 @@ class ZcashAdapter(
             is AddressType.Tex -> ZCashAddressType.Shielded
             AddressType.Unified -> ZCashAddressType.Unified
         }
+    }
+
+    /**
+     * Gets a fresh unified address with Orchard and Sapling receivers (shielded only).
+     * Falls back to the standard unified address if custom address generation fails.
+     */
+    override suspend fun getFreshReceiveAddress(): String {
+        return try {
+            synchronizer.getCustomUnifiedAddress(zcashAccount, UnifiedAddressRequest.shielded)
+        } catch (_: Exception) {
+            receiveAddress
+        }
+    }
+
+    /**
+     * Generates and returns an ephemeral transparent address for one-time use.
+     * Used for receiving swaps from decentralized exchanges or other single-use scenarios.
+     * Falls back to the standard transparent address if ephemeral address generation fails.
+     */
+    override suspend fun getFreshReceiveAddressTransparent(): String {
+        //TODO transparent address rotation is disabled for now
+        return receiveAddressTransparent
+//        return try {
+//            synchronizer.getSingleUseTransparentAddress(zcashAccount.accountUuid).address
+//        } catch (e: Exception) {
+//            receiveAddressTransparent
+//        }
     }
 
     suspend fun sendShieldProposal() {
