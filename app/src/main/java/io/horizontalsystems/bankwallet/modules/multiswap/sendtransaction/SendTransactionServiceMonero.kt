@@ -47,6 +47,5 @@ class SendTransactionServiceMonero(
         sendable = sendData != null && fee != null,
         loading = sendData == null || fee == null,
         fields = listOf(),
-        extraFees = extraFees
     )
 }

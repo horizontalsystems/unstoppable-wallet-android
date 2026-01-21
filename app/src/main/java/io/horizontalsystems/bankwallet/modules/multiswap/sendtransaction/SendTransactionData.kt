@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.tronkit.models.Contract
@@ -13,7 +11,6 @@ sealed class SendTransactionData {
     data class Evm(
         val transactionData: TransactionData,
         val gasLimit: Long?,
-        val feesMap: Map<FeeType, CoinValue> = mapOf()
     ): SendTransactionData()
 
     data class Btc(
@@ -24,7 +21,6 @@ sealed class SendTransactionData {
         val minimumSendAmount: Int?,
         val changeToFirstInput: Boolean,
         val utxoFilters: UtxoFilters,
-        val feesMap: Map<FeeType, CoinValue>
     ) : SendTransactionData()
 
     sealed class Tron : SendTransactionData() {
@@ -86,9 +82,4 @@ sealed class SendTransactionData {
         val memo: String?,
     ) : SendTransactionData()
 
-}
-
-enum class FeeType(val stringResId: Int) {
-    Outbound(R.string.Fee_OutboundFee),
-    Liquidity(R.string.Fee_LiquidityFee);
 }

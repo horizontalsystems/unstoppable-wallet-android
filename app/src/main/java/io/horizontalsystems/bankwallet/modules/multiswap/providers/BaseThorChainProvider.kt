@@ -4,11 +4,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThornodeAPI.Response
-import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
@@ -235,14 +233,6 @@ abstract class BaseThorChainProvider(
         val recommendedGasRate = quoteSwap.recommended_gas_rate.toInt()
         val dustThreshold = quoteSwap.dust_threshold?.toInt()
 
-        val outboundFee = CoinValue(tokenOut, quoteSwap.fees.outbound.movePointLeft(8))
-        val liquidityFee = CoinValue(tokenOut, quoteSwap.fees.liquidity.movePointLeft(8))
-
-        val feesMap = mapOf(
-            FeeType.Liquidity to liquidityFee,
-            FeeType.Outbound to outboundFee,
-        )
-
         return when (tokenIn.blockchainType) {
             BlockchainType.ArbitrumOne,
             BlockchainType.Avalanche,
@@ -283,7 +273,6 @@ abstract class BaseThorChainProvider(
                 SendTransactionData.Evm(
                     transactionData = transactionData,
                     gasLimit = null,
-                    feesMap = feesMap
                 )
             }
 
@@ -303,7 +292,6 @@ abstract class BaseThorChainProvider(
                         scriptTypes = listOf(ScriptType.P2PKH, ScriptType.P2WPKHSH, ScriptType.P2WPKH),
                         maxOutputsCountForInputs = 10
                     ),
-                    feesMap = feesMap
                 )
             }
 

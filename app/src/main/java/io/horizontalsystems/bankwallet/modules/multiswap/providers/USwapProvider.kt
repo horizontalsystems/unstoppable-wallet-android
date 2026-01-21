@@ -324,7 +324,6 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                 return SendTransactionData.Evm(
                     transactionData = transactionData,
                     gasLimit = jsonObject["gas"]?.asString?.hexStringToByteArray()?.toLong(),
-                    feesMap = mapOf()
                 )
             } else {
                 throw IllegalStateException("No tx found")
@@ -361,7 +360,6 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     minimumSendAmount = null,
                     changeToFirstInput = false,
                     utxoFilters = UtxoFilters(),
-                    feesMap = mapOf()
                 )
             }
 

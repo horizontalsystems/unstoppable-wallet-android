@@ -110,6 +110,5 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
         sendable = rawTransaction != null || (amountState.canBeSend && addressState.canBeSend),
         loading = false,
         fields = listOf(),
-        extraFees = extraFees
     )
 }

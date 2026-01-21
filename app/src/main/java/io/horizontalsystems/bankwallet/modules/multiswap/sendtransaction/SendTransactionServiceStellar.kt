@@ -62,6 +62,5 @@ class SendTransactionServiceStellar(
         sendable = stellarSendHandler != null,
         loading = stellarSendHandler == null,
         fields = listOf(),
-        extraFees = extraFees
     )
 }

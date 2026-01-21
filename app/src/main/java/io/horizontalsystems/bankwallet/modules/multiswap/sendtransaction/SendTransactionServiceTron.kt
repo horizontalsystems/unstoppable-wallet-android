@@ -127,6 +127,5 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
         sendable = sendTransactionData != null || (amountState.canBeSend && feeState.canBeSend && addressState.canBeSend),
         loading = loading,
         fields = listOf(),
-        extraFees = extraFees
     )
 }

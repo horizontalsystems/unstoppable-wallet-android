@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.CoroutineScope
@@ -76,7 +75,6 @@ class SendTransactionServiceZcash(
         sendable = proposal != null,
         loading = proposal == null,
         fields = listOf(),
-        extraFees = extraFees
     )
 
 }
