@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,6 +23,7 @@ import java.math.BigDecimal
 
 class ReceiveAddressViewModel(
     private val wallet: Wallet,
+    private val token: Token,
     private val adapterManager: IAdapterManager,
     private val isTransparentAddress: Boolean,
 ) : ViewModelUiState<ReceiveModule.UiState>() {
@@ -36,7 +38,7 @@ class ReceiveAddressViewModel(
     private var addressType: String? = null
     private var mainNet = true
     private var watchAccount = wallet.account.isWatchAccount
-    private val addressUriService = AddressUriService(wallet.token)
+    private val addressUriService = AddressUriService(token)
 
     private var addressUriState = addressUriService.stateFlow.value
 
@@ -78,12 +80,12 @@ class ReceiveAddressViewModel(
         addressType = addressType,
         watchAccount = watchAccount,
         amount = amount,
-        amountString = amount?.let { App.numberFormatter.formatCoinFull(it, wallet.token.coin.code, wallet.token.decimals) },
+        amountString = amount?.let { App.numberFormatter.formatCoinFull(it, token.coin.code, token.decimals) },
         alertText = null,
     )
 
     private fun setNetworkName() {
-        when (val tokenType = wallet.token.type) {
+        when (val tokenType = token.type) {
             is TokenType.Derived -> {
                 addressFormat = "${tokenType.derivation.accountTypeDerivation.addressType} (${tokenType.derivation.accountTypeDerivation.rawName})"
             }
@@ -93,11 +95,11 @@ class ReceiveAddressViewModel(
             }
 
             else -> {
-                if (wallet.token.blockchainType == BlockchainType.Zcash) {
+                if (token.blockchainType == BlockchainType.Zcash) {
                     addressType =
                         Translator.getString(if (isTransparentAddress) R.string.Balance_Zcash_Transparent else R.string.Balance_Zcash_Unified)
                 } else {
-                    blockchainName = wallet.token.blockchain.name
+                    blockchainName = token.blockchain.name
                 }
             }
         }

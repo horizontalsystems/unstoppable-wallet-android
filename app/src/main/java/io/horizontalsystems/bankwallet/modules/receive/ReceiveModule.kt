@@ -7,17 +7,19 @@ import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveAddressViewModel
+import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 object ReceiveModule {
 
     class Factory(
         private val wallet: Wallet,
+        private val token: Token,
         private val isTransparentAddress: Boolean,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ReceiveAddressViewModel(wallet, App.adapterManager, isTransparentAddress) as T
+            return ReceiveAddressViewModel(wallet, token, App.adapterManager, isTransparentAddress) as T
         }
     }
 

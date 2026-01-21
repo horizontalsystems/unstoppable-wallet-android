@@ -376,7 +376,7 @@ fun TokenBalanceScreen(
                 isTronAlertVisible = false
                 navController.slideFromRight(
                     R.id.receiveFragment,
-                    ReceiveFragment.Input(viewModel.getWalletForReceive())
+                    ReceiveFragment.Input(viewModel.getWalletForReceive(), token = viewModel.getTronTokenForReceive())
                 )
             },
             bottomSheetState = tronBottomSheetState,

@@ -51,6 +51,7 @@ class TokenBalanceModule {
                 App.adapterManager,
                 App.connectivityManager,
                 App.localStorage,
+                App.coinManager,
             ) as T
         }
     }

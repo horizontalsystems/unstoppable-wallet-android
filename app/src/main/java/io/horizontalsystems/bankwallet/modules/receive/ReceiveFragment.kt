@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
 
@@ -34,13 +35,13 @@ class ReceiveFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) {
             val wallet = it.wallet
-            val token = wallet.token
+            val token = it.token ?: wallet.token
             when (token.blockchainType) {
                 BlockchainType.Stellar -> {
                     if (token.type is TokenType.Asset) {
                         ReceiveStellarAssetScreen(navController, wallet, it.receiveEntryPointDestId)
                     } else if (token.type == TokenType.Native) {
-                        ReceiveScreen(navController, wallet, it.receiveEntryPointDestId, it.isTransparentAddress)
+                        ReceiveScreen(navController, wallet, token, it.receiveEntryPointDestId, it.isTransparentAddress)
                     }
                 }
 
@@ -68,7 +69,7 @@ class ReceiveFragment : BaseComposeFragment() {
 //        BlockchainType.Zcash -> TODO()
 //        BlockchainType.ZkSync -> TODO()
                 else -> {
-                    ReceiveScreen(navController, wallet, it.receiveEntryPointDestId, it.isTransparentAddress)
+                    ReceiveScreen(navController, wallet, token, it.receiveEntryPointDestId, it.isTransparentAddress)
                 }
             }
         }
@@ -78,7 +79,8 @@ class ReceiveFragment : BaseComposeFragment() {
     data class Input(
         val wallet: Wallet,
         val receiveEntryPointDestId: Int = 0,
-        val isTransparentAddress: Boolean = false
+        val isTransparentAddress: Boolean = false,
+        val token: Token? = null
     ) : Parcelable
 
 }
@@ -87,15 +89,16 @@ class ReceiveFragment : BaseComposeFragment() {
 fun ReceiveScreen(
     navController: NavController,
     wallet: Wallet,
+    token: Token,
     receiveEntryPointDestId: Int,
     isTransparentAddress: Boolean,
 ) {
     val addressViewModel =
-        viewModel<ReceiveAddressViewModel>(factory = ReceiveModule.Factory(wallet, isTransparentAddress))
+        viewModel<ReceiveAddressViewModel>(factory = ReceiveModule.Factory(wallet, token, isTransparentAddress))
 
     val uiState = addressViewModel.uiState
     ReceiveAddressScreen(
-        title = stringResource(R.string.Deposit_Title, wallet.coin.code),
+        title = stringResource(R.string.Deposit_Title, token.coin.code),
         uiState = uiState,
         setAmount = { amount -> addressViewModel.setAmount(amount) },
         onErrorClick = { addressViewModel.onErrorClick() },

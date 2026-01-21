@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
@@ -26,6 +27,9 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItemFactory
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -43,6 +47,7 @@ class TokenBalanceViewModel(
     private val adapterManager: IAdapterManager,
     private val connectivityManager: ConnectivityManager,
     private val localStorage: ILocalStorage,
+    private val coinManager: ICoinManager,
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
@@ -212,6 +217,10 @@ class TokenBalanceViewModel(
             account.hasAnyBackup -> return wallet
             else -> throw BackupRequiredError(account, wallet.coin.name)
         }
+    }
+
+    fun getTronTokenForReceive(): Token? {
+        return coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: return null
     }
 
     fun onBottomReached() {
