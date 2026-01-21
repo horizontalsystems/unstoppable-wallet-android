@@ -39,9 +39,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
+import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
 
@@ -103,7 +103,7 @@ fun ChooseContactScreen(
                             focusRequester.requestFocus()
                         }
                     } else {
-                        title3_leah(text = stringResource(id = R.string.Contacts))
+                        headline1_leah(text = stringResource(id = R.string.Contacts))
                     }
                 },
                 navigationIcon = {
