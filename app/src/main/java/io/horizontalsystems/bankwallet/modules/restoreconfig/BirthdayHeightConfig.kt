@@ -82,8 +82,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessor
 import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessorImpl
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -336,7 +336,7 @@ fun ConfigureAppBar(
                     ),
                     contentDescription = null
                 )
-                title3_leah(
+                headline1_leah(
                     text = blockchainType.title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

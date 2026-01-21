@@ -67,7 +67,7 @@ fun SearchBar(
             .windowInsetsPadding(TopAppBarDefaults.windowInsets)
             .height(64.dp),
         title = {
-            title3_leah(
+            headline1_leah(
                 text = if (searchMode) "" else title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
