@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.balance.token
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
@@ -26,6 +26,8 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItemFactory
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -39,10 +41,10 @@ class TokenBalanceViewModel(
     private val transactionsService: TokenTransactionsService,
     private val transactionViewItem2Factory: TransactionViewItemFactory,
     private val balanceHiddenManager: BalanceHiddenManager,
-    private val accountManager: IAccountManager,
     private val adapterManager: IAdapterManager,
     private val connectivityManager: ConnectivityManager,
     private val localStorage: ILocalStorage,
+    private val coinManager: ICoinManager,
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
@@ -204,13 +206,23 @@ class TokenBalanceViewModel(
         }
     }
 
-    @Throws(BackupRequiredError::class, IllegalStateException::class)
+    @Throws(BackupRequiredError::class)
     fun getWalletForReceive(): Wallet {
-        val account =
-            accountManager.activeAccount ?: throw IllegalStateException("Active account is not set")
         when {
-            account.hasAnyBackup -> return wallet
-            else -> throw BackupRequiredError(account, wallet.coin.name)
+            wallet.account.hasAnyBackup -> return wallet
+            else -> throw BackupRequiredError(wallet.account, wallet.coin.name)
+        }
+    }
+
+    @Throws(BackupRequiredError::class, IllegalStateException::class)
+    fun getWalletForTronReceive(): Wallet {
+        when {
+            wallet.account.hasAnyBackup -> {
+                val tronToken = coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalStateException("Tron token not found")
+                val tronWallet = wallet.copy(token = tronToken)
+                return tronWallet
+            }
+            else -> throw BackupRequiredError(wallet.account, wallet.coin.name)
         }
     }
 
