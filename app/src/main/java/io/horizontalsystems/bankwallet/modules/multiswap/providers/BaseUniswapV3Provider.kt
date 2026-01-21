@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
+import io.horizontalsystems.bankwallet.core.blockTime
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.getEthereumKitAddress
 import io.horizontalsystems.bankwallet.modules.multiswap.EvmBlockchainHelper
@@ -86,7 +87,8 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             amountOutMin,
             SendTransactionData.Evm(transactionData, null),
             bestTrade.tradeDataV3.priceImpact,
-            fields
+            fields,
+            tokenIn.blockchainType.blockTime
         )
     }
 

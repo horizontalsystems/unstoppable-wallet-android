@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
+import android.icu.text.MeasureFormat
+import android.icu.util.Measure
+import android.icu.util.MeasureUnit
 import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -72,6 +75,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
+import java.util.Locale
 
 class SwapConfirmFragment : BaseComposeFragment() {
     @Composable
@@ -279,6 +283,20 @@ fun SwapConfirmScreen(navController: NavController) {
                         }
                     )
                 }
+                uiState.estimatedTime?.let { estimatedTime ->
+                    val infoTitle = stringResource(id = R.string.Swap_EstimatedTime)
+                    val infoText = stringResource(id = R.string.Swap_EstimatedTimeDescription)
+                    QuoteInfoRow(
+                        title = stringResource(id = R.string.Swap_EstimatedTime),
+                        value = "~${formatDuration(estimatedTime)}".hs(ComposeAppTheme.colors.leah),
+                        onInfoClick = {
+                            navController.slideFromBottom(
+                                R.id.swapInfoDialog,
+                                SwapInfoDialog.Input(infoTitle, infoText)
+                            )
+                        }
+                    )
+                }
                 uiState.quoteFields.forEach {
                     it.GetContent(navController)
                 }
@@ -369,4 +387,21 @@ fun TokenRowPure(
             )
         }
     )
+}
+
+fun formatDuration(totalSeconds: Long): String {
+    val hours = totalSeconds / 3600
+    val minutes = (totalSeconds % 3600) / 60
+    val seconds = totalSeconds % 60
+
+    val measures = mutableListOf<Measure>()
+    if (hours > 0) measures.add(Measure(hours, MeasureUnit.HOUR))
+    if (minutes > 0) measures.add(Measure(minutes, MeasureUnit.MINUTE))
+    // Include seconds if they exist, or if the total duration is 0
+    if (seconds > 0 || measures.isEmpty()) measures.add(Measure(seconds, MeasureUnit.SECOND))
+
+    val fmt = MeasureFormat.getInstance(Locale.getDefault(), MeasureFormat.FormatWidth.SHORT)
+
+    // formatMeasures takes an array and joins them localized (e.g., "2 mins 25 secs")
+    return fmt.formatMeasures(*measures.toTypedArray())
 }

@@ -64,6 +64,7 @@ class SwapConfirmViewModel(
 
     private var amountOut: BigDecimal? = null
     private var amountOutMin: BigDecimal? = null
+    private var estimatedTime: Long? = null
     private var quoteFields: List<DataField> = listOf()
     private var fetchFinalQuoteJob: Job? = null
 
@@ -197,6 +198,7 @@ class SwapConfirmViewModel(
             swapDefenseSystemMessage = swapDefenseState.systemMessage,
             recipient = recipient,
             slippage = slippage,
+            estimatedTime = estimatedTime,
         )
     }
 
@@ -236,6 +238,7 @@ class SwapConfirmViewModel(
 
                 amountOut = finalQuote.amountOut
                 amountOutMin = finalQuote.amountOutMin
+                estimatedTime = finalQuote.estimatedTime
                 quoteFields = finalQuote.fields
                 emitState()
 
@@ -323,6 +326,7 @@ data class SwapConfirmUiState(
     val swapDefenseSystemMessage: DefenseSystemMessage?,
     val recipient: Address?,
     val slippage: BigDecimal,
+    val estimatedTime: Long?,
 ) {
     val totalFee by lazy {
         val networkFiatValue = networkFee?.secondary  ?: return@lazy null

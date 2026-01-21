@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
 import io.horizontalsystems.bankwallet.core.adapters.toMoneroSeed
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronApproveTransactionRecord
@@ -20,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAct
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.monerokit.MoneroKit
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.math.BigDecimal
