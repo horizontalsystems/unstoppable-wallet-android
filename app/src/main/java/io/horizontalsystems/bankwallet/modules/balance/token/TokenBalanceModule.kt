@@ -47,10 +47,10 @@ class TokenBalanceModule {
                 tokenTransactionsService,
                 TransactionViewItemFactory(App.evmLabelManager, App.contactsRepository, App.balanceHiddenManager, App.localStorage),
                 App.balanceHiddenManager,
-                App.accountManager,
                 App.adapterManager,
                 App.connectivityManager,
                 App.localStorage,
+                App.coinManager,
             ) as T
         }
     }

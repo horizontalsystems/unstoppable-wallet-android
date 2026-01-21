@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -366,6 +367,7 @@ fun TokenBalanceScreen(
 
     }
     if (isTronAlertVisible) {
+        val context = LocalContext.current
         TronAlertBottomSheet(
             hideBottomSheet = {
                 coroutineScope.launch { tronBottomSheetState.hide() }
@@ -374,10 +376,27 @@ fun TokenBalanceScreen(
             onActionButtonClick = {
                 coroutineScope.launch { tronBottomSheetState.hide() }
                 isTronAlertVisible = false
-                navController.slideFromRight(
-                    R.id.receiveFragment,
-                    ReceiveFragment.Input(viewModel.getWalletForReceive())
-                )
+                try {
+                    val wallet = viewModel.getWalletForTronReceive()
+                    navController.slideFromRight(
+                        R.id.receiveFragment,
+                        ReceiveFragment.Input(wallet)
+                    )
+                } catch (e: BackupRequiredError) {
+                    val text = Translator.getString(
+                        R.string.ManageAccount_BackupRequired_Description,
+                        e.account.name,
+                        e.coinTitle
+                    )
+                    navController.slideFromBottom(
+                        R.id.backupRequiredDialog,
+                        BackupRequiredDialog.Input(e.account, text)
+                    )
+
+                    stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
+                } catch (e: IllegalStateException) {
+                    Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                }
             },
             bottomSheetState = tronBottomSheetState,
         )
