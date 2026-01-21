@@ -345,6 +345,24 @@ interface IReceiveAdapter {
     val receiveAddressTransparent: String?
         get() = null
 
+    /**
+     * Gets a fresh unified/shielded address for receiving funds.
+     * For Zcash, this returns a custom unified address with Orchard and Sapling receivers.
+     * For other chains, returns the standard receive address.
+     */
+    suspend fun getFreshReceiveAddress(): String {
+        return receiveAddress
+    }
+
+    /**
+     * Gets a fresh transparent address for receiving funds.
+     * For Zcash, this returns a single-use ephemeral transparent address.
+     * For other chains, returns the standard transparent address or null.
+     */
+    suspend fun getFreshReceiveAddressTransparent(): String? {
+        return receiveAddressTransparent
+    }
+
     suspend fun isAddressActive(address: String): Boolean {
         return true
     }
