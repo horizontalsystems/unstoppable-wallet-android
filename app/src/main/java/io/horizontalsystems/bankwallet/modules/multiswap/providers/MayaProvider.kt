@@ -16,7 +16,6 @@ object MayaProvider : BaseThorChainProvider(
     override val id = "mayachain"
     override val title = "Maya Protocol"
     override val icon = R.drawable.swap_provider_maya
-    override val priority = 0
 
     override fun getRefundAddress(tokenIn: Token): String? {
         return if (tokenIn.blockchainType == BlockchainType.Zcash) {

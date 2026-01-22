@@ -10,5 +10,4 @@ object ThorChainProvider : BaseThorChainProvider(
     override val id = "thorchain"
     override val title = "THORChain"
     override val icon = R.drawable.swap_provider_thorchain
-    override val priority = 0
 }

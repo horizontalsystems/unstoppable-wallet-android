@@ -36,7 +36,6 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     override val id = "u_${provider.id}"
     override val title = provider.title
     override val icon = provider.icon
-    override val priority = 0
     override val type = provider.type
     override val aml = provider.aml
 
