@@ -104,20 +104,25 @@ enum class PremiumFeature(
         R.string.Premium_UpgradeFeature_SecureSend_BigDescription,
         R.drawable.prem_securesend
     ),
-    SwapProtectionFeature(
-        R.string.Premium_UpgradeFeature_SwapProtection,
-        R.string.Premium_UpgradeFeature_SwapProtection_BigDescription,
-        R.drawable.prem_swapprotection
-    ),
     ScamProtectionFeature(
         R.string.Premium_UpgradeFeature_ScamProtection,
         R.string.Premium_UpgradeFeature_ScamProtection_BigDescription,
         R.drawable.prem_scamprotection
     ),
+    SwapProtectionFeature(
+        R.string.Premium_UpgradeFeature_SwapProtection,
+        R.string.Premium_UpgradeFeature_SwapProtection_BigDescription,
+        R.drawable.prem_swapprotection
+    ),
     RobberyProtectionFeature(
         R.string.Premium_UpgradeFeature_RobberyProtection,
         R.string.Premium_UpgradeFeature_RobberyProtection_BigDescription,
         R.drawable.prem_robberyprotection
+    ),
+    PrioritySupportFeature(
+        R.string.Premium_UpgradeFeature_PrioritySupport,
+        R.string.Premium_UpgradeFeature_PrioritySupport_BigDescription,
+        R.drawable.prem_prioritysupport
     ),
     TokenInsightsFeature(
         R.string.Premium_UpgradeFeature_TokenInsights,
@@ -133,11 +138,6 @@ enum class PremiumFeature(
         R.string.Premium_UpgradeFeature_TradeSignals,
         R.string.Premium_UpgradeFeature_TradeSignals_BigDescription,
         R.drawable.prem_tradesignals
-    ),
-    PrioritySupportFeature(
-        R.string.Premium_UpgradeFeature_PrioritySupport,
-        R.string.Premium_UpgradeFeature_PrioritySupport_BigDescription,
-        R.drawable.prem_prioritysupport
     );
 
     companion object {
