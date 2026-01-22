@@ -33,6 +33,7 @@ abstract class BaseThorChainProvider(
 ) : IMultiSwapProvider {
     override val type = SwapProviderType.DEX
     override val aml = false
+    override val requireTerms = false
 
     protected val thornodeAPI =
         APIClient.retrofit(baseUrl, 60).create(ThornodeAPI::class.java)
