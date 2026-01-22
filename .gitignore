@@ -6,3 +6,5 @@
 /captures
 /local.properties
 .externalNativeBuild
+/CLAUDE.md
+/.claude/settings.local.json
