@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.getInputX
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -31,6 +32,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
@@ -91,14 +93,6 @@ class ResendBitcoinFragment : BaseComposeFragment() {
 
         val view = LocalView.current
         when (uiState.sendResult) {
-            SendResult.Sending -> {
-                HudHelper.showInProcessMessage(
-                    view,
-                    R.string.Send_Sending,
-                    SnackbarDuration.INDEFINITE
-                )
-            }
-
             is SendResult.Sent -> {
                 HudHelper.showSuccessMessage(
                     view,
@@ -108,10 +102,10 @@ class ResendBitcoinFragment : BaseComposeFragment() {
             }
 
             is SendResult.Failed -> {
-                HudHelper.showErrorMessage(view, uiState.sendResult.caution.getString())
+                navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(uiState.sendResult.caution.getString()))
             }
 
-            null -> Unit
+            else -> Unit
         }
 
         LaunchedEffect(uiState.sendResult) {

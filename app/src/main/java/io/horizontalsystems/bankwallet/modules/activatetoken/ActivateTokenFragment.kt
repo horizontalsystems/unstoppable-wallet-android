@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -25,8 +26,10 @@ import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenError
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenViewModel
@@ -41,8 +44,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
-import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -76,29 +79,30 @@ fun ActivateTokenScreen(
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
             var buttonEnabled by remember { mutableStateOf(true) }
+            var buttonTitle by remember { mutableIntStateOf(R.string.Button_Activate) }
             val view = LocalView.current
 
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
-                title = stringResource(R.string.Button_Activate),
+                title = stringResource(buttonTitle),
                 onClick = {
                     coroutineScope.launch {
                         buttonEnabled = false
-                        HudHelper.showInProcessMessage(view, R.string.Activate_Activating, SnackbarDuration.INDEFINITE)
+                        buttonTitle = R.string.Activate_Activating
 
-                        val result = try {
+                        try {
                             viewModel.activate()
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
-                            ActivateTokenFragment.Result(true)
+                            delay(1200)
+                            navController.setNavigationResultX(ActivateTokenFragment.Result(true))
+                            navController.popBackStack()
                         } catch (t: Throwable) {
-                            HudHelper.showErrorMessage(view, t.javaClass.simpleName)
-                            ActivateTokenFragment.Result(false)
+                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                         }
 
+                        buttonTitle = R.string.Button_Activate
                         buttonEnabled = true
-                        navController.setNavigationResultX(result)
-                        navController.popBackStack()
                     }
                 },
                 enabled = uiState.activateEnabled && buttonEnabled
