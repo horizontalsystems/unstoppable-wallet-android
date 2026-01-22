@@ -11,6 +11,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -20,9 +21,9 @@ import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
@@ -88,37 +89,36 @@ private fun TransactionSpeedUpCancelScreen(
             navController.slideFromBottom(R.id.transactionSpeedUpCancelTransactionSettings)
         },
         buttonsSlot = {
-            val buttonTitle = viewModel.buttonTitle
             val coroutineScope = rememberCoroutineScope()
             var buttonEnabled by remember { mutableStateOf(true) }
+            var isSending by remember { mutableStateOf(false) }
 
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
-                title = buttonTitle,
+                title = if (isSending) stringResource(R.string.Send_Sending) else viewModel.buttonTitle,
                 onClick = {
-                    logger.info("click $buttonTitle button")
+                    logger.info("click ${viewModel.buttonTitle} button")
 
                     coroutineScope.launch {
                         buttonEnabled = false
-                        HudHelper.showInProcessMessage(view, R.string.Send_Sending, SnackbarDuration.INDEFINITE)
+                        isSending = true
 
-                        val result = try {
+                        try {
                             logger.info("sending tx")
                             viewModel.send()
                             logger.info("success")
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            TransactionSpeedUpCancelFragment.Result(true)
+                            navController.setNavigationResultX(TransactionSpeedUpCancelFragment.Result(true))
+                            navController.popBackStack()
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
-                            HudHelper.showErrorMessage(view, t.javaClass.simpleName)
-                            TransactionSpeedUpCancelFragment.Result(false)
+                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                         }
 
+                        isSending = false
                         buttonEnabled = true
-                        navController.setNavigationResultX(result)
-                        navController.popBackStack()
                     }
 
                 },

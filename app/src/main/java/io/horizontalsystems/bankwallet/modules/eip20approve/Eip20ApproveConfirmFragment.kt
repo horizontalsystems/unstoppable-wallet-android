@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -25,11 +26,13 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.OnlyRequired
 import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.Unlimited
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
@@ -45,7 +48,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsBut
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
-import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
@@ -84,33 +86,29 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
             var buttonEnabled by remember { mutableStateOf(true) }
+            var buttonTitle by remember { mutableIntStateOf(R.string.Swap_Approve) }
 
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
-                title = stringResource(R.string.Swap_Approve),
+                title = stringResource(buttonTitle),
                 onClick = {
                     coroutineScope.launch {
                         buttonEnabled = false
-                        HudHelper.showInProcessMessage(
-                            view,
-                            R.string.Swap_Approving,
-                            SnackbarDuration.INDEFINITE
-                        )
+                        buttonTitle = R.string.Swap_Approving
 
-                        val result = try {
+                        try {
                             viewModel.approve()
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            Eip20ApproveConfirmFragment.Result(true)
+                            navController.setNavigationResultX(Eip20ApproveConfirmFragment.Result(true))
+                            navController.popBackStack()
                         } catch (t: Throwable) {
-                            HudHelper.showErrorMessage(view, t.javaClass.simpleName)
-                            Eip20ApproveConfirmFragment.Result(false)
+                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                         }
 
+                        buttonTitle = R.string.Swap_Approve
                         buttonEnabled = true
-                        navController.setNavigationResultX(result)
-                        navController.popBackStack()
                     }
                 },
                 enabled = uiState.approveEnabled && buttonEnabled
