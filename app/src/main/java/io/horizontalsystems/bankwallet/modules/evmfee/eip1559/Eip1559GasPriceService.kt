@@ -174,7 +174,7 @@ class Eip1559GasPriceService(
         val recommendedPriorityFee = max(recommendedPriorityFee(feeHistory), minPriorityFee ?: 0)
         currentPriorityFee = recommendedPriorityFee
 
-        val newRecommendGasPrice = GasPrice.Eip1559(recommendedBaseFee + recommendedPriorityFee, recommendedPriorityFee)
+        val newRecommendGasPrice = GasPrice.Eip1559((recommendedBaseFee + recommendedPriorityFee) * 125 / 100, recommendedPriorityFee)
 
         recommendedGasPrice = newRecommendGasPrice
 
