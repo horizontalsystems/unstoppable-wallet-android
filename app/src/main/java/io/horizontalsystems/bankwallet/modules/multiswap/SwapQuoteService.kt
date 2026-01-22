@@ -169,10 +169,7 @@ class SwapQuoteService {
             }
             .awaitAll()
             .filterNotNull()
-            .sortedWith(
-                compareByDescending<SwapProviderQuote> { it.provider.priority }
-                    .thenByDescending { it.amountOut }
-            )
+            .sortedByDescending { it.amountOut }
     }
 
     fun setAmount(v: BigDecimal?) {
