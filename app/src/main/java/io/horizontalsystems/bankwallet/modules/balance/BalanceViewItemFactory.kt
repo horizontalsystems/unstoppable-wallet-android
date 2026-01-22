@@ -368,7 +368,7 @@ class BalanceViewItemFactory {
             AttentionIcon(
                 caution = Caution(
                     text = Translator.getString(R.string.SyncError),
-                    type = Caution.Type.Warning
+                    type = Caution.Type.Error
                 ),
                 type = AttentionIconType.SyncError
             )
