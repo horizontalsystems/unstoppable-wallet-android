@@ -53,11 +53,11 @@ class LegacyFeeSettingsViewModel(
     }
 
     fun onIncrementGasPrice(currentWeiValue: Long) {
-        gasPriceService.setGasPrice(currentWeiValue + scale.scaleValue)
+        gasPriceService.setGasPrice(currentWeiValue * 110 / 100)
     }
 
     fun onDecrementGasPrice(currentWeiValue: Long) {
-        gasPriceService.setGasPrice((currentWeiValue - scale.scaleValue).coerceAtLeast(0))
+        gasPriceService.setGasPrice(currentWeiValue * 90 / 100)
     }
 
     private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {
