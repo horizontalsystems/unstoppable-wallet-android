@@ -10,6 +10,7 @@ object PriceImpactCalculator {
         minLevel: PriceImpactLevel
     ): PriceImpactData? {
         val priceImpact = calculateDiff(amountOut, amountIn) ?: return null
+        if (priceImpact > BigDecimal.ZERO) return null
 
         val priceImpactAbs = priceImpact.abs()
         if (priceImpactAbs < minLevel.lowerInclusive.toBigDecimal()) return null
@@ -24,9 +25,11 @@ object PriceImpactCalculator {
     private fun calculateDiff(amountOut: BigDecimal?, amountIn: BigDecimal?): BigDecimal? {
         if (amountOut == null || amountIn == null || amountIn.compareTo(BigDecimal.ZERO) == 0) return null
 
-        return (amountOut - amountIn)
-            .divide(amountIn, RoundingMode.DOWN)
-            .times(BigDecimal("100"))
+        val amountOutF = amountOut.toFloat()
+        val amountInF = amountIn.toFloat()
+        val percent = (amountOutF - amountInF) * 100 / amountInF
+
+        return percent.toBigDecimal()
             .setScale(2, RoundingMode.DOWN)
             .stripTrailingZeros()
     }
