@@ -599,7 +599,7 @@
     <string name="Tron_TokenPage_AddressNotActivated">Not Activated</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">TRON Not Activated</string>
     <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">Transactions will appear after activation</string>
-    <string name="Tron_TokenPage_AddressNotActive_Info">New TRON wallets need at least 1 TRX to activate. Until then, they can receive tokens but won’t show correct balances.</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">TRON requires at least 1 TRX for activation/ Until the wallet is activated, tokens can be received, but balances may not be shown.</string>
 
     <!--TonConnect-->
     <string name="TonConnect_Title" translatable="false">Ton Connect</string>
@@ -964,7 +964,7 @@
     <string name="Settings_Twitter" translatable="false">Twitter</string>
     <string name="Settings_JoinUnstoppables">Join Unstoppables</string>
     <string name="Settings_Support">Support</string>
-    <string name="Settings_VipSupport">VIP Support</string>
+    <string name="Settings_VipSupport">Priority Support</string>
 
     <string name="Settings_Donate">Donate</string>
     <string name="Settings_DonateToken">Donate %s</string>
@@ -1043,7 +1043,7 @@
     <string name="Premium_Upgrade">Upgrade</string>
     <string name="Premium_ThankYouForSubscription">Thank you for your \nsubscription!</string>
     <string name="Premium_GoToApp">Go to App</string>
-    <string name="Premium_Banner_BlackFridayText">Upgrade to Premium with our biggest discount of the year</string>
+    <string name="Premium_Banner_BlackFridayText">Upgrade your experience with Premium features!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Enjoy the full power of the app.</string>
     <string name="Premium_SelectSubscription">Select Subscription</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">One purchase unlocks all Premium features.</string>
