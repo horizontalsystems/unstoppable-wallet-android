@@ -456,7 +456,7 @@ fun PriceImpactField(
 
     QuoteInfoRow(
         title = stringResource(R.string.Swap_PriceImpact),
-        value = stringResource(R.string.Swap_Percent, (priceImpact * BigDecimal.valueOf(-1)).toPlainString())
+        value = stringResource(R.string.Swap_Percent, priceImpact.toPlainString())
             .hs(color = getPriceImpactColor(priceImpactLevel)),
         onInfoClick = {
             navController.slideFromBottom(
