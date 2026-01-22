@@ -22,6 +22,7 @@ import java.math.BigDecimal
 abstract class BaseUniswapProvider : IMultiSwapProvider {
     override val type = SwapProviderType.DEX
     override val aml = true
+    override val requireTerms = false
     private val uniswapKit by lazy { UniswapKit.getInstance() }
 
     final override suspend fun fetchQuote(

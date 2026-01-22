@@ -14,6 +14,7 @@ interface IMultiSwapProvider {
     val icon: Int
     val type: SwapProviderType
     val aml: Boolean
+    val requireTerms: Boolean
 
     val titleShort: String
         get() {

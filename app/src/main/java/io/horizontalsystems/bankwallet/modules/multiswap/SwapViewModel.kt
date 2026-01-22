@@ -139,7 +139,7 @@ class SwapViewModel(
         fiatAmountOut = fiatAmountOut,
         currency = currency,
         fiatAmountInputEnabled = fiatAmountInputEnabled,
-        needToAcceptTerms = !swapTermsAccepted && quoteState.quote?.provider?.aml == true
+        needToAcceptTerms = !swapTermsAccepted && quoteState.quote?.provider?.requireTerms == true
     )
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
