@@ -95,6 +95,7 @@ private fun SendEvmConfirmationScreen(
 
     ConfirmTransactionScreen(
         title = stringResource(R.string.Send_Confirmation_Title),
+        initialLoading = uiState.initialLoading,
         onClickBack = { navController.popBackStack() },
         onClickFeeSettings = {
             navController.slideFromBottom(R.id.sendEvmSettingsFragment)

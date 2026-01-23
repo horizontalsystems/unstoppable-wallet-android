@@ -84,6 +84,7 @@ private fun TransactionSpeedUpCancelScreen(
 
     ConfirmTransactionScreen(
         title = viewModel.title,
+        initialLoading = uiState.initialLoading,
         onClickBack = { navController.popBackStack() },
         onClickFeeSettings = {
             navController.slideFromBottom(R.id.transactionSpeedUpCancelTransactionSettings)
