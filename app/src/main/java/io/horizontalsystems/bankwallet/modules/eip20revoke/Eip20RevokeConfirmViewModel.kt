@@ -41,6 +41,7 @@ class Eip20RevokeConfirmViewModel(
     private val contactsRepository: ContactsRepository,
 ) : ViewModelUiState<Eip20RevokeUiState>() {
     private val currency = currencyManager.baseCurrency
+    private var initialLoading = true
     private var sendTransactionState = sendTransactionService.stateFlow.value
     private var fiatAmount: BigDecimal? = null
     private val contact = contactsRepository.getContactsFiltered(
@@ -57,7 +58,8 @@ class Eip20RevokeConfirmViewModel(
         fiatAmount = fiatAmount,
         spenderAddress = spenderAddress,
         contact = contact,
-        revokeEnabled = sendTransactionState.sendable
+        revokeEnabled = sendTransactionState.sendable,
+        initialLoading = initialLoading,
     )
 
     val uuid = UUID.randomUUID().toString()
@@ -77,6 +79,8 @@ class Eip20RevokeConfirmViewModel(
         viewModelScope.launch {
             sendTransactionService.stateFlow.collect { transactionState ->
                 sendTransactionState = transactionState
+                initialLoading = initialLoading && transactionState.loading
+
                 emitState()
             }
         }
@@ -154,4 +158,5 @@ data class Eip20RevokeUiState(
     val spenderAddress: String,
     val contact: Contact?,
     val revokeEnabled: Boolean,
+    val initialLoading: Boolean,
 )

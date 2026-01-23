@@ -41,6 +41,7 @@ class Eip20ApproveViewModel(
 ) : ViewModelUiState<Eip20ApproveUiState>() {
     private val currency = currencyManager.baseCurrency
     private var allowanceMode = OnlyRequired
+    private var initialLoading = true
     private var sendTransactionState = sendTransactionService.stateFlow.value
     private var fiatAmount: BigDecimal? = null
     private val contact = contactsRepository.getContactsFiltered(
@@ -58,7 +59,8 @@ class Eip20ApproveViewModel(
         fiatAmount = fiatAmount,
         spenderAddress = spenderAddress,
         contact = contact,
-        approveEnabled = sendTransactionState.sendable
+        approveEnabled = sendTransactionState.sendable,
+        initialLoading = initialLoading,
     )
 
     init {
@@ -77,6 +79,8 @@ class Eip20ApproveViewModel(
         viewModelScope.launch {
             sendTransactionService.stateFlow.collect { transactionState ->
                 sendTransactionState = transactionState
+                initialLoading = initialLoading && transactionState.loading
+
                 emitState()
             }
         }
@@ -170,6 +174,7 @@ data class Eip20ApproveUiState(
     val spenderAddress: String,
     val contact: Contact?,
     val approveEnabled: Boolean,
+    val initialLoading: Boolean,
 )
 
 enum class AllowanceMode {

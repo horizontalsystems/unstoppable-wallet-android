@@ -40,6 +40,7 @@ class TransactionSpeedUpCancelViewModel(
         SpeedUpCancelType.Cancel -> Translator.getString(R.string.TransactionInfoOptions_Cancel_Button)
     }
 
+    private var initialLoading = true
     private var sendTransactionState: SendTransactionServiceState = sendTransactionService.stateFlow.value
     private var error: Throwable? = null
     private var sectionViewItems: List<SectionViewItem> = listOf()
@@ -48,7 +49,8 @@ class TransactionSpeedUpCancelViewModel(
         sendTransactionState = sendTransactionState,
         sectionViewItems = sectionViewItems,
         error = error,
-        sendEnabled = error == null && sendTransactionState.sendable
+        sendEnabled = error == null && sendTransactionState.sendable,
+        initialLoading = initialLoading
     )
 
     init {
@@ -90,6 +92,8 @@ class TransactionSpeedUpCancelViewModel(
             viewModelScope.launch {
                 sendTransactionService.stateFlow.collect { transactionState ->
                     sendTransactionState = transactionState
+                    initialLoading = initialLoading && transactionState.loading
+
                     emitState()
                 }
             }
@@ -146,7 +150,8 @@ data class TransactionSpeedUpCancelUiState(
     val sendTransactionState: SendTransactionServiceState,
     val sectionViewItems: List<SectionViewItem>,
     val error: Throwable?,
-    val sendEnabled: Boolean
+    val sendEnabled: Boolean,
+    val initialLoading: Boolean
 )
 
 class TransactionAlreadyInBlock : Exception()
