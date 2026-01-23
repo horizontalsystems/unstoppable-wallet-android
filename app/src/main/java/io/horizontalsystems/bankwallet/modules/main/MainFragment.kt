@@ -7,14 +7,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -135,14 +137,17 @@ private fun MainScreen(
     Scaffold(
         containerColor = ComposeAppTheme.colors.tyler,
         bottomBar = {
-            Column {
+            Column(
+                modifier = Modifier
+                    .background(ComposeAppTheme.colors.blade)
+                    .windowInsetsPadding(WindowInsets.navigationBars)
+            ) {
                 if (uiState.torEnabled) {
                     TorStatusView()
                 }
                 NavigationBar(
-                    modifier = Modifier.height(72.dp),
+                    modifier = Modifier.height(56.dp),
                     containerColor = ComposeAppTheme.colors.blade,
-                    windowInsets = NavigationBarDefaults.windowInsets,
                 ) {
                     uiState.mainNavItems.forEach { destination ->
                         HsNavigationBarItem(
