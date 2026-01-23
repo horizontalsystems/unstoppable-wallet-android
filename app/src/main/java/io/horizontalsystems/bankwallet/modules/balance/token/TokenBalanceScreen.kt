@@ -136,10 +136,6 @@ fun TokenBalanceScreen(
                 info = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Description),
                 coinValue = DeemedValue("", false)
             )
-            coroutineScope.launch {
-                delay(300)
-                bottomSheetState.show()
-            }
             viewModel.transparentZecAmountWarningShown(uiState.alertUnshieldedBalance)
         }
     }
@@ -242,9 +238,6 @@ fun TokenBalanceScreen(
                         viewModel = viewModel,
                         showBottomSheet = { content ->
                             bottomSheetContent = content
-                            coroutineScope.launch {
-                                bottomSheetState.show()
-                            }
                         },
                         onClickReceive = onClickReceive,
                         loading = loading
@@ -320,8 +313,8 @@ fun TokenBalanceScreen(
                     onClose = {
                         coroutineScope.launch {
                             bottomSheetState.hide()
+                            bottomSheetContent = null
                         }
-                        bottomSheetContent = null
                     }
                 )
             }
@@ -335,18 +328,18 @@ fun TokenBalanceScreen(
                     onShieldClick = { wallet ->
                         coroutineScope.launch {
                             bottomSheetState.hide()
+                            bottomSheetContent = null
+                            navController.slideFromRight(
+                                R.id.shieldZcash,
+                                ShieldZcashFragment.Input(wallet, R.id.tokenBalanceFragment)
+                            )
                         }
-                        bottomSheetContent = null
-                        navController.slideFromRight(
-                            R.id.shieldZcash,
-                            ShieldZcashFragment.Input(wallet, R.id.tokenBalanceFragment)
-                        )
                     },
                     onClose = {
                         coroutineScope.launch {
                             bottomSheetState.hide()
+                            bottomSheetContent = null
                         }
-                        bottomSheetContent = null
                     }
                 )
             }
@@ -358,8 +351,8 @@ fun TokenBalanceScreen(
                     hideBottomSheet = {
                         coroutineScope.launch {
                             bottomSheetState.hide()
+                            bottomSheetContent = null
                         }
-                        bottomSheetContent = null
                     }
                 )
             }
