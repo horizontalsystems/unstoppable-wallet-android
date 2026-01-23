@@ -100,9 +100,6 @@ fun SectorScreen(
                 title = TranslatableString.ResString(R.string.Info_Title),
                 icon = R.drawable.ic_info_24,
                 onClick = {
-                    coroutineScope.launch {
-                        infoModalBottomSheetState.show()
-                    }
                     isInfoBottomSheetVisible = true
                 },
             )
@@ -219,8 +216,8 @@ fun SectorScreen(
             hideBottomSheet = {
                 coroutineScope.launch {
                     infoModalBottomSheetState.hide()
+                    isInfoBottomSheetVisible = false
                 }
-                isInfoBottomSheetVisible = false
             }
         )
     }

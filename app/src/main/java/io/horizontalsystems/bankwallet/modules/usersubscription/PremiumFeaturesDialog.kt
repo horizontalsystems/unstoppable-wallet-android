@@ -279,10 +279,7 @@ fun PremiumFeaturesScreen(
                         onClick = {
                             //when used in NavHost
                             navHostController?.let {
-                                coroutineScope.launch {
-                                    isPlanSelectBottomSheetVisible = true
-                                    plansModalBottomSheetState.show()
-                                }
+                                isPlanSelectBottomSheetVisible = true
                             } ?: run {
                                 onClose.invoke()
                                 navController.slideFromBottom(R.id.selectSubscriptionPlanDialog)

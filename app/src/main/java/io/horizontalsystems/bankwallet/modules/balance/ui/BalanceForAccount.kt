@@ -83,7 +83,6 @@ fun BalanceForAccount(
             LaunchedEffect(viewModel.connectionResult) {
                 scope.launch {
                     delay(300)
-                    sheetState.show()
                     isWCInvalidUrlBottomSheetVisible = true
                 }
             }
@@ -168,19 +167,16 @@ fun BalanceForAccount(
         WCInvalidUrlBottomSheet(
             sheetState = sheetState,
             onConfirm = {
-                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                    if (!sheetState.isVisible) {
-                        isWCInvalidUrlBottomSheetVisible = false
-                    }
+                scope.launch {
+                    sheetState.hide()
+                    isWCInvalidUrlBottomSheetVisible = false
+                    qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
                 }
-
-                qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
             },
             onDismiss = {
-                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                    if (!sheetState.isVisible) {
-                        isWCInvalidUrlBottomSheetVisible = false
-                    }
+                scope.launch {
+                    sheetState.hide()
+                    isWCInvalidUrlBottomSheetVisible = false
                 }
             }
         )

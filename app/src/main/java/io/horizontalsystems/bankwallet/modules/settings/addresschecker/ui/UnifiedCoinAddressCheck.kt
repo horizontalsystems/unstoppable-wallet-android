@@ -119,9 +119,6 @@ fun UnifiedAddressCheckScreen(
                         description = stringResource(R.string.SettingsAddressChecker_ChainalysisCheckDescription),
                         onInfoClick = { info ->
                             bottomCheckInfo = info
-                            coroutineScope.launch {
-                                infoModalBottomSheetState.show()
-                            }
                         }
                     ) {
                         NetworkItem(
@@ -137,9 +134,6 @@ fun UnifiedAddressCheckScreen(
                         description = stringResource(R.string.SettingsAddressChecker_HashditCheckDescription),
                         onInfoClick = { info ->
                             bottomCheckInfo = info
-                            coroutineScope.launch {
-                                infoModalBottomSheetState.show()
-                            }
                         }
                     ) {
                         viewModel.hashDitBlockchains.forEach { blockchain ->
@@ -173,9 +167,6 @@ fun UnifiedAddressCheckScreen(
                             description = description,
                             onInfoClick = { info ->
                                 bottomCheckInfo = info
-                                coroutineScope.launch {
-                                    infoModalBottomSheetState.show()
-                                }
                             }
                         ) {
                             fullCoin.tokens.forEach { token ->
@@ -204,8 +195,8 @@ fun UnifiedAddressCheckScreen(
                 hideBottomSheet = {
                     coroutineScope.launch {
                         infoModalBottomSheetState.hide()
+                        bottomCheckInfo = null
                     }
-                    bottomCheckInfo = null
                 }
             )
         }

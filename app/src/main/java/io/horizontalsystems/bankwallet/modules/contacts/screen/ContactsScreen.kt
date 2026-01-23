@@ -195,14 +195,8 @@ fun ContactsScreen(
                         itemsIndexed(uiState.contacts) { index, contact ->
                             Contact(contact) {
                                 if (viewModel.shouldShowReplaceWarning(contact)) {
-                                    coroutineScope.launch {
-                                        bottomSheetType =
-                                            ContactsScreenBottomSheetType.ReplaceAddressConfirmation
-                                        selectedContact = contact
-                                        coroutineScope.launch {
-                                            bottomSheetState.show()
-                                        }
-                                    }
+                                    selectedContact = contact
+                                    bottomSheetType = ContactsScreenBottomSheetType.ReplaceAddressConfirmation
                                 } else {
                                     isSearchActive = false
                                     coroutineScope.launch {
@@ -253,13 +247,7 @@ fun ContactsScreen(
                         when (action) {
                             ContactsModule.ContactsAction.Restore -> {
                                 if (viewModel.shouldShowRestoreWarning()) {
-                                    coroutineScope.launch {
-                                        bottomSheetType =
-                                            ContactsScreenBottomSheetType.RestoreContactsConfirmation
-                                        coroutineScope.launch {
-                                            bottomSheetState.show()
-                                        }
-                                    }
+                                    bottomSheetType = ContactsScreenBottomSheetType.RestoreContactsConfirmation
                                 } else {
                                     restoreLauncher.launch(arrayOf("application/json"))
                                 }
@@ -288,9 +276,6 @@ fun ContactsScreen(
         bottomSheetType?.let { type ->
             BottomSheetContent(
                 onDismissRequest = {
-                    coroutineScope.launch {
-                        bottomSheetState.hide()
-                    }
                     bottomSheetType = null
                 },
                 sheetState = bottomSheetState

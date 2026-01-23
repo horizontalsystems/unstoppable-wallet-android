@@ -123,10 +123,7 @@ private fun AdvancedSearchScreen(
                     },
                     showBottomSheet = { type ->
                         bottomSheetType = type
-                        coroutineScope.launch {
-                            modalBottomSheetState.show()
-                            isBottomSheetVisible = true
-                        }
+                        isBottomSheetVisible = true
                     }
                 )
             }
