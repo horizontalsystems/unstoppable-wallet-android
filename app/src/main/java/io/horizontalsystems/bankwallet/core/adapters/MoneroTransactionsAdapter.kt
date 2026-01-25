@@ -107,7 +107,7 @@ class MoneroTransactionsAdapter(
                     conflictingHash = null,
                     showRawTransaction = false,
                     amount = transaction.amount.scaledDown(DECIMALS).negate(),
-                    to = null,
+                    to = if (transaction.transfers.isNullOrEmpty()) null else transaction.transfers[0].address,
                     sentToSelf = false,
                     memo = transaction.notes,
                     source = wallet.transactionSource,
