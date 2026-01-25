@@ -11,6 +11,8 @@ import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ApproveTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmIncomingTransactionRecord
@@ -158,6 +160,12 @@ class TransactionInfoService(
                 }
                 is ZcashShieldingTransactionRecord -> {
                     listOf(tx.value.coinUid)
+                }
+                is MoneroIncomingTransactionRecord -> {
+                    listOf(tx.value.coinUid)
+                }
+                is MoneroOutgoingTransactionRecord -> {
+                    listOf(tx.fee?.coinUid, tx.value.coinUid)
                 }
                 else -> emptyList()
             }
