@@ -628,6 +628,7 @@ enum class StatEntity(val key: String) {
     Status("status"),
     Token("token"),
     TransactionId("transaction_id"),
+    TransactionKey("transaction_key"),
     Wallet("wallet"),
     WalletName("wallet_name")
 }

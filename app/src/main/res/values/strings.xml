@@ -876,6 +876,7 @@
     <string name="TransactionInfo_Sent">Sent</string>
     <string name="TransactionInfo_Approved">Approved</string>
     <string name="TransactionInfo_SpeedUp">Speed Up</string>
+    <string name="TransactionInfo_TransactionSecretKey">Tx Secret Key</string>
     <string name="TransactionInfo_SpamWarning">This transaction is suspicious and can be a scam.\nPlease do not copy any addresses from this transaction.</string>
     <string name="TransactionInfo_SpeedUpDescription">This action will attempt to invalidate the previous transaction by resending it with a higher fee.</string>
 

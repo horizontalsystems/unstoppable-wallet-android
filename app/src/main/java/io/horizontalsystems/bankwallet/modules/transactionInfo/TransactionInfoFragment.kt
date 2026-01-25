@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSent
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSpeedUpCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoStatusCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoTransactionHashCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSecretKeyCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionNftAmountCell
 import io.horizontalsystems.bankwallet.ui.compose.components.WarningMessageCell
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -315,6 +316,12 @@ fun TransactionInfoSection(
                     is TransactionInfoViewItem.SentToSelf -> {
                         add {
                             TransactionInfoSentToSelfCell()
+                        }
+                    }
+
+                    is TransactionInfoViewItem.TransactionSecretKey -> {
+                        add {
+                            TransactionInfoSecretKeyCell(secretKey = viewItem.key)
                         }
                     }
 
