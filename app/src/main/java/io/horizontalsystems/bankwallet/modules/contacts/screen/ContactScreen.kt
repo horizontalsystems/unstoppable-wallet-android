@@ -174,7 +174,7 @@ fun ContactScreen(
                             cautionType = Caution.Type.Error,
                             cancelText = stringResource(R.string.Button_Cancel),
                             onConfirm = {
-                                viewModel::onDelete
+                                viewModel.onDelete()
                                 scope.launch {
                                     sheetState.hide()
                                     showBottomSheet = false
