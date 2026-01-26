@@ -87,22 +87,20 @@ fun SecretKeyScreen(
             ConfirmCopyBottomSheet(
                 sheetState = sheetState,
                 onConfirm = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showBottomSheet = false
-                        }
+                    scope.launch {
+                        sheetState.hide()
+                        showBottomSheet = false
+
                     }
                     TextHelper.copyText(secretKey)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                    showBottomSheet = false
 
                     onCopyKey()
                 },
                 onDismiss = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showBottomSheet = false
-                        }
+                    scope.launch {
+                        sheetState.hide()
+                        showBottomSheet = false
                     }
                 }
             )

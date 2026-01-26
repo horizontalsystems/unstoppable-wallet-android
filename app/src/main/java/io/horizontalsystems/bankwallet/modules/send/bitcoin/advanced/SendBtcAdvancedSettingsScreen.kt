@@ -227,10 +227,9 @@ fun SendBtcAdvancedSettingsScreen(
                             viewModel.setTransactionMode(mode)
                         },
                         onCloseClick = {
-                            scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                if (!sheetState.isVisible) {
-                                    showBottomSheet = false
-                                }
+                            scope.launch {
+                                sheetState.hide()
+                                showBottomSheet = false
                             }
                         }
                     )

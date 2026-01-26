@@ -175,17 +175,15 @@ fun ContactScreen(
                             cancelText = stringResource(R.string.Button_Cancel),
                             onConfirm = {
                                 viewModel::onDelete
-                                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                    if (!sheetState.isVisible) {
-                                        showBottomSheet = false
-                                    }
+                                scope.launch {
+                                    sheetState.hide()
+                                    showBottomSheet = false
                                 }
                             },
                             onClose = {
-                                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                    if (!sheetState.isVisible) {
-                                        showBottomSheet = false
-                                    }
+                                scope.launch {
+                                    sheetState.hide()
+                                    showBottomSheet = false
                                 }
                             }
                         )
@@ -202,17 +200,15 @@ fun ContactScreen(
                             cancelText = stringResource(R.string.Contacts_KeepEditing),
                             onConfirm = {
                                 onNavigateToBack()
-                                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                    if (!sheetState.isVisible) {
-                                        showBottomSheet = false
-                                    }
+                                scope.launch {
+                                    sheetState.hide()
+                                    showBottomSheet = false
                                 }
                             },
                             onClose = {
-                                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                    if (!sheetState.isVisible) {
-                                        showBottomSheet = false
-                                    }
+                                scope.launch {
+                                    sheetState.hide()
+                                    showBottomSheet = false
                                 }
                             }
                         )

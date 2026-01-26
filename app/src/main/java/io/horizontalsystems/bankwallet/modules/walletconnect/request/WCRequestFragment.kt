@@ -355,10 +355,9 @@ fun WCNewSignRequestScreen(
             message = message,
             sheetState = messageBottomSheetState,
             onDismiss = {
-                scope.launch { messageBottomSheetState.hide() }.invokeOnCompletion {
-                    if (!messageBottomSheetState.isVisible) {
-                        messageBottomSheet = null
-                    }
+                scope.launch {
+                    messageBottomSheetState.hide()
+                    messageBottomSheet = null
                 }
             }
         )

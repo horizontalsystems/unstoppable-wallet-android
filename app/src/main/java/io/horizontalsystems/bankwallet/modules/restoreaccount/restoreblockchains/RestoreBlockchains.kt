@@ -223,10 +223,9 @@ fun ManageWalletsScreen(
                     onItemsSelected = { blockchainTokensViewModel.onSelect(it) },
                     onCloseClick = {
                         blockchainTokensViewModel.onCancelSelect()
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
+                        scope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
                         }
                     },
                 )
