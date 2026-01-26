@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.ServiceState
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.models.Contract
+import io.horizontalsystems.tronkit.network.CreatedTransaction
 import io.horizontalsystems.tronkit.transaction.Fee
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,6 +17,7 @@ class SendTronFeeService(private val adapter: ISendTronAdapter, private val feeT
     private var amount: BigDecimal? = null
     private var tronAddress: TronAddress? = null
     private var contract: Contract? = null
+    private var transaction: CreatedTransaction? = null
 
     private var feeLimit: Long? = null
     private var fee: BigDecimal? = null
@@ -39,11 +41,11 @@ class SendTronFeeService(private val adapter: ISendTronAdapter, private val feeT
         emitState()
     }
 
-    fun setFeeLimit(feeLimit: Long?) {
-        resetFees()
+    suspend fun setCreatedTransaction(transaction: CreatedTransaction) {
+        this.transaction = transaction
 
-        this.feeLimit = feeLimit
-        fee = feeLimit?.toBigDecimal()?.movePointLeft(feeToken.decimals)
+        resetFees()
+        refreshFees()
         emitState()
     }
 
@@ -57,14 +59,17 @@ class SendTronFeeService(private val adapter: ISendTronAdapter, private val feeT
 
     private suspend fun refreshFees() = withContext(Dispatchers.Default) {
         try {
-            val contract = this@SendTronFeeService.contract
+            val contract = contract
+            val transaction = transaction
             val fees: List<Fee>
 
             if (contract != null) {
                 fees = adapter.estimateFee(contract)
+            } else if (transaction != null) {
+                fees = adapter.estimateFee(transaction)
             } else {
-                val amount = this@SendTronFeeService.amount ?: return@withContext
-                val tronAddress = this@SendTronFeeService.tronAddress ?: return@withContext
+                val amount = amount ?: return@withContext
+                val tronAddress = tronAddress ?: return@withContext
 
                 fees = adapter.estimateFee(amount, tronAddress)
             }
