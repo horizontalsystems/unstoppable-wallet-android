@@ -177,10 +177,9 @@ fun ReceiveTokenSelectScreen(
                             }
                         }
                     }
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            bottomSheetFullCoin = null
-                        }
+                    scope.launch {
+                        sheetState.hide()
+                        bottomSheetFullCoin = null
                     }
                 },
                 createNewWallet = {
@@ -196,17 +195,15 @@ fun ReceiveTokenSelectScreen(
                             onCoinClick
                         )
                     }
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            bottomSheetFullCoin = null
-                        }
+                    scope.launch {
+                        sheetState.hide()
+                        bottomSheetFullCoin = null
                     }
                 },
                 onCloseClick = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            bottomSheetFullCoin = null
-                        }
+                    scope.launch {
+                        sheetState.hide()
+                        bottomSheetFullCoin = null
                     }
                 }
             )

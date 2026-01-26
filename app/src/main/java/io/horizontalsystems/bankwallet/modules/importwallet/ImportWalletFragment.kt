@@ -173,17 +173,15 @@ private fun ImportWalletScreen(
                     cancelText = stringResource(R.string.Button_Cancel),
                     onConfirm = {
                         restoreLauncher.launch(arrayOf("application/json"))
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
+                        scope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
                         }
                     },
                     onClose = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
+                        scope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
                         }
                     }
                 )

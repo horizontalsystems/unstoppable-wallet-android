@@ -333,18 +333,16 @@ fun AppearanceScreen(navController: NavController) {
             ) {
                 AppCloseWarningBottomSheet(
                     onCloseClick = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
+                        scope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
                         }
                     },
                     onChangeClick = {
                         selectedAppIcon?.let { viewModel.onEnterAppIcon(it) }
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
+                        scope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
                         }
                     }
                 )

@@ -132,17 +132,15 @@ fun AddressScreen(
                     cancelText = stringResource(R.string.Button_Cancel),
                     onConfirm = {
                         uiState.editingAddress?.let { onDelete(it) }
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
+                        scope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
                         }
                     },
                     onClose = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
+                        scope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
                         }
                     }
                 )

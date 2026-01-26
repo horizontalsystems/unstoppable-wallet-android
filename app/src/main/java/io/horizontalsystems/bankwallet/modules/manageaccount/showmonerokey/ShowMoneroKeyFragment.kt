@@ -139,20 +139,18 @@ private fun ShowMoneroKeyScreen(
             ConfirmCopyBottomSheet(
                 sheetState = sheetState,
                 onConfirm = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showBottomSheet = false
-                        }
+                    scope.launch {
+                        sheetState.hide()
+                        showBottomSheet = false
                     }
                     TextHelper.copyText(keys.getKey(keyType))
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                     showBottomSheet = false
                 },
                 onDismiss = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showBottomSheet = false
-                        }
+                    scope.launch {
+                        sheetState.hide()
+                        showBottomSheet = false
                     }
                 }
             )

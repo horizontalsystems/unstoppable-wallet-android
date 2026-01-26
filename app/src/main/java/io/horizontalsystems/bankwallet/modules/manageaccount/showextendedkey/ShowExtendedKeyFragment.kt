@@ -258,10 +258,9 @@ private fun ShowExtendedKeyScreen(
             ConfirmCopyBottomSheet(
                 sheetState = sheetState,
                 onConfirm = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showBottomSheet = false
-                        }
+                    scope.launch {
+                        sheetState.hide()
+                        showBottomSheet = false
                     }
                     TextHelper.copyText(viewModel.extendedKey)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
@@ -270,10 +269,9 @@ private fun ShowExtendedKeyScreen(
                     viewModel.logEvent(StatEvent.Copy(StatEntity.Key))
                 },
                 onDismiss = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showBottomSheet = false
-                        }
+                    scope.launch {
+                        sheetState.hide()
+                        showBottomSheet = false
                     }
                 }
             )
