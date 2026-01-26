@@ -94,7 +94,7 @@ class SendTransactionServiceTron(token: Token) : AbstractSendTransactionService(
         if (data is SendTransactionData.Tron.WithContract) {
             feeService.setContract(data.contract)
         } else if (data is SendTransactionData.Tron.WithCreateTransaction) {
-            feeService.setFeeLimit(data.transaction.raw_data.fee_limit)
+            feeService.setCreatedTransaction(data.transaction)
         }
 
         emitState()
