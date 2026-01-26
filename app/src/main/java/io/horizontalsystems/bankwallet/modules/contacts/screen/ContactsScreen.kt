@@ -297,6 +297,7 @@ fun ContactsScreen(
                                 selectedContact?.let {
                                     coroutineScope.launch {
                                         bottomSheetState.hide()
+                                        bottomSheetType = null
                                         onNavigateToContact(it)
                                     }
                                 }
@@ -322,6 +323,7 @@ fun ContactsScreen(
                             onConfirm = {
                                 coroutineScope.launch {
                                     bottomSheetState.hide()
+                                    bottomSheetType = null
                                     restoreLauncher.launch(arrayOf("application/json"))
                                 }
                             },
