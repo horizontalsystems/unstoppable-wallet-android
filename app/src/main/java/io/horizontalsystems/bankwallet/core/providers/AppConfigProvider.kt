@@ -169,14 +169,16 @@ class AppConfigProvider(localStorage: ILocalStorage) {
 
     // coinCode -> min value
     val spamCoinValueLimits: Map<String, BigDecimal> = mapOf(
-        "USDT" to BigDecimal("0.01"),
-        "USDC" to BigDecimal("0.01"),
-        "DAI" to BigDecimal("0.01"),
-        "BUSD" to BigDecimal("0.01"),
-        "EURS" to BigDecimal("0.01"),
-        "BSC-USD" to BigDecimal("0.01"),
-        "TRX" to BigDecimal("10"),
         "XLM" to BigDecimal("0.01"),
+        "USDT" to BigDecimal("1.5"),
+        "USDC" to BigDecimal("1.5"),
+        "USDD" to BigDecimal("1.5"),
+        "DAI" to BigDecimal("1.5"),
+        "BUSD" to BigDecimal("1.5"),
+        "EURS" to BigDecimal("1.5"),
+        "BSC-USD" to BigDecimal("1.5"),
+        "TRX" to BigDecimal("0.1"),
+        "ETH" to BigDecimal("0.0005"),
     )
 
     val chainalysisBaseUrl by lazy {
