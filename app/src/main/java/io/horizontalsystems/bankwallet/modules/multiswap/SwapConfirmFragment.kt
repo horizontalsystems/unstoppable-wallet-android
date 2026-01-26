@@ -49,6 +49,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsRecipientFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsSlippageFragment
@@ -56,15 +57,24 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog.Input
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsErrorMessageDefault
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonConfig
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
 import io.horizontalsystems.core.helpers.HudHelper
@@ -87,9 +97,6 @@ class SwapConfirmFragment : BaseComposeFragment() {
 
 @Composable
 fun SwapConfirmScreen(navController: NavController) {
-    val coroutineScope = rememberCoroutineScope()
-    val view = LocalView.current
-
     val previousBackStackEntry = remember { navController.previousBackStackEntry }
     val swapViewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = previousBackStackEntry!!,
@@ -104,6 +111,73 @@ fun SwapConfirmScreen(navController: NavController) {
     )
 
     val uiState = viewModel.uiState
+
+    if (uiState.error != null) {
+        SwapConfirmError(navController, viewModel, uiState, uiState.error)
+    } else {
+        SwapConfirmInternal(navController, viewModel, uiState)
+    }
+}
+
+@Composable
+private fun SwapConfirmError(
+    navController: NavController,
+    viewModel: SwapConfirmViewModel,
+    uiState: SwapConfirmUiState,
+    error: Throwable
+) {
+    HSScaffold(
+        title = stringResource(R.string.Swap_Confirm_Title),
+        onBack = navController::popBackStack,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Settings_Title),
+                icon = R.drawable.manage_24,
+                enabled = false,
+                onClick = {}
+            )
+        ),
+        bottomBar = {
+            ButtonsGroupWithShade {
+                ButtonPrimaryDefault(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    title = stringResource(R.string.Button_Refresh),
+                    onClick = viewModel::refresh,
+                    enabled = !uiState.loading
+                )
+            }
+        }
+    ) {
+        CardsErrorMessageDefault(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(horizontal = 64.dp),
+            icon = painterResource(R.drawable.ic_warning_filled_24),
+            iconTint = ComposeAppTheme.colors.grey,
+            text = stringResource(R.string.SwapError_FailedToFetchQuote),
+            button4config = ButtonConfig(
+                variant = ButtonVariant.Primary,
+                style = ButtonStyle.Transparent,
+                size = ButtonSize.Small,
+                title = stringResource(R.string.Button_CopyError),
+                onClick = {
+                    TextHelper.copyText(error.message ?: error.javaClass.simpleName)
+                }
+            )
+        )
+    }
+}
+
+@Composable
+private fun SwapConfirmInternal(
+    navController: NavController,
+    viewModel: SwapConfirmViewModel,
+    uiState: SwapConfirmUiState
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val view = LocalView.current
 
     val onClickSettings = if (uiState.hasSettings) {
         {
@@ -174,14 +248,7 @@ fun SwapConfirmScreen(navController: NavController) {
             }
         },
         buttonsSlot = {
-            if (uiState.loading) {
-                ButtonPrimaryYellow(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = stringResource(R.string.Alert_Loading),
-                    enabled = false,
-                    onClick = { },
-                )
-            } else if (!uiState.validQuote) {
+            if (!uiState.validQuote) {
                 ButtonPrimaryDefault(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Refresh),
@@ -195,7 +262,7 @@ fun SwapConfirmScreen(navController: NavController) {
                 ButtonPrimaryYellow(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(swapButtonTitle),
-                    enabled = buttonEnabled,
+                    enabled = buttonEnabled && !uiState.loading,
                     onClick = {
                         coroutineScope.launch {
                             buttonEnabled = false

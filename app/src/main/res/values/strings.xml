@@ -736,6 +736,7 @@
     <string name="SwapDefense_Attention_Description">Protection is off. Bots may interfere with your swap and make you lose money.</string>
     <string name="SwapDefense_Safe_Title">Protected</string>
     <string name="SwapDefense_Safe_Description">I’m blocking bots from taking value in your swap.</string>
+    <string name="SwapError_FailedToFetchQuote">Failed to fetch quote.</string>
 
     <string name="SwapTerms_Title">Swap Terms</string>
     <string name="SwapTerms_TopText">Unstoppable aggregates multiple decentralized (DEX) and centralized swap providers to offer competitive rates and broad asset support.</string>
