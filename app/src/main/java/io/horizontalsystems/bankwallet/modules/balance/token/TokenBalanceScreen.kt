@@ -363,32 +363,37 @@ fun TokenBalanceScreen(
         val context = LocalContext.current
         TronAlertBottomSheet(
             hideBottomSheet = {
-                coroutineScope.launch { tronBottomSheetState.hide() }
-                isTronAlertVisible = false
+                coroutineScope.launch {
+                    tronBottomSheetState.hide()
+                    isTronAlertVisible = false
+                }
             },
             onActionButtonClick = {
-                coroutineScope.launch { tronBottomSheetState.hide() }
-                isTronAlertVisible = false
-                try {
-                    val wallet = viewModel.getWalletForTronReceive()
-                    navController.slideFromRight(
-                        R.id.receiveFragment,
-                        ReceiveFragment.Input(wallet)
-                    )
-                } catch (e: BackupRequiredError) {
-                    val text = Translator.getString(
-                        R.string.ManageAccount_BackupRequired_Description,
-                        e.account.name,
-                        e.coinTitle
-                    )
-                    navController.slideFromBottom(
-                        R.id.backupRequiredDialog,
-                        BackupRequiredDialog.Input(e.account, text)
-                    )
+                coroutineScope.launch {
+                    tronBottomSheetState.hide()
+                    isTronAlertVisible = false
 
-                    stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
-                } catch (e: IllegalStateException) {
-                    Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                    try {
+                        val wallet = viewModel.getWalletForTronReceive()
+                        navController.slideFromRight(
+                            R.id.receiveFragment,
+                            ReceiveFragment.Input(wallet)
+                        )
+                    } catch (e: BackupRequiredError) {
+                        val text = Translator.getString(
+                            R.string.ManageAccount_BackupRequired_Description,
+                            e.account.name,
+                            e.coinTitle
+                        )
+                        navController.slideFromBottom(
+                            R.id.backupRequiredDialog,
+                            BackupRequiredDialog.Input(e.account, text)
+                        )
+
+                        stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
+                    } catch (e: IllegalStateException) {
+                        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             },
             bottomSheetState = tronBottomSheetState,
