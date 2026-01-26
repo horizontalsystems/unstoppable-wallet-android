@@ -82,6 +82,33 @@ enum class ButtonVariant {
     Primary, Secondary
 }
 
+data class ButtonConfig(
+    val variant: ButtonVariant,
+    val style: ButtonStyle,
+    val size: ButtonSize,
+    val title: String,
+    val onClick: () -> Unit,
+)
+
+@Composable
+fun HSButton(
+    modifier: Modifier = Modifier,
+    buttonConfig: ButtonConfig,
+    icon: Painter? = null,
+    enabled: Boolean = true,
+) {
+    HSButton(
+        modifier = modifier,
+        variant = buttonConfig.variant,
+        style = buttonConfig.style,
+        size = buttonConfig.size,
+        title = buttonConfig.title,
+        icon = icon,
+        enabled = enabled,
+        onClick = buttonConfig.onClick,
+    )
+}
+
 @Composable
 private fun getButtonProps(size: ButtonSize, style: ButtonStyle, variant: ButtonVariant): ButtonProps {
     val buttonHeight: Dp

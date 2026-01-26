@@ -164,40 +164,33 @@ class SwapConfirmViewModel(
         emitState()
     }
 
-    override fun createState(): SwapConfirmUiState {
-        var cautions = sendTransactionState.cautions
-
-        error?.let {
-            cautions += CautionViewItem(it.javaClass.simpleName, it.message ?: "", CautionViewItem.Type.Error)
-        }
-
-        return SwapConfirmUiState(
-            initialLoading = initialLoading,
-            loading = loading,
-            tokenIn = tokenIn,
-            tokenOut = tokenOut,
-            amountIn = amountIn,
-            amountOut = amountOut,
-            amountOutMin = amountOutMin,
-            fiatAmountIn = fiatAmountIn,
-            fiatAmountOut = fiatAmountOut,
-            fiatAmountOutMin = fiatAmountOutMin,
-            currency = currency,
-            networkFee = sendTransactionState.networkFee,
-            cautions = cautions,
-            validQuote = error == null && sendTransactionState.sendable,
-            priceImpact = priceImpactState.priceImpact,
-            priceImpactLevel = priceImpactState.priceImpactLevel,
-            quoteFields = quoteFields,
-            transactionFields = sendTransactionState.fields,
-            hasSettings = sendTransactionService.hasSettings,
-            hasNonceSettings = sendTransactionService.hasNonceSettings,
-            swapDefenseSystemMessage = swapDefenseState.systemMessage,
-            recipient = recipient,
-            slippage = slippage,
-            estimatedTime = estimatedTime,
-        )
-    }
+    override fun createState() = SwapConfirmUiState(
+        initialLoading = initialLoading,
+        loading = loading,
+        tokenIn = tokenIn,
+        tokenOut = tokenOut,
+        amountIn = amountIn,
+        amountOut = amountOut,
+        amountOutMin = amountOutMin,
+        fiatAmountIn = fiatAmountIn,
+        fiatAmountOut = fiatAmountOut,
+        fiatAmountOutMin = fiatAmountOutMin,
+        currency = currency,
+        networkFee = sendTransactionState.networkFee,
+        cautions = sendTransactionState.cautions,
+        validQuote = error == null && sendTransactionState.sendable,
+        priceImpact = priceImpactState.priceImpact,
+        priceImpactLevel = priceImpactState.priceImpactLevel,
+        quoteFields = quoteFields,
+        transactionFields = sendTransactionState.fields,
+        hasSettings = sendTransactionService.hasSettings,
+        hasNonceSettings = sendTransactionService.hasNonceSettings,
+        swapDefenseSystemMessage = swapDefenseState.systemMessage,
+        recipient = recipient,
+        slippage = slippage,
+        estimatedTime = estimatedTime,
+        error = error
+    )
 
     override fun onCleared() {
         timerService.stop()
@@ -326,4 +319,5 @@ data class SwapConfirmUiState(
     val recipient: Address?,
     val slippage: BigDecimal?,
     val estimatedTime: Long?,
+    val error: Throwable?,
 )
