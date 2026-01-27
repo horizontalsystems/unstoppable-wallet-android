@@ -53,6 +53,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
@@ -85,6 +86,7 @@ fun CoinListSlidable(
     onRemoveFavorite: (String) -> Unit,
     onCoinClick: (String) -> Unit,
     userScrollEnabled: Boolean = true,
+    bottomPadding: Dp = 16.dp,
     preItems: LazyListScope.() -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -149,7 +151,7 @@ fun CoinListSlidable(
             }
         }
         item {
-            VSpacer(140.dp)
+            VSpacer(bottomPadding)
         }
         if (scrollToTop) {
             coroutineScope.launch {
