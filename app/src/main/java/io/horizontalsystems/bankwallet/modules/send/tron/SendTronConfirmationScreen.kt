@@ -28,12 +28,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
@@ -45,8 +45,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
@@ -271,39 +269,5 @@ private fun ResourcesConsumed(
             text = value,
             textAlign = TextAlign.Right
         )
-    }
-}
-
-@Composable
-private fun Cautions(cautions: List<HSCaution>) {
-
-    val modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        cautions.forEach { caution ->
-
-            when (caution.type) {
-                HSCaution.Type.Error -> {
-                    TextImportantError(
-                        modifier = modifier,
-                        text = caution.getString(),
-                        title = stringResource(R.string.Error),
-                        icon = R.drawable.ic_attention_20
-                    )
-                }
-
-                HSCaution.Type.Warning -> {
-                    TextImportantWarning(
-                        modifier = modifier,
-                        text = caution.getString(),
-                        title = stringResource(R.string.Alert_TitleWarning),
-                        icon = R.drawable.ic_attention_20
-                    )
-                }
-            }
-        }
     }
 }
