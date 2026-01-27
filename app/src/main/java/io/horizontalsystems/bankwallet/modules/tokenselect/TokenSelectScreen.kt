@@ -127,7 +127,7 @@ fun TokenSelectScreen(
                             HsDivider()
                         }
                         item {
-                            VSpacer(100.dp)
+                            VSpacer(88.dp)
                         }
                     }
                 }

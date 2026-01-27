@@ -2,8 +2,11 @@ package io.horizontalsystems.bankwallet.uiv3.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,7 +30,10 @@ fun HSScaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
         Box(
-            modifier = Modifier.padding(it).fillMaxSize(),
+            modifier = Modifier
+                .padding(it)
+                .windowInsetsPadding(WindowInsets.navigationBars)
+                .fillMaxSize(),
             content = content
         )
     }
