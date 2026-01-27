@@ -7,7 +7,6 @@ import cash.z.ecc.android.sdk.model.TransactionRecipient
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.firstOrNull
@@ -90,26 +89,22 @@ class ZcashTransactionsProvider(
         }
     }
 
-    fun getTransactions(
+    suspend fun getTransactions(
         from: Triple<ByteArray, Long, Int>?,
         transactionType: FilterTransactionType,
         address: String?,
         limit: Int,
-    ) = Single.create { emitter ->
-        try {
-            val filters = getFilters(transactionType, address)
-            val filtered = when {
-                filters.isEmpty() -> transactions
-                else -> transactions.filter { tx -> filters.all { it.invoke(tx) } }
-            }
-
-            val fromIndex = from?.let { (transactionHash, timestamp, transactionIndex) ->
-                filtered.indexOfFirst { it.transactionHash.contentEquals(transactionHash) && it.timestamp == timestamp && it.transactionIndex == transactionIndex } + 1
-            } ?: 0
-
-            emitter.onSuccess(filtered.subList(fromIndex, min(filtered.size, fromIndex + limit)))
-        } catch (error: Throwable) {
-            emitter.onError(error)
+    ): List<ZcashTransaction> {
+        val filters = getFilters(transactionType, address)
+        val filtered = when {
+            filters.isEmpty() -> transactions
+            else -> transactions.filter { tx -> filters.all { it.invoke(tx) } }
         }
+
+        val fromIndex = from?.let { (transactionHash, timestamp, transactionIndex) ->
+            filtered.indexOfFirst { it.transactionHash.contentEquals(transactionHash) && it.timestamp == timestamp && it.transactionIndex == transactionIndex } + 1
+        } ?: 0
+
+        return filtered.subList(fromIndex, min(filtered.size, fromIndex + limit))
     }
 }

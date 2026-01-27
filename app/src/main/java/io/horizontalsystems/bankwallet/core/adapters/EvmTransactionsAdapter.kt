@@ -18,6 +18,7 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.Flowable
 import io.reactivex.Single
+import kotlinx.coroutines.rx2.await
 
 class EvmTransactionsAdapter(
     val evmKitWrapper: EvmKitWrapper,
@@ -54,20 +55,20 @@ class EvmTransactionsAdapter(
             TokenQuery(evmKitWrapper.blockchainType, TokenType.Eip20(address))
         }
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Single<List<TransactionRecord>> {
+    ): List<TransactionRecord> {
         return evmKit.getFullTransactionsAsync(
             getFilters(token, transactionType, address?.lowercase()),
             from?.transactionHash?.hexStringToByteArray(),
             limit
-        ).map {
-            it.map { tx -> transactionConverter.transactionRecord(tx) }
-        }
+        )
+            .await()
+            .map { tx -> transactionConverter.transactionRecord(tx) }
     }
 
     override fun getTransactionsAfter(fromTransactionId: String?): Single<List<TransactionRecord>> {

@@ -16,7 +16,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.rx2.await
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -217,7 +216,7 @@ class TransactionRecordRepository(
         coroutineScope.launch {
             try {
                 val records = activeAdapters
-                    .map { async { it.get(itemsCount).await() } }
+                    .map { async { it.get(itemsCount) } }
                     .awaitAll()
                     .flatten()
 

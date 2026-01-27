@@ -5,7 +5,6 @@ import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -76,25 +75,21 @@ class TransactionAdapterWrapper(
         }
     }
 
-    fun get(limit: Int): Single<List<TransactionRecord>> = when {
-        transactionRecords.size >= limit || allLoaded -> Single.just(transactionRecords.take(limit))
-        contact != null && address == null -> Single.just(listOf())
+    suspend fun get(limit: Int): List<TransactionRecord> = when {
+        transactionRecords.size >= limit || allLoaded -> transactionRecords.take(limit)
+        contact != null && address == null -> listOf()
         else -> {
             val numberOfRecordsToRequest = limit - transactionRecords.size
-            transactionsAdapter
-                .getTransactionsAsync(
-                    transactionRecords.lastOrNull(),
-                    transactionWallet.token,
-                    numberOfRecordsToRequest,
-                    transactionType,
-                    address
-                )
-                .map {
-                    allLoaded = it.size < numberOfRecordsToRequest
-                    transactionRecords.addAll(it)
-
-                    transactionRecords
-                }
+            val result = transactionsAdapter.getTransactions(
+                transactionRecords.lastOrNull(),
+                transactionWallet.token,
+                numberOfRecordsToRequest,
+                transactionType,
+                address
+            )
+            allLoaded = result.size < numberOfRecordsToRequest
+            transactionRecords.addAll(result)
+            transactionRecords.toList()
         }
     }
 

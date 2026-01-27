@@ -18,10 +18,8 @@ import io.horizontalsystems.tonkit.Address
 import io.horizontalsystems.tonkit.models.Tag
 import io.horizontalsystems.tonkit.models.TagQuery
 import io.reactivex.Flowable
-import io.reactivex.Single
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
-import kotlinx.coroutines.rx2.rxSingle
 
 class TonTransactionsAdapter(
     tonKitWrapper: TonKitWrapper,
@@ -40,24 +38,22 @@ class TonTransactionsAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = Flowable.empty()
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Single<List<TransactionRecord>> = try {
+    ): List<TransactionRecord> = try {
         val tagQuery = getTagQuery(token, transactionType, address)
         val beforeLt = (from as TonTransactionRecord?)?.lt
 
-        rxSingle {
-            tonKit.events(tagQuery, beforeLt, limit = limit)
-                .map {
-                    tonTransactionConverter.createTransactionRecord(it)
-                }
-        }
+        tonKit.events(tagQuery, beforeLt, limit = limit)
+            .map {
+                tonTransactionConverter.createTransactionRecord(it)
+            }
     } catch (e: NotSupportedException) {
-        Single.just(listOf())
+        listOf()
     }
 
     private fun getTagQuery(token: Token?, transactionType: FilterTransactionType, address: String?): TagQuery {

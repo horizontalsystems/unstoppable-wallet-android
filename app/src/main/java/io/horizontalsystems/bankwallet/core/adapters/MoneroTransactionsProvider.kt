@@ -1,11 +1,9 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.monerokit.model.TransactionInfo
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlin.math.min
 
@@ -25,25 +23,21 @@ class MoneroTransactionsProvider {
         }
     }
 
-    fun getTransactions(
+    suspend fun getTransactions(
         fromHash: String?,
         transactionType: FilterTransactionType,
         address: String?,
         limit: Int,
-    ) = Single.create { emitter ->
-        try {
-            val filters = getFilters(transactionType)
-            val filtered = when {
-                filters.isEmpty() -> transactions
-                else -> transactions.filter { tx -> filters.all { it.invoke(tx) } }
-            }
-
-            val fromIndex = fromHash?.let { filtered.indexOfFirst { it.hash == fromHash } + 1 } ?: 0
-
-            emitter.onSuccess(filtered.subList(fromIndex, min(filtered.size, fromIndex + limit)))
-        } catch (error: Throwable) {
-            emitter.onError(error)
+    ): List<TransactionInfo> {
+        val filters = getFilters(transactionType)
+        val filtered = when {
+            filters.isEmpty() -> transactions
+            else -> transactions.filter { tx -> filters.all { it.invoke(tx) } }
         }
+
+        val fromIndex = fromHash?.let { filtered.indexOfFirst { it.hash == fromHash } + 1 } ?: 0
+
+        return filtered.subList(fromIndex, min(filtered.size, fromIndex + limit))
     }
 
 
