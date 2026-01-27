@@ -125,7 +125,7 @@ class SendTronFeeService(private val adapter: ISendTronAdapter, private val feeT
         activationFee = activationFee,
         resourcesConsumed = resourcesConsumed,
         error = error,
-        canBeSend = feeLimit != null && error == null
+        canBeSend = error == null
     )
 
     data class State(
