@@ -254,6 +254,8 @@ class SwapConfirmViewModel(
     }
 
     suspend fun swap() = withContext(Dispatchers.Default) {
+        timerService.stop()
+
         stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
 
         sendTransactionService.sendTransaction(swapDefenseState.mevProtectionEnabled)
