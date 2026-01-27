@@ -41,8 +41,8 @@ import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -180,26 +180,28 @@ abstract class BitcoinBaseAdapter(
         kit.refresh()
     }
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ) = when (address) {
-        null -> getTransactionsAsync(from, limit, transactionType)
-        else -> Single.just(listOf())
+    ): List<TransactionRecord> = when (address) {
+        null -> getTransactionsList(from, limit, transactionType)
+        else -> listOf()
     }
 
-    private fun getTransactionsAsync(
+    private suspend fun getTransactionsList(
         from: TransactionRecord?,
         limit: Int,
         transactionType: FilterTransactionType
-    ): Single<List<TransactionRecord>> {
+    ): List<TransactionRecord> {
         return try {
-            kit.transactions(from?.uid, getBitcoinTransactionTypeFilter(transactionType), limit).map { it.map { tx -> transactionRecord(tx) } }
+            kit.transactions(from?.uid, getBitcoinTransactionTypeFilter(transactionType), limit)
+                .await()
+                .map { tx -> transactionRecord(tx) }
         } catch (e: UnsupportedFilterException) {
-            Single.just(listOf())
+            listOf()
         }
     }
 

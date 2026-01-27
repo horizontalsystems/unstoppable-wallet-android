@@ -48,21 +48,19 @@ class TronTransactionsAdapter(
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
         get() = tronKit.syncStateFlow.asFlowable().map {}
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Single<List<TransactionRecord>> {
-        return rxSingle {
-            tronKit.getFullTransactionsBefore(
-                getFilters(token, transactionType, address),
-                from?.transactionHash?.hexStringToByteArray(),
-                limit
-            ).map {
-                transactionConverter.transactionRecord(it)
-            }
+    ): List<TransactionRecord> {
+        return tronKit.getFullTransactionsBefore(
+            getFilters(token, transactionType, address),
+            from?.transactionHash?.hexStringToByteArray(),
+            limit
+        ).map {
+            transactionConverter.transactionRecord(it)
         }
     }
 

@@ -41,24 +41,22 @@ class StellarTransactionsAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = Flowable.empty()
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Single<List<TransactionRecord>> = try {
+    ): List<TransactionRecord> = try {
         val tagQuery = getTagQuery(token, transactionType, address)
         val beforeId = (from as StellarTransactionRecord?)?.operation?.id
 
-        rxSingle {
-            stellarKit.operationsBefore(tagQuery, fromId = beforeId, limit = limit)
-                .map {
-                    transactionConverter.convert(it)
-                }
-        }
+        stellarKit.operationsBefore(tagQuery, fromId = beforeId, limit = limit)
+            .map {
+                transactionConverter.convert(it)
+            }
     } catch (e: NotSupportedException) {
-        Single.just(listOf())
+        listOf()
     }
 
     override fun getTransactionsAfter(fromTransactionId: String?): Single<List<TransactionRecord>> {
