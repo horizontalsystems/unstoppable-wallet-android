@@ -101,7 +101,7 @@ class SendTronViewModel(
         proceedEnabled = amountState.canBeSend && addressState.canBeSend,
         sendEnabled = feeState is FeeState.Success && cautions.isEmpty(),
         feeViewState = feeState.viewState,
-        cautions = cautions,
+        cautions = cautions.map { it.toCautionViewItem() },
         showAddressInput = showAddressInput,
         address = address
     )
@@ -150,7 +150,9 @@ class SendTronViewModel(
         cautions = if (trxAmount + totalFee > availableBalance) {
             listOf(
                 HSCaution(
-                    TranslatableString.PlainString(
+                    s = TranslatableString.PlainString(Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance_Title)),
+                    type = HSCaution.Type.Error,
+                    description = TranslatableString.PlainString(
                         Translator.getString(
                             R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
                             feeToken.coin.code
@@ -161,7 +163,9 @@ class SendTronViewModel(
         } else if (sendToken == feeToken && confirmationData.amount <= BigDecimal.ZERO) {
             listOf(
                 HSCaution(
-                    TranslatableString.PlainString(
+                    s = TranslatableString.PlainString(Translator.getString(R.string.Error)),
+                    type = HSCaution.Type.Error,
+                    description = TranslatableString.PlainString(
                         Translator.getString(
                             R.string.Tron_ZeroAmountTrxNotAllowed,
                             sendToken.coin.code
