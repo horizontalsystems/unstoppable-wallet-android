@@ -1,15 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.settings.donate
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -25,10 +18,10 @@ import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 class DonateTokenSelectFragment : BaseComposeFragment() {
 
@@ -75,27 +68,15 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
 
 @Composable
 private fun DonateHeader(onClick: () -> Unit) {
-    VSpacer(12.dp)
-    CellUniversalLawrenceSection(
-        listOf({
-            RowUniversal(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                onClick = onClick
-            ) {
-                body_leah(
-                    text = stringResource(R.string.Settings_Donate_DonationAddresses),
-                    maxLines = 1,
-                )
-                Spacer(Modifier.weight(1f))
-                Image(
-                    modifier = Modifier.size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_arrow_right),
-                    contentDescription = null,
-                )
-            }
-        })
+    CellPrimary(
+        middle = {
+            CellMiddleInfo(title = stringResource(R.string.Settings_Donate_DonationAddresses).hs)
+        },
+        right = {
+            CellRightNavigation()
+        },
+        onClick = onClick
     )
-    VSpacer(32.dp)
 }
 
 @Preview
