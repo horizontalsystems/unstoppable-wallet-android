@@ -105,7 +105,7 @@ class MoneroTransactionsAdapter(
                     sentToSelf = false,
                     memo = transaction.notes,
                     source = wallet.transactionSource,
-                    txKey = transaction.txKey
+                    txKey = kit.getTxKey(transaction.hash)
                 )
             }
         }
