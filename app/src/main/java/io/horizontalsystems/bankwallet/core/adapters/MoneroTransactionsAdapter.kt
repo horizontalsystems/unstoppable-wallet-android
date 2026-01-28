@@ -14,6 +14,9 @@ import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.monerokit.model.TransactionInfo
 import io.horizontalsystems.monerokit.model.TransactionInfo.Direction
 import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.rx2.asFlowable
 
 class MoneroTransactionsAdapter(
@@ -47,12 +50,13 @@ class MoneroTransactionsAdapter(
             .map { getTransactionRecord(it) }
     }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?
-    ): Flowable<List<TransactionRecord>> {
+    ): Flow<List<TransactionRecord>> {
         return transactionsProvider.getNewTransactionsFlowable(transactionType)
+            .asFlow()
             .map { transactions ->
                 transactions.map { getTransactionRecord(it) }
             }

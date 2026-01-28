@@ -53,8 +53,11 @@ import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Instant
 import java.math.BigDecimal
@@ -217,12 +220,13 @@ class ZcashAdapter(
             .map { getTransactionRecord(it) }
     }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> {
+    ): Flow<List<TransactionRecord>> {
         return transactionsProvider.getNewTransactionsFlowable(transactionType, address)
+            .asFlow()
             .map { transactions ->
                 transactions.map { getTransactionRecord(it) }
             }

@@ -11,6 +11,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.solanakit.SolanaKit
 import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
@@ -74,24 +75,24 @@ class SolanaTransactionsAdapter(
         return transactions.map { solanaTransactionConverter.transactionRecord(it) }
     }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> = when (address) {
-        null -> getTransactionRecordsFlowable(token, transactionType)
-        else -> Flowable.empty()
+    ): Flow<List<TransactionRecord>> = when (address) {
+        null -> getTransactionRecordsFlow(token, transactionType)
+        else -> emptyFlow()
     }
 
-    private fun getTransactionRecordsFlowable(token: Token?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+    private fun getTransactionRecordsFlow(token: Token?, transactionType: FilterTransactionType): Flow<List<TransactionRecord>> {
         val incoming: Boolean? = when (transactionType) {
             FilterTransactionType.All -> null
             FilterTransactionType.Incoming -> true
             FilterTransactionType.Outgoing -> false
-            else -> return Flowable.just(listOf())
+            else -> return emptyFlow()
         }
 
-        val transactionsFlow =  when {
+        val transactionsFlow = when {
             token == null -> kit.allTransactionsFlow(incoming)
             token.type is TokenType.Native -> kit.solTransactionsFlow(incoming)
             token.type is TokenType.Spl -> kit.splTransactionsFlow((token.type as TokenType.Spl).address, incoming)
@@ -100,7 +101,7 @@ class SolanaTransactionsAdapter(
 
         return transactionsFlow.map { txList ->
             txList.map { solanaTransactionConverter.transactionRecord(it) }
-        }.asFlowable()
+        }
     }
 
     private fun convertToAdapterState(syncState: SolanaKit.SyncState): AdapterState =

@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.reactive.asFlow
 import java.util.concurrent.CopyOnWriteArrayList
 
 class TransactionAdapterWrapper(
@@ -65,8 +64,7 @@ class TransactionAdapterWrapper(
 
         updatesJob = coroutineScope.launch {
             transactionsAdapter
-                .getTransactionRecordsFlowable(transactionWallet.token, transactionType, address)
-                .asFlow()
+                .getTransactionRecordsFlow(transactionWallet.token, transactionType, address)
                 .collect {
                     transactionRecords.clear()
                     allLoaded = false

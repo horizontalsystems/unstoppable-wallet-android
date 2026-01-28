@@ -17,7 +17,9 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.Flowable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.rx2.await
 
 class EvmTransactionsAdapter(
@@ -71,20 +73,20 @@ class EvmTransactionsAdapter(
             .map { tx -> transactionConverter.transactionRecord(tx) }
     }
 
-    override fun getTransactionsAfter(fromTransactionId: String?): Single<List<TransactionRecord>> {
-        return evmKit.getFullTransactionsAfterSingle(fromTransactionId?.hexStringToByteArrayOrNull()).map {
-            it.map { tx -> transactionConverter.transactionRecord(tx) }
-        }
+    override suspend fun getTransactionsAfter(fromTransactionId: String?): List<TransactionRecord> {
+        return evmKit.getFullTransactionsAfterSingle(fromTransactionId?.hexStringToByteArrayOrNull())
+            .await()
+            .map { tx -> transactionConverter.transactionRecord(tx) }
     }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> {
-        return evmKit.getFullTransactionsFlowable(getFilters(token, transactionType, address)).map {
-            it.map { tx -> transactionConverter.transactionRecord(tx) }
-        }
+    ): Flow<List<TransactionRecord>> {
+        return evmKit.getFullTransactionsFlowable(getFilters(token, transactionType, address))
+            .asFlow()
+            .map { it.map { tx -> transactionConverter.transactionRecord(tx) } }
     }
 
     private fun convertToAdapterState(syncState: EthereumKit.SyncState): AdapterState =
