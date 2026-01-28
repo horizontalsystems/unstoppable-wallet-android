@@ -292,17 +292,17 @@ interface ITransactionsAdapter {
         address: String?,
     ): List<TransactionRecord>
 
-    fun getTransactionsAfter(
+    suspend fun getTransactionsAfter(
         fromTransactionId: String?
-    ): Single<List<TransactionRecord>> = Single.just(emptyList())
+    ): List<TransactionRecord> = emptyList()
 
     fun getRawTransaction(transactionHash: String): String? = null
 
-    fun getTransactionRecordsFlowable(
+    fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?
-    ): Flowable<List<TransactionRecord>>
+    ): Flow<List<TransactionRecord>>
 
     fun getTransactionUrl(transactionHash: String): String
 }

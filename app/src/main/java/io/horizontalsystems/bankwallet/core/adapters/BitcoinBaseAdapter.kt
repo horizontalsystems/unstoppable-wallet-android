@@ -42,11 +42,14 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 import java.util.Date
 
@@ -107,16 +110,16 @@ abstract class BitcoinBaseAdapter(
     final override val unspentOutputs: List<UnspentOutputInfo>
         get() = kit.getUnspentOutputs(UtxoFilters())
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> = when (address) {
-        null -> getTransactionRecordsFlowable(transactionType)
-        else -> Flowable.empty()
+    ): Flow<List<TransactionRecord>> = when (address) {
+        null -> getTransactionRecordsFlow(transactionType)
+        else -> emptyFlow()
     }
 
-    private fun getTransactionRecordsFlowable(transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+    private fun getTransactionRecordsFlow(transactionType: FilterTransactionType): Flow<List<TransactionRecord>> {
         val observable: Observable<List<TransactionRecord>> = when (transactionType) {
             FilterTransactionType.All -> {
                 transactionRecordsSubject
@@ -149,7 +152,7 @@ abstract class BitcoinBaseAdapter(
             }
         }
 
-        return observable.toFlowable(BackpressureStrategy.BUFFER)
+        return observable.toFlowable(BackpressureStrategy.BUFFER).asFlow()
     }
 
     override val debugInfo: String = ""

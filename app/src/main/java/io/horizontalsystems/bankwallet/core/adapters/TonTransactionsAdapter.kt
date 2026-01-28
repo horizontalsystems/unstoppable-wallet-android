@@ -18,6 +18,8 @@ import io.horizontalsystems.tonkit.Address
 import io.horizontalsystems.tonkit.models.Tag
 import io.horizontalsystems.tonkit.models.TagQuery
 import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
 
@@ -85,11 +87,11 @@ class TonTransactionsAdapter(
         )
     }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> = try {
+    ): Flow<List<TransactionRecord>> = try {
         val tagQuery = getTagQuery(token, transactionType, address)
 
         tonKit
@@ -99,10 +101,9 @@ class TonTransactionsAdapter(
                     tonTransactionConverter.createTransactionRecord(it)
                 }
             }
-            .asFlowable()
 
     } catch (e: NotSupportedException) {
-        Flowable.empty()
+        emptyFlow()
     }
 
     override fun getTransactionUrl(transactionHash: String): String {

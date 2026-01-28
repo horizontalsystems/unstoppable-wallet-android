@@ -15,10 +15,9 @@ import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.models.TransactionTag
 import io.horizontalsystems.tronkit.network.Network
 import io.reactivex.Flowable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
-import kotlinx.coroutines.rx2.rxSingle
 
 class TronTransactionsAdapter(
     val tronKitWrapper: TronKitWrapper,
@@ -64,25 +63,22 @@ class TronTransactionsAdapter(
         }
     }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> {
+    ): Flow<List<TransactionRecord>> {
         return tronKit.getFullTransactionsFlow(getFilters(token, transactionType, address))
             .map { transactions ->
                 transactions.map { transactionConverter.transactionRecord(it) }
             }
-            .asFlowable()
     }
 
-    override fun getTransactionsAfter(fromTransactionId: String?): Single<List<TransactionRecord>> {
-        return rxSingle {
-            tronKit.getFullTransactionsAfter(listOf(), fromTransactionId?.hexStringToByteArrayOrNull())
-                .map {
-                    transactionConverter.transactionRecord(it)
-                }
-        }
+    override suspend fun getTransactionsAfter(fromTransactionId: String?): List<TransactionRecord> {
+        return tronKit.getFullTransactionsAfter(listOf(), fromTransactionId?.hexStringToByteArrayOrNull())
+            .map {
+                transactionConverter.transactionRecord(it)
+            }
     }
 
     private fun convertToAdapterState(syncState: TronKit.SyncState): AdapterState =

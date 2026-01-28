@@ -191,7 +191,7 @@ class TransactionInfoService(
         _transactionInfoItemFlow.update { transactionInfoItem }
 
         launch {
-            adapter.getTransactionRecordsFlowable(null, FilterTransactionType.All, null).asFlow()
+            adapter.getTransactionRecordsFlow(null, FilterTransactionType.All, null)
                 .collect { transactionRecords ->
                     val record = transactionRecords.find { it == transactionRecord }
 

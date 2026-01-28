@@ -64,7 +64,7 @@ class SpamManager(
                 return@launch
             }
             val spamScanState = spamAddressStorage.getSpamScanState(source.blockchain.type, source.account.id)
-            val transactions = adapter.getTransactionsAfter(spamScanState?.lastSyncedTransactionId).blockingGet()
+            val transactions = adapter.getTransactionsAfter(spamScanState?.lastSyncedTransactionId)
             val lastSyncedTransactionId = handle(transactions, source)
             lastSyncedTransactionId?.let {
                 spamAddressStorage.save(SpamScanState(source.blockchain.type, source.account.id, lastSyncedTransactionId))
