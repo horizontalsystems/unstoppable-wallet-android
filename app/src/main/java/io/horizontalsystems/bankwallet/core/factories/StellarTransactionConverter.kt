@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.core.factories
 
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord.Type
-import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.tokenIconPlaceholder
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
@@ -20,7 +20,7 @@ class StellarTransactionConverter(
     private val coinManager: ICoinManager,
     private val baseToken: Token,
 ) {
-    fun convert(operation: Operation): StellarTransactionRecord {
+    suspend fun convert(operation: Operation): StellarTransactionRecord {
         var type: Type = Type.Unsupported(operation.type)
 
         operation.payment?.let { payment ->
@@ -41,6 +41,14 @@ class StellarTransactionConverter(
 
             when {
                 outgoing -> {
+                    // Cache outgoing transaction for spam detection
+                    val tokenUid = "${source.blockchain.type.uid}:native"
+                    App.spamManager.addOutgoingTransaction(
+                        tokenUid,
+                        payment.to,
+                        operation.timestamp,
+                        null
+                    )
                     type = Type.Send(
                         value = transactionValue,
                         to = payment.to,
@@ -74,6 +82,14 @@ class StellarTransactionConverter(
 
             when {
                 outgoing -> {
+                    // Cache outgoing transaction for spam detection
+                    val tokenUid = "${source.blockchain.type.uid}:native"
+                    App.spamManager.addOutgoingTransaction(
+                        tokenUid,
+                        accountCreated.account,
+                        operation.timestamp,
+                        null
+                    )
                     type = Type.Send(
                         value = transactionValue,
                         to = accountCreated.account,
@@ -117,7 +133,14 @@ class StellarTransactionConverter(
         }
 
         val eventsForPhishingCheck = StellarTransactionRecord.eventsForPhishingCheck(type)
-        val spam = SpamManager.isSpam(eventsForPhishingCheck)
+        val tokenUid = "${source.blockchain.type.uid}:native"
+        val spam = App.spamManager.isSpam(
+            eventsForPhishingCheck,
+            operation.timestamp,
+            null,
+            tokenUid,
+            source
+        )
 
         return StellarTransactionRecord(baseToken, source, operation, type, spam)
     }

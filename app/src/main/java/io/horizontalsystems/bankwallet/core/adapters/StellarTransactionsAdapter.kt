@@ -23,6 +23,7 @@ import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.rx2.asFlowable
 
 class StellarTransactionsAdapter(
@@ -107,7 +108,7 @@ class StellarTransactionsAdapter(
             .operationFlow(tagQuery)
             .map { operationInfo ->
                 operationInfo.operations.map {
-                    transactionConverter.convert(it)
+                    runBlocking { transactionConverter.convert(it) }
                 }
             }
     } catch (e: NotSupportedException) {
