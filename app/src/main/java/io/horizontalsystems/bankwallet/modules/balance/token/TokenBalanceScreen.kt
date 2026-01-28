@@ -161,7 +161,7 @@ fun TokenBalanceScreen(
                             title = TranslatableString.PlainString(uiState.attentionIcon.caution.text),
                             tint = color,
                             onClick = {
-                                if(uiState.attentionIcon.type == AttentionIconType.SyncError) {
+                                if (uiState.attentionIcon.type == AttentionIconType.SyncError) {
                                     openSyncErrorDialog(uiState, navController)
                                 } else if (uiState.attentionIcon.type == AttentionIconType.TronNotActive) {
                                     isTronAlertVisible = true
@@ -515,6 +515,13 @@ private fun TokenBalanceHeader(
             balanceViewItem = balanceViewItem,
             showBottomSheet = showBottomSheet,
         )
+
+        balanceViewItem.birthdayHeight?.let { birthdayHeight ->
+            BirthdayHeightCell(
+                birthdayHeight = birthdayHeight,
+                onClick = { }
+            )
+        }
     }
 }
 
@@ -580,6 +587,25 @@ private fun LockedBalanceSection(
     }
 }
 
+@Composable
+private fun BirthdayHeightCell(
+    birthdayHeight: Long,
+    onClick: () -> Unit
+) {
+    CellPrimary(
+        middle = {
+            CellMiddleInfo(eyebrow = stringResource(R.string.Restore_BirthdayHeight).hs)
+        },
+        right = {
+            CellRightNavigation(
+                subtitle = birthdayHeight.toString().hs(color = ComposeAppTheme.colors.leah)
+            )
+        },
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        onClick = onClick
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InfoBottomSheet(
@@ -616,7 +642,7 @@ fun InfoBottomSheet(
 fun ZcashLockedBalanceBottomSheet(
     sheetState: SheetState,
     wallet: Wallet,
-    title: String ,
+    title: String,
     info: String,
     onShieldClick: (Wallet) -> Unit,
     onClose: () -> Unit
