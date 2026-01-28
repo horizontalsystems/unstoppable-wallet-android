@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
@@ -124,7 +123,6 @@ class PoisoningScorer {
                     recentOutgoingTxs = recentOutgoingTxs,
                     spamCoinLimits = spamCoinLimits
                 )
-                Log.e("TAG", "detect ${nativeResult.isSpam} totalNativeValue: ${totalNativeValue.toPlainString()} ${nativeResult.address} : reason: ${nativeResult.reasons}")
                 if (nativeResult.isSpam) {
                     spamAddresses.addAll(nativeAddresses)
                 }
@@ -188,41 +186,51 @@ class PoisoningScorer {
             }
         }
 
-        // Mimic address and time correlation scoring (add points only once per category)
-        var hasMimicMatch = false
-        var hasBlockCorrelation = false
+        // Time and mimic correlation scoring (add points only once per category)
+        // Order: fastest checks first (time/block), slowest last (mimic)
         var hasTimeCorrelation = false
+        var hasBlockCorrelation = false
+        var hasMimicMatch = false
 
         for (outgoingTx in recentOutgoingTxs) {
-            // Mimic address check
-            if (!hasMimicMatch && isMimicAddress(address, outgoingTx.recipientAddress)) {
-                score += POINTS_MIMIC_ADDRESS
-                reasons.add("Mimic address: similar to ${outgoingTx.recipientAddress}")
-                hasMimicMatch = true
-            }
-
-            // Time correlation - within 5 blocks
-            if (!hasBlockCorrelation && incomingBlockHeight != null && outgoingTx.blockHeight != null) {
-                val blockDiff = kotlin.math.abs(incomingBlockHeight - outgoingTx.blockHeight)
-                if (blockDiff <= BLOCK_COUNT_THRESHOLD) {
-                    score += POINTS_TIME_WITHIN_5_BLOCKS
-                    reasons.add("Time correlation: within $blockDiff blocks")
-                    hasBlockCorrelation = true
-                }
-            }
-
-            // Time correlation - within 20 minutes
+            // Time correlation - within 20 minutes (fastest check - simple long comparison)
             if (!hasTimeCorrelation) {
                 val timeDiff = kotlin.math.abs(incomingTimestamp - outgoingTx.timestamp)
                 if (timeDiff <= TWENTY_MINUTES_SECONDS) {
                     score += POINTS_TIME_WITHIN_20_MINUTES
                     reasons.add("Time correlation: within ${timeDiff}s")
                     hasTimeCorrelation = true
+                    if (score > SPAM_THRESHOLD) {
+                        return ScoringResult(address, score, false, reasons)
+                    }
+                }
+            }
+
+            // Block correlation - within 5 blocks (fast - integer comparison)
+            if (!hasBlockCorrelation && incomingBlockHeight != null && outgoingTx.blockHeight != null) {
+                val blockDiff = kotlin.math.abs(incomingBlockHeight - outgoingTx.blockHeight)
+                if (blockDiff <= BLOCK_COUNT_THRESHOLD) {
+                    score += POINTS_TIME_WITHIN_5_BLOCKS
+                    reasons.add("Time correlation: within $blockDiff blocks")
+                    hasBlockCorrelation = true
+                    if (score > SPAM_THRESHOLD) {
+                        return ScoringResult(address, score, false, reasons)
+                    }
+                }
+            }
+
+            // Mimic address check (slowest - string operations, do last)
+            if (!hasMimicMatch && isMimicAddress(address, outgoingTx.recipientAddress)) {
+                score += POINTS_MIMIC_ADDRESS
+                reasons.add("Mimic address: similar to ${outgoingTx.recipientAddress}")
+                hasMimicMatch = true
+                if (score > SPAM_THRESHOLD) {
+                    return ScoringResult(address, score, false, reasons)
                 }
             }
 
             // Early exit if all categories matched
-            if (hasMimicMatch && hasBlockCorrelation && hasTimeCorrelation) break
+            if (hasTimeCorrelation && hasBlockCorrelation && hasMimicMatch) break
         }
 
         return ScoringResult(address, score, false, reasons)
@@ -264,42 +272,57 @@ class PoisoningScorer {
             }
         }
 
-        // Check each address for mimic pattern and time correlation (add points only once per category)
-        var hasMimicMatch = false
-        var hasBlockCorrelation = false
+        // Early exit if already spam from zero/dust alone
+        if (score > SPAM_THRESHOLD) {
+            return ScoringResult(addresses.firstOrNull(), score, false, reasons)
+        }
+
+        // Check each address for time/mimic correlation (add points only once per category)
+        // Order: fastest checks first (time/block), slowest last (mimic)
         var hasTimeCorrelation = false
+        var hasBlockCorrelation = false
+        var hasMimicMatch = false
 
         outer@ for (address in addresses) {
             for (outgoingTx in recentOutgoingTxs) {
-                // Mimic address check
-                if (!hasMimicMatch && isMimicAddress(address, outgoingTx.recipientAddress)) {
-                    score += POINTS_MIMIC_ADDRESS
-                    reasons.add("Mimic address: $address similar to ${outgoingTx.recipientAddress}")
-                    hasMimicMatch = true
-                }
-
-                // Time correlation - within 5 blocks
-                if (!hasBlockCorrelation && incomingBlockHeight != null && outgoingTx.blockHeight != null) {
-                    val blockDiff = kotlin.math.abs(incomingBlockHeight - outgoingTx.blockHeight)
-                    if (blockDiff <= BLOCK_COUNT_THRESHOLD) {
-                        score += POINTS_TIME_WITHIN_5_BLOCKS
-                        reasons.add("Time correlation: within $blockDiff blocks")
-                        hasBlockCorrelation = true
-                    }
-                }
-
-                // Time correlation - within 20 minutes
+                // Time correlation - within 20 minutes (fastest check)
                 if (!hasTimeCorrelation) {
                     val timeDiff = kotlin.math.abs(incomingTimestamp - outgoingTx.timestamp)
                     if (timeDiff <= TWENTY_MINUTES_SECONDS) {
                         score += POINTS_TIME_WITHIN_20_MINUTES
                         reasons.add("Time correlation: within ${timeDiff}s")
                         hasTimeCorrelation = true
+                        if (score > SPAM_THRESHOLD) {
+                            return ScoringResult(addresses.firstOrNull(), score, false, reasons)
+                        }
+                    }
+                }
+
+                // Block correlation - within 5 blocks (fast)
+                if (!hasBlockCorrelation && incomingBlockHeight != null && outgoingTx.blockHeight != null) {
+                    val blockDiff = kotlin.math.abs(incomingBlockHeight - outgoingTx.blockHeight)
+                    if (blockDiff <= BLOCK_COUNT_THRESHOLD) {
+                        score += POINTS_TIME_WITHIN_5_BLOCKS
+                        reasons.add("Time correlation: within $blockDiff blocks")
+                        hasBlockCorrelation = true
+                        if (score > SPAM_THRESHOLD) {
+                            return ScoringResult(addresses.firstOrNull(), score, false, reasons)
+                        }
+                    }
+                }
+
+                // Mimic address check (slowest - string operations, do last)
+                if (!hasMimicMatch && isMimicAddress(address, outgoingTx.recipientAddress)) {
+                    score += POINTS_MIMIC_ADDRESS
+                    reasons.add("Mimic address: $address similar to ${outgoingTx.recipientAddress}")
+                    hasMimicMatch = true
+                    if (score > SPAM_THRESHOLD) {
+                        return ScoringResult(addresses.firstOrNull(), score, false, reasons)
                     }
                 }
 
                 // Early exit if all categories matched
-                if (hasMimicMatch && hasBlockCorrelation && hasTimeCorrelation) break@outer
+                if (hasTimeCorrelation && hasBlockCorrelation && hasMimicMatch) break@outer
             }
         }
 
