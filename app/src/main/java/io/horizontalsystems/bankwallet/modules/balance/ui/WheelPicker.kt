@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.FlingBehavior
+import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,7 +39,16 @@ fun WheelPicker(
     }
 
     val lazyListState = rememberLazyListState(initialFirstVisibleItemIndex = startIndex)
-    val snapFlingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState)
+    val baseSnapFlingBehavior = rememberSnapFlingBehavior(lazyListState = lazyListState)
+    val snapFlingBehavior = remember(baseSnapFlingBehavior) {
+        object : FlingBehavior {
+            override suspend fun ScrollScope.performFling(initialVelocity: Float): Float {
+                return with(baseSnapFlingBehavior) {
+                    performFling(initialVelocity * 0.6f)
+                }
+            }
+        }
+    }
 
     LaunchedEffect(lazyListState.isScrollInProgress) {
         if (!lazyListState.isScrollInProgress) {
