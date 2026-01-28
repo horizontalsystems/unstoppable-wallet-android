@@ -34,7 +34,8 @@ data class BalanceViewItem(
     val isWatchAccount: Boolean,
     val warning: WarningText?,
     val balanceHidden: Boolean,
-    val attentionIcon: AttentionIcon?
+    val attentionIcon: AttentionIcon?,
+    val birthdayHeight: Long? = null
 )
 
 data class WarningText(
@@ -54,7 +55,7 @@ data class AttentionIcon(
     val type: AttentionIconType,
 )
 
-enum class AttentionIconType{
+enum class AttentionIconType {
     SyncError, TronNotActive
 }
 
@@ -96,6 +97,7 @@ data class DeemedValue<T>(val value: T, val dimmed: Boolean = false)
 enum class SyncingProgressType {
     Spinner, ProgressWithRing
 }
+
 data class SyncingProgress(val type: SyncingProgressType?, val progress: Int?)
 
 class BalanceViewItemFactory {
@@ -110,12 +112,14 @@ class BalanceViewItemFactory {
                     SyncingProgress(SyncingProgressType.Spinner, progressValue)
                 }
             }
+
             is AdapterState.Downloading -> {
                 val progressValue = state.progress ?: getDefaultSyncingProgress(blockchainType)
                 SyncingProgress(SyncingProgressType.ProgressWithRing, progressValue)
             }
+
             is AdapterState.Connecting -> SyncingProgress(SyncingProgressType.Spinner, 10)
-            is AdapterState.SearchingTxs -> SyncingProgress(SyncingProgressType.Spinner,10)
+            is AdapterState.SearchingTxs -> SyncingProgress(SyncingProgressType.Spinner, 10)
             else -> SyncingProgress(null, null)
         }
     }
@@ -128,6 +132,7 @@ class BalanceViewItemFactory {
         BlockchainType.Dash,
         BlockchainType.Zcash,
         BlockchainType.Monero -> true
+
         else -> false
     }
 
@@ -176,9 +181,11 @@ class BalanceViewItemFactory {
                             text
                         }
                     }
+
                     else -> Translator.getString(R.string.Balance_Syncing)
                 }
             }
+
             is AdapterState.Downloading -> {
                 if (withDetails) {
                     val progressValue = state.progress ?: 10
@@ -187,6 +194,7 @@ class BalanceViewItemFactory {
                     Translator.getString(R.string.Balance_Downloading)
                 }
             }
+
             is AdapterState.Connecting -> Translator.getString(R.string.WalletConnect_Status_Connecting)
             is AdapterState.SearchingTxs -> Translator.getString(R.string.Balance_SearchingTransactions)
             else -> null
@@ -202,7 +210,7 @@ class BalanceViewItemFactory {
 
         val text = when (state) {
             is AdapterState.Syncing -> {
-                if (state.lastBlockDate != null && state.blocksRemained == null ) {
+                if (state.lastBlockDate != null && state.blocksRemained == null) {
                     Translator.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(state.lastBlockDate, "MMM d, yyyy"))
                 } else {
                     null
