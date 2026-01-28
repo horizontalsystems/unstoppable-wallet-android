@@ -81,7 +81,6 @@ class DefenseSystemFeatureDialog : BaseComposableBottomSheetFragment() {
                     DefenseSystemFeatureScreen(
                         navController,
                         input.feature,
-                        input.showAllFeaturesButton
                     )
                 }
             }
@@ -89,7 +88,7 @@ class DefenseSystemFeatureDialog : BaseComposableBottomSheetFragment() {
     }
 
     @Parcelize
-    data class Input(val feature: PremiumFeature, val showAllFeaturesButton: Boolean = false) :
+    data class Input(val feature: PremiumFeature) :
         Parcelable
 }
 
@@ -161,7 +160,6 @@ enum class PremiumFeature(
 private fun DefenseSystemFeatureScreen(
     navController: NavController,
     feature: PremiumFeature,
-    showAllFeaturesButton: Boolean
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val features = remember { PremiumFeature.entries.toTypedArray() }
@@ -254,19 +252,17 @@ private fun DefenseSystemFeatureScreen(
                 )
             }
 
-            if (showAllFeaturesButton) {
-                subhead1_jacob(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            navController.popBackStack()
-                            navController.slideFromBottom(R.id.buySubscriptionDialog)
-                        }
-                        .padding(horizontal = 32.dp, vertical = 12.dp),
-                    text = stringResource(R.string.Premium_OnePurchaseUnlocksAllPremium),
-                    textAlign = TextAlign.Center
-                )
-            }
+            subhead1_jacob(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        navController.popBackStack()
+                        navController.slideFromBottom(R.id.buySubscriptionDialog)
+                    }
+                    .padding(horizontal = 32.dp, vertical = 12.dp),
+                text = stringResource(R.string.Premium_OnePurchaseUnlocksAllPremium),
+                textAlign = TextAlign.Center
+            )
         }
         ButtonsStack {
             HSButton(

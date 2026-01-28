@@ -68,7 +68,7 @@ fun NavController.paidAction(paidAction: IPaidAction, block: () -> Unit) {
         val premiumFeature = PremiumFeature.getFeature(paidAction)
         slideFromBottom(
             R.id.defenseSystemFeatureDialog,
-            DefenseSystemFeatureDialog.Input(premiumFeature, true)
+            DefenseSystemFeatureDialog.Input(premiumFeature)
         )
     }
 }
