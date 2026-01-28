@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
-import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitWrapper
 import io.horizontalsystems.bankwallet.core.tokenIconPlaceholder
 import io.horizontalsystems.bankwallet.entities.TransactionValue
@@ -43,7 +43,7 @@ class TronTransactionConverter(
     private val tronKit: TronKit
         get() = tronKitWrapper.tronKit
 
-    fun transactionRecord(fullTransaction: FullTransaction): TronTransactionRecord {
+    suspend fun transactionRecord(fullTransaction: FullTransaction): TronTransactionRecord {
         val transaction = fullTransaction.transaction
 
         val transactionRecord = when (val decoration = fullTransaction.decoration) {
@@ -52,7 +52,14 @@ class TronTransactionConverter(
                     is TransferContract -> {
                         if (contract.ownerAddress != tronKit.address) {
                             val transactionValue = baseCoinValue(contract.amount, false)
-                            val spam = SpamManager.isSpam(listOf(TransferEvent(contract.ownerAddress.base58, transactionValue)))
+                            val tokenUid = "${source.blockchain.type.uid}:native"
+                            val spam = App.spamManager.isSpam(
+                                listOf(TransferEvent(contract.ownerAddress.base58, transactionValue)),
+                                transaction.timestamp / 1000,
+                                transaction.blockNumber?.toInt(),
+                                tokenUid,
+                                source
+                            )
                             TronIncomingTransactionRecord(
                                 transaction = transaction,
                                 baseToken = baseToken,
@@ -62,6 +69,14 @@ class TronTransactionConverter(
                                 spam = spam
                             )
                         } else {
+                            // Cache outgoing transaction for spam detection
+                            val outgoingTokenUid = "${source.blockchain.type.uid}:native"
+                            App.spamManager.addOutgoingTransaction(
+                                outgoingTokenUid,
+                                contract.toAddress.base58,
+                                transaction.timestamp / 1000,
+                                transaction.blockNumber?.toInt()
+                            )
                             TronOutgoingTransactionRecord(
                                 transaction = transaction,
                                 baseToken = baseToken,
@@ -78,6 +93,14 @@ class TronTransactionConverter(
             }
 
             is OutgoingTrc20Decoration -> {
+                // Cache outgoing transaction for spam detection
+                val tokenUid = "${source.blockchain.type.uid}:${decoration.contractAddress.base58}"
+                App.spamManager.addOutgoingTransaction(
+                    tokenUid,
+                    decoration.to.base58,
+                    transaction.timestamp / 1000,
+                    transaction.blockNumber?.toInt()
+                )
                 TronOutgoingTransactionRecord(
                     transaction = transaction,
                     baseToken = baseToken,
@@ -125,7 +148,14 @@ class TronTransactionConverter(
                     }
 
                     decoration.fromAddress != address && decoration.toAddress != address -> {
-                        val spam = SpamManager.isSpam(incomingEvents + outgoingEvents)
+                        val tokenUid = "${source.blockchain.type.uid}:native"
+                        val spam = App.spamManager.isSpam(
+                            incomingEvents + outgoingEvents,
+                            transaction.timestamp / 1000,
+                            transaction.blockNumber?.toInt(),
+                            tokenUid,
+                            source
+                        )
 
                         TronExternalContractCallTransactionRecord(
                             transaction, baseToken, source,
