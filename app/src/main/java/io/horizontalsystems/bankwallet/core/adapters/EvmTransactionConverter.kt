@@ -70,6 +70,7 @@ class EvmTransactionConverter(
                 val transactionValue = baseCoinValue(decoration.value, false)
                 val tokenUid = "${source.blockchain.type.uid}:native"
                 val isSpam = App.spamManager.isSpam(
+                    transaction.hash,
                     listOf(TransferEvent(decoration.from.eip55, transactionValue)),
                     transaction.timestamp,
                     transaction.blockNumber?.toInt(),
@@ -247,6 +248,7 @@ class EvmTransactionConverter(
                     transaction.from != address && transaction.to != address -> {
                         val tokenUid = "${source.blockchain.type.uid}:native"
                         val isSpam = App.spamManager.isSpam(
+                            transaction.hash,
                             incomingEvents + outgoingEvents,
                             transaction.timestamp,
                             transaction.blockNumber?.toInt(),
