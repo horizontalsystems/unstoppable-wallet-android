@@ -23,7 +23,6 @@ object TermsModule {
         TransactionsIrreversible("term_transactions_irreversible"),
         OpenSource("term_open_source"),
         LegalObligations("term_legal_obligations"),
-        ProhibitedUse("term_prohibited_use"),
         UserResponsibility("term_user_responsibility");
 
         val description: Int
@@ -36,7 +35,6 @@ object TermsModule {
                 TransactionsIrreversible -> R.string.SettingsTerms_TransactionsIrreversible
                 OpenSource -> R.string.SettingsTerms_OpenSource
                 LegalObligations -> R.string.SettingsTerms_LegalObligations
-                ProhibitedUse -> R.string.SettingsTerms_ProhibitedUse
                 UserResponsibility -> R.string.SettingsTerms_UserResponsibility
             }
     }
