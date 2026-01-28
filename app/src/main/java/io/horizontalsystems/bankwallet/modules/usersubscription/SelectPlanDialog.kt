@@ -43,7 +43,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.BadgeOrangeGradient
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -127,9 +126,6 @@ fun SelectPlanBottomSheet(
                 title = stringResource(R.string.Premium_SelectSubscription),
                 onCloseClick = onDismiss
             )
-            VSpacer(12.dp)
-
-            subhead_grey(stringResource(R.string.Premium_BlackFridayOfferEnds))
 
             VSpacer(12.dp)
 
