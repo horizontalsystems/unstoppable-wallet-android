@@ -1106,8 +1106,8 @@
     <string name="Appearance_HideBalanceTabButtons_Tip">Hide the Send, Receive, and Swap buttons from the Balance tab.</string>
     <string name="Appearance_AmountRounding">Amount Rounding</string>
     <string name="Appearance_AmountRounding_Tip">Display rounded balances and transaction amounts.</string>
-    <string name="Appearance_BalanceAutoHide">Balance Tab</string>
-    <string name="Appearance_BalanceAutoHide_Description">Hide the Send, Receive, and Swap buttons from the Balance tab.</string>
+    <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
+    <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance every time the app is opened.</string>
     <string name="Appearance_PriceChangeInterval">Price Change %</string>
     <string name="Appearance_PriceChangeInterval_Tip">Select the time period for token price change display.</string>
 
@@ -1244,15 +1244,14 @@
 
     <!--Setting_Terms-->
 
-    <string name="SettingsTerms_Backup">Securely back up the recovery phrase for each wallet. It\'s the only way to regain access to your funds if the app is deleted, lost or malfunctions. No one can restore it for you.</string>
+    <string name="SettingsTerms_Backup">Securely back up the recovery phrase for each wallet. It\'s the only way to regain access to your funds if the app is deleted or malfunctions. No one can restore it for you.</string>
     <string name="SettingsTerms_DisablingPin">Disabling your smartphone\'s unlock PIN (or passcode) wipes all wallets from the app. You\'ll need your recovery phrases to restore access.</string>
     <string name="SettingsTerms_PrivacyNotice">The app doesn\'t spy or collect data about your balances or transactions - we don\'t even know how many people use it. It only tracks anonymous usage patterns (pages opened, buttons tapped) to improve usability. You can turn this off in Settings → Privacy</string>
-    <string name="SettingsTerms_WeNotHoldingYourAssets">We do not hold your assets, access your private keys, or execute transactions on your behalf. The app does not provide brokerage, exchange, custody, escrow, or money-transmission services. All transactions are initiated, signed, and broadcast directly by you to public blockchain networks. We do not control, relay, modify, or process your transactions.</string>
-    <string name="SettingsTerms_MonetizationDisclosure">As part of its monetization model, the app earns small commissions from DEX swaps executed within the wallet.This helps us stay independent, open source, and free of VC money.</string>
+    <string name="SettingsTerms_WeNotHoldingYourAssets">We do not hold your assets, access your private keys, or execute transactions on your behalf. The app does not provide brokerage, exchange, custody, escrow, or money-transmission services. All transactions are initiated, signed, and broadcast directly by you to public blockchain networks.</string>
+    <string name="SettingsTerms_MonetizationDisclosure">As part of its monetization model, the app earns small commissions from DEX swaps executed within the wallet. This helps us stay independent, open source, and free of VC money.</string>
     <string name="SettingsTerms_TransactionsIrreversible">Blockchain transactions are irreversible. Always review transaction details before confirming.</string>
     <string name="SettingsTerms_OpenSource">The app is verifiably open source, with all source code published online. Everything stated above can be publicly verified by anyone.</string>
-    <string name="SettingsTerms_LegalObligations">You are solely responsible for the security of your funds, your conduct, and compliance with applicable laws in your jurisdiction. Use of the app does not exempt you from tax, financial reporting, or other legal obligations.</string>
-    <string name="SettingsTerms_ProhibitedUse">To maintain a safe ecosystem, you agree not to use the app for any illegal activity, including money laundering or sanction evasion, fraud, scams, hiding stolen assets, or the financing of prohibited organizations.</string>
+    <string name="SettingsTerms_LegalObligations">You are solely responsible for the security of your funds, your conduct, and compliance with applicable laws in your jurisdiction as well as globally.</string>
     <string name="SettingsTerms_UserResponsibility">By proceeding, you acknowledge that security of your funds and legal compliance are ultimately your responsibility.</string>
 
 
