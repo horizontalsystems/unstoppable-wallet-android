@@ -53,7 +53,9 @@ class TronTransactionConverter(
                         if (contract.ownerAddress != tronKit.address) {
                             val transactionValue = baseCoinValue(contract.amount, false)
                             val tokenUid = "${source.blockchain.type.uid}:native"
+                            val txHash = transaction.hashString.hexStringToByteArrayOrNull() ?: byteArrayOf()
                             val spam = App.spamManager.isSpam(
+                                txHash,
                                 listOf(TransferEvent(contract.ownerAddress.base58, transactionValue)),
                                 transaction.timestamp / 1000,
                                 transaction.blockNumber?.toInt(),
@@ -149,7 +151,9 @@ class TronTransactionConverter(
 
                     decoration.fromAddress != address && decoration.toAddress != address -> {
                         val tokenUid = "${source.blockchain.type.uid}:native"
+                        val txHash = transaction.hashString.hexStringToByteArrayOrNull() ?: byteArrayOf()
                         val spam = App.spamManager.isSpam(
+                            txHash,
                             incomingEvents + outgoingEvents,
                             transaction.timestamp / 1000,
                             transaction.blockNumber?.toInt(),
