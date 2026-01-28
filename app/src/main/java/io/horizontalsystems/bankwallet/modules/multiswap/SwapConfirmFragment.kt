@@ -232,7 +232,7 @@ private fun SwapConfirmInternal(
                     {
                         navController.slideFromBottom(
                             defenseSystemFeatureDialog,
-                            Input(PremiumFeature.getFeature(paidAction = message.requiredPaidAction), true)
+                            Input(PremiumFeature.getFeature(paidAction = message.requiredPaidAction))
                         )
                     }
                 }

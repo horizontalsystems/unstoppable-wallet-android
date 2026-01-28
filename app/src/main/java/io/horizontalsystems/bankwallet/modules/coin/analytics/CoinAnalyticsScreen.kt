@@ -306,7 +306,7 @@ private fun AnalyticsPreviewBlock(
         onClick = {
             navController.slideFromBottom(
                 R.id.defenseSystemFeatureDialog,
-                DefenseSystemFeatureDialog.Input(PremiumFeature.TokenInsightsFeature, true)
+                DefenseSystemFeatureDialog.Input(PremiumFeature.TokenInsightsFeature)
             )
             stat(
                 page = StatPage.CoinAnalytics,
