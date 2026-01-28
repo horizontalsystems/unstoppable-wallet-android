@@ -16,7 +16,6 @@ import io.horizontalsystems.monerokit.model.TransactionInfo.Direction
 import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.rx2.asFlowable
 
 class MoneroTransactionsAdapter(
@@ -55,8 +54,7 @@ class MoneroTransactionsAdapter(
         transactionType: FilterTransactionType,
         address: String?
     ): Flow<List<TransactionRecord>> {
-        return transactionsProvider.getNewTransactionsFlowable(transactionType)
-            .asFlow()
+        return transactionsProvider.getNewTransactionsFlow(transactionType)
             .map { transactions ->
                 transactions.map { getTransactionRecord(it) }
             }
