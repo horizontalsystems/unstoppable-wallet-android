@@ -1038,7 +1038,7 @@
     <!--Premium Screens-->
     <string name="Premium_Title">Premium</string>
     <string name="Premium_EnjoyFreePeriod">Enjoy the first %s FREE.</string>
-    <string name="Premium_CancelSubscriptionInfo">Cancel any time</string>
+    <string name="Premium_CancelSubscriptionInfo">You can cancel your Play Store subscription at any time.</string>
     <string name="Premium_GetFreePeriod">Get %s FREE</string>
     <string name="Premium_Subscribe">Subscribe</string>
     <string name="Premium_TryForFree">Try for FREE</string>
@@ -1083,7 +1083,6 @@
 
     <string name="Premium_HighlyRatedSecurity">Highly rated security, exceptional privacy, and a truly non-custodial wallet.</string>
     <string name="Premium_ApprovedBy">Approved and Audited By:</string>
-    <string name="Premium_BlackFridayOfferEnds">Black Friday offer ends on December 7</string>
 
     <string name="Premium_SubscriptionPeriod_Month">month</string>
     <string name="Premium_SubscriptionPeriod_Year">year</string>
