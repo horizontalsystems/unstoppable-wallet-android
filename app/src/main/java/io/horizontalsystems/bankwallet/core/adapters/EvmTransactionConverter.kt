@@ -235,6 +235,16 @@ class EvmTransactionConverter(
 
                 when {
                     transaction.from == address && contractAddress != null && value != null -> {
+                        // Cache outgoing ERC-20 transfers for spam detection
+                        outgoingEip20Transfers.forEach { transfer ->
+                            val tokenUid = "${source.blockchain.type.uid}:${transfer.contractAddress.eip55}"
+                            App.spamManager.addOutgoingTransaction(
+                                tokenUid,
+                                transfer.to.eip55,
+                                transaction.timestamp,
+                                transaction.blockNumber?.toInt()
+                            )
+                        }
                         ContractCallTransactionRecord(
                             transaction, baseToken, source,
                             contractAddress.eip55,
@@ -246,7 +256,10 @@ class EvmTransactionConverter(
                     }
 
                     transaction.from != address && transaction.to != address -> {
-                        val tokenUid = "${source.blockchain.type.uid}:native"
+                        // Extract tokenUid from incoming events for spam detection
+                        val tokenUid = incomingEip20Transfers.firstOrNull()?.let {
+                            "${source.blockchain.type.uid}:${it.contractAddress.eip55}"
+                        } ?: "${source.blockchain.type.uid}:native"
                         val isSpam = App.spamManager.isSpam(
                             transaction.hash,
                             incomingEvents + outgoingEvents,
