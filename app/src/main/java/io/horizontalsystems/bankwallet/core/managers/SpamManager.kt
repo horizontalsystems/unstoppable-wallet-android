@@ -10,34 +10,100 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRe
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
-import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronContractCallTransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
+
+private fun isEvmBlockchain(source: TransactionSource): Boolean {
+    return EvmBlockchainManager.blockchainTypes.contains(source.blockchain.type)
+}
 
 class SpamManager(
     private val localStorage: ILocalStorage,
     private val scannedTransactionStorage: ScannedTransactionStorage
 ) {
-    private var transactionAdapterManager: TransactionAdapterManager? = null
     private val poisoningScorer = PoisoningScorer()
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     // Cache for recent outgoing transactions per token (tokenUid -> list of outgoing tx info)
-    // Used for address poisoning detection without database calls
+    // Used for address poisoning detection - populated when outgoing transactions are processed
     private val outgoingTxCache = mutableMapOf<String, MutableList<PoisoningScorer.OutgoingTxInfo>>()
     private val cacheLock = Any()
+    private val initializedSources = mutableSetOf<TransactionSource>()
 
     companion object {
         private const val CACHE_SIZE_PER_TOKEN = 10
+        private const val INITIAL_CACHE_SIZE = 10
     }
 
     var hideSuspiciousTx = localStorage.hideSuspiciousTransactions
         private set
 
-    fun set(transactionAdapterManager: TransactionAdapterManager) {
-        this.transactionAdapterManager = transactionAdapterManager
+    /**
+     * Initialize cache with recent outgoing transactions for EVM sources.
+     * Called once per source on first run to pre-populate the cache.
+     */
+    fun initializeCache(transactionAdapterManager: TransactionAdapterManager) {
+        coroutineScope.launch {
+            transactionAdapterManager.adaptersMap.forEach { (source, adapter) ->
+                if (isEvmBlockchain(source) && !initializedSources.contains(source)) {
+                    initializeCacheForSource(source, adapter)
+                    initializedSources.add(source)
+                }
+            }
+        }
+    }
+
+    private suspend fun initializeCacheForSource(source: TransactionSource, adapter: ITransactionsAdapter) {
+        try {
+            val outgoingTxs = adapter.getTransactions(
+                from = null,
+                token = null,
+                limit = INITIAL_CACHE_SIZE,
+                transactionType = FilterTransactionType.Outgoing,
+                address = null
+            )
+
+            outgoingTxs.forEach { tx ->
+                extractOutgoingTxInfo(tx, source)?.let { (tokenUid, txInfo) ->
+                    synchronized(cacheLock) {
+                        val txList = outgoingTxCache.getOrPut(tokenUid) { mutableListOf() }
+                        if (txList.size < CACHE_SIZE_PER_TOKEN) {
+                            txList.add(txInfo)
+                        }
+                    }
+                }
+            }
+        } catch (_: Throwable) {
+            // Ignore errors during initialization
+        }
+    }
+
+    private fun extractOutgoingTxInfo(
+        tx: TransactionRecord,
+        source: TransactionSource
+    ): Pair<String, PoisoningScorer.OutgoingTxInfo>? {
+        return when (tx) {
+            is EvmOutgoingTransactionRecord -> {
+                val tokenUid = "${source.blockchain.type.uid}:native"
+                val txInfo = PoisoningScorer.OutgoingTxInfo(tx.to, tx.timestamp, tx.blockHeight)
+                tokenUid to txInfo
+            }
+            is ContractCallTransactionRecord -> {
+                tx.outgoingEvents.firstOrNull()?.let { event ->
+                    val tokenUid = "${source.blockchain.type.uid}:native"
+                    event.address?.let { address ->
+                        val txInfo = PoisoningScorer.OutgoingTxInfo(address, tx.timestamp, tx.blockHeight)
+                        tokenUid to txInfo
+                    }
+                }
+            }
+            else -> null
+        }
     }
 
     fun updateFilterHideSuspiciousTx(hide: Boolean) {
@@ -47,56 +113,6 @@ class SpamManager(
 
     fun findSpamByAddress(address: String): ScannedTransaction? {
         return scannedTransactionStorage.findSpamByAddress(address)
-    }
-
-    /**
-     * Fetch recent outgoing transactions for address poisoning comparison.
-     */
-    private suspend fun fetchRecentOutgoingTransactions(
-        adapter: ITransactionsAdapter,
-        limit: Int
-    ): List<PoisoningScorer.OutgoingTxInfo> {
-        return try {
-            val outgoingTxs = adapter.getTransactions(
-                from = null,
-                token = null,
-                limit = limit,
-                transactionType = FilterTransactionType.Outgoing,
-                address = null
-            )
-
-            outgoingTxs.mapNotNull { tx ->
-                extractOutgoingTxInfo(tx)
-            }
-        } catch (_: Throwable) {
-            emptyList()
-        }
-    }
-
-    /**
-     * Extract recipient address and timing info from outgoing transaction records.
-     */
-    private fun extractOutgoingTxInfo(tx: TransactionRecord): PoisoningScorer.OutgoingTxInfo? {
-        val recipientAddress = when (tx) {
-            is EvmOutgoingTransactionRecord -> tx.to
-            is TronOutgoingTransactionRecord -> tx.to
-            is ContractCallTransactionRecord -> {
-                // For contract calls, get the first outgoing event recipient
-                tx.outgoingEvents.firstOrNull()?.address
-            }
-            is TronContractCallTransactionRecord -> {
-                tx.outgoingEvents.firstOrNull()?.address
-            }
-            else -> null
-        }
-
-        return recipientAddress?.let {
-            PoisoningScorer.OutgoingTxInfo(
-                recipientAddress = it,
-                timestamp = tx.timestamp,
-                blockHeight = tx.blockHeight
-            )
-        }
     }
 
     /**
@@ -120,33 +136,13 @@ class SpamManager(
 
     /**
      * Get cached outgoing transactions for a token.
-     * If cache is empty, fetches from database and populates cache.
+     * Returns only cached data - does not fetch from adapter to avoid memory pressure.
+     * Cache is populated when outgoing transactions are processed via addOutgoingTransaction().
      */
-    private suspend fun getOrFetchOutgoingTxs(
-        tokenUid: String,
-        source: TransactionSource
-    ): List<PoisoningScorer.OutgoingTxInfo> {
-        // Check cache first
+    private fun getOutgoingTxsFromCache(tokenUid: String): List<PoisoningScorer.OutgoingTxInfo> {
         synchronized(cacheLock) {
-            outgoingTxCache[tokenUid]?.let { cached ->
-                if (cached.isNotEmpty()) {
-                    return cached.toList()
-                }
-            }
+            return outgoingTxCache[tokenUid]?.toList() ?: emptyList()
         }
-
-        // Cache is empty, fetch from database
-        val adapter = transactionAdapterManager?.getAdapter(source) ?: return emptyList()
-        val fetchedTxs = fetchRecentOutgoingTransactions(adapter, CACHE_SIZE_PER_TOKEN)
-
-        // Populate cache with fetched transactions
-        synchronized(cacheLock) {
-            val txList = outgoingTxCache.getOrPut(tokenUid) { mutableListOf() }
-            txList.clear()
-            txList.addAll(fetchedTxs)
-        }
-
-        return fetchedTxs
     }
 
     /**
@@ -176,7 +172,7 @@ class SpamManager(
         // Not in database, calculate spam status
         val dustSpamAddresses = handleSpamAddresses(events)
 
-        val recentOutgoingTxs = tokenUid?.let { getOrFetchOutgoingTxs(it, source) } ?: emptyList()
+        val recentOutgoingTxs = tokenUid?.let { getOutgoingTxsFromCache(it) } ?: emptyList()
 
         val poisoningSpamAddresses = poisoningScorer.detectSpamAddresses(
             events = events,

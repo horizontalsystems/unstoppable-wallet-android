@@ -399,8 +399,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
-        spamManager.set(transactionAdapterManager)
-
         feeCoinProvider = FeeTokenProvider(marketKit)
 
         pinComponent = PinComponent(
@@ -616,6 +614,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             pinComponent.initDefaultPinLevel()
             accountManager.clearAccounts()
             wcSessionManager.start()
+            spamManager.initializeCache(transactionAdapterManager)
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 
