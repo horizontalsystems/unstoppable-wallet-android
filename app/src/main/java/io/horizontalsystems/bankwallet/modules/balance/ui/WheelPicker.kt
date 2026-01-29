@@ -1,26 +1,50 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import java.text.DateFormatSymbols
-import java.util.*
+import java.util.Calendar
 
 @Composable
 fun WheelPicker(
@@ -62,7 +86,7 @@ fun WheelPicker(
     }
 
     Box(
-        modifier = modifier.height(180.dp),
+        modifier = modifier.height(132.dp),
         contentAlignment = Alignment.Center
     ) {
         // Selection Highlight
@@ -76,7 +100,7 @@ fun WheelPicker(
         LazyColumn(
             state = lazyListState,
             flingBehavior = snapFlingBehavior,
-            contentPadding = PaddingValues(vertical = 68.dp),
+            contentPadding = PaddingValues(vertical = 44.dp),
             modifier = Modifier.fillMaxSize()
         ) {
             items(totalItemsCount) { index ->
@@ -211,10 +235,14 @@ fun MonthYearPickerBottomSheet(
         }
     ) {
         BottomSheetHeaderV3(
-            title = "Select Month & Year",
+            title = stringResource(R.string.BirthdayDatePicker_Title),
             onCloseClick = onDismissRequest
         )
-        Box(modifier = Modifier.padding(vertical = 16.dp)) {
+        TextBlock(
+            text = stringResource(R.string.BirthdayDatePicker_Description),
+            textAlign = TextAlign.Center
+        )
+        Box(modifier = Modifier.border(1.dp, Color.Red).padding(vertical = 32.dp)) {
             MonthYearPicker(
                 selectedMonth = month,
                 selectedYear = year,
