@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -34,6 +35,7 @@ fun HSButton(
     size: ButtonSize = ButtonSize.Medium,
     title: String,
     icon: Painter? = null,
+    loadingIndicator: Boolean = false,
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
@@ -60,6 +62,14 @@ fun HSButton(
                 contentDescription = null,
             )
             HSpacer(buttonProps.iconRightPadding)
+        }
+        if (loadingIndicator) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(16.dp),
+                color = ComposeAppTheme.colors.grey,
+                strokeWidth = 2.dp
+            )
+            HSpacer(width = buttonProps.iconRightPadding)
         }
         Text(
             text = title,
