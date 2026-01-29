@@ -240,7 +240,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     //Splash screen
-    implementation "androidx.core:core-splashscreen:1.0.1"
+    implementation "androidx.core:core-splashscreen:1.2.0"
 
     //AppWidgets
     implementation 'androidx.glance:glance-appwidget:1.1.1'
