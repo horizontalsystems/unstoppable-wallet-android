@@ -139,6 +139,16 @@ class TronTransactionConverter(
 
                 when {
                     decoration.fromAddress == address && contractAddress != null -> {
+                        // Cache outgoing TRC-20 transfers for spam detection
+                        outgoingEip20Transfers.forEach { transfer ->
+                            val tokenUid = "${source.blockchain.type.uid}:${transfer.contractAddress.base58}"
+                            App.spamManager.addOutgoingTransaction(
+                                tokenUid,
+                                transfer.to.base58,
+                                transaction.timestamp / 1000,
+                                transaction.blockNumber?.toInt()
+                            )
+                        }
                         TronContractCallTransactionRecord(
                             transaction, baseToken, source,
                             contractAddress.base58,
@@ -150,7 +160,10 @@ class TronTransactionConverter(
                     }
 
                     decoration.fromAddress != address && decoration.toAddress != address -> {
-                        val tokenUid = "${source.blockchain.type.uid}:native"
+                        // Extract tokenUid from incoming events for spam detection
+                        val tokenUid = incomingEip20Transfers.firstOrNull()?.let {
+                            "${source.blockchain.type.uid}:${it.contractAddress.base58}"
+                        } ?: "${source.blockchain.type.uid}:native"
                         val txHash = transaction.hashString.hexStringToByteArrayOrNull() ?: byteArrayOf()
                         val spam = App.spamManager.isSpam(
                             txHash,
