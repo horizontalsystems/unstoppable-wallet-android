@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance.token
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.marketkit.models.BlockchainType
 
@@ -17,7 +18,8 @@ object EnterBirthdayHeightModule {
             return EnterBirthdayHeightViewModel(
                 blockchainType = blockchainType,
                 account = account,
-                currentBirthdayHeight = currentBirthdayHeight
+                currentBirthdayHeight = currentBirthdayHeight,
+                restoreSettingsManager = App.restoreSettingsManager
             ) as T
         }
     }
@@ -25,6 +27,7 @@ object EnterBirthdayHeightModule {
     data class UiState(
         val birthdayHeight: Long? = null,
         val blockDateText: String? = null,
-        val rescanButtonEnabled: Boolean = false
+        val rescanButtonEnabled: Boolean = false,
+        val closeAfterRescan: Boolean = false
     )
 }

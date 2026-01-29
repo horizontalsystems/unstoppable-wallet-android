@@ -4,6 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -12,14 +14,16 @@ import java.util.Date
 class EnterBirthdayHeightViewModel(
     private val blockchainType: BlockchainType,
     private val account: Account,
-    private val currentBirthdayHeight: Long?
+    private val currentBirthdayHeight: Long?,
+    private val restoreSettingsManager: RestoreSettingsManager
 ) : ViewModel() {
 
     var uiState by mutableStateOf(
         EnterBirthdayHeightModule.UiState(
             birthdayHeight = null,
             blockDateText = getBlockDateText(currentBirthdayHeight),
-            rescanButtonEnabled = false
+            rescanButtonEnabled = false,
+            closeAfterRescan = false
         )
     )
         private set
@@ -37,6 +41,20 @@ class EnterBirthdayHeightViewModel(
             blockDateText = getBlockDateText(dateHeight),
             rescanButtonEnabled = isValid && isDifferent
         )
+    }
+
+    fun onRescanClick() {
+        val newHeight = uiState.birthdayHeight ?: return
+
+        val settings = RestoreSettings()
+        settings.birthdayHeight = newHeight
+        restoreSettingsManager.save(settings, account, blockchainType)
+
+        uiState = uiState.copy(closeAfterRescan = true)
+    }
+
+    fun onRescanHandled() {
+        uiState = uiState.copy(closeAfterRescan = false)
     }
 
     private fun getBlockDateText(height: Long?): String? {
