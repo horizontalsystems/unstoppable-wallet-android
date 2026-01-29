@@ -390,7 +390,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             tronKitManager,
             tonKitManager,
             stellarKitManager,
-            moneroNodeManager
+            moneroNodeManager,
+            restoreSettingsManager
         )
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 

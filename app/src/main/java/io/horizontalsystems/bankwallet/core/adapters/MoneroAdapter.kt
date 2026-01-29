@@ -168,7 +168,7 @@ class MoneroAdapter(
                 }
 
                 AccountOrigin.Restored -> {
-                    birthdayHeightStr ?: "1"
+                    birthdayHeightStr ?: "0"
                 }
             }
 

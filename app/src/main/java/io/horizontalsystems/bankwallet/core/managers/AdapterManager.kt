@@ -27,7 +27,8 @@ class AdapterManager(
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
     private val stellarKitManager: StellarKitManager,
-    private val moneroNodeManager: MoneroNodeManager
+    private val moneroNodeManager: MoneroNodeManager,
+    private val restoreSettingsManager: RestoreSettingsManager
 ) : IAdapterManager {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -66,11 +67,16 @@ class AdapterManager(
                 handleUpdatedKit(BlockchainType.Monero)
             }
         }
+        coroutineScope.launch {
+            restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
+                handleUpdatedKit(blockchainType)
+            }
+        }
     }
 
     private fun handleUpdatedKit(blockchainType: BlockchainType) {
         val wallets = adaptersMap.keys().toList().filter {
-            it.token.blockchain.type == blockchainType
+            it.token.blockchainType == blockchainType
         }
 
         if (wallets.isEmpty()) return

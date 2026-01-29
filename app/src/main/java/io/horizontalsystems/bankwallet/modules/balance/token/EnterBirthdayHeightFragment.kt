@@ -17,6 +17,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,11 +67,7 @@ class EnterBirthdayHeightFragment : BaseComposeFragment() {
                 blockchainType = input.blockchainType,
                 account = input.account,
                 currentBirthdayHeight = input.currentBirthdayHeight,
-                onCloseClick = { navController.popBackStack() },
-                onRescan = {
-                    // TODO: Implement rescan logic
-                    navController.popBackStack()
-                }
+                onCloseClick = { navController.popBackStack() }
             )
         }
     }
@@ -89,7 +86,6 @@ fun EnterBirthdayHeightScreen(
     account: Account,
     currentBirthdayHeight: Long?,
     onCloseClick: () -> Unit,
-    onRescan: (Long?) -> Unit,
     viewModel: EnterBirthdayHeightViewModel = viewModel(
         factory = EnterBirthdayHeightModule.Factory(blockchainType, account, currentBirthdayHeight)
     )
@@ -101,7 +97,14 @@ fun EnterBirthdayHeightScreen(
         mutableStateOf(TextFieldValue(""))
     }
 
-        HSScaffold(
+    LaunchedEffect(uiState.closeAfterRescan) {
+        if (uiState.closeAfterRescan) {
+            viewModel.onRescanHandled()
+            onCloseClick()
+        }
+    }
+
+    HSScaffold(
         title = stringResource(R.string.Restore_BirthdayHeight),
         onBack = onCloseClick,
         bottomBar = {
@@ -113,7 +116,7 @@ fun EnterBirthdayHeightScreen(
                     title = stringResource(R.string.BirthdayHeight_Rescan),
                     variant = ButtonVariant.Primary,
                     enabled = uiState.rescanButtonEnabled,
-                    onClick = { onRescan(uiState.birthdayHeight) }
+                    onClick = { viewModel.onRescanClick() }
                 )
             }
         }
