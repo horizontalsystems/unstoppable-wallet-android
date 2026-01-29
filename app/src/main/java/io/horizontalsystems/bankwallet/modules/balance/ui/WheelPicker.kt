@@ -1,10 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -27,10 +25,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -99,14 +95,6 @@ fun WheelPicker(
         modifier = modifier.height(132.dp),
         contentAlignment = Alignment.Center
     ) {
-        // Selection Highlight
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(44.dp)
-                .background(ComposeAppTheme.colors.lawrence.copy(alpha = 0.5f))
-        )
-
         LazyColumn(
             state = lazyListState,
             flingBehavior = snapFlingBehavior,
@@ -123,12 +111,8 @@ fun WheelPicker(
                         .height(44.dp)
                         .wrapContentHeight(),
                     textAlign = TextAlign.Center,
-                    style = if (isSelected) {
-                        ComposeAppTheme.typography.body.copy(fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                    } else {
-                        ComposeAppTheme.typography.body
-                    },
-                    color = if (isSelected) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
+                    style = ComposeAppTheme.typography.title3,
+                    color = if (isSelected) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.andy,
                     maxLines = 1
                 )
             }
@@ -166,11 +150,9 @@ fun WheelDatePicker(
     val dayStrings = (1..daysInMonth).map { it.toString() }
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = Modifier.fillMaxWidth(),
     ) {
+        Box(modifier = Modifier.weight(1f))
         WheelPicker(
             items = dayStrings,
             initialIndex = (selectedDay - 1).coerceIn(0, dayStrings.size - 1),
@@ -192,6 +174,7 @@ fun WheelDatePicker(
             modifier = Modifier.weight(1.5f),
             isInfinite = false
         )
+        Box(modifier = Modifier.weight(1f))
     }
 }
 
