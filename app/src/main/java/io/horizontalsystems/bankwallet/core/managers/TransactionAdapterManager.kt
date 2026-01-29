@@ -18,7 +18,8 @@ import java.util.concurrent.ConcurrentHashMap
 
 class TransactionAdapterManager(
     private val adapterManager: IAdapterManager,
-    private val adapterFactory: AdapterFactory
+    private val adapterFactory: AdapterFactory,
+    private val restoreSettingsManager: RestoreSettingsManager
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -29,12 +30,36 @@ class TransactionAdapterManager(
         )
     val adaptersReadyFlow get() = _adaptersReadyFlow.asSharedFlow()
 
+    private val _adaptersInvalidatedFlow = MutableSharedFlow<BlockchainType>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val adaptersInvalidatedFlow get() = _adaptersInvalidatedFlow.asSharedFlow()
+
     val adaptersMap = ConcurrentHashMap<TransactionSource, ITransactionsAdapter>()
+
+    private val pendingInvalidations = mutableSetOf<BlockchainType>()
 
     init {
         coroutineScope.launch {
             adapterManager.adaptersReadyObservable.asFlow().collect(::initAdapters)
         }
+        coroutineScope.launch {
+            restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
+                invalidateAdapters(blockchainType)
+            }
+        }
+    }
+
+    private fun invalidateAdapters(blockchainType: BlockchainType) {
+        val sourcesToRemove = adaptersMap.keys.filter { it.blockchain.type == blockchainType }
+        sourcesToRemove.forEach { source ->
+            adaptersMap.remove(source)?.let {
+                adapterFactory.unlinkAdapter(source)
+            }
+        }
+        // Track pending invalidation - will emit after initAdapters sets up new adapter
+        pendingInvalidations.add(blockchainType)
     }
 
     fun getAdapter(source: TransactionSource): ITransactionsAdapter? = adaptersMap[source]
@@ -47,34 +72,45 @@ class TransactionAdapterManager(
             val source = wallet.transactionSource
             if (this.adaptersMap.containsKey(source)) continue
 
-            var txAdapter = currentAdapters.remove(source)
-            if (txAdapter == null) {
-                txAdapter = when (val blockchainType = source.blockchain.type) {
-                    BlockchainType.Ethereum,
-                    BlockchainType.BinanceSmartChain,
-                    BlockchainType.Polygon,
-                    BlockchainType.Avalanche,
-                    BlockchainType.Optimism,
-                    BlockchainType.Base,
-                    BlockchainType.ZkSync,
-                    BlockchainType.Gnosis,
-                    BlockchainType.Fantom,
-                    BlockchainType.ArbitrumOne -> {
-                        adapterFactory.evmTransactionsAdapter(wallet.transactionSource, blockchainType)
-                    }
-                    BlockchainType.Solana -> {
-                        adapterFactory.solanaTransactionsAdapter(wallet.transactionSource)
-                    }
-                    BlockchainType.Tron -> {
-                        adapterFactory.tronTransactionsAdapter(wallet.transactionSource)
-                    }
-                    BlockchainType.Ton -> {
-                        adapterFactory.tonTransactionsAdapter(wallet.transactionSource)
-                    }
-                    BlockchainType.Stellar -> {
-                        adapterFactory.stellarTransactionsAdapter(wallet.transactionSource)
-                    }
-                    else -> adapter as? ITransactionsAdapter
+            val blockchainType = source.blockchain.type
+
+            // For blockchains that use ITransactionsAdapter directly from the adapter (like Monero, Zcash),
+            // always use the fresh adapter instance to handle cases where the adapter was recreated
+            // (e.g., after birthday height change)
+            val txAdapter = when (blockchainType) {
+                BlockchainType.Ethereum,
+                BlockchainType.BinanceSmartChain,
+                BlockchainType.Polygon,
+                BlockchainType.Avalanche,
+                BlockchainType.Optimism,
+                BlockchainType.Base,
+                BlockchainType.ZkSync,
+                BlockchainType.Gnosis,
+                BlockchainType.Fantom,
+                BlockchainType.ArbitrumOne -> {
+                    currentAdapters.remove(source)
+                        ?: adapterFactory.evmTransactionsAdapter(wallet.transactionSource, blockchainType)
+                }
+                BlockchainType.Solana -> {
+                    currentAdapters.remove(source)
+                        ?: adapterFactory.solanaTransactionsAdapter(wallet.transactionSource)
+                }
+                BlockchainType.Tron -> {
+                    currentAdapters.remove(source)
+                        ?: adapterFactory.tronTransactionsAdapter(wallet.transactionSource)
+                }
+                BlockchainType.Ton -> {
+                    currentAdapters.remove(source)
+                        ?: adapterFactory.tonTransactionsAdapter(wallet.transactionSource)
+                }
+                BlockchainType.Stellar -> {
+                    currentAdapters.remove(source)
+                        ?: adapterFactory.stellarTransactionsAdapter(wallet.transactionSource)
+                }
+                else -> {
+                    // For Monero, Zcash, Bitcoin, etc. - always use fresh adapter from AdapterManager
+                    currentAdapters.remove(source)
+                    adapter as? ITransactionsAdapter
                 }
             }
 
@@ -88,5 +124,11 @@ class TransactionAdapterManager(
         }
 
         _adaptersReadyFlow.tryEmit(this.adaptersMap)
+
+        // Emit pending invalidations now that new adapters are ready
+        pendingInvalidations.forEach { blockchainType ->
+            _adaptersInvalidatedFlow.tryEmit(blockchainType)
+        }
+        pendingInvalidations.clear()
     }
 }

@@ -393,7 +393,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             moneroNodeManager,
             restoreSettingsManager
         )
-        transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
+        transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory, restoreSettingsManager)
 
         spamManager.set(transactionAdapterManager)
 

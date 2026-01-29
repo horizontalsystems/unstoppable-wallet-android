@@ -25,6 +25,7 @@ class TransactionRecordRepository(
 ) : ITransactionRecordRepository {
 
     private var selectedFilterTransactionType: FilterTransactionType = FilterTransactionType.All
+    private var invalidationJob: Job? = null
 
     private var selectedWallet: TransactionWallet? = null
     private var selectedBlockchain: Blockchain? = null
@@ -44,6 +45,44 @@ class TransactionRecordRepository(
 
     private var transactionWallets: List<TransactionWallet> = listOf()
     private var walletsGroupedBySource: List<TransactionWallet> = listOf()
+
+    init {
+        invalidationJob = coroutineScope.launch {
+            adapterManager.adaptersInvalidatedFlow.collect { blockchainType ->
+                handleAdaptersInvalidated(blockchainType)
+            }
+        }
+    }
+
+    private fun handleAdaptersInvalidated(blockchainType: BlockchainType) {
+        val walletsToInvalidate = adaptersMap.keys.filter { it.source.blockchain.type == blockchainType }
+        if (walletsToInvalidate.isEmpty()) return
+
+        // Remove old wrappers and recreate with fresh adapters
+        walletsToInvalidate.forEach { transactionWallet ->
+            adaptersMap.remove(transactionWallet)?.clear()
+
+            // Recreate wrapper with fresh adapter from adapterManager
+            adapterManager.getAdapter(transactionWallet.source)?.let { adapter ->
+                adaptersMap[transactionWallet] = TransactionAdapterWrapper(
+                    adapter,
+                    transactionWallet,
+                    selectedFilterTransactionType,
+                    contact
+                )
+            }
+        }
+
+        // Clear cached items immediately so UI updates right away
+        items.clear()
+        itemsSubject.onNext(items)
+
+        // Trigger reload with fresh data
+        unsubscribeFromUpdates()
+        allLoaded.set(false)
+        loadItems(1)
+        subscribeForUpdates()
+    }
 
     private val activeAdapters: List<TransactionAdapterWrapper>
         get() {
