@@ -16,6 +16,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import java.text.DateFormatSymbols
 import java.util.*
 
@@ -113,7 +116,7 @@ fun MonthYearPicker(
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        WheelPicker(
+         WheelPicker(
             items = months,
             initialIndex = (selectedMonth - 1).coerceIn(0, 11),
             onItemSelected = { onMonthSelected(it + 1) },
@@ -169,6 +172,49 @@ fun MonthYearPickerDialog(
                 color = ComposeAppTheme.colors.leah,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
+            MonthYearPicker(
+                selectedMonth = month,
+                selectedYear = year,
+                onMonthSelected = { month = it },
+                onYearSelected = { year = it }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MonthYearPickerBottomSheet(
+    onDismissRequest: () -> Unit,
+    onConfirm: (Int, Int) -> Unit,
+    initialMonth: Int = Calendar.getInstance().get(Calendar.MONTH) + 1,
+    initialYear: Int = Calendar.getInstance().get(Calendar.YEAR)
+) {
+    var month by remember { mutableIntStateOf(initialMonth) }
+    var year by remember { mutableIntStateOf(initialYear) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    BottomSheetContent(
+        onDismissRequest = onDismissRequest,
+        sheetState = sheetState,
+        buttons = {
+            HSButton(
+                title = "OK",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                onClick = {
+                    onConfirm(month, year)
+                    onDismissRequest()
+                }
+            )
+        }
+    ) {
+        BottomSheetHeaderV3(
+            title = "Select Month & Year",
+            onCloseClick = onDismissRequest
+        )
+        Box(modifier = Modifier.padding(vertical = 16.dp)) {
             MonthYearPicker(
                 selectedMonth = month,
                 selectedYear = year,
