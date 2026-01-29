@@ -1889,5 +1889,7 @@
     <string name="Contacts_Error_DefinedName">The name already exists</string>
 
     <string name="Hud_Text_Connected">Connected</string>
+    <string name="BirthdayDatePicker_Title">Select Date</string>
+    <string name="BirthdayDatePicker_Description">Choose an approximate wallet creation date. \nThe block height will be calculated automatically.</string>
 
 </resources>
