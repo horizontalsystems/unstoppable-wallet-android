@@ -519,7 +519,16 @@ private fun TokenBalanceHeader(
         balanceViewItem.birthdayHeight?.let { birthdayHeight ->
             BirthdayHeightCell(
                 birthdayHeight = birthdayHeight,
-                onClick = { }
+                onClick = {
+                    navController.slideFromRight(
+                        R.id.enterBirthdayHeightFragment,
+                        EnterBirthdayHeightFragment.Input(
+                            blockchainType = balanceViewItem.wallet.token.blockchainType,
+                            account = balanceViewItem.wallet.account,
+                            currentBirthdayHeight = birthdayHeight
+                        )
+                    )
+                }
             )
         }
     }

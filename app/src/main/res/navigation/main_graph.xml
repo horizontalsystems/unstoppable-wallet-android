@@ -355,6 +355,9 @@
         android:id="@+id/tokenBalanceFragment"
         android:name="io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceFragment" />
     <fragment
+        android:id="@+id/enterBirthdayHeightFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.balance.token.EnterBirthdayHeightFragment" />
+    <fragment
         android:id="@+id/кeyAccountInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.KeyAccountInfoFragment" />
     <fragment

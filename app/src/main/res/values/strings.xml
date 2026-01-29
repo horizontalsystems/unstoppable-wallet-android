@@ -155,6 +155,9 @@
     <string name="Restore_BirthdayHeight_Invalid">Invalid Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Enter wallet\'s birthday height for faster synchronization.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
+    <string name="BirthdayHeight_Description">You can change the block height or select an approximate date to rescan your transaction history.</string>
+    <string name="BirthdayHeight_BlockDate">Block Date:</string>
+    <string name="BirthdayHeight_Rescan">Rescan</string>
     <string name="Restore_ZCash_RestoreAsNew">Restore as New</string>
     <string name="Restore_ZCash_NewWallet">New Wallet</string>
     <string name="Restore_ZCash_NewWallet_Description">Doesn\'t have any transactions</string>
