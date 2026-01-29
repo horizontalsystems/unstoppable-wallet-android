@@ -14,8 +14,8 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -182,7 +182,9 @@ fun WheelDatePicker(
 @Composable
 fun WheelDatePickerBottomSheet(
     onDismissRequest: () -> Unit,
+    sheetState: SheetState,
     onConfirm: (Int, Int, Int) -> Unit,
+    loading: Boolean,
     initialDay: Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
     initialMonth: Int = Calendar.getInstance().get(Calendar.MONTH) + 1,
     initialYear: Int = Calendar.getInstance().get(Calendar.YEAR)
@@ -190,20 +192,20 @@ fun WheelDatePickerBottomSheet(
     var day by remember { mutableIntStateOf(initialDay) }
     var month by remember { mutableIntStateOf(initialMonth) }
     var year by remember { mutableIntStateOf(initialYear) }
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     BottomSheetContent(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
         buttons = {
             HSButton(
-                title = "OK",
+                title = stringResource(R.string.Button_Apply),
+                loadingIndicator = loading,
+                enabled = !loading,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 onClick = {
                     onConfirm(day, month, year)
-                    onDismissRequest()
                 }
             )
         }
