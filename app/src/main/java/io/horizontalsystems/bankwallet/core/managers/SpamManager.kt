@@ -259,58 +259,78 @@ class SpamManager(
 
     /**
      * Process a transaction for spam detection during background rescan.
-     * Extracts transfer events from the transaction and checks for spam.
-     * Only processes EVM-based transactions that have incoming events.
+     * Uses explicit outgoing transaction context instead of cache.
      *
      * @param tx Transaction record to process
      * @param source Transaction source
+     * @param outgoingContext List of recent outgoing transactions for poisoning detection
      */
-    suspend fun processTransactionForSpam(tx: TransactionRecord, source: TransactionSource) {
+    suspend fun processTransactionForSpamWithContext(
+        tx: TransactionRecord,
+        source: TransactionSource,
+        outgoingContext: List<PoisoningScorer.OutgoingTxInfo>
+    ) {
         val txHashBytes = tx.transactionHash.hexStringToByteArray()
 
         // Skip if already scanned
         scannedTransactionStorage.getScannedTransaction(txHashBytes)?.let { return }
 
-        val events: List<TransferEvent>
-        val tokenUid: String
-
-        when (tx) {
-            is EvmIncomingTransactionRecord -> {
-                events = listOf(TransferEvent(tx.from, tx.value))
-                tokenUid = "${source.blockchain.type.uid}:native"
-            }
-            is ExternalContractCallTransactionRecord -> {
-                events = tx.incomingEvents + tx.outgoingEvents
-                tokenUid = events.firstOrNull()?.let {
-                    "${source.blockchain.type.uid}:${it.value.tokenUidOrNative()}"
-                } ?: "${source.blockchain.type.uid}:native"
-            }
-            is ContractCallTransactionRecord -> {
-                events = tx.incomingEvents + tx.outgoingEvents
-                tokenUid = events.firstOrNull()?.let {
-                    "${source.blockchain.type.uid}:${it.value.tokenUidOrNative()}"
-                } ?: "${source.blockchain.type.uid}:native"
-            }
+        val events: List<TransferEvent> = when (tx) {
+            is EvmIncomingTransactionRecord -> listOf(TransferEvent(tx.from, tx.value))
+            is ExternalContractCallTransactionRecord -> tx.incomingEvents + tx.outgoingEvents
+            is ContractCallTransactionRecord -> tx.incomingEvents + tx.outgoingEvents
             else -> return // Skip other transaction types
         }
 
         if (events.isEmpty()) return
 
-        isSpam(
-            transactionHash = txHashBytes,
+        // Calculate spam status with explicit context
+        val dustSpamAddresses = handleSpamAddresses(events)
+
+        val poisoningSpamAddresses = poisoningScorer.detectSpamAddresses(
             events = events,
-            timestamp = tx.timestamp,
-            blockHeight = tx.blockHeight,
-            tokenUid = tokenUid,
-            source = source
+            incomingTimestamp = tx.timestamp,
+            incomingBlockHeight = tx.blockHeight,
+            recentOutgoingTxs = outgoingContext
         )
+
+        val spamAddresses = (dustSpamAddresses + poisoningSpamAddresses).distinct()
+        val isSpam = spamAddresses.isNotEmpty()
+
+        // Save result to database
+        try {
+            scannedTransactionStorage.save(
+                ScannedTransaction(
+                    transactionHash = txHashBytes,
+                    isSpam = isSpam,
+                    blockchainType = source.blockchain.type,
+                    address = spamAddresses.firstOrNull()
+                )
+            )
+        } catch (_: Throwable) {
+        }
     }
 
-    @Suppress("unused")
-    private fun TransactionValue.tokenUidOrNative(): String {
-        return when (this) {
-            is TransactionValue.CoinValue -> token.type.id
-            else -> "native"
+    /**
+     * Extract outgoing transaction info from a transaction record.
+     * Used by SpamRescanManager to build context for spam detection.
+     */
+    fun extractOutgoingInfo(tx: TransactionRecord): PoisoningScorer.OutgoingTxInfo? {
+        return when (tx) {
+            is EvmOutgoingTransactionRecord -> {
+                PoisoningScorer.OutgoingTxInfo(tx.to, tx.timestamp, tx.blockHeight)
+            }
+            is ContractCallTransactionRecord -> {
+                tx.outgoingEvents.firstOrNull()?.address?.let { address ->
+                    PoisoningScorer.OutgoingTxInfo(address, tx.timestamp, tx.blockHeight)
+                }
+            }
+            is ExternalContractCallTransactionRecord -> {
+                tx.outgoingEvents.firstOrNull()?.address?.let { address ->
+                    PoisoningScorer.OutgoingTxInfo(address, tx.timestamp, tx.blockHeight)
+                }
+            }
+            else -> null
         }
     }
 }
