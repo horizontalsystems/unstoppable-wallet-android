@@ -23,6 +23,9 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
@@ -47,6 +50,7 @@ import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.SwapProtection
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 
 class SecuritySettingsFragment : BaseComposeFragment() {
 
@@ -139,7 +143,18 @@ private fun SecurityCenterScreen(
                             },
                             right = {
                                 CellRightControlsSwitcher(
-                                    checked = false
+                                    checked = false,
+                                    confirmChange = {
+                                        if (UserSubscriptionManager.isActionAllowed(action)) {
+                                            true
+                                        } else {
+                                            navController.slideFromBottom(
+                                                R.id.defenseSystemFeatureDialog,
+                                                DefenseSystemFeatureDialog.Input(PremiumFeature.getFeature(action))
+                                            )
+                                            false
+                                        }
+                                    }
                                 ) { }
                             }
                         )

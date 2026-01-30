@@ -33,6 +33,7 @@ fun CellRightControlsSwitcher(
     checked: Boolean,
     enabled: Boolean = true,
     onInfoClick: (() -> Unit)? = null,
+    confirmChange: (() -> Boolean) = { true },
     onCheckedChange: (Boolean) -> Unit,
 ) {
     var internalChecked by remember { mutableStateOf(checked) }
@@ -59,8 +60,10 @@ fun CellRightControlsSwitcher(
             Switch(
                 checked = internalChecked,
                 onCheckedChange = { newChecked ->
-                    internalChecked = newChecked
-                    onCheckedChange(newChecked)
+                    if (confirmChange()) {
+                        internalChecked = newChecked
+                        onCheckedChange(newChecked)
+                    }
                 },
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Bright,
