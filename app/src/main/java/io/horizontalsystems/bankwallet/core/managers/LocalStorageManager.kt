@@ -97,6 +97,7 @@ class LocalStorageManager(
     private val PRICE_CHANGE_INTERVAL = "price_change_interval"
     private val UI_STATS_ENABLED = "ui_stats_enabled"
     private val LAST_MIGRATION_VERSION = "last_migration_version"
+    private val DISABLED_PAID_ACTIONS = "disabled_paid_actions"
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
@@ -648,5 +649,17 @@ class LocalStorageManager(
             value?.let {
                 preferences.edit().putInt(LAST_MIGRATION_VERSION, it).apply()
             }
+        }
+
+    private val _disabledPaidActionsFlow = MutableStateFlow(
+        preferences.getStringSet(DISABLED_PAID_ACTIONS, emptySet()) ?: emptySet()
+    )
+    override val disabledPaidActionsFlow = _disabledPaidActionsFlow.asStateFlow()
+
+    override var disabledPaidActions: Set<String>
+        get() = preferences.getStringSet(DISABLED_PAID_ACTIONS, emptySet()) ?: emptySet()
+        set(value) {
+            preferences.edit().putStringSet(DISABLED_PAID_ACTIONS, value).apply()
+            _disabledPaidActionsFlow.update { value }
         }
 }
