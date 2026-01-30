@@ -254,8 +254,7 @@ data class DefenseSystemMessage(
     val title: TranslatableString,
     val body: TranslatableString,
     val actionText: TranslatableString? = null,
-    val actionToBuy: IPaidAction? = null,
-    val actionToActivate: IPaidAction? = null
+    val requiredPaidAction: IPaidAction? = null
 )
 
 enum class DefenseAlertLevel {

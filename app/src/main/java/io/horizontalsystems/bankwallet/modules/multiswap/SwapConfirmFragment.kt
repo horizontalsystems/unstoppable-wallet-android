@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.R.drawable.close_e_filled_24
 import io.horizontalsystems.bankwallet.R.drawable.shield_check_filled_24
 import io.horizontalsystems.bankwallet.R.drawable.warning_filled_24
+import io.horizontalsystems.bankwallet.R.id.defenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
@@ -227,19 +228,13 @@ private fun SwapConfirmInternal(
                     DefenseAlertLevel.IDLE -> close_e_filled_24
                 }
 
-                val onClick = if (message.actionToBuy != null) {
+                val onClick = message.requiredPaidAction?.let {
                     {
                         navController.slideFromBottom(
-                            R.id.defenseSystemFeatureDialog,
-                            Input(PremiumFeature.getFeature(paidAction = message.actionToBuy))
+                            defenseSystemFeatureDialog,
+                            Input(PremiumFeature.getFeature(paidAction = message.requiredPaidAction))
                         )
                     }
-                } else if (message.actionToActivate != null) {
-                    {
-                        navController.slideFromRight(R.id.securitySettingsFragment)
-                    }
-                } else {
-                    null
                 }
 
                 DefenseSystemMessage(

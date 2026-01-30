@@ -115,16 +115,10 @@ class SwapDefenseSystemService(
                     title = TranslatableString.ResString(R.string.SwapDefense_Attention_Title),
                     body = TranslatableString.ResString(R.string.SwapDefense_Attention_Description),
                     actionText = TranslatableString.ResString(R.string.Button_Activate),
-                    actionToBuy = SwapProtection
+                    requiredPaidAction = SwapProtection
                 )
 
-                !actionEnabled -> DefenseSystemMessage(
-                    level = DefenseAlertLevel.WARNING,
-                    title = TranslatableString.ResString(R.string.SwapDefense_Attention_Title),
-                    body = TranslatableString.ResString(R.string.SwapDefense_Attention_Description),
-                    actionText = TranslatableString.ResString(R.string.Button_Activate),
-                    actionToActivate = SwapProtection
-                )
+                !actionEnabled -> null
 
                 else -> DefenseSystemMessage(
                     level = DefenseAlertLevel.SAFE,
