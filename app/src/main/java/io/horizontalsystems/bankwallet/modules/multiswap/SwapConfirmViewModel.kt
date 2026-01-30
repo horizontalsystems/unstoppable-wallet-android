@@ -289,7 +289,7 @@ class SwapConfirmViewModel(
                 sendTransactionService,
                 TimerService(),
                 PriceImpactService(PriceImpactLevel.Normal),
-                SwapDefenseSystemService(sendTransactionService.supportsMevProtection)
+                SwapDefenseSystemService(sendTransactionService.supportsMevProtection, App.paidActionSettingsManager)
             )
         }
     }
