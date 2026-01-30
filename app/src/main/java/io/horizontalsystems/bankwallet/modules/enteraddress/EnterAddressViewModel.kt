@@ -4,13 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.address.AddressCheckManager
 import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.core.factories.AddressValidatorFactory
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
+import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.entities.Address
@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressValidato
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.subscriptions.core.ScamProtection
+import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -38,11 +39,11 @@ class EnterAddressViewModel(
     initialAddress: String?,
     contactsRepository: ContactsRepository,
     recentAddressManager: RecentAddressManager,
-    localStorage: ILocalStorage,
     private val domainParser: AddressParserChain,
     private val addressValidator: EnterAddressValidator,
     private val addressCheckManager: AddressCheckManager,
     private val allowNull: Boolean,
+    paidActionSettingsManager: PaidActionSettingsManager,
 ) : ViewModelUiState<EnterAddressUiState>() {
     private var address: Address? = null
     private val canBeSendToAddress: Boolean
@@ -60,7 +61,7 @@ class EnterAddressViewModel(
     private var parseAddressJob: Job? = null
 
     private val addressExtractor = AddressExtractor(token.blockchainType, addressUriParser)
-    private val addressCheckEnabled = localStorage.recipientAddressCheckEnabled
+    private val addressCheckEnabled = paidActionSettingsManager.isActionEnabled(SecureSend)
 
     init {
         initialAddress?.let {
@@ -229,11 +230,11 @@ class EnterAddressViewModel(
                 address,
                 App.contactsRepository,
                 recentAddressManager,
-                App.localStorage,
                 addressParserChain,
                 addressValidator,
                 addressCheckManager,
-                allowNull
+                allowNull,
+                App.paidActionSettingsManager
             ) as T
         }
     }
