@@ -498,7 +498,6 @@ class TransactionInfoViewItemFactory(
                         )
                     )
                 )
-                sentToSelf = true
                 itemSections.add(
                     TransactionViewItemFactoryHelper.getSendSectionItems(
                         value = transaction.value,
