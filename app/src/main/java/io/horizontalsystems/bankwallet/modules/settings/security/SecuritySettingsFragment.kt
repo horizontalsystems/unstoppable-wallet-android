@@ -46,10 +46,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsSwitcher
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
-import io.horizontalsystems.subscriptions.core.RobberyProtection
-import io.horizontalsystems.subscriptions.core.ScamProtection
-import io.horizontalsystems.subscriptions.core.SecureSend
-import io.horizontalsystems.subscriptions.core.SwapProtection
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 
 class SecuritySettingsFragment : BaseComposeFragment() {
@@ -131,8 +127,8 @@ private fun SecurityCenterScreen(
             )
 
             SectionPremiumUniversalLawrence {
-                val actions = listOf(SecureSend, ScamProtection, SwapProtection, RobberyProtection)
-                actions.forEachIndexed { i, action ->
+                uiState.defenseSystemActions.forEachIndexed { i, defenseAction ->
+                    val action = defenseAction.action
                     BoxBordered(top = i != 0) {
                         CellPrimary(
                             middle = {
@@ -143,7 +139,7 @@ private fun SecurityCenterScreen(
                             },
                             right = {
                                 CellRightControlsSwitcher(
-                                    checked = false,
+                                    checked = defenseAction.enabled,
                                     confirmChange = {
                                         if (UserSubscriptionManager.isActionAllowed(action)) {
                                             true
@@ -155,7 +151,9 @@ private fun SecurityCenterScreen(
                                             false
                                         }
                                     }
-                                ) { }
+                                ) {
+                                    securitySettingsViewModel.setActionEnabled(action, it)
+                                }
                             }
                         )
                     }
