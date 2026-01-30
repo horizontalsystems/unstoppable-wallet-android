@@ -490,15 +490,15 @@
     <string name="Send_Address_ErrorMessage_PhishingDetected">Phishing Address Detected!</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected">Blacklisted Address Detected!</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected">Sanctioned Address Detected!</string>
-    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">The address you entered may be fraudulent. Scammers often alter the first and last characters. Verify the full address carefully before proceeding to avoid loss.</string>
-    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">The address you entered is flagged as blacklisted. Transactions to this address could lead to loss or other risks. Please verify the recipient\'s details before proceeding.</string>
-    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">The address you entered is marked as being under sanctions. Transactions to this address could lead to loss or other risks. Please verify the recipient\'s details before proceeding.</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Phishing address detected. Sending here will steal your funds.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">This address is blacklisted. Funds may be frozen.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Sanctioned address detected. Transfer may be blocked.</string>
     <string name="AddressEnter_NeedSubscription_Title">Attention!</string>
-    <string name="AddressEnter_NeedSubscription_Content">Risky vibes here. Wanna donate to scammers? Didn’t think so. Enable me.</string>
+    <string name="AddressEnter_NeedSubscription_Content">Secure Send is off. Your transfer may go to a risky address and funds can be lost.</string>
     <string name="AddressEnter_Danger_Title">Danger!</string>
     <string name="AddressEnter_Danger_Content">Phishing address detected. Sending here will steal your funds.</string>
     <string name="AddressEnter_Safe_Title">Safe</string>
-    <string name="AddressEnter_Safe_Content">Checked this address — no phishing, blacklist, or sanctions. It’s safe to use.</string>
+    <string name="AddressEnter_Safe_Content">Address checked. No phishing, blacklist, or sanctions found. It’s safe to use.</string>
 
     <string name="Send_RiskyAddress">Risky Address!</string>
     <string name="Send_RiskyAddress_AlertText">You are about to send funds to a high-risk address. Proceeding may result in loss or other security risks. By continuing, you accept the potential dangers. Are you sure you want to proceed?</string>
