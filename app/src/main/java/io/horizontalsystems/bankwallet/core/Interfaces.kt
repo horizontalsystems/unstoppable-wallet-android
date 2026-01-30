@@ -150,6 +150,9 @@ interface ILocalStorage {
     var donateUsLastShownDate: Long?
     var lastMigrationVersion: Int?
 
+    var disabledPaidActions: Set<String>
+    val disabledPaidActionsFlow: StateFlow<Set<String>>
+
     fun clear()
 }
 

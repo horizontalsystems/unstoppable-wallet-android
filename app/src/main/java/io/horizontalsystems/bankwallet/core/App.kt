@@ -51,6 +51,7 @@ import io.horizontalsystems.bankwallet.core.managers.NftAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataSyncer
 import io.horizontalsystems.bankwallet.core.managers.NumberFormatter
+import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
@@ -215,6 +216,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var recentAddressManager: RecentAddressManager
         lateinit var roiManager: RoiManager
         lateinit var appIconService: AppIconService
+        lateinit var paidActionSettingsManager: PaidActionSettingsManager
         var trialExpired: Boolean = false
     }
 
@@ -242,6 +244,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             thirdKeyboardStorage = this
             marketStorage = this
         }
+
+        paidActionSettingsManager = PaidActionSettingsManager(localStorage)
 
         val appConfig = AppConfigProvider(localStorage)
         appConfigProvider = appConfig
