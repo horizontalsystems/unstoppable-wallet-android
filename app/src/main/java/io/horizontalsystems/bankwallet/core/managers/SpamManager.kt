@@ -8,10 +8,13 @@ import io.horizontalsystems.bankwallet.entities.ScannedTransaction
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCallTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
+import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -252,5 +255,62 @@ class SpamManager(
         }
 
         return limit > value
+    }
+
+    /**
+     * Process a transaction for spam detection during background rescan.
+     * Extracts transfer events from the transaction and checks for spam.
+     * Only processes EVM-based transactions that have incoming events.
+     *
+     * @param tx Transaction record to process
+     * @param source Transaction source
+     */
+    suspend fun processTransactionForSpam(tx: TransactionRecord, source: TransactionSource) {
+        val txHashBytes = tx.transactionHash.hexStringToByteArray()
+
+        // Skip if already scanned
+        scannedTransactionStorage.getScannedTransaction(txHashBytes)?.let { return }
+
+        val events: List<TransferEvent>
+        val tokenUid: String
+
+        when (tx) {
+            is EvmIncomingTransactionRecord -> {
+                events = listOf(TransferEvent(tx.from, tx.value))
+                tokenUid = "${source.blockchain.type.uid}:native"
+            }
+            is ExternalContractCallTransactionRecord -> {
+                events = tx.incomingEvents + tx.outgoingEvents
+                tokenUid = events.firstOrNull()?.let {
+                    "${source.blockchain.type.uid}:${it.value.tokenUidOrNative()}"
+                } ?: "${source.blockchain.type.uid}:native"
+            }
+            is ContractCallTransactionRecord -> {
+                events = tx.incomingEvents + tx.outgoingEvents
+                tokenUid = events.firstOrNull()?.let {
+                    "${source.blockchain.type.uid}:${it.value.tokenUidOrNative()}"
+                } ?: "${source.blockchain.type.uid}:native"
+            }
+            else -> return // Skip other transaction types
+        }
+
+        if (events.isEmpty()) return
+
+        isSpam(
+            transactionHash = txHashBytes,
+            events = events,
+            timestamp = tx.timestamp,
+            blockHeight = tx.blockHeight,
+            tokenUid = tokenUid,
+            source = source
+        )
+    }
+
+    @Suppress("unused")
+    private fun TransactionValue.tokenUidOrNative(): String {
+        return when (this) {
+            is TransactionValue.CoinValue -> token.type.id
+            else -> "native"
+        }
     }
 }
