@@ -12,9 +12,12 @@ import java.math.BigDecimal
  * Scoring Rules (threshold > 6 points = SPAM):
  * - Zero Value Transfer (transferFrom with value == 0): Automatic SPAM
  * - Zero Value Input (Native): +4 points
- * - Dust Amount: +3 points if < Limit, +2 points if < 5x Limit
+ * - Dust Amount (based on risk threshold from config):
+ *   - If value < spam (risk/10): Automatic SPAM
+ *   - If value < risk: +3 points
+ *   - If value < danger (risk*5): +2 points
  * - Mimic Address (prefix 3 + suffix 3 match, excluding 0x): +4 points
- * - Time Correlation: +4 points if within 5 blocks, +3 points if within 20 minutes
+ * - Time Correlation (mutually exclusive): +4 points if within 5 blocks OR +3 points if within 20 minutes
  */
 class PoisoningScorer {
 
@@ -133,6 +136,66 @@ class PoisoningScorer {
     }
 
     /**
+     * Result of correlation scoring (temporal + mimic)
+     */
+    private data class CorrelationScore(
+        val points: Int,
+        val reasons: List<String>
+    )
+
+    /**
+     * Calculate temporal and mimic correlation score for addresses against outgoing transactions.
+     * Block and Time correlations are mutually exclusive - block is checked first (more precise).
+     */
+    private fun calculateCorrelationScore(
+        addresses: List<String>,
+        incomingTimestamp: Long,
+        incomingBlockHeight: Int?,
+        recentOutgoingTxs: List<OutgoingTxInfo>
+    ): CorrelationScore {
+        var points = 0
+        val reasons = mutableListOf<String>()
+        var hasTemporalCorrelation = false
+        var hasMimicMatch = false
+
+        outer@ for (address in addresses) {
+            for (outgoingTx in recentOutgoingTxs) {
+                // Block correlation - within 5 blocks (more precise, check first)
+                if (!hasTemporalCorrelation && incomingBlockHeight != null && outgoingTx.blockHeight != null) {
+                    val blockDiff = kotlin.math.abs(incomingBlockHeight - outgoingTx.blockHeight)
+                    if (blockDiff <= BLOCK_COUNT_THRESHOLD) {
+                        points += POINTS_TIME_WITHIN_5_BLOCKS
+                        reasons.add("Block correlation: within $blockDiff blocks")
+                        hasTemporalCorrelation = true
+                    }
+                }
+
+                // Time correlation - within 20 minutes (only if no block correlation found)
+                if (!hasTemporalCorrelation) {
+                    val timeDiff = kotlin.math.abs(incomingTimestamp - outgoingTx.timestamp)
+                    if (timeDiff <= TWENTY_MINUTES_SECONDS) {
+                        points += POINTS_TIME_WITHIN_20_MINUTES
+                        reasons.add("Time correlation: within ${timeDiff}s")
+                        hasTemporalCorrelation = true
+                    }
+                }
+
+                // Mimic address check (slowest - string operations, do last)
+                if (!hasMimicMatch && isMimicAddress(address, outgoingTx.recipientAddress)) {
+                    points += POINTS_MIMIC_ADDRESS
+                    reasons.add("Mimic address: $address similar to ${outgoingTx.recipientAddress}")
+                    hasMimicMatch = true
+                }
+
+                // Early exit if all categories matched
+                if (hasTemporalCorrelation && hasMimicMatch) break@outer
+            }
+        }
+
+        return CorrelationScore(points, reasons)
+    }
+
+    /**
      * Score an individual transfer event
      */
     private fun scoreEvent(
@@ -172,66 +235,31 @@ class PoisoningScorer {
             return ScoringResult(address, 0, true, listOf("Zero-value token transfer"))
         }
 
-        // Dust amount scoring
+        // Dust amount scoring (based on risk threshold)
+        // spam = risk/10 (auto-spam), risk = config value (+3 points), danger = risk*5 (+2 points)
         if (limit > BigDecimal.ZERO) {
+            val spamThreshold = limit.divide(BigDecimal.TEN)
+            val dangerThreshold = limit.multiply(BigDecimal("5"))
+
             when {
+                decimalValue < spamThreshold -> {
+                    return ScoringResult(address, 0, true, listOf("Micro dust: value < spam threshold ($decimalValue < $spamThreshold)"))
+                }
                 decimalValue < limit -> {
                     score += POINTS_DUST_BELOW_LIMIT
-                    reasons.add("Dust: value < limit ($decimalValue < $limit)")
+                    reasons.add("Dust: value < risk ($decimalValue < $limit)")
                 }
-                decimalValue < limit.multiply(BigDecimal("5")) -> {
+                decimalValue < dangerThreshold -> {
                     score += POINTS_DUST_BELOW_5X_LIMIT
-                    reasons.add("Low value: value < 5x limit")
+                    reasons.add("Low value: value < danger ($decimalValue < $dangerThreshold)")
                 }
             }
         }
 
-        // Time and mimic correlation scoring (add points only once per category)
-        // Order: fastest checks first (time/block), slowest last (mimic)
-        var hasTimeCorrelation = false
-        var hasBlockCorrelation = false
-        var hasMimicMatch = false
-
-        for (outgoingTx in recentOutgoingTxs) {
-            // Time correlation - within 20 minutes (fastest check - simple long comparison)
-            if (!hasTimeCorrelation) {
-                val timeDiff = kotlin.math.abs(incomingTimestamp - outgoingTx.timestamp)
-                if (timeDiff <= TWENTY_MINUTES_SECONDS) {
-                    score += POINTS_TIME_WITHIN_20_MINUTES
-                    reasons.add("Time correlation: within ${timeDiff}s")
-                    hasTimeCorrelation = true
-                    if (score > SPAM_THRESHOLD) {
-                        return ScoringResult(address, score, false, reasons)
-                    }
-                }
-            }
-
-            // Block correlation - within 5 blocks (fast - integer comparison)
-            if (!hasBlockCorrelation && incomingBlockHeight != null && outgoingTx.blockHeight != null) {
-                val blockDiff = kotlin.math.abs(incomingBlockHeight - outgoingTx.blockHeight)
-                if (blockDiff <= BLOCK_COUNT_THRESHOLD) {
-                    score += POINTS_TIME_WITHIN_5_BLOCKS
-                    reasons.add("Time correlation: within $blockDiff blocks")
-                    hasBlockCorrelation = true
-                    if (score > SPAM_THRESHOLD) {
-                        return ScoringResult(address, score, false, reasons)
-                    }
-                }
-            }
-
-            // Mimic address check (slowest - string operations, do last)
-            if (!hasMimicMatch && isMimicAddress(address, outgoingTx.recipientAddress)) {
-                score += POINTS_MIMIC_ADDRESS
-                reasons.add("Mimic address: similar to ${outgoingTx.recipientAddress}")
-                hasMimicMatch = true
-                if (score > SPAM_THRESHOLD) {
-                    return ScoringResult(address, score, false, reasons)
-                }
-            }
-
-            // Early exit if all categories matched
-            if (hasTimeCorrelation && hasBlockCorrelation && hasMimicMatch) break
-        }
+        // Calculate correlation score
+        val correlation = calculateCorrelationScore(listOf(address), incomingTimestamp, incomingBlockHeight, recentOutgoingTxs)
+        score += correlation.points
+        reasons.addAll(correlation.reasons)
 
         return ScoringResult(address, score, false, reasons)
     }
@@ -258,16 +286,23 @@ class PoisoningScorer {
             reasons.add("Zero native value")
         }
 
-        // Dust amount scoring
+        // Dust amount scoring (based on risk threshold)
+        // spam = risk/10 (auto-spam), risk = config value (+3 points), danger = risk*5 (+2 points)
         if (limit > BigDecimal.ZERO && totalValue > BigDecimal.ZERO) {
+            val spamThreshold = limit.divide(BigDecimal.TEN)
+            val dangerThreshold = limit.multiply(BigDecimal("5"))
+
             when {
+                totalValue < spamThreshold -> {
+                    return ScoringResult(addresses.firstOrNull(), 0, true, listOf("Micro dust: native value < spam threshold ($totalValue < $spamThreshold)"))
+                }
                 totalValue < limit -> {
                     score += POINTS_DUST_BELOW_LIMIT
-                    reasons.add("Dust: native value < limit ($totalValue < $limit)")
+                    reasons.add("Dust: native value < risk ($totalValue < $limit)")
                 }
-                totalValue < limit.multiply(BigDecimal("5")) -> {
+                totalValue < dangerThreshold -> {
                     score += POINTS_DUST_BELOW_5X_LIMIT
-                    reasons.add("Low native value: value < 5x limit")
+                    reasons.add("Low native value: value < danger ($totalValue < $dangerThreshold)")
                 }
             }
         }
@@ -277,54 +312,10 @@ class PoisoningScorer {
             return ScoringResult(addresses.firstOrNull(), score, false, reasons)
         }
 
-        // Check each address for time/mimic correlation (add points only once per category)
-        // Order: fastest checks first (time/block), slowest last (mimic)
-        var hasTimeCorrelation = false
-        var hasBlockCorrelation = false
-        var hasMimicMatch = false
-
-        outer@ for (address in addresses) {
-            for (outgoingTx in recentOutgoingTxs) {
-                // Time correlation - within 20 minutes (fastest check)
-                if (!hasTimeCorrelation) {
-                    val timeDiff = kotlin.math.abs(incomingTimestamp - outgoingTx.timestamp)
-                    if (timeDiff <= TWENTY_MINUTES_SECONDS) {
-                        score += POINTS_TIME_WITHIN_20_MINUTES
-                        reasons.add("Time correlation: within ${timeDiff}s")
-                        hasTimeCorrelation = true
-                        if (score > SPAM_THRESHOLD) {
-                            return ScoringResult(addresses.firstOrNull(), score, false, reasons)
-                        }
-                    }
-                }
-
-                // Block correlation - within 5 blocks (fast)
-                if (!hasBlockCorrelation && incomingBlockHeight != null && outgoingTx.blockHeight != null) {
-                    val blockDiff = kotlin.math.abs(incomingBlockHeight - outgoingTx.blockHeight)
-                    if (blockDiff <= BLOCK_COUNT_THRESHOLD) {
-                        score += POINTS_TIME_WITHIN_5_BLOCKS
-                        reasons.add("Time correlation: within $blockDiff blocks")
-                        hasBlockCorrelation = true
-                        if (score > SPAM_THRESHOLD) {
-                            return ScoringResult(addresses.firstOrNull(), score, false, reasons)
-                        }
-                    }
-                }
-
-                // Mimic address check (slowest - string operations, do last)
-                if (!hasMimicMatch && isMimicAddress(address, outgoingTx.recipientAddress)) {
-                    score += POINTS_MIMIC_ADDRESS
-                    reasons.add("Mimic address: $address similar to ${outgoingTx.recipientAddress}")
-                    hasMimicMatch = true
-                    if (score > SPAM_THRESHOLD) {
-                        return ScoringResult(addresses.firstOrNull(), score, false, reasons)
-                    }
-                }
-
-                // Early exit if all categories matched
-                if (hasTimeCorrelation && hasBlockCorrelation && hasMimicMatch) break@outer
-            }
-        }
+        // Calculate correlation score
+        val correlation = calculateCorrelationScore(addresses, incomingTimestamp, incomingBlockHeight, recentOutgoingTxs)
+        score += correlation.points
+        reasons.addAll(correlation.reasons)
 
         return ScoringResult(addresses.firstOrNull(), score, false, reasons)
     }
