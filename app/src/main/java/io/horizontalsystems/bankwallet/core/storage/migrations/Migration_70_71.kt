@@ -18,5 +18,8 @@ object Migration_70_71 : Migration(70, 71) {
                 PRIMARY KEY(`transactionHash`)
             )
         """.trimIndent())
+
+        // Clear SpamScanState to trigger rescan of all transactions
+        db.execSQL("DELETE FROM SpamScanState")
     }
 }

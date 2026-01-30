@@ -61,6 +61,7 @@ import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaWalletManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
+import io.horizontalsystems.bankwallet.core.managers.SpamRescanManager
 import io.horizontalsystems.bankwallet.core.managers.StellarAccountManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
@@ -210,6 +211,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var contactsRepository: ContactsRepository
         lateinit var chartIndicatorManager: ChartIndicatorManager
         lateinit var backupProvider: BackupProvider
+        lateinit var scannedTransactionStorage: ScannedTransactionStorage
         lateinit var spamManager: SpamManager
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
@@ -320,7 +322,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         walletActivator = WalletActivator(walletManager, marketKit)
         tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
 
-        spamManager = SpamManager(localStorage, ScannedTransactionStorage(appDatabase.scannedTransactionDao()))
+        scannedTransactionStorage = ScannedTransactionStorage(appDatabase.scannedTransactionDao())
+        spamManager = SpamManager(localStorage, scannedTransactionStorage)
         recentAddressManager = RecentAddressManager(accountManager, appDatabase.recentAddressDao(), ActionCompletedDelegate)
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
@@ -615,6 +618,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             accountManager.clearAccounts()
             wcSessionManager.start()
             spamManager.initializeCache(transactionAdapterManager)
+
+            val spamRescanManager = SpamRescanManager(scannedTransactionStorage, spamManager)
+            spamRescanManager.runRescanIfNeeded(transactionAdapterManager)
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 
