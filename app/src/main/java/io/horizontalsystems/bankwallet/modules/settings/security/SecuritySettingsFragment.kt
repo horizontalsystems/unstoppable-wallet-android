@@ -26,6 +26,8 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.descriptionStringRes
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.titleStringRes
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
@@ -33,7 +35,18 @@ import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsSwitcher
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
+import io.horizontalsystems.subscriptions.core.RobberyProtection
+import io.horizontalsystems.subscriptions.core.ScamProtection
+import io.horizontalsystems.subscriptions.core.SecureSend
+import io.horizontalsystems.subscriptions.core.SwapProtection
 
 class SecuritySettingsFragment : BaseComposeFragment() {
 
@@ -108,14 +121,40 @@ private fun SecurityCenterScreen(
                 paddingBottom = 32.dp
             )
 
-            DuressPasscodeBlock(
-                securitySettingsViewModel,
-                navController
+            SectionHeader(
+                title = stringResource(R.string.Premium_DefenseSystem),
+                icon = R.drawable.defense_gradient_filled_24
             )
-            InfoText(
-                text = stringResource(R.string.SettingsSecurity_DuressPinDescription),
-                paddingBottom = 32.dp
-            )
+
+            SectionPremiumUniversalLawrence {
+                val actions = listOf(SecureSend, ScamProtection, SwapProtection, RobberyProtection)
+                actions.forEachIndexed { i, action ->
+                    BoxBordered(top = i != 0) {
+                        CellPrimary(
+                            middle = {
+                                CellMiddleInfo(
+                                    title = stringResource(action.titleStringRes).hs,
+                                    subtitle = stringResource(action.descriptionStringRes).hs
+                                )
+                            },
+                            right = {
+                                CellRightControlsSwitcher(
+                                    checked = false
+                                ) { }
+                            }
+                        )
+                    }
+                }
+            }
+
+//            DuressPasscodeBlock(
+//                securitySettingsViewModel,
+//                navController
+//            )
+//            InfoText(
+//                text = stringResource(R.string.SettingsSecurity_DuressPinDescription),
+//                paddingBottom = 32.dp
+//            )
 
             VSpacer(height = 32.dp)
         }
