@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
@@ -42,19 +43,19 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessor
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
 
@@ -197,8 +198,8 @@ private fun BirthdayHeightInputField(
             .clip(RoundedCornerShape(12.dp))
             .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.lawrence)
-            .height(44.dp)
-            .padding(start = 16.dp, end = 8.dp),
+            .height(54.dp)
+            .padding(start = 16.dp, end = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         BasicTextField(
@@ -231,23 +232,27 @@ private fun BirthdayHeightInputField(
         )
 
         if (textState.text.isNotEmpty()) {
-            ButtonSecondaryCircle(
-                modifier = Modifier.padding(end = 8.dp),
-                icon = R.drawable.ic_delete_20,
+            HSIconButton(
+                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Small,
+                icon = painterResource(id = R.drawable.ic_delete_20),
                 onClick = {
                     onDeleteClick()
                     focusRequester.requestFocus()
                 }
             )
         } else {
-            ButtonSecondaryCircle(
-                modifier = Modifier.padding(end = 8.dp),
-                icon = R.drawable.ic_date_20,
+            HSIconButton(
+                variant = ButtonVariant.Secondary,
+                size = ButtonSize.Small,
+                icon = painterResource(id = R.drawable.ic_date_20),
                 onClick = onCalendarClick
             )
-
-            ButtonSecondaryDefault(
-                modifier = Modifier.height(28.dp),
+            HSpacer(12.dp)
+            HSButton(
+                variant = ButtonVariant.Secondary,
+                style = ButtonStyle.Solid,
+                size = ButtonSize.Small,
                 title = stringResource(R.string.Send_Button_Paste),
                 onClick = onPasteClick
             )
