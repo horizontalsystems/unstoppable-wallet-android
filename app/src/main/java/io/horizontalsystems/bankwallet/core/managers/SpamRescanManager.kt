@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionTyp
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -21,34 +20,52 @@ class SpamRescanManager(
         private const val TAG = "SpamRescanManager"
         private const val BATCH_SIZE = 50
         private const val OUTGOING_CONTEXT_SIZE = 10
+        private const val SCAN_COMPLETE_MARKER = "complete"
     }
 
-    fun runRescanIfNeeded(transactionAdapterManager: TransactionAdapterManager) {
-        Timber.tag(TAG).d("Waiting for adapters to be ready...")
+    /**
+     * Start listening for adapter changes and run rescan when needed.
+     * This handles both initial app startup and account switching.
+     * When user switches to a different account, adaptersReadyFlow emits
+     * the new account's adapters, and we check if rescan is needed.
+     */
+    fun start(transactionAdapterManager: TransactionAdapterManager) {
+        Timber.tag(TAG).e("Starting spam rescan manager, listening for adapter changes...")
         coroutineScope.launch {
-            // Wait for adapters to be ready
-            val adaptersMap = transactionAdapterManager.adaptersReadyFlow.first()
-            Timber.tag(TAG).d("Adapters ready, starting spam rescan check...")
-
-            val evmSources = adaptersMap.filter { (source, _) ->
-                isEvmBlockchain(source)
+            // Collect continuously - emits on startup and on every account switch
+            transactionAdapterManager.adaptersReadyFlow.collect { adaptersMap ->
+                Timber.tag(TAG).e("Adapters changed, checking if rescan needed...")
+                checkAndRescanIfNeeded(adaptersMap)
             }
-            Timber.tag(TAG).d("Found ${evmSources.size} EVM sources to check")
-
-            evmSources.forEach { (source, adapter) ->
-                val scanState = scannedTransactionStorage.getSpamScanState(
-                    source.blockchain.type,
-                    source.account.id
-                )
-                if (scanState == null) {
-                    Timber.tag(TAG).d("Rescan needed for ${source.blockchain.name} (account: ${source.account.id.take(8)}...)")
-                    rescanTransactionsForSource(source, adapter)
-                } else {
-                    Timber.tag(TAG).d("Rescan already done for ${source.blockchain.name} (lastTx: ${scanState.lastSyncedTransactionId.take(16)}...)")
-                }
-            }
-            Timber.tag(TAG).d("Spam rescan check completed")
         }
+    }
+
+    private suspend fun checkAndRescanIfNeeded(adaptersMap: Map<TransactionSource, ITransactionsAdapter>) {
+        val evmSources = adaptersMap.filter { (source, _) ->
+            isEvmBlockchain(source)
+        }
+        Timber.tag(TAG).e("Found ${evmSources.size} EVM sources to check")
+
+        evmSources.forEach { (source, adapter) ->
+            val scanState = scannedTransactionStorage.getSpamScanState(
+                source.blockchain.type,
+                source.account.id
+            )
+            // Only skip if scan was completed (marked with "complete")
+            // If scan was interrupted (has partial lastTxId), we restart from beginning
+            val isCompleted = scanState?.lastSyncedTransactionId == SCAN_COMPLETE_MARKER
+            if (!isCompleted) {
+                if (scanState != null) {
+                    Timber.tag(TAG).e("Rescan interrupted previously for ${source.blockchain.name}, restarting...")
+                } else {
+                    Timber.tag(TAG).e("Rescan needed for ${source.blockchain.name} (account: ${source.account.id.take(8)}...)")
+                }
+                rescanTransactionsForSource(source, adapter)
+            } else {
+                Timber.tag(TAG).e("Rescan already done for ${source.blockchain.name}")
+            }
+        }
+        Timber.tag(TAG).e("Spam rescan check completed for current account")
     }
 
     private suspend fun rescanTransactionsForSource(
@@ -56,7 +73,7 @@ class SpamRescanManager(
         adapter: ITransactionsAdapter
     ) {
         val blockchainName = source.blockchain.name
-        Timber.tag(TAG).d("[$blockchainName] Starting rescan...")
+        Timber.tag(TAG).e("[$blockchainName] Starting rescan...")
 
         try {
             var lastTxId: String? = null
@@ -67,7 +84,7 @@ class SpamRescanManager(
                 batchNumber++
                 val transactions = adapter.getTransactionsAfter(lastTxId)
                 if (transactions.isEmpty()) {
-                    Timber.tag(TAG).d("[$blockchainName] No more transactions to process")
+                    Timber.tag(TAG).e("[$blockchainName] No more transactions to process")
                     break
                 }
 
@@ -88,7 +105,7 @@ class SpamRescanManager(
                     ).mapNotNull { spamManager.extractOutgoingInfo(it) }
                 }?.toMutableList() ?: mutableListOf()
 
-                Timber.tag(TAG).d("[$blockchainName] Batch #$batchNumber: ${transactions.size} txs, initial context: ${outgoingContext.size} older outgoing txs")
+                Timber.tag(TAG).e("[$blockchainName] Batch #$batchNumber: ${transactions.size} txs, initial context: ${outgoingContext.size} older outgoing txs")
 
                 transactions.forEach { tx ->
                     // Process the transaction with current outgoing context
@@ -114,20 +131,18 @@ class SpamRescanManager(
                     )
                 }
 
-                Timber.tag(TAG).d("[$blockchainName] Progress: $processedCount transactions processed")
+                Timber.tag(TAG).e("[$blockchainName] Progress: $processedCount transactions processed")
 
                 // If we got fewer transactions than batch size, we're done
                 if (transactions.size < BATCH_SIZE) break
             }
 
-            // Mark as complete even if no transactions were found
-            if (lastTxId == null) {
-                scannedTransactionStorage.save(
-                    SpamScanState(source.blockchain.type, source.account.id, "complete")
-                )
-            }
+            // Mark as complete
+            scannedTransactionStorage.save(
+                SpamScanState(source.blockchain.type, source.account.id, SCAN_COMPLETE_MARKER)
+            )
 
-            Timber.tag(TAG).d("[$blockchainName] Rescan completed. Total: $processedCount transactions")
+            Timber.tag(TAG).e("[$blockchainName] Rescan completed. Total: $processedCount transactions")
         } catch (e: Throwable) {
             Timber.tag(TAG).e(e, "[$blockchainName] Rescan failed")
         }

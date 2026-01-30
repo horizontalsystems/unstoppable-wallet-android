@@ -213,6 +213,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var backupProvider: BackupProvider
         lateinit var scannedTransactionStorage: ScannedTransactionStorage
         lateinit var spamManager: SpamManager
+        lateinit var spamRescanManager: SpamRescanManager
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
         lateinit var recentAddressManager: RecentAddressManager
@@ -619,8 +620,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             wcSessionManager.start()
             spamManager.initializeCache(transactionAdapterManager)
 
-            val spamRescanManager = SpamRescanManager(scannedTransactionStorage, spamManager)
-            spamRescanManager.runRescanIfNeeded(transactionAdapterManager)
+            spamRescanManager = SpamRescanManager(scannedTransactionStorage, spamManager)
+            spamRescanManager.start(transactionAdapterManager)
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 
