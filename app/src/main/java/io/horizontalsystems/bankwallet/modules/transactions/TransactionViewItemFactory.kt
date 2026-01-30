@@ -1186,7 +1186,7 @@ class TransactionViewItemFactory(
             secondaryValue = secondaryValue,
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
-            sentToSelf = true,
+            sentToSelf = false,
             doubleSpend = false,
             locked = locked,
             spam = record.spam,
