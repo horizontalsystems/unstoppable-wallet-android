@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.monerokit.MoneroKit
 import java.util.Date
 
 class EnterBirthdayHeightViewModel(
@@ -57,6 +58,60 @@ class EnterBirthdayHeightViewModel(
         uiState = uiState.copy(closeAfterRescan = false)
     }
 
+    fun onDatePickerOpened() {
+        uiState = uiState.copy(datePickerLoading = false)
+    }
+
+    fun getInitialDateForPicker(): Triple<Int, Int, Int> {
+        val height = uiState.birthdayHeight ?: currentBirthdayHeight
+        val date = height?.let { estimateBlockDate(it) } ?: Date()
+        val calendar = java.util.Calendar.getInstance().apply { time = date }
+        return Triple(
+            calendar.get(java.util.Calendar.DAY_OF_MONTH),
+            calendar.get(java.util.Calendar.MONTH) + 1,
+            calendar.get(java.util.Calendar.YEAR)
+        )
+    }
+
+    fun estimateBlockHeightFromDate(day: Int, month: Int, year: Int): Long? {
+        uiState = uiState.copy(datePickerLoading = true)
+
+        val calendar = java.util.Calendar.getInstance().apply {
+            set(java.util.Calendar.YEAR, year)
+            set(java.util.Calendar.MONTH, month - 1)
+            set(java.util.Calendar.DAY_OF_MONTH, day)
+            set(java.util.Calendar.HOUR_OF_DAY, 0)
+            set(java.util.Calendar.MINUTE, 0)
+            set(java.util.Calendar.SECOND, 0)
+            set(java.util.Calendar.MILLISECOND, 0)
+        }
+        val selectedDate = Date(calendar.timeInMillis)
+        val now = System.currentTimeMillis()
+
+        val height = when (blockchainType) {
+            BlockchainType.Zcash -> {
+                // Zcash: ~75 seconds per block
+                // Genesis: Oct 28, 2016
+                val genesisTimestamp = 1477656000000L
+                val blockTime = 75 * 1000L
+                val selectedTimestamp = calendar.timeInMillis
+                if (selectedTimestamp <= genesisTimestamp) {
+                    1L
+                } else {
+                    val timeSinceGenesis = (minOf(selectedTimestamp, now) - genesisTimestamp)
+                    (timeSinceGenesis / blockTime).coerceAtLeast(1L)
+                }
+            }
+            BlockchainType.Monero -> {
+                MoneroKit.restoreHeightForDate(selectedDate)
+            }
+            else -> null
+        }
+
+        uiState = uiState.copy(datePickerLoading = false)
+        return height
+    }
+
     private fun getBlockDateText(height: Long?): String? {
         if (height == null) return null
 
@@ -66,26 +121,19 @@ class EnterBirthdayHeightViewModel(
     }
 
     private fun estimateBlockDate(height: Long): Date? {
-        // This is a simplified estimation. In reality, you'd want to use
-        // checkpoint data or blockchain-specific calculation
         val now = System.currentTimeMillis()
 
         return when (blockchainType) {
             BlockchainType.Zcash -> {
                 // Zcash: ~75 seconds per block
                 // Genesis: Oct 28, 2016
-                val genesisTimestamp = 1477656000000L // Oct 28, 2016
-                val blockTime = 75 * 1000L // 75 seconds in milliseconds
+                val genesisTimestamp = 1477656000000L
+                val blockTime = 75 * 1000L
                 val estimatedTimestamp = genesisTimestamp + (height * blockTime)
                 if (estimatedTimestamp <= now) Date(estimatedTimestamp) else Date(now)
             }
             BlockchainType.Monero -> {
-                // Monero: ~120 seconds per block
-                // Genesis: Apr 18, 2014
-                val genesisTimestamp = 1397818193000L // Apr 18, 2014
-                val blockTime = 120 * 1000L // 120 seconds in milliseconds
-                val estimatedTimestamp = genesisTimestamp + (height * blockTime)
-                if (estimatedTimestamp <= now) Date(estimatedTimestamp) else Date(now)
+                MoneroKit.dateForRestoreHeight(height)
             }
             else -> null
         }

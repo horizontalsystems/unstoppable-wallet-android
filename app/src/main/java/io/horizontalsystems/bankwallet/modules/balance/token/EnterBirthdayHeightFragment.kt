@@ -10,17 +10,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -40,7 +42,9 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.balance.ui.WheelDatePickerBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import kotlinx.coroutines.launch
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -81,6 +85,7 @@ class EnterBirthdayHeightFragment : BaseComposeFragment() {
     ) : Parcelable
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnterBirthdayHeightScreen(
     blockchainType: BlockchainType,
@@ -93,16 +98,47 @@ fun EnterBirthdayHeightScreen(
 ) {
     val uiState = viewModel.uiState
     val focusRequester = remember { FocusRequester() }
+    val scope = rememberCoroutineScope()
 
     var textState by rememberSaveable("", stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(""))
     }
+
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(uiState.closeAfterRescan) {
         if (uiState.closeAfterRescan) {
             viewModel.onRescanHandled()
             onCloseClick()
         }
+    }
+
+    if (showDatePicker) {
+        val initialDate = viewModel.getInitialDateForPicker()
+        WheelDatePickerBottomSheet(
+            onDismissRequest = {
+                scope.launch { datePickerSheetState.hide() }.invokeOnCompletion {
+                    showDatePicker = false
+                }
+            },
+            sheetState = datePickerSheetState,
+            loading = uiState.datePickerLoading,
+            initialDay = initialDate.first,
+            initialMonth = initialDate.second,
+            initialYear = initialDate.third,
+            onConfirm = { day, month, year ->
+                val estimatedHeight = viewModel.estimateBlockHeightFromDate(day, month, year)
+                if (estimatedHeight != null) {
+                    val heightText = estimatedHeight.toString()
+                    textState = TextFieldValue(heightText, TextRange(heightText.length))
+                    viewModel.setBirthdayHeight(heightText)
+                }
+                scope.launch { datePickerSheetState.hide() }.invokeOnCompletion {
+                    showDatePicker = false
+                }
+            }
+        )
     }
 
     HSScaffold(
@@ -154,7 +190,8 @@ fun EnterBirthdayHeightScreen(
                     }
                 },
                 onCalendarClick = {
-                    // TODO: Open date picker
+                    viewModel.onDatePickerOpened()
+                    showDatePicker = true
                 },
                 onDeleteClick = {
                     textState = TextFieldValue("")

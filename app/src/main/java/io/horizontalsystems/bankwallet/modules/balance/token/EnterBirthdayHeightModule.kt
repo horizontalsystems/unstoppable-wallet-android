@@ -28,6 +28,7 @@ object EnterBirthdayHeightModule {
         val birthdayHeight: Long? = null,
         val blockDateText: String? = null,
         val rescanButtonEnabled: Boolean = false,
-        val closeAfterRescan: Boolean = false
+        val closeAfterRescan: Boolean = false,
+        val datePickerLoading: Boolean = false
     )
 }
