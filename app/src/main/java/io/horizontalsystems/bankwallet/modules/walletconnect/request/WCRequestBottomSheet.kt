@@ -170,17 +170,20 @@ fun WCRequestScreen(
             TextBlock(
                 text = stringResource(R.string.WalletConnect_ConnectWarning),
             )
-            VSpacer(16.dp)
-            WCDefenseSystemMessage(
-                activated = uiState.hasSubscription,
-                whiteListState = uiState.whiteListState,
-                onActivateClick = {
-                    navController.slideFromBottom(
-                        R.id.defenseSystemFeatureDialog,
-                        DefenseSystemFeatureDialog.Input(PremiumFeature.ScamProtectionFeature)
-                    )
-                }
-            )
+
+            uiState.whiteListState?.let { whiteListState ->
+                VSpacer(16.dp)
+                WCDefenseSystemMessage(
+                    activated = uiState.hasSubscription,
+                    whiteListState = whiteListState,
+                    onActivateClick = {
+                        navController.slideFromBottom(
+                            R.id.defenseSystemFeatureDialog,
+                            DefenseSystemFeatureDialog.Input(PremiumFeature.ScamProtectionFeature)
+                        )
+                    }
+                )
+            }
         }
         ActionButtons(
             buttonsStates = buttonsStates,
