@@ -114,6 +114,22 @@ fun EnterBirthdayHeightScreen(
         }
     }
 
+    // Update text field when birthdayHeightText changes from date picker
+    LaunchedEffect(uiState.birthdayHeightText) {
+        uiState.birthdayHeightText?.let { heightText ->
+            textState = TextFieldValue(heightText, TextRange(heightText.length))
+        }
+    }
+
+    // Close date picker when ViewModel signals completion
+    LaunchedEffect(uiState.closeDatePicker) {
+        if (uiState.closeDatePicker) {
+            datePickerSheetState.hide()
+            showDatePicker = false
+            viewModel.onDatePickerClosed()
+        }
+    }
+
     if (showDatePicker) {
         val initialDate = viewModel.getInitialDateForPicker()
         WheelDatePickerBottomSheet(
@@ -128,15 +144,7 @@ fun EnterBirthdayHeightScreen(
             initialMonth = initialDate.second,
             initialYear = initialDate.third,
             onConfirm = { day, month, year ->
-                val estimatedHeight = viewModel.estimateBlockHeightFromDate(day, month, year)
-                if (estimatedHeight != null) {
-                    val heightText = estimatedHeight.toString()
-                    textState = TextFieldValue(heightText, TextRange(heightText.length))
-                    viewModel.setBirthdayHeight(heightText)
-                }
-                scope.launch { datePickerSheetState.hide() }.invokeOnCompletion {
-                    showDatePicker = false
-                }
+                viewModel.onDateSelected(day, month, year)
             }
         )
     }

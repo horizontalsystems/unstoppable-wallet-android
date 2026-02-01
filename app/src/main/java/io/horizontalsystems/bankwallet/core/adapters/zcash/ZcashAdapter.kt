@@ -26,7 +26,6 @@ import cash.z.ecc.android.sdk.model.Zip32AccountIndex
 import cash.z.ecc.android.sdk.tool.DerivationTool
 import cash.z.ecc.android.sdk.type.AddressType
 import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
-import io.horizontalsystems.bankwallet.entities.Account as WalletAccount
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
@@ -58,10 +57,13 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.Instant
 import java.math.BigDecimal
 import java.util.Base64
+import java.util.Date
 import java.util.regex.Pattern
 import kotlin.math.max
+import io.horizontalsystems.bankwallet.entities.Account as WalletAccount
 
 class ZcashAdapter(
     context: Context,
@@ -602,6 +604,15 @@ class ZcashAdapter(
             synchronizer.close()
 
             return transparentAddress
+        }
+
+        suspend fun estimateBirthdayHeight(context: Context, date: Date): Long {
+            val blockHeight = SdkSynchronizer.estimateBirthdayHeight(
+                context = context,
+                date = Instant.fromEpochMilliseconds(date.time),
+                network = ZcashNetwork.Mainnet
+            )
+            return blockHeight.value
         }
     }
 }

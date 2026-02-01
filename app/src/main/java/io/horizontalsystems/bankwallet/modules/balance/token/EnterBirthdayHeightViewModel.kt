@@ -1,15 +1,23 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.monerokit.MoneroKit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Date
 
 class EnterBirthdayHeightViewModel(
@@ -59,7 +67,11 @@ class EnterBirthdayHeightViewModel(
     }
 
     fun onDatePickerOpened() {
-        uiState = uiState.copy(datePickerLoading = false)
+        uiState = uiState.copy(datePickerLoading = false, closeDatePicker = false)
+    }
+
+    fun onDatePickerClosed() {
+        uiState = uiState.copy(closeDatePicker = false)
     }
 
     fun getInitialDateForPicker(): Triple<Int, Int, Int> {
@@ -73,9 +85,32 @@ class EnterBirthdayHeightViewModel(
         )
     }
 
-    fun estimateBlockHeightFromDate(day: Int, month: Int, year: Int): Long? {
+    fun onDateSelected(day: Int, month: Int, year: Int) {
         uiState = uiState.copy(datePickerLoading = true)
 
+        viewModelScope.launch {
+            val estimatedHeight = estimateBlockHeightFromDate(day, month, year)
+            if (estimatedHeight != null) {
+                val isValid = estimatedHeight > 0
+                val isDifferent = estimatedHeight != currentBirthdayHeight
+
+                uiState = uiState.copy(
+                    birthdayHeight = estimatedHeight,
+                    birthdayHeightText = estimatedHeight.toString(),
+                    blockDateText = getBlockDateText(estimatedHeight),
+                    rescanButtonEnabled = isValid && isDifferent,
+                    datePickerLoading = false,
+                    closeDatePicker = true
+                )
+            } else {
+                uiState = uiState.copy(datePickerLoading = false, closeDatePicker = true)
+            }
+        }
+    }
+
+    private suspend fun estimateBlockHeightFromDate(day: Int, month: Int, year: Int): Long? = withContext(Dispatchers.Default) {
+
+        delay(2000)
         val calendar = java.util.Calendar.getInstance().apply {
             set(java.util.Calendar.YEAR, year)
             set(java.util.Calendar.MONTH, month - 1)
@@ -86,20 +121,11 @@ class EnterBirthdayHeightViewModel(
             set(java.util.Calendar.MILLISECOND, 0)
         }
         val selectedDate = Date(calendar.timeInMillis)
-        val now = System.currentTimeMillis()
 
-        val height = when (blockchainType) {
+        when (blockchainType) {
             BlockchainType.Zcash -> {
-                // Zcash: ~75 seconds per block
-                // Genesis: Oct 28, 2016
-                val genesisTimestamp = 1477656000000L
-                val blockTime = 75 * 1000L
-                val selectedTimestamp = calendar.timeInMillis
-                if (selectedTimestamp <= genesisTimestamp) {
-                    1L
-                } else {
-                    val timeSinceGenesis = (minOf(selectedTimestamp, now) - genesisTimestamp)
-                    (timeSinceGenesis / blockTime).coerceAtLeast(1L)
+                ZcashAdapter.estimateBirthdayHeight(App.instance, selectedDate).also {
+                    Log.e("eee", "?????????? estimated birthdayHeight: $it")
                 }
             }
             BlockchainType.Monero -> {
@@ -107,9 +133,6 @@ class EnterBirthdayHeightViewModel(
             }
             else -> null
         }
-
-        uiState = uiState.copy(datePickerLoading = false)
-        return height
     }
 
     private fun getBlockDateText(height: Long?): String? {
