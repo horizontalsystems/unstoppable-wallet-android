@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.subscriptions.core.IPaidAction
-import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.SwapProtection
@@ -16,7 +15,6 @@ class PaidActionSettingsManager(
         SecureSend,
         ScamProtection,
         SwapProtection,
-        RobberyProtection
     )
 
     val disabledActionsFlow: StateFlow<Set<String>> = localStorage.disabledPaidActionsFlow

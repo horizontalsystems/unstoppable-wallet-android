@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -23,7 +25,15 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.authorizedAction
+import io.horizontalsystems.bankwallet.core.ensurePinSet
+import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
@@ -45,7 +55,13 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsSwitcher
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
+import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 
 class SecuritySettingsFragment : BaseComposeFragment() {
@@ -158,16 +174,72 @@ private fun SecurityCenterScreen(
                         )
                     }
                 }
-            }
 
-//            DuressPasscodeBlock(
-//                securitySettingsViewModel,
-//                navController
-//            )
-//            InfoText(
-//                text = stringResource(R.string.SettingsSecurity_DuressPinDescription),
-//                paddingBottom = 32.dp
-//            )
+                BoxBordered(top = true) {
+                    CellPrimary(
+                        middle = {
+                            CellMiddleInfo(
+                                title = stringResource(R.string.Premium_UpgradeFeature_RobberyProtection).hs,
+                                subtitle = stringResource(R.string.Premium_UpgradeFeature_RobberyProtection_Description).hs
+                            )
+                        },
+                        right = {
+                            val onClick = {
+                                navController.paidAction(RobberyProtection) {
+                                    if (uiState.pinEnabled) {
+                                        navController.authorizedAction {
+                                            if (uiState.duressPinEnabled) {
+                                                navController.slideFromRight(R.id.editDuressPinFragment)
+                                            } else {
+                                                navController.slideFromRight(R.id.setDuressPinIntroFragment)
+                                            }
+                                        }
+                                    } else {
+                                        navController.ensurePinSet(R.string.PinSet_ForDuress) {
+                                            navController.slideFromRight(R.id.setDuressPinIntroFragment)
+                                        }
+                                    }
+                                }
+                                stat(
+                                    page = StatPage.Security,
+                                    event = StatEvent.OpenPremium(StatPremiumTrigger.DuressMode)
+                                )
+                            }
+
+                            if (uiState.duressPinEnabled) {
+                                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                    HSIconButton(
+                                        variant = ButtonVariant.Secondary,
+                                        style = ButtonStyle.Solid,
+                                        size = ButtonSize.Small,
+                                        icon = painterResource(R.drawable.ic_edit_24),
+                                        onClick = onClick
+                                    )
+
+                                    HSIconButton(
+                                        variant = ButtonVariant.Secondary,
+                                        style = ButtonStyle.Solid,
+                                        size = ButtonSize.Small,
+                                        icon = painterResource(R.drawable.trash_24)
+                                    ) {
+                                        navController.authorizedAction {
+                                            securitySettingsViewModel.disableDuressPin()
+                                        }
+                                    }
+                                }
+                            } else {
+                                HSButton(
+                                    variant = ButtonVariant.Secondary,
+                                    style = ButtonStyle.Solid,
+                                    size = ButtonSize.Small,
+                                    title = stringResource(R.string.Button_Add),
+                                    onClick = onClick
+                                )
+                            }
+                        }
+                    )
+                }
+            }
 
             VSpacer(height = 32.dp)
         }
