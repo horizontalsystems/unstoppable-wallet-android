@@ -1,12 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
@@ -25,17 +22,25 @@ class EnterBirthdayHeightViewModel(
     private val account: Account,
     private val currentBirthdayHeight: Long?,
     private val restoreSettingsManager: RestoreSettingsManager
-) : ViewModel() {
+) : ViewModelUiState<EnterBirthdayHeightModule.UiState>() {
 
-    var uiState by mutableStateOf(
-        EnterBirthdayHeightModule.UiState(
-            birthdayHeight = null,
-            blockDateText = getBlockDateText(currentBirthdayHeight),
-            rescanButtonEnabled = false,
-            closeAfterRescan = false
-        )
+    private var birthdayHeight: Long? = null
+    private var birthdayHeightText: String? = null
+    private var blockDateText: String? = getBlockDateText(currentBirthdayHeight)
+    private var rescanButtonEnabled: Boolean = false
+    private var closeAfterRescan: Boolean = false
+    private var datePickerLoading: Boolean = false
+    private var closeDatePicker: Boolean = false
+
+    override fun createState() = EnterBirthdayHeightModule.UiState(
+        birthdayHeight = birthdayHeight,
+        birthdayHeightText = birthdayHeightText,
+        blockDateText = blockDateText,
+        rescanButtonEnabled = rescanButtonEnabled,
+        closeAfterRescan = closeAfterRescan,
+        datePickerLoading = datePickerLoading,
+        closeDatePicker = closeDatePicker
     )
-        private set
 
     fun setBirthdayHeight(heightText: String) {
         val height = heightText.toLongOrNull()
@@ -45,37 +50,42 @@ class EnterBirthdayHeightViewModel(
         // When input is cleared, show the current birthday height's date
         val dateHeight = height ?: currentBirthdayHeight
 
-        uiState = uiState.copy(
-            birthdayHeight = height,
-            blockDateText = getBlockDateText(dateHeight),
-            rescanButtonEnabled = isValid && isDifferent
-        )
+        birthdayHeight = height
+        birthdayHeightText = null // Reset so LaunchedEffect can trigger again for same value
+        blockDateText = getBlockDateText(dateHeight)
+        rescanButtonEnabled = isValid && isDifferent
+        emitState()
     }
 
     fun onRescanClick() {
-        val newHeight = uiState.birthdayHeight ?: return
+        val newHeight = birthdayHeight ?: return
 
         val settings = RestoreSettings()
         settings.birthdayHeight = newHeight
         restoreSettingsManager.save(settings, account, blockchainType)
 
-        uiState = uiState.copy(closeAfterRescan = true)
+        closeAfterRescan = true
+        emitState()
     }
 
     fun onRescanHandled() {
-        uiState = uiState.copy(closeAfterRescan = false)
+        closeAfterRescan = false
+        emitState()
     }
 
     fun onDatePickerOpened() {
-        uiState = uiState.copy(datePickerLoading = false, closeDatePicker = false)
+        datePickerLoading = false
+        closeDatePicker = false
+        emitState()
     }
 
     fun onDatePickerClosed() {
-        uiState = uiState.copy(closeDatePicker = false)
+        closeDatePicker = false
+        emitState()
     }
 
     fun getInitialDateForPicker(): Triple<Int, Int, Int> {
-        val height = uiState.birthdayHeight ?: currentBirthdayHeight
+        val height = birthdayHeight ?: currentBirthdayHeight
         val date = height?.let { estimateBlockDate(it) } ?: Date()
         val calendar = java.util.Calendar.getInstance().apply { time = date }
         return Triple(
@@ -86,7 +96,8 @@ class EnterBirthdayHeightViewModel(
     }
 
     fun onDateSelected(day: Int, month: Int, year: Int) {
-        uiState = uiState.copy(datePickerLoading = true)
+        datePickerLoading = true
+        emitState()
 
         viewModelScope.launch {
             val estimatedHeight = estimateBlockHeightFromDate(day, month, year)
@@ -94,17 +105,17 @@ class EnterBirthdayHeightViewModel(
                 val isValid = estimatedHeight > 0
                 val isDifferent = estimatedHeight != currentBirthdayHeight
 
-                uiState = uiState.copy(
-                    birthdayHeight = estimatedHeight,
-                    birthdayHeightText = estimatedHeight.toString(),
-                    blockDateText = getBlockDateText(estimatedHeight),
-                    rescanButtonEnabled = isValid && isDifferent,
-                    datePickerLoading = false,
-                    closeDatePicker = true
-                )
+                birthdayHeight = estimatedHeight
+                birthdayHeightText = estimatedHeight.toString()
+                blockDateText = getBlockDateText(estimatedHeight)
+                rescanButtonEnabled = isValid && isDifferent
+                datePickerLoading = false
+                closeDatePicker = true
             } else {
-                uiState = uiState.copy(datePickerLoading = false, closeDatePicker = true)
+                datePickerLoading = false
+                closeDatePicker = true
             }
+            emitState()
         }
     }
 
