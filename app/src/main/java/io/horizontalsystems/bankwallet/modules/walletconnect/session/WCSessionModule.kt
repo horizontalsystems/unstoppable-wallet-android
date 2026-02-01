@@ -23,7 +23,8 @@ object WCSessionModule {
                 topic = sessionTopic,
                 wcManager = App.wcManager,
                 networkManager = App.networkManager,
-                appConfigProvider = App.appConfigProvider
+                appConfigProvider = App.appConfigProvider,
+                paidActionSettingsManager = App.paidActionSettingsManager
             ) as T
         }
     }
@@ -69,7 +70,7 @@ data class WCSessionUiState(
     val status: Status?,
     val pendingRequests: List<WCRequestViewItem>,
     val blockchainTypes: List<BlockchainType>?,
-    val whiteListState: WCWhiteListState,
+    val whiteListState: WCWhiteListState?,
     val hasSubscription: Boolean,
     val closeDialog: Boolean,
 )

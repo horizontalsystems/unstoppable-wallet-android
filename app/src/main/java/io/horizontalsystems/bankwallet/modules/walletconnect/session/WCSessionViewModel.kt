@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.ServiceWCWhitelist
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -25,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionSe
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.WaitingForApproveSession
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,7 +42,8 @@ class WCSessionViewModel(
     private val topic: String?,
     private val wcManager: WCManager,
     private val networkManager: INetworkManager,
-    appConfigProvider: AppConfigProvider
+    appConfigProvider: AppConfigProvider,
+    private val paidActionSettingsManager: PaidActionSettingsManager
 ) : ViewModelUiState<WCSessionUiState>() {
 
     val marketApiBaseUrl = appConfigProvider.marketApiBaseUrl
@@ -59,10 +62,11 @@ class WCSessionViewModel(
     private var pendingRequests = listOf<WCRequestViewItem>()
     private var blockchainTypes: List<BlockchainType>? = null
     private var connected: Boolean = topic != null
-    private var whiteListState = WCWhiteListState.InProgress
+    private var whiteListState: WCWhiteListState? = null
     private var whiteListCache: List<ServiceWCWhitelist.WCWhiteList>? = null
     private var hasSubscription = false
     private var closeDialog = false
+    private var scamProtectionEnabled = paidActionSettingsManager.isActionEnabled(ScamProtection)
 
     override fun createState() = WCSessionUiState(
         peerMeta = peerMeta,
@@ -172,8 +176,11 @@ class WCSessionViewModel(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            whiteListCache = getWCWhiteList()
-            checkWhiteListStatus()
+            if (scamProtectionEnabled) {
+                whiteListState = WCWhiteListState.InProgress
+                whiteListCache = getWCWhiteList()
+                checkWhiteListStatus()
+            }
         }
 
         viewModelScope.launch {
