@@ -160,7 +160,8 @@ fun EnterBirthdayHeightScreen(
                         .padding(horizontal = 24.dp),
                     title = stringResource(R.string.BirthdayHeight_Rescan),
                     variant = ButtonVariant.Primary,
-                    enabled = uiState.rescanButtonEnabled,
+                    loadingIndicator = uiState.rescanLoading,
+                    enabled = uiState.rescanButtonEnabled && !uiState.rescanLoading,
                     onClick = { viewModel.onRescanClick() }
                 )
             }

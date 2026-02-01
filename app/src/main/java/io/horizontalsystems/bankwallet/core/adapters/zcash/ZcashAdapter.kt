@@ -424,7 +424,7 @@ class ZcashAdapter(
 
     private fun onStatus(status: Synchronizer.Status) {
         syncState = when (status) {
-            Synchronizer.Status.STOPPED -> AdapterState.NotSynced(Exception("stopped"))
+            Synchronizer.Status.STOPPED -> AdapterState.Connecting
             Synchronizer.Status.DISCONNECTED -> AdapterState.NotSynced(Exception("disconnected"))
             Synchronizer.Status.SYNCING -> AdapterState.Syncing()
             Synchronizer.Status.SYNCED -> AdapterState.Synced

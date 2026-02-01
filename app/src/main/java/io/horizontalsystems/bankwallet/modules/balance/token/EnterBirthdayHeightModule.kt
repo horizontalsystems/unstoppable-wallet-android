@@ -19,7 +19,9 @@ object EnterBirthdayHeightModule {
                 blockchainType = blockchainType,
                 account = account,
                 currentBirthdayHeight = currentBirthdayHeight,
-                restoreSettingsManager = App.restoreSettingsManager
+                restoreSettingsManager = App.restoreSettingsManager,
+                adapterManager = App.adapterManager,
+                walletManager = App.walletManager
             ) as T
         }
     }
@@ -29,6 +31,7 @@ object EnterBirthdayHeightModule {
         val birthdayHeightText: String? = null,
         val blockDateText: String? = null,
         val rescanButtonEnabled: Boolean = false,
+        val rescanLoading: Boolean = false,
         val closeAfterRescan: Boolean = false,
         val datePickerLoading: Boolean = false,
         val closeDatePicker: Boolean = false
