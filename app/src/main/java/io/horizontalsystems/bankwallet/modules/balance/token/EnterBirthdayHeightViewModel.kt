@@ -26,6 +26,14 @@ class EnterBirthdayHeightViewModel(
     private val walletManager: IWalletManager
 ) : ViewModelUiState<EnterBirthdayHeightModule.UiState>() {
 
+    private val minBirthdayHeight: Long = when (blockchainType) {
+        BlockchainType.Zcash -> 420_000L
+        BlockchainType.Monero -> 0L
+        else -> 0L
+    }
+
+    private val maxBirthdayHeight: Long = UInt.MAX_VALUE.toLong()
+
     private var birthdayHeight: Long? = null
     private var birthdayHeightText: String? = null
     private var blockDateText: String? = null
@@ -53,7 +61,7 @@ class EnterBirthdayHeightViewModel(
 
     fun setBirthdayHeight(heightText: String) {
         val height = heightText.toLongOrNull()
-        val isValid = height != null && height > 0
+        val isValid = height != null && height >= minBirthdayHeight && height <= maxBirthdayHeight
         val isDifferent = height != currentBirthdayHeight
 
         // When input is cleared, show the current birthday height's date
@@ -129,7 +137,7 @@ class EnterBirthdayHeightViewModel(
         viewModelScope.launch {
             val estimatedHeight = estimateBlockHeightFromDate(day, month, year)
             if (estimatedHeight != null) {
-                val isValid = estimatedHeight > 0
+                val isValid = estimatedHeight in minBirthdayHeight..maxBirthdayHeight
                 val isDifferent = estimatedHeight != currentBirthdayHeight
 
                 birthdayHeight = estimatedHeight
@@ -180,7 +188,7 @@ class EnterBirthdayHeightViewModel(
             return
         }
 
-        blockDateText = "Calculating..."
+        blockDateText = ""
         emitState()
 
         viewModelScope.launch {
