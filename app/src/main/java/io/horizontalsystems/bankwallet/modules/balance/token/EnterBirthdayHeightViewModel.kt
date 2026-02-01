@@ -13,7 +13,6 @@ import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.monerokit.MoneroKit
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
@@ -29,12 +28,17 @@ class EnterBirthdayHeightViewModel(
 
     private var birthdayHeight: Long? = null
     private var birthdayHeightText: String? = null
-    private var blockDateText: String? = getBlockDateText(currentBirthdayHeight)
+    private var blockDateText: String? = null
+    private var cachedEstimatedDate: Date? = null
     private var rescanButtonEnabled: Boolean = false
     private var rescanLoading: Boolean = false
     private var closeAfterRescan: Boolean = false
     private var datePickerLoading: Boolean = false
     private var closeDatePicker: Boolean = false
+
+    init {
+        updateBlockDateText(currentBirthdayHeight)
+    }
 
     override fun createState() = EnterBirthdayHeightModule.UiState(
         birthdayHeight = birthdayHeight,
@@ -57,9 +61,8 @@ class EnterBirthdayHeightViewModel(
 
         birthdayHeight = height
         birthdayHeightText = null // Reset so LaunchedEffect can trigger again for same value
-        blockDateText = getBlockDateText(dateHeight)
         rescanButtonEnabled = isValid && isDifferent
-        emitState()
+        updateBlockDateText(dateHeight)
     }
 
     fun onRescanClick() {
@@ -110,8 +113,7 @@ class EnterBirthdayHeightViewModel(
     }
 
     fun getInitialDateForPicker(): Triple<Int, Int, Int> {
-        val height = birthdayHeight ?: currentBirthdayHeight
-        val date = height?.let { estimateBlockDate(it) } ?: Date()
+        val date = cachedEstimatedDate ?: Date()
         val calendar = java.util.Calendar.getInstance().apply { time = date }
         return Triple(
             calendar.get(java.util.Calendar.DAY_OF_MONTH),
@@ -132,21 +134,20 @@ class EnterBirthdayHeightViewModel(
 
                 birthdayHeight = estimatedHeight
                 birthdayHeightText = estimatedHeight.toString()
-                blockDateText = getBlockDateText(estimatedHeight)
                 rescanButtonEnabled = isValid && isDifferent
                 datePickerLoading = false
                 closeDatePicker = true
+                emitState()
+                updateBlockDateText(estimatedHeight)
             } else {
                 datePickerLoading = false
                 closeDatePicker = true
+                emitState()
             }
-            emitState()
         }
     }
 
     private suspend fun estimateBlockHeightFromDate(day: Int, month: Int, year: Int): Long? = withContext(Dispatchers.Default) {
-
-        delay(2000)
         val calendar = java.util.Calendar.getInstance().apply {
             set(java.util.Calendar.YEAR, year)
             set(java.util.Calendar.MONTH, month - 1)
@@ -162,36 +163,44 @@ class EnterBirthdayHeightViewModel(
             BlockchainType.Zcash -> {
                 ZcashAdapter.estimateBirthdayHeight(App.instance, selectedDate)
             }
+
             BlockchainType.Monero -> {
                 MoneroKit.restoreHeightForDate(selectedDate)
             }
+
             else -> null
         }
     }
 
-    private fun getBlockDateText(height: Long?): String? {
-        if (height == null) return null
+    private fun updateBlockDateText(height: Long?) {
+        if (height == null) {
+            blockDateText = null
+            cachedEstimatedDate = null
+            emitState()
+            return
+        }
 
-        // Estimate block date based on blockchain type
-        val estimatedDate = estimateBlockDate(height)
-        return estimatedDate?.let { DateHelper.formatDate(it, "MMM d, yyyy") }
+        blockDateText = "Calculating..."
+        emitState()
+
+        viewModelScope.launch {
+            val estimatedDate = estimateBlockDate(height)
+            cachedEstimatedDate = estimatedDate
+            blockDateText = estimatedDate?.let { DateHelper.formatDate(it, "MMM d, yyyy") }
+            emitState()
+        }
     }
 
-    private fun estimateBlockDate(height: Long): Date? {
-        val now = System.currentTimeMillis()
-
-        return when (blockchainType) {
+    private suspend fun estimateBlockDate(height: Long): Date? = withContext(Dispatchers.IO) {
+        when (blockchainType) {
             BlockchainType.Zcash -> {
-                // Zcash: ~75 seconds per block
-                // Genesis: Oct 28, 2016
-                val genesisTimestamp = 1477656000000L
-                val blockTime = 75 * 1000L
-                val estimatedTimestamp = genesisTimestamp + (height * blockTime)
-                if (estimatedTimestamp <= now) Date(estimatedTimestamp) else Date(now)
+                ZcashAdapter.estimateBirthdayDate(App.instance, height)
             }
+
             BlockchainType.Monero -> {
                 MoneroKit.dateForRestoreHeight(height)
             }
+
             else -> null
         }
     }
