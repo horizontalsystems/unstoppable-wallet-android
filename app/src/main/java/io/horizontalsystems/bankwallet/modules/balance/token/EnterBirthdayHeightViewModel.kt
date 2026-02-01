@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
@@ -21,13 +22,16 @@ class EnterBirthdayHeightViewModel(
     private val blockchainType: BlockchainType,
     private val account: Account,
     private val currentBirthdayHeight: Long?,
-    private val restoreSettingsManager: RestoreSettingsManager
+    private val restoreSettingsManager: RestoreSettingsManager,
+    private val adapterManager: IAdapterManager,
+    private val walletManager: IWalletManager
 ) : ViewModelUiState<EnterBirthdayHeightModule.UiState>() {
 
     private var birthdayHeight: Long? = null
     private var birthdayHeightText: String? = null
     private var blockDateText: String? = getBlockDateText(currentBirthdayHeight)
     private var rescanButtonEnabled: Boolean = false
+    private var rescanLoading: Boolean = false
     private var closeAfterRescan: Boolean = false
     private var datePickerLoading: Boolean = false
     private var closeDatePicker: Boolean = false
@@ -37,6 +41,7 @@ class EnterBirthdayHeightViewModel(
         birthdayHeightText = birthdayHeightText,
         blockDateText = blockDateText,
         rescanButtonEnabled = rescanButtonEnabled,
+        rescanLoading = rescanLoading,
         closeAfterRescan = closeAfterRescan,
         datePickerLoading = datePickerLoading,
         closeDatePicker = closeDatePicker
@@ -60,12 +65,32 @@ class EnterBirthdayHeightViewModel(
     fun onRescanClick() {
         val newHeight = birthdayHeight ?: return
 
-        val settings = RestoreSettings()
-        settings.birthdayHeight = newHeight
-        restoreSettingsManager.save(settings, account, blockchainType)
-
-        closeAfterRescan = true
+        rescanLoading = true
         emitState()
+
+        viewModelScope.launch {
+            if (blockchainType == BlockchainType.Zcash) {
+                val zcashWallet = walletManager.activeWallets.firstOrNull {
+                    it.account == account && it.token.blockchainType == BlockchainType.Zcash
+                }
+
+                zcashWallet?.let { wallet ->
+                    val adapter: ZcashAdapter? = adapterManager.getAdapterForWallet(wallet)
+                    withContext(Dispatchers.IO) {
+                        adapter?.stop()
+                        ZcashAdapter.clear(account.id)
+                    }
+                }
+            }
+
+            val settings = RestoreSettings()
+            settings.birthdayHeight = newHeight
+            restoreSettingsManager.save(settings, account, blockchainType)
+
+            rescanLoading = false
+            closeAfterRescan = true
+            emitState()
+        }
     }
 
     fun onRescanHandled() {
@@ -135,9 +160,7 @@ class EnterBirthdayHeightViewModel(
 
         when (blockchainType) {
             BlockchainType.Zcash -> {
-                ZcashAdapter.estimateBirthdayHeight(App.instance, selectedDate).also {
-                    Log.e("eee", "?????????? estimated birthdayHeight: $it")
-                }
+                ZcashAdapter.estimateBirthdayHeight(App.instance, selectedDate)
             }
             BlockchainType.Monero -> {
                 MoneroKit.restoreHeightForDate(selectedDate)
