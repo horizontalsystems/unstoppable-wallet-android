@@ -187,7 +187,8 @@ fun WheelDatePickerBottomSheet(
     loading: Boolean,
     initialDay: Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
     initialMonth: Int = Calendar.getInstance().get(Calendar.MONTH) + 1,
-    initialYear: Int = Calendar.getInstance().get(Calendar.YEAR)
+    initialYear: Int = Calendar.getInstance().get(Calendar.YEAR),
+    years: List<Int> = (1900..2100).toList()
 ) {
     var day by remember { mutableIntStateOf(initialDay) }
     var month by remember { mutableIntStateOf(initialMonth) }
@@ -225,7 +226,8 @@ fun WheelDatePickerBottomSheet(
                 selectedYear = year,
                 onDaySelected = { day = it },
                 onMonthSelected = { month = it },
-                onYearSelected = { year = it }
+                onYearSelected = { year = it },
+                years = years
             )
         }
     }
