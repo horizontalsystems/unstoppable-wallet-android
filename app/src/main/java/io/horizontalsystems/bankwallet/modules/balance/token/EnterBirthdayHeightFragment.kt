@@ -134,7 +134,8 @@ fun EnterBirthdayHeightScreen(
         val initialDate = viewModel.getInitialDateForPicker()
         WheelDatePickerBottomSheet(
             onDismissRequest = {
-                scope.launch { datePickerSheetState.hide() }.invokeOnCompletion {
+                scope.launch {
+                    datePickerSheetState.hide()
                     showDatePicker = false
                 }
             },
