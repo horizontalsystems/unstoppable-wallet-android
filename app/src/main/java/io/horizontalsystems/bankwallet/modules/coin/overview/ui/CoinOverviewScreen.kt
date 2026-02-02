@@ -30,8 +30,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -107,10 +107,13 @@ fun CoinOverviewScreen(
     val manageWalletsViewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory1)
     val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory1)
 
-    if (restoreSettingsViewModel.openBirthdayHeightConfig != null) {
+    restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        navController.slideFromBottomForResult<BirthdayHeightConfig.Result>(R.id.zcashConfigure) {
+        navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
+            resId = R.id.zcashConfigure,
+            input = token
+        ) {
             if (it.config != null) {
                 restoreSettingsViewModel.onEnter(it.config)
             } else {
@@ -132,6 +135,7 @@ fun CoinOverviewScreen(
                     ViewState.Loading -> {
                         Loading()
                     }
+
                     ViewState.Success -> {
                         overview?.let { overview ->
                             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -269,12 +273,14 @@ fun CoinOverviewScreen(
                         }
 
                     }
+
                     is ViewState.Error -> {
                         ListErrorView(stringResource(id = R.string.BalanceSyncError_Title)) {
                             viewModel.retry()
                             chartViewModel.refresh()
                         }
                     }
+
                     null -> {}
                 }
             }
@@ -292,31 +298,37 @@ private fun onClick(coinLink: CoinLink, context: Context, navController: NavCont
                 MarkdownFragment.Input(absoluteUrl, true)
             )
         }
+
         else -> LinkHelper.openLinkInAppBrowser(context, absoluteUrl)
     }
 
-    when(coinLink.linkType) {
+    when (coinLink.linkType) {
         LinkType.Guide -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.Guide))
         LinkType.Website -> stat(
             page = StatPage.CoinOverview,
             event = StatEvent.Open(StatPage.ExternalCoinWebsite)
         )
+
         LinkType.Whitepaper -> stat(
             page = StatPage.CoinOverview,
             event = StatEvent.Open(StatPage.ExternalCoinWhitePaper)
         )
+
         LinkType.Twitter -> stat(
             page = StatPage.CoinOverview,
             event = StatEvent.Open(StatPage.ExternalTwitter)
         )
+
         LinkType.Telegram -> stat(
             page = StatPage.CoinOverview,
             event = StatEvent.Open(StatPage.ExternalTelegram)
         )
+
         LinkType.Reddit -> stat(
             page = StatPage.CoinOverview,
             event = StatEvent.Open(StatPage.ExternalReddit)
         )
+
         LinkType.Github -> stat(
             page = StatPage.CoinOverview,
             event = StatEvent.Open(StatPage.ExternalGithub)
