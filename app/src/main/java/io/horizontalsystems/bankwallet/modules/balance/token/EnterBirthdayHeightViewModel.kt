@@ -73,7 +73,7 @@ class EnterBirthdayHeightViewModel(
 
     fun setBirthdayHeight(heightText: String) {
         val height = heightText.toLongOrNull()
-        val isValid = height != null && height >= minBirthdayHeight && height <= maxBirthdayHeight
+        val isHeightValid = height != null && height >= minBirthdayHeight && height <= maxBirthdayHeight
         val isDifferent = height != currentBirthdayHeight
 
         // When input is cleared, show the current birthday height's date
@@ -81,7 +81,7 @@ class EnterBirthdayHeightViewModel(
 
         birthdayHeight = height
         birthdayHeightText = null // Reset so LaunchedEffect can trigger again for same value
-        rescanButtonEnabled = isValid && isDifferent
+        rescanButtonEnabled = isHeightValid && isDifferent
         updateBlockDateText(dateHeight)
     }
 
@@ -134,11 +134,11 @@ class EnterBirthdayHeightViewModel(
 
     fun getInitialDateForPicker(): Triple<Int, Int, Int> {
         val date = cachedEstimatedDate ?: Date()
-        val calendar = java.util.Calendar.getInstance().apply { time = date }
+        val calendar = Calendar.getInstance().apply { time = date }
         return Triple(
-            calendar.get(java.util.Calendar.DAY_OF_MONTH),
-            calendar.get(java.util.Calendar.MONTH) + 1,
-            calendar.get(java.util.Calendar.YEAR)
+            calendar.get(Calendar.DAY_OF_MONTH),
+            calendar.get(Calendar.MONTH) + 1,
+            calendar.get(Calendar.YEAR)
         )
     }
 
@@ -206,8 +206,15 @@ class EnterBirthdayHeightViewModel(
         viewModelScope.launch {
             val heightForEstimate = if (height < minBirthdayHeight) minBirthdayHeight else height
             val estimatedDate = estimateBlockDate(heightForEstimate)
-            cachedEstimatedDate = estimatedDate
-            blockDateText = estimatedDate?.let { DateHelper.formatDate(it, "MMM d, yyyy") }
+            val currentDate = Date()
+            if (estimatedDate != null && estimatedDate.after(currentDate)) {
+                cachedEstimatedDate = currentDate
+                blockDateText = DateHelper.formatDate(currentDate, "MMM d, yyyy")
+                rescanButtonEnabled = false
+            } else {
+                cachedEstimatedDate = estimatedDate
+                blockDateText = estimatedDate?.let { DateHelper.formatDate(it, "MMM d, yyyy") }
+            }
             emitState()
         }
     }

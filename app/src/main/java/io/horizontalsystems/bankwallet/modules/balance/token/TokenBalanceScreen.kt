@@ -231,44 +231,39 @@ fun TokenBalanceScreen(
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
             item {
-                uiState.balanceViewItem?.let {
+                uiState.balanceViewItem?.let { balanceViewItem ->
                     TokenBalanceHeader(
-                        balanceViewItem = it,
+                        balanceViewItem = balanceViewItem,
                         navController = navController,
                         viewModel = viewModel,
-                        showBottomSheet = { content ->
-                            bottomSheetContent = content
-                        },
+                        receiveAddress = uiState.receiveAddress,
+                        warning = uiState.warningMessage,
                         onClickReceive = onClickReceive,
                         loading = loading
                     )
 
-                    if (it.isWatchAccount) {
-                        uiState.receiveAddress?.let { receiveAddress ->
-                            CellPrimary(
-                                middle = {
-                                    CellMiddleInfoTextIcon(text = stringResource(R.string.Balance_ReceiveAddress).hs)
-                                },
-                                right = {
-                                    CellRightNavigation(
-                                        subtitle = receiveAddress.shorten()
-                                            .hs(color = ComposeAppTheme.colors.leah)
+                    balanceViewItem.birthdayHeight?.let { birthdayHeight ->
+                        BirthdayHeightCell(
+                            birthdayHeight = birthdayHeight,
+                            onClick = {
+                                navController.slideFromRight(
+                                    R.id.enterBirthdayHeightFragment,
+                                    EnterBirthdayHeightFragment.Input(
+                                        blockchainType = balanceViewItem.wallet.token.blockchainType,
+                                        account = balanceViewItem.wallet.account,
+                                        currentBirthdayHeight = birthdayHeight
                                     )
-                                },
-                                backgroundColor = ComposeAppTheme.colors.tyler,
-                                onClick = onClickReceive
-                            )
-                        }
-                    }
-
-                    uiState.warningMessage?.let { warning ->
-                        TextAttention(
-                            modifier = Modifier
-                                .background(ComposeAppTheme.colors.tyler)
-                                .padding(16.dp),
-                            text = warning
+                                )
+                            }
                         )
                     }
+
+                    LockedBalanceSection(
+                        balanceViewItem = balanceViewItem,
+                        showBottomSheet = { content ->
+                            bottomSheetContent = content
+                        }
+                    )
                 }
             }
 
@@ -437,7 +432,8 @@ private fun TokenBalanceHeader(
     balanceViewItem: BalanceViewItem,
     navController: NavController,
     viewModel: TokenBalanceViewModel,
-    showBottomSheet: (LockedValue) -> Unit = { _ -> },
+    receiveAddress: String?,
+    warning: String?,
     onClickReceive: () -> Unit,
     loading: Boolean
 ) {
@@ -502,7 +498,23 @@ private fun TokenBalanceHeader(
                 stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
             },
         )
-
+        if (balanceViewItem.isWatchAccount) {
+            receiveAddress?.let { receiveAddress ->
+                CellPrimary(
+                    middle = {
+                        CellMiddleInfoTextIcon(text = stringResource(R.string.Balance_ReceiveAddress).hs)
+                    },
+                    right = {
+                        CellRightNavigation(
+                            subtitle = receiveAddress.shorten()
+                                .hs(color = ComposeAppTheme.colors.leah)
+                        )
+                    },
+                    backgroundColor = ComposeAppTheme.colors.tyler,
+                    onClick = onClickReceive
+                )
+            }
+        }
         if (!balanceViewItem.isWatchAccount) {
             ButtonsRow(
                 viewItem = balanceViewItem,
@@ -510,25 +522,12 @@ private fun TokenBalanceHeader(
                 onClickReceive = onClickReceive
             )
         }
-
-        LockedBalanceSection(
-            balanceViewItem = balanceViewItem,
-            showBottomSheet = showBottomSheet,
-        )
-
-        balanceViewItem.birthdayHeight?.let { birthdayHeight ->
-            BirthdayHeightCell(
-                birthdayHeight = birthdayHeight,
-                onClick = {
-                    navController.slideFromRight(
-                        R.id.enterBirthdayHeightFragment,
-                        EnterBirthdayHeightFragment.Input(
-                            blockchainType = balanceViewItem.wallet.token.blockchainType,
-                            account = balanceViewItem.wallet.account,
-                            currentBirthdayHeight = birthdayHeight
-                        )
-                    )
-                }
+        warning?.let { warning ->
+            TextAttention(
+                modifier = Modifier
+                    .background(ComposeAppTheme.colors.tyler)
+                    .padding(16.dp),
+                text = warning
             )
         }
     }
@@ -601,18 +600,20 @@ private fun BirthdayHeightCell(
     birthdayHeight: Long,
     onClick: () -> Unit
 ) {
-    CellPrimary(
-        middle = {
-            CellMiddleInfo(eyebrow = stringResource(R.string.Restore_BirthdayHeight).hs)
-        },
-        right = {
-            CellRightNavigation(
-                subtitle = birthdayHeight.toString().hs(color = ComposeAppTheme.colors.leah)
-            )
-        },
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        onClick = onClick
-    )
+    BoxBordered(bottom = true) {
+        CellPrimary(
+            middle = {
+                CellMiddleInfo(eyebrow = stringResource(R.string.Restore_BirthdayHeight).hs)
+            },
+            right = {
+                CellRightNavigation(
+                    subtitle = birthdayHeight.toString().hs(color = ComposeAppTheme.colors.leah)
+                )
+            },
+            backgroundColor = ComposeAppTheme.colors.lawrence,
+            onClick = onClick
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

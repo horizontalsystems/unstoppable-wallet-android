@@ -175,8 +175,15 @@ class RestoreBirthdayHeightViewModel(
         viewModelScope.launch {
             val heightForEstimate = if (height < minBirthdayHeight) minBirthdayHeight else height
             val estimatedDate = estimateBlockDate(heightForEstimate)
-            cachedEstimatedDate = estimatedDate
-            blockDateText = estimatedDate?.let { DateHelper.formatDate(it, "MMM d, yyyy") }
+            val currentDate = Date()
+            if (estimatedDate != null && estimatedDate.after(currentDate)) {
+                cachedEstimatedDate = currentDate
+                blockDateText = DateHelper.formatDate(currentDate, "MMM d, yyyy")
+                doneButtonEnabled = false
+            } else {
+                cachedEstimatedDate = estimatedDate
+                blockDateText = estimatedDate?.let { DateHelper.formatDate(it, "MMM d, yyyy") }
+            }
             emitState()
         }
     }
