@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.Restor
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestorePhrase
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard.RestorePhraseNonStandard
-import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigScreen
+import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class RestoreAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
@@ -101,8 +101,8 @@ private fun RestoreAccountNavHost(
                 onBackClick = { navController.popBackStack() }
             )
         }
-        composablePopup("zcash_configure") {
-            BirthdayHeightConfigScreen(
+        composablePage("zcash_configure") {
+            RestoreBirthdayHeightScreen(
                 blockchainType = BlockchainType.Zcash,
                 onCloseWithResult = { config ->
                     mainViewModel.setBirthdayHeightConfig(config)
@@ -114,8 +114,8 @@ private fun RestoreAccountNavHost(
                 }
             )
         }
-        composablePopup("monero_configure") {
-            BirthdayHeightConfigScreen(
+        composablePage("monero_configure") {
+            RestoreBirthdayHeightScreen(
                 blockchainType = BlockchainType.Monero,
                 onCloseWithResult = { config ->
                     mainViewModel.setBirthdayHeightConfig(config)
