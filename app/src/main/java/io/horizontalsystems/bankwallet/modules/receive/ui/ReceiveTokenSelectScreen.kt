@@ -4,14 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetState
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,20 +19,16 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.CoinForReceiveType
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveTokenSelectViewModel
-import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
@@ -43,23 +36,16 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
-import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
-import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
-import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
-import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
-import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceiveTokenSelectScreen(
-    navController: NavController,
     activeAccount: Account,
     onMultipleAddressesClick: (String) -> Unit,
     onMultipleDerivationsClick: (String) -> Unit,
@@ -76,9 +62,6 @@ fun ReceiveTokenSelectScreen(
     val scope = rememberCoroutineScope()
     var searchQuery by remember { mutableStateOf(uiState.searchQuery) }
     var isSearchActive by remember { mutableStateOf(false) }
-
-    val sheetState = rememberModalBottomSheetState()
-    var bottomSheetFullCoin by remember { mutableStateOf<FullCoin?>(null) }
 
     val lazyListState = rememberSaveable(
         fullCoins.size,
@@ -122,10 +105,6 @@ fun ReceiveTokenSelectScreen(
                                 alternativeCoinIconUrl = fullCoin.coin.alternativeImageUrl,
                                 coinIconPlaceholder = fullCoin.iconPlaceholder,
                                 onClick = {
-                                    if (viewModel.shouldShowBottomSheet(fullCoin)) {
-                                        bottomSheetFullCoin = fullCoin
-                                        return@ReceiveCoin
-                                    }
                                     scope.launch {
                                         val type = viewModel.getCoinForReceiveType(fullCoin)
 
@@ -160,53 +139,6 @@ fun ReceiveTokenSelectScreen(
                     }
                 )
             }
-        }
-        bottomSheetFullCoin?.let { fullCoin ->
-            ExistingOrNewWalletBottomSheet(
-                sheetState = sheetState,
-                fullCoin = fullCoin,
-                showBirthdayConfig = {
-                    navController.slideFromBottomForResult<BirthdayHeightConfig.Result>(
-                        resId = R.id.zcashConfigure,
-                        input = fullCoin.tokens.first()
-                    ) { result ->
-                        if (result.config != null) {
-                            scope.launch {
-                                viewModel.getWalletForCoinWithBirthday(fullCoin, result.config)
-                                    ?.let { onCoinClick(it) }
-                            }
-                        }
-                    }
-                    scope.launch {
-                        sheetState.hide()
-                        bottomSheetFullCoin = null
-                    }
-                },
-                createNewWallet = {
-                    scope.launch {
-                        val type = viewModel.getCoinForReceiveType(fullCoin)
-                        processCoinClick(
-                            type,
-                            fullCoin,
-                            onMultipleAddressesClick,
-                            onMultipleDerivationsClick,
-                            onMultipleBlockchainsClick,
-                            onMultipleZcashAddressTypeClick,
-                            onCoinClick
-                        )
-                    }
-                    scope.launch {
-                        sheetState.hide()
-                        bottomSheetFullCoin = null
-                    }
-                },
-                onCloseClick = {
-                    scope.launch {
-                        sheetState.hide()
-                        bottomSheetFullCoin = null
-                    }
-                }
-            )
         }
     }
 }
@@ -274,45 +206,4 @@ fun ReceiveCoin(
         },
         onClick = onClick
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ExistingOrNewWalletBottomSheet(
-    sheetState: SheetState,
-    fullCoin: FullCoin,
-    showBirthdayConfig: (FullCoin) -> Unit,
-    createNewWallet: (FullCoin) -> Unit,
-    onCloseClick: () -> Unit
-) {
-    val coin = fullCoin.coin
-
-    BottomSheetContent(
-        onDismissRequest = onCloseClick,
-        sheetState = sheetState,
-        buttons = {
-            HSButton(
-                title = stringResource(R.string.Balance_Receive_YesAlreadyOwn),
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    showBirthdayConfig(fullCoin)
-                }
-            )
-            HSButton(
-                title = stringResource(R.string.Balance_Receive_IDontHave),
-                modifier = Modifier.fillMaxWidth(),
-                style = ButtonStyle.Transparent,
-                variant = ButtonVariant.Secondary,
-                onClick = {
-                    createNewWallet(fullCoin)
-                }
-            )
-        }
-    ) {
-        BottomSheetHeaderV3(title = coin.name)
-        TextBlock(
-            text = stringResource(R.string.Balance_Receive_HaveYouOwnedCoins, coin.code.uppercase()),
-            textAlign = TextAlign.Center
-        )
-    }
 }

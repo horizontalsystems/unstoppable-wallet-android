@@ -113,21 +113,6 @@ class ReceiveTokenSelectViewModel(
         }
     }
 
-    fun shouldShowBottomSheet(fullCoin: FullCoin): Boolean {
-        val token = fullCoin.tokens.firstOrNull() ?: return false
-
-        if (token.blockchainType == BlockchainType.Zcash || token.blockchainType == BlockchainType.Monero) {
-            fullCoin.tokens.firstOrNull()?.let {
-                val activeWallets =
-                    walletManager.activeWallets.filter { it.coin == fullCoin.coin }
-                if (activeWallets.isEmpty()) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
     suspend fun getCoinForReceiveType(fullCoin: FullCoin): CoinForReceiveType? {
         val eligibleTokens = fullCoin.eligibleTokens(activeAccount.type)
 
@@ -186,28 +171,6 @@ class ReceiveTokenSelectViewModel(
 
             else -> CoinForReceiveType.MultipleBlockchains
         }
-    }
-
-    suspend fun getWalletForCoinWithBirthday(
-        coin: FullCoin,
-        config: BirthdayHeightConfig
-    ): Wallet? {
-        val token = coin.tokens.firstOrNull() ?: return null
-
-        val birthdayHeight = if (config.restoreAsNew) {
-            getBirthdayHeightForNewWallet(token.blockchainType)
-        } else {
-            config.birthdayHeight?.toLongOrNull()
-        }
-
-        if (birthdayHeight != null) {
-            val settings = RestoreSettings().apply {
-                this.birthdayHeight = birthdayHeight
-            }
-            restoreSettingsManager.save(settings, activeAccount, token.blockchainType)
-        }
-
-        return getOrCreateWallet(token)
     }
 
     private suspend fun getOrCreateWallet(token: Token): Wallet {
