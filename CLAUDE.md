@@ -96,18 +96,31 @@ App.myManager.doSomething()
 
 ## Reactive Patterns
 
-- **Repositories**: RxJava `Observable` / `BehaviorSubject`
-- **ViewModels**: Kotlin `StateFlow`
-- **Conversion**: Use `.asFlow()` to convert RxJava to Flow
+- **Preferred**: Kotlin Coroutines + `StateFlow` / `SharedFlow`
+- **Deprecated**: RxJava (legacy code only, do not use in new code)
 
 ```kotlin
+// Preferred pattern - use StateFlow
+class MyRepository {
+    private val _itemsFlow = MutableStateFlow<List<Item>>(emptyList())
+    val itemsFlow: StateFlow<List<Item>> = _itemsFlow.asStateFlow()
+}
+
 // In ViewModel
 viewModelScope.launch {
-    repository.itemsObservable.asFlow().collect { items ->
+    repository.itemsFlow.collect { items ->
         // handle
     }
 }
 ```
+
+### Migration Note
+Existing RxJava code should be migrated to Coroutines/Flow when modified. Replace:
+- `Observable` → `Flow` / `StateFlow`
+- `BehaviorSubject` → `MutableStateFlow`
+- `PublishSubject` → `MutableStateFlow`
+- `Single` → `suspend fun`
+- `Completable` → `suspend fun` returning `Unit`
 
 ## Storage
 
@@ -158,10 +171,11 @@ object SecureSend : IPaidAction
 
 ## Common Gotchas
 
-1. **RxJava to Flow**: If Observable completes, Flow stops collecting silently
-2. **Coroutine exceptions**: Uncaught exceptions in `launch` blocks terminate silently
+1. **RxJava to Flow (legacy)**: If Observable completes, `.asFlow()` stops collecting silently — migrate to pure Flow
+2. **Coroutine exceptions**: Uncaught exceptions in `launch` blocks terminate silently — wrap in try-catch or use `catch` operator
 3. **Mutex in Services**: Use `mutex.withLock` for thread-safe state updates
 4. **ViewModel cleanup**: Call `service.clear()` in `onCleared()`
+5. **Flow collection**: Always collect in a coroutine scope that matches the lifecycle (e.g., `viewModelScope`)
 
 ## Testing
 
