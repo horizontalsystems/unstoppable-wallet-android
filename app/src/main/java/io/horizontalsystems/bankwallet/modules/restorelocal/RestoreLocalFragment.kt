@@ -38,7 +38,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -48,7 +47,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
-import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigScreen
+import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -152,8 +151,8 @@ private fun RestoreLocalNavHost(
                 onBackClick = { navController.popBackStack() }
             ) { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) }
         }
-        composablePopup("zcash_configure") {
-            BirthdayHeightConfigScreen(
+        composablePage("zcash_configure") {
+            RestoreBirthdayHeightScreen(
                 blockchainType = BlockchainType.Zcash,
                 onCloseWithResult = { config ->
                     mainViewModel.setBirthdayHeightConfig(config)
@@ -165,8 +164,8 @@ private fun RestoreLocalNavHost(
                 }
             )
         }
-        composablePopup("monero_configure") {
-            BirthdayHeightConfigScreen(
+        composablePage("monero_configure") {
+            RestoreBirthdayHeightScreen(
                 blockchainType = BlockchainType.Monero,
                 onCloseWithResult = { config ->
                     mainViewModel.setBirthdayHeightConfig(config)
