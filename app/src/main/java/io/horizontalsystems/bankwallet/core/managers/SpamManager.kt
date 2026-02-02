@@ -213,11 +213,12 @@ class SpamManager(
         // Skip if already scanned
         scannedTransactionStorage.getScannedTransaction(txHashBytes)?.let { return }
 
+        // Only check incoming events for spam - outgoing events are user-initiated
         val events: List<TransferEvent> = when (tx) {
             is EvmIncomingTransactionRecord -> listOf(TransferEvent(tx.from, tx.value))
-            is ExternalContractCallTransactionRecord -> tx.incomingEvents + tx.outgoingEvents
-            is ContractCallTransactionRecord -> tx.incomingEvents + tx.outgoingEvents
-            else -> return // Skip other transaction types
+            is ExternalContractCallTransactionRecord -> tx.incomingEvents
+            is ContractCallTransactionRecord -> tx.incomingEvents
+            else -> return // Skip outgoing/approve/swap - user-initiated, not spam
         }
 
         if (events.isEmpty()) return
