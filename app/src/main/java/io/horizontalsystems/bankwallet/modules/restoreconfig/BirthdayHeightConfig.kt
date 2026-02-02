@@ -101,10 +101,13 @@ class BirthdayHeightConfig : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        navController.getInput<Token>()?.let { token ->
+        val blockchainType = navController.getInput<Token>()?.blockchainType
+            ?: navController.getInput<BlockchainType>()
+
+        blockchainType?.let {
             RestoreBirthdayHeightScreen(
-                blockchainType = token.blockchainType,
-                onCloseWithResult = { closeWithConfig(it, navController) },
+                blockchainType = it,
+                onCloseWithResult = { config -> closeWithConfig(config, navController) },
                 onCloseClick = { close(navController) }
             )
         }
