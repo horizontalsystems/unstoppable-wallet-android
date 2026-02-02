@@ -71,7 +71,6 @@ fun ReceiveChooseCoinScreen(
                     return@composablePage
                 }
                 ReceiveTokenSelectScreen(
-                    navController = fragmentNavController,
                     activeAccount = activeAccount,
                     onMultipleAddressesClick = { coinUid ->
                         viewModel.coinUid = coinUid
