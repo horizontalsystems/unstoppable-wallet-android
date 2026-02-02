@@ -23,8 +23,8 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -97,7 +97,7 @@ private fun ManageWalletsScreen(
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        navController.slideFromBottomForResult<BirthdayHeightConfig.Result>(
+        navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
             resId = R.id.zcashConfigure,
             input = token
         ) {
