@@ -143,6 +143,7 @@ fun EnterBirthdayHeightScreen(
             initialDay = initialDate.first,
             initialMonth = initialDate.second,
             initialYear = initialDate.third,
+            years = uiState.datePickerYears,
             onConfirm = { day, month, year ->
                 viewModel.onDateSelected(day, month, year)
             }

@@ -15,6 +15,7 @@ import io.horizontalsystems.monerokit.MoneroKit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Calendar
 import java.util.Date
 
 class EnterBirthdayHeightViewModel(
@@ -33,6 +34,16 @@ class EnterBirthdayHeightViewModel(
     }
 
     private val maxBirthdayHeight: Long = UInt.MAX_VALUE.toLong()
+
+    private val datePickerYears: List<Int> = run {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val startYear = when (blockchainType) {
+            BlockchainType.Zcash -> 2018
+            BlockchainType.Monero -> 2014
+            else -> 2009
+        }
+        (startYear..currentYear).toList()
+    }
 
     private var birthdayHeight: Long? = null
     private var birthdayHeightText: String? = null
@@ -56,7 +67,8 @@ class EnterBirthdayHeightViewModel(
         rescanLoading = rescanLoading,
         closeAfterRescan = closeAfterRescan,
         datePickerLoading = datePickerLoading,
-        closeDatePicker = closeDatePicker
+        closeDatePicker = closeDatePicker,
+        datePickerYears = datePickerYears
     )
 
     fun setBirthdayHeight(heightText: String) {
@@ -156,14 +168,14 @@ class EnterBirthdayHeightViewModel(
     }
 
     private suspend fun estimateBlockHeightFromDate(day: Int, month: Int, year: Int): Long? = withContext(Dispatchers.Default) {
-        val calendar = java.util.Calendar.getInstance().apply {
-            set(java.util.Calendar.YEAR, year)
-            set(java.util.Calendar.MONTH, month - 1)
-            set(java.util.Calendar.DAY_OF_MONTH, day)
-            set(java.util.Calendar.HOUR_OF_DAY, 0)
-            set(java.util.Calendar.MINUTE, 0)
-            set(java.util.Calendar.SECOND, 0)
-            set(java.util.Calendar.MILLISECOND, 0)
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, month - 1)
+            set(Calendar.DAY_OF_MONTH, day)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
         }
         val selectedDate = Date(calendar.timeInMillis)
 
@@ -192,7 +204,8 @@ class EnterBirthdayHeightViewModel(
         emitState()
 
         viewModelScope.launch {
-            val estimatedDate = estimateBlockDate(height)
+            val heightForEstimate = if (height < minBirthdayHeight) minBirthdayHeight else height
+            val estimatedDate = estimateBlockDate(heightForEstimate)
             cachedEstimatedDate = estimatedDate
             blockDateText = estimatedDate?.let { DateHelper.formatDate(it, "MMM d, yyyy") }
             emitState()

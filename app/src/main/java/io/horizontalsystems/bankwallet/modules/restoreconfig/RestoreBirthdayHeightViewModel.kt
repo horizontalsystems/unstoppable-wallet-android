@@ -29,6 +29,16 @@ class RestoreBirthdayHeightViewModel(
 
     private val maxBirthdayHeight: Long = UInt.MAX_VALUE.toLong()
 
+    private val datePickerYears: List<Int> = run {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val startYear = when (blockchainType) {
+            BlockchainType.Zcash -> 2018
+            BlockchainType.Monero -> 2014
+            else -> 2009
+        }
+        (startYear..currentYear).toList()
+    }
+
     private val defaultBirthdayHeight: Long? = App.restoreSettingsManager
         .getSettingValueForCreatedAccount(RestoreSettingType.BirthdayHeight, blockchainType)
         ?.toLongOrNull()
@@ -55,7 +65,8 @@ class RestoreBirthdayHeightViewModel(
         doneButtonEnabled = doneButtonEnabled,
         datePickerLoading = datePickerLoading,
         closeDatePicker = closeDatePicker,
-        closeWithResult = closeWithResult
+        closeWithResult = closeWithResult,
+        datePickerYears = datePickerYears
     )
 
     fun setBirthdayHeight(heightText: String) {
@@ -162,7 +173,8 @@ class RestoreBirthdayHeightViewModel(
         emitState()
 
         viewModelScope.launch {
-            val estimatedDate = estimateBlockDate(height)
+            val heightForEstimate = if (height < minBirthdayHeight) minBirthdayHeight else height
+            val estimatedDate = estimateBlockDate(heightForEstimate)
             cachedEstimatedDate = estimatedDate
             blockDateText = estimatedDate?.let { DateHelper.formatDate(it, "MMM d, yyyy") }
             emitState()
@@ -200,5 +212,6 @@ data class RestoreBirthdayHeightUiState(
     val doneButtonEnabled: Boolean = true,
     val datePickerLoading: Boolean = false,
     val closeDatePicker: Boolean = false,
-    val closeWithResult: BirthdayHeightConfig? = null
+    val closeWithResult: BirthdayHeightConfig? = null,
+    val datePickerYears: List<Int> = emptyList()
 )
