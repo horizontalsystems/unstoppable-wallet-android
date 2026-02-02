@@ -1,11 +1,9 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.bankwallet.entities.ScannedTransaction
-import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmIncomingTransactionRecord
@@ -15,11 +13,9 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferE
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
-import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 private fun isEvmBlockchain(source: TransactionSource): Boolean {
     return EvmBlockchainManager.blockchainTypes.contains(source.blockchain.type)
@@ -173,18 +169,14 @@ class SpamManager(
         }
 
         // Not in database, calculate spam status
-        val dustSpamAddresses = handleSpamAddresses(events)
-
         val recentOutgoingTxs = tokenUid?.let { getOutgoingTxsFromCache(it) } ?: emptyList()
 
-        val poisoningSpamAddresses = poisoningScorer.detectSpamAddresses(
+        val spamAddresses = poisoningScorer.detectSpamAddresses(
             events = events,
             incomingTimestamp = timestamp,
             incomingBlockHeight = blockHeight,
             recentOutgoingTxs = recentOutgoingTxs
         )
-
-        val spamAddresses = (dustSpamAddresses + poisoningSpamAddresses).distinct()
         val isSpam = spamAddresses.isNotEmpty()
 
         // Save result to database
@@ -203,60 +195,6 @@ class SpamManager(
         return isSpam
     }
 
-    private fun handleSpamAddresses(events: List<TransferEvent>): List<String> {
-        val spamTokenSenders = mutableListOf<String>()
-        val nativeSenders = mutableListOf<String>()
-        var totalNativeTransactionValue: TransactionValue? = null
-
-        events.forEach { event ->
-            if (event.value is TransactionValue.CoinValue && event.value.token.type == TokenType.Native) {
-                val totalNativeValue = totalNativeTransactionValue?.decimalValue ?: BigDecimal.ZERO
-                totalNativeTransactionValue = TransactionValue.CoinValue(event.value.token, event.value.value + totalNativeValue)
-                event.address?.let { nativeSenders.add(it) }
-            } else {
-                if (event.address != null && isSpamValue(event.value)) {
-                    spamTokenSenders.add(event.address)
-                }
-            }
-        }
-
-        totalNativeTransactionValue?.let { nativeValue ->
-            if (isSpamValue(nativeValue) && nativeSenders.isNotEmpty()) {
-                spamTokenSenders.addAll(nativeSenders)
-            }
-        }
-
-        return spamTokenSenders
-    }
-
-    private fun isSpamValue(transactionValue: TransactionValue): Boolean {
-        val spamCoinLimits = App.appConfigProvider.spamCoinValueLimits
-        val value = transactionValue.decimalValue
-
-        var limit: BigDecimal = BigDecimal.ZERO
-        when (transactionValue) {
-            is TransactionValue.CoinValue -> {
-                limit = spamCoinLimits[transactionValue.coinCode] ?: BigDecimal.ZERO
-            }
-
-            is TransactionValue.JettonValue -> {
-                limit = spamCoinLimits[transactionValue.coinCode] ?: BigDecimal.ZERO
-            }
-
-            is TransactionValue.NftValue -> {
-                if (transactionValue.value > BigDecimal.ZERO)
-                    return false
-            }
-
-            is TransactionValue.RawValue,
-            is TransactionValue.TokenValue -> {
-                return true
-            }
-        }
-
-        return limit > value
-    }
-
     /**
      * Process a transaction for spam detection during background rescan.
      * Uses explicit outgoing transaction context instead of cache.
@@ -265,7 +203,7 @@ class SpamManager(
      * @param source Transaction source
      * @param outgoingContext List of recent outgoing transactions for poisoning detection
      */
-    suspend fun processTransactionForSpamWithContext(
+    fun processTransactionForSpamWithContext(
         tx: TransactionRecord,
         source: TransactionSource,
         outgoingContext: List<PoisoningScorer.OutgoingTxInfo>
@@ -285,16 +223,12 @@ class SpamManager(
         if (events.isEmpty()) return
 
         // Calculate spam status with explicit context
-        val dustSpamAddresses = handleSpamAddresses(events)
-
-        val poisoningSpamAddresses = poisoningScorer.detectSpamAddresses(
+        val spamAddresses = poisoningScorer.detectSpamAddresses(
             events = events,
             incomingTimestamp = tx.timestamp,
             incomingBlockHeight = tx.blockHeight,
             recentOutgoingTxs = outgoingContext
         )
-
-        val spamAddresses = (dustSpamAddresses + poisoningSpamAddresses).distinct()
         val isSpam = spamAddresses.isNotEmpty()
 
         // Save result to database

@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
 import io.horizontalsystems.marketkit.models.TokenType
 import java.math.BigDecimal
+import kotlin.math.abs
 
 /**
  * Address Poisoning Detection using a Scoring System.
@@ -162,7 +163,7 @@ class PoisoningScorer {
             for (outgoingTx in recentOutgoingTxs) {
                 // Block correlation - within 5 blocks (more precise, check first)
                 if (!hasTemporalCorrelation && incomingBlockHeight != null && outgoingTx.blockHeight != null) {
-                    val blockDiff = kotlin.math.abs(incomingBlockHeight - outgoingTx.blockHeight)
+                    val blockDiff = abs(incomingBlockHeight - outgoingTx.blockHeight)
                     if (blockDiff <= BLOCK_COUNT_THRESHOLD) {
                         points += POINTS_TIME_WITHIN_5_BLOCKS
                         reasons.add("Block correlation: within $blockDiff blocks")
@@ -172,7 +173,7 @@ class PoisoningScorer {
 
                 // Time correlation - within 20 minutes (only if no block correlation found)
                 if (!hasTemporalCorrelation) {
-                    val timeDiff = kotlin.math.abs(incomingTimestamp - outgoingTx.timestamp)
+                    val timeDiff = abs(incomingTimestamp - outgoingTx.timestamp)
                     if (timeDiff <= TWENTY_MINUTES_SECONDS) {
                         points += POINTS_TIME_WITHIN_20_MINUTES
                         reasons.add("Time correlation: within ${timeDiff}s")
