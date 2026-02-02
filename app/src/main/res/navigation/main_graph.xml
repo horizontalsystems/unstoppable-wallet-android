@@ -453,9 +453,6 @@
         android:id="@+id/whyDonateFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateFragment"/>
     <fragment
-        android:id="@+id/addressCheckerFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.addresschecker.AddressCheckerFragment"/>
-    <fragment
         android:id="@+id/addressCheckFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.addresschecker.AddressCheckFragment"/>
     <fragment

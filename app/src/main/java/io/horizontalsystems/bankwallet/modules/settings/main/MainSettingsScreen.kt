@@ -345,7 +345,7 @@ private fun SettingSections(
             iconTint = ComposeAppTheme.colors.jacob,
             onClick = {
                 navController.paidAction(SecureSend) {
-                    navController.slideFromRight(R.id.addressCheckerFragment)
+                    navController.slideFromRight(R.id.addressCheckFragment)
                 }
                 stat(
                     page = StatPage.Settings,
