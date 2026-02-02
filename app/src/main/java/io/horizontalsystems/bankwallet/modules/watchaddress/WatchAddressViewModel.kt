@@ -40,8 +40,8 @@ class WatchAddressViewModel(
     private var accountNameEdited = false
     private var inputState: DataState<String>? = null
     private var viewKeyState: DataState<String>? = null
-    private var birthdayHeightState: DataState<String>? = null
     private var parseAddressJob: Job? = null
+    private var openBirthdayHeightScreen: Boolean = false
 
     val defaultAccountName = watchAddressService.nextWatchAccountName()
     var accountName: String = defaultAccountName
@@ -56,7 +56,7 @@ class WatchAddressViewModel(
         inputState = inputState,
         addressType = type,
         viewKeyState = viewKeyState,
-        birthdayHeightState = birthdayHeightState
+        openBirthdayHeightScreen = openBirthdayHeightScreen
     )
 
     fun onEnterAccountName(v: String) {
@@ -72,7 +72,6 @@ class WatchAddressViewModel(
         viewKey = null
         birthdayHeight = null
         viewKeyState = null
-        birthdayHeightState = null
 
         if (v.isBlank()) {
             inputState = null
@@ -105,7 +104,7 @@ class WatchAddressViewModel(
                                 setAddress(parsedAddress)
                                 onEnterViewKey(parsedAddress.viewKey)
                                 parsedAddress.height?.let {
-                                    onEnterBirthdayHeight(parsedAddress.height.toString())
+                                    birthdayHeight = it
                                 }
                             } else {
                                 setAddress(parsedAddress)
@@ -157,25 +156,18 @@ class WatchAddressViewModel(
     }
 
 
-    fun onEnterBirthdayHeight(height: String) {
-        if (height.trim().isEmpty()) {
-            birthdayHeight = null
-            birthdayHeightState = null
-            syncSubmitButtonType()
-            emitState()
-            return
-        }
-
-        birthdayHeightState = DataState.Loading
-        val convertedHeight = height.toLongOrNull()
-        if (convertedHeight == null) {
-            birthdayHeightState = DataState.Error(Exception(Translator.getString(R.string.Restore_BirthdayHeight_Invalid)))
-        } else {
-            birthdayHeightState = DataState.Success(height)
-            birthdayHeight = convertedHeight
-        }
-        syncSubmitButtonType()
+    fun onBirthdayHeightScreenOpened() {
+        openBirthdayHeightScreen = false
         emitState()
+    }
+
+    fun onBirthdayHeightEntered(height: Long?) {
+        birthdayHeight = height
+        doWatch()
+    }
+
+    fun onBirthdayHeightCancelled() {
+        // Do nothing, user cancelled
     }
 
     private fun setAddress(address: Address) {
@@ -254,6 +246,15 @@ class WatchAddressViewModel(
     }
 
     fun onClickWatch() {
+        if (type == Type.MoneroAddress && birthdayHeight == null) {
+            openBirthdayHeightScreen = true
+            emitState()
+            return
+        }
+        doWatch()
+    }
+
+    private fun doWatch() {
         try {
             val accountType = getAccountType() ?: throw Exception()
 
@@ -334,7 +335,7 @@ data class WatchAddressUiState(
     val inputState: DataState<String>?,
     val addressType: WatchAddressViewModel.Type,
     val viewKeyState: DataState<String>?,
-    val birthdayHeightState: DataState<String>?
+    val openBirthdayHeightScreen: Boolean
 )
 
 sealed class SubmitButtonType {

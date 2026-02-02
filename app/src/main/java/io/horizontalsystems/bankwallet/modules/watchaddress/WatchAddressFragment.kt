@@ -4,14 +4,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -19,11 +17,13 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 
 class WatchAddressFragment : BaseComposeFragment() {
@@ -84,6 +85,21 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 accountName
             )
         )
+    }
+
+    if (uiState.openBirthdayHeightScreen) {
+        viewModel.onBirthdayHeightScreenOpened()
+
+        navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
+            resId = R.id.zcashConfigure,
+            input = BlockchainType.Monero
+        ) { result ->
+            if (result.config != null) {
+                viewModel.onBirthdayHeightEntered(result.config.birthdayHeight?.toLongOrNull())
+            } else {
+                viewModel.onBirthdayHeightCancelled()
+            }
+        }
     }
 
     HSScaffold(
@@ -158,16 +174,6 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                     hint = stringResource(R.string.Watch_ViewKey),
                     onValueChange = viewModel::onEnterViewKey,
                     state = uiState.viewKeyState
-                )
-
-                FormsInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = uiState.birthdayHeightState?.dataOrNull,
-                    pasteEnabled = true,
-                    hint = stringResource(R.string.Watch_BirthdayHeight),
-                    onValueChange = viewModel::onEnterBirthdayHeight,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    state = uiState.birthdayHeightState
                 )
             }
 
