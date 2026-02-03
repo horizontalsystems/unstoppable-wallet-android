@@ -987,6 +987,7 @@
         \n\nEn → las transacciones al instante aparecen como Pendientes cuando se transmite (sincronización más rápida, pero menor privacidad y confianza en el nodo).
         \n\nApagado → las transacciones se muestran sólo después de las confirmaciones de la red (más lento, pero más seguro y más privado).</string>
     <string name="MoneroNodeSettings_Trusted">Confiado</string>
+    <string name="MoneroNodeSettings_Description">Seleccione la aplicación inparable de nodo que debe usar para sincronizar cartera(s).</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Después de cambiar la fuente, el monedero tendrá que resinc sí mismo.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Elige la fuente que la aplicación Unstoppable debería usar para sincronizar la(s) cartera(s).</string>
