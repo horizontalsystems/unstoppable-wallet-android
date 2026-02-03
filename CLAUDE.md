@@ -169,6 +169,36 @@ object SecureSend : IPaidAction
 - **Repositories**: Suffix with `Repository`
 - **Compose**: New components go in `uiv3/components/`
 
+### Preventing Double Clicks in Compose
+
+Use **local composable state** (not ViewModel) to disable buttons during async operations. This prevents double-clicks because local state updates are synchronous, while ViewModel state requires an async round-trip.
+
+```kotlin
+// Correct: Local state — immediate, no race condition
+var buttonEnabled by remember { mutableStateOf(true) }
+
+ButtonPrimaryYellow(
+    enabled = buttonEnabled,
+    onClick = {
+        buttonEnabled = false  // Immediate, same frame
+        coroutineScope.launch {
+            try {
+                viewModel.doAction()
+            } finally {
+                buttonEnabled = true
+            }
+        }
+    }
+)
+
+// Wrong: ViewModel state — race condition possible
+// User can click twice before recomposition disables button
+ButtonPrimaryYellow(
+    enabled = uiState.buttonEnabled,  // Async update
+    onClick = { viewModel.doAction() }
+)
+```
+
 ## Common Gotchas
 
 1. **RxJava to Flow (legacy)**: If Observable completes, `.asFlow()` stops collecting silently — migrate to pure Flow
