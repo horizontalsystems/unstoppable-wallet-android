@@ -44,7 +44,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.balance.ui.WheelDatePickerBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import kotlinx.coroutines.launch
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -61,6 +60,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class EnterBirthdayHeightFragment : BaseComposeFragment() {
@@ -106,6 +106,7 @@ fun EnterBirthdayHeightScreen(
 
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(uiState.closeAfterRescan) {
         if (uiState.closeAfterRescan) {
@@ -114,39 +115,33 @@ fun EnterBirthdayHeightScreen(
         }
     }
 
-    // Update text field when birthdayHeightText changes from date picker
     LaunchedEffect(uiState.birthdayHeightText) {
         uiState.birthdayHeightText?.let { heightText ->
             textState = TextFieldValue(heightText, TextRange(heightText.length))
         }
     }
 
-    // Close date picker when ViewModel signals completion
-    LaunchedEffect(uiState.closeDatePicker) {
-        if (uiState.closeDatePicker) {
-            datePickerSheetState.hide()
-            showDatePicker = false
-            viewModel.onDatePickerClosed()
-        }
-    }
-
     if (showDatePicker) {
         val initialDate = viewModel.getInitialDateForPicker()
+        var loading by remember { mutableStateOf(false) }
+
         WheelDatePickerBottomSheet(
             onDismissRequest = {
-                scope.launch {
-                    datePickerSheetState.hide()
-                    showDatePicker = false
-                }
+                showDatePicker = false
             },
             sheetState = datePickerSheetState,
-            loading = uiState.datePickerLoading,
+            loading = loading,
             initialDay = initialDate.first,
             initialMonth = initialDate.second,
             initialYear = initialDate.third,
             years = uiState.datePickerYears,
             onConfirm = { day, month, year ->
-                viewModel.onDateSelected(day, month, year)
+                coroutineScope.launch {
+                    loading = true
+                    viewModel.onDateSelected(day, month, year)
+                    datePickerSheetState.hide()
+                    showDatePicker = false
+                }
             }
         )
     }
@@ -201,7 +196,6 @@ fun EnterBirthdayHeightScreen(
                     }
                 },
                 onCalendarClick = {
-                    viewModel.onDatePickerOpened()
                     showDatePicker = true
                 },
                 onDeleteClick = {

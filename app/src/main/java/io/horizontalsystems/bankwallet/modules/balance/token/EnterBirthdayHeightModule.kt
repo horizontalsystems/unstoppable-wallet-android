@@ -33,8 +33,6 @@ object EnterBirthdayHeightModule {
         val rescanButtonEnabled: Boolean = false,
         val rescanLoading: Boolean = false,
         val closeAfterRescan: Boolean = false,
-        val datePickerLoading: Boolean = false,
-        val closeDatePicker: Boolean = false,
         val datePickerYears: List<Int> = emptyList()
     )
 }

@@ -66,6 +66,7 @@ fun RestoreBirthdayHeightScreen(
 
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val coroutineScope = rememberCoroutineScope()
 
     uiState.closeWithResult?.let {
         viewModel.onClosed()
@@ -79,31 +80,27 @@ fun RestoreBirthdayHeightScreen(
         }
     }
 
-    LaunchedEffect(uiState.closeDatePicker) {
-        if (uiState.closeDatePicker) {
-            datePickerSheetState.hide()
-            showDatePicker = false
-            viewModel.onDatePickerClosed()
-        }
-    }
-
     if (showDatePicker) {
         val initialDate = viewModel.getInitialDateForPicker()
+        var loading by remember { mutableStateOf(false) }
+
         WheelDatePickerBottomSheet(
             onDismissRequest = {
-                scope.launch {
-                    datePickerSheetState.hide()
-                    showDatePicker = false
-                }
+                showDatePicker = false
             },
             sheetState = datePickerSheetState,
-            loading = uiState.datePickerLoading,
+            loading = loading,
             initialDay = initialDate.first,
             initialMonth = initialDate.second,
             initialYear = initialDate.third,
             years = uiState.datePickerYears,
             onConfirm = { day, month, year ->
-                viewModel.onDateSelected(day, month, year)
+                coroutineScope.launch {
+                    loading = true
+                    viewModel.onDateSelected(day, month, year)
+                    datePickerSheetState.hide()
+                    showDatePicker = false
+                }
             }
         )
     }
@@ -157,7 +154,6 @@ fun RestoreBirthdayHeightScreen(
                     }
                 },
                 onCalendarClick = {
-                    viewModel.onDatePickerOpened()
                     showDatePicker = true
                 },
                 onDeleteClick = {
