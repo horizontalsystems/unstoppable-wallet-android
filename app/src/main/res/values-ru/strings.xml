@@ -809,7 +809,7 @@
     <string name="Settings_LaunchScreen_Tip">Выберите, на каком экране откроется приложение по умолчанию.</string>
     <string name="Settings_AppSettings">Настройки приложения</string>
     <string name="Settings_Subscription">Подписка</string>
-    <string name="Settings_AutoLock">Блокировка</string>
+    <string name="Settings_AutoLock">Автоблокировка</string>
     <string name="Settings_JoinUnstoppables">Продолжить</string>
     <string name="Settings_Support">Поддержка</string>
     <string name="Settings_VipSupport">VIP тех. поддержка</string>
@@ -934,8 +934,8 @@
     <string name="Appearance_HideBalanceTabButtons_Tip">Скрыть кнопки \"Отправить\", \"Получить\" и \"Поменять\" на балансе</string>
     <string name="Appearance_AmountRounding">Количество округления</string>
     <string name="Appearance_AmountRounding_Tip">Отображение округленных балансов и сумм транзакций.</string>
-    <string name="Appearance_BalanceAutoHide">Balance Tab</string>
-    <string name="Appearance_BalanceAutoHide_Description">Скрыть кнопки Отправлять, Получать и Поменять местами на вкладке Баланс.</string>
+    <string name="Appearance_BalanceAutoHide">Автоскрытие баланса</string>
+    <string name="Appearance_BalanceAutoHide_Description">Автоматически скрывает баланс при открытии приложения.</string>
     <string name="Appearance_PriceChangeInterval">Изменение цены %</string>
     <string name="Appearance_PriceChangeInterval_Tip">Выберите период времени для изменения цены токена.</string>
     <string name="BalanceViewType_CoinValue">Токен значение</string>
@@ -985,13 +985,13 @@
     <string name="AddMoneroNode_Warning_UrlExists">Узел с этим url уже существует</string>
     <string name="AddMoneroNode_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: https</string>
     <string name="MoneroNodeSettings_TrustedTitle">Настройки узла</string>
-    <string name="MoneroNodeSettings_TrustedDescription">Надежный узел — кошелек доверяет выбранному узлу и использует его данные без дополнительной проверки.
+    <string name="MoneroNodeSettings_TrustedDescription">Надежный узел - кошелек доверяет выбранному узлу и использует его данные без дополнительной проверки.
         \n\nВключенные → транзакции мгновенно появляются в ожидании передачи (ускоренная синхронизация, но снизить конфиденциальность и полагаться на узел).
         \n\nВыкл → транзакции отображаются только после подтверждения из сети (медленнее, но безопаснее и более приватно).</string>
     <string name="MoneroNodeSettings_Trusted">Доверенный</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">После изменения источника восстановления, кошелек должен будет повторно синхронизироваться с блокчейном.</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Выберите источник данных для восстановления кошелька. Восстановление из блокчейна занимает значительно больше времени.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Выберите исходное приложение для синхронизации кошелька (кошельков).</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Вводы/Выводы</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Настройки транзакций</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Вводы / выводы транзакций</string>
@@ -1101,10 +1101,10 @@
     <string name="ManageAccounts_ImportWallet">Импорт кошелька</string>
     <string name="ManageAccounts_WatchAddress">Просмотр кошелька</string>
     <!-- Import Wallet -->
-    <string name="ImportWallet_BackupFile">Резервный файл</string>
+    <string name="ImportWallet_BackupFile">из файла</string>
     <string name="ImportWallet_BackupFile_Description">Импорт из файла резервной копии.</string>
     <string name="ImportWallet_RecoveryPhrase">Фраза восстановления</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Импортировать кошелек с использованием ключевого словосочетания или приватного ключа.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
     <string name="ImportWallet_WarningInvalidJson">Недопустимый Json файл</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">Этот файл не является действительной резервной копией кошелька, либо же он был поврежден и не может быть восстановлен.</string>
     <string name="ImportWallet_SelectAnotherFile">Выберите другой файл</string>
@@ -1560,4 +1560,5 @@
     <string name="Contacts_Error_DefinedName">Такое имя уже существует</string>
     <string name="Hud_Text_Connected">Подключено</string>
     <string name="BirthdayDatePicker_Title">Выберите дату</string>
+    <string name="BirthdayDatePicker_Description">Выберите приблизительную дату создания кошелька. \nВысота блока будет рассчитана автоматически.</string>
 </resources>
