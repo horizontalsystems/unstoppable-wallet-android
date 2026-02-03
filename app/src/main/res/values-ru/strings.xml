@@ -129,8 +129,8 @@
     <string name="Restore_BirthdayHeight_Invalid">Недопустимая высота дня рождения</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Введите блок создания кошелька для ускорения синхронизации.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (необязательно)</string>
-    <string name="BirthdayHeight_Description">Вы можете изменить высоту блока или выбрать приблизительную дату для повторного сканирования истории транзакции.</string>
-    <string name="BirthdayHeight_RestoreDescription">Ваш кошелек будет восстановлен из начальной точки по умолчанию. Вы можете изменить высоту блока или выбрать примерную дату создания кошелька.</string>
+    <string name="BirthdayHeight_Description">Вы можете изменить высоту блока или выбрать приблизительную дату, чтобы повторно просканировать историю транзакций.</string>
+    <string name="BirthdayHeight_RestoreDescription">Введите блок создания кошелька для ускорения синхронизации.</string>
     <string name="BirthdayHeight_BlockDate">Дата блока:</string>
     <string name="BirthdayHeight_Rescan">Пересканировать</string>
     <string name="Restore_ZCash_RestoreAsNew">Восстановить как новый</string>
@@ -298,8 +298,8 @@
     <string name="Market_Sorting_LowestCap">Наименьшей кап.</string>
     <string name="Market_Filters_Select">Выбрать %d</string>
     <!--Vaults-->
-    <string name="Market_Vaults_WantToUnlockPremium">Исследуйте лучшие возвраты расстановки DeFi, все в одном месте.</string>
-    <string name="Market_Vaults_UnlockPremium">Разблокировать Премиум</string>
+    <string name="Market_Vaults_WantToUnlockPremium">Исследуйте лучшие доходности от DeFi-стейкинга - всё в одном месте.</string>
+    <string name="Market_Vaults_UnlockPremium">Разблокировать премиум</string>
     <string name="Market_Vaults_Sorting_APY">Наибольшее APY</string>
     <string name="Market_Vaults_Sorting_TVL">Наивысший ТВЛ</string>
     <string name="Market_Vaults_Filter_AllAssets">Все медиафайлы</string>
@@ -656,7 +656,7 @@
     <string name="Activate_InsufficientBalance_Title">Недостаточный баланс</string>
     <string name="Activate_InsufficientBalance_Description">У вас недостаточно средств XLM для активации этого токена.</string>
     <!--Approve-->
-    <string name="Approve_RevokeAndApproveInfo">Вы можете обменять %s, или вы должны отменить и одобрить новую сумму</string>
+    <string name="Approve_RevokeAndApproveInfo">Вы можете обменять %s, или вам нужно отозвать и утвердить новую сумму</string>
     <string name="Approve_Spender">Покупатель</string>
     <string name="Approve_YouRevoke">Вы отменяете</string>
     <string name="Approve_Allowance">Допустимая сумма</string>
@@ -812,7 +812,6 @@
     <string name="Settings_AutoLock">Автоблокировка</string>
     <string name="Settings_JoinUnstoppables">Продолжить</string>
     <string name="Settings_Support">Поддержка</string>
-    <string name="Settings_VipSupport">VIP тех. поддержка</string>
     <string name="Settings_Donate">Поддержи нас</string>
     <string name="Settings_DonateToken">Пожертвовать %s</string>
     <string name="Settings_Donate_Addresses">Адреса</string>
@@ -874,7 +873,7 @@
     <!--Premium Screens-->
     <string name="Premium_Title">Премиум</string>
     <string name="Premium_EnjoyFreePeriod">Наслаждайтесь первым %s БЕСПЛАТНО.</string>
-    <string name="Premium_CancelSubscriptionInfo">Вы можете отменить подписку в любое время.</string>
+    <string name="Premium_CancelSubscriptionInfo">Вы можете отменить подписку Play Store в любое время.</string>
     <string name="Premium_GetFreePeriod">Получите %s БЕСПЛАТНО</string>
     <string name="Premium_Subscribe">Подписаться</string>
     <string name="Premium_TryForFree">Попробовать БЕСПЛАТНО</string>
@@ -891,28 +890,28 @@
     <string name="Premium_UpgradeFeature_RobberyProtection">Режим Duress</string>
     <string name="Premium_UpgradeFeature_SecureSend">Безопасная отправка</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Scam-защита</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport">VIP тех. поддержка</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport">Поддержка Premium</string>
     <string name="Premium_UpgradeFeature_SwapProtection">Защита от потерь</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_Description">Доступ к топ-100 спискам по ключевым критериям</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Многоуровневая фильтрация по множеству параметров</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">Авто-мониторинг рыночных трендов для ваших токенов</string>
-    <string name="Premium_UpgradeFeature_RobberyProtection_Description">Сохраняет средства, если вас заставили открыть приложение.</string>
-    <string name="Premium_UpgradeFeature_SecureSend_Description">Предупреждает о рискованных адресах.</string>
-    <string name="Premium_UpgradeFeature_ScamProtection_Description">Сообщает, если сайт dApp - фальшивый.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_Description">Быстрый и удобный доступ к команде.</string>
-    <string name="Premium_UpgradeFeature_SwapProtection_Description">Блокирует действия ботов, ворующих средства во время свапов.</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Показывает данные токена - объём, ликвидность и тренды. Помогает принимать более точные инвестиционные решения.</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Находите токены с фильтрами по объёму, сети, сектору и CEX/DEX активности.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Отправляет уведомления о торговых возможностях в реальном времени. </string>
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">Расширенная аналитика и данные по токенам</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Мощные фильтры для более удобного поиска токенов.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Практические сигналы для более уверенной торговли.</string>
+    <string name="Premium_UpgradeFeature_RobberyProtection_Description">Защищает ваши средства, если вас вынуждают разблокировать приложение.</string>
+    <string name="Premium_UpgradeFeature_SecureSend_Description">Предотвращает отправку средств на рискованные или фишинговые адреса.</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_Description">Предупреждает при подключении к поддельным или вредоносным dApps.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_Description">Прямой доступ к нашей службе поддержки.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_Description">Предотвращает атаки ботов и MEV во время swap-операций.</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Показывает подробные данные о токене - объем, ликвидность и тенденции. Помогает вам принимать более эффективные инвестиционные решения.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Поиск токенов с фильтрами по объему, цепочке или сектору. Включает метрики деятельности CEX/DEX и списков.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Уведомления в реальном времени о торговых возможностях и рисках.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Позволяет создать ложный кошелёк с отдельным PIN. Скрывает реальные активы в рискованных ситуациях.</string>
-    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Проверяет адреса на фишинг. Предупреждает о рисках при отправке.</string>
+    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Проверяет адреса получателей на фишинг и мошенничество и предупреждает о рисках перед отправкой.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Обнаруживает поддельные dApp до подключения. Предотвращает фишинг и защищает активы.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Предоставляет прямой доступ к поддержке.Получайте быструю персональную помощь от команды Unstoppable.</string>
-    <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Блокирует ботов и атаки при свапах. Делает транзакции честными и безопасными.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Прямой доступ к приоритетной поддержке от команды Unstoppable.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Защищает от ботов и front-running атак при обмене.</string>
     <string name="Premium_DefenseSystem">Система защиты</string>
-    <string name="Premium_MarketInsights">Рынки</string>
-    <string name="Premium_AdvancedControls">VIP</string>
-    <string name="Premium_HighlyRatedSecurity">Высокий уровень безопасности, полная конфиденциальность и по-настоящему некостодиальный кошелек.</string>
+    <string name="Premium_MarketInsights">Аналитика рынка</string>
+    <string name="Premium_AdvancedControls">Расширенные настройки</string>
+    <string name="Premium_HighlyRatedSecurity">Высоко оцененная безопасность, исключительная конфиденциальность и подлинный кошелек, не являющийся хранителем.</string>
     <string name="Premium_ApprovedBy">Одобрено и проверено:</string>
     <string name="Premium_SubscriptionPeriod_Month">месяц</string>
     <string name="Premium_SubscriptionPeriod_Year">год</string>
@@ -925,15 +924,15 @@
     <string name="Appearance_MarketsTab">ВКЛАДКА РЫНКИ</string>
     <string name="Appearance_BalanceTab">ВКЛАДКА БАЛАНС</string>
     <string name="Appearance_AppIcon">ИКОНКА ПРИЛОЖЕНИЯ</string>
-    <string name="Appearance_BalanceValue">Балансы монет</string>
-    <string name="Appearance_BalanceValue_Tip">Показывать балансы, выделенные либо в криптовалюте.</string>
+    <string name="Appearance_BalanceValue">Балансы токенов</string>
+    <string name="Appearance_BalanceValue_Tip">Отображать балансы с выделением в криптовалюте или фиате.</string>
     <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
     <string name="Appearance_HideMarketsTab">Скрыть рынки</string>
     <string name="Appearance_HideMarketsTab_Tip">Вкладка «Рынок» полностью скрыта.</string>
     <string name="Appearance_HideBalanceTabButtons">Скрыть кнопки</string>
-    <string name="Appearance_HideBalanceTabButtons_Tip">Скрыть кнопки \"Отправить\", \"Получить\" и \"Поменять\" на балансе</string>
-    <string name="Appearance_AmountRounding">Количество округления</string>
-    <string name="Appearance_AmountRounding_Tip">Отображение округленных балансов и сумм транзакций.</string>
+    <string name="Appearance_HideBalanceTabButtons_Tip">Скрыть кнопки Отправить, Получить и Обмен на вкладке Баланс.</string>
+    <string name="Appearance_AmountRounding">Округление суммы</string>
+    <string name="Appearance_AmountRounding_Tip">Отображать округлённые балансы и суммы транзакций.</string>
     <string name="Appearance_BalanceAutoHide">Автоскрытие баланса</string>
     <string name="Appearance_BalanceAutoHide_Description">Автоматически скрывает баланс при открытии приложения.</string>
     <string name="Appearance_PriceChangeInterval">Изменение цены %</string>
@@ -966,7 +965,7 @@
     <!-- Privacy  -->
     <string name="Privacy_Information">Неостановимо не собирает персональные данные, такие как балансы или адреса кошельков. Мы используем анонимные данные только для улучшения приложения.</string>
     <string name="ShareUiData">Поделиться данными UI</string>
-    <string name="ShareUiDataDescription">Этот параметр позволяет отключить аналитику и сохранить вашу активность в полной конфиденциальности.</string>
+    <string name="ShareUiDataDescription">Эта настройка позволяет отключить аналитику UI/UX и обеспечить полную конфиденциальность.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Добавить новый</string>
@@ -1009,7 +1008,7 @@
     <string name="SettingsSecurity_DisableDuressPin">Отключить Duress код</string>
     <string name="SettingsSecurity_DuressPinDescription">Специальный режим, защищающий выбранные кошельки в случае принуждения.</string>
     <string name="SettingsSecurity_ManageKeys">Кошельки</string>
-    <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable Кошелек.</string>
+    <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable кошелек.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Во время использования этого приложения полностью анонимизировать ваш интернет. Обратите внимание, что в некоторых случаях функция WalletConnect для DeFi приложений может быть очень медленной или вообще не работать.</string>
     <string name="SettingsSecurity_SortingShuffle">Перемешать</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Случайное индексирование</string>
@@ -1554,7 +1553,7 @@
     <string name="Contacts_DiscardChanges">Отменить изменения</string>
     <string name="Contacts_KeepEditing">Продолжить редактирование</string>
     <string name="Contacts_DiscardChanges_Warning">Вы уверены, что хотите отменить эти изменения?</string>
-    <string name="Contacts_NoContacts">Контакты еще не добавлены</string>
+    <string name="Contacts_NoContacts">У вас нет добавленных контактов</string>
     <string name="Contacts_ActionMore">Ещё</string>
     <string name="Contacts_Error_DefinedAddress">Этот адрес уже используется для %s</string>
     <string name="Contacts_Error_DefinedName">Такое имя уже существует</string>
