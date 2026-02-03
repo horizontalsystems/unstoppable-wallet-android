@@ -146,6 +146,7 @@
     <string name="Send_Warning_LowFee">هشدار! خطر گیر افتادن</string>
     <string name="Send_Warning_LowFee_Description">تراکنش ممکن است گیر کند یا موفقیت آمیز نباشد</string>
     <!-- Send Evm Settings -->
+    <string name="SendEvmSettings_SlippageTolerance">تحمل لغزش</string>
     <!-- Fee Settings -->
     <string name="FeeSettings_NetworkFee">هزينه</string>
     <string name="FeeSettings_GasPrice_Info">کارمزد تراکنش در شبکه بر حسب واحد گاز سنجیده می شود. قیمت گاز مبلغی است که کاربر مایل است برای هر واحد گاز هزینه کند. وقتی شبکه شلوغ است، قیمت گاز بالاست و وقتی خلوت است پایین. قیمت ناکافی گاز اغلب دلیلی برای معلق ماندن یک معامله برای مدت طولانی است.</string>
