@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="Error_BrowserNotFound">Nenhum app encontrado para abrir este link</string>
     <string name="Error_ParameterNotSet">Parâmetro não está definido</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Cancelar</string>
@@ -50,6 +51,8 @@
     <string name="Button_CopyAddress">Copiar Endereço</string>
     <string name="Button_HideCoin">Ocultar moeda</string>
     <string name="Button_Approve">Aprovar</string>
+    <string name="Button_ViewMyAddress">Ver meu endereço</string>
+    <string name="Button_CopyError">Erro de cópia</string>
     <string name="Attention_Title">Atenção</string>
     <string name="Error_OutOfRange">Não pode ser menor que %1$s ou mais do que %2$s</string>
     <string name="Error_NotInteger">Número inteiro errado</string>
@@ -124,6 +127,10 @@
     <string name="Restore_BirthdayHeight_Invalid">Altura de aniversário inválida</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Insira a data da criação da carteira para uma sincronização mais rápida.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (opcional)</string>
+    <string name="BirthdayHeight_Description">Você pode alterar a altura do bloco ou selecionar uma data aproximada para reescanear o histórico de transações.</string>
+    <string name="BirthdayHeight_RestoreDescription">Sua carteira será restaurada de um ponto de partida padrão. Você pode alterar a altura do bloco ou selecionar uma data de criação de carteira aproximada.</string>
+    <string name="BirthdayHeight_BlockDate">Data do Bloco</string>
+    <string name="BirthdayHeight_Rescan">Reescanear</string>
     <string name="Restore_ZCash_RestoreAsNew">Restaurar como novo</string>
     <string name="Restore_ZCash_NewWallet">Nova Carteira</string>
     <string name="Restore_ZCash_NewWallet_Description">Não tem nenhuma transação</string>
@@ -395,6 +402,7 @@
     <string name="Send_Confirmation_Send_Button">Enviar</string>
     <string name="Send_Confirmation_Action">Ação</string>
     <string name="Send_Address_Error_InvalidAddress">Endereço Inválido</string>
+    <string name="Send_Address_Error_InvalidAddress_Description">Parece que esse endereço não se encaixa na rede selecionada. Por favor, verifique novamente.</string>
     <string name="Send_Address_Error_Detected">Detectado</string>
     <string name="Send_Address_Error_Clear">Limpar</string>
     <string name="Send_Address_PhishingCheck">Verificação de Phishing</string>
@@ -406,6 +414,12 @@
     <string name="Send_Address_ErrorMessage_PhishingDetected_Description">O endereço que você digitou pode ser fraudulento. Os golpistas frequentemente alteram os primeiros e últimos caracteres. Verifique o endereço completo com atenção antes de prosseguir para evitar perdas.</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">O endereço digitado está marcado na lista negra. As transações para este endereço podem levar a perda ou outros riscos. Por favor, verifique os dados do destinatário antes de prosseguir.</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected_Description">O endereço que você digitou está marcado como sancionado. As transações para este endereço podem levar a perda ou outros riscos. Por favor, verifique os dados do destinatário antes de prosseguir.</string>
+    <string name="AddressEnter_NeedSubscription_Title">Atenção!</string>
+    <string name="AddressEnter_NeedSubscription_Content">O envio seguro está desativado. A sua transferência pode ir para um endereço de risco e o dinheiro pode ser perdido.</string>
+    <string name="AddressEnter_Danger_Title">Perigo!</string>
+    <string name="AddressEnter_Danger_Content">O endereço que você digitou pode ser fraudulento. Os golpistas frequentemente alteram os primeiros e últimos caracteres. Verifique o endereço completo com atenção antes de prosseguir para evitar perdas.</string>
+    <string name="AddressEnter_Safe_Title">Segura</string>
+    <string name="AddressEnter_Safe_Content">Endereço verificado. Nenhum phishing, lista negra ou sanções foram encontradas. É seguro de usar.</string>
     <string name="Send_RiskyAddress">Endereço Arriscado!</string>
     <string name="Send_RiskyAddress_AlertText">Você está prestes a enviar fundos para um endereço de alto risco. O processo pode resultar em perda ou outros riscos de segurança. Ao continuar, você aceita os perigos potenciais. Tem certeza que deseja continuar?</string>
     <string name="Send_Success">\u2713 Enviado</string>
@@ -425,6 +439,8 @@
     <string name="Send_LockTime_HalfYear">6 meses</string>
     <string name="Send_LockTime_Year">1 ano</string>
     <string name="Send_Sending">Enviando</string>
+    <string name="Send_UnexpectedError">Erro inesperado</string>
+    <string name="Send_UnexpectedError_Description">Algo deu errado ao enviar sua transação. Por favor, tente novamente ou copie o código de erro e contate o suporte.</string>
     <string name="Send_Warning_LowFee">Atenção! Risco de ficar preso</string>
     <string name="Send_Error_LowFee">Erro de taxa</string>
     <string name="Send_Error_LowFee_Description">Taxa de taxa é muito baixa.</string>
@@ -433,8 +449,12 @@
     <string name="Send_Error_FetchFeeRateFailed_Description">A conexão com o servidor foi perdida. Para continuar, configure as taxas manualmente utilizando os dados no site.</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Avançado</string>
+    <string name="SendEvmSettings_SetRecipient">Definir Destinatário</string>
     <string name="SendEvmSettings_Nonce">Nonce de Transação</string>
+    <string name="SendEvmSettings_EditFee">Editar taxa</string>
     <string name="SendEvmSettings_Nonce_Info">O nonce é um valor inteiro exclusivo para uma transação dentro da carteira do usuário. Ele normalmente aumenta com cada transação enviada e não precisa ser alterado. Os usuários avançados podem defini-lo igual a um nonce de uma transação pendente para cancelar e substituir essa transação, desde que a nova transação tenha uma taxa suficientemente alta para evitar que a antiga seja confirmada (por exemplo, eles podem querer acelerar sua confirmação, ou alterar totalmente os parâmetros da transação). Quando várias transações pendentes têm o mesmo nonce, apenas uma é confirmada, geralmente aquela com a taxa mais alta.</string>
+    <string name="SendEvmSettings_SlippageTolerance">Tolerância de Slippage</string>
+    <string name="SendEvmSettings_SlippageTolerance_Info">O desvio de preço máximo aceitável para sua troca. Além deste limite, a transação é revertida.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Usado Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Já existe uma transação executada agora.</string>
     <!-- Fee Settings -->
@@ -479,7 +499,9 @@
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">Não é possível transferir TRX para si mesmo</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Não é possível transferir 0 %s</string>
+    <string name="Tron_TokenPage_AddressNotActivated">Não ativado</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Conta Não Ativa</string>
+    <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">As transações aparecerão após a ativação</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">Novas carteiras TRON requerem um depósito mínimo de 1 TRX para se tornarem ativas. Carteiras inativas podem armazenar e receber tokens, mas não atualizarão os saldos até serem ativadas.</string>
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">Nova Conexão</string>
@@ -558,13 +580,17 @@
     <string name="EthereumTransaction_Error_ExecutionReverted">Erro inesperado: %s</string>
     <!--Swap-->
     <string name="Swap">Trocar</string>
+    <string name="Swap_AML">AML</string>
     <string name="Swap_FromAmountTitle">Você Paga</string>
     <string name="Swap_ToAmountTitle">Você recebe</string>
     <string name="Swap_TokenSelectorTitle">Selecionar</string>
     <string name="Swap_Price">Preço</string>
     <string name="Swap_AvailableBalance">Saldo Disponível</string>
     <string name="Swap_PriceImpact">Impacto de preço</string>
+    <string name="Swap_EstimatedTime">Tempo estimado</string>
+    <string name="Swap_EstimatedTimeDescription">Tempo aproximado para receber fundos. Troque o processamento e as confirmações de transações podem levar algum tempo, dependendo da rede e do provedor.</string>
     <string name="Swap_MinimumReceived">Valor garantido</string>
+    <string name="Swap_MinimumReceivedDescription">Este valor está em processo de validação. Assim que o status da transação for validado, você poderá usar essas moedas. A quantia mínima que um usuário perde </string>
     <string name="Swap_Slippage">Corrente</string>
     <string name="Swap_Recipient">Destinatário</string>
     <string name="Swap_ErrorNoProviders">Sem provedores</string>
@@ -588,7 +614,26 @@
     <string name="Swap_AmountMax">(máx)</string>
     <string name="Swap_YouPay">Você Paga</string>
     <string name="Swap_YouGet">Você recebe</string>
+    <string name="Swap_ConfirmApprove_Title">Confirmar aprovação</string>
+    <string name="Swap_ConfirmRevoke_Title">Confirmar Revogação</string>
     <string name="Swap_Confirm_Title">Confirmar</string>
+    <string name="Swap_SlippageDescription">Este valor está em processo de validação. Assim que o status da transação for validado, você poderá usar essas moedas. O valor mínimo que um usuário receberá </string>
+    <string name="SwapDefense_PriceImpact_High_Title">Caro demais!</string>
+    <string name="SwapDefense_PriceImpact_High_Description">Você perderá uma grande parte (-%s%%) dos seus fundos neste swap.</string>
+    <string name="SwapDefense_PriceImpact_Forbidden_Title">Preço desfavorável!</string>
+    <string name="SwapDefense_PriceImpact_Forbidden_Description">Esta swap resultaria em uma grande perda (-%s%%) devido a liquidez muito baixa.</string>
+    <string name="SwapDefense_Attention_Title">Atenção!</string>
+    <string name="SwapDefense_Attention_Description">A proteção está desativada. Os bots podem interferir com sua troca e fazer com que você perca dinheiro.</string>
+    <string name="SwapDefense_Safe_Title">Protegido</string>
+    <string name="SwapDefense_Safe_Description">Estou impedindo que bots usem valor na sua troca.</string>
+    <string name="SwapError_FailedToFetchQuote">Falha ao obter citação.</string>
+    <string name="SwapTerms_Title">Trocar Termos</string>
+    <string name="SwapTerms_TopText">Unstoppable aggregates multiple descentralizado (DEX) e provedores de swap centralizados para oferecer taxas competitivas e suporte amplo a ativos.</string>
+    <string name="SwapTerms_BottomText">Escolha sempre um provedor de swap que se alinhe com suas exigências.</string>
+    <string name="SwapTerms_RiskRestrictions">Risco de restrições</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Entendo que alguns provedores de swap não-DEX aplicam o screening de transações (AML). Esses fornecedores podem rejeitar (e reembolso) swaps ou, em raros casos, (CSAM e terrorismo), congelar fundos e solicitar dados da KYC.</string>
+    <string name="SwapTerms_UserResponsibility">Responsabilidade do usuário</string>
+    <string name="SwapTerms_UserResponsibility_Info">Entendo que o uso de provedores não-DEX introduz riscos adicionais e que esses riscos são da minha responsabilidade. Não parável pode garantir o comportamento do fornecedor.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Tolerância de Slippage</string>
     <string name="SwapSettings_RecipientAddressTitle">Endereço do Destinatário</string>
@@ -702,6 +747,7 @@
     <string name="TransactionInfo_Sent">Enviado</string>
     <string name="TransactionInfo_Approved">Aprovado</string>
     <string name="TransactionInfo_SpeedUp">Acelerar</string>
+    <string name="TransactionInfo_TransactionSecretKey">Chave Secreta Tx</string>
     <string name="TransactionInfo_SpamWarning">Esta transação é suspeita e pode ser um golpe. \nPor favor, não copie nenhum endereço desta transação.</string>
     <string name="TransactionInfo_SpeedUpDescription">Esta ação tentará invalidar a transação anterior, reenviando-a com uma taxa maior.</string>
     <string name="StatusInfo_Pending">Pendente</string>
@@ -833,7 +879,7 @@
     <string name="Premium_Upgrade">Atualizar</string>
     <string name="Premium_ThankYouForSubscription">Obrigado por sua \nassinatura!</string>
     <string name="Premium_GoToApp">Ir ao App</string>
-    <string name="Premium_Banner_BlackFridayText">Atualize para a Premium com o nosso maior desconto do ano</string>
+    <string name="Premium_Banner_BlackFridayText">Melhore a sua experiência com recursos Premium!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Aproveite o poder total do aplicativo.</string>
     <string name="Premium_SelectSubscription">Selecionar Assinatura</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">Uma compra desbloqueia todos os recursos Premium.</string>
@@ -994,8 +1040,12 @@
     <string name="SettingsTerms_Backup">Frases de recuperação de backup seguros para cada carteira. É a única maneira de recuperar o acesso a fundos se o aplicativo não funcionar.</string>
     <string name="SettingsTerms_DisablingPin">Desabilitando o PIN (código) no smartphone exclui todas as carteiras do aplicativo. As frases de recuperação serão necessárias para restaurar o acesso aos fundos.</string>
     <string name="SettingsTerms_PrivacyNotice">O aplicativo não espiona nem coleta dados sobre seus saldos ou transações. Nem sabemos quantas pessoas o usam. Ele apenas rastreia padrões de uso anônimos (páginas abertas, botões tocados) para melhorar a usabilidade. Você pode desligar isso em Configurações → Privacidade.</string>
+    <string name="SettingsTerms_WeNotHoldingYourAssets">Nós não temos seus ativos e acessamos suas chaves privadas ou executamos transações em seu nome. O aplicativo não fornece serviços de corretagem, câmbio, custódia, escava ou de transmissão de dinheiro. Todas as transações são iniciadas, assinadas e transmitidas diretamente por você para as redes públicas da blockchain.</string>
     <string name="SettingsTerms_MonetizationDisclosure">Como parte do modelo de monetização, o aplicativo ganha pequenas comissões de swaps de DEX executados dentro da carteira. Isso nos ajuda a manter um código aberto, independente e livre de dinheiro de VC.</string>
+    <string name="SettingsTerms_TransactionsIrreversible">Transações Blockchain são irreversíveis. Sempre reveja os detalhes da transação antes de confirmar.</string>
     <string name="SettingsTerms_OpenSource">O aplicativo é de código aberto de forma verificável, com todo o código-fonte publicado online. Tudo o que é descrito acima pode ser verificado publicamente por qualquer pessoa.</string>
+    <string name="SettingsTerms_LegalObligations">Você é o único responsável pela segurança dos seus fundos, pela sua conduta e pelo cumprimento das leis aplicáveis na sua jurisdição, bem como globalmente.</string>
+    <string name="SettingsTerms_UserResponsibility">Ao prosseguir, você reconhece que a segurança dos seus fundos e a conformidade jurídica são, em última análise, sua responsabilidade.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartilhar</string>
     <string name="SettingsShare_Text">Seja Unstoppable</string>
@@ -1511,4 +1561,6 @@
     <string name="Contacts_Error_DefinedAddress">Este endereço já está em uso para %s</string>
     <string name="Contacts_Error_DefinedName">O nome já existe</string>
     <string name="Hud_Text_Connected">Conectado</string>
+    <string name="BirthdayDatePicker_Title">Selecione Data</string>
+    <string name="BirthdayDatePicker_Description">Escolha uma data de criação de carteira aproximada. \nA altura do bloco será calculada automaticamente.</string>
 </resources>
