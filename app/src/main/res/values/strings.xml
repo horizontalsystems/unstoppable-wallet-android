@@ -1183,6 +1183,7 @@
         \n\nOn → transactions instantly appear as Pending when broadcast (faster sync, but lower privacy and reliance on the node).
         \n\nOff → transactions are shown only after confirmations from the network (slower, but safer and more private).</string>
     <string name="MoneroNodeSettings_Trusted">Trusted</string>
+    <string name="MoneroNodeSettings_Description">Choose the node Unstoppable app should use for synchronizing wallet(s).</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">After changing source the wallet will have to resync itself.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source Unstoppable app should use for synchronizing wallet(s).</string>
