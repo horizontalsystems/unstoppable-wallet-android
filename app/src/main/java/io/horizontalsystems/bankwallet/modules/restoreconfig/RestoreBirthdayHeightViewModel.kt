@@ -28,8 +28,6 @@ class RestoreBirthdayHeightViewModel(
     private var blockDateText: String? = null
     private var cachedEstimatedDate: Date? = null
     private var doneButtonEnabled: Boolean = true
-    private var datePickerLoading: Boolean = false
-    private var closeDatePicker: Boolean = false
     private var closeWithResult: BirthdayHeightConfig? = null
 
     val hintText: String = defaultBirthdayHeight?.toString() ?: ""
@@ -43,8 +41,6 @@ class RestoreBirthdayHeightViewModel(
         birthdayHeightText = birthdayHeightText,
         blockDateText = blockDateText,
         doneButtonEnabled = doneButtonEnabled,
-        datePickerLoading = datePickerLoading,
-        closeDatePicker = closeDatePicker,
         closeWithResult = closeWithResult,
         datePickerYears = datePickerYears
     )
@@ -71,42 +67,22 @@ class RestoreBirthdayHeightViewModel(
         emitState()
     }
 
-    fun onDatePickerOpened() {
-        datePickerLoading = false
-        closeDatePicker = false
-        emitState()
-    }
-
-    fun onDatePickerClosed() {
-        closeDatePicker = false
-        emitState()
-    }
-
     fun getInitialDateForPicker(): Triple<Int, Int, Int> {
         return BirthdayHeightHelper.getInitialDateForPicker(cachedEstimatedDate)
     }
 
-    fun onDateSelected(day: Int, month: Int, year: Int) {
-        datePickerLoading = true
-        emitState()
+    suspend fun onDateSelected(day: Int, month: Int, year: Int) {
+        val estimatedHeight = BirthdayHeightHelper.estimateBlockHeightFromDate(blockchainType, day, month, year)
+        if (estimatedHeight != null) {
+            val isValid = BirthdayHeightHelper.isHeightValid(blockchainType, estimatedHeight)
 
-        viewModelScope.launch {
-            val estimatedHeight = BirthdayHeightHelper.estimateBlockHeightFromDate(blockchainType, day, month, year)
-            if (estimatedHeight != null) {
-                val isValid = BirthdayHeightHelper.isHeightValid(blockchainType, estimatedHeight)
-
-                birthdayHeight = estimatedHeight
-                birthdayHeightText = estimatedHeight.toString()
-                doneButtonEnabled = isValid
-                datePickerLoading = false
-                closeDatePicker = true
-                emitState()
-                updateBlockDateText(estimatedHeight)
-            } else {
-                datePickerLoading = false
-                closeDatePicker = true
-                emitState()
-            }
+            birthdayHeight = estimatedHeight
+            birthdayHeightText = estimatedHeight.toString()
+            doneButtonEnabled = isValid
+            emitState()
+            updateBlockDateText(estimatedHeight)
+        } else {
+            updateBlockDateText(null)
         }
     }
 
@@ -153,8 +129,6 @@ data class RestoreBirthdayHeightUiState(
     val birthdayHeightText: String? = null,
     val blockDateText: String? = null,
     val doneButtonEnabled: Boolean = true,
-    val datePickerLoading: Boolean = false,
-    val closeDatePicker: Boolean = false,
     val closeWithResult: BirthdayHeightConfig? = null,
     val datePickerYears: List<Int> = emptyList()
 )

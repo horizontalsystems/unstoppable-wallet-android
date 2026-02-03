@@ -34,8 +34,6 @@ class EnterBirthdayHeightViewModel(
     private var rescanButtonEnabled: Boolean = false
     private var rescanLoading: Boolean = false
     private var closeAfterRescan: Boolean = false
-    private var datePickerLoading: Boolean = false
-    private var closeDatePicker: Boolean = false
 
     init {
         updateBlockDateText(currentBirthdayHeight)
@@ -48,8 +46,6 @@ class EnterBirthdayHeightViewModel(
         rescanButtonEnabled = rescanButtonEnabled,
         rescanLoading = rescanLoading,
         closeAfterRescan = closeAfterRescan,
-        datePickerLoading = datePickerLoading,
-        closeDatePicker = closeDatePicker,
         datePickerYears = datePickerYears
     )
 
@@ -103,43 +99,23 @@ class EnterBirthdayHeightViewModel(
         emitState()
     }
 
-    fun onDatePickerOpened() {
-        datePickerLoading = false
-        closeDatePicker = false
-        emitState()
-    }
-
-    fun onDatePickerClosed() {
-        closeDatePicker = false
-        emitState()
-    }
-
     fun getInitialDateForPicker(): Triple<Int, Int, Int> {
         return BirthdayHeightHelper.getInitialDateForPicker(cachedEstimatedDate)
     }
 
-    fun onDateSelected(day: Int, month: Int, year: Int) {
-        datePickerLoading = true
-        emitState()
+    suspend fun onDateSelected(day: Int, month: Int, year: Int) {
+        val estimatedHeight = BirthdayHeightHelper.estimateBlockHeightFromDate(blockchainType, day, month, year)
+        if (estimatedHeight != null) {
+            val isValid = BirthdayHeightHelper.isHeightValid(blockchainType, estimatedHeight)
+            val isDifferent = estimatedHeight != currentBirthdayHeight
 
-        viewModelScope.launch {
-            val estimatedHeight = BirthdayHeightHelper.estimateBlockHeightFromDate(blockchainType, day, month, year)
-            if (estimatedHeight != null) {
-                val isValid = BirthdayHeightHelper.isHeightValid(blockchainType, estimatedHeight)
-                val isDifferent = estimatedHeight != currentBirthdayHeight
-
-                birthdayHeight = estimatedHeight
-                birthdayHeightText = estimatedHeight.toString()
-                rescanButtonEnabled = isValid && isDifferent
-                datePickerLoading = false
-                closeDatePicker = true
-                emitState()
-                updateBlockDateText(estimatedHeight)
-            } else {
-                datePickerLoading = false
-                closeDatePicker = true
-                emitState()
-            }
+            birthdayHeight = estimatedHeight
+            birthdayHeightText = estimatedHeight.toString()
+            rescanButtonEnabled = isValid && isDifferent
+            emitState()
+            updateBlockDateText(estimatedHeight)
+        } else {
+           updateBlockDateText(null)
         }
     }
 
