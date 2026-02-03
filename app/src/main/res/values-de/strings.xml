@@ -987,6 +987,7 @@
         \n\nAuf → Transaktionen erscheinen sofort als ausstehend beim Broadcasten (schneller synchronisieren, aber weniger Privatsphäre und Abhängigkeit vom Knoten).
         \n\n\n Aus → Transaktionen werden nur nach Bestätigung aus dem Netzwerk angezeigt (langsamer, aber sicherer und privat).</string>
     <string name="MoneroNodeSettings_Trusted">Vertrauen</string>
+    <string name="MoneroNodeSettings_Description">Wählen Sie den Knoten Nicht stoppbare App zur Synchronisierung von Brieftasche(n).</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Nach dem Ändern der Quelle muss die Brieftasche sich selbst synchronisieren.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Wählen Sie die Quell-Nicht stoppbare App zur Synchronisierung von Brieftasche(n).</string>
