@@ -97,6 +97,8 @@ class ZcashAdapter(
 
     override val isMainNet: Boolean = true
 
+    private var currentSyncProgress: Float = 0f
+
     private var syncState: AdapterState = AdapterState.Syncing()
         set(value) {
             if (value != field) {
@@ -424,21 +426,39 @@ class ZcashAdapter(
 
     private fun onStatus(status: Synchronizer.Status) {
         syncState = when (status) {
-            Synchronizer.Status.STOPPED -> AdapterState.Connecting
-            Synchronizer.Status.DISCONNECTED -> AdapterState.NotSynced(Exception("disconnected"))
+            Synchronizer.Status.STOPPED -> AdapterState.Syncing()
+            Synchronizer.Status.DISCONNECTED -> AdapterState.Syncing()
             Synchronizer.Status.SYNCING -> AdapterState.Syncing()
             Synchronizer.Status.SYNCED -> AdapterState.Synced
-            Synchronizer.Status.INITIALIZING -> AdapterState.Connecting
+            Synchronizer.Status.INITIALIZING -> AdapterState.Syncing()
         }
     }
 
     private fun onDownloadProgress(progress: PercentDecimal) {
-        syncState = AdapterState.Downloading(progress.toPercentage())
+        currentSyncProgress = progress.decimal
+        val blocksRemaining = calculateBlocksRemaining()
+        val progressPercent = progress.toPercentage().coerceIn(0, 100)
+
+        if (blocksRemaining == null || progressPercent == 0) return
+
+        syncState = AdapterState.Syncing(
+            progress = if (progressPercent > 0) progressPercent else null,
+            blocksRemained = blocksRemaining
+        )
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun onProcessorInfo(processorInfo: CompactBlockProcessor.ProcessorInfo) {
-        syncState = AdapterState.Syncing()
         lastBlockUpdatedSubject.onNext(Unit)
+    }
+
+    private fun calculateBlocksRemaining(): Long? {
+        val birthday = accountBirthday ?: return null
+        val latestHeight = synchronizer.latestHeight?.value ?: return null
+        val totalBlocks = latestHeight - birthday
+        if (totalBlocks <= 0 || currentSyncProgress <= 0f) return null
+
+        return max(1L, (totalBlocks * (1 - currentSyncProgress)).toLong())
     }
 
     private fun onBalance(balance: AccountBalance) {

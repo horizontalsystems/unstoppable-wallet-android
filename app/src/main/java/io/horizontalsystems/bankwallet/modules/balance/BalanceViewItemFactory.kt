@@ -174,7 +174,7 @@ class BalanceViewItemFactory {
                 when {
                     state.blocksRemained != null -> Translator.getString(R.string.Balance_BlocksRemaining, state.blocksRemained)
                     state.progress != null && state.progress > 0 -> {
-                        val text = Translator.getString(R.string.Balance_Syncing_WithProgress, state.progress.toString())
+                        val text = Translator.getString(R.string.Balance_Syncing)
                         if (syncedUntil != null) {
                             "$text - $syncedUntil"
                         } else {
