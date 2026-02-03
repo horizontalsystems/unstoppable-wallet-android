@@ -4,15 +4,21 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.bankwallet.entities.ScannedTransaction
+import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCallTransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import io.horizontalsystems.erc20kit.decorations.OutgoingEip20Decoration
+import io.horizontalsystems.erc20kit.events.TransferEventInstance
+import io.horizontalsystems.ethereumkit.decorations.IncomingDecoration
+import io.horizontalsystems.ethereumkit.decorations.OutgoingDecoration
+import io.horizontalsystems.ethereumkit.decorations.UnknownTransactionDecoration
+import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.FullTransaction
+import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -155,7 +161,7 @@ class SpamManager(
      * @param tokenUid Token identifier for cache lookup
      * @param source Transaction source
      */
-    suspend fun isSpam(
+    fun isSpam(
         transactionHash: ByteArray,
         events: List<TransferEvent>,
         timestamp: Long,
@@ -196,76 +202,131 @@ class SpamManager(
     }
 
     /**
-     * Process a transaction for spam detection during background rescan.
-     * Uses explicit outgoing transaction context instead of cache.
+     * Extract outgoing transaction info directly from FullTransaction.
+     * Works with decoration types instead of TransactionRecord.
+     * Used by SpamRescanManager to build context for spam detection without triggering isSpam().
+     */
+    fun extractOutgoingInfoFromFullTransaction(
+        fullTx: FullTransaction,
+        userAddress: Address
+    ): PoisoningScorer.OutgoingTxInfo? {
+        val tx = fullTx.transaction
+        return when (val decoration = fullTx.decoration) {
+            is OutgoingDecoration -> {
+                PoisoningScorer.OutgoingTxInfo(
+                    decoration.to.eip55,
+                    tx.timestamp,
+                    tx.blockNumber?.toInt()
+                )
+            }
+            is OutgoingEip20Decoration -> {
+                PoisoningScorer.OutgoingTxInfo(
+                    decoration.to.eip55,
+                    tx.timestamp,
+                    tx.blockNumber?.toInt()
+                )
+            }
+            is UnknownTransactionDecoration -> {
+                // Only extract outgoing info if user initiated the transaction
+                if (tx.from == userAddress) {
+                    val outgoingTransfers = decoration.eventInstances
+                        .mapNotNull { it as? TransferEventInstance }
+                        .filter { it.from == userAddress }
+                    outgoingTransfers.firstOrNull()?.let { transfer ->
+                        PoisoningScorer.OutgoingTxInfo(
+                            transfer.to.eip55,
+                            tx.timestamp,
+                            tx.blockNumber?.toInt()
+                        )
+                    }
+                } else {
+                    null
+                }
+            }
+            else -> null
+        }
+    }
+
+    /**
+     * Process a FullTransaction for spam detection during background rescan.
+     * Works directly with FullTransaction to avoid triggering isSpam() during conversion.
      *
-     * @param tx Transaction record to process
+     * @param fullTx Full transaction to process
      * @param source Transaction source
+     * @param userAddress User's wallet address
+     * @param baseToken Base token for native value conversion
      * @param outgoingContext List of recent outgoing transactions for poisoning detection
      */
-    fun processTransactionForSpamWithContext(
-        tx: TransactionRecord,
+    fun processFullTransactionForSpamWithContext(
+        fullTx: FullTransaction,
         source: TransactionSource,
+        userAddress: Address,
+        baseToken: Token,
         outgoingContext: List<PoisoningScorer.OutgoingTxInfo>
     ) {
-        val txHashBytes = tx.transactionHash.hexStringToByteArray()
+        val tx = fullTx.transaction
+        val txHashBytes = tx.hash
 
         // Skip if already scanned
         scannedTransactionStorage.getScannedTransaction(txHashBytes)?.let { return }
 
-        // Only check incoming events for spam - outgoing events are user-initiated
-        val events: List<TransferEvent> = when (tx) {
-            is EvmIncomingTransactionRecord -> listOf(TransferEvent(tx.from, tx.value))
-            is ExternalContractCallTransactionRecord -> tx.incomingEvents
-            is ContractCallTransactionRecord -> tx.incomingEvents
-            else -> return // Skip outgoing/approve/swap - user-initiated, not spam
+        // Extract incoming events based on decoration type
+        val incomingEvents: List<TransferEvent> = when (val decoration = fullTx.decoration) {
+            is IncomingDecoration -> {
+                val value = decoration.value.toBigDecimal(baseToken.decimals)
+                listOf(TransferEvent(decoration.from.eip55, TransactionValue.CoinValue(baseToken, value)))
+            }
+            is UnknownTransactionDecoration -> {
+                // Only process if not user-initiated (external contract call)
+                if (tx.from != userAddress) {
+                    val incomingTransfers = decoration.eventInstances
+                        .mapNotNull { it as? TransferEventInstance }
+                    incomingTransfers.map { transfer ->
+                        val tokenValue = transfer.tokenInfo?.let { info ->
+                            TransactionValue.TokenValue(
+                                tokenName = info.tokenName,
+                                tokenCode = info.tokenSymbol,
+                                tokenDecimals = info.tokenDecimal,
+                                value = transfer.value.toBigDecimal(info.tokenDecimal),
+                            )
+                        } ?: TransactionValue.RawValue(transfer.value)
+                        // Use transfer.from (sender address) for mimic detection
+                        TransferEvent(transfer.to.eip55, tokenValue)
+                    }
+                } else {
+                    emptyList()
+                }
+            }
+            else -> emptyList()
         }
 
-        if (events.isEmpty()) return
+        // Calculate spam status - only transactions with incoming events can be spam
+        val (isSpam, spamAddress) = if (incomingEvents.isEmpty()) {
+            // No incoming events = not spam (outgoing, contract calls, etc.)
+            false to null
+        } else {
+            val spamAddresses = poisoningScorer.detectSpamAddresses(
+                events = incomingEvents,
+                incomingTimestamp = tx.timestamp,
+                incomingBlockHeight = tx.blockNumber?.toInt(),
+                recentOutgoingTxs = outgoingContext
+            )
+            val detected = spamAddresses.isNotEmpty()
+            detected to spamAddresses.firstOrNull()
+        }
 
-        // Calculate spam status with explicit context
-        val spamAddresses = poisoningScorer.detectSpamAddresses(
-            events = events,
-            incomingTimestamp = tx.timestamp,
-            incomingBlockHeight = tx.blockHeight,
-            recentOutgoingTxs = outgoingContext
-        )
-        val isSpam = spamAddresses.isNotEmpty()
-
-        // Save result to database
+        // Save result to database for all transactions
         try {
             scannedTransactionStorage.save(
                 ScannedTransaction(
                     transactionHash = txHashBytes,
                     isSpam = isSpam,
                     blockchainType = source.blockchain.type,
-                    address = spamAddresses.firstOrNull()
+                    address = spamAddress
                 )
             )
         } catch (_: Throwable) {
         }
     }
 
-    /**
-     * Extract outgoing transaction info from a transaction record.
-     * Used by SpamRescanManager to build context for spam detection.
-     */
-    fun extractOutgoingInfo(tx: TransactionRecord): PoisoningScorer.OutgoingTxInfo? {
-        return when (tx) {
-            is EvmOutgoingTransactionRecord -> {
-                PoisoningScorer.OutgoingTxInfo(tx.to, tx.timestamp, tx.blockHeight)
-            }
-            is ContractCallTransactionRecord -> {
-                tx.outgoingEvents.firstOrNull()?.address?.let { address ->
-                    PoisoningScorer.OutgoingTxInfo(address, tx.timestamp, tx.blockHeight)
-                }
-            }
-            is ExternalContractCallTransactionRecord -> {
-                tx.outgoingEvents.firstOrNull()?.address?.let { address ->
-                    PoisoningScorer.OutgoingTxInfo(address, tx.timestamp, tx.blockHeight)
-                }
-            }
-            else -> null
-        }
-    }
 }

@@ -1,10 +1,11 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
+import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.bankwallet.entities.SpamScanState
-import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
+import io.horizontalsystems.ethereumkit.core.toHexString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,36 +59,36 @@ class SpamRescanManager(
         source: TransactionSource,
         adapter: ITransactionsAdapter
     ) {
+        // Get user address and base token from EVM adapter
+        val evmAdapter = adapter as? EvmTransactionsAdapter ?: return
+        val userAddress = evmAdapter.evmKitWrapper.evmKit.receiveAddress
+        val baseToken = evmAdapter.baseToken
+
         try {
-            var lastTxId: String? = null
+            var lastTxHash: ByteArray? = null
+            val outgoingContext = mutableListOf<PoisoningScorer.OutgoingTxInfo>()
 
             while (true) {
-                val transactions = adapter.getTransactionsAfter(lastTxId)
+                // Use getFullTransactionsBefore to avoid triggering isSpam() during conversion
+                val transactions = adapter.getFullTransactionsBefore(lastTxHash, BATCH_SIZE)
                 if (transactions.isEmpty()) break
 
-                // Find the oldest transaction in this batch to use as reference point
-                val oldestTxInBatch = transactions.minByOrNull { it.timestamp }
+                // Sort by timestamp (oldest first) to ensure correct outgoing context
+                // Address poisoning detection needs context from OLDER outgoing transactions
+                val sortedTransactions = transactions.sortedBy { it.transaction.timestamp }
 
-                // IMPORTANT: Fresh outgoing context for each batch (not using SpamManager's cache)
-                // We fetch outgoing transactions that are OLDER than this batch's oldest transaction
-                // This is required for proper poisoning detection - attacker mimics addresses
-                // from outgoing txs that happened BEFORE the spam transaction
-                val outgoingContext = oldestTxInBatch?.let { oldestTx ->
-                    adapter.getTransactions(
-                        from = oldestTx,
-                        token = null,
-                        limit = OUTGOING_CONTEXT_SIZE,
-                        transactionType = FilterTransactionType.Outgoing,
-                        address = null
-                    ).mapNotNull { spamManager.extractOutgoingInfo(it) }
-                }?.toMutableList() ?: mutableListOf()
-
-                transactions.forEach { tx ->
+                sortedTransactions.forEach { fullTx ->
                     // Process the transaction with current outgoing context
-                    spamManager.processTransactionForSpamWithContext(tx, source, outgoingContext.toList())
+                    spamManager.processFullTransactionForSpamWithContext(
+                        fullTx,
+                        source,
+                        userAddress,
+                        baseToken,
+                        outgoingContext.toList()
+                    )
 
-                    // If this tx is outgoing, add it to context for subsequent txs in this batch
-                    spamManager.extractOutgoingInfo(tx)?.let { outgoingInfo ->
+                    // If this tx is outgoing, add it to context for subsequent (newer) txs
+                    spamManager.extractOutgoingInfoFromFullTransaction(fullTx, userAddress)?.let { outgoingInfo ->
                         outgoingContext.add(0, outgoingInfo)
                         // Keep context size limited
                         if (outgoingContext.size > OUTGOING_CONTEXT_SIZE) {
@@ -96,10 +97,11 @@ class SpamRescanManager(
                     }
                 }
 
-                lastTxId = transactions.lastOrNull()?.uid
+                // Use the last transaction from original order for pagination
+                lastTxHash = transactions.lastOrNull()?.transaction?.hash
 
                 // Update progress
-                lastTxId?.let {
+                lastTxHash?.toHexString()?.let {
                     scannedTransactionStorage.save(
                         SpamScanState(source.blockchain.type, source.account.id, it)
                     )
