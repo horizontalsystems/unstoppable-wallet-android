@@ -2,7 +2,6 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Parametre ayarlanmadı</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">İptal</string>
     <string name="Alert_Copy">Kopyala</string>
     <string name="Alert_Loading">Yükleniyor...</string>
@@ -15,7 +14,6 @@
     <string name="Button_ScanQr">QR Kod</string>
     <string name="Button_Close">Kapat</string>
     <string name="Button_Ok">Tamam</string>
-    <string name="Button_Activate">Activate</string>
     <string name="Button_Later">Sonra</string>
     <string name="Button_Done">Bitti</string>
     <string name="Button_Retry">Yeniden Dene</string>
@@ -218,19 +216,6 @@
     <string name="Market_Filter_ATL_Description">(Tüm Zamanların En Düşüğü)</string>
     <string name="Market_Filter_ShowResults">Sonuçları Göster</string>
     <string name="Market_Filter_ShowResults_Counter">Sonuçları Göster: %d</string>
-    <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
-    <string name="Market_Filter_Range_5B_More">&gt; 5B</string>
-    <string name="Market_Filter_Range_0_10M">&lt; 10M</string>
-    <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
-    <string name="Market_Filter_Range_40M_200M">40M - 200M</string>
-    <string name="Market_Filter_Range_200M_2B">200M - 2B</string>
-    <string name="Market_Filter_Range_2B_10B">2B - 10B</string>
-    <string name="Market_Filter_Range_10B_More">&gt; 10B</string>
-    <string name="Market_Filter_Range_0_50M">&lt; 50M</string>
-    <string name="Market_Filter_Range_50M_200M">50M - 200M</string>
-    <string name="Market_Filter_Range_200M_1B">200M - 1B</string>
-    <string name="Market_Filter_Range_1B_10B">1B - 10B</string>
-    <string name="Market_Filter_Range_10B_50B">10B - 50B</string>
     <string name="Market_Filter_TimePeriod_1D">1 Gün</string>
     <string name="Market_Filter_TimePeriod_1W">1 Hafta</string>
     <string name="Market_Filter_TimePeriod_2W">2 Hafta</string>
@@ -318,6 +303,7 @@
     <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Girdiğiniz adres sahte olabilir. Dolandırıcılar genellikle ilk ve son karakterleri değiştirirler. Kayıpları önlemek için devam etmeden önce tam adresi dikkatlice doğrulayın.</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">Girdiğiniz adres kara listeye alınmış olarak işaretlenmiştir. Bu adrese yapılan işlemler kayıplara veya diğer risklere yol açabilir. Lütfen devam etmeden önce alıcının bilgilerini doğrulayın.</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Girdiğiniz adres yaptırım altında olarak işaretlenmiştir. Bu adrese yapılan işlemler kayıplara veya diğer risklere yol açabilir. Lütfen devam etmeden önce alıcının bilgilerini doğrulayın.</string>
+    <string name="AddressEnter_Danger_Content">Girdiğiniz adres sahte olabilir. Dolandırıcılar genellikle ilk ve son karakterleri değiştirirler. Kayıpları önlemek için devam etmeden önce tam adresi dikkatlice doğrulayın.</string>
     <string name="Send_RiskyAddress">Riskli Adres!</string>
     <string name="Send_RiskyAddress_AlertText">Yüksek riskli bir adrese fon göndermek üzeresiniz. Devam etmek, para kaybına veya diğer güvenlik risklerine yol açabilir. Devam ederek potansiyel tehlikeleri kabul etmiş olursunuz. Devam etmek istediğinizden emin misiniz?</string>
     <string name="Send_Success">\u2713 Gönderilen</string>
@@ -347,6 +333,7 @@
     <string name="SendEvmSettings_Title">İleri düzey</string>
     <string name="SendEvmSettings_Nonce">İşlem Nonce</string>
     <string name="SendEvmSettings_Nonce_Info">Nonce, kullanıcının cüzdanındaki bir işlem için benzersiz bir tamsayı değeridir. Normalde gönderilen her işlemle birlikte artar ve değiştirilmesi gerekmez. İleri düzey kullanıcılar, yeni işlemin eskisinin onaylanmasını önlemek için yeterince yüksek bir ücrete sahip olduğu sürece, bu işlemi iptal etmek ve değiştirmek için bekleyen bir işlemin bir nonsine eşit olarak ayarlayabilirler (örneğin, onayını hızlandırmak veya işlem parametrelerini tamamen değiştirmek isteyebilirler). Birden fazla bekleyen işlem aynı nonce\'a sahip olduğunda, genellikle en yüksek ücrete sahip olan biri onaylanır.</string>
+    <string name="SendEvmSettings_SlippageTolerance">Slipaj Toleransı</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Kullanılmış Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Bu nonce ile gerçekleştirilen bir işlem zaten var.</string>
     <!-- Fee Settings -->
@@ -646,6 +633,7 @@
     <string name="Premium_Upgrade">Yükselt</string>
     <string name="Premium_ThankYouForSubscription">Aboneliğiniz için \nteşekkürler!</string>
     <string name="Premium_GoToApp">Uygulamaya Git</string>
+    <string name="Premium_Banner_BlackFridayText">Premium özelliklerle deneyiminizi yükseltin!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Uygulamanın tüm gücünün keyfini çıkarın.</string>
     <string name="Premium_SelectSubscription">Abonelik Seçin</string>
     <string name="Premium_UpgradeFeature_TokenInsights">Token Analitiği</string>

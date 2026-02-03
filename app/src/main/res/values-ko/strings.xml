@@ -2,7 +2,6 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">매개 변수가 설정되지 않았습니다</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
     <string name="Alert_Loading">로딩중...</string>
@@ -161,7 +160,6 @@
     <string name="Market_Signals">신호</string>
     <string name="Market_Volume">거래량</string>
     <string name="Market_MarketCap">시가총액</string>
-    <string name="Market_TVL">TVL</string>
     <string name="Market_Signal_Description">아래 신호는 대략 최근 30일 동안의 볼린저 밴드와 RSI 기술적 가격 지표를 기반으로 합니다. 이러한 신호는 알고리즘에 기반하며 자주 변경될 수 있습니다.</string>
     <string name="Market_Signal_StrongBuy_Description">가격 상승에 대한 높은 신뢰도.</string>
     <string name="Market_Signal_Buy_Description">가까운 미래에 가능성 있는 가격 상승.</string>
@@ -198,8 +196,6 @@
     <string name="MarketEtf_LowestAssets">최저 자산</string>
     <string name="MarketEtf_Inflow">유입</string>
     <string name="MarketEtf_Outflow">유출</string>
-    <string name="MarketEtf_BitcoinEtf">Bitcoin ETF</string>
-    <string name="MarketEtf_EthereumEtf">Ethereum ETF</string>
     <string name="MarketEtf_EtfDescription">현물 및 선물 기반 상품을 포함한 모든 %s ETF의 순유입입니다.</string>
     <!--Market Search-->
     <string name="EmptyResults">검색 결과가 없습니다</string>
@@ -299,12 +295,10 @@
     <string name="Market_Vaults_Filter_USDYield">USD 수익률</string>
     <string name="Market_Vaults_OpenDapp">dApp 열기</string>
     <string name="Market_Vaults_Filter_MultipleChains">%d 체인</string>
-    <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">회로망</string>
     <string name="Market_Vaults_Vault_Protocol">프로토콜</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">기반 토큰</string>
     <string name="Market_Vaults_Vault_Holders">소유주</string>
-    <string name="Market_Vaults_ChartTvl">TVL</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">다중 체인</string>
@@ -318,7 +312,6 @@
     <string name="Balance_Syncing">동기화...</string>
     <string name="Balance_SearchingTransactions">거래 검색 중...</string>
     <string name="Balance_Downloading">다운로드 중…</string>
-    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">동기화 중입니다...%s%%</string>
     <string name="Balance_BlocksRemaining">남은 블록 수 - %d</string>
     <string name="Balance_Sort_Balance">잔액</string>
@@ -397,15 +390,16 @@
     <string name="Send_Address_Error_InvalidAddress">잘못된 주소</string>
     <string name="Send_Address_Error_Detected">감지됨</string>
     <string name="Send_Address_Error_Clear">안전함</string>
-    <string name="Send_Address_PhishingCheck">Phishing Check</string>
-    <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
-    <string name="Send_Address_SanctionCheck">Sanctions Check</string>
     <string name="Send_Address_ErrorMessage_PhishingDetected">피싱 주소 감지됨!</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected">블랙리스트 등록 주소 감지됨!</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected">제재 대상 주소 감지됨!</string>
     <string name="Send_Address_ErrorMessage_PhishingDetected_Description">입력한 주소가 사기성일 수 있습니다. 사기꾼들은 종종 처음과 마지막 문자를 변경합니다. 손실을 방지하기 위해 진행하기 전에 전체 주소를 주의 깊게 확인하세요.</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">입력한 주소가 블랙리스트에 등록된 것으로 표시되어 있습니다. 이 주소로의 거래는 손실이나 기타 위험을 초래할 수 있습니다. 수신자 정보를 진행하기 전에 확인하세요.</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected_Description">입력한 주소가 제재 대상으로 표시되어 있습니다. 이 주소로의 거래는 손실이나 기타 위험을 초래할 수 있습니다. 수신자 정보를 진행하기 전에 확인하세요.</string>
+    <string name="AddressEnter_NeedSubscription_Title">주목!</string>
+    <string name="AddressEnter_Danger_Title">위험!</string>
+    <string name="AddressEnter_Danger_Content">입력한 주소가 사기성일 수 있습니다. 사기꾼들은 종종 처음과 마지막 문자를 변경합니다. 손실을 방지하기 위해 진행하기 전에 전체 주소를 주의 깊게 확인하세요.</string>
+    <string name="AddressEnter_Safe_Title">안전함</string>
     <string name="Send_RiskyAddress">위험한 주소!</string>
     <string name="Send_RiskyAddress_AlertText">고위험 주소로 자금을 보내려고 합니다. 진행하면 손실이나 기타 보안 위험이 발생할 수 있습니다. 계속 진행하면 잠재적 위험을 수락하는 것입니다. 정말로 진행하시겠습니까?</string>
     <string name="Send_Success">\u2713 보냄</string>
@@ -435,6 +429,7 @@
     <string name="SendEvmSettings_Title">고급의</string>
     <string name="SendEvmSettings_Nonce">트랜잭션 Nonce</string>
     <string name="SendEvmSettings_Nonce_Info">Nonce(논스)는 사용자 지갑 내에서 거래마다 고유한 정수값입니다. 보통 각 제출된 거래마다 증가하며 변경할 필요가 없습니다. 고급 사용자는 새 거래가 충분히 높은 수수료로 설정되어 이전 거래가 대신 확인되지 않도록 하기 위해 보류 중인 거래의 논스 값을 설정할 수 있습니다. (예를 들어, 거래 확인을 가속화하거나 거래 매개변수를 완전히 변경하려는 경우). 여러 보류 중인 거래가 동일한 논스를 가지면 일반적으로 가장 높은 수수료를 가진 거래만 확인됩니다.</string>
+    <string name="SendEvmSettings_SlippageTolerance">토큰 범위 설정</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">중고 Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">이 nonce를 사용하여 실행된 트랜잭션이 이미 존재합니다.</string>
     <!-- Fee Settings -->
@@ -580,6 +575,7 @@
     <string name="Swap_YouPay">지불하기</string>
     <string name="Swap_YouGet">얻기</string>
     <string name="Swap_Confirm_Title">확인</string>
+    <string name="SwapDefense_Attention_Title">주목!</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">토큰 범위 설정</string>
     <string name="SwapSettings_RecipientAddressTitle">귀하의 거래가 이 시간 이상 보류되면 원상 복귀됩니다</string>
@@ -619,6 +615,7 @@
     <string name="Transactions_Swap">스왑됨</string>
     <string name="Transactions_Failed">실패</string>
     <string name="Transactions_Transfer">전송</string>
+    <string name="Transactions_Shield">차폐(Shield)</string>
     <string name="Transactions_ContractCall">계약 콜</string>
     <string name="Transactions_ExternalContractCall">외부 콜</string>
     <string name="Transactions_ContractCreation">계약 생성</string>
@@ -763,6 +760,7 @@
     <string name="Premium_Upgrade">업그레이드</string>
     <string name="Premium_ThankYouForSubscription">구독해 주셔서 감사합니다!</string>
     <string name="Premium_GoToApp">앱으로 이동</string>
+    <string name="Premium_Banner_BlackFridayText">프리미엄 기능으로 경험을 업그레이드하세요!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">앱의 모든 기능을 마음껏 즐기세요.</string>
     <string name="Premium_SelectSubscription">구독 선택</string>
     <string name="Premium_UpgradeFeature_TokenInsights">토큰 분석</string>
@@ -771,7 +769,6 @@
     <string name="Premium_UpgradeFeature_RobberyProtection">강압 모드</string>
     <string name="Premium_UpgradeFeature_SecureSend">사기 방지</string>
     <string name="Premium_UpgradeFeature_ScamProtection">블랙리스트 확인</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport">VIP 그룹</string>
     <string name="Premium_UpgradeFeature_SwapProtection">손실 방지</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">주요 기준별 상위 100개 목록 접근</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">다양한 매개변수에 대한 다중 레벨 필터링</string>
@@ -798,7 +795,6 @@
     <string name="Premium_SubscriptionPeriod_Year">년</string>
     <string name="Premium_SubscriptionPeriod_Annually">연간</string>
     <string name="Premium_SubscriptionPeriod_Monthly">월간</string>
-    <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
     <string name="Premium_SubscriptionPeriod_PerYear">연간</string>
     <string name="Premium_SubscriptionPeriod_PerMonth">월별</string>
     <string name="Appearance_MarketsTab">마켓 탭</string>
@@ -840,7 +836,6 @@
     <string name="EvmNetwork_AddNew">신규로 추가</string>
     <string name="EvmNetwork_Added">추가됨</string>
     <!--Add RPC Source-->
-    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">RPC 소스 추가</string>
     <string name="AddEvmSyncSource_BasicAuthentication">기본 인증(선택 사항)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">이 URL이 있는 RPC 소스가 이미 존재합니다.</string>
@@ -876,7 +871,6 @@
     <string name="SettingsSecurity_SortingShuffleDescription">랜덤 인덱싱</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">사전 색인 작성</string>
-    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">빠르고 비공개, 중앙집중화</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">블록체인으로 필터링</string>
@@ -903,7 +897,6 @@
     <string name="SettingsTerms_DisablingPin">스마트폰에서 잠금 해제 PIN(코드)을 비활성화하면 앱에서 모든 지갑이 삭제됩니다. 자금에 대한 액세스를 복원하려면 복구 문구가 필요합니다.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <!--Setting_Notifications-->
     <!-- Settings Launch Screen -->
@@ -1021,7 +1014,6 @@
     <string name="StellarSecretKey_Title">Stellar 비밀 키</string>
     <string name="StellarSecretKey_ShowSecretKey">탭하여 비밀 키 표시</string>
     <!-- Bip32 Root Key -->
-    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">개인 키 보기</string>
     <string name="ExtendedKey_AccountInfo">할 일</string>
@@ -1032,7 +1024,6 @@
     <string name="PrivateKeys_StellarSecretKey">Stellar 비밀 키</string>
     <string name="PrivateKeys_StellarSecretKeyDescription">이 지갑은 Stellar 네트워크 자산에 대한 완전한 제어 권한을 부여합니다.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">지갑의 마스터 개인 키. 파생된 모든 계정과 자산에 대한 완전한 제어 권한을 부여합니다.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">이 지갑은 Bitcoin 및 기타 UTXO 기반 자산(예: Litecoin, Bitcoin Cash, Dash)에 대한 완전한 제어 권한을 부여합니다.</string>
     <string name="PrivateKeys_NeverShareWarning">복구 문구를 누구와도 공유하지 마십시오. Unstoppable 팀은 복구 문구를 요구하지 않습니다.</string>
     <string name="PrivateKeys_MoneroPrivateKey">Monero 개인 키</string>
@@ -1135,6 +1126,8 @@
     <string name="CoinPage_Performance_Month3">3 개월</string>
     <string name="CoinPage_Performance_Month6">6 개월</string>
     <string name="CoinPage_Performance_Year1">일년</string>
+    <string name="CoinPage_Performance_Year2">2 년</string>
+    <string name="CoinPage_Performance_Year5">5 년</string>
     <string name="CoinPage_ShowMore">더 보기</string>
     <string name="CoinPage_ShowLess">적게 보이기</string>
     <string name="CoinPage_LaunchDate">창립일</string>
@@ -1312,7 +1305,6 @@
     <string name="BalanceSyncError_ChangableSourceErrorText">현재 소스에서 데이터를 가져오지 못했습니다. 다시 시도하거나 다른 동기화 소스로 변경할 수 있습니다.</string>
     <string name="BalanceSyncError_ErrorText">현재 소스에서 데이터를 가져오지 못했습니다. 나중에 다시 시도하세요.</string>
     <!--Release notes-->
-    <string name="ReleaseNotes_JoinUnstoppables">JOIN UNSTOPPABLES</string>
     <string name="ProUsersInfo_UnstoppablePass">Unstoppable 패스</string>
     <string name="ProUsersInfo_Description">이 데이터를 활성화하려면 브론즈 레벨 UW NFTs \'Coin Info+\'를 획득해야 합니다.
 \n\n또한 아래의 데이터에 액세스할 수 있습니다:</string>

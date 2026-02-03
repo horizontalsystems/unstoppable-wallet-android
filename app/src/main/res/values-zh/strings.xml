@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="Error_BrowserNotFound">没有找到打开此链接的应用</string>
     <string name="Error_ParameterNotSet">参数未设置</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">取消</string>
@@ -50,6 +51,8 @@
     <string name="Button_CopyAddress">复制地址</string>
     <string name="Button_HideCoin">隐藏硬币</string>
     <string name="Button_Approve">批准</string>
+    <string name="Button_ViewMyAddress">查看我的地址</string>
+    <string name="Button_CopyError">复制错误</string>
     <string name="Attention_Title">注意事项</string>
     <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
@@ -124,6 +127,10 @@
     <string name="Restore_BirthdayHeight_Invalid">生日高度无效</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">输入钱包的生日高度以便实现更快同步。</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (可选)</string>
+    <string name="BirthdayHeight_Description">您可以更改块高度或选择一个大约日期来重新扫描您的交易历史记录。</string>
+    <string name="BirthdayHeight_RestoreDescription">你的钱包将从默认起点恢复。你可以更改块高度或选择一个大约的钱包创建日期。</string>
+    <string name="BirthdayHeight_BlockDate">区块日期：</string>
+    <string name="BirthdayHeight_Rescan">重新扫描</string>
     <string name="Restore_ZCash_RestoreAsNew">恢复为新的</string>
     <string name="Restore_ZCash_NewWallet">新钱包</string>
     <string name="Restore_ZCash_NewWallet_Description">没有任何交易</string>
@@ -395,6 +402,7 @@
     <string name="Send_Confirmation_Send_Button">发送​​</string>
     <string name="Send_Confirmation_Action">操作</string>
     <string name="Send_Address_Error_InvalidAddress">无效地址</string>
+    <string name="Send_Address_Error_InvalidAddress_Description">看起来这个地址不适合选定的网络。请重新检查。</string>
     <string name="Send_Address_Error_Detected">已檢測</string>
     <string name="Send_Address_Error_Clear">清除</string>
     <string name="Send_Address_PhishingCheck">钓鱼检查</string>
@@ -406,6 +414,12 @@
     <string name="Send_Address_ErrorMessage_PhishingDetected_Description">您輸入的地址可能是欺詐性的。詐騙者通常會更改首尾字符。在繼續之前請仔細驗證完整地址，以避免損失。</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">您輸入的地址被標記為黑名單。向此地址進行交易可能導致損失或其他風險。繼續之前請驗證接收者的詳細信息。</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected_Description">您輸入的地址被標記為受制裁。向此地址進行交易可能導致損失或其他風險。繼續之前請驗證接收者的詳細信息。</string>
+    <string name="AddressEnter_NeedSubscription_Title">注意！</string>
+    <string name="AddressEnter_NeedSubscription_Content">安全发送已关闭。您的转账可能会转到一个危险的地址，资金可能会丢失。</string>
+    <string name="AddressEnter_Danger_Title">危险！</string>
+    <string name="AddressEnter_Danger_Content">您輸入的地址可能是欺詐性的。詐騙者通常會更改首尾字符。在繼續之前請仔細驗證完整地址，以避免損失。</string>
+    <string name="AddressEnter_Safe_Title">安全</string>
+    <string name="AddressEnter_Safe_Content">地址已检查。未找到网络钓鱼、黑名单或制裁。可以安全使用。</string>
     <string name="Send_RiskyAddress">風險地址！</string>
     <string name="Send_RiskyAddress_AlertText">您即將向高風險地址發送資金。繼續可能導致資金損失或其他安全風險。繼續操作即表示您接受潛在危險。您確定要繼續嗎？</string>
     <string name="Send_Success">\u2713已发送</string>
@@ -425,6 +439,8 @@
     <string name="Send_LockTime_HalfYear">6月</string>
     <string name="Send_LockTime_Year">1年</string>
     <string name="Send_Sending">正在发送</string>
+    <string name="Send_UnexpectedError">意外错误</string>
+    <string name="Send_UnexpectedError_Description">发送您的交易时出了错。请重试或复制错误代码并联系支持者。</string>
     <string name="Send_Warning_LowFee">警告！有被骗的风险</string>
     <string name="Send_Error_LowFee">手续费错误</string>
     <string name="Send_Error_LowFee_Description">费用率太低。</string>
@@ -433,8 +449,12 @@
     <string name="Send_Error_FetchFeeRateFailed_Description">与服务器的连接已丢失。要继续，请手动使用网站上的数据设置费用。</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">高级</string>
+    <string name="SendEvmSettings_SetRecipient">设置收件人</string>
     <string name="SendEvmSettings_Nonce">交易nonce</string>
+    <string name="SendEvmSettings_EditFee">编辑费用</string>
     <string name="SendEvmSettings_Nonce_Info">Nonce是用于用户钱包内的交易的一个唯一的整数值。它通常随着每一个提交的交易而增加且不需要更改。高级用户可以将其设置为等于一个待定交易的nonce，以便取消和取代该交易，只要新的交易具备足够高的费用来防止旧的交易得到确认即可（例如，他们可能需要加快其确认，或者完全更改交易参数）。当多个待定交易具有相同的nonce时，只有一个会得到确认，通常是具有最高费用的那一个。</string>
+    <string name="SendEvmSettings_SlippageTolerance">无效滑点</string>
+    <string name="SendEvmSettings_SlippageTolerance_Info">您交换的最高可接受价格偏差。超过这个限制交易将被恢复。</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">已用nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">使用此nonce执行的交易已存在。</string>
     <!-- Fee Settings -->
@@ -479,7 +499,9 @@
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">无法将 TRX 转移给自己</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">无法传输 0 %s</string>
+    <string name="Tron_TokenPage_AddressNotActivated">未激活</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">帐户未激活</string>
+    <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">激活后交易将显示</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">新的TRON钱包需要至少1TRX的存款才能激活。 非活动钱包可以持有并接收代币，但在激活之前不会纠正余额。</string>
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">新连接</string>
@@ -558,13 +580,17 @@
     <string name="EthereumTransaction_Error_ExecutionReverted">异常错误: %s</string>
     <!--Swap-->
     <string name="Swap">互兑交易</string>
+    <string name="Swap_AML">AML</string>
     <string name="Swap_FromAmountTitle">您支付</string>
     <string name="Swap_ToAmountTitle">您获得</string>
     <string name="Swap_TokenSelectorTitle">选择</string>
     <string name="Swap_Price">价格</string>
     <string name="Swap_AvailableBalance">可用余额</string>
     <string name="Swap_PriceImpact">价格影响</string>
+    <string name="Swap_EstimatedTime">估计时间</string>
+    <string name="Swap_EstimatedTimeDescription">接收资金的大约时间，交换处理和交易确认可能需要一些时间，这取决于网络和提供者。</string>
     <string name="Swap_MinimumReceived">保证金额</string>
+    <string name="Swap_MinimumReceivedDescription">这一数额正在审定过程中。 一旦交易状态得到验证，您将能够使用这些硬币。用户正在使用的最低金额 </string>
     <string name="Swap_Slippage">滑点</string>
     <string name="Swap_Recipient">收款人</string>
     <string name="Swap_ErrorNoProviders">没有提供者</string>
@@ -588,7 +614,26 @@
     <string name="Swap_AmountMax">(最大金额)</string>
     <string name="Swap_YouPay">您支付</string>
     <string name="Swap_YouGet">您获得</string>
+    <string name="Swap_ConfirmApprove_Title">确认批准</string>
+    <string name="Swap_ConfirmRevoke_Title">确认撤销</string>
     <string name="Swap_Confirm_Title">确认</string>
+    <string name="Swap_SlippageDescription">这一数额正在审定过程中。 一旦交易状态被验证，您将能够使用这些硬币。用户正在使用的最低金额 </string>
+    <string name="SwapDefense_PriceImpact_High_Title">太昂贵了！</string>
+    <string name="SwapDefense_PriceImpact_High_Description">您将在这次交换中失去大部分资金 (-%s%%)。</string>
+    <string name="SwapDefense_PriceImpact_Forbidden_Title">取消优惠价格！</string>
+    <string name="SwapDefense_PriceImpact_Forbidden_Description">这种交换会因流动性很低而造成重大损失 (-%s%%)。</string>
+    <string name="SwapDefense_Attention_Title">注意！</string>
+    <string name="SwapDefense_Attention_Description">保护已关闭。Bots可能会干扰您的交换并使您失去钱。</string>
+    <string name="SwapDefense_Safe_Title">保护</string>
+    <string name="SwapDefense_Safe_Description">我正在阻止机器人在你的交换中接受值。</string>
+    <string name="SwapError_FailedToFetchQuote">获取报价失败。</string>
+    <string name="SwapTerms_Title">交换条款</string>
+    <string name="SwapTerms_TopText">不可阻挡的聚合物是多个分散化(DEX)和集中化的交换提供商，以提供有竞争力的利率和广泛的资产支持。</string>
+    <string name="SwapTerms_BottomText">总是选择一个与您的要求匹配的交换源。</string>
+    <string name="SwapTerms_RiskRestrictions">限制的风险</string>
+    <string name="SwapTerms_RiskRestrictions_Info">我知道一些非DEX交换供应商采用了交易筛选方法。 这类提供者可拒绝（和退还）交换资金，或者，在极少数情况下（化学武器组织和恐怖主义），冻结资金并要求获得了解青年组织的数据。</string>
+    <string name="SwapTerms_UserResponsibility">用户责任</string>
+    <string name="SwapTerms_UserResponsibility_Info">我理解使用非DEX提供商会带来额外的风险，这些风险是我的责任。无法阻挡不能保证提供商的行为。</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">无效滑点</string>
     <string name="SwapSettings_RecipientAddressTitle">接收人地址</string>
@@ -702,6 +747,7 @@
     <string name="TransactionInfo_Sent">已发送</string>
     <string name="TransactionInfo_Approved">批准</string>
     <string name="TransactionInfo_SpeedUp">加速</string>
+    <string name="TransactionInfo_TransactionSecretKey">Tx 秘密密钥</string>
     <string name="TransactionInfo_SpamWarning">这笔交易存在可疑，可能是诈骗。\n请不要从这笔交易中复制任何地址。</string>
     <string name="TransactionInfo_SpeedUpDescription">此操作将尝试通过以更高的费用重新发送原始交易来使其失效。</string>
     <string name="StatusInfo_Pending">待处理</string>
@@ -833,7 +879,7 @@
     <string name="Premium_Upgrade">升級</string>
     <string name="Premium_ThankYouForSubscription">感謝您的\n訂閱！</string>
     <string name="Premium_GoToApp">前往應用程式</string>
-    <string name="Premium_Banner_BlackFridayText">通过我们年度最大的折扣升级到高级版</string>
+    <string name="Premium_Banner_BlackFridayText">使用高級版功能升級您的體驗！</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">盡享應用程式的全部功能。</string>
     <string name="Premium_SelectSubscription">選擇訂閱</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">一次购买将解锁所有高级功能。</string>
@@ -994,8 +1040,12 @@
     <string name="SettingsTerms_Backup">安全地备份每个钱包的恢复短语。这是在应用程序发生故障时重新获得资金的唯一途径。</string>
     <string name="SettingsTerms_DisablingPin">在智能手机上禁用解锁 PIN (代码)会删除应用程序中的所有钱包。恢复资金访问将需要恢复短语。</string>
     <string name="SettingsTerms_PrivacyNotice">应用没有间接或收集关于您的余额或交易的数据 — — 我们甚至不知道有多少人使用它。 它只跟踪匿名使用模式(打开的页面、点击的按钮)以提高可用性。您可以在设置 -&gt; 隐私中关闭此功能。</string>
+    <string name="SettingsTerms_WeNotHoldingYourAssets">我们不持有您的资产，访问您的私人密钥，或代表您执行交易。 该应用不提供经纪、交换、保管、托管或货币传输服务。 所有交易都是由您发起、签名和直接向公共区块链网络广播的。</string>
     <string name="SettingsTerms_MonetizationDisclosure">作为其货币化模型的一部分，应用程序从钱包内执行的DEX交换器中赚取小佣金。 这有助于我们保持独立和公开的来源，并且没有VC资金。</string>
+    <string name="SettingsTerms_TransactionsIrreversible">区块链交易是不可逆的。确认前总是审查交易细节。</string>
     <string name="SettingsTerms_OpenSource">应用程序是可验证的开源，所有源代码都在线发布。上面所述的一切都可以由任何人公开验证。</string>
+    <string name="SettingsTerms_LegalObligations">你完全负责贵国资金的安全、你的行为以及在贵国管辖范围内和全球范围内遵守适用法律的情况。</string>
+    <string name="SettingsTerms_UserResponsibility">通过继续工作，你承认你们的资金安全和法律上的遵守最终是你们的责任。</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
     <string name="SettingsShare_Text">不可阻止的</string>
@@ -1506,4 +1556,6 @@
     <string name="Contacts_Error_DefinedAddress">此地址已用于 %s</string>
     <string name="Contacts_Error_DefinedName">该名称已存在</string>
     <string name="Hud_Text_Connected">已连接</string>
+    <string name="BirthdayDatePicker_Title">选择日期</string>
+    <string name="BirthdayDatePicker_Description">选择一个大致的钱包创建日期。 \n区块高度将自动计算。</string>
 </resources>

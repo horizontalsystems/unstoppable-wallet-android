@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="Error_BrowserNotFound">Не найдено приложений для открытия этой ссылки</string>
     <string name="Error_ParameterNotSet">Не задан параметр</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Отменить</string>
@@ -50,6 +51,8 @@
     <string name="Button_CopyAddress">Копировать адрес</string>
     <string name="Button_HideCoin">Скрыть монету</string>
     <string name="Button_Approve">Разрешить</string>
+    <string name="Button_ViewMyAddress">Посмотреть мой адрес</string>
+    <string name="Button_CopyError">Ошибка копирования</string>
     <string name="Attention_Title">Внимание</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
@@ -126,6 +129,10 @@
     <string name="Restore_BirthdayHeight_Invalid">Недопустимая высота дня рождения</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Введите блок создания кошелька для ускорения синхронизации.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (необязательно)</string>
+    <string name="BirthdayHeight_Description">Вы можете изменить высоту блока или выбрать приблизительную дату для повторного сканирования истории транзакции.</string>
+    <string name="BirthdayHeight_RestoreDescription">Ваш кошелек будет восстановлен из начальной точки по умолчанию. Вы можете изменить высоту блока или выбрать примерную дату создания кошелька.</string>
+    <string name="BirthdayHeight_BlockDate">Дата блока:</string>
+    <string name="BirthdayHeight_Rescan">Пересканировать</string>
     <string name="Restore_ZCash_RestoreAsNew">Восстановить как новый</string>
     <string name="Restore_ZCash_NewWallet">Новый кошелек</string>
     <string name="Restore_ZCash_NewWallet_Description">Нет транзакций</string>
@@ -397,6 +404,7 @@
     <string name="Send_Confirmation_Send_Button">Отправить</string>
     <string name="Send_Confirmation_Action">Действие</string>
     <string name="Send_Address_Error_InvalidAddress">Неверный адрес</string>
+    <string name="Send_Address_Error_InvalidAddress_Description">Похоже, этот адрес не соответствует выбранной сети. Пожалуйста, проверьте его.</string>
     <string name="Send_Address_Error_Detected">Обнаружено</string>
     <string name="Send_Address_Error_Clear">Чисто</string>
     <string name="Send_Address_PhishingCheck">Проверка фишинга</string>
@@ -408,6 +416,12 @@
     <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Введенный вами адрес может быть мошенническим. Мошенники часто изменяют первые и последние символы. Внимательно проверьте полный адрес перед отправкой во избежание потерь.</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">Введенный вами адрес помечен как находящийся в черном списке. Транзакции на этот адрес могут привести к потерям или другим рискам. Пожалуйста, проверьте данные получателя перед продолжением.</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Введенный вами адрес помечен как санкционный. Транзакции на этот адрес могут привести к потерям или другим рискам. Пожалуйста, проверьте данные получателя перед продолжением.</string>
+    <string name="AddressEnter_NeedSubscription_Title">Внимание!</string>
+    <string name="AddressEnter_NeedSubscription_Content">Безопасная отправка отключена. Ваш перевод может быть переведен на опасный адрес и средства могут быть утеряны.</string>
+    <string name="AddressEnter_Danger_Title">Опасность!</string>
+    <string name="AddressEnter_Danger_Content">Введенный вами адрес может быть мошенническим. Мошенники часто изменяют первые и последние символы. Внимательно проверьте полный адрес перед отправкой во избежание потерь.</string>
+    <string name="AddressEnter_Safe_Title">Безопасный</string>
+    <string name="AddressEnter_Safe_Content">Адрес отмечен. Нет фишинга, черного списка или санкций. Это безопасно для использования.</string>
     <string name="Send_RiskyAddress">Рискованный адрес!</string>
     <string name="Send_RiskyAddress_AlertText">Вы собираетесь отправить средства на адрес с высоким уровнем риска. Продолжение может привести к потере средств или другим угрозам безопасности. Продолжая, вы принимаете потенциальные риски. Вы уверены, что хотите продолжить?</string>
     <string name="Send_Success">\u2713 Отправлено</string>
@@ -427,6 +441,8 @@
     <string name="Send_LockTime_HalfYear">6 месяцев</string>
     <string name="Send_LockTime_Year">1 год</string>
     <string name="Send_Sending">Отправка</string>
+    <string name="Send_UnexpectedError">Неожиданная ошибка</string>
+    <string name="Send_UnexpectedError_Description">Во время отправки транзакции что-то пошло не так. Пожалуйста, повторите попытку или скопируйте код ошибки и обратитесь в службу поддержки.</string>
     <string name="Send_Warning_LowFee">Внимание! Транзакция может застрять в сети</string>
     <string name="Send_Error_LowFee">Ошибка комиссии</string>
     <string name="Send_Error_LowFee_Description">Ставка комиссии слишком низкая.</string>
@@ -435,8 +451,12 @@
     <string name="Send_Error_FetchFeeRateFailed_Description">Подключение к серверу было потеряно. Чтобы продолжить, настройте комиссию вручную, используя данные на сайте.</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Доп. настройки</string>
+    <string name="SendEvmSettings_SetRecipient">Установить получателя</string>
     <string name="SendEvmSettings_Nonce">Nonce транзакции</string>
+    <string name="SendEvmSettings_EditFee">Изменить комиссию</string>
     <string name="SendEvmSettings_Nonce_Info">Nonce - это уникальное целочисленное значение для транзакции в кошельке пользователя. Обычно оно увеличивается с каждой транзакцией и не нуждается в изменении. Продвинутые пользователи могут установить его равным nonce отложенной транзакции, чтобы отменить и заменить эту транзакцию, при условии, что новая транзакция имеет достаточно большую плату, чтобы старая не была подтверждена вместо нее (например, они могут захотеть ускорить ее подтверждение или полностью изменить параметры транзакции). Когда несколько ожидающих транзакций имеют одинаковый nonce, подтверждается только одна, обычно с наибольшей комиссией.</string>
+    <string name="SendEvmSettings_SlippageTolerance">Допустимость отклонений</string>
+    <string name="SendEvmSettings_SlippageTolerance_Info">Максимально допустимое отклонение цены для вашего обмена. Кроме этого лимита транзакция будет отменена.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Использованый Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Выполненная транзакция с таким nonce уже существует.</string>
     <!-- Fee Settings -->
@@ -481,7 +501,9 @@
     <!--Tron-->
     <string name="Tron_SelfSendTrxNotAllowed">Невозможно отправить TRX самому себе</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Невозможно отправить 0 %s</string>
+    <string name="Tron_TokenPage_AddressNotActivated">Не активирован</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Аккаунт не активен</string>
+    <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">Транзакции появятся после активации</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">Новым кошелькам TRON требуется депозит как минимум 1 TRX для активации. Неактивные кошельки могут принимать и хранить токены, но не будут корректировать балансы до момента активации.</string>
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">Новое соединение</string>
@@ -560,13 +582,17 @@
     <string name="EthereumTransaction_Error_ExecutionReverted">Непредвиденная ошибка: %s</string>
     <!--Swap-->
     <string name="Swap">Обмен</string>
+    <string name="Swap_AML">AML</string>
     <string name="Swap_FromAmountTitle">Вы платите</string>
     <string name="Swap_ToAmountTitle">Вы получите</string>
     <string name="Swap_TokenSelectorTitle">Выбрать</string>
     <string name="Swap_Price">Цена</string>
     <string name="Swap_AvailableBalance">Доступный баланс</string>
     <string name="Swap_PriceImpact">Отклонение от рын. цены</string>
+    <string name="Swap_EstimatedTime">Приблизительное время</string>
+    <string name="Swap_EstimatedTimeDescription">Приблизительное время для получения средств. Обработка замены и подтверждения транзакций может занять некоторое время в зависимости от сети и провайдера.</string>
     <string name="Swap_MinimumReceived">Гарантированная сумма</string>
+    <string name="Swap_MinimumReceivedDescription">Эта сумма находится в процессе проверки. Как только состояние транзакции будет проверено, вы сможете использовать эти монеты. Минимальная сумма пользователя </string>
     <string name="Swap_Slippage">Отклонение от курса</string>
     <string name="Swap_Recipient">Получатель</string>
     <string name="Swap_ErrorNoProviders">Нет провайдеров</string>
@@ -590,7 +616,26 @@
     <string name="Swap_AmountMax">(макс)</string>
     <string name="Swap_YouPay">Вы платите</string>
     <string name="Swap_YouGet">Вы получите</string>
+    <string name="Swap_ConfirmApprove_Title">Подтвердить</string>
+    <string name="Swap_ConfirmRevoke_Title">Подтвердить отзыв</string>
     <string name="Swap_Confirm_Title">Подтвердить</string>
+    <string name="Swap_SlippageDescription">Эта сумма находится в процессе проверки. Как только состояние транзакции будет проверено, вы сможете использовать эти монеты. Минимальная сумма пользователя </string>
+    <string name="SwapDefense_PriceImpact_High_Title">Слишком дорого!</string>
+    <string name="SwapDefense_PriceImpact_High_Description">Вы потеряете большую часть (-%s%%) Ваших средств на этом свопе.</string>
+    <string name="SwapDefense_PriceImpact_Forbidden_Title">Неблагоприятная цена!</string>
+    <string name="SwapDefense_PriceImpact_Forbidden_Description">Этот обмен приведет к крупным потерям (-%s%%) из-за очень низкой ликвидности.</string>
+    <string name="SwapDefense_Attention_Title">Внимание!</string>
+    <string name="SwapDefense_Attention_Description">Защита отключена. Бот может помешать вашей замене и заставить вас потерять деньги.</string>
+    <string name="SwapDefense_Safe_Title">Защищено</string>
+    <string name="SwapDefense_Safe_Description">Я блокирую ботов принимать значение в своем.</string>
+    <string name="SwapError_FailedToFetchQuote">Не удалось получить кавычку.</string>
+    <string name="SwapTerms_Title">Поменять условия</string>
+    <string name="SwapTerms_TopText">Неотрывные агрегированные данные нескольких децентрализованных поставщиков (DEX) и централизованных поставщиков заменителей для обеспечения конкурентоспособных ставок и широкой поддержки активов.</string>
+    <string name="SwapTerms_BottomText">Всегда выбирайте поставщика подкачки, который соответствует вашим требованиям.</string>
+    <string name="SwapTerms_RiskRestrictions">Риски ограничений</string>
+    <string name="SwapTerms_RiskRestrictions_Info">Я понимаю, что некоторые провайдеры не-DEX используют прокси-транзакции (AML). Такие провайдеры могут отказаться от обменов (рефератов) или, в редких случаях, (CSAM и терроризм), замораживать средства и запрашивать данные KYC.</string>
+    <string name="SwapTerms_UserResponsibility">Ответственность пользователя</string>
+    <string name="SwapTerms_UserResponsibility_Info">Я понимаю, что использование не DEX провайдеров влечет за собой дополнительные риски и что эти риски являются моей ответственностью. Неспособность не может гарантировать поведение провайдера.</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Допустимость отклонений</string>
     <string name="SwapSettings_RecipientAddressTitle">Адрес получателя</string>
@@ -704,6 +749,7 @@
     <string name="TransactionInfo_Sent">Отправлено</string>
     <string name="TransactionInfo_Approved">Разрешено</string>
     <string name="TransactionInfo_SpeedUp">Ускорение</string>
+    <string name="TransactionInfo_TransactionSecretKey">Секретный ключ Tx</string>
     <string name="TransactionInfo_SpamWarning">Эта транзакция подозрительна и может быть мошенничеством. \nПожалуйста, не копируйте никакие адреса из этой транзакции.</string>
     <string name="TransactionInfo_SpeedUpDescription">Это действие попытается аннулировать предыдущую транзакцию, переотправив ее с более высокой комиссией.</string>
     <string name="StatusInfo_Pending">В ожидании</string>
@@ -835,7 +881,7 @@
     <string name="Premium_Upgrade">Подписаться</string>
     <string name="Premium_ThankYouForSubscription">Благодарим вас \nза подписку!</string>
     <string name="Premium_GoToApp">Перейти в приложение</string>
-    <string name="Premium_Banner_BlackFridayText">Обновитесь до Премиум с нашей самой большой скидкой года</string>
+    <string name="Premium_Banner_BlackFridayText">Откройте новые возможности с Премиум-доступом!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Наслаждайтесь полным функционалом приложения.</string>
     <string name="Premium_SelectSubscription">Выбрать подписку</string>
     <string name="Premium_OnePurchaseUnlocksAllPremium">Одна покупка открывает все премиум-функции.</string>
@@ -845,7 +891,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection">Режим Duress</string>
     <string name="Premium_UpgradeFeature_SecureSend">Безопасная отправка</string>
     <string name="Premium_UpgradeFeature_ScamProtection">Scam-защита</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport">Поддержка VIP</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport">VIP тех. поддержка</string>
     <string name="Premium_UpgradeFeature_SwapProtection">Защита от потерь</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Доступ к топ-100 спискам по ключевым критериям</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Многоуровневая фильтрация по множеству параметров</string>
@@ -997,8 +1043,12 @@
     <string name="SettingsTerms_DisablingPin">Отключение PIN-кода (или пароля) разблокировки телефона полностью удалит все кошельки из приложения. Вам потребуется фраза восстановления, чтобы вернуть доступ.</string>
     <string name="SettingsTerms_PrivacyNotice">Приложение не отслеживает и не собирает данные о ваших балансах и транзакциях - мы даже не знаем, сколько людей им пользуется.
 Оно фиксирует только анонимную статистику использования (открытые страницы, нажатия кнопок), чтобы улучшать интерфейс. Это можно отключить в Настройки → Конфиденциальность.</string>
+    <string name="SettingsTerms_WeNotHoldingYourAssets">Мы не располагаем Вашими активами, не имеем доступа к вашим закрытым ключам или совершаем транзакции от вашего имени. Приложение не предоставляет услуги по брокерству, обмену, хранению, переполнению или передаче денежных средств. Все транзакции инициализируются, подписываются и транслируются непосредственно вами в публичные сети блокчейн.</string>
     <string name="SettingsTerms_MonetizationDisclosure">В рамках своей модели монетизации приложение получает небольшие комиссии с DEX-свапов, выполненных внутри кошелька. Это помогает нам оставаться независимыми, открытым исходным кодом и без венчурного финансирования.</string>
+    <string name="SettingsTerms_TransactionsIrreversible">Блокчейн транзакции необратимы. Всегда просматривайте детали транзакции перед подтверждением.</string>
     <string name="SettingsTerms_OpenSource">Приложение имеет открытый исходный код, и всё, что указано выше, может быть публично проверено любым пользователем.</string>
+    <string name="SettingsTerms_LegalObligations">Вы несете полную ответственность за безопасность Ваших средств, Ваше поведение и соблюдение действующих законов как в Вашей юрисдикции, так и во всем мире.</string>
+    <string name="SettingsTerms_UserResponsibility">Продолжая, Вы подтверждаете, что безопасность Ваших средств и правовое соблюдение в конечном счете являются Вашей ответственностью.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Поделиться</string>
     <string name="SettingsShare_Text">Продолжить</string>
@@ -1509,4 +1559,5 @@
     <string name="Contacts_Error_DefinedAddress">Этот адрес уже используется для %s</string>
     <string name="Contacts_Error_DefinedName">Такое имя уже существует</string>
     <string name="Hud_Text_Connected">Подключено</string>
+    <string name="BirthdayDatePicker_Title">Выберите дату</string>
 </resources>
