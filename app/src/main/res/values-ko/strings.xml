@@ -2,6 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">매개 변수가 설정되지 않았습니다</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
     <string name="Alert_Loading">로딩중...</string>
@@ -49,6 +50,7 @@
     <string name="Button_CopyAddress">주소 복사</string>
     <string name="Button_HideCoin">코인 숨기기</string>
     <string name="Button_Approve">승인</string>
+    <string name="Button_ViewMyAddress">내 주소 보기</string>
     <string name="Attention_Title">주목</string>
     <string name="Error_OutOfRange">%1$s 이하나 %2$s 이상이어야 합니다.</string>
     <string name="Error_NotInteger">잘못된 정수 숫자</string>

@@ -987,6 +987,7 @@
         \n\n广播时即时显示为挂起的交易(粉刷同步) 但隐私和对节点的依赖性较低)。
         \n\n\n Off -&gt; 交易仅在网络确认后显示(较慢) 但更加安全和更加私人)。</string>
     <string name="MoneroNodeSettings_Trusted">信任的</string>
+    <string name="MoneroNodeSettings_Description">选择节点不可阻止应用应用于同步钱包(s)。</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">在更改源后，钱包将必须重新同步自己。</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">通过交易为恢复钱包选择数据源。</string>

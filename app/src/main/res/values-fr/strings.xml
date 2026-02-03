@@ -987,6 +987,7 @@
         \n\nOn → transactions apparaissent instantanément en attente de diffusion (synchronisation plus rapide, mais la confidentialité et la dépendance au noeud).
         \n\nDésactivé → les transactions ne sont affichées qu\'après confirmation du réseau (plus lent, mais plus sûr et plus privé).</string>
     <string name="MoneroNodeSettings_Trusted">Avoir confiance</string>
+    <string name="MoneroNodeSettings_Description">Choisissez l\'application Unstoppable à utiliser pour synchroniser le(s) portefeuille(s).</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Après avoir changé de source, le portefeuille devra se resynchroniser lui-même.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Sélectionnez la source de données pour restaurer le portefeuille avec les transactions.</string>
