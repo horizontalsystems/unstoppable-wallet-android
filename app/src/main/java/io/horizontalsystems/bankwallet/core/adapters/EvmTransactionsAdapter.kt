@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArrayOrNull
+import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.horizontalsystems.ethereumkit.models.TransactionTag
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -24,7 +25,7 @@ import kotlinx.coroutines.rx2.await
 
 class EvmTransactionsAdapter(
     val evmKitWrapper: EvmKitWrapper,
-    baseToken: Token,
+    val baseToken: Token,
     coinManager: ICoinManager,
     source: TransactionSource,
     private val evmTransactionSource: io.horizontalsystems.ethereumkit.models.TransactionSource,
@@ -77,6 +78,17 @@ class EvmTransactionsAdapter(
         return evmKit.getFullTransactionsAfterSingle(fromTransactionId?.hexStringToByteArrayOrNull())
             .await()
             .map { tx -> transactionConverter.transactionRecord(tx) }
+    }
+
+    override suspend fun getFullTransactionsBefore(
+        fromTransactionHash: ByteArray?,
+        limit: Int
+    ): List<FullTransaction> {
+        return evmKit.getFullTransactionsAsync(
+            emptyList(),
+            fromTransactionHash,
+            limit
+        ).await()
     }
 
     override fun getTransactionRecordsFlow(
