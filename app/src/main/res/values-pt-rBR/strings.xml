@@ -987,6 +987,7 @@
         \n\nEm → transações aparecem instantaneamente como pendentes quando a transmissão (sincronização mais rápida, mas baixa privacidade e confiança no nó).
         \n\nOff → transações são mostradas apenas após confirmações da rede (lento, mas mais seguro e mais privado).</string>
     <string name="MoneroNodeSettings_Trusted">Confiável</string>
+    <string name="MoneroNodeSettings_Description">Escolha o aplicativo \"Não\" Interparável para a sincronização de carteiras(s).</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Após alterar a fonte, a carteira terá que ressincronizar.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Selecione uma fonte de dados para restaurar uma carteira com transações.</string>
