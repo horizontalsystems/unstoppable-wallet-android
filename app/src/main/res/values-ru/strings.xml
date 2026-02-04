@@ -72,7 +72,7 @@
     <string name="Intro_Wallet_Screen2Description">Распоряжайтесь активами свободно и без ограничений.</string>
     <string name="Intro_Wallet_Screen3Title">Избавьтесь от границ</string>
     <string name="Intro_Wallet_Screen3Description">Преодолейте барьеры и получите доступ к рынкам.</string>
-    <string name="Intro_Wallet_Screen4Title">Сохраняйте конфиденциальность</string>
+    <string name="Intro_Wallet_Screen4Title">Оставаться приватным</string>
     <string name="Intro_Wallet_Screen4Description">Не допускайте утечку личных и финансовых данных.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Я понимаю</string>
@@ -81,15 +81,15 @@
     <string name="CreateWallet_Advanced_Title">Доп. настройки</string>
     <string name="CreateWallet_Mnemonic">Фраза восстановления</string>
     <string name="CreateWallet_Wordlist">Список слов</string>
-    <string name="Passphrase">Кодовая фраза</string>
+    <string name="Passphrase">Пароль</string>
     <string name="Password">Пароль</string>
     <string name="ConfirmPassphrase">Подтвердить</string>
     <string name="CreateWallet_N_WordsRecommended">%s слов (рекомендуется)</string>
     <string name="CreateWallet_N_Words">%s слов</string>
-    <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">Пароль не может быть пустым</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только поддерживаемые символы: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
-    <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
-    <string name="CreateWallet_PassphraseDescription">Парольные фразы обеспечивают дополнительный уровень безопасности кошельков. она восстанавливает кошелек, защищённый ключевой фразой, пользователь должен предоставить как ключевую фразу, так и ключевую фразу.\n\nКодовые фразы также позволяют пользователям создавать несколько независимых мульти-кодовых кошельков из одного и того же мнемоники, просто используя различные кодовые фразы.</string>
+    <string name="CreateWallet_Error_InvalidConfirmation">Подтверждение пароля не совпадает</string>
+    <string name="CreateWallet_PassphraseDescription">Пароли обеспечивают дополнительный уровень безопасности для кошельков. При восстановлении кошелька, защищённого паролем, пользователь должен указать как фразу восстановления, так и пароль.\n\nПароли также позволяют создавать несколько независимых мультивалютных кошельков на основе одной и той же мнемонической фразы - достаточно использовать разные пароли.</string>
     <!--Languages-->
     <string name="Language_English">Английский</string>
     <string name="Language_Japanese">Японский</string>
@@ -103,17 +103,17 @@
     <string name="Language_Portuguese">Португальский</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">ДД!</string>
-    <string name="RateApp_Description_Rate_This_App">Вам нравится Unstoppable? Поделитесь отзывами и идеями для дальнейшего развития кошелька.</string>
+    <string name="RateApp_Description_Rate_This_App">Вам нравится Unstoppable? Поделитесь обратной связью и идеями, чтобы продолжить работу.</string>
     <string name="RateApp_Button_RateIt">Оценить</string>
     <string name="RateApp_Button_NotNow">Не сейчас</string>
     <!--Restore-->
     <string name="Restore_Advanced_Title">Доп. настройки</string>
-    <string name="Restore_Error_MnemonicWordCount">Неправильное количество слов. Должно быть 12-24 слова. Вы ввели: %d</string>
+    <string name="Restore_Error_MnemonicWordCount">Неверное количество слов. Оно должно быть от 12 до 24 слов. Вы ввели: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="Restore_InvalidChecksum">Неверная контрольная сумма</string>
-    <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
-    <string name="Restore_Title">Блокчейны</string>
-    <string name="Restore_By">Через</string>
+    <string name="Restore_PassphraseDescription">Введите пароль, который вы использовали при создании этой фразы восстановления. Восстановление существующего кошелька с новым паролем приведёт к созданию нового кошелька.</string>
+    <string name="Restore_Title">Выберите блокчейны</string>
+    <string name="Restore_By">Импорт по</string>
     <string name="Restore_RestoreBy">Через</string>
     <string name="Restore_RecoveryPhrase">Фраза восстановления</string>
     <string name="Restore_PrivateKey">Приватный ключ</string>
