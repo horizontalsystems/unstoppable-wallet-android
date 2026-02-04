@@ -469,13 +469,13 @@
     <string name="FeeSettings_BaseFee">Базовая комиссия</string>
     <string name="FeeSettings_BaseFee_Info">Сетевой протокол определяет базовую цену за газ для каждого блока, называемую базовым тарифом. Он варьируется в зависимости от уровня загрузки сети от блока к блоку. В следующем блоке он может увеличиться или уменьшиться не более чем на 12,5%, что сделает комиссию более предсказуемой. Здесь показана базовая комиссия текущего блока.</string>
     <string name="FeeSettings_MaxFee">Макс. ставка комиссии</string>
-    <string name="FeeSettings_MaxFee_Info">Это максимальная общая цена газа, которую пользователь готов заплатить. Она должна покрывать базовую тарифную ставку сети и максимальный приоритетный тариф. Указанное здесь значение предлагается на основе оценки суммы базовой тарифной ставки следующего блока и максимального приоритетного тарифа, выбранного пользователем. Фактический размер платёжного тарифа обычно меньше. Снижение настройки текущего базового тарифа ограничит оплачиваемую сумму тарифа, но приведет к удлинению периода ожидания подтверждения транзакции или даже к ее подвисанию.</string>
-    <string name="FeeSettings_MaxMinerTips">Макс. приоритетная комиссия (Gwei)</string>
+    <string name="FeeSettings_MaxFee_Info">Это максимальная общая цена за газ который пользователь готов платить. Она должна покрывать базовую ставку комиссии сети и максимальную приоритетную ставку комиссии. Значение, указанное здесь, предлагается на основе оценки базовой ставки комиссии следующего блока, плюс максимальный приоритетный тариф комиссии, выбранный пользователем. Фактический платёжный тариф обычно меньше. Установка ниже текущего базового тарифа комиссии ограничит комиссию, но приведет к длительному ожиданию подтверждения транзакции или даже к застрявшей транзакции.</string>
+    <string name="FeeSettings_MaxMinerTips">Макс. приоритетная комиссия</string>
     <string name="FeeSettings_MaxMinerTips_Info">Пользователи платят приоритетную комиссию, в целях ускорения процесса подтверждения транзакции. Иногда эти тарифы называются чаевыми. Максимальный размер приоритетного сбора - это максимальная дополнительная цена за газ, которую пользователь готов оплатить поверх базовой ставки комиссии. Приведенная здесь стоимость определяется исходя из прогнозируемых сетевых условий. Фактический размер приоритетного тарифа будет меньше. Обнуление этого тарифа может привести к удлинению периода ожидания подтверждения транзакции ввиду её размещения в конце очереди незавершенных транзакций ото всех пользователей.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Риски</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">Обработка транзакции может отложиться на некоторое время, или транзакцию могут полностью отклонить.</string>
     <string name="FeeSettings_RiskOfGettingStuck_Title">Риски</string>
-    <string name="FeeSettings_RiskOfGettingStuck">Для обеспечения быстрого выполнения транзакции максимальная ставка вознаграждения (вычитаются максимальные чаевые для майнера) должна быть выше текущей базовой ставки вознаграждения. В противном случае транзакция может оставаться на рассмотрении до тех пор, пока не будет выполнено условие.</string>
+    <string name="FeeSettings_RiskOfGettingStuck">Для обеспечения быстрого исполнения транзакции максимальная комиссия (вычитается макс. Совет майнера) должен быть выше, чем текущий базовый тариф комиссии. Если транзакция не может оставаться в ожидании до тех пор, пока не будет выполнено условие.</string>
     <string name="FeeSettings_Overpricing_Title">Слишком высокая комиссия</string>
     <string name="FeeSettings_Overpricing">Установленная комиссия за транзакцию больше чем требуется для обработки этой транзакции.</string>
     <string name="FeeSettings_FeeRate">Ставка комиссии (SAT/BYTE)</string>
@@ -501,9 +501,10 @@
     <string name="Tron_SelfSendTrxNotAllowed">Невозможно отправить TRX самому себе</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Невозможно отправить 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActivated">Не активирован</string>
-    <string name="Tron_TokenPage_AddressNotActive_Title">Аккаунт не активен</string>
+    <string name="Tron_TokenPage_AddressNotActive_Title">TRON не активирован</string>
     <string name="Tron_TokenPage_TransactionWillAppearAfterActivation">Транзакции появятся после активации</string>
-    <string name="Tron_TokenPage_AddressNotActive_Info">Новым кошелькам TRON требуется депозит как минимум 1 TRX для активации. Неактивные кошельки могут принимать и хранить токены, но не будут корректировать балансы до момента активации.</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">Для активации TRON требуется не менее 1 TRX.
+Пока wallet не активирован, токены могут поступать, но их балансы могут не отображаться.</string>
     <!--TonConnect-->
     <string name="TonConnect_NewConnect">Новое соединение</string>
     <string name="TonConnect_Error_InvalidUrl">Неверный URL-адрес</string>
@@ -616,7 +617,7 @@
     <string name="Swap_YouPay">Вы платите</string>
     <string name="Swap_YouGet">Вы получите</string>
     <string name="Swap_ConfirmApprove_Title">Подтвердить</string>
-    <string name="Swap_ConfirmRevoke_Title">Подтвердить отзыв</string>
+    <string name="Swap_ConfirmRevoke_Title">Подтвердить отмену</string>
     <string name="Swap_Confirm_Title">Подтвердить</string>
     <string name="Swap_SlippageDescription">Эта сумма находится в процессе проверки. Как только состояние транзакции будет проверено, вы сможете использовать эти монеты. Минимальная сумма пользователя </string>
     <string name="SwapDefense_PriceImpact_High_Title">Слишком дорого!</string>
@@ -772,10 +773,9 @@
     <!-- Info -->
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
     <string name="Info_LockTime_NoDateDescription">Отправитель отправил эти средства с блокировкой траты, срок действия которой истекает на указанную дату.\n\nНе волнуйтесь, полученные биткойны уже вашы, но до истечения периода блокировки вы не можете тратить их в сети Bitcoin.</string>
-    <string name="Info_Reserved_Title">Зарезервировано</string>
     <string name="Info_Reserved_Description">Stellar сеть блокирует 1 XLM для активации кошелька и 0.5 XLM в качестве резерва для каждого токена, активированного в вашем кошельке.</string>
     <string name="Info_Reserved_WalletAction">Активация кошелька</string>
-    <string name="Info_NotRelayed_Title">Передача</string>
+    <string name="Info_NotRelayed_Title">Broadcast</string>
     <string name="Info_NotRelayed_Description">Транзакция, содержащая эту сумму, транслирована, но еще не принята сетью.</string>
     <string name="Info_ProcessingBalance_Title">Обрабатываемая сумма</string>
     <string name="Info_ProcessingBalance_Description">Транзакции на эту сумму все еще синхронизируются. После подтверждения эти токены будут доступны для использования</string>
@@ -852,15 +852,15 @@
     <string name="SettingsBanner_DonateYourSupportIsCommitment">Ваша поддержка - это не просто доступ к функциям, это сопротивление финансовому мониторингу и контролю</string>
     <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">Это помогает нам оставаться независимыми, защищая тысячи людей, которые отказываются идти на компромиссы в вопросах конфиденциальности</string>
     <string name="SettingsBanner_DonateExclusivelyOnFDroid">Доступно только на F-Droid</string>
-    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Функции с приоритетом конфиденциальности — без отслеживания и ограничений.</string>
-    <string name="SettingsBanner_DonateFeatureFullAnalytics">Доступ к топ-100 спискам по ключевым критериям</string>
-    <string name="SettingsBanner_DonateFeaturePrivacy">Режим Duress Mode и дополнительная безопасность</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Unstoppable кошелек предоставляет дополнительные возможности — без каких-либо ограничений:</string>
+    <string name="SettingsBanner_DonateFeatureFullAnalytics">Полная аналитика и данные о токенах</string>
+    <string name="SettingsBanner_DonateFeaturePrivacy">Режим конфиденциальности &amp; режим Duress</string>
     <string name="SettingsBanner_DonateFeatureSignals">Продвинутая защита от фишинга</string>
     <string name="SettingsBanner_DonateFeatureAddress">Проверка черного списка адресов</string>
     <string name="SettingsBanner_DonateFeatureAdvanced">Расширенный поиск токенов и фильтры</string>
     <string name="SettingsBanner_DonateFeaturePriority">Приоритетный доступ к тех.поддержке</string>
     <string name="SettingsBanner_DonateEveryBitOfSupportMatters">Каждый вклад имеет значение</string>
-    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Поддерживая Unstoppable кошелек, вы помогаете нам оставаться независимыми и защищать финансовую конфиденциальность.</string>
+    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Поддерживая Unstoppable кошелёк, вы помогаете нам расти, улучшать и оставаться независимыми.</string>
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Активно</string>
     <string name="SettingsSubscription_GetPremium">Получите премиум</string>
@@ -875,7 +875,7 @@
     <string name="Premium_GetFreePeriod">Получите %s БЕСПЛАТНО</string>
     <string name="Premium_Subscribe">Подписаться</string>
     <string name="Premium_TryForFree">Попробовать БЕСПЛАТНО</string>
-    <string name="Premium_Upgrade">Подписаться</string>
+    <string name="Premium_Upgrade">Обновить</string>
     <string name="Premium_ThankYouForSubscription">Благодарим вас \nза подписку!</string>
     <string name="Premium_GoToApp">Перейти в приложение</string>
     <string name="Premium_Banner_BlackFridayText">Откройте новые возможности с Премиум-доступом!</string>
@@ -915,7 +915,7 @@
     <string name="Premium_SubscriptionPeriod_Year">год</string>
     <string name="Premium_SubscriptionPeriod_Annually">Ежегодно</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Ежемесячно</string>
-    <string name="Premium_SubscriptionPeriod_AnnuallySave">Сэкономьте 31%</string>
+    <string name="Premium_SubscriptionPeriod_AnnuallySave">SAVE 50%</string>
     <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
     <string name="Premium_SubscriptionPeriod_PerYear">в год</string>
     <string name="Premium_SubscriptionPeriod_PerMonth">в месяц</string>
@@ -1099,10 +1099,10 @@
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">из файла</string>
     <string name="ImportWallet_BackupFile_Description">Импорт из файла резервной копии.</string>
-    <string name="ImportWallet_RecoveryPhrase">Фраза восстановления</string>
+    <string name="ImportWallet_RecoveryPhrase">с фразой восстановления</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
     <string name="ImportWallet_WarningInvalidJson">Недопустимый Json файл</string>
-    <string name="ImportWallet_WarningInvalidJsonDescription">Этот файл не является действительной резервной копией кошелька, либо же он был поврежден и не может быть восстановлен.</string>
+    <string name="ImportWallet_WarningInvalidJsonDescription">Этот файл не является резервной копией кошелька, или файл был повреждён и не может быть восстановлен.</string>
     <string name="ImportWallet_SelectAnotherFile">Выберите другой файл</string>
     <!-- Import Backup File -->
     <string name="ImportBackupFile_EnterPassword">Введите пароль</string>
@@ -1281,7 +1281,7 @@
     <string name="CoinPage_AddToWallet">Добавить в кошелек</string>
     <string name="CoinPage_ROI_Title">Относительное изменение против %s</string>
     <string name="CoinPage_ROI_Vs">против</string>
-    <string name="CoinPage_ROI_SelectCoins">Выберите Монеты</string>
+    <string name="CoinPage_ROI_SelectCoins">Выберите монеты</string>
     <string name="CoinPage_InWallet">В кошельке</string>
     <string name="CoinPage_Favorite">Избранное</string>
     <string name="CoinPage_Unfavorite">Удалить из избранного</string>
@@ -1356,14 +1356,14 @@
     <string name="CoinAnalytics_ProjectTVL_Info4">Список всех токенов, ранжированных на основе текущего итогового Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info5">Соотношение рыночной цены / ТВЛ для проекта.</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Этот проект не имеет аналитических данных</string>
-    <string name="CoinAnalytics_CexVolume">Громкость CEX</string>
-    <string name="CoinAnalytics_CexVolumeRank">CEX Ранг Грома</string>
-    <string name="CoinAnalytics_CexVolumeRank_Description">Токены по объему торгов токена на централизованных биржах.</string>
-    <string name="CoinAnalytics_DexVolume">Громкость DEX</string>
-    <string name="CoinAnalytics_DexVolumeRank">Ранг громкости DEX</string>
+    <string name="CoinAnalytics_CexVolume">Объем CEX</string>
+    <string name="CoinAnalytics_CexVolumeRank">Рейтинг объема CEX</string>
+    <string name="CoinAnalytics_CexVolumeRank_Description">Торговый объем токена на централизованных биржах.</string>
+    <string name="CoinAnalytics_DexVolume">Объем DEX</string>
+    <string name="CoinAnalytics_DexVolumeRank">Рейтинг объема DEX</string>
     <string name="CoinAnalytics_DexVolumeRank_Description">Токены оцениваются по объему торгов токена на децентрализованных биржах.</string>
     <string name="CoinAnalytics_DexLiquidity">Ликвидность DEX</string>
-    <string name="CoinAnalytics_DexLiquidityRank">Рейтинг Ликвидности DEX</string>
+    <string name="CoinAnalytics_DexLiquidityRank">Рейтинг ликвидности DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank_Description">Токены ранжируются по доступной ликвидности на децентрализованных биржах.</string>
     <string name="CoinAnalytics_ActiveAddresses">Ежедневные активные адреса</string>
     <string name="CoinAnalytics_ActiveAddressesRank">Рейтинг Активных Адресов</string>
