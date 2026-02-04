@@ -9,6 +9,8 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRe
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.erc20kit.decorations.OutgoingEip20Decoration
@@ -18,6 +20,7 @@ import io.horizontalsystems.ethereumkit.decorations.OutgoingDecoration
 import io.horizontalsystems.ethereumkit.decorations.UnknownTransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.FullTransaction
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +32,8 @@ private fun isEvmBlockchain(source: TransactionSource): Boolean {
 
 class SpamManager(
     private val localStorage: ILocalStorage,
-    private val scannedTransactionStorage: ScannedTransactionStorage
+    private val scannedTransactionStorage: ScannedTransactionStorage,
+    private val contactsRepository: ContactsRepository
 ) {
     private val poisoningScorer = PoisoningScorer()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -40,9 +44,38 @@ class SpamManager(
     private val cacheLock = Any()
     private val initializedSources = mutableSetOf<TransactionSource>()
 
+    // Cache for trusted addresses from contacts (blockchainType:address -> true)
+    // Key format: "blockchainTypeUid:lowercaseAddress" for fast lookup
+    @Volatile
+    private var trustedAddressesCache: Set<String> = emptySet()
+
     companion object {
         private const val CACHE_SIZE_PER_TOKEN = 10
         private const val INITIAL_CACHE_SIZE = 10
+    }
+
+    init {
+        // Subscribe to contacts updates to keep cache in sync
+        coroutineScope.launch {
+            contactsRepository.contactsFlow.collect { contacts ->
+                updateTrustedAddressesCache(contacts)
+            }
+        }
+    }
+
+    private fun updateTrustedAddressesCache(contacts: List<Contact>) {
+        trustedAddressesCache = contacts
+            .flatMap { contact ->
+                contact.addresses.map { addr ->
+                    "${addr.blockchain.type.uid}:${addr.address.lowercase()}"
+                }
+            }
+            .toSet()
+    }
+
+    private fun isAddressTrusted(address: String, blockchainType: BlockchainType): Boolean {
+        val key = "${blockchainType.uid}:${address.lowercase()}"
+        return trustedAddressesCache.contains(key)
     }
 
     var hideSuspiciousTx = localStorage.hideSuspiciousTransactions
@@ -153,6 +186,7 @@ class SpamManager(
     /**
      * Check if transaction is spam.
      * First checks stored result in database, then calculates if not found.
+     * Addresses in user's contacts are trusted and never flagged as spam.
      *
      * @param transactionHash Transaction hash for database lookup
      * @param events List of transfer events to check (only used if not in database)
@@ -174,7 +208,27 @@ class SpamManager(
             return it.isSpam
         }
 
-        // Not in database, calculate spam score
+        val blockchainType = source.blockchain.type
+
+        // Check if any event address is from a trusted contact - if so, not spam
+        val eventAddresses = events.mapNotNull { it.address }
+        if (eventAddresses.any { isAddressTrusted(it, blockchainType) }) {
+            // Trusted address - save as score 0 and return not spam
+            try {
+                scannedTransactionStorage.save(
+                    ScannedTransaction(
+                        transactionHash = transactionHash,
+                        spamScore = 0,
+                        blockchainType = blockchainType,
+                        address = null
+                    )
+                )
+            } catch (_: Throwable) {
+            }
+            return false
+        }
+
+        // Not in database and not trusted, calculate spam score
         val recentOutgoingTxs = tokenUid?.let { getOutgoingTxsFromCache(it) } ?: emptyList()
 
         val scoringResult = poisoningScorer.calculateSpamScore(
@@ -190,7 +244,7 @@ class SpamManager(
                 ScannedTransaction(
                     transactionHash = transactionHash,
                     spamScore = scoringResult.score,
-                    blockchainType = source.blockchain.type,
+                    blockchainType = blockchainType,
                     address = scoringResult.spamAddress
                 )
             )
@@ -304,12 +358,20 @@ class SpamManager(
             // No incoming events = score 0 (outgoing, contract calls, etc.)
             PoisoningScorer.SpamScoringResult(0, null)
         } else {
-            poisoningScorer.calculateSpamScore(
-                events = incomingEvents,
-                incomingTimestamp = tx.timestamp,
-                incomingBlockHeight = tx.blockNumber?.toInt(),
-                recentOutgoingTxs = outgoingContext
-            )
+            // Check if any event address is from a trusted contact
+            val eventAddresses = incomingEvents.mapNotNull { it.address }
+            val blockchainType = source.blockchain.type
+            if (eventAddresses.any { isAddressTrusted(it, blockchainType) }) {
+                // Trusted address - score 0
+                PoisoningScorer.SpamScoringResult(0, null)
+            } else {
+                poisoningScorer.calculateSpamScore(
+                    events = incomingEvents,
+                    incomingTimestamp = tx.timestamp,
+                    incomingBlockHeight = tx.blockNumber?.toInt(),
+                    recentOutgoingTxs = outgoingContext
+                )
+            }
         }
 
         // Save result to database for all transactions
