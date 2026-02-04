@@ -170,7 +170,7 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     // coinCode -> risk threshold (used for dust detection scoring)
     // spam = risk/10 (auto-spam), risk = config value (+3 points), danger = risk*5 (+2 points)
     val spamCoinValueLimits: Map<String, BigDecimal> = mapOf(
-        "XLM" to BigDecimal("0.01"),
+        "XLM" to BigDecimal("0.1"),
         "USDT" to BigDecimal("1"),
         "USDC" to BigDecimal("1"),
         "USDD" to BigDecimal("1"),
@@ -178,8 +178,8 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         "BUSD" to BigDecimal("1"),
         "EURS" to BigDecimal("1"),
         "BSC-USD" to BigDecimal("1"),
-        "TRX" to BigDecimal("0.1"),
-        "ETH" to BigDecimal("0.00005"),
+        "TRX" to BigDecimal("1"),
+        "ETH" to BigDecimal("0.0005"),
     )
 
     val chainalysisBaseUrl by lazy {

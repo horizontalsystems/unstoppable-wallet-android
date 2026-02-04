@@ -174,31 +174,30 @@ class SpamManager(
             return it.isSpam
         }
 
-        // Not in database, calculate spam status
+        // Not in database, calculate spam score
         val recentOutgoingTxs = tokenUid?.let { getOutgoingTxsFromCache(it) } ?: emptyList()
 
-        val spamAddresses = poisoningScorer.detectSpamAddresses(
+        val scoringResult = poisoningScorer.calculateSpamScore(
             events = events,
             incomingTimestamp = timestamp,
             incomingBlockHeight = blockHeight,
             recentOutgoingTxs = recentOutgoingTxs
         )
-        val isSpam = spamAddresses.isNotEmpty()
 
         // Save result to database
         try {
             scannedTransactionStorage.save(
                 ScannedTransaction(
                     transactionHash = transactionHash,
-                    isSpam = isSpam,
+                    spamScore = scoringResult.score,
                     blockchainType = source.blockchain.type,
-                    address = spamAddresses.firstOrNull()
+                    address = scoringResult.spamAddress
                 )
             )
         } catch (_: Throwable) {
         }
 
-        return isSpam
+        return scoringResult.score >= PoisoningScorer.SPAM_THRESHOLD
     }
 
     /**
@@ -300,19 +299,17 @@ class SpamManager(
             else -> emptyList()
         }
 
-        // Calculate spam status - only transactions with incoming events can be spam
-        val (isSpam, spamAddress) = if (incomingEvents.isEmpty()) {
-            // No incoming events = not spam (outgoing, contract calls, etc.)
-            false to null
+        // Calculate spam score - only transactions with incoming events can be spam
+        val scoringResult = if (incomingEvents.isEmpty()) {
+            // No incoming events = score 0 (outgoing, contract calls, etc.)
+            PoisoningScorer.SpamScoringResult(0, null)
         } else {
-            val spamAddresses = poisoningScorer.detectSpamAddresses(
+            poisoningScorer.calculateSpamScore(
                 events = incomingEvents,
                 incomingTimestamp = tx.timestamp,
                 incomingBlockHeight = tx.blockNumber?.toInt(),
                 recentOutgoingTxs = outgoingContext
             )
-            val detected = spamAddresses.isNotEmpty()
-            detected to spamAddresses.firstOrNull()
         }
 
         // Save result to database for all transactions
@@ -320,9 +317,9 @@ class SpamManager(
             scannedTransactionStorage.save(
                 ScannedTransaction(
                     transactionHash = txHashBytes,
-                    isSpam = isSpam,
+                    spamScore = scoringResult.score,
                     blockchainType = source.blockchain.type,
-                    address = spamAddress
+                    address = scoringResult.spamAddress
                 )
             )
         } catch (_: Throwable) {

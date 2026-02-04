@@ -10,28 +10,40 @@ import kotlin.math.abs
 /**
  * Address Poisoning Detection using a Scoring System.
  *
- * Scoring Rules (threshold > 6 points = SPAM):
- * - Zero Value Transfer (transferFrom with value == 0): Automatic SPAM
- * - Zero Value Input (Native): +4 points
+ * Scoring Rules:
+ * - spam ≥ 7 points
+ * - suspicious ≥ 3 points
+ * - trusted < 3 points
+ *
+ * Points:
+ * - Zero Value Transfer: +4 points
+ * - Zero Value NFT: +3 points
  * - Dust Amount (based on risk threshold from config):
- *   - If value < spam (risk/10): Automatic SPAM
+ *   - If value < spam (risk/10): +7 points (auto-spam)
  *   - If value < risk: +3 points
  *   - If value < danger (risk*5): +2 points
- * - Mimic Address (prefix 3 + suffix 3 match, excluding 0x): +4 points
+ * - Address Prefix Match (3 chars): +4 points
+ * - Address Suffix Match (3 chars): +4 points
  * - Time Correlation (mutually exclusive): +4 points if within 5 blocks OR +3 points if within 20 minutes
+ * - Unknown ERC-20 token: +7 points
  */
 class PoisoningScorer {
 
     companion object {
-        const val SPAM_THRESHOLD = 6
+        const val SPAM_THRESHOLD = 7
+        const val SUSPICIOUS_THRESHOLD = 3
 
         // Scoring points
-        const val POINTS_ZERO_NATIVE_VALUE = 4
+        const val POINTS_ZERO_VALUE = 4
+        const val POINTS_ZERO_NFT = 3
+        const val POINTS_MICRO_DUST = 7
         const val POINTS_DUST_BELOW_LIMIT = 3
         const val POINTS_DUST_BELOW_5X_LIMIT = 2
-        const val POINTS_MIMIC_ADDRESS = 4
+        const val POINTS_ADDRESS_PREFIX_MATCH = 4
+        const val POINTS_ADDRESS_SUFFIX_MATCH = 4
         const val POINTS_TIME_WITHIN_5_BLOCKS = 4
         const val POINTS_TIME_WITHIN_20_MINUTES = 3
+        const val POINTS_UNKNOWN_TOKEN = 7
 
         // Time constants
         const val TWENTY_MINUTES_SECONDS = 20 * 60L
@@ -57,30 +69,45 @@ class PoisoningScorer {
     data class ScoringResult(
         val address: String?,
         val score: Int,
-        val isAutoSpam: Boolean,
         val reasons: List<String>
     ) {
         val isSpam: Boolean
-            get() = isAutoSpam || score > SPAM_THRESHOLD
+            get() = score >= SPAM_THRESHOLD
+
+        val isSuspicious: Boolean
+            get() = score >= SUSPICIOUS_THRESHOLD && score < SPAM_THRESHOLD
+
+        val isTrusted: Boolean
+            get() = score < SUSPICIOUS_THRESHOLD
     }
 
     /**
-     * Calculate spam score for incoming transfer events against recent outgoing transactions.
+     * Result of spam scoring for a transaction (aggregated from all events)
+     */
+    data class SpamScoringResult(
+        val score: Int,
+        val spamAddress: String?
+    )
+
+    /**
+     * Calculate spam score for incoming transfer events.
+     * Returns the maximum score found and the corresponding spam address.
      *
      * @param events List of incoming transfer events to check
      * @param incomingTimestamp Timestamp of the incoming transaction
      * @param incomingBlockHeight Block height of the incoming transaction (nullable)
      * @param recentOutgoingTxs Recent outgoing transactions for comparison
-     * @return List of addresses identified as spam
+     * @return SpamScoringResult with max score and spam address
      */
-    fun detectSpamAddresses(
+    fun calculateSpamScore(
         events: List<TransferEvent>,
         incomingTimestamp: Long,
         incomingBlockHeight: Int?,
         recentOutgoingTxs: List<OutgoingTxInfo>
-    ): List<String> {
-        val spamAddresses = mutableListOf<String>()
+    ): SpamScoringResult {
         val spamCoinLimits = App.appConfigProvider.spamCoinValueLimits
+        var maxScore = 0
+        var maxScoreAddress: String? = null
 
         // Handle native token events separately (sum them up)
         val nativeEvents = mutableListOf<TransferEvent>()
@@ -103,8 +130,9 @@ class PoisoningScorer {
                 recentOutgoingTxs = recentOutgoingTxs,
                 spamCoinLimits = spamCoinLimits
             )
-            if (result.isSpam && result.address != null) {
-                spamAddresses.add(result.address)
+            if (result.score > maxScore) {
+                maxScore = result.score
+                maxScoreAddress = result.address
             }
         }
 
@@ -116,7 +144,6 @@ class PoisoningScorer {
             val nativeAddresses = nativeEvents.mapNotNull { it.address }
 
             if (nativeAddresses.isNotEmpty()) {
-                // Use the first native event as representative for scoring
                 val representativeEvent = nativeEvents.first()
                 val nativeResult = scoreNativeTransfer(
                     totalValue = totalNativeValue,
@@ -127,13 +154,14 @@ class PoisoningScorer {
                     recentOutgoingTxs = recentOutgoingTxs,
                     spamCoinLimits = spamCoinLimits
                 )
-                if (nativeResult.isSpam) {
-                    spamAddresses.addAll(nativeAddresses)
+                if (nativeResult.score > maxScore) {
+                    maxScore = nativeResult.score
+                    maxScoreAddress = nativeResult.address
                 }
             }
         }
 
-        return spamAddresses.distinct()
+        return SpamScoringResult(maxScore, maxScoreAddress)
     }
 
     /**
@@ -145,8 +173,9 @@ class PoisoningScorer {
     )
 
     /**
-     * Calculate temporal and mimic correlation score for addresses against outgoing transactions.
+     * Calculate temporal and address similarity score for addresses against outgoing transactions.
      * Block and Time correlations are mutually exclusive - block is checked first (more precise).
+     * Prefix and Suffix matches are scored separately (+4 each).
      */
     private fun calculateCorrelationScore(
         addresses: List<String>,
@@ -157,7 +186,8 @@ class PoisoningScorer {
         var points = 0
         val reasons = mutableListOf<String>()
         var hasTemporalCorrelation = false
-        var hasMimicMatch = false
+        var hasPrefixMatch = false
+        var hasSuffixMatch = false
 
         outer@ for (address in addresses) {
             for (outgoingTx in recentOutgoingTxs) {
@@ -181,19 +211,54 @@ class PoisoningScorer {
                     }
                 }
 
-                // Mimic address check (slowest - string operations, do last)
-                if (!hasMimicMatch && isMimicAddress(address, outgoingTx.recipientAddress)) {
-                    points += POINTS_MIMIC_ADDRESS
-                    reasons.add("Mimic address: $address similar to ${outgoingTx.recipientAddress}")
-                    hasMimicMatch = true
+                // Address prefix/suffix check - score separately
+                if (!hasPrefixMatch || !hasSuffixMatch) {
+                    val (prefixMatch, suffixMatch) = checkAddressSimilarity(address, outgoingTx.recipientAddress)
+                    if (prefixMatch && !hasPrefixMatch) {
+                        points += POINTS_ADDRESS_PREFIX_MATCH
+                        reasons.add("Address prefix match: $address")
+                        hasPrefixMatch = true
+                    }
+                    if (suffixMatch && !hasSuffixMatch) {
+                        points += POINTS_ADDRESS_SUFFIX_MATCH
+                        reasons.add("Address suffix match: $address")
+                        hasSuffixMatch = true
+                    }
                 }
 
-                // Early exit if all categories matched
-                if (hasTemporalCorrelation && hasMimicMatch) break@outer
+                // Early exit if we've reached spam threshold
+                if (points >= SPAM_THRESHOLD) break@outer
             }
         }
 
         return CorrelationScore(points, reasons)
+    }
+
+    /**
+     * Check if addresses have matching prefix and/or suffix.
+     * Returns Pair(prefixMatch, suffixMatch).
+     */
+    private fun checkAddressSimilarity(incomingAddress: String, outgoingRecipient: String): Pair<Boolean, Boolean> {
+        val normalizedIncoming = normalizeAddress(incomingAddress)
+        val normalizedOutgoing = normalizeAddress(outgoingRecipient)
+
+        // Addresses must be different
+        if (normalizedIncoming.equals(normalizedOutgoing, ignoreCase = true)) {
+            return Pair(false, false)
+        }
+
+        // Must have enough characters for comparison
+        if (normalizedIncoming.length < PREFIX_LENGTH + SUFFIX_LENGTH ||
+            normalizedOutgoing.length < PREFIX_LENGTH + SUFFIX_LENGTH) {
+            return Pair(false, false)
+        }
+
+        val prefixMatch = normalizedIncoming.take(PREFIX_LENGTH)
+            .equals(normalizedOutgoing.take(PREFIX_LENGTH), ignoreCase = true)
+        val suffixMatch = normalizedIncoming.takeLast(SUFFIX_LENGTH)
+            .equals(normalizedOutgoing.takeLast(SUFFIX_LENGTH), ignoreCase = true)
+
+        return Pair(prefixMatch, suffixMatch)
     }
 
     /**
@@ -206,23 +271,26 @@ class PoisoningScorer {
         recentOutgoingTxs: List<OutgoingTxInfo>,
         spamCoinLimits: Map<String, BigDecimal>
     ): ScoringResult {
-        val address = event.address ?: return ScoringResult(null, 0, false, emptyList())
+        val address = event.address ?: return ScoringResult(null, 0, emptyList())
         val value = event.value
         var score = 0
         val reasons = mutableListOf<String>()
 
-        // Check for automatic spam conditions (TokenValue, RawValue)
+        // Check for high-score spam conditions (TokenValue, RawValue)
         when (value) {
             is TransactionValue.TokenValue,
             is TransactionValue.RawValue -> {
-                return ScoringResult(address, 0, true, listOf("Unknown token type"))
+                return ScoringResult(address, POINTS_UNKNOWN_TOKEN, listOf("Unknown token type"))
             }
             is TransactionValue.NftValue -> {
-                // NFT with zero value is spam
+                // NFT with zero value gets +3 points
                 if (value.value <= BigDecimal.ZERO) {
-                    return ScoringResult(address, 0, true, listOf("Zero-value NFT transfer"))
+                    score += POINTS_ZERO_NFT
+                    reasons.add("Zero-value NFT transfer")
+                    // Continue to check correlation for additional points
+                } else {
+                    return ScoringResult(address, 0, emptyList())
                 }
-                return ScoringResult(address, 0, false, emptyList())
             }
             else -> { /* Continue scoring */ }
         }
@@ -231,20 +299,21 @@ class PoisoningScorer {
         val coinCode = value.coinCode
         val limit = spamCoinLimits[coinCode] ?: BigDecimal.ZERO
 
-        // Zero value transfer check (automatic spam for tokens)
-        if (decimalValue == BigDecimal.ZERO) {
-            return ScoringResult(address, 0, true, listOf("Zero-value token transfer"))
+        // Zero value transfer check (+4 points for tokens)
+        if (decimalValue == BigDecimal.ZERO && value !is TransactionValue.NftValue) {
+            score += POINTS_ZERO_VALUE
+            reasons.add("Zero-value token transfer")
         }
 
         // Dust amount scoring (based on risk threshold)
-        // spam = risk/10 (auto-spam), risk = config value (+3 points), danger = risk*5 (+2 points)
-        if (limit > BigDecimal.ZERO) {
+        if (limit > BigDecimal.ZERO && decimalValue > BigDecimal.ZERO) {
             val spamThreshold = limit.divide(BigDecimal.TEN)
             val dangerThreshold = limit.multiply(BigDecimal("5"))
 
             when {
                 decimalValue < spamThreshold -> {
-                    return ScoringResult(address, 0, true, listOf("Micro dust: value < spam threshold ($decimalValue < $spamThreshold)"))
+                    score += POINTS_MICRO_DUST
+                    reasons.add("Micro dust: value < spam threshold ($decimalValue < $spamThreshold)")
                 }
                 decimalValue < limit -> {
                     score += POINTS_DUST_BELOW_LIMIT
@@ -262,7 +331,7 @@ class PoisoningScorer {
         score += correlation.points
         reasons.addAll(correlation.reasons)
 
-        return ScoringResult(address, score, false, reasons)
+        return ScoringResult(address, score, reasons)
     }
 
     /**
@@ -281,21 +350,21 @@ class PoisoningScorer {
         val reasons = mutableListOf<String>()
         val limit = spamCoinLimits[coinCode] ?: BigDecimal.ZERO
 
-        // Zero native value
+        // Zero native value (+4 points)
         if (totalValue == BigDecimal.ZERO) {
-            score += POINTS_ZERO_NATIVE_VALUE
+            score += POINTS_ZERO_VALUE
             reasons.add("Zero native value")
         }
 
         // Dust amount scoring (based on risk threshold)
-        // spam = risk/10 (auto-spam), risk = config value (+3 points), danger = risk*5 (+2 points)
         if (limit > BigDecimal.ZERO && totalValue > BigDecimal.ZERO) {
             val spamThreshold = limit.divide(BigDecimal.TEN)
             val dangerThreshold = limit.multiply(BigDecimal("5"))
 
             when {
                 totalValue < spamThreshold -> {
-                    return ScoringResult(addresses.firstOrNull(), 0, true, listOf("Micro dust: native value < spam threshold ($totalValue < $spamThreshold)"))
+                    score += POINTS_MICRO_DUST
+                    reasons.add("Micro dust: native value < spam threshold ($totalValue < $spamThreshold)")
                 }
                 totalValue < limit -> {
                     score += POINTS_DUST_BELOW_LIMIT
@@ -309,8 +378,8 @@ class PoisoningScorer {
         }
 
         // Early exit if already spam from zero/dust alone
-        if (score > SPAM_THRESHOLD) {
-            return ScoringResult(addresses.firstOrNull(), score, false, reasons)
+        if (score >= SPAM_THRESHOLD) {
+            return ScoringResult(addresses.firstOrNull(), score, reasons)
         }
 
         // Calculate correlation score
@@ -318,7 +387,7 @@ class PoisoningScorer {
         score += correlation.points
         reasons.addAll(correlation.reasons)
 
-        return ScoringResult(addresses.firstOrNull(), score, false, reasons)
+        return ScoringResult(addresses.firstOrNull(), score, reasons)
     }
 
     /**
