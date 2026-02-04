@@ -616,7 +616,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             pinComponent.initDefaultPinLevel()
             accountManager.clearAccounts()
             wcSessionManager.start()
-            spamManager.initializeCache(transactionAdapterManager)
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 

@@ -42,14 +42,6 @@ class StellarTransactionConverter(
 
             when {
                 outgoing -> {
-                    // Cache outgoing transaction for spam detection
-                    val tokenUid = "${source.blockchain.type.uid}:native"
-                    App.spamManager.addOutgoingTransaction(
-                        tokenUid,
-                        payment.to,
-                        operation.timestamp,
-                        null
-                    )
                     type = Type.Send(
                         value = transactionValue,
                         to = payment.to,
@@ -83,14 +75,6 @@ class StellarTransactionConverter(
 
             when {
                 outgoing -> {
-                    // Cache outgoing transaction for spam detection
-                    val tokenUid = "${source.blockchain.type.uid}:native"
-                    App.spamManager.addOutgoingTransaction(
-                        tokenUid,
-                        accountCreated.account,
-                        operation.timestamp,
-                        null
-                    )
                     type = Type.Send(
                         value = transactionValue,
                         to = accountCreated.account,

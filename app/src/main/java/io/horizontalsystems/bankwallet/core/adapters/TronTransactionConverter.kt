@@ -73,14 +73,6 @@ class TronTransactionConverter(
                             )
                         } else {
                             val toAddress = contract.toAddress.base58
-                            // Cache outgoing transaction for spam detection
-                            val outgoingTokenUid = "${source.blockchain.type.uid}:native"
-                            App.spamManager.addOutgoingTransaction(
-                                outgoingTokenUid,
-                                toAddress,
-                                transaction.timestamp / 1000,
-                                transaction.blockNumber?.toInt()
-                            )
                             TronOutgoingTransactionRecord(
                                 transaction = transaction,
                                 baseToken = baseToken,
@@ -98,15 +90,6 @@ class TronTransactionConverter(
 
             is OutgoingTrc20Decoration -> {
                 val toAddress = decoration.to.base58
-                val contractAddress = decoration.contractAddress.base58
-                // Cache outgoing transaction for spam detection
-                val tokenUid = "${source.blockchain.type.uid}:$contractAddress"
-                App.spamManager.addOutgoingTransaction(
-                    tokenUid,
-                    toAddress,
-                    transaction.timestamp / 1000,
-                    transaction.blockNumber?.toInt()
-                )
                 TronOutgoingTransactionRecord(
                     transaction = transaction,
                     baseToken = baseToken,
@@ -143,18 +126,6 @@ class TronTransactionConverter(
 
                 when {
                     decoration.fromAddress == address && contractAddress != null -> {
-                        // Cache outgoing TRC-20 transfers for spam detection
-                        outgoingEip20Transfers.forEach { transfer ->
-                            val transferContractAddress = transfer.contractAddress.base58
-                            val transferToAddress = transfer.to.base58
-                            val tokenUid = "${source.blockchain.type.uid}:$transferContractAddress"
-                            App.spamManager.addOutgoingTransaction(
-                                tokenUid,
-                                transferToAddress,
-                                transaction.timestamp / 1000,
-                                transaction.blockNumber?.toInt()
-                            )
-                        }
                         TronContractCallTransactionRecord(
                             transaction, baseToken, source,
                             contractAddress.base58,
