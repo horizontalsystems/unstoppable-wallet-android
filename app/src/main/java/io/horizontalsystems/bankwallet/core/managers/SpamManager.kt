@@ -25,6 +25,7 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 private fun isEvmBlockchain(source: TransactionSource): Boolean {
     return EvmBlockchainManager.blockchainTypes.contains(source.blockchain.type)
@@ -33,10 +34,16 @@ private fun isEvmBlockchain(source: TransactionSource): Boolean {
 class SpamManager(
     private val localStorage: ILocalStorage,
     private val scannedTransactionStorage: ScannedTransactionStorage,
-    private val contactsRepository: ContactsRepository
+    private val contactsRepository: ContactsRepository,
+    private val transactionAdapterManager: TransactionAdapterManager
 ) {
     private val poisoningScorer = PoisoningScorer()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
+    // Lazy initialized SpamRescanManager to avoid circular dependency
+    private val spamRescanManager: SpamRescanManager by lazy {
+        SpamRescanManager(scannedTransactionStorage, this)
+    }
 
     // Cache for recent outgoing transactions per token (tokenUid -> list of outgoing tx info)
     // Used for address poisoning detection - populated when outgoing transactions are processed
@@ -185,7 +192,8 @@ class SpamManager(
 
     /**
      * Check if transaction is spam.
-     * First checks stored result in database, then calculates if not found.
+     * First checks stored result in database. If not found, triggers background scan
+     * and waits for result to ensure accurate spam detection with full outgoing context.
      * Addresses in user's contacts are trusted and never flagged as spam.
      *
      * @param transactionHash Transaction hash for database lookup
@@ -228,7 +236,23 @@ class SpamManager(
             return false
         }
 
-        // Not in database and not trusted, calculate spam score
+        // Not in database - trigger on-demand scan and wait for result
+        // This ensures proper outgoing context is built for accurate spam detection
+        if (isEvmBlockchain(source)) {
+            val adapter = transactionAdapterManager.adaptersMap[source]
+            if (adapter != null) {
+                runBlocking {
+                    spamRescanManager.ensureTransactionScanned(transactionHash, source, adapter)
+                }
+
+                // Check database again after scan
+                scannedTransactionStorage.getScannedTransaction(transactionHash)?.let {
+                    return it.isSpam
+                }
+            }
+        }
+
+        // Fallback: calculate with available context (non-EVM or adapter not found)
         val recentOutgoingTxs = tokenUid?.let { getOutgoingTxsFromCache(it) } ?: emptyList()
 
         val scoringResult = poisoningScorer.calculateSpamScore(
@@ -237,19 +261,6 @@ class SpamManager(
             incomingBlockHeight = blockHeight,
             recentOutgoingTxs = recentOutgoingTxs
         )
-
-        // Save result to database
-        try {
-            scannedTransactionStorage.save(
-                ScannedTransaction(
-                    transactionHash = transactionHash,
-                    spamScore = scoringResult.score,
-                    blockchainType = blockchainType,
-                    address = scoringResult.spamAddress
-                )
-            )
-        } catch (_: Throwable) {
-        }
 
         return scoringResult.score >= PoisoningScorer.SPAM_THRESHOLD
     }
@@ -387,5 +398,4 @@ class SpamManager(
         } catch (_: Throwable) {
         }
     }
-
 }
