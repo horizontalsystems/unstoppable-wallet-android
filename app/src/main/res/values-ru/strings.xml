@@ -1138,7 +1138,7 @@
     <!--Network Settings-->
     <!-- Show Key -->
     <string name="ShowKey_Passphrase">Кодовая фраза</string>
-    <string name="ShowKey_PrivateKeyCopyWarning_Text">В целях безопасности мы не рекомендуем копировать секретный ключ.</string>
+    <string name="ShowKey_PrivateKeyCopyWarning_Text">В целях безопасности мы не рекомендуем копировать приватный ключ.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">Я рискну</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Не копировать</string>
     <!-- Backup Recovery Phrase -->
@@ -1352,7 +1352,7 @@
     <string name="CoinAnalytics_Holders_TrackedBlockchains">Отслеживаемые блокчейны: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
     <string name="CoinAnalytics_ProjectTVL_Info1">Все-Value-Locked (или Assets Under Management) в смарт-контрактах проекта.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Диаграмма с указанием вариаций Total-Value-Locked в смарт-контракты проекта более одного года.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info3">Ранг Токена основан на текущем Итоге-Value-Locked.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info3">Рейтинг токена по текущему Token-Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info4">Список всех токенов, ранжированных на основе текущего итогового Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info5">Соотношение рыночной цены / ТВЛ для проекта.</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Этот проект не имеет аналитических данных</string>
@@ -1366,10 +1366,10 @@
     <string name="CoinAnalytics_DexLiquidityRank">Рейтинг ликвидности DEX</string>
     <string name="CoinAnalytics_DexLiquidityRank_Description">Токены ранжируются по доступной ликвидности на децентрализованных биржах.</string>
     <string name="CoinAnalytics_ActiveAddresses">Ежедневные активные адреса</string>
-    <string name="CoinAnalytics_ActiveAddressesRank">Рейтинг Активных Адресов</string>
+    <string name="CoinAnalytics_ActiveAddressesRank">Рейтинг активных адресов</string>
     <string name="CoinAnalytics_ActiveAddressesRank_Description">Токены находятся в рейтинге по ряду уникальных адресов, совершаемых с токеном.</string>
     <string name="CoinAnalytics_TransactionCount">Количество транзакций</string>
-    <string name="CoinAnalytics_TransactionCountRank">Ранг по количеству Tx</string>
+    <string name="CoinAnalytics_TransactionCountRank">Рейтинг кол-ва транзакций</string>
     <string name="CoinAnalytics_Holders">Держатели</string>
     <string name="CoinAnalytics_ProjectTvl">Проект TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Проект TVL (общая стоимость заблокирована)</string>
@@ -1385,21 +1385,21 @@
     <string name="CoinAnalytics_OtherData">Другие данные</string>
     <string name="CoinAnalytics_Reports">Отчёты</string>
     <string name="CoinAnalytics_Funding">Финансирование</string>
-    <string name="Coin_Analytics_Audits">Проверки</string>
+    <string name="Coin_Analytics_Audits">Аудиты</string>
     <string name="Coin_Analytics_Last30d">последние 30д</string>
     <string name="Coin_Analytics_Current">текущий</string>
-    <string name="Coin_Analytics_Rank">Ранг</string>
+    <string name="Coin_Analytics_Rank">Рейтинг</string>
     <string name="Coin_Analytics_30DayRank">Рейтинг на 30 дней</string>
     <string name="Coin_Analytics_30DayUniqueAddress">Уникальные адреса на 30 дней</string>
-    <string name="Coin_Analytics_30DayVolume">Громкость на 30 дней</string>
+    <string name="Coin_Analytics_30DayVolume">Объем за 30д</string>
     <string name="Coin_Analytics_OverallScore">Общий балл</string>
-    <string name="Coin_Analytics_OverallScore_Excellent">Отличное</string>
+    <string name="Coin_Analytics_OverallScore_Excellent">Отлично</string>
     <string name="Coin_Analytics_OverallScore_Good">Хорошо</string>
-    <string name="Coin_Analytics_OverallScore_Fair">Справедливый</string>
-    <string name="Coin_Analytics_OverallScore_Poor">Плохое</string>
+    <string name="Coin_Analytics_OverallScore_Fair">Приемлемо</string>
+    <string name="Coin_Analytics_OverallScore_Poor">Плохо</string>
     <string name="Coin_Analytics_OverallScore_CexVolume">Общий счет основан на среднем ежедневном объеме торгов на централизованных биржах за последние 7 дней.</string>
-    <string name="Coin_Analytics_OverallScore_DexVolume">Общий результат основан на среднем ежедневном объеме торговли на децентрализованных биржах за последние 7 дней.</string>
-    <string name="Coin_Analytics_OverallScore_DexLiquidity">Общий результат основан на общей доступной ликвидности на децентрализованных биржах.</string>
+    <string name="Coin_Analytics_OverallScore_DexVolume">Общий балл основан на среднем ежедневном объеме торговли на децентрализованных биржах за последние 7 дней.</string>
+    <string name="Coin_Analytics_OverallScore_DexLiquidity">Общий балл основан на общей доступной ликвидности на децентрализованных биржах.</string>
     <string name="Coin_Analytics_OverallScore_ActiveAddresses">Общий счет основан на среднедневных активных адресах за последние 7 дней.</string>
     <string name="Coin_Analytics_OverallScore_ProjectTvl">Общая оценка основана на общей закрытой стоимости (активы, находящиеся в ведении управления) на проекте, представленном данным токеном.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">Общий счет основан на среднем подсчете ежедневных транзакций за последние 7 дней.</string>
@@ -1416,9 +1416,9 @@
     <string name="Coin_Analytics_Indicators_Sell">Продавать</string>
     <string name="Coin_Analytics_Indicators_Buy">Покупать</string>
     <string name="Coin_Analytics_Indicators_Neutral">Нейтрально</string>
-    <string name="CoinAnalytics_SmartContractAnalysis">Умный анализ контрактов</string>
-    <string name="CoinAnalytics_HighRiskItems">Предметы высокого риска</string>
-    <string name="CoinAnalytics_MediumRiskItems">Средний элемент риска</string>
+    <string name="CoinAnalytics_SmartContractAnalysis">Анализ смарт-контрактов</string>
+    <string name="CoinAnalytics_HighRiskItems">Элементы высокого риска</string>
+    <string name="CoinAnalytics_MediumRiskItems">Элементы среднего риска</string>
     <string name="Coin_Analytics_Indicators_Risky">Риски</string>
     <string name="CoinAnalytics_AttentionRequired">Требуется внимание</string>
     <string name="CoinAnalytics_PoweredByDeFi">При поддержке De.Fi</string>
@@ -1460,7 +1460,7 @@
     <string name="TechnicalAdvice_Details">Детали</string>
     <string name="Detectors_TokenDetectors">Детекторы токенов</string>
     <string name="Detectors_GeneralDetectors">Общие детекторы</string>
-    <string name="Detectors_IssuesCount">Проблемы %d</string>
+    <string name="Detectors_IssuesCount">Запросы: %d</string>
     <!-- NFT Collection -->
     <!-- NFT Collection Events -->
     <!--Rate list-->
@@ -1478,17 +1478,17 @@
     <string name="BalanceSyncError_ErrorText">Не удалось получить данные из текущего источника. Пожалуйста, повторите попытку позже.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">ПРИСОЕДИНЯЙТЕСЬ</string>
-    <string name="ProUsersInfo_UnstoppablePass">Неудержимый пропуск</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable пропуск</string>
     <string name="ProUsersInfo_Description">Для включения этих данных необходимо получить бронзовый уровень UW NFTs “Coin Info+”\n\nтакже получить доступ к данным ниже:</string>
-    <string name="ProUsersInfo_Features_DexVolume">Громкость и звание DEX</string>
-    <string name="ProUsersInfo_Features_DesLiquidity">Ликвидность DEX и ранг</string>
+    <string name="ProUsersInfo_Features_DexVolume">DEX объем и рейтинг</string>
+    <string name="ProUsersInfo_Features_DesLiquidity">DEX ликвидность и рейтинг</string>
     <string name="ProUsersInfo_Features_ActiveAddresses">Активные адреса</string>
     <string name="ProUsersInfo_Features_TxCount">Количество транзакций</string>
-    <string name="ProUsersInfo_Features_TxVolume">Громкость транзакции</string>
-    <string name="Hud_Text_LearnMore">Скоро</string>
+    <string name="ProUsersInfo_Features_TxVolume">Объем транзакций</string>
+    <string name="Hud_Text_LearnMore">Уже скоро</string>
     <string name="Hud_Text_Activate">Активировать</string>
-    <string name="ProUsersActivate_Title">Активировать пасс</string>
-    <string name="ProUsersActivate_Description">Горный Як - Безграничный. Покажет важные данные рынка, аналитические инструменты, полезные диаграммы, основанные на данных по цепочке, которые помогут вам получить четкое представление о проектах.</string>
+    <string name="ProUsersActivate_Title">Activate the Pass</string>
+    <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, useful charts based on on-chain data that will help give you a clear view of projects</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Выберите тип</string>
     <string name="Widget_EnableAutostartWarning">Чтобы убедиться, что этот виджет работает правильно, необходимо включить автозапуск.</string>
