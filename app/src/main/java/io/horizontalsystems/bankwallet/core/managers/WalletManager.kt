@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 class WalletManager(
     private val accountManager: IAccountManager,
     private val storage: IWalletStorage,
+    private val restoreSettingsManager: RestoreSettingsManager,
 ) : IWalletManager {
 
     override val activeWallets get() = walletsSet.toList()
@@ -29,6 +31,11 @@ class WalletManager(
                 if (activeAccountState is ActiveAccountState.ActiveAccount) {
                     handleUpdated(activeAccountState.account)
                 }
+            }
+        }
+        coroutineScope.launch {
+            restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
+                handleUpdatedRestoreSettings(blockchainType)
             }
         }
     }
@@ -80,6 +87,15 @@ class WalletManager(
     override fun saveEnabledWallets(enabledWallets: List<EnabledWallet>) {
         storage.handle(enabledWallets)
         handleUpdated(accountManager.activeAccount)
+    }
+
+    @Synchronized
+    private fun handleUpdatedRestoreSettings(blockchainType: BlockchainType) {
+        val walletsToReAdd = walletsSet.filter { it.token.blockchainType == blockchainType }
+        if (walletsToReAdd.isEmpty()) return
+
+        delete(walletsToReAdd)
+        save(walletsToReAdd)
     }
 
 }

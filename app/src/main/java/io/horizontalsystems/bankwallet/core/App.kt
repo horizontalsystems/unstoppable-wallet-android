@@ -275,6 +275,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         accountsStorage = AccountsStorage(appDatabase)
         restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
 
+        zcashBirthdayProvider = ZcashBirthdayProvider(this)
+        moneroBirthdayProvider = MoneroBirthdayProvider()
+        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider, moneroBirthdayProvider)
+
         AppLog.logsDao = appDatabase.logsDao()
 
         accountCleaner = AccountCleaner()
@@ -287,7 +291,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
 
-        walletManager = WalletManager(accountManager, walletStorage)
+        walletManager = WalletManager(accountManager, walletStorage, restoreSettingsManager)
         coinManager = CoinManager(marketKit, walletManager)
 
         solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
@@ -360,10 +364,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        zcashBirthdayProvider = ZcashBirthdayProvider(this)
-        moneroBirthdayProvider = MoneroBirthdayProvider()
-        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider, moneroBirthdayProvider)
-
         evmLabelManager = EvmLabelManager(
             EvmLabelProvider(),
             appDatabase.evmAddressLabelDao(),
@@ -397,7 +397,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             tonKitManager,
             stellarKitManager,
             moneroNodeManager,
-            restoreSettingsManager
         )
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
         spamManager = SpamManager(localStorage, scannedTransactionStorage, contactsRepository, transactionAdapterManager)

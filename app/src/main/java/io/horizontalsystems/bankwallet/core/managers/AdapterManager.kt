@@ -28,7 +28,6 @@ class AdapterManager(
     private val tonKitManager: TonKitManager,
     private val stellarKitManager: StellarKitManager,
     private val moneroNodeManager: MoneroNodeManager,
-    private val restoreSettingsManager: RestoreSettingsManager
 ) : IAdapterManager {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -65,11 +64,6 @@ class AdapterManager(
         coroutineScope.launch {
             moneroNodeManager.currentNodeUpdatedFlow.collect {
                 handleUpdatedKit(BlockchainType.Monero)
-            }
-        }
-        coroutineScope.launch {
-            restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
-                handleUpdatedKit(blockchainType)
             }
         }
     }
