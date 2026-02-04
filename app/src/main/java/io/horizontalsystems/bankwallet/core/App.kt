@@ -61,7 +61,6 @@ import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaWalletManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
-import io.horizontalsystems.bankwallet.core.managers.SpamRescanManager
 import io.horizontalsystems.bankwallet.core.managers.StellarAccountManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
@@ -213,7 +212,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var backupProvider: BackupProvider
         lateinit var scannedTransactionStorage: ScannedTransactionStorage
         lateinit var spamManager: SpamManager
-        lateinit var spamRescanManager: SpamRescanManager
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
         lateinit var recentAddressManager: RecentAddressManager
@@ -325,7 +323,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         scannedTransactionStorage = ScannedTransactionStorage(appDatabase.scannedTransactionDao())
         contactsRepository = ContactsRepository(marketKit)
-        spamManager = SpamManager(localStorage, scannedTransactionStorage, contactsRepository)
         recentAddressManager = RecentAddressManager(accountManager, appDatabase.recentAddressDao(), ActionCompletedDelegate)
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
@@ -403,6 +400,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             restoreSettingsManager
         )
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
+        spamManager = SpamManager(localStorage, scannedTransactionStorage, contactsRepository, transactionAdapterManager)
 
         feeCoinProvider = FeeTokenProvider(marketKit)
 
@@ -619,9 +617,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             accountManager.clearAccounts()
             wcSessionManager.start()
             spamManager.initializeCache(transactionAdapterManager)
-
-            spamRescanManager = SpamRescanManager(scannedTransactionStorage, spamManager)
-            spamRescanManager.start(transactionAdapterManager)
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 

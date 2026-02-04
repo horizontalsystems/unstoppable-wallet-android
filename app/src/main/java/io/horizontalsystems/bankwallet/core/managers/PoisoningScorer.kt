@@ -74,7 +74,7 @@ class PoisoningScorer {
             get() = score >= SPAM_THRESHOLD
 
         val isSuspicious: Boolean
-            get() = score >= SUSPICIOUS_THRESHOLD && score < SPAM_THRESHOLD
+            get() = score in SUSPICIOUS_THRESHOLD..<SPAM_THRESHOLD
 
         val isTrusted: Boolean
             get() = score < SUSPICIOUS_THRESHOLD
