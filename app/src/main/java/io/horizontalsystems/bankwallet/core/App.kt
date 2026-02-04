@@ -324,7 +324,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
 
         scannedTransactionStorage = ScannedTransactionStorage(appDatabase.scannedTransactionDao())
-        spamManager = SpamManager(localStorage, scannedTransactionStorage)
+        contactsRepository = ContactsRepository(marketKit)
+        spamManager = SpamManager(localStorage, scannedTransactionStorage, contactsRepository)
         recentAddressManager = RecentAddressManager(accountManager, appDatabase.recentAddressDao(), ActionCompletedDelegate)
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
@@ -455,7 +456,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
         balanceHiddenManager = BalanceHiddenManager(localStorage, backgroundManager)
 
-        contactsRepository = ContactsRepository(marketKit)
         chartIndicatorManager = ChartIndicatorManager(appDatabase.chartIndicatorSettingsDao(), localStorage)
 
         appIconService = AppIconService(localStorage)
