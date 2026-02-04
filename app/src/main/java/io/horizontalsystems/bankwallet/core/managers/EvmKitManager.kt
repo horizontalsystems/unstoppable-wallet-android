@@ -30,6 +30,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.net.URI
@@ -197,7 +198,11 @@ class EvmKitManager(
             backgroundManager.stateFlow.collect { state ->
                 when (state) {
                     BackgroundManagerState.EnterForeground -> {
-                        evmKitWrapper?.evmKit?.onEnterForeground()
+                        evmKitWrapper?.evmKit?.let { kit ->
+                            kit.onEnterForeground()
+                            delay(1000)
+                            kit.refresh()
+                        }
                     }
                     BackgroundManagerState.EnterBackground -> {
                         evmKitWrapper?.evmKit?.onEnterBackground()
