@@ -53,14 +53,12 @@ class TronTransactionConverter(
                         if (contract.ownerAddress != tronKit.address) {
                             val fromAddress = contract.ownerAddress.base58
                             val transactionValue = baseCoinValue(contract.amount, false)
-                            val tokenUid = "${source.blockchain.type.uid}:native"
                             val txHash = transaction.hashString.hexStringToByteArrayOrNull() ?: byteArrayOf()
                             val spam = App.spamManager.isSpam(
                                 txHash,
                                 listOf(TransferEvent(fromAddress, transactionValue)),
                                 transaction.timestamp / 1000,
                                 transaction.blockNumber?.toInt(),
-                                tokenUid,
                                 source
                             )
                             TronIncomingTransactionRecord(
@@ -137,17 +135,12 @@ class TronTransactionConverter(
                     }
 
                     decoration.fromAddress != address && decoration.toAddress != address -> {
-                        // Extract tokenUid from incoming events for spam detection
-                        val tokenUid = incomingEip20Transfers.firstOrNull()?.contractAddress?.base58?.let {
-                            "${source.blockchain.type.uid}:$it"
-                        } ?: "${source.blockchain.type.uid}:native"
                         val txHash = transaction.hashString.hexStringToByteArrayOrNull() ?: byteArrayOf()
                         val spam = App.spamManager.isSpam(
                             txHash,
                             incomingEvents + outgoingEvents,
                             transaction.timestamp / 1000,
                             transaction.blockNumber?.toInt(),
-                            tokenUid,
                             source
                         )
 

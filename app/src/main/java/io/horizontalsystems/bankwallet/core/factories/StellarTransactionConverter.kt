@@ -2,12 +2,12 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICoinManager
-import io.horizontalsystems.ethereumkit.core.hexStringToByteArrayOrNull
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord.Type
 import io.horizontalsystems.bankwallet.core.tokenIconPlaceholder
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
+import io.horizontalsystems.ethereumkit.core.hexStringToByteArrayOrNull
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -118,14 +118,12 @@ class StellarTransactionConverter(
         }
 
         val eventsForPhishingCheck = StellarTransactionRecord.eventsForPhishingCheck(type)
-        val tokenUid = "${source.blockchain.type.uid}:native"
         val txHash = operation.transactionHash.hexStringToByteArrayOrNull() ?: byteArrayOf()
         val spam = App.spamManager.isSpam(
             txHash,
             eventsForPhishingCheck,
             operation.timestamp,
             null,
-            tokenUid,
             source
         )
 

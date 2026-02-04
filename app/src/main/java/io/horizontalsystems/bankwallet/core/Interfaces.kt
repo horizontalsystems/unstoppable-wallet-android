@@ -301,6 +301,16 @@ interface ITransactionsAdapter {
         limit: Int
     ): List<io.horizontalsystems.ethereumkit.models.FullTransaction> = emptyList()
 
+    suspend fun getTronFullTransactionsBefore(
+        fromTransactionHash: ByteArray?,
+        limit: Int
+    ): List<io.horizontalsystems.tronkit.models.FullTransaction> = emptyList()
+
+    suspend fun getStellarOperationsBefore(
+        fromId: Long?,
+        limit: Int
+    ): List<io.horizontalsystems.stellarkit.room.Operation> = emptyList()
+
     fun getRawTransaction(transactionHash: String): String? = null
 
     fun getTransactionRecordsFlow(

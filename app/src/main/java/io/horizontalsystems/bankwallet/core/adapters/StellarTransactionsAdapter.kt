@@ -27,7 +27,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.rx2.asFlowable
 
 class StellarTransactionsAdapter(
-    stellarKitWrapper: StellarKitWrapper,
+    val stellarKitWrapper: StellarKitWrapper,
     private val transactionConverter: StellarTransactionConverter,
 ) : ITransactionsAdapter {
     private val stellarKit = stellarKitWrapper.stellarKit
@@ -117,5 +117,12 @@ class StellarTransactionsAdapter(
 
     override fun getTransactionUrl(transactionHash: String): String {
         return "https://stellar.expert/explorer/public/tx/${transactionHash}"
+    }
+
+    override suspend fun getStellarOperationsBefore(
+        fromId: Long?,
+        limit: Int
+    ): List<io.horizontalsystems.stellarkit.room.Operation> {
+        return stellarKit.operationsBefore(TagQuery(null, null, null), fromId = fromId, limit = limit)
     }
 }

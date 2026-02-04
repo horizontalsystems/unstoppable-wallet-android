@@ -82,6 +82,13 @@ class TronTransactionsAdapter(
             }
     }
 
+    override suspend fun getTronFullTransactionsBefore(
+        fromTransactionHash: ByteArray?,
+        limit: Int
+    ): List<io.horizontalsystems.tronkit.models.FullTransaction> {
+        return tronKit.getFullTransactionsBefore(listOf(), fromTransactionHash, limit)
+    }
+
     private fun convertToAdapterState(syncState: TronKit.SyncState): AdapterState =
         when (syncState) {
             is TronKit.SyncState.Synced -> AdapterState.Synced
