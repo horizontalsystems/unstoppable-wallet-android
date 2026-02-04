@@ -8,11 +8,11 @@ object Migration_70_71 : Migration(70, 71) {
         // Drop old SpamAddress table
         db.execSQL("DROP TABLE IF EXISTS `SpamAddress`")
 
-        // Create new ScannedTransaction table
+        // Create new ScannedTransaction table with spamScore
         db.execSQL("""
             CREATE TABLE IF NOT EXISTS `ScannedTransaction` (
                 `transactionHash` BLOB NOT NULL,
-                `isSpam` INTEGER NOT NULL,
+                `spamScore` INTEGER NOT NULL,
                 `blockchainType` TEXT NOT NULL,
                 `address` TEXT,
                 PRIMARY KEY(`transactionHash`)

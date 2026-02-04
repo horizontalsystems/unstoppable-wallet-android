@@ -73,11 +73,10 @@ class PoisoningScorerTest {
     // ==================== ScoringResult.isSpam Tests ====================
 
     @Test
-    fun `isSpam true when autoSpam is true regardless of score`() {
+    fun `isSpam true when score reaches threshold`() {
         val result = PoisoningScorer.ScoringResult(
             address = "0xSpammer",
-            score = 0,
-            isAutoSpam = true,
+            score = PoisoningScorer.SPAM_THRESHOLD,
             reasons = listOf("Zero-value token transfer")
         )
 
@@ -88,8 +87,7 @@ class PoisoningScorerTest {
     fun `isSpam true when score exceeds threshold`() {
         val result = PoisoningScorer.ScoringResult(
             address = "0xSpammer",
-            score = 7,
-            isAutoSpam = false,
+            score = 8,
             reasons = listOf("Mimic address", "Dust")
         )
 
@@ -97,57 +95,60 @@ class PoisoningScorerTest {
     }
 
     @Test
-    fun `isSpam false when score at threshold`() {
+    fun `isSuspicious when score between thresholds`() {
         val result = PoisoningScorer.ScoringResult(
-            address = "0xNormal",
-            score = PoisoningScorer.SPAM_THRESHOLD,
-            isAutoSpam = false,
+            address = "0xSuspect",
+            score = 5,
             reasons = emptyList()
         )
 
         assertFalse(result.isSpam)
+        assertTrue(result.isSuspicious)
     }
 
     @Test
-    fun `isSpam false when score below threshold`() {
+    fun `isTrusted when score below suspicious threshold`() {
         val result = PoisoningScorer.ScoringResult(
             address = "0xNormal",
-            score = 4,
-            isAutoSpam = false,
-            reasons = listOf("Mimic address")
+            score = 2,
+            reasons = emptyList()
         )
 
         assertFalse(result.isSpam)
+        assertFalse(result.isSuspicious)
+        assertTrue(result.isTrusted)
     }
 
     // ==================== Scoring Combinations ====================
 
     @Test
-    fun `mimic plus dust exceeds threshold`() {
-        val score = PoisoningScorer.POINTS_MIMIC_ADDRESS + PoisoningScorer.POINTS_DUST_BELOW_LIMIT
-        assertTrue(score > PoisoningScorer.SPAM_THRESHOLD)
+    fun `prefix plus suffix match reaches threshold`() {
+        // Classic poisoning: prefix(4) + suffix(4) = 8 >= 7
+        val score = PoisoningScorer.POINTS_ADDRESS_PREFIX_MATCH + PoisoningScorer.POINTS_ADDRESS_SUFFIX_MATCH
+        assertTrue(score >= PoisoningScorer.SPAM_THRESHOLD)
     }
 
     @Test
-    fun `mimic plus time correlation exceeds threshold`() {
-        val score = PoisoningScorer.POINTS_MIMIC_ADDRESS + PoisoningScorer.POINTS_TIME_WITHIN_20_MINUTES
-        assertTrue(score > PoisoningScorer.SPAM_THRESHOLD)
+    fun `prefix plus time correlation does not reach threshold alone`() {
+        // prefix(4) + time(3) = 7 >= 7 (just reaches threshold)
+        val score = PoisoningScorer.POINTS_ADDRESS_PREFIX_MATCH + PoisoningScorer.POINTS_TIME_WITHIN_20_MINUTES
+        assertTrue(score >= PoisoningScorer.SPAM_THRESHOLD)
     }
 
     @Test
-    fun `single factor does not exceed threshold`() {
-        assertFalse(PoisoningScorer.POINTS_MIMIC_ADDRESS > PoisoningScorer.SPAM_THRESHOLD)
-        assertFalse(PoisoningScorer.POINTS_DUST_BELOW_LIMIT > PoisoningScorer.SPAM_THRESHOLD)
-        assertFalse(PoisoningScorer.POINTS_ZERO_NATIVE_VALUE > PoisoningScorer.SPAM_THRESHOLD)
+    fun `single factor does not reach threshold`() {
+        assertFalse(PoisoningScorer.POINTS_ADDRESS_PREFIX_MATCH >= PoisoningScorer.SPAM_THRESHOLD)
+        assertFalse(PoisoningScorer.POINTS_DUST_BELOW_LIMIT >= PoisoningScorer.SPAM_THRESHOLD)
+        assertFalse(PoisoningScorer.POINTS_ZERO_VALUE >= PoisoningScorer.SPAM_THRESHOLD)
     }
 
     // ==================== Complex Scoring Scenarios ====================
 
     @Test
-    fun `dust plus block correlation exceeds threshold`() {
+    fun `dust plus block correlation reaches threshold`() {
         // Scenario: Attacker sends dust amount within 5 blocks of user's outgoing tx
         val score = PoisoningScorer.POINTS_DUST_BELOW_LIMIT + PoisoningScorer.POINTS_TIME_WITHIN_5_BLOCKS
-        assertTrue("dust(3) + block_correlation(4) = 7 > 6", score > PoisoningScorer.SPAM_THRESHOLD)
+        assertTrue("dust(3) + block_correlation(4) = 7 >= 7", score >= PoisoningScorer.SPAM_THRESHOLD)
     }
 
     @Test
@@ -155,46 +156,49 @@ class PoisoningScorerTest {
         // Block correlation (4 points) is used when available, otherwise time correlation (3 points)
         // They should NOT be combined - only one applies
         assertTrue(
-            "block(4) alone should not exceed threshold",
-            PoisoningScorer.POINTS_TIME_WITHIN_5_BLOCKS <= PoisoningScorer.SPAM_THRESHOLD
+            "block(4) alone should not reach threshold",
+            PoisoningScorer.POINTS_TIME_WITHIN_5_BLOCKS < PoisoningScorer.SPAM_THRESHOLD
         )
         assertTrue(
-            "time(3) alone should not exceed threshold",
-            PoisoningScorer.POINTS_TIME_WITHIN_20_MINUTES <= PoisoningScorer.SPAM_THRESHOLD
+            "time(3) alone should not reach threshold",
+            PoisoningScorer.POINTS_TIME_WITHIN_20_MINUTES < PoisoningScorer.SPAM_THRESHOLD
         )
     }
 
     @Test
-    fun `zero native value plus mimic exceeds threshold`() {
-        val score = PoisoningScorer.POINTS_ZERO_NATIVE_VALUE + PoisoningScorer.POINTS_MIMIC_ADDRESS
-        assertTrue("zero_native(4) + mimic(4) = 8 > 6", score > PoisoningScorer.SPAM_THRESHOLD)
+    fun `zero value plus prefix and suffix match exceeds threshold`() {
+        val score = PoisoningScorer.POINTS_ZERO_VALUE +
+                PoisoningScorer.POINTS_ADDRESS_PREFIX_MATCH +
+                PoisoningScorer.POINTS_ADDRESS_SUFFIX_MATCH
+        assertTrue("zero(4) + prefix(4) + suffix(4) = 12 >= 7", score >= PoisoningScorer.SPAM_THRESHOLD)
     }
 
     @Test
-    fun `low value dust alone does not exceed threshold`() {
+    fun `low value dust alone does not reach threshold`() {
         // Dust below 5x limit gives fewer points
         assertFalse(
-            "dust_5x(2) alone should not exceed threshold",
-            PoisoningScorer.POINTS_DUST_BELOW_5X_LIMIT > PoisoningScorer.SPAM_THRESHOLD
+            "dust_5x(2) alone should not reach threshold",
+            PoisoningScorer.POINTS_DUST_BELOW_5X_LIMIT >= PoisoningScorer.SPAM_THRESHOLD
         )
     }
 
     @Test
-    fun `low value dust plus time correlation does not exceed threshold`() {
-        // dust_5x(2) + time(3) = 5 <= 6
+    fun `low value dust plus time correlation does not reach threshold`() {
+        // dust_5x(2) + time(3) = 5 < 7
         val score = PoisoningScorer.POINTS_DUST_BELOW_5X_LIMIT + PoisoningScorer.POINTS_TIME_WITHIN_20_MINUTES
-        assertFalse("dust_5x(2) + time(3) = 5 <= 6", score > PoisoningScorer.SPAM_THRESHOLD)
+        assertFalse("dust_5x(2) + time(3) = 5 < 7", score >= PoisoningScorer.SPAM_THRESHOLD)
     }
 
     @Test
     fun `maximum possible score from all factors`() {
-        // All factors combined: mimic(4) + dust(3) + block(4) = 11
+        // All factors combined: prefix(4) + suffix(4) + dust(3) + block(4) = 15
         // Note: time(3) and block(4) are mutually exclusive, block is higher
-        val maxScore = PoisoningScorer.POINTS_MIMIC_ADDRESS +
+        val maxScore = PoisoningScorer.POINTS_ADDRESS_PREFIX_MATCH +
+                PoisoningScorer.POINTS_ADDRESS_SUFFIX_MATCH +
                 PoisoningScorer.POINTS_DUST_BELOW_LIMIT +
                 PoisoningScorer.POINTS_TIME_WITHIN_5_BLOCKS
-        assertEquals("Max score should be 11", 11, maxScore)
-        assertTrue(maxScore > PoisoningScorer.SPAM_THRESHOLD)
+        assertEquals("Max score should be 15", 15, maxScore)
+        assertTrue(maxScore >= PoisoningScorer.SPAM_THRESHOLD)
     }
 
     // ==================== Mimic Address Edge Cases ====================
@@ -251,11 +255,15 @@ class PoisoningScorerTest {
     @Test
     fun `spam threshold requires combination of factors`() {
         // Verify that spam detection requires multiple suspicious signals
-        assertEquals(6, PoisoningScorer.SPAM_THRESHOLD)
+        assertEquals(7, PoisoningScorer.SPAM_THRESHOLD)
+        assertEquals(3, PoisoningScorer.SUSPICIOUS_THRESHOLD)
 
-        // Single high-value factor (4 points) alone shouldn't trigger
-        assertTrue(PoisoningScorer.POINTS_MIMIC_ADDRESS <= PoisoningScorer.SPAM_THRESHOLD)
-        assertTrue(PoisoningScorer.POINTS_TIME_WITHIN_5_BLOCKS <= PoisoningScorer.SPAM_THRESHOLD)
-        assertTrue(PoisoningScorer.POINTS_ZERO_NATIVE_VALUE <= PoisoningScorer.SPAM_THRESHOLD)
+        // Single high-value factor (4 points) alone shouldn't trigger spam
+        assertTrue(PoisoningScorer.POINTS_ADDRESS_PREFIX_MATCH < PoisoningScorer.SPAM_THRESHOLD)
+        assertTrue(PoisoningScorer.POINTS_TIME_WITHIN_5_BLOCKS < PoisoningScorer.SPAM_THRESHOLD)
+        assertTrue(PoisoningScorer.POINTS_ZERO_VALUE < PoisoningScorer.SPAM_THRESHOLD)
+
+        // But single factor can trigger suspicious
+        assertTrue(PoisoningScorer.POINTS_ADDRESS_PREFIX_MATCH >= PoisoningScorer.SUSPICIOUS_THRESHOLD)
     }
 }
