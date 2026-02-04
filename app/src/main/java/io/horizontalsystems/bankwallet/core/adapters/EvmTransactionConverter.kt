@@ -83,14 +83,6 @@ class EvmTransactionConverter(
 
             is OutgoingDecoration -> {
                 val toAddress = decoration.to.eip55
-                // Cache outgoing transaction for spam detection
-                val tokenUid = "${source.blockchain.type.uid}:native"
-                App.spamManager.addOutgoingTransaction(
-                    tokenUid,
-                    toAddress,
-                    transaction.timestamp,
-                    transaction.blockNumber?.toInt()
-                )
                 EvmOutgoingTransactionRecord(
                     transaction,
                     baseToken,
@@ -104,15 +96,6 @@ class EvmTransactionConverter(
 
             is OutgoingEip20Decoration -> {
                 val toAddress = decoration.to.eip55
-                val contractAddress = decoration.contractAddress.eip55
-                // Cache outgoing transaction for spam detection
-                val tokenUid = "${source.blockchain.type.uid}:$contractAddress"
-                App.spamManager.addOutgoingTransaction(
-                    tokenUid,
-                    toAddress,
-                    transaction.timestamp,
-                    transaction.blockNumber?.toInt()
-                )
                 EvmOutgoingTransactionRecord(
                     transaction,
                     baseToken,
@@ -239,18 +222,6 @@ class EvmTransactionConverter(
 
                 when {
                     transaction.from == address && contractAddress != null && value != null -> {
-                        // Cache outgoing ERC-20 transfers for spam detection
-                        outgoingEip20Transfers.forEach { transfer ->
-                            val transferContractAddress = transfer.contractAddress.eip55
-                            val transferToAddress = transfer.to.eip55
-                            val tokenUid = "${source.blockchain.type.uid}:$transferContractAddress"
-                            App.spamManager.addOutgoingTransaction(
-                                tokenUid,
-                                transferToAddress,
-                                transaction.timestamp,
-                                transaction.blockNumber?.toInt()
-                            )
-                        }
                         ContractCallTransactionRecord(
                             transaction, baseToken, source,
                             contractAddress.eip55,
