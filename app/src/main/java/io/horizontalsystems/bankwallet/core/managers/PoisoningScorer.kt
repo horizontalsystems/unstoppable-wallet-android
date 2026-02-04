@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
-import io.horizontalsystems.marketkit.models.TokenType
 import java.math.BigDecimal
 import kotlin.math.abs
 
@@ -109,20 +108,8 @@ class PoisoningScorer {
         var maxScore = 0
         var maxScoreAddress: String? = null
 
-        // Handle native token events separately (sum them up)
-        val nativeEvents = mutableListOf<TransferEvent>()
-        val tokenEvents = mutableListOf<TransferEvent>()
-
+        // Score each event individually
         events.forEach { event ->
-            if (event.value is TransactionValue.CoinValue && event.value.token.type == TokenType.Native) {
-                nativeEvents.add(event)
-            } else {
-                tokenEvents.add(event)
-            }
-        }
-
-        // Process token events
-        tokenEvents.forEach { event ->
             val result = scoreEvent(
                 event = event,
                 incomingTimestamp = incomingTimestamp,
@@ -133,31 +120,6 @@ class PoisoningScorer {
             if (result.score > maxScore) {
                 maxScore = result.score
                 maxScoreAddress = result.address
-            }
-        }
-
-        // Process native events (sum values)
-        if (nativeEvents.isNotEmpty()) {
-            val totalNativeValue = nativeEvents.sumOf {
-                (it.value as? TransactionValue.CoinValue)?.value ?: BigDecimal.ZERO
-            }
-            val nativeAddresses = nativeEvents.mapNotNull { it.address }
-
-            if (nativeAddresses.isNotEmpty()) {
-                val representativeEvent = nativeEvents.first()
-                val nativeResult = scoreNativeTransfer(
-                    totalValue = totalNativeValue,
-                    addresses = nativeAddresses,
-                    coinCode = (representativeEvent.value as? TransactionValue.CoinValue)?.coinCode ?: "",
-                    incomingTimestamp = incomingTimestamp,
-                    incomingBlockHeight = incomingBlockHeight,
-                    recentOutgoingTxs = recentOutgoingTxs,
-                    spamCoinLimits = spamCoinLimits
-                )
-                if (nativeResult.score > maxScore) {
-                    maxScore = nativeResult.score
-                    maxScoreAddress = nativeResult.address
-                }
             }
         }
 
@@ -332,62 +294,6 @@ class PoisoningScorer {
         reasons.addAll(correlation.reasons)
 
         return ScoringResult(address, score, reasons)
-    }
-
-    /**
-     * Score native token transfers (summed)
-     */
-    private fun scoreNativeTransfer(
-        totalValue: BigDecimal,
-        addresses: List<String>,
-        coinCode: String,
-        incomingTimestamp: Long,
-        incomingBlockHeight: Int?,
-        recentOutgoingTxs: List<OutgoingTxInfo>,
-        spamCoinLimits: Map<String, BigDecimal>
-    ): ScoringResult {
-        var score = 0
-        val reasons = mutableListOf<String>()
-        val limit = spamCoinLimits[coinCode] ?: BigDecimal.ZERO
-
-        // Zero native value (+4 points)
-        if (totalValue == BigDecimal.ZERO) {
-            score += POINTS_ZERO_VALUE
-            reasons.add("Zero native value")
-        }
-
-        // Dust amount scoring (based on risk threshold)
-        if (limit > BigDecimal.ZERO && totalValue > BigDecimal.ZERO) {
-            val spamThreshold = limit.divide(BigDecimal.TEN)
-            val dangerThreshold = limit.multiply(BigDecimal("5"))
-
-            when {
-                totalValue < spamThreshold -> {
-                    score += POINTS_MICRO_DUST
-                    reasons.add("Micro dust: native value < spam threshold ($totalValue < $spamThreshold)")
-                }
-                totalValue < limit -> {
-                    score += POINTS_DUST_BELOW_LIMIT
-                    reasons.add("Dust: native value < risk ($totalValue < $limit)")
-                }
-                totalValue < dangerThreshold -> {
-                    score += POINTS_DUST_BELOW_5X_LIMIT
-                    reasons.add("Low native value: value < danger ($totalValue < $dangerThreshold)")
-                }
-            }
-        }
-
-        // Early exit if already spam from zero/dust alone
-        if (score >= SPAM_THRESHOLD) {
-            return ScoringResult(addresses.firstOrNull(), score, reasons)
-        }
-
-        // Calculate correlation score
-        val correlation = calculateCorrelationScore(addresses, incomingTimestamp, incomingBlockHeight, recentOutgoingTxs)
-        score += correlation.points
-        reasons.addAll(correlation.reasons)
-
-        return ScoringResult(addresses.firstOrNull(), score, reasons)
     }
 
     /**
