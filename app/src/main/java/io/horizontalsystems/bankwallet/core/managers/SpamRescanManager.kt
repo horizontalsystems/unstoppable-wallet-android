@@ -168,7 +168,7 @@ class SpamRescanManager(
                     notifyWaiters(txHashHex)
 
                     // Update outgoing context
-                    spamManager.extractOutgoingInfo(fullTx, userAddress)?.let { outgoingInfo ->
+                    spamManager.evmExtractor.extractOutgoingInfo(fullTx, userAddress)?.let { outgoingInfo ->
                         outgoingContext.add(0, outgoingInfo)
                         if (outgoingContext.size > OUTGOING_CONTEXT_SIZE) {
                             outgoingContext.removeAt(outgoingContext.size - 1)
@@ -236,7 +236,7 @@ class SpamRescanManager(
                     notifyWaiters(txHashHex)
 
                     // Update outgoing context
-                    spamManager.extractOutgoingInfo(fullTx, userAddress)?.let { outgoingInfo ->
+                    spamManager.tronExtractor.extractOutgoingInfo(fullTx, userAddress)?.let { outgoingInfo ->
                         outgoingContext.add(0, outgoingInfo)
                         if (outgoingContext.size > OUTGOING_CONTEXT_SIZE) {
                             outgoingContext.removeAt(outgoingContext.size - 1)
@@ -304,7 +304,7 @@ class SpamRescanManager(
                     notifyWaiters(txHashHex)
 
                     // Update outgoing context
-                    spamManager.extractOutgoingInfo(operation, selfAddress)?.let { outgoingInfo ->
+                    spamManager.stellarExtractor.extractOutgoingInfo(operation, selfAddress)?.let { outgoingInfo ->
                         outgoingContext.add(0, outgoingInfo)
                         if (outgoingContext.size > OUTGOING_CONTEXT_SIZE) {
                             outgoingContext.removeAt(outgoingContext.size - 1)

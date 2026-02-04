@@ -7,34 +7,22 @@ import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TronTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.bankwallet.entities.ScannedTransaction
-import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
-import io.horizontalsystems.erc20kit.decorations.OutgoingEip20Decoration
-import io.horizontalsystems.erc20kit.events.TransferEventInstance
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArrayOrNull
-import io.horizontalsystems.ethereumkit.decorations.IncomingDecoration
-import io.horizontalsystems.ethereumkit.decorations.OutgoingDecoration
-import io.horizontalsystems.ethereumkit.decorations.UnknownTransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.stellarkit.room.StellarAsset
-import io.horizontalsystems.tronkit.decoration.NativeTransactionDecoration
-import io.horizontalsystems.tronkit.decoration.trc20.OutgoingTrc20Decoration
-import io.horizontalsystems.tronkit.decoration.trc20.Trc20TransferEvent
-import io.horizontalsystems.tronkit.models.TransferContract
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import io.horizontalsystems.stellarkit.room.Operation as StellarOperation
-import io.horizontalsystems.tronkit.decoration.UnknownTransactionDecoration as TronUnknownTransactionDecoration
 import io.horizontalsystems.tronkit.models.FullTransaction as TronFullTransaction
 
 private fun isEvmBlockchain(source: TransactionSource): Boolean {
@@ -57,6 +45,11 @@ class SpamManager(
 ) {
     private val poisoningScorer = PoisoningScorer()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
+    // Transaction event extractors for each blockchain
+    val evmExtractor = EvmTransactionEventExtractor()
+    val tronExtractor = TronTransactionEventExtractor()
+    val stellarExtractor = StellarTransactionEventExtractor()
 
     // Lazy initialized SpamRescanManager to avoid circular dependency
     private val spamRescanManager: SpamRescanManager by lazy {
@@ -125,7 +118,7 @@ class SpamManager(
                 val transactions = adapter.getFullTransactionsBefore(null, limit)
                 transactions
                     .sortedByDescending { it.transaction.timestamp }
-                    .mapNotNull { extractOutgoingInfo(it, userAddress) }
+                    .mapNotNull { evmExtractor.extractOutgoingInfo(it, userAddress) }
                     .take(limit)
             }
         } catch (_: Throwable) {
@@ -235,7 +228,7 @@ class SpamManager(
 
     /**
      * Common method to process extracted events for spam detection.
-     * Called by both EVM and Tron processing methods after extracting events.
+     * Called by blockchain-specific processing methods after extracting events.
      */
     private fun processEventsForSpam(
         txHashBytes: ByteArray,
@@ -276,70 +269,6 @@ class SpamManager(
     // ==================== EVM Transaction Processing ====================
 
     /**
-     * Extract outgoing transaction info from EVM FullTransaction.
-     */
-    fun extractOutgoingInfo(
-        fullTx: FullTransaction,
-        userAddress: Address
-    ): PoisoningScorer.OutgoingTxInfo? {
-        val tx = fullTx.transaction
-        return when (val decoration = fullTx.decoration) {
-            is OutgoingDecoration -> {
-                PoisoningScorer.OutgoingTxInfo(decoration.to.eip55, tx.timestamp, tx.blockNumber?.toInt())
-            }
-            is OutgoingEip20Decoration -> {
-                PoisoningScorer.OutgoingTxInfo(decoration.to.eip55, tx.timestamp, tx.blockNumber?.toInt())
-            }
-            is UnknownTransactionDecoration -> {
-                if (tx.from == userAddress) {
-                    decoration.eventInstances
-                        .mapNotNull { it as? TransferEventInstance }
-                        .filter { it.from == userAddress }
-                        .firstOrNull()?.let { transfer ->
-                            PoisoningScorer.OutgoingTxInfo(transfer.to.eip55, tx.timestamp, tx.blockNumber?.toInt())
-                        }
-                } else null
-            }
-            else -> null
-        }
-    }
-
-    /**
-     * Extract incoming events from EVM FullTransaction.
-     */
-    private fun extractIncomingEvents(
-        fullTx: FullTransaction,
-        userAddress: Address,
-        baseToken: Token
-    ): List<TransferEvent> {
-        val tx = fullTx.transaction
-        return when (val decoration = fullTx.decoration) {
-            is IncomingDecoration -> {
-                val value = decoration.value.toBigDecimal(baseToken.decimals)
-                listOf(TransferEvent(decoration.from.eip55, TransactionValue.CoinValue(baseToken, value)))
-            }
-            is UnknownTransactionDecoration -> {
-                if (tx.from != userAddress) {
-                    decoration.eventInstances
-                        .mapNotNull { it as? TransferEventInstance }
-                        .map { transfer ->
-                            val tokenValue = transfer.tokenInfo?.let { info ->
-                                TransactionValue.TokenValue(
-                                    tokenName = info.tokenName,
-                                    tokenCode = info.tokenSymbol,
-                                    tokenDecimals = info.tokenDecimal,
-                                    value = transfer.value.toBigDecimal(info.tokenDecimal),
-                                )
-                            } ?: TransactionValue.RawValue(transfer.value)
-                            TransferEvent(transfer.to.eip55, tokenValue)
-                        }
-                } else emptyList()
-            }
-            else -> emptyList()
-        }
-    }
-
-    /**
      * Process an EVM FullTransaction for spam detection during background rescan.
      */
     fun processEvmTransactionForSpamWithContext(
@@ -350,85 +279,11 @@ class SpamManager(
         outgoingContext: List<PoisoningScorer.OutgoingTxInfo>
     ) {
         val tx = fullTx.transaction
-        val incomingEvents = extractIncomingEvents(fullTx, userAddress, baseToken)
+        val incomingEvents = evmExtractor.extractIncomingEvents(fullTx, userAddress, baseToken)
         processEventsForSpam(tx.hash, tx.timestamp, tx.blockNumber?.toInt(), incomingEvents, source, outgoingContext)
     }
 
     // ==================== Tron Transaction Processing ====================
-
-    /**
-     * Extract outgoing transaction info from Tron FullTransaction.
-     */
-    fun extractOutgoingInfo(
-        fullTx: TronFullTransaction,
-        userAddress: io.horizontalsystems.tronkit.models.Address
-    ): PoisoningScorer.OutgoingTxInfo? {
-        val tx = fullTx.transaction
-        val timestamp = tx.timestamp / 1000
-        val blockHeight = tx.blockNumber?.toInt()
-
-        return when (val decoration = fullTx.decoration) {
-            is NativeTransactionDecoration -> {
-                val contract = decoration.contract as? TransferContract ?: return null
-                if (contract.ownerAddress == userAddress) {
-                    PoisoningScorer.OutgoingTxInfo(contract.toAddress.base58, timestamp, blockHeight)
-                } else null
-            }
-            is OutgoingTrc20Decoration -> {
-                PoisoningScorer.OutgoingTxInfo(decoration.to.base58, timestamp, blockHeight)
-            }
-            is TronUnknownTransactionDecoration -> {
-                if (decoration.fromAddress == userAddress) {
-                    decoration.events
-                        .mapNotNull { it as? Trc20TransferEvent }
-                        .filter { it.from == userAddress }
-                        .firstOrNull()?.let { transfer ->
-                            PoisoningScorer.OutgoingTxInfo(transfer.to.base58, timestamp, blockHeight)
-                        }
-                } else null
-            }
-            else -> null
-        }
-    }
-
-    /**
-     * Extract incoming events from Tron FullTransaction.
-     */
-    private fun extractIncomingEvents(
-        fullTx: TronFullTransaction,
-        userAddress: io.horizontalsystems.tronkit.models.Address,
-        baseToken: Token
-    ): List<TransferEvent> {
-        val tx = fullTx.transaction
-        return when (val decoration = fullTx.decoration) {
-            is NativeTransactionDecoration -> {
-                val contract = decoration.contract as? TransferContract
-                if (contract != null && contract.ownerAddress != userAddress && contract.toAddress == userAddress) {
-                    val value = contract.amount.toBigDecimal().movePointLeft(baseToken.decimals)
-                    listOf(TransferEvent(contract.ownerAddress.base58, TransactionValue.CoinValue(baseToken, value)))
-                } else emptyList()
-            }
-            is TronUnknownTransactionDecoration -> {
-                if (decoration.fromAddress != userAddress && decoration.toAddress != userAddress) {
-                    decoration.events
-                        .mapNotNull { it as? Trc20TransferEvent }
-                        .filter { it.to == userAddress && it.from != userAddress }
-                        .map { transfer ->
-                            val tokenValue = transfer.tokenInfo?.let { info ->
-                                TransactionValue.TokenValue(
-                                    tokenName = info.tokenName,
-                                    tokenCode = info.tokenSymbol,
-                                    tokenDecimals = info.tokenDecimal,
-                                    value = transfer.value.toBigDecimal().movePointLeft(info.tokenDecimal),
-                                )
-                            } ?: TransactionValue.RawValue(transfer.value)
-                            TransferEvent(transfer.from.base58, tokenValue)
-                        }
-                } else emptyList()
-            }
-            else -> emptyList()
-        }
-    }
 
     /**
      * Process a Tron FullTransaction for spam detection during background rescan.
@@ -441,75 +296,11 @@ class SpamManager(
         outgoingContext: List<PoisoningScorer.OutgoingTxInfo>
     ) {
         val tx = fullTx.transaction
-        val incomingEvents = extractIncomingEvents(fullTx, userAddress, baseToken)
+        val incomingEvents = tronExtractor.extractIncomingEvents(fullTx, userAddress, baseToken)
         processEventsForSpam(tx.hash, tx.timestamp / 1000, tx.blockNumber?.toInt(), incomingEvents, source, outgoingContext)
     }
 
     // ==================== Stellar Transaction Processing ====================
-
-    /**
-     * Extract outgoing transaction info from Stellar Operation.
-     */
-    fun extractOutgoingInfo(
-        operation: StellarOperation,
-        selfAddress: String
-    ): PoisoningScorer.OutgoingTxInfo? {
-        // Check payment operations
-        operation.payment?.let { payment ->
-            if (payment.from == selfAddress) {
-                return PoisoningScorer.OutgoingTxInfo(payment.to, operation.timestamp, null)
-            }
-        }
-
-        // Check account creation operations
-        operation.accountCreated?.let { accountCreated ->
-            if (accountCreated.funder == selfAddress) {
-                return PoisoningScorer.OutgoingTxInfo(accountCreated.account, operation.timestamp, null)
-            }
-        }
-
-        return null
-    }
-
-    /**
-     * Extract incoming events from Stellar Operation.
-     */
-    private fun extractIncomingEvents(
-        operation: StellarOperation,
-        selfAddress: String,
-        baseToken: Token
-    ): List<TransferEvent> {
-        // Check payment operations
-        operation.payment?.let { payment ->
-            if (payment.to == selfAddress && payment.from != selfAddress) {
-                val token = getStellarToken(payment.asset)
-                val transactionValue = if (token != null) {
-                    TransactionValue.CoinValue(token, payment.amount)
-                } else {
-                    TransactionValue.RawValue(payment.amount.unscaledValue())
-                }
-                return listOf(TransferEvent(payment.from, transactionValue))
-            }
-        }
-
-        // Check account creation operations
-        operation.accountCreated?.let { accountCreated ->
-            if (accountCreated.account == selfAddress && accountCreated.funder != selfAddress) {
-                val transactionValue = TransactionValue.CoinValue(baseToken, accountCreated.startingBalance)
-                return listOf(TransferEvent(accountCreated.funder, transactionValue))
-            }
-        }
-
-        return emptyList()
-    }
-
-    private fun getStellarToken(asset: StellarAsset): Token? {
-        val tokenType = when (asset) {
-            StellarAsset.Native -> TokenType.Native
-            is StellarAsset.Asset -> TokenType.Asset(asset.code, asset.issuer)
-        }
-        return App.coinManager.getToken(TokenQuery(BlockchainType.Stellar, tokenType))
-    }
 
     /**
      * Process a Stellar Operation for spam detection during background rescan.
@@ -522,7 +313,7 @@ class SpamManager(
         outgoingContext: List<PoisoningScorer.OutgoingTxInfo>
     ) {
         val txHash = operation.transactionHash.hexStringToByteArrayOrNull() ?: return
-        val incomingEvents = extractIncomingEvents(operation, selfAddress, baseToken)
+        val incomingEvents = stellarExtractor.extractIncomingEvents(operation, selfAddress, baseToken)
         processEventsForSpam(txHash, operation.timestamp, null, incomingEvents, source, outgoingContext)
     }
 }
