@@ -454,7 +454,7 @@
     <string name="SendEvmSettings_Nonce">Nonce транзакции</string>
     <string name="SendEvmSettings_EditFee">Изменить комиссию</string>
     <string name="SendEvmSettings_Nonce_Info">Пользовательский nonce для EVM-транзакций. Управляет порядком ваших транзакций и может использоваться для замены ожидающих транзакций.</string>
-    <string name="SendEvmSettings_SlippageTolerance">Допустимость отклонений</string>
+    <string name="SendEvmSettings_SlippageTolerance">Допустимое отклонение</string>
     <string name="SendEvmSettings_SlippageTolerance_Info">Максимально допустимое отклонение цены для вашего обмена. При превышении этого лимита транзакция будет отменена.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Использованый Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Выполненная транзакция с таким nonce уже существует.</string>
@@ -464,11 +464,11 @@
     <string name="Fee_LiquidityFee">Плата за ликвидность</string>
     <string name="FeeSettings_NetworkFee">Комиссия сети</string>
     <string name="FeeSettings_NetworkFee_Info">Ориентировочная стоимость отправки данной транзакции по сети.</string>
-    <string name="FeeSettings_GasLimit_Info">Единица сложности транзакций - газ, она варьирует в зависимости от выполняемого смарт-контракта. Лимит газа - это предполагаемый максимальный размер газа, необходимый для выполнения смарт-контракта. Обычно используется меньшее количество газа.</string>
-    <string name="FeeSettings_GasPrice_Info">Комиссия за сетевую транзакцию измеряется в единицах газа. Цена газа – это сумма, которую пользователь готов заплатить за единицу газа. Когда сеть занята, цены на газ повышаются, а во время простоя они наоборот снижаются. Слишком низкая цена газа зачастую является основанием для длительного сохранения отложенного статуса транзакции.</string>
+    <string name="FeeSettings_GasLimit_Info">Сложность транзакций измеряется в единицах под названием \"газ\" и варьируется в зависимости от выполняемого смарт-контракта. Предельный газ - это предполагаемый максимальный газ, необходимый для его исполнения. Используемый газ обычно меньше.</string>
+    <string name="FeeSettings_GasPrice_Info">Комиссия за транзакцию по сети измеряется в газовых единицах. Газовая цена – это сумма, которую пользователь готов потратить за единицу газа. Когда сеть занята, высокие цены на газ и низкие во время простоя. Недостаточная цена на газ зачастую является основанием для того, чтобы сделка оставалась в ожидании продленного периода.</string>
     <string name="FeeSettings_BaseFee">Базовая комиссия</string>
-    <string name="FeeSettings_BaseFee_Info">Сетевой протокол определяет базовую стоимость газа для каждого блока, которая называется базовая ставка комиссии. Он варьирует в зависимости от уровня загрузки сети от блока к блоку. В следующем блоке он может увеличиться или уменьшиться не более чем на 12.5%, что делает взимаемый тариф более предсказуемым. Здесь отражена базовая ставка комиссии текущего блока.</string>
-    <string name="FeeSettings_MaxFee">Макс. ставка комиссии (Gwei)</string>
+    <string name="FeeSettings_BaseFee_Info">Сетевой протокол определяет базовую цену за газ для каждого блока, называемую базовым тарифом. Он варьируется в зависимости от уровня загрузки сети от блока к блоку. В следующем блоке он может увеличиться или уменьшиться не более чем на 12,5%, что сделает комиссию более предсказуемой. Здесь показана базовая комиссия текущего блока.</string>
+    <string name="FeeSettings_MaxFee">Макс. ставка комиссии</string>
     <string name="FeeSettings_MaxFee_Info">Это максимальная общая цена газа, которую пользователь готов заплатить. Она должна покрывать базовую тарифную ставку сети и максимальный приоритетный тариф. Указанное здесь значение предлагается на основе оценки суммы базовой тарифной ставки следующего блока и максимального приоритетного тарифа, выбранного пользователем. Фактический размер платёжного тарифа обычно меньше. Снижение настройки текущего базового тарифа ограничит оплачиваемую сумму тарифа, но приведет к удлинению периода ожидания подтверждения транзакции или даже к ее подвисанию.</string>
     <string name="FeeSettings_MaxMinerTips">Макс. приоритетная комиссия (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips_Info">Пользователи платят приоритетную комиссию, в целях ускорения процесса подтверждения транзакции. Иногда эти тарифы называются чаевыми. Максимальный размер приоритетного сбора - это максимальная дополнительная цена за газ, которую пользователь готов оплатить поверх базовой ставки комиссии. Приведенная здесь стоимость определяется исходя из прогнозируемых сетевых условий. Фактический размер приоритетного тарифа будет меньше. Обнуление этого тарифа может привести к удлинению периода ожидания подтверждения транзакции ввиду её размещения в конце очереди незавершенных транзакций ото всех пользователей.</string>
@@ -628,15 +628,14 @@
     <string name="SwapDefense_Safe_Title">Защищено</string>
     <string name="SwapDefense_Safe_Description">Я блокирую ботов принимать значение в своем.</string>
     <string name="SwapError_FailedToFetchQuote">Не удалось получить кавычку.</string>
-    <string name="SwapTerms_Title">Поменять условия</string>
-    <string name="SwapTerms_TopText">Неотрывные агрегированные данные нескольких децентрализованных поставщиков (DEX) и централизованных поставщиков заменителей для обеспечения конкурентоспособных ставок и широкой поддержки активов.</string>
+    <string name="SwapTerms_Title">Условия обмена</string>
+    <string name="SwapTerms_TopText">Unstoppable агрегирует несколько децентрализованных (DEX) и централизованных swap-провайдеров, чтобы предлагать конкурентные курсы и широкий выбор поддерживаемых активов.</string>
     <string name="SwapTerms_BottomText">Всегда выбирайте поставщика подкачки, который соответствует вашим требованиям.</string>
-    <string name="SwapTerms_RiskRestrictions">Риски ограничений</string>
     <string name="SwapTerms_RiskRestrictions_Info">Я понимаю, что некоторые провайдеры не-DEX используют прокси-транзакции (AML). Такие провайдеры могут отказаться от обменов (рефератов) или, в редких случаях, (CSAM и терроризм), замораживать средства и запрашивать данные KYC.</string>
     <string name="SwapTerms_UserResponsibility">Ответственность пользователя</string>
     <string name="SwapTerms_UserResponsibility_Info">Я понимаю, что использование не DEX провайдеров влечет за собой дополнительные риски и что эти риски являются моей ответственностью. Неспособность не может гарантировать поведение провайдера.</string>
     <!-- Swap Settings -->
-    <string name="SwapSettings_SlippageTitle">Допустимость отклонений</string>
+    <string name="SwapSettings_SlippageTitle">Допустимое отклонение</string>
     <string name="SwapSettings_RecipientAddressTitle">Адрес получателя</string>
     <string name="SwapSettings_Apply">Применить</string>
     <string name="SwapSettings_Error_SlippageZero">Нулевое отклонение</string>
@@ -662,10 +661,10 @@
     <!--Swap Unlock Access-->
     <string name="Swap_Approve_PageTitle">Разрешить</string>
     <string name="Swap_Approve_Info">Предоставьте разрешение смарт-контракту на торговлю токенами от вашего имени, указав разрешенную сумму. Это не влияет на ваш баланс, но влечет за собой небольшую комиссию за разрешение.\n\nПредварительное разрешение более высокой суммы для будущих сделок экономически выгоднее по сравнению с разрешением по запросу.</string>
-    <string name="Swap_Approve_Unlimited">Неограниченно</string>
+    <string name="Swap_Approve_Unlimited">Безлимит</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_PriceImpactTitle">Отклонение от рын. цены</string>
-    <string name="SwapInfo_PriceImpactDescription">Ожидаемое отклонение цены от указанной цены, обычно увеличивается при увеличении суммы обмена.</string>
+    <string name="SwapInfo_PriceImpactDescription">Ожидаемое отклонение цены от отображаемой. Обычно увеличивается с ростом суммы обмена.</string>
     <!--Deposit-->
     <string name="Deposit_Title">Получить %s</string>
     <!--Transactions-->
@@ -710,9 +709,9 @@
     <string name="Transactions_Unknown">Неизвестная транзакция</string>
     <string name="Transactions_OperationType">Тип операции</string>
     <string name="Transactions_OperationType_ChangeTrust">Изменить Доверие</string>
-    <string name="Transactions_OperationType_CreateAccount">Создать Аккаунт</string>
+    <string name="Transactions_OperationType_CreateAccount">Создание аккаунта</string>
     <string name="Transactions_TonTransaction">Транзакция TON</string>
-    <string name="Transactions_StellarTransaction">Звёздная Транзакция</string>
+    <string name="Transactions_StellarTransaction">Stellar Транзакция</string>
     <string name="Transactions_Unknown_Description">Транзакция не может быть обработана</string>
     <string name="Transactions_Multiple">Множество</string>
     <string name="Transactions_Filter">Фильтр</string>
@@ -791,7 +790,6 @@
     <!--Setting_Currency-->
     <string name="SettingsCurrency_Title">Базовая валюта</string>
     <string name="SettingsCurrency_Other">ДРУГИЕ</string>
-    <string name="SettingsCurrency_DisclaimerTitle">Отказ от ответственности</string>
     <string name="SettingsCurrency_DisclaimerText">Данные об обменном курсе предоставлены третьим лицом Coingecko.сom\n\n Приложение Unstoppable Wallet не гарантирует, что эти данные всегда верны и соответствуют рыночным. Шанс на несоответствие повышается при выборе базовой валюты, отличающейся от %s.</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
@@ -799,7 +797,7 @@
     <string name="Settings_BaseCurrency">Базовая валюта</string>
     <string name="Settings_Language">Язык</string>
     <string name="Settings_Theme">Тема</string>
-    <string name="Settings_Terms">Условия использования</string>
+    <string name="Settings_Terms">Условия безопасности</string>
     <string name="Settings_Privacy">Конфиденциальность</string>
     <string name="Settings_ShareThisWallet">Рассказать друзьям</string>
     <string name="Settings_AppStatus">Статус приложения</string>
@@ -809,7 +807,7 @@
     <string name="Settings_AppSettings">Настройки приложения</string>
     <string name="Settings_Subscription">Подписка</string>
     <string name="Settings_AutoLock">Автоблокировка</string>
-    <string name="Settings_JoinUnstoppables">Продолжить</string>
+    <string name="Settings_JoinUnstoppables">Присоединиться к Unstoppables</string>
     <string name="Settings_Support">Поддержка</string>
     <string name="Settings_VipSupport">Поддержка Premium</string>
     <string name="Settings_Donate">Поддержи нас</string>
@@ -842,7 +840,7 @@
     <string name="SettingsBanner_Premium">Премиум</string>
     <string name="SettingsBanner_PremiumBannerDescription">Откройте новые возможности с Премиум-доступом!</string>
     <string name="SettingsBanner_PremiumTryFee">Попробовать БЕСПЛАТНО</string>
-    <string name="SettingsBanner_GameDescription">Пройди тесты, выполни задания и заработай токены!</string>
+    <string name="SettingsBanner_GameDescription">Пройдите тесты, выполните задачи и заработайте токены!</string>
     <string name="SettingsBanner_BePartOfTheFuture">Поддержите настоящую финансовую приватность</string>
     <string name="SettingsBanner_SupportTheProject">Помогите нам оставаться независимыми!</string>
     <!--Why Donate Page-->
@@ -1001,7 +999,7 @@
     <string name="Info_Title">Информация</string>
     <!--Setting_Security-->
     <string name="SettingsSecurity_Biometric_Authentication">Биометрическая аутентификация</string>
-    <string name="SettingsSecurity_EnablePin">Код доступа</string>
+    <string name="SettingsSecurity_EnablePin">Включить код доступа</string>
     <string name="SettingsSecurity_DisablePin">Отключить код доступа</string>
     <string name="SettingsSecurity_EditPin">Изменить код</string>
     <string name="SettingsSecurity_SetDuressPin">Установить режим Duress</string>
@@ -1011,14 +1009,13 @@
     <string name="SettingsSecurity_ManageKeys">Кошельки</string>
     <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable кошелек.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Во время использования этого приложения полностью анонимизировать ваш интернет. Обратите внимание, что в некоторых случаях функция WalletConnect для DeFi приложений может быть очень медленной или вообще не работать.</string>
-    <string name="SettingsSecurity_SortingShuffle">Перемешать</string>
+    <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Случайное индексирование</string>
     <string name="SettingsSecurity_SortingBip69Short">Детерминированный</string>
-    <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
+    <string name="SettingsSecurity_SortingBip69">Детерминированный Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">Лексикографическая индексация</string>
     <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">Быстрый, Конфиденциальный, Централизованный</string>
-    <string name="SettingsSecurity_SyncModeHybridDescription">API + Блокчейн</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Блокчейн</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Медленно, приватно</string>
     <string name="SetDuressPin_Title">Duress код</string>
@@ -1114,8 +1111,8 @@
     <string name="ImportBackupFile_BackupPassword">Пароль для резервной копии</string>
     <string name="WatchWallet">Смотреть кошелек</string>
     <string name="Watch_Address_Hint">Вставьте ваш адрес (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) или XPUB</string>
-    <string name="Watch_ViewKey">Приватный ключ</string>
-    <string name="Watch_BirthdayHeight">Восстановить высоту</string>
+    <string name="Watch_ViewKey">Приватный ключ просмотра</string>
+    <string name="Watch_BirthdayHeight">Высота восстановления</string>
     <string name="Watch_Select_Blockchains">Блокчейны</string>
     <string name="Watch_Select_Coins">Выберите токены</string>
     <string name="Watch_Error_InvalidAddressFormat">Формат адреса не поддерживается</string>
@@ -1123,10 +1120,9 @@
     <!--Manage Account-->
     <string name="ManageAccount_Name">Название</string>
     <string name="ManageAccount_Save">Сохранить</string>
-    <string name="ManageAccount_RecoveryPhraseBackup">Ручное резервное \nкопирование</string>
-    <string name="ManageAccount_LocalBackup">Локальное резервное \nкопирование</string>
+    <string name="ManageAccount_RecoveryPhraseBackup">Ручное резервное копирование</string>
     <string name="ManageAccount_Unlink">Отключить кошелек</string>
-    <string name="ManageAccount_BackupRequired_Title">Необходима резервная копия</string>
+    <string name="ManageAccount_BackupRequired_Title">Требуется резервная копия</string>
     <string name="ManageAccount_BackupRequired_Description">Вам нужно сделать резервную копию %1$s перед получением %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Это действие удалит ваш кошелек с этого устройства.</string>
     <string name="ManageAccount_Delete_ConfirmationLose">Если вы не сделали резервную копию приватного ключа для этого кошелька, вы потеряете доступ к вашим средствам.</string>
@@ -1177,7 +1173,6 @@
     <string name="Bip32RootKey">BIP32 Root ключ</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
-    <string name="ExtendedKey_AccountInfo">Выполнить</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Приватные ключи</string>
     <string name="PrivateKeys_EvmPrivateKey">Приватный ключ EVM</string>
@@ -1185,7 +1180,7 @@
     <string name="PrivateKeys_StellarSecretKey">Звёздный Секретный Ключ</string>
     <string name="PrivateKeys_StellarSecretKeyDescription">Даёт полный контроль над активами в сети Stellar внутри этого кошелька.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Мастер приватный ключ кошелька. Даёт полный контроль над всеми производными счетами и активами.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Расширенный приватный ключ аккаунта</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Даёт полный контроль над биткойнами и другими UTXO активами (например, Litecoin, Bitcoin Cash, Dash) в этом кошельке.</string>
     <string name="PrivateKeys_NeverShareWarning">Никогда ни с кем не делитесь вашей фразой восстановления. Команда Unstoppable никогда не запросит вашу фразу восстановления.</string>
     <string name="PrivateKeys_MoneroPrivateKey">Приватные ключи Monero</string>
