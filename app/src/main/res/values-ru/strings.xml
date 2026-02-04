@@ -72,7 +72,7 @@
     <string name="Intro_Wallet_Screen2Description">Распоряжайтесь активами свободно и без ограничений.</string>
     <string name="Intro_Wallet_Screen3Title">Избавьтесь от границ</string>
     <string name="Intro_Wallet_Screen3Description">Преодолейте барьеры и получите доступ к рынкам.</string>
-    <string name="Intro_Wallet_Screen4Title">Сохраняйте конфиденциальность</string>
+    <string name="Intro_Wallet_Screen4Title">Оставаться приватным</string>
     <string name="Intro_Wallet_Screen4Description">Не допускайте утечку личных и финансовых данных.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Я понимаю</string>
@@ -81,15 +81,15 @@
     <string name="CreateWallet_Advanced_Title">Доп. настройки</string>
     <string name="CreateWallet_Mnemonic">Фраза восстановления</string>
     <string name="CreateWallet_Wordlist">Список слов</string>
-    <string name="Passphrase">Кодовая фраза</string>
+    <string name="Passphrase">Пароль</string>
     <string name="Password">Пароль</string>
     <string name="ConfirmPassphrase">Подтвердить</string>
     <string name="CreateWallet_N_WordsRecommended">%s слов (рекомендуется)</string>
     <string name="CreateWallet_N_Words">%s слов</string>
-    <string name="CreateWallet_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
+    <string name="CreateWallet_Error_EmptyPassphrase">Пароль не может быть пустым</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Пожалуйста, используйте только поддерживаемые символы: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
-    <string name="CreateWallet_Error_InvalidConfirmation">Подтвержденная кодовая фраза не совпадает</string>
-    <string name="CreateWallet_PassphraseDescription">Парольные фразы обеспечивают дополнительный уровень безопасности кошельков. она восстанавливает кошелек, защищённый ключевой фразой, пользователь должен предоставить как ключевую фразу, так и ключевую фразу.\n\nКодовые фразы также позволяют пользователям создавать несколько независимых мульти-кодовых кошельков из одного и того же мнемоники, просто используя различные кодовые фразы.</string>
+    <string name="CreateWallet_Error_InvalidConfirmation">Подтверждение пароля не совпадает</string>
+    <string name="CreateWallet_PassphraseDescription">Пароли обеспечивают дополнительный уровень безопасности для кошельков. При восстановлении кошелька, защищённого паролем, пользователь должен указать как фразу восстановления, так и пароль.\n\nПароли также позволяют создавать несколько независимых мультивалютных кошельков на основе одной и той же мнемонической фразы - достаточно использовать разные пароли.</string>
     <!--Languages-->
     <string name="Language_English">Английский</string>
     <string name="Language_Japanese">Японский</string>
@@ -103,25 +103,24 @@
     <string name="Language_Portuguese">Португальский</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">ДД!</string>
-    <string name="RateApp_Description_Rate_This_App">Вам нравится Unstoppable? Поделитесь отзывами и идеями для дальнейшего развития кошелька.</string>
+    <string name="RateApp_Description_Rate_This_App">Вам нравится Unstoppable? Поделитесь обратной связью и идеями, чтобы продолжить работу.</string>
     <string name="RateApp_Button_RateIt">Оценить</string>
     <string name="RateApp_Button_NotNow">Не сейчас</string>
     <!--Restore-->
     <string name="Restore_Advanced_Title">Доп. настройки</string>
-    <string name="Restore_Error_MnemonicWordCount">Неправильное количество слов. Должно быть 12-24 слова. Вы ввели: %d</string>
+    <string name="Restore_Error_MnemonicWordCount">Неверное количество слов. Оно должно быть от 12 до 24 слов. Вы ввели: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Поле для кодовой фразы не может быть пустым</string>
     <string name="Restore_InvalidChecksum">Неверная контрольная сумма</string>
-    <string name="Restore_PassphraseDescription">Введите свою кодовую фразу, которую вы использовали при создании этой мнемонической фразы.</string>
-    <string name="Restore_Title">Блокчейны</string>
-    <string name="Restore_By">Через</string>
+    <string name="Restore_PassphraseDescription">Введите пароль, который вы использовали при создании этой фразы восстановления. Восстановление существующего кошелька с новым паролем приведёт к созданию нового кошелька.</string>
+    <string name="Restore_Title">Выберите блокчейны</string>
+    <string name="Restore_By">Импорт по</string>
     <string name="Restore_RestoreBy">Через</string>
     <string name="Restore_RecoveryPhrase">Фраза восстановления</string>
     <string name="Restore_PrivateKey">Приватный ключ</string>
     <string name="Restore_PrivateKeyHint">Введите приватный ключ EVM, BIP32 Root Key или Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Введите фразу восстановления</string>
     <string name="Restore_NonStandardRestore">Нестандартный импорт</string>
-    <string name="Restore_NonStandard_Description">На этой странице представлен специальный механизм восстановления кошелька для пользователей Unstoppable с нестандартным кошельком. Как правило, такие кошельки могли быть созданы в версиях Unstoppable 0.27–0.28 с использованием неанглоязычного списка мнемонических слов и/или специального символа в парольной фразе кошелька (например, диакритического знака).
-\n\nЕсли вы являетесь затронутым пользователем, то баланс вашего кошелька будет отображаться как 0 после восстановления такого кошелька в версии 0.29 или выше.Эта страница позволит вам восстановить доступ к вашему нестандартному кошельку. После восстановления рекомендуется создать новый кошелек (который будет соответствовать стандарту) и перевести туда средства.</string>
+    <string name="Restore_NonStandard_Description">Эта страница предоставляет специальный механизм восстановления кошелька для пользователей Unstoppable, у которых используется нестандартный кошелёк. Такие кошельки могли быть созданы в версии Unstoppable 0.27–0.28 с использованием неанглийской фразы восстановления и/или специального символа в пароле кошелька (например, диакритического знака).\n\nЕсли вы относитесь к числу затронутых пользователей, то после восстановления такого кошелька в версии 0.29 или выше его баланс будет отображаться как 0. Эта страница позволит вам восстановить доступ к нестандартному кошельку. После восстановления рекомендуется создать новый кошелёк (соответствующий стандартам) и перевести на него средства.</string>
     <string name="Restore_Bip_Recommended">(рекомендовано)</string>
     <string name="Restore_PrivateKey_InvalidKey">Неверный ключ</string>
     <string name="SelectContacts_All">Все</string>
@@ -132,7 +131,7 @@
     <string name="BirthdayHeight_Description">Вы можете изменить высоту блока или выбрать приблизительную дату, чтобы повторно просканировать историю транзакций.</string>
     <string name="BirthdayHeight_RestoreDescription">Введите блок создания кошелька для ускорения синхронизации.</string>
     <string name="BirthdayHeight_BlockDate">Дата блока:</string>
-    <string name="BirthdayHeight_Rescan">Пересканировать</string>
+    <string name="BirthdayHeight_Rescan">Повторное сканирование</string>
     <string name="Restore_ZCash_RestoreAsNew">Восстановить как новый</string>
     <string name="Restore_ZCash_NewWallet">Новый кошелек</string>
     <string name="Restore_ZCash_NewWallet_Description">Нет транзакций</string>
@@ -188,12 +187,12 @@
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">Лучшие платформы</string>
     <string name="MarketTopPlatforms_Protocols">Протокол: %s</string>
-    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Капитализация рынка всех протоколов на блокчейне %s</string>
+    <string name="MarketPlatformCoins_PlatformEcosystemDescription">Капитализация рынка всех протоколов на блокчейне %s </string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_TotalMarketCapShort">Общ.кап.</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Общая капитализация</string>
     <string name="MarketGlobalMetrics_Volume">24ч объём</string>
-    <string name="MarketGlobalMetrics_VolumeShort">Объём</string>
+    <string name="MarketGlobalMetrics_VolumeShort">24ч объем</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL в DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Общая рыночная стоимость всех криптовалют</string>
@@ -229,8 +228,8 @@
     <string name="Market_Filter_OutperformedBtc">Обошел BTC</string>
     <string name="Market_Filter_OutperformedEth">Обошел ETH</string>
     <string name="Market_Filter_OutperformedBnb">Обошел BNB</string>
-    <string name="Market_Filter_OutperformedGold">Устаревшее золото</string>
-    <string name="Market_Filter_OutperformedSnp">Выполнено S&amp;P 500</string>
+    <string name="Market_Filter_OutperformedGold">Обошел Золото</string>
+    <string name="Market_Filter_OutperformedSnp">Обошел S&amp;P 500</string>
     <string name="Market_Filter_PriceCloseTo">Цена близка к</string>
     <string name="Market_Filter_ListedOnTopExchanges">Размещены на ведущих биржах</string>
     <string name="Market_Filter_SolidCex">Хороший объем CEX</string>
@@ -302,15 +301,15 @@
     <string name="Market_Vaults_UnlockPremium">Разблокировать премиум</string>
     <string name="Market_Vaults_Sorting_APY">Наибольшее APY</string>
     <string name="Market_Vaults_Sorting_TVL">Наивысший ТВЛ</string>
-    <string name="Market_Vaults_Filter_AllAssets">Все медиафайлы</string>
-    <string name="Market_Vaults_Filter_AllChains">Все цепочки</string>
-    <string name="Market_Vaults_Filter_ETHYield">Усвоение ETH</string>
-    <string name="Market_Vaults_Filter_USDYield">Выход в USD</string>
+    <string name="Market_Vaults_Filter_AllAssets">Все активы</string>
+    <string name="Market_Vaults_Filter_AllChains">Все чейны</string>
+    <string name="Market_Vaults_Filter_ETHYield">Доходность в ETH</string>
+    <string name="Market_Vaults_Filter_USDYield">Доходность в USD</string>
     <string name="Market_Vaults_OpenDapp">Открыть dapp</string>
-    <string name="Market_Vaults_Filter_MultipleChains">%d цепочки</string>
+    <string name="Market_Vaults_Filter_MultipleChains">%d Сети</string>
     <string name="Market_Vaults_Vault_TVL">TVL</string>
     <string name="Market_Vaults_Vault_Network">Сеть</string>
-    <string name="Market_Vaults_Vault_Protocol">Protocol</string>
+    <string name="Market_Vaults_Vault_Protocol">Протокол</string>
     <string name="Market_Vaults_Vault_UnderlyingToken">Базовый токен</string>
     <string name="Market_Vaults_Vault_Holders">Держатели</string>
     <string name="Market_Vaults_ChartTvl">TVL</string>
@@ -343,8 +342,8 @@
     <string name="Balance_Receive_AddressFormat">Формат адреса</string>
     <string name="Balance_Receive_AddressType">Тип адреса</string>
     <string name="Balance_Receive_AddressTypeZcashDescription">Выберите, как вы хотите получить Zcash.</string>
-    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Формат Cash Address предпочтителен для получения Bitcoin Cash (BCH) из-за улучшенного пользовательского опыта и совместимости. Однако, оба формата адреса могут использоваться взаимозаменяемо для получения BCH, независимо от формата адреса отправителя.</string>
-    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Формат Native SegWit предпочтителен в Биткойне для повышения пропускной способности и безопасности. Все форматы адресов (Taproot, SegWit, Legacy) могут использоваться взаимозаменяемо для получения BTC независимо от формата адреса отправителя, что обеспечивает бесперебойные транзакции между различными типами монет.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Формат денежного адреса для получения Bitcoin Cash (BCH) предпочтительнее из-за его улучшенной совместимости с пользователями. Тем не менее, оба формата адреса могут быть использованы для получения BCH, независимо от формата адреса отправителя.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Исходный формат SegWit предпочитается в биткоин для улучшения пропускной способности и безопасности. Все форматы адресов (Taproot, SegWit, Legacy) могут быть использованы взаимозаменяемыми для получения BTC независимо от формата адреса отправителя, активация бесшовных транзакций между различными типами монет.</string>
     <string name="Balance_Receive_Amount">Сумма</string>
     <string name="Balance_Receive_SetAmount">Установить сумму</string>
     <string name="Balance_Receive_Memo">Memo(Tag)</string>
@@ -353,25 +352,25 @@
     <string name="Balance_Receive_UsedAddresses">Использованные адреса</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s адресов изменены для повышения конфиденциальности и безопасности. Ниже приведен список использованных адресов в этом кошельке.</string>
     <string name="Balance_Receive_ReceiveAddresses">Адреса для получения</string>
-    <string name="Balance_ReceiveAddress">Получающий адрес</string>
+    <string name="Balance_ReceiveAddress">Адрес получателя</string>
     <string name="Balance_Receive_ChangeAddresses">Адрес-сдача</string>
     <string name="Balance_ReceiveHint_Search">Поиск</string>
     <string name="Balance_Receive_ActivationRequired">Чтобы получить адрес, необходимо активировать токен. Требуется Stellar сеть.</string>
-    <string name="Balance_Receive_Trustline">Строка доверия</string>
+    <string name="Balance_Receive_Trustline">Trustline</string>
     <string name="Balance_Receive_Subaddresses">Субадреса</string>
-    <string name="Balance_Receive_SubaddressesInfo">Подадреса позволяют вам использовать несколько уникальных адресов в одном кошельке для удобства и повышенной конфиденциальности.</string>
+    <string name="Balance_Receive_SubaddressesInfo">Субадреса позволяют использовать несколько уникальных адресов в одном кошельке для удобства и повышения конфиденциальности.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Транзакции: %s</string>
-    <string name="Balance_Receive_HaveYouOwnedCoins">Вы уже владели любыми монетами %s?</string>
+    <string name="Balance_Receive_HaveYouOwnedCoins">Ранее у вас уже были %s монеты?</string>
     <string name="Balance_Receive_YesAlreadyOwn">Да, у меня уже есть</string>
     <string name="Balance_Receive_IDontHave">Нет, у меня нет</string>
-    <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Обнаружен прозрачный ZEC</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Прозрачная сумма</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Прозрачный баланс пока не может быть использован в нашем кошельке. Но эти деньги могут быть использованы другими кошельками с поддержкой адреса</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Shield">Щит</string>
-    <string name="Balance_Zcash_Unified">Единый</string>
+    <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Обнаружен Transparent ZEC</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent сумма</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">У вас есть ZEC, находящийся на transparent адресе. Чтобы использовать его в Unstoppable, необходимо выполнить shielding для полной приватности.</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Shield">Shield</string>
+    <string name="Balance_Zcash_Unified">Unified</string>
     <string name="Balance_Zcash_UnifiedDescription">Используйте для личных и частных переводов между кошельками.</string>
-    <string name="Balance_Zcash_Transparent">Прозрачный</string>
-    <string name="Balance_Zcash_TransparentDescription">Используйте для получения от бирж или служб, не поддерживающих единые адреса.</string>
+    <string name="Balance_Zcash_Transparent">Transparent</string>
+    <string name="Balance_Zcash_TransparentDescription">Используйте для получения от бирж или сервисов, которые не поддерживают унифицированные адреса.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
     <!--Send-->
@@ -379,21 +378,21 @@
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес или домен</string>
     <string name="Send_Fee">Комиссия</string>
-    <string name="Send_Fee_Info">Ориентировочная стоимость обработки транзакции в блокчейне.</string>
+    <string name="Send_Fee_Info">Ориентировочная стоимость отправки данной транзакции по сети.</string>
     <string name="Send_Button_Paste">Вставить</string>
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Advanced">Доп. настройки</string>
-    <string name="Send_Hodler_Description">TimeLock работает только для отправки на адреса BIP44 (начинаются с 1)</string>
+    <string name="Send_Hodler_Description">TimeLock работает только для отправки на BIP44 адреса (начиная с 1)</string>
     <string name="Send_UtxoExpertMode">Режим эксперта UTxO</string>
-    <string name="Send_Utxo_Description">Вручную выбрать UTxO для траты средств</string>
+    <string name="Send_Utxo_Description">Вручную выбрать UTxO для траты средств на баланс</string>
     <string name="Send_Rbf">Изменить комиссию</string>
     <string name="Send_Rbf_Description">Эта опция позволяет повторно отправить застрявшую транзакцию, увеличивая сумму комиссии.</string>
     <string name="Send_RbfEnabled">Вкл.</string>
     <string name="Send_RbfDisabled">Выкл.</string>
     <string name="Send_Utxo_AvailableBalance">Доступный баланс</string>
     <string name="Send_Utxo_UnselectAll">Отменить выбор</string>
-    <string name="Send_Utxo_SelectAll">Выбрать все</string>
-    <string name="Send_Confirmation_Title">Подтвердить</string>
+    <string name="Send_Utxo_SelectAll">Выбрать всё</string>
+    <string name="Send_Confirmation_Title">Подтвердить отправку</string>
     <string name="Send_Confirmation_YouSend">Вы отправляете</string>
     <string name="Send_Confirmation_YouReceive">Вы получите</string>
     <string name="Send_Confirmation_Mint">Минт</string>
@@ -407,21 +406,21 @@
     <string name="Send_Address_Error_InvalidAddress_Description">Похоже, этот адрес не соответствует выбранной сети. Пожалуйста, проверьте его.</string>
     <string name="Send_Address_Error_Detected">Обнаружено</string>
     <string name="Send_Address_Error_Clear">Чисто</string>
-    <string name="Send_Address_PhishingCheck">Проверка фишинга</string>
+    <string name="Send_Address_PhishingCheck">Phishing Check</string>
     <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
     <string name="Send_Address_SanctionCheck">Sanction Check</string>
     <string name="Send_Address_ErrorMessage_PhishingDetected">Обнаружен фишинговый адрес!</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected">Обнаружен адрес из черного списка!</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected">Обнаружен санкционный адрес!</string>
-    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Введенный вами адрес может быть мошенническим. Мошенники часто изменяют первые и последние символы. Внимательно проверьте полный адрес перед отправкой во избежание потерь.</string>
-    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">Введенный вами адрес помечен как находящийся в черном списке. Транзакции на этот адрес могут привести к потерям или другим рискам. Пожалуйста, проверьте данные получателя перед продолжением.</string>
-    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Введенный вами адрес помечен как санкционный. Транзакции на этот адрес могут привести к потерям или другим рискам. Пожалуйста, проверьте данные получателя перед продолжением.</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Обнаружен фишинговый адрес. Отправка средств приведёт к потере денег.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">Адрес находится в чёрном списке. Средства могут быть заморожены.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Адрес находится под санкциями. Перевод может быть заблокирован.</string>
     <string name="AddressEnter_NeedSubscription_Title">Внимание!</string>
-    <string name="AddressEnter_NeedSubscription_Content">Безопасная отправка отключена. Ваш перевод может быть переведен на опасный адрес и средства могут быть утеряны.</string>
+    <string name="AddressEnter_NeedSubscription_Content">Защита Secure Send отключена. Есть риск отправить средства на небезопасный адрес и потерять деньги.</string>
     <string name="AddressEnter_Danger_Title">Опасность!</string>
-    <string name="AddressEnter_Danger_Content">Введенный вами адрес может быть мошенническим. Мошенники часто изменяют первые и последние символы. Внимательно проверьте полный адрес перед отправкой во избежание потерь.</string>
+    <string name="AddressEnter_Danger_Content">Обнаружен фишинговый адрес. Отправка средств приведёт к потере денег.</string>
     <string name="AddressEnter_Safe_Title">Безопасный</string>
-    <string name="AddressEnter_Safe_Content">Адрес отмечен. Нет фишинга, черного списка или санкций. Это безопасно для использования.</string>
+    <string name="AddressEnter_Safe_Content">Адрес проверен. Фишинга, чёрных списков и санкций не обнаружено - можно отправлять.</string>
     <string name="Send_RiskyAddress">Рискованный адрес!</string>
     <string name="Send_RiskyAddress_AlertText">Вы собираетесь отправить средства на адрес с высоким уровнем риска. Продолжение может привести к потере средств или другим угрозам безопасности. Продолжая, вы принимаете потенциальные риски. Вы уверены, что хотите продолжить?</string>
     <string name="Send_Success">\u2713 Отправлено</string>
@@ -432,7 +431,7 @@
     <string name="Send_Error_UnsupportedAddress">TimeLock работает только при отправке на платёжные адреса, начинающиеся с 1... (также известных как BIP44 адреса)</string>
     <string name="Send_Error_MinimumAmount">Мин. сумма %s</string>
     <string name="Send_Error_MaximumAmount">Макс. сумма %s</string>
-    <string name="Send_Error_SendToSelf">Отправка самому себе невозможна</string>
+    <string name="Send_Error_SendToSelf">Отправка %s на собственный адрес не разрешена. Пожалуйста, введите другой адрес получателя.</string>
     <string name="Send_DialogAvailableBalance">Доступный баланс</string>
     <string name="Send_DialogSpeed">Скорость транзакции</string>
     <string name="Send_LockTime_Off">Выкл.</string>
@@ -441,8 +440,8 @@
     <string name="Send_LockTime_HalfYear">6 месяцев</string>
     <string name="Send_LockTime_Year">1 год</string>
     <string name="Send_Sending">Отправка</string>
-    <string name="Send_UnexpectedError">Неожиданная ошибка</string>
-    <string name="Send_UnexpectedError_Description">Во время отправки транзакции что-то пошло не так. Пожалуйста, повторите попытку или скопируйте код ошибки и обратитесь в службу поддержки.</string>
+    <string name="Send_UnexpectedError">Непредвиденная ошибка</string>
+    <string name="Send_UnexpectedError_Description">При отправке транзакции произошла ошибка. Пожалуйста, попробуйте ещё раз или скопируйте код ошибки и обратитесь в службу поддержки.</string>
     <string name="Send_Warning_LowFee">Внимание! Транзакция может застрять в сети</string>
     <string name="Send_Error_LowFee">Ошибка комиссии</string>
     <string name="Send_Error_LowFee_Description">Ставка комиссии слишком низкая.</string>
@@ -451,12 +450,12 @@
     <string name="Send_Error_FetchFeeRateFailed_Description">Подключение к серверу было потеряно. Чтобы продолжить, настройте комиссию вручную, используя данные на сайте.</string>
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Доп. настройки</string>
-    <string name="SendEvmSettings_SetRecipient">Установить получателя</string>
+    <string name="SendEvmSettings_SetRecipient">Указать получателя</string>
     <string name="SendEvmSettings_Nonce">Nonce транзакции</string>
     <string name="SendEvmSettings_EditFee">Изменить комиссию</string>
-    <string name="SendEvmSettings_Nonce_Info">Nonce - это уникальное целочисленное значение для транзакции в кошельке пользователя. Обычно оно увеличивается с каждой транзакцией и не нуждается в изменении. Продвинутые пользователи могут установить его равным nonce отложенной транзакции, чтобы отменить и заменить эту транзакцию, при условии, что новая транзакция имеет достаточно большую плату, чтобы старая не была подтверждена вместо нее (например, они могут захотеть ускорить ее подтверждение или полностью изменить параметры транзакции). Когда несколько ожидающих транзакций имеют одинаковый nonce, подтверждается только одна, обычно с наибольшей комиссией.</string>
+    <string name="SendEvmSettings_Nonce_Info">Пользовательский nonce для EVM-транзакций. Управляет порядком ваших транзакций и может использоваться для замены ожидающих транзакций.</string>
     <string name="SendEvmSettings_SlippageTolerance">Допустимость отклонений</string>
-    <string name="SendEvmSettings_SlippageTolerance_Info">Максимально допустимое отклонение цены для вашего обмена. Кроме этого лимита транзакция будет отменена.</string>
+    <string name="SendEvmSettings_SlippageTolerance_Info">Максимально допустимое отклонение цены для вашего обмена. При превышении этого лимита транзакция будет отменена.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Использованый Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Выполненная транзакция с таким nonce уже существует.</string>
     <!-- Fee Settings -->
@@ -514,8 +513,8 @@
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Статус</string>
     <string name="WalletConnect_Approve_Hint">Нажав на соединение, вы позволяете этому приложению просматривать ваш публичный адрес. Это важный шаг безопасности, чтобы защитить ваши данные от потенциальных рисков, связанных с фишингом.</string>
-    <string name="WalletConnect_Reconnect_Hint">Не удалось установить соединение. Попробуйте переподключиться снова.</string>
-    <string name="WalletConnect_Error_InvalidUrl">Неверный URL-адрес</string>
+    <string name="WalletConnect_Reconnect_Hint">Не удалось подключиться по этой ссылке. Пожалуйста, проверьте её и повторите попытку.</string>
+    <string name="WalletConnect_Error_InvalidUrl">Неверный URL</string>
     <string name="WalletConnect_Status_Offline">Не доступен</string>
     <string name="WalletConnect_Status_Online">Доступен</string>
     <string name="WalletConnect_Status_Connecting">Подключение…</string>
@@ -524,14 +523,14 @@
     <string name="WalletConnect_SendTransactionRequest_ButtonSend">Отправить</string>
     <string name="WalletConnect_SignMessageRequest_Title">Запрос на подпись</string>
     <string name="WalletConnect_Error_NoWallet">Вам нужно создать или импортировать кошелек перед использованием WalletConnect</string>
-    <string name="WalletConnect_Error_NeedBackup">Создайте резервную копию вашей ключевой фразы восстановления и связанной с ней ключевой фразы. Они позволят вам восстановить ваш кошелек, если ваш телефон потерян, украден или поврежден.</string>
+    <string name="WalletConnect_Error_NeedBackup">Создайте резервную копию фразы восстановления и связанного с ней пароля. Это позволит восстановить ваш кошелёк в случае потери, кражи или повреждения телефона.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Неподдерживаемый блокчейн</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Нет подходящей учетной записи</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Нет подходящего evm kit</string>
     <string name="WalletConnect_Error_UnsupportedChains">Неподдерживаемые чейны: %s</string>
     <string name="WalletConnect_Error_UnsupportedMethods">Неподдерживаемые методы: %s</string>
     <string name="WalletConnect_Error_UnsupportedEvents">Неподдерживаемые события: %s</string>
-    <string name="WalletConnect_Error_RequestNotFoundError">Запрос не найден</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">Ошибка: запрос не найден</string>
     <string name="WalletConnect_NoConnection">У вас нет подключенных dapps</string>
     <string name="WalletConnect_PendingRequests">Ожидающие запросы</string>
     <string name="WalletConnect_ActiveWallet">Кошелек</string>
@@ -575,10 +574,10 @@
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Низкая комиссия</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">Установленная сумма комиссии недостаточно для обработки этой транзакции.</string>
     <string name="EthereumTransaction_Error_InsufficientLiquidity_Title">Недостаточно ликвидности</string>
-    <string name="EthereumTransaction_Error_InsufficientLiquidity">Кажется, для этой сделки не хватает ликвидности. Попробуйте уменьшить сумму сделки.</string>
+    <string name="EthereumTransaction_Error_InsufficientLiquidity">Вероятно, нет достаточной ликвидности для выполнения этой сделки. Попробуйте уменьшить сумму.</string>
     <string name="EthereumTransaction_Error_CannotEstimate_Title">Ошибка оценки</string>
     <string name="EthereumTransaction_Error_CannotEstimate">Проверьте баланс и убедитесь, что на нем достаточно %s для покрытия комиссии. Или попробуйте увеличить предел скольжения цены и повторите попытку снова. Следующая попытка через 3 секунды…</string>
-    <string name="EthereumTransaction_Warning_CoinNeededForFee">Вы можете оставить некоторую сумму в размере %s на балансе, чтобы оплачивать будущие транзакции.</string>
+    <string name="EthereumTransaction_Warning_CoinNeededForFee">Рассмотрите возможность оставить %s на балансе, чтобы иметь возможность оплачивать будущие транзакции.</string>
     <string name="EthereumTransaction_Error_ExecutionReverted">Непредвиденная ошибка: %s</string>
     <!--Swap-->
     <string name="Swap">Обмен</string>
@@ -606,7 +605,7 @@
     <string name="Swap_SelectTokenOut">Выберите токен для получения</string>
     <string name="Swap_EnterAmount">Введите сумму</string>
     <string name="Swap_Revoke">Отозвать</string>
-    <string name="Swap_Revoking">Отзыв...</string>
+    <string name="Swap_Revoking">Отмена...</string>
     <string name="Swap_Approve">Разрешить</string>
     <string name="Swap_Approving">Разрешение</string>
     <string name="Swap_Swapping">Обмен</string>
@@ -673,9 +672,9 @@
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_EmptyList">Еще нет отложенных или прошлых транзакций.</string>
     <string name="Transactions_WaitForSync">Пожалуйста, дождитесь завершение синхронизации.</string>
-    <string name="Transactions_Pending">В обработке</string>
+    <string name="Transactions_Pending">В ожидании</string>
     <string name="Transactions_Receive">Получено</string>
-    <string name="Transactions_ChangeTrust">Изменить Доверие</string>
+    <string name="Transactions_ChangeTrust">Изменить Trust</string>
     <string name="Transactions_Completed">Завершено</string>
     <string name="Transactions_Processing">В процессе</string>
     <string name="Transactions_Send">Отправлено</string>
@@ -686,7 +685,7 @@
     <string name="Transactions_Failed">Не удалось</string>
     <string name="Transactions_Transfer">Перевод</string>
     <string name="Transactions_Shield">Щит</string>
-    <string name="Transactions_Unshield">Не щит</string>
+    <string name="Transactions_Unshield">Unshield</string>
     <string name="Transactions_ContractCall">Вызов контракта</string>
     <string name="Transactions_ExternalContractCall">Внешний вызов</string>
     <string name="Transactions_ContractCreation">Создание контракта</string>
@@ -696,7 +695,7 @@
     <string name="Transaction_Unlimited_CoinCode">безлимитный %s</string>
     <string name="Transaction_Unlimited">безлимитный</string>
     <string name="Transactions_All">Все</string>
-    <string name="Transactions_Filter_Blockchain">Фильтр по блокчейну</string>
+    <string name="Transactions_Filter_Blockchain">Блокчейн</string>
     <string name="Transactions_Filter_Coin">Монета</string>
     <string name="Transactions_Filter_Contacts">Контакты</string>
     <string name="Transactions_Filter_AllBlockchains">Все блокчейны</string>
@@ -964,7 +963,7 @@
     <string name="BackupManager_AppSettingsTitle">Настройки приложения</string>
     <string name="BackupManager_AppSettingsDescription">Язык, валюта, внешний вид</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Неостановимо не собирает персональные данные, такие как балансы или адреса кошельков. Мы используем анонимные данные только для улучшения приложения.</string>
+    <string name="Privacy_Information">Unstoppable не собирает персональные данные, такие как балансы или адреса кошельков. Мы используем анонимные данные только для улучшения приложения.</string>
     <string name="ShareUiData">Поделиться данными UI</string>
     <string name="ShareUiDataDescription">Эта настройка позволяет отключить аналитику UI/UX и обеспечить полную конфиденциальность.</string>
     <!-- Security Center -->
@@ -1042,8 +1041,7 @@
     <!--Setting_Terms-->
     <string name="SettingsTerms_Backup">Безопасное резервное копирование фраз для каждого кошелька. Это единственный способ восстановить доступ к средствам, если приложение будет удалено, утеряно или выйдет из строя. Никто не сможет восстановить её за вас.</string>
     <string name="SettingsTerms_DisablingPin">Отключение PIN-кода (или пароля) разблокировки телефона полностью удалит все кошельки из приложения. Вам потребуется фраза восстановления, чтобы вернуть доступ.</string>
-    <string name="SettingsTerms_PrivacyNotice">Приложение не отслеживает и не собирает данные о ваших балансах и транзакциях - мы даже не знаем, сколько людей им пользуется.
-Оно фиксирует только анонимную статистику использования (открытые страницы, нажатия кнопок), чтобы улучшать интерфейс. Это можно отключить в Настройки → Конфиденциальность.</string>
+    <string name="SettingsTerms_PrivacyNotice">Приложение не отслеживает и не собирает данные о ваших балансах или транзакциях - мы даже не знаем, сколько людей используют их. Он отслеживает только анонимные шаблоны использования (страницы открыты, кнопки нажаты) для улучшения удобства использования. Вы можете отключить это в Настройках → Конфиденциальность</string>
     <string name="SettingsTerms_WeNotHoldingYourAssets">Мы не располагаем Вашими активами, не имеем доступа к вашим закрытым ключам или совершаем транзакции от вашего имени. Приложение не предоставляет услуги по брокерству, обмену, хранению, переполнению или передаче денежных средств. Все транзакции инициализируются, подписываются и транслируются непосредственно вами в публичные сети блокчейн.</string>
     <string name="SettingsTerms_MonetizationDisclosure">В рамках своей модели монетизации приложение получает небольшие комиссии с DEX-свапов, выполненных внутри кошелька. Это помогает нам оставаться независимыми, открытым исходным кодом и без венчурного финансирования.</string>
     <string name="SettingsTerms_TransactionsIrreversible">Блокчейн транзакции необратимы. Всегда просматривайте детали транзакции перед подтверждением.</string>
@@ -1135,7 +1133,7 @@
     <string name="ManageAccount_MigrationRequired_Title">Требуется миграция</string>
     <string name="ManageAccount_BirthdayHeight">%s Блок создания</string>
     <string name="ManageAccount_NWords">%s слов</string>
-    <string name="ManageAccount_NWordsWithPassphrase">%s слов с кодовой фразой</string>
+    <string name="ManageAccount_NWordsWithPassphrase">%s слов с паролем</string>
     <string name="ManageAccount_SwitchWallet_Title">Переключить кошелек</string>
     <string name="ManageAccount_Wallets">Кошельки</string>
     <string name="ManageAccount_WatchAddresses">Просмотр кошелька</string>
@@ -1511,8 +1509,8 @@
     <string name="OSPin_Prompt_Desciption">Это приложение требует PIN-кода вашего телефона, чтобы сохранить конфиденциальные данные из вашего кошелька в безопасном хранилище Android, а не в самом приложении.</string>
     <!--Unlock-->
     <string name="Unlock_Title">Разблокировать</string>
-    <string name="Unlock_Passcode">Passcode</string>
-    <string name="Unlock_EnterPasscode">Введите пароль</string>
+    <string name="Unlock_Passcode">Код доступа</string>
+    <string name="Unlock_EnterPasscode">Введите код доступа</string>
     <string name="Unlock_BiometricScanner">Биометрический сканер</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Введите пароль или повторите попытку позже</string>
     <string name="Unlock_BiometricScannerDisabled_Info">Биометрический автор. отключен</string>
@@ -1520,17 +1518,17 @@
     <string name="Unlock_AttemptsLeft">Осталось попыток: %s</string>
     <string name="Unlock_Random">Случайный</string>
     <!--Set Pin-->
-    <string name="PinSet_Title">Создать пароль</string>
-    <string name="PinSet_Info">Ваш пароль будет использован для разблокировки вашего кошелька</string>
+    <string name="PinSet_Title">Установить код доступа</string>
+    <string name="PinSet_Info">Код доступа будет использоваться для разблокировки вашего кошелька</string>
     <string name="PinSet_ConfirmInfo">Подтвердить</string>
-    <string name="PinSet_ErrorPinsDontMatch">Пароли не совпадают. Попробуйте еще раз.</string>
+    <string name="PinSet_ErrorPinsDontMatch">Код не совпадает. Попробуйте еще раз.</string>
     <string name="PinSet_ErrorFailedToSavePin">Произошла ошибка при сохранении пароля. Пожалуйста, попробуйте еще раз.</string>
-    <string name="PinSet_ForBiometrics">Установить секретный код для включения биометрических данных</string>
-    <string name="PinSet_ForDuress">Установите секретный код для включения режима Duress</string>
-    <string name="PinSet_ErrorPinInUse">Этот пароль уже используется.</string>
+    <string name="PinSet_ForBiometrics">Установить код доступа для включения биометрических данных</string>
+    <string name="PinSet_ForDuress">Установите код доступа для включения режима Duress</string>
+    <string name="PinSet_ErrorPinInUse">Этот код доступа уже используется.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Изменить код</string>
-    <string name="EditPin_NewPinInfo">Новый пароль</string>
+    <string name="EditPin_NewPinInfo">Новый код доступа</string>
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Биометрический сканер</string>
     <!--Contacts-->
