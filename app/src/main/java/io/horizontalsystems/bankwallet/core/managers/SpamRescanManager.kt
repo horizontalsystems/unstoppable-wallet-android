@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
+import io.horizontalsystems.bankwallet.core.adapters.TronTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.bankwallet.entities.SpamScanState
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
@@ -122,9 +123,23 @@ class SpamRescanManager(
         source: TransactionSource,
         adapter: ITransactionsAdapter
     ) {
-        val evmAdapter = adapter as? EvmTransactionsAdapter ?: return
-        val userAddress = evmAdapter.evmKitWrapper.evmKit.receiveAddress
-        val baseToken = evmAdapter.baseToken
+        when (adapter) {
+            is EvmTransactionsAdapter -> rescanEvmTransactions(source, adapter)
+            is TronTransactionsAdapter -> rescanTronTransactions(source, adapter)
+            is io.horizontalsystems.bankwallet.core.adapters.StellarTransactionsAdapter -> rescanStellarTransactions(source, adapter)
+            else -> {
+                // Unsupported adapter - notify waiters and return
+                notifyAllRemainingWaiters()
+            }
+        }
+    }
+
+    private suspend fun rescanEvmTransactions(
+        source: TransactionSource,
+        adapter: EvmTransactionsAdapter
+    ) {
+        val userAddress = adapter.evmKitWrapper.evmKit.receiveAddress
+        val baseToken = adapter.baseToken
 
         try {
             var lastTxHash: ByteArray? = null
@@ -141,7 +156,7 @@ class SpamRescanManager(
                     val txHashHex = fullTx.transaction.hash.toHexString()
 
                     // Process the transaction
-                    spamManager.processFullTransactionForSpamWithContext(
+                    spamManager.processEvmTransactionForSpamWithContext(
                         fullTx,
                         source,
                         userAddress,
@@ -153,7 +168,7 @@ class SpamRescanManager(
                     notifyWaiters(txHashHex)
 
                     // Update outgoing context
-                    spamManager.extractOutgoingInfoFromFullTransaction(fullTx, userAddress)?.let { outgoingInfo ->
+                    spamManager.extractOutgoingInfo(fullTx, userAddress)?.let { outgoingInfo ->
                         outgoingContext.add(0, outgoingInfo)
                         if (outgoingContext.size > OUTGOING_CONTEXT_SIZE) {
                             outgoingContext.removeAt(outgoingContext.size - 1)
@@ -171,6 +186,142 @@ class SpamRescanManager(
                 }
 
                 if (transactions.size < BATCH_SIZE) break
+            }
+
+            // Mark as complete
+            scannedTransactionStorage.save(
+                SpamScanState(source.blockchain.type, source.account.id, SCAN_COMPLETE_MARKER)
+            )
+
+            // Notify all remaining waiters (transaction might not exist in blockchain data)
+            notifyAllRemainingWaiters()
+
+        } catch (_: Throwable) {
+            // Error during scan - notify waiters so they don't hang forever
+            notifyAllRemainingWaiters()
+        }
+    }
+
+    private suspend fun rescanTronTransactions(
+        source: TransactionSource,
+        adapter: TronTransactionsAdapter
+    ) {
+        val userAddress = adapter.tronKitWrapper.tronKit.address
+        val baseToken = spamManager.getBaseToken(source) ?: return
+
+        try {
+            var lastTxHash: ByteArray? = null
+            val outgoingContext = mutableListOf<PoisoningScorer.OutgoingTxInfo>()
+
+            while (true) {
+                val transactions: List<io.horizontalsystems.tronkit.models.FullTransaction> = adapter.getTronFullTransactionsBefore(lastTxHash, BATCH_SIZE)
+                if (transactions.isEmpty()) break
+
+                // Sort by timestamp (oldest first) for correct outgoing context
+                val sortedTransactions = transactions.sortedBy { it.transaction.timestamp }
+
+                for (fullTx in sortedTransactions) {
+                    val txHashHex = fullTx.transaction.hash.toHexString()
+
+                    // Process the transaction
+                    spamManager.processTronTransactionForSpamWithContext(
+                        fullTx,
+                        source,
+                        userAddress,
+                        baseToken,
+                        outgoingContext.toList()
+                    )
+
+                    // Notify any waiters for this transaction
+                    notifyWaiters(txHashHex)
+
+                    // Update outgoing context
+                    spamManager.extractOutgoingInfo(fullTx, userAddress)?.let { outgoingInfo ->
+                        outgoingContext.add(0, outgoingInfo)
+                        if (outgoingContext.size > OUTGOING_CONTEXT_SIZE) {
+                            outgoingContext.removeAt(outgoingContext.size - 1)
+                        }
+                    }
+                }
+
+                lastTxHash = transactions.lastOrNull()?.transaction?.hash
+
+                // Update progress
+                lastTxHash?.toHexString()?.let {
+                    scannedTransactionStorage.save(
+                        SpamScanState(source.blockchain.type, source.account.id, it)
+                    )
+                }
+
+                if (transactions.size < BATCH_SIZE) break
+            }
+
+            // Mark as complete
+            scannedTransactionStorage.save(
+                SpamScanState(source.blockchain.type, source.account.id, SCAN_COMPLETE_MARKER)
+            )
+
+            // Notify all remaining waiters (transaction might not exist in blockchain data)
+            notifyAllRemainingWaiters()
+
+        } catch (_: Throwable) {
+            // Error during scan - notify waiters so they don't hang forever
+            notifyAllRemainingWaiters()
+        }
+    }
+
+    private suspend fun rescanStellarTransactions(
+        source: TransactionSource,
+        adapter: io.horizontalsystems.bankwallet.core.adapters.StellarTransactionsAdapter
+    ) {
+        val selfAddress = adapter.stellarKitWrapper.stellarKit.receiveAddress
+        val baseToken = spamManager.getBaseToken(source) ?: return
+
+        try {
+            var lastOperationId: Long? = null
+            val outgoingContext = mutableListOf<PoisoningScorer.OutgoingTxInfo>()
+
+            while (true) {
+                val operations = adapter.getStellarOperationsBefore(lastOperationId, BATCH_SIZE)
+                if (operations.isEmpty()) break
+
+                // Sort by timestamp (oldest first) for correct outgoing context
+                val sortedOperations = operations.sortedBy { it.timestamp }
+
+                for (operation in sortedOperations) {
+                    val txHashHex = operation.transactionHash
+
+                    // Process the operation
+                    spamManager.processStellarOperationForSpamWithContext(
+                        operation,
+                        source,
+                        selfAddress,
+                        baseToken,
+                        outgoingContext.toList()
+                    )
+
+                    // Notify any waiters for this transaction
+                    notifyWaiters(txHashHex)
+
+                    // Update outgoing context
+                    spamManager.extractOutgoingInfo(operation, selfAddress)?.let { outgoingInfo ->
+                        outgoingContext.add(0, outgoingInfo)
+                        if (outgoingContext.size > OUTGOING_CONTEXT_SIZE) {
+                            outgoingContext.removeAt(outgoingContext.size - 1)
+                        }
+                    }
+                }
+
+                lastOperationId = operations.lastOrNull()?.id
+
+                // Update progress
+                lastOperationId?.toString()?.let {
+                    scannedTransactionStorage.save(
+                        SpamScanState(source.blockchain.type, source.account.id, it)
+                    )
+                }
+
+                if (operations.size < BATCH_SIZE) break
             }
 
             // Mark as complete

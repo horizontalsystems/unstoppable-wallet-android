@@ -69,13 +69,11 @@ class EvmTransactionConverter(
             is IncomingDecoration -> {
                 val fromAddress = decoration.from.eip55
                 val transactionValue = baseCoinValue(decoration.value, false)
-                val tokenUid = "${source.blockchain.type.uid}:native"
                 val isSpam = App.spamManager.isSpam(
                     transaction.hash,
                     listOf(TransferEvent(fromAddress, transactionValue)),
                     transaction.timestamp,
                     transaction.blockNumber?.toInt(),
-                    tokenUid,
                     source
                 )
                 EvmIncomingTransactionRecord(transaction, baseToken, source, fromAddress, transactionValue, isSpam, protected)
@@ -233,16 +231,11 @@ class EvmTransactionConverter(
                     }
 
                     transaction.from != address && transaction.to != address -> {
-                        // Extract tokenUid from incoming events for spam detection
-                        val tokenUid = incomingEip20Transfers.firstOrNull()?.contractAddress?.eip55?.let {
-                            "${source.blockchain.type.uid}:$it"
-                        } ?: "${source.blockchain.type.uid}:native"
                         val isSpam = App.spamManager.isSpam(
                             transaction.hash,
                             incomingEvents + outgoingEvents,
                             transaction.timestamp,
                             transaction.blockNumber?.toInt(),
-                            tokenUid,
                             source
                         )
                         ExternalContractCallTransactionRecord(
