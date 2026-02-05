@@ -159,14 +159,10 @@ class SpamManager(
         if (isEvmBlockchain(source) || isTronBlockchain(source) || isStellarBlockchain(source)) {
             val adapter = transactionAdapterManager.adaptersMap[source]
             if (adapter != null) {
-                runBlocking {
+                val scannedTx = runBlocking {
                     spamRescanManager.ensureTransactionScanned(transactionHash, source, adapter)
                 }
-
-                // Check database again after scan
-                scannedTransactionStorage.getScannedTransaction(transactionHash)?.let {
-                    return it.isSpam
-                }
+                scannedTx?.let { return it.isSpam }
             }
         }
 

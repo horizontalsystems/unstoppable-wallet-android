@@ -15,16 +15,14 @@ import kotlin.math.abs
  * - trusted < 3 points
  *
  * Points:
- * - Zero Value Transfer: +4 points
+ * - Auto-spam (7 points): Unknown token, zero-value native coin, micro dust
  * - Zero Value NFT: +3 points
  * - Dust Amount (based on risk threshold from config):
- *   - If value < spam (risk/10): +7 points (auto-spam)
  *   - If value < risk: +3 points
  *   - If value < danger (risk*5): +2 points
  * - Address Prefix Match (3 chars): +4 points
  * - Address Suffix Match (3 chars): +4 points
  * - Time Correlation (mutually exclusive): +4 points if within 5 blocks OR +3 points if within 20 minutes
- * - Unknown ERC-20 token: +7 points
  */
 class PoisoningScorer {
 
@@ -42,7 +40,7 @@ class PoisoningScorer {
         const val POINTS_ADDRESS_SUFFIX_MATCH = 4
         const val POINTS_TIME_WITHIN_5_BLOCKS = 4
         const val POINTS_TIME_WITHIN_20_MINUTES = 3
-        const val POINTS_UNKNOWN_TOKEN = 7
+        const val POINTS_AUTO_SPAM = 7
 
         // Time constants
         const val TWENTY_MINUTES_SECONDS = 20 * 60L
@@ -242,7 +240,14 @@ class PoisoningScorer {
         when (value) {
             is TransactionValue.TokenValue,
             is TransactionValue.RawValue -> {
-                return ScoringResult(address, POINTS_UNKNOWN_TOKEN, listOf("Unknown token type"))
+                return ScoringResult(address, POINTS_AUTO_SPAM, listOf("Unknown token type"))
+            }
+            is TransactionValue.CoinValue -> {
+                // Zero-value native coin transfer is auto-spam (no legitimate use case)
+                if (value.value == BigDecimal.ZERO) {
+                    return ScoringResult(address, POINTS_AUTO_SPAM, listOf("Zero-value native coin transfer"))
+                }
+                // Continue scoring for non-zero CoinValue
             }
             is TransactionValue.NftValue -> {
                 // NFT with zero value gets +3 points

@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TronTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
+import io.horizontalsystems.bankwallet.entities.ScannedTransaction
 import io.horizontalsystems.bankwallet.entities.SpamScanState
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.core.toHexString
@@ -53,28 +54,24 @@ class SpamRescanManager(
 
     /**
      * Ensure a transaction is scanned. If not yet scanned, triggers scan and waits.
-     * Returns true if transaction was found in DB after scan, false otherwise.
+     * Returns the ScannedTransaction if found after scan, null otherwise.
+     * Note: Caller should check DB first before calling this to avoid redundant lookups.
      */
     suspend fun ensureTransactionScanned(
         transactionHash: ByteArray,
         source: TransactionSource,
         adapter: ITransactionsAdapter
-    ): Boolean {
+    ): ScannedTransaction? {
         val txHashHex = transactionHash.toHexString()
         val sourceKey = getSourceKey(source)
 
-        // Check if already scanned
-        scannedTransactionStorage.getScannedTransaction(transactionHash)?.let {
-            return true
-        }
-
-        // Check if scan is complete for this source
+        // Check if scan is complete for this source (no point waiting)
         val scanState = scannedTransactionStorage.getSpamScanState(
             source.blockchain.type,
             source.account.id
         )
         if (scanState?.lastSyncedTransactionId == SCAN_COMPLETE_MARKER) {
-            return false
+            return null
         }
 
         // Need to scan - create a deferred to wait for this transaction
@@ -107,8 +104,8 @@ class SpamRescanManager(
             }
         }
 
-        // Check if now in database
-        return scannedTransactionStorage.getScannedTransaction(transactionHash) != null
+        // Return the scanned transaction (or null if not found)
+        return scannedTransactionStorage.getScannedTransaction(transactionHash)
     }
 
     private fun startScanIfNeeded(source: TransactionSource, adapter: ITransactionsAdapter) {
