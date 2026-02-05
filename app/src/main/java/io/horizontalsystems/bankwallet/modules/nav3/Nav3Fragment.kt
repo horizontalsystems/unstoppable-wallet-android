@@ -1,15 +1,60 @@
 package io.horizontalsystems.bankwallet.modules.nav3
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import kotlinx.serialization.Serializable
 
 class Nav3Fragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-
+        NavExample()
 
     }
 
+}
+
+
+@Serializable
+data object Home : NavKey
+
+@Serializable
+data class Product(val id: String) : NavKey
+
+
+@Composable
+fun NavExample() {
+    val backStack = rememberNavBackStack(Home)
+
+    NavDisplay(
+        entryDecorators = listOf(
+            // Add the default decorators for managing scenes and saving state
+            rememberSaveableStateHolderNavEntryDecorator(),
+            // Then add the view model store decorator
+            rememberViewModelStoreNavEntryDecorator()
+        ),
+        backStack = backStack,
+        entryProvider = entryProvider {
+            entry<Home> {
+                HSButton(title = "Home") {
+                    backStack.add(Product("Yahoo"))
+                }
+            }
+            entry<Product>(
+//                metadata = mapOf("extraDataKey" to "extraDataValue")
+            ) { key ->
+                HSButton(title = "Product ${key.id}") {
+
+                }
+            }
+        },
+    )
 }
