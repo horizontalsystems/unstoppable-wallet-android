@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.compose)
+
+    // Optional, provides the @Serialize annotation for autogeneration of Serializers.
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 ksp {
@@ -247,6 +250,13 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.compose)
+
+    // Navigation 3
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.material3.adaptive.navigation3)
+    implementation(libs.kotlinx.serialization.core)
 
     // Room
     implementation(libs.androidx.room.runtime)
