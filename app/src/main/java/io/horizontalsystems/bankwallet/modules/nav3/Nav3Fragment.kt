@@ -9,6 +9,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.settings.about.AboutScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import kotlinx.serialization.Serializable
@@ -18,7 +19,6 @@ class Nav3Fragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         NavExample()
-
     }
 
 }
@@ -28,12 +28,15 @@ class Nav3Fragment : BaseComposeFragment() {
 data object Home : NavKey
 
 @Serializable
+data object About : NavKey
+
+@Serializable
 data object AppStatus : NavKey
 
 
 @Composable
 fun NavExample() {
-    val backStack = rememberNavBackStack(Home)
+    val backStack = rememberNavBackStack(About)
 
     NavDisplay(
         entryDecorators = listOf(
@@ -50,6 +53,14 @@ fun NavExample() {
                 }
             }
 
+            entry<About> {
+                AboutScreen(
+                    onBackPress = { backStack.removeLastOrNull() },
+                    navigateToReleaseNotes = { /*backStack.add(AppStatus)*/ },
+                    navigateToAppStatus = { backStack.add(AppStatus) },
+                    navigateToTerms = { /*backStack.add(AppStatus)*/ }
+                )
+            }
             entry<AppStatus> {
                 AppStatusScreen(onBack = { backStack.removeLastOrNull() })
             }

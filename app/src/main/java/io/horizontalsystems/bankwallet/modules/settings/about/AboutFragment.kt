@@ -54,8 +54,10 @@ private fun AboutNavHost(fragmentNavController: NavController) {
     ) {
         composable(AboutPage) {
             AboutScreen(
-                navController,
-                { fragmentNavController.popBackStack() }
+                onBackPress = { fragmentNavController.popBackStack() },
+                navigateToReleaseNotes = { navController.navigate(ReleaseNotesPage) },
+                navigateToAppStatus = { navController.navigate(AppStatusPage) },
+                navigateToTerms = { navController.navigate(TermsPage) }
             )
         }
         composablePage(ReleaseNotesPage) {
@@ -67,18 +69,26 @@ private fun AboutNavHost(fragmentNavController: NavController) {
 }
 
 @Composable
-private fun AboutScreen(
-    navController: NavController,
+fun AboutScreen(
     onBackPress: () -> Unit,
-    aboutViewModel: AboutViewModel = viewModel(factory = AboutModule.Factory()),
+    navigateToReleaseNotes: () -> Unit,
+    navigateToAppStatus: () -> Unit,
+    navigateToTerms: () -> Unit,
 ) {
+    val aboutViewModel: AboutViewModel = viewModel(factory = AboutModule.Factory())
+
     HSScaffold(
         title = stringResource(R.string.SettingsAboutApp_Title),
         onBack = onBackPress,
     ) {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             VSpacer(12.dp)
-            SettingSections(aboutViewModel, navController)
+            SettingSections(
+                viewModel = aboutViewModel,
+                navigateToReleaseNotes = navigateToReleaseNotes,
+                navigateToAppStatus = navigateToAppStatus,
+                navigateToTerms = navigateToTerms
+            )
             VSpacer(36.dp)
         }
     }
@@ -87,7 +97,9 @@ private fun AboutScreen(
 @Composable
 private fun SettingSections(
     viewModel: AboutViewModel,
-    navController: NavController
+    navigateToReleaseNotes: () -> Unit,
+    navigateToAppStatus: () -> Unit,
+    navigateToTerms: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -99,7 +111,7 @@ private fun SettingSections(
                 icon = R.drawable.ic_info_20,
                 value = viewModel.appVersion,
                 onClick = {
-                    navController.navigate(ReleaseNotesPage)
+                    navigateToReleaseNotes()
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.WhatsNew))
                 }
@@ -115,7 +127,7 @@ private fun SettingSections(
                 R.string.Settings_AppStatus,
                 R.drawable.ic_app_status,
                 onClick = {
-                    navController.navigate(AppStatusPage)
+                    navigateToAppStatus()
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.AppStatus))
                 }
@@ -126,7 +138,7 @@ private fun SettingSections(
                 R.drawable.ic_terms_20,
                 showAlert = viewModel.termsShowAlert,
                 onClick = {
-                    navController.navigate(TermsPage)
+                    navigateToTerms()
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Terms))
                 }
