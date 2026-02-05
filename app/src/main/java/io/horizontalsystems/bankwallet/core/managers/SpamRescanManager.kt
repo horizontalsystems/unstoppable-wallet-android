@@ -1,18 +1,24 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
+import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TronTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.bankwallet.entities.SpamScanState
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.core.toHexString
+import io.horizontalsystems.ethereumkit.models.FullTransaction
+import io.horizontalsystems.stellarkit.room.Operation
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withTimeoutOrNull
+import io.horizontalsystems.tronkit.models.FullTransaction as TronFullTransaction
 
 class SpamRescanManager(
     private val scannedTransactionStorage: ScannedTransactionStorage,
@@ -24,14 +30,16 @@ class SpamRescanManager(
     // Track running scans per source (sourceKey -> scan job info)
     private val runningScans = mutableMapOf<String, ScanJob>()
 
-    // Pending waiters for specific transactions (txHashHex -> list of deferreds)
-    private val pendingWaiters = mutableMapOf<String, MutableList<CompletableDeferred<Unit>>>()
+    // Pending waiters per source (sourceKey -> (txHashHex -> list of deferreds))
+    private val pendingWaitersPerSource = mutableMapOf<String, MutableMap<String, MutableList<CompletableDeferred<Unit>>>>()
     private val waitersMutex = Mutex()
 
     companion object {
+        private const val TAG = "SpamRescanManager"
         private const val BATCH_SIZE = 50
         private const val OUTGOING_CONTEXT_SIZE = 10
         private const val SCAN_COMPLETE_MARKER = "complete"
+        private const val WAITER_TIMEOUT_MS = 60_000L // 1 minute timeout for waiters
     }
 
     private data class ScanJob(
@@ -53,6 +61,7 @@ class SpamRescanManager(
         adapter: ITransactionsAdapter
     ): Boolean {
         val txHashHex = transactionHash.toHexString()
+        val sourceKey = getSourceKey(source)
 
         // Check if already scanned
         scannedTransactionStorage.getScannedTransaction(transactionHash)?.let {
@@ -65,8 +74,6 @@ class SpamRescanManager(
             source.account.id
         )
         if (scanState?.lastSyncedTransactionId == SCAN_COMPLETE_MARKER) {
-            // Scan complete but transaction not found - it wasn't in DB when scan ran
-            // This shouldn't happen in normal flow, but return false
             return false
         }
 
@@ -74,19 +81,29 @@ class SpamRescanManager(
         val deferred = CompletableDeferred<Unit>()
 
         waitersMutex.withLock {
-            pendingWaiters.getOrPut(txHashHex) { mutableListOf() }.add(deferred)
+            pendingWaitersPerSource
+                .getOrPut(sourceKey) { mutableMapOf() }
+                .getOrPut(txHashHex) { mutableListOf() }
+                .add(deferred)
         }
 
         // Start scan if not already running
         startScanIfNeeded(source, adapter)
 
-        // Wait for transaction to be scanned (with timeout protection)
-        try {
-            deferred.await()
-        } catch (_: Throwable) {
-            // Timeout or cancellation - clean up
+        // Wait for transaction to be scanned with timeout
+        val result = withTimeoutOrNull(WAITER_TIMEOUT_MS) {
+            try {
+                deferred.await()
+                true
+            } catch (_: Throwable) {
+                false
+            }
+        }
+
+        // Clean up if timed out or failed
+        if (result != true) {
             waitersMutex.withLock {
-                pendingWaiters[txHashHex]?.remove(deferred)
+                pendingWaitersPerSource[sourceKey]?.get(txHashHex)?.remove(deferred)
             }
         }
 
@@ -98,22 +115,27 @@ class SpamRescanManager(
         val sourceKey = getSourceKey(source)
 
         coroutineScope.launch {
-            scanMutex.withLock {
-                // Check if already running
+            // Check and mark as running atomically
+            val shouldRun = scanMutex.withLock {
                 if (runningScans[sourceKey]?.isRunning == true) {
-                    return@launch
+                    false
+                } else {
+                    runningScans[sourceKey] = ScanJob(sourceKey)
+                    true
                 }
-
-                // Mark as running
-                runningScans[sourceKey] = ScanJob(sourceKey)
             }
+
+            if (!shouldRun) return@launch
 
             // Run the actual scan
             try {
                 rescanTransactionsForSource(source, adapter)
+            } catch (e: Throwable) {
+                Log.e(TAG, "Error scanning transactions for $sourceKey", e)
+                notifyWaitersForSource(sourceKey)
             } finally {
                 scanMutex.withLock {
-                    runningScans[sourceKey]?.isRunning = false
+                    runningScans.remove(sourceKey)
                 }
             }
         }
@@ -123,52 +145,119 @@ class SpamRescanManager(
         source: TransactionSource,
         adapter: ITransactionsAdapter
     ) {
+        val sourceKey = getSourceKey(source)
+
         when (adapter) {
-            is EvmTransactionsAdapter -> rescanEvmTransactions(source, adapter)
-            is TronTransactionsAdapter -> rescanTronTransactions(source, adapter)
-            is io.horizontalsystems.bankwallet.core.adapters.StellarTransactionsAdapter -> rescanStellarTransactions(source, adapter)
+            is EvmTransactionsAdapter -> {
+                val userAddress = adapter.evmKitWrapper.evmKit.receiveAddress
+                val baseToken = adapter.baseToken
+
+                rescanWithStrategy<FullTransaction, ByteArray>(
+                    source = source,
+                    sourceKey = sourceKey,
+                    fetchBatch = { lastHash -> adapter.getFullTransactionsBefore(lastHash, BATCH_SIZE) },
+                    getTimestamp = { tx -> tx.transaction.timestamp },
+                    getTxHashHex = { tx -> tx.transaction.hash.toHexString() },
+                    getNextCursor = { transactions -> transactions.lastOrNull()?.transaction?.hash },
+                    getCursorString = { hash -> hash?.toHexString() },
+                    processTransaction = { tx, context ->
+                        spamManager.processEvmTransactionForSpamWithContext(tx, source, userAddress, baseToken, context)
+                    },
+                    extractOutgoingInfo = { tx -> spamManager.evmExtractor.extractOutgoingInfo(tx, userAddress) }
+                )
+            }
+
+            is TronTransactionsAdapter -> {
+                val userAddress = adapter.tronKitWrapper.tronKit.address
+                val baseToken = spamManager.getBaseToken(source)
+                if (baseToken == null) {
+                    Log.w(TAG, "Could not get base token for Tron source: $sourceKey")
+                    notifyWaitersForSource(sourceKey)
+                    return
+                }
+
+                rescanWithStrategy<TronFullTransaction, ByteArray>(
+                    source = source,
+                    sourceKey = sourceKey,
+                    fetchBatch = { lastHash -> adapter.getTronFullTransactionsBefore(lastHash, BATCH_SIZE) },
+                    getTimestamp = { tx -> tx.transaction.timestamp },
+                    getTxHashHex = { tx -> tx.transaction.hash.toHexString() },
+                    getNextCursor = { transactions -> transactions.lastOrNull()?.transaction?.hash },
+                    getCursorString = { hash -> hash?.toHexString() },
+                    processTransaction = { tx, context ->
+                        spamManager.processTronTransactionForSpamWithContext(tx, source, userAddress, baseToken, context)
+                    },
+                    extractOutgoingInfo = { tx -> spamManager.tronExtractor.extractOutgoingInfo(tx, userAddress) }
+                )
+            }
+
+            is StellarTransactionsAdapter -> {
+                val selfAddress = adapter.stellarKitWrapper.stellarKit.receiveAddress
+                val baseToken = spamManager.getBaseToken(source)
+                if (baseToken == null) {
+                    Log.w(TAG, "Could not get base token for Stellar source: $sourceKey")
+                    notifyWaitersForSource(sourceKey)
+                    return
+                }
+
+                rescanWithStrategy<Operation, Long>(
+                    source = source,
+                    sourceKey = sourceKey,
+                    fetchBatch = { lastId -> adapter.getStellarOperationsBefore(lastId, BATCH_SIZE) },
+                    getTimestamp = { op -> op.timestamp },
+                    getTxHashHex = { op -> op.transactionHash },
+                    getNextCursor = { operations -> operations.lastOrNull()?.id },
+                    getCursorString = { id -> id?.toString() },
+                    processTransaction = { op, context ->
+                        spamManager.processStellarOperationForSpamWithContext(op, source, selfAddress, baseToken, context)
+                    },
+                    extractOutgoingInfo = { op -> spamManager.stellarExtractor.extractOutgoingInfo(op, selfAddress) }
+                )
+            }
+
             else -> {
-                // Unsupported adapter - notify waiters and return
-                notifyAllRemainingWaiters()
+                Log.w(TAG, "Unsupported adapter type for source: $sourceKey")
+                notifyWaitersForSource(sourceKey)
             }
         }
     }
 
-    private suspend fun rescanEvmTransactions(
+    /**
+     * Generic rescan strategy that works with any transaction type.
+     */
+    private suspend fun <T, C> rescanWithStrategy(
         source: TransactionSource,
-        adapter: EvmTransactionsAdapter
+        sourceKey: String,
+        fetchBatch: suspend (cursor: C?) -> List<T>,
+        getTimestamp: (T) -> Long,
+        getTxHashHex: (T) -> String,
+        getNextCursor: (List<T>) -> C?,
+        getCursorString: (C?) -> String?,
+        processTransaction: (T, List<PoisoningScorer.OutgoingTxInfo>) -> Unit,
+        extractOutgoingInfo: (T) -> PoisoningScorer.OutgoingTxInfo?
     ) {
-        val userAddress = adapter.evmKitWrapper.evmKit.receiveAddress
-        val baseToken = adapter.baseToken
-
         try {
-            var lastTxHash: ByteArray? = null
+            var cursor: C? = null
             val outgoingContext = mutableListOf<PoisoningScorer.OutgoingTxInfo>()
 
             while (true) {
-                val transactions = adapter.getFullTransactionsBefore(lastTxHash, BATCH_SIZE)
-                if (transactions.isEmpty()) break
+                val items = fetchBatch(cursor)
+                if (items.isEmpty()) break
 
                 // Sort by timestamp (oldest first) for correct outgoing context
-                val sortedTransactions = transactions.sortedBy { it.transaction.timestamp }
+                val sortedItems = items.sortedBy { getTimestamp(it) }
 
-                sortedTransactions.forEach { fullTx ->
-                    val txHashHex = fullTx.transaction.hash.toHexString()
+                for (item in sortedItems) {
+                    val txHashHex = getTxHashHex(item)
 
                     // Process the transaction
-                    spamManager.processEvmTransactionForSpamWithContext(
-                        fullTx,
-                        source,
-                        userAddress,
-                        baseToken,
-                        outgoingContext.toList()
-                    )
+                    processTransaction(item, outgoingContext.toList())
 
                     // Notify any waiters for this transaction
-                    notifyWaiters(txHashHex)
+                    notifyWaiter(sourceKey, txHashHex)
 
                     // Update outgoing context
-                    spamManager.evmExtractor.extractOutgoingInfo(fullTx, userAddress)?.let { outgoingInfo ->
+                    extractOutgoingInfo(item)?.let { outgoingInfo ->
                         outgoingContext.add(0, outgoingInfo)
                         if (outgoingContext.size > OUTGOING_CONTEXT_SIZE) {
                             outgoingContext.removeAt(outgoingContext.size - 1)
@@ -176,16 +265,16 @@ class SpamRescanManager(
                     }
                 }
 
-                lastTxHash = transactions.lastOrNull()?.transaction?.hash
+                cursor = getNextCursor(items)
 
                 // Update progress
-                lastTxHash?.toHexString()?.let {
+                getCursorString(cursor)?.let { cursorStr ->
                     scannedTransactionStorage.save(
-                        SpamScanState(source.blockchain.type, source.account.id, it)
+                        SpamScanState(source.blockchain.type, source.account.id, cursorStr)
                     )
                 }
 
-                if (transactions.size < BATCH_SIZE) break
+                if (items.size < BATCH_SIZE) break
             }
 
             // Mark as complete
@@ -193,165 +282,28 @@ class SpamRescanManager(
                 SpamScanState(source.blockchain.type, source.account.id, SCAN_COMPLETE_MARKER)
             )
 
-            // Notify all remaining waiters (transaction might not exist in blockchain data)
-            notifyAllRemainingWaiters()
+            // Notify remaining waiters for this source
+            notifyWaitersForSource(sourceKey)
 
-        } catch (_: Throwable) {
-            // Error during scan - notify waiters so they don't hang forever
-            notifyAllRemainingWaiters()
+        } catch (e: Throwable) {
+            Log.e(TAG, "Error during rescan for $sourceKey", e)
+            notifyWaitersForSource(sourceKey)
         }
     }
 
-    private suspend fun rescanTronTransactions(
-        source: TransactionSource,
-        adapter: TronTransactionsAdapter
-    ) {
-        val userAddress = adapter.tronKitWrapper.tronKit.address
-        val baseToken = spamManager.getBaseToken(source) ?: return
-
-        try {
-            var lastTxHash: ByteArray? = null
-            val outgoingContext = mutableListOf<PoisoningScorer.OutgoingTxInfo>()
-
-            while (true) {
-                val transactions: List<io.horizontalsystems.tronkit.models.FullTransaction> = adapter.getTronFullTransactionsBefore(lastTxHash, BATCH_SIZE)
-                if (transactions.isEmpty()) break
-
-                // Sort by timestamp (oldest first) for correct outgoing context
-                val sortedTransactions = transactions.sortedBy { it.transaction.timestamp }
-
-                for (fullTx in sortedTransactions) {
-                    val txHashHex = fullTx.transaction.hash.toHexString()
-
-                    // Process the transaction
-                    spamManager.processTronTransactionForSpamWithContext(
-                        fullTx,
-                        source,
-                        userAddress,
-                        baseToken,
-                        outgoingContext.toList()
-                    )
-
-                    // Notify any waiters for this transaction
-                    notifyWaiters(txHashHex)
-
-                    // Update outgoing context
-                    spamManager.tronExtractor.extractOutgoingInfo(fullTx, userAddress)?.let { outgoingInfo ->
-                        outgoingContext.add(0, outgoingInfo)
-                        if (outgoingContext.size > OUTGOING_CONTEXT_SIZE) {
-                            outgoingContext.removeAt(outgoingContext.size - 1)
-                        }
-                    }
-                }
-
-                lastTxHash = transactions.lastOrNull()?.transaction?.hash
-
-                // Update progress
-                lastTxHash?.toHexString()?.let {
-                    scannedTransactionStorage.save(
-                        SpamScanState(source.blockchain.type, source.account.id, it)
-                    )
-                }
-
-                if (transactions.size < BATCH_SIZE) break
-            }
-
-            // Mark as complete
-            scannedTransactionStorage.save(
-                SpamScanState(source.blockchain.type, source.account.id, SCAN_COMPLETE_MARKER)
-            )
-
-            // Notify all remaining waiters (transaction might not exist in blockchain data)
-            notifyAllRemainingWaiters()
-
-        } catch (_: Throwable) {
-            // Error during scan - notify waiters so they don't hang forever
-            notifyAllRemainingWaiters()
-        }
-    }
-
-    private suspend fun rescanStellarTransactions(
-        source: TransactionSource,
-        adapter: io.horizontalsystems.bankwallet.core.adapters.StellarTransactionsAdapter
-    ) {
-        val selfAddress = adapter.stellarKitWrapper.stellarKit.receiveAddress
-        val baseToken = spamManager.getBaseToken(source) ?: return
-
-        try {
-            var lastOperationId: Long? = null
-            val outgoingContext = mutableListOf<PoisoningScorer.OutgoingTxInfo>()
-
-            while (true) {
-                val operations = adapter.getStellarOperationsBefore(lastOperationId, BATCH_SIZE)
-                if (operations.isEmpty()) break
-
-                // Sort by timestamp (oldest first) for correct outgoing context
-                val sortedOperations = operations.sortedBy { it.timestamp }
-
-                for (operation in sortedOperations) {
-                    val txHashHex = operation.transactionHash
-
-                    // Process the operation
-                    spamManager.processStellarOperationForSpamWithContext(
-                        operation,
-                        source,
-                        selfAddress,
-                        baseToken,
-                        outgoingContext.toList()
-                    )
-
-                    // Notify any waiters for this transaction
-                    notifyWaiters(txHashHex)
-
-                    // Update outgoing context
-                    spamManager.stellarExtractor.extractOutgoingInfo(operation, selfAddress)?.let { outgoingInfo ->
-                        outgoingContext.add(0, outgoingInfo)
-                        if (outgoingContext.size > OUTGOING_CONTEXT_SIZE) {
-                            outgoingContext.removeAt(outgoingContext.size - 1)
-                        }
-                    }
-                }
-
-                lastOperationId = operations.lastOrNull()?.id
-
-                // Update progress
-                lastOperationId?.toString()?.let {
-                    scannedTransactionStorage.save(
-                        SpamScanState(source.blockchain.type, source.account.id, it)
-                    )
-                }
-
-                if (operations.size < BATCH_SIZE) break
-            }
-
-            // Mark as complete
-            scannedTransactionStorage.save(
-                SpamScanState(source.blockchain.type, source.account.id, SCAN_COMPLETE_MARKER)
-            )
-
-            // Notify all remaining waiters (transaction might not exist in blockchain data)
-            notifyAllRemainingWaiters()
-
-        } catch (_: Throwable) {
-            // Error during scan - notify waiters so they don't hang forever
-            notifyAllRemainingWaiters()
-        }
-    }
-
-    private suspend fun notifyWaiters(txHashHex: String) {
+    private suspend fun notifyWaiter(sourceKey: String, txHashHex: String) {
         waitersMutex.withLock {
-            pendingWaiters.remove(txHashHex)?.forEach { deferred ->
+            pendingWaitersPerSource[sourceKey]?.remove(txHashHex)?.forEach { deferred ->
                 deferred.complete(Unit)
             }
         }
     }
 
-    private suspend fun notifyAllRemainingWaiters() {
+    private suspend fun notifyWaitersForSource(sourceKey: String) {
         waitersMutex.withLock {
-            pendingWaiters.values.flatten().forEach { deferred ->
+            pendingWaitersPerSource.remove(sourceKey)?.values?.flatten()?.forEach { deferred ->
                 deferred.complete(Unit)
             }
-            pendingWaiters.clear()
         }
     }
 }
