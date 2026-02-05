@@ -9,6 +9,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.about.AboutScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
@@ -33,6 +34,9 @@ data object About : NavKey
 @Serializable
 data object AppStatus : NavKey
 
+@Serializable
+data object ReleaseNotes : NavKey
+
 
 @Composable
 fun NavExample() {
@@ -56,13 +60,16 @@ fun NavExample() {
             entry<About> {
                 AboutScreen(
                     onBackPress = { backStack.removeLastOrNull() },
-                    navigateToReleaseNotes = { /*backStack.add(AppStatus)*/ },
+                    navigateToReleaseNotes = { backStack.add(ReleaseNotes) },
                     navigateToAppStatus = { backStack.add(AppStatus) },
                     navigateToTerms = { /*backStack.add(AppStatus)*/ }
                 )
             }
             entry<AppStatus> {
                 AppStatusScreen(onBack = { backStack.removeLastOrNull() })
+            }
+            entry<ReleaseNotes> {
+                ReleaseNotesScreen(false, { backStack.removeLastOrNull() })
             }
         },
     )
