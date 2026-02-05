@@ -61,9 +61,6 @@ class SpamManager(
     @Volatile
     private var trustedAddressesCache: Set<String> = emptySet()
 
-    companion object {
-        private const val OUTGOING_CONTEXT_SIZE = 10
-    }
 
     init {
         // Subscribe to contacts updates to keep cache in sync
@@ -102,31 +99,6 @@ class SpamManager(
     }
 
     /**
-     * Fetch recent outgoing transactions from adapter to build context for spam detection.
-     * Used as fallback when transaction is not in database and full scan is not available.
-     */
-    private fun getOutgoingContextFromAdapter(
-        source: TransactionSource,
-        limit: Int = OUTGOING_CONTEXT_SIZE
-    ): List<PoisoningScorer.OutgoingTxInfo> {
-        val adapter = transactionAdapterManager.adaptersMap[source] ?: return emptyList()
-        val evmAdapter = adapter as? EvmTransactionsAdapter ?: return emptyList()
-        val userAddress = evmAdapter.evmKitWrapper.evmKit.receiveAddress
-
-        return try {
-            runBlocking {
-                val transactions = adapter.getFullTransactionsBefore(null, limit)
-                transactions
-                    .sortedByDescending { it.transaction.timestamp }
-                    .mapNotNull { evmExtractor.extractOutgoingInfo(it, userAddress) }
-                    .take(limit)
-            }
-        } catch (_: Throwable) {
-            emptyList()
-        }
-    }
-
-    /**
      * Check if transaction is spam.
      * First checks stored result in database. If not found, triggers background scan
      * and waits for result to ensure accurate spam detection with full outgoing context.
@@ -135,8 +107,6 @@ class SpamManager(
     fun isSpam(
         transactionHash: ByteArray,
         events: List<TransferEvent>,
-        timestamp: Long,
-        blockHeight: Int?,
         source: TransactionSource
     ): Boolean {
         // Check database first for stored result
@@ -166,20 +136,7 @@ class SpamManager(
             }
         }
 
-        // Fallback: calculate with context fetched from adapter
-        val recentOutgoingTxs = getOutgoingContextFromAdapter(source)
-
-        val scoringResult = poisoningScorer.calculateSpamScore(
-            events = events,
-            incomingTimestamp = timestamp,
-            incomingBlockHeight = blockHeight,
-            recentOutgoingTxs = recentOutgoingTxs
-        )
-
-        // Save result to database
-        saveSpamResult(transactionHash, scoringResult.score, blockchainType, scoringResult.spamAddress)
-
-        return scoringResult.score >= PoisoningScorer.SPAM_THRESHOLD
+        return false
     }
 
     /**
@@ -275,7 +232,7 @@ class SpamManager(
         outgoingContext: List<PoisoningScorer.OutgoingTxInfo>
     ) {
         val tx = fullTx.transaction
-        val incomingEvents = evmExtractor.extractIncomingEvents(fullTx, userAddress, baseToken)
+        val incomingEvents = evmExtractor.extractIncomingEvents(fullTx, userAddress, baseToken, source.blockchain.type)
         processEventsForSpam(tx.hash, tx.timestamp, tx.blockNumber?.toInt(), incomingEvents, source, outgoingContext)
     }
 
