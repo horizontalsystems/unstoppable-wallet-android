@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.main
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -191,15 +192,17 @@ private fun MainScreen(
         }
     ) { paddingValues ->
         Column {
-            when (uiState.mainNavItems[uiState.selectedTabIndex].mainNavItem) {
-                MainNavigation.Market -> MarketScreen(fragmentNavController)
-                MainNavigation.Balance -> BalanceScreen(fragmentNavController)
-                MainNavigation.Transactions -> TransactionsScreen(
-                    fragmentNavController,
-                    transactionsViewModel
-                )
+            Crossfade(uiState.selectedTabIndex) {
+                when (uiState.mainNavItems[it].mainNavItem) {
+                    MainNavigation.Market -> MarketScreen(fragmentNavController)
+                    MainNavigation.Balance -> BalanceScreen(fragmentNavController)
+                    MainNavigation.Transactions -> TransactionsScreen(
+                        fragmentNavController,
+                        transactionsViewModel
+                    )
 
-                MainNavigation.Settings -> SettingsScreen(fragmentNavController)
+                    MainNavigation.Settings -> SettingsScreen(fragmentNavController)
+                }
             }
         }
     }
