@@ -124,6 +124,9 @@
         android:id="@+id/termsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment"/>
     <fragment
+        android:id="@+id/nav3"
+        android:name="io.horizontalsystems.bankwallet.modules.nav3.Nav3Fragment"/>
+    <fragment
         android:id="@+id/aboutAppFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.about.AboutFragment"/>
     <fragment
