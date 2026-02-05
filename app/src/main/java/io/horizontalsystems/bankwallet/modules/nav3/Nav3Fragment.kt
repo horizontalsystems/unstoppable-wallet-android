@@ -9,6 +9,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import kotlinx.serialization.Serializable
 
@@ -27,7 +28,7 @@ class Nav3Fragment : BaseComposeFragment() {
 data object Home : NavKey
 
 @Serializable
-data class Product(val id: String) : NavKey
+data object AppStatus : NavKey
 
 
 @Composable
@@ -45,15 +46,12 @@ fun NavExample() {
         entryProvider = entryProvider {
             entry<Home> {
                 HSButton(title = "Home") {
-                    backStack.add(Product("Yahoo"))
+                    backStack.add(AppStatus)
                 }
             }
-            entry<Product>(
-//                metadata = mapOf("extraDataKey" to "extraDataValue")
-            ) { key ->
-                HSButton(title = "Product ${key.id}") {
 
-                }
+            entry<AppStatus> {
+                AppStatusScreen(onBack = { backStack.removeLastOrNull() })
             }
         },
     )
