@@ -122,8 +122,6 @@ class StellarTransactionConverter(
         val spam = App.spamManager.isSpam(
             txHash,
             eventsForPhishingCheck,
-            operation.timestamp,
-            null,
             source
         )
 
