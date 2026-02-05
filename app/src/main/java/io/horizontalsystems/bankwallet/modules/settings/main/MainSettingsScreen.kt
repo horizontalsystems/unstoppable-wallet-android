@@ -32,23 +32,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
-import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
-import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
-import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
 import io.horizontalsystems.bankwallet.modules.settings.main.ui.BannerCarousel
@@ -68,12 +61,32 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.subscriptions.core.SecureSend
 
 @Composable
 fun SettingsScreen(
-    navController: NavController,
+    navigateToBuySubscription: () -> Unit,
+    navigateToWhyDonate: () -> Unit,
+    navigateToManageAccounts: () -> Unit,
+    navigateToBlockchainSettings: () -> Unit,
+    navigateToSecuritySettings: () -> Unit,
+    navigateToPrivacySettings: () -> Unit,
+    navigateToWcList: () -> Unit,
+    navigateToWcErrorNoAccount: () -> Unit,
+    navigateToBackupRequired: (BackupRequiredDialog.Input) -> Unit,
+    navigateToWcAccountTypeNotSupported: (WCAccountTypeNotSupportedDialog.Input) -> Unit,
+    navigateToAppearance: () -> Unit,
+    navigateToSubscription: () -> Unit,
+    navigateToContacts: () -> Unit,
+    navigateToBackupManager: () -> Unit,
+    navigateToPaidAction: (IPaidAction, () -> Unit) -> Unit,
+    navigateToAddressCheck: () -> Unit,
+    navigateToAbout: () -> Unit,
+    navigateToFaq: () -> Unit,
+    navigateToAcademy: () -> Unit,
+    navigateToDonate: () -> Unit,
     viewModel: MainSettingsViewModel = viewModel(factory = MainSettingsModule.Factory()),
 ) {
 
@@ -93,8 +106,27 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 SettingSections(
                     viewModel = viewModel,
-                    navController = navController,
-                    )
+                    navigateToBuySubscription = navigateToBuySubscription,
+                    navigateToWhyDonate = navigateToWhyDonate,
+                    navigateToManageAccounts = navigateToManageAccounts,
+                    navigateToBlockchainSettings = navigateToBlockchainSettings,
+                    navigateToSecuritySettings = navigateToSecuritySettings,
+                    navigateToPrivacySettings = navigateToPrivacySettings,
+                    navigateToWcList = navigateToWcList,
+                    navigateToWcErrorNoAccount = navigateToWcErrorNoAccount,
+                    navigateToBackupRequired = navigateToBackupRequired,
+                    navigateToWcAccountTypeNotSupported = navigateToWcAccountTypeNotSupported,
+                    navigateToAppearance = navigateToAppearance,
+                    navigateToSubscription = navigateToSubscription,
+                    navigateToContacts = navigateToContacts,
+                    navigateToBackupManager = navigateToBackupManager,
+                    navigateToPaidAction = navigateToPaidAction,
+                    navigateToAddressCheck = navigateToAddressCheck,
+                    navigateToAbout = navigateToAbout,
+                    navigateToFaq = navigateToFaq,
+                    navigateToAcademy = navigateToAcademy,
+                    navigateToDonate = navigateToDonate,
+                )
                 SettingsFooter(viewModel.appVersion, viewModel.companyWebPage)
                 VSpacer(70.dp)
             }
@@ -105,7 +137,26 @@ fun SettingsScreen(
 @Composable
 private fun SettingSections(
     viewModel: MainSettingsViewModel,
-    navController: NavController,
+    navigateToBuySubscription: () -> Unit,
+    navigateToWhyDonate: () -> Unit,
+    navigateToManageAccounts: () -> Unit,
+    navigateToBlockchainSettings: () -> Unit,
+    navigateToSecuritySettings: () -> Unit,
+    navigateToPrivacySettings: () -> Unit,
+    navigateToWcList: () -> Unit,
+    navigateToWcErrorNoAccount: () -> Unit,
+    navigateToBackupRequired: (BackupRequiredDialog.Input) -> Unit,
+    navigateToWcAccountTypeNotSupported: (WCAccountTypeNotSupportedDialog.Input) -> Unit,
+    navigateToAppearance: () -> Unit,
+    navigateToSubscription: () -> Unit,
+    navigateToContacts: () -> Unit,
+    navigateToBackupManager: () -> Unit,
+    navigateToPaidAction: (IPaidAction, () -> Unit) -> Unit,
+    navigateToAddressCheck: () -> Unit,
+    navigateToAbout: () -> Unit,
+    navigateToFaq: () -> Unit,
+    navigateToAcademy: () -> Unit,
+    navigateToDonate: () -> Unit,
 ) {
     val uiState = viewModel.uiState
     val context = LocalContext.current
@@ -116,7 +167,7 @@ private fun SettingSections(
             add {
                 SubscriptionBanner(
                     onClick = {
-                        navController.slideFromBottom(R.id.buySubscriptionFragment)
+                        navigateToBuySubscription()
                         stat(
                             page = StatPage.Settings,
                             event = StatEvent.OpenPremium(StatPremiumTrigger.Banner)
@@ -129,7 +180,7 @@ private fun SettingSections(
             add {
                 DonateBanner(
                     onClick = {
-                        navController.slideFromBottom(R.id.whyDonateFragment)
+                        navigateToWhyDonate()
                     }
                 )
             }
@@ -147,10 +198,7 @@ private fun SettingSections(
                 R.drawable.ic_wallet_20,
                 showAlert = uiState.manageWalletShowAlert,
                 onClick = {
-                    navController.slideFromRight(
-                        R.id.manageAccountsFragment,
-                        ManageAccountsModule.Mode.Manage
-                    )
+                    navigateToManageAccounts()
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ManageWallets))
                 }
@@ -160,7 +208,7 @@ private fun SettingSections(
                 R.string.BlockchainSettings_Title,
                 R.drawable.ic_blocks_20,
                 onClick = {
-                    navController.slideFromRight(R.id.blockchainSettingsFragment)
+                    navigateToBlockchainSettings()
 
                     stat(
                         page = StatPage.Settings,
@@ -174,7 +222,7 @@ private fun SettingSections(
                 R.drawable.ic_security,
                 showAlert = uiState.securityCenterShowAlert,
                 onClick = {
-                    navController.slideFromRight(R.id.securitySettingsFragment)
+                    navigateToSecuritySettings()
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Security))
                 }
@@ -184,7 +232,7 @@ private fun SettingSections(
                 R.string.Settings_Privacy,
                 R.drawable.ic_eye_20,
                 onClick = {
-                    navController.slideFromRight(R.id.privacySettingsFragment)
+                    navigateToPrivacySettings()
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
                 }
@@ -198,7 +246,7 @@ private fun SettingSections(
                 onClick = {
                     when (val state = viewModel.walletConnectSupportState) {
                         WCManager.SupportState.Supported -> {
-                            navController.slideFromRight(R.id.wcListFragment)
+                            navigateToWcList()
 
                             stat(
                                 page = StatPage.Settings,
@@ -207,13 +255,12 @@ private fun SettingSections(
                         }
 
                         WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-                            navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                            navigateToWcErrorNoAccount()
                         }
 
                         is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
                             val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
-                            navController.slideFromBottom(
-                                R.id.backupRequiredDialog,
+                            navigateToBackupRequired(
                                 BackupRequiredDialog.Input(state.account, text)
                             )
 
@@ -224,8 +271,7 @@ private fun SettingSections(
                         }
 
                         is WCManager.SupportState.NotSupported -> {
-                            navController.slideFromBottom(
-                                R.id.wcAccountTypeNotSupportedDialog,
+                            navigateToWcAccountTypeNotSupported(
                                 WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
                             )
                         }
@@ -233,22 +279,6 @@ private fun SettingSections(
                 }
             )
         },
-//            {
-//            HsSettingCell(
-//                title = R.string.Settings_TonConnect,
-//                icon = R.drawable.ic_ton_connect_24,
-//                value = null,
-//                counterBadge = null,
-//                onClick = {
-//                    navController.slideFromRight(R.id.tcListFragment)
-//
-//                    stat(
-//                        page = StatPage.Settings,
-//                        event = StatEvent.Open(StatPage.TonConnect)
-//                    )
-//                }
-//            )
-//        }
         )
     )
 
@@ -261,7 +291,7 @@ private fun SettingSections(
                     R.string.Settings_AppSettings,
                     R.drawable.ic_unstoppable_icon_20,
                     onClick = {
-                        navController.slideFromRight(R.id.appearanceFragment)
+                        navigateToAppearance()
 
                         stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Appearance))
                     }
@@ -274,7 +304,7 @@ private fun SettingSections(
                         R.drawable.ic_star_24,
                         value = if (uiState.hasSubscription) stringResource(R.string.SettingsSubscription_Active) else null,
                         onClick = {
-                            navController.slideFromRight(R.id.subscriptionFragment)
+                            navigateToSubscription()
                         }
                     )
                 }
@@ -284,10 +314,7 @@ private fun SettingSections(
                     R.string.Contacts,
                     R.drawable.ic_user_20,
                     onClick = {
-                        navController.slideFromRight(
-                            R.id.contactsFragment,
-                            ContactsFragment.Input(Mode.Full)
-                        )
+                        navigateToContacts()
 
                         stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Contacts))
                     }
@@ -298,7 +325,7 @@ private fun SettingSections(
                     R.string.BackupManager_Title,
                     R.drawable.ic_file_24,
                     onClick = {
-                        navController.slideFromRight(R.id.backupManagerFragment)
+                        navigateToBackupManager()
 
                         stat(
                             page = StatPage.Settings,
@@ -327,7 +354,7 @@ private fun SettingSections(
                 if (isFDroidBuild) {
                     LinkHelper.openLinkInAppBrowser(context, viewModel.fdroidSupportLink)
                 } else {
-                    navController.paidAction(PrioritySupport) {
+                    navigateToPaidAction(PrioritySupport) {
                         LinkHelper.openLinkInAppBrowser(context, viewModel.vipSupportLink)
                     }
                 }
@@ -344,8 +371,8 @@ private fun SettingSections(
             icon = R.drawable.ic_radar_24,
             iconTint = ComposeAppTheme.colors.jacob,
             onClick = {
-                navController.paidAction(SecureSend) {
-                    navController.slideFromRight(R.id.addressCheckFragment)
+                navigateToPaidAction(SecureSend) {
+                    navigateToAddressCheck()
                 }
                 stat(
                     page = StatPage.Settings,
@@ -365,7 +392,7 @@ private fun SettingSections(
                 R.drawable.ic_info_20,
                 showAlert = uiState.aboutAppShowAlert,
                 onClick = {
-                    navController.slideFromRight(R.id.aboutAppFragment)
+                    navigateToAbout()
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.AboutApp))
                 }
@@ -395,7 +422,7 @@ private fun SettingSections(
                 R.string.Settings_Faq,
                 R.drawable.ic_faq_20,
                 onClick = {
-                    navController.slideFromRight(R.id.faqListFragment)
+                    navigateToFaq()
                 }
             )
         }, {
@@ -403,7 +430,7 @@ private fun SettingSections(
                 R.string.Guides_Title,
                 R.drawable.ic_academy_20,
                 onClick = {
-                    navController.slideFromRight(R.id.academyFragment)
+                    navigateToAcademy()
                 }
             )
         })
@@ -455,7 +482,7 @@ private fun SettingSections(
                 R.string.Settings_Donate,
                 R.drawable.ic_heart_24,
                 onClick = {
-                    navController.slideFromRight(R.id.donateTokenSelectFragment)
+                    navigateToDonate()
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
                 }

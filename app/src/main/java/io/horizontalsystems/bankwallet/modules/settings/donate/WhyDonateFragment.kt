@@ -28,6 +28,8 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -37,6 +39,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subheadR_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 
 class WhyDonateFragment : BaseComposeFragment() {
 
@@ -53,6 +56,25 @@ class WhyDonateFragment : BaseComposeFragment() {
         )
     }
 
+}
+
+@Serializable
+data object WhyDonateScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: MutableList<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        WhyDonateView(
+            onClick = {
+                backStack.add(DonateTokenSelectScreen)
+                stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
+            },
+            onClose = {
+                backStack.removeLastOrNull()
+            }
+        )
+    }
 }
 
 @Composable

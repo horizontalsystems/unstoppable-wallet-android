@@ -11,74 +11,38 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
-import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
-import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
-class AboutFragment : BaseComposeFragment() {
-
-    @Composable
-    override fun GetContent(navController: NavController) {
-        AboutNavHost(navController)
-    }
-
-}
-
-private const val AboutPage = "about"
-private const val ReleaseNotesPage = "release_notes"
-private const val AppStatusPage = "app_status"
-private const val TermsPage = "terms"
 
 @Composable
-private fun AboutNavHost(fragmentNavController: NavController) {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = AboutPage,
-    ) {
-        composable(AboutPage) {
-            AboutScreen(
-                navController,
-                { fragmentNavController.popBackStack() }
-            )
-        }
-        composablePage(ReleaseNotesPage) {
-            ReleaseNotesScreen(false, { navController.popBackStack() })
-        }
-        composablePage(AppStatusPage) { AppStatusScreen(navController) }
-        composablePopup(TermsPage) { TermsScreen(navController) }
-    }
-}
-
-@Composable
-private fun AboutScreen(
-    navController: NavController,
+fun AboutScreen(
     onBackPress: () -> Unit,
-    aboutViewModel: AboutViewModel = viewModel(factory = AboutModule.Factory()),
+    navigateToReleaseNotes: () -> Unit,
+    navigateToAppStatus: () -> Unit,
+    navigateToTerms: () -> Unit,
 ) {
+    val aboutViewModel: AboutViewModel = viewModel(factory = AboutModule.Factory())
+
     HSScaffold(
         title = stringResource(R.string.SettingsAboutApp_Title),
         onBack = onBackPress,
     ) {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             VSpacer(12.dp)
-            SettingSections(aboutViewModel, navController)
+            SettingSections(
+                viewModel = aboutViewModel,
+                navigateToReleaseNotes = navigateToReleaseNotes,
+                navigateToAppStatus = navigateToAppStatus,
+                navigateToTerms = navigateToTerms
+            )
             VSpacer(36.dp)
         }
     }
@@ -87,7 +51,9 @@ private fun AboutScreen(
 @Composable
 private fun SettingSections(
     viewModel: AboutViewModel,
-    navController: NavController
+    navigateToReleaseNotes: () -> Unit,
+    navigateToAppStatus: () -> Unit,
+    navigateToTerms: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -99,7 +65,7 @@ private fun SettingSections(
                 icon = R.drawable.ic_info_20,
                 value = viewModel.appVersion,
                 onClick = {
-                    navController.navigate(ReleaseNotesPage)
+                    navigateToReleaseNotes()
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.WhatsNew))
                 }
@@ -115,7 +81,7 @@ private fun SettingSections(
                 R.string.Settings_AppStatus,
                 R.drawable.ic_app_status,
                 onClick = {
-                    navController.navigate(AppStatusPage)
+                    navigateToAppStatus()
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.AppStatus))
                 }
@@ -126,7 +92,7 @@ private fun SettingSections(
                 R.drawable.ic_terms_20,
                 showAlert = viewModel.termsShowAlert,
                 onClick = {
-                    navController.navigate(TermsPage)
+                    navigateToTerms()
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Terms))
                 }

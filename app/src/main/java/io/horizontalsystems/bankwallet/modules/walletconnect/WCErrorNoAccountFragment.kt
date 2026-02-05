@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -18,12 +19,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.nav3.BottomSheetSceneStrategy
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
+import kotlinx.serialization.Serializable
 
 class WCErrorNoAccountFragment : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
@@ -42,6 +47,22 @@ class WCErrorNoAccountFragment : BaseComposableBottomSheetFragment() {
                     }
                 }
             }
+        }
+    }
+}
+
+@Serializable
+data object WCErrorNoAccountScreen : HSScreen() {
+    @OptIn(ExperimentalMaterial3Api::class)
+    override fun getMetadata() = BottomSheetSceneStrategy.bottomSheet()
+
+    @Composable
+    override fun GetContent(
+        backStack: MutableList<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        WalletConnectErrorNoAccount {
+            backStack.removeLastOrNull()
         }
     }
 }

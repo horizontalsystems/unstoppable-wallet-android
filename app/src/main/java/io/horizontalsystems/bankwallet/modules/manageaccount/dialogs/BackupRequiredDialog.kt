@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -34,6 +35,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
 
@@ -58,6 +60,9 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
     @Parcelize
     data class Input(val account: Account, val text: String) : Parcelable
 }
+
+@Serializable
+data class BackupRequiredScreen(val account: Account, val text: String) : HSScreen()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

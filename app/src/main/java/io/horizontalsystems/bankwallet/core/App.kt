@@ -109,6 +109,7 @@ import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconServic
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoScreenManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCWalletRequestHandler
@@ -208,6 +209,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var marketWidgetManager: MarketWidgetManager
         lateinit var marketWidgetRepository: MarketWidgetRepository
         lateinit var contactsRepository: ContactsRepository
+        lateinit var transactionInfoScreenManager: TransactionInfoScreenManager
         lateinit var chartIndicatorManager: ChartIndicatorManager
         lateinit var backupProvider: BackupProvider
         lateinit var scannedTransactionStorage: ScannedTransactionStorage
@@ -327,6 +329,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         scannedTransactionStorage = ScannedTransactionStorage(appDatabase.scannedTransactionDao())
         contactsRepository = ContactsRepository(marketKit)
+        transactionInfoScreenManager = TransactionInfoScreenManager
         recentAddressManager = RecentAddressManager(accountManager, appDatabase.recentAddressDao(), ActionCompletedDelegate)
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,

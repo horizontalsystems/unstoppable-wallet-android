@@ -47,7 +47,10 @@ class TermsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        TermsScreen(navController = navController)
+        TermsScreen(
+            onBack = navController::popBackStack,
+            setResult = navController::setNavigationResultX
+        )
     }
 
     @Parcelize
@@ -56,14 +59,15 @@ class TermsFragment : BaseComposeFragment() {
 
 @Composable
 fun TermsScreen(
-    navController: NavController,
-    viewModel: TermsViewModel = viewModel(factory = TermsModule.Factory())
+    onBack: () -> Unit,
+    setResult: (TermsFragment.Result) -> Unit,
 ) {
+    val viewModel: TermsViewModel = viewModel(factory = TermsModule.Factory())
 
     LaunchedEffect(viewModel.closeWithTermsAgreed) {
         if (viewModel.closeWithTermsAgreed) {
-            navController.setNavigationResultX(TermsFragment.Result(true))
-            navController.popBackStack()
+            setResult(TermsFragment.Result(true))
+            onBack()
             viewModel.onTermsAgreedConsumed()
         }
     }
@@ -75,8 +79,8 @@ fun TermsScreen(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.setNavigationResultX(TermsFragment.Result(false))
-                    navController.popBackStack()
+                    setResult(TermsFragment.Result(false))
+                    onBack()
                 }
             )
         )

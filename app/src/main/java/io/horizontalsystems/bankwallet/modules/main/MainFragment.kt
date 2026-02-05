@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.main
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.animation.Crossfade
@@ -30,64 +30,43 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statTab
-import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceScreen
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
-import io.horizontalsystems.bankwallet.modules.market.MarketScreen
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.NavExample
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.Settings
 import io.horizontalsystems.bankwallet.modules.rateapp.RateApp
-import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
+import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceModule
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceScreen
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceViewModel
-import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
-import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
+import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateScreen
 import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsScreen
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItem
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItemDefaults
-import kotlinx.coroutines.delay
-import kotlin.system.exitProcess
+import kotlinx.serialization.Serializable
 
 class MainFragment : BaseComposeFragment() {
     private val mainActivityViewModel by activityViewModels<MainActivityViewModel>()
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val backStackEntry = navController.safeGetBackStackEntry(R.id.mainFragment)
-
-        backStackEntry?.let {
-            val viewModel =
-                ViewModelProvider(backStackEntry.viewModelStore, TransactionsModule.Factory())
-                    .get(TransactionsViewModel::class.java)
-            MainScreenWithRootedDeviceCheck(
-                transactionsViewModel = viewModel,
-                navController = navController,
-                mainActivityViewModel = mainActivityViewModel
-            )
-        } ?: run {
-            requireActivity().finishAndRemoveTask()
-            exitProcess(0)
-        }
+        NavExample(mainActivityViewModel)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,25 +85,47 @@ class MainFragment : BaseComposeFragment() {
 
 @Composable
 private fun MainScreenWithRootedDeviceCheck(
-    transactionsViewModel: TransactionsViewModel,
-    navController: NavController,
     rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory()),
-    mainActivityViewModel: MainActivityViewModel
+    mainActivityViewModel: MainActivityViewModel,
+    backStack: MutableList<HSScreen>,
+    resultBus: ResultEventBus
 ) {
     if (rootedDeviceViewModel.showRootedDeviceWarning) {
         RootedDeviceScreen { rootedDeviceViewModel.ignoreRootedDeviceWarning() }
     } else {
-        MainScreen(mainActivityViewModel, transactionsViewModel, navController)
+        MainScreen(
+            mainActivityViewModel = mainActivityViewModel,
+            backStack = backStack,
+            resultBus = resultBus
+        )
+    }
+}
+
+@Serializable
+data object MainScreen : HSScreen() {
+    // TODO("Nav3: need to find other solution. There should not be mainActivityViewModel")
+    lateinit var mainActivityViewModel: MainActivityViewModel
+
+    @Composable
+    override fun GetContent(
+        backStack: MutableList<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        MainScreenWithRootedDeviceCheck(
+            mainActivityViewModel = mainActivityViewModel,
+            backStack = backStack,
+            resultBus = resultBus,
+        )
     }
 }
 
 @Composable
 private fun MainScreen(
     mainActivityViewModel: MainActivityViewModel,
-    transactionsViewModel: TransactionsViewModel,
-    fragmentNavController: NavController,
-    viewModel: MainViewModel = viewModel(factory = MainModule.Factory())
+    backStack: MutableList<HSScreen>,
+    resultBus: ResultEventBus
 ) {
+    val viewModel = viewModel<MainViewModel>(factory = MainModule.Factory())
     val activityIntent by mainActivityViewModel.intentLiveData.observeAsState()
     LaunchedEffect(activityIntent) {
         activityIntent?.data?.let {
@@ -135,6 +136,7 @@ private fun MainScreen(
 
     val uiState = viewModel.uiState
 
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     Scaffold(
         containerColor = ComposeAppTheme.colors.tyler,
         bottomBar = {
@@ -162,7 +164,7 @@ private fun MainScreen(
                             },
                             onLongClick = if (destination.selected && destination.mainNavItem == MainNavigation.Balance) {
                                 {
-                                    fragmentNavController.slideFromBottom(R.id.walletSwitchDialog)
+                                    backStack.add(WalletSwitchScreen)
                                     stat(
                                         page = StatPage.Main,
                                         event = StatEvent.Open(StatPage.SwitchWallet)
@@ -190,18 +192,35 @@ private fun MainScreen(
                 }
             }
         }
-    ) { paddingValues ->
+    ) {
         Column {
             Crossfade(uiState.selectedTabItem) { navItem ->
                 when (navItem) {
-                    MainNavigation.Market -> MarketScreen(fragmentNavController)
-                    MainNavigation.Balance -> BalanceScreen(fragmentNavController)
-                    MainNavigation.Transactions -> TransactionsScreen(
-                        fragmentNavController,
-                        transactionsViewModel
-                    )
+                    MainNavigation.Market -> {
+//                        TODO("nav3")
+//                        MarketScreen(fragmentNavController)
+                    }
 
-                    MainNavigation.Settings -> SettingsScreen(fragmentNavController)
+                    MainNavigation.Balance -> {
+//                        TODO("nav3")
+//                        BalanceScreen(fragmentNavController)
+                    }
+
+                    MainNavigation.Transactions -> {
+//                        TODO("nav3")
+//                        TransactionsScreen(
+//                            navigateToTransactionFilter = {
+//                                fragmentNavController.slideFromRight(transactionFilterFragment)
+//                            },
+//                            navigateToTransactionInfo = {
+//                                fragmentNavController.slideFromBottom(transactionInfoFragment)
+//                            },
+//                        )
+                    }
+
+                    MainNavigation.Settings -> {
+                        Settings.GetContent(backStack, resultBus)
+                    }
                 }
             }
         }
@@ -209,17 +228,14 @@ private fun MainScreen(
 
     if (uiState.showWhatsNew) {
         LaunchedEffect(Unit) {
-            fragmentNavController.slideFromBottom(
-                R.id.releaseNotesFragment,
-                ReleaseNotesFragment.Input(true)
-            )
+            backStack.add(ReleaseNotesScreen(true))
             viewModel.whatsNewShown()
         }
     }
 
     if (uiState.showDonationPage) {
         LaunchedEffect(Unit) {
-            fragmentNavController.slideFromBottom(R.id.whyDonateFragment)
+            backStack.add(WhyDonateScreen)
             viewModel.donationShown()
         }
     }
@@ -238,24 +254,22 @@ private fun MainScreen(
     if (uiState.wcSupportState != null) {
         when (val wcSupportState = uiState.wcSupportState) {
             SupportState.NotSupportedDueToNoActiveAccount -> {
-                fragmentNavController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                backStack.add(WCErrorNoAccountScreen)
             }
 
             is SupportState.NotSupportedDueToNonBackedUpAccount -> {
                 val text = stringResource(R.string.WalletConnect_Error_NeedBackup)
-                fragmentNavController.slideFromBottom(
-                    R.id.backupRequiredDialog,
-                    BackupRequiredDialog.Input(wcSupportState.account, text)
-                )
+                backStack.add(BackupRequiredScreen(wcSupportState.account, text))
 
                 stat(page = StatPage.Main, event = StatEvent.Open(StatPage.BackupRequired))
             }
 
             is SupportState.NotSupported -> {
-                fragmentNavController.slideFromBottom(
-                    R.id.wcAccountTypeNotSupportedDialog,
-                    WCAccountTypeNotSupportedDialog.Input(wcSupportState.accountTypeDescription)
-                )
+                TODO("Nav3")
+//                fragmentNavController.slideFromBottom(
+//                    R.id.wcAccountTypeNotSupportedDialog,
+//                    WCAccountTypeNotSupportedDialog.Input(wcSupportState.accountTypeDescription)
+//                )
             }
 
             else -> {}
@@ -265,27 +279,29 @@ private fun MainScreen(
 
     uiState.deeplinkPage?.let { deepLinkPage ->
         LaunchedEffect(Unit) {
-            delay(500)
-            fragmentNavController.slideFromRight(
-                deepLinkPage.navigationId,
-                deepLinkPage.input
-            )
-            viewModel.deeplinkPageHandled()
+            TODO("Nav3")
+//            delay(500)
+//            fragmentNavController.slideFromRight(
+//                deepLinkPage.navigationId,
+//                deepLinkPage.input
+//            )
+//            viewModel.deeplinkPageHandled()
         }
     }
 
     uiState.openSend?.let { openSend ->
-        fragmentNavController.slideFromRight(
-            R.id.sendTokenSelectFragment,
-            SendTokenSelectFragment.Input(
-                openSend.blockchainTypes,
-                openSend.tokenTypes,
-                openSend.address,
-                openSend.amount,
-                openSend.memo,
-            )
-        )
-        viewModel.onSendOpened()
+        TODO("Nav3")
+//        fragmentNavController.slideFromRight(
+//            R.id.sendTokenSelectFragment,
+//            SendTokenSelectFragment.Input(
+//                openSend.blockchainTypes,
+//                openSend.tokenTypes,
+//                openSend.address,
+//                openSend.amount,
+//                openSend.memo,
+//            )
+//        )
+//        viewModel.onSendOpened()
     }
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
@@ -330,13 +346,5 @@ private fun BadgedIcon(
                 icon()
             }
         }
-    }
-}
-
-fun NavController.safeGetBackStackEntry(destinationId: Int): NavBackStackEntry? {
-    return try {
-        this.getBackStackEntry(destinationId)
-    } catch (e: IllegalArgumentException) {
-        null
     }
 }
