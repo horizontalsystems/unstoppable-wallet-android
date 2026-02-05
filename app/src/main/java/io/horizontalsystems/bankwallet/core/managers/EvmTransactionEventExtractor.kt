@@ -59,21 +59,24 @@ class EvmTransactionEventExtractor {
                 listOf(TransferEvent(decoration.from.eip55, TransactionValue.CoinValue(baseToken, value)))
             }
             is UnknownTransactionDecoration -> {
-                if (tx.from != userAddress) {
-                    decoration.eventInstances
-                        .mapNotNull { it as? TransferEventInstance }
-                        .map { transfer ->
-                            val tokenValue = transfer.tokenInfo?.let { info ->
-                                TransactionValue.TokenValue(
-                                    tokenName = info.tokenName,
-                                    tokenCode = info.tokenSymbol,
-                                    tokenDecimals = info.tokenDecimal,
-                                    value = transfer.value.toBigDecimal(info.tokenDecimal),
-                                )
-                            } ?: TransactionValue.RawValue(transfer.value)
+                decoration.eventInstances
+                    .mapNotNull { it as? TransferEventInstance }
+                    .filter { it.to == userAddress || it.from == userAddress }
+                    .map { transfer ->
+                        val tokenValue = transfer.tokenInfo?.let { info ->
+                            TransactionValue.TokenValue(
+                                tokenName = info.tokenName,
+                                tokenCode = info.tokenSymbol,
+                                tokenDecimals = info.tokenDecimal,
+                                value = transfer.value.toBigDecimal(info.tokenDecimal),
+                            )
+                        } ?: TransactionValue.RawValue(transfer.value)
+                        if (transfer.from == userAddress) {
                             TransferEvent(transfer.to.eip55, tokenValue)
+                        } else {
+                            TransferEvent(transfer.from.eip55, tokenValue)
                         }
-                } else emptyList()
+                    }
             }
             else -> emptyList()
         }
