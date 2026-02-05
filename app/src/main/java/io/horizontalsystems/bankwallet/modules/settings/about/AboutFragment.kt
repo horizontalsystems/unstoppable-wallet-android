@@ -61,7 +61,7 @@ private fun AboutNavHost(fragmentNavController: NavController) {
         composablePage(ReleaseNotesPage) {
             ReleaseNotesScreen(false, { navController.popBackStack() })
         }
-        composablePage(AppStatusPage) { AppStatusScreen(navController) }
+        composablePage(AppStatusPage) { AppStatusScreen(navController::popBackStack) }
         composablePopup(TermsPage) { TermsScreen(navController) }
     }
 }
