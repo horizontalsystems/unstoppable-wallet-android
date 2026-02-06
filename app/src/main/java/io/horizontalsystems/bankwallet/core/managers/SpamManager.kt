@@ -21,7 +21,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import java.util.concurrent.atomic.AtomicReference
 import io.horizontalsystems.stellarkit.room.Operation as StellarOperation
 import io.horizontalsystems.tronkit.models.FullTransaction as TronFullTransaction
 
@@ -58,9 +58,8 @@ class SpamManager(
 
     // Cache for trusted addresses from contacts (blockchainType:address -> true)
     // Key format: "blockchainTypeUid:lowercaseAddress" for fast lookup
-    @Volatile
-    private var trustedAddressesCache: Set<String> = emptySet()
-
+    // Using AtomicReference to ensure consistent reads during cache updates
+    private val trustedAddressesCache = AtomicReference<Set<String>>(emptySet())
 
     init {
         // Subscribe to contacts updates to keep cache in sync
@@ -72,18 +71,19 @@ class SpamManager(
     }
 
     private fun updateTrustedAddressesCache(contacts: List<Contact>) {
-        trustedAddressesCache = contacts
+        val newCache = contacts
             .flatMap { contact ->
                 contact.addresses.map { addr ->
                     "${addr.blockchain.type.uid}:${addr.address.lowercase()}"
                 }
             }
             .toSet()
+        trustedAddressesCache.set(newCache)
     }
 
     private fun isAddressTrusted(address: String, blockchainType: BlockchainType): Boolean {
         val key = "${blockchainType.uid}:${address.lowercase()}"
-        return trustedAddressesCache.contains(key)
+        return trustedAddressesCache.get().contains(key)
     }
 
     var hideSuspiciousTx = localStorage.hideSuspiciousTransactions
@@ -104,7 +104,7 @@ class SpamManager(
      * and waits for result to ensure accurate spam detection with full outgoing context.
      * Addresses in user's contacts are trusted and never flagged as spam.
      */
-    fun isSpam(
+    suspend fun isSpam(
         transactionHash: ByteArray,
         events: List<TransferEvent>,
         source: TransactionSource
@@ -129,9 +129,7 @@ class SpamManager(
         if (isEvmBlockchain(source) || isTronBlockchain(source) || isStellarBlockchain(source)) {
             val adapter = transactionAdapterManager.adaptersMap[source]
             if (adapter != null) {
-                val scannedTx = runBlocking {
-                    spamRescanManager.ensureTransactionScanned(transactionHash, source, adapter)
-                }
+                val scannedTx = spamRescanManager.ensureTransactionScanned(transactionHash, source, adapter)
                 scannedTx?.let { return it.isSpam }
             }
         }

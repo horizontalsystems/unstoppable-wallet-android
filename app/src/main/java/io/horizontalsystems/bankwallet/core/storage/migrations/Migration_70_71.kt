@@ -14,10 +14,13 @@ object Migration_70_71 : Migration(70, 71) {
                 `transactionHash` BLOB NOT NULL,
                 `spamScore` INTEGER NOT NULL,
                 `blockchainType` TEXT NOT NULL,
-                `address` TEXT,
+                `address` TEXT COLLATE NOCASE,
                 PRIMARY KEY(`transactionHash`)
             )
         """.trimIndent())
+
+        // Add index on address and spamScore for faster spam lookups
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_ScannedTransaction_address_spamScore` ON `ScannedTransaction` (`address`, `spamScore`)")
 
         // Clear SpamScanState to trigger rescan of all transactions
         db.execSQL("DELETE FROM SpamScanState")

@@ -17,7 +17,6 @@ import io.horizontalsystems.tronkit.network.Network
 import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.rx2.asFlowable
 
 class TronTransactionsAdapter(
@@ -71,7 +70,7 @@ class TronTransactionsAdapter(
     ): Flow<List<TransactionRecord>> {
         return tronKit.getFullTransactionsFlow(getFilters(token, transactionType, address))
             .map { transactions ->
-                transactions.map { runBlocking { transactionConverter.transactionRecord(it) } }
+                transactions.map { transactionConverter.transactionRecord(it) }
             }
     }
 

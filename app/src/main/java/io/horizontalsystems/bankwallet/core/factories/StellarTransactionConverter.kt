@@ -118,12 +118,16 @@ class StellarTransactionConverter(
         }
 
         val eventsForPhishingCheck = StellarTransactionRecord.eventsForPhishingCheck(type)
-        val txHash = operation.transactionHash.hexStringToByteArrayOrNull() ?: byteArrayOf()
-        val spam = App.spamManager.isSpam(
-            txHash,
-            eventsForPhishingCheck,
-            source
-        )
+        val txHash = operation.transactionHash.hexStringToByteArrayOrNull()
+        val spam = if (txHash != null) {
+            App.spamManager.isSpam(
+                txHash,
+                eventsForPhishingCheck,
+                source
+            )
+        } else {
+            false
+        }
 
         return StellarTransactionRecord(baseToken, source, operation, type, spam)
     }
