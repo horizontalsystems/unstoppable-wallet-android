@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.os.Handler
-import android.os.Looper
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.BackgroundManagerState
@@ -16,6 +14,7 @@ import io.horizontalsystems.tronkit.transaction.Signer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -130,11 +129,16 @@ class TronKitManager(
         tronKitWrapper?.tronKit?.start()
         job = scope.launch {
             backgroundManager.stateFlow.collect { state ->
-                if (state == BackgroundManagerState.EnterForeground) {
-                    tronKitWrapper?.tronKit?.let { kit ->
-                        Handler(Looper.getMainLooper()).postDelayed({
+                when (state) {
+                    BackgroundManagerState.EnterForeground -> {
+                        tronKitWrapper?.tronKit?.let { kit ->
+                            kit.resume()
+                            delay(1000)
                             kit.refresh()
-                        }, 1000)
+                        }
+                    }
+                    BackgroundManagerState.EnterBackground -> {
+                        tronKitWrapper?.tronKit?.pause()
                     }
                 }
             }
