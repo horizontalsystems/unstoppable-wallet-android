@@ -26,6 +26,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
+import java.math.RoundingMode
 import kotlin.coroutines.cancellation.CancellationException
 
 class SwapConfirmViewModel(
@@ -44,7 +45,13 @@ class SwapConfirmViewModel(
     private val currency = currencyManager.baseCurrency
     private val tokenIn = swapQuote.tokenIn
     private val tokenOut = swapQuote.tokenOut
-    private val amountIn = swapQuote.amountIn
+    private val amountIn = swapQuote.amountIn.let { amount ->
+        if (amount.scale() > tokenIn.decimals) {
+            amount.setScale(tokenIn.decimals, RoundingMode.DOWN)
+        } else {
+            amount
+        }
+    }
     private var fiatAmountIn: BigDecimal? = null
     private var recipient: Address? = null
     private var slippage: BigDecimal? = null
