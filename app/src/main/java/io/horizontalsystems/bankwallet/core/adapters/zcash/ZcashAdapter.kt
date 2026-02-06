@@ -439,10 +439,10 @@ class ZcashAdapter(
         val blocksRemaining = calculateBlocksRemaining()
         val progressPercent = progress.toPercentage().coerceIn(0, 100)
 
-        if (blocksRemaining == null || progressPercent == 0) return
+        if (blocksRemaining == null) return
 
         syncState = AdapterState.Syncing(
-            progress = if (progressPercent > 0) progressPercent else null,
+            progress = progressPercent,
             blocksRemained = blocksRemaining
         )
     }
