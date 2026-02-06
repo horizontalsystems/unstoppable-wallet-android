@@ -53,9 +53,8 @@ class TronTransactionConverter(
                         if (contract.ownerAddress != tronKit.address) {
                             val fromAddress = contract.ownerAddress.base58
                             val transactionValue = baseCoinValue(contract.amount, false)
-                            val txHash = transaction.hashString.hexStringToByteArrayOrNull() ?: byteArrayOf()
                             val spam = App.spamManager.isSpam(
-                                txHash,
+                                transaction.hash,
                                 listOf(TransferEvent(fromAddress, transactionValue)),
                                 source
                             )
@@ -133,9 +132,8 @@ class TronTransactionConverter(
                     }
 
                     decoration.fromAddress != address && decoration.toAddress != address -> {
-                        val txHash = transaction.hashString.hexStringToByteArrayOrNull() ?: byteArrayOf()
                         val spam = App.spamManager.isSpam(
-                            txHash,
+                            transaction.hash,
                             incomingEvents + outgoingEvents,
                             source
                         )

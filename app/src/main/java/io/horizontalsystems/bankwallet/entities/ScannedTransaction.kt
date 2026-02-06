@@ -1,15 +1,20 @@
 package io.horizontalsystems.bankwallet.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import io.horizontalsystems.bankwallet.core.managers.PoisoningScorer
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-@Entity
+@Entity(
+    indices = [Index(value = ["address", "spamScore"])]
+)
 data class ScannedTransaction(
     @PrimaryKey val transactionHash: ByteArray,
     val spamScore: Int,
     val blockchainType: BlockchainType,
+    @ColumnInfo(collate = ColumnInfo.NOCASE)
     val address: String?
 ) {
     val isSpam: Boolean

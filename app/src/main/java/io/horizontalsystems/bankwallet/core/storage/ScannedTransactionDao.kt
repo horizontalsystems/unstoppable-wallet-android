@@ -22,7 +22,7 @@ interface ScannedTransactionDao {
     @Query("SELECT * FROM ScannedTransaction WHERE transactionHash IN (:hashes)")
     fun getByHashes(hashes: List<ByteArray>): List<ScannedTransaction>
 
-    @Query("SELECT * FROM ScannedTransaction WHERE spamScore >= 7 AND address = :address COLLATE NOCASE LIMIT 1")
+    @Query("SELECT * FROM ScannedTransaction WHERE spamScore >= 7 AND address = :address LIMIT 1")
     fun getSpamByAddress(address: String): ScannedTransaction?
 
     @Query("SELECT * FROM ScannedTransaction WHERE spamScore >= 7")
