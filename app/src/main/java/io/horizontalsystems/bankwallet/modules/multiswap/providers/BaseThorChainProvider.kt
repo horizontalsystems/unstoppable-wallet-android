@@ -129,7 +129,7 @@ abstract class BaseThorChainProvider(
         tokenOut: Token,
         amountIn: BigDecimal
     ): SwapQuote {
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, null, refundAddress = null)
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, null, refundAddress = null, fromAddress = null)
 
         val routerAddress = quoteSwap.router?.let { router ->
             try {
@@ -159,7 +159,8 @@ abstract class BaseThorChainProvider(
         amountIn: BigDecimal,
         slippage: BigDecimal?,
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
-        refundAddress: String?
+        refundAddress: String?,
+        fromAddress: String?
     ): Response.QuoteSwap {
         val assetIn = assetsMap[tokenIn]!!
         val assetOut = assetsMap[tokenOut]!!
@@ -175,11 +176,13 @@ abstract class BaseThorChainProvider(
             streamingInterval = 1,
             streamingQuantity = 0,
             liquidityToleranceBps = slippage?.movePointRight(2)?.toLong(),
-            refundAddress = refundAddress
+            refundAddress = refundAddress,
+            fromAddress = fromAddress
         )
     }
 
     protected open fun getRefundAddress(tokenIn: Token): String? = null
+    protected open fun getFromAddress(tokenIn: Token): String? = null
 
     override suspend fun fetchFinalQuote(
         tokenIn: Token,
@@ -190,7 +193,7 @@ abstract class BaseThorChainProvider(
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         slippage: BigDecimal,
     ): SwapFinalQuote {
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, recipient, getRefundAddress(tokenIn))
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, recipient, getRefundAddress(tokenIn), getFromAddress(tokenIn))
 
         val amountOut = quoteSwap.expected_amount_out.movePointLeft(8)
 
@@ -323,6 +326,7 @@ interface ThornodeAPI {
         @Query("streaming_quantity") streamingQuantity: Long,
         @Query("liquidity_tolerance_bps") liquidityToleranceBps: Long?,
         @Query("refund_address") refundAddress: String?,
+        @Query("from_address") fromAddress: String?,
 
     ): Response.QuoteSwap
 
