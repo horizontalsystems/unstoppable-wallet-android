@@ -80,6 +80,7 @@ interface IKeyStoreCleaner {
 
 interface IKeyProvider {
     fun getKey(): SecretKey
+    fun getLegacyKey(): SecretKey?
 }
 
 interface ICurrentDateProvider {
