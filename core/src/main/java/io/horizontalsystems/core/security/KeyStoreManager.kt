@@ -23,8 +23,6 @@ class KeyStoreManager(
 ) : IKeyStoreManager, IKeyProvider {
 
     private val ANDROID_KEY_STORE = "AndroidKeyStore"
-    private val BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC
-    private val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
     private val AUTH_DURATION_SEC = 86400 // 24 hours in seconds (24x60x60)
 
     private val keyStore: KeyStore
@@ -94,10 +92,10 @@ class KeyStoreManager(
             keyAlias,
             KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
         )
-            .setBlockModes(BLOCK_MODE)
+            .setBlockModes(KeyProperties.BLOCK_MODE_CBC, KeyProperties.BLOCK_MODE_GCM)
             .setUserAuthenticationRequired(true)
             .setRandomizedEncryptionRequired(false)
-            .setEncryptionPaddings(PADDING)
+            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7, KeyProperties.ENCRYPTION_PADDING_NONE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             builder.setUserAuthenticationParameters(
