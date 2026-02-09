@@ -72,7 +72,9 @@ class EvmTransactionConverter(
                 val isSpam = App.spamManager.isSpam(
                     transaction.hash,
                     listOf(TransferEvent(fromAddress, transactionValue)),
-                    source
+                    source,
+                    transaction.timestamp,
+                    transaction.blockNumber?.toInt()
                 )
                 EvmIncomingTransactionRecord(transaction, baseToken, source, fromAddress, transactionValue, isSpam, protected)
             }
@@ -232,7 +234,9 @@ class EvmTransactionConverter(
                         val isSpam = App.spamManager.isSpam(
                             transaction.hash,
                             incomingEvents + outgoingEvents,
-                            source
+                            source,
+                            transaction.timestamp,
+                            transaction.blockNumber?.toInt()
                         )
                         ExternalContractCallTransactionRecord(
                             transaction, baseToken, source,
