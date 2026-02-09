@@ -17,20 +17,9 @@ object MayaProvider : BaseThorChainProvider(
     override val title = "Maya Protocol"
     override val icon = R.drawable.swap_provider_maya
 
-    // When true, refundAddress is not passed to the quoteSwap API request
-    // but is manually added to the memo returned by the API.
-    // This avoids the "generated memo too long for source chain" error
-    // for UTXO chains (e.g. Zcash) where the memo with refundAddress exceeds
-    // the 80-char OP_RETURN limit.
-    private const val MANUALLY_ADD_REFUND_ADDRESS = true
-
     override fun getRefundAddress(tokenIn: Token): String? {
         return if (tokenIn.blockchainType == BlockchainType.Zcash) {
-            if (MANUALLY_ADD_REFUND_ADDRESS) {
-                null
-            } else {
-                App.adapterManager.getAdapterForToken<ZcashAdapter>(tokenIn)?.receiveAddressTransparent
-            }
+            App.adapterManager.getAdapterForToken<ZcashAdapter>(tokenIn)?.receiveAddressTransparent
         } else {
             null
         }
@@ -52,33 +41,14 @@ object MayaProvider : BaseThorChainProvider(
                 throw IllegalStateException("Zcash shielded memo is not available or disabled")
             }
 
-            var memo = quoteSwap.memo
-
-            if (MANUALLY_ADD_REFUND_ADDRESS) {
-                val refundAddress = App.adapterManager.getAdapterForToken<ZcashAdapter>(tokenIn)?.receiveAddressTransparent
-                if (refundAddress != null) {
-                    memo = addRefundAddressToMemo(memo, refundAddress)
-                }
-            }
-
             return SendTransactionData.Zcash.ShieldedMemo(
                 address = quoteSwap.inbound_address,
                 amount = amountIn,
-                memo = memo,
+                memo = quoteSwap.memo,
                 memoShieldedAddress = shieldedMemoConfig.unified_address
             )
         }
 
         return super.getSendTransactionData(tokenIn, amountIn, quoteSwap, tokenOut)
-    }
-
-    // Memo format: =:ASSET:DESTADDR:LIM/INTERVAL/QUANTITY:AFFILIATE:FEE
-    // Adds refund address after DESTADDR: =:ASSET:DESTADDR/REFUNDADDR:LIM/INTERVAL/QUANTITY:AFFILIATE:FEE
-    private fun addRefundAddressToMemo(memo: String, refundAddress: String): String {
-        val parts = memo.split(":")
-        if (parts.size < 3) return memo
-        val mutableParts = parts.toMutableList()
-        mutableParts[2] = "${mutableParts[2]}/$refundAddress"
-        return mutableParts.joinToString(":")
     }
 }
