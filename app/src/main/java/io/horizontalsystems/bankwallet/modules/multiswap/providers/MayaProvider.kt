@@ -25,6 +25,14 @@ object MayaProvider : BaseThorChainProvider(
         }
     }
 
+    override fun getFromAddress(tokenIn: Token): String? {
+        return if (tokenIn.blockchainType == BlockchainType.Zcash) {
+            App.adapterManager.getAdapterForToken<ZcashAdapter>(tokenIn)?.receiveAddress
+        } else {
+            null
+        }
+    }
+
     override suspend fun getSendTransactionData(
         tokenIn: Token,
         amountIn: BigDecimal,
