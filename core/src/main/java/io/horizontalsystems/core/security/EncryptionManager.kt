@@ -12,12 +12,6 @@ class EncryptionManager(private val keyProvider: IKeyProvider) : IEncryptionMana
 
     @Synchronized
     override fun decrypt(data: String): String {
-        val key = if (data.startsWith("v2]")) {
-            keyProvider.getKey()
-        } else {
-            keyProvider.getLegacyKey()
-                ?: throw IllegalStateException("No legacy key available to decrypt CBC-encrypted data")
-        }
-        return CipherWrapper().decrypt(data, key)
+        return CipherWrapper().decrypt(data, keyProvider.getKey(), keyProvider.getLegacyKey())
     }
 }

@@ -29,11 +29,13 @@ class CipherWrapper {
         return VERSION_GCM_PREFIX + ivString + IV_SEPARATOR + encryptedString
     }
 
-    fun decrypt(data: String, key: Key): String {
+    fun decrypt(data: String, key: Key, legacyKey: Key?): String {
         return if (data.startsWith(VERSION_GCM_PREFIX)) {
             decryptGcm(data.removePrefix(VERSION_GCM_PREFIX), key)
         } else {
-            decryptCbc(data, key)
+            val cbcKey = legacyKey
+                ?: throw IllegalStateException("No legacy key available to decrypt CBC-encrypted data")
+            decryptCbc(data, cbcKey)
         }
     }
 
