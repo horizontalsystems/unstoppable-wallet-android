@@ -23,7 +23,11 @@ class KeyStoreManager(
 ) : IKeyStoreManager, IKeyProvider {
 
     private val ANDROID_KEY_STORE = "AndroidKeyStore"
+    private val BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC
+    private val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
     private val AUTH_DURATION_SEC = 86400 // 24 hours in seconds (24x60x60)
+
+    private val gcmKeyAlias = "${keyAlias}_gcm"
 
     private val keyStore: KeyStore
 
@@ -39,20 +43,33 @@ class KeyStoreManager(
 
     override fun getKey(): SecretKey {
         try {
-            keyStore.getKey(keyAlias, null)?.let {
+            keyStore.getKey(gcmKeyAlias, null)?.let {
                 return it as SecretKey
             }
         } catch (ex: UnrecoverableKeyException) {
             //couldn't get key due to exception
         }
-        return createKey()
+        return createGcmKey()
+    }
+
+    override fun getLegacyKey(): SecretKey? {
+        return try {
+            keyStore.getKey(keyAlias, null) as? SecretKey
+        } catch (ex: UnrecoverableKeyException) {
+            null
+        }
     }
 
     override fun removeKey() {
         try {
             keyStore.deleteEntry(keyAlias)
         } catch (ex: KeyStoreException) {
-            logger.warning("remove key failed", ex)
+            logger.warning("remove legacy key failed", ex)
+        }
+        try {
+            keyStore.deleteEntry(gcmKeyAlias)
+        } catch (ex: KeyStoreException) {
+            logger.warning("remove gcm key failed", ex)
         }
     }
 
@@ -84,18 +101,17 @@ class KeyStoreManager(
     }
 
     @Synchronized
-    private fun createKey(): SecretKey {
+    private fun createGcmKey(): SecretKey {
         val keyGenerator =
             KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEY_STORE)
 
         val builder = KeyGenParameterSpec.Builder(
-            keyAlias,
+            gcmKeyAlias,
             KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
         )
-            .setBlockModes(KeyProperties.BLOCK_MODE_CBC, KeyProperties.BLOCK_MODE_GCM)
+            .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
             .setUserAuthenticationRequired(true)
-            .setRandomizedEncryptionRequired(false)
-            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7, KeyProperties.ENCRYPTION_PADDING_NONE)
+            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             builder.setUserAuthenticationParameters(
@@ -114,11 +130,25 @@ class KeyStoreManager(
     }
 
     private fun validateKey() {
+        val cipherWrapper = CipherWrapper()
+
         keyStoreCleaner.encryptedSampleText?.let { encryptedText ->
-            val key = keyStore.getKey(keyAlias, null) ?: throw InvalidKeyException()
-            CipherWrapper().decrypt(encryptedText, key)
+            if (encryptedText.startsWith("v2]")) {
+                // Already migrated — validate GCM key
+                val key = keyStore.getKey(gcmKeyAlias, null) ?: throw InvalidKeyException()
+                cipherWrapper.decrypt(encryptedText, key)
+            } else {
+                // Legacy CBC data — validate CBC key, then migrate sample to GCM
+                val legacyKey = keyStore.getKey(keyAlias, null) ?: throw InvalidKeyException()
+                val plainText = cipherWrapper.decrypt(encryptedText, legacyKey)
+
+                // Re-encrypt with GCM key and store
+                val gcmEncrypted = cipherWrapper.encrypt(plainText, getKey())
+                keyStoreCleaner.encryptedSampleText = gcmEncrypted
+            }
         } ?: run {
-            val text = CipherWrapper().encrypt("abc", getKey())
+            // Fresh install — encrypt sample with GCM key
+            val text = cipherWrapper.encrypt("abc", getKey())
             keyStoreCleaner.encryptedSampleText = text
         }
     }
