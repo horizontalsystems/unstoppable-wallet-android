@@ -133,23 +133,9 @@ class KeyStoreManager(
         val cipherWrapper = CipherWrapper()
 
         keyStoreCleaner.encryptedSampleText?.let { encryptedText ->
-            if (encryptedText.startsWith("v2]")) {
-                // Already migrated — validate GCM key
-                val key = keyStore.getKey(gcmKeyAlias, null) ?: throw InvalidKeyException()
-                cipherWrapper.decrypt(encryptedText, key)
-            } else {
-                // Legacy CBC data — validate CBC key, then migrate sample to GCM
-                val legacyKey = keyStore.getKey(keyAlias, null) ?: throw InvalidKeyException()
-                val plainText = cipherWrapper.decrypt(encryptedText, legacyKey)
-
-                // Re-encrypt with GCM key and store
-                val gcmEncrypted = cipherWrapper.encrypt(plainText, getKey())
-                keyStoreCleaner.encryptedSampleText = gcmEncrypted
-            }
+            cipherWrapper.decrypt(encryptedText, getKey(), getLegacyKey())
         } ?: run {
-            // Fresh install — encrypt sample with GCM key
-            val text = cipherWrapper.encrypt("abc", getKey())
-            keyStoreCleaner.encryptedSampleText = text
+            keyStoreCleaner.encryptedSampleText = cipherWrapper.encrypt("abc", getKey())
         }
     }
 
