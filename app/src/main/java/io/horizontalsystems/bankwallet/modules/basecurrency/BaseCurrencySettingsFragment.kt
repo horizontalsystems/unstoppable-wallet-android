@@ -68,6 +68,7 @@ private fun BaseCurrencyScreen(
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = androidx.compose.material3.rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
         confirmValueChange = {
             if (it == SheetValue.Hidden) {
                 viewModel.closeDisclaimer()

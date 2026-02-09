@@ -262,7 +262,7 @@ fun WCNewSignRequestScreen(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
-    val messageBottomSheetState = rememberModalBottomSheetState()
+    val messageBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var messageBottomSheet by remember { mutableStateOf<String?>(null) }
 
     BottomSheetContent(

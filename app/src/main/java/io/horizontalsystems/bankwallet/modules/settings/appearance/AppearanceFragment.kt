@@ -89,7 +89,7 @@ fun AppearanceScreen(navController: NavController) {
     var openPriceChangeIntervalSelector by rememberSaveable { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
 
     HSScaffold(
