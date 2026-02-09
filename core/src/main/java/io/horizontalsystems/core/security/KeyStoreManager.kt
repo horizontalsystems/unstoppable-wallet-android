@@ -23,8 +23,6 @@ class KeyStoreManager(
 ) : IKeyStoreManager, IKeyProvider {
 
     private val ANDROID_KEY_STORE = "AndroidKeyStore"
-    private val BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC
-    private val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
     private val AUTH_DURATION_SEC = 86400 // 24 hours in seconds (24x60x60)
 
     private val gcmKeyAlias = "${keyAlias}_gcm"
