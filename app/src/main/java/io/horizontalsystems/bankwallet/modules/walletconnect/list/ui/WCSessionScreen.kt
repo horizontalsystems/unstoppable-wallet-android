@@ -74,7 +74,7 @@ fun WCSessionsScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showInvalidUrlBottomSheet by remember { mutableStateOf(false) }
     var removeSessionBottomSheet by remember {
         mutableStateOf<WalletConnectListModule.SessionViewItem?>(

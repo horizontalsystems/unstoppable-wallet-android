@@ -865,7 +865,7 @@ private fun ButtonsRow(
 @Preview
 @Composable
 private fun InfoBottomSheetPreview() {
-    val bottomSheetState = rememberModalBottomSheetState()
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val lockedValue = LockedValue(
         title = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalanceDetected_Info_Title),
         info = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Description),
