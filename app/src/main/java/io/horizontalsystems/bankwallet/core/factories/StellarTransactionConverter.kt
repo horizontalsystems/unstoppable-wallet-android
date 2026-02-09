@@ -123,7 +123,10 @@ class StellarTransactionConverter(
             App.spamManager.isSpam(
                 txHash,
                 eventsForPhishingCheck,
-                source
+                source,
+                operation.timestamp,
+                null,
+                operation.id
             )
         } else {
             false

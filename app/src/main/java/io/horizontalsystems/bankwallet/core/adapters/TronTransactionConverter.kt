@@ -56,7 +56,9 @@ class TronTransactionConverter(
                             val spam = App.spamManager.isSpam(
                                 transaction.hash,
                                 listOf(TransferEvent(fromAddress, transactionValue)),
-                                source
+                                source,
+                                transaction.timestamp / 1000,
+                                transaction.blockNumber?.toInt()
                             )
                             TronIncomingTransactionRecord(
                                 transaction = transaction,
@@ -135,7 +137,9 @@ class TronTransactionConverter(
                         val spam = App.spamManager.isSpam(
                             transaction.hash,
                             incomingEvents + outgoingEvents,
-                            source
+                            source,
+                            transaction.timestamp / 1000,
+                            transaction.blockNumber?.toInt()
                         )
 
                         TronExternalContractCallTransactionRecord(

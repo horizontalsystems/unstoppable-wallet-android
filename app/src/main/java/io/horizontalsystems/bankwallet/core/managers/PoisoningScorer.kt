@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
 import java.math.BigDecimal
@@ -79,53 +78,88 @@ class PoisoningScorer {
     }
 
     /**
-     * Result of spam scoring for a transaction (aggregated from all events)
+     * Result of value-only scoring (Phase 1 of two-pass approach).
+     * Used to determine if we need to fetch outgoing context.
      */
-    data class SpamScoringResult(
+    data class ValueScoringResult(
         val score: Int,
-        val spamAddress: String?
+        val address: String?,
+        val needsContextCheck: Boolean  // true if score is 1-6 (gray zone)
     )
 
     /**
-     * Calculate spam score for incoming transfer events.
-     * Returns the maximum score found and the corresponding spam address.
+     * Result of correlation scoring (temporal + mimic).
+     * Made public for two-pass scoring approach.
+     */
+    data class CorrelationScoringResult(
+        val points: Int,
+        val address: String?
+    )
+
+    /**
+     * Phase 1: Calculate value-only score for incoming transfer events.
+     * This is a fast check that doesn't require outgoing transaction context.
+     *
+     * Early exits:
+     * - Score >= 7 → Spam (no context needed)
+     * - Score = 0 → Not spam (no context needed)
+     * - Score 1-6 → Gray zone (needs context for correlation check)
      *
      * @param events List of incoming transfer events to check
-     * @param incomingTimestamp Timestamp of the incoming transaction
-     * @param incomingBlockHeight Block height of the incoming transaction (nullable)
-     * @param recentOutgoingTxs Recent outgoing transactions for comparison
-     * @return SpamScoringResult with max score and spam address
+     * @param spamCoinLimits Map of coin code to spam threshold value
+     * @return ValueScoringResult with score and whether context check is needed
      */
-    fun calculateSpamScore(
+    fun calculateValueScore(
         events: List<TransferEvent>,
-        incomingTimestamp: Long,
-        incomingBlockHeight: Int?,
-        recentOutgoingTxs: List<OutgoingTxInfo>
-    ): SpamScoringResult {
-        val spamCoinLimits = App.appConfigProvider.spamCoinValueLimits
+        spamCoinLimits: Map<String, BigDecimal>
+    ): ValueScoringResult {
         var maxScore = 0
         var maxScoreAddress: String? = null
 
-        // Score each event individually
         events.forEach { event ->
-            val result = scoreEvent(
-                event = event,
-                incomingTimestamp = incomingTimestamp,
-                incomingBlockHeight = incomingBlockHeight,
-                recentOutgoingTxs = recentOutgoingTxs,
-                spamCoinLimits = spamCoinLimits
-            )
+            val result = scoreEventValue(event, spamCoinLimits)
             if (result.score > maxScore) {
                 maxScore = result.score
                 maxScoreAddress = result.address
             }
         }
 
-        return SpamScoringResult(maxScore, maxScoreAddress)
+        // Determine if we need context check:
+        // - Score >= SPAM_THRESHOLD: already spam, no context needed
+        // - Score = 0: not spam, no context needed
+        // - Score 1 to SPAM_THRESHOLD-1: gray zone, need context for correlation
+        val needsContextCheck = maxScore in 1..<SPAM_THRESHOLD
+
+        return ValueScoringResult(maxScore, maxScoreAddress, needsContextCheck)
     }
 
     /**
-     * Result of correlation scoring (temporal + mimic)
+     * Phase 2: Calculate correlation score using outgoing transaction context.
+     * Only called when value score is in the gray zone (1-6 points).
+     *
+     * @param events List of incoming transfer events to check
+     * @param incomingTimestamp Timestamp of the incoming transaction
+     * @param incomingBlockHeight Block height of the incoming transaction (nullable)
+     * @param recentOutgoingTxs Recent outgoing transactions for comparison
+     * @return CorrelationScoringResult with additional points from correlation
+     */
+    fun calculateCorrelationScore(
+        events: List<TransferEvent>,
+        incomingTimestamp: Long,
+        incomingBlockHeight: Int?,
+        recentOutgoingTxs: List<OutgoingTxInfo>
+    ): CorrelationScoringResult {
+        val addresses = events.mapNotNull { it.address }
+        if (addresses.isEmpty()) {
+            return CorrelationScoringResult(0, null)
+        }
+
+        val correlation = calculateCorrelation(addresses, incomingTimestamp, incomingBlockHeight, recentOutgoingTxs)
+        return CorrelationScoringResult(correlation.points, addresses.firstOrNull())
+    }
+
+    /**
+     * Internal result of correlation scoring (temporal + mimic)
      */
     private data class CorrelationScore(
         val points: Int,
@@ -137,7 +171,7 @@ class PoisoningScorer {
      * Block and Time correlations are mutually exclusive - block is checked first (more precise).
      * Prefix and Suffix matches are scored separately (+4 each).
      */
-    private fun calculateCorrelationScore(
+    private fun calculateCorrelation(
         addresses: List<String>,
         incomingTimestamp: Long,
         incomingBlockHeight: Int?,
@@ -222,13 +256,11 @@ class PoisoningScorer {
     }
 
     /**
-     * Score an individual transfer event
+     * Score an individual transfer event based on value only (no correlation).
+     * Used in Phase 1 of two-pass scoring to determine if context fetch is needed.
      */
-    private fun scoreEvent(
+    private fun scoreEventValue(
         event: TransferEvent,
-        incomingTimestamp: Long,
-        incomingBlockHeight: Int?,
-        recentOutgoingTxs: List<OutgoingTxInfo>,
         spamCoinLimits: Map<String, BigDecimal>
     ): ScoringResult {
         val address = event.address ?: return ScoringResult(null, 0, emptyList())
@@ -254,7 +286,6 @@ class PoisoningScorer {
                 if (value.value <= BigDecimal.ZERO) {
                     score += POINTS_ZERO_NFT
                     reasons.add("Zero-value NFT transfer")
-                    // Continue to check correlation for additional points
                 } else {
                     return ScoringResult(address, 0, emptyList())
                 }
@@ -293,11 +324,7 @@ class PoisoningScorer {
             }
         }
 
-        // Calculate correlation score
-        val correlation = calculateCorrelationScore(listOf(address), incomingTimestamp, incomingBlockHeight, recentOutgoingTxs)
-        score += correlation.points
-        reasons.addAll(correlation.reasons)
-
+        // No correlation scoring in Phase 1
         return ScoringResult(address, score, reasons)
     }
 
