@@ -503,8 +503,16 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     }
 
     override fun newImageLoader(): ImageLoader {
+        val cacheDir = java.io.File(cacheDir, "http_cache")
+        val okHttpClient = okhttp3.OkHttpClient.Builder()
+            .cache(okhttp3.Cache(cacheDir, 10L * 1024 * 1024)) // 10 MB
+            .addNetworkInterceptor(NotFoundCacheInterceptor())
+            .build()
+
         return ImageLoader.Builder(this)
             .crossfade(true)
+            .okHttpClient(okHttpClient)
+            .respectCacheHeaders(true)
             .components {
                 add(SvgDecoder.Factory())
                 if (Build.VERSION.SDK_INT >= 28) {
@@ -645,5 +653,24 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             val migrationManager = MigrationManager(localStorage, termsManager)
             migrationManager.runMigrations()
         }
+    }
+}
+
+/**
+ * OkHttp network interceptor that makes 404 responses cacheable for 24 hours.
+ * Without this, 404s have no cache headers and are re-fetched every time.
+ * This avoids repeated network requests for missing images (e.g. coin icons),
+ * allowing the app to skip straight to the alternative URL on subsequent loads.
+ */
+private class NotFoundCacheInterceptor : okhttp3.Interceptor {
+    override fun intercept(chain: okhttp3.Interceptor.Chain): okhttp3.Response {
+        val response = chain.proceed(chain.request())
+        if (response.code == 404) {
+            return response.newBuilder()
+                .header("Cache-Control", "public, max-age=86400")
+                .removeHeader("Pragma")
+                .build()
+        }
+        return response
     }
 }
