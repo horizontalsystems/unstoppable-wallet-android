@@ -229,6 +229,12 @@ class TransactionRecordRepository(
         }
     }
 
+    override fun invalidateAdapters() {
+        adaptersMap.values.forEach(TransactionAdapterWrapper::clear)
+        adaptersMap.clear()
+        selectedWallet = null
+    }
+
     override fun clear() {
         adaptersMap.values.forEach(TransactionAdapterWrapper::clear)
         adaptersMap.clear()
