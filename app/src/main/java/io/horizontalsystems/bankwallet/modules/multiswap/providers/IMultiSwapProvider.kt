@@ -56,5 +56,5 @@ interface IMultiSwapProvider {
 
 enum class SwapProviderType(val title: String) {
     DEX("DEX"),
-    P2P("P2P")
+    CEX("CEX")
 }
