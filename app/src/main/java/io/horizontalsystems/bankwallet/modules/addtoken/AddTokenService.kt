@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.addtoken
 
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
@@ -54,7 +55,7 @@ class AddTokenService(
                 AddTonTokenBlockchainService(blockchain)
             }
             BlockchainType.Solana -> {
-                AddSolanaTokenBlockchainService.getInstance(blockchain)
+                AddSolanaTokenBlockchainService.getInstance(blockchain, App.appConfigProvider.solanaJupiterApiKey)
             }
             else -> AddEvmTokenBlockchainService.getInstance(blockchain)
         }

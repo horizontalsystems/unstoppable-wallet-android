@@ -76,8 +76,12 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         Translator.getString(R.string.openSeaApiKey)
     }
 
-    val solscanApiKey by lazy {
-        Translator.getString(R.string.solscanApiKey)
+    val solanaAlchemyApiKey by lazy {
+        Translator.getString(R.string.solanaAlchemyApiKey)
+    }
+
+    val solanaJupiterApiKey by lazy {
+        Translator.getString(R.string.solanaJupiterApiKey)
     }
 
     val trongridApiKeys: List<String> by lazy {

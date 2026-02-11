@@ -59,11 +59,13 @@ class SolanaKitManager(
             val accountType = account.type
             this.solanaKitWrapper = when (accountType) {
                 is AccountType.Mnemonic -> {
-                    createKitInstance(accountType, account)
+                    createKitInstanceFromMnemonic(accountType, account)
                 }
+
                 is AccountType.SolanaAddress -> {
-                    createKitInstance(accountType, account)
+                    createKitInstanceFromAddress(accountType, account)
                 }
+
                 else -> throw UnsupportedAccountException()
             }
             startKit()
@@ -76,7 +78,7 @@ class SolanaKitManager(
         return this.solanaKitWrapper!!
     }
 
-    private fun createKitInstance(
+    private fun createKitInstanceFromMnemonic(
         accountType: AccountType.Mnemonic,
         account: Account
     ): SolanaKitWrapper {
@@ -89,15 +91,14 @@ class SolanaKitManager(
             addressString = address,
             rpcSource = rpcSourceManager.rpcSource,
             walletId = account.id,
-            solscanApiKey = appConfigProvider.solscanApiKey
         )
 
         return SolanaKitWrapper(kit, signer)
     }
 
-    private fun createKitInstance(
-            accountType: AccountType.SolanaAddress,
-            account: Account
+    private fun createKitInstanceFromAddress(
+        accountType: AccountType.SolanaAddress,
+        account: Account
     ): SolanaKitWrapper {
         val address = accountType.address
 
@@ -106,7 +107,6 @@ class SolanaKitManager(
             addressString = address,
             rpcSource = rpcSourceManager.rpcSource,
             walletId = account.id,
-            solscanApiKey = appConfigProvider.solscanApiKey
         )
 
         return SolanaKitWrapper(kit, null)
