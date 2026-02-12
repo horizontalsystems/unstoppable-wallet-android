@@ -12,12 +12,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class WalletManager(
     private val accountManager: IAccountManager,
     private val storage: IWalletStorage,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val moneroNodeManager: MoneroNodeManager,
+    private val btcBlockchainManager: BtcBlockchainManager,
 ) : IWalletManager {
 
     override val activeWallets get() = walletsSet.toList()
@@ -36,12 +38,17 @@ class WalletManager(
         }
         coroutineScope.launch {
             restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
-                handleUpdatedRestoreSettings(blockchainType)
+                reloadWallets(blockchainType)
             }
         }
         coroutineScope.launch {
             moneroNodeManager.currentNodeUpdatedFlow.collect {
-                handleUpdatedRestoreSettings(BlockchainType.Monero)
+                reloadWallets(BlockchainType.Monero)
+            }
+        }
+        coroutineScope.launch {
+            btcBlockchainManager.restoreModeUpdatedObservable.asFlow().collect { blockchainType ->
+                reloadWallets(blockchainType)
             }
         }
     }
@@ -96,7 +103,7 @@ class WalletManager(
     }
 
     @Synchronized
-    private fun handleUpdatedRestoreSettings(blockchainType: BlockchainType) {
+    private fun reloadWallets(blockchainType: BlockchainType) {
         val walletsToReAdd = walletsSet.filter { it.token.blockchainType == blockchainType }
         if (walletsToReAdd.isEmpty()) return
 

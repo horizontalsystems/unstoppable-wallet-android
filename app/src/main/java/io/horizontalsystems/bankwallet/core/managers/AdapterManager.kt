@@ -21,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap
 class AdapterManager(
     private val walletManager: IWalletManager,
     private val adapterFactory: AdapterFactory,
-    private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
@@ -43,11 +42,6 @@ class AdapterManager(
             }
         }
         coroutineScope.launch {
-            btcBlockchainManager.restoreModeUpdatedObservable.asFlow().collect {
-                handleUpdatedRestoreMode(it)
-            }
-        }
-        coroutineScope.launch {
             solanaKitManager.kitStoppedObservable.asFlow().collect {
                 handleUpdatedKit(BlockchainType.Solana)
             }
@@ -63,21 +57,6 @@ class AdapterManager(
     }
 
     private fun handleUpdatedKit(blockchainType: BlockchainType) {
-        val wallets = adaptersMap.keys().toList().filter {
-            it.token.blockchainType == blockchainType
-        }
-
-        if (wallets.isEmpty()) return
-
-        wallets.forEach {
-            adaptersMap[it]?.stop()
-            adaptersMap.remove(it)
-        }
-
-        initAdapters(walletManager.activeWallets)
-    }
-
-    private fun handleUpdatedRestoreMode(blockchainType: BlockchainType) {
         val wallets = adaptersMap.keys().toList().filter {
             it.token.blockchainType == blockchainType
         }
