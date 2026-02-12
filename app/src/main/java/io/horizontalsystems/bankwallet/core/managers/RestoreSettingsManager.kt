@@ -13,9 +13,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 class RestoreSettingsManager(
-        private val storage: IRestoreSettingsStorage,
-        private val zcashBirthdayProvider: ZcashBirthdayProvider,
-        private val moneroBirthdayProvider: MoneroBirthdayProvider
+    private val storage: IRestoreSettingsStorage,
+    private val zcashBirthdayProvider: ZcashBirthdayProvider,
+    private val moneroBirthdayProvider: MoneroBirthdayProvider
 ) {
     private val _settingsUpdatedFlow = MutableSharedFlow<BlockchainType>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val settingsUpdatedFlow = _settingsUpdatedFlow.asSharedFlow()
@@ -58,9 +58,11 @@ class RestoreSettingsManager(
                     BlockchainType.Zcash -> {
                         return zcashBirthdayProvider.getLatestCheckpointBlockHeight().toString()
                     }
+
                     BlockchainType.Monero -> {
                         return moneroBirthdayProvider.restoreHeightForNewWallet().toString()
                     }
+
                     else -> null
                 }
             }
