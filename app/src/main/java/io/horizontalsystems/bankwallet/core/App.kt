@@ -294,7 +294,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         moneroNodeStorage = MoneroNodeStorage(appDatabase)
         moneroNodeManager = MoneroNodeManager(blockchainSettingsStorage, moneroNodeStorage,marketKit)
 
-        walletManager = WalletManager(accountManager, walletStorage, restoreSettingsManager, moneroNodeManager)
+        walletManager = WalletManager(accountManager, walletStorage, restoreSettingsManager, moneroNodeManager, btcBlockchainManager)
         coinManager = CoinManager(marketKit, walletManager)
 
         solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
@@ -390,7 +390,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         adapterManager = AdapterManager(
             walletManager,
             adapterFactory,
-            btcBlockchainManager,
             evmBlockchainManager,
             solanaKitManager,
             tronKitManager,
