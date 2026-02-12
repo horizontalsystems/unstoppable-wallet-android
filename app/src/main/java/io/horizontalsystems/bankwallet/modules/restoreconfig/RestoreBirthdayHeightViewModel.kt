@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.util.Date
 
 class RestoreBirthdayHeightViewModel(
@@ -17,7 +18,7 @@ class RestoreBirthdayHeightViewModel(
 ) : ViewModelUiState<RestoreBirthdayHeightUiState>() {
 
     private val minBirthdayHeight = BirthdayHeightHelper.minBirthdayHeight(blockchainType)
-    private val datePickerYears = BirthdayHeightHelper.datePickerYears(blockchainType)
+    private val firstBlockDate = BirthdayHeightHelper.getFirstBlockDate(blockchainType)
 
     private val defaultBirthdayHeight: Long? = App.restoreSettingsManager
         .getSettingValueForCreatedAccount(RestoreSettingType.BirthdayHeight, blockchainType)
@@ -42,7 +43,7 @@ class RestoreBirthdayHeightViewModel(
         blockDateText = blockDateText,
         doneButtonEnabled = doneButtonEnabled,
         closeWithResult = closeWithResult,
-        datePickerYears = datePickerYears
+        firstBlockDate = firstBlockDate
     )
 
     fun setBirthdayHeight(heightText: String) {
@@ -130,5 +131,5 @@ data class RestoreBirthdayHeightUiState(
     val blockDateText: String? = null,
     val doneButtonEnabled: Boolean = true,
     val closeWithResult: BirthdayHeightConfig? = null,
-    val datePickerYears: List<Int> = emptyList()
+    val firstBlockDate: LocalDate? = null
 )

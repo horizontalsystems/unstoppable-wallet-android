@@ -25,7 +25,7 @@ class EnterBirthdayHeightViewModel(
 ) : ViewModelUiState<EnterBirthdayHeightModule.UiState>() {
 
     private val minBirthdayHeight = BirthdayHeightHelper.minBirthdayHeight(blockchainType)
-    private val datePickerYears = BirthdayHeightHelper.datePickerYears(blockchainType)
+    private val firstBlockDate = BirthdayHeightHelper.getFirstBlockDate(blockchainType)
 
     private var birthdayHeight: Long? = null
     private var birthdayHeightText: String? = null
@@ -46,7 +46,7 @@ class EnterBirthdayHeightViewModel(
         rescanButtonEnabled = rescanButtonEnabled,
         rescanLoading = rescanLoading,
         closeAfterRescan = closeAfterRescan,
-        datePickerYears = datePickerYears
+        firstBlockDate = firstBlockDate
     )
 
     fun setBirthdayHeight(heightText: String) {

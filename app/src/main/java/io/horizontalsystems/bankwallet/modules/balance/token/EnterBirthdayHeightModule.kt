@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.marketkit.models.BlockchainType
+import java.time.LocalDate
 
 object EnterBirthdayHeightModule {
 
@@ -33,6 +34,6 @@ object EnterBirthdayHeightModule {
         val rescanButtonEnabled: Boolean = false,
         val rescanLoading: Boolean = false,
         val closeAfterRescan: Boolean = false,
-        val datePickerYears: List<Int> = emptyList()
+        val firstBlockDate: LocalDate? = null
     )
 }
