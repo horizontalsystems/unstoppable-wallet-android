@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -41,34 +40,6 @@ class AdapterManager(
                 initAdapters(wallets)
             }
         }
-        coroutineScope.launch {
-            solanaKitManager.kitStoppedObservable.asFlow().collect {
-                handleUpdatedKit(BlockchainType.Solana)
-            }
-        }
-        for (blockchain in evmBlockchainManager.allBlockchains) {
-            coroutineScope.launch {
-                evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitUpdatedObservable.asFlow()
-                    .collect {
-                        handleUpdatedKit(blockchain.type)
-                    }
-            }
-        }
-    }
-
-    private fun handleUpdatedKit(blockchainType: BlockchainType) {
-        val wallets = adaptersMap.keys().toList().filter {
-            it.token.blockchainType == blockchainType
-        }
-
-        if (wallets.isEmpty()) return
-
-        wallets.forEach {
-            adaptersMap[it]?.stop()
-            adaptersMap.remove(it)
-        }
-
-        initAdapters(walletManager.activeWallets)
     }
 
     override suspend fun refresh() {
