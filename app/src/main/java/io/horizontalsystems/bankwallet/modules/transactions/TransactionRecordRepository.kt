@@ -230,9 +230,15 @@ class TransactionRecordRepository(
     }
 
     override fun invalidateAdapters() {
+        unsubscribeFromUpdates()
         adaptersMap.values.forEach(TransactionAdapterWrapper::clear)
         adaptersMap.clear()
+        items.clear()
+        loadedPageNumber = 0
+        loading.set(false)
+        allLoaded.set(false)
         selectedWallet = null
+        itemsSubject.onNext(emptyList())
     }
 
     override fun clear() {
