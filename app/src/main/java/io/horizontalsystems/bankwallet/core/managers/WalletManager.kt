@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.IWalletStorage
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
@@ -17,10 +16,10 @@ import kotlinx.coroutines.rx2.asFlow
 class WalletManager(
     private val accountManager: IAccountManager,
     private val storage: IWalletStorage,
-) : IWalletManager {
+) {
 
-    override val activeWallets get() = walletsSet.toList()
-    override val activeWalletsUpdatedObservable = PublishSubject.create<List<Wallet>>()
+    val activeWallets get() = walletsSet.toList()
+    val activeWalletsUpdatedObservable = PublishSubject.create<List<Wallet>>()
 
     private val walletsSet = mutableSetOf<Wallet>()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -35,16 +34,16 @@ class WalletManager(
         }
     }
 
-    override fun save(wallets: List<Wallet>) {
+    fun save(wallets: List<Wallet>) {
         handle(wallets, listOf())
     }
 
-    override fun delete(wallets: List<Wallet>) {
+    fun delete(wallets: List<Wallet>) {
         handle(listOf(), wallets)
     }
 
     @Synchronized
-    override fun handle(newWallets: List<Wallet>, deletedWallets: List<Wallet>) {
+    fun handle(newWallets: List<Wallet>, deletedWallets: List<Wallet>) {
         storage.save(newWallets)
         storage.delete(deletedWallets)
 
@@ -54,7 +53,7 @@ class WalletManager(
         notifyActiveWallets()
     }
 
-    override fun clear() {
+    fun clear() {
         storage.clear()
         walletsSet.clear()
         notifyActiveWallets()
@@ -79,7 +78,7 @@ class WalletManager(
         walletsSet.addAll(activeWallets)
     }
 
-    override fun saveEnabledWallets(enabledWallets: List<EnabledWallet>) {
+    fun saveEnabledWallets(enabledWallets: List<EnabledWallet>) {
         storage.handle(enabledWallets)
         handleUpdated(accountManager.activeAccount)
     }

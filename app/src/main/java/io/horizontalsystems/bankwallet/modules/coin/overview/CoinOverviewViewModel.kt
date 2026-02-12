@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.accountTypeDerivation
 import io.horizontalsystems.bankwallet.core.assetUrl
 import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
@@ -35,7 +35,7 @@ import kotlinx.coroutines.rx2.asFlow
 class CoinOverviewViewModel(
     private val service: CoinOverviewService,
     private val factory: CoinViewFactory,
-    private val walletManager: IWalletManager,
+    private val walletManager: WalletManager,
     private val accountManager: IAccountManager,
     private val chartIndicatorManager: ChartIndicatorManager
 ) : ViewModel() {

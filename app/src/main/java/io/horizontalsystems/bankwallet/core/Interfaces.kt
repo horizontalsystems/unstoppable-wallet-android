@@ -533,17 +533,6 @@ interface IEnabledWalletStorage {
     fun deleteAll()
 }
 
-interface IWalletManager {
-    val activeWallets: List<Wallet>
-    val activeWalletsUpdatedObservable: Observable<List<Wallet>>
-
-    fun save(wallets: List<Wallet>)
-    fun saveEnabledWallets(enabledWallets: List<EnabledWallet>)
-    fun delete(wallets: List<Wallet>)
-    fun clear()
-    fun handle(newWallets: List<Wallet>, deletedWallets: List<Wallet>)
-}
-
 interface IAppNumberFormatter {
     fun format(
         value: Number,

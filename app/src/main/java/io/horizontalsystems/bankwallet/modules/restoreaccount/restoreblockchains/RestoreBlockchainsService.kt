@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchain
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.isDefault
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
@@ -41,7 +41,7 @@ class RestoreBlockchainsService(
     private val fileBackup: Boolean,
     private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,
-    private val walletManager: IWalletManager,
+    private val walletManager: WalletManager,
     private val marketKit: MarketKitWrapper,
     private val tokenAutoEnableManager: TokenAutoEnableManager,
     private val blockchainTokensService: BlockchainTokensService,

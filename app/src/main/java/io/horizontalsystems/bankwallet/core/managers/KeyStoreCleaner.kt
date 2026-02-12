@@ -2,13 +2,12 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.core.IKeyStoreCleaner
 
 class KeyStoreCleaner(
         private val localStorage: ILocalStorage,
         private val accountManager: IAccountManager,
-        private val walletManager: IWalletManager)
+        private val walletManager: WalletManager)
     : IKeyStoreCleaner {
 
     override var encryptedSampleText: String?
