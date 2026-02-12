@@ -223,15 +223,13 @@ fun WheelDatePickerBottomSheet(
     sheetState: SheetState,
     onConfirm: (Int, Int, Int) -> Unit,
     loading: Boolean,
-    initialDay: Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
-    initialMonth: Int = Calendar.getInstance().get(Calendar.MONTH) + 1,
-    initialYear: Int = Calendar.getInstance().get(Calendar.YEAR),
+    initialDate: LocalDate = LocalDate.now(),
     startDate: LocalDate? = null,
     endDate: LocalDate? = null,
 ) {
-    var day by remember { mutableIntStateOf(initialDay) }
-    var month by remember { mutableIntStateOf(initialMonth) }
-    var year by remember { mutableIntStateOf(initialYear) }
+    var day by remember { mutableIntStateOf(initialDate.dayOfMonth) }
+    var month by remember { mutableIntStateOf(initialDate.monthValue) }
+    var year by remember { mutableIntStateOf(initialDate.year) }
 
     BottomSheetContent(
         onDismissRequest = onDismissRequest,

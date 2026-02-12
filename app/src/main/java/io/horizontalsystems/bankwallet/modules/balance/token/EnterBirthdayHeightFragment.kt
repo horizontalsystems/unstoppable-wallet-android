@@ -132,9 +132,7 @@ fun EnterBirthdayHeightScreen(
             },
             sheetState = datePickerSheetState,
             loading = loading,
-            initialDay = initialDate.first,
-            initialMonth = initialDate.second,
-            initialYear = initialDate.third,
+            initialDate = initialDate,
             startDate = uiState.firstBlockDate,
             endDate = LocalDate.now(),
             onConfirm = { day, month, year ->
