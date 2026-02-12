@@ -102,6 +102,25 @@ class WalletManager(
         handleUpdated(accountManager.activeAccount)
     }
 
+    fun start(
+        evmBlockchainManager: EvmBlockchainManager,
+        solanaKitManager: SolanaKitManager,
+    ) {
+        for (blockchain in evmBlockchainManager.allBlockchains) {
+            coroutineScope.launch {
+                evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitUpdatedObservable.asFlow()
+                    .collect {
+                        reloadWallets(blockchain.type)
+                    }
+            }
+        }
+        coroutineScope.launch {
+            solanaKitManager.kitStoppedObservable.asFlow().collect {
+                reloadWallets(BlockchainType.Solana)
+            }
+        }
+    }
+
     @Synchronized
     private fun reloadWallets(blockchainType: BlockchainType) {
         val walletsToReAdd = walletsSet.filter { it.token.blockchainType == blockchainType }
