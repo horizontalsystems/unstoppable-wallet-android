@@ -291,10 +291,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
 
-        moneroNodeStorage = MoneroNodeStorage(appDatabase)
-        moneroNodeManager = MoneroNodeManager(blockchainSettingsStorage, moneroNodeStorage,marketKit)
+        walletManager = WalletManager(accountManager, walletStorage)
 
-        walletManager = WalletManager(accountManager, walletStorage, restoreSettingsManager, moneroNodeManager, btcBlockchainManager)
+        moneroNodeStorage = MoneroNodeStorage(appDatabase)
+        moneroNodeManager = MoneroNodeManager(blockchainSettingsStorage, moneroNodeStorage, marketKit)
         coinManager = CoinManager(marketKit, walletManager)
 
         solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
@@ -614,7 +614,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     private fun startTasks() {
         coroutineScope.launch {
             EthereumKit.init()
-            walletManager.start(evmBlockchainManager, solanaKitManager)
+            walletManager.start(restoreSettingsManager, moneroNodeManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager)
             adapterManager.startAdapterManager()
             marketKit.sync()
             rateAppManager.onAppLaunch()

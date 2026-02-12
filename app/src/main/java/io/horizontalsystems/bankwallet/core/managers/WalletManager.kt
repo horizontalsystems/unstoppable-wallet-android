@@ -17,9 +17,6 @@ import kotlinx.coroutines.rx2.asFlow
 class WalletManager(
     private val accountManager: IAccountManager,
     private val storage: IWalletStorage,
-    private val restoreSettingsManager: RestoreSettingsManager,
-    private val moneroNodeManager: MoneroNodeManager,
-    private val btcBlockchainManager: BtcBlockchainManager,
 ) : IWalletManager {
 
     override val activeWallets get() = walletsSet.toList()
@@ -34,21 +31,6 @@ class WalletManager(
                 if (activeAccountState is ActiveAccountState.ActiveAccount) {
                     handleUpdated(activeAccountState.account)
                 }
-            }
-        }
-        coroutineScope.launch {
-            restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
-                reloadWallets(blockchainType)
-            }
-        }
-        coroutineScope.launch {
-            moneroNodeManager.currentNodeUpdatedFlow.collect {
-                reloadWallets(BlockchainType.Monero)
-            }
-        }
-        coroutineScope.launch {
-            btcBlockchainManager.restoreModeUpdatedObservable.asFlow().collect { blockchainType ->
-                reloadWallets(blockchainType)
             }
         }
     }
@@ -103,9 +85,27 @@ class WalletManager(
     }
 
     fun start(
+        restoreSettingsManager: RestoreSettingsManager,
+        moneroNodeManager: MoneroNodeManager,
+        btcBlockchainManager: BtcBlockchainManager,
         evmBlockchainManager: EvmBlockchainManager,
         solanaKitManager: SolanaKitManager,
     ) {
+        coroutineScope.launch {
+            restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
+                reloadWallets(blockchainType)
+            }
+        }
+        coroutineScope.launch {
+            moneroNodeManager.currentNodeUpdatedFlow.collect {
+                reloadWallets(BlockchainType.Monero)
+            }
+        }
+        coroutineScope.launch {
+            btcBlockchainManager.restoreModeUpdatedObservable.asFlow().collect { blockchainType ->
+                reloadWallets(blockchainType)
+            }
+        }
         for (blockchain in evmBlockchainManager.allBlockchains) {
             coroutineScope.launch {
                 evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitUpdatedObservable.asFlow()
