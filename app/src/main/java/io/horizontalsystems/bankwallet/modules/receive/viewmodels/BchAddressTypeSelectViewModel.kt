@@ -3,12 +3,12 @@ package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
 import io.horizontalsystems.bankwallet.modules.receive.ui.AddressFormatItem
 import io.horizontalsystems.marketkit.models.TokenType
 
-class BchAddressTypeSelectViewModel(coinUid: String, walletManager: IWalletManager) : ViewModel() {
+class BchAddressTypeSelectViewModel(coinUid: String, walletManager: WalletManager) : ViewModel() {
     val items = walletManager.activeWallets
         .filter {
             it.coin.uid == coinUid

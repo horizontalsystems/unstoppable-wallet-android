@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
@@ -33,7 +33,7 @@ class Eip20RevokeConfirmViewModel(
     private val token: Token,
     private val allowance: BigDecimal,
     private val spenderAddress: String,
-    private val walletManager: IWalletManager,
+    private val walletManager: WalletManager,
     private val adapterManager: IAdapterManager,
     val sendTransactionService: AbstractSendTransactionService,
     private val currencyManager: CurrencyManager,

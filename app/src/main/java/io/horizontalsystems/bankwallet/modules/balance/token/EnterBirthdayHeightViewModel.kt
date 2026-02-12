@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance.token
 
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.BirthdayHeightHelper
@@ -21,7 +21,7 @@ class EnterBirthdayHeightViewModel(
     private val currentBirthdayHeight: Long?,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val adapterManager: IAdapterManager,
-    private val walletManager: IWalletManager
+    private val walletManager: WalletManager
 ) : ViewModelUiState<EnterBirthdayHeightModule.UiState>() {
 
     private val minBirthdayHeight = BirthdayHeightHelper.minBirthdayHeight(blockchainType)

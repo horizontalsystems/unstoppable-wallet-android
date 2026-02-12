@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.eligibleTokens
 import io.horizontalsystems.bankwallet.core.isDefault
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class ReceiveTokenSelectViewModel(
-    private val walletManager: IWalletManager,
+    private val walletManager: WalletManager,
     private val activeAccount: Account,
     private val fullCoinsProvider: FullCoinsProvider,
     private val adapterManager: IAdapterManager,

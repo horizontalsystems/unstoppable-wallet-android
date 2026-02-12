@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
@@ -27,7 +26,7 @@ import java.util.concurrent.Executors
 
 class TronAccountManager(
     private val accountManager: IAccountManager,
-    private val walletManager: IWalletManager,
+    private val walletManager: WalletManager,
     private val marketKit: MarketKitWrapper,
     private val tronKitManager: TronKitManager,
     private val tokenAutoEnableManager: TokenAutoEnableManager

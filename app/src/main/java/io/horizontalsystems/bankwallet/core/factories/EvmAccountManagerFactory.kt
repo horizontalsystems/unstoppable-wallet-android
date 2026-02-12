@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.managers.EvmAccountManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -10,7 +10,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 class EvmAccountManagerFactory(
     private val accountManager: IAccountManager,
-    private val walletManager: IWalletManager,
+    private val walletManager: WalletManager,
     private val marketKit: MarketKitWrapper,
     private val tokenAutoEnableManager: TokenAutoEnableManager
 ) {

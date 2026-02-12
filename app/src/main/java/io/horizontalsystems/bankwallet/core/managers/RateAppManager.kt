@@ -9,7 +9,6 @@ import android.os.Looper
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IRateAppManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -19,7 +18,7 @@ import java.time.Instant
 
 
 class RateAppManager(
-        private val walletManager: IWalletManager,
+        private val walletManager: WalletManager,
         private val adapterManager: IAdapterManager,
         private val localStorage: ILocalStorage) : IRateAppManager {
 
