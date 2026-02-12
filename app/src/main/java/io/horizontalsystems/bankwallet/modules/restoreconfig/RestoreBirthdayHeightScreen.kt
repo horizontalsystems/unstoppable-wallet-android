@@ -93,7 +93,7 @@ fun RestoreBirthdayHeightScreen(
             initialDay = initialDate.first,
             initialMonth = initialDate.second,
             initialYear = initialDate.third,
-            years = uiState.datePickerYears,
+            startDate = uiState.firstBlockDate,
             onConfirm = { day, month, year ->
                 coroutineScope.launch {
                     loading = true

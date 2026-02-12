@@ -62,6 +62,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
 
 class EnterBirthdayHeightFragment : BaseComposeFragment() {
 
@@ -134,7 +135,8 @@ fun EnterBirthdayHeightScreen(
             initialDay = initialDate.first,
             initialMonth = initialDate.second,
             initialYear = initialDate.third,
-            years = uiState.datePickerYears,
+            startDate = uiState.firstBlockDate,
+            endDate = LocalDate.now(),
             onConfirm = { day, month, year ->
                 coroutineScope.launch {
                     loading = true

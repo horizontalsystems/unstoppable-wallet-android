@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHe
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import java.text.DateFormatSymbols
+import java.time.LocalDate
 import java.util.Calendar
 
 @Composable
@@ -78,7 +79,7 @@ fun WheelPicker(
                 } else {
                     initialIndex
                 }
-                lazyListState.scrollToItem(targetIndex)
+                lazyListState.animateScrollToItem(targetIndex)
             }
         }
     }
@@ -122,32 +123,63 @@ fun WheelPicker(
 
 @Composable
 fun WheelDatePicker(
-    selectedDay: Int,
-    selectedMonth: Int,
-    selectedYear: Int,
-    onDaySelected: (Int) -> Unit,
-    onMonthSelected: (Int) -> Unit,
-    onYearSelected: (Int) -> Unit,
-    years: List<Int> = (1900..2100).toList()
+    initialDay: Int,
+    initialMonth: Int,
+    initialYear: Int,
+    startDate: LocalDate? = null,
+    endDate: LocalDate? = null,
+    onChange: (Int, Int, Int) -> Unit,
 ) {
-    val months = DateFormatSymbols().months.filter { it.isNotEmpty() }
-    val yearStrings = years.map { it.toString() }
+    var day by remember { mutableIntStateOf(initialDay) }
+    var month by remember { mutableIntStateOf(initialMonth) }
+    var year by remember { mutableIntStateOf(initialYear) }
 
-    val daysInMonth = remember(selectedMonth, selectedYear) {
+    val daysInMonth = remember(year, month) {
         Calendar.getInstance().apply {
-            set(Calendar.YEAR, selectedYear)
-            set(Calendar.MONTH, selectedMonth - 1)
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, month - 1)
             set(Calendar.DAY_OF_MONTH, 1)
         }.getActualMaximum(Calendar.DAY_OF_MONTH)
     }
 
-    LaunchedEffect(daysInMonth) {
-        if (selectedDay > daysInMonth) {
-            onDaySelected(daysInMonth)
+    LaunchedEffect(year, month, day, startDate, endDate) {
+        var tmpYear = year
+        var tmpMonth = month
+        var tmpDay = day
+
+        if (tmpDay > daysInMonth) {
+            tmpDay = daysInMonth
+        }
+
+        val date = LocalDate.of(tmpYear, tmpMonth, tmpDay)
+        if (startDate != null && date < startDate) {
+            tmpYear = startDate.year
+            tmpMonth = startDate.monthValue
+            tmpDay = startDate.dayOfMonth
+        }
+
+        if (endDate != null && date > endDate) {
+            tmpYear = endDate.year
+            tmpMonth = endDate.monthValue
+            tmpDay = endDate.dayOfMonth
+        }
+
+        if (tmpYear != year || tmpMonth != month || tmpDay != day) {
+            year = tmpYear
+            month = tmpMonth
+            day = tmpDay
+        } else if (tmpDay != initialDay || tmpMonth != initialMonth || tmpYear != initialYear) {
+            // call onchange only for corrected and stamped date
+            onChange(tmpDay, tmpMonth, tmpYear)
         }
     }
 
-    val dayStrings = (1..daysInMonth).map { it.toString() }
+    val months = DateFormatSymbols().months.filter { it.isNotEmpty() }
+    val years = remember {
+        (1..100000).toList()
+    }
+    val yearStrings = years.map { it.toString() }
+    val dayStrings = (1..31).map { it.toString() }
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -155,22 +187,28 @@ fun WheelDatePicker(
         Box(modifier = Modifier.weight(1f))
         WheelPicker(
             items = dayStrings,
-            initialIndex = (selectedDay - 1).coerceIn(0, dayStrings.size - 1),
-            onItemSelected = { onDaySelected(it + 1) },
+            initialIndex = (day - 1).coerceIn(0, dayStrings.size - 1),
+            onItemSelected = { index ->
+                day = index + 1
+            },
             modifier = Modifier.weight(1f),
             isInfinite = true
         )
         WheelPicker(
             items = months,
-            initialIndex = (selectedMonth - 1).coerceIn(0, 11),
-            onItemSelected = { onMonthSelected(it + 1) },
+            initialIndex = (month - 1).coerceIn(0, 11),
+            onItemSelected = { index ->
+                month = index + 1
+            },
             modifier = Modifier.weight(2.2f),
             isInfinite = true
         )
         WheelPicker(
             items = yearStrings,
-            initialIndex = years.indexOf(selectedYear).coerceAtLeast(0),
-            onItemSelected = { onYearSelected(years[it]) },
+            initialIndex = years.indexOf(year).coerceAtLeast(0),
+            onItemSelected = { index ->
+                year = years[index]
+            },
             modifier = Modifier.weight(1.5f),
             isInfinite = false
         )
@@ -188,7 +226,8 @@ fun WheelDatePickerBottomSheet(
     initialDay: Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
     initialMonth: Int = Calendar.getInstance().get(Calendar.MONTH) + 1,
     initialYear: Int = Calendar.getInstance().get(Calendar.YEAR),
-    years: List<Int> = (1900..2100).toList()
+    startDate: LocalDate? = null,
+    endDate: LocalDate? = null,
 ) {
     var day by remember { mutableIntStateOf(initialDay) }
     var month by remember { mutableIntStateOf(initialMonth) }
@@ -221,14 +260,16 @@ fun WheelDatePickerBottomSheet(
         )
         Box(modifier = Modifier.padding(vertical = 32.dp)) {
             WheelDatePicker(
-                selectedDay = day,
-                selectedMonth = month,
-                selectedYear = year,
-                onDaySelected = { day = it },
-                onMonthSelected = { month = it },
-                onYearSelected = { year = it },
-                years = years
-            )
+                initialDay = day,
+                initialMonth = month,
+                initialYear = year,
+                startDate = startDate,
+                endDate = endDate,
+            ) { newDay, newMonth, newYear ->
+                day = newDay
+                month = newMonth
+                year = newYear
+            }
         }
     }
 }
