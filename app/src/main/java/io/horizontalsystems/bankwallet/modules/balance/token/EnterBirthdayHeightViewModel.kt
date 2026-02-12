@@ -13,6 +13,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 import java.util.Date
 
 class EnterBirthdayHeightViewModel(
@@ -99,7 +100,7 @@ class EnterBirthdayHeightViewModel(
         emitState()
     }
 
-    fun getInitialDateForPicker(): Triple<Int, Int, Int> {
+    fun getInitialDateForPicker(): LocalDate {
         return BirthdayHeightHelper.getInitialDateForPicker(cachedEstimatedDate)
     }
 

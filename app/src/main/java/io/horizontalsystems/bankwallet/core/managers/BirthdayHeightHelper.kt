@@ -27,13 +27,13 @@ object BirthdayHeightHelper {
         else -> throw IllegalArgumentException()
     }
 
-    fun getInitialDateForPicker(cachedDate: Date?): Triple<Int, Int, Int> {
-        val date = cachedDate ?: Date()
-        val calendar = Calendar.getInstance().apply { time = date }
-        return Triple(
-            calendar.get(Calendar.DAY_OF_MONTH),
+    fun getInitialDateForPicker(cachedDate: Date?): LocalDate {
+        if (cachedDate == null) return LocalDate.now()
+        val calendar = Calendar.getInstance().apply { time = cachedDate }
+        return LocalDate.of(
+            calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH) + 1,
-            calendar.get(Calendar.YEAR)
+            calendar.get(Calendar.DAY_OF_MONTH)
         )
     }
 

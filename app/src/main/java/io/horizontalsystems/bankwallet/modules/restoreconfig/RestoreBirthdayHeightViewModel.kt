@@ -68,7 +68,7 @@ class RestoreBirthdayHeightViewModel(
         emitState()
     }
 
-    fun getInitialDateForPicker(): Triple<Int, Int, Int> {
+    fun getInitialDateForPicker(): LocalDate {
         return BirthdayHeightHelper.getInitialDateForPicker(cachedEstimatedDate)
     }
 

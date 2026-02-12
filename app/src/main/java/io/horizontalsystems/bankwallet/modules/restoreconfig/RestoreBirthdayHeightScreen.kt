@@ -90,9 +90,7 @@ fun RestoreBirthdayHeightScreen(
             },
             sheetState = datePickerSheetState,
             loading = loading,
-            initialDay = initialDate.first,
-            initialMonth = initialDate.second,
-            initialYear = initialDate.third,
+            initialDate = initialDate,
             startDate = uiState.firstBlockDate,
             onConfirm = { day, month, year ->
                 coroutineScope.launch {
