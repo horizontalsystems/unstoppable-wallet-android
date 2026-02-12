@@ -69,7 +69,7 @@ class FullCoinsProvider(
                 }
                 .map { it.fullCoin }
 
-            customFullCoins + marketKit.fullCoins(tmpQuery)
+            customFullCoins + marketKit.fullCoins(tmpQuery, 100)
         }
 
         return fullCoins
