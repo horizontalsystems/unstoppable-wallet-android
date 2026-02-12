@@ -17,6 +17,7 @@ class WalletManager(
     private val accountManager: IAccountManager,
     private val storage: IWalletStorage,
     private val restoreSettingsManager: RestoreSettingsManager,
+    private val moneroNodeManager: MoneroNodeManager,
 ) : IWalletManager {
 
     override val activeWallets get() = walletsSet.toList()
@@ -36,6 +37,11 @@ class WalletManager(
         coroutineScope.launch {
             restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
                 handleUpdatedRestoreSettings(blockchainType)
+            }
+        }
+        coroutineScope.launch {
+            moneroNodeManager.currentNodeUpdatedFlow.collect {
+                handleUpdatedRestoreSettings(BlockchainType.Monero)
             }
         }
     }

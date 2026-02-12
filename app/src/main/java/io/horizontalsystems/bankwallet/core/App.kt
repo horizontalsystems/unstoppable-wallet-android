@@ -291,15 +291,15 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
         walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
 
-        walletManager = WalletManager(accountManager, walletStorage, restoreSettingsManager)
+        moneroNodeStorage = MoneroNodeStorage(appDatabase)
+        moneroNodeManager = MoneroNodeManager(blockchainSettingsStorage, moneroNodeStorage,marketKit)
+
+        walletManager = WalletManager(accountManager, walletStorage, restoreSettingsManager, moneroNodeManager)
         coinManager = CoinManager(marketKit, walletManager)
 
         solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
         val solanaWalletManager = SolanaWalletManager(walletManager, accountManager, marketKit)
         solanaKitManager = SolanaKitManager(appConfigProvider, solanaRpcSourceManager, solanaWalletManager, backgroundManager)
-
-        moneroNodeStorage = MoneroNodeStorage(appDatabase)
-        moneroNodeManager = MoneroNodeManager(blockchainSettingsStorage, moneroNodeStorage,marketKit)
 
         tronKitManager = TronKitManager(appConfigProvider, backgroundManager)
         tonKitManager = TonKitManager(backgroundManager)
@@ -396,7 +396,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             tronKitManager,
             tonKitManager,
             stellarKitManager,
-            moneroNodeManager,
         )
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
         spamManager = SpamManager(localStorage, scannedTransactionStorage, contactsRepository, transactionAdapterManager)
