@@ -93,6 +93,16 @@ class TokenBalanceViewModel(
             transactionsService.start()
         }
 
+        viewModelScope.launch {
+            restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
+                if (blockchainType == wallet.token.blockchainType) {
+                    balanceService.balanceItem?.let {
+                        updateBalanceViewItem(it)
+                    }
+                }
+            }
+        }
+
         if (wallet.account.type is AccountType.MoneroWatchAccount) {
             waringMessage = Translator.getString(R.string.Watch_Monero_Warning)
         }
