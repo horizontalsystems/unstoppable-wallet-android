@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.nav3
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation.NavController
@@ -12,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.about.AboutScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import kotlinx.serialization.Serializable
 
@@ -37,6 +39,8 @@ data object AppStatus : NavKey
 @Serializable
 data object ReleaseNotes : NavKey
 
+@Serializable
+data object Terms : NavKey
 
 @Composable
 fun NavExample() {
@@ -52,8 +56,14 @@ fun NavExample() {
         backStack = backStack,
         entryProvider = entryProvider {
             entry<Home> {
-                HSButton(title = "Home") {
-                    backStack.add(AppStatus)
+                Column {
+                    HSButton(title = "Home") {
+                        backStack.add(AppStatus)
+                    }
+
+                    HSButton(title = "Terms") {
+                        backStack.add(Terms)
+                    }
                 }
             }
 
@@ -62,7 +72,7 @@ fun NavExample() {
                     onBackPress = { backStack.removeLastOrNull() },
                     navigateToReleaseNotes = { backStack.add(ReleaseNotes) },
                     navigateToAppStatus = { backStack.add(AppStatus) },
-                    navigateToTerms = { /*backStack.add(AppStatus)*/ }
+                    navigateToTerms = { backStack.add(Terms) }
                 )
             }
             entry<AppStatus> {
@@ -70,6 +80,12 @@ fun NavExample() {
             }
             entry<ReleaseNotes> {
                 ReleaseNotesScreen(false, { backStack.removeLastOrNull() })
+            }
+            entry<Terms> {
+                TermsScreen(
+                    onBack = { backStack.removeLastOrNull() },
+                    setResult = {  }
+                )
             }
         },
     )

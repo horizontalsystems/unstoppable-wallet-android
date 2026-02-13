@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -64,7 +65,12 @@ private fun AboutNavHost(fragmentNavController: NavController) {
             ReleaseNotesScreen(false, { navController.popBackStack() })
         }
         composablePage(AppStatusPage) { AppStatusScreen(navController::popBackStack) }
-        composablePopup(TermsPage) { TermsScreen(navController) }
+        composablePopup(TermsPage) {
+            TermsScreen(
+                onBack = navController::popBackStack,
+                setResult = navController::setNavigationResultX
+            )
+        }
     }
 }
 
