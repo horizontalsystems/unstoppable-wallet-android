@@ -40,15 +40,17 @@ class SendZCashViewModel(
     private val address: Address,
     private val recentAddressManager: RecentAddressManager
 ) : ViewModelUiState<SendZCashUiState>() {
+    private val feeService = SendZcashFeeService(adapter)
+
     val blockchainType = wallet.token.blockchainType
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
     val memoMaxLength by memoService::memoMaxLength
 
-    private val fee = adapter.fee
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
     private var memoState = memoService.stateFlow.value
+    private var feeState = feeService.stateFlow.value
 
     var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
         private set
@@ -61,14 +63,25 @@ class SendZCashViewModel(
         xRateService.getRateFlow(wallet.coin.uid).collectWith(viewModelScope) {
             coinRate = it
         }
-        amountService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedAmountState(it)
+        viewModelScope.launch {
+            amountService.stateFlow.collect {
+                handleUpdatedAmountState(it)
+            }
         }
-        addressService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedAddressState(it)
+        viewModelScope.launch {
+            addressService.stateFlow.collect {
+                handleUpdatedAddressState(it)
+            }
         }
-        memoService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedMemoState(it)
+        viewModelScope.launch {
+            memoService.stateFlow.collect {
+                handleUpdatedMemoState(it)
+            }
+        }
+        viewModelScope.launch {
+            feeService.stateFlow.collect {
+                handleUpdatedFeeState(it)
+            }
         }
 
         viewModelScope.launch {
@@ -77,7 +90,6 @@ class SendZCashViewModel(
     }
 
     override fun createState() = SendZCashUiState(
-        fee = fee,
         availableBalance = amountState.availableBalance,
         addressError = addressState.addressError,
         amountCaution = amountState.amountCaution,
@@ -101,22 +113,33 @@ class SendZCashViewModel(
         memoService.setMemo(memo)
     }
 
-    private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
+    private suspend fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
+
+        feeService.setAmount(amountState.amount)
 
         emitState()
     }
 
-    private fun handleUpdatedAddressState(addressState: SendZCashAddressService.State) {
+    private suspend fun handleUpdatedAddressState(addressState: SendZCashAddressService.State) {
         this.addressState = addressState
 
         memoService.setAddressType(addressState.addressType)
+        feeService.setAddress(addressState.address)
 
         emitState()
     }
 
-    private fun handleUpdatedMemoState(memoState: SendZCashMemoService.State) {
+    private suspend fun handleUpdatedMemoState(memoState: SendZCashMemoService.State) {
         this.memoState = memoState
+
+        feeService.setMemo(memoState.memo)
+
+        emitState()
+    }
+
+    private fun handleUpdatedFeeState(feeState: SendZcashFeeService.State) {
+        this.feeState = feeState
 
         emitState()
     }
@@ -129,7 +152,7 @@ class SendZCashViewModel(
         ).firstOrNull()
         return SendConfirmationData(
             amount = amountState.amount!!,
-            fee = fee,
+            fee = feeState.fee,
             address = address,
             contact = contact,
             token = wallet.token,
@@ -176,7 +199,6 @@ class SendZCashViewModel(
 }
 
 data class SendZCashUiState(
-    val fee: BigDecimal,
     val availableBalance: BigDecimal,
     val addressError: Throwable?,
     val amountCaution: HSCaution?,

@@ -449,10 +449,10 @@ interface ISendEthereumAdapter {
 
 interface ISendZcashAdapter {
     val availableBalance: BigDecimal
-    val fee: BigDecimal
 
     suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
     suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger)
+    suspend fun fee(amount: BigDecimal, address: String, memo: String): BigDecimal
 }
 
 interface IAdapter {

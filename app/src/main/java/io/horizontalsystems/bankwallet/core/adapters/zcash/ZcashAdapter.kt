@@ -6,7 +6,6 @@ import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.Synchronizer
 import cash.z.ecc.android.sdk.WalletInitMode
 import cash.z.ecc.android.sdk.block.processor.CompactBlockProcessor
-import cash.z.ecc.android.sdk.ext.ZcashSdk
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
 import cash.z.ecc.android.sdk.ext.convertZecToZatoshi
@@ -238,9 +237,6 @@ class ZcashAdapter(
     override val availableBalance: BigDecimal
         get() = balanceData?.available ?: BigDecimal.ZERO
 
-    override val fee: BigDecimal
-        get() = ZcashSdk.MINERS_FEE.convertZatoshiToZec(decimalCount)
-
     override suspend fun validate(address: String): ZCashAddressType {
         if (address == receiveAddress) throw ZcashError.SendToSelfNotAllowed
         return when (synchronizer.validateAddress(address)) {
@@ -295,7 +291,12 @@ class ZcashAdapter(
 
     override suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger) {
         logger.info("call sendTransferProposal")
-        sendTransferProposal(amount, address, memo)
+        val transferProposal = transferProposal(amount, address, memo)
+        send(transferProposal)
+    }
+
+    override suspend fun fee(amount: BigDecimal, address: String, memo: String): BigDecimal {
+        return transferProposal(amount, address, memo).totalFeeRequired().convertZatoshiToZec(decimalCount)
     }
 
     private suspend fun transferProposal(
@@ -339,15 +340,6 @@ class ZcashAdapter(
         } catch (e: Exception) {
             throw RuntimeException("Unexpected error while sending Zcash: ${e.message}", e)
         }
-    }
-
-    private suspend fun sendTransferProposal(
-        amount: BigDecimal,
-        address: String,
-        memo: String
-    ) {
-        val transferProposal = transferProposal(amount, address, memo)
-        send(transferProposal)
     }
 
     suspend fun createProposal(outputs: List<TransferOutput>): Proposal {
