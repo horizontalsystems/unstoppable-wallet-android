@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.modules.address.HSAddressCell
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
-import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
@@ -47,7 +46,6 @@ fun SendZCashScreen(
 
     val availableBalance = uiState.availableBalance
     val amountCaution = uiState.amountCaution
-    val fee = uiState.fee
     val proceedEnabled = uiState.canBeSend
     val memoIsAllowed = uiState.memoIsAllowed
     val amountInputType = amountInputModeViewModel.inputType
@@ -118,16 +116,6 @@ fun SendZCashScreen(
                     viewModel.onEnterMemo(it)
                 }
             }
-
-            VSpacer(16.dp)
-            HSFee(
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fee = fee,
-                amountInputType = amountInputType,
-                rate = viewModel.coinRate,
-                navController = navController
-            )
 
             ButtonPrimaryYellow(
                 modifier = Modifier
