@@ -60,7 +60,7 @@ class TermsFragment : BaseComposeFragment() {
 @Composable
 fun TermsScreen(
     onBack: () -> Unit,
-    setResult: (Parcelable) -> Unit,
+    setResult: (TermsFragment.Result) -> Unit,
 ) {
     val viewModel: TermsViewModel = viewModel(factory = TermsModule.Factory())
 
