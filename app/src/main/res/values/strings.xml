@@ -672,7 +672,7 @@
 
 
     <!-- dApp Connection-->
-    <string name="DAppConnection_Title" translatable="false">DApp Connection</string>
+    <string name="DAppConnection_Title">DApp Connection</string>
     <string name="DAppConnection_Requests">Requests</string>
 
     <!--EthereumTransaction-->
@@ -847,7 +847,7 @@
     <string name="Transactions_Multiple">Multiple</string>
     <string name="Transactions_Filter">Filter</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Hide suspicious tx</string>
-    <string name="Transactions_Filter_StablecoinDustAmount_Description">Hiding incoming transactions with the dust amount in stablecoins, this partially solves the  address poisoning attack problems.</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Hides small-value incoming transfers (e.g. USDT below $1.5). These transactions are often used for phishing and address-poisoning attacks.</string>
     <string name="Transactions_Filter_ChooseContact_Hint">Filtering by contacts works on the following blockchains: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimism, Tron, Ton and ZCash. Below are the suitable contacts</string>
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">You don\'t have any suitable contacts </string>
 
@@ -963,7 +963,7 @@
     <string name="Settings_RateUs">Rate Us</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="Settings_LaunchScreen_Tip">Choose which screen the app opens on by default.</string>
-    <string name="Settings_AppSettings">App Settings</string>
+    <string name="Settings_AppSettings">Appearance</string>
     <string name="Settings_Subscription">Subscription</string>
     <string name="Settings_AutoLock">Auto-Lock</string>
     <string name="Settings_Telegram" translatable="false">Telegram</string>

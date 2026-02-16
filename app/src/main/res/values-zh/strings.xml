@@ -564,6 +564,7 @@
     <string name="WalletConnect_DefenseMessage_Danger">此 dApp 未验证。连接可能会使您的资金面临风险。</string>
     <string name="WalletConnect_DefenseMessage_Safe">我检查了它。这个dapp 是安全的连接。</string>
     <!-- dApp Connection-->
+    <string name="DAppConnection_Title">dApp 连接</string>
     <string name="DAppConnection_Requests">请求</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">警告</string>
@@ -716,7 +717,7 @@
     <string name="Transactions_Multiple">多种</string>
     <string name="Transactions_Filter">筛选器</string>
     <string name="Transactions_Filter_HideSuspiciousTx">隐藏可疑Txs</string>
-    <string name="Transactions_Filter_StablecoinDustAmount_Description">隐藏到达的沙尘群交易，这部分解决了地址中毒攻击问题。</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">隐藏小额入账转账（例如低于 $1.5 的 USDT）。此类交易常被用于钓鱼攻击和地址投毒攻击。</string>
     <string name="Transactions_Filter_ChooseContact_Hint">通过联系人过滤在以下区块链上起作用: Etherum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimism, Tron, Ton和ZCash。 以下是合适的联系人</string>
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">您没有任何合适的联系人 </string>
     <!--Transaction Info-->
@@ -805,7 +806,7 @@
     <string name="Settings_RateUs">评价我们</string>
     <string name="Settings_LaunchScreen">启动屏幕</string>
     <string name="Settings_LaunchScreen_Tip">选择默认打开哪个屏幕。</string>
-    <string name="Settings_AppSettings">应用设置</string>
+    <string name="Settings_AppSettings">外观</string>
     <string name="Settings_Subscription">訂閱</string>
     <string name="Settings_AutoLock">自动锁定</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>

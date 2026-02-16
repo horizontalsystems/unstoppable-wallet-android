@@ -564,6 +564,7 @@
     <string name="WalletConnect_DefenseMessage_Danger">Esta dApp no está verificada. Conexión puede poner tus fondos en riesgo.</string>
     <string name="WalletConnect_DefenseMessage_Safe">Lo comprobé. Esta dApp es segura para conectarse.</string>
     <!-- dApp Connection-->
+    <string name="DAppConnection_Title">Conexión DApp</string>
     <string name="DAppConnection_Requests">Solicitudes</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
@@ -716,7 +717,7 @@
     <string name="Transactions_Multiple">Múltiples</string>
     <string name="Transactions_Filter">Filtro</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Ocultar Transacciones Sospechosas</string>
-    <string name="Transactions_Filter_StablecoinDustAmount_Description">Ocultando transacciones entrantes con montos mínimos en stablecoins, esto resuelve parcialmente los problemas de ataques de envenenamiento de direcciones.</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Oculta transferencias entrantes de bajo valor (por ejemplo, USDT por debajo de $1.5). Estas transacciones se utilizan con frecuencia para ataques de phishing y address-poisoning.</string>
     <string name="Transactions_Filter_ChooseContact_Hint">El filtrado de contactos es compatible con las siguientes blockchains: Ethereum, BNB Smart Chain, Poligono, Avalanche, Gnosis, Fantom, Arbitrum, Optism, Tron, Ton y ZCash. Debajo están los contactos adecuados</string>
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">No tienes ninguna persona agendada</string>
     <!--Transaction Info-->
@@ -805,7 +806,7 @@
     <string name="Settings_RateUs">Califícanos</string>
     <string name="Settings_LaunchScreen">Pantalla de lanzamiento</string>
     <string name="Settings_LaunchScreen_Tip">Elige en qué pantalla se abre la aplicación por defecto.</string>
-    <string name="Settings_AppSettings">Ajustes de app</string>
+    <string name="Settings_AppSettings">Apariencia</string>
     <string name="Settings_Subscription">Suscripción</string>
     <string name="Settings_AutoLock">Bloqueo automático</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>

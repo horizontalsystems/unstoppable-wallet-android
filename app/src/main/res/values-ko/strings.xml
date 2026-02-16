@@ -531,6 +531,8 @@
     <string name="WalletConnect_TokenAllowance">토큰 허용량</string>
     <string name="WalletConnect_ConfirmTransaction">트랜잭션 확인</string>
     <!-- dApp Connection-->
+    <string name="DAppConnection_Title">디앱 연결</string>
+    <string name="DAppConnection_Requests">Solicitudes</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">경고</string>
     <string name="EthereumTransaction_Error_Title">오류</string>
@@ -645,7 +647,7 @@
     <string name="Transactions_Multiple">다수</string>
     <string name="Transactions_Filter">필터</string>
     <string name="Transactions_Filter_HideSuspiciousTx">의심스러운 거래 숨기기</string>
-    <string name="Transactions_Filter_StablecoinDustAmount_Description">Dust 양의 안정화된 암호화폐를 사용하여 수신 거래를 숨기면 주소 독성 공격 문제의 일부를 해결할 수 있습니다.</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">소액의 수신 트랜잭션(예: $1.5 미만의 USDT)을 숨깁니다. 이러한 트랜잭션은 피싱 및 주소 포이즈닝 공격에 자주 사용됩니다.</string>
     <string name="Transactions_Filter_ChooseContact_Hint">다음 블록체인에서 연락처 필터링이 작동합니다: 이더리움, BNB 스마트 체인, 폴리곤, 아발란체, 그노시스, 팬텀, 아비트럼, 옵티미즘, 트론, 톤, 그리고 지캐시. 아래에 적합한 연락처가 나열되어 있습니다.</string>
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">적합한 연락처가 없습니다</string>
     <!--Transaction Info-->
@@ -728,7 +730,7 @@
     <string name="Settings_AppStatus">앱 상태</string>
     <string name="Settings_RateUs">앱 평가</string>
     <string name="Settings_LaunchScreen">시작 화면</string>
-    <string name="Settings_AppSettings">앱 설정</string>
+    <string name="Settings_AppSettings">디자인</string>
     <string name="Settings_Subscription">구독</string>
     <string name="Settings_AutoLock">자동 잠금</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
