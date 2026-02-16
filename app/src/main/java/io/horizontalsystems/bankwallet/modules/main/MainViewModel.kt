@@ -87,6 +87,9 @@ class MainViewModel(
                 MainNavigation.Settings,
             )
         }
+    private val selectedTabItem: MainNavigation
+        get() = mainNavItems.firstOrNull { it.selected }?.mainNavItem
+            ?: MainNavigation.Balance
 
     private var selectedTabIndex = getTabIndexToOpen()
     private var deeplinkPage: DeeplinkPage? = null
@@ -100,15 +103,7 @@ class MainViewModel(
 
     init {
         localStorage.marketsTabEnabledFlow.collectWith(viewModelScope) { enabled ->
-            var navItemSize = items.size
             marketsTabEnabled = enabled
-            if (navItemSize != items.size) {
-                if (enabled) {
-                    selectedTabIndex += 1
-                } else {
-                    selectedTabIndex -= 1
-                }
-            }
             syncNavigation()
         }
 
@@ -165,7 +160,6 @@ class MainViewModel(
     }
 
     override fun createState() = MainModule.UiState(
-        selectedTabIndex = selectedTabIndex,
         deeplinkPage = deeplinkPage,
         mainNavItems = mainNavItems,
         showRateAppDialog = showRateAppDialog,
@@ -174,6 +168,7 @@ class MainViewModel(
         wcSupportState = wcSupportState,
         torEnabled = torEnabled,
         openSend = openSendTokenSelect,
+        selectedTabItem = selectedTabItem,
     )
 
     private fun isTransactionsTabEnabled(): Boolean = !accountManager.isAccountsEmpty
@@ -379,6 +374,10 @@ class MainViewModel(
     }
 
     private fun syncNavigation() {
+        val currentNavItem = mainNavItems.getOrNull(selectedTabIndex)?.mainNavItem
+        val newIndex = currentNavItem?.let { items.indexOf(it) } ?: -1
+        selectedTabIndex = if (newIndex >= 0) newIndex else items.indexOf(MainNavigation.Balance).coerceAtLeast(0)
+
         val newNavItems = navigationItems()
 
         // Only update if structure changed

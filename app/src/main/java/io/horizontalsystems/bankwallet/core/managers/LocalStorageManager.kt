@@ -657,7 +657,7 @@ class LocalStorageManager(
     override val disabledPaidActionsFlow = _disabledPaidActionsFlow.asStateFlow()
 
     override var disabledPaidActions: Set<String>
-        get() = preferences.getStringSet(DISABLED_PAID_ACTIONS, emptySet()) ?: emptySet()
+        get() = preferences.getStringSet(DISABLED_PAID_ACTIONS, null) ?: setOf("SecureSend")
         set(value) {
             preferences.edit().putStringSet(DISABLED_PAID_ACTIONS, value).apply()
             _disabledPaidActionsFlow.update { value }
