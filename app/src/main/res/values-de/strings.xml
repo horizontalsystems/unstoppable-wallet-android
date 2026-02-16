@@ -564,6 +564,7 @@
     <string name="WalletConnect_DefenseMessage_Danger">Diese dApp ist nicht verifiziert. Verbinden kann Ihr Guthaben gefährden.</string>
     <string name="WalletConnect_DefenseMessage_Safe">Ich habe es ausgewählt. Diese dApp ist sicher um sich zu verbinden.</string>
     <!-- dApp Connection-->
+    <string name="DAppConnection_Title">DApp Verbindung</string>
     <string name="DAppConnection_Requests">Anfragen</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warnung</string>
@@ -716,7 +717,7 @@
     <string name="Transactions_Multiple">Mehrere</string>
     <string name="Transactions_Filter">Filtern</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Verdächtige tx ausblenden</string>
-    <string name="Transactions_Filter_StablecoinDustAmount_Description">Das Verstecken eingehender Transaktionen mit dem Staub in Stablecoins löst teilweise die Adressenvergiftungsprobleme.</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Blendet eingehende Transfers mit geringem Wert aus (z. B. USDT unter 1,5 $). Solche Transaktionen werden häufig für Phishing- und Address-poisoning-Angriffe verwendet.</string>
     <string name="Transactions_Filter_ChooseContact_Hint">Das Filtern nach Kontakten funktioniert an den folgenden Blockchains: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimismus, Tron, Ton und ZCash. Unten sind die passenden Kontakte</string>
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">Sie haben keine passenden Kontakte </string>
     <!--Transaction Info-->
@@ -805,7 +806,7 @@
     <string name="Settings_RateUs">Bewerte uns</string>
     <string name="Settings_LaunchScreen">Bildschirm starten</string>
     <string name="Settings_LaunchScreen_Tip">Wählen Sie aus, auf welchem Bildschirm die App standardmäßig geöffnet wird.</string>
-    <string name="Settings_AppSettings">App-Einstellungen</string>
+    <string name="Settings_AppSettings">Erscheinungsbild</string>
     <string name="Settings_Subscription">Abonnement</string>
     <string name="Settings_AutoLock">Auto-Sperren</string>
     <string name="Settings_JoinUnstoppables">Schließen Sie unaufhaltsam an</string>

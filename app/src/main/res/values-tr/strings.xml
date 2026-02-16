@@ -410,6 +410,8 @@
     <string name="WalletConnect_Pairings_Delete">Sil</string>
     <string name="WalletConnect_DeleteAllPairs">Hepsini sil</string>
     <!-- dApp Connection-->
+    <string name="DAppConnection_Title">DApp Bağlantısı</string>
+    <string name="DAppConnection_Requests">Talepler</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Uyarı</string>
     <string name="EthereumTransaction_Error_Title">Hata</string>
@@ -519,7 +521,7 @@
     <string name="Transactions_Multiple">Çoklu</string>
     <string name="Transactions_Filter">Filtre</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Şüpheli İşlemleri Gizle</string>
-    <string name="Transactions_Filter_StablecoinDustAmount_Description">Gelen işlemleri, stablecoin\'lerdeki toz miktarı ile gizlemek, adres zehirleme saldırısı sorunlarını kısmen çözer.</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Küçük tutarlı gelen transferleri gizler (ör. $1.5 altındaki USDT). Bu tür işlemler genellikle phishing ve adres zehirleme (address poisoning) saldırılarında kullanılır.</string>
     <string name="Transactions_Filter_ChooseContact_Hint">İletişim filtrelemesi aşağıdaki blok zincirlerinde çalışır: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimism, Tron, Ton ve ZCash. Aşağıda uygun iletişim bilgileri bulunmaktadır</string>
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">Uygun hiçbir iletişim bilginiz yok</string>
     <!--Transaction Info-->
@@ -601,7 +603,7 @@
     <string name="Settings_AppStatus">Uygulama Durumu</string>
     <string name="Settings_RateUs">Bizi Değerlendirin</string>
     <string name="Settings_LaunchScreen">Başlangıç Ekranı</string>
-    <string name="Settings_AppSettings">Uygulama Ayarları</string>
+    <string name="Settings_AppSettings">Görünüm</string>
     <string name="Settings_Subscription">Abonelik</string>
     <string name="Settings_AutoLock">Otomatik kilit</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>

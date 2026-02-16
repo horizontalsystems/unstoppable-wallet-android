@@ -68,12 +68,12 @@
 \n\nПОЖАЛУЙСТА НАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
     <string name="AccountRecovery_MigrationRequired">Это нестандартный кошелек.\n\nНАЖМИТЕ, ЧТОБЫ ПОЛУЧИТЬ БОЛЬШЕ ИНФОРМАЦИИ</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen2Title">Непривязанные активы</string>
-    <string name="Intro_Wallet_Screen2Description">Распоряжайтесь активами свободно и без ограничений.</string>
-    <string name="Intro_Wallet_Screen3Title">Избавьтесь от границ</string>
-    <string name="Intro_Wallet_Screen3Description">Преодолейте барьеры и получите доступ к рынкам.</string>
-    <string name="Intro_Wallet_Screen4Title">Оставаться приватным</string>
-    <string name="Intro_Wallet_Screen4Description">Не допускайте утечку личных и финансовых данных.</string>
+    <string name="Intro_Wallet_Screen2Title">Полный контроль над активами</string>
+    <string name="Intro_Wallet_Screen2Description">Контроль только у вас. Без ограничений со стороны третьих лиц.</string>
+    <string name="Intro_Wallet_Screen3Title">Без границ</string>
+    <string name="Intro_Wallet_Screen3Description">Свободный доступ к глобальным рынкам.</string>
+    <string name="Intro_Wallet_Screen4Title">Сохраняйте приватность</string>
+    <string name="Intro_Wallet_Screen4Description">Ваши данные остаются под вашим контролем.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Я понимаю</string>
     <!--Welcome-->
@@ -566,6 +566,7 @@
     <string name="WalletConnect_DefenseMessage_Danger">Эта dApp не проверена. Подключение может поставить под угрозу ваши средства.</string>
     <string name="WalletConnect_DefenseMessage_Safe">Я проверил это. Это приложение безопасно для подключения.</string>
     <!-- dApp Connection-->
+    <string name="DAppConnection_Title">Подключение к DApp</string>
     <string name="DAppConnection_Requests">Запросы</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Внимание</string>
@@ -685,7 +686,7 @@
     <string name="Transactions_Swap">Обмен выполнен</string>
     <string name="Transactions_Failed">Не удалось</string>
     <string name="Transactions_Transfer">Перевод</string>
-    <string name="Transactions_Shield">Щит</string>
+    <string name="Transactions_Shield">Shield</string>
     <string name="Transactions_Unshield">Unshield</string>
     <string name="Transactions_ContractCall">Вызов контракта</string>
     <string name="Transactions_ExternalContractCall">Внешний вызов</string>
@@ -718,7 +719,7 @@
     <string name="Transactions_Multiple">Множество</string>
     <string name="Transactions_Filter">Фильтр</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Скрыть подозрительные транзакции</string>
-    <string name="Transactions_Filter_StablecoinDustAmount_Description">Скрытие входящих транзакций с незначительной суммой в стабильных монетах частично решает проблемы атаки на загрязнение адреса.</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Скрывает входящие переводы с небольшой суммой (например, USDT менее $1.5). Такие транзакции часто используются для фишинга и атак с подменой адреса.</string>
     <string name="Transactions_Filter_ChooseContact_Hint">Фильтрация по контактам работает на блокчейнах: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimism, Tron, Ton и ZCash. Ниже приведены подходящие контакты</string>
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">У вас нет подходящих контактов </string>
     <!--Transaction Info-->
@@ -807,7 +808,7 @@
     <string name="Settings_RateUs">Оцените нас</string>
     <string name="Settings_LaunchScreen">Экран запуска</string>
     <string name="Settings_LaunchScreen_Tip">Выберите, на каком экране откроется приложение по умолчанию.</string>
-    <string name="Settings_AppSettings">Настройки приложения</string>
+    <string name="Settings_AppSettings">Настройки интерфейса</string>
     <string name="Settings_Subscription">Подписка</string>
     <string name="Settings_AutoLock">Автоблокировка</string>
     <string name="Settings_JoinUnstoppables">Присоединиться к Unstoppables</string>
@@ -890,29 +891,29 @@
     <string name="Premium_UpgradeFeature_TradeSignals">Сигналы и тренды</string>
     <string name="Premium_UpgradeFeature_RobberyProtection">Защита от грабежа</string>
     <string name="Premium_UpgradeFeature_SecureSend">Безопасная отправка</string>
-    <string name="Premium_UpgradeFeature_ScamProtection">Scam-защита</string>
+    <string name="Premium_UpgradeFeature_ScamProtection">Скам-защита</string>
     <string name="Premium_UpgradeFeature_PrioritySupport">Поддержка Premium</string>
-    <string name="Premium_UpgradeFeature_SwapProtection">Защита от потерь</string>
+    <string name="Premium_UpgradeFeature_SwapProtection">Защита обмена</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Расширенная аналитика и данные по токенам</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Мощные фильтры для более удобного поиска токенов.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Расширенные фильтры для удобного поиска токенов.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Практические сигналы для более уверенной торговли.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_Description">Защищает ваши средства, если вас вынуждают разблокировать приложение.</string>
-    <string name="Premium_UpgradeFeature_SecureSend_Description">Предотвращает отправку средств на рискованные или фишинговые адреса.</string>
-    <string name="Premium_UpgradeFeature_ScamProtection_Description">Предупреждает при подключении к поддельным или вредоносным dApps.</string>
+    <string name="Premium_UpgradeFeature_SecureSend_Description">Предупреждает и защищает от отправки средств на опасные адреса.</string>
+    <string name="Premium_UpgradeFeature_ScamProtection_Description">Обнаруживает поддельные и вредоносные dApps перед подключением.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Прямой доступ к нашей службе поддержки.</string>
-    <string name="Premium_UpgradeFeature_SwapProtection_Description">Предотвращает атаки ботов и MEV во время swap-операций.</string>
+    <string name="Premium_UpgradeFeature_SwapProtection_Description">Защищает обмен от автоматических атак и опережающих сделок.</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Показывает подробные данные о токене - объем, ликвидность и тенденции. Помогает вам принимать более эффективные инвестиционные решения.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Поиск токенов с фильтрами по объему, цепочке или сектору. Включает метрики деятельности CEX/DEX и списков.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Уведомления в реальном времени о торговых возможностях и рисках.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Позволяет создать ложный кошелёк с отдельным PIN. Скрывает реальные активы в рискованных ситуациях.</string>
-    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Проверяет адреса получателей на фишинг и мошенничество и предупреждает о рисках перед отправкой.</string>
+    <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Проверяет адрес получателя и предупреждает о риске перед отправкой средств.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Обнаруживает поддельные dApp до подключения. Предотвращает фишинг и защищает активы.</string>
     <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Прямой доступ к приоритетной поддержке от команды Unstoppable.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Защищает от ботов и front-running атак при обмене.</string>
     <string name="Premium_DefenseSystem">Система защиты</string>
     <string name="Premium_MarketInsights">Аналитика рынка</string>
     <string name="Premium_AdvancedControls">Расширенные настройки</string>
-    <string name="Premium_HighlyRatedSecurity">Высоко оцененная безопасность, исключительная конфиденциальность и подлинный кошелек, не являющийся хранителем.</string>
+    <string name="Premium_HighlyRatedSecurity">Надёжная безопасность, высокий уровень конфиденциальности и полностью некастодиальный кошелёк.</string>
     <string name="Premium_ApprovedBy">Одобрено и проверено:</string>
     <string name="Premium_SubscriptionPeriod_Month">месяц</string>
     <string name="Premium_SubscriptionPeriod_Year">год</string>
@@ -926,7 +927,7 @@
     <string name="Appearance_BalanceTab">ВКЛАДКА БАЛАНС</string>
     <string name="Appearance_AppIcon">ИКОНКА ПРИЛОЖЕНИЯ</string>
     <string name="Appearance_BalanceValue">Балансы токенов</string>
-    <string name="Appearance_BalanceValue_Tip">Отображать балансы с выделением в криптовалюте или фиате.</string>
+    <string name="Appearance_BalanceValue_Tip">Отображение баланса: в криптовалюте или в фиате.</string>
     <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
     <string name="Appearance_HideMarketsTab">Скрыть рынки</string>
     <string name="Appearance_HideMarketsTab_Tip">Вкладка «Рынок» полностью скрыта.</string>

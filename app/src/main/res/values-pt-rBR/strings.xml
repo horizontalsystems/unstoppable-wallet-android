@@ -564,6 +564,7 @@
     <string name="WalletConnect_DefenseMessage_Danger">Este dApp não está verificado. A conexão pode colocar seus fundos em risco.</string>
     <string name="WalletConnect_DefenseMessage_Safe">Eu marcei. Este dApp é seguro para se conectar.</string>
     <!-- dApp Connection-->
+    <string name="DAppConnection_Title">Conexão DApp</string>
     <string name="DAppConnection_Requests">Solicitações</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
@@ -716,7 +717,7 @@
     <string name="Transactions_Multiple">Múltiplo</string>
     <string name="Transactions_Filter">Filtro</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Ocultar Transações Suspeitas</string>
-    <string name="Transactions_Filter_StablecoinDustAmount_Description">Ocultando transações de entrada com montantes ínfimos em stablecoins, isso resolve parcialmente os problemas de ataques de envenenamento de endereço.</string>
+    <string name="Transactions_Filter_StablecoinDustAmount_Description">Oculta transferências de entrada de baixo valor (por exemplo, USDT abaixo de US$ 1,5). Essas transações são frequentemente usadas para ataques de phishing e address poisoning.</string>
     <string name="Transactions_Filter_ChooseContact_Hint">A filtragem de contato é suportada nas seguintes blockchains: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Opbitrum, Tron, Ton e ZCash. Abaixo estão os contatos adequados</string>
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">Você não tem nenhum contato adequado </string>
     <!--Transaction Info-->
@@ -805,7 +806,7 @@
     <string name="Settings_RateUs">Avalie-Nos</string>
     <string name="Settings_LaunchScreen">Tela Inicial</string>
     <string name="Settings_LaunchScreen_Tip">Escolha em qual tela o aplicativo será aberto por padrão.</string>
-    <string name="Settings_AppSettings">Configurações do Aplicativo</string>
+    <string name="Settings_AppSettings">Aparência</string>
     <string name="Settings_Subscription">Assinatura</string>
     <string name="Settings_AutoLock">Auto-Bloqueio</string>
     <string name="Settings_JoinUnstoppables">Seja Unstoppable</string>
