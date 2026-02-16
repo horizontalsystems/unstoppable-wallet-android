@@ -275,7 +275,7 @@ private fun RowScope.MarketTotalCard(
         changeStr = getDiff(changePercentage)
         changePositive = changePercentage > BigDecimal.ZERO
     } else if (changeFiat != null) {
-        changeStr = formatFiatShortened(changeFiat, currency.symbol)
+        changeStr = formatFiatShortened(changeFiat.abs(), currency.symbol)
         changePositive = changeFiat > BigDecimal.ZERO
     } else {
         changeStr = null
