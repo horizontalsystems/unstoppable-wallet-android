@@ -192,8 +192,8 @@ private fun MainScreen(
         }
     ) { paddingValues ->
         Column {
-            Crossfade(uiState.selectedTabIndex) {
-                when (uiState.mainNavItems[it].mainNavItem) {
+            Crossfade(uiState.selectedTabItem) { navItem ->
+                when (navItem) {
                     MainNavigation.Market -> MarketScreen(fragmentNavController)
                     MainNavigation.Balance -> BalanceScreen(fragmentNavController)
                     MainNavigation.Transactions -> TransactionsScreen(
