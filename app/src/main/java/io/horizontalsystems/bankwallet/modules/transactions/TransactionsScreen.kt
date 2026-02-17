@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -123,11 +124,13 @@ fun TransactionsScreen(
                         if (transactionItems.isEmpty()) {
                             if (syncing) {
                                 ListEmptyView(
+                                    modifier = Modifier.background(ComposeAppTheme.colors.lawrence),
                                     text = stringResource(R.string.Transactions_WaitForSync),
                                     icon = R.drawable.ic_clock
                                 )
                             } else {
                                 ListEmptyView(
+                                    modifier = Modifier.background(ComposeAppTheme.colors.lawrence),
                                     text = stringResource(R.string.Transactions_EmptyList),
                                     icon = R.drawable.ic_outgoingraw
                                 )
@@ -153,7 +156,9 @@ fun TransactionsScreen(
 
                             LazyColumn(
                                 state = listState,
-                                modifier = Modifier.background(ComposeAppTheme.colors.lawrence)
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(ComposeAppTheme.colors.lawrence)
                             ) {
                                 transactionList(
                                     transactionsMap = transactionItems,
