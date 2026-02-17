@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
-import com.walletconnect.web3.wallet.client.Wallet
+import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.Account

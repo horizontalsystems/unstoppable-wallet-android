@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.handler
 
-import com.walletconnect.android.Core
-import com.walletconnect.web3.wallet.client.Wallet
+import com.reown.android.Core
+import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.AbstractWCAction
 
