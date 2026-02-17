@@ -137,14 +137,14 @@ private fun AddressDefenseMessage(
     onActivateClick: () -> Unit
 ) {
     val noSubscription = checkResults.any { it.value.checkResult == AddressCheckResult.NotAllowed }
-    val isDanger = checkResults.any { it.value.checkResult == AddressCheckResult.Detected }
+    val detectedType = checkResults.entries.firstOrNull { it.value.checkResult == AddressCheckResult.Detected }?.key
     val invalidAddress = addressValidationError != null
 
     val level = when {
         addressValidationInProgress -> DefenseAlertLevel.IDLE
         invalidAddress -> DefenseAlertLevel.DANGER
         noSubscription -> DefenseAlertLevel.WARNING
-        isDanger -> DefenseAlertLevel.DANGER
+        detectedType != null -> DefenseAlertLevel.DANGER
         else -> DefenseAlertLevel.SAFE
     }
 
@@ -152,7 +152,7 @@ private fun AddressDefenseMessage(
         addressValidationInProgress -> R.string.WalletConnect_Checking
         invalidAddress -> R.string.Send_Address_Error_InvalidAddress
         noSubscription -> R.string.AddressEnter_NeedSubscription_Title
-        isDanger -> R.string.AddressEnter_Danger_Title
+        detectedType != null -> detectedType.detectedErrorTitle
         else -> R.string.AddressEnter_Safe_Title
     }
 
@@ -160,7 +160,7 @@ private fun AddressDefenseMessage(
         addressValidationInProgress -> null
         invalidAddress -> R.string.Send_Address_Error_InvalidAddress_Description
         noSubscription -> R.string.AddressEnter_NeedSubscription_Content
-        isDanger -> R.string.AddressEnter_Danger_Content
+        detectedType != null -> detectedType.detectedErrorDescription
         else -> R.string.AddressEnter_Safe_Content
     }
 

@@ -37,15 +37,17 @@ class BlacklistAddressChecker(
         if (token.blockchainType == BlockchainType.Tron) {
             return trc20AddressValidator.isClear(address, token)
         }
+        if (eip20AddressValidator.supports(token)) {
+            if (!eip20AddressValidator.isClear(address, token)) {
+                return false
+            }
+        }
         if (hashDitAddressValidator.supports(token)) {
             if (!hashDitAddressValidator.isClear(address, token)) {
                 return false
-            } else if (!eip20AddressValidator.supports(token)) {
-                return true
             }
         }
-        val eip20CheckResult = eip20AddressValidator.isClear(address, token)
-        return eip20CheckResult
+        return true
     }
 
     override fun supports(token: Token): Boolean {

@@ -71,6 +71,7 @@ class EnterAddressViewModel(
         viewModelScope.launch {
             UserSubscriptionManager.activeSubscriptionStateFlow.collect {
                 if (value.isNotEmpty()) {
+                    parseAddressJob?.cancel()
                     processAddress(value)
                 }
             }
@@ -125,7 +126,6 @@ class EnterAddressViewModel(
                     ensureActive()
 
                     this@EnterAddressViewModel.address = address
-                    addressValidationInProgress = false
                     addressValidationError = null
 
                     emitState()
@@ -149,26 +149,34 @@ class EnterAddressViewModel(
                         checkResults = availableCheckTypes.associateWith { AddressCheckData(true) }
                         emitState()
 
-                        availableCheckTypes.forEach { type ->
+                        for (type in availableCheckTypes) {
                             val checkResult = try {
                                 if (addressCheckManager.isClear(type, address, token)) {
                                     AddressCheckResult.Clear
                                 } else {
                                     AddressCheckResult.Detected
                                 }
-                            } catch (e: Throwable) {
+                            } catch (e: CancellationException) {
+                                throw e
+                            } catch (e: Exception) {
                                 AddressCheckResult.NotAvailable
                             }
 
-                            checkResults += mapOf(type to AddressCheckData(false, checkResult))
                             ensureActive()
+                            checkResults += mapOf(type to AddressCheckData(false, checkResult))
                             emitState()
+
+                            if (type == AddressCheckType.Phishing && checkResult == AddressCheckResult.Detected) {
+                                break
+                            }
                         }
                     } else {
                         checkResults = availableCheckTypes.associateWith { AddressCheckData(false, AddressCheckResult.NotAllowed) }
                         emitState()
                     }
                 }
+
+                addressValidationInProgress = false
 
                 inputState = if (
                     addressValidationError == null &&
