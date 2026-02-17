@@ -4,8 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.walletconnect.web3.wallet.client.Wallet.Params.Pair
-import com.walletconnect.web3.wallet.client.Web3Wallet
+import com.reown.walletkit.client.Wallet.Params.Pair
+import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
@@ -357,7 +357,7 @@ class BalanceViewModel(
     }
 
     private fun handleWalletConnectUri(scannedText: String) {
-        Web3Wallet.pair(Pair(scannedText.trim()),
+        WalletKit.pair(Pair(scannedText.trim()),
             onSuccess = {
                 connectionResult = null
             },

@@ -195,11 +195,16 @@ android {
             substitute(module("com.google.protobuf:protobuf-java:3.6.1")).using(module("com.google.protobuf:protobuf-javalite:3.21.1"))
             substitute(module("net.jcip:jcip-annotations:1.0")).using(module("com.github.stephenc.jcip:jcip-annotations:1.0-1"))
 
-            substitute(module("com.tinder.scarlet:scarlet:0.1.12")).using(module("com.github.WalletConnect.Scarlet:scarlet:1.0.0"))
-            substitute(module("com.tinder.scarlet:websocket-okhttp:0.1.12")).using(module("com.github.WalletConnect.Scarlet:websocket-okhttp:1.0.0"))
-            substitute(module("com.tinder.scarlet:stream-adapter-rxjava2:0.1.12")).using(module("com.github.WalletConnect.Scarlet:stream-adapter-rxjava2:1.0.0"))
-            substitute(module("com.tinder.scarlet:message-adapter-gson:0.1.12")).using(module("com.github.WalletConnect.Scarlet:message-adapter-gson:1.0.0"))
-            substitute(module("com.tinder.scarlet:lifecycle-android:0.1.12")).using(module("com.github.WalletConnect.Scarlet:lifecycle-android:1.0.0"))
+            substitute(module("com.tinder.scarlet:scarlet:0.1.12")).using(module("com.walletconnect.Scarlet:scarlet:1.0.2"))
+            substitute(module("com.tinder.scarlet:websocket-okhttp:0.1.12")).using(module("com.walletconnect.Scarlet:websocket-okhttp:1.0.2"))
+            substitute(module("com.tinder.scarlet:stream-adapter-rxjava2:0.1.12")).using(module("com.walletconnect.Scarlet:stream-adapter-rxjava2:1.0.2"))
+            substitute(module("com.tinder.scarlet:message-adapter-gson:0.1.12")).using(module("com.walletconnect.Scarlet:message-adapter-gson:1.0.2"))
+            substitute(module("com.tinder.scarlet:lifecycle-android:0.1.12")).using(module("com.walletconnect.Scarlet:lifecycle-android:1.0.2"))
+            substitute(module("com.github.WalletConnect.Scarlet:scarlet:1.0.0")).using(module("com.walletconnect.Scarlet:scarlet:1.0.2"))
+            substitute(module("com.github.WalletConnect.Scarlet:websocket-okhttp:1.0.0")).using(module("com.walletconnect.Scarlet:websocket-okhttp:1.0.2"))
+            substitute(module("com.github.WalletConnect.Scarlet:stream-adapter-rxjava2:1.0.0")).using(module("com.walletconnect.Scarlet:stream-adapter-rxjava2:1.0.2"))
+            substitute(module("com.github.WalletConnect.Scarlet:message-adapter-gson:1.0.0")).using(module("com.walletconnect.Scarlet:message-adapter-gson:1.0.2"))
+            substitute(module("com.github.WalletConnect.Scarlet:lifecycle-android:1.0.0")).using(module("com.walletconnect.Scarlet:lifecycle-android:1.0.2"))
         }
 
         resolutionStrategy.eachDependency {
@@ -301,10 +306,14 @@ dependencies {
     api(libs.zxing)
     implementation(libs.qrose)
 
-    // WalletConnect
-    implementation(platform(libs.walletconnect.bom))
-    implementation(libs.walletconnect.web3wallet)
-    implementation(libs.walletconnect.android.core)
+    // Reown (WalletConnect)
+    implementation(platform(libs.reown.bom))
+    implementation(libs.reown.walletkit) {
+        exclude(group = "com.google.firebase")
+    }
+    implementation(libs.reown.android.core) {
+        exclude(group = "com.google.firebase")
+    }
 
     // Web3
     implementation(libs.web3j)

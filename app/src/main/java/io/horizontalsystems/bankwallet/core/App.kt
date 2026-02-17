@@ -13,11 +13,11 @@ import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
-import com.walletconnect.android.Core
-import com.walletconnect.android.CoreClient
-import com.walletconnect.android.relay.ConnectionType
-import com.walletconnect.web3.wallet.client.Wallet
-import com.walletconnect.web3.wallet.client.Web3Wallet
+import com.reown.android.Core
+import com.reown.android.CoreClient
+import com.reown.android.relay.ConnectionType
+import com.reown.walletkit.client.Wallet
+import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
@@ -542,7 +542,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                 Log.w("AAA", "error", error.throwable)
             },
         )
-        Web3Wallet.initialize(Wallet.Params.Init(core = CoreClient)) { error ->
+        WalletKit.initialize(Wallet.Params.Init(core = CoreClient)) { error ->
             Log.e("AAA", "error", error.throwable)
         }
     }

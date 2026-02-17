@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.pairing
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.walletconnect.android.Core
+import com.reown.android.Core
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 

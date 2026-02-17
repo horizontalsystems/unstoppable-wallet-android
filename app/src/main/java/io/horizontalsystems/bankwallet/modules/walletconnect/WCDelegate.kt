@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
-import com.walletconnect.android.Core
-import com.walletconnect.android.CoreClient
-import com.walletconnect.web3.wallet.client.Wallet
-import com.walletconnect.web3.wallet.client.Web3Wallet
+import com.reown.android.Core
+import com.reown.android.CoreClient
+import com.reown.walletkit.client.Wallet
+import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.core.App
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
+object WCDelegate : WalletKit.WalletDelegate, CoreClient.CoreDelegate {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val _coreEvents: MutableSharedFlow<Core.Model> = MutableSharedFlow()
     val coreEvents: SharedFlow<Core.Model> = _coreEvents.asSharedFlow()
@@ -33,24 +33,12 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
     private val _connectionAvailableEvent: MutableStateFlow<Boolean?> = MutableStateFlow(null)
     val connectionAvailableEvent: StateFlow<Boolean?> = _connectionAvailableEvent.asStateFlow()
 
-    var authRequestEvent: Pair<Wallet.Model.AuthRequest, Wallet.Model.VerifyContext>? = null
     var sessionProposalEvent: Pair<Wallet.Model.SessionProposal, Wallet.Model.VerifyContext>? = null
     var sessionRequestEvent: Wallet.Model.SessionRequest? = null
 
     init {
         CoreClient.setDelegate(this)
-        Web3Wallet.setWalletDelegate(this)
-    }
-
-    override fun onAuthRequest(
-        authRequest: Wallet.Model.AuthRequest,
-        verifyContext: Wallet.Model.VerifyContext
-    ) {
-        authRequestEvent = Pair(authRequest, verifyContext)
-
-        scope.launch {
-            _walletEvents.emit(authRequest)
-        }
+        WalletKit.setWalletDelegate(this)
     }
 
     override fun onConnectionStateChange(state: Wallet.Model.ConnectionState) {
@@ -75,9 +63,9 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
         }
     }
 
-//    override fun onSessionExtend(session: Wallet.Model.Session) {
-//        Log.d("Session Extend", "${session.expiry}")
-//    }
+    override fun onSessionExtend(session: Wallet.Model.Session) {
+        // no-op
+    }
 
     override fun onSessionProposal(
         sessionProposal: Wallet.Model.SessionProposal,
@@ -147,7 +135,7 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
 //    }
 
 //    fun deleteAccountAllPairings(currentAccountTopics: List<String>) {
-//        Web3Wallet.getListOfActiveSessions()
+//        WalletKit.getListOfActiveSessions()
 //            .filter { currentAccountTopics.contains(it.topic) }
 //            .forEach {
 //                deletePairing(it.topic)
@@ -159,7 +147,7 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
     }
 
     fun getActiveSessions(): List<Wallet.Model.Session> {
-        return Web3Wallet.getListOfActiveSessions()
+        return WalletKit.getListOfActiveSessions()
     }
 
     fun deletePairing(topic: String, onError: (Throwable) -> Unit = {}) {
@@ -190,7 +178,7 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
         onSuccess: () -> Unit = {},
         onError: (Throwable) -> Unit = {}
     ) {
-        Web3Wallet.disconnectSession(Wallet.Params.SessionDisconnect(topic),
+        WalletKit.disconnectSession(Wallet.Params.SessionDisconnect(topic),
             onSuccess = {
                 scope.launch {
                     _walletEvents.emit(Wallet.Model.SessionDelete.Success(it.sessionTopic, ""))
@@ -240,7 +228,7 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
             jsonRpcResponse = jsonRpcResponse
         )
 
-        Web3Wallet.respondSessionRequest(
+        WalletKit.respondSessionRequest(
             response,
             onSuccess = {
                 onSuccessResult.invoke()

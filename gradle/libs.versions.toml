@@ -60,8 +60,8 @@ markwon = "4.6.2"
 zxing = "4.3.0"
 qrose = "1.0.1"
 
-# WalletConnect
-walletconnectBom = "1.15.0"
+# Reown (WalletConnect)
+reownBom = "1.6.5"
 
 # Web3
 web3j = "4.9.0"
@@ -208,10 +208,10 @@ markwon = { module = "io.noties.markwon:core", version.ref = "markwon" }
 zxing = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxing" }
 qrose = { module = "io.github.alexzhirkevich:qrose", version.ref = "qrose" }
 
-# WalletConnect
-walletconnect-bom = { module = "com.walletconnect:android-bom", version.ref = "walletconnectBom" }
-walletconnect-web3wallet = { module = "com.walletconnect:web3wallet" }
-walletconnect-android-core = { module = "com.walletconnect:android-core" }
+# Reown (WalletConnect)
+reown-bom = { module = "com.reown:android-bom", version.ref = "reownBom" }
+reown-walletkit = { module = "com.reown:walletkit" }
+reown-android-core = { module = "com.reown:android-core" }
 
 # Web3
 web3j = { module = "org.web3j:core", version.ref = "web3j" }
