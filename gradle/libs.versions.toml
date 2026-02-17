@@ -116,7 +116,7 @@ espresso = "3.5.1"
 testRunner = "1.5.2"
 
 # AGP
-agp = "9.0.0"
+agp = "9.0.1"
 
 [libraries]
 # AndroidX Core
