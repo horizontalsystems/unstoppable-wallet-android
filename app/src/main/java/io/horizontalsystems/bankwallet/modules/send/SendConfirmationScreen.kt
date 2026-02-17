@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.badge
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -42,6 +43,7 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
@@ -84,6 +86,7 @@ fun SendConfirmationScreen(
     onClickSend: () -> Unit,
     sendEntryPointDestId: Int,
     title: String? = null,
+    error: Throwable? = null,
     additionalFields: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
     val closeUntilDestId = if (sendEntryPointDestId == 0) {
@@ -140,7 +143,8 @@ fun SendConfirmationScreen(
                         onClickSend()
 
                         stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
-                    }
+                    },
+                    enabled = error == null
                 )
             }
         }
@@ -169,6 +173,10 @@ fun SendConfirmationScreen(
                 memo = memo,
                 additionalFields = additionalFields
             )
+
+            error?.let {
+                Cautions(listOf(CautionViewItem.fromThrowable(it)))
+            }
         }
     }
 }
@@ -206,13 +214,16 @@ fun ConfirmationBottomSection(
         if (!memo.isNullOrBlank()) {
             MemoCell(memo)
         }
-        DataFieldFeeTemplate(
-            navController = navController,
-            primary = formattedFee?.primary ?: "---",
-            secondary = formattedFee?.secondary,
-            title = stringResource(id = R.string.FeeSettings_NetworkFee),
-            infoText = customFeeInfo ?: stringResource(id = R.string.FeeSettings_NetworkFee_Info)
-        )
+
+        formattedFee?.let { formattedFee ->
+            DataFieldFeeTemplate(
+                navController = navController,
+                primary = formattedFee.primary,
+                secondary = formattedFee.secondary,
+                title = stringResource(id = R.string.FeeSettings_NetworkFee),
+                infoText = customFeeInfo ?: stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+            )
+        }
     }
 }
 
@@ -286,7 +297,12 @@ fun ConfirmationTopSection(
 }
 
 @Composable
-fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> Unit) {
+fun SendButton(
+    modifier: Modifier,
+    sendResult: SendResult?,
+    onClickSend: () -> Unit,
+    enabled: Boolean
+) {
     when (sendResult) {
         SendResult.Sending -> {
             ButtonPrimaryYellow(
@@ -311,7 +327,7 @@ fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> U
                 modifier = modifier,
                 title = stringResource(R.string.Send_Confirmation_Send_Button),
                 onClick = onClickSend,
-                enabled = true
+                enabled = enabled
             )
         }
     }

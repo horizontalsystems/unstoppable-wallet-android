@@ -8,6 +8,21 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 
+interface ICaution {
+    fun toCautionViewItem(): CautionViewItem
+}
+
+class InsufficientBalance(val coinCode: String) : Exception(), ICaution {
+    override fun toCautionViewItem() = CautionViewItem(
+        Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance_Title),
+        Translator.getString(
+            R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
+            coinCode
+        ),
+        CautionViewItem.Type.Error
+    )
+}
+
 open class HSCaution(
     val s: TranslatableString,
     val type: Type = Type.Error,

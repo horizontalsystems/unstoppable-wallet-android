@@ -3,7 +3,9 @@ package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
 import cash.z.ecc.android.sdk.model.Proposal
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.InsufficientBalance
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -21,6 +23,7 @@ class SendTransactionServiceZcash(
         ?: throw IllegalArgumentException()
 
     private var proposal: Proposal? = null
+    private var error: Throwable? = null
     private var fee: BigDecimal? = null
 
     override fun start(coroutineScope: CoroutineScope) = Unit
@@ -55,8 +58,18 @@ class SendTransactionServiceZcash(
             }
         }
 
-        proposal = adapter.createProposal(outputs)
-        fee = proposal?.totalFeeRequired()?.convertZatoshiToZec()
+        error = null
+        try {
+            proposal = adapter.createProposal(outputs)
+            fee = proposal?.totalFeeRequired()?.convertZatoshiToZec()
+        } catch (e: Throwable) {
+            val message = e.message
+            if (message != null && message.contains("Insufficient balance", ignoreCase = true)) {
+                error = InsufficientBalance(feeToken.coin.code)
+            } else {
+                error = e
+            }
+        }
 
         emitState()
     }
@@ -71,9 +84,9 @@ class SendTransactionServiceZcash(
         networkFee = fee?.let {
             getAmountData(CoinValue(feeToken, it))
         },
-        cautions = listOf(),
-        sendable = proposal != null,
-        loading = proposal == null,
+        cautions = listOfNotNull(error?.let { CautionViewItem.fromThrowable(it) }),
+        sendable = proposal != null && error == null,
+        loading = proposal == null && error == null,
         fields = listOf(),
     )
 

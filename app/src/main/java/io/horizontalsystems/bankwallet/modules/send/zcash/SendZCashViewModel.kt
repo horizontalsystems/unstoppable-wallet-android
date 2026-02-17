@@ -40,7 +40,7 @@ class SendZCashViewModel(
     private val address: Address,
     private val recentAddressManager: RecentAddressManager
 ) : ViewModelUiState<SendZCashUiState>() {
-    private val feeService = SendZcashFeeService(adapter)
+    private val feeService = SendZcashFeeService(adapter, wallet.coin.code)
 
     val blockchainType = wallet.token.blockchainType
     val coinMaxAllowedDecimals = wallet.token.decimals
@@ -157,7 +157,8 @@ class SendZCashViewModel(
             contact = contact,
             token = wallet.token,
             feeCoin = wallet.coin,
-            memo = memoState.memo
+            memo = memoState.memo,
+            error = feeState.error
         )
     }
 
