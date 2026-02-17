@@ -43,6 +43,7 @@ fun SendZCashConfirmationScreen(
         fee = confirmationData.fee,
         memo = confirmationData.memo,
         onClickSend = sendViewModel::onClickSend,
-        sendEntryPointDestId = sendEntryPointDestId
+        sendEntryPointDestId = sendEntryPointDestId,
+        error = confirmationData.error
     )
 }
