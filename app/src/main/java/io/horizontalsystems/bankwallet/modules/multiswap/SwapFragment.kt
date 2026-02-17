@@ -95,19 +95,18 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.marketkit.models.Token
-import kotlinx.coroutines.delay
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class SwapFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapScreen(navController, navController.getInput())
+        SwapScreen(navController, navController.getInput(), navController::popBackStack)
     }
 }
 
 @Composable
-fun SwapScreen(navController: NavController, tokenIn: Token?) {
+fun SwapScreen(navController: NavController, tokenIn: Token? = null, onClickClose: (() -> Unit)? = null) {
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = currentBackStackEntry!!,
@@ -125,16 +124,16 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         }
     }
 
-    LaunchedEffect(Unit) {
-        if (tokenIn == null) {
-            delay(300)
-            onClickCoinFrom.invoke()
-        }
-    }
+//    LaunchedEffect(Unit) {
+//        if (tokenIn == null) {
+//            delay(300)
+//            onClickCoinFrom.invoke()
+//        }
+//    }
 
     SwapScreenInner(
         uiState = uiState,
-        onClickClose = navController::popBackStack,
+        onClickClose = onClickClose,
         onClickCoinFrom = onClickCoinFrom,
         onClickCoinTo = {
             navController.slideFromBottomForResult<Token>(
@@ -188,7 +187,7 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
 @Composable
 private fun SwapScreenInner(
     uiState: SwapUiState,
-    onClickClose: () -> Unit,
+    onClickClose: (() -> Unit)?,
     onClickCoinFrom: () -> Unit,
     onClickCoinTo: () -> Unit,
     onSwitchPairs: () -> Unit,

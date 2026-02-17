@@ -78,6 +78,7 @@ object MainModule {
     enum class MainNavigation(val iconRes: Int, val titleRes: Int) : Parcelable {
         Market(R.drawable.ic_market_24, R.string.Market_Title),
         Balance(R.drawable.ic_wallet_24, R.string.Balance_Title),
+        Swap(R.drawable.ic_swap_filled_24, R.string.Swap),
         Transactions(R.drawable.ic_transactions_24, R.string.Transactions_Title),
         Settings(R.drawable.ic_settings_24, R.string.Settings_Title);
 
