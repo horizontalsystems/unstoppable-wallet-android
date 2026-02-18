@@ -1,13 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -31,10 +29,12 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightSelectors
 import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
+import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 class SwapSelectProviderFragment : BaseComposeFragment() {
@@ -110,10 +110,10 @@ private fun SwapSelectProviderScreenInner(
                     }
                     CellPrimary(
                         left = {
-                            Image(
-                                modifier = Modifier.size(32.dp),
+                            CellLeftImage(
                                 painter = painterResource(provider.icon),
-                                contentDescription = null
+                                type = ImageType.Rectangle,
+                                size = 32
                             )
                         },
                         middle = {
