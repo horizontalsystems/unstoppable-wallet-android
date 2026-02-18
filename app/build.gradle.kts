@@ -187,6 +187,7 @@ android {
 
     lint {
         disable += "LogNotTimber"
+        disable += "RemoveWorkManagerInitializer"
     }
 
     configurations.all {
