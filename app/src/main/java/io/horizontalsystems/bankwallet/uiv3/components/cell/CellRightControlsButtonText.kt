@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 fun CellRightControlsButtonText(
     title: HSString? = null,
     subtitle: HSString? = null,
+    subhead: HSString? = null,
     description: HSString? = null,
     icon: Painter? = null,
     iconTint: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
@@ -57,6 +58,15 @@ fun CellRightControlsButtonText(
             Text(
                 text = it.text,
                 style = ComposeAppTheme.typography.subheadSB,
+                color = it.color ?: ComposeAppTheme.colors.leah,
+                textAlign = TextAlign.End,
+                modifier = Modifier.weight(1f)
+            )
+        }
+        subhead?.let {
+            Text(
+                text = it.text,
+                style = ComposeAppTheme.typography.subhead,
                 color = it.color ?: ComposeAppTheme.colors.leah,
                 textAlign = TextAlign.End,
                 modifier = Modifier.weight(1f)
