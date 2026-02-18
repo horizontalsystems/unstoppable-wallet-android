@@ -11,68 +11,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.composablePopup
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
-import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
-import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
-class AboutFragment : BaseComposeFragment() {
-
-    @Composable
-    override fun GetContent(navController: NavController) {
-        AboutNavHost(navController)
-    }
-
-}
-
-private const val AboutPage = "about"
-private const val ReleaseNotesPage = "release_notes"
-private const val AppStatusPage = "app_status"
-private const val TermsPage = "terms"
-
-@Composable
-private fun AboutNavHost(fragmentNavController: NavController) {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = AboutPage,
-    ) {
-        composable(AboutPage) {
-            AboutScreen(
-                onBackPress = { fragmentNavController.popBackStack() },
-                navigateToReleaseNotes = { navController.navigate(ReleaseNotesPage) },
-                navigateToAppStatus = { navController.navigate(AppStatusPage) },
-                navigateToTerms = { navController.navigate(TermsPage) }
-            )
-        }
-        composablePage(ReleaseNotesPage) {
-            ReleaseNotesScreen(false, { navController.popBackStack() })
-        }
-        composablePage(AppStatusPage) { AppStatusScreen(navController::popBackStack) }
-        composablePopup(TermsPage) {
-            TermsScreen(
-                onBack = navController::popBackStack,
-                setResult = navController::setNavigationResultX
-            )
-        }
-    }
-}
 
 @Composable
 fun AboutScreen(
