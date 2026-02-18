@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.nav3
 
+import android.view.WindowManager
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,9 +41,10 @@ class Nav3Fragment : BaseComposeFragment() {
 
 }
 
-interface HSScreen : NavKey {
+@Serializable
+abstract class HSScreen(val screenshotEnabled: Boolean = true) : NavKey {
     @Composable
-    fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
+    open fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
         HSScaffold(title = "TODO") {
 
         }
@@ -48,7 +52,7 @@ interface HSScreen : NavKey {
 }
 
 @Serializable
-data object Home : HSScreen {
+data object Home : HSScreen() {
     @Composable
     override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
         HSScaffold(title = "Nav3") {
@@ -76,7 +80,7 @@ data object Home : HSScreen {
 }
 
 @Serializable
-data object About : HSScreen {
+data object About : HSScreen() {
     @Composable
     override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
         AboutScreen(
@@ -89,7 +93,7 @@ data object About : HSScreen {
 }
 
 @Serializable
-data object AppStatus : HSScreen {
+data object AppStatus : HSScreen() {
     @Composable
     override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
         AppStatusScreen(onBack = { backStack.removeLastOrNull() })
@@ -97,7 +101,7 @@ data object AppStatus : HSScreen {
 }
 
 @Serializable
-data object ReleaseNotes : HSScreen {
+data object ReleaseNotes : HSScreen() {
     @Composable
     override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
         ReleaseNotesScreen(false, { backStack.removeLastOrNull() })
@@ -105,7 +109,7 @@ data object ReleaseNotes : HSScreen {
 }
 
 @Serializable
-data object Terms : HSScreen {
+data object Terms : HSScreen() {
     @Composable
     override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
         TermsScreen(
@@ -125,6 +129,19 @@ fun NavExample() {
         serializer = NavBackStackSerializer(elementSerializer = NavKeySerializer())
     ) {
         NavBackStack<HSScreen>(About)
+    }
+
+    val currentScreen = backStack.lastOrNull()
+    val activity = LocalActivity.current
+
+    LaunchedEffect(currentScreen) {
+        if (activity != null) {
+            if (currentScreen?.screenshotEnabled == false) {
+                activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+            } else {
+                activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+            }
+        }
     }
 
     NavDisplay(
