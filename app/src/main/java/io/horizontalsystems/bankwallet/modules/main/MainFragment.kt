@@ -135,6 +135,7 @@ private fun MainScreen(
     }
 
     val uiState = viewModel.uiState
+    val navigationBarHeight = 56.dp
 
     Scaffold(
         containerColor = ComposeAppTheme.colors.tyler,
@@ -148,7 +149,7 @@ private fun MainScreen(
                     TorStatusView()
                 }
                 NavigationBar(
-                    modifier = Modifier.height(56.dp),
+                    modifier = Modifier.height(navigationBarHeight),
                     containerColor = ComposeAppTheme.colors.blade,
                 ) {
                     uiState.mainNavItems.forEach { destination ->
@@ -197,7 +198,11 @@ private fun MainScreen(
                 when (navItem) {
                     MainNavigation.Market -> MarketScreen(fragmentNavController)
                     MainNavigation.Balance -> BalanceScreen(fragmentNavController)
-                    MainNavigation.Swap -> SwapScreen(fragmentNavController)
+                    MainNavigation.Swap -> SwapScreen(
+                        fragmentNavController,
+                        bottomPadding = navigationBarHeight
+                    )
+
                     MainNavigation.Transactions -> TransactionsScreen(
                         fragmentNavController,
                         transactionsViewModel
