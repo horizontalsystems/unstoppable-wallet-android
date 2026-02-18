@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
@@ -43,6 +44,8 @@ class Nav3Fragment : BaseComposeFragment() {
 
 @Serializable
 abstract class HSScreen(val screenshotEnabled: Boolean = true) : NavKey {
+    open fun getMetadata() = mapOf<String, Any>()
+
     @Composable
     open fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
         HSScaffold(title = "TODO") {
@@ -52,13 +55,36 @@ abstract class HSScreen(val screenshotEnabled: Boolean = true) : NavKey {
 }
 
 @Serializable
+data object Child : HSScreen() {
+    override fun getMetadata() = SharedViewModelStoreNavEntryDecorator.parent(
+        Home.toString()
+    )
+
+    @Composable
+    override fun GetContent(
+        backStack: MutableList<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val parentViewModel = viewModel(modelClass = SharedViewModel::class)
+        HSScaffold(title = "Child") {
+            title3_leah("uuid: " + parentViewModel.uuid)
+        }
+    }
+}
+
+@Serializable
 data object Home : HSScreen() {
     @Composable
     override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
+        val viewModel = viewModel(modelClass = SharedViewModel::class)
+
         HSScaffold(title = "Nav3") {
             Column {
-                HSButton(title = "About") {
-                    backStack.add(About)
+                title3_leah("uuid: " + viewModel.uuid)
+                VSpacer(12.dp)
+
+                HSButton(title = "Child") {
+                    backStack.add(Child)
                 }
 
                 VSpacer(36.dp)
@@ -128,7 +154,7 @@ fun NavExample() {
     val backStack = rememberSerializable(
         serializer = NavBackStackSerializer(elementSerializer = NavKeySerializer())
     ) {
-        NavBackStack<HSScreen>(About)
+        NavBackStack<HSScreen>(Home)
     }
 
     val currentScreen = backStack.lastOrNull()
@@ -149,12 +175,13 @@ fun NavExample() {
             // Add the default decorators for managing scenes and saving state
             rememberSaveableStateHolderNavEntryDecorator(),
             // Then add the view model store decorator
-            rememberViewModelStoreNavEntryDecorator()
+            rememberViewModelStoreNavEntryDecorator(),
+            rememberSharedViewModelStoreNavEntryDecorator(),
         ),
         backStack = backStack,
-        entryProvider = { key ->
-            NavEntry(key) {
-                key.GetContent(backStack, resultBus)
+        entryProvider = { hSScreen ->
+            NavEntry(hSScreen, metadata = hSScreen.getMetadata()) {
+                hSScreen.GetContent(backStack, resultBus)
             }
         }
     )
