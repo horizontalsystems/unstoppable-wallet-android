@@ -26,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -43,6 +42,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.BadgeOrangeGradient
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -311,26 +311,7 @@ private fun CustomCellMiddleInfo(
                     )
                 }
                 if (noteText != null && noteAmount != null) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(
-                                style = SpanStyle(
-                                    textDecoration = TextDecoration.LineThrough,
-                                    color = ComposeAppTheme.colors.grey,
-                                )
-                            ) {
-                                append(noteAmount)
-                            }
-                            withStyle(
-                                style = SpanStyle(
-                                    color = ComposeAppTheme.colors.grey,
-                                )
-                            ) {
-                                append(" $noteText")
-                            }
-                        },
-                        style = ComposeAppTheme.typography.captionSB,
-                    )
+                    subhead2_remus("($noteAmount / $noteText)")
                 }
             }
         }
