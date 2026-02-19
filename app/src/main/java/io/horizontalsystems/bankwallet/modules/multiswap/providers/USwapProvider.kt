@@ -304,7 +304,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             priceImpact = null,
             fields = fields,
             estimatedTime = bestRoute.estimatedTime?.total,
-            slippage = slippage
+            slippage = slippage,
+            providerSwapId = bestRoute.providerSwapId,
         )
     }
 
@@ -514,6 +515,7 @@ interface UnstoppableAPI {
                 val memo: String?,
                 val txExtraAttribute: Map<String, String>?,
                 val estimatedTime: EstimatedTime?,
+                val providerSwapId: String?,
             ) {
                 data class EstimatedTime(
                     val total: Long

@@ -15,5 +15,6 @@ data class SwapFinalQuote(
     val priceImpact: BigDecimal?,
     val fields: List<DataField>,
     val estimatedTime: Long?,
-    val slippage: BigDecimal?
+    val slippage: BigDecimal?,
+    val providerSwapId: String? = null,
 )
