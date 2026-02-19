@@ -55,6 +55,7 @@ import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapRecordManager
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
@@ -218,6 +219,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var roiManager: RoiManager
         lateinit var appIconService: AppIconService
         lateinit var paidActionSettingsManager: PaidActionSettingsManager
+        lateinit var swapRecordManager: SwapRecordManager
         var trialExpired: Boolean = false
     }
 
@@ -328,6 +330,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         scannedTransactionStorage = ScannedTransactionStorage(appDatabase.scannedTransactionDao())
         contactsRepository = ContactsRepository(marketKit)
         recentAddressManager = RecentAddressManager(accountManager, appDatabase.recentAddressDao(), ActionCompletedDelegate)
+        swapRecordManager = SwapRecordManager(appDatabase.swapRecordDao())
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
             walletManager,

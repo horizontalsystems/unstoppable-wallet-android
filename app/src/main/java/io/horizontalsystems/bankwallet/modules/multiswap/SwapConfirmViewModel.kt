@@ -4,6 +4,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.badge
+import io.horizontalsystems.bankwallet.core.toHexString
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapHelper
+import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionResult
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -71,6 +75,7 @@ class SwapConfirmViewModel(
     private var amountOutMin: BigDecimal? = null
     private var estimatedTime: Long? = null
     private var quoteFields: List<DataField> = listOf()
+    private var providerSwapId: String? = null
     private var fetchFinalQuoteJob: Job? = null
 
     init {
@@ -238,6 +243,7 @@ class SwapConfirmViewModel(
                 estimatedTime = finalQuote.estimatedTime
                 quoteFields = finalQuote.fields
                 slippage = finalQuote.slippage
+                providerSwapId = finalQuote.providerSwapId
                 emitState()
 
                 fiatServiceOut.setAmount(amountOut)
@@ -265,7 +271,45 @@ class SwapConfirmViewModel(
 
         stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
 
-        sendTransactionService.sendTransaction(swapDefenseState.mevProtectionEnabled)
+        val result = sendTransactionService.sendTransaction(swapDefenseState.mevProtectionEnabled)
+        saveSwapRecord(result)
+        result
+    }
+
+    private fun saveSwapRecord(result: SendTransactionResult) {
+        val transactionHash = when (result) {
+            is SendTransactionResult.Evm -> result.fullTransaction.transaction.hash.toHexString()
+            is SendTransactionResult.Btc -> result.transactionRecord?.transactionHash
+            else -> null
+        }
+
+        val record = SwapRecord(
+            timestamp = System.currentTimeMillis(),
+            providerId = swapProvider.id,
+            providerName = swapProvider.title,
+            tokenInUid = tokenIn.tokenQuery.id,
+            tokenInCoinCode = tokenIn.coin.code,
+            tokenInCoinUid = tokenIn.coin.uid,
+            tokenInBadge = tokenIn.badge,
+            tokenInBlockchainTypeUid = tokenIn.blockchainType.uid,
+            tokenOutUid = tokenOut.tokenQuery.id,
+            tokenOutCoinCode = tokenOut.coin.code,
+            tokenOutCoinUid = tokenOut.coin.uid,
+            tokenOutBadge = tokenOut.badge,
+            tokenOutBlockchainTypeUid = tokenOut.blockchainType.uid,
+            amountIn = amountIn.toPlainString(),
+            amountOut = amountOut?.toPlainString(),
+            amountOutMin = amountOutMin?.toPlainString(),
+            recipientAddress = recipient?.hex,
+            sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn),
+            transactionHash = transactionHash,
+            slippage = slippage?.toPlainString(),
+            networkFeeCoinCode = sendTransactionState.networkFee?.primary?.coinValue?.coin?.code,
+            networkFeeAmount = sendTransactionState.networkFee?.primary?.coinValue?.value?.toPlainString(),
+            providerSwapId = providerSwapId,
+            status = SwapStatus.Depositing.name,
+        )
+        App.swapRecordManager.save(record)
     }
 
     fun setRecipient(recipient: Address?) {
