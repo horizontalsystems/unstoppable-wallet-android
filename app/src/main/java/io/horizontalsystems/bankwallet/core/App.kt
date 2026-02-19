@@ -495,7 +495,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         roiManager = RoiManager(localStorage)
 
-        Timber.plant(Timber.DebugTree())
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
         startTasks()
     }
 
@@ -539,11 +541,11 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             connectionType = connectionType,
             application = this,
             onError = { error ->
-                Log.w("AAA", "error", error.throwable)
+                Timber.w(error.throwable)
             },
         )
         WalletKit.initialize(Wallet.Params.Init(core = CoreClient)) { error ->
-            Log.e("AAA", "error", error.throwable)
+            Timber.e(error.throwable)
         }
     }
 
