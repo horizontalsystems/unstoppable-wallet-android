@@ -23,7 +23,7 @@ android {
         applicationId = "io.horizontalsystems.bankwallet"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.compileSdk.get().toInt()
-        versionCode = 160
+        versionCode = 161
         versionName = "0.48.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -187,6 +187,7 @@ android {
 
     lint {
         disable += "LogNotTimber"
+        disable += "RemoveWorkManagerInitializer"
     }
 
     configurations.all {

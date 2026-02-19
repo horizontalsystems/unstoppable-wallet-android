@@ -97,9 +97,9 @@ class SubscriptionServiceDev(private val context: Context) : SubscriptionService
                     id = "plan-1",
                     pricingPhases = listOf(
                         PricingPhase(
-                            formattedPrice = "$19.9",
+                            formattedPrice = "$25.0",
                             billingPeriod = "P1M",
-                            priceAmountMicros = 19900000L,
+                            priceAmountMicros = 2500000L,
                             priceCurrencyCode = "USD"
                         )
                     ),
@@ -109,9 +109,9 @@ class SubscriptionServiceDev(private val context: Context) : SubscriptionService
                     id = "plan-2",
                     pricingPhases = listOf(
                         PricingPhase(
-                            formattedPrice = "$149.9",
+                            formattedPrice = "$199.00",
                             billingPeriod = "P1Y",
-                            priceAmountMicros = 149900000L,
+                            priceAmountMicros = 199000000L,
                             priceCurrencyCode = "USD"
                         )
                     ),
