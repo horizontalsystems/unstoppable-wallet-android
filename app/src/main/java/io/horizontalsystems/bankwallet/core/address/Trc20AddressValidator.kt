@@ -12,11 +12,12 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONObject
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class Trc20AddressValidator {
 
-    private val logger = HttpLoggingInterceptor().apply {
+    private val logger = HttpLoggingInterceptor { Timber.d(it) }.apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 

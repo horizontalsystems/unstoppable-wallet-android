@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
@@ -13,7 +12,6 @@ class WCRequestRouterViewModel : ViewModelUiState<WCRequestRouterUiState>() {
     private val blockchainType = determineBlockchainType()
 
     private fun determineBlockchainType(): BlockchainType? {
-        Log.e("AAA", "sessionRequest: $sessionRequest")
         val chainParts = sessionRequest?.chainId?.split(":") ?: return null
         val first = chainParts[0]
 
