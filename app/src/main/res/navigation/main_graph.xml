@@ -331,6 +331,9 @@
         android:id="@+id/swapConfirm"
         android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapConfirmFragment" />
     <fragment
+        android:id="@+id/swapHistoryFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapHistoryFragment" />
+    <fragment
         android:id="@+id/sendConfirmation"
         android:name="io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment" />
     <fragment

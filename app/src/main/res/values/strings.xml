@@ -787,6 +787,10 @@
     <string name="Activate_InsufficientBalance_Title">Insufficient Balance</string>
     <string name="Activate_InsufficientBalance_Description">You don\’t have enough XLM balance to activate this token.</string>
 
+    <!-- Swap History -->
+    <string name="SwapHistory_Title">Swap History</string>
+    <string name="SwapHistory_EmptyList">No swaps yet</string>
+
     <!--Approve-->
 
     <string name="Approve_RevokeAndApproveInfo">You can exchange %s, or you need to revoke and approve the new amount</string>
