@@ -14,6 +14,9 @@ interface SwapRecordDao {
     @Query("SELECT * FROM SwapRecord ORDER BY timestamp DESC")
     fun getAll(): List<SwapRecord>
 
+    @Query("SELECT * FROM SwapRecord WHERE status NOT IN ('Completed', 'Refunded', 'Failed') ORDER BY timestamp DESC")
+    fun getPending(): List<SwapRecord>
+
     @Query("SELECT * FROM SwapRecord WHERE id = :id")
     fun getById(id: Int): SwapRecord?
 

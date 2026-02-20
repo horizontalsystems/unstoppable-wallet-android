@@ -39,6 +39,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderStick
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
@@ -101,66 +102,69 @@ fun SwapHistoryScreen(navController: NavController) {
 
 @Composable
 private fun SwapHistoryCell(item: SwapHistoryViewItem, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(ComposeAppTheme.colors.lawrence)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        // Token In icon — spinner when Depositing
-        SwapCoinIcon(
-            imageUrl = item.tokenInImageUrl,
-            showSpinner = item.status == SwapStatus.Depositing,
-        )
-
-        // Amount In + fiat
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.Start,
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(ComposeAppTheme.colors.lawrence)
+                .clickable(onClick = onClick)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            body_leah(
-                text = item.amountIn,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+            // Token In icon — spinner when Depositing
+            SwapCoinIcon(
+                imageUrl = item.tokenInImageUrl,
+                showSpinner = item.status == SwapStatus.Depositing,
             )
-            item.fiatAmountIn?.let {
-                subhead2_grey(text = it, maxLines = 1)
+
+            // Amount In + fiat
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                body_leah(
+                    text = item.amountIn,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                item.fiatAmountIn?.let {
+                    subhead2_grey(text = it, maxLines = 1)
+                }
             }
-        }
 
-        // Center: arrow right for all statuses; tinted by completion state
-        val (statusIcon, statusTint) = statusIconAndTint(item.status)
-        Icon(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(statusIcon),
-            tint = statusTint,
-            contentDescription = null,
-        )
-
-        // Amount Out + fiat
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.End,
-        ) {
-            body_leah(
-                text = item.amountOut ?: "---",
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.End,
+            // Center: arrow right for all statuses; tinted by completion state
+            val (statusIcon, statusTint) = statusIconAndTint(item.status)
+            Icon(
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(statusIcon),
+                tint = statusTint,
+                contentDescription = null,
             )
-            item.fiatAmountOut?.let {
-                subhead2_grey(text = it, maxLines = 1, textAlign = TextAlign.End)
-            }
-        }
 
-        // Token Out icon — spinner when Swapping or Sending
-        SwapCoinIcon(
-            imageUrl = item.tokenOutImageUrl,
-            showSpinner = item.status == SwapStatus.Swapping || item.status == SwapStatus.Sending,
-        )
+            // Amount Out + fiat
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.End,
+            ) {
+                body_leah(
+                    text = item.amountOut ?: "---",
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.End,
+                )
+                item.fiatAmountOut?.let {
+                    subhead2_grey(text = it, maxLines = 1, textAlign = TextAlign.End)
+                }
+            }
+
+            // Token Out icon — spinner when Swapping or Sending
+            SwapCoinIcon(
+                imageUrl = item.tokenOutImageUrl,
+                showSpinner = item.status == SwapStatus.Swapping || item.status == SwapStatus.Sending,
+            )
+        }
+        HsDivider()
     }
 }
 

@@ -31,28 +31,39 @@ class SwapHistoryViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            val currency = currencyManager.baseCurrency
-            val records = swapRecordManager.getAll()
-            items = records
-                .map { record ->
-                    val timestampSeconds = record.timestamp / 1000
-                    val priceIn = fetchHistoricalPrice(record.tokenInCoinUid, currency.code, timestampSeconds)
-                    val priceOut = fetchHistoricalPrice(record.tokenOutCoinUid, currency.code, timestampSeconds)
-                    SwapHistoryViewItem(
-                        id = record.id,
-                        tokenInImageUrl = coinImageUrl(record.tokenInCoinUid),
-                        tokenOutImageUrl = coinImageUrl(record.tokenOutCoinUid),
-                        amountIn = formatAmount(record.amountIn, record.tokenInCoinCode),
-                        amountOut = record.amountOut?.let { formatAmount(it, record.tokenOutCoinCode) },
-                        fiatAmountIn = formatFiat(record.amountIn, priceIn, currency.symbol, currency.decimal),
-                        fiatAmountOut = record.amountOut?.let { formatFiat(it, priceOut, currency.symbol, currency.decimal) },
-                        status = runCatching { SwapStatus.valueOf(record.status) }.getOrDefault(SwapStatus.Depositing),
-                        formattedDate = formatDate(Date(record.timestamp)),
-                    )
-                }
-                .groupBy { it.formattedDate }
-            emitState()
+            loadItems()
         }
+        // Reload whenever a record is saved or its status updated
+        viewModelScope.launch(Dispatchers.IO) {
+            swapRecordManager.recordsUpdatedFlow
+                .collect {
+                    loadItems()
+                }
+        }
+    }
+
+    private suspend fun loadItems() {
+        val currency = currencyManager.baseCurrency
+        val records = swapRecordManager.getAll()
+        items = records
+            .map { record ->
+                val timestampSeconds = record.timestamp / 1000
+                val priceIn = fetchHistoricalPrice(record.tokenInCoinUid, currency.code, timestampSeconds)
+                val priceOut = fetchHistoricalPrice(record.tokenOutCoinUid, currency.code, timestampSeconds)
+                SwapHistoryViewItem(
+                    id = record.id,
+                    tokenInImageUrl = coinImageUrl(record.tokenInCoinUid),
+                    tokenOutImageUrl = coinImageUrl(record.tokenOutCoinUid),
+                    amountIn = formatAmount(record.amountIn, record.tokenInCoinCode),
+                    amountOut = record.amountOut?.let { formatAmount(it, record.tokenOutCoinCode) },
+                    fiatAmountIn = formatFiat(record.amountIn, priceIn, currency.symbol, currency.decimal),
+                    fiatAmountOut = record.amountOut?.let { formatFiat(it, priceOut, currency.symbol, currency.decimal) },
+                    status = runCatching { SwapStatus.valueOf(record.status) }.getOrDefault(SwapStatus.Depositing),
+                    formattedDate = formatDate(Date(record.timestamp)),
+                )
+            }
+            .groupBy { it.formattedDate }
+        emitState()
     }
 
     private fun coinImageUrl(coinUid: String) =
