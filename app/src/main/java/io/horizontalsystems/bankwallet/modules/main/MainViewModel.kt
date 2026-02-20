@@ -442,6 +442,7 @@ class MainViewModel(
             deeplinkString.startsWith("bitcoin:")
             || deeplinkString.startsWith("ethereum:")
             || deeplinkString.startsWith("toncoin:")
+            || deeplinkString.startsWith("monero:")
         ) {
             AddressUriParser.addressUri(deeplinkString)?.let { addressUri ->
                 val allowedBlockchainTypes = addressUri.allowedBlockchainTypes
