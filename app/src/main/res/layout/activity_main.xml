@@ -18,4 +18,11 @@
         android:layout_height="match_parent"
         android:elevation="10dp" />
 
+    <View
+        android:id="@+id/privacyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="12dp"
+        android:visibility="gone" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
