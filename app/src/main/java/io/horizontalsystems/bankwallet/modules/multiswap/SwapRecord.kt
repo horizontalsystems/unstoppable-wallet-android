@@ -45,5 +45,8 @@ data class SwapRecord(
     val networkFeeAmount: String?,
 
     val providerSwapId: String?,
+    val fromAsset: String?,
+    val toAsset: String?,
+    val depositAddress: String?,
     val status: String,
 )

@@ -47,7 +47,7 @@ object OneInchProvider : IMultiSwapProvider {
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
         BlockchainType.ArbitrumOne
-        -> true
+            -> true
 
         else -> false
     }
@@ -144,8 +144,15 @@ object OneInchProvider : IMultiSwapProvider {
             null,
             fields,
             tokenIn.blockchainType.blockTime,
-            slippage
+            slippage,
+            fromAsset = assetId(tokenIn),
+            toAsset = assetId(tokenOut),
         )
+    }
+
+    private fun assetId(token: Token): String = when (val type = token.type) {
+        is TokenType.Eip20 -> type.address
+        else -> evmCoinAddress.hex
     }
 }
 

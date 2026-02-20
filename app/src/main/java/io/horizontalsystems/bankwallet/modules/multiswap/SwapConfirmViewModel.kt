@@ -76,6 +76,9 @@ class SwapConfirmViewModel(
     private var estimatedTime: Long? = null
     private var quoteFields: List<DataField> = listOf()
     private var providerSwapId: String? = null
+    private var fromAsset: String? = null
+    private var toAsset: String? = null
+    private var depositAddress: String? = null
     private var fetchFinalQuoteJob: Job? = null
 
     init {
@@ -244,6 +247,9 @@ class SwapConfirmViewModel(
                 quoteFields = finalQuote.fields
                 slippage = finalQuote.slippage
                 providerSwapId = finalQuote.providerSwapId
+                fromAsset = finalQuote.fromAsset
+                toAsset = finalQuote.toAsset
+                depositAddress = finalQuote.depositAddress
                 emitState()
 
                 fiatServiceOut.setAmount(amountOut)
@@ -307,6 +313,9 @@ class SwapConfirmViewModel(
             networkFeeCoinCode = sendTransactionState.networkFee?.primary?.coinValue?.coin?.code,
             networkFeeAmount = sendTransactionState.networkFee?.primary?.coinValue?.value?.toPlainString(),
             providerSwapId = providerSwapId,
+            fromAsset = fromAsset,
+            toAsset = toAsset,
+            depositAddress = depositAddress,
             status = SwapStatus.Depositing.name,
         )
         App.swapRecordManager.save(record)
