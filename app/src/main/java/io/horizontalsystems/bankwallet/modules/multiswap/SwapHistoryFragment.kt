@@ -116,7 +116,7 @@ private fun SwapHistoryCell(item: SwapHistoryViewItem, onClick: () -> Unit) {
             showSpinner = item.status == SwapStatus.Depositing,
         )
 
-        // Amount In + badge
+        // Amount In + fiat
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start,
@@ -126,7 +126,7 @@ private fun SwapHistoryCell(item: SwapHistoryViewItem, onClick: () -> Unit) {
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            item.tokenInBadge?.let {
+            item.fiatAmountIn?.let {
                 subhead2_grey(text = it, maxLines = 1)
             }
         }
@@ -140,7 +140,7 @@ private fun SwapHistoryCell(item: SwapHistoryViewItem, onClick: () -> Unit) {
             contentDescription = null,
         )
 
-        // Amount Out + badge
+        // Amount Out + fiat
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.End,
@@ -151,7 +151,7 @@ private fun SwapHistoryCell(item: SwapHistoryViewItem, onClick: () -> Unit) {
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.End,
             )
-            item.tokenOutBadge?.let {
+            item.fiatAmountOut?.let {
                 subhead2_grey(text = it, maxLines = 1, textAlign = TextAlign.End)
             }
         }
