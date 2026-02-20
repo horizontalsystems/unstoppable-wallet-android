@@ -483,6 +483,11 @@ interface UnstoppableAPI {
         @Body request: Request.Track,
     ): Response.Track
 
+    @POST("track/evm")
+    suspend fun trackEvm(
+        @Body request: Request.Track,
+    ): Response.Track
+
     object Request {
         data class Quote(
             val sellAsset: String,
@@ -548,6 +553,7 @@ interface UnstoppableAPI {
 
         data class Track(
             val status: String, // not_started, pending, swapping, completed, refunded, unknown, failed
+            val type: String?,
             val hash: String?,
             val chainId: String?,
             val fromAsset: String?,
@@ -556,6 +562,20 @@ interface UnstoppableAPI {
             val toAsset: String?,
             val toAmount: String?,
             val toAddress: String?,
-        )
+            val legs: List<Leg>?,
+        ) {
+            data class Leg(
+                val type: String,   // "swap" | "native_send"
+                val status: String,
+                val hash: String?,
+                val chainId: String?,
+                val fromAsset: String?,
+                val fromAmount: String?,
+                val fromAddress: String?,
+                val toAsset: String?,
+                val toAmount: String?,
+                val toAddress: String?,
+            )
+        }
     }
 }

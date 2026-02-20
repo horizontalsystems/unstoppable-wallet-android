@@ -282,7 +282,7 @@ class SwapConfirmViewModel(
         result
     }
 
-    private fun saveSwapRecord(result: SendTransactionResult) {
+    private suspend fun saveSwapRecord(result: SendTransactionResult) {
         val transactionHash = when (result) {
             is SendTransactionResult.Evm -> result.fullTransaction.transaction.hash.toHexString()
             is SendTransactionResult.Btc -> result.transactionRecord?.transactionHash
@@ -306,7 +306,7 @@ class SwapConfirmViewModel(
             amountIn = amountIn.toPlainString(),
             amountOut = amountOut?.toPlainString(),
             amountOutMin = amountOutMin?.toPlainString(),
-            recipientAddress = recipient?.hex,
+            recipientAddress = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut),
             sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn),
             transactionHash = transactionHash,
             slippage = slippage?.toPlainString(),

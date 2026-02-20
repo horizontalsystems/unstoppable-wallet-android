@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.MayaProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UnstoppableAPI
 
@@ -22,7 +25,7 @@ object SwapTrackRequestBuilder {
         val providerApiName = apiProviderName(record.providerId)
 
         return when (record.providerId) {
-            "thorchain", "mayachain" -> UnstoppableAPI.Request.Track(
+            ThorChainProvider.id, MayaProvider.id -> UnstoppableAPI.Request.Track(
                 provider = providerApiName,
                 // Use hash when available; fall back to depositAddress for memoless swaps
                 hash = record.transactionHash,
@@ -32,7 +35,7 @@ object SwapTrackRequestBuilder {
                 toAddress = record.recipientAddress,
             )
 
-            "oneinch" -> UnstoppableAPI.Request.Track(
+            OneInchProvider.id -> UnstoppableAPI.Request.Track(
                 provider = providerApiName,
                 hash = record.transactionHash,
                 chainId = evmChainIds[record.tokenInBlockchainTypeUid],
@@ -61,9 +64,9 @@ object SwapTrackRequestBuilder {
     }
 
     private fun apiProviderName(providerId: String): String = when (providerId) {
-        "thorchain" -> "THORCHAIN"
-        "mayachain" -> "MAYACHAIN"
-        "oneinch" -> "ONEINCH"
+        ThorChainProvider.id -> "THORCHAIN"
+        MayaProvider.id -> "MAYACHAIN"
+        OneInchProvider.id -> "ONEINCH"
         else -> if (providerId.startsWith("u_")) providerId.removePrefix("u_") else providerId.uppercase()
     }
 }
