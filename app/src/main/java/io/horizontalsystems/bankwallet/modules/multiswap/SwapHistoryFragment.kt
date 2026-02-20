@@ -55,7 +55,7 @@ class SwapHistoryFragment : BaseComposeFragment() {
 
 @Composable
 fun SwapHistoryScreen(navController: NavController) {
-    val viewModel = viewModel<SwapHistoryViewModel>()
+    val viewModel = viewModel<SwapHistoryViewModel>(factory = SwapHistoryViewModel.Factory())
     val uiState = viewModel.uiState
 
     HSScaffold(

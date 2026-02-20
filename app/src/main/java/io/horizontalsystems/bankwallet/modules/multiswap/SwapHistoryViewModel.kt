@@ -1,31 +1,43 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Calendar
 import java.util.Date
 
-class SwapHistoryViewModel : ViewModelUiState<SwapHistoryUiState>() {
+class SwapHistoryViewModel(
+    private val swapRecordManager: SwapRecordManager,
+    private val marketKit: MarketKitWrapper,
+    private val currencyManager: CurrencyManager,
+    private val numberFormatter: IAppNumberFormatter,
+) : ViewModelUiState<SwapHistoryUiState>() {
     private var items: Map<String, List<SwapHistoryViewItem>> = emptyMap()
 
     override fun createState() = SwapHistoryUiState(items)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            val currency = App.currencyManager.baseCurrency
-            val records = App.swapRecordManager.getAll()
+            val currency = currencyManager.baseCurrency
+            val records = swapRecordManager.getAll()
             items = records
                 .map { record ->
-                    val priceIn = App.marketKit.coinPrice(record.tokenInCoinUid, currency.code)?.value
-                    val priceOut = App.marketKit.coinPrice(record.tokenOutCoinUid, currency.code)?.value
+                    val timestampSeconds = record.timestamp / 1000
+                    val priceIn = fetchHistoricalPrice(record.tokenInCoinUid, currency.code, timestampSeconds)
+                    val priceOut = fetchHistoricalPrice(record.tokenOutCoinUid, currency.code, timestampSeconds)
                     SwapHistoryViewItem(
                         id = record.id,
                         tokenInImageUrl = coinImageUrl(record.tokenInCoinUid),
@@ -48,14 +60,36 @@ class SwapHistoryViewModel : ViewModelUiState<SwapHistoryUiState>() {
 
     private fun formatAmount(amountStr: String, coinCode: String): String {
         val amount = amountStr.toBigDecimalOrNull() ?: return amountStr
-        return App.numberFormatter.formatCoinShort(amount, coinCode, 8)
+        return numberFormatter.formatCoinShort(amount, coinCode, 8)
+    }
+
+    private suspend fun fetchHistoricalPrice(coinUid: String, currencyCode: String, timestampSeconds: Long): BigDecimal? {
+        return try {
+            marketKit.coinHistoricalPrice(coinUid, currencyCode, timestampSeconds)?.let { return it }
+            val rate = marketKit.coinHistoricalPriceSingle(coinUid, currencyCode, timestampSeconds).await()
+            if (rate.compareTo(BigDecimal.ZERO) != 0) rate else null
+        } catch (_: Throwable) {
+            null
+        }
     }
 
     private fun formatFiat(amountStr: String, price: BigDecimal?, symbol: String, decimals: Int): String? {
         val amount = amountStr.toBigDecimalOrNull() ?: return null
         val price = price ?: return null
         val fiat = (amount * price).setScale(decimals, RoundingMode.DOWN).stripTrailingZeros()
-        return App.numberFormatter.formatFiatShort(fiat, symbol, decimals)
+        return numberFormatter.formatFiatShort(fiat, symbol, decimals)
+    }
+
+    class Factory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return SwapHistoryViewModel(
+                swapRecordManager = App.swapRecordManager,
+                marketKit = App.marketKit,
+                currencyManager = App.currencyManager,
+                numberFormatter = App.numberFormatter,
+            ) as T
+        }
     }
 
     private fun formatDate(date: Date): String {
