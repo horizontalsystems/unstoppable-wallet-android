@@ -307,6 +307,9 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             estimatedTime = bestRoute.estimatedTime?.total,
             slippage = slippage,
             providerSwapId = bestRoute.providerSwapId,
+            fromAsset = assetsMap[tokenIn],
+            toAsset = assetsMap[tokenOut],
+            depositAddress = bestRoute.inboundAddress,
         )
     }
 
@@ -475,6 +478,11 @@ interface UnstoppableAPI {
         @Body quote: Request.Quote,
     ): Response.Quote
 
+    @POST("track")
+    suspend fun track(
+        @Body request: Request.Track,
+    ): Response.Track
+
     object Request {
         data class Quote(
             val sellAsset: String,
@@ -486,6 +494,20 @@ interface UnstoppableAPI {
             val sourceAddress: String?,
             val refundAddress: String,
             val dry: Boolean,
+        )
+
+        data class Track(
+            val provider: String,
+            val hash: String? = null,
+            val chainId: String? = null,
+            val fromAsset: String? = null,
+            val fromAddress: String? = null,
+            val fromAmount: String? = null,
+            val toAsset: String? = null,
+            val toAddress: String? = null,
+            val toAmount: String? = null,
+            val depositAddress: String? = null,
+            val providerSwapId: String? = null,
         )
     }
 
@@ -523,5 +545,17 @@ interface UnstoppableAPI {
                 )
             }
         }
+
+        data class Track(
+            val status: String, // not_started, pending, swapping, completed, refunded, unknown, failed
+            val hash: String?,
+            val chainId: String?,
+            val fromAsset: String?,
+            val fromAmount: String?,
+            val fromAddress: String?,
+            val toAsset: String?,
+            val toAmount: String?,
+            val toAddress: String?,
+        )
     }
 }

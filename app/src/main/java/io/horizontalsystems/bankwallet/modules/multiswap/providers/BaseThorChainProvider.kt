@@ -224,7 +224,10 @@ abstract class BaseThorChainProvider(
             priceImpact = null,
             fields = fields,
             estimatedTime = quoteSwap.total_swap_seconds,
-            slippage = slippage
+            slippage = slippage,
+            fromAsset = assetsMap[tokenIn],
+            toAsset = assetsMap[tokenOut],
+            depositAddress = quoteSwap.inbound_address,
         )
     }
 
