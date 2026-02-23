@@ -23,6 +23,8 @@ include(":core")
 include(":components:icons")
 include(":components:chartview")
 include(":subscriptions-core")
-include(":subscriptions-google-play")
+if (file("subscriptions-google-play").exists()) {
+    include(":subscriptions-google-play")
+}
 include(":subscriptions-dev")
 include(":subscriptions-fdroid")
