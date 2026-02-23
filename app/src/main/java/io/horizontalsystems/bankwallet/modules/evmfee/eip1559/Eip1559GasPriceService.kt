@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsError
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsWarning
 import io.horizontalsystems.bankwallet.modules.evmfee.GasPriceInfo
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.FeeHistory
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
@@ -26,7 +25,7 @@ class Eip1559GasPriceService(
     private val gasProvider: Eip1559GasPriceProvider,
     private val refreshSignalFlowable: Flowable<Long>,
     minGasPrice: GasPrice.Eip1559? = null,
-    initialGasPrice: GasPrice.Eip1559? = null
+    private val initialGasPrice: GasPrice.Eip1559? = null
 ) : IEvmGasPriceService() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -36,8 +35,6 @@ class Eip1559GasPriceService(
 
     private val minBaseFee: Long? = minGasPrice?.let { it.maxFeePerGas - it.maxPriorityFeePerGas }
     private val minPriorityFee: Long? = minGasPrice?.maxPriorityFeePerGas
-    private val initialBaseFee: Long? = initialGasPrice?.let { it.maxFeePerGas - it.maxPriorityFeePerGas }
-    private val initialPriorityFee: Long? = initialGasPrice?.maxPriorityFeePerGas
 
     private val overpricingBound = Bound.Multiplied(BigDecimal(1.5))
     private val riskOfStuckBound = Bound.Multiplied(BigDecimal(1))
@@ -56,16 +53,9 @@ class Eip1559GasPriceService(
     var currentPriorityFee: Long? = null
         private set
 
-    constructor(
-        gasProvider: Eip1559GasPriceProvider,
-        evmKit: EthereumKit,
-        minGasPrice: GasPrice.Eip1559? = null,
-        initialGasPrice: GasPrice.Eip1559? = null
-    ) : this(gasProvider, evmKit.lastBlockHeightFlowable, minGasPrice, initialGasPrice)
-
     override fun start() {
-        if (initialBaseFee != null && initialPriorityFee != null) {
-            setGasPrice(initialBaseFee, initialPriorityFee)
+        if (initialGasPrice != null) {
+            setGasPrice(initialGasPrice.maxFeePerGas, initialGasPrice.maxPriorityFeePerGas)
         } else {
             setRecommended()
         }
