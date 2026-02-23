@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.about.AboutScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
+import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -73,6 +74,86 @@ data object Child : HSScreen() {
 }
 
 @Serializable
+data object Settings : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: MutableList<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SettingsScreen(
+            navigateToBuySubscription = {
+//                fragmentNavController.slideFromBottom(R.id.buySubscriptionFragment)
+            },
+            navigateToWhyDonate = {
+//                fragmentNavController.slideFromBottom(R.id.whyDonateFragment)
+            },
+            navigateToManageAccounts = {
+//                fragmentNavController.slideFromRight(
+//                    R.id.manageAccountsFragment,
+//                    ManageAccountsModule.Mode.Manage
+//                )
+            },
+            navigateToBlockchainSettings = {
+//                fragmentNavController.slideFromRight(R.id.blockchainSettingsFragment)
+            },
+            navigateToSecuritySettings = {
+//                fragmentNavController.slideFromRight(R.id.securitySettingsFragment)
+            },
+            navigateToPrivacySettings = {
+//                fragmentNavController.slideFromRight(R.id.privacySettingsFragment)
+            },
+            navigateToWcList = {
+//                fragmentNavController.slideFromRight(R.id.wcListFragment)
+            },
+            navigateToWcErrorNoAccount = {
+//                fragmentNavController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+            },
+            navigateToBackupRequired = {
+//                fragmentNavController.slideFromBottom(R.id.backupRequiredDialog, it)
+            },
+            navigateToWcAccountTypeNotSupported = {
+//                fragmentNavController.slideFromBottom(R.id.wcAccountTypeNotSupportedDialog, it)
+            },
+            navigateToAppearance = {
+//                fragmentNavController.slideFromRight(R.id.appearanceFragment)
+            },
+            navigateToSubscription = {
+//                fragmentNavController.slideFromRight(R.id.subscriptionFragment)
+            },
+            navigateToContacts = {
+//                fragmentNavController.slideFromRight(
+//                    R.id.contactsFragment,
+//                    ContactsFragment.Input(Mode.Full)
+//                )
+            },
+            navigateToBackupManager = {
+//                fragmentNavController.slideFromRight(R.id.backupManagerFragment)
+            },
+            navigateToAddressCheck = {
+//                fragmentNavController.slideFromRight(R.id.addressCheckFragment)
+            },
+            navigateToAbout = {
+                backStack.add(About)
+            },
+            navigateToFaq = {
+//                fragmentNavController.slideFromRight(R.id.faqListFragment)
+            },
+            navigateToAcademy = {
+//                fragmentNavController.slideFromRight(R.id.academyFragment)
+            },
+            navigateToDonate = {
+//                fragmentNavController.slideFromRight(R.id.donateTokenSelectFragment)
+            },
+            navigateToPaidAction = { paidAction, block ->
+//                fragmentNavController.paidAction(
+//                    paidAction,
+//                    block
+//                )
+            },
+        )
+    }
+}
+
 data object Home : HSScreen() {
     @Composable
     override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
@@ -154,7 +235,7 @@ fun NavExample() {
     val backStack = rememberSerializable(
         serializer = NavBackStackSerializer(elementSerializer = NavKeySerializer())
     ) {
-        NavBackStack<HSScreen>(Home)
+        NavBackStack<HSScreen>(Settings)
     }
 
     val currentScreen = backStack.lastOrNull()
