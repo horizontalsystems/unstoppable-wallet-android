@@ -23,8 +23,8 @@ android {
         applicationId = "io.horizontalsystems.bankwallet"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.compileSdk.get().toInt()
-        versionCode = 160
-        versionName = "0.47.2"
+        versionCode = 161
+        versionName = "0.47.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         resourceConfigurations += listOf("de", "es", "en", "fa", "fr", "ko", "pt", "pt-rBR", "ru", "tr", "zh")
@@ -375,7 +375,9 @@ dependencies {
 afterEvaluate {
     dependencies {
         "baseDebugImplementation"(project(":subscriptions-dev"))
-        "baseReleaseImplementation"(project(":subscriptions-google-play"))
+        findProject(":subscriptions-google-play")?.let {
+            "baseReleaseImplementation"(it)
+        }
 
         "fdroidImplementation"(project(":subscriptions-fdroid"))
         "fdroidCiImplementation"(project(":subscriptions-fdroid"))
