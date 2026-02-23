@@ -66,6 +66,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItem
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItemDefaults
 import kotlinx.coroutines.delay
+import kotlin.system.exitProcess
 
 class MainFragment : BaseComposeFragment() {
     private val mainActivityViewModel by activityViewModels<MainActivityViewModel>()
@@ -84,9 +85,8 @@ class MainFragment : BaseComposeFragment() {
                 mainActivityViewModel = mainActivityViewModel
             )
         } ?: run {
-            // Back stack entry doesn't exist, restart activity
-            val intent = Intent(context, MainActivity::class.java)
-            requireActivity().startActivity(intent)
+            requireActivity().finishAndRemoveTask()
+            exitProcess(0)
         }
     }
 
