@@ -38,6 +38,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -45,8 +46,11 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceScreen
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
+import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.market.MarketScreen
 import io.horizontalsystems.bankwallet.modules.rateapp.RateApp
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
@@ -201,7 +205,28 @@ private fun MainScreen(
                         transactionsViewModel
                     )
 
-                    MainNavigation.Settings -> SettingsScreen(fragmentNavController)
+                    MainNavigation.Settings -> SettingsScreen(
+                        navigateToBuySubscription = { fragmentNavController.slideFromBottom(R.id.buySubscriptionFragment) },
+                        navigateToWhyDonate = { fragmentNavController.slideFromBottom(R.id.whyDonateFragment) },
+                        navigateToManageAccounts = { fragmentNavController.slideFromRight(R.id.manageAccountsFragment, ManageAccountsModule.Mode.Manage) },
+                        navigateToBlockchainSettings = { fragmentNavController.slideFromRight(R.id.blockchainSettingsFragment) },
+                        navigateToSecuritySettings = { fragmentNavController.slideFromRight(R.id.securitySettingsFragment) },
+                        navigateToPrivacySettings = { fragmentNavController.slideFromRight(R.id.privacySettingsFragment) },
+                        navigateToWcList = { fragmentNavController.slideFromRight(R.id.wcListFragment) },
+                        navigateToWcErrorNoAccount = { fragmentNavController.slideFromBottom(R.id.wcErrorNoAccountFragment) },
+                        navigateToBackupRequired = { fragmentNavController.slideFromBottom(R.id.backupRequiredDialog, it) },
+                        navigateToWcAccountTypeNotSupported = { fragmentNavController.slideFromBottom(R.id.wcAccountTypeNotSupportedDialog, it) },
+                        navigateToAppearance = { fragmentNavController.slideFromRight(R.id.appearanceFragment) },
+                        navigateToSubscription = { fragmentNavController.slideFromRight(R.id.subscriptionFragment) },
+                        navigateToContacts = { fragmentNavController.slideFromRight(R.id.contactsFragment, ContactsFragment.Input(Mode.Full)) },
+                        navigateToBackupManager = { fragmentNavController.slideFromRight(R.id.backupManagerFragment) },
+                        navigateToPaidAction = { paidAction, block -> fragmentNavController.paidAction(paidAction, block) },
+                        navigateToAddressCheck = { fragmentNavController.slideFromRight(R.id.addressCheckFragment) },
+                        navigateToAbout = { fragmentNavController.slideFromRight(R.id.nav3) },
+                        navigateToFaq = { fragmentNavController.slideFromRight(R.id.faqListFragment) },
+                        navigateToAcademy = { fragmentNavController.slideFromRight(R.id.academyFragment) },
+                        navigateToDonate = { fragmentNavController.slideFromRight(R.id.donateTokenSelectFragment) },
+                    )
                 }
             }
         }
