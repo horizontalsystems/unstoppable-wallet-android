@@ -35,6 +35,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.R.id.transactionFilterFragment
+import io.horizontalsystems.bankwallet.R.id.transactionInfoFragment
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -180,7 +182,15 @@ private fun MainScreen(
                 when (navItem) {
                     MainNavigation.Market -> MarketScreen(fragmentNavController)
                     MainNavigation.Balance -> BalanceScreen(fragmentNavController)
-                    MainNavigation.Transactions -> TransactionsScreen(fragmentNavController)
+                    MainNavigation.Transactions -> TransactionsScreen(
+                        navigateToTransactionFilter = {
+                            fragmentNavController.slideFromRight(transactionFilterFragment)
+                        },
+                        navigateToTransactionInfo = {
+                            fragmentNavController.slideFromBottom(transactionInfoFragment)
+                        },
+                    )
+
                     MainNavigation.Settings -> NavExample()
                 }
             }

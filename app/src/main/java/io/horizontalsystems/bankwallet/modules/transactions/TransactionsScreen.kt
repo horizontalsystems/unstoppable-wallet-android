@@ -35,11 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -67,7 +64,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 
 @Composable
-fun TransactionsScreen(navController: NavController) {
+fun TransactionsScreen(
+    navigateToTransactionFilter: () -> Unit,
+    navigateToTransactionInfo: () -> Unit,
+) {
     val viewModel = viewModel<TransactionsViewModel>(factory = TransactionsModule.Factory())
     val accountsViewModel =
         viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
@@ -91,7 +91,7 @@ fun TransactionsScreen(navController: NavController) {
                     icon = R.drawable.ic_manage_2_24,
                     showAlertDot = showFilterAlertDot,
                     onClick = {
-                        navController.slideFromRight(R.id.transactionFilterFragment)
+                        navigateToTransactionFilter()
 
                         stat(
                             page = StatPage.Transactions,
@@ -145,11 +145,13 @@ fun TransactionsScreen(navController: NavController) {
 
                             val onClick: (TransactionViewItem) -> Unit = remember {
                                 {
-                                    onTransactionClick(
-                                        it,
-                                        viewModel,
-                                        navController
-                                    )
+                                    viewModel.getTransactionItem(it)?.let { transactionItem ->
+                                        App.transactionInfoScreenManager.tmpTransactionRecordToShow = transactionItem.record
+
+                                        navigateToTransactionInfo()
+
+                                        stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionInfo))
+                                    }
                                 }
                             }
 
@@ -172,20 +174,6 @@ fun TransactionsScreen(navController: NavController) {
             }
         }
     }
-}
-
-private fun onTransactionClick(
-    transactionViewItem: TransactionViewItem,
-    viewModel: TransactionsViewModel,
-    navController: NavController
-) {
-    val transactionItem = viewModel.getTransactionItem(transactionViewItem) ?: return
-
-    App.transactionInfoScreenManager.tmpTransactionRecordToShow = transactionItem.record
-
-    navController.slideFromBottom(R.id.transactionInfoFragment)
-
-    stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionInfo))
 }
 
 fun LazyListScope.transactionList(
