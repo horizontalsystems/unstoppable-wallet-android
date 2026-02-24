@@ -111,7 +111,13 @@ class SwapFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun SwapScreen(navController: NavController, tokenIn: Token? = null, onClickClose: (() -> Unit)? = null, bottomPadding: Dp = 0.dp) {
+fun SwapScreen(
+    navController: NavController,
+    tokenIn: Token? = null,
+    onClickClose: (() -> Unit)? = null,
+    bottomPadding: Dp = 0.dp,
+    closeAfterSwap: Boolean = true
+) {
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = currentBackStackEntry!!,
@@ -160,7 +166,7 @@ fun SwapScreen(navController: NavController, tokenIn: Token? = null, onClickClos
         onClickNext = {
             val navigateToSwapConfirm = {
                 navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
-                    if (it.success) {
+                    if (it.success && closeAfterSwap) {
                         navController.popBackStack()
                     }
                 }
@@ -222,12 +228,12 @@ private fun SwapScreenInner(
         title = stringResource(R.string.Swap),
         menuItems = listOf(
             MenuItem(
-            title = TranslatableString.ResString(R.string.SwapHistory_Title),
-            icon = R.drawable.ic_circle_clock_24,
-            onClick = {
-                navController.slideFromRight(R.id.swapHistoryFragment)
-            }
-        )),
+                title = TranslatableString.ResString(R.string.SwapHistory_Title),
+                icon = R.drawable.ic_circle_clock_24,
+                onClick = {
+                    navController.slideFromRight(R.id.swapHistoryFragment)
+                }
+            )),
         onBack = onClickClose,
     ) {
         val focusManager = LocalFocusManager.current

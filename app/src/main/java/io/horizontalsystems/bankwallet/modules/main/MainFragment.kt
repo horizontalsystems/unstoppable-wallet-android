@@ -200,7 +200,10 @@ private fun MainScreen(
                     MainNavigation.Balance -> BalanceScreen(fragmentNavController)
                     MainNavigation.Swap -> SwapScreen(
                         fragmentNavController,
-                        bottomPadding = navigationBarHeight
+                        tokenIn = null,
+                        onClickClose = null,
+                        bottomPadding = navigationBarHeight,
+                        closeAfterSwap = false
                     )
 
                     MainNavigation.Transactions -> TransactionsScreen(
