@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.os.Parcelable
+import cash.z.ecc.android.sdk.model.Proposal
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.tonapps.wallet.data.core.entity.SendRequestEntity
@@ -57,7 +58,6 @@ import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.network.CreatedTransaction
 import io.horizontalsystems.tronkit.transaction.Fee
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
@@ -451,8 +451,9 @@ interface ISendZcashAdapter {
     val availableBalance: BigDecimal
 
     suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
-    suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger)
     suspend fun fee(amount: BigDecimal, address: String, memo: String): BigDecimal
+    suspend fun proposeTransfer(amount: BigDecimal, address: String, memo: String): Proposal
+    suspend fun sendProposal(proposal: Proposal)
 }
 
 interface IAdapter {
