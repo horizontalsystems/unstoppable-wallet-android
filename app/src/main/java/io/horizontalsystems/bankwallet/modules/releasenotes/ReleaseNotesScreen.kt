@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.releasenotes
 
-import android.os.Parcelable
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,11 +19,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownContent
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -33,20 +31,16 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_jacob
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class ReleaseNotesFragment : BaseComposeFragment() {
-
+@Serializable
+data class ReleaseNotesScreen(val showAsClosablePopup: Boolean = false) : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
         ReleaseNotesScreen(
-            closeablePopup = navController.getInput<Input>()?.showAsClosablePopup ?: false,
-            onCloseClick = { navController.popBackStack() },
-        )
+            closeablePopup = showAsClosablePopup,
+            onCloseClick = { backStack.removeLastOrNull() })
     }
-
-    @Parcelize
-    data class Input(val showAsClosablePopup: Boolean) : Parcelable
 }
 
 @Composable

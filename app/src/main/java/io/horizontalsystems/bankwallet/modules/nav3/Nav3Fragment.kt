@@ -223,7 +223,7 @@ data object About : HSScreen() {
     override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
         AboutScreen(
             onBackPress = { backStack.removeLastOrNull() },
-            navigateToReleaseNotes = { backStack.add(ReleaseNotes) },
+            navigateToReleaseNotes = { backStack.add(ReleaseNotesScreen()) },
             navigateToAppStatus = { backStack.add(AppStatus) },
             navigateToTerms = { backStack.add(Terms) }
         )
@@ -235,14 +235,6 @@ data object AppStatus : HSScreen() {
     @Composable
     override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
         AppStatusScreen(onBack = { backStack.removeLastOrNull() })
-    }
-}
-
-@Serializable
-data object ReleaseNotes : HSScreen() {
-    @Composable
-    override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
-        ReleaseNotesScreen(false, { backStack.removeLastOrNull() })
     }
 }
 

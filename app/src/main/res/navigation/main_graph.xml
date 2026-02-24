@@ -193,9 +193,6 @@
         android:id="@+id/confirmPinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment" />
     <fragment
-        android:id="@+id/releaseNotesFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment" />
-    <fragment
         android:id="@+id/markdownFragment"
         android:name="io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment"/>
     <fragment
