@@ -51,6 +51,7 @@ import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceScreen
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceViewModel
 import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateScreen
 import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
@@ -251,8 +252,7 @@ private fun MainScreen(
     if (uiState.wcSupportState != null) {
         when (val wcSupportState = uiState.wcSupportState) {
             SupportState.NotSupportedDueToNoActiveAccount -> {
-                TODO("Nav3")
-//                fragmentNavController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                backStack.add(WCErrorNoAccountScreen)
             }
 
             is SupportState.NotSupportedDueToNonBackedUpAccount -> {

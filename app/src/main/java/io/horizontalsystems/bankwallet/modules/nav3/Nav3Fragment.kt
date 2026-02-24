@@ -36,6 +36,7 @@ import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
@@ -136,7 +137,7 @@ data object Settings : HSScreen() {
 //                fragmentNavController.slideFromRight(R.id.wcListFragment)
             },
             navigateToWcErrorNoAccount = {
-//                fragmentNavController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                backStack.add(WCErrorNoAccountScreen)
             },
             navigateToBackupRequired = {
 //                fragmentNavController.slideFromBottom(R.id.backupRequiredDialog, it)
