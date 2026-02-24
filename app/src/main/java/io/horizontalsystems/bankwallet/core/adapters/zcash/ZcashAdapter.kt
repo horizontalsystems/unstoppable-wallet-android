@@ -27,7 +27,6 @@ import cash.z.ecc.android.sdk.type.AddressType
 import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
@@ -289,10 +288,8 @@ class ZcashAdapter(
         memo = ""
     )
 
-    override suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger) {
-        logger.info("call sendTransferProposal")
-        val transferProposal = transferProposal(amount, address, memo)
-        send(transferProposal)
+    override suspend fun proposeTransfer(amount: BigDecimal, address: String, memo: String): Proposal {
+        return transferProposal(amount, address, memo)
     }
 
     override suspend fun fee(amount: BigDecimal, address: String, memo: String): BigDecimal {
@@ -350,7 +347,7 @@ class ZcashAdapter(
         )
     }
 
-    suspend fun sendProposal(proposal: Proposal) {
+    override suspend fun sendProposal(proposal: Proposal) {
         send(proposal)
     }
 
