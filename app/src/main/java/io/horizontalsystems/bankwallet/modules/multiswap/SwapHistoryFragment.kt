@@ -37,6 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderStick
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -90,7 +91,12 @@ fun SwapHistoryScreen(navController: NavController) {
                     items(swaps, key = { it.id }) { item ->
                         SwapHistoryCell(
                             item = item,
-                            onClick = { /* step 3: open details */ },
+                            onClick = {
+                                navController.slideFromRight(
+                                    R.id.swapInfoFragment,
+                                    SwapInfoFragment.Input(item.id),
+                                )
+                            },
                         )
                     }
                 }
