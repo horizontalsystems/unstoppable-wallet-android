@@ -27,6 +27,8 @@ import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
+import io.horizontalsystems.bankwallet.modules.main.MainScreen
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.about.AboutScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
@@ -45,7 +47,7 @@ class Nav3Fragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        NavExample()
+//        NavExample(mainActivityViewModel)
     }
 
 }
@@ -258,13 +260,13 @@ data object Terms : HSScreen() {
 }
 
 @Composable
-fun NavExample() {
+fun NavExample(mainActivityViewModel: MainActivityViewModel) {
     val resultBus = remember { ResultEventBus() }
 
     val backStack = rememberSerializable(
         serializer = NavBackStackSerializer(elementSerializer = NavKeySerializer())
     ) {
-        NavBackStack<HSScreen>(Settings)
+        NavBackStack<HSScreen>(MainScreen)
     }
 
     val bottomSheetStrategy = remember { BottomSheetSceneStrategy<HSScreen>() }
@@ -294,6 +296,9 @@ fun NavExample() {
         sceneStrategy = bottomSheetStrategy,
         entryProvider = { hSScreen ->
             NavEntry(hSScreen, metadata = hSScreen.getMetadata()) {
+                if (currentScreen is MainScreen) {
+                    currentScreen.mainActivityViewModel = mainActivityViewModel
+                }
                 hSScreen.GetContent(backStack, resultBus)
             }
         }
