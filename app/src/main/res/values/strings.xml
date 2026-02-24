@@ -791,6 +791,17 @@
     <string name="SwapHistory_Title">Swap History</string>
     <string name="SwapHistory_EmptyList">No swaps yet</string>
 
+    <!-- Swap Info -->
+    <string name="SwapInfo_Provider">Provider</string>
+    <string name="SwapInfo_SourceAddress">Source Address</string>
+    <string name="SwapInfo_StatusTitle">Status</string>
+    <string name="SwapInfo_StatusDescription">Current cross-chain swap status.</string>
+    <string name="SwapInfo_CrossChainNote">Cross-chain swaps are processed automatically and may take some time. If the status does not update immediately, the operation is still in progress.</string>
+    <string name="SwapInfo_StepDepositing">Depositing</string>
+    <string name="SwapInfo_StepSwap">Swap</string>
+    <string name="SwapInfo_StepSend">Send</string>
+    <string name="SwapInfo_StepComplete">Complete</string>
+
     <!--Approve-->
 
     <string name="Approve_RevokeAndApproveInfo">You can exchange %s, or you need to revoke and approve the new amount</string>
