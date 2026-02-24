@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.about.AboutScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
+import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
@@ -112,7 +113,7 @@ data object Settings : HSScreen() {
 //                fragmentNavController.slideFromBottom(R.id.buySubscriptionFragment)
             },
             navigateToWhyDonate = {
-//                fragmentNavController.slideFromBottom(R.id.whyDonateFragment)
+                backStack.add(WhyDonateScreen)
             },
             navigateToManageAccounts = {
 //                fragmentNavController.slideFromRight(

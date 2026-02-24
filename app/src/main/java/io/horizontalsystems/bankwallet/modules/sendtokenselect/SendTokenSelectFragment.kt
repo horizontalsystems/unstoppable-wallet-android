@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.sendtokenselect
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -27,9 +26,7 @@ class SendTokenSelectFragment : BaseComposeFragment() {
 
         val blockchainTypes = input?.blockchainTypes
         val tokenTypes = input?.tokenTypes
-        val view = LocalView.current
         TokenSelectScreen(
-            navController = navController,
             title = stringResource(R.string.Balance_Send),
             onClickItem = {
                 val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
@@ -46,6 +43,7 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                 )
             },
             viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes, tokenTypes)),
+            onBack = { navController.popBackStack() },
         )
     }
 
