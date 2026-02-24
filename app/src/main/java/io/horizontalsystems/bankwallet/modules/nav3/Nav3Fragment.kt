@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.modules.nav3
 
 import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -10,6 +12,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -21,6 +25,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.serialization.NavBackStackSerializer
 import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.about.AboutScreen
@@ -28,10 +33,11 @@ import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScree
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
-import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.serialization.Serializable
 
 class Nav3Fragment : BaseComposeFragment() {
@@ -52,6 +58,27 @@ abstract class HSScreen(val screenshotEnabled: Boolean = true) : NavKey {
         HSScaffold(title = "TODO") {
 
         }
+    }
+}
+
+@Serializable
+data object BottomSheetSample : HSScreen() {
+    @OptIn(ExperimentalMaterial3Api::class)
+    override fun getMetadata() = BottomSheetSceneStrategy.bottomSheet()
+
+    @Composable
+    override fun GetContent(
+        backStack: MutableList<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        BottomSheetHeaderV3(
+            image72 = painterResource(R.drawable.warning_filled_24),
+            title = "Title"
+        )
+        TextBlock(
+            text = "By clicking connect, you allow this app to view your public address.",
+            textAlign = TextAlign.Center
+        )
     }
 }
 
@@ -154,21 +181,23 @@ data object Settings : HSScreen() {
     }
 }
 
+@Serializable
 data object Home : HSScreen() {
     @Composable
     override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
         val viewModel = viewModel(modelClass = SharedViewModel::class)
 
         HSScaffold(title = "Nav3") {
-            Column {
-                title3_leah("uuid: " + viewModel.uuid)
-                VSpacer(12.dp)
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                title3_leah("viewModel.uuid: " + viewModel.uuid)
 
                 HSButton(title = "Child") {
                     backStack.add(Child)
                 }
 
-                VSpacer(36.dp)
+                HSButton(title = "Bottom Sheet") {
+                    backStack.add(BottomSheetSample)
+                }
 
                 var resultString by remember { mutableStateOf("Default") }
                 ResultEffect<TermsFragment.Result>(resultBus) {
@@ -176,7 +205,6 @@ data object Home : HSScreen() {
                 }
 
                 title3_leah(resultString)
-                VSpacer(36.dp)
 
                 HSButton(title = "Terms") {
                     backStack.add(Terms)
@@ -238,6 +266,8 @@ fun NavExample() {
         NavBackStack<HSScreen>(Settings)
     }
 
+    val bottomSheetStrategy = remember { BottomSheetSceneStrategy<HSScreen>() }
+
     val currentScreen = backStack.lastOrNull()
     val activity = LocalActivity.current
 
@@ -260,6 +290,7 @@ fun NavExample() {
             rememberSharedViewModelStoreNavEntryDecorator(),
         ),
         backStack = backStack,
+        sceneStrategy = bottomSheetStrategy,
         entryProvider = { hSScreen ->
             NavEntry(hSScreen, metadata = hSScreen.getMetadata()) {
                 hSScreen.GetContent(backStack, resultBus)
