@@ -15,14 +15,13 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.getInput
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
-import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.nav3.BottomSheetSceneStrategy
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -34,6 +33,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
 
@@ -49,7 +49,7 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
             setContent {
                 val navController = findNavController()
                 navController.getInput<Input>()?.let { input ->
-                    BackupRequiredScreen(navController, input.account, input.text)
+//                    BackupRequiredScreen(navController, input.account, input.text)
                 }
             }
         }
@@ -59,27 +59,42 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
     data class Input(val account: Account, val text: String) : Parcelable
 }
 
+@Serializable
+data class BackupRequiredScreen(val account: Account, val text: String) : HSScreen() {
+    @OptIn(ExperimentalMaterial3Api::class)
+    override fun getMetadata() = BottomSheetSceneStrategy.bottomSheet()
+
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        BackupRequiredScreen(backStack, account, text)
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BackupRequiredScreen(navController: NavController, account: Account, text: String) {
+fun BackupRequiredScreen(backStack: NavBackStack<HSScreen>, account: Account, text: String) {
     ComposeAppTheme {
         BottomSheetContent(
-            onDismissRequest = navController::popBackStack,
+            onDismissRequest = backStack::removeLastOrNull,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             buttons = {
                 HSButton(
                     title = stringResource(R.string.BackupRecoveryPhrase_ManualBackup),
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        navController.slideFromBottom(
-                            R.id.backupKeyFragment,
-                            account
-                        )
-
-                        stat(
-                            page = StatPage.BackupRequired,
-                            event = StatEvent.Open(StatPage.ManualBackup)
-                        )
+//                        TODO("xxx nav3")
+//                        navController.slideFromBottom(
+//                            R.id.backupKeyFragment,
+//                            account
+//                        )
+//
+//                        stat(
+//                            page = StatPage.BackupRequired,
+//                            event = StatEvent.Open(StatPage.ManualBackup)
+//                        )
                     }
                 )
                 HSButton(
@@ -87,12 +102,13 @@ fun BackupRequiredScreen(navController: NavController, account: Account, text: S
                     modifier = Modifier.fillMaxWidth(),
                     variant = ButtonVariant.Secondary,
                     onClick = {
-                        navController.slideFromBottom(R.id.backupLocalFragment, account)
-
-                        stat(
-                            page = StatPage.BackupRequired,
-                            event = StatEvent.Open(StatPage.FileBackup)
-                        )
+//                        TODO("xxx nav3")
+//                        navController.slideFromBottom(R.id.backupLocalFragment, account)
+//
+//                        stat(
+//                            page = StatPage.BackupRequired,
+//                            event = StatEvent.Open(StatPage.FileBackup)
+//                        )
                     }
                 )
                 HSButton(
@@ -101,7 +117,7 @@ fun BackupRequiredScreen(navController: NavController, account: Account, text: S
                     style = ButtonStyle.Transparent,
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Medium,
-                    onClick = navController::popBackStack
+                    onClick = backStack::removeLastOrNull
                 )
             },
             content = {

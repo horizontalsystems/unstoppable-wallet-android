@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -42,6 +43,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceScreen
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredScreen
 import io.horizontalsystems.bankwallet.modules.market.MarketScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.NavExample
@@ -253,14 +255,9 @@ private fun MainScreen(
             }
 
             is SupportState.NotSupportedDueToNonBackedUpAccount -> {
-//                TODO("xxx nav3")
-//                val text = stringResource(R.string.WalletConnect_Error_NeedBackup)
-//                fragmentNavController.slideFromBottom(
-//                    R.id.backupRequiredDialog,
-//                    BackupRequiredDialog.Input(wcSupportState.account, text)
-//                )
-//
-//                stat(page = StatPage.Main, event = StatEvent.Open(StatPage.BackupRequired))
+                val text = stringResource(R.string.WalletConnect_Error_NeedBackup)
+                backStack.add(BackupRequiredScreen(wcSupportState.account, text))
+                stat(page = StatPage.Main, event = StatEvent.Open(StatPage.BackupRequired))
             }
 
             is SupportState.NotSupported -> {
