@@ -40,7 +40,8 @@ abstract class BaseUniswapProvider : IMultiSwapProvider {
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, routerAddress, tokenIn)
+            actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, routerAddress, tokenIn),
+            estimationTime = tokenIn.blockchainType.blockTime
         )
     }
 

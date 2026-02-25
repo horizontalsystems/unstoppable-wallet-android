@@ -176,12 +176,14 @@ object AllBridgeProvider : IMultiSwapProvider {
             actionRequired = null
         }
 
+        val crosschain = tokenIn.blockchainType != tokenOut.blockchainType
         return SwapQuote(
             amountOut = amountOut,
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
             actionRequired = actionRequired,
+            estimationTime = if (crosschain) null else tokenIn.blockchainType.blockTime,
         )
     }
 

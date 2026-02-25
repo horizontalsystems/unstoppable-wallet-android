@@ -225,7 +225,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            actionRequired = actionApprove
+            actionRequired = actionApprove,
+            estimationTime = bestRoute.estimatedTime?.total
         )
     }
 
