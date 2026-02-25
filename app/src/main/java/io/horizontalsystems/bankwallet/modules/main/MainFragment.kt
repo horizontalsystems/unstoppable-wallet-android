@@ -201,14 +201,8 @@ private fun MainScreen(
         Column {
             Crossfade(uiState.selectedTabItem) { navItem ->
                 when (navItem) {
-                    MainNavigation.Market -> {
-                        MarketScreen(backStack)
-                    }
-
-                    MainNavigation.Balance -> {
-                        BalanceScreen(backStack)
-                    }
-
+                    MainNavigation.Market -> MarketScreen(backStack)
+                    MainNavigation.Balance -> BalanceScreen(backStack)
                     MainNavigation.Swap -> {
 //                        TODO("xxx nav3")
 //                        SwapScreen(
@@ -219,14 +213,8 @@ private fun MainScreen(
 //                            closeAfterSwap = false
 //                        )
                     }
-
-                    MainNavigation.Transactions -> {
-                        TransactionsScreen(backStack)
-                    }
-
-                    MainNavigation.Settings -> {
-                        SettingsScreen(backStack)
-                    }
+                    MainNavigation.Transactions -> TransactionsScreen(backStack)
+                    MainNavigation.Settings -> SettingsScreen(backStack)
                 }
             }
         }
