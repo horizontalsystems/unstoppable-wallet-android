@@ -45,13 +45,11 @@ class SwapSyncService(
     private suspend fun syncRecord(record: SwapRecord) {
         try {
             val request = SwapTrackRequestBuilder.build(record)
-            Log.e("eee", "request: $request")
             val response = if (record.providerId == OneInchProvider.id) {
                 unstoppableAPI.trackEvm(request)
             } else {
                 unstoppableAPI.track(request)
             }
-            Log.e("eee", "response: $response")
             val newStatus = mapStatus(response)
                 ?.takeIf { it != SwapStatus.valueOf(record.status) }
                 ?: return
