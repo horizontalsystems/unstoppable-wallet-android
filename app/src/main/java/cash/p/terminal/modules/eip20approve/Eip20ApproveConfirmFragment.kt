@@ -21,7 +21,7 @@ import cash.p.terminal.modules.eip20approve.AllowanceMode.Unlimited
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.multiswap.TokenRow
 import cash.p.terminal.modules.multiswap.TokenRowUnlimited
-import cash.p.terminal.modules.multiswap.ui.DataFieldFee
+import cash.p.terminal.modules.fee.DataFieldFee
 import cash.p.terminal.navigation.setNavigationResultX
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell

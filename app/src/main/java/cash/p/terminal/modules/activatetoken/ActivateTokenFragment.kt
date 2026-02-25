@@ -21,7 +21,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
-import cash.p.terminal.modules.multiswap.ui.DataFieldFee
+import cash.p.terminal.modules.fee.DataFieldFee
 import cash.p.terminal.modules.receive.ActivateTokenError
 import cash.p.terminal.modules.receive.ActivateTokenViewModel
 import cash.p.terminal.ui_compose.BaseComposeFragment

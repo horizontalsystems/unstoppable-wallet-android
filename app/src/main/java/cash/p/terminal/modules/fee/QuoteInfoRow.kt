@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.multiswap
+package cash.p.terminal.modules.fee
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

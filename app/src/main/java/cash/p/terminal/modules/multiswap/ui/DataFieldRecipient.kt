@@ -6,7 +6,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.entities.Address
-import cash.p.terminal.modules.multiswap.QuoteInfoRow
+import cash.p.terminal.modules.fee.QuoteInfoRow
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_leah
 

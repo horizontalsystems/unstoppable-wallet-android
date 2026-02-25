@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.multiswap.ui
+package cash.p.terminal.modules.fee
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -10,7 +10,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.entities.CoinValue
-import cash.p.terminal.modules.multiswap.QuoteInfoRow
 import cash.p.terminal.ui.compose.components.CardsSwapInfo
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.caption_lucian
@@ -32,6 +31,7 @@ fun FeeInfoSection(
     insufficientFeeBalance: Boolean,
     onBalanceClicked: () -> Unit,
     feeTitle: String? = null,
+    feeLoading: Boolean = false,
 ) {
     val isNativeCoinSwap = feeCoinBalance == null
 
@@ -64,6 +64,7 @@ fun FeeInfoSection(
             primary = feePrimary,
             secondary = feeSecondary,
             borderTop = feeCoinBalance != null,
+            loading = feeLoading,
             title = feeTitle ?: stringResource(R.string.fee),
         )
     }

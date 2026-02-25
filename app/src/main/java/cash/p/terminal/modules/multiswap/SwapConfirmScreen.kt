@@ -23,7 +23,7 @@ import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.evmfee.Cautions
-import cash.p.terminal.modules.multiswap.ui.FeeInfoSection
+import cash.p.terminal.modules.fee.FeeInfoSection
 import cash.p.terminal.modules.multiswap.ui.SwapProviderField
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.ui.compose.components.CoinImage

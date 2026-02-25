@@ -12,7 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.Address
-import cash.p.terminal.modules.multiswap.QuoteInfoRow
+import cash.p.terminal.modules.fee.QuoteInfoRow
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.subhead2_grey
