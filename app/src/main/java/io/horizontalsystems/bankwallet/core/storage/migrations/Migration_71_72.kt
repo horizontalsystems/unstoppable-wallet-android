@@ -31,7 +31,10 @@ object Migration_71_72 : Migration(71, 72) {
                 `networkFeeCoinCode` TEXT,
                 `networkFeeAmount` TEXT,
                 `providerSwapId` TEXT,
-                `status` TEXT NOT NULL DEFAULT 'Depositing'
+                `status` TEXT NOT NULL DEFAULT 'Depositing',
+                `fromAsset` TEXT,
+                `toAsset` TEXT,
+                `depositAddress` TEXT
             )
         """.trimIndent())
     }
