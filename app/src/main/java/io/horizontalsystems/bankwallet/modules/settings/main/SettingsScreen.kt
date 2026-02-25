@@ -46,6 +46,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequi
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
+import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.ui.BannerCarousel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountScreen
@@ -124,8 +125,7 @@ private fun SettingSections(
             add {
                 DonateBanner(
                     onClick = {
-//                        TODO("xxx nav3")
-//                        navController.slideFromBottom(R.id.whyDonateFragment)
+                        backStack.add(WhyDonateScreen)
                     }
                 )
             }
