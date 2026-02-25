@@ -407,7 +407,7 @@ private fun handleActionClick(
         }
 
         CoinAnalyticsModule.ActionType.OpenTvl -> {
-            navController.slideFromBottom(R.id.tvlFragment)
+//            navController.slideFromBottom(R.id.tvlFragment)
         }
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {
