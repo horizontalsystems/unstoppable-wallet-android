@@ -292,9 +292,6 @@
         android:id="@+id/tvlFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment" />
     <fragment
-        android:id="@+id/etfFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.etf.EtfFragment" />
-    <fragment
         android:id="@+id/enterAddressFragment"
         android:name="io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment" />
     <fragment
