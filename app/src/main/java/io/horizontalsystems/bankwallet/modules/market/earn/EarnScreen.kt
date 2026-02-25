@@ -25,13 +25,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.paidAction
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -39,6 +36,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.earn.vault.VaultFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -61,13 +59,12 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
-import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 @Composable
 fun MarketEarnScreen(
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     val viewModel = viewModel<MarketEarnViewModel>(factory = EarnModule.Factory())
     val uiState = viewModel.uiState
@@ -127,14 +124,16 @@ fun MarketEarnScreen(
                                     protocolName = viewItem.protocolName,
                                     assetLogo = viewItem.assetLogo
                                 )
-                                navController.paidAction(TokenInsights) {
-                                    navController.slideFromRight(R.id.vaultFragment, input)
-                                }
+//                                TODO("xxx nav3")
+//                                navController.paidAction(TokenInsights) {
+//                                    navController.slideFromRight(R.id.vaultFragment, input)
+//                                }
                             },
                             onGetPremiumClick = {
-                                navController.paidAction(TokenInsights) {
-                                    //refresh page
-                                }
+//                                TODO("xxx nav3")
+//                                navController.paidAction(TokenInsights) {
+//                                    //refresh page
+//                                }
                             },
                             preItems = {
                                 stickyHeader {
@@ -171,15 +170,16 @@ fun MarketEarnScreen(
                                             variant = ButtonVariant.Secondary,
                                             title = uiState.chainSelectorMenuTitle,
                                             onClick = {
-                                                navController.slideFromRightForResult<VaultBlockchainsSelectorFragment.Result>(
-                                                    R.id.vaultsBlockchainsSelectorFragment,
-                                                    VaultBlockchainsSelectorFragment.Input(
-                                                        uiState.selectedBlockchains,
-                                                        uiState.blockchains
-                                                    )
-                                                ) {
-                                                    viewModel.onBlockchainsSelected(it.selected)
-                                                }
+//                                                TODO("xxx nav3")
+//                                                navController.slideFromRightForResult<VaultBlockchainsSelectorFragment.Result>(
+//                                                    R.id.vaultsBlockchainsSelectorFragment,
+//                                                    VaultBlockchainsSelectorFragment.Input(
+//                                                        uiState.selectedBlockchains,
+//                                                        uiState.blockchains
+//                                                    )
+//                                                ) {
+//                                                    viewModel.onBlockchainsSelected(it.selected)
+//                                                }
                                             },
                                         )
                                         HSpacer(width = 16.dp)
@@ -202,10 +202,11 @@ fun MarketEarnScreen(
             select = Select(uiState.filterBy, viewModel.filterOptions),
             onSelect = { selected ->
                 openFilterSelector = false
-                navController.paidAction(TokenInsights) {
-                    scrollToTopAfterUpdate = true
-                    viewModel.onFilterBySelected(selected)
-                }
+//                TODO("xxx nav3")
+//                navController.paidAction(TokenInsights) {
+//                    scrollToTopAfterUpdate = true
+//                    viewModel.onFilterBySelected(selected)
+//                }
             },
             onDismiss = {
                 openFilterSelector = false
@@ -218,10 +219,11 @@ fun MarketEarnScreen(
             select = Select(uiState.apyPeriod, viewModel.apyPeriods),
             onSelect = { selected ->
                 openPeriodSelector = false
-                navController.paidAction(TokenInsights) {
-                    scrollToTopAfterUpdate = true
-                    viewModel.onApyPeriodSelected(selected)
-                }
+//                TODO("xxx nav3")
+//                navController.paidAction(TokenInsights) {
+//                    scrollToTopAfterUpdate = true
+//                    viewModel.onApyPeriodSelected(selected)
+//                }
             },
             onDismiss = {
                 openPeriodSelector = false
@@ -234,10 +236,11 @@ fun MarketEarnScreen(
             select = Select(uiState.sortingBy, viewModel.sortingOptions),
             onSelect = { selected ->
                 openSortingSelector = false
-                navController.paidAction(TokenInsights) {
-                    scrollToTopAfterUpdate = true
-                    viewModel.onSortingSelected(selected)
-                }
+//                TODO("xxx nav3")
+//                navController.paidAction(TokenInsights) {
+//                    scrollToTopAfterUpdate = true
+//                    viewModel.onSortingSelected(selected)
+//                }
             },
             onDismiss = {
                 openSortingSelector = false
