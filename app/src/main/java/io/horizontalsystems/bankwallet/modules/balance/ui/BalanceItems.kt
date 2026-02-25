@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -57,6 +58,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.ReceiveAllowedState
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
 import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
@@ -585,19 +587,15 @@ private fun showBackupRequiredDialog(
     account: Account,
     backStack: NavBackStack<HSScreen>
 ) {
-//    TODO("xxx nav3")
-//    val text = Translator.getString(
-//        R.string.Balance_Receive_BackupRequired_Description,
-//        account.name
-//    )
-//    navController.slideFromBottom(
-//        R.id.backupRequiredDialog,
-//        BackupRequiredDialog.Input(account, text)
-//    )
-//    stat(
-//        page = StatPage.Balance,
-//        event = StatEvent.Open(StatPage.BackupRequired)
-//    )
+    val text = Translator.getString(
+        R.string.Balance_Receive_BackupRequired_Description,
+        account.name
+    )
+    backStack.add(BackupRequiredScreen(account, text))
+    stat(
+        page = StatPage.Balance,
+        event = StatEvent.Open(StatPage.BackupRequired)
+    )
 }
 
 private fun copyAddressAndShowSuccess(
