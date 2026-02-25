@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.main
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.animation.Crossfade
@@ -30,10 +30,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -57,9 +55,7 @@ import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceViewMode
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
 import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsScreen
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -67,28 +63,16 @@ import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItem
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItemDefaults
 import kotlinx.coroutines.delay
-import kotlin.system.exitProcess
 
 class MainFragment : BaseComposeFragment() {
     private val mainActivityViewModel by activityViewModels<MainActivityViewModel>()
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val backStackEntry = navController.safeGetBackStackEntry(R.id.mainFragment)
-
-        backStackEntry?.let {
-            val viewModel =
-                ViewModelProvider(backStackEntry.viewModelStore, TransactionsModule.Factory())
-                    .get(TransactionsViewModel::class.java)
-            MainScreenWithRootedDeviceCheck(
-                transactionsViewModel = viewModel,
-                navController = navController,
-                mainActivityViewModel = mainActivityViewModel
-            )
-        } ?: run {
-            requireActivity().finishAndRemoveTask()
-            exitProcess(0)
-        }
+        MainScreenWithRootedDeviceCheck(
+            navController = navController,
+            mainActivityViewModel = mainActivityViewModel
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,7 +91,6 @@ class MainFragment : BaseComposeFragment() {
 
 @Composable
 private fun MainScreenWithRootedDeviceCheck(
-    transactionsViewModel: TransactionsViewModel,
     navController: NavController,
     rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory()),
     mainActivityViewModel: MainActivityViewModel
@@ -115,17 +98,16 @@ private fun MainScreenWithRootedDeviceCheck(
     if (rootedDeviceViewModel.showRootedDeviceWarning) {
         RootedDeviceScreen { rootedDeviceViewModel.ignoreRootedDeviceWarning() }
     } else {
-        MainScreen(mainActivityViewModel, transactionsViewModel, navController)
+        MainScreen(mainActivityViewModel, navController)
     }
 }
 
 @Composable
 private fun MainScreen(
     mainActivityViewModel: MainActivityViewModel,
-    transactionsViewModel: TransactionsViewModel,
-    fragmentNavController: NavController,
-    viewModel: MainViewModel = viewModel(factory = MainModule.Factory())
+    fragmentNavController: NavController
 ) {
+    val viewModel = viewModel<MainViewModel>(factory = MainModule.Factory())
     val activityIntent by mainActivityViewModel.intentLiveData.observeAsState()
     LaunchedEffect(activityIntent) {
         activityIntent?.data?.let {
@@ -137,6 +119,7 @@ private fun MainScreen(
     val uiState = viewModel.uiState
     val navigationBarHeight = 56.dp
 
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     Scaffold(
         containerColor = ComposeAppTheme.colors.tyler,
         bottomBar = {
@@ -205,12 +188,7 @@ private fun MainScreen(
                         bottomPadding = navigationBarHeight,
                         closeAfterSwap = false
                     )
-
-                    MainNavigation.Transactions -> TransactionsScreen(
-                        fragmentNavController,
-                        transactionsViewModel
-                    )
-
+                    MainNavigation.Transactions -> TransactionsScreen(fragmentNavController)
                     MainNavigation.Settings -> SettingsScreen(fragmentNavController)
                 }
             }
@@ -340,13 +318,5 @@ private fun BadgedIcon(
                 icon()
             }
         }
-    }
-}
-
-fun NavController.safeGetBackStackEntry(destinationId: Int): NavBackStackEntry? {
-    return try {
-        this.getBackStackEntry(destinationId)
-    } catch (e: IllegalArgumentException) {
-        null
     }
 }

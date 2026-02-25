@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -56,7 +57,6 @@ import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.zcash.shield.ShieldZcashFragment
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.transactionList
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -94,7 +94,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun TokenBalanceScreen(
     viewModel: TokenBalanceViewModel,
-    transactionsViewModel: TransactionsViewModel,
     navController: NavController
 ) {
     val uiState = viewModel.uiState
@@ -290,7 +289,6 @@ fun TokenBalanceScreen(
                         onTransactionClick(
                             it,
                             viewModel,
-                            transactionsViewModel,
                             navController
                         )
                     },
@@ -416,11 +414,10 @@ private fun openSyncErrorDialog(
 private fun onTransactionClick(
     transactionViewItem: TransactionViewItem,
     tokenBalanceViewModel: TokenBalanceViewModel,
-    transactionsViewModel: TransactionsViewModel,
     navController: NavController
 ) {
     val transactionItem = tokenBalanceViewModel.getTransactionItem(transactionViewItem) ?: return
-    transactionsViewModel.tmpTransactionRecordToShow = transactionItem.record
+    App.transactionInfoScreenManager.tmpTransactionRecordToShow = transactionItem.record
 
     navController.slideFromBottom(R.id.transactionInfoFragment)
 
