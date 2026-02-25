@@ -20,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -293,24 +294,10 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
 @Composable
 private fun StatusRightSlot(status: SwapStatus) {
     val leah = ComposeAppTheme.colors.leah
-    val andy = ComposeAppTheme.colors.andy
 
     val isSpinning = status == SwapStatus.Depositing ||
             status == SwapStatus.Swapping ||
             status == SwapStatus.Sending
-
-    val rotate by if (isSpinning) {
-        rememberInfiniteTransition(label = "spinner").animateFloat(
-            initialValue = 0f,
-            targetValue = 360f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(durationMillis = 1500, easing = LinearEasing)
-            ),
-            label = "rotate",
-        )
-    } else {
-        remember { mutableStateOf(0f) }
-    }
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -321,33 +308,15 @@ private fun StatusRightSlot(status: SwapStatus) {
             style = ComposeAppTheme.typography.subheadSB,
             color = leah,
         )
-        Box(
-            modifier = Modifier
-                .size(20.dp)
-                .drawBehind {
-                    if (isSpinning) {
-                        inset(-2.dp.toPx()) {
-                            drawArc(
-                                color = andy,
-                                startAngle = 0f,
-                                sweepAngle = 360f,
-                                useCenter = false,
-                                style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round),
-                            )
-                            rotate(degrees = rotate) {
-                                drawArc(
-                                    color = leah,
-                                    startAngle = 0f,
-                                    sweepAngle = -120f,
-                                    useCenter = false,
-                                    style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round),
-                                )
-                            }
-                        }
-                    }
-                },
-            contentAlignment = Alignment.Center,
-        ) {
+
+        if (isSpinning) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(20.dp),
+                color = ComposeAppTheme.colors.leah,
+                backgroundColor = ComposeAppTheme.colors.andy,
+                strokeWidth = 2.dp
+            )
+        } else {
             when (status) {
                 SwapStatus.Completed -> Icon(
                     modifier = Modifier.size(20.dp),
@@ -355,18 +324,21 @@ private fun StatusRightSlot(status: SwapStatus) {
                     tint = ComposeAppTheme.colors.remus,
                     contentDescription = null,
                 )
+
                 SwapStatus.Failed -> Icon(
                     modifier = Modifier.size(20.dp),
                     painter = painterResource(R.drawable.ic_warning_filled_20),
                     tint = ComposeAppTheme.colors.redL,
                     contentDescription = null,
                 )
+
                 SwapStatus.Refunded -> Icon(
                     modifier = Modifier.size(20.dp),
                     painter = painterResource(R.drawable.ic_arrow_return_20),
                     tint = ComposeAppTheme.colors.grey,
                     contentDescription = null,
                 )
+
                 else -> Unit
             }
         }
@@ -466,6 +438,7 @@ private fun StepIndicator(isActive: Boolean, isDone: Boolean) {
                 tint = ComposeAppTheme.colors.remus,
                 contentDescription = null,
             )
+
             !isActive -> Box(
                 modifier = Modifier
                     .size(12.dp)
