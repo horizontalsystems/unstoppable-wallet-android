@@ -35,6 +35,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCInvalidUrlBottomSheet
@@ -202,8 +203,7 @@ private fun onScanClick(
         }
 
         WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-//            TODO("xxx nav3")
-//            navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+            backStack.add(WCErrorNoAccountScreen)
         }
 
         is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
