@@ -8,6 +8,7 @@ object UniswapV3Provider : BaseUniswapV3Provider(DexType.Uniswap) {
     override val id = "uniswap_v3"
     override val title = "Uniswap V3"
     override val icon = R.drawable.swap_provider_uniswap
+    override val riskLevel = RiskLevel.LIMITED
 
     override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
         BlockchainType.Ethereum,

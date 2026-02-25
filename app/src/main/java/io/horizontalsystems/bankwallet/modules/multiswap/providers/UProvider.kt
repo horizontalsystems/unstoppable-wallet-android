@@ -9,10 +9,51 @@ enum class UProvider(
     val type: SwapProviderType,
     val aml: Boolean,
     val requireTerms: Boolean,
+    val riskLevel: RiskLevel,
 ) {
-    Near("NEAR", "Near", R.drawable.swap_provider_near, SwapProviderType.DEX, false, false),
-    QuickEx("QUICKEX", "QuickEx", R.drawable.swap_provider_quickex, SwapProviderType.CEX, true, true),
-    LetsExchange("LETSEXCHANGE", "LetsExchange", R.drawable.swap_provider_letsexchange, SwapProviderType.CEX, true, true),
-    StealthEx("STEALTHEX", "StealthEX", R.drawable.swap_provider_stealthex, SwapProviderType.CEX, true, true),
-    Swapuz("SWAPUZ", "Swapuz", R.drawable.swap_provider_swapuz, SwapProviderType.CEX, false, false);
+    Near(
+        "NEAR",
+        "Near",
+        R.drawable.swap_provider_near,
+        SwapProviderType.DEX,
+        false,
+        false,
+        RiskLevel.CONTROLLED
+    ),
+    QuickEx(
+        "QUICKEX",
+        "QuickEx",
+        R.drawable.swap_provider_quickex,
+        SwapProviderType.CEX,
+        true,
+        true,
+        RiskLevel.LIMITED
+    ),
+    LetsExchange(
+        "LETSEXCHANGE",
+        "LetsExchange",
+        R.drawable.swap_provider_letsexchange,
+        SwapProviderType.CEX,
+        true,
+        true,
+        RiskLevel.CONTROLLED
+    ),
+    StealthEx(
+        "STEALTHEX",
+        "StealthEX",
+        R.drawable.swap_provider_stealthex,
+        SwapProviderType.CEX,
+        true,
+        true,
+        RiskLevel.CONTROLLED
+    ),
+    Swapuz(
+        "SWAPUZ",
+        "Swapuz",
+        R.drawable.swap_provider_swapuz,
+        SwapProviderType.CEX,
+        false,
+        false,
+        RiskLevel.LIMITED
+    );
 }

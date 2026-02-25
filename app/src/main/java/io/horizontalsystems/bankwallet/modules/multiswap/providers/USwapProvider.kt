@@ -39,6 +39,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     override val type = provider.type
     override val aml = provider.aml
     override val requireTerms = provider.requireTerms
+    override val riskLevel = provider.riskLevel
 
     private val unstoppableAPI = APIClient.build(
         App.appConfigProvider.uswapApiBaseUrl,

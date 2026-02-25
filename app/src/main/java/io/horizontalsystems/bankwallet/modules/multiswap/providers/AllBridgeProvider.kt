@@ -34,6 +34,7 @@ object AllBridgeProvider : IMultiSwapProvider {
     override val type = SwapProviderType.DEX
     override val aml = true
     override val requireTerms = false
+    override val riskLevel = RiskLevel.LIMITED
     private val feePaymentMethod = FeePaymentMethod.StableCoin
 
     private val proxies = mapOf(

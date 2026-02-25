@@ -414,6 +414,9 @@
     <dialog
         android:id="@+id/errorBottomSheet"
         android:name="io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet"/>
+    <dialog
+        android:id="@+id/riskLevelInfoBottomSheet"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.RiskLevelInfoDialog"/>
 
     <!--Wallet Connect-->
     <fragment

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -24,6 +25,7 @@ class SwapSelectProviderViewModel(
     private var rateTokenIn: BigDecimal? = marketKit.coinPrice(tokenIn.coin.uid, currency.code)?.value
     private var rateTokenOut: BigDecimal? = marketKit.coinPrice(tokenOut.coin.uid, currency.code)?.value
     private var quoteViewItems = getViewItems(quotes.sorted())
+    private var sortType = ProviderSortType.BestPrice
 
     init {
         viewModelScope.launch {
@@ -76,13 +78,20 @@ class SwapSelectProviderViewModel(
 
     override fun createState() = SwapSelectProviderUiState(
         quoteViewItems = quoteViewItems,
-        selectedQuote = quote
+        selectedQuote = quote,
+        sortType = sortType,
     )
 
     private fun getFiatValue(amount: BigDecimal?, rate: BigDecimal?): CurrencyValue? {
         if (amount == null || rate == null) return null
 
         return CurrencyValue(currency, amount.multiply(rate))
+    }
+
+    fun setSortType(sortType: ProviderSortType) {
+        this.sortType = sortType
+        quoteViewItems = getViewItems(quotes.sorted())
+        emitState()
     }
 
     class Factory(private val quotes: List<SwapProviderQuote>, private val quote: SwapProviderQuote?) : ViewModelProvider.Factory {
@@ -95,7 +104,8 @@ class SwapSelectProviderViewModel(
 
 data class SwapSelectProviderUiState(
     val quoteViewItems: List<QuoteViewItem>,
-    val selectedQuote: SwapProviderQuote?
+    val selectedQuote: SwapProviderQuote?,
+    val sortType: ProviderSortType,
 )
 
 data class QuoteViewItem(
@@ -104,3 +114,9 @@ data class QuoteViewItem(
     val tokenAmount: String,
     val priceImpactData: PriceImpactData?
 )
+
+enum class ProviderSortType(val title: Int) {
+    BestPrice(R.string.SwapSort_BestPrice),
+    BestTime(R.string.SwapSort_BestTime),
+    Recommended(R.string.SwapSort_Recommended);
+}
