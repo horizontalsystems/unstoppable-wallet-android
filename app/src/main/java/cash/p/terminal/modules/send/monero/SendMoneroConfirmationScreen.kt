@@ -50,6 +50,13 @@ fun SendMoneroConfirmationScreen(
         rbfEnabled = confirmationData.rbfEnabled,
         onClickSend = sendViewModel::onClickSend,
         sendEntryPointDestId = sendEntryPointDestId,
-        isSynced = sendViewModel.isSynced
+        isSynced = sendViewModel.isSynced,
+        sendToken = sendViewModel.wallet.token,
+        feeToken = sendViewModel.feeToken,
+        feeCoinBalance = sendViewModel.feeCoinBalance,
+        displayBalance = sendViewModel.displayBalance,
+        insufficientFeeBalance = sendViewModel.isInsufficientFeeBalance(confirmationData.fee),
+        balanceHidden = sendViewModel.balanceHidden,
+        onBalanceClicked = sendViewModel::toggleHideBalance,
     )
 }

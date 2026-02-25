@@ -36,7 +36,7 @@ import cash.p.terminal.entities.Address
 import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.contacts.model.Contact
-import cash.p.terminal.modules.fee.HSFeeRaw
+import cash.p.terminal.modules.fee.FeeInfoSection
 import cash.p.terminal.modules.hodler.HSHodler
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
@@ -58,8 +58,10 @@ import cash.p.terminal.ui_compose.components.SnackbarDuration
 import cash.p.terminal.ui_compose.components.HudHelper
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.ui_compose.components.CustomSnackbar
+import cash.p.terminal.ui_compose.components.VSpacer
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 
@@ -85,6 +87,13 @@ fun SendConfirmationScreen(
     onClickSend: () -> Unit,
     sendEntryPointDestId: Int,
     isSynced: Boolean,
+    sendToken: Token? = null,
+    feeToken: Token? = null,
+    feeCoinBalance: BigDecimal? = null,
+    displayBalance: BigDecimal? = null,
+    insufficientFeeBalance: Boolean = false,
+    balanceHidden: Boolean = false,
+    onBalanceClicked: () -> Unit = {},
     windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
 ) {
     val closeUntilDestId = if (sendEntryPointDestId == 0) {
@@ -216,27 +225,35 @@ fun SendConfirmationScreen(
 
                 CellUniversalLawrenceSection(topSectionItems)
 
-                Spacer(modifier = Modifier.height(28.dp))
+                VSpacer(height = 16.dp)
 
-                val bottomSectionItems = buildList<@Composable () -> Unit> {
-                    add {
-                        HSFeeRaw(
-                            coinCode = feeCoin.code,
-                            coinDecimal = feeCoinMaxAllowedDecimals,
-                            fee = fee,
-                            amountInputType = amountInputType,
-                            rate = feeCoinRate,
-                            navController = navController
-                        )
-                    }
-                    if (!memo.isNullOrBlank()) {
-                        add {
-                            MemoCell(memo)
-                        }
-                    }
+                val feePrimary = if (fee != null) {
+                    App.numberFormatter.formatCoinFull(fee, feeCoin.code, feeCoinMaxAllowedDecimals)
+                } else {
+                    "---"
+                }
+                val feeSecondary = if (fee != null && feeCoinRate != null) {
+                    feeCoinRate.copy(value = fee.times(feeCoinRate.value)).getFormattedFull()
+                } else {
+                    ""
                 }
 
-                CellUniversalLawrenceSection(bottomSectionItems)
+                FeeInfoSection(
+                    tokenIn = sendToken,
+                    displayBalance = displayBalance,
+                    balanceHidden = balanceHidden,
+                    feeToken = feeToken,
+                    feeCoinBalance = feeCoinBalance,
+                    feePrimary = feePrimary,
+                    feeSecondary = feeSecondary,
+                    insufficientFeeBalance = insufficientFeeBalance,
+                    onBalanceClicked = onBalanceClicked,
+                )
+
+                if (!memo.isNullOrBlank()) {
+                    VSpacer(height = 12.dp)
+                    CellUniversalLawrenceSection(listOf { MemoCell(memo) })
+                }
             }
 
             Column(

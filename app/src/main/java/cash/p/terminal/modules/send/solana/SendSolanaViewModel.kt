@@ -41,7 +41,7 @@ import kotlin.getValue
 class SendSolanaViewModel(
     wallet: Wallet,
     val sendToken: Token,
-    val feeToken: Token,
+    override val feeToken: Token,
     val solBalance: BigDecimal,
     val adapter: ISendSolanaAdapter,
     xRateService: XRateService,

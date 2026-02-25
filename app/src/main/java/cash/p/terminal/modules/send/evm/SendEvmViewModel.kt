@@ -54,7 +54,7 @@ internal class SendEvmViewModel(
     private var addressState = addressService.stateFlow.value
 
     private val contactsRepository: ContactsRepository by inject(ContactsRepository::class.java)
-    private val feeToken = App.evmBlockchainManager.getBaseToken(blockchainType)
+    override val feeToken = App.evmBlockchainManager.getBaseToken(blockchainType)
         ?: throw IllegalArgumentException()
     val feeTokenMaxAllowedDecimals = feeToken.decimals
 
@@ -105,15 +105,21 @@ internal class SendEvmViewModel(
 
     }
 
-    override fun createState() = SendUiState(
-        availableBalance = amountState.availableBalance,
-        amountCaution = amountState.amountCaution,
-        addressError = addressState.addressError,
-        canBeSend = amountState.canBeSend && addressState.canBeSend && sendTransactionService.stateFlow.value.sendable,
-        showAddressInput = showAddressInput,
-        address = addressState.address,
-        cautions = if (amountMoreThanZero()) sendTransactionService.stateFlow.value.cautions else emptyList()
-    )
+    override fun createState(): SendUiState {
+        val txState = sendTransactionService.stateFlow.value
+        val hasSendData = amountMoreThanZero() && addressState.address != null
+        return SendUiState(
+            availableBalance = amountState.availableBalance,
+            amountCaution = amountState.amountCaution,
+            addressError = addressState.addressError,
+            canBeSend = amountState.canBeSend && addressState.canBeSend && txState.sendable,
+            showAddressInput = showAddressInput,
+            address = addressState.address,
+            cautions = if (hasSendData) txState.cautions else emptyList(),
+            fee = txState.networkFee?.primary?.value,
+            feeLoading = hasSendData && txState.loading,
+        )
+    }
 
     private fun amountMoreThanZero(): Boolean {
         val amount = amountService.stateFlow.value.amount

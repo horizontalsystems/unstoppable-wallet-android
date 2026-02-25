@@ -26,7 +26,9 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.tronkit.transaction.Fee
+import com.tangem.common.extensions.isZero
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.inject
@@ -38,7 +40,7 @@ import io.horizontalsystems.tronkit.models.Address as TronAddress
 class SendTronViewModel(
     wallet: Wallet,
     private val sendToken: Token,
-    private val feeToken: Token,
+    override val feeToken: Token,
     private val adapter: ISendTronAdapter,
     private val xRateService: XRateService,
     private val amountService: SendAmountService,
@@ -60,7 +62,11 @@ class SendTronViewModel(
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
     private var feeState: FeeState = FeeState.Loading
+    private var hasEnoughFeeBalance: Boolean = true
     private var cautions: List<HSCaution> = listOf()
+    private var currentFee: BigDecimal? = null
+    private var feeLoading: Boolean = false
+    private var feeEstimationJob: Job? = null
 
     var coinRate by mutableStateOf(xRateService.getRate(sendToken.coin.uid))
         private set
@@ -97,17 +103,22 @@ class SendTronViewModel(
         }
     }
 
-    override fun createState() = SendUiState(
-        availableBalance = amountState.availableBalance,
-        amountCaution = amountState.amountCaution,
-        addressError = addressState.addressError,
-        proceedEnabled = amountState.canBeSend && addressState.canBeSend,
-        sendEnabled = feeState is FeeState.Success && cautions.isEmpty(),
-        feeViewState = feeState.viewState,
-        cautions = cautions,
-        showAddressInput = showAddressInput,
-        address = addressState.address
-    )
+    override fun createState(): SendUiState {
+        val hasSendData = amountState.amount?.let { !it.isZero() } == true && addressState.address != null
+        return SendUiState(
+            availableBalance = amountState.availableBalance,
+            amountCaution = amountState.amountCaution,
+            addressError = addressState.addressError,
+            proceedEnabled = amountState.canBeSend && addressState.canBeSend,
+            sendEnabled = feeState is FeeState.Success && hasEnoughFeeBalance && cautions.isEmpty(),
+            feeViewState = feeState.viewState,
+            cautions = cautions,
+            showAddressInput = showAddressInput,
+            address = addressState.address,
+            fee = currentFee,
+            feeLoading = hasSendData && feeLoading,
+        )
+    }
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -150,17 +161,9 @@ class SendTronViewModel(
         val totalFee = confirmationData.fee ?: return
         val availableBalance = adapter.trxBalanceData.available
 
-        cautions = if (trxAmount + totalFee > availableBalance) {
-            listOf(
-                HSCaution(
-                    TranslatableString.ResString(
-                        R.string.Error_InsufficientBalanceForFee,
-                        feeToken.coin.code,
-                        availableBalance.toPlainString()
-                    )
-                )
-            )
-        } else if (sendToken == feeToken && confirmationData.amount <= BigDecimal.ZERO) {
+        hasEnoughFeeBalance = trxAmount + totalFee <= availableBalance
+
+        cautions = if (sendToken == feeToken && confirmationData.amount <= BigDecimal.ZERO) {
             listOf(
                 HSCaution(
                     TranslatableString.ResString(
@@ -273,14 +276,40 @@ class SendTronViewModel(
 
     private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
-
-        emitState()
+        estimateFeeIfReady()
     }
 
     private fun handleUpdatedAddressState(addressState: SendTronAddressService.State) {
         this.addressState = addressState
+        estimateFeeIfReady()
+    }
 
-        emitState()
+    private fun estimateFeeIfReady() {
+        val amount = amountState.amount
+        val address = addressState.address
+        if (amount == null || amount.isZero() || address == null) {
+            feeEstimationJob?.cancel()
+            currentFee = null
+            feeLoading = false
+            emitState()
+            return
+        }
+
+        feeEstimationJob?.cancel()
+        feeEstimationJob = viewModelScope.launch {
+            feeLoading = true
+            emitState()
+            try {
+                val tronAddress = TronAddress.fromBase58(address.hex)
+                val fees = adapter.estimateFee(amount, tronAddress)
+                val totalFee = fees.sumOf { it.feeInSuns }.toBigInteger()
+                currentFee = totalFee.toBigDecimal().movePointLeft(feeToken.decimals)
+            } catch (_: Throwable) {
+                currentFee = null
+            }
+            feeLoading = false
+            emitState()
+        }
     }
 }
 

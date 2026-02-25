@@ -19,8 +19,7 @@ import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.address.HSAddressInput
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
-import cash.p.terminal.modules.availablebalance.AvailableBalance
-import cash.p.terminal.modules.fee.HSFee
+import cash.p.terminal.modules.fee.FeeInfoSection
 import cash.p.terminal.modules.memo.HSMemoInput
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendFragment.ProceedActionData
@@ -118,29 +117,20 @@ fun SendStellarScreen(
                 amountUnique = amountUnique
             )
 
-            VSpacer(8.dp)
-            AvailableBalance(
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                availableBalance = availableBalance,
-                amountInputType = amountInputType,
-                rate = viewModel.coinRate
-            )
+            VSpacer(12.dp)
+            HSMemoInput(maxLength = 120) { viewModel.onEnterMemo(it) }
 
-            VSpacer(16.dp)
-            HSMemoInput(maxLength = 120) {
-                viewModel.onEnterMemo(it)
-            }
-
-            VSpacer(16.dp)
-            HSFee(
-                coinCode = viewModel.feeToken.coin.code,
-                coinDecimal = viewModel.feeTokenMaxAllowedDecimals,
-                fee = fee,
-                amountInputType = amountInputType,
-                rate = viewModel.feeCoinRate,
-                navController = navController,
+            VSpacer(12.dp)
+            FeeInfoSection(
+                tokenIn = wallet.token,
+                displayBalance = viewModel.displayBalance,
+                balanceHidden = viewModel.balanceHidden,
+                feeToken = viewModel.feeToken,
+                feeCoinBalance = viewModel.feeCoinBalance,
+                feePrimary = viewModel.formatFeePrimary(fee),
+                feeSecondary = viewModel.formatFeeSecondary(fee, viewModel.feeCoinRate),
+                insufficientFeeBalance = viewModel.isInsufficientFeeBalance(fee),
+                onBalanceClicked = viewModel::toggleHideBalance,
             )
 
             Spacer(modifier = Modifier.height(12.dp))

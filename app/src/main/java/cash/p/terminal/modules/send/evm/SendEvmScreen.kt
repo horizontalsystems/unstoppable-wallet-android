@@ -19,7 +19,7 @@ import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.address.HSAddressInput
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
-import cash.p.terminal.modules.availablebalance.AvailableBalance
+import cash.p.terminal.modules.fee.FeeInfoSection
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendFragment.ProceedActionData
@@ -30,6 +30,7 @@ import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.SectionUniversalLawrence
 import cash.p.terminal.ui_compose.components.SwitchWithText
+import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Wallet
 import java.math.BigDecimal
@@ -116,14 +117,18 @@ internal fun SendEvmScreen(
                 amountUnique = amountUnique
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-            AvailableBalance(
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                availableBalance = availableBalance,
-                amountInputType = amountInputType,
-                rate = viewModel.coinRate
+            VSpacer(height = 12.dp)
+            FeeInfoSection(
+                tokenIn = wallet.token,
+                displayBalance = viewModel.displayBalance,
+                balanceHidden = viewModel.balanceHidden,
+                feeToken = viewModel.feeToken,
+                feeCoinBalance = viewModel.feeCoinBalance,
+                feePrimary = viewModel.formatFeePrimary(uiState.fee),
+                feeSecondary = viewModel.formatFeeSecondary(uiState.fee, viewModel.feeCoinRate),
+                insufficientFeeBalance = viewModel.isInsufficientFeeBalance(uiState.fee),
+                onBalanceClicked = viewModel::toggleHideBalance,
+                feeLoading = uiState.feeLoading,
             )
             Spacer(modifier = Modifier.height(12.dp))
             SectionUniversalLawrence {

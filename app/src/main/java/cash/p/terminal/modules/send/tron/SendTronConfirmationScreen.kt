@@ -34,8 +34,8 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
+import cash.p.terminal.modules.fee.FeeInfoSection
 import cash.p.terminal.modules.fee.HSFeeRaw
-import cash.p.terminal.modules.fee.HSFeeRawWithViewState
 import cash.p.terminal.modules.send.ConfirmAmountCell
 import cash.p.terminal.modules.send.MemoCell
 import cash.p.terminal.modules.send.SendResult
@@ -54,6 +54,7 @@ import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.SnackbarDuration
 import cash.p.terminal.ui_compose.components.TextImportantError
 import cash.p.terminal.ui_compose.components.TextImportantWarning
+import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.subhead1_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
@@ -198,23 +199,33 @@ fun SendTronConfirmationScreen(
 
                 CellUniversalLawrenceSection(topSectionItems)
 
-                Spacer(modifier = Modifier.height(16.dp))
+                VSpacer(height = 16.dp)
 
-                val bottomSectionItems = buildList<@Composable () -> Unit> {
-                    add {
-                        HSFeeRawWithViewState(
-                            title = stringResource(R.string.FeeInfo_TronFee_Title),
-                            info = stringResource(R.string.FeeInfo_TronFee_Description),
-                            coinCode = feeCoin.code,
-                            coinDecimal = feeCoinMaxAllowedDecimals,
-                            fee = fee,
-                            viewState = feeViewState,
-                            amountInputType = amountInputType,
-                            rate = feeCoinRate,
-                            navController = navController
-                        )
-                    }
+                val feePrimary = if (fee != null) {
+                    App.numberFormatter.formatCoinFull(fee, feeCoin.code, feeCoinMaxAllowedDecimals)
+                } else {
+                    "---"
+                }
+                val feeSecondary = if (fee != null && feeCoinRate != null) {
+                    feeCoinRate.copy(value = fee.times(feeCoinRate.value)).getFormattedFull()
+                } else {
+                    ""
+                }
 
+                FeeInfoSection(
+                    tokenIn = sendViewModel.wallet.token,
+                    displayBalance = sendViewModel.displayBalance,
+                    balanceHidden = sendViewModel.balanceHidden,
+                    feeToken = sendViewModel.feeToken,
+                    feeCoinBalance = sendViewModel.feeCoinBalance,
+                    feePrimary = feePrimary,
+                    feeSecondary = feeSecondary,
+                    insufficientFeeBalance = sendViewModel.isInsufficientFeeBalance(fee),
+                    onBalanceClicked = sendViewModel::toggleHideBalance,
+                    feeTitle = stringResource(R.string.FeeInfo_TronFee_Title),
+                )
+
+                val additionalItems = buildList<@Composable () -> Unit> {
                     activationFee?.let {
                         add {
                             HSFeeRaw(
@@ -229,7 +240,6 @@ fun SendTronConfirmationScreen(
                             )
                         }
                     }
-
                     resourcesConsumed?.let {
                         add {
                             ResourcesConsumed(
@@ -239,15 +249,16 @@ fun SendTronConfirmationScreen(
                             )
                         }
                     }
-
                     if (!memo.isNullOrBlank()) {
                         add {
                             MemoCell(memo)
                         }
                     }
                 }
-
-                CellUniversalLawrenceSection(bottomSectionItems)
+                if (additionalItems.isNotEmpty()) {
+                    VSpacer(height = 12.dp)
+                    CellUniversalLawrenceSection(additionalItems)
+                }
 
                 if (cautions.isNotEmpty()) {
                     Cautions(cautions)

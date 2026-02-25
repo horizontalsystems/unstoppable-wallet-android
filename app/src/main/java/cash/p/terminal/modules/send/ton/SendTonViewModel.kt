@@ -34,7 +34,7 @@ import java.net.UnknownHostException
 class SendTonViewModel(
     wallet: Wallet,
     private val sendToken: Token,
-    val feeToken: Token,
+    override val feeToken: Token,
     val adapter: ISendTonAdapter,
     private val xRateService: XRateService,
     private val amountService: SendTonAmountService,

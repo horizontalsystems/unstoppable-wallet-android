@@ -34,7 +34,7 @@ import java.net.UnknownHostException
 class SendStellarViewModel(
     wallet: Wallet,
     private val sendToken: Token,
-    val feeToken: Token,
+    override val feeToken: Token,
     private val adapter: ISendStellarAdapter,
     val coinMaxAllowedDecimals: Int,
     private val xRateService: XRateService,

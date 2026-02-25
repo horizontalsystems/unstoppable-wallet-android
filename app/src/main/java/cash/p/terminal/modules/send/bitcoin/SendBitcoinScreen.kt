@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -32,8 +33,7 @@ import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.address.HSAddressInput
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
-import cash.p.terminal.modules.availablebalance.AvailableBalance
-import cash.p.terminal.modules.fee.HSFeeRaw
+import cash.p.terminal.modules.fee.FeeInfoSection
 import cash.p.terminal.modules.memo.HSMemoInput
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendFragment.ProceedActionData
@@ -190,7 +190,7 @@ private fun SendBitcoinScreen(
                 }
             )
 
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            Column(modifier = Modifier.imePadding().verticalScroll(rememberScrollState())) {
                 if (uiState.showAddressInput) {
                     HSAddressInput(
                         modifier = Modifier.padding(horizontal = 16.dp),
@@ -225,16 +225,6 @@ private fun SendBitcoinScreen(
                     amountUnique = amountUnique
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
-                AvailableBalance(
-                    coinCode = wallet.coin.code,
-                    coinDecimal = viewModel.coinMaxAllowedDecimals,
-                    fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                    availableBalance = availableBalance,
-                    amountInputType = amountInputType,
-                    rate = rate
-                )
-
                 if (uiState.isMemoAvailable) {
                     VSpacer(12.dp)
                     HSMemoInput(maxLength = 120) {
@@ -242,30 +232,27 @@ private fun SendBitcoinScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
-                CellUniversalLawrenceSection(
-                    buildList {
-                        uiState.utxoData?.let { utxoData ->
-                            add {
-                                UtxoCell(
-                                    utxoData = utxoData,
-                                    onClick = {
-                                        composeNavController.navigate(UtxoExpertModePage)
-                                    }
-                                )
-                            }
-                        }
-                        add {
-                            HSFeeRaw(
-                                coinCode = wallet.coin.code,
-                                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                                fee = fee,
-                                amountInputType = amountInputType,
-                                rate = rate,
-                                navController = fragmentNavController
-                            )
-                        }
-                    }
+                uiState.utxoData?.let { utxoData ->
+                    Spacer(modifier = Modifier.height(12.dp))
+                    CellUniversalLawrenceSection(listOf {
+                        UtxoCell(
+                            utxoData = utxoData,
+                            onClick = { composeNavController.navigate(UtxoExpertModePage) }
+                        )
+                    })
+                }
+
+                VSpacer(height = 12.dp)
+                FeeInfoSection(
+                    tokenIn = wallet.token,
+                    displayBalance = viewModel.displayBalance,
+                    balanceHidden = viewModel.balanceHidden,
+                    feeToken = viewModel.feeToken,
+                    feeCoinBalance = viewModel.feeCoinBalance,
+                    feePrimary = viewModel.formatFeePrimary(fee),
+                    feeSecondary = viewModel.formatFeeSecondary(fee, rate),
+                    insufficientFeeBalance = viewModel.isInsufficientFeeBalance(fee),
+                    onBalanceClicked = viewModel::toggleHideBalance,
                 )
 
                 feeRateCaution?.let {

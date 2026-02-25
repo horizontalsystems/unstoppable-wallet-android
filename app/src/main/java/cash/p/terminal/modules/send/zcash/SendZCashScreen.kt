@@ -20,8 +20,7 @@ import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.address.HSAddressInput
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
-import cash.p.terminal.modules.availablebalance.AvailableBalance
-import cash.p.terminal.modules.fee.HSFee
+import cash.p.terminal.modules.fee.FeeInfoSection
 import cash.p.terminal.modules.memo.HSMemoInput
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendFragment.ProceedActionData
@@ -32,6 +31,7 @@ import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.SectionUniversalLawrence
 import cash.p.terminal.ui_compose.components.SwitchWithText
+import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
@@ -115,33 +115,22 @@ fun SendZCashScreen(
                 amountUnique = amountUnique
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-            AvailableBalance(
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                availableBalance = availableBalance,
-                amountInputType = amountInputType,
-                rate = viewModel.coinRate
-            )
-
             if (memoIsAllowed) {
-                Spacer(modifier = Modifier.height(12.dp))
-                HSMemoInput(
-                    maxLength = viewModel.memoMaxLength
-                ) {
-                    viewModel.onEnterMemo(it)
-                }
+                VSpacer(12.dp)
+                HSMemoInput(maxLength = viewModel.memoMaxLength) { viewModel.onEnterMemo(it) }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-            HSFee(
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fee = fee,
-                amountInputType = amountInputType,
-                rate = viewModel.coinRate,
-                navController = navController
+            VSpacer(12.dp)
+            FeeInfoSection(
+                tokenIn = wallet.token,
+                displayBalance = viewModel.displayBalance,
+                balanceHidden = viewModel.balanceHidden,
+                feeToken = viewModel.feeToken,
+                feeCoinBalance = viewModel.feeCoinBalance,
+                feePrimary = viewModel.formatFeePrimary(fee),
+                feeSecondary = viewModel.formatFeeSecondary(fee, viewModel.coinRate),
+                insufficientFeeBalance = viewModel.isInsufficientFeeBalance(fee),
+                onBalanceClicked = viewModel::toggleHideBalance,
             )
 
             Spacer(modifier = Modifier.height(12.dp))

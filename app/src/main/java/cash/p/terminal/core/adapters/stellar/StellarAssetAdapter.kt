@@ -1,5 +1,6 @@
 package cash.p.terminal.core.adapters.stellar
 
+import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.ISendStellarAdapter
 import cash.p.terminal.core.managers.StellarKitWrapper
 import cash.p.terminal.core.managers.statusInfo
@@ -25,12 +26,14 @@ class StellarAssetAdapter(
     stellarKitWrapper: StellarKitWrapper,
     code: String,
     issuer: String
-) : BaseStellarAdapter(stellarKitWrapper), ISendStellarAdapter {
+) : BaseStellarAdapter(stellarKitWrapper), ISendStellarAdapter, INativeBalanceProvider {
 
     private val stellarAsset = StellarAsset.Asset(code, issuer)
     private var assetBalance: BigDecimal? = null
+    private var xlmBalance: BigDecimal = BigDecimal.ZERO
 
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
+    private val nativeBalanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
 
     private val balance: BigDecimal
         get() = assetBalance ?: BigDecimal.ZERO
@@ -56,6 +59,12 @@ class StellarAssetAdapter(
             }
         }
         coroutineScope.launch {
+            stellarKit.getBalanceFlow(StellarAsset.Native).collect { balance ->
+                xlmBalance = balance?.balance ?: BigDecimal.ZERO
+                nativeBalanceUpdatedSubject.onNext(Unit)
+            }
+        }
+        coroutineScope.launch {
             stellarKit.syncStateFlow.collect {
                 _balanceState.value = it.toAdapterState()
             }
@@ -69,6 +78,14 @@ class StellarAssetAdapter(
     override suspend fun refresh() = Unit
     override val statusInfo: Map<String, Any>
         get() = stellarKit.statusInfo()
+
+    // INativeBalanceProvider
+
+    override val nativeBalanceData: BalanceData
+        get() = BalanceData(xlmBalance)
+
+    override val nativeBalanceUpdatedFlow: Flow<Unit>
+        get() = nativeBalanceUpdatedSubject.asFlow()
 
     // Fee is ZERO because Stellar asset transfers are paid in XLM (native token), not the asset itself.
     // Returning the actual XLM fee here would cause incorrect subtraction when swapping 100% of asset balance.

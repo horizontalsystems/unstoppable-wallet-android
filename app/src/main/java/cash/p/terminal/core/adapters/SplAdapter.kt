@@ -1,5 +1,6 @@
 package cash.p.terminal.core.adapters
 
+import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.managers.SolanaKitWrapper
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.Wallet
@@ -16,7 +17,7 @@ class SplAdapter(
     private val solanaKitWrapper: SolanaKitWrapper,
     wallet: Wallet,
     private val mintAddressString: String
-) : BaseSolanaAdapter(solanaKitWrapper, wallet.decimal) {
+) : BaseSolanaAdapter(solanaKitWrapper, wallet.decimal), INativeBalanceProvider {
 
     private val mintAddress = Address(mintAddressString)
 
@@ -58,6 +59,14 @@ class SplAdapter(
 
     override val maxSpendableBalance: BigDecimal
         get() = balanceData.available
+
+    // INativeBalanceProvider
+
+    override val nativeBalanceData: BalanceData
+        get() = BalanceData(SolanaAdapter.balanceInBigDecimal(solanaKit.balance, SolanaAdapter.decimal))
+
+    override val nativeBalanceUpdatedFlow: Flow<Unit>
+        get() = solanaKit.balanceFlow.map { }
 
     override suspend fun send(amount: BigDecimal, to: Address): FullTransaction {
         if (signer == null) throw Exception()

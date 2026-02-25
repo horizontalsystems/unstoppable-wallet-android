@@ -27,6 +27,7 @@ import cash.p.terminal.core.managers.PendingTransactionRegistrar
 import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.entities.PendingTransactionDraft
 import cash.p.terminal.modules.evmfee.Cautions
+import cash.p.terminal.modules.evmfee.FeeSettingsError
 import cash.p.terminal.modules.evmfee.Eip1559FeeSettings
 import cash.p.terminal.modules.evmfee.EvmCommonGasDataService
 import cash.p.terminal.modules.evmfee.EvmFeeModule
@@ -213,7 +214,10 @@ internal class SendTransactionServiceEvm(
                     listOf(error)
                 }
 
-                cautions = cautionViewItemFactory.cautionViewItems(listOf(), errorsToShow)
+                cautions = cautionViewItemFactory.cautionViewItems(
+                    listOf(),
+                    errorsToShow.filterNot { !token.type.isNative && it is FeeSettingsError.InsufficientBalance }
+                )
             }
 
             is DataState.Success -> {
@@ -221,7 +225,7 @@ internal class SendTransactionServiceEvm(
                     .filter { !ignoreMevErrors || !isMevRelatedError(it) }
                 cautions = cautionViewItemFactory.cautionViewItems(
                     transactionState.data.warnings,
-                    errors
+                    errors.filterNot { !token.type.isNative && it is FeeSettingsError.InsufficientBalance }
                 )
                 sendable = errors.isEmpty()
             }
