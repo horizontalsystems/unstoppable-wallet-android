@@ -7,19 +7,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
-import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsErrorMessageDefault
 
 @Composable
-fun BalanceNoAccount(navController: NavController) {
+fun BalanceNoAccount(backStack: NavBackStack<HSScreen>) {
     HSScaffold(
         title = stringResource(R.string.Wallet_Title)
     ) {
@@ -33,23 +29,26 @@ fun BalanceNoAccount(navController: NavController) {
             buttonTitle2 = stringResource(R.string.ManageAccounts_ImportWallet),
             buttonTitle3 = stringResource(R.string.ManageAccounts_WatchAddress),
             onClick = {
-                navController.navigateWithTermsAccepted {
-                    navController.slideFromRight(R.id.createAccountFragment)
-
-                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.NewWallet))
-                }
+//                TODO("xxx nav3")
+//                navController.navigateWithTermsAccepted {
+//                    navController.slideFromRight(R.id.createAccountFragment)
+//
+//                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.NewWallet))
+//                }
             },
             onClick2 = {
-                navController.navigateWithTermsAccepted {
-                    navController.slideFromRight(R.id.importWalletFragment)
-
-                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ImportWallet))
-                }
+//                TODO("xxx nav3")
+//                navController.navigateWithTermsAccepted {
+//                    navController.slideFromRight(R.id.importWalletFragment)
+//
+//                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ImportWallet))
+//                }
             },
             onClick3 = {
-                navController.slideFromRight(R.id.watchAddressFragment)
-
-                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.WatchWallet))
+//                TODO("xxx nav3")
+//                navController.slideFromRight(R.id.watchAddressFragment)
+//
+//                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.WatchWallet))
             }
         )
     }

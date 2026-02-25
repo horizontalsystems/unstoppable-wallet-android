@@ -38,14 +38,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.balance.BalanceContextMenuItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.contextMenuItems
-import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -255,16 +254,17 @@ fun IconCell(
     }
 }
 
-fun onSyncErrorClicked(viewItem: BalanceViewItem2, viewModel: BalanceViewModel, navController: NavController, view: View) {
+fun onSyncErrorClicked(viewItem: BalanceViewItem2, viewModel: BalanceViewModel, backStack: NavBackStack<HSScreen>, view: View) {
     when (val syncErrorDetails = viewModel.getSyncErrorDetails(viewItem)) {
         is BalanceViewModel.SyncError.Dialog -> {
-            val wallet = syncErrorDetails.wallet
-            val errorMessage = syncErrorDetails.errorMessage
-
-            navController.slideFromBottom(
-                R.id.syncErrorDialog,
-                SyncErrorDialog.Input(wallet, errorMessage)
-            )
+//            TODO("xxx nav3")
+//            val wallet = syncErrorDetails.wallet
+//            val errorMessage = syncErrorDetails.errorMessage
+//
+//            navController.slideFromBottom(
+//                R.id.syncErrorDialog,
+//                SyncErrorDialog.Input(wallet, errorMessage)
+//            )
         }
 
         is BalanceViewModel.SyncError.NetworkNotAvailable -> {

@@ -22,11 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -36,10 +33,8 @@ import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
-import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCInvalidUrlBottomSheet
@@ -54,7 +49,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BalanceForAccount(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     accountViewItem: AccountViewItem,
 ) {
     val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
@@ -95,7 +90,7 @@ fun BalanceForAccount(
         else -> Unit
     }
 
-    BackupRequiredAlert(navController)
+    BackupRequiredAlert(backStack)
     val uiState = viewModel.uiState
 
     HSScaffold(
@@ -115,7 +110,7 @@ fun BalanceForAccount(
                                 viewModel,
                                 qrScannerLauncher,
                                 context,
-                                navController
+                                backStack
                             )
                         }
                     )
@@ -126,15 +121,16 @@ fun BalanceForAccount(
                     title = TranslatableString.ResString(R.string.ManageAccounts_Title),
                     icon = R.drawable.ic_wallet_switch_24,
                     onClick = {
-                        navController.slideFromRight(
-                            R.id.manageAccountsFragment,
-                            ManageAccountsModule.Mode.Switcher
-                        )
-
-                        stat(
-                            page = StatPage.Balance,
-                            event = StatEvent.Open(StatPage.ManageWallets)
-                        )
+//                        TODO("xxx nav3")
+//                        navController.slideFromRight(
+//                            R.id.manageAccountsFragment,
+//                            ManageAccountsModule.Mode.Switcher
+//                        )
+//
+//                        stat(
+//                            page = StatPage.Balance,
+//                            event = StatEvent.Open(StatPage.ManageWallets)
+//                        )
                     }
                 )
             )
@@ -152,10 +148,10 @@ fun BalanceForAccount(
                         balanceViewItems,
                         viewModel,
                         accountViewItem,
-                        navController,
+                        backStack,
                         uiState,
                     ) {
-                        onScanClick(viewModel, qrScannerLauncher, context, navController)
+                        onScanClick(viewModel, qrScannerLauncher, context, backStack)
                     }
                 }
 
@@ -190,7 +186,7 @@ private fun onScanClick(
     viewModel: BalanceViewModel,
     qrScannerLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>,
     context: Context,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     when (val state =
         viewModel.getWalletConnectSupportState()) {
@@ -206,28 +202,31 @@ private fun onScanClick(
         }
 
         WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-            navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+//            TODO("xxx nav3")
+//            navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
         }
 
         is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
-            val text =
-                Translator.getString(R.string.WalletConnect_Error_NeedBackup)
-            navController.slideFromBottom(
-                R.id.backupRequiredDialog,
-                BackupRequiredDialog.Input(state.account, text)
-            )
-
-            stat(
-                page = StatPage.Balance,
-                event = StatEvent.Open(StatPage.BackupRequired)
-            )
+//            TODO("xxx nav3")
+//            val text =
+//                Translator.getString(R.string.WalletConnect_Error_NeedBackup)
+//            navController.slideFromBottom(
+//                R.id.backupRequiredDialog,
+//                BackupRequiredDialog.Input(state.account, text)
+//            )
+//
+//            stat(
+//                page = StatPage.Balance,
+//                event = StatEvent.Open(StatPage.BackupRequired)
+//            )
         }
 
         is WCManager.SupportState.NotSupported -> {
-            navController.slideFromBottom(
-                R.id.wcAccountTypeNotSupportedDialog,
-                WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
-            )
+//            TODO("xxx nav3")
+//            navController.slideFromBottom(
+//                R.id.wcAccountTypeNotSupportedDialog,
+//                WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
+//            )
         }
     }
 }

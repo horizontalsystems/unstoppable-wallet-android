@@ -40,13 +40,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.managers.FaqManager
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -60,12 +56,10 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.ReceiveAllowedState
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
-import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
-import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
@@ -193,7 +187,7 @@ fun BalanceItems(
     balanceViewItems: List<BalanceViewItem2>,
     viewModel: BalanceViewModel,
     accountViewItem: AccountViewItem,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     uiState: BalanceUiState,
     onScanClick: () -> Unit,
 ) {
@@ -211,12 +205,13 @@ fun BalanceItems(
 
     val navigateToTokenBalance: (BalanceViewItem2) -> Unit = remember {
         {
-            navController.slideFromRight(
-                R.id.tokenBalanceFragment,
-                it.wallet
-            )
-
-            stat(page = StatPage.Balance, event = StatEvent.OpenTokenPage(it.wallet.token))
+//            TODO("xxx nav3")
+//            navController.slideFromRight(
+//                R.id.tokenBalanceFragment,
+//                it.wallet
+//            )
+//
+//            stat(page = StatPage.Balance, event = StatEvent.OpenTokenPage(it.wallet.token))
         }
     }
 
@@ -225,7 +220,7 @@ fun BalanceItems(
             onSyncErrorClicked(
                 it,
                 viewModel,
-                navController,
+                backStack,
                 view
             )
         }
@@ -298,18 +293,19 @@ fun BalanceItems(
                                 when (val receiveAllowedState =
                                     viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
-                                        navController.slideFromRight(R.id.receiveChooseCoinFragment)
-
-                                        stat(
-                                            page = StatPage.Balance,
-                                            event = StatEvent.Open(StatPage.ReceiveTokenList)
-                                        )
+//                                        TODO("xxx nav3")
+//                                        navController.slideFromRight(R.id.receiveChooseCoinFragment)
+//
+//                                        stat(
+//                                            page = StatPage.Balance,
+//                                            event = StatEvent.Open(StatPage.ReceiveTokenList)
+//                                        )
                                     }
 
                                     is ReceiveAllowedState.BackupRequired -> {
                                         showBackupRequiredDialog(
                                             account = receiveAllowedState.account,
-                                            navController = navController
+                                            backStack = backStack
                                         )
                                     }
 
@@ -322,12 +318,13 @@ fun BalanceItems(
                             icon = R.drawable.ic_arrow_up_24,
                             title = stringResource(R.string.Balance_Send),
                             onClick = {
-                                navController.slideFromRight(R.id.sendTokenSelectFragment)
-
-                                stat(
-                                    page = StatPage.Balance,
-                                    event = StatEvent.Open(StatPage.SendTokenList)
-                                )
+//                                TODO("xxx nav3")
+//                                navController.slideFromRight(R.id.sendTokenSelectFragment)
+//
+//                                stat(
+//                                    page = StatPage.Balance,
+//                                    event = StatEvent.Open(StatPage.SendTokenList)
+//                                )
                             }
                         )
                         if (viewModel.isSwapEnabled) {
@@ -336,12 +333,13 @@ fun BalanceItems(
                                 icon = R.drawable.ic_swap_circle_24,
                                 title = stringResource(R.string.Swap),
                                 onClick = {
-                                    navController.slideFromRight(R.id.multiswap)
-
-                                    stat(
-                                        page = StatPage.Balance,
-                                        event = StatEvent.Open(StatPage.Swap)
-                                    )
+//                                    TODO("xxx nav3")
+//                                    navController.slideFromRight(R.id.multiswap)
+//
+//                                    stat(
+//                                        page = StatPage.Balance,
+//                                        event = StatEvent.Open(StatPage.Swap)
+//                                    )
                                 }
                             )
                         }
@@ -360,10 +358,11 @@ fun BalanceItems(
                         type = AlertType.Critical,
                         text = stringResource(R.string.AccountRecovery_MigrationRequired),
                         onClick = {
-                            FaqManager.showFaqPage(
-                                navController,
-                                FaqManager.faqPathMigrationRequired
-                            )
+//                            TODO("xxx nav3")
+//                            FaqManager.showFaqPage(
+//                                navController,
+//                                FaqManager.faqPathMigrationRequired
+//                            )
                         }
                     )
                 }
@@ -419,12 +418,13 @@ fun BalanceItems(
                             icon = painterResource(R.drawable.ic_manage_20),
                             contentDescription = stringResource(R.string.ManageCoins_title),
                             onClick = {
-                                navController.slideFromRight(R.id.manageWalletsFragment)
-
-                                stat(
-                                    page = StatPage.Balance,
-                                    event = StatEvent.Open(StatPage.CoinManager)
-                                )
+//                                TODO("xxx nav3")
+//                                navController.slideFromRight(R.id.manageWalletsFragment)
+//
+//                                stat(
+//                                    page = StatPage.Balance,
+//                                    event = StatEvent.Open(StatPage.CoinManager)
+//                                )
                             }
                         )
                     },
@@ -470,9 +470,9 @@ fun BalanceItems(
                                 handleContextMenuClick(
                                     menuItem = it,
                                     balanceViewItem = item,
-                                    navController = navController,
+                                    backStack = backStack,
                                     onAddressCopyClick = { wallet ->
-                                        handleReceiveAddress(viewModel, wallet, view, navController)
+                                        handleReceiveAddress(viewModel, wallet, view, backStack)
                                     },
                                     onDisable = onDisable
                                 )
@@ -491,66 +491,68 @@ fun BalanceItems(
         }
     }
     uiState.openSend?.let { openSend ->
-        navController.slideFromRight(
-            R.id.sendTokenSelectFragment,
-            SendTokenSelectFragment.Input(
-                openSend.blockchainTypes,
-                openSend.tokenTypes,
-                openSend.address,
-                openSend.amount,
-                openSend.memo,
-            )
-        )
-        viewModel.onSendOpened()
+//        TODO("xxx nav3")
+//        navController.slideFromRight(
+//            R.id.sendTokenSelectFragment,
+//            SendTokenSelectFragment.Input(
+//                openSend.blockchainTypes,
+//                openSend.tokenTypes,
+//                openSend.address,
+//                openSend.amount,
+//                openSend.memo,
+//            )
+//        )
+//        viewModel.onSendOpened()
     }
 }
 
 private fun handleContextMenuClick(
     menuItem: BalanceContextMenuItem,
     balanceViewItem: BalanceViewItem2,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     onAddressCopyClick: (Wallet) -> Unit,
     onDisable: (BalanceViewItem2) -> Unit
 ) {
     when (menuItem) {
         BalanceContextMenuItem.Send -> {
-            val sendTitle = Translator.getString(
-                R.string.Send_Title,
-                balanceViewItem.wallet.token.fullCoin.coin.code
-            )
-            navController.slideFromRight(
-                R.id.enterAddressFragment,
-                EnterAddressFragment.Input(
-                    wallet = balanceViewItem.wallet,
-                    title = sendTitle
-                )
-            )
-
-            stat(
-                page = StatPage.Balance,
-                event = StatEvent.OpenSend(balanceViewItem.wallet.token)
-            )
+//            TODO("xxx nav3")
+//            val sendTitle = Translator.getString(
+//                R.string.Send_Title,
+//                balanceViewItem.wallet.token.fullCoin.coin.code
+//            )
+//            navController.slideFromRight(
+//                R.id.enterAddressFragment,
+//                EnterAddressFragment.Input(
+//                    wallet = balanceViewItem.wallet,
+//                    title = sendTitle
+//                )
+//            )
+//
+//            stat(
+//                page = StatPage.Balance,
+//                event = StatEvent.OpenSend(balanceViewItem.wallet.token)
+//            )
         }
 
         BalanceContextMenuItem.CopyAddress -> { onAddressCopyClick.invoke(balanceViewItem.wallet) }
 
         BalanceContextMenuItem.Swap -> {
-            navController.slideFromRight(
-                R.id.multiswap,
-                balanceViewItem.wallet.token
-            )
-
-            stat(
-                page = StatPage.Balance,
-                event = StatEvent.Open(StatPage.Swap)
-            )
+//            TODO("xxx nav3")
+//            navController.slideFromRight(
+//                R.id.multiswap,
+//                balanceViewItem.wallet.token
+//            )
+//
+//            stat(
+//                page = StatPage.Balance,
+//                event = StatEvent.Open(StatPage.Swap)
+//            )
         }
 
         BalanceContextMenuItem.CoinInfo -> {
             val coinUid = balanceViewItem.wallet.coin.uid
-            val arguments = CoinFragment.Input(coinUid)
 
-            navController.slideFromRight(R.id.coinFragment, arguments)
+            backStack.add(CoinScreen(coinUid))
 
             stat(
                 page = StatPage.Balance,
@@ -564,13 +566,13 @@ private fun handleContextMenuClick(
     }
 }
 
-private fun handleReceiveAddress(viewModel: BalanceViewModel, wallet: Wallet, view: View, navController: NavController) {
+private fun handleReceiveAddress(viewModel: BalanceViewModel, wallet: Wallet, view: View, backStack: NavBackStack<HSScreen>) {
     val address = viewModel.getReceiveAddress(wallet)
     val receiveAllowedState = viewModel.getReceiveAllowedState()
 
     when {
         address == null -> showErrorAddressUnavailable(view)
-        receiveAllowedState is ReceiveAllowedState.BackupRequired -> showBackupRequiredDialog(wallet.account, navController)
+        receiveAllowedState is ReceiveAllowedState.BackupRequired -> showBackupRequiredDialog(wallet.account, backStack)
         else -> copyAddressAndShowSuccess(view, address, wallet)
     }
 }
@@ -581,20 +583,21 @@ private fun showErrorAddressUnavailable(view: View) {
 
 private fun showBackupRequiredDialog(
     account: Account,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
-    val text = Translator.getString(
-        R.string.Balance_Receive_BackupRequired_Description,
-        account.name
-    )
-    navController.slideFromBottom(
-        R.id.backupRequiredDialog,
-        BackupRequiredDialog.Input(account, text)
-    )
-    stat(
-        page = StatPage.Balance,
-        event = StatEvent.Open(StatPage.BackupRequired)
-    )
+//    TODO("xxx nav3")
+//    val text = Translator.getString(
+//        R.string.Balance_Receive_BackupRequired_Description,
+//        account.name
+//    )
+//    navController.slideFromBottom(
+//        R.id.backupRequiredDialog,
+//        BackupRequiredDialog.Input(account, text)
+//    )
+//    stat(
+//        page = StatPage.Balance,
+//        event = StatEvent.Open(StatPage.BackupRequired)
+//    )
 }
 
 private fun copyAddressAndShowSuccess(

@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -50,7 +49,8 @@ class ManageAccountsFragment : BaseComposeFragment() {
 
 @Composable
 fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModule.Mode) {
-    BackupRequiredAlert(navController)
+//    TODO("xxx nav3")
+//    BackupRequiredAlert(navController)
 
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
 

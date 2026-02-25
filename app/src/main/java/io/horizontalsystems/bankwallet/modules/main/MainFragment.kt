@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statTab
+import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceScreen
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.market.MarketScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -203,8 +204,7 @@ private fun MainScreen(
                     }
 
                     MainNavigation.Balance -> {
-//                        TODO("xxx nav3")
-//                        BalanceScreen(fragmentNavController)
+                        BalanceScreen(backStack)
                     }
 
                     MainNavigation.Swap -> {
