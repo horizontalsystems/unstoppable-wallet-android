@@ -45,6 +45,7 @@ import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.Tab
+import io.horizontalsystems.bankwallet.modules.market.earn.MarketEarnScreen
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesScreen
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
 import io.horizontalsystems.bankwallet.modules.market.topcoins.TopCoins
@@ -174,8 +175,7 @@ fun TabsSection(
                 MarketFavoritesScreen(backStack)
             }
             Tab.Earn -> {
-//                TODO("xxx nav3")
-//                MarketEarnScreen(navController)
+                MarketEarnScreen(backStack)
             }
             Tab.Posts -> {
                 MarketPostsScreen()
