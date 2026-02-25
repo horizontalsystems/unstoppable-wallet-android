@@ -6,20 +6,18 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -31,7 +29,6 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -44,9 +41,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 class SwapHistoryFragment : BaseComposeFragment() {
     @Composable
@@ -109,67 +108,50 @@ fun SwapHistoryScreen(navController: NavController) {
 @Composable
 private fun SwapHistoryCell(item: SwapHistoryViewItem, onClick: () -> Unit) {
     Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(ComposeAppTheme.colors.lawrence)
-                .clickable(onClick = onClick)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            // Token In icon — spinner when Depositing
-            SwapCoinIcon(
-                imageUrl = item.tokenInImageUrl,
-                showSpinner = item.status == SwapStatus.Depositing,
-            )
-
-            // Amount In + fiat
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.Start,
-            ) {
-                body_leah(
-                    text = item.amountIn,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+        CellPrimary(
+            left = {
+                SwapCoinIcon(
+                    imageUrl = item.tokenInImageUrl,
+                    showSpinner = item.status == SwapStatus.Depositing,
                 )
-                item.fiatAmountIn?.let {
-                    subhead2_grey(text = it, maxLines = 1)
+            },
+            middle = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Box(modifier = Modifier.weight(1f)) {
+                        CellMiddleInfo(
+                            title = item.amountIn.hs,
+                            subtitle = item.fiatAmountIn?.hs,
+                        )
+                    }
+                    val (statusIcon, statusTint) = statusIconAndTint(item.status)
+                    Icon(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(statusIcon),
+                        tint = statusTint,
+                        contentDescription = null,
+                    )
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.CenterEnd,
+                    ) {
+                        CellRightInfo(
+                            title = (item.amountOut ?: "---").hs,
+                            subtitle = item.fiatAmountOut?.hs,
+                        )
+                    }
                 }
-            }
-
-            // Center: arrow right for all statuses; tinted by completion state
-            val (statusIcon, statusTint) = statusIconAndTint(item.status)
-            Icon(
-                modifier = Modifier.size(20.dp),
-                painter = painterResource(statusIcon),
-                tint = statusTint,
-                contentDescription = null,
-            )
-
-            // Amount Out + fiat
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.End,
-            ) {
-                body_leah(
-                    text = item.amountOut ?: "---",
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.End,
+            },
+            right = {
+                SwapCoinIcon(
+                    imageUrl = item.tokenOutImageUrl,
+                    showSpinner = item.status == SwapStatus.Swapping || item.status == SwapStatus.Sending,
                 )
-                item.fiatAmountOut?.let {
-                    subhead2_grey(text = it, maxLines = 1, textAlign = TextAlign.End)
-                }
-            }
-
-            // Token Out icon — spinner when Swapping or Sending
-            SwapCoinIcon(
-                imageUrl = item.tokenOutImageUrl,
-                showSpinner = item.status == SwapStatus.Swapping || item.status == SwapStatus.Sending,
-            )
-        }
+            },
+            onClick = onClick,
+        )
         HsDivider()
     }
 }
@@ -189,8 +171,7 @@ private fun SwapCoinIcon(imageUrl: String, showSpinner: Boolean) {
             label = "rotate",
         )
     } else {
-        // Static, no animation
-        androidx.compose.runtime.remember { androidx.compose.runtime.mutableFloatStateOf(0f) }
+        remember { androidx.compose.runtime.mutableFloatStateOf(0f) }
     }
 
     Box(
@@ -199,7 +180,6 @@ private fun SwapCoinIcon(imageUrl: String, showSpinner: Boolean) {
             .drawBehind {
                 if (showSpinner) {
                     inset(-2.dp.toPx()) {
-                        // Background ring
                         drawArc(
                             color = andy,
                             startAngle = 0f,
@@ -207,7 +187,6 @@ private fun SwapCoinIcon(imageUrl: String, showSpinner: Boolean) {
                             useCenter = false,
                             style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round),
                         )
-                        // Rotating arc
                         rotate(degrees = rotate) {
                             drawArc(
                                 color = leah,
