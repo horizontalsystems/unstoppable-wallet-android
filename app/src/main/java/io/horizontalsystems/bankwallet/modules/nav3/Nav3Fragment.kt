@@ -51,7 +51,7 @@ abstract class HSScreen(val screenshotEnabled: Boolean = true) : NavKey {
     open fun getMetadata() = mapOf<String, Any>()
 
     @Composable
-    open fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
+    open fun GetContent(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
         HSScaffold(title = "TODO") {
 
         }
@@ -65,7 +65,7 @@ data object BottomSheetSample : HSScreen() {
 
     @Composable
     override fun GetContent(
-        backStack: MutableList<HSScreen>,
+        backStack: NavBackStack<HSScreen>,
         resultBus: ResultEventBus
     ) {
         BottomSheetHeaderV3(
@@ -87,7 +87,7 @@ data object Child : HSScreen() {
 
     @Composable
     override fun GetContent(
-        backStack: MutableList<HSScreen>,
+        backStack: NavBackStack<HSScreen>,
         resultBus: ResultEventBus
     ) {
         val parentViewModel = viewModel(modelClass = SharedViewModel::class)
@@ -100,7 +100,7 @@ data object Child : HSScreen() {
 @Serializable
 data object Home : HSScreen() {
     @Composable
-    override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
         val viewModel = viewModel(modelClass = SharedViewModel::class)
 
         HSScaffold(title = "Nav3") {

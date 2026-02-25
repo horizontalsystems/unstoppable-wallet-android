@@ -33,6 +33,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -87,7 +88,7 @@ class MainFragment : BaseComposeFragment() {
 private fun MainScreenWithRootedDeviceCheck(
     rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory()),
     mainActivityViewModel: MainActivityViewModel,
-    backStack: MutableList<HSScreen>,
+    backStack: NavBackStack<HSScreen>,
     resultBus: ResultEventBus
 ) {
     if (rootedDeviceViewModel.showRootedDeviceWarning) {
@@ -108,7 +109,7 @@ data object MainScreen : HSScreen() {
 
     @Composable
     override fun GetContent(
-        backStack: MutableList<HSScreen>,
+        backStack: NavBackStack<HSScreen>,
         resultBus: ResultEventBus
     ) {
         MainScreenWithRootedDeviceCheck(
@@ -122,7 +123,7 @@ data object MainScreen : HSScreen() {
 @Composable
 private fun MainScreen(
     mainActivityViewModel: MainActivityViewModel,
-    backStack: MutableList<HSScreen>,
+    backStack: NavBackStack<HSScreen>,
     resultBus: ResultEventBus
 ) {
     val viewModel = viewModel<MainViewModel>(factory = MainModule.Factory())
