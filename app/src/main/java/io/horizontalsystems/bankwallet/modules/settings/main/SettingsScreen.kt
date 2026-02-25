@@ -46,6 +46,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
 import io.horizontalsystems.bankwallet.modules.settings.main.ui.BannerCarousel
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -224,11 +225,7 @@ private fun SettingSections(
                         }
 
                         is WCManager.SupportState.NotSupported -> {
-//                            TODO("xxx nav3")
-//                            navController.slideFromBottom(
-//                                R.id.wcAccountTypeNotSupportedDialog,
-//                                WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
-//                            )
+                            backStack.add(WCAccountTypeNotSupportedScreen(state.accountTypeDescription))
                         }
                     }
                 }
