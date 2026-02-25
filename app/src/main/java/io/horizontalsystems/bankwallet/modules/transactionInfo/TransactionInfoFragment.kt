@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,8 +18,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionCell
@@ -36,11 +33,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoCont
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoDoubleSpendCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoExplorerCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoRawTransaction
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSecretKeyCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSentToSelfCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSpeedUpCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoStatusCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoTransactionHashCell
-import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSecretKeyCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionNftAmountCell
 import io.horizontalsystems.bankwallet.ui.compose.components.WarningMessageCell
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -49,14 +46,7 @@ class TransactionInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val viewModelTxs: TransactionsViewModel? = try {
-            navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
-        } catch (e: IllegalStateException) {
-            Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
-            null
-        }
-
-        val transactionRecord = viewModelTxs?.tmpTransactionRecordToShow
+        val transactionRecord = App.transactionInfoScreenManager.tmpTransactionRecordToShow
         if (transactionRecord == null) {
             navController.popBackStack(R.id.transactionInfoFragment, true)
             return

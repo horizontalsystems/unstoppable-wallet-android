@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -66,10 +67,8 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 
 @Composable
-fun TransactionsScreen(
-    navController: NavController,
-    viewModel: TransactionsViewModel,
-) {
+fun TransactionsScreen(navController: NavController) {
+    val viewModel = viewModel<TransactionsViewModel>(factory = TransactionsModule.Factory())
     val accountsViewModel =
         viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
 
@@ -182,7 +181,7 @@ private fun onTransactionClick(
 ) {
     val transactionItem = viewModel.getTransactionItem(transactionViewItem) ?: return
 
-    viewModel.tmpTransactionRecordToShow = transactionItem.record
+    App.transactionInfoScreenManager.tmpTransactionRecordToShow = transactionItem.record
 
     navController.slideFromBottom(R.id.transactionInfoFragment)
 

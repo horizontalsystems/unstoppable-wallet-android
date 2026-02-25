@@ -5,11 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
@@ -40,8 +40,6 @@ class TransactionsViewModel(
     private val transactionFilterService: TransactionFilterService,
     private val localStorage: ILocalStorage,
 ) : ViewModelUiState<TransactionsUiState>() {
-
-    var tmpTransactionRecordToShow: TransactionRecord? = null
 
     val filterResetEnabled = MutableLiveData<Boolean>()
     val filterTokensLiveData = MutableLiveData<List<Filter<FilterToken?>>>()
