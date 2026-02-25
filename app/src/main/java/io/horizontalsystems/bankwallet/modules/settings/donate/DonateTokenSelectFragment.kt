@@ -28,8 +28,8 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         TokenSelectScreen(
-            navController = navController,
             title = stringResource(R.string.Settings_Donate),
+            onBack = { navController.popBackStack() },
             onClickItem = { viewItem ->
                 val donateAddress: String? =
                     App.appConfigProvider.donateAddresses[viewItem.wallet.token.blockchainType]

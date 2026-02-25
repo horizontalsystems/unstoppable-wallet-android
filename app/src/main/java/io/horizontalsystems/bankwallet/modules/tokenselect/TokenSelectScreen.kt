@@ -19,7 +19,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceCardInner2
@@ -38,8 +37,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun TokenSelectScreen(
-    navController: NavController,
     title: String,
+    onBack: () -> Unit,
     onClickItem: (BalanceViewItem2) -> Unit,
     viewModel: TokenSelectViewModel,
     header: @Composable (() -> Unit)? = null
@@ -66,7 +65,7 @@ fun TokenSelectScreen(
 
     HSScaffold(
         title = title,
-        onBack = { navController.popBackStack() },
+        onBack = onBack,
     ) {
 
         Column {
