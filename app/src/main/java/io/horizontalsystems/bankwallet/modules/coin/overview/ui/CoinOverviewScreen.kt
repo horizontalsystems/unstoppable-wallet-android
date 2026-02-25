@@ -26,12 +26,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -47,7 +47,7 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.Restor
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
-import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -69,7 +69,7 @@ import io.horizontalsystems.marketkit.models.LinkType
 @Composable
 fun CoinOverviewScreen(
     fullCoin: FullCoin,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     val vmFactory by lazy { CoinOverviewModule.Factory(fullCoin) }
     val viewModel = viewModel<CoinOverviewViewModel>(factory = vmFactory)
@@ -110,16 +110,17 @@ fun CoinOverviewScreen(
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
-            resId = R.id.zcashConfigure,
-            input = token
-        ) {
-            if (it.config != null) {
-                restoreSettingsViewModel.onEnter(it.config)
-            } else {
-                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
-            }
-        }
+//        TODO("xxx nav3")
+//        navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
+//            resId = R.id.zcashConfigure,
+//            input = token
+//        ) {
+//            if (it.config != null) {
+//                restoreSettingsViewModel.onEnter(it.config)
+//            } else {
+//                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+//            }
+//        }
     }
 
 
@@ -192,12 +193,13 @@ fun CoinOverviewScreen(
                                                 modifier = Modifier.height(28.dp),
                                                 icon = R.drawable.ic_setting_20
                                             ) {
-                                                navController.slideFromRight(R.id.indicatorsFragment)
-
-                                                stat(
-                                                    page = StatPage.CoinOverview,
-                                                    event = StatEvent.Open(StatPage.Indicators)
-                                                )
+//                                                TODO("xxx nav3")
+//                                                navController.slideFromRight(R.id.indicatorsFragment)
+//
+//                                                stat(
+//                                                    page = StatPage.CoinOverview,
+//                                                    event = StatEvent.Open(StatPage.Indicators)
+//                                                )
                                             }
                                         }
                                     }
@@ -214,7 +216,8 @@ fun CoinOverviewScreen(
                                         body_leah(text = stringResource(R.string.CoinPage_ROI_Title, viewModel.fullCoin.coin.code))
                                     }
                                     Spacer(modifier = Modifier.height(12.dp))
-                                    Roi(overview.roi, navController)
+//                                    TODO("xxx nav3")
+//                                    Roi(overview.roi, navController)
                                 }
 
                                 viewModel.tokenVariants?.let { tokenVariants ->
@@ -264,7 +267,8 @@ fun CoinOverviewScreen(
 
                                 if (overview.links.isNotEmpty()) {
                                     Spacer(modifier = Modifier.height(24.dp))
-                                    Links(overview.links) { onClick(it, context, navController) }
+//                                    TODO("xxx nav3")
+//                                    Links(overview.links) { onClick(it, context, navController) }
                                 }
 
                                 Spacer(modifier = Modifier.height(32.dp))
