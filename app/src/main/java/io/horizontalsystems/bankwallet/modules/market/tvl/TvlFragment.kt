@@ -12,28 +12,32 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.TvlDiffType
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -60,26 +64,37 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.serialization.Serializable
 
 class TvlFragment : BaseComposeFragment() {
 
-    private val vmFactory by lazy { TvlModule.Factory() }
-    private val tvlChartViewModel by viewModels<TvlChartViewModel> { vmFactory }
-    private val viewModel by viewModels<TvlViewModel> { vmFactory }
-
     @Composable
     override fun GetContent(navController: NavController) {
-        TvlScreen(viewModel, tvlChartViewModel, navController) { onCoinClick(it, navController) }
     }
 
-    private fun onCoinClick(coinUid: String?, navController: NavController) {
-        if (coinUid != null) {
-            val arguments = CoinFragment.Input(coinUid)
-            navController.slideFromRight(R.id.coinFragment, arguments)
+}
 
-            stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.OpenCoin(coinUid))
-        } else {
-            HudHelper.showWarningMessage(requireView(), R.string.MarketGlobalMetrics_NoCoin)
+@Serializable
+data object TvlScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val vmFactory = remember { TvlModule.Factory() }
+        val tvlChartViewModel = viewModel<TvlChartViewModel>(factory = vmFactory)
+        val viewModel = viewModel<TvlViewModel>(factory = vmFactory)
+
+        val view = LocalView.current
+
+        TvlScreen(viewModel, tvlChartViewModel, backStack) { coinUid ->
+            if (coinUid != null) {
+                backStack.add(CoinScreen(coinUid))
+
+                stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.OpenCoin(coinUid))
+            } else {
+                HudHelper.showWarningMessage(view, R.string.MarketGlobalMetrics_NoCoin)
+            }
         }
     }
 }
@@ -89,7 +104,7 @@ class TvlFragment : BaseComposeFragment() {
 private fun TvlScreen(
     tvlViewModel: TvlViewModel,
     chartViewModel: TvlChartViewModel,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     onCoinClick: (String?) -> Unit
 ) {
     val itemsViewState by tvlViewModel.viewStateLiveData.observeAsState()
@@ -108,7 +123,7 @@ private fun TvlScreen(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 }
             )
         )

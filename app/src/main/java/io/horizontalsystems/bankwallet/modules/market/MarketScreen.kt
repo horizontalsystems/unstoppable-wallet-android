@@ -53,6 +53,7 @@ import io.horizontalsystems.bankwallet.modules.market.topcoins.TopCoins
 import io.horizontalsystems.bankwallet.modules.market.toppairs.TopPairsScreen
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatforms
 import io.horizontalsystems.bankwallet.modules.market.topsectors.TopSectorsScreen
+import io.horizontalsystems.bankwallet.modules.market.tvl.TvlScreen
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -324,8 +325,7 @@ private fun RowScope.MarketTotalCard(
 private fun openMetricsPage(metricsType: MetricsType, backStack: NavBackStack<HSScreen>) {
     when (metricsType) {
         MetricsType.TvlInDefi -> {
-//            TODO("xxx nav3")
-//            navController.slideFromBottom(R.id.tvlFragment)
+            backStack.add(TvlScreen)
         }
 
         MetricsType.Etf -> {
