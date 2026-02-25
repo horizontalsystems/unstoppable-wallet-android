@@ -1,11 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.main
 
 import android.content.Intent
-import android.graphics.RenderEffect
-import android.graphics.Shader
-import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
@@ -38,9 +34,6 @@ import kotlinx.coroutines.launch
 class MainActivity : BaseActivity() {
 
     private lateinit var pinLockComposeView: ComposeView
-    private lateinit var privacyView: View
-    private lateinit var fragmentContainerView: View
-
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     private val viewModel by viewModels<MainActivityViewModel> {
@@ -48,15 +41,6 @@ class MainActivity : BaseActivity() {
     }
 
     private var showPinLockScreen by mutableStateOf(false)
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (!hasFocus) {
-            showPrivacyOverlay()
-        } else {
-            hidePrivacyOverlay()
-        }
-    }
 
     override fun onResume() {
         super.onResume()
@@ -81,8 +65,6 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         pinLockComposeView = findViewById(R.id.pinLockComposeView)
-        fragmentContainerView = findViewById(R.id.fragmentContainerView)
-        privacyView = findViewById(R.id.privacyView)
 
         val navHost =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
@@ -169,25 +151,6 @@ class MainActivity : BaseActivity() {
         }
 
         observeLockState()
-    }
-
-    private fun showPrivacyOverlay() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            privacyView.background = null
-            fragmentContainerView.setRenderEffect(
-                RenderEffect.createBlurEffect(40f, 40f, Shader.TileMode.CLAMP)
-            )
-        } else {
-            privacyView.setBackgroundResource(R.color.tyler)
-        }
-        privacyView.visibility = VISIBLE
-    }
-
-    private fun hidePrivacyOverlay() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            fragmentContainerView.setRenderEffect(null)
-        }
-        privacyView.visibility = GONE
     }
 
     private fun observeLockState() {
