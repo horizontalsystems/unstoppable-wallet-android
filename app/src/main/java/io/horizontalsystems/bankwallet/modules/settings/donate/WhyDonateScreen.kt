@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -42,9 +45,8 @@ data object WhyDonateScreen : HSScreen() {
     override fun GetContent(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
         WhyDonateView(
             onClick = {
-//                TODO("xxx nav3")
-//                navController.slideFromRight(R.id.donateTokenSelectFragment)
-//                stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
+                backStack.add(DonateTokenSelectScreen)
+                stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
             },
             onClose = {
                 backStack.removeLastOrNull()
