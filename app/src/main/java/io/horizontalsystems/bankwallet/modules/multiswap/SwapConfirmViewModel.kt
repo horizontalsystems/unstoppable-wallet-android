@@ -286,6 +286,7 @@ class SwapConfirmViewModel(
         val transactionHash = when (result) {
             is SendTransactionResult.Evm -> result.fullTransaction.transaction.hash.toHexString()
             is SendTransactionResult.Btc -> result.transactionRecord?.transactionHash
+            is SendTransactionResult.Zcash -> result.transactionHash
             else -> null
         }
 
