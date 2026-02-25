@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,7 +37,6 @@ import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -47,13 +47,9 @@ import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.Tab
-import io.horizontalsystems.bankwallet.modules.market.earn.MarketEarnScreen
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesScreen
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
 import io.horizontalsystems.bankwallet.modules.market.topcoins.TopCoins
 import io.horizontalsystems.bankwallet.modules.market.toppairs.TopPairsScreen
-import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatforms
-import io.horizontalsystems.bankwallet.modules.market.topsectors.TopSectorsScreen
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -83,13 +79,12 @@ fun MarketScreen(backStack: NavBackStack<HSScreen>) {
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column() {
-//                TODO("xxx nav3")
-//                Crossfade(uiState.marketGlobal, label = "") {
-//                    MetricsBoard(navController, it, uiState.currency)
-//                }
-//                TabsSection(navController, tabs, uiState.selectedTab) { tab ->
-//                    viewModel.onSelect(tab)
-//                }
+                Crossfade(uiState.marketGlobal, label = "") {
+                    MetricsBoard(backStack, it, uiState.currency)
+                }
+                TabsSection(backStack, tabs, uiState.selectedTab) { tab ->
+                    viewModel.onSelect(tab)
+                }
             }
             Row(
                 modifier = Modifier
@@ -136,7 +131,7 @@ fun MarketScreen(backStack: NavBackStack<HSScreen>) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TabsSection(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     tabs: Array<Tab>,
     selectedTab: Tab,
     onTabClick: (Tab) -> Unit
@@ -169,13 +164,34 @@ fun TabsSection(
             .background(ComposeAppTheme.colors.lawrence)
     ) { page ->
         when (tabs[page]) {
-            Tab.Coins -> TopCoins(onCoinClick = { onCoinClick(it, navController) })
-            Tab.Watchlist -> MarketFavoritesScreen(navController)
-            Tab.Earn -> MarketEarnScreen(navController)
-            Tab.Posts -> MarketPostsScreen()
-            Tab.Platform -> TopPlatforms(navController)
+            Tab.Coins -> {
+                TopCoins(
+                    onCoinClick = {
+//                        TODO("xxx nav3")
+//                        onCoinClick(it, navController)
+                    }
+                )
+            }
+            Tab.Watchlist -> {
+//                TODO("xxx nav3")
+//                MarketFavoritesScreen(navController)
+            }
+            Tab.Earn -> {
+//                TODO("xxx nav3")
+//                MarketEarnScreen(navController)
+            }
+            Tab.Posts -> {
+                MarketPostsScreen()
+            }
+            Tab.Platform -> {
+//                TODO("xxx nav3")
+//                TopPlatforms(navController)
+            }
             Tab.Pairs -> TopPairsScreen()
-            Tab.Sectors -> TopSectorsScreen(navController)
+            Tab.Sectors -> {
+//                TODO("xxx nav3")
+//                TopSectorsScreen(navController)
+            }
         }
     }
 }
@@ -190,7 +206,7 @@ private fun getDiff(it: BigDecimal): String {
 
 @Composable
 fun MetricsBoard(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     marketGlobal: MarketGlobal?,
     currency: Currency
 ) {
@@ -208,7 +224,7 @@ fun MetricsBoard(
             changePercentage = marketGlobal?.marketCapChange,
             currency = currency,
             onClick = {
-                openMetricsPage(MetricsType.TotalMarketCap, navController)
+                openMetricsPage(MetricsType.TotalMarketCap, backStack)
             }
         )
 
@@ -220,7 +236,7 @@ fun MetricsBoard(
             changePercentage = marketGlobal?.volumeChange,
             currency = currency,
             onClick = {
-                openMetricsPage(MetricsType.Volume24h, navController)
+                openMetricsPage(MetricsType.Volume24h, backStack)
             }
         )
 
@@ -232,7 +248,7 @@ fun MetricsBoard(
             changePercentage = marketGlobal?.tvlChange,
             currency = currency,
             onClick = {
-                openMetricsPage(MetricsType.TvlInDefi, navController)
+                openMetricsPage(MetricsType.TvlInDefi, backStack)
             }
         )
 
@@ -244,7 +260,7 @@ fun MetricsBoard(
             changeFiat = marketGlobal?.etfDailyInflow,
             currency = currency,
             onClick = {
-                openMetricsPage(MetricsType.Etf, navController)
+                openMetricsPage(MetricsType.Etf, backStack)
             }
         )
     }
@@ -324,18 +340,21 @@ private fun RowScope.MarketTotalCard(
     }
 }
 
-private fun openMetricsPage(metricsType: MetricsType, navController: NavController) {
+private fun openMetricsPage(metricsType: MetricsType, backStack: NavBackStack<HSScreen>) {
     when (metricsType) {
         MetricsType.TvlInDefi -> {
-            navController.slideFromBottom(R.id.tvlFragment)
+//            TODO("xxx nav3")
+//            navController.slideFromBottom(R.id.tvlFragment)
         }
 
         MetricsType.Etf -> {
-            navController.slideFromBottom(R.id.etfFragment)
+//            TODO("xxx nav3")
+//            navController.slideFromBottom(R.id.etfFragment)
         }
 
         else -> {
-            navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
+//            TODO("xxx nav3")
+//            navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
         }
     }
 
