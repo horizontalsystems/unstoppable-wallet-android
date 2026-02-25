@@ -197,7 +197,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                 )
                 // Status (clickable → opens bottom sheet)
                 CellSecondary(
-                    onClick = { showStatusSheet = true },
+                    onClick = { /*showStatusSheet = true*/ },
                     middle = {
                         CellMiddleInfoTextIcon(text = stringResource(R.string.TransactionInfo_Status).hs)
                     },
