@@ -51,6 +51,7 @@ import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceModule
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceScreen
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceViewModel
+import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateScreen
 import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -239,9 +240,8 @@ private fun MainScreen(
 
     if (uiState.showDonationPage) {
         LaunchedEffect(Unit) {
-//            TODO("xxx nav3")
-//            fragmentNavController.slideFromBottom(R.id.whyDonateFragment)
-//            viewModel.donationShown()
+            backStack.add(WhyDonateScreen)
+            viewModel.donationShown()
         }
     }
 
