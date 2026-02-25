@@ -56,6 +56,7 @@ import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceScreen
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceViewModel
 import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateScreen
 import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionsScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
@@ -219,8 +220,7 @@ private fun MainScreen(
                     }
 
                     MainNavigation.Transactions -> {
-//                        TODO("xxx nav3")
-//                        TransactionsScreen(fragmentNavController)
+                        TransactionsScreen(backStack)
                     }
 
                     MainNavigation.Settings -> {
