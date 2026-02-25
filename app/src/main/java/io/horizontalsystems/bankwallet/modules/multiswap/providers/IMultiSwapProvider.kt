@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
@@ -15,6 +16,7 @@ interface IMultiSwapProvider {
     val type: SwapProviderType
     val aml: Boolean
     val requireTerms: Boolean
+    val riskLevel: RiskLevel
 
     val titleShort: String
         get() {
@@ -57,4 +59,10 @@ interface IMultiSwapProvider {
 enum class SwapProviderType(val title: String) {
     DEX("DEX"),
     CEX("CEX")
+}
+
+enum class RiskLevel(val title: Int) {
+    AUTO(R.string.RiskLevel_Auto),
+    LIMITED(R.string.RiskLevel_Limited),
+    CONTROLLED(R.string.RiskLevel_Controlled);
 }

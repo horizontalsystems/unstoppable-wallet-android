@@ -762,6 +762,19 @@
     <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Your transaction may be frontrun</string>
 
+    <string name="SwapSort_BestPrice">Best Price</string>
+    <string name="SwapSort_BestTime">Best Time</string>
+    <string name="SwapSort_Recommended">Recommended</string>
+
+    <string name="RiskLevel_ProviderRiskLevel">Provider Risk Levels</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">Risk levels show what actions a provider may take during execution.</string>
+    <string name="RiskLevel_Auto_Description">Automatic on-chain execution. Funds cannot be frozen or blocked after submission.</string>
+    <string name="RiskLevel_Limited_Description">Execution may be paused or rejected during processing. Temporary blocking is possible in rare cases.</string>
+    <string name="RiskLevel_Controlled_Description">The provider may pause, reject, or freeze funds under internal rules, including compliance checks.</string>
+    <string name="RiskLevel_Auto">Auto</string>
+    <string name="RiskLevel_Limited">Limited</string>
+    <string name="RiskLevel_Controlled">Controlled</string>
+
     <!-- Swap Confirmation -->
 
     <string name="ActivationRequired_DialogTitle">Activate Token</string>

@@ -20,6 +20,8 @@ val RedD = Color(0xFFFF1539)
 val RedL = Color(0xFFFF1500)
 val Orange = Color(0xFFFE4A11)
 val Sunset = Color(0xFFFF2C00)
+val BlueD = Color(0xFF0084FF)
+val BlueL = Color(0xFF1249FF)
 
 val Yellow50 = Color(0x80FFB700)
 val Yellow20 = Color(0x33FFB700)

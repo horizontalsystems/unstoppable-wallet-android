@@ -1,33 +1,62 @@
 package io.horizontalsystems.bankwallet.uiv3.components.cell
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSBadgeOutline
 
 @Composable
 fun CellMiddleInfo(
     eyebrow: HSString? = null,
+    eyebrowBadge: HSString? = null,
     title: HSString? = null,
     badge: HSString? = null,
     subtitleBadge: HSString? = null,
     subtitle: HSString? = null,
     subtitle2: HSString? = null,
     description: HSString? = null,
+    onEyebrowBadgeClick: (() -> Unit)? = null,
 ) {
     Column {
-        eyebrow?.let {
-            Text(
-                text = it.text,
-                style = ComposeAppTheme.typography.subhead,
-                color = it.color ?: ComposeAppTheme.colors.grey,
-            )
+        if (eyebrow != null || eyebrowBadge != null) {
+            Row {
+                eyebrow?.let {
+                    Text(
+                        text = it.text,
+                        style = ComposeAppTheme.typography.subhead,
+                        color = it.color ?: ComposeAppTheme.colors.grey,
+                    )
+                }
+                eyebrowBadge?.let {
+                    val modifier = if (onEyebrowBadgeClick != null) {
+                        Modifier.clickable {
+                            onEyebrowBadgeClick.invoke()
+                        }
+                    } else {
+                        Modifier
+                    }
+
+                    if (eyebrow != null) {
+                        HSpacer(8.dp)
+                    }
+
+                    HSBadgeOutline(
+                        modifier = modifier,
+                        text = it.text,
+                        color = it.color ?: ComposeAppTheme.colors.grey
+                    )
+                }
+            }
         }
 
         Row(

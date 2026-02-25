@@ -29,6 +29,7 @@ object OneInchProvider : IMultiSwapProvider {
     override val type = SwapProviderType.DEX
     override val aml = true
     override val requireTerms = false
+    override val riskLevel = RiskLevel.LIMITED
     private val oneInchKit by lazy { OneInchKit.getInstance(App.appConfigProvider.oneInchApiKey) }
     private const val PARTNER_FEE: Float = 0.5F
     private const val PARTNER_ADDRESS: String = "0xe42BBeE8389548fAe35C09072065b7fEc582b590"
