@@ -46,6 +46,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
 import io.horizontalsystems.bankwallet.modules.settings.main.ui.BannerCarousel
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -205,8 +206,7 @@ private fun SettingSections(
                         }
 
                         WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-//                            TODO("xxx nav3")
-//                            navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                            backStack.add(WCErrorNoAccountScreen)
                         }
 
                         is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {

@@ -438,9 +438,6 @@
         android:id="@+id/wcPairingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.pairing.WCPairingsFragment"/>
     <dialog
-        android:id="@+id/wcErrorNoAccountFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment" />
-    <dialog
         android:id="@+id/wcAccountTypeNotSupportedDialog"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
     <dialog
