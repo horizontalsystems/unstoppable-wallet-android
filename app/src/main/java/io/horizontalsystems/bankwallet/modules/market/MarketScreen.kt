@@ -46,6 +46,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.Tab
 import io.horizontalsystems.bankwallet.modules.market.earn.MarketEarnScreen
+import io.horizontalsystems.bankwallet.modules.market.etf.EtfScreen
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesScreen
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchScreen
@@ -329,8 +330,7 @@ private fun openMetricsPage(metricsType: MetricsType, backStack: NavBackStack<HS
         }
 
         MetricsType.Etf -> {
-//            TODO("xxx nav3")
-//            navController.slideFromBottom(R.id.etfFragment)
+            backStack.add(EtfScreen)
         }
 
         else -> {

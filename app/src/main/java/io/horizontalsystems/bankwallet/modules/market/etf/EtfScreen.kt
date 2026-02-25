@@ -38,11 +38,10 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -53,6 +52,8 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartTab
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.GraphicLine
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -86,24 +87,26 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.EtfPoint
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import kotlin.math.abs
 
-class EtfFragment : BaseComposeFragment() {
+@Serializable
+data object EtfScreen : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
-        val factory = EtfModule.Factory()
-        val viewModel by viewModels<EtfViewModel> { factory }
-        EtfPage(viewModel, navController)
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        EtfPage(backStack)
     }
 }
 
 @Composable
-fun EtfPage(
-    viewModel: EtfViewModel,
-    navController: NavController
-) {
+fun EtfPage(backStack: NavBackStack<HSScreen>) {
+    val viewModel = viewModel<EtfViewModel>(factory = EtfModule.Factory())
+
     val tabs = EtfModule.EtfTab.entries
     var selectedTab by remember { mutableStateOf(EtfModule.EtfTab.BtcTab) }
     val pagerState = rememberPagerState(initialPage = selectedTab.ordinal) { tabs.size }
@@ -122,7 +125,7 @@ fun EtfPage(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 }
             )
         ),
