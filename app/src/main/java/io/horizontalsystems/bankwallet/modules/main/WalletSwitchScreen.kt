@@ -4,6 +4,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -22,14 +23,14 @@ data object WalletSwitchScreen : HSScreen() {
     override fun getMetadata() = BottomSheetSceneStrategy.bottomSheet()
 
     @Composable
-    override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
         WalletSwitchScreen(backStack)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun WalletSwitchScreen(backStack: MutableList<HSScreen>) {
+private fun WalletSwitchScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel = viewModel<WalletSwitchViewModel>(factory = WalletSwitchViewModel.Factory())
     val uiState = viewModel.uiState
 

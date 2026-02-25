@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -61,7 +62,7 @@ class WhyDonateFragment : BaseComposeFragment() {
 @Serializable
 data object WhyDonateScreen : HSScreen() {
     @Composable
-    override fun GetContent(backStack: MutableList<HSScreen>, resultBus: ResultEventBus) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
         WhyDonateView(
             onClick = {
 //                TODO("xxx nav3")

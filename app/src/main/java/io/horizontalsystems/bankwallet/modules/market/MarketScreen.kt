@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -72,7 +73,7 @@ import io.horizontalsystems.marketkit.models.MarketGlobal
 import java.math.BigDecimal
 
 @Composable
-fun MarketScreen(backStack: MutableList<HSScreen>) {
+fun MarketScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel = viewModel<MarketViewModel>(factory = MarketModule.Factory())
     val uiState = viewModel.uiState
     val tabs = viewModel.tabs
