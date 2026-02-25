@@ -162,12 +162,11 @@ private fun MainScreen(
                             },
                             onLongClick = if (destination.selected && destination.mainNavItem == MainNavigation.Balance) {
                                 {
-//                                    TODO("xxx nav3")
-//                                    fragmentNavController.slideFromBottom(R.id.walletSwitchDialog)
-//                                    stat(
-//                                        page = StatPage.Main,
-//                                        event = StatEvent.Open(StatPage.SwitchWallet)
-//                                    )
+                                    backStack.add(WalletSwitchScreen)
+                                    stat(
+                                        page = StatPage.Main,
+                                        event = StatEvent.Open(StatPage.SwitchWallet)
+                                    )
                                 }
                             } else null,
                             enabled = destination.enabled,

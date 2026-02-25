@@ -482,7 +482,4 @@
     <dialog
         android:id="@+id/swapInfoDialog"
         android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialog" />
-    <dialog
-        android:id="@+id/walletSwitchDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.main.WalletSwitchDialog" />
 </navigation>
