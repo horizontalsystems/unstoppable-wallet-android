@@ -166,29 +166,13 @@ fun TabsSection(
             .background(ComposeAppTheme.colors.lawrence)
     ) { page ->
         when (tabs[page]) {
-            Tab.Coins -> {
-                TopCoins(
-                    onCoinClick = {
-                        onCoinClick(it, backStack)
-                    }
-                )
-            }
-            Tab.Watchlist -> {
-                MarketFavoritesScreen(backStack)
-            }
-            Tab.Earn -> {
-                MarketEarnScreen(backStack)
-            }
-            Tab.Posts -> {
-                MarketPostsScreen()
-            }
-            Tab.Platform -> {
-                TopPlatforms(backStack)
-            }
+            Tab.Coins -> TopCoins(onCoinClick = { onCoinClick(it, backStack) })
+            Tab.Watchlist -> MarketFavoritesScreen(backStack)
+            Tab.Earn -> MarketEarnScreen(backStack)
+            Tab.Posts -> MarketPostsScreen()
+            Tab.Platform -> TopPlatforms(backStack)
             Tab.Pairs -> TopPairsScreen()
-            Tab.Sectors -> {
-                TopSectorsScreen(backStack)
-            }
+            Tab.Sectors -> TopSectorsScreen(backStack)
         }
     }
 }
