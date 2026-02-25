@@ -47,6 +47,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequi
 import io.horizontalsystems.bankwallet.modules.market.MarketScreen
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapScreen
 import io.horizontalsystems.bankwallet.modules.rateapp.RateApp
+import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceModule
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceScreen
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceViewModel
@@ -231,12 +232,8 @@ private fun MainScreen(
 
     if (uiState.showWhatsNew) {
         LaunchedEffect(Unit) {
-//            TODO("xxx nav3")
-//            fragmentNavController.slideFromBottom(
-//                R.id.releaseNotesFragment,
-//                ReleaseNotesFragment.Input(true)
-//            )
-//            viewModel.whatsNewShown()
+            backStack.add(ReleaseNotesScreen(true))
+            viewModel.whatsNewShown()
         }
     }
 
