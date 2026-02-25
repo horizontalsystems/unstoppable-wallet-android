@@ -33,11 +33,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -45,7 +43,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statPage
 import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.Tab
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
 import io.horizontalsystems.bankwallet.modules.market.topcoins.TopCoins
@@ -167,8 +165,7 @@ fun TabsSection(
             Tab.Coins -> {
                 TopCoins(
                     onCoinClick = {
-//                        TODO("xxx nav3")
-//                        onCoinClick(it, navController)
+                        onCoinClick(it, backStack)
                     }
                 )
             }
@@ -361,10 +358,8 @@ private fun openMetricsPage(metricsType: MetricsType, backStack: NavBackStack<HS
     stat(page = StatPage.Markets, event = StatEvent.Open(metricsType.statPage))
 }
 
-private fun onCoinClick(coinUid: String, navController: NavController) {
-    val arguments = CoinFragment.Input(coinUid)
-
-    navController.slideFromRight(R.id.coinFragment, arguments)
+private fun onCoinClick(coinUid: String, backStack: NavBackStack<HSScreen>) {
+    backStack.add(CoinScreen(coinUid))
 
     stat(page = StatPage.Markets, event = StatEvent.OpenCoin(coinUid), section = StatSection.Coins)
 }

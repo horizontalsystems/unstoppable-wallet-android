@@ -15,17 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
-import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
-import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsBlockHeader
@@ -40,9 +35,7 @@ import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsF
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
-import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
@@ -60,8 +53,7 @@ import io.horizontalsystems.marketkit.models.FullCoin
 @Composable
 fun CoinAnalyticsScreen(
     fullCoin: FullCoin,
-    navController: NavController,
-    fragmentManager: FragmentManager
+    backStack: NavBackStack<HSScreen>
 ) {
     val viewModel =
         viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin))
@@ -89,8 +81,7 @@ fun CoinAnalyticsScreen(
                         is AnalyticsViewItem.Analytics -> {
                             AnalyticsData(
                                 item.blocks,
-                                navController,
-                                fragmentManager,
+                                backStack
                             )
                         }
 
@@ -111,18 +102,16 @@ fun CoinAnalyticsScreen(
 @Composable
 private fun AnalyticsData(
     blocks: List<CoinAnalyticsModule.BlockViewItem>,
-    navController: NavController,
-    fragmentManager: FragmentManager,
+    backStack: NavBackStack<HSScreen>
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(blocks) { block ->
             if (block.showAsPreview) {
-                AnalyticsPreviewBlock(block, navController)
+                AnalyticsPreviewBlock(block, backStack)
             } else {
                 AnalyticsBlock(
                     block,
-                    navController,
-                    fragmentManager,
+                    backStack
                 )
             }
         }
@@ -135,8 +124,7 @@ private fun AnalyticsData(
 @Composable
 private fun AnalyticsBlock(
     block: CoinAnalyticsModule.BlockViewItem,
-    navController: NavController,
-    fragmentManager: FragmentManager,
+    backStack: NavBackStack<HSScreen>
 ) {
     AnalyticsContainer(
         showFooterDivider = block.showFooterDivider,
@@ -155,7 +143,8 @@ private fun AnalyticsBlock(
                     isPreview = false,
                     onInfoClick = block.info?.let { info ->
                         {
-                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
+//                            TODO("xxx nav3")
+//                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
                         }
                     }
                 )
@@ -168,7 +157,7 @@ private fun AnalyticsBlock(
         },
         bottomRows = {
             block.footerItems.forEachIndexed { index, item ->
-                FooterCell(item, index, navController)
+                FooterCell(item, index, backStack)
             }
         }
     ) {
@@ -179,12 +168,13 @@ private fun AnalyticsBlock(
                     val coinUid = block.analyticChart?.coinUid
                     val chartType = block.analyticChart?.chartType
                     if (coinUid != null && chartType != null) {
-                        ProChartFragment.show(
-                            fragmentManager,
-                            coinUid,
-                            Translator.getString(chartType.titleRes),
-                            chartType,
-                        )
+//                        TODO("xxx nav3")
+//                        ProChartFragment.show(
+//                            fragmentManager,
+//                            coinUid,
+//                            Translator.getString(chartType.titleRes),
+//                            chartType,
+//                        )
                     }
                 }
             )
@@ -204,7 +194,7 @@ private fun AnalyticsBlock(
 private fun FooterCell(
     item: CoinAnalyticsModule.FooterType,
     index: Int,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
 ) {
     when (item) {
         is CoinAnalyticsModule.FooterType.FooterItem -> {
@@ -215,7 +205,8 @@ private fun FooterCell(
                 showRightArrow = item.action != null,
                 cellAction = item.action,
                 onActionClick = { action ->
-                    handleActionClick(action, navController)
+//                    TODO("xxx nav3")
+//                    handleActionClick(action, navController)
                 }
             )
         }
@@ -223,7 +214,10 @@ private fun FooterCell(
         is CoinAnalyticsModule.FooterType.DetectorFooterItem -> {
             Column(
                 modifier = Modifier.clickable {
-                    item.action?.let { handleActionClick(it, navController) }
+                    item.action?.let {
+//                        TODO("xxx nav3")
+//                        handleActionClick(it, navController)
+                    }
                 }
             ) {
                 AnalyticsFooterCell(
@@ -269,7 +263,7 @@ private fun FooterCell(
 @Composable
 private fun AnalyticsPreviewBlock(
     block: CoinAnalyticsModule.BlockViewItem,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     AnalyticsContainer(
         showFooterDivider = block.showFooterDivider,
@@ -288,7 +282,8 @@ private fun AnalyticsPreviewBlock(
                     isPreview = true,
                     onInfoClick = block.info?.let { info ->
                         {
-                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
+//                            TODO("xxx nav3")
+//                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
                         }
                     }
                 )
@@ -304,14 +299,15 @@ private fun AnalyticsPreviewBlock(
             }
         },
         onClick = {
-            navController.slideFromBottom(
-                R.id.defenseSystemFeatureDialog,
-                DefenseSystemFeatureDialog.Input(PremiumFeature.TokenInsightsFeature)
-            )
-            stat(
-                page = StatPage.CoinAnalytics,
-                event = StatEvent.OpenPremium(block.statTrigger ?: StatPremiumTrigger.Other)
-            )
+//            TODO("xxx nav3")
+//            navController.slideFromBottom(
+//                R.id.defenseSystemFeatureDialog,
+//                DefenseSystemFeatureDialog.Input(PremiumFeature.TokenInsightsFeature)
+//            )
+//            stat(
+//                page = StatPage.CoinAnalytics,
+//                event = StatEvent.OpenPremium(block.statTrigger ?: StatPremiumTrigger.Other)
+//            )
         }
     ) {
         if (block.value != null) {

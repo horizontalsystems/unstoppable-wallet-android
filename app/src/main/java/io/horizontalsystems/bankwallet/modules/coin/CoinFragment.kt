@@ -10,9 +10,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -22,6 +23,8 @@ import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsScreen
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
@@ -33,19 +36,20 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 class CoinFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            CoinScreen(
-                input.coinUid,
-                coinViewModel(input.coinUid),
-                navController,
-                childFragmentManager
-            )
-        }
+//        withInput<Input>(navController) { input ->
+//            CoinScreen(
+//                input.coinUid,
+//                coinViewModel(input.coinUid),
+//                navController,
+//                childFragmentManager
+//            )
+//        }
     }
 
     private fun coinViewModel(coinUid: String): CoinViewModel? = try {
@@ -61,25 +65,40 @@ class CoinFragment : BaseComposeFragment() {
     data class Input(val coinUid: String) : Parcelable
 }
 
+@Serializable
+data class CoinScreen(val coinUid: String) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val coinViewModel = viewModel<CoinViewModel>(factory = CoinModule.Factory(coinUid))
+        CoinScreen(
+            coinUid,
+            coinViewModel,
+            backStack
+        )
+
+    }
+}
+
 @Composable
 fun CoinScreen(
     coinUid: String,
     coinViewModel: CoinViewModel?,
-    navController: NavController,
-    fragmentManager: FragmentManager
+    backStack: NavBackStack<HSScreen>
 ) {
     if (coinViewModel != null) {
-        CoinTabs(coinViewModel, navController, fragmentManager)
+        CoinTabs(coinViewModel, backStack)
     } else {
-        CoinNotFound(coinUid, navController)
+        CoinNotFound(coinUid, backStack)
     }
 }
 
 @Composable
 fun CoinTabs(
     viewModel: CoinViewModel,
-    navController: NavController,
-    fragmentManager: FragmentManager
+    backStack: NavBackStack<HSScreen>
 ) {
     val tabs = viewModel.tabs
     val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
@@ -88,7 +107,7 @@ fun CoinTabs(
 
     HSScaffold(
         title = viewModel.fullCoin.coin.code,
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = buildList {
             if (viewModel.isWatchlistEnabled) {
                 if (viewModel.isFavorite) {
@@ -150,7 +169,7 @@ fun CoinTabs(
                     CoinModule.Tab.Overview -> {
                         CoinOverviewScreen(
                             fullCoin = viewModel.fullCoin,
-                            navController = navController
+                            backStack = backStack
                         )
                     }
 
@@ -161,8 +180,7 @@ fun CoinTabs(
                     CoinModule.Tab.Details -> {
                         CoinAnalyticsScreen(
                             fullCoin = viewModel.fullCoin,
-                            navController = navController,
-                            fragmentManager = fragmentManager
+                            backStack = backStack
                         )
                     }
                 }
@@ -178,10 +196,10 @@ fun CoinTabs(
 }
 
 @Composable
-fun CoinNotFound(coinUid: String, navController: NavController) {
+fun CoinNotFound(coinUid: String, backStack: NavBackStack<HSScreen>) {
     HSScaffold(
         title = coinUid,
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         ListEmptyView(
             text = stringResource(R.string.CoinPage_CoinNotFound, coinUid),
