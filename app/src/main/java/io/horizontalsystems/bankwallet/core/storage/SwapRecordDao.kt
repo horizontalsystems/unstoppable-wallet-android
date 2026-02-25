@@ -23,6 +23,9 @@ interface SwapRecordDao {
     @Query("UPDATE SwapRecord SET status = :status WHERE id = :id")
     fun updateStatus(id: Int, status: String)
 
+    @Query("UPDATE SwapRecord SET status = :status, amountOut = :amountOut WHERE id = :id")
+    fun updateStatusAndAmountOut(id: Int, status: String, amountOut: String)
+
     @Query("DELETE FROM SwapRecord WHERE id = :id")
     fun delete(id: Int)
 }

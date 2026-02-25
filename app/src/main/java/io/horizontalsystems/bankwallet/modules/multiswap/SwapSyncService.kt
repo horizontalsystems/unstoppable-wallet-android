@@ -52,8 +52,13 @@ class SwapSyncService(
                 unstoppableAPI.track(request)
             }
             Log.e("eee", "response: $response")
-            val newStatus = mapStatus(response) ?: return
-            if (SwapStatus.valueOf(record.status) != newStatus) {
+            val newStatus = mapStatus(response)
+                ?.takeIf { it != SwapStatus.valueOf(record.status) }
+                ?: return
+            val newAmountOut = response.toAmount?.takeIf { it.isNotEmpty() }
+            if (newAmountOut != null) {
+                swapRecordManager.updateStatusAndAmountOut(record.id, newStatus, newAmountOut)
+            } else {
                 swapRecordManager.updateStatus(record.id, newStatus)
             }
         } catch (e: IllegalArgumentException) {

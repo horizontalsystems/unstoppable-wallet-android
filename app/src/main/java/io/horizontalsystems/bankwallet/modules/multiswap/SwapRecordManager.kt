@@ -30,4 +30,9 @@ class SwapRecordManager(private val swapRecordDao: SwapRecordDao) {
         swapRecordDao.updateStatus(id, status.name)
         _recordsUpdatedFlow.tryEmit(Unit)
     }
+
+    fun updateStatusAndAmountOut(id: Int, status: SwapStatus, amountOut: String) {
+        swapRecordDao.updateStatusAndAmountOut(id, status.name, amountOut)
+        _recordsUpdatedFlow.tryEmit(Unit)
+    }
 }
