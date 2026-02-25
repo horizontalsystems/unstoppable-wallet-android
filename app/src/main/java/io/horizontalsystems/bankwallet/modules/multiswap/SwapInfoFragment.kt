@@ -122,7 +122,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                     middle = {
                         CellMiddleInfo(
                             title = uiState.tokenInCode.hs,
-                            subtitle = uiState.tokenInBadge?.hs,
+                            subtitle = (uiState.tokenInBadge ?: stringResource(id = R.string.CoinPlatforms_Native)).hs,
                         )
                     },
                     right = {
@@ -157,7 +157,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                     middle = {
                         CellMiddleInfo(
                             title = uiState.tokenOutCode.hs,
-                            subtitle = uiState.tokenOutBadge?.hs,
+                            subtitle = (uiState.tokenOutBadge ?: stringResource(id = R.string.CoinPlatforms_Native)).hs,
                         )
                     },
                     right = {
@@ -169,14 +169,15 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                 )
             }
 
-            VSpacer(12.dp)
+            VSpacer(16.dp)
 
             // Details card
             Column(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(ComposeAppTheme.colors.lawrence),
+                    .background(ComposeAppTheme.colors.lawrence)
+                    .padding(vertical = 8.dp),
             ) {
                 // Provider
                 CellSecondary(
