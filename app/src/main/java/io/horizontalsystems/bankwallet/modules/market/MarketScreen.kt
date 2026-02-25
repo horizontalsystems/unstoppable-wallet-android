@@ -50,6 +50,7 @@ import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesS
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
 import io.horizontalsystems.bankwallet.modules.market.topcoins.TopCoins
 import io.horizontalsystems.bankwallet.modules.market.toppairs.TopPairsScreen
+import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatforms
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -181,8 +182,7 @@ fun TabsSection(
                 MarketPostsScreen()
             }
             Tab.Platform -> {
-//                TODO("xxx nav3")
-//                TopPlatforms(navController)
+                TopPlatforms(backStack)
             }
             Tab.Pairs -> TopPairsScreen()
             Tab.Sectors -> {

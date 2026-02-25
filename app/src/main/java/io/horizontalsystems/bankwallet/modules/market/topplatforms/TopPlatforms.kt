@@ -18,10 +18,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -34,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.Value
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -57,7 +57,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TopPlatforms(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     viewModel: TopPlatformsViewModel = viewModel(
         factory = TopPlatformsModule.Factory(null)
     ),
@@ -100,16 +100,17 @@ fun TopPlatforms(
                                 sortingField = uiState.sortingField,
                                 timeDuration = uiState.timePeriod,
                                 onItemClick = {
-                                    navController.slideFromRight(
-                                        R.id.marketPlatformFragment,
-                                        it
-                                    )
-
-                                    stat(
-                                        page = StatPage.Markets,
-                                        event = StatEvent.OpenPlatform(it.uid),
-                                        section = StatSection.Platforms
-                                    )
+//                                    TODO("xxx nav3")
+//                                    navController.slideFromRight(
+//                                        R.id.marketPlatformFragment,
+//                                        it
+//                                    )
+//
+//                                    stat(
+//                                        page = StatPage.Markets,
+//                                        event = StatEvent.OpenPlatform(it.uid),
+//                                        section = StatSection.Platforms
+//                                    )
                                 },
                                 preItems = {
                                     stickyHeader {
