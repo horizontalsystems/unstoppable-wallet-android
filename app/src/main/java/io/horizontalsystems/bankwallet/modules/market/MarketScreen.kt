@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -55,6 +54,7 @@ import io.horizontalsystems.bankwallet.modules.market.toppairs.TopPairsScreen
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatforms
 import io.horizontalsystems.bankwallet.modules.market.topsectors.TopSectorsScreen
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -72,9 +72,7 @@ import io.horizontalsystems.marketkit.models.MarketGlobal
 import java.math.BigDecimal
 
 @Composable
-fun MarketScreen(
-    navController: NavController,
-) {
+fun MarketScreen(backStack: MutableList<HSScreen>) {
     val viewModel = viewModel<MarketViewModel>(factory = MarketModule.Factory())
     val uiState = viewModel.uiState
     val tabs = viewModel.tabs
@@ -84,12 +82,13 @@ fun MarketScreen(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column() {
-                Crossfade(uiState.marketGlobal, label = "") {
-                    MetricsBoard(navController, it, uiState.currency)
-                }
-                TabsSection(navController, tabs, uiState.selectedTab) { tab ->
-                    viewModel.onSelect(tab)
-                }
+//                TODO("xxx nav3")
+//                Crossfade(uiState.marketGlobal, label = "") {
+//                    MetricsBoard(navController, it, uiState.currency)
+//                }
+//                TabsSection(navController, tabs, uiState.selectedTab) { tab ->
+//                    viewModel.onSelect(tab)
+//                }
             }
             Row(
                 modifier = Modifier
@@ -106,11 +105,12 @@ fun MarketScreen(
                         .background(ComposeAppTheme.colors.blade)
                         .height(48.dp)
                         .clickable {
-                            navController.slideFromBottom(R.id.marketSearchFragment)
-                            stat(
-                                page = StatPage.Markets,
-                                event = StatEvent.Open(StatPage.MarketSearch)
-                            )
+//                            TODO("xxx nav3")
+//                            navController.slideFromBottom(R.id.marketSearchFragment)
+//                            stat(
+//                                page = StatPage.Markets,
+//                                event = StatEvent.Open(StatPage.MarketSearch)
+//                            )
                         }
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically

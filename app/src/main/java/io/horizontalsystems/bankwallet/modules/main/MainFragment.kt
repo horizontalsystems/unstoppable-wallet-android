@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
+import io.horizontalsystems.bankwallet.modules.market.MarketScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.NavExample
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
@@ -197,8 +198,7 @@ private fun MainScreen(
             Crossfade(uiState.selectedTabItem) { navItem ->
                 when (navItem) {
                     MainNavigation.Market -> {
-//                        TODO("xxx nav3")
-//                        MarketScreen(fragmentNavController)
+                        MarketScreen(backStack)
                     }
 
                     MainNavigation.Balance -> {
