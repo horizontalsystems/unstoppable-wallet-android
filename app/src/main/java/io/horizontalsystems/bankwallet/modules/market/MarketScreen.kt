@@ -48,6 +48,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule.Tab
 import io.horizontalsystems.bankwallet.modules.market.earn.MarketEarnScreen
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesScreen
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchScreen
 import io.horizontalsystems.bankwallet.modules.market.topcoins.TopCoins
 import io.horizontalsystems.bankwallet.modules.market.toppairs.TopPairsScreen
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatforms
@@ -103,12 +104,11 @@ fun MarketScreen(backStack: NavBackStack<HSScreen>) {
                         .background(ComposeAppTheme.colors.blade)
                         .height(48.dp)
                         .clickable {
-//                            TODO("xxx nav3")
-//                            navController.slideFromBottom(R.id.marketSearchFragment)
-//                            stat(
-//                                page = StatPage.Markets,
-//                                event = StatEvent.Open(StatPage.MarketSearch)
-//                            )
+                            backStack.add(MarketSearchScreen)
+                            stat(
+                                page = StatPage.Markets,
+                                event = StatEvent.Open(StatPage.MarketSearch)
+                            )
                         }
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically

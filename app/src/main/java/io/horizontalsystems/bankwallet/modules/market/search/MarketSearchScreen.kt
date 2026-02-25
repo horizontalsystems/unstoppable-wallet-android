@@ -33,18 +33,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statSection
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -63,24 +63,29 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import java.util.Optional
 
-class MarketSearchFragment : BaseComposeFragment() {
+@Serializable
+data object MarketSearchScreen : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavController) {
-        val viewModel = viewModel<MarketSearchViewModel>(
-            factory = MarketSearchModule.Factory()
-        )
-        MarketSearchScreen(viewModel, navController)
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        MarketSearchScreen(backStack)
     }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MarketSearchScreen(
-    viewModel: MarketSearchViewModel,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
+    val viewModel = viewModel<MarketSearchViewModel>(
+        factory = MarketSearchModule.Factory()
+    )
+
     val uiState = viewModel.uiState
 
     var searchQuery by remember { mutableStateOf(uiState.searchQuery) }
@@ -124,12 +129,13 @@ fun MarketSearchScreen(
                 title = TranslatableString.ResString(R.string.Market_Filters),
                 icon = R.drawable.ic_manage_2_24,
                 onClick = {
-                    navController.slideFromRight(R.id.marketAdvancedSearchFragment)
-
-                    stat(
-                        page = StatPage.Markets,
-                        event = StatEvent.Open(StatPage.AdvancedSearch)
-                    )
+//                    TODO("xxx nav3")
+//                    navController.slideFromRight(R.id.marketAdvancedSearchFragment)
+//
+//                    stat(
+//                        page = StatPage.Markets,
+//                        event = StatEvent.Open(StatPage.AdvancedSearch)
+//                    )
                 },
             )
         )
@@ -184,10 +190,7 @@ fun MarketSearchScreen(
                                                         delay(200)
 
                                                         viewModel.onCoinOpened(coin)
-                                                        navController.slideFromRight(
-                                                            R.id.coinFragment,
-                                                            CoinFragment.Input(coin.uid)
-                                                        )
+                                                        backStack.add(CoinScreen(coin.uid))
                                                     }
                                                     stat(
                                                         page = StatPage.MarketSearch,
@@ -223,7 +226,7 @@ fun MarketSearchScreen(
                         viewModel.searchByQuery(query)
                     }
                 ) {
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 }
             }
         }
