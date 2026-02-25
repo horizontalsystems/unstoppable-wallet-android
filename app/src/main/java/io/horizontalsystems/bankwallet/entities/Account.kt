@@ -6,6 +6,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
+import io.horizontalsystems.bankwallet.serializers.BigIntegerSerializer
+import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
+import io.horizontalsystems.bankwallet.serializers.TokenTypeSerializer
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
@@ -17,10 +20,12 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigInteger
 import java.text.Normalizer
 
 @Parcelize
+@Serializable
 data class Account(
     val id: String,
     val name: String,
@@ -126,25 +131,38 @@ sealed class CexType : Parcelable {
 }
 
 @Parcelize
+@Serializable
 sealed class AccountType : Parcelable {
 
     @Parcelize
+    @Serializable
     data class EvmAddress(val address: String) : AccountType()
 
     @Parcelize
+    @Serializable
     data class SolanaAddress(val address: String) : AccountType()
 
     @Parcelize
+    @Serializable
     data class TronAddress(val address: String) : AccountType()
 
     @Parcelize
+    @Serializable
     data class TonAddress(val address: String) : AccountType()
 
     @Parcelize
+    @Serializable
     data class StellarAddress(val address: String) : AccountType()
 
     @Parcelize
-    data class BitcoinAddress(val address: String, val blockchainType: BlockchainType, val tokenType: TokenType) : AccountType() {
+    @Serializable
+    data class BitcoinAddress(
+        val address: String,
+        @Serializable(with = BlockchainTypeSerializer::class)
+        val blockchainType: BlockchainType,
+        @Serializable(with = TokenTypeSerializer::class)
+        val tokenType: TokenType
+    ) : AccountType() {
 
         val serialized: String
             get() = "$address|${blockchainType.uid}|${tokenType.id}"
@@ -162,6 +180,7 @@ sealed class AccountType : Parcelable {
     }
 
     @Parcelize
+    @Serializable
     data class MoneroWatchAccount(
         val address: String,
         val privateViewKey: String,
@@ -185,6 +204,7 @@ sealed class AccountType : Parcelable {
     }
 
     @Parcelize
+    @Serializable
     data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
         @IgnoredOnParcel
         val seed by lazy { Mnemonic().toSeed(words, passphrase) }
@@ -201,6 +221,7 @@ sealed class AccountType : Parcelable {
     }
 
     @Parcelize
+    @Serializable
     data class StellarSecretKey(val key: String) : AccountType() {
         override fun equals(other: Any?): Boolean {
             return other is StellarSecretKey && key == other.key
@@ -212,7 +233,11 @@ sealed class AccountType : Parcelable {
     }
 
     @Parcelize
-    data class EvmPrivateKey(val key: BigInteger) : AccountType() {
+    @Serializable
+    data class EvmPrivateKey(
+        @Serializable(with = BigIntegerSerializer::class)
+        val key: BigInteger
+    ) : AccountType() {
         override fun equals(other: Any?): Boolean {
             return other is EvmPrivateKey && key == other.key
         }
@@ -223,6 +248,7 @@ sealed class AccountType : Parcelable {
     }
 
     @Parcelize
+    @Serializable
     data class HdExtendedKey(val keySerialized: String) : AccountType() {
         val hdExtendedKey: HDExtendedKey
             get() = HDExtendedKey(keySerialized)
