@@ -24,8 +24,8 @@ class SwapSelectProviderViewModel(
     private var tokenOut = quotes.first().tokenOut
     private var rateTokenIn: BigDecimal? = marketKit.coinPrice(tokenIn.coin.uid, currency.code)?.value
     private var rateTokenOut: BigDecimal? = marketKit.coinPrice(tokenOut.coin.uid, currency.code)?.value
-    private var quoteViewItems = getViewItems(quotes.sorted())
     private var sortType = ProviderSortType.BestPrice
+    private var quoteViewItems = getViewItems(quotes.sorted())
 
     init {
         viewModelScope.launch {
@@ -49,7 +49,11 @@ class SwapSelectProviderViewModel(
     }
 
     private fun List<SwapProviderQuote>.sorted(): List<SwapProviderQuote> {
-        return this.sortedByDescending { it.amountOut }
+        return when (sortType) {
+            ProviderSortType.BestPrice,
+            ProviderSortType.Recommended -> sortedByDescending { it.amountOut }
+            ProviderSortType.BestTime -> sortedBy { it.estimationTime ?: Long.MAX_VALUE }
+        }
     }
 
     private fun getViewItems(quotes: List<SwapProviderQuote>): List<QuoteViewItem> {
@@ -71,7 +75,8 @@ class SwapSelectProviderViewModel(
                 quote = quote,
                 fiatAmount = fiatAmountOut?.getFormattedFull(),
                 tokenAmount = tokenAmount,
-                priceImpactData = priceImpactData
+                priceImpactData = priceImpactData,
+                estimationTime = quote.estimationTime
             )
         }
     }
@@ -112,7 +117,8 @@ data class QuoteViewItem(
     val quote: SwapProviderQuote,
     val fiatAmount: String?,
     val tokenAmount: String,
-    val priceImpactData: PriceImpactData?
+    val priceImpactData: PriceImpactData?,
+    val estimationTime: Long?,
 )
 
 enum class ProviderSortType(val title: Int) {

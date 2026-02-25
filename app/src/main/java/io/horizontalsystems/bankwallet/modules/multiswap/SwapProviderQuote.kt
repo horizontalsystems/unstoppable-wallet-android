@@ -12,4 +12,5 @@ data class SwapProviderQuote(
     val amountIn by swapQuote::amountIn
     val amountOut by swapQuote::amountOut
     val actionRequired by swapQuote::actionRequired
+    val estimationTime by swapQuote::estimationTime
 }

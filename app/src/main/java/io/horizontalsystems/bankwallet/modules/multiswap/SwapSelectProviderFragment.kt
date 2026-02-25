@@ -161,7 +161,7 @@ private fun SwapSelectProviderScreenInner(
                                     eyebrow = provider.title.hs(ComposeAppTheme.colors.leah),
                                     eyebrowBadge = getRiskLevelHsString(provider.riskLevel),
                                     onEyebrowBadgeClick = onBadgeClick,
-                                    subtitle = description.hs,
+                                    subtitle = (viewItem.estimationTime?.let { "~${formatDurationShort(it)}" } ?: stringResource(R.string.NotAvailable)).hs,
                                 )
                             },
                             right = {
@@ -237,6 +237,18 @@ private fun getPriceImpact(priceImpactData: PriceImpactData?): HSString? {
     val value =
         App.numberFormatter.format(priceImpactData.priceImpact, 0, 2, prefix = "-", suffix = "%")
     return "($value)".hs(color = color)
+}
+
+fun formatDurationShort(totalSeconds: Long): String {
+    val hours = totalSeconds / 3600
+    val minutes = (totalSeconds % 3600) / 60
+    val seconds = totalSeconds % 60
+
+    return buildString {
+        if (hours > 0) append("${hours}h ")
+        if (minutes > 0) append("${minutes}m ")
+        if (seconds > 0 || (hours == 0L && minutes == 0L)) append("${seconds}s")
+    }.trim()
 }
 
 @Preview

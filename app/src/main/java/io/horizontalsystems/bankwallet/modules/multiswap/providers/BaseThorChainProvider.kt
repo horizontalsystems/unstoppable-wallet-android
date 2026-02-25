@@ -149,7 +149,8 @@ abstract class BaseThorChainProvider(
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            actionRequired = actionApprove
+            actionRequired = actionApprove,
+            estimationTime = quoteSwap.total_swap_seconds
         )
     }
 
