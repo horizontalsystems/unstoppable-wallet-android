@@ -307,14 +307,17 @@ class ZcashAdapter(
         memo = memo
     )
 
-    private suspend fun send(proposal: Proposal) {
+    private suspend fun send(proposal: Proposal): String? {
         val spendingKey = DerivationTool.getInstance().deriveUnifiedSpendingKey(seed, network, Zip32AccountIndex.new(0))
 
         try {
             val results = synchronizer.createProposedTransactions(proposal, spendingKey).toList()
+            var firstTxHash: String? = null
             results.forEach { result ->
                 when (result) {
-                    is TransactionSubmitResult.Success -> {}
+                    is TransactionSubmitResult.Success -> {
+                        if (firstTxHash == null) firstTxHash = result.txIdString()
+                    }
 
                     is TransactionSubmitResult.Failure -> {
                         val errorMsg = buildString {
@@ -332,6 +335,7 @@ class ZcashAdapter(
                     }
                 }
             }
+            return firstTxHash
         } catch (e: IllegalArgumentException) {
             throw IllegalArgumentException("Invalid proposal: ${e.message}", e)
         } catch (e: Exception) {
@@ -347,8 +351,8 @@ class ZcashAdapter(
         )
     }
 
-    override suspend fun sendProposal(proposal: Proposal) {
-        send(proposal)
+    override suspend fun sendProposal(proposal: Proposal): String? {
+        return send(proposal)
     }
 
     private fun createPaymentUri(outputs: List<TransferOutput>): String {

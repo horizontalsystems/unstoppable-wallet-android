@@ -453,7 +453,7 @@ interface ISendZcashAdapter {
     suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
     suspend fun fee(amount: BigDecimal, address: String, memo: String): BigDecimal
     suspend fun proposeTransfer(amount: BigDecimal, address: String, memo: String): Proposal
-    suspend fun sendProposal(proposal: Proposal)
+    suspend fun sendProposal(proposal: Proposal): String?
 }
 
 interface IAdapter {

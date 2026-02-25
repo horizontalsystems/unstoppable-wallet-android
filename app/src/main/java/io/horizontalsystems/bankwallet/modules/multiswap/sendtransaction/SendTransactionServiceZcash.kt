@@ -64,10 +64,10 @@ class SendTransactionServiceZcash(
             fee = proposal?.totalFeeRequired()?.convertZatoshiToZec()
         } catch (e: Throwable) {
             val message = e.message
-            if (message != null && message.contains("Insufficient balance", ignoreCase = true)) {
-                error = InsufficientBalance(feeToken.coin.code)
+            error = if (message != null && message.contains("Insufficient balance", ignoreCase = true)) {
+                InsufficientBalance(feeToken.coin.code)
             } else {
-                error = e
+                e
             }
         }
 
@@ -75,8 +75,8 @@ class SendTransactionServiceZcash(
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
-        adapter.sendProposal(proposal!!)
-        return SendTransactionResult.Zcash
+        val transactionHash = adapter.sendProposal(proposal!!)
+        return SendTransactionResult.Zcash(transactionHash)
     }
 
     override fun createState() = SendTransactionServiceState(
