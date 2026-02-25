@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -37,13 +38,9 @@ fun BackupRequiredAlert(backStack: NavBackStack<HSScreen>) {
             account.name,
         )
         LaunchedEffect(account) {
-//            TODO("xxx nav3")
-//            delay(300)
-//            viewModel.onHandled()
-//            navController.slideFromBottom(
-//                R.id.backupRequiredDialog,
-//                BackupRequiredDialog.Input(account, text)
-//            )
+            delay(300)
+            viewModel.onHandled()
+            backStack.add(BackupRequiredScreen(account, text))
         }
     }
 }

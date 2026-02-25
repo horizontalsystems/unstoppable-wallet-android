@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -33,6 +34,7 @@ import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedScreen
@@ -208,18 +210,14 @@ private fun onScanClick(
         }
 
         is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
-//            TODO("xxx nav3")
-//            val text =
-//                Translator.getString(R.string.WalletConnect_Error_NeedBackup)
-//            navController.slideFromBottom(
-//                R.id.backupRequiredDialog,
-//                BackupRequiredDialog.Input(state.account, text)
-//            )
-//
-//            stat(
-//                page = StatPage.Balance,
-//                event = StatEvent.Open(StatPage.BackupRequired)
-//            )
+            val text =
+                Translator.getString(R.string.WalletConnect_Error_NeedBackup)
+            backStack.add(BackupRequiredScreen(state.account, text))
+
+            stat(
+                page = StatPage.Balance,
+                event = StatEvent.Open(StatPage.BackupRequired)
+            )
         }
 
         is WCManager.SupportState.NotSupported -> {
