@@ -9,18 +9,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun BackupRequiredAlert(navController: NavController) {
+fun BackupRequiredAlert(backStack: NavBackStack<HSScreen>) {
     val viewModel = viewModel<BackupRequiredAlertViewModel>()
 
     LifecycleResumeEffect(Unit) {
@@ -38,12 +37,13 @@ fun BackupRequiredAlert(navController: NavController) {
             account.name,
         )
         LaunchedEffect(account) {
-            delay(300)
-            viewModel.onHandled()
-            navController.slideFromBottom(
-                R.id.backupRequiredDialog,
-                BackupRequiredDialog.Input(account, text)
-            )
+//            TODO("xxx nav3")
+//            delay(300)
+//            viewModel.onHandled()
+//            navController.slideFromBottom(
+//                R.id.backupRequiredDialog,
+//                BackupRequiredDialog.Input(account, text)
+//            )
         }
     }
 }
