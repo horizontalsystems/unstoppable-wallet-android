@@ -136,9 +136,6 @@
         android:id="@+id/donateTokenSelectFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.donate.DonateTokenSelectFragment"/>
     <fragment
-        android:id="@+id/metricsPageFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment" />
-    <fragment
         android:id="@+id/coinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment" />
     <fragment

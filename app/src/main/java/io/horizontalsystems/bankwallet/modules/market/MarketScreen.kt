@@ -48,6 +48,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule.Tab
 import io.horizontalsystems.bankwallet.modules.market.earn.MarketEarnScreen
 import io.horizontalsystems.bankwallet.modules.market.etf.EtfScreen
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesScreen
+import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageScreen
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchScreen
 import io.horizontalsystems.bankwallet.modules.market.topcoins.TopCoins
@@ -325,18 +326,9 @@ private fun RowScope.MarketTotalCard(
 
 private fun openMetricsPage(metricsType: MetricsType, backStack: NavBackStack<HSScreen>) {
     when (metricsType) {
-        MetricsType.TvlInDefi -> {
-            backStack.add(TvlScreen)
-        }
-
-        MetricsType.Etf -> {
-            backStack.add(EtfScreen)
-        }
-
-        else -> {
-//            TODO("xxx nav3")
-//            navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
-        }
+        MetricsType.TvlInDefi -> backStack.add(TvlScreen)
+        MetricsType.Etf -> backStack.add(EtfScreen)
+        else -> backStack.add(MetricsPageScreen(metricsType))
     }
 
     stat(page = StatPage.Markets, event = StatEvent.Open(metricsType.statPage))
