@@ -25,13 +25,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -39,6 +37,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
+import io.horizontalsystems.bankwallet.modules.coin.indicators.IndicatorsScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewModule
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.HudMessageType
@@ -46,7 +45,7 @@ import io.horizontalsystems.bankwallet.modules.coin.ui.CoinScreenTitle
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
-import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.modules.markdown.MarkdownScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -193,13 +192,12 @@ fun CoinOverviewScreen(
                                                 modifier = Modifier.height(28.dp),
                                                 icon = R.drawable.ic_setting_20
                                             ) {
-//                                                TODO("xxx nav3")
-//                                                navController.slideFromRight(R.id.indicatorsFragment)
-//
-//                                                stat(
-//                                                    page = StatPage.CoinOverview,
-//                                                    event = StatEvent.Open(StatPage.Indicators)
-//                                                )
+                                                backStack.add(IndicatorsScreen)
+
+                                                stat(
+                                                    page = StatPage.CoinOverview,
+                                                    event = StatEvent.Open(StatPage.Indicators)
+                                                )
                                             }
                                         }
                                     }
@@ -216,8 +214,7 @@ fun CoinOverviewScreen(
                                         body_leah(text = stringResource(R.string.CoinPage_ROI_Title, viewModel.fullCoin.coin.code))
                                     }
                                     Spacer(modifier = Modifier.height(12.dp))
-//                                    TODO("xxx nav3")
-//                                    Roi(overview.roi, navController)
+                                    Roi(overview.roi, backStack)
                                 }
 
                                 viewModel.tokenVariants?.let { tokenVariants ->
@@ -267,8 +264,7 @@ fun CoinOverviewScreen(
 
                                 if (overview.links.isNotEmpty()) {
                                     Spacer(modifier = Modifier.height(24.dp))
-//                                    TODO("xxx nav3")
-//                                    Links(overview.links) { onClick(it, context, navController) }
+                                    Links(overview.links) { onClick(it, context, backStack) }
                                 }
 
                                 Spacer(modifier = Modifier.height(32.dp))
@@ -292,15 +288,12 @@ fun CoinOverviewScreen(
     )
 }
 
-private fun onClick(coinLink: CoinLink, context: Context, navController: NavController) {
+private fun onClick(coinLink: CoinLink, context: Context, backStack: NavBackStack<HSScreen>) {
     val absoluteUrl = getAbsoluteUrl(coinLink)
 
     when (coinLink.linkType) {
         LinkType.Guide -> {
-            navController.slideFromRight(
-                R.id.markdownFragment,
-                MarkdownFragment.Input(absoluteUrl, true)
-            )
+            backStack.add(MarkdownScreen(absoluteUrl, true))
         }
 
         else -> LinkHelper.openLinkInAppBrowser(context, absoluteUrl)
