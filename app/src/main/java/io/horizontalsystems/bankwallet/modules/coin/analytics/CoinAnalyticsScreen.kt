@@ -16,11 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsBlockHeader
@@ -29,13 +30,20 @@ import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsContai
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsContentNumber
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsFooterCell
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.TechnicalAdviceBlock
-import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment
-import io.horizontalsystems.bankwallet.modules.coin.detectors.DetectorsFragment
-import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
-import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
+import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsScreen
+import io.horizontalsystems.bankwallet.modules.coin.detectors.DetectorsScreen
+import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsScreen
+import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
+import io.horizontalsystems.bankwallet.modules.coin.ranks.CoinRankScreen
+import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsScreen
+import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesScreen
+import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoScreen
+import io.horizontalsystems.bankwallet.modules.info.OverallScoreInfoScreen
+import io.horizontalsystems.bankwallet.modules.market.tvl.TvlScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
+import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
@@ -143,8 +151,7 @@ private fun AnalyticsBlock(
                     isPreview = false,
                     onInfoClick = block.info?.let { info ->
                         {
-//                            TODO("xxx nav3")
-//                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
+                            backStack.add(CoinAnalyticsInfoScreen(info))
                         }
                     }
                 )
@@ -205,8 +212,7 @@ private fun FooterCell(
                 showRightArrow = item.action != null,
                 cellAction = item.action,
                 onActionClick = { action ->
-//                    TODO("xxx nav3")
-//                    handleActionClick(action, navController)
+                    handleActionClick(action, backStack)
                 }
             )
         }
@@ -215,8 +221,7 @@ private fun FooterCell(
             Column(
                 modifier = Modifier.clickable {
                     item.action?.let {
-//                        TODO("xxx nav3")
-//                        handleActionClick(it, navController)
+                        handleActionClick(it, backStack)
                     }
                 }
             ) {
@@ -282,8 +287,7 @@ private fun AnalyticsPreviewBlock(
                     isPreview = true,
                     onInfoClick = block.info?.let { info ->
                         {
-//                            TODO("xxx nav3")
-//                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
+                            backStack.add(CoinAnalyticsInfoScreen(info))
                         }
                     }
                 )
@@ -299,15 +303,11 @@ private fun AnalyticsPreviewBlock(
             }
         },
         onClick = {
-//            TODO("xxx nav3")
-//            navController.slideFromBottom(
-//                R.id.defenseSystemFeatureDialog,
-//                DefenseSystemFeatureDialog.Input(PremiumFeature.TokenInsightsFeature)
-//            )
-//            stat(
-//                page = StatPage.CoinAnalytics,
-//                event = StatEvent.OpenPremium(block.statTrigger ?: StatPremiumTrigger.Other)
-//            )
+            backStack.add(DefenseSystemFeatureScreen(PremiumFeature.TokenInsightsFeature))
+            stat(
+                page = StatPage.CoinAnalytics,
+                event = StatEvent.OpenPremium(block.statTrigger ?: StatPremiumTrigger.Other)
+            )
         }
     ) {
         if (block.value != null) {
@@ -369,50 +369,43 @@ private fun PreviewFooterCell(
 
 private fun handleActionClick(
     action: CoinAnalyticsModule.ActionType,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     when (action) {
         is CoinAnalyticsModule.ActionType.OpenTokenHolders -> {
-            navController.slideFromBottom(
-                R.id.coinMajorHoldersFragment,
-                CoinMajorHoldersFragment.Input(action.coin.uid, action.blockchain)
-            )
+            backStack.add(CoinMajorHoldersScreen(action.coin.uid, action.blockchain))
         }
 
         is CoinAnalyticsModule.ActionType.OpenAudits -> {
-            val arguments = CoinAuditsFragment.Input(action.audits)
-            navController.slideFromRight(R.id.coinAuditsFragment, arguments)
+            backStack.add(CoinAuditsScreen(action.audits))
         }
 
         is CoinAnalyticsModule.ActionType.OpenTreasuries -> {
-            navController.slideFromRight(R.id.coinTreasuriesFragment, action.coin)
+            backStack.add(CoinTreasuriesScreen(action.coin))
         }
 
         is CoinAnalyticsModule.ActionType.OpenReports -> {
-            val arguments = CoinReportsFragment.Input(action.coinUid)
-            navController.slideFromRight(R.id.coinReportsFragment, arguments)
+            backStack.add(CoinReportsScreen(action.coinUid))
         }
 
         is CoinAnalyticsModule.ActionType.OpenInvestors -> {
-            val arguments = CoinInvestmentsFragment.Input(action.coinUid)
-            navController.slideFromRight(R.id.coinInvestmentsFragment, arguments)
+            backStack.add(CoinInvestmentsScreen(action.coinUid))
         }
 
         is CoinAnalyticsModule.ActionType.OpenRank -> {
-            navController.slideFromBottom(R.id.coinRankFragment, action.type)
+            backStack.add(CoinRankScreen(action.type))
         }
 
         is CoinAnalyticsModule.ActionType.OpenOverallScoreInfo -> {
-            navController.slideFromRight(R.id.overallScoreInfoFragment, action.scoreCategory)
+            backStack.add(OverallScoreInfoScreen(action.scoreCategory))
         }
 
         CoinAnalyticsModule.ActionType.OpenTvl -> {
-//            navController.slideFromBottom(R.id.tvlFragment)
+            backStack.add(TvlScreen)
         }
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {
-            val params = DetectorsFragment.Input(action.title, action.issues)
-            navController.slideFromRight(R.id.coinDetectorsFragment, params)
+            backStack.add(DetectorsScreen(action.title, action.issues))
         }
     }
 }

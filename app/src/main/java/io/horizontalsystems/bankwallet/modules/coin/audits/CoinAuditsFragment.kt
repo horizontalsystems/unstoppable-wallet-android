@@ -35,7 +35,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object CoinAuditsScreen : HSScreen()
+data class CoinAuditsScreen(val audits: List<CoinAuditsModule.AuditParcelable>) : HSScreen()
 
 class CoinAuditsFragment : BaseComposeFragment() {
 

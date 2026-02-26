@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object CoinAnalyticsInfoScreen : HSScreen()
+data class CoinAnalyticsInfoScreen(val analyticsInfo: AnalyticInfo) : HSScreen()
 
 class CoinAnalyticsInfoFragment : BaseComposeFragment() {
 

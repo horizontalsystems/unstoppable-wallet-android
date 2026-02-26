@@ -29,7 +29,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object CoinReportsScreen : HSScreen()
+data class CoinReportsScreen(val coinUid: String) : HSScreen()
 
 class CoinReportsFragment : BaseComposeFragment() {
 

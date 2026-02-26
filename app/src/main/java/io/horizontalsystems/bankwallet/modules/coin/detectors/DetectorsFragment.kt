@@ -53,7 +53,10 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object DetectorsScreen : HSScreen()
+data class DetectorsScreen(
+    val title: String,
+    val issues: List<IssueParcelable>
+) : HSScreen()
 
 class DetectorsFragment : BaseComposeFragment() {
 

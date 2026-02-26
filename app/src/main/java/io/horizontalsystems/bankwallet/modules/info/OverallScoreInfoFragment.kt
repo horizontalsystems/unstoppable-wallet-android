@@ -34,7 +34,7 @@ import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 @Serializable
-data object OverallScoreInfoScreen : HSScreen()
+data class OverallScoreInfoScreen(val scoreCategory: ScoreCategory) : HSScreen()
 
 class OverallScoreInfoFragment : BaseComposeFragment() {
 

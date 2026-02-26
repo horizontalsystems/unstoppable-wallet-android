@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import javax.annotation.concurrent.Immutable
 
 object CoinAuditsModule {
@@ -35,6 +36,7 @@ object CoinAuditsModule {
     )
 
     @Parcelize
+    @Serializable
     data class AuditParcelable(
         val date: String?,
         val name: String?,
