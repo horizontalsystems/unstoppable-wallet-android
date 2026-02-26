@@ -18,6 +18,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Calendar
 import java.util.Date
+import java.util.concurrent.CopyOnWriteArrayList
 
 class SwapHistoryViewModel(
     private val swapRecordManager: SwapRecordManager,
@@ -25,9 +26,9 @@ class SwapHistoryViewModel(
     private val currencyManager: CurrencyManager,
     private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<SwapHistoryUiState>() {
-    private var items: Map<String, List<SwapHistoryViewItem>> = emptyMap()
+    private val viewItems = CopyOnWriteArrayList<SwapHistoryViewItem>()
 
-    override fun createState() = SwapHistoryUiState(items)
+    override fun createState() = SwapHistoryUiState(viewItems.toList().groupBy { it.formattedDate })
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -45,25 +46,59 @@ class SwapHistoryViewModel(
     private suspend fun loadItems() {
         val currency = currencyManager.baseCurrency
         val records = swapRecordManager.getAll()
-        items = records
-            .map { record ->
-                val timestampSeconds = record.timestamp / 1000
-                val priceIn = fetchHistoricalPrice(record.tokenInCoinUid, currency.code, timestampSeconds)
-                val priceOut = fetchHistoricalPrice(record.tokenOutCoinUid, currency.code, timestampSeconds)
-                SwapHistoryViewItem(
-                    id = record.id,
-                    tokenInImageUrl = coinImageUrl(record.tokenInCoinUid),
-                    tokenOutImageUrl = coinImageUrl(record.tokenOutCoinUid),
-                    amountIn = formatAmount(record.amountIn, record.tokenInCoinCode),
-                    amountOut = record.amountOut?.let { formatAmount(it, record.tokenOutCoinCode) },
-                    fiatAmountIn = formatFiat(record.amountIn, priceIn, currency.symbol, currency.decimal),
-                    fiatAmountOut = record.amountOut?.let { formatFiat(it, priceOut, currency.symbol, currency.decimal) },
-                    status = runCatching { SwapStatus.valueOf(record.status) }.getOrDefault(SwapStatus.Depositing),
-                    formattedDate = formatDate(Date(record.timestamp)),
-                )
-            }
-            .groupBy { it.formattedDate }
+
+        // Emit items immediately without fiat amounts so the list appears instantly
+        viewItems.clear()
+        viewItems.addAll(records.map { record ->
+            SwapHistoryViewItem(
+                id = record.id,
+                tokenInImageUrl = coinImageUrl(record.tokenInCoinUid),
+                tokenOutImageUrl = coinImageUrl(record.tokenOutCoinUid),
+                amountIn = formatAmount(record.amountIn, record.tokenInCoinCode),
+                amountOut = record.amountOut?.let { formatAmount(it, record.tokenOutCoinCode) },
+                fiatAmountIn = null,
+                fiatAmountOut = null,
+                status = runCatching { SwapStatus.valueOf(record.status) }.getOrDefault(SwapStatus.Depositing),
+                formattedDate = formatDate(Date(record.timestamp)),
+            )
+        })
         emitState()
+
+        // Fetch prices lazily — each item updates independently as its price arrives
+        val currencyCode = currency.code
+        val currencySymbol = currency.symbol
+        val currencyDecimal = currency.decimal
+        records.forEach { record ->
+            viewModelScope.launch(Dispatchers.IO) {
+                val timestampSeconds = record.timestamp / 1000
+                val priceIn = fetchHistoricalPrice(record.tokenInCoinUid, currencyCode, timestampSeconds)
+                val priceOut = fetchHistoricalPrice(record.tokenOutCoinUid, currencyCode, timestampSeconds)
+                updateFiatAmounts(record.id, record.amountIn, record.amountOut, priceIn, priceOut, currencySymbol, currencyDecimal)
+            }
+        }
+    }
+
+    @Synchronized
+    private fun updateFiatAmounts(
+        recordId: Int,
+        amountIn: String,
+        amountOut: String?,
+        priceIn: BigDecimal?,
+        priceOut: BigDecimal?,
+        currencySymbol: String,
+        currencyDecimal: Int,
+    ) {
+        val index = viewItems.indexOfFirst { it.id == recordId }
+        if (index == -1) return
+
+        val item = viewItems[index]
+        val fiatIn = formatFiat(amountIn, priceIn, currencySymbol, currencyDecimal)
+        val fiatOut = amountOut?.let { formatFiat(it, priceOut, currencySymbol, currencyDecimal) }
+
+        if (fiatIn != item.fiatAmountIn || fiatOut != item.fiatAmountOut) {
+            viewItems[index] = item.copy(fiatAmountIn = fiatIn, fiatAmountOut = fiatOut)
+            emitState()
+        }
     }
 
     private fun coinImageUrl(coinUid: String) =
