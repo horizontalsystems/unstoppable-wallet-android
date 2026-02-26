@@ -788,10 +788,10 @@ private fun LockedBalanceZcashCell(
                     ) else "*****".hs,
                     icon = painterResource(R.drawable.warning_filled_24),
                     iconTint = ComposeAppTheme.colors.jacob,
-                    onIconClick = onClickInfo
                 )
             },
             backgroundColor = ComposeAppTheme.colors.lawrence,
+            onClick = onClickInfo
         )
     }
 }
