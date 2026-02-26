@@ -16,12 +16,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.getInput
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsScreen
+import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkScreen
+import io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -36,7 +39,17 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SyncErrorScreen : HSScreen()
+data class SyncErrorScreen(
+    val wallet: Wallet, val errorMessage: String?
+) : HSScreen(bottomSheet = true) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SyncErrorScreen(backStack, wallet)
+    }
+}
 
 class SyncErrorDialog : BaseComposableBottomSheetFragment() {
 
@@ -52,7 +65,7 @@ class SyncErrorDialog : BaseComposableBottomSheetFragment() {
             setContent {
                 val navController = findNavController()
                 navController.getInput<Input>()?.let { input ->
-                    SyncErrorScreen(navController, input.wallet)
+//                    SyncErrorScreen(navController, input.wallet)
                 }
             }
         }
@@ -64,7 +77,7 @@ class SyncErrorDialog : BaseComposableBottomSheetFragment() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SyncErrorScreen(navController: NavController, wallet: Wallet) {
+private fun SyncErrorScreen(backStack: NavBackStack<HSScreen>, wallet: Wallet) {
     val viewModel = viewModel<SyncErrorViewModel>(factory = SyncErrorModule.Factory(wallet))
     val text = if (viewModel.sourceChangeable) {
         stringResource(R.string.BalanceSyncError_ChangableSourceErrorText)
@@ -75,7 +88,7 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet) {
     ComposeAppTheme {
         BottomSheetContent(
             onDismissRequest = {
-                navController.popBackStack()
+                backStack.removeLastOrNull()
             },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             buttons = {
@@ -85,7 +98,7 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet) {
                     variant = ButtonVariant.Secondary,
                     onClick = {
                         viewModel.retry()
-                        navController.popBackStack()
+                        backStack.removeLastOrNull()
                     }
                 )
                 if (viewModel.sourceChangeable) {
@@ -96,26 +109,20 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet) {
                         variant = ButtonVariant.Secondary,
                         size = ButtonSize.Medium,
                         onClick = {
-                            navController.popBackStack()
+                            backStack.removeLastOrNull()
 
                             val blockchainWrapper = viewModel.blockchainWrapper
                             when (blockchainWrapper) {
                                 is SyncErrorModule.BlockchainWrapper.Bitcoin -> {
-                                    navController.slideFromBottom(
-                                        R.id.btcBlockchainSettingsFragment,
-                                        blockchainWrapper.blockchain
-                                    )
+                                    backStack.add(BtcBlockchainSettingsScreen)
                                 }
 
                                 is SyncErrorModule.BlockchainWrapper.Evm -> {
-                                    navController.slideFromBottom(
-                                        R.id.evmNetworkFragment,
-                                        blockchainWrapper.blockchain
-                                    )
+                                    backStack.add(EvmNetworkScreen(blockchainWrapper.blockchain))
                                 }
 
                                 SyncErrorModule.BlockchainWrapper.Monero -> {
-                                    navController.slideFromBottom(R.id.moneroNetworkFragment)
+                                    backStack.add(MoneroNetworkScreen)
                                 }
 
                                 else -> {}

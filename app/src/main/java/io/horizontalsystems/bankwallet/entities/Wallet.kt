@@ -4,12 +4,16 @@ import android.os.Parcelable
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.meta
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
+import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.util.Objects
 
 @Parcelize
+@Serializable
 data class Wallet(
+    @Serializable(with = TokenSerializer::class)
     val token: Token,
     val account: Account
 ) : Parcelable {

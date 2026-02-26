@@ -45,6 +45,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.contextMenuItems
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -257,14 +258,10 @@ fun IconCell(
 fun onSyncErrorClicked(viewItem: BalanceViewItem2, viewModel: BalanceViewModel, backStack: NavBackStack<HSScreen>, view: View) {
     when (val syncErrorDetails = viewModel.getSyncErrorDetails(viewItem)) {
         is BalanceViewModel.SyncError.Dialog -> {
-//            TODO("xxx nav3")
-//            val wallet = syncErrorDetails.wallet
-//            val errorMessage = syncErrorDetails.errorMessage
-//
-//            navController.slideFromBottom(
-//                R.id.syncErrorDialog,
-//                SyncErrorDialog.Input(wallet, errorMessage)
-//            )
+            val wallet = syncErrorDetails.wallet
+            val errorMessage = syncErrorDetails.errorMessage
+
+            backStack.add(SyncErrorScreen(wallet, errorMessage))
         }
 
         is BalanceViewModel.SyncError.NetworkNotAvailable -> {
