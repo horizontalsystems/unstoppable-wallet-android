@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object BackupLocalScreen : HSScreen()
+data class BackupLocalScreen(val account: Account) : HSScreen()
 
 class BackupLocalFragment : BaseComposeFragment() {
 

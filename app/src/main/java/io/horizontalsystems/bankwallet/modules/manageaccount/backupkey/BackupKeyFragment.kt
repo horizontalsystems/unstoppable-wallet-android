@@ -32,7 +32,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object BackupKeyScreen : HSScreen()
+data class BackupKeyScreen(val account: Account) : HSScreen()
 
 class BackupKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 

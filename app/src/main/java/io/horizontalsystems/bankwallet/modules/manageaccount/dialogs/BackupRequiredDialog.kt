@@ -18,7 +18,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalScreen
+import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -81,16 +86,12 @@ fun BackupRequiredScreen(backStack: NavBackStack<HSScreen>, account: Account, te
                     title = stringResource(R.string.BackupRecoveryPhrase_ManualBackup),
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-//                        TODO("xxx nav3")
-//                        navController.slideFromBottom(
-//                            R.id.backupKeyFragment,
-//                            account
-//                        )
-//
-//                        stat(
-//                            page = StatPage.BackupRequired,
-//                            event = StatEvent.Open(StatPage.ManualBackup)
-//                        )
+                        backStack.add(BackupKeyScreen(account))
+
+                        stat(
+                            page = StatPage.BackupRequired,
+                            event = StatEvent.Open(StatPage.ManualBackup)
+                        )
                     }
                 )
                 HSButton(
@@ -98,13 +99,12 @@ fun BackupRequiredScreen(backStack: NavBackStack<HSScreen>, account: Account, te
                     modifier = Modifier.fillMaxWidth(),
                     variant = ButtonVariant.Secondary,
                     onClick = {
-//                        TODO("xxx nav3")
-//                        navController.slideFromBottom(R.id.backupLocalFragment, account)
-//
-//                        stat(
-//                            page = StatPage.BackupRequired,
-//                            event = StatEvent.Open(StatPage.FileBackup)
-//                        )
+                        backStack.add(BackupLocalScreen(account))
+
+                        stat(
+                            page = StatPage.BackupRequired,
+                            event = StatEvent.Open(StatPage.FileBackup)
+                        )
                     }
                 )
                 HSButton(
