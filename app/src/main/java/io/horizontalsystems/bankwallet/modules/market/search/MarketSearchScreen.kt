@@ -43,6 +43,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statSection
 import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -129,13 +130,12 @@ fun MarketSearchScreen(
                 title = TranslatableString.ResString(R.string.Market_Filters),
                 icon = R.drawable.ic_manage_2_24,
                 onClick = {
-//                    TODO("xxx nav3")
-//                    navController.slideFromRight(R.id.marketAdvancedSearchFragment)
-//
-//                    stat(
-//                        page = StatPage.Markets,
-//                        event = StatEvent.Open(StatPage.AdvancedSearch)
-//                    )
+                    backStack.add(MarketFiltersScreen)
+
+                    stat(
+                        page = StatPage.Markets,
+                        event = StatEvent.Open(StatPage.AdvancedSearch)
+                    )
                 },
             )
         )
