@@ -701,9 +701,9 @@
     <string name="Swap_Price">Price</string>
     <string name="Swap_AvailableBalance">Available Balance</string>
     <string name="Swap_PriceImpact">Price Impact</string>
-    <string name="Swap_EstimatedTime">Estimated Time</string>
+    <string name="Swap_EstimatedTime">Est. Time</string>
     <string name="Swap_EstimatedTimeDescription">Approximate time to receive funds. Swap processing and transaction confirmations may take some time depending on the network and provider.</string>
-    <string name="Swap_MinimumReceived">Guaranteed Amount</string>
+    <string name="Swap_MinimumReceived">Guaranteed</string>
     <string name="Swap_MinimumReceivedDescription">This amount is in the process of validation. As soon as the transaction status is validated you will be able to use these coins. The minimum amount a user is going </string>
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Recipient</string>
@@ -767,12 +767,12 @@
     <string name="SwapSort_Recommended">Recommended</string>
 
     <string name="RiskLevel_ProviderRiskLevel">Provider Risk Levels</string>
-    <string name="RiskLevel_ProviderRiskLevel_Description">Risk levels show what actions a provider may take during execution.</string>
-    <string name="RiskLevel_Auto_Description">Automatic on-chain execution. Funds cannot be frozen or blocked after submission.</string>
-    <string name="RiskLevel_Limited_Description">Execution may be paused or rejected during processing. Temporary blocking is possible in rare cases.</string>
-    <string name="RiskLevel_Controlled_Description">The provider may pause, reject, or freeze funds under internal rules, including compliance checks.</string>
-    <string name="RiskLevel_Auto">Auto</string>
-    <string name="RiskLevel_Limited">Limited</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">The labels below explain different risk levels of swap providers. Choose accordingly.</string>
+    <string name="RiskLevel_Auto_Description">Automatic on-chain execution. Funds cannot be frozen or blocked after submission. If swap fails the funds are refunded automatically.</string>
+    <string name="RiskLevel_Limited_Description">Provider operates using their own liquidity. Rejections are rare. Freezes are theoretically possible but highly unlikely.</string>
+    <string name="RiskLevel_Controlled_Description">These provider operates with third party liquidity and has AML policies in place. In most cases swaps are rejected and refunded if any AML issues are detected. In some situations provider may request KYC before releasing funds.</string>
+    <string name="RiskLevel_Auto">Auto👌👌</string>
+    <string name="RiskLevel_Limited">Flexible👌 </string>
     <string name="RiskLevel_Controlled">Controlled</string>
 
     <!-- Swap Confirmation -->
