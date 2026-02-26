@@ -19,7 +19,6 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.nav3.BottomSheetSceneStrategy
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -60,10 +59,7 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Serializable
-data class BackupRequiredScreen(val account: Account, val text: String) : HSScreen() {
-    @OptIn(ExperimentalMaterial3Api::class)
-    override fun getMetadata() = BottomSheetSceneStrategy.bottomSheet()
-
+data class BackupRequiredScreen(val account: Account, val text: String) : HSScreen(bottomSheet = true) {
     @Composable
     override fun GetContent(
         backStack: NavBackStack<HSScreen>,
