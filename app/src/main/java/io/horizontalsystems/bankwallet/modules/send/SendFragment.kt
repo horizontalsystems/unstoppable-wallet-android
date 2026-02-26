@@ -43,6 +43,7 @@ import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
+import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
@@ -50,7 +51,17 @@ import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 @Serializable
-data object SendScreen : HSScreen()
+data class SendScreen(
+    val wallet: Wallet,
+    val title: String,
+    val sendEntryPointDestId: Int,
+    val address: Address,
+    val riskyAddress: Boolean = false,
+    @Serializable(with = BigDecimalSerializer::class)
+    val amount: BigDecimal? = null,
+    val hideAddress: Boolean = false,
+    val memo: String? = null,
+) : HSScreen()
 
 class SendFragment : BaseFragment() {
 
