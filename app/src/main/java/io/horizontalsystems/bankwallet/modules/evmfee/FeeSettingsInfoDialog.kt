@@ -16,12 +16,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.requireInput
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object FeeSettingsInfoScreen : HSScreen()
 
 class FeeSettingsInfoDialog : BaseComposableBottomSheetFragment() {
 

@@ -8,9 +8,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePopup
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumSubscribedScreen
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object BuySubscriptionHavHostScreen : HSScreen()
 
 class BuySubscriptionHavHostFragment : BaseComposeFragment() {
     @Composable

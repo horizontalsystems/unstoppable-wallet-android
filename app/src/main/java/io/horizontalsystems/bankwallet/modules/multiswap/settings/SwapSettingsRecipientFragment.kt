@@ -10,8 +10,13 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.enteraddress.EnterAddressScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object SwapSettingsRecipientScreen : HSScreen()
 
 class SwapSettingsRecipientFragment : BaseComposeFragment() {
     @Composable

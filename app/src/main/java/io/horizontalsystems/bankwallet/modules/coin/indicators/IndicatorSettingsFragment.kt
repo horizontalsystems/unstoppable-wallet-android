@@ -8,8 +8,13 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object IndicatorSettingsScreen : HSScreen()
 
 class IndicatorSettingsFragment : BaseComposeFragment() {
 

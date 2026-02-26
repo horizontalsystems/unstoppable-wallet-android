@@ -12,9 +12,14 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enteraddress.EnterAddressScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendFragment.Input
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
+
+@Serializable
+data object EnterAddressScreen : HSScreen()
 
 class EnterAddressFragment : BaseComposeFragment() {
     @Composable

@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
@@ -44,6 +45,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSSelector
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object UnlinkAccountScreen : HSScreen()
 
 class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(

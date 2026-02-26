@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
@@ -30,6 +31,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawren
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object AboutScreen : HSScreen()
 
 class AboutFragment : BaseComposeFragment() {
 

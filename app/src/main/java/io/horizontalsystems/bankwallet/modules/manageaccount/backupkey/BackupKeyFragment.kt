@@ -23,11 +23,16 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.PassphraseCell
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.SeedPhraseList
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object BackupKeyScreen : HSScreen()
 
 class BackupKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 

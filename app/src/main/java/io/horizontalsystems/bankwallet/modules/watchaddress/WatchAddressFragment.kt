@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -36,6 +37,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object WatchAddressScreen : HSScreen()
 
 class WatchAddressFragment : BaseComposeFragment() {
 

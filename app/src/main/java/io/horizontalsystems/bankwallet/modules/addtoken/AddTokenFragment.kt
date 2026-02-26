@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector.AddTokenBlockchainSelectorScreen
 import io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector.BlockchainSelectorResult
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -44,6 +45,10 @@ import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.delay
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object AddTokenScreen : HSScreen()
 
 class AddTokenFragment : BaseComposeFragment() {
 

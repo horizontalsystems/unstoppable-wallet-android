@@ -21,11 +21,15 @@ import io.horizontalsystems.bankwallet.modules.contacts.screen.ContactsScreen
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.AddressViewModel
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactViewModel
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactsViewModel
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
+@Serializable
+data object ContactsScreen : HSScreen()
 
 class ContactsFragment : BaseComposeFragment() {
 

@@ -54,6 +54,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsRecipientFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsSlippageFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog.Input
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -82,8 +83,12 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.util.Locale
+
+@Serializable
+data object SwapConfirmScreen : HSScreen()
 
 class SwapConfirmFragment : BaseComposeFragment() {
     @Composable

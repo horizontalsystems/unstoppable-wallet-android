@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketSignalsFragment
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersViewModel
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -41,6 +42,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.subscriptions.core.TradeSignals
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object MarketFiltersResultsScreen : HSScreen()
 
 class MarketFiltersResultsFragment : BaseComposeFragment() {
 

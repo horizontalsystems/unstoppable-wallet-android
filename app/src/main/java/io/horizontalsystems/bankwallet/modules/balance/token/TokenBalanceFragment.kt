@@ -5,6 +5,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object TokenBalanceScreen : HSScreen()
 
 class TokenBalanceFragment : BaseComposeFragment() {
 

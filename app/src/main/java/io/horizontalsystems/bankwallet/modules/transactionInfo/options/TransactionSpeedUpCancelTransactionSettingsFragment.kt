@@ -6,6 +6,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object TransactionSpeedUpCancelTransactionSettingsScreen : HSScreen()
 
 class TransactionSpeedUpCancelTransactionSettingsFragment : BaseComposeFragment() {
     @Composable

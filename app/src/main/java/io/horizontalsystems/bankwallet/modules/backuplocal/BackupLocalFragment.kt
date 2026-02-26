@@ -14,6 +14,11 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBack
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupType
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.LocalBackupPasswordScreen
 import io.horizontalsystems.bankwallet.modules.backuplocal.terms.LocalBackupTermsScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object BackupLocalScreen : HSScreen()
 
 class BackupLocalFragment : BaseComposeFragment() {
 

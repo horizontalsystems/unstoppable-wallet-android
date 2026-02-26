@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.receive.monero.ReceiveMoneroScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressesParams
@@ -27,6 +28,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object ReceiveScreen : HSScreen()
 
 class ReceiveFragment : BaseComposeFragment() {
 

@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -37,7 +38,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
+import kotlinx.serialization.Serializable
 import java.net.UnknownHostException
+
+@Serializable
+data object GuidesScreen : HSScreen()
 
 class GuidesFragment : BaseComposeFragment() {
 

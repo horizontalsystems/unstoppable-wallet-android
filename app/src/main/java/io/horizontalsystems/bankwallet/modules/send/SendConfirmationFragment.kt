@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroConfirmationScreen
@@ -21,6 +22,10 @@ import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object SendConfirmationScreen : HSScreen()
 
 class SendConfirmationFragment : BaseComposeFragment() {
 

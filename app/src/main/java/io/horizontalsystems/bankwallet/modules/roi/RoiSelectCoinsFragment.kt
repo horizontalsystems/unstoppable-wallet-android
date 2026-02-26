@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
@@ -46,6 +47,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.subscriptions.core.TokenInsights
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object RoiSelectCoinsScreen : HSScreen()
 
 class RoiSelectCoinsFragment : BaseComposeFragment() {
     @Composable

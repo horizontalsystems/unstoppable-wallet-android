@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.OnlyRe
 import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.Unlimited
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -53,7 +54,11 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
+
+@Serializable
+data object Eip20ApproveConfirmScreen : HSScreen()
 
 class Eip20ApproveConfirmFragment : BaseComposeFragment() {
     @Composable

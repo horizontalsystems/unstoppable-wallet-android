@@ -49,6 +49,7 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
 import io.horizontalsystems.bankwallet.modules.moneronetwork.addnode.AddMoneroNodeScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.getShape
@@ -69,6 +70,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object MoneroNetworkScreen : HSScreen()
 
 class MoneroNetworkFragment : BaseComposeFragment() {
 

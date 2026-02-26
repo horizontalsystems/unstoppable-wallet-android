@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionCell
@@ -41,6 +42,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoTran
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionNftAmountCell
 import io.horizontalsystems.bankwallet.ui.compose.components.WarningMessageCell
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object TransactionInfoScreen : HSScreen()
 
 class TransactionInfoFragment : BaseComposeFragment() {
 

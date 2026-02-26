@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowM
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -38,6 +39,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object ShowMoneroKeyScreen : HSScreen()
 
 class ShowMoneroKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
