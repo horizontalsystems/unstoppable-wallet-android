@@ -53,6 +53,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.getShape
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.showDivider
+import io.horizontalsystems.bankwallet.serializers.BlockchainSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -71,7 +72,10 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object EvmNetworkScreen : HSScreen()
+data class EvmNetworkScreen(
+    @Serializable(with = BlockchainSerializer::class)
+    val blockchain: Blockchain
+) : HSScreen()
 
 class EvmNetworkFragment : BaseComposeFragment() {
 
