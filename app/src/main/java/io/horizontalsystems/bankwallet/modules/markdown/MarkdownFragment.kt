@@ -19,7 +19,11 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object MarkdownScreen : HSScreen()
+data class MarkdownScreen(
+    val markdownUrl: String,
+    val handleRelativeUrl: Boolean = false,
+    val showAsPopup: Boolean = false,
+) : HSScreen()
 
 class MarkdownFragment : BaseComposeFragment() {
 
