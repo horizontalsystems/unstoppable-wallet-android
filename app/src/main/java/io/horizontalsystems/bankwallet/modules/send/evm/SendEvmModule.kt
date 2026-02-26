@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigInteger
 import java.math.RoundingMode
 
@@ -21,8 +22,10 @@ data class SendEvmData(
     val transactionData: TransactionData,
     val additionalInfo: AdditionalInfo? = null
 ) {
+    @Serializable
     sealed class AdditionalInfo : Parcelable {
         @Parcelize
+        @Serializable
         class Send(val info: SendInfo) : AdditionalInfo()
 
         val sendInfo: SendInfo?
@@ -30,11 +33,13 @@ data class SendEvmData(
     }
 
     @Parcelize
+    @Serializable
     data class SendInfo(
         val nftShortMeta: NftShortMeta? = null
     ) : Parcelable
 
     @Parcelize
+    @Serializable
     data class NftShortMeta(
         val nftName: String,
         val previewImageUrl: String?
