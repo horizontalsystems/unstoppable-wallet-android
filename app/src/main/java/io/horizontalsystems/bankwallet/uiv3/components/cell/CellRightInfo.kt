@@ -1,9 +1,13 @@
 package io.horizontalsystems.bankwallet.uiv3.components.cell
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
@@ -13,8 +17,22 @@ fun CellRightInfo(
     titleSubheadSb: HSString? = null,
     subtitle: HSString? = null,
     description: HSString? = null,
+    onClick: (() -> Unit)? = null,
 ) {
-    Column(horizontalAlignment = Alignment.End) {
+    var modifier: Modifier = Modifier
+
+    onClick?.let {
+        modifier = modifier.clickable(
+            onClick = onClick,
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+        )
+    }
+
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.End
+    ) {
         eyebrow?.let {
             Text(
                 text = it.text,
