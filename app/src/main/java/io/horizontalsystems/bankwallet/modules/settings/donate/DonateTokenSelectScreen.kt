@@ -7,8 +7,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -32,23 +38,19 @@ data object DonateTokenSelectScreen : HSScreen() {
                 val donateAddress: String? =
                     App.appConfigProvider.donateAddresses[viewItem.wallet.token.blockchainType]
                 donateAddress?.let {
-//                    TODO("xxx nav3")
-//                    val sendTitle = Translator.getString(
-//                        R.string.Settings_DonateToken,
-//                        viewItem.wallet.token.fullCoin.coin.code
-//                    )
-//                    navController.slideFromRight(
-//                        R.id.sendXFragment,
-//                        SendFragment.Input(
-//                            wallet = viewItem.wallet,
-//                            title = sendTitle,
-//                            sendEntryPointDestId = R.id.sendTokenSelectFragment,
-//                            address = Address(donateAddress),
-//                            hideAddress = true
-//                        )
-//                    )
-//
-//                    stat(page = StatPage.Donate, event = StatEvent.OpenSend(viewItem.wallet.token))
+                    val sendTitle = Translator.getString(
+                        R.string.Settings_DonateToken,
+                        viewItem.wallet.token.fullCoin.coin.code
+                    )
+                    backStack.add(SendScreen(
+                        wallet = viewItem.wallet,
+                        title = sendTitle,
+                        sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                        address = Address(donateAddress),
+                        hideAddress = true
+                    ))
+
+                    stat(page = StatPage.Donate, event = StatEvent.OpenSend(viewItem.wallet.token))
                 }
 
             },
@@ -56,10 +58,9 @@ data object DonateTokenSelectScreen : HSScreen() {
         ) {
             DonateHeader(
                 onClick = {
-//                    TODO("xxx nav3")
-//                    navController.slideFromRight(R.id.donateAddressesFragment)
-//
-//                    stat(page = StatPage.Donate, event = StatEvent.Open(StatPage.DonateAddressList))
+                    backStack.add(DonateAddressesScreen)
+
+                    stat(page = StatPage.Donate, event = StatEvent.Open(StatPage.DonateAddressList))
                 }
             )
         }
