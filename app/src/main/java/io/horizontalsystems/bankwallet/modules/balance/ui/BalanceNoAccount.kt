@@ -9,7 +9,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsErrorMessageDefault
@@ -45,10 +49,9 @@ fun BalanceNoAccount(backStack: NavBackStack<HSScreen>) {
 //                }
             },
             onClick3 = {
-//                TODO("xxx nav3")
-//                navController.slideFromRight(R.id.watchAddressFragment)
-//
-//                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.WatchWallet))
+                backStack.add(WatchAddressScreen())
+
+                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.WatchWallet))
             }
         )
     }
