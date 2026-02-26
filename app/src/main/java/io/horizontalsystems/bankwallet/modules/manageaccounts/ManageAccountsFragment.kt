@@ -14,18 +14,21 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment
+import io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletScreen
+import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountScreen
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -40,22 +43,29 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ManageAccountsScreen : HSScreen()
+data class ManageAccountsScreen(val mode: ManageAccountsModule.Mode) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ManageAccountsScreen(backStack, mode)
+    }
+}
 
 class ManageAccountsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<ManageAccountsModule.Mode>(navController) { input ->
-            ManageAccountsScreen(navController, input)
+//            ManageAccountsScreen(navController, input)
         }
     }
 }
 
 @Composable
-fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModule.Mode) {
-//    TODO("xxx nav3")
-//    BackupRequiredAlert(navController)
+fun ManageAccountsScreen(backStack: NavBackStack<HSScreen>, mode: ManageAccountsModule.Mode) {
+    BackupRequiredAlert(backStack)
 
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
 
@@ -63,12 +73,12 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
     val finish = viewModel.finish
 
     if (finish) {
-        navController.popBackStack()
+        backStack.removeLastOrNull()
     }
 
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_Title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         LazyColumn(
             modifier = Modifier.navigationBarsPadding()
@@ -78,12 +88,12 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
 
                 viewItems?.let { (regularAccounts, watchAccounts) ->
                     if (regularAccounts.isNotEmpty()) {
-                        AccountsSection(regularAccounts, viewModel, navController)
+                        AccountsSection(regularAccounts, viewModel, backStack)
                         VSpacer(32.dp)
                     }
 
                     if (watchAccounts.isNotEmpty()) {
-                        AccountsSection(watchAccounts, viewModel, navController)
+                        AccountsSection(watchAccounts, viewModel, backStack)
                         VSpacer(32.dp)
                     }
                 }
@@ -105,20 +115,21 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                         R.drawable.ic_plus,
                         R.string.ManageAccounts_CreateNewWallet
                     ) {
-                        navController.navigateWithTermsAccepted {
-                            navController.slideFromRight(R.id.createAccountFragment, args)
-
-                            stat(
-                                page = StatPage.ManageWallets,
-                                event = StatEvent.Open(StatPage.NewWallet)
-                            )
-                        }
+//                        TODO("xxx nav3")
+//                        navController.navigateWithTermsAccepted {
+//                            navController.slideFromRight(R.id.createAccountFragment, args)
+//
+//                            stat(
+//                                page = StatPage.ManageWallets,
+//                                event = StatEvent.Open(StatPage.NewWallet)
+//                            )
+//                        }
                     },
                     ActionViewItem(
                         R.drawable.ic_download_20,
                         R.string.ManageAccounts_ImportWallet
                     ) {
-                        navController.slideFromRight(R.id.importWalletFragment, args)
+                        backStack.add(ImportWalletScreen(args.popOffOnSuccess, args.popOffInclusive))
 
                         stat(
                             page = StatPage.ManageWallets,
@@ -129,7 +140,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                         R.drawable.icon_binocule_20,
                         R.string.ManageAccounts_WatchAddress
                     ) {
-                        navController.slideFromRight(R.id.watchAddressFragment, args)
+                        backStack.add(WatchAddressScreen(args.popOffOnSuccess, args.popOffInclusive))
 
                         stat(
                             page = StatPage.ManageWallets,
@@ -161,7 +172,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
 private fun AccountsSection(
     accounts: List<AccountViewItem>,
     viewModel: ManageAccountsViewModel,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     CellUniversalLawrenceSection(items = accounts) { accountViewItem ->
         RowUniversal(
@@ -216,10 +227,7 @@ private fun AccountsSection(
                 icon = icon,
                 tint = iconTint
             ) {
-                navController.slideFromRight(
-                    R.id.manageAccountFragment,
-                    ManageAccountFragment.Input(accountViewItem.accountId)
-                )
+                backStack.add(ManageAccountScreen(accountViewItem.accountId))
 
                 stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.ManageWallet))
             }

@@ -40,7 +40,7 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object WatchAddressScreen : HSScreen()
+data class WatchAddressScreen(val popOffOnSuccess: Int, val popOffInclusive: Boolean) : HSScreen()
 
 class WatchAddressFragment : BaseComposeFragment() {
 

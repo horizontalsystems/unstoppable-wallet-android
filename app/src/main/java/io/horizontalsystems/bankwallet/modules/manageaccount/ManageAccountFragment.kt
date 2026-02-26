@@ -63,7 +63,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ManageAccountScreen : HSScreen()
+data class ManageAccountScreen(val accountId: String) : HSScreen()
 
 class ManageAccountFragment : BaseComposeFragment() {
 
