@@ -12,8 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -25,16 +23,13 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.serialization.NavBackStackSerializer
 import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainScreen
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
-import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.serialization.Serializable
 
 class Nav3Fragment : BaseComposeFragment() {
@@ -47,35 +42,19 @@ class Nav3Fragment : BaseComposeFragment() {
 }
 
 @Serializable
-abstract class HSScreen(val screenshotEnabled: Boolean = true) : NavKey {
-    open fun getMetadata() = mapOf<String, Any>()
+abstract class HSScreen(val bottomSheet: Boolean = false, val screenshotEnabled: Boolean = true) : NavKey {
+    @OptIn(ExperimentalMaterial3Api::class)
+    open fun getMetadata() = buildMap {
+        if (bottomSheet) {
+            putAll(BottomSheetSceneStrategy.bottomSheet())
+        }
+    }
 
     @Composable
     open fun GetContent(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
         HSScaffold(title = "TODO") {
 
         }
-    }
-}
-
-@Serializable
-data object BottomSheetSample : HSScreen() {
-    @OptIn(ExperimentalMaterial3Api::class)
-    override fun getMetadata() = BottomSheetSceneStrategy.bottomSheet()
-
-    @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
-    ) {
-        BottomSheetHeaderV3(
-            image72 = painterResource(R.drawable.warning_filled_24),
-            title = "Title"
-        )
-        TextBlock(
-            text = "By clicking connect, you allow this app to view your public address.",
-            textAlign = TextAlign.Center
-        )
     }
 }
 
@@ -109,10 +88,6 @@ data object Home : HSScreen() {
 
                 HSButton(title = "Child") {
                     backStack.add(Child)
-                }
-
-                HSButton(title = "Bottom Sheet") {
-                    backStack.add(BottomSheetSample)
                 }
 
                 var resultString by remember { mutableStateOf("Default") }
