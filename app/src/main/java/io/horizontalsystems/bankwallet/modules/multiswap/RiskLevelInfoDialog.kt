@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -37,6 +38,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSBadgeOutline
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.findNavController
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object RiskLevelInfoScreen : HSScreen()
 
 class RiskLevelInfoDialog : BaseComposableBottomSheetFragment() {
 

@@ -11,7 +11,12 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.SecretKeyScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object StellarSecretKeyScreen : HSScreen()
 
 class StellarSecretKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 

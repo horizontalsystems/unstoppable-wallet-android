@@ -24,7 +24,12 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.Sho
 import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.stellarsecretkey.StellarSecretKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object PrivateKeysScreen : HSScreen()
 
 class PrivateKeysFragment : BaseComposeFragment() {
 

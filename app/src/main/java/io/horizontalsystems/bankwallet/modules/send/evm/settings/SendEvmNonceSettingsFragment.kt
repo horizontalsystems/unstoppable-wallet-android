@@ -6,7 +6,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationViewModel
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object SendEvmNonceSettingsScreen : HSScreen()
 
 class SendEvmNonceSettingsFragment : BaseComposeFragment() {
     @Composable

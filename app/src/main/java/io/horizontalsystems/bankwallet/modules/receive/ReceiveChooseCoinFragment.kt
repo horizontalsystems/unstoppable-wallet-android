@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.BCH_ADDRESS_FORMAT_SCREEN
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.COIN_SELECT_SCREEN
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.DERIVATION_SELECT_SCREEN
@@ -33,6 +34,10 @@ import io.horizontalsystems.bankwallet.modules.receive.viewmodels.BchAddressType
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.DerivationSelectViewModel
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveSharedViewModel
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object ReceiveChooseCoinScreen : HSScreen()
 
 class ReceiveChooseCoinFragment : BaseComposeFragment() {
     @Composable

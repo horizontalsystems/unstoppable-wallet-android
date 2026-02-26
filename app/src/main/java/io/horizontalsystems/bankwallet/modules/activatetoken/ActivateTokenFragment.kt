@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenError
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenViewModel
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -48,6 +49,10 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object ActivateTokenScreen : HSScreen()
 
 class ActivateTokenFragment : BaseComposeFragment() {
     @Composable

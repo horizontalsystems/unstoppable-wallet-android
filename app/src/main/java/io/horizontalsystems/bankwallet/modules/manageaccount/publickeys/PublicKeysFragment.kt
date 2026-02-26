@@ -23,7 +23,12 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.evmaddress.EvmAddre
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object PublicKeysScreen : HSScreen()
 
 class PublicKeysFragment : BaseComposeFragment() {
 

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.badge
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.gradientBadge
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.noteAmount
@@ -56,6 +57,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSSelector
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.subscriptions.core.HSPurchase
 import io.horizontalsystems.subscriptions.core.numberOfDays
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object SelectPlanScreen : HSScreen()
 
 class SelectPlanDialog : BaseComposableBottomSheetFragment() {
 

@@ -3,8 +3,13 @@ package io.horizontalsystems.bankwallet.modules.receive
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressesParams
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object BtcUsedAddressesScreen : HSScreen()
 
 class BtcUsedAddressesFragment : BaseComposeFragment() {
     @Composable

@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.usersubscription
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,8 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PlanItems
@@ -64,38 +63,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class PremiumFeaturesFragment : BaseFragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    val navController = findNavController()
-                    PremiumFeaturesScreen(
-                        navController = navController,
-                        navHostController = null,
-                        onClose = { navController.popBackStack() }
-                    )
-                }
-            }
-        }
-    }
-
-    @Parcelize
-    data class Input(val action: IPaidAction) : Parcelable
-
-    @Parcelize
-    class Result : Parcelable
-}
+@Serializable
+data object PremiumFeaturesScreen : HSScreen()
 
 class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
 

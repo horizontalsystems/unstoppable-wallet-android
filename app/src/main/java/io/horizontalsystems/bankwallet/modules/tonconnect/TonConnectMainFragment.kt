@@ -5,7 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object TonConnectMainScreen : HSScreen()
 
 class TonConnectMainFragment : BaseComposeFragment() {
     @Composable

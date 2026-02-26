@@ -6,7 +6,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestViewModel
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object WCEvmTransactionSettingsScreen : HSScreen()
 
 class WCEvmTransactionSettingsFragment : BaseComposeFragment() {
     @Composable
