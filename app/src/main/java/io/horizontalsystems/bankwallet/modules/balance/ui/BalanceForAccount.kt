@@ -35,6 +35,8 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredScreen
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedScreen
@@ -125,16 +127,12 @@ fun BalanceForAccount(
                     title = TranslatableString.ResString(R.string.ManageAccounts_Title),
                     icon = R.drawable.ic_wallet_switch_24,
                     onClick = {
-//                        TODO("xxx nav3")
-//                        navController.slideFromRight(
-//                            R.id.manageAccountsFragment,
-//                            ManageAccountsModule.Mode.Switcher
-//                        )
-//
-//                        stat(
-//                            page = StatPage.Balance,
-//                            event = StatEvent.Open(StatPage.ManageWallets)
-//                        )
+                        backStack.add(ManageAccountsScreen(ManageAccountsModule.Mode.Switcher))
+
+                        stat(
+                            page = StatPage.Balance,
+                            event = StatEvent.Open(StatPage.ManageWallets)
+                        )
                     }
                 )
             )
