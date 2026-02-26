@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object TokenBalanceScreen : HSScreen()
+data class TokenBalanceScreen(val wallet: Wallet) : HSScreen()
 
 class TokenBalanceFragment : BaseComposeFragment() {
 

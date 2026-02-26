@@ -68,6 +68,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
@@ -108,7 +109,10 @@ import java.math.BigDecimal
 import java.net.UnknownHostException
 
 @Serializable
-data object SwapScreen : HSScreen()
+data class SwapScreen(
+    @Serializable(with = TokenSerializer::class)
+    val tokenIn: Token? = null
+) : HSScreen()
 
 class SwapFragment : BaseComposeFragment() {
     @Composable

@@ -14,12 +14,21 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enteraddress.EnterAddressScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendFragment.Input
+import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 @Serializable
-data object EnterAddressScreen : HSScreen()
+data class EnterAddressScreen(
+    val wallet: Wallet,
+    val title: String,
+    val sendEntryPointDestId: Int? = null,
+    val address: String? = null,
+    @Serializable(with = BigDecimalSerializer::class)
+    val amount: BigDecimal? = null,
+    val memo: String? = null,
+) : HSScreen()
 
 class EnterAddressFragment : BaseComposeFragment() {
     @Composable
