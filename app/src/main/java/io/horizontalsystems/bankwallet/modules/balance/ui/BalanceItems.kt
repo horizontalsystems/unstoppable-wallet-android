@@ -57,11 +57,17 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.ReceiveAllowedState
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
+import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceScreen
 import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredScreen
+import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsScreen
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
+import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinScreen
+import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressScreen
+import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
@@ -207,13 +213,9 @@ fun BalanceItems(
 
     val navigateToTokenBalance: (BalanceViewItem2) -> Unit = remember {
         {
-//            TODO("xxx nav3")
-//            navController.slideFromRight(
-//                R.id.tokenBalanceFragment,
-//                it.wallet
-//            )
-//
-//            stat(page = StatPage.Balance, event = StatEvent.OpenTokenPage(it.wallet.token))
+            backStack.add(TokenBalanceScreen(it.wallet))
+
+            stat(page = StatPage.Balance, event = StatEvent.OpenTokenPage(it.wallet.token))
         }
     }
 
@@ -295,13 +297,12 @@ fun BalanceItems(
                                 when (val receiveAllowedState =
                                     viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
-//                                        TODO("xxx nav3")
-//                                        navController.slideFromRight(R.id.receiveChooseCoinFragment)
-//
-//                                        stat(
-//                                            page = StatPage.Balance,
-//                                            event = StatEvent.Open(StatPage.ReceiveTokenList)
-//                                        )
+                                        backStack.add(ReceiveChooseCoinScreen)
+
+                                        stat(
+                                            page = StatPage.Balance,
+                                            event = StatEvent.Open(StatPage.ReceiveTokenList)
+                                        )
                                     }
 
                                     is ReceiveAllowedState.BackupRequired -> {
@@ -320,13 +321,12 @@ fun BalanceItems(
                             icon = R.drawable.ic_arrow_up_24,
                             title = stringResource(R.string.Balance_Send),
                             onClick = {
-//                                TODO("xxx nav3")
-//                                navController.slideFromRight(R.id.sendTokenSelectFragment)
-//
-//                                stat(
-//                                    page = StatPage.Balance,
-//                                    event = StatEvent.Open(StatPage.SendTokenList)
-//                                )
+                                backStack.add(SendTokenSelectScreen())
+
+                                stat(
+                                    page = StatPage.Balance,
+                                    event = StatEvent.Open(StatPage.SendTokenList)
+                                )
                             }
                         )
                         if (viewModel.isSwapEnabled) {
@@ -335,13 +335,12 @@ fun BalanceItems(
                                 icon = R.drawable.ic_swap_circle_24,
                                 title = stringResource(R.string.Swap),
                                 onClick = {
-//                                    TODO("xxx nav3")
-//                                    navController.slideFromRight(R.id.multiswap)
-//
-//                                    stat(
-//                                        page = StatPage.Balance,
-//                                        event = StatEvent.Open(StatPage.Swap)
-//                                    )
+                                    backStack.add(SwapScreen())
+
+                                    stat(
+                                        page = StatPage.Balance,
+                                        event = StatEvent.Open(StatPage.Swap)
+                                    )
                                 }
                             )
                         }
@@ -420,13 +419,12 @@ fun BalanceItems(
                             icon = painterResource(R.drawable.ic_manage_20),
                             contentDescription = stringResource(R.string.ManageCoins_title),
                             onClick = {
-//                                TODO("xxx nav3")
-//                                navController.slideFromRight(R.id.manageWalletsFragment)
-//
-//                                stat(
-//                                    page = StatPage.Balance,
-//                                    event = StatEvent.Open(StatPage.CoinManager)
-//                                )
+                                backStack.add(ManageWalletsScreen)
+
+                                stat(
+                                    page = StatPage.Balance,
+                                    event = StatEvent.Open(StatPage.CoinManager)
+                                )
                             }
                         )
                     },
@@ -493,18 +491,14 @@ fun BalanceItems(
         }
     }
     uiState.openSend?.let { openSend ->
-//        TODO("xxx nav3")
-//        navController.slideFromRight(
-//            R.id.sendTokenSelectFragment,
-//            SendTokenSelectFragment.Input(
-//                openSend.blockchainTypes,
-//                openSend.tokenTypes,
-//                openSend.address,
-//                openSend.amount,
-//                openSend.memo,
-//            )
-//        )
-//        viewModel.onSendOpened()
+        backStack.add(SendTokenSelectScreen(
+            openSend.blockchainTypes,
+            openSend.tokenTypes,
+            openSend.address,
+            openSend.amount,
+            openSend.memo,
+        ))
+        viewModel.onSendOpened()
     }
 }
 
@@ -517,38 +511,29 @@ private fun handleContextMenuClick(
 ) {
     when (menuItem) {
         BalanceContextMenuItem.Send -> {
-//            TODO("xxx nav3")
-//            val sendTitle = Translator.getString(
-//                R.string.Send_Title,
-//                balanceViewItem.wallet.token.fullCoin.coin.code
-//            )
-//            navController.slideFromRight(
-//                R.id.enterAddressFragment,
-//                EnterAddressFragment.Input(
-//                    wallet = balanceViewItem.wallet,
-//                    title = sendTitle
-//                )
-//            )
-//
-//            stat(
-//                page = StatPage.Balance,
-//                event = StatEvent.OpenSend(balanceViewItem.wallet.token)
-//            )
+            val sendTitle = Translator.getString(
+                R.string.Send_Title,
+                balanceViewItem.wallet.token.fullCoin.coin.code
+            )
+            backStack.add(EnterAddressScreen(
+                wallet = balanceViewItem.wallet,
+                title = sendTitle
+            ))
+            stat(
+                page = StatPage.Balance,
+                event = StatEvent.OpenSend(balanceViewItem.wallet.token)
+            )
         }
 
         BalanceContextMenuItem.CopyAddress -> { onAddressCopyClick.invoke(balanceViewItem.wallet) }
 
         BalanceContextMenuItem.Swap -> {
-//            TODO("xxx nav3")
-//            navController.slideFromRight(
-//                R.id.multiswap,
-//                balanceViewItem.wallet.token
-//            )
-//
-//            stat(
-//                page = StatPage.Balance,
-//                event = StatEvent.Open(StatPage.Swap)
-//            )
+            backStack.add(SwapScreen(balanceViewItem.wallet.token))
+
+            stat(
+                page = StatPage.Balance,
+                event = StatEvent.Open(StatPage.Swap)
+            )
         }
 
         BalanceContextMenuItem.CoinInfo -> {
