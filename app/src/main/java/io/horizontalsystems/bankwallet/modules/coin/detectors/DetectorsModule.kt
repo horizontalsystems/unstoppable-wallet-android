@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 object DetectorsModule {
     @Suppress("UNCHECKED_CAST")
@@ -37,6 +38,7 @@ object DetectorsModule {
 }
 
 @Parcelize
+@Serializable
 data class IssueParcelable(
     val issue: String,
     val title: String? = null,
@@ -45,6 +47,7 @@ data class IssueParcelable(
 ) : Parcelable
 
 @Parcelize
+@Serializable
 data class IssueItemParcelable(
     val impact: String,
     val confidence: String? = null,

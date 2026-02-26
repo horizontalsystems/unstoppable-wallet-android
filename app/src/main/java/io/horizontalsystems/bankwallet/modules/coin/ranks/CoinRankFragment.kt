@@ -63,7 +63,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object CoinRankScreen : HSScreen()
+data class CoinRankScreen(val type: RankType) : HSScreen()
 
 class CoinRankFragment : BaseComposeFragment() {
 

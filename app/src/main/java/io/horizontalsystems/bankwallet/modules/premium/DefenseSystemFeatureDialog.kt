@@ -62,7 +62,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object DefenseSystemFeatureScreen : HSScreen()
+data class DefenseSystemFeatureScreen(val feature: PremiumFeature) : HSScreen()
 
 class DefenseSystemFeatureDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
