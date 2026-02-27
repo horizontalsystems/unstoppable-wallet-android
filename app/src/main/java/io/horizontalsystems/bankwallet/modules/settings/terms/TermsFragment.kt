@@ -20,11 +20,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -39,7 +41,15 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object TermsScreen : HSScreen()
+data class TermsScreen(val hsScreen: HSScreen) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        TermsScreen(backStack, hsScreen)
+    }
+}
 
 class TermsFragment : BaseComposeFragment() {
 
@@ -52,7 +62,7 @@ class TermsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        TermsScreen(navController = navController)
+//        TermsScreen(navController = navController)
     }
 
     @Parcelize
@@ -61,14 +71,15 @@ class TermsFragment : BaseComposeFragment() {
 
 @Composable
 fun TermsScreen(
-    navController: NavController,
-    viewModel: TermsViewModel = viewModel(factory = TermsModule.Factory())
+    backStack: NavBackStack<HSScreen>,
+    hsScreen: HSScreen
 ) {
+    val viewModel = viewModel<TermsViewModel>(factory = TermsModule.Factory())
 
     LaunchedEffect(viewModel.closeWithTermsAgreed) {
         if (viewModel.closeWithTermsAgreed) {
-            navController.setNavigationResultX(TermsFragment.Result(true))
-            navController.popBackStack()
+            backStack.removeLastOrNull()
+            backStack.add(hsScreen)
             viewModel.onTermsAgreedConsumed()
         }
     }
@@ -80,8 +91,7 @@ fun TermsScreen(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.setNavigationResultX(TermsFragment.Result(false))
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 }
             )
         )

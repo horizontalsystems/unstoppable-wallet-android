@@ -23,10 +23,12 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.serialization.NavBackStackSerializer
 import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainScreen
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
@@ -149,4 +151,12 @@ fun NavExample(mainActivityViewModel: MainActivityViewModel) {
             }
         }
     )
+}
+
+fun NavBackStack<HSScreen>.navigateWithTermsAccepted(screen: HSScreen) {
+    if (!App.termsManager.allTermsAccepted) {
+        add(TermsScreen(screen))
+    } else {
+        add(screen)
+    }
 }

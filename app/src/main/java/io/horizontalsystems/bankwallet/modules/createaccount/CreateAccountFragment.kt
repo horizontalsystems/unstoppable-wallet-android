@@ -45,7 +45,10 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object CreateAccountScreen : HSScreen()
+data class CreateAccountScreen(
+    val popOffOnSuccess: Int = R.id.createAccountFragment,
+    val popOffInclusive: Boolean = true
+) : HSScreen()
 
 class CreateAccountFragment : BaseComposeFragment() {
 
