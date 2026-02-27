@@ -267,6 +267,25 @@ fun AppearanceScreen(navController: NavController) {
                 )
             )
 
+            HeaderText(text = stringResource(id = R.string.Appearance_SendScreen))
+            CellUniversalLawrenceSection(
+                listOf(
+                    {
+                        SettingUniversalCell(
+                            title = R.string.Appearance_RecentlySent,
+                            subtitle = R.string.Appearance_RecentlySent_Tip,
+                        ) {
+                            HsSwitch(
+                                checked = uiState.recentlySentEnabled,
+                                onCheckedChange = {
+                                    viewModel.enableRecentlySent(it)
+                                }
+                            )
+                        }
+                    }
+                )
+            )
+
             VSpacer(24.dp)
             HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
             AppIconSection(uiState.appIconOptions) {

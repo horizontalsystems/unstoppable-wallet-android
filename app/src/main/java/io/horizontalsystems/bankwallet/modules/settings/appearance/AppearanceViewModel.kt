@@ -33,6 +33,7 @@ class AppearanceViewModel(
     private var marketsTabHidden = !localStorage.marketsTabEnabled
     private var balanceTabButtonsHidden = !localStorage.balanceTabButtonsEnabled
     private var amountRoundingEnabled = localStorage.amountRoundingEnabled
+    private var recentlySentEnabled = localStorage.recentlySentEnabled
     private var balanceViewTypeOptions = buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
     private var priceChangeInterval = localStorage.priceChangeInterval
     private var priceChangeIntervalOptions = buildPriceChangeIntervalSelect(priceChangeInterval)
@@ -88,7 +89,8 @@ class AppearanceViewModel(
         selectedBalanceViewType = balanceViewTypeManager.balanceViewType,
         priceChangeInterval = priceChangeInterval,
         priceChangeIntervalOptions = priceChangeIntervalOptions,
-        amountRoundingEnabled = amountRoundingEnabled
+        amountRoundingEnabled = amountRoundingEnabled,
+        recentlySentEnabled = recentlySentEnabled,
     )
 
     private fun buildBalanceViewTypeSelect(value: BalanceViewType): Select<BalanceViewType> {
@@ -186,6 +188,12 @@ class AppearanceViewModel(
         )
     }
 
+    fun enableRecentlySent(enabled: Boolean) {
+        recentlySentEnabled = enabled
+        localStorage.recentlySentEnabled = enabled
+        emitState()
+    }
+
 }
 
 data class AppearanceUIState(
@@ -202,5 +210,6 @@ data class AppearanceUIState(
     val selectedBalanceViewType: BalanceViewType,
     val priceChangeInterval: PriceChangeInterval,
     val priceChangeIntervalOptions: Select<PriceChangeInterval>,
-    val amountRoundingEnabled: Boolean
+    val amountRoundingEnabled: Boolean,
+    val recentlySentEnabled: Boolean,
 )
