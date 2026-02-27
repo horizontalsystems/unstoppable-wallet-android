@@ -200,58 +200,18 @@ fun AddressSuggestions(
     onClick: (String) -> Unit
 ) {
     if (recentContact != null) {
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .border(
-                    0.5.dp,
-                    ComposeAppTheme.colors.blade,
-                    RoundedCornerShape(16.dp)
-                )
-                .clickable {
-                    onClick.invoke(recentContact.address)
-                }
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-        ) {
-            headline2_leah(recentContact.name)
-            subhead2_grey(recentContact.address.shortAddress)
+        AddressCardContainer(onClick = { onClick(recentContact.address) }) {
+            ContactItem(recentContact)
         }
     } else recentAddress?.let { address ->
         SectionHeaderText(stringResource(R.string.Send_Address_Recent))
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .border(
-                    0.5.dp,
-                    ComposeAppTheme.colors.blade,
-                    RoundedCornerShape(16.dp)
-                )
-                .clickable {
-                    onClick.invoke(address)
-                }
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-        ) {
+        AddressCardContainer(onClick = { onClick(address) }) {
             body_leah(address)
         }
     }
     if (contacts.isNotEmpty()) {
         SectionHeaderText(stringResource(R.string.Contacts))
-        Column(
-            modifier = Modifier
-                .padding(bottom = 24.dp)
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .border(
-                    0.5.dp,
-                    ComposeAppTheme.colors.blade,
-                    RoundedCornerShape(16.dp)
-                )
-        ) {
+        AddressCardContainer {
             contacts.forEachIndexed { index, contact ->
                 if (index != 0) {
                     HsDivider(modifier = Modifier.fillMaxWidth())
@@ -259,17 +219,38 @@ fun AddressSuggestions(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            onClick.invoke(contact.address)
-                        }
+                        .clickable { onClick(contact.address) }
                         .padding(horizontal = 16.dp, vertical = 12.dp)
                 ) {
-                    headline2_leah(contact.name)
-                    subhead2_grey(contact.address.shortAddress)
+                    ContactItem(contact)
                 }
             }
         }
     }
+}
+
+@Composable
+private fun AddressCardContainer(
+    onClick: (() -> Unit)? = null,
+    content: @Composable () -> Unit
+) {
+    var modifier: Modifier = Modifier
+        .padding(horizontal = 16.dp)
+        .fillMaxWidth()
+        .clip(RoundedCornerShape(16.dp))
+        .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
+    if (onClick != null) {
+        modifier = modifier.clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 12.dp)
+    }
+    Column(modifier = modifier) {
+        content()
+    }
+}
+
+@Composable
+private fun ContactItem(contact: SContact) {
+    headline2_leah(contact.name)
+    subhead2_grey(contact.address.shortAddress)
 }
 
 @Composable
