@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.platform.InfoBottomSheet
 import io.horizontalsystems.bankwallet.modules.market.topcoins.OptionController
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.CoinCategorySerializer
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -49,7 +50,10 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object MarketSectorScreen : HSScreen()
+data class MarketSectorScreen(
+    @Serializable(with = CoinCategorySerializer::class)
+    val coinCategory: CoinCategory
+) : HSScreen()
 
 class MarketSectorFragment : BaseComposeFragment() {
 
