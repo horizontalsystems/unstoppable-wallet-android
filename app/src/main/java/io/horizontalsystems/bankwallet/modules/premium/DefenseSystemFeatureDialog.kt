@@ -30,12 +30,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.getInput
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.settings.banners.TextWithDynamicScale
+import io.horizontalsystems.bankwallet.modules.usersubscription.PremiumFeaturesScreen
+import io.horizontalsystems.bankwallet.modules.usersubscription.SelectPlanScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.DynamicSliderIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -62,7 +64,20 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DefenseSystemFeatureScreen(val feature: PremiumFeature) : HSScreen()
+data class DefenseSystemFeatureScreen(
+    val feature: PremiumFeature,
+    val screen: HSScreen? = null
+) : HSScreen(bottomSheet = true) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ComposeAppTheme {
+            DefenseSystemFeatureScreen(backStack, feature)
+        }
+    }
+}
 
 class DefenseSystemFeatureDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
@@ -83,10 +98,10 @@ class DefenseSystemFeatureDialog : BaseComposableBottomSheetFragment() {
                     }
 
                 ComposeAppTheme {
-                    DefenseSystemFeatureScreen(
-                        navController,
-                        input.feature,
-                    )
+//                    DefenseSystemFeatureScreen(
+//                        navController,
+//                        input.feature,
+//                    )
                 }
             }
         }
@@ -163,7 +178,7 @@ enum class PremiumFeature(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun DefenseSystemFeatureScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     feature: PremiumFeature,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -172,7 +187,7 @@ private fun DefenseSystemFeatureScreen(
 
     BottomSheetContent(
         onDismissRequest = {
-            navController.popBackStack()
+            backStack.removeLastOrNull()
         },
         sheetState = sheetState
     ) {
@@ -240,7 +255,7 @@ private fun DefenseSystemFeatureScreen(
                         icon = painterResource(id = R.drawable.ic_close),
                         variant = ButtonVariant.Secondary,
                         size = ButtonSize.Small,
-                        onClick = { navController.popBackStack() }
+                        onClick = { backStack.removeLastOrNull() }
                     )
                 }
             }
@@ -261,8 +276,8 @@ private fun DefenseSystemFeatureScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        navController.popBackStack()
-                        navController.slideFromBottom(R.id.buySubscriptionDialog)
+                        backStack.removeLastOrNull()
+                        backStack.add(PremiumFeaturesScreen)
                     }
                     .padding(horizontal = 32.dp, vertical = 12.dp),
                 text = stringResource(R.string.Premium_OnePurchaseUnlocksAllPremium),
@@ -275,8 +290,8 @@ private fun DefenseSystemFeatureScreen(
                 variant = ButtonVariant.Primary,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    navController.popBackStack()
-                    navController.slideFromBottom(R.id.selectSubscriptionPlanDialog)
+                    backStack.removeLastOrNull()
+                    backStack.add(SelectPlanScreen)
                 }
             )
         }

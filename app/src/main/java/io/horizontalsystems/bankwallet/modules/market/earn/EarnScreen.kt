@@ -35,8 +35,9 @@ import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.modules.market.earn.vault.VaultFragment
+import io.horizontalsystems.bankwallet.modules.market.earn.vault.VaultScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.navigateWithPaidAction
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -59,6 +60,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
+import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -112,22 +114,21 @@ fun MarketEarnScreen(
                             blurredItems = uiState.blurredItems,
                             scrollToTop = scrollToTopAfterUpdate,
                             onCoinClick = { viewItem ->
-                                val input = VaultFragment.Input(
-                                    rank = viewItem.rank,
-                                    address = viewItem.address,
-                                    name = viewItem.name,
-                                    tvl = viewItem.tvl,
-                                    chain = viewItem.blockchainName,
-                                    url = viewItem.url,
-                                    holders = viewItem.holders,
-                                    assetSymbol = viewItem.assetSymbol,
-                                    protocolName = viewItem.protocolName,
-                                    assetLogo = viewItem.assetLogo
+                                backStack.navigateWithPaidAction(
+                                    TokenInsights,
+                                    VaultScreen(
+                                        rank = viewItem.rank,
+                                        address = viewItem.address,
+                                        name = viewItem.name,
+                                        tvl = viewItem.tvl,
+                                        chain = viewItem.blockchainName,
+                                        url = viewItem.url,
+                                        holders = viewItem.holders,
+                                        assetSymbol = viewItem.assetSymbol,
+                                        protocolName = viewItem.protocolName,
+                                        assetLogo = viewItem.assetLogo
+                                    )
                                 )
-//                                TODO("xxx nav3")
-//                                navController.paidAction(TokenInsights) {
-//                                    navController.slideFromRight(R.id.vaultFragment, input)
-//                                }
                             },
                             onGetPremiumClick = {
 //                                TODO("xxx nav3")
