@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.core.stats.statPeriod
 import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
+import io.horizontalsystems.bankwallet.modules.market.sector.MarketSectorScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -119,11 +120,7 @@ fun TopSectorsScreen(
                             itemsIndexed(uiState.items) { _, item ->
                                 BoxBordered(bottom = true) {
                                     TopSectorItem(item) { coinCategory ->
-//                                        TODO("xxx nav3")
-//                                        navController.slideFromRight(
-//                                            R.id.marketSectorFragment,
-//                                            coinCategory
-//                                        )
+                                        backStack.add(MarketSectorScreen(coinCategory))
                                     }
                                 }
                             }
