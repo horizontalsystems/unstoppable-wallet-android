@@ -26,7 +26,6 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
-import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -67,7 +66,10 @@ private fun AboutNavHost(fragmentNavController: NavController) {
             ReleaseNotesScreen(false, { navController.popBackStack() })
         }
         composablePage(AppStatusPage) { AppStatusScreen(navController) }
-        composablePopup(TermsPage) { TermsScreen(navController) }
+        composablePopup(TermsPage) {
+//            TODO("xxx nav3")
+//            TermsScreen(navController)
+        }
     }
 }
 

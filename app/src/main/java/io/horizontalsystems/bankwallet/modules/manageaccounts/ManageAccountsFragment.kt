@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountScreen
 import io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletScreen
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountScreen
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
@@ -28,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -115,15 +117,12 @@ fun ManageAccountsScreen(backStack: NavBackStack<HSScreen>, mode: ManageAccounts
                         R.drawable.ic_plus,
                         R.string.ManageAccounts_CreateNewWallet
                     ) {
-//                        TODO("xxx nav3")
-//                        navController.navigateWithTermsAccepted {
-//                            navController.slideFromRight(R.id.createAccountFragment, args)
-//
-//                            stat(
-//                                page = StatPage.ManageWallets,
-//                                event = StatEvent.Open(StatPage.NewWallet)
-//                            )
-//                        }
+                        backStack.navigateWithTermsAccepted(CreateAccountScreen(args.popOffOnSuccess, args.popOffInclusive))
+
+                        stat(
+                            page = StatPage.ManageWallets,
+                            event = StatEvent.Open(StatPage.NewWallet)
+                        )
                     },
                     ActionViewItem(
                         R.drawable.ic_download_20,

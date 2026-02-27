@@ -12,7 +12,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountScreen
+import io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -33,20 +36,14 @@ fun BalanceNoAccount(backStack: NavBackStack<HSScreen>) {
             buttonTitle2 = stringResource(R.string.ManageAccounts_ImportWallet),
             buttonTitle3 = stringResource(R.string.ManageAccounts_WatchAddress),
             onClick = {
-//                TODO("xxx nav3")
-//                navController.navigateWithTermsAccepted {
-//                    navController.slideFromRight(R.id.createAccountFragment)
-//
-//                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.NewWallet))
-//                }
+                backStack.navigateWithTermsAccepted(CreateAccountScreen())
+
+                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.NewWallet))
             },
             onClick2 = {
-//                TODO("xxx nav3")
-//                navController.navigateWithTermsAccepted {
-//                    navController.slideFromRight(R.id.importWalletFragment)
-//
-//                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ImportWallet))
-//                }
+                backStack.navigateWithTermsAccepted(ImportWalletScreen())
+
+                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ImportWallet))
             },
             onClick3 = {
                 backStack.add(WatchAddressScreen())

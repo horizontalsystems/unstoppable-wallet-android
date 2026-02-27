@@ -56,7 +56,10 @@ import kotlinx.serialization.Serializable
 import java.io.File
 
 @Serializable
-data class ImportWalletScreen(val popOffOnSuccess: Int, val popOffInclusive: Boolean) : HSScreen()
+data class ImportWalletScreen(
+    val popOffOnSuccess: Int = R.id.importWalletFragment,
+    val popOffInclusive: Boolean = true
+) : HSScreen()
 
 class ImportWalletFragment : BaseComposeFragment() {
 
