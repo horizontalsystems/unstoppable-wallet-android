@@ -27,11 +27,15 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainScreen
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
+import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.subscriptions.core.IPaidAction
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.serialization.Serializable
 
 class Nav3Fragment : BaseComposeFragment() {
@@ -151,6 +155,15 @@ fun NavExample(mainActivityViewModel: MainActivityViewModel) {
             }
         }
     )
+}
+
+fun NavBackStack<HSScreen>.navigateWithPaidAction(paidAction: IPaidAction, screen: HSScreen) {
+    if (UserSubscriptionManager.isActionAllowed(paidAction)) {
+        add(screen)
+    } else {
+        val premiumFeature = PremiumFeature.getFeature(paidAction)
+        add(DefenseSystemFeatureScreen(premiumFeature, screen))
+    }
 }
 
 fun NavBackStack<HSScreen>.navigateWithTermsAccepted(screen: HSScreen) {

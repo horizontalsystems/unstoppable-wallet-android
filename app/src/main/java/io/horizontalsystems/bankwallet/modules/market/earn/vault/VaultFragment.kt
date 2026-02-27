@@ -46,7 +46,18 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object VaultScreen : HSScreen()
+data class VaultScreen(
+    val rank: Int,
+    val address: String,
+    val name: String,
+    val tvl: String,
+    val chain: String,
+    val url: String?,
+    val holders: String?,
+    val assetSymbol: String,
+    val protocolName: String,
+    val assetLogo: String?,
+) : HSScreen()
 
 class VaultFragment : BaseComposeFragment() {
 
