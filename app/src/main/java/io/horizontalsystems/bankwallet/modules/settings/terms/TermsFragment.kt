@@ -41,7 +41,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TermsScreen(val hsScreen: HSScreen) : HSScreen() {
+data class TermsScreen(val hsScreen: HSScreen? = null) : HSScreen() {
     @Composable
     override fun GetContent(
         backStack: NavBackStack<HSScreen>,
@@ -72,15 +72,15 @@ class TermsFragment : BaseComposeFragment() {
 @Composable
 fun TermsScreen(
     backStack: NavBackStack<HSScreen>,
-    hsScreen: HSScreen
+    hsScreen: HSScreen?
 ) {
     val viewModel = viewModel<TermsViewModel>(factory = TermsModule.Factory())
 
     LaunchedEffect(viewModel.closeWithTermsAgreed) {
         if (viewModel.closeWithTermsAgreed) {
             backStack.removeLastOrNull()
-            backStack.add(hsScreen)
             viewModel.onTermsAgreedConsumed()
+            hsScreen?.let { backStack.add(it) }
         }
     }
 
