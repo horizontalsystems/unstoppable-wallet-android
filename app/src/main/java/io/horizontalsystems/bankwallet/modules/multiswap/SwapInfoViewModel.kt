@@ -40,6 +40,7 @@ class SwapInfoViewModel(
     private var recipientAddress: String? = null
     private var sourceAddress: String? = null
     private var fee: String? = null
+    private var txUrl: String? = null
 
     override fun createState() = SwapInfoUiState(
         tokenInImageUrl = tokenInImageUrl,
@@ -58,6 +59,7 @@ class SwapInfoViewModel(
         recipientAddress = recipientAddress,
         sourceAddress = sourceAddress,
         fee = fee,
+        txUrl = txUrl,
     )
 
     init {
@@ -90,6 +92,7 @@ class SwapInfoViewModel(
         recipientAddress = record.recipientAddress
         sourceAddress = record.sourceAddress
         fee = formatFee(record.networkFeeAmount, record.networkFeeCoinCode)
+        txUrl = record.transactionHash?.let { buildTxUrl(record.providerId, it) }
 
         emitState()
     }
@@ -117,6 +120,12 @@ class SwapInfoViewModel(
         val price = price ?: return null
         val fiat = (amount * price).setScale(decimals, RoundingMode.DOWN).stripTrailingZeros()
         return numberFormatter.formatFiatShort(fiat, symbol, decimals)
+    }
+
+    private fun buildTxUrl(providerId: String, txHash: String): String? = when (providerId) {
+        "thorchain" -> "https://thorchain.net/tx/$txHash"
+        "mayachain" -> "https://www.mayascan.org/tx/$txHash"
+        else -> null
     }
 
     private fun formatFee(feeAmount: String?, feeCoinCode: String?): String? {
@@ -156,4 +165,5 @@ data class SwapInfoUiState(
     val recipientAddress: String?,
     val sourceAddress: String?,
     val fee: String?,
+    val txUrl: String?,
 )

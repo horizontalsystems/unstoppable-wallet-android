@@ -1,11 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
 import android.os.Parcelable
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -33,11 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.inset
-import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -62,6 +53,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsButtonText
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfoTextIcon
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
@@ -92,6 +84,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
     var showStatusSheet by remember { mutableStateOf(false) }
     val view = LocalView.current
     val leah = ComposeAppTheme.colors.leah
+    val uriHandler = LocalUriHandler.current
 
     HSScaffold(
         title = stringResource(R.string.SwapHistory_Title),
@@ -199,7 +192,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                 )
                 // Status (clickable → opens bottom sheet)
                 CellSecondary(
-                    onClick = { /*showStatusSheet = true*/ },
+                    onClick = { showStatusSheet = true },
                     middle = {
                         CellMiddleInfoTextIcon(text = stringResource(R.string.TransactionInfo_Status).hs)
                     },
@@ -283,7 +276,10 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                     .padding(bottom = 16.dp),
                 textAlign = TextAlign.Center,
             )
-            SwapStatusSteps(status = uiState.status)
+            SwapStatusSteps(
+                status = uiState.status,
+                onViewClick = uiState.txUrl?.let { url -> { uriHandler.openUri(url) } },
+            )
             subhead2_grey(
                 text = stringResource(R.string.SwapInfo_CrossChainNote),
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
@@ -339,28 +335,45 @@ private fun StatusRightSlot(status: SwapStatus) {
                     tint = ComposeAppTheme.colors.grey,
                     contentDescription = null,
                 )
-
-                else -> Unit
             }
         }
     }
 }
 
 @Composable
-private fun SwapStatusSteps(status: SwapStatus) {
-    val steps = listOf(
+private fun SwapStatusSteps(status: SwapStatus, onViewClick: (() -> Unit)?) {
+    val normalSteps = listOf(
         stringResource(R.string.SwapInfo_StepDepositing),
         stringResource(R.string.SwapInfo_StepSwap),
         stringResource(R.string.SwapInfo_StepSend),
         stringResource(R.string.SwapInfo_StepComplete),
     )
+    val refundedSteps = listOf(
+        stringResource(R.string.SwapInfo_StepDepositing),
+        stringResource(R.string.SwapInfo_StepSwap),
+        stringResource(R.string.SwapInfo_StepRefund),
+    )
+    val viewLabel = stringResource(R.string.Button_View)
 
-    val activeIndex = when (status) {
-        SwapStatus.Depositing -> 0
-        SwapStatus.Swapping -> 1
-        SwapStatus.Sending -> 2
-        SwapStatus.Completed -> steps.size
-        SwapStatus.Refunded, SwapStatus.Failed -> -1
+    val steps: List<String>
+    val activeIndex: Int
+    val failedIndex: Int?
+
+    when (status) {
+        SwapStatus.Refunded -> {
+            steps = refundedSteps
+            activeIndex = steps.size // all done
+            failedIndex = null
+        }
+        SwapStatus.Failed -> {
+            steps = normalSteps
+            activeIndex = -1
+            failedIndex = 0
+        }
+        SwapStatus.Depositing -> { steps = normalSteps; activeIndex = 0; failedIndex = null }
+        SwapStatus.Swapping   -> { steps = normalSteps; activeIndex = 1; failedIndex = null }
+        SwapStatus.Sending    -> { steps = normalSteps; activeIndex = 2; failedIndex = null }
+        SwapStatus.Completed  -> { steps = normalSteps; activeIndex = steps.size; failedIndex = null }
     }
 
     Column(
@@ -370,82 +383,59 @@ private fun SwapStatusSteps(status: SwapStatus) {
             .background(ComposeAppTheme.colors.lawrence),
     ) {
         steps.forEachIndexed { index, label ->
+            val isFailed = failedIndex == index
             val isDone = activeIndex > index
             val isActive = activeIndex == index
+            val showView = onViewClick != null && (isDone || isActive || isFailed)
             CellSecondary(
-                left = { StepIndicator(isActive = isActive, isDone = isDone) },
+                left = { StepIndicator(isActive = isActive, isDone = isDone, isFailed = isFailed) },
                 middle = {
                     CellMiddleInfoTextIcon(
                         text = label.hs(
-                            color = if (isActive) ComposeAppTheme.colors.leah else null
+                            color = if (isActive || isDone || isFailed) ComposeAppTheme.colors.leah else null
                         )
                     )
                 },
+                right = if (showView) {
+                    { CellRightNavigation(subtitle = viewLabel.hs) }
+                } else null,
+                onClick = if (showView) onViewClick else null,
             )
         }
     }
 }
 
 @Composable
-private fun StepIndicator(isActive: Boolean, isDone: Boolean) {
-    val leah = ComposeAppTheme.colors.leah
-    val andy = ComposeAppTheme.colors.andy
+private fun StepIndicator(isActive: Boolean, isDone: Boolean, isFailed: Boolean = false) {
     val grey = ComposeAppTheme.colors.grey
 
-    val rotate by if (isActive) {
-        rememberInfiniteTransition(label = "step_spinner").animateFloat(
-            initialValue = 0f,
-            targetValue = 360f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(durationMillis = 1500, easing = LinearEasing)
-            ),
-            label = "step_rotate",
+    when {
+        isActive -> CircularProgressIndicator(
+            modifier = Modifier.size(20.dp),
+            color = ComposeAppTheme.colors.leah,
+            backgroundColor = ComposeAppTheme.colors.andy,
+            strokeWidth = 2.dp,
         )
-    } else {
-        remember { mutableStateOf(0f) }
-    }
 
-    Box(
-        modifier = Modifier
-            .size(20.dp)
-            .drawBehind {
-                if (isActive) {
-                    inset(-2.dp.toPx()) {
-                        drawArc(
-                            color = andy,
-                            startAngle = 0f,
-                            sweepAngle = 360f,
-                            useCenter = false,
-                            style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round),
-                        )
-                        rotate(degrees = rotate) {
-                            drawArc(
-                                color = leah,
-                                startAngle = 0f,
-                                sweepAngle = -120f,
-                                useCenter = false,
-                                style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round),
-                            )
-                        }
-                    }
-                }
-            },
-        contentAlignment = Alignment.Center,
-    ) {
-        when {
-            isDone -> Icon(
-                modifier = Modifier.size(20.dp),
-                painter = painterResource(R.drawable.ic_done_filled_20),
-                tint = ComposeAppTheme.colors.remus,
-                contentDescription = null,
-            )
+        isFailed -> Icon(
+            modifier = Modifier.size(20.dp),
+            painter = painterResource(R.drawable.close_e_filled_24),
+            tint = ComposeAppTheme.colors.redL,
+            contentDescription = null,
+        )
 
-            !isActive -> Box(
-                modifier = Modifier
-                    .size(12.dp)
-                    .border(1.5.dp, grey, CircleShape),
-            )
-        }
+        isDone -> Icon(
+            modifier = Modifier.size(20.dp),
+            painter = painterResource(R.drawable.ic_done_filled_20),
+            tint = ComposeAppTheme.colors.remus,
+            contentDescription = null,
+        )
+
+        else -> Box(
+            modifier = Modifier
+                .size(12.dp)
+                .border(1.5.dp, grey, CircleShape),
+        )
     }
 }
 

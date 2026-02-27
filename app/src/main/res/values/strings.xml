@@ -801,6 +801,8 @@
     <string name="SwapInfo_StepSwap">Swap</string>
     <string name="SwapInfo_StepSend">Send</string>
     <string name="SwapInfo_StepComplete">Complete</string>
+    <string name="SwapInfo_StepRefund">Refund</string>
+    <string name="Button_View">View</string>
 
     <!--Approve-->
 
