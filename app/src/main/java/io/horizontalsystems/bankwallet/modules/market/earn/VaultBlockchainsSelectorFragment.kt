@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.BlockchainSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -42,7 +43,12 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object VaultBlockchainsSelectorScreen : HSScreen()
+data class VaultBlockchainsSelectorScreen(
+    val selected: List<@Serializable(with = BlockchainSerializer::class) Blockchain>,
+    val allBlockchains: List<@Serializable(with = BlockchainSerializer::class) Blockchain>
+) : HSScreen() {
+    data class Result(val selected: List<Blockchain>)
+}
 
 class VaultBlockchainsSelectorFragment : BaseComposeFragment() {
 

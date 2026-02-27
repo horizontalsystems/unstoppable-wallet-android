@@ -203,7 +203,7 @@ private fun MainScreen(
         Column {
             Crossfade(uiState.selectedTabItem) { navItem ->
                 when (navItem) {
-                    MainNavigation.Market -> MarketScreen(backStack)
+                    MainNavigation.Market -> MarketScreen(backStack, resultBus)
                     MainNavigation.Balance -> BalanceScreen(backStack)
                     MainNavigation.Swap -> {
 //                        TODO("xxx nav3")

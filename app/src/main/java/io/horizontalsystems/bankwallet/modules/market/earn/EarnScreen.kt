@@ -37,6 +37,8 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.earn.vault.VaultScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.navigateWithPaidAction
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -66,7 +68,8 @@ import java.math.BigDecimal
 
 @Composable
 fun MarketEarnScreen(
-    backStack: NavBackStack<HSScreen>
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus
 ) {
     val viewModel = viewModel<MarketEarnViewModel>(factory = EarnModule.Factory())
     val uiState = viewModel.uiState
@@ -167,20 +170,18 @@ fun MarketEarnScreen(
                                             },
                                         )
                                         HSpacer(width = 12.dp)
+
+                                        ResultEffect<VaultBlockchainsSelectorScreen.Result>(resultBus) {
+                                            viewModel.onBlockchainsSelected(it.selected)
+                                        }
                                         HSDropdownButton(
                                             variant = ButtonVariant.Secondary,
                                             title = uiState.chainSelectorMenuTitle,
                                             onClick = {
-//                                                TODO("xxx nav3")
-//                                                navController.slideFromRightForResult<VaultBlockchainsSelectorFragment.Result>(
-//                                                    R.id.vaultsBlockchainsSelectorFragment,
-//                                                    VaultBlockchainsSelectorFragment.Input(
-//                                                        uiState.selectedBlockchains,
-//                                                        uiState.blockchains
-//                                                    )
-//                                                ) {
-//                                                    viewModel.onBlockchainsSelected(it.selected)
-//                                                }
+                                                backStack.add(VaultBlockchainsSelectorScreen(
+                                                    uiState.selectedBlockchains,
+                                                    uiState.blockchains
+                                                ))
                                             },
                                         )
                                         HSpacer(width = 16.dp)
