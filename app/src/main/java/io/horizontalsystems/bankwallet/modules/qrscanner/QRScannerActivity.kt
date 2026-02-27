@@ -4,12 +4,16 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -25,6 +29,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +40,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,7 +54,11 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.client.android.Intents
+import com.google.zxing.common.HybridBinarizer
+import com.google.zxing.qrcode.QRCodeReader
 import com.journeyapps.barcodescanner.CompoundBarcodeView
 import com.journeyapps.barcodescanner.ScanOptions
 import io.horizontalsystems.bankwallet.R
@@ -55,15 +66,18 @@ import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.ui.compose.Bright
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Dark
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimary
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaults
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.core.helpers.HudHelper
 
 class QRScannerActivity : BaseActivity() {
 
@@ -116,6 +130,19 @@ class QRScannerActivity : BaseActivity() {
 
 }
 
+private fun decodeQrFromUri(context: Context, uri: Uri): String? {
+    val bitmap = context.contentResolver.openInputStream(uri)
+        ?.use { BitmapFactory.decodeStream(it) } ?: return null
+    val intArray = IntArray(bitmap.width * bitmap.height)
+    bitmap.getPixels(intArray, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+    val source = RGBLuminanceSource(bitmap.width, bitmap.height, intArray)
+    return try {
+        QRCodeReader().decode(BinaryBitmap(HybridBinarizer(source))).text
+    } catch (e: Exception) {
+        null
+    }
+}
+
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun QRScannerScreen(
@@ -124,6 +151,20 @@ private fun QRScannerScreen(
     onCloseClick: () -> Unit,
     onCameraPermissionSettingsClick: () -> Unit
 ) {
+    val context = LocalContext.current
+    val view = androidx.compose.ui.platform.LocalView.current
+    val galleryLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        uri ?: return@rememberLauncherForActivityResult
+        val result = decodeQrFromUri(context, uri)
+        if (result != null) {
+            HudHelper.showSuccessMessage(view, R.string.ScanQr_QrDetected)
+            onScan(result)
+        } else {
+            HudHelper.showErrorMessage(view, R.string.ScanQr_NoQrFound)
+        }
+    }
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     var showPermissionNeededDialog by remember { mutableStateOf(cameraPermissionState.status != PermissionStatus.Granted) }
 
@@ -157,6 +198,21 @@ private fun QRScannerScreen(
                 GoToSettingsBox(onCameraPermissionSettingsClick)
             }
 
+            Box(Modifier.align(Alignment.TopCenter).fillMaxWidth()) {
+                AppBar(
+                    navigationIcon = {
+                        HsIconButton(onClick = onCloseClick) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_arrow_left_24),
+                                contentDescription = stringResource(R.string.Button_Back),
+                                tint = ComposeAppTheme.colors.white
+                            )
+                        }
+                    },
+                    backgroundColor = Color.Transparent
+                )
+            }
+
             Column(
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
@@ -165,31 +221,41 @@ private fun QRScannerScreen(
             ) {
                 Spacer(Modifier.height(24.dp))
                 if (showPasteButton) {
-                    ButtonPrimaryYellow(
+                    Row(
                         modifier = Modifier.fillMaxWidth(),
-                        title = stringResource(R.string.Send_Button_Paste),
-                        onClick = { onScan(TextHelper.getCopiedText() ?: "") }
-                    )
-                    Spacer(Modifier.height(16.dp))
-                }
-                ButtonPrimary(
-                    modifier = Modifier.fillMaxWidth(),
-                    content = {
-                        Text(
-                            text = stringResource(R.string.Button_Cancel),
-                            maxLines = 1,
-                            color = Dark,
-                            overflow = TextOverflow.Ellipsis
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        HSButton(
+                            modifier = Modifier.weight(1f),
+                            variant = ButtonVariant.Secondary,
+                            title = stringResource(R.string.ScanQr_Photos),
+                            icon = painterResource(R.drawable.ic_gallery_24),
+                            onClick = {
+                                galleryLauncher.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                )
+                            }
                         )
-                    },
-                    buttonColors = ButtonPrimaryDefaults.textButtonColors(
-                        backgroundColor = Bright,
-                        contentColor = ComposeAppTheme.colors.dark,
-                        disabledBackgroundColor = ComposeAppTheme.colors.blade,
-                        disabledContentColor = ComposeAppTheme.colors.andy,
-                    ),
-                    onClick = onCloseClick
-                )
+                        HSButton(
+                            modifier = Modifier.weight(1f),
+                            title = stringResource(R.string.Send_Button_Paste),
+                            icon = painterResource(R.drawable.ic_copy_24),
+                            onClick = { onScan(TextHelper.getCopiedText() ?: "") }
+                        )
+                    }
+                } else {
+                    HSButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = ButtonVariant.Secondary,
+                        title = stringResource(R.string.ScanQr_Photos),
+                        icon = painterResource(R.drawable.ic_gallery_24),
+                        onClick = {
+                            galleryLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        }
+                    )
+                }
                 Spacer(Modifier.height(48.dp))
             }
         }

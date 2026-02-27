@@ -514,6 +514,9 @@
     <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
     <string name="ScanQr_CameraPermissionDeniedText">Access to your camera for this app was denied, you can go to settings and allow access</string>
     <string name="ScanQr_GoToSettings">Go to Settings</string>
+    <string name="ScanQr_Photos">Photos</string>
+    <string name="ScanQr_NoQrFound">No QR code found</string>
+    <string name="ScanQr_QrDetected">QR code detected</string>
 
     <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
     <string name="Send_Error_MinimumAmount">Min. amount %s</string>
