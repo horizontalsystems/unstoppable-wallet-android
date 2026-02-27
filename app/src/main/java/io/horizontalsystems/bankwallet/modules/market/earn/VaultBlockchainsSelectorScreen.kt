@@ -1,8 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market.earn
 
-import android.os.Bundle
-import android.os.Parcelable
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -19,13 +16,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
-import io.horizontalsystems.bankwallet.core.paidAction
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BlockchainSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -36,10 +30,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellBlockchain
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.subscriptions.core.TokenInsights
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -47,54 +38,31 @@ data class VaultBlockchainsSelectorScreen(
     val selected: List<@Serializable(with = BlockchainSerializer::class) Blockchain>,
     val allBlockchains: List<@Serializable(with = BlockchainSerializer::class) Blockchain>
 ) : HSScreen() {
-    data class Result(val selected: List<Blockchain>)
-}
-
-class VaultBlockchainsSelectorFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
-        if (input == null) {
-            navController.popBackStack()
-            return
-        }
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
         FilterByBlockchainsScreen(
-            input.allBlockchains,
-            input.selected,
-            navController = navController,
+            blockchains = allBlockchains,
+            selected = selected,
+            backStack = backStack,
             onDone = { selected ->
-                navController.setNavigationResultX(Result(selected))
-                navController.popBackStack()
+                resultBus.sendResult(result = Result(selected))
+                backStack.removeLastOrNull()
             },
         )
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        requireActivity().onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                }
-            })
-    }
-
-    @Parcelize
-    data class Input(val selected: List<Blockchain>, val allBlockchains: List<Blockchain>) :
-        Parcelable
-
-    @Parcelize
-    data class Result(val selected: List<Blockchain>) : Parcelable
+    data class Result(val selected: List<Blockchain>)
 }
 
 @Composable
 private fun FilterByBlockchainsScreen(
     blockchains: List<Blockchain>,
     selected: List<Blockchain>,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     onDone: (List<Blockchain>) -> Unit,
 ) {
     var selectedBlockchains = remember { mutableStateListOf<Blockchain>() }
@@ -139,13 +107,14 @@ private fun FilterByBlockchainsScreen(
                             blockchain = item,
                             checked = item in selectedBlockchains,
                         ) {
-                            navController.paidAction(TokenInsights) {
-                                if (item in selectedBlockchains) {
-                                    selectedBlockchains.remove(item)
-                                } else {
-                                    selectedBlockchains.add(item)
-                                }
-                            }
+//                            TODO("xxx nav3")
+//                            navController.paidAction(TokenInsights) {
+//                                if (item in selectedBlockchains) {
+//                                    selectedBlockchains.remove(item)
+//                                } else {
+//                                    selectedBlockchains.add(item)
+//                                }
+//                            }
                         }
                     }
                 }
