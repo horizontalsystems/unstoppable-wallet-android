@@ -29,7 +29,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ContactsScreen : HSScreen()
+data class ContactsScreen(val mode: Mode) : HSScreen()
 
 class ContactsFragment : BaseComposeFragment() {
 

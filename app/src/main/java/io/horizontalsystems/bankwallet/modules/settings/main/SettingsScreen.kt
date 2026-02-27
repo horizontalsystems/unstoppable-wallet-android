@@ -42,16 +42,31 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupManagerScreen
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsScreen
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsScreen
+import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredScreen
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.settings.about.AboutScreen
+import io.horizontalsystems.bankwallet.modules.settings.appearance.AppearanceScreen
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
 import io.horizontalsystems.bankwallet.modules.settings.donate.DonateTokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateScreen
+import io.horizontalsystems.bankwallet.modules.settings.faq.FaqListScreen
+import io.horizontalsystems.bankwallet.modules.settings.guides.GuidesScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.ui.BannerCarousel
+import io.horizontalsystems.bankwallet.modules.settings.privacy.PrivacySettingsScreen
+import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsScreen
+import io.horizontalsystems.bankwallet.modules.settings.subscription.SubscriptionScreen
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
@@ -112,12 +127,11 @@ private fun SettingSections(
             add {
                 SubscriptionBanner(
                     onClick = {
-//                        TODO("xxx nav3")
-//                        navController.slideFromBottom(R.id.buySubscriptionFragment)
-//                        stat(
-//                            page = StatPage.Settings,
-//                            event = StatEvent.OpenPremium(StatPremiumTrigger.Banner)
-//                        )
+                        backStack.add(BuySubscriptionHavHostScreen)
+                        stat(
+                            page = StatPage.Settings,
+                            event = StatEvent.OpenPremium(StatPremiumTrigger.Banner)
+                        )
                     }
                 )
             }
@@ -144,13 +158,9 @@ private fun SettingSections(
                 R.drawable.ic_wallet_20,
                 showAlert = uiState.manageWalletShowAlert,
                 onClick = {
-//                    TODO("xxx nav3")
-//                    navController.slideFromRight(
-//                        R.id.manageAccountsFragment,
-//                        ManageAccountsModule.Mode.Manage
-//                    )
-//
-//                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ManageWallets))
+                    backStack.add(ManageAccountsScreen(ManageAccountsModule.Mode.Manage))
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ManageWallets))
                 }
             )
         }, {
@@ -158,13 +168,12 @@ private fun SettingSections(
                 R.string.BlockchainSettings_Title,
                 R.drawable.ic_blocks_20,
                 onClick = {
-//                    TODO("xxx nav3")
-//                    navController.slideFromRight(R.id.blockchainSettingsFragment)
-//
-//                    stat(
-//                        page = StatPage.Settings,
-//                        event = StatEvent.Open(StatPage.BlockchainSettings)
-//                    )
+                    backStack.add(BlockchainSettingsScreen)
+
+                    stat(
+                        page = StatPage.Settings,
+                        event = StatEvent.Open(StatPage.BlockchainSettings)
+                    )
                 }
             )
         }, {
@@ -173,10 +182,9 @@ private fun SettingSections(
                 R.drawable.ic_security,
                 showAlert = uiState.securityCenterShowAlert,
                 onClick = {
-//                    TODO("xxx nav3")
-//                    navController.slideFromRight(R.id.securitySettingsFragment)
-//
-//                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Security))
+                    backStack.add(SecuritySettingsScreen)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Security))
                 }
             )
         }, {
@@ -184,10 +192,9 @@ private fun SettingSections(
                 R.string.Settings_Privacy,
                 R.drawable.ic_eye_20,
                 onClick = {
-//                    TODO("xxx nav3")
-//                    navController.slideFromRight(R.id.privacySettingsFragment)
-//
-//                    stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
+                    backStack.add(PrivacySettingsScreen)
+
+                    stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
                 }
             )
         }, {
@@ -199,13 +206,12 @@ private fun SettingSections(
                 onClick = {
                     when (val state = viewModel.walletConnectSupportState) {
                         WCManager.SupportState.Supported -> {
-//                            TODO("xxx nav3")
-//                            navController.slideFromRight(R.id.wcListFragment)
-//
-//                            stat(
-//                                page = StatPage.Settings,
-//                                event = StatEvent.Open(StatPage.WalletConnect)
-//                            )
+                            backStack.add(WCListScreen)
+
+                            stat(
+                                page = StatPage.Settings,
+                                event = StatEvent.Open(StatPage.WalletConnect)
+                            )
                         }
 
                         WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
@@ -257,10 +263,9 @@ private fun SettingSections(
                     R.string.Settings_AppSettings,
                     R.drawable.ic_unstoppable_icon_20,
                     onClick = {
-//                        TODO("xxx nav3")
-//                        navController.slideFromRight(R.id.appearanceFragment)
-//
-//                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Appearance))
+                        backStack.add(AppearanceScreen)
+
+                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Appearance))
                     }
                 )
             }
@@ -271,8 +276,7 @@ private fun SettingSections(
                         R.drawable.ic_star_24,
                         value = if (uiState.hasSubscription) stringResource(R.string.SettingsSubscription_Active) else null,
                         onClick = {
-//                            TODO("xxx nav3")
-//                            navController.slideFromRight(R.id.subscriptionFragment)
+                            backStack.add(SubscriptionScreen)
                         }
                     )
                 }
@@ -282,13 +286,9 @@ private fun SettingSections(
                     R.string.Contacts,
                     R.drawable.ic_user_20,
                     onClick = {
-//                        TODO("xxx nav3")
-//                        navController.slideFromRight(
-//                            R.id.contactsFragment,
-//                            ContactsFragment.Input(Mode.Full)
-//                        )
-//
-//                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Contacts))
+                        backStack.add(ContactsScreen(Mode.Full))
+
+                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Contacts))
                     }
                 )
             }
@@ -297,13 +297,12 @@ private fun SettingSections(
                     R.string.BackupManager_Title,
                     R.drawable.ic_file_24,
                     onClick = {
-//                        TODO("xxx nav3")
-//                        navController.slideFromRight(R.id.backupManagerFragment)
-//
-//                        stat(
-//                            page = StatPage.Settings,
-//                            event = StatEvent.Open(StatPage.BackupManager)
-//                        )
+                        backStack.add(BackupManagerScreen)
+
+                        stat(
+                            page = StatPage.Settings,
+                            event = StatEvent.Open(StatPage.BackupManager)
+                        )
                     }
                 )
             }
@@ -367,10 +366,9 @@ private fun SettingSections(
                 R.drawable.ic_info_20,
                 showAlert = uiState.aboutAppShowAlert,
                 onClick = {
-//                    TODO("xxx nav3")
-//                    navController.slideFromRight(R.id.aboutAppFragment)
-//
-//                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.AboutApp))
+                    backStack.add(AboutScreen)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.AboutApp))
                 }
             )
         }, {
@@ -398,8 +396,7 @@ private fun SettingSections(
                 R.string.Settings_Faq,
                 R.drawable.ic_faq_20,
                 onClick = {
-//                    TODO("xxx nav3")
-//                    navController.slideFromRight(R.id.faqListFragment)
+                    backStack.add(FaqListScreen)
                 }
             )
         }, {
@@ -407,8 +404,7 @@ private fun SettingSections(
                 R.string.Guides_Title,
                 R.drawable.ic_academy_20,
                 onClick = {
-//                    TODO("xxx nav3")
-//                    navController.slideFromRight(R.id.academyFragment)
+                    backStack.add(GuidesScreen)
                 }
             )
         })
