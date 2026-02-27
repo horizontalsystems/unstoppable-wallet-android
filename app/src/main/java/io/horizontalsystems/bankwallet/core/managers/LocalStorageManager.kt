@@ -528,6 +528,12 @@ class LocalStorageManager(
             }
         }
 
+    override var recentlySentEnabled: Boolean
+        get() = preferences.getBoolean("recentlySentEnabled", false)
+        set(value) {
+            preferences.edit(commit = true) { putBoolean("recentlySentEnabled", value) }
+        }
+
     override var balanceTabButtonsEnabled: Boolean
         get() = preferences.getBoolean("balanceTabButtonsEnabled", true)
         set(value) {

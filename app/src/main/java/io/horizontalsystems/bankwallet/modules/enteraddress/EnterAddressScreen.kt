@@ -36,6 +36,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputAddress
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
@@ -92,7 +93,11 @@ fun EnterAddressScreen(
                 }
 
                 if (uiState.value.isBlank()) {
-                    AddressSuggestions(uiState.contacts) {
+                    AddressSuggestions(
+                        uiState.recentAddress,
+                        uiState.recentContact,
+                        uiState.contacts,
+                    ) {
                         viewModel.onEnterAddress(it)
                     }
                 } else if (uiState.addressCheckEnabled || uiState.addressValidationError != null) {
@@ -189,9 +194,50 @@ private fun AddressDefenseMessage(
 
 @Composable
 fun AddressSuggestions(
+    recentAddress: String?,
+    recentContact: SContact?,
     contacts: List<SContact>,
     onClick: (String) -> Unit
 ) {
+    if (recentContact != null) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .border(
+                    0.5.dp,
+                    ComposeAppTheme.colors.blade,
+                    RoundedCornerShape(16.dp)
+                )
+                .clickable {
+                    onClick.invoke(recentContact.address)
+                }
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+        ) {
+            headline2_leah(recentContact.name)
+            subhead2_grey(recentContact.address.shortAddress)
+        }
+    } else recentAddress?.let { address ->
+        SectionHeaderText(stringResource(R.string.Send_Address_Recent))
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .border(
+                    0.5.dp,
+                    ComposeAppTheme.colors.blade,
+                    RoundedCornerShape(16.dp)
+                )
+                .clickable {
+                    onClick.invoke(address)
+                }
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+        ) {
+            body_leah(address)
+        }
+    }
     if (contacts.isNotEmpty()) {
         SectionHeaderText(stringResource(R.string.Contacts))
         Column(

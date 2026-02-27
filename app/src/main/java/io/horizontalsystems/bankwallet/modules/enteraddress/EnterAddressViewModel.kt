@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.address.AddressCheckManager
 import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
@@ -44,7 +45,9 @@ class EnterAddressViewModel(
     private val addressCheckManager: AddressCheckManager,
     private val allowNull: Boolean,
     paidActionSettingsManager: PaidActionSettingsManager,
+    localStorage: ILocalStorage
 ) : ViewModelUiState<EnterAddressUiState>() {
+    private val recentEnabled = localStorage.recentlySentEnabled
     private var address: Address? = null
     private val canBeSendToAddress: Boolean
         get() = (allowNull || address != null) && !addressValidationInProgress && addressValidationError == null
@@ -63,6 +66,23 @@ class EnterAddressViewModel(
     private val addressExtractor = AddressExtractor(token.blockchainType, addressUriParser)
     private val addressCheckEnabled = paidActionSettingsManager.isActionEnabled(SecureSend)
 
+    private val recentlySentAddress: String?
+        get() {
+            return if (recentEnabled) recentAddress else null
+        }
+
+    private val recentlySentContact: SContact?
+        get() {
+            return if (recentEnabled) {
+                recentAddress?.let { recent ->
+                    contactNameAddresses.find { it.contactAddress.address == recentAddress }
+                        ?.let { SContact(it.name, recent) }
+                }
+            } else {
+                null
+            }
+        }
+
     init {
         initialAddress?.let {
             onEnterAddress(initialAddress)
@@ -80,6 +100,8 @@ class EnterAddressViewModel(
 
     override fun createState() = EnterAddressUiState(
         canBeSendToAddress = canBeSendToAddress,
+        recentAddress = recentlySentAddress,
+        recentContact = recentlySentContact,
         contacts = contactNameAddresses.map { SContact(it.name, it.contactAddress.address) },
         value = value,
         inputState = inputState,
@@ -242,7 +264,8 @@ class EnterAddressViewModel(
                 addressValidator,
                 addressCheckManager,
                 allowNull,
-                App.paidActionSettingsManager
+                App.paidActionSettingsManager,
+                App.localStorage
             ) as T
         }
     }
@@ -250,6 +273,8 @@ class EnterAddressViewModel(
 
 data class EnterAddressUiState(
     val canBeSendToAddress: Boolean,
+    val recentAddress: String?,
+    val recentContact: SContact?,
     val contacts: List<SContact>,
     val value: String,
     val inputState: DataState<Address>?,
