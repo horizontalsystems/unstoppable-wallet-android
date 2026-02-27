@@ -10,15 +10,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -28,19 +28,18 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SubscriptionScreen : HSScreen()
-
-class SubscriptionFragment : BaseComposeFragment() {
-
+data object SubscriptionScreen : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavController) {
-        SubscriptionScreen(navController)
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SubscriptionScreen(backStack)
     }
-
 }
 
 @Composable
-fun SubscriptionScreen(navController: NavController) {
+fun SubscriptionScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel = viewModel<SubscriptionViewModel>()
 
     val uiState = viewModel.uiState
@@ -48,7 +47,7 @@ fun SubscriptionScreen(navController: NavController) {
 
     HSScaffold(
         title = stringResource(R.string.Settings_Subscription),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column {
             VSpacer(12.dp)
@@ -76,7 +75,7 @@ fun SubscriptionScreen(navController: NavController) {
                     CellUniversal(
                         borderTop = false,
                         onClick = {
-                            navController.slideFromBottom(R.id.buySubscriptionFragment)
+                            backStack.add(BuySubscriptionHavHostScreen)
                             stat(
                                 page = StatPage.PurchaseList,
                                 event = StatEvent.OpenPremium(StatPremiumTrigger.GetPremium)
