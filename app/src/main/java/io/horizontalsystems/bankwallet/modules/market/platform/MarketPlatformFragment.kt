@@ -71,7 +71,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object MarketPlatformScreen : HSScreen()
+data class MarketPlatformScreen(val platform: Platform) : HSScreen()
 
 class MarketPlatformFragment : BaseComposeFragment() {
 

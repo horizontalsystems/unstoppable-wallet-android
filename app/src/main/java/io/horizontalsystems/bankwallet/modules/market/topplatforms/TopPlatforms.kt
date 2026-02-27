@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.Value
+import io.horizontalsystems.bankwallet.modules.market.platform.MarketPlatformScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -100,17 +101,13 @@ fun TopPlatforms(
                                 sortingField = uiState.sortingField,
                                 timeDuration = uiState.timePeriod,
                                 onItemClick = {
-//                                    TODO("xxx nav3")
-//                                    navController.slideFromRight(
-//                                        R.id.marketPlatformFragment,
-//                                        it
-//                                    )
-//
-//                                    stat(
-//                                        page = StatPage.Markets,
-//                                        event = StatEvent.OpenPlatform(it.uid),
-//                                        section = StatSection.Platforms
-//                                    )
+                                    backStack.add(MarketPlatformScreen(it))
+
+                                    stat(
+                                        page = StatPage.Markets,
+                                        event = StatEvent.OpenPlatform(it.uid),
+                                        section = StatSection.Platforms
+                                    )
                                 },
                                 preItems = {
                                     stickyHeader {

@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 object TopPlatformsModule {
@@ -41,6 +42,7 @@ object TopPlatformsModule {
 }
 
 @Parcelize
+@Serializable
 data class Platform(
     val uid: String,
     val name: String,
