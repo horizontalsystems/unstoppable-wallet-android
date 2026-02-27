@@ -27,7 +27,7 @@ enum class UProvider(
         SwapProviderType.CEX,
         true,
         true,
-        RiskLevel.LIMITED
+        RiskLevel.CONTROLLED
     ),
     LetsExchange(
         "LETSEXCHANGE",

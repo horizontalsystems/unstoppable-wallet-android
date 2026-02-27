@@ -772,9 +772,9 @@
     <string name="RiskLevel_Auto_Description">Automatic on-chain execution. Funds cannot be frozen or blocked after submission. If swap fails the funds are refunded automatically.</string>
     <string name="RiskLevel_Limited_Description">Provider operates using their own liquidity. Rejections are rare. Freezes are theoretically possible but highly unlikely.</string>
     <string name="RiskLevel_Controlled_Description">These provider operates with third party liquidity and has AML policies in place. In most cases swaps are rejected and refunded if any AML issues are detected. In some situations provider may request KYC before releasing funds.</string>
-    <string name="RiskLevel_Auto">Auto👌👌</string>
-    <string name="RiskLevel_Limited">Flexible👌 </string>
-    <string name="RiskLevel_Controlled">Controlled</string>
+    <string name="RiskLevel_Auto" translatable="false">Auto👌👌</string>
+    <string name="RiskLevel_Limited" translatable="false">Flexible👌</string>
+    <string name="RiskLevel_Controlled" translatable="false">Controlled</string>
 
     <!-- Swap Confirmation -->
 
