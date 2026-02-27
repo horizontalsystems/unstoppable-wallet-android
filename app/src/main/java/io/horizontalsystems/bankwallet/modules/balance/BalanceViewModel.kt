@@ -308,7 +308,11 @@ class BalanceViewModel(
     private fun handleAddressData(text: String) {
         if (text.contains("//")) {
             //handle this type of uri ton://transfer/<address>
-            val toncoinAddress = ToncoinUriParser.getAddress(text) ?: return
+            val toncoinAddress = ToncoinUriParser.getAddress(text) ?: run {
+                errorMessage = Translator.getString(R.string.Balance_Error_InvalidQrCode)
+                return
+            }
+
             openSendTokenSelect = OpenSendTokenSelect(
                 blockchainTypes = listOf(BlockchainType.Ton),
                 tokenTypes = null,
