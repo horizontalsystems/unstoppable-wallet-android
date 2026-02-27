@@ -66,22 +66,16 @@ class EnterAddressViewModel(
     private val addressExtractor = AddressExtractor(token.blockchainType, addressUriParser)
     private val addressCheckEnabled = paidActionSettingsManager.isActionEnabled(SecureSend)
 
-    private val recentlySentAddress: String?
-        get() {
-            return if (recentEnabled) recentAddress else null
-        }
+    private val recentlySentAddress = if (recentEnabled) recentAddress else null
 
-    private val recentlySentContact: SContact?
-        get() {
-            return if (recentEnabled) {
-                recentAddress?.let { recent ->
-                    contactNameAddresses.find { it.contactAddress.address == recentAddress }
-                        ?.let { SContact(it.name, recent) }
-                }
-            } else {
-                null
-            }
+    private val recentlySentContact: SContact? = if (recentEnabled) {
+        recentAddress?.let { recent ->
+            contactNameAddresses.find { it.contactAddress.address == recentAddress }
+                ?.let { SContact(it.name, recent) }
         }
+    } else {
+        null
+    }
 
     init {
         initialAddress?.let {
