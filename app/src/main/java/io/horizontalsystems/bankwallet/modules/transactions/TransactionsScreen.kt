@@ -47,6 +47,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceAccountsViewModel
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceScreenState
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HSCircularProgressIndicator
@@ -90,13 +91,12 @@ fun TransactionsScreen(backStack: NavBackStack<HSScreen>) {
                     icon = R.drawable.ic_manage_2_24,
                     showAlertDot = showFilterAlertDot,
                     onClick = {
-//                        TODO("xxx nav3")
-//                        navController.slideFromRight(R.id.transactionFilterFragment)
-//
-//                        stat(
-//                            page = StatPage.Transactions,
-//                            event = StatEvent.Open(StatPage.TransactionFilter)
-//                        )
+                        backStack.add(TransactionsFilterScreen)
+
+                        stat(
+                            page = StatPage.Transactions,
+                            event = StatEvent.Open(StatPage.TransactionFilter)
+                        )
                     },
                 )
             )
@@ -183,10 +183,9 @@ private fun onTransactionClick(
 
     App.transactionInfoScreenManager.tmpTransactionRecordToShow = transactionItem.record
 
-//    TODO("xxx nav3")
-//    navController.slideFromBottom(R.id.transactionInfoFragment)
-//
-//    stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionInfo))
+    backStack.add(TransactionInfoScreen)
+
+    stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionInfo))
 }
 
 fun LazyListScope.transactionList(
