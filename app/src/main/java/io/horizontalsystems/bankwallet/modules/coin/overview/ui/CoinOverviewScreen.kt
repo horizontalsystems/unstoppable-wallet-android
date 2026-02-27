@@ -47,6 +47,9 @@ import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -68,7 +71,8 @@ import io.horizontalsystems.marketkit.models.LinkType
 @Composable
 fun CoinOverviewScreen(
     fullCoin: FullCoin,
-    backStack: NavBackStack<HSScreen>
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus
 ) {
     val vmFactory by lazy { CoinOverviewModule.Factory(fullCoin) }
     val viewModel = viewModel<CoinOverviewViewModel>(factory = vmFactory)
@@ -106,20 +110,18 @@ fun CoinOverviewScreen(
     val manageWalletsViewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory1)
     val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory1)
 
+    ResultEffect<BirthdayHeightConfigScreen.Result>(resultBus) {
+        if (it.config != null) {
+            restoreSettingsViewModel.onEnter(it.config)
+        } else {
+            restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+        }
+    }
+
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-//        TODO("xxx nav3")
-//        navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
-//            resId = R.id.zcashConfigure,
-//            input = token
-//        ) {
-//            if (it.config != null) {
-//                restoreSettingsViewModel.onEnter(it.config)
-//            } else {
-//                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
-//            }
-//        }
+        backStack.add(BirthdayHeightConfigScreen(token))
     }
 
 

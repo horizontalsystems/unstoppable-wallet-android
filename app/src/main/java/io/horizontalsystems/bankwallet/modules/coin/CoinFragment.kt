@@ -76,7 +76,8 @@ data class CoinScreen(val coinUid: String) : HSScreen() {
         CoinScreen(
             coinUid,
             coinViewModel,
-            backStack
+            backStack,
+            resultBus
         )
 
     }
@@ -86,10 +87,11 @@ data class CoinScreen(val coinUid: String) : HSScreen() {
 fun CoinScreen(
     coinUid: String,
     coinViewModel: CoinViewModel?,
-    backStack: NavBackStack<HSScreen>
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus
 ) {
     if (coinViewModel != null) {
-        CoinTabs(coinViewModel, backStack)
+        CoinTabs(coinViewModel, backStack, resultBus)
     } else {
         CoinNotFound(coinUid, backStack)
     }
@@ -98,7 +100,8 @@ fun CoinScreen(
 @Composable
 fun CoinTabs(
     viewModel: CoinViewModel,
-    backStack: NavBackStack<HSScreen>
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus
 ) {
     val tabs = viewModel.tabs
     val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
@@ -169,7 +172,8 @@ fun CoinTabs(
                     CoinModule.Tab.Overview -> {
                         CoinOverviewScreen(
                             fullCoin = viewModel.fullCoin,
-                            backStack = backStack
+                            backStack = backStack,
+                            resultBus = resultBus
                         )
                     }
 
