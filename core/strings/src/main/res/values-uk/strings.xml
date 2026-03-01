@@ -1574,7 +1574,7 @@
     <string name="estimated_annual_interest">Передбачуваний річний відсоток</string>
     <string name="accruals">Нарахування</string>
     <string name="payouts">Виплати</string>
-    <string name="investment_chart">Графік інвестицій</string>
+    <string name="how_my_income_grows">Як зростає мій дохід</string>
     <string name="payouts_history">Історія виплат</string>
     <string name="pos_calculator">Калькулятор POS</string>
     <string name="pos_calculator_pirate_description">Розрахунок прибутковості майнінгу PirateCash при стейкінгу в пулі.</string>

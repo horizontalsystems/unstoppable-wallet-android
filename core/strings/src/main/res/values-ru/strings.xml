@@ -1575,7 +1575,7 @@
     <string name="estimated_annual_interest">Предполагаемый годовой процент</string>
     <string name="accruals">Начисления</string>
     <string name="payouts">Выплаты</string>
-    <string name="investment_chart">График инвестиций</string>
+    <string name="how_my_income_grows">Как растёт мой доход</string>
     <string name="payouts_history">История выплат</string>
     <string name="pos_calculator">Калькулятор POS</string>
     <string name="pos_calculator_pirate_description">Расчет прибыльности майнинга PirateCash при стейкинге в пуле.</string>
