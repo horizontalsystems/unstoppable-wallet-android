@@ -440,6 +440,28 @@
     <string name="FeeInfo_TronActivationFee_Description">This address is not active. Transferring TRX or TRC-10 tokens to an inactive account address will activate the account.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">소모된 자원</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth 은 블록체인 데이터베이스에 저장된 트랜잭션 바이트 크기를 측정하는 단위입니다. 거래가 클수록 대역폭 자원이 더 많이 사용됩니다.\n\nEnergy 는 TRON 가상 머신이 TRON 네트워크에서 특정 작업을 수행하기 위해 필요한 계산 양을 측정하는 단위입니다. \n\n스마트 계약 트랜잭션은 실행에 계산 자원이 필요하기 때문에 각 스마트 계약 트랜잭션에는 energy 수수료를 지불해야합니다.</string>
+
+    <!--Network Fee Warning-->
+    <string name="network_fee_warning_title">%s 네트워크 수수료</string>
+    <string name="network_fee_warning_body_protocol">%1$s 네트워크 프로토콜에 따르면 이 거래의 네트워크 수수료를 지불하려면 최소 %2$s이(가) 필요합니다.</string>
+    <string name="network_fee_warning_body_balance">잔액이 %s 미만입니다.</string>
+    <string name="network_fee_warning_body_protocol_bold">최소 %s</string>
+    <string name="network_fee_warning_body_balance_bold">%s 미만</string>
+    <string name="network_fee_warning_body_case_not_completed_prefix"></string>
+    <string name="network_fee_warning_body_case_not_sent_prefix"></string>
+    <string name="network_fee_warning_body_risk">이 잔액으로는 실제 수수료가 예상보다 높아질 수 있는 위험이 있습니다.</string>
+    <string name="network_fee_warning_body_risk_bold">예상보다 높아질 수 있는</string>
+    <string name="network_fee_warning_body_case_intro">이 경우:</string>
+    <string name="network_fee_warning_body_case_debited">%s이(가) 잔액에서 차감되지만,</string>
+    <string name="network_fee_warning_body_case_not_completed">거래가 완료되지 않을 수 있으며,</string>
+    <string name="network_fee_warning_body_case_not_sent">코인이 수신자에게 전송되지 않을 수 있습니다.</string>
+    <string name="network_fee_warning_body_confirm_intro">계속 진행하시면 다음을 확인하는 것입니다:</string>
+    <string name="network_fee_warning_body_confirm_understand">%s 네트워크의 작동 방식에 대한 세부 사항을 이해하고 있으며,</string>
+    <string name="network_fee_warning_body_confirm_risk">수수료 손실 위험을 인지하고 있으며,</string>
+    <string name="network_fee_warning_body_confirm_accept">거래 실패로 인한 결과를 수용합니다.</string>
+    <string name="network_fee_warning_points_header">동의할 사항:</string>
+    <string name="network_fee_warning_checkbox">위험을 이해하고 수용합니다</string>
+
     <!--Tron-->
     <string name="Tron_AddressNotActive_Warning">이 주소는 활성화되어 있지 않습니다</string>
     <string name="Tron_AddressNotActive_Title">비활성 주소</string>

@@ -9,6 +9,7 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.navigation.NavController
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.send.SendConfirmationScreen
+import cash.p.terminal.modules.send.fee.NetworkFeeWarningOverlay
 
 @Composable
 fun SendTonConfirmationScreen(
@@ -48,7 +49,7 @@ fun SendTonConfirmationScreen(
         lockTimeInterval = confirmationData.lockTimeInterval,
         memo = confirmationData.memo,
         rbfEnabled = confirmationData.rbfEnabled,
-        onClickSend = sendViewModel::onClickSend,
+        onClickSend = sendViewModel::onClickSendWithWarningCheck,
         sendEntryPointDestId = sendEntryPointDestId,
         isSynced = sendViewModel.isSynced,
         sendToken = sendViewModel.wallet.token,
@@ -58,5 +59,11 @@ fun SendTonConfirmationScreen(
         insufficientFeeBalance = sendViewModel.isInsufficientFeeBalance(confirmationData.fee),
         balanceHidden = sendViewModel.balanceHidden,
         onBalanceClicked = sendViewModel::toggleHideBalance,
+    )
+
+    NetworkFeeWarningOverlay(
+        feeWarningData = sendViewModel.feeWarningData,
+        onConfirm = sendViewModel::onFeeWarningConfirmed,
+        onCancel = sendViewModel::onFeeWarningCancelled,
     )
 }

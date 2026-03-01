@@ -77,6 +77,9 @@ class SendTronViewModel(
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
 
+    override fun getEstimatedFee(): BigDecimal? = confirmationData?.fee
+    override fun onSendRequested() = onClickSend()
+
     init {
         viewModelScope.launch {
             amountService.stateFlow.collect {
@@ -237,7 +240,7 @@ class SendTronViewModel(
         }
     }
 
-    fun onClickSend() {
+    private fun onClickSend() {
         logger.info("click send button")
 
         viewModelScope.launch {

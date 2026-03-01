@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.multiswap
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -70,6 +69,9 @@ class SwapConfirmViewModel(
 
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
+
+    override fun getEstimatedFee(): BigDecimal? = sendTransactionState.networkFee?.primary?.value
+    override fun onSendRequested() = executeSwap()
 
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
@@ -301,7 +303,7 @@ class SwapConfirmViewModel(
             } catch (_: CancellationException) {
                 Timber.w("fetchFinalQuote was cancelled")
             } catch (t: Throwable) {
-                Log.e("AAA", "fetchFinalQuote error", t)
+                Timber.e(t, "fetchFinalQuote error")
                 loading = false
                 criticalError = Translator.getString(R.string.unexpected_error)
                 emitState()
@@ -319,9 +321,8 @@ class SwapConfirmViewModel(
         emitState()
     }
 
-    fun executeSwap() {
+    private fun executeSwap() {
         if (sendResult == SendResult.Sending) return
-
         sendResult = SendResult.Sending
 
         viewModelScope.launch {

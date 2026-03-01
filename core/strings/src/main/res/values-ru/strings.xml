@@ -445,6 +445,28 @@
     <string name="FeeInfo_TronActivationFee_Description">Этот адрес неактивен. Перевод TRX или токенов TRC-10 на адрес неактивного аккаунта активирует аккаунт.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Расходуемые ресурсы</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth - это единица, которая измеряет размер байт транзакции, хранящихся в базе данных блокчейна. Чем больше транзакция, тем больше bandwidth будет потребляться.\n\nEnergy — это единица, измеряющая количество вычислений, требуемых виртуальной машиной TRON для выполнения конкретных операций в сети TRON.\n\nПоскольку транзакции смарт-контракта требуют выполнения вычислительных ресурсов, каждая сделка по контракту требует оплаты energy комиссии.</string>
+
+    <!--Network Fee Warning-->
+    <string name="network_fee_warning_title">Комиссия сети %s</string>
+    <string name="network_fee_warning_body_protocol">Протокол сети %1$s сообщает, что для выполнения данной транзакции требуется не менее %2$s для оплаты сетевой комиссии.</string>
+    <string name="network_fee_warning_body_balance">На вашем балансе менее %s.</string>
+    <string name="network_fee_warning_body_protocol_bold">не менее %s</string>
+    <string name="network_fee_warning_body_balance_bold">менее %s</string>
+    <string name="network_fee_warning_body_case_not_completed_prefix">но </string>
+    <string name="network_fee_warning_body_case_not_sent_prefix">и </string>
+    <string name="network_fee_warning_body_risk">При таком балансе существует риск, что фактическая комиссия может быть выше ожидаемой.</string>
+    <string name="network_fee_warning_body_risk_bold">быть выше ожидаемой</string>
+    <string name="network_fee_warning_body_case_intro">В этом случае:</string>
+    <string name="network_fee_warning_body_case_debited">%s будут списаны с вашего баланса,</string>
+    <string name="network_fee_warning_body_case_not_completed">транзакция может не быть выполнена,</string>
+    <string name="network_fee_warning_body_case_not_sent">монеты не будут отправлены получателю.</string>
+    <string name="network_fee_warning_body_confirm_intro">Продолжая, вы подтверждаете, что:</string>
+    <string name="network_fee_warning_body_confirm_understand">понимаете особенности работы сети %s,</string>
+    <string name="network_fee_warning_body_confirm_risk">осознаёте риск потери комиссии,</string>
+    <string name="network_fee_warning_body_confirm_accept">принимаете возможные последствия неуспешной транзакции.</string>
+    <string name="network_fee_warning_points_header">Необходимо подтвердить:</string>
+    <string name="network_fee_warning_checkbox">Я понимаю и принимаю риск</string>
+
     <!--Tron-->
     <string name="Tron_AddressNotActive_Warning">Этот адрес не активен</string>
     <string name="Tron_AddressNotActive_Title">Неактивный адрес</string>

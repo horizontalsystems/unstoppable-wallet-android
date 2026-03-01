@@ -9,6 +9,8 @@ import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.isNative
 import cash.p.terminal.entities.CoinValue
 import io.horizontalsystems.core.entities.CurrencyValue
+import cash.p.terminal.modules.send.fee.NetworkFeeWarningData
+import cash.p.terminal.modules.send.fee.buildNetworkFeeWarningData
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IBalanceAdapter
@@ -48,6 +50,9 @@ abstract class BaseSendViewModel<T>(
     var feeCoinBalance: BigDecimal? by mutableStateOf(null)
         private set
 
+    var feeWarningData by mutableStateOf<NetworkFeeWarningData?>(null)
+        private set
+
     var balanceHidden by mutableStateOf(balanceHiddenManager.balanceHiddenFlow.value)
         private set
 
@@ -57,6 +62,34 @@ abstract class BaseSendViewModel<T>(
     fun toggleHideBalance() {
         HudHelper.vibrate(App.instance)
         balanceHiddenManager.toggleBalanceHidden()
+    }
+
+    protected open fun getEstimatedFee(): BigDecimal? = null
+    protected open fun onSendRequested() {}
+
+    fun onClickSendWithWarningCheck() {
+        val ft = feeToken ?: run { onSendRequested(); return }
+        val data = buildNetworkFeeWarningData(
+            blockchainType = wallet.token.blockchainType,
+            tokenType = wallet.token.type,
+            feeTokenBalance = feeCoinBalance,
+            estimatedFee = getEstimatedFee(),
+            feeToken = ft,
+        )
+        if (data != null) {
+            feeWarningData = data
+            return
+        }
+        onSendRequested()
+    }
+
+    fun onFeeWarningConfirmed() {
+        feeWarningData = null
+        onSendRequested()
+    }
+
+    fun onFeeWarningCancelled() {
+        feeWarningData = null
     }
 
     private fun resolveFeeBalanceAdapter(): IBalanceAdapter? {

@@ -215,7 +215,7 @@ fun SwapScreen(navController: NavController, tokenIn: Token?, tokenOut: Token?) 
                 fragmentNavController = navController,
                 swapNavController = swapNavController,
                 swapViewModel = viewModel,
-                onOpenSettings = { swapNavController.navigate(SwapTransactionSettingsPage) }
+                onOpenSettings = { swapNavController.navigate(SwapTransactionSettingsPage) },
             )
         }
         composablePage<SwapSettingsPage> {

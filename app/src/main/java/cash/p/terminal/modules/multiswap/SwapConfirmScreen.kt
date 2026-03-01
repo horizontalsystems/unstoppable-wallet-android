@@ -26,6 +26,7 @@ import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.fee.FeeInfoSection
 import cash.p.terminal.modules.multiswap.ui.SwapProviderField
 import cash.p.terminal.modules.send.SendResult
+import cash.p.terminal.modules.send.fee.NetworkFeeWarningOverlay
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
@@ -59,7 +60,7 @@ fun SwapConfirmScreen(
     fragmentNavController: NavController,
     swapNavController: NavController,
     swapViewModel: SwapViewModel,
-    onOpenSettings: (() -> Unit)? = null
+    onOpenSettings: (() -> Unit)? = null,
 ) {
     val view = LocalView.current
 
@@ -176,7 +177,7 @@ fun SwapConfirmScreen(
                     enabled = viewModel.isSynced && !swapInProgress && uiState.amountOut != null &&
                             uiState.networkFee != null && uiState.feeCaution == null &&
                             uiState.cautions.none { it.type == CautionViewItem.Type.Error },
-                    onClick = viewModel::executeSwap,
+                    onClick = viewModel::onClickSendWithWarningCheck,
                 )
                 if (uiState.expiresIn != null) {
                     VSpacer(height = 12.dp)
@@ -294,6 +295,12 @@ fun SwapConfirmScreen(
             Cautions(cautions = uiState.cautions)
         }
     }
+
+    NetworkFeeWarningOverlay(
+        feeWarningData = viewModel.feeWarningData,
+        onConfirm = viewModel::onFeeWarningConfirmed,
+        onCancel = viewModel::onFeeWarningCancelled,
+    )
 }
 
 @Composable

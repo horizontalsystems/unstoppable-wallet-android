@@ -39,6 +39,7 @@ import cash.p.terminal.modules.fee.HSFeeRaw
 import cash.p.terminal.modules.send.ConfirmAmountCell
 import cash.p.terminal.modules.send.MemoCell
 import cash.p.terminal.modules.send.SendResult
+import cash.p.terminal.modules.send.fee.NetworkFeeWarningOverlay
 import cash.p.terminal.ui.compose.components.SectionTitleCell
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
@@ -282,10 +283,16 @@ fun SendTronConfirmationScreen(
                 SendButton(
                     modifier = Modifier.fillMaxWidth(),
                     sendResult = sendResult,
-                    onClickSend = sendViewModel::onClickSend,
+                    onClickSend = sendViewModel::onClickSendWithWarningCheck,
                     enabled = sendEnabled && sendViewModel.isSynced
                 )
             }
+
+            NetworkFeeWarningOverlay(
+                feeWarningData = sendViewModel.feeWarningData,
+                onConfirm = sendViewModel::onFeeWarningConfirmed,
+                onCancel = sendViewModel::onFeeWarningCancelled,
+            )
         }
     }
 }

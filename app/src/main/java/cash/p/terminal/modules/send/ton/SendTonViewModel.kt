@@ -66,6 +66,9 @@ class SendTonViewModel(
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
 
+    override fun getEstimatedFee(): BigDecimal? = (feeState.feeStatus as? FeeStatus.Success)?.fee
+    override fun onSendRequested() = onClickSend()
+
     private val logger: AppLogger = AppLogger("send-ton")
 
     init {
@@ -143,7 +146,7 @@ class SendTonViewModel(
         )
     }
 
-    fun onClickSend() {
+    private fun onClickSend() {
         logger.info("click send button")
 
         viewModelScope.launch {

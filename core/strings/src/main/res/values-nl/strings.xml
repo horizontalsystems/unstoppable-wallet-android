@@ -440,6 +440,28 @@
     <string name="FeeInfo_TronActivationFee_Description">This address is not active. Transferring TRX or TRC-10 tokens to an inactive account address will activate the account.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Resources Consumed</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth is the unit that measures the size of the transaction bytes stored in the blockchain database. The larger the transaction, the more bandwidth resources will be consumed.\n\nEnergy is the unit that measures the amount of computation required by the TRON virtual machine to perform specific operations on the TRON network.\n\nSince smart contract transactions require computing resources to execute, each smart contract transaction requires to pay for the energy fee.</string>
+
+    <!--Network Fee Warning-->
+    <string name="network_fee_warning_title">%s Netwerkkosten</string>
+    <string name="network_fee_warning_body_protocol">Het %1$s-netwerkprotocol vereist dat minimaal %2$s nodig is om de netwerkkosten voor deze transactie te betalen.</string>
+    <string name="network_fee_warning_body_balance">U heeft minder dan %s op uw saldo.</string>
+    <string name="network_fee_warning_body_protocol_bold">minimaal %s</string>
+    <string name="network_fee_warning_body_balance_bold">minder dan %s</string>
+    <string name="network_fee_warning_body_case_not_completed_prefix">maar </string>
+    <string name="network_fee_warning_body_case_not_sent_prefix">en </string>
+    <string name="network_fee_warning_body_risk">Met dit saldo bestaat het risico dat de werkelijke kosten hoger dan verwacht kunnen zijn.</string>
+    <string name="network_fee_warning_body_risk_bold">hoger dan verwacht kunnen zijn</string>
+    <string name="network_fee_warning_body_case_intro">In dat geval:</string>
+    <string name="network_fee_warning_body_case_debited">wordt %s van uw saldo afgeschreven,</string>
+    <string name="network_fee_warning_body_case_not_completed">de transactie wordt mogelijk niet voltooid,</string>
+    <string name="network_fee_warning_body_case_not_sent">de munten worden niet naar de ontvanger verzonden.</string>
+    <string name="network_fee_warning_body_confirm_intro">Door verder te gaan, bevestigt u dat u:</string>
+    <string name="network_fee_warning_body_confirm_understand">de specifieke werking van het %s-netwerk begrijpt,</string>
+    <string name="network_fee_warning_body_confirm_risk">zich bewust bent van het risico van commissieverlies,</string>
+    <string name="network_fee_warning_body_confirm_accept">de mogelijke gevolgen van een mislukte transactie accepteert.</string>
+    <string name="network_fee_warning_points_header">Punten waarmee u moet instemmen:</string>
+    <string name="network_fee_warning_checkbox">Ik begrijp en accepteer het risico</string>
+
     <!--Tron-->
     <string name="Tron_AddressNotActive_Warning">This address is not active</string>
     <string name="Tron_AddressNotActive_Title">Not Active Address</string>

@@ -436,6 +436,28 @@
     <string name="FeeInfo_TronActivationFee_Description">This address is not active. Transferring TRX or TRC-10 tokens to an inactive account address will activate the account.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Ressources consommées</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">La bande passante est l\'unité qui mesure la taille des octets de transaction stockés dans la base de données blockchain. Plus la transaction est grande, plus la bande passante sera consommée.\n\nL\'énergie est l\'unité qui mesure le montant de calcul requis par la machine virtuelle TRON pour effectuer des opérations spécifiques sur le réseau TRON.\n\nÉtant donné que les transactions de contrats intelligents nécessitent des ressources informatiques pour être exécutées, chaque transaction de contrat intelligent nécessite le paiement de frais d\'énergie.</string>
+
+    <!--Network Fee Warning-->
+    <string name="network_fee_warning_title">Frais de réseau %s</string>
+    <string name="network_fee_warning_body_protocol">Le protocole du réseau %1$s stipule qu\'au moins %2$s est nécessaire pour payer les frais de réseau de cette transaction.</string>
+    <string name="network_fee_warning_body_balance">Vous avez moins de %s dans votre solde.</string>
+    <string name="network_fee_warning_body_protocol_bold">au moins %s</string>
+    <string name="network_fee_warning_body_balance_bold">moins de %s</string>
+    <string name="network_fee_warning_body_case_not_completed_prefix">mais </string>
+    <string name="network_fee_warning_body_case_not_sent_prefix">et </string>
+    <string name="network_fee_warning_body_risk">Avec ce solde, il existe un risque que les frais réels soient plus élevés que prévu.</string>
+    <string name="network_fee_warning_body_risk_bold">plus élevés que prévu</string>
+    <string name="network_fee_warning_body_case_intro">Dans ce cas :</string>
+    <string name="network_fee_warning_body_case_debited">%s seront débités de votre solde,</string>
+    <string name="network_fee_warning_body_case_not_completed">la transaction pourrait ne pas être finalisée,</string>
+    <string name="network_fee_warning_body_case_not_sent">les fonds ne seront pas envoyés au destinataire.</string>
+    <string name="network_fee_warning_body_confirm_intro">En continuant, vous confirmez que vous :</string>
+    <string name="network_fee_warning_body_confirm_understand">comprenez les spécificités du fonctionnement du réseau %s,</string>
+    <string name="network_fee_warning_body_confirm_risk">êtes conscient du risque de perte de commission,</string>
+    <string name="network_fee_warning_body_confirm_accept">acceptez les conséquences possibles d\'une transaction échouée.</string>
+    <string name="network_fee_warning_points_header">Points à accepter :</string>
+    <string name="network_fee_warning_checkbox">Je comprends et j\'accepte le risque</string>
+
     <!--Tron-->
     <string name="Tron_AddressNotActive_Warning">Cette adresse n\'est pas active</string>
     <string name="Tron_AddressNotActive_Title">Adresse non-active</string>
