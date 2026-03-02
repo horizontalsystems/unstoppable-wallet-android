@@ -32,9 +32,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -52,13 +54,21 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object BaseCurrencySettingsScreen : HSScreen()
+data object BaseCurrencySettingsScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        BaseCurrencyScreen(backStack)
+    }
+}
 
 class BaseCurrencySettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        BaseCurrencyScreen(navController)
+//        BaseCurrencyScreen(navController)
     }
 
 }
@@ -66,7 +76,7 @@ class BaseCurrencySettingsFragment : BaseComposeFragment() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BaseCurrencyScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     viewModel: BaseCurrencySettingsViewModel = viewModel(
         factory = BaseCurrencySettingsModule.Factory()
     )
@@ -84,7 +94,7 @@ private fun BaseCurrencyScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
 
     if (viewModel.closeScreen) {
-        navController.popBackStack()
+        backStack.removeLastOrNull()
     }
 
     if (viewModel.showDisclaimer) {
@@ -95,7 +105,7 @@ private fun BaseCurrencyScreen(
 
     HSScaffold(
         title = stringResource(R.string.SettingsCurrency_Title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(
             Modifier
