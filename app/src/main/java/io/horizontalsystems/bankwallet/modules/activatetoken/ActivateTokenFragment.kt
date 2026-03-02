@@ -19,19 +19,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenError
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenViewModel
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -52,14 +51,24 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ActivateTokenScreen : HSScreen()
+data class ActivateTokenScreen(val wallet: Wallet) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ActivateTokenScreen(backStack, wallet, resultBus)
+    }
+
+    data class Result(val activated: Boolean)
+}
 
 class ActivateTokenFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Wallet>(navController) {
-            ActivateTokenScreen(navController, it)
-        }
+//        withInput<Wallet>(navController) {
+//            ActivateTokenScreen(navController, it)
+//        }
     }
 
     @Parcelize
@@ -69,8 +78,9 @@ class ActivateTokenFragment : BaseComposeFragment() {
 
 @Composable
 fun ActivateTokenScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     wallet: Wallet,
+    resultBus: ResultEventBus
 ) {
     val viewModel = viewModel<ActivateTokenViewModel>(factory = ActivateTokenViewModel.Factory(wallet))
 
@@ -100,10 +110,10 @@ fun ActivateTokenScreen(
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            navController.setNavigationResultX(ActivateTokenFragment.Result(true))
-                            navController.popBackStack()
+                            resultBus.sendResult(result = ActivateTokenScreen.Result(true))
+                            backStack.removeLastOrNull()
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                            backStack.add(ErrorBottomSheetScreen(t.message ?: t.javaClass.simpleName))
                         }
 
                         buttonTitle = R.string.Button_Activate
@@ -139,11 +149,12 @@ fun ActivateTokenScreen(
 
         VSpacer(height = 16.dp)
         SectionUniversalLawrence {
-            DataFieldFee(
-                navController,
-                uiState.feeCoinValue?.getFormattedFull() ?: "---",
-                uiState.feeFiatValue?.getFormattedFull() ?: "---"
-            )
+//            TODO("xxx nav3")
+//            DataFieldFee(
+//                backStack,
+//                uiState.feeCoinValue?.getFormattedFull() ?: "---",
+//                uiState.feeFiatValue?.getFormattedFull() ?: "---"
+//            )
         }
 
         uiState.error?.let { error ->

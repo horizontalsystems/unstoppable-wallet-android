@@ -32,7 +32,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ErrorBottomSheetScreen : HSScreen()
+data class ErrorBottomSheetScreen(val error: String) : HSScreen()
 
 class ErrorBottomSheet : BaseComposableBottomSheetFragment() {
 
