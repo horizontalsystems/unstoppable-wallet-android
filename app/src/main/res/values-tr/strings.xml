@@ -4,7 +4,6 @@
     <string name="Error_ParameterNotSet">Parametre ayarlanmadı</string>
     <string name="Alert_Cancel">İptal</string>
     <string name="Alert_Copy">Kopyala</string>
-    <string name="Alert_Loading">Yükleniyor...</string>
     <string name="Button_Show">Göster</string>
     <string name="Button_Hide">Gizle</string>
     <string name="Button_Cancel">İptal</string>
@@ -112,14 +111,8 @@
     <string name="Restore_PrivateKey_InvalidKey">Geçersiz Anahtar</string>
     <string name="SelectContacts_All">Hepsi</string>
     <string name="Restore_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Daha hızlı senkronizasyon için cüzdanın doğum günü yüksekliğini girin.</string>
     <string name="Restore_ZCash_Birthday_Hint">00000000 (isteğe bağlı)</string>
     <string name="Restore_ZCash_RestoreAsNew">Yeni olarak geri yükle</string>
-    <string name="Restore_ZCash_NewWallet">Yeni Cüzdan</string>
-    <string name="Restore_ZCash_NewWallet_Description">Herhangi bir para işlemi yok</string>
-    <string name="Restore_ZCash_OldWallet">Mevcut Cuzdan</string>
-    <string name="Restore_ZCash_OldWallet_Description">Işlemler Mevcut</string>
-    <string name="Restore_ZCash_SlowSyncWarningText">Blok zinciri ile ilk senkronizasyon, çok fazla internet trafiği tüketebilir.</string>
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">P. Değeri</string>
@@ -243,7 +236,6 @@
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
     <string name="Balance_SearchingTransactions">İşlemler aranıyor ...</string>
-    <string name="Balance_Syncing_WithProgress">Eşitleniyor...%s%%</string>
     <string name="Balance_Sort_Balance">Bakiye</string>
     <string name="Balance_Sort_PopupTitle">Sıralama şekli</string>
     <string name="Balance_Sort_Az">İsim</string>
@@ -303,7 +295,6 @@
     <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Girdiğiniz adres sahte olabilir. Dolandırıcılar genellikle ilk ve son karakterleri değiştirirler. Kayıpları önlemek için devam etmeden önce tam adresi dikkatlice doğrulayın.</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">Girdiğiniz adres kara listeye alınmış olarak işaretlenmiştir. Bu adrese yapılan işlemler kayıplara veya diğer risklere yol açabilir. Lütfen devam etmeden önce alıcının bilgilerini doğrulayın.</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Girdiğiniz adres yaptırım altında olarak işaretlenmiştir. Bu adrese yapılan işlemler kayıplara veya diğer risklere yol açabilir. Lütfen devam etmeden önce alıcının bilgilerini doğrulayın.</string>
-    <string name="AddressEnter_Danger_Content">Girdiğiniz adres sahte olabilir. Dolandırıcılar genellikle ilk ve son karakterleri değiştirirler. Kayıpları önlemek için devam etmeden önce tam adresi dikkatlice doğrulayın.</string>
     <string name="Send_RiskyAddress">Riskli Adres!</string>
     <string name="Send_RiskyAddress_AlertText">Yüksek riskli bir adrese fon göndermek üzeresiniz. Devam etmek, para kaybına veya diğer güvenlik risklerine yol açabilir. Devam ederek potansiyel tehlikeleri kabul etmiş olursunuz. Devam etmek istediğinizden emin misiniz?</string>
     <string name="Send_Success">\u2713 Gönderilen</string>
@@ -400,7 +391,6 @@
     <string name="WalletConnect_Error_UnsupportedEvents">Desteklenmeyen olaylar: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">İstek bulunamadı hatası</string>
     <string name="WalletConnect_NoConnection">Bağlı dapp\'niz yok</string>
-    <string name="WalletConnect_PendingRequests">bekleyen istekler</string>
     <string name="WalletConnect_ActiveWallet">Cüzdanı</string>
     <string name="WalletConnect_NotSupportedDescription">Mevcut cüzdan türünüz %s WalletConnect\'i desteklemiyor</string>
     <string name="WalletConnect_Unnamed">İsimsiz</string>
@@ -722,9 +712,6 @@
     <string name="SettingsSecurity_EnablePin">Kod</string>
     <string name="SettingsSecurity_DisablePin">Şifre Kodunu Devre Dışı Bırak</string>
     <string name="SettingsSecurity_EditPin">Kod Değiştir</string>
-    <string name="SettingsSecurity_SetDuressPin">Baskı Modunu Ayarla</string>
-    <string name="SettingsSecurity_EditDuressPin">Duress Şifresini Düzenle</string>
-    <string name="SettingsSecurity_DisableDuressPin">Zorlama Şifresini Devre Dışı Bırak</string>
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internetinizi tamamen anonimleştirin. Bazı durumlarda DeFi uygulamaları için WalletConnect özelliğinin çok yavaş olabileceğini veya hiç çalışmayabileceğini unutmayın.</string>

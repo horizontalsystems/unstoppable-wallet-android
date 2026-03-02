@@ -6,7 +6,6 @@
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Abbrechen</string>
     <string name="Alert_Copy">Kopieren</string>
-    <string name="Alert_Loading">Wird geladen ...</string>
     <string name="Button_Show">Anzeigen</string>
     <string name="Button_Hide">Ausblenden</string>
     <string name="Button_Cancel">Abbrechen</string>
@@ -124,19 +123,12 @@
     <string name="Restore_PrivateKey_InvalidKey">Ungültiger Schlüssel</string>
     <string name="SelectContacts_All">Alle</string>
     <string name="Restore_BirthdayHeight">Geburtstagshöhe</string>
-    <string name="Restore_BirthdayHeight_Invalid">Ungültige Geburtstagshöhe</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Geben Sie die Geburtstagshöhe der Brieftasche für eine schnellere Synchronisierung ein.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
     <string name="BirthdayHeight_Description">Sie können die Blockhöhe ändern oder ein ungefähres Datum wählen, um Ihren Transaktionsverlauf erneut zu durchsuchen.</string>
     <string name="BirthdayHeight_RestoreDescription">Ihre Brieftasche wird von einem Standard-Startpunkt wiederhergestellt. Sie können die Blockhöhe ändern oder ein ungefähres Wallet-Erstellungsdatum wählen.</string>
     <string name="BirthdayHeight_BlockDate">Blockdatum:</string>
     <string name="BirthdayHeight_Rescan">Neu scannen</string>
     <string name="Restore_ZCash_RestoreAsNew">Als Neu wiederherstellen</string>
-    <string name="Restore_ZCash_NewWallet">Neue Brieftasche</string>
-    <string name="Restore_ZCash_NewWallet_Description">Keine Transaktionen vorhanden</string>
-    <string name="Restore_ZCash_OldWallet">Vorhandene Wallet</string>
-    <string name="Restore_ZCash_OldWallet_Description">Hat Transaktionen</string>
-    <string name="Restore_ZCash_SlowSyncWarningText">Die erste Synchronisation mit der Blockchain kann viel Internet-Verkehr verbrauchen.</string>
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">MCap</string>
@@ -326,7 +318,6 @@
     <string name="Balance_SearchingTransactions">Transaktionen werden gesucht…</string>
     <string name="Balance_Downloading">Herunterladen…</string>
     <string name="Balance_FoundTx">%s tx</string>
-    <string name="Balance_Syncing_WithProgress">Synchronisiere… %s%%</string>
     <string name="Balance_BlocksRemaining">Verbleibende Blöcke - %d</string>
     <string name="Balance_Sort_Balance">Guthaben</string>
     <string name="Balance_Sort_PopupTitle">Sortieren nach</string>
@@ -359,9 +350,6 @@
     <string name="Balance_Receive_Subaddresses">Unteradressen</string>
     <string name="Balance_Receive_SubaddressesInfo">Mit Unteradressen können Sie mehrere eindeutige Adressen innerhalb einer Brieftasche für Komfort und verbesserte Privatsphäre verwenden.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Transaktionen: %s</string>
-    <string name="Balance_Receive_HaveYouOwnedCoins">Hast du zuvor %s Münzen besessen?</string>
-    <string name="Balance_Receive_YesAlreadyOwn">Ja, ich besitze bereits</string>
-    <string name="Balance_Receive_IDontHave">Nein, ich habe nicht</string>
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Transparente ZEC erkannt</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparenter Betrag</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Transparentes Guthaben kann momentan in unserer Brieftasche nicht verwendet werden. Dieses Geld kann jedoch von anderen Brieftaschen mit t-address Unterstützung ausgegeben werden</string>
@@ -416,8 +404,6 @@
     <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Die Adresse, die Sie eingegeben haben, wird als unter Sanktionen markiert. Transaktionen an diese Adresse können zu Verlusten oder anderen Risiken führen. Bitte überprüfen Sie die Angaben des Empfängers bevor Sie fortfahren.</string>
     <string name="AddressEnter_NeedSubscription_Title">Achtung!</string>
     <string name="AddressEnter_NeedSubscription_Content">Secure Send ist aus. Deine Überweisung kann an eine riskante Adresse gehen und dein Guthaben kann verloren gehen.</string>
-    <string name="AddressEnter_Danger_Title">Gefahr!</string>
-    <string name="AddressEnter_Danger_Content">Die eingegebene Adresse kann betrügerisch sein. Scammer ändern oft die ersten und letzten Zeichen. Überprüfen Sie die vollständige Adresse, bevor Sie fortfahren, um Verluste zu vermeiden.</string>
     <string name="AddressEnter_Safe_Title">Sicher</string>
     <string name="AddressEnter_Safe_Content">Adresse ausgewählt. Keine Phishing, schwarze Liste oder Sanktionen gefunden. Es ist sicher zu verwenden.</string>
     <string name="Send_RiskyAddress">Riskante Adresse!</string>
@@ -458,9 +444,6 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Nonce verwendet</string>
     <string name="SendEvmSettings_Error_NonceUsed">Eine ausgeführte Transaktion mit diesem nonce existiert bereits.</string>
     <!-- Fee Settings -->
-    <string name="Fee_Total">Gesamtgebühr</string>
-    <string name="Fee_OutboundFee">Ausgehende Gebühr</string>
-    <string name="Fee_LiquidityFee">Liquiditätsgebühr</string>
     <string name="FeeSettings_NetworkFee">Netzwerkgebühr</string>
     <string name="FeeSettings_NetworkFee_Info">Die geschätzten Kosten für den Versand der Transaktion im Netzwerk.</string>
     <string name="FeeSettings_GasLimit_Info">Die Transaktionskomplexität wird in Einheiten mit dem Namen \"Gas\" gemessen, die je nach ausgeführten intelligenten Verträgen variieren. Das Gaslimit ist das geschätzte Höchstgas, das benötigt wird, um es auszuführen. Das tatsächliche Gas wird normalerweise niedriger sein.</string>
@@ -531,7 +514,6 @@
     <string name="WalletConnect_Error_UnsupportedEvents">Nicht unterstützte Ereignisse: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Anforderungsfehler nicht gefunden</string>
     <string name="WalletConnect_NoConnection">Du hast keine verbundenen Dapps</string>
-    <string name="WalletConnect_PendingRequests">Ausstehende Anfragen</string>
     <string name="WalletConnect_ActiveWallet">Wallet</string>
     <string name="WalletConnect_NotSupportedDescription">Ihr aktueller Brieftyp %s unterstützt WalletConnect nicht</string>
     <string name="WalletConnect_Unnamed">Unbenannt</string>
@@ -544,8 +526,6 @@
     <string name="WalletConnect_ConnectTo">Mit %s verbinden</string>
     <string name="WalletConnect_ConnectedTo">Verbunden mit %s</string>
     <string name="WalletConnect_Disconnect">Verbindung trennen %s</string>
-    <string name="WalletConnect_WhiteListDeactivatedWarning">Scam-Schutz ist deaktiviert. Domain-Verifizierung ist nicht verfügbar. Upgrade auf Premium, um vor nicht verifizierten oder Phishing-Websites zu schützen.</string>
-    <string name="WalletConnect_NotInWhiteListAlert">Diese Website ist nicht verifiziert und kann zu Phishing oder Verlust von Mitteln führen. Verbinden wird dringend verhindert.</string>
     <string name="WalletConnect_ConnectWarning">Wenn Sie auf eine Verbindung klicken, erlauben Sie dieser App, Ihre öffentliche Adresse anzuzeigen.</string>
     <string name="WalletConnect_Attention">Achtung!</string>
     <string name="WalletConnect_Danger">Gefahr!</string>
@@ -824,9 +804,6 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 Stunde</string>
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">Adressprüfung</string>
-    <string name="SettingsAddressChecker_RecipientCheck">Empfängerprüfung</string>
-    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Prüft die Empfängeradresse auf Sicherheitsrisiken vor dem Versand.</string>
-    <string name="SettingsAddressChecker_CheckAddress">Adresse prüfen</string>
     <string name="SettingsAddressChecker_OnSubject">auf %s</string>
     <string name="SettingsAddressChecker_SanctionsCheck">Sanktionsüberprüfung</string>
     <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
@@ -918,9 +895,6 @@
     <string name="Premium_SubscriptionPeriod_Annually">Jährlich</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Monatlich</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">31% SPAREN</string>
-    <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
-    <string name="Premium_SubscriptionPeriod_PerYear">pro Jahr</string>
-    <string name="Premium_SubscriptionPeriod_PerMonth">pro Monat</string>
     <string name="Appearance_MarketsTab">MARKETS TAB</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">APP ICON</string>
@@ -1008,10 +982,6 @@
     <string name="SettingsSecurity_EnablePin">Passcode aktivieren</string>
     <string name="SettingsSecurity_DisablePin">Passwort deaktivieren</string>
     <string name="SettingsSecurity_EditPin">Passwort bearbeiten</string>
-    <string name="SettingsSecurity_SetDuressPin">Duress Modus setzen</string>
-    <string name="SettingsSecurity_EditDuressPin">Duress Passwort bearbeiten</string>
-    <string name="SettingsSecurity_DisableDuressPin">Duress Passwort deaktivieren</string>
-    <string name="SettingsSecurity_DuressPinDescription">Ein spezieller Modus, der ausgewählte Brieftaschen im Falle von Zwang schützt.</string>
     <string name="SettingsSecurity_ManageKeys">Wallets verwalten</string>
     <string name="SettingsSecurity_AppRestartWarning">Diese Aktion startet die unaufhaltsame Wallet neu.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Vollständig anonymisieren Sie Ihr Internet während Sie diese App verwenden. Beachten Sie, dass in einigen Fällen die WalletConnect-Funktion für DeFi-Apps sehr langsam oder gar nicht funktionieren kann.</string>
@@ -1124,7 +1094,6 @@
     <string name="WatchWallet">Wallet ansehen</string>
     <string name="Watch_Address_Hint">Fügen Sie Ihre Adresse ein (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) oder XPUB</string>
     <string name="Watch_ViewKey">Privater Ansichtsschlüssel</string>
-    <string name="Watch_BirthdayHeight">Höhe wiederherstellen</string>
     <string name="Watch_Select_Blockchains">Blockchain auswählen</string>
     <string name="Watch_Select_Coins">Münzen auswählen</string>
     <string name="Watch_Error_InvalidAddressFormat">Adressformat wird nicht unterstützt</string>

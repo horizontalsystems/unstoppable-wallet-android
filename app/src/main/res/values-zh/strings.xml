@@ -6,7 +6,6 @@
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">取消</string>
     <string name="Alert_Copy">复制</string>
-    <string name="Alert_Loading">正在加载...</string>
     <string name="Button_Show">查看</string>
     <string name="Button_Hide">隐藏</string>
     <string name="Button_Cancel">取消</string>
@@ -124,19 +123,12 @@
     <string name="Restore_PrivateKey_InvalidKey">错误密钥</string>
     <string name="SelectContacts_All">所有</string>
     <string name="Restore_BirthdayHeight">生日高度</string>
-    <string name="Restore_BirthdayHeight_Invalid">生日高度无效</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">输入钱包的生日高度以便实现更快同步。</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (可选)</string>
     <string name="BirthdayHeight_Description">您可以更改块高度或选择一个大约日期来重新扫描您的交易历史记录。</string>
     <string name="BirthdayHeight_RestoreDescription">你的钱包将从默认起点恢复。你可以更改块高度或选择一个大约的钱包创建日期。</string>
     <string name="BirthdayHeight_BlockDate">区块日期：</string>
     <string name="BirthdayHeight_Rescan">重新扫描</string>
     <string name="Restore_ZCash_RestoreAsNew">恢复为新的</string>
-    <string name="Restore_ZCash_NewWallet">新钱包</string>
-    <string name="Restore_ZCash_NewWallet_Description">没有任何交易</string>
-    <string name="Restore_ZCash_OldWallet">现有钱包</string>
-    <string name="Restore_ZCash_OldWallet_Description">有交易</string>
-    <string name="Restore_ZCash_SlowSyncWarningText">初始化与区块链的同步可以消耗大量的网络流量。</string>
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">市值</string>
@@ -326,7 +318,6 @@
     <string name="Balance_SearchingTransactions">正在搜索交易…</string>
     <string name="Balance_Downloading">正在下载…</string>
     <string name="Balance_FoundTx">%s tx</string>
-    <string name="Balance_Syncing_WithProgress">正在同步... %s%%</string>
     <string name="Balance_BlocksRemaining">剩余区块数 - %d</string>
     <string name="Balance_Sort_Balance">余额</string>
     <string name="Balance_Sort_PopupTitle">排序</string>
@@ -359,9 +350,6 @@
     <string name="Balance_Receive_Subaddresses">子项</string>
     <string name="Balance_Receive_SubaddressesInfo">子地址让您在一个钱包内使用多个唯一地址来方便和增强隐私。</string>
     <string name="Balance_Receive_SubaddressesTransactions">交易: %s</string>
-    <string name="Balance_Receive_HaveYouOwnedCoins">您以前是否拥有过任何 %s 硬币？</string>
-    <string name="Balance_Receive_YesAlreadyOwn">是的，我已经拥有了</string>
-    <string name="Balance_Receive_IDontHave">不，我没有</string>
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">检测到透明ZEC</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">现在我们的钱包无法使用透明平衡，但这笔钱可以由其他钱包使用 t-address 支持使用</string>
@@ -416,8 +404,6 @@
     <string name="Send_Address_ErrorMessage_SanctionDetected_Description">您輸入的地址被標記為受制裁。向此地址進行交易可能導致損失或其他風險。繼續之前請驗證接收者的詳細信息。</string>
     <string name="AddressEnter_NeedSubscription_Title">注意！</string>
     <string name="AddressEnter_NeedSubscription_Content">安全发送已关闭。您的转账可能会转到一个危险的地址，资金可能会丢失。</string>
-    <string name="AddressEnter_Danger_Title">危险！</string>
-    <string name="AddressEnter_Danger_Content">您輸入的地址可能是欺詐性的。詐騙者通常會更改首尾字符。在繼續之前請仔細驗證完整地址，以避免損失。</string>
     <string name="AddressEnter_Safe_Title">安全</string>
     <string name="AddressEnter_Safe_Content">地址已检查。未找到网络钓鱼、黑名单或制裁。可以安全使用。</string>
     <string name="Send_RiskyAddress">風險地址！</string>
@@ -458,9 +444,6 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">已用nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">使用此nonce执行的交易已存在。</string>
     <!-- Fee Settings -->
-    <string name="Fee_Total">总费用</string>
-    <string name="Fee_OutboundFee">出站费用</string>
-    <string name="Fee_LiquidityFee">流动费用</string>
     <string name="FeeSettings_NetworkFee">网络费</string>
     <string name="FeeSettings_NetworkFee_Info">在网络上发送给定交易的估计费用。</string>
     <string name="FeeSettings_GasLimit_Info">交易复杂度以被称为“gas”（燃料）的单位度量。它将根据被执行的智能合同而变化。Gas Limit（燃料限制）是执行它所需要的估计最大燃料。使用的实际燃料通常会较低。</string>
@@ -531,7 +514,6 @@
     <string name="WalletConnect_Error_UnsupportedEvents">不支持的事件: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">请求找不到错误</string>
     <string name="WalletConnect_NoConnection">您没有任何已连接的dapps</string>
-    <string name="WalletConnect_PendingRequests">待处理请求</string>
     <string name="WalletConnect_ActiveWallet">钱包</string>
     <string name="WalletConnect_NotSupportedDescription">您当前的钱包类型 %s 不支持 WalletConnect</string>
     <string name="WalletConnect_Unnamed">未命名</string>
@@ -544,8 +526,6 @@
     <string name="WalletConnect_ConnectTo">连接到 %s</string>
     <string name="WalletConnect_ConnectedTo">已连接到 %s</string>
     <string name="WalletConnect_Disconnect">断开连接 %s</string>
-    <string name="WalletConnect_WhiteListDeactivatedWarning">Scam 保护功能已停用。域名验证不可用。升级到高级版以保护免受未验证或钓鱼网站之害。</string>
-    <string name="WalletConnect_NotInWhiteListAlert">此网站未经过核实，可能导致网络钓鱼或资金流失。连接被强烈阻止。</string>
     <string name="WalletConnect_ConnectWarning">点击连接，允许此应用查看您的公共地址。</string>
     <string name="WalletConnect_Attention">注意！</string>
     <string name="WalletConnect_Danger">危险！</string>
@@ -824,9 +804,6 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 小时</string>
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">地址检查器</string>
-    <string name="SettingsAddressChecker_RecipientCheck">收件人检查</string>
-    <string name="SettingsAddressChecker_CheckTheRecipientInfo">在发送前扫描收件人地址以获取安全风险。</string>
-    <string name="SettingsAddressChecker_CheckAddress">检查地址</string>
     <string name="SettingsAddressChecker_OnSubject">在 %s</string>
     <string name="SettingsAddressChecker_SanctionsCheck">制裁检查</string>
     <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
@@ -918,9 +895,6 @@
     <string name="Premium_SubscriptionPeriod_Annually">年度</string>
     <string name="Premium_SubscriptionPeriod_Monthly">月度</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">SVE 31%</string>
-    <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
-    <string name="Premium_SubscriptionPeriod_PerYear">每年</string>
-    <string name="Premium_SubscriptionPeriod_PerMonth">每个月</string>
     <string name="Appearance_MarketsTab">市场标签</string>
     <string name="Appearance_BalanceTab">余额标签</string>
     <string name="Appearance_AppIcon">应用图标</string>
@@ -1004,10 +978,6 @@
     <string name="SettingsSecurity_EnablePin">启用密码</string>
     <string name="SettingsSecurity_DisablePin">禁用密码</string>
     <string name="SettingsSecurity_EditPin">编辑密码</string>
-    <string name="SettingsSecurity_SetDuressPin">设置压力模式</string>
-    <string name="SettingsSecurity_EditDuressPin">编辑货币密码</string>
-    <string name="SettingsSecurity_DisableDuressPin">禁用冒险密码</string>
-    <string name="SettingsSecurity_DuressPinDescription">在胁迫情况下保护选定钱包的特殊模式。</string>
     <string name="SettingsSecurity_ManageKeys">管理钱包</string>
     <string name="SettingsSecurity_AppRestartWarning">此操作将重新启动本钱包。</string>
     <string name="SettingsSecurity_TorConnectionDescription">使用此功能让您的网络完全匿名化。请注意，在某些情况下，DeFi的钱包链接功能可能非常慢或根本不起作用。</string>
@@ -1115,7 +1085,6 @@
     <string name="WatchWallet">观看钱包</string>
     <string name="Watch_Address_Hint">粘贴您的地址 (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) 或 XPUB</string>
     <string name="Watch_ViewKey">私人视图密钥</string>
-    <string name="Watch_BirthdayHeight">还原高度</string>
     <string name="Watch_Select_Blockchains">选择区块链</string>
     <string name="Watch_Select_Coins">选择货币</string>
     <string name="Watch_Error_InvalidAddressFormat">不支持的地址格式</string>
