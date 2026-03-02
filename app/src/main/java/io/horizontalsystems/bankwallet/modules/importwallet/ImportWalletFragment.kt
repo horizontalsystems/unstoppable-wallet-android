@@ -27,20 +27,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.Caution
-import io.horizontalsystems.bankwallet.core.getInput
-import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupFileValidator
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
-import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.navigateWithTermsAccepted
+import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreAccountScreen
+import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -59,17 +59,25 @@ import java.io.File
 data class ImportWalletScreen(
     val popOffOnSuccess: Int = R.id.importWalletFragment,
     val popOffInclusive: Boolean = true
-) : HSScreen()
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ImportWalletScreen(backStack, popOffOnSuccess, popOffInclusive)
+    }
+}
 
 class ImportWalletFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<ManageAccountsModule.Input>()
-        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.importWalletFragment
-        val inclusive = input?.popOffInclusive ?: true
-
-        ImportWalletScreen(navController, popUpToInclusiveId, inclusive)
+//        val input = navController.getInput<ManageAccountsModule.Input>()
+//        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.importWalletFragment
+//        val inclusive = input?.popOffInclusive ?: true
+//
+//        ImportWalletScreen(navController, popUpToInclusiveId, inclusive)
     }
 
 }
@@ -77,7 +85,7 @@ class ImportWalletFragment : BaseComposeFragment() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ImportWalletScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     popUpToInclusiveId: Int,
     inclusive: Boolean
 ) {
@@ -95,24 +103,20 @@ private fun ImportWalletScreen(
                         //validate json format
                         BackupFileValidator().validate(jsonString)
 
-                        navController.navigateWithTermsAccepted {
-                            val fileName = context.getFileName(uriNonNull)
-                            navController.slideFromBottom(
-                                R.id.restoreLocalFragment,
-                                RestoreLocalFragment.Input(
-                                    popUpToInclusiveId,
-                                    inclusive,
-                                    jsonString,
-                                    fileName,
-                                    StatPage.ImportWalletFromFiles
-                                )
+                        val fileName = context.getFileName(uriNonNull)
+                        backStack.navigateWithTermsAccepted(
+                            RestoreLocalScreen(
+                                popUpToInclusiveId,
+                                inclusive,
+                                jsonString,
+                                fileName,
+                                StatPage.ImportWalletFromFiles
                             )
-
-                            stat(
-                                page = StatPage.ImportWallet,
-                                event = StatEvent.Open(StatPage.ImportWalletFromFiles)
-                            )
-                        }
+                        )
+                        stat(
+                            page = StatPage.ImportWallet,
+                            event = StatEvent.Open(StatPage.ImportWalletFromFiles)
+                        )
                     }
                 } catch (e: Throwable) {
                     Log.e("TAG", "ImportWalletScreen: ", e)
@@ -128,7 +132,7 @@ private fun ImportWalletScreen(
 
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_ImportWallet),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
@@ -139,17 +143,14 @@ private fun ImportWalletScreen(
                 description = stringResource(R.string.ImportWallet_RecoveryPhrase_Description),
                 icon = R.drawable.ic_edit_24,
                 onClick = {
-                    navController.navigateWithTermsAccepted {
-                        navController.slideFromBottom(
-                            R.id.restoreAccountFragment,
-                            ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
-                        )
+                    backStack.navigateWithTermsAccepted(
+                        RestoreAccountScreen(popUpToInclusiveId, inclusive)
+                    )
 
-                        stat(
-                            page = StatPage.ImportWallet,
-                            event = StatEvent.Open(StatPage.ImportWalletFromKey)
-                        )
-                    }
+                    stat(
+                        page = StatPage.ImportWallet,
+                        event = StatEvent.Open(StatPage.ImportWalletFromKey)
+                    )
                 }
             )
             VSpacer(12.dp)

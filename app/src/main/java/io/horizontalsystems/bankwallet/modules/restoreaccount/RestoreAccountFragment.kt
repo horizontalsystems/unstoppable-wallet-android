@@ -25,7 +25,10 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object RestoreAccountScreen : HSScreen()
+data class RestoreAccountScreen(
+    val popOffOnSuccess: Int,
+    val popOffInclusive: Boolean
+) : HSScreen()
 
 class RestoreAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
 

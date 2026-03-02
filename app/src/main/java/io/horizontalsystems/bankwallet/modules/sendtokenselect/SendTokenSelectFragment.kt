@@ -6,13 +6,16 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
+import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
@@ -32,7 +35,32 @@ data class SendTokenSelectScreen(
     @Serializable(with = BigDecimalSerializer::class)
     val amount: BigDecimal? = null,
     val memo: String? = null,
-) : HSScreen()
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        TokenSelectScreen(
+            title = stringResource(R.string.Balance_Send),
+            onBack = { backStack.removeLastOrNull() },
+            onClickItem = {
+                val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
+                backStack.add(
+                    EnterAddressScreen(
+                        wallet = it.wallet,
+                        title = sendTitle,
+                        sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                        address = address,
+                        amount = amount,
+                        memo = memo,
+                    )
+                )
+            },
+            viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes, tokenTypes)),
+        )
+    }
+}
 
 class SendTokenSelectFragment : BaseComposeFragment() {
 

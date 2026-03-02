@@ -73,7 +73,13 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object RestoreLocalScreen : HSScreen()
+data class RestoreLocalScreen(
+    val popOffOnSuccess: Int,
+    val popOffInclusive: Boolean,
+    val jsonFile: String,
+    val fileName: String?,
+    val statPage: StatPage
+) : HSScreen()
 
 class RestoreLocalFragment : BaseComposeFragment() {
 
