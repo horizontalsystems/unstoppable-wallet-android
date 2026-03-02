@@ -23,29 +23,36 @@ fun FeeRow(
     valueToken: String,
     onInfoClick: (() -> Unit)? = null,
 ) {
-    var showFiat by remember { mutableStateOf(valueFiat != null) }
-    val displayedValue = if (showFiat) valueFiat else valueToken
-    val onClick = { showFiat = !showFiat }
+    var showFiat by remember(valueFiat) { mutableStateOf(false) }
+
+    val displayedValue = when {
+        showFiat && valueFiat != null -> valueFiat
+        else -> valueToken
+    }
+
+    val middleContent: @Composable () -> Unit = {
+        if (onInfoClick != null) {
+            CellMiddleInfoTextIcon(
+                text = title.hs(color = ComposeAppTheme.colors.grey),
+                icon = painterResource(R.drawable.ic_info_filled_20),
+                iconTint = ComposeAppTheme.colors.grey,
+                onIconClick = onInfoClick
+            )
+        } else {
+            CellMiddleInfo(eyebrow = title.hs)
+        }
+    }
 
     CellSecondary(
-        middle = {
-            if (onInfoClick != null) {
-                CellMiddleInfoTextIcon(
-                    text = title.hs(color = ComposeAppTheme.colors.grey),
-                    icon = painterResource(R.drawable.ic_info_filled_20),
-                    iconTint = ComposeAppTheme.colors.grey,
-                    onIconClick = onInfoClick
-                )
-            } else {
-                CellMiddleInfo(
-                    eyebrow = title.hs
-                )
-            }
-        },
+        middle = middleContent,
         right = {
             CellRightInfo(
-                eyebrow = displayedValue?.hs(ComposeAppTheme.colors.leah),
-                onClick = if (valueFiat != null) onClick else null,
+                eyebrow = displayedValue.hs(ComposeAppTheme.colors.leah),
+                onClick = if (valueFiat != null) {
+                    { showFiat = !showFiat }
+                } else {
+                    null
+                },
             )
         },
     )
