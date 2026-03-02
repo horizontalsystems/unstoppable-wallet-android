@@ -11,15 +11,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CellNews
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
@@ -29,7 +32,24 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CoinReportsScreen(val coinUid: String) : HSScreen()
+data class CoinReportsScreen(val coinUid: String) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val context = LocalContext.current
+        CoinReportsScreen(
+            viewModel = viewModel(factory = CoinReportsModule.Factory(coinUid)),
+            onClickNavigation = {
+                backStack.removeLastOrNull()
+            },
+            onClickReportUrl = {
+                LinkHelper.openLinkInAppBrowser(context, it)
+            }
+        )
+    }
+}
 
 class CoinReportsFragment : BaseComposeFragment() {
 
