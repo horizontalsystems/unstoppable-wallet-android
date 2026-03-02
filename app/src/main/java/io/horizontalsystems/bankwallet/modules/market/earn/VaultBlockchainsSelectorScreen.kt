@@ -20,6 +20,7 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.paidAction
 import io.horizontalsystems.bankwallet.serializers.BlockchainSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -31,6 +32,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -107,14 +109,13 @@ private fun FilterByBlockchainsScreen(
                             blockchain = item,
                             checked = item in selectedBlockchains,
                         ) {
-//                            TODO("xxx nav3")
-//                            navController.paidAction(TokenInsights) {
-//                                if (item in selectedBlockchains) {
-//                                    selectedBlockchains.remove(item)
-//                                } else {
-//                                    selectedBlockchains.add(item)
-//                                }
-//                            }
+                            backStack.paidAction(TokenInsights) {
+                                if (item in selectedBlockchains) {
+                                    selectedBlockchains.remove(item)
+                                } else {
+                                    selectedBlockchains.add(item)
+                                }
+                            }
                         }
                     }
                 }

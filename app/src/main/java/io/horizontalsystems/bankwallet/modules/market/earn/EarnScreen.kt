@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.navigateWithPaidAction
+import io.horizontalsystems.bankwallet.modules.nav3.paidAction
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -134,10 +135,9 @@ fun MarketEarnScreen(
                                 )
                             },
                             onGetPremiumClick = {
-//                                TODO("xxx nav3")
-//                                navController.paidAction(TokenInsights) {
-//                                    //refresh page
-//                                }
+                                backStack.paidAction(TokenInsights) {
+                                    //refresh page
+                                }
                             },
                             preItems = {
                                 stickyHeader {
@@ -204,11 +204,10 @@ fun MarketEarnScreen(
             select = Select(uiState.filterBy, viewModel.filterOptions),
             onSelect = { selected ->
                 openFilterSelector = false
-//                TODO("xxx nav3")
-//                navController.paidAction(TokenInsights) {
-//                    scrollToTopAfterUpdate = true
-//                    viewModel.onFilterBySelected(selected)
-//                }
+                backStack.paidAction(TokenInsights) {
+                    scrollToTopAfterUpdate = true
+                    viewModel.onFilterBySelected(selected)
+                }
             },
             onDismiss = {
                 openFilterSelector = false
@@ -221,11 +220,10 @@ fun MarketEarnScreen(
             select = Select(uiState.apyPeriod, viewModel.apyPeriods),
             onSelect = { selected ->
                 openPeriodSelector = false
-//                TODO("xxx nav3")
-//                navController.paidAction(TokenInsights) {
-//                    scrollToTopAfterUpdate = true
-//                    viewModel.onApyPeriodSelected(selected)
-//                }
+                backStack.paidAction(TokenInsights) {
+                    scrollToTopAfterUpdate = true
+                    viewModel.onApyPeriodSelected(selected)
+                }
             },
             onDismiss = {
                 openPeriodSelector = false
@@ -238,11 +236,10 @@ fun MarketEarnScreen(
             select = Select(uiState.sortingBy, viewModel.sortingOptions),
             onSelect = { selected ->
                 openSortingSelector = false
-//                TODO("xxx nav3")
-//                navController.paidAction(TokenInsights) {
-//                    scrollToTopAfterUpdate = true
-//                    viewModel.onSortingSelected(selected)
-//                }
+                backStack.paidAction(TokenInsights) {
+                    scrollToTopAfterUpdate = true
+                    viewModel.onSortingSelected(selected)
+                }
             },
             onDismiss = {
                 openSortingSelector = false
