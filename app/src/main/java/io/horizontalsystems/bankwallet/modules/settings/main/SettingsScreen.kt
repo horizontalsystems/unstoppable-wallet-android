@@ -51,6 +51,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.navigateWithPaidAction
+import io.horizontalsystems.bankwallet.modules.nav3.paidAction
 import io.horizontalsystems.bankwallet.modules.settings.about.AboutScreen
 import io.horizontalsystems.bankwallet.modules.settings.addresschecker.AddressCheckScreen
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppearanceScreen
@@ -83,6 +84,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.subscriptions.core.SecureSend
 
 @Composable
@@ -329,10 +331,9 @@ private fun SettingSections(
                 if (isFDroidBuild) {
                     LinkHelper.openLinkInAppBrowser(context, viewModel.fdroidSupportLink)
                 } else {
-//                    TODO("xxx nav3")
-//                    navController.paidAction(PrioritySupport) {
-//                        LinkHelper.openLinkInAppBrowser(context, viewModel.vipSupportLink)
-//                    }
+                    backStack.paidAction(PrioritySupport) {
+                        LinkHelper.openLinkInAppBrowser(context, viewModel.vipSupportLink)
+                    }
                 }
 
                 stat(

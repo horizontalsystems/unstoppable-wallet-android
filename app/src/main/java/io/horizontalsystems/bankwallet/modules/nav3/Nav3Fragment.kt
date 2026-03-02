@@ -160,6 +160,15 @@ fun NavExample(mainActivityViewModel: MainActivityViewModel) {
     )
 }
 
+fun NavBackStack<HSScreen>.paidAction(paidAction: IPaidAction, block: () -> Unit) {
+    if (UserSubscriptionManager.isActionAllowed(paidAction)) {
+        block.invoke()
+    } else {
+        val premiumFeature = PremiumFeature.getFeature(paidAction)
+        add(DefenseSystemFeatureScreen(premiumFeature))
+    }
+}
+
 fun NavBackStack<HSScreen>.navigateWithPaidAction(paidAction: IPaidAction, screen: HSScreen) {
     if (UserSubscriptionManager.isActionAllowed(paidAction)) {
         add(screen)
