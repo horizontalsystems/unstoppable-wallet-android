@@ -29,15 +29,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.badge
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.gradientBadge
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.noteAmount
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.noteText
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.stringRepresentation
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.title
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumSubscribedScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeOrangeGradient
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
@@ -60,7 +63,21 @@ import io.horizontalsystems.subscriptions.core.numberOfDays
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SelectPlanScreen : HSScreen()
+data object SelectPlanScreen : HSScreen(bottomSheet = true) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SelectPlanBottomSheet(
+            onDismiss = { backStack.removeLastOrNull() },
+            onPurchase = {
+                backStack.removeLastOrNull()
+                backStack.add(PremiumSubscribedScreen)
+            },
+        )
+    }
+}
 
 class SelectPlanDialog : BaseComposableBottomSheetFragment() {
 
