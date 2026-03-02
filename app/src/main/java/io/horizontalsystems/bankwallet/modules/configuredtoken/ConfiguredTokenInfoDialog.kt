@@ -19,11 +19,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -38,13 +39,23 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFr
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeaderMultiline
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ConfiguredTokenInfoScreen : HSScreen()
+data class ConfiguredTokenInfoScreen(
+    @Serializable(with = TokenSerializer::class)
+    val token: Token
+) : HSScreen(bottomSheet = true) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ConfiguredTokenInfo(backStack, token)
+    }
+}
 
 class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
 
@@ -58,15 +69,15 @@ class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val navController = findNavController()
-                ConfiguredTokenInfo(navController, navController.requireInput<Token>())
+//                val navController = findNavController()
+//                ConfiguredTokenInfo(navController, navController.requireInput<Token>())
             }
         }
     }
 }
 
 @Composable
-private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
+private fun ConfiguredTokenInfo(backStack: NavBackStack<HSScreen>, token: Token) {
     val viewModel = viewModel<ConfiguredTokenInfoViewModel>(factory = ConfiguredTokenInfoViewModel.Factory(token))
     val uiState = viewModel.uiState
 
@@ -75,7 +86,7 @@ private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
             iconPainter = uiState.iconSource.painter(),
             title = uiState.title,
             subtitle = uiState.subtitle,
-            onCloseClick = { navController.popBackStack() }
+            onCloseClick = { backStack.removeLastOrNull() }
         ) {
             when (val tokenInfoType = uiState.tokenInfoType) {
                 is ConfiguredTokenInfoType.Contract -> {
