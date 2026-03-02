@@ -12,11 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -32,7 +34,26 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ZcashAddressTypeSelectScreen(val wallet: Wallet) : HSScreen()
+data class ZcashAddressTypeSelectScreen(val wallet: Wallet) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ZcashAddressTypeSelectScreen(
+            onZcashAddressTypeClick = { isTransparent ->
+                backStack.add(
+                    ReceiveScreen(
+                        wallet = wallet,
+                        isTransparentAddress = isTransparent
+                    )
+                )
+            },
+            onBackPress = {
+                backStack.removeLastOrNull()
+            })
+    }
+}
 
 class ZcashAddressTypeSelectFragment : BaseComposeFragment() {
     @Composable
