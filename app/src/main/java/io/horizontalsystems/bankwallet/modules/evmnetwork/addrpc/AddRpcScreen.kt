@@ -11,11 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.serializers.BlockchainSerializer
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
@@ -25,15 +28,32 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Blockchain
+import kotlinx.serialization.Serializable
+
+data class AddRpcScreen(
+    @Serializable(with = BlockchainSerializer::class)
+    val blockchain: Blockchain
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        AddRpcScreen(
+            backStack = backStack,
+            blockchain = blockchain
+        )
+    }
+}
 
 @Composable
 fun AddRpcScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     blockchain: Blockchain,
 ) {
     val viewModel = viewModel<AddRpcViewModel>(factory = AddRpcModule.Factory(blockchain))
     if (viewModel.viewState.closeScreen) {
-        navController.popBackStack()
+        backStack.removeLastOrNull()
         viewModel.onScreenClose()
     }
 
@@ -44,7 +64,7 @@ fun AddRpcScreen(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 }
             )
         )
