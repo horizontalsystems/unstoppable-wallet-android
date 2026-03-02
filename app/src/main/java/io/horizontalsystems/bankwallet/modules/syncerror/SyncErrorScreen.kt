@@ -114,7 +114,7 @@ private fun SyncErrorScreen(backStack: NavBackStack<HSScreen>, wallet: Wallet) {
                             val blockchainWrapper = viewModel.blockchainWrapper
                             when (blockchainWrapper) {
                                 is SyncErrorModule.BlockchainWrapper.Bitcoin -> {
-                                    backStack.add(BtcBlockchainSettingsScreen)
+                                    backStack.add(BtcBlockchainSettingsScreen(blockchainWrapper.blockchain))
                                 }
 
                                 is SyncErrorModule.BlockchainWrapper.Evm -> {

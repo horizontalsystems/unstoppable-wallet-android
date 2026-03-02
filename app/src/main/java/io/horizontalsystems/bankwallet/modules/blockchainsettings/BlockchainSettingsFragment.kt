@@ -17,14 +17,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsScreen
+import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkScreen
+import io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.solananetwork.SolanaNetworkScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -35,28 +40,38 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object BlockchainSettingsScreen : HSScreen()
+data object BlockchainSettingsScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        BlockchainSettingsScreen(
+            backStack = backStack,
+        )
+    }
+}
 
 class BlockchainSettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        BlockchainSettingsScreen(
-            navController = navController,
-        )
+//        BlockchainSettingsScreen(
+//            backStack = navController,
+//        )
     }
 
 }
 
 @Composable
 private fun BlockchainSettingsScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     viewModel: BlockchainSettingsViewModel = viewModel(factory = BlockchainSettingsModule.Factory()),
 ) {
 
     HSScaffold(
         title = stringResource(R.string.BlockchainSettings_Title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier
@@ -67,7 +82,7 @@ private fun BlockchainSettingsScreen(
             BlockchainSettingsBlock(
                 btcLikeChains = viewModel.btcLikeChains,
                 otherChains = viewModel.otherChains,
-                navController = navController
+                backStack = backStack
             )
             VSpacer(44.dp)
         }
@@ -78,31 +93,28 @@ private fun BlockchainSettingsScreen(
 fun BlockchainSettingsBlock(
     btcLikeChains: List<BlockchainSettingsModule.BlockchainViewItem>,
     otherChains: List<BlockchainSettingsModule.BlockchainViewItem>,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     CellUniversalLawrenceSection(btcLikeChains) { item ->
         BlockchainSettingCell(item) {
-            onClick(item, navController)
+            onClick(item, backStack)
         }
     }
     Spacer(Modifier.height(32.dp))
     CellUniversalLawrenceSection(otherChains) { item ->
         BlockchainSettingCell(item) {
-            onClick(item, navController)
+            onClick(item, backStack)
         }
     }
 }
 
 private fun onClick(
     item: BlockchainSettingsModule.BlockchainViewItem,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     when (item.blockchainItem) {
         is BlockchainSettingsModule.BlockchainItem.Btc -> {
-            navController.slideFromBottom(
-                R.id.btcBlockchainSettingsFragment,
-                item.blockchainItem.blockchain
-            )
+            backStack.add(BtcBlockchainSettingsScreen(item.blockchainItem.blockchain))
 
             stat(
                 page = StatPage.BlockchainSettings,
@@ -111,7 +123,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Evm -> {
-            navController.slideFromBottom(R.id.evmNetworkFragment, item.blockchainItem.blockchain)
+            backStack.add(EvmNetworkScreen(item.blockchainItem.blockchain))
 
             stat(
                 page = StatPage.BlockchainSettings,
@@ -120,7 +132,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Solana -> {
-            navController.slideFromBottom(R.id.solanaNetworkFragment)
+            backStack.add(SolanaNetworkScreen)
 
             stat(
                 page = StatPage.BlockchainSettings,
@@ -129,7 +141,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Monero -> {
-            navController.slideFromBottom(R.id.moneroNetworkFragment)
+            backStack.add(MoneroNetworkScreen)
 
             stat(
                 page = StatPage.BlockchainSettings,
