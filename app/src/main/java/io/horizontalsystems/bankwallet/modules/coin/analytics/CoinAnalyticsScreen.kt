@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
@@ -41,6 +42,7 @@ import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesScr
 import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoScreen
 import io.horizontalsystems.bankwallet.modules.info.OverallScoreInfoScreen
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlScreen
+import io.horizontalsystems.bankwallet.modules.metricchart.ProChartScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
@@ -175,13 +177,13 @@ private fun AnalyticsBlock(
                     val coinUid = block.analyticChart?.coinUid
                     val chartType = block.analyticChart?.chartType
                     if (coinUid != null && chartType != null) {
-//                        TODO("xxx nav3")
-//                        ProChartFragment.show(
-//                            fragmentManager,
-//                            coinUid,
-//                            Translator.getString(chartType.titleRes),
-//                            chartType,
-//                        )
+                        backStack.add(
+                            ProChartScreen(
+                                coinUid,
+                                Translator.getString(chartType.titleRes),
+                                chartType
+                            )
+                        )
                     }
                 }
             )
