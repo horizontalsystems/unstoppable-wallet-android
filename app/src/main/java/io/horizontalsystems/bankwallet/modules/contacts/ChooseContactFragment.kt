@@ -25,11 +25,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -48,15 +50,28 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ChooseContactScreen : HSScreen()
+data class ChooseContactScreen(
+    @Serializable(with = BlockchainTypeSerializer::class)
+    val blockchainType: BlockchainType
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ChooseContactScreen(blockchainType, backStack, resultBus)
+    }
+
+    data class Result(val address: String)
+}
 
 class ChooseContactFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<BlockchainType>(navController) { blockchainType ->
-            ChooseContactScreen(blockchainType, navController)
-        }
+//        withInput<BlockchainType>(navController) { blockchainType ->
+//            ChooseContactScreen(blockchainType, navController)
+//        }
     }
 
     @Parcelize
@@ -66,7 +81,8 @@ class ChooseContactFragment : BaseComposeFragment() {
 @Composable
 fun ChooseContactScreen(
     blockchainType: BlockchainType,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus
 ) {
     val viewModel = viewModel<ChooseContactViewModel>(factory = ChooseContactViewModel.Factory(blockchainType))
 
@@ -117,7 +133,7 @@ fun ChooseContactScreen(
                             viewModel.onEnterQuery(null)
                             searchMode = false
                         } else {
-                            navController.popBackStack()
+                            backStack.removeLastOrNull()
                         }
                     })
                 },
@@ -152,8 +168,8 @@ fun ChooseContactScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-                                        navController.setNavigationResultX(ChooseContactFragment.Result(contact.address))
-                                        navController.popBackStack()
+                                        resultBus.sendResult(result = ChooseContactScreen.Result(contact.address))
+                                        backStack.removeLastOrNull()
                                     }
                                     .padding(horizontal = 16.dp, vertical = 12.dp)
                             ) {
