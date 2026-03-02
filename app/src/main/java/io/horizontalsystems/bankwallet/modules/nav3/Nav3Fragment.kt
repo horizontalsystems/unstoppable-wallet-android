@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScree
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
@@ -56,10 +57,12 @@ abstract class HSScreen(val bottomSheet: Boolean = false, val screenshotEnabled:
         }
     }
 
+    private val className = this.javaClass.simpleName
+
     @Composable
     open fun GetContent(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
         HSScaffold(title = "TODO") {
-
+            body_leah(className)
         }
     }
 }
