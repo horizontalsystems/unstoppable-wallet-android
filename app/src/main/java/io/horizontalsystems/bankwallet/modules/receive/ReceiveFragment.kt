@@ -31,7 +31,11 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ReceiveScreen : HSScreen()
+data class ReceiveScreen(
+    val wallet: Wallet,
+    val receiveEntryPointDestId: Int = 0,
+    val isTransparentAddress: Boolean = false
+) : HSScreen()
 
 class ReceiveFragment : BaseComposeFragment() {
 

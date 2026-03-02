@@ -12,7 +12,10 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ShieldZcashScreen : HSScreen()
+data class ShieldZcashScreen(
+    val wallet: Wallet,
+    val entryPointDestId: Int
+) : HSScreen()
 
 class ShieldZcashFragment : BaseComposeFragment() {
 

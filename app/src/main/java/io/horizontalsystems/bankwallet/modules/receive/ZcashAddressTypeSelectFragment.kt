@@ -32,7 +32,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ZcashAddressTypeSelectScreen : HSScreen()
+data class ZcashAddressTypeSelectScreen(val wallet: Wallet) : HSScreen()
 
 class ZcashAddressTypeSelectFragment : BaseComposeFragment() {
     @Composable
