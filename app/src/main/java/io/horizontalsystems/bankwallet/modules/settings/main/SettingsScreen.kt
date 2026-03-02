@@ -50,7 +50,9 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequi
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.navigateWithPaidAction
 import io.horizontalsystems.bankwallet.modules.settings.about.AboutScreen
+import io.horizontalsystems.bankwallet.modules.settings.addresschecker.AddressCheckScreen
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppearanceScreen
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
@@ -81,6 +83,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.subscriptions.core.SecureSend
 
 @Composable
 fun SettingsScreen(
@@ -344,14 +347,11 @@ private fun SettingSections(
             icon = R.drawable.ic_radar_24,
             iconTint = ComposeAppTheme.colors.jacob,
             onClick = {
-//                TODO("xxx nav3")
-//                navController.paidAction(SecureSend) {
-//                    navController.slideFromRight(R.id.addressCheckFragment)
-//                }
-//                stat(
-//                    page = StatPage.Settings,
-//                    event = StatEvent.OpenPremium(StatPremiumTrigger.AddressChecker)
-//                )
+                backStack.navigateWithPaidAction(SecureSend, AddressCheckScreen)
+                stat(
+                    page = StatPage.Settings,
+                    event = StatEvent.OpenPremium(StatPremiumTrigger.AddressChecker)
+                )
             }
         )
     }

@@ -1,21 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.settings.addresschecker
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.settings.addresschecker.ui.UnifiedAddressCheckScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object AddressCheckScreen : HSScreen()
-
-class AddressCheckFragment : BaseComposeFragment() {
-
+data object AddressCheckScreen : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
         UnifiedAddressCheckScreen(
-            onClose = { navController.popBackStack() }
+            onClose = { backStack.removeLastOrNull() }
         )
     }
 }
