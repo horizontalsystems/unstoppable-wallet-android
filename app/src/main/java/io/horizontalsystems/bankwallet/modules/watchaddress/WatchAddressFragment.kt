@@ -13,19 +13,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
-import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsFragment
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigScreen
+import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
@@ -43,22 +42,35 @@ import kotlinx.serialization.Serializable
 data class WatchAddressScreen(
     val popOffOnSuccess: Int = R.id.watchAddressFragment,
     val popOffInclusive: Boolean = true
-) : HSScreen()
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        WatchAddressScreen(backStack, popOffOnSuccess, popOffInclusive, resultBus)
+    }
+}
 
 class WatchAddressFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<ManageAccountsModule.Input>()
-        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.watchAddressFragment
-        val inclusive = input?.popOffInclusive ?: true
-        WatchAddressScreen(navController, popUpToInclusiveId, inclusive)
+//        val input = navController.getInput<ManageAccountsModule.Input>()
+//        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.watchAddressFragment
+//        val inclusive = input?.popOffInclusive ?: true
+//        WatchAddressScreen(navController, popUpToInclusiveId, inclusive)
     }
 
 }
 
 @Composable
-fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, inclusive: Boolean) {
+fun WatchAddressScreen(
+    backStack: NavBackStack<HSScreen>,
+    popUpToInclusiveId: Int,
+    inclusive: Boolean,
+    resultBus: ResultEventBus
+) {
     val view = LocalView.current
 
     val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())
@@ -77,42 +89,38 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 iconTint = R.color.white
             )
             delay(300)
-            navController.popBackStack(popUpToInclusiveId, inclusive)
+//            TODO("xxx nav3")
+//            backStack.popBackStack(popUpToInclusiveId, inclusive)
         }
     }
 
     if (accountType != null) {
         viewModel.blockchainSelectionOpened()
 
-        navController.slideFromRight(
-            R.id.selectBlockchainsFragment,
-            SelectBlockchainsFragment.Input(
-                popUpToInclusiveId,
-                inclusive,
-                accountType,
-                accountName
-            )
-        )
+        backStack.add(SelectBlockchainsScreen(
+            popUpToInclusiveId,
+            inclusive,
+            accountType,
+            accountName
+        ))
+    }
+
+    ResultEffect<BirthdayHeightConfigScreen.Result>(resultBus) { result ->
+        if (result.config != null) {
+            viewModel.onBirthdayHeightEntered(result.config.birthdayHeight?.toLongOrNull())
+        } else {
+            viewModel.onBirthdayHeightCancelled()
+        }
     }
 
     if (uiState.openBirthdayHeightScreen) {
         viewModel.onBirthdayHeightScreenOpened()
-
-        navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
-            resId = R.id.zcashConfigure,
-            input = BlockchainType.Monero
-        ) { result ->
-            if (result.config != null) {
-                viewModel.onBirthdayHeightEntered(result.config.birthdayHeight?.toLongOrNull())
-            } else {
-                viewModel.onBirthdayHeightCancelled()
-            }
-        }
+        backStack.add(BirthdayHeightConfigScreen(BlockchainType.Monero))
     }
 
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_WatchAddress),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = buildList {
             when (submitType) {
                 is SubmitButtonType.Watch -> {

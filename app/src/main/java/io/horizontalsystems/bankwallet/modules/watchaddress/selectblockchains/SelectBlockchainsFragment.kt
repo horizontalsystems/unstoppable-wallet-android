@@ -42,7 +42,12 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SelectBlockchainsScreen : HSScreen()
+data class SelectBlockchainsScreen(
+    val popOffOnSuccess: Int,
+    val popOffInclusive: Boolean,
+    val accountType: AccountType,
+    val accountName: String?,
+) : HSScreen()
 
 class SelectBlockchainsFragment : BaseComposeFragment() {
 

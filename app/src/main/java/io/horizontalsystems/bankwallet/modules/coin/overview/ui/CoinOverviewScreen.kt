@@ -121,7 +121,7 @@ fun CoinOverviewScreen(
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        backStack.add(BirthdayHeightConfigScreen(token))
+        backStack.add(BirthdayHeightConfigScreen(token.blockchainType))
     }
 
 
