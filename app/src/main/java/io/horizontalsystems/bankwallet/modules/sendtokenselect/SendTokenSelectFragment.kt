@@ -2,19 +2,15 @@ package io.horizontalsystems.bankwallet.modules.sendtokenselect
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
-import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
@@ -66,30 +62,30 @@ class SendTokenSelectFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
-
-        val blockchainTypes = input?.blockchainTypes
-        val tokenTypes = input?.tokenTypes
-        val view = LocalView.current
-        TokenSelectScreen(
-            title = stringResource(R.string.Balance_Send),
-            onBack = { navController.popBackStack() },
-            onClickItem = {
-                val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
-                navController.slideFromRight(
-                    R.id.enterAddressFragment,
-                    EnterAddressFragment.Input(
-                        wallet = it.wallet,
-                        title = sendTitle,
-                        sendEntryPointDestId = R.id.sendTokenSelectFragment,
-                        address = input?.address,
-                        amount = input?.amount,
-                        memo = input?.memo,
-                    )
-                )
-            },
-            viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes, tokenTypes)),
-        )
+//        val input = navController.getInput<Input>()
+//
+//        val blockchainTypes = input?.blockchainTypes
+//        val tokenTypes = input?.tokenTypes
+//        val view = LocalView.current
+//        TokenSelectScreen(
+//            title = stringResource(R.string.Balance_Send),
+//            onBack = { navController.popBackStack() },
+//            onClickItem = {
+//                val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
+//                navController.slideFromRight(
+//                    R.id.enterAddressFragment,
+//                    EnterAddressFragment.Input(
+//                        wallet = it.wallet,
+//                        title = sendTitle,
+//                        sendEntryPointDestId = R.id.sendTokenSelectFragment,
+//                        address = input?.address,
+//                        amount = input?.amount,
+//                        memo = input?.memo,
+//                    )
+//                )
+//            },
+//            viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes, tokenTypes)),
+//        )
     }
 
     @Parcelize

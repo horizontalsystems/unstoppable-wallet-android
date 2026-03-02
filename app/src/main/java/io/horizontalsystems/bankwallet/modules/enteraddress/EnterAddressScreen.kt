@@ -23,18 +23,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import com.tonapps.tonkeeper.api.shortAddress
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -59,13 +59,13 @@ import io.horizontalsystems.marketkit.models.Token
 
 @Composable
 fun EnterAddressScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     token: Token,
     title: String,
     buttonTitle: String,
     allowNull: Boolean,
     initialAddress: String?,
-    onResult: (address: Address?, risky: Boolean) -> Unit
+    onResult: (Address?, Boolean) -> Unit
 ) {
     val viewModel = viewModel<EnterAddressViewModel>(
         factory = EnterAddressViewModel.Factory(
@@ -82,7 +82,7 @@ fun EnterAddressScreen(
 
     HSScaffold(
         title = title,
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier.windowInsetsPadding(WindowInsets.ime)
@@ -119,12 +119,10 @@ fun EnterAddressScreen(
                         uiState.checkResults,
                     ) {
                         if (uiState.hasPremium){
-                            navController.slideFromBottom(R.id.secureSendConfigDialog)
+//                            TODO("xxx nav3")
+//                            navController.slideFromBottom(R.id.secureSendConfigDialog)
                         } else {
-                            navController.slideFromBottom(
-                                R.id.defenseSystemFeatureDialog,
-                                DefenseSystemFeatureDialog.Input(PremiumFeature.SecureSendFeature)
-                            )
+                            backStack.add(DefenseSystemFeatureScreen(PremiumFeature.SecureSendFeature))
                         }
                     }
                 }
@@ -199,7 +197,9 @@ private fun AddressCardContainer(
         .clip(RoundedCornerShape(16.dp))
         .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
     if (onClick != null) {
-        modifier = modifier.clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 12.dp)
+        modifier = modifier
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     }
     Column(modifier = modifier) {
         content()
