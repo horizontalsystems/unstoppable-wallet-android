@@ -14,20 +14,28 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object IndicatorsAlertScreen : HSScreen()
+data object IndicatorsAlertScreen : HSScreen(bottomSheet = true) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        IndicatorsAlertScreen(backStack)
+    }
+}
 
 class IndicatorsAlertDialog : BaseComposableBottomSheetFragment() {
 
@@ -41,7 +49,7 @@ class IndicatorsAlertDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                IndicatorsAlertScreen(findNavController())
+//                IndicatorsAlertScreen(findNavController())
             }
         }
     }
@@ -49,14 +57,14 @@ class IndicatorsAlertDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-private fun IndicatorsAlertScreen(navController: NavController) {
+private fun IndicatorsAlertScreen(backStack: NavBackStack<HSScreen>) {
     ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.icon_24_lock),
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
             title = stringResource(R.string.CoinPage_Indicators),
             onCloseClick = {
-                navController.popBackStack()
+                backStack.removeLastOrNull()
             }
         ) {
             InfoText(
