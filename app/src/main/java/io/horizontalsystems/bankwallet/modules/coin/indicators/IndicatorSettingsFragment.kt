@@ -14,7 +14,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object IndicatorSettingsScreen : HSScreen()
+data class IndicatorSettingsScreen(val indicatorId: String) : HSScreen()
 
 class IndicatorSettingsFragment : BaseComposeFragment() {
 

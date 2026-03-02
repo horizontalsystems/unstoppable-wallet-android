@@ -15,11 +15,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -33,21 +34,31 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object IndicatorsScreen : HSScreen()
+data object IndicatorsScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        IndicatorsScreen(
+            backStack = backStack,
+        )
+    }
+}
 
 class IndicatorsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        IndicatorsScreen(
-            navController = navController,
-        )
+//        IndicatorsScreen(
+//            backStack = navController,
+//        )
     }
 
 }
 
 @Composable
-fun IndicatorsScreen(navController: NavController) {
+fun IndicatorsScreen(backStack: NavBackStack<HSScreen>) {
     val chartIndicatorsViewModel =
         viewModel<ChartIndicatorsViewModel>(factory = ChartIndicatorsViewModel.Factory())
 
@@ -62,7 +73,7 @@ fun IndicatorsScreen(navController: NavController) {
 
     HSScaffold(
         title = stringResource(R.string.CoinPage_Indicators),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column {
             HeaderText(
@@ -84,10 +95,7 @@ fun IndicatorsScreen(navController: NavController) {
                         toggleIndicator.invoke(indicator, it)
                     },
                     onEditClick = {
-                        navController.slideFromRight(
-                            R.id.indicatorSettingsFragment,
-                            IndicatorSettingsFragment.Input(indicator.id)
-                        )
+                        backStack.add(IndicatorSettingsScreen(indicator.id))
                     }
                 )
             }
@@ -103,10 +111,7 @@ fun IndicatorsScreen(navController: NavController) {
                         toggleIndicator.invoke(indicator, it)
                     },
                     onEditClick = {
-                        navController.slideFromRight(
-                            R.id.indicatorSettingsFragment,
-                            IndicatorSettingsFragment.Input(indicator.id)
-                        )
+                        backStack.add(IndicatorSettingsScreen(indicator.id))
                     }
                 )
             }
@@ -157,6 +162,6 @@ private fun IndicatorCell(
 private fun Preview_Indicators() {
     val navController = rememberNavController()
     ComposeAppTheme {
-        IndicatorsScreen(navController)
+//        IndicatorsScreen(navController)
     }
 }
