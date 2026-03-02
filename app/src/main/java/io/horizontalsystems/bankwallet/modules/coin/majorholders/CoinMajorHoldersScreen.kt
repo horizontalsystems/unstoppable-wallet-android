@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.majorholders
 
-import android.os.Parcelable
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,14 +21,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BlockchainSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -54,7 +53,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -62,30 +60,25 @@ data class CoinMajorHoldersScreen(
     val coinUid: String,
     @Serializable(with = BlockchainSerializer::class)
     val blockchain: Blockchain
-) : HSScreen()
-
-class CoinMajorHoldersFragment : BaseComposeFragment() {
-
+) : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            CoinMajorHoldersScreen(
-                input.coinUid,
-                input.blockchain,
-                navController,
-            )
-        }
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        CoinMajorHoldersScreen(
+            coinUid,
+            blockchain,
+            backStack,
+        )
     }
-
-    @Parcelize
-    data class Input(val coinUid: String, val blockchain: Blockchain) : Parcelable
 }
 
 @Composable
 private fun CoinMajorHoldersScreen(
     coinUid: String,
     blockchain: Blockchain,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     viewModel: CoinMajorHoldersViewModel = viewModel(
         factory = CoinMajorHoldersModule.Factory(coinUid, blockchain)
     )
@@ -97,7 +90,7 @@ private fun CoinMajorHoldersScreen(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = { navController.popBackStack() }
+                onClick = { backStack.removeLastOrNull() }
             )
         )
     ) {

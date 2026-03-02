@@ -16,10 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -28,12 +26,13 @@ import io.horizontalsystems.bankwallet.core.stats.statPeriod
 import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.platform.InfoBottomSheet
 import io.horizontalsystems.bankwallet.modules.market.topcoins.OptionController
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.CoinCategorySerializer
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -53,30 +52,26 @@ import kotlinx.serialization.Serializable
 data class MarketSectorScreen(
     @Serializable(with = CoinCategorySerializer::class)
     val coinCategory: CoinCategory
-) : HSScreen()
-
-class MarketSectorFragment : BaseComposeFragment() {
-
+) : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavController) {
-        withInput<CoinCategory>(navController) { input ->
-            val factory = MarketSectorModule.Factory(input)
-            val chartViewModel = viewModel<ChartViewModel>(factory = factory)
-            val viewModel = viewModel<MarketSectorViewModel>(factory = factory)
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val factory = MarketSectorModule.Factory(coinCategory)
+        val chartViewModel = viewModel<ChartViewModel>(factory = factory)
+        val viewModel = viewModel<MarketSectorViewModel>(factory = factory)
 
-            SectorScreen(
-                viewModel = viewModel,
-                chartViewModel = chartViewModel,
-                onCloseButtonClick = { navController.popBackStack() },
-                onCoinClick = { coinUid -> onCoinClick(coinUid, navController) }
-            )
-        }
+        SectorScreen(
+            viewModel = viewModel,
+            chartViewModel = chartViewModel,
+            onCloseButtonClick = { backStack.removeLastOrNull() },
+            onCoinClick = { coinUid -> onCoinClick(coinUid, backStack) }
+        )
     }
 
-    private fun onCoinClick(coinUid: String, navController: NavController) {
-        val arguments = CoinFragment.Input(coinUid)
-
-        navController.slideFromRight(R.id.coinFragment, arguments)
+    private fun onCoinClick(coinUid: String, backStack: NavBackStack<HSScreen>) {
+        backStack.add(CoinScreen(coinUid))
 
         stat(page = StatPage.CoinCategory, event = StatEvent.OpenCoin(coinUid))
     }

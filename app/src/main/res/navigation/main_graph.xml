@@ -142,14 +142,8 @@
         android:id="@+id/overallScoreInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.info.OverallScoreInfoFragment" />
     <fragment
-        android:id="@+id/coinMajorHoldersFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment" />
-    <fragment
         android:id="@+id/coinRankFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.ranks.CoinRankFragment" />
-    <fragment
-        android:id="@+id/coinTreasuriesFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment" />
     <fragment
         android:id="@+id/coinAuditsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment" />
@@ -215,10 +209,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.market.filters.BlockchainsSelectorFragment" />
     <fragment
         android:id="@+id/sectorsSelectorFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.filters.SectorsSelectorFragment" />
-    <fragment
-        android:id="@+id/marketSectorFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.sector.MarketSectorFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.market.filters.SectorsSelectorFragment"/>
     <fragment
         android:id="@+id/marketAdvancedSearchResultsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.filtersresult.MarketFiltersResultsFragment" />
