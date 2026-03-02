@@ -3,7 +3,6 @@
     <!--Common-->
     <string name="Alert_Cancel">انصراف</string>
     <string name="Alert_Copy">رونوشت</string>
-    <string name="Alert_Loading">درحال بارگذاری...</string>
     <string name="Button_Show">نمایش</string>
     <string name="Button_Cancel">کنسل</string>
     <string name="Button_Next">بعدي</string>
@@ -77,7 +76,6 @@
     <string name="Restore_PhraseHint">Enter 12, 15, 18, 21 or 24 words</string>
     <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
     <string name="Restore_BirthdayHeight">قد تولد</string>
-    <string name="Restore_ZCash_NewWallet">کیف پول جدید</string>
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_PriceDiff">قیمت</string>
@@ -108,7 +106,6 @@
     <string name="Balance_SyncedUntil">تا %s</string>
     <string name="Balance_Syncing">همزمانی…</string>
     <string name="Balance_SearchingTransactions">در جستجوی تراکنش ها…</string>
-    <string name="Balance_Syncing_WithProgress">همزمانی... %%%s</string>
     <string name="Balance_Sort_Balance">مانده حساب</string>
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Balance_Sort_Az">نام</string>
@@ -182,7 +179,6 @@
     <string name="WalletConnect_Error_NoSuitableEvmKit">بدون کیت evm مناسب</string>
     <string name="WalletConnect_Error_RequestNotFoundError">خطای درخواست یافت نشد</string>
     <string name="WalletConnect_NoConnection">شما هیچ برنامه متصل ندارید</string>
-    <string name="WalletConnect_PendingRequests">درخواست های معلق</string>
     <!-- dApp Connection-->
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">هشدار</string>

@@ -5,7 +5,6 @@
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
-    <string name="Alert_Loading">로딩중...</string>
     <string name="Button_Show">표시</string>
     <string name="Button_Hide">숨기기</string>
     <string name="Button_Cancel">취소</string>
@@ -122,15 +121,8 @@
     <string name="Restore_PrivateKey_InvalidKey">잘못된 암호입니다</string>
     <string name="SelectContacts_All">모든</string>
     <string name="Restore_BirthdayHeight">생일 신장</string>
-    <string name="Restore_BirthdayHeight_Invalid">잘못된 벌스데이 높이</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">더 빠른 동기화를 위해 지갑의 생일 키를 입력하세요.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000(선택 사항)</string>
     <string name="Restore_ZCash_RestoreAsNew">새 것으로 복원</string>
-    <string name="Restore_ZCash_NewWallet">새 지갑</string>
-    <string name="Restore_ZCash_NewWallet_Description">거래 내역이 없습니다</string>
-    <string name="Restore_ZCash_OldWallet">기존 지갑</string>
-    <string name="Restore_ZCash_OldWallet_Description">거래 있음</string>
-    <string name="Restore_ZCash_SlowSyncWarningText">블록체인과의 초기 동기화는 많은 인터넷 트래픽을 소비할 수 있습니다.</string>
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">시가총액</string>
@@ -314,7 +306,6 @@
     <string name="Balance_Syncing">동기화...</string>
     <string name="Balance_SearchingTransactions">거래 검색 중...</string>
     <string name="Balance_Downloading">다운로드 중…</string>
-    <string name="Balance_Syncing_WithProgress">동기화 중입니다...%s%%</string>
     <string name="Balance_BlocksRemaining">남은 블록 수 - %d</string>
     <string name="Balance_Sort_Balance">잔액</string>
     <string name="Balance_Sort_PopupTitle">정렬 기준</string>
@@ -347,9 +338,6 @@
     <string name="Balance_Receive_Subaddresses">서브주소</string>
     <string name="Balance_Receive_SubaddressesInfo">서브주소를 사용하면 하나의 지갑에서 여러 개의 고유 주소를 사용할 수 있어 편리하며 프라이버시도 강화됩니다.</string>
     <string name="Balance_Receive_SubaddressesTransactions">트랜잭션: %s</string>
-    <string name="Balance_Receive_HaveYouOwnedCoins">이전에 %s 코인을 보유한 적이 있습니까?</string>
-    <string name="Balance_Receive_YesAlreadyOwn">예, 이미 소유하고 있습니다</string>
-    <string name="Balance_Receive_IDontHave">아니요, 없어요</string>
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">투명 ZEC 감지됨</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">투명 주소에 보유 중인 ZEC 잔액이 있습니다. Unstoppable에서 사용하려면 완전한 프라이버시 보호를 위해 보호(Shield) 처리해야 합니다.</string>
@@ -399,8 +387,6 @@
     <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">입력한 주소가 블랙리스트에 등록된 것으로 표시되어 있습니다. 이 주소로의 거래는 손실이나 기타 위험을 초래할 수 있습니다. 수신자 정보를 진행하기 전에 확인하세요.</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected_Description">입력한 주소가 제재 대상으로 표시되어 있습니다. 이 주소로의 거래는 손실이나 기타 위험을 초래할 수 있습니다. 수신자 정보를 진행하기 전에 확인하세요.</string>
     <string name="AddressEnter_NeedSubscription_Title">주목!</string>
-    <string name="AddressEnter_Danger_Title">위험!</string>
-    <string name="AddressEnter_Danger_Content">입력한 주소가 사기성일 수 있습니다. 사기꾼들은 종종 처음과 마지막 문자를 변경합니다. 손실을 방지하기 위해 진행하기 전에 전체 주소를 주의 깊게 확인하세요.</string>
     <string name="AddressEnter_Safe_Title">안전함</string>
     <string name="Send_RiskyAddress">위험한 주소!</string>
     <string name="Send_RiskyAddress_AlertText">고위험 주소로 자금을 보내려고 합니다. 진행하면 손실이나 기타 보안 위험이 발생할 수 있습니다. 계속 진행하면 잠재적 위험을 수락하는 것입니다. 정말로 진행하시겠습니까?</string>
@@ -435,9 +421,6 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">중고 Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">이 nonce를 사용하여 실행된 트랜잭션이 이미 존재합니다.</string>
     <!-- Fee Settings -->
-    <string name="Fee_Total">총 수수료</string>
-    <string name="Fee_OutboundFee">송금 수수료</string>
-    <string name="Fee_LiquidityFee">유동성 수수료</string>
     <string name="FeeSettings_NetworkFee">네트워크 수수료</string>
     <string name="FeeSettings_NetworkFee_Info">네트워크에서 주어진 거래를 보내는 데 예상되는 비용.</string>
     <string name="FeeSettings_GasLimit_Info">거래 복잡성은 \'가스\'라고 불리는 단위로 측정됩니다. 이는 실행되는 스마트 계약에 따라 다릅니다. 가스 한도는 해당 거래를 실행하는 데 필요한 최대 가스를 예상한 값입니다. 실제로 사용된 가스는 일반적으로 더 낮을 것입니다.</string>
@@ -504,7 +487,6 @@
     <string name="WalletConnect_Error_UnsupportedEvents">지원되지 않는 이벤트: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">요청을 찾을 수 없음 오류</string>
     <string name="WalletConnect_NoConnection">연결된 dapp이 없습니다.</string>
-    <string name="WalletConnect_PendingRequests">보류 중인 요청</string>
     <string name="WalletConnect_ActiveWallet">지갑</string>
     <string name="WalletConnect_NotSupportedDescription">현재 지갑 유형 %s은(는) WalletConnect를 지원하지 않습니다.</string>
     <string name="WalletConnect_Unnamed">이름없음</string>
@@ -517,8 +499,6 @@
     <string name="WalletConnect_ConnectTo">%s에 연결</string>
     <string name="WalletConnect_ConnectedTo">%s에 연결됨</string>
     <string name="WalletConnect_Disconnect">연결해제 %s</string>
-    <string name="WalletConnect_WhiteListDeactivatedWarning">스캠 보호가 비활성화되어 도메인 검증을 사용할 수 없습니다. 검증되지 않은 웹사이트나 피싱으로부터 보호하려면 프리미엄으로 업그레이드하세요.</string>
-    <string name="WalletConnect_NotInWhiteListAlert">이 웹사이트는 검증되지 않았으며 피싱이나 자산 손실로 이어질 수 있습니다. 연결을 강력히 권장하지 않습니다.</string>
     <string name="WalletConnect_ConnectWarning">승인을 눌러 이 앱이 귀하의 공공 주소를 볼 수 있도록 허용하십시오. 이것은 잠재적인 피싱 위험으로부터 데이터를 보호하기 위한 중요한 보안 단계 입니다.</string>
     <string name="WalletConnect_Attention">주목!</string>
     <string name="WalletConnect_Danger">위험!</string>
@@ -799,8 +779,6 @@
     <string name="Premium_SubscriptionPeriod_Year">년</string>
     <string name="Premium_SubscriptionPeriod_Annually">연간</string>
     <string name="Premium_SubscriptionPeriod_Monthly">월간</string>
-    <string name="Premium_SubscriptionPeriod_PerYear">연간</string>
-    <string name="Premium_SubscriptionPeriod_PerMonth">월별</string>
     <string name="Appearance_MarketsTab">마켓 탭</string>
     <string name="Appearance_BalanceTab">잔고 탭</string>
     <string name="Appearance_AppIcon">앱 아이콘</string>
@@ -865,9 +843,6 @@
     <string name="SettingsSecurity_EnablePin">비밀번호</string>
     <string name="SettingsSecurity_DisablePin">비밀번호 비활성화</string>
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
-    <string name="SettingsSecurity_SetDuressPin">긴급 상황 모드 설정</string>
-    <string name="SettingsSecurity_EditDuressPin">긴급 상황 비밀번호 편집</string>
-    <string name="SettingsSecurity_DisableDuressPin">협박 비밀번호를 비활성화합니다.</string>
     <string name="SettingsSecurity_ManageKeys">지갑 관리하기</string>
     <string name="SettingsSecurity_AppRestartWarning">이 작업을 수행하면 Unstoppable Wallet 이 다시 시작됩니다.</string>
     <string name="SettingsSecurity_TorConnectionDescription">이 앱을 사용하는 동안 인터넷을 완전히 익명화하십시오. 경우에 따라 DeFi 앱용 WalletConnect 기능이 매우 느리거나 전혀 작동하지 않을 수 있습니다.</string>

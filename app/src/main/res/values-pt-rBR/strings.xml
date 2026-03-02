@@ -6,7 +6,6 @@
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
-    <string name="Alert_Loading">Carregando...</string>
     <string name="Button_Show">Mostrar</string>
     <string name="Button_Hide">Ocultar</string>
     <string name="Button_Cancel">Cancelar</string>
@@ -124,19 +123,12 @@
     <string name="Restore_PrivateKey_InvalidKey">Chave Inválida</string>
     <string name="SelectContacts_All">Todas</string>
     <string name="Restore_BirthdayHeight">Altura de aniversário</string>
-    <string name="Restore_BirthdayHeight_Invalid">Altura de aniversário inválida</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Insira a data da criação da carteira para uma sincronização mais rápida.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (opcional)</string>
     <string name="BirthdayHeight_Description">Você pode alterar a altura do bloco ou selecionar uma data aproximada para reescanear o histórico de transações.</string>
     <string name="BirthdayHeight_RestoreDescription">Sua carteira será restaurada de um ponto de partida padrão. Você pode alterar a altura do bloco ou selecionar uma data de criação de carteira aproximada.</string>
     <string name="BirthdayHeight_BlockDate">Data do Bloco</string>
     <string name="BirthdayHeight_Rescan">Reescanear</string>
     <string name="Restore_ZCash_RestoreAsNew">Restaurar como novo</string>
-    <string name="Restore_ZCash_NewWallet">Nova Carteira</string>
-    <string name="Restore_ZCash_NewWallet_Description">Não tem nenhuma transação</string>
-    <string name="Restore_ZCash_OldWallet">Carteira existente</string>
-    <string name="Restore_ZCash_OldWallet_Description">Tem transações</string>
-    <string name="Restore_ZCash_SlowSyncWarningText">A sincronização inicial com o blockchain pode consumir muito tráfego na internet.</string>
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">Cap. de mercado</string>
@@ -326,7 +318,6 @@
     <string name="Balance_SearchingTransactions">Procurando transações...</string>
     <string name="Balance_Downloading">Baixando…</string>
     <string name="Balance_FoundTx">%s tx</string>
-    <string name="Balance_Syncing_WithProgress">Sincronizando… %s%%</string>
     <string name="Balance_BlocksRemaining">Blocos restantes - %d</string>
     <string name="Balance_Sort_Balance">Saldo</string>
     <string name="Balance_Sort_PopupTitle">Organizar por</string>
@@ -359,9 +350,6 @@
     <string name="Balance_Receive_Subaddresses">Sub-endereços</string>
     <string name="Balance_Receive_SubaddressesInfo">Subendereços permitem que você use vários endereços exclusivos dentro de uma carteira para conveniência e privacidade aprimorada.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Transações: %s</string>
-    <string name="Balance_Receive_HaveYouOwnedCoins">Você já possuiu alguma moeda %s?</string>
-    <string name="Balance_Receive_YesAlreadyOwn">Sim, eu já possuo</string>
-    <string name="Balance_Receive_IDontHave">Não, eu não tenho</string>
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">ZEC transparente detectado</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Valor transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">O saldo transparente não pode ser usado em nossa carteira por enquanto. Mas este dinheiro pode ser gasto por outras carteiras com suporte a endereços.</string>
@@ -416,8 +404,6 @@
     <string name="Send_Address_ErrorMessage_SanctionDetected_Description">O endereço que você digitou está marcado como sancionado. As transações para este endereço podem levar a perda ou outros riscos. Por favor, verifique os dados do destinatário antes de prosseguir.</string>
     <string name="AddressEnter_NeedSubscription_Title">Atenção!</string>
     <string name="AddressEnter_NeedSubscription_Content">O envio seguro está desativado. A sua transferência pode ir para um endereço de risco e o dinheiro pode ser perdido.</string>
-    <string name="AddressEnter_Danger_Title">Perigo!</string>
-    <string name="AddressEnter_Danger_Content">O endereço que você digitou pode ser fraudulento. Os golpistas frequentemente alteram os primeiros e últimos caracteres. Verifique o endereço completo com atenção antes de prosseguir para evitar perdas.</string>
     <string name="AddressEnter_Safe_Title">Segura</string>
     <string name="AddressEnter_Safe_Content">Endereço verificado. Nenhum phishing, lista negra ou sanções foram encontradas. É seguro de usar.</string>
     <string name="Send_RiskyAddress">Endereço Arriscado!</string>
@@ -458,9 +444,6 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Usado Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Já existe uma transação executada agora.</string>
     <!-- Fee Settings -->
-    <string name="Fee_Total">Taxa total</string>
-    <string name="Fee_OutboundFee">Taxa de Saída</string>
-    <string name="Fee_LiquidityFee">Taxa de Liquidez</string>
     <string name="FeeSettings_NetworkFee">Taxa de Rede</string>
     <string name="FeeSettings_NetworkFee_Info">O custo estimado do envio de determinada transação na rede.</string>
     <string name="FeeSettings_GasLimit_Info">A complexidade da transação é medida em unidades chamadas \"gas\". Ela varia dependendo do contrato inteligente ser executado. O Limite de Gas é estimado o gas máximo necessário para o executar. O gas real utilizado normalmente será mais baixo.</string>
@@ -531,7 +514,6 @@
     <string name="WalletConnect_Error_UnsupportedEvents">Eventos não suportados: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Pedido não encontrado erro</string>
     <string name="WalletConnect_NoConnection">Você não tem nenhum Dapps conectado</string>
-    <string name="WalletConnect_PendingRequests">Solicitações Pendentes</string>
     <string name="WalletConnect_ActiveWallet">Carteira</string>
     <string name="WalletConnect_NotSupportedDescription">Seu tipo de carteira atual %s não suporta WalletConnect</string>
     <string name="WalletConnect_Unnamed">Sem nome</string>
@@ -544,8 +526,6 @@
     <string name="WalletConnect_ConnectTo">Conectar a %s</string>
     <string name="WalletConnect_ConnectedTo">Conectado a %s</string>
     <string name="WalletConnect_Disconnect">Desconectar %s</string>
-    <string name="WalletConnect_WhiteListDeactivatedWarning">A Proteção de Scam está desativada. Verificação de domínio não está disponível. Atualize para a versão Premium para proteger contra sites não verificados ou phishing.</string>
-    <string name="WalletConnect_NotInWhiteListAlert">Este site não é verificado e pode levar a phishing ou perda de fundos. Conectar é fortemente desencorajado.</string>
     <string name="WalletConnect_ConnectWarning">Ao clicar em conectar, você permite que este aplicativo veja seu endereço público.</string>
     <string name="WalletConnect_Attention">Atenção!</string>
     <string name="WalletConnect_Danger">Perigo!</string>
@@ -824,9 +804,6 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">Verificador de endereço</string>
-    <string name="SettingsAddressChecker_RecipientCheck">Verificação do destinatário</string>
-    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Verificar o endereço do destinatário por riscos de segurança antes do envio.</string>
-    <string name="SettingsAddressChecker_CheckAddress">Verificar endereço</string>
     <string name="SettingsAddressChecker_OnSubject">Em %s</string>
     <string name="SettingsAddressChecker_SanctionsCheck">Verificar Sanções</string>
     <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
@@ -918,9 +895,6 @@
     <string name="Premium_SubscriptionPeriod_Annually">Anualmente</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Mensalmente</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">ECONOMIZE 31%</string>
-    <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
-    <string name="Premium_SubscriptionPeriod_PerYear">por ano</string>
-    <string name="Premium_SubscriptionPeriod_PerMonth">por mês</string>
     <string name="Appearance_MarketsTab">TAB MARKETS</string>
     <string name="Appearance_BalanceTab">ABA SALDO</string>
     <string name="Appearance_AppIcon">ICONE DE APLICATIVO</string>
@@ -1004,10 +978,6 @@
     <string name="SettingsSecurity_EnablePin">Senha</string>
     <string name="SettingsSecurity_DisablePin">Desativar Senha</string>
     <string name="SettingsSecurity_EditPin">Editar senha</string>
-    <string name="SettingsSecurity_SetDuressPin">Definir modo de dureza</string>
-    <string name="SettingsSecurity_EditDuressPin">Editar Senha do Modo Coação</string>
-    <string name="SettingsSecurity_DisableDuressPin">Desabilitar senha de cobrança</string>
-    <string name="SettingsSecurity_DuressPinDescription">Um modo de especial que protege carteiras selecionadas em caso de coerção.</string>
     <string name="SettingsSecurity_ManageKeys">Gerenciar carteiras</string>
     <string name="SettingsSecurity_AppRestartWarning">Esta ação reiniciará Carteira Unstoppable.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonimize sua internet completamente enquanto estiver usando este aplicativo. Nota: em alguns casos, o recurso WalletConnect para apps DeFi pode ser muito lento ou nem funcionar.</string>
@@ -1120,7 +1090,6 @@
     <string name="WatchWallet">Assistir Carteira</string>
     <string name="Watch_Address_Hint">Cole seu endereço (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) ou XPUB</string>
     <string name="Watch_ViewKey">Chave Privada de Visualização</string>
-    <string name="Watch_BirthdayHeight">Altura da Restauração</string>
     <string name="Watch_Select_Blockchains">Escolha as Blockchains</string>
     <string name="Watch_Select_Coins">Escolher Moedas</string>
     <string name="Watch_Error_InvalidAddressFormat">Formato de endereço não suportado</string>

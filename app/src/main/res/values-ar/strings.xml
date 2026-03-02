@@ -4,7 +4,6 @@
     <string name="Error_ParameterNotSet">لم يتم تحديد الإعدادات</string>
     <string name="Alert_Cancel">إلغاء</string>
     <string name="Alert_Copy">نسخ</string>
-    <string name="Alert_Loading">جاري التحميل...</string>
     <string name="Button_Cancel">إلغاء</string>
     <string name="Button_Next">التالي</string>
     <string name="Button_Enable">تمكين</string>

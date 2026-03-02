@@ -6,7 +6,6 @@
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Отменить</string>
     <string name="Alert_Copy">Скопировать</string>
-    <string name="Alert_Loading">Загрузка...</string>
     <string name="Button_Show">Показать</string>
     <string name="Button_Hide">Скрыть</string>
     <string name="Button_Cancel">Отменить</string>
@@ -125,19 +124,12 @@
     <string name="Restore_PrivateKey_InvalidKey">Неверный ключ</string>
     <string name="SelectContacts_All">Все</string>
     <string name="Restore_BirthdayHeight">Блок создания</string>
-    <string name="Restore_BirthdayHeight_Invalid">Недопустимая высота дня рождения</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Введите блок создания кошелька для ускорения синхронизации.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (необязательно)</string>
     <string name="BirthdayHeight_Description">Вы можете изменить высоту блока или выбрать приблизительную дату, чтобы повторно просканировать историю транзакций.</string>
     <string name="BirthdayHeight_RestoreDescription">Введите блок создания кошелька для ускорения синхронизации.</string>
     <string name="BirthdayHeight_BlockDate">Дата блока:</string>
     <string name="BirthdayHeight_Rescan">Повторное сканирование</string>
     <string name="Restore_ZCash_RestoreAsNew">Восстановить как новый</string>
-    <string name="Restore_ZCash_NewWallet">Новый кошелек</string>
-    <string name="Restore_ZCash_NewWallet_Description">Нет транзакций</string>
-    <string name="Restore_ZCash_OldWallet">Существующий кошелек</string>
-    <string name="Restore_ZCash_OldWallet_Description">Есть транзакции</string>
-    <string name="Restore_ZCash_SlowSyncWarningText">Первоначальная синхронизация с блокчейном может потреблять много интернет-трафика.</string>
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">Рын. кап.</string>
@@ -327,7 +319,6 @@
     <string name="Balance_SearchingTransactions">Поиск транзакций...</string>
     <string name="Balance_Downloading">Загрузка…</string>
     <string name="Balance_FoundTx">%s tx</string>
-    <string name="Balance_Syncing_WithProgress">Синхронизация… %s%%</string>
     <string name="Balance_BlocksRemaining">Осталось блоков - %d</string>
     <string name="Balance_Sort_Balance">По балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировать</string>
@@ -360,9 +351,6 @@
     <string name="Balance_Receive_Subaddresses">Субадреса</string>
     <string name="Balance_Receive_SubaddressesInfo">Субадреса позволяют использовать несколько уникальных адресов в одном кошельке для удобства и повышения конфиденциальности.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Транзакции: %s</string>
-    <string name="Balance_Receive_HaveYouOwnedCoins">Ранее у вас уже были %s монеты?</string>
-    <string name="Balance_Receive_YesAlreadyOwn">Да, у меня уже есть</string>
-    <string name="Balance_Receive_IDontHave">Нет, у меня нет</string>
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Обнаружен Transparent ZEC</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent сумма</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">У вас есть ZEC, находящийся на transparent адресе. Чтобы использовать его в Unstoppable, необходимо выполнить shielding для полной приватности.</string>
@@ -417,8 +405,6 @@
     <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Адрес находится под санкциями. Перевод может быть заблокирован.</string>
     <string name="AddressEnter_NeedSubscription_Title">Внимание!</string>
     <string name="AddressEnter_NeedSubscription_Content">Защита Secure Send отключена. Есть риск отправить средства на небезопасный адрес и потерять деньги.</string>
-    <string name="AddressEnter_Danger_Title">Опасность!</string>
-    <string name="AddressEnter_Danger_Content">Обнаружен фишинговый адрес. Отправка средств приведёт к потере денег.</string>
     <string name="AddressEnter_Safe_Title">Безопасный</string>
     <string name="AddressEnter_Safe_Content">Адрес проверен. Фишинга, чёрных списков и санкций не обнаружено - можно отправлять.</string>
     <string name="Send_RiskyAddress">Рискованный адрес!</string>
@@ -459,9 +445,6 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Использованый Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Выполненная транзакция с таким nonce уже существует.</string>
     <!-- Fee Settings -->
-    <string name="Fee_Total">Общая комиссия</string>
-    <string name="Fee_OutboundFee">Исходящая комиссия</string>
-    <string name="Fee_LiquidityFee">Плата за ликвидность</string>
     <string name="FeeSettings_NetworkFee">Комиссия сети</string>
     <string name="FeeSettings_NetworkFee_Info">Ориентировочная стоимость отправки данной транзакции по сети.</string>
     <string name="FeeSettings_GasLimit_Info">Сложность транзакций измеряется в единицах под названием \"газ\" и варьируется в зависимости от выполняемого смарт-контракта. Предельный газ - это предполагаемый максимальный газ, необходимый для его исполнения. Используемый газ обычно меньше.</string>
@@ -533,7 +516,6 @@
     <string name="WalletConnect_Error_UnsupportedEvents">Неподдерживаемые события: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Ошибка: запрос не найден</string>
     <string name="WalletConnect_NoConnection">У вас нет подключенных dapps</string>
-    <string name="WalletConnect_PendingRequests">Ожидающие запросы</string>
     <string name="WalletConnect_ActiveWallet">Кошелек</string>
     <string name="WalletConnect_NotSupportedDescription">Ваш текущий тип кошелька %s не поддерживает WalletConnect</string>
     <string name="WalletConnect_Unnamed">Без имени</string>
@@ -546,8 +528,6 @@
     <string name="WalletConnect_ConnectTo">Подключиться к %s</string>
     <string name="WalletConnect_ConnectedTo">Подключено к %s</string>
     <string name="WalletConnect_Disconnect">Отключить %s</string>
-    <string name="WalletConnect_WhiteListDeactivatedWarning">Защита от мошенничества отключена. Проверка домена недоступна. Обновите до Премиум, чтобы защитить от непроверенных или фишинговых сайтов.</string>
-    <string name="WalletConnect_NotInWhiteListAlert">Этот веб-сайт не верифицирован и может привести к фишингу или потере средств. Подключение крайне не приветствуется.</string>
     <string name="WalletConnect_ConnectWarning">Нажав на кнопку \"Подключиться\", вы разрешите этому приложению просматривать свой публичный адрес.</string>
     <string name="WalletConnect_Attention">Внимание!</string>
     <string name="WalletConnect_Danger">Опасность!</string>
@@ -826,9 +806,6 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 час</string>
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">Проверка адреса</string>
-    <string name="SettingsAddressChecker_RecipientCheck">Проверка получателя</string>
-    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Сканирует адрес получателя на предмет риска безопасности перед отправкой.</string>
-    <string name="SettingsAddressChecker_CheckAddress">Проверить адрес</string>
     <string name="SettingsAddressChecker_OnSubject">на %s</string>
     <string name="SettingsAddressChecker_SanctionsCheck">Sanction Check</string>
     <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
@@ -920,9 +897,6 @@
     <string name="Premium_SubscriptionPeriod_Annually">Ежегодно</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Ежемесячно</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">SAVE 50%</string>
-    <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
-    <string name="Premium_SubscriptionPeriod_PerYear">в год</string>
-    <string name="Premium_SubscriptionPeriod_PerMonth">в месяц</string>
     <string name="Appearance_MarketsTab">ВКЛАДКА РЫНКИ</string>
     <string name="Appearance_BalanceTab">ВКЛАДКА БАЛАНС</string>
     <string name="Appearance_AppIcon">ИКОНКА ПРИЛОЖЕНИЯ</string>
@@ -1006,10 +980,6 @@
     <string name="SettingsSecurity_EnablePin">Включить код доступа</string>
     <string name="SettingsSecurity_DisablePin">Отключить код доступа</string>
     <string name="SettingsSecurity_EditPin">Изменить код</string>
-    <string name="SettingsSecurity_SetDuressPin">Установить режим Duress</string>
-    <string name="SettingsSecurity_EditDuressPin">Изменить Duress код</string>
-    <string name="SettingsSecurity_DisableDuressPin">Отключить Duress код</string>
-    <string name="SettingsSecurity_DuressPinDescription">Специальный режим, защищающий выбранные кошельки в случае принуждения.</string>
     <string name="SettingsSecurity_ManageKeys">Кошельки</string>
     <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable кошелек.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Во время использования этого приложения полностью анонимизировать ваш интернет. Обратите внимание, что в некоторых случаях функция WalletConnect для DeFi приложений может быть очень медленной или вообще не работать.</string>
@@ -1122,7 +1092,6 @@
     <string name="WatchWallet">Смотреть кошелек</string>
     <string name="Watch_Address_Hint">Вставьте ваш адрес (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) или XPUB</string>
     <string name="Watch_ViewKey">Приватный ключ просмотра</string>
-    <string name="Watch_BirthdayHeight">Высота восстановления</string>
     <string name="Watch_Select_Blockchains">Блокчейны</string>
     <string name="Watch_Select_Coins">Выберите токены</string>
     <string name="Watch_Error_InvalidAddressFormat">Формат адреса не поддерживается</string>
