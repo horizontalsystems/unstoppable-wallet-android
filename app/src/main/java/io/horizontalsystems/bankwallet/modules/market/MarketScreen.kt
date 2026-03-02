@@ -172,7 +172,7 @@ fun TabsSection(
     ) { page ->
         when (tabs[page]) {
             Tab.Coins -> TopCoins(onCoinClick = { onCoinClick(it, backStack) })
-            Tab.Watchlist -> MarketFavoritesScreen(backStack)
+            Tab.Watchlist -> MarketFavoritesScreen(backStack, resultBus)
             Tab.Earn -> MarketEarnScreen(backStack, resultBus)
             Tab.Posts -> MarketPostsScreen()
             Tab.Platform -> TopPlatforms(backStack)

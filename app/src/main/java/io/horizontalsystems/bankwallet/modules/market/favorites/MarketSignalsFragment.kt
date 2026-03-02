@@ -16,11 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -40,12 +41,22 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object MarketSignalsScreen : HSScreen()
+data object MarketSignalsScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        MarketSignalsScreen(backStack, resultBus)
+    }
+
+    data class Result(val enabled: Boolean)
+}
 
 class MarketSignalsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        MarketSignalsScreen(navController)
+//        MarketSignalsScreen(navController)
     }
 
     @Parcelize
@@ -53,15 +64,15 @@ class MarketSignalsFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun MarketSignalsScreen(navController: NavController) {
+fun MarketSignalsScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
     HSScaffold(
         title = stringResource(R.string.Market_Signals),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = navController::popBackStack
+                onClick = backStack::removeLastOrNull
             )
         ),
     ) {
@@ -127,8 +138,8 @@ fun MarketSignalsScreen(navController: NavController) {
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Market_Signal_TurnOn),
                     onClick = {
-                        navController.setNavigationResultX(MarketSignalsFragment.Result(true))
-                        navController.popBackStack()
+                        resultBus.sendResult(result = MarketSignalsScreen.Result(true))
+                        backStack.removeLastOrNull()
                     }
                 )
             }

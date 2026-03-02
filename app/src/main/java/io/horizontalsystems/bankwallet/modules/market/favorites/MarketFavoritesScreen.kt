@@ -15,6 +15,7 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statPeriod
@@ -23,6 +24,9 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.navigateWithPaidAction
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -38,11 +42,13 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
+import io.horizontalsystems.subscriptions.core.TradeSignals
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MarketFavoritesScreen(
-    backStack: NavBackStack<HSScreen>
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus
 ) {
     val viewModel = viewModel<MarketFavoritesViewModel>(factory = MarketFavoritesModule.Factory())
     val uiState = viewModel.uiState
@@ -148,6 +154,12 @@ fun MarketFavoritesScreen(
                                             }
                                         )
                                         HSpacer(width = 12.dp)
+
+                                        ResultEffect<MarketSignalsScreen.Result>(resultBus) {
+                                            if (it.enabled) {
+                                                viewModel.showSignals()
+                                            }
+                                        }
                                         HSButton(
                                             variant = ButtonVariant.Secondary,
                                             style = ButtonStyle.Solid,
@@ -155,22 +167,16 @@ fun MarketFavoritesScreen(
                                             title = stringResource(id = R.string.Market_Signals),
                                             onClick = {
                                                 if (!uiState.showSignal) {
-//                                                    TODO("xxx nav3")
-//                                                    navController.paidAction(TradeSignals) {
-//                                                        navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
-//                                                            R.id.marketSignalsFragment
-//                                                        ) {
-//                                                            if (it.enabled) {
-//                                                                viewModel.showSignals()
-//                                                            }
-//                                                        }
-//                                                    }
-//                                                    stat(
-//                                                        page = StatPage.MarketOverview,
-//                                                        event = StatEvent.OpenPremium(
-//                                                            StatPremiumTrigger.TradingSignal),
-//                                                        section = StatSection.Watchlist
-//                                                    )
+                                                    backStack.navigateWithPaidAction(
+                                                        TradeSignals,
+                                                        MarketSignalsScreen
+                                                    )
+                                                    stat(
+                                                        page = StatPage.MarketOverview,
+                                                        event = StatEvent.OpenPremium(
+                                                            StatPremiumTrigger.TradingSignal),
+                                                        section = StatSection.Watchlist
+                                                    )
                                                 } else {
                                                     viewModel.hideSignals()
                                                 }
