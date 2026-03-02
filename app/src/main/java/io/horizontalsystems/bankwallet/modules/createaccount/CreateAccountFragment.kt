@@ -18,19 +18,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statAccountType
-import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
@@ -48,45 +44,40 @@ import kotlinx.serialization.Serializable
 data class CreateAccountScreen(
     val popOffOnSuccess: Int = R.id.createAccountFragment,
     val popOffInclusive: Boolean = true
-) : HSScreen()
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        CreateAccountIntroScreen(
+            openCreateAdvancedScreen = {
+                backStack.add(
+                    CreateAccountAdvancedScreen(
+                        popOffOnSuccess,
+                        popOffInclusive
+                    )
+                )
+            },
+            onBackClick = { backStack.removeLastOrNull() },
+            onFinish = {
+//                TODO("xxx nav3")
+//                backStack.popBackStack(popUpToInclusiveId, inclusive)
+            },
+        )
+    }
+}
 
 class CreateAccountFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<ManageAccountsModule.Input>()
-        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.createAccountFragment
-        val inclusive = input?.popOffInclusive ?: true
-        CreateAccountNavHost(navController, popUpToInclusiveId, inclusive)
+//        val input = navController.getInput<ManageAccountsModule.Input>()
+//        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.createAccountFragment
+//        val inclusive = input?.popOffInclusive ?: true
+//        CreateAccountNavHost(navController, popUpToInclusiveId, inclusive)
     }
 
-}
-
-@Composable
-private fun CreateAccountNavHost(
-    fragmentNavController: NavController,
-    popUpToInclusiveId: Int,
-    inclusive: Boolean
-) {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = "create_account_intro",
-    ) {
-        composable("create_account_intro") {
-            CreateAccountIntroScreen(
-                openCreateAdvancedScreen = { navController.navigate("create_account_advanced") },
-                onBackClick = { fragmentNavController.popBackStack() },
-                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) },
-            )
-        }
-        composablePage("create_account_advanced") {
-            CreateAccountAdvancedScreen(
-                onBackClick = { navController.popBackStack() },
-                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) }
-            )
-        }
-    }
 }
 
 @Composable
