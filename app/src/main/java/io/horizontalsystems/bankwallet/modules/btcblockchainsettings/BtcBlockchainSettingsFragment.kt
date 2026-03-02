@@ -23,12 +23,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule.BlockchainSettingsIcon
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BlockchainSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -49,18 +51,29 @@ import kotlinx.serialization.Serializable
 data class BtcBlockchainSettingsScreen(
     @Serializable(with = BlockchainSerializer::class)
     val blockchain: Blockchain
-) : HSScreen()
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val viewModel = viewModel<BtcBlockchainSettingsViewModel>(
+            factory = BtcBlockchainSettingsModule.Factory(blockchain)
+        )
+        BtcBlockchainSettingsScreen(viewModel, backStack)
+    }
+}
 
 class BtcBlockchainSettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Blockchain>(navController) { input ->
-            val viewModel = viewModel<BtcBlockchainSettingsViewModel>(
-                factory = BtcBlockchainSettingsModule.Factory(input)
-            )
-            BtcBlockchainSettingsScreen(viewModel, navController)
-        }
+//        withInput<Blockchain>(navController) { input ->
+//            val viewModel = viewModel<BtcBlockchainSettingsViewModel>(
+//                factory = BtcBlockchainSettingsModule.Factory(input)
+//            )
+//            BtcBlockchainSettingsScreen(viewModel, navController)
+//        }
     }
 
 }
@@ -68,11 +81,11 @@ class BtcBlockchainSettingsFragment : BaseComposeFragment() {
 @Composable
 private fun BtcBlockchainSettingsScreen(
     viewModel: BtcBlockchainSettingsViewModel,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
 
     if (viewModel.closeScreen) {
-        navController.popBackStack()
+        backStack.removeLastOrNull()
     }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
@@ -96,7 +109,7 @@ private fun BtcBlockchainSettingsScreen(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
                         onClick = {
-                            navController.popBackStack()
+                            backStack.removeLastOrNull()
                         }
                     )
                 )
