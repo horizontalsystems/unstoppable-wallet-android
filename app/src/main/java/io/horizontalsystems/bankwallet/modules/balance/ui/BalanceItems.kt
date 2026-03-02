@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -360,11 +361,10 @@ fun BalanceItems(
                         type = AlertType.Critical,
                         text = stringResource(R.string.AccountRecovery_MigrationRequired),
                         onClick = {
-//                            TODO("xxx nav3")
-//                            FaqManager.showFaqPage(
-//                                navController,
-//                                FaqManager.faqPathMigrationRequired
-//                            )
+                            FaqManager.showFaqPage(
+                                backStack,
+                                FaqManager.faqPathMigrationRequired
+                            )
                         }
                     )
                 }
