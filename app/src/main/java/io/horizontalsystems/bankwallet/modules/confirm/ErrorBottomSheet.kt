@@ -15,10 +15,10 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -27,12 +27,19 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHe
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
-import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ErrorBottomSheetScreen(val error: String) : HSScreen()
+data class ErrorBottomSheetScreen(val error: String) : HSScreen(bottomSheet = true) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ErrorBottomSheetScreen(backStack, error)
+    }
+}
 
 class ErrorBottomSheet : BaseComposableBottomSheetFragment() {
 
@@ -46,10 +53,10 @@ class ErrorBottomSheet : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val navController = findNavController()
-                navController.getInput<Input>()?.let { input ->
-                    ErrorBottomSheetScreen(navController, input.error)
-                }
+//                val navController = findNavController()
+//                navController.getInput<Input>()?.let { input ->
+//                    ErrorBottomSheetScreen(navController, input.error)
+//                }
             }
         }
     }
@@ -61,12 +68,12 @@ class ErrorBottomSheet : BaseComposableBottomSheetFragment() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ErrorBottomSheetScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     error: String
 ) {
     ComposeAppTheme {
         BottomSheetContent(
-            onDismissRequest = navController::popBackStack,
+            onDismissRequest = backStack::removeLastOrNull,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             buttons = {
                 HSButton(
@@ -75,7 +82,7 @@ fun ErrorBottomSheetScreen(
                     variant = ButtonVariant.Secondary,
                     onClick = {
                         TextHelper.copyText(error)
-                        navController.popBackStack()
+                        backStack.removeLastOrNull()
                     }
                 )
             },
