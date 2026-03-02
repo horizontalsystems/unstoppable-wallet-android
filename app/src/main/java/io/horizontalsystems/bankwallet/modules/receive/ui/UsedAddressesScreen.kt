@@ -43,8 +43,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 @Parcelize
+@Serializable
 data class UsedAddressesParams(
     val coinName: String,
     val usedAddresses: List<UsedAddress>,

@@ -63,6 +63,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.util.Date
 import io.horizontalsystems.solanakit.models.Address as SolanaAddress
@@ -393,6 +394,7 @@ interface IReceiveAdapter {
 }
 
 @Parcelize
+@Serializable
 data class UsedAddress(
     val index: Int,
     val address: String,
