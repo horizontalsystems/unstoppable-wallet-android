@@ -22,10 +22,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -35,30 +36,44 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object LanguageSettingsScreen : HSScreen()
+data object LanguageSettingsScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        LanguageScreen(
+            backStack,
+            {
+//                TODO("xxx nav3")
+//                activity?.let { MainModule.startAsNewTask(it) }
+            }
+        )
+    }
+}
 
 class LanguageSettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        LanguageScreen(
-            navController,
-            { activity?.let { MainModule.startAsNewTask(it) } }
-        )
+//        LanguageScreen(
+//            navController,
+//            { activity?.let { MainModule.startAsNewTask(it) } }
+//        )
     }
 
 }
 
 @Composable
 private fun LanguageScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     reloadApp: () -> Unit,
     viewModel: LanguageSettingsViewModel = viewModel(
         factory = LanguageSettingsModule.Factory()
     )
 ) {
     if (viewModel.closeScreen) {
-        navController.popBackStack()
+        backStack.removeLastOrNull()
     }
 
     if (viewModel.reloadApp) {
@@ -67,7 +82,7 @@ private fun LanguageScreen(
 
     HSScaffold(
         title = stringResource(R.string.Settings_Language),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier
