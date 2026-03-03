@@ -14,18 +14,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.LocalizedException
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Faq
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.modules.markdown.MarkdownScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
@@ -38,23 +39,38 @@ import kotlinx.serialization.Serializable
 import java.net.UnknownHostException
 
 @Serializable
-data object FaqListScreen : HSScreen()
+data object FaqListScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        FaqScreen(
+            onCloseClick = { backStack.removeLastOrNull() },
+            onItemClick = { faqItem ->
+                backStack.add(MarkdownScreen(faqItem.markdown))
+
+                stat(page = StatPage.Faq, event = StatEvent.OpenArticle(faqItem.markdown))
+            }
+        )
+    }
+}
 
 class FaqListFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        FaqScreen(
-            onCloseClick = { navController.popBackStack() },
-            onItemClick = { faqItem ->
-                navController.slideFromRight(
-                    R.id.markdownFragment,
-                    MarkdownFragment.Input(faqItem.markdown)
-                )
-
-                stat(page = StatPage.Faq, event = StatEvent.OpenArticle(faqItem.markdown))
-            }
-        )
+//        FaqScreen(
+//            onCloseClick = { navController.popBackStack() },
+//            onItemClick = { faqItem ->
+//                navController.slideFromRight(
+//                    R.id.markdownFragment,
+//                    MarkdownFragment.Input(faqItem.markdown)
+//                )
+//
+//                stat(page = StatPage.Faq, event = StatEvent.OpenArticle(faqItem.markdown))
+//            }
+//        )
     }
 
 }
