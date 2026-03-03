@@ -9,11 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoBody
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoSubHeader
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -21,22 +23,30 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object TransactionStatusInfoScreen : HSScreen()
+data object TransactionStatusInfoScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        InfoScreen(backStack)
+    }
+}
 
 class TransactionStatusInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        InfoScreen(
-            navController
-        )
+//        InfoScreen(
+//            navController
+//        )
     }
 
 }
 
 @Composable
 private fun InfoScreen(
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     HSScaffold(
         title = stringResource(R.string.TransactionInfo_Status),
@@ -44,7 +54,7 @@ private fun InfoScreen(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = { navController.popBackStack() }
+                onClick = { backStack.removeLastOrNull() }
             )
         )
     ) {
