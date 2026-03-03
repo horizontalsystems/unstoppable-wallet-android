@@ -17,13 +17,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule.BlockContent
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule.BlockData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -43,11 +44,19 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object AppStatusScreen : HSScreen()
+data object AppStatusScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        AppStatusScreen(backStack)
+    }
+}
 
 @Composable
 fun AppStatusScreen(
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     val viewModel = viewModel<AppStatusViewModel>(factory = AppStatusModule.Factory())
     val uiState = viewModel.uiState
@@ -56,7 +65,7 @@ fun AppStatusScreen(
 
     HSScaffold(
         title = stringResource(R.string.Settings_AppStatus),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier
