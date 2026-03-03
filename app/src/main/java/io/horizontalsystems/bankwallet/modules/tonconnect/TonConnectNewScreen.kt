@@ -23,12 +23,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.DropDownCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -46,7 +46,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 
 @Composable
 fun TonConnectNewScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     requestEntity: DAppRequestEntity,
     onResult: (Boolean) -> Unit,
 ) {
@@ -59,7 +59,7 @@ fun TonConnectNewScreen(
 
     LaunchedEffect(uiState.finish) {
         if (uiState.finish) {
-            navController.popBackStack()
+            backStack.removeLastOrNull()
         }
     }
 
@@ -76,7 +76,7 @@ fun TonConnectNewScreen(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = { navController.popBackStack() }
+                onClick = { backStack.removeLastOrNull() }
             )
         ),
         bottomBar = {
@@ -86,10 +86,11 @@ fun TonConnectNewScreen(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Connect),
                         onClick = {
-                            navController.authorizedAction {
-                                viewModel.connect()
-                                onResult.invoke(true)
-                            }
+//                            TODO("xxx nav3")
+//                            backStack.authorizedAction {
+//                                viewModel.connect()
+//                                onResult.invoke(true)
+//                            }
                         },
                         enabled = uiState.connectEnabled
                     )

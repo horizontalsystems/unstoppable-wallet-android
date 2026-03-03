@@ -30,7 +30,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.tonapps.wallet.data.tonconnect.entities.DAppEntity
 import io.horizontalsystems.bankwallet.R
@@ -49,7 +48,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 @Composable
 fun TonConnectSessionList(
     dapps: Map<String, List<DAppEntity>>,
-    navController: NavController,
     onDelete: (DAppEntity) -> Unit
 ) {
     var revealedCardId by remember { mutableStateOf<String?>(null) }
