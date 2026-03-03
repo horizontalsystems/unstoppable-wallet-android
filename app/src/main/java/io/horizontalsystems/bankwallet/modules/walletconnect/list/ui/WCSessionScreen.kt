@@ -35,18 +35,19 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListUiState
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel.ConnectionResult
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -69,7 +70,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WCSessionsScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     deepLinkUri: String?
 ) {
     val context = LocalContext.current
@@ -122,14 +123,14 @@ fun WCSessionsScreen(
 
     HSScaffold(
         title = stringResource(R.string.DAppConnection_Title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),
                 icon = R.drawable.ic_info_24,
                 tint = ComposeAppTheme.colors.grey,
                 onClick = {
-                    FaqManager.showFaqPage(navController, FaqManager.faqPathDefiRisks)
+                    FaqManager.showFaqPage(backStack, FaqManager.faqPathDefiRisks)
                 }
             )
         )
@@ -149,7 +150,7 @@ fun WCSessionsScreen(
                         },
                         onRequestClick = { requestViewItem ->
                             viewModel.setRequestToOpen(requestViewItem.request)
-                            navController.slideFromBottom(R.id.wcRequestFragment)
+                            backStack.add(WCRequestScreen)
                         }
                     )
                 }

@@ -211,7 +211,7 @@ private fun SettingSections(
                 onClick = {
                     when (val state = viewModel.walletConnectSupportState) {
                         WCManager.SupportState.Supported -> {
-                            backStack.add(WCListScreen)
+                            backStack.add(WCListScreen())
 
                             stat(
                                 page = StatPage.Settings,
