@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.delay
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -17,7 +18,7 @@ class HashDitAddressValidator(
     private val apiService by lazy {
         APIClient.build(
             baseUrl,
-            mapOf("Accept" to "application/json", "X-API-KEY" to apiKey)
+            mapOf("Accept" to "application/json", "X-API-Key" to apiKey)
         ).create(HashDitApi::class.java)
     }
 
@@ -25,12 +26,22 @@ class HashDitAddressValidator(
         return isClear(address, token.blockchainType)
     }
 
+    //score <= 15: Significant Risk
+    //score <= 40: High Risk
+    //score <= 59: Medium Risk
+    //score >= 60: Safe
     suspend fun isClear(address: Address, blockchainType: BlockchainType): Boolean {
         if (!supportedBlockchainTypes.contains(blockchainType)) throw UnsupportedBlockchainType()
 
         val chain = evmBlockchainManager.getChain(blockchainType)
-        val response = apiService.transactionSecurity(TransactionSecurityData(chain.id, address.hex))
-        return response.data.risk_level < 4
+        val request = AddressSecurityRequest(chain.id.toString(), address.hex)
+
+        var response = apiService.addressSecurity(request)
+        while (response.status == "in progress") {
+            delay((response.pollAfter ?: 10) * 1000L)
+            response = apiService.addressSecurity(request)
+        }
+        return (response.data?.overall_score?.toIntOrNull() ?: 0) >= 60
     }
 
     fun supports(token: Token): Boolean {
@@ -38,31 +49,23 @@ class HashDitAddressValidator(
     }
 
     private interface HashDitApi {
-        @POST("transaction-security")
-        suspend fun transactionSecurity(@Body data: TransactionSecurityData): TransactionSecurityResponse
+        @POST("address-security-v2")
+        suspend fun addressSecurity(@Body data: AddressSecurityRequest): AddressSecurityResponse
     }
 
-    data class TransactionSecurityData(
-        val chainId: Int,
-        val to: String
+    data class AddressSecurityRequest(
+        val chainId: String,
+        val address: String
     )
 
-    data class TransactionSecurityResponse(
+    data class AddressSecurityResponse(
         val code: String,
         val status: String,
-        val data: Data
+        val pollAfter: Int?,
+        val data: Data?
     ) {
         data class Data(
-            val request_id: String,
-            val has_result: Boolean,
-            val polling_interval: Int,
-            val risk_level: Int,
-            val risk_detail: List<RiskDetail>
-        )
-
-        data class RiskDetail(
-            val name: String,
-            val value: String
+            val overall_score: String
         )
     }
 
