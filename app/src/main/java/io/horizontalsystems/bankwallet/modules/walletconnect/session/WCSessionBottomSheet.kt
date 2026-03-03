@@ -34,15 +34,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.getInputX
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -64,19 +63,27 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
 import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object WCSessionBottomSheetScreen : HSScreen()
+data class WCSessionBottomSheetScreen(val sessionTopic: String) : HSScreen(bottomSheet = true) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val viewModel = viewModel<WCSessionViewModel>(factory = WCSessionModule.Factory(sessionTopic))
+        WCSessionScreen(backStack, viewModel)
+    }
+}
 
 class WCSessionBottomSheet : BaseComposableBottomSheetFragment() {
 
-    private val viewModel by viewModels<WCSessionViewModel> {
-        val input = arguments?.getInputX<WCSessionModule.Input>()
-        WCSessionModule.Factory(input?.sessionTopic)
-    }
+//    private val viewModel by viewModels<WCSessionViewModel> {
+//        val input = arguments?.getInputX<WCSessionModule.Input>()
+//        WCSessionModule.Factory(input?.sessionTopic)
+//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,11 +95,11 @@ class WCSessionBottomSheet : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val navController = findNavController()
-
-                ComposeAppTheme {
-                    WCSessionScreen(navController, viewModel)
-                }
+//                val navController = findNavController()
+//
+//                ComposeAppTheme {
+//                    WCSessionScreen(navController, viewModel)
+//                }
             }
         }
     }
@@ -101,7 +108,7 @@ class WCSessionBottomSheet : BaseComposableBottomSheetFragment() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WCSessionScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     viewModel: WCSessionViewModel,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -114,12 +121,12 @@ fun WCSessionScreen(
 
     LaunchedEffect(uiState.closeDialog) {
         if (uiState.closeDialog) {
-            navController.popBackStack()
+            backStack.removeLastOrNull()
         }
     }
 
     BottomSheetContent(
-        onDismissRequest = navController::popBackStack,
+        onDismissRequest = backStack::removeLastOrNull,
         sheetState = sheetState,
     ) { snackbarActions ->
         uiState.showError?.let {
@@ -193,10 +200,7 @@ fun WCSessionScreen(
                     activated = uiState.hasSubscription,
                     whiteListState = whiteListState,
                     onActivateClick = {
-                        navController.slideFromBottom(
-                            R.id.defenseSystemFeatureDialog,
-                            DefenseSystemFeatureDialog.Input(PremiumFeature.ScamProtectionFeature)
-                        )
+                        backStack.add(DefenseSystemFeatureScreen(PremiumFeature.ScamProtectionFeature))
                     }
                 )
             }
@@ -207,7 +211,7 @@ fun WCSessionScreen(
             onDisconnectClick = { viewModel.disconnect() },
             onCancelClick = {
                 viewModel.rejectProposal()
-                navController.popBackStack()
+                backStack.removeLastOrNull()
             }
         )
 
