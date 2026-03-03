@@ -22,15 +22,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
@@ -43,12 +43,19 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSSelector
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UnlinkAccountScreen(val account: Account) : HSScreen()
+data class UnlinkAccountScreen(val account: Account) : HSScreen(bottomSheet = true) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        UnlinkAccountScreen(backStack, account)
+    }
+}
 
 class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
@@ -61,11 +68,11 @@ class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val navController = findNavController()
-
-                ComposeAppTheme {
-                    UnlinkAccountScreen(navController, navController.requireInput())
-                }
+//                val navController = findNavController()
+//
+//                ComposeAppTheme {
+//                    UnlinkAccountScreen(navController, navController.requireInput())
+//                }
             }
         }
     }
@@ -73,7 +80,7 @@ class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun UnlinkAccountScreen(navController: NavController, account: Account) {
+private fun UnlinkAccountScreen(backStack: NavBackStack<HSScreen>, account: Account) {
     val viewModel =
         viewModel<UnlinkAccountViewModel>(factory = UnlinkAccountModule.Factory(account))
 
@@ -86,7 +93,7 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
 
     BottomSheetContent(
         onDismissRequest = {
-            navController.popBackStack()
+            backStack.removeLastOrNull()
         },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         buttons = {
@@ -98,7 +105,7 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
                 onClick = {
                     viewModel.onUnlink()
                     HudHelper.showSuccessMessage(view, doneConfirmationMessage)
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
 
                     stat(page = StatPage.UnlinkWallet, event = StatEvent.Delete(StatEntity.Wallet))
                 }
