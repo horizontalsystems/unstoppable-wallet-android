@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
@@ -31,6 +32,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBotto
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.PassphraseCell
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.SeedPhraseList
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
@@ -42,15 +44,23 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object RecoveryPhraseScreen : HSScreen()
+data class RecoveryPhraseScreen(val account: Account) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        RecoveryPhraseScreen(backStack, account)
+    }
+}
 
 class RecoveryPhraseFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Account>(navController) { input ->
-            RecoveryPhraseScreen(navController, input)
-        }
+//        withInput<Account>(navController) { input ->
+//            RecoveryPhraseScreen(navController, input)
+//        }
     }
 
 }
@@ -58,7 +68,7 @@ class RecoveryPhraseFragment : BaseComposeFragment(screenshotEnabled = false) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RecoveryPhraseScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     account: Account,
 ) {
     val viewModel =
@@ -71,13 +81,13 @@ private fun RecoveryPhraseScreen(
 
     HSScaffold(
         title = stringResource(R.string.RecoveryPhrase_Title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),
                 icon = R.drawable.ic_info_24,
                 onClick = {
-                    FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                    FaqManager.showFaqPage(backStack, FaqManager.faqPathPrivateKeys)
                     stat(
                         page = StatPage.RecoveryPhrase,
                         event = StatEvent.Open(StatPage.Info)
