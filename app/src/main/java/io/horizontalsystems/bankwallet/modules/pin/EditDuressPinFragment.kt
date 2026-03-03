@@ -3,25 +3,41 @@ package io.horizontalsystems.bankwallet.modules.pin
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object EditDuressPinScreen : HSScreen()
+data object EditDuressPinScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        PinSet(
+            title = stringResource(id = R.string.EditDuressPin_Title),
+            description = stringResource(id = R.string.EditDuressPin_Description),
+            dismissWithSuccess = { backStack.removeLastOrNull() },
+            onBackPress = { backStack.removeLastOrNull() },
+            forDuress = true
+        )
+    }
+}
 
 class EditDuressPinFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        PinSet(
-            title = stringResource(id = R.string.EditDuressPin_Title),
-            description = stringResource(id = R.string.EditDuressPin_Description),
-            dismissWithSuccess = { navController.popBackStack() },
-            onBackPress = { navController.popBackStack() },
-            forDuress = true
-        )
+//        PinSet(
+//            title = stringResource(id = R.string.EditDuressPin_Title),
+//            description = stringResource(id = R.string.EditDuressPin_Description),
+//            dismissWithSuccess = { navController.popBackStack() },
+//            onBackPress = { navController.popBackStack() },
+//            forDuress = true
+//        )
     }
 }
