@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -22,6 +23,7 @@ import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModul
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.ScoreCategory
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoHeader
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -34,21 +36,35 @@ import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 @Serializable
-data class OverallScoreInfoScreen(val scoreCategory: ScoreCategory) : HSScreen()
+data class OverallScoreInfoScreen(val scoreCategory: ScoreCategory) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val categoryScores = getScores(scoreCategory)
+        InfoScreen(
+            scoreCategory.title,
+            scoreCategory.description,
+            categoryScores,
+            backStack
+        )
+    }
+}
 
 class OverallScoreInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<ScoreCategory>(navController) { scoreCategory ->
-            val categoryScores = getScores(scoreCategory)
-            InfoScreen(
-                scoreCategory.title,
-                scoreCategory.description,
-                categoryScores,
-                navController
-            )
-        }
+//        withInput<ScoreCategory>(navController) { scoreCategory ->
+//            val categoryScores = getScores(scoreCategory)
+//            InfoScreen(
+//                scoreCategory.title,
+//                scoreCategory.description,
+//                categoryScores,
+//                navController
+//            )
+//        }
     }
 }
 
@@ -57,11 +73,11 @@ private fun InfoScreen(
     categoryTitle: Int,
     description: Int,
     categoryScores: Map<OverallScore, String>,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     HSScaffold(
         title = "",
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier
