@@ -21,11 +21,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
@@ -57,24 +61,59 @@ data class VaultScreen(
     val assetSymbol: String,
     val protocolName: String,
     val assetLogo: String?,
-) : HSScreen()
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val viewModel = viewModel<VaultViewModel> {
+            VaultViewModel(
+                VaultModule.VaultViewItem(
+                    rank = "#$rank",
+                    address = address,
+                    name = name,
+                    tvl = tvl,
+                    chain = chain,
+                    url = url,
+                    holders = holders,
+                    assetSymbol = assetSymbol,
+                    protocolName = protocolName,
+                    assetLogo = assetLogo
+                )
+            )
+        }
+
+        val chartViewModel = viewModel<ChartViewModel> {
+            val chartService = VaultChartService(address, App.currencyManager, App.marketKit)
+            val chartNumberFormatter = VaultChartFormatter()
+            ChartModule.createViewModel(chartService, chartNumberFormatter)
+
+        }
+        VaultScreen(
+            viewModel,
+            chartViewModel,
+            backStack
+        )
+    }
+}
 
 class VaultFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            val factory = VaultModule.Factory(input)
-            val viewModel = viewModel<VaultViewModel>(factory = factory)
-            val chartViewModel = viewModel<ChartViewModel>(
-                factory = factory
-            )
-            VaultScreen(
-                viewModel,
-                chartViewModel,
-                navController
-            )
-        }
+//        withInput<Input>(navController) { input ->
+//            val factory = VaultModule.Factory(input)
+//            val viewModel = viewModel<VaultViewModel>(factory = factory)
+//            val chartViewModel = viewModel<ChartViewModel>(
+//                factory = factory
+//            )
+//            VaultScreen(
+//                viewModel,
+//                chartViewModel,
+//                navController
+//            )
+//        }
     }
 
     @Parcelize
@@ -97,14 +136,14 @@ class VaultFragment : BaseComposeFragment() {
 private fun VaultScreen(
     viewModel: VaultViewModel,
     chartViewModel: ChartViewModel,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
 ) {
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
     HSScaffold(
         title = uiState.vaultViewItem.assetSymbol,
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(Modifier.navigationBarsPadding()) {
             HSSwipeRefresh(
