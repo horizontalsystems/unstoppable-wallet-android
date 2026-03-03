@@ -15,15 +15,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.manageaccount.backupconfirmkey.BackupConfirmKeyScreen
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.PassphraseCell
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.SeedPhraseList
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
@@ -32,21 +34,29 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BackupKeyScreen(val account: Account) : HSScreen()
+data class BackupKeyScreen(val account: Account) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        RecoveryPhraseScreen(backStack, account)
+    }
+}
 
 class BackupKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Account>(navController) { account ->
-            RecoveryPhraseScreen(navController, account)
-        }
+//        withInput<Account>(navController) { account ->
+//            RecoveryPhraseScreen(navController, account)
+//        }
     }
 }
 
 @Composable
 fun RecoveryPhraseScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     account: Account
 ) {
     val viewModel = viewModel<BackupKeyViewModel>(factory = BackupKeyModule.Factory(account))
@@ -58,14 +68,14 @@ fun RecoveryPhraseScreen(
                 title = TranslatableString.ResString(R.string.Info_Title),
                 icon = R.drawable.ic_info_24,
                 onClick = {
-                    FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                    FaqManager.showFaqPage(backStack, FaqManager.faqPathPrivateKeys)
                 }
             ),
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 }
             )
         )
@@ -91,10 +101,7 @@ fun RecoveryPhraseScreen(
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.RecoveryPhrase_Verify),
                     onClick = {
-                        navController.slideFromRight(
-                            R.id.backupConfirmationKeyFragment,
-                            viewModel.account
-                        )
+                        backStack.add(BackupConfirmKeyScreen(viewModel.account))
                     },
                 )
             }
