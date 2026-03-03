@@ -28,7 +28,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object PublicKeysScreen : HSScreen()
+data class PublicKeysScreen(val account: Account) : HSScreen()
 
 class PublicKeysFragment : BaseComposeFragment() {
 

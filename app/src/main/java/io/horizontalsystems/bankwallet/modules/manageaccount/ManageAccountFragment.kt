@@ -23,12 +23,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -37,7 +35,11 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.BackupItem
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.KeyAction
+import io.horizontalsystems.bankwallet.modules.manageaccount.privatekeys.PrivateKeysScreen
+import io.horizontalsystems.bankwallet.modules.manageaccount.publickeys.PublicKeysScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -63,15 +65,23 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ManageAccountScreen(val accountId: String) : HSScreen()
+data class ManageAccountScreen(val accountId: String) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ManageAccountScreen(backStack, accountId)
+    }
+}
 
 class ManageAccountFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            ManageAccountScreen(navController, input.accountId)
-        }
+//        withInput<Input>(navController) { input ->
+//            ManageAccountScreen(navController, input.accountId)
+//        }
     }
 
     @Parcelize
@@ -79,17 +89,17 @@ class ManageAccountFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun ManageAccountScreen(navController: NavController, accountId: String) {
+fun ManageAccountScreen(backStack: NavBackStack<HSScreen>, accountId: String) {
     val viewModel =
         viewModel<ManageAccountViewModel>(factory = ManageAccountModule.Factory(accountId))
 
     if (viewModel.viewState.closeScreen) {
-        navController.popBackStack()
+        backStack.removeLastOrNull()
         viewModel.onClose()
     }
     HSScaffold(
         title = viewModel.viewState.title,
-        onBack = { navController.popBackStack() },
+        onBack = { backStack.removeLastOrNull() },
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.ManageAccount_Save),
@@ -135,7 +145,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                             text = stringResource(R.string.AccountRecovery_MigrationRequired),
                             onClick = {
                                 FaqManager.showFaqPage(
-                                    navController,
+                                    backStack,
                                     FaqManager.faqPathMigrationRequired
                                 )
                             }
@@ -150,7 +160,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                             text = stringResource(R.string.AccountRecovery_MigrationRecommended),
                             onClick = {
                                 FaqManager.showFaqPage(
-                                    navController,
+                                    backStack,
                                     FaqManager.faqPathMigrationRecommended
                                 )
                             },
@@ -160,13 +170,13 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                     HeaderNote.None -> Unit
                 }
 
-                KeyActions(viewModel, navController)
+                KeyActions(viewModel, backStack)
 
                 if (viewModel.viewState.backupActions.isNotEmpty()) {
                     BackupActions(
                         viewModel.viewState.backupActions,
                         viewModel.account,
-                        navController
+                        backStack
                     )
                 }
 
@@ -177,10 +187,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                             title = stringResource(id = R.string.ManageAccount_Unlink),
                             icon = painterResource(id = R.drawable.ic_delete_20)
                         ) {
-                            navController.slideFromBottom(
-                                R.id.unlinkConfirmationDialog,
-                                viewModel.account
-                            )
+                            backStack.add(UnlinkAccountScreen(viewModel.account))
 
                             stat(
                                 page = StatPage.ManageWallet,
@@ -198,7 +205,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
 private fun BackupActions(
     backupActions: List<BackupItem>,
     account: Account,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     val actionItems = mutableListOf<@Composable () -> Unit>()
     val infoItems = mutableListOf<@Composable () -> Unit>()
@@ -213,17 +220,18 @@ private fun BackupActions(
                         attention = action.showAttention,
                         completed = action.completed
                     ) {
-                        navController.authorizedAction {
-                            navController.slideFromBottom(
-                                R.id.backupKeyFragment,
-                                account
-                            )
-
-                            stat(
-                                page = StatPage.ManageWallet,
-                                event = StatEvent.Open(StatPage.ManualBackup)
-                            )
-                        }
+//                        TODO("xxx nav3")
+//                        backStack.authorizedAction {
+//                            backStack.slideFromBottom(
+//                                R.id.backupKeyFragment,
+//                                account
+//                            )
+//
+//                            stat(
+//                                page = StatPage.ManageWallet,
+//                                event = StatEvent.Open(StatPage.ManualBackup)
+//                            )
+//                        }
                     }
                 }
             }
@@ -235,14 +243,15 @@ private fun BackupActions(
                         icon = painterResource(id = R.drawable.ic_file_24),
                         attention = action.showAttention
                     ) {
-                        navController.authorizedAction {
-                            navController.slideFromBottom(R.id.backupLocalFragment, account)
-
-                            stat(
-                                page = StatPage.ManageWallet,
-                                event = StatEvent.Open(StatPage.FileBackup)
-                            )
-                        }
+//                        TODO("xxx nav3")
+//                        backStack.authorizedAction {
+//                            backStack.slideFromBottom(R.id.backupLocalFragment, account)
+//
+//                            stat(
+//                                page = StatPage.ManageWallet,
+//                                event = StatEvent.Open(StatPage.FileBackup)
+//                            )
+//                        }
                     }
                 }
             }
@@ -267,7 +276,7 @@ private fun BackupActions(
 @Composable
 private fun KeyActions(
     viewModel: ManageAccountViewModel,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     val actionItems = mutableListOf<@Composable () -> Unit>()
 
@@ -279,17 +288,18 @@ private fun KeyActions(
                         title = stringResource(id = R.string.RecoveryPhrase_Title),
                         icon = painterResource(id = R.drawable.icon_paper_contract_20)
                     ) {
-                        navController.authorizedAction {
-                            navController.slideFromRight(
-                                R.id.recoveryPhraseFragment,
-                                viewModel.account
-                            )
-
-                            stat(
-                                page = StatPage.ManageWallet,
-                                event = StatEvent.Open(StatPage.RecoveryPhrase)
-                            )
-                        }
+//                        TODO("xxx nav3")
+//                        backStack.authorizedAction {
+//                            backStack.slideFromRight(
+//                                R.id.recoveryPhraseFragment,
+//                                viewModel.account
+//                            )
+//
+//                            stat(
+//                                page = StatPage.ManageWallet,
+//                                event = StatEvent.Open(StatPage.RecoveryPhrase)
+//                            )
+//                        }
                     }
                 }
             }
@@ -300,10 +310,7 @@ private fun KeyActions(
                         title = stringResource(id = R.string.PrivateKeys_Title),
                         icon = painterResource(id = R.drawable.ic_key_20)
                     ) {
-                        navController.slideFromRight(
-                            R.id.privateKeysFragment,
-                            viewModel.account
-                        )
+                        backStack.add(PrivateKeysScreen(viewModel.account))
 
                         stat(
                             page = StatPage.ManageWallet,
@@ -319,10 +326,7 @@ private fun KeyActions(
                         title = stringResource(id = R.string.PublicKeys_Title),
                         icon = painterResource(id = R.drawable.icon_binocule_20)
                     ) {
-                        navController.slideFromRight(
-                            R.id.publicKeysFragment,
-                            viewModel.account
-                        )
+                        backStack.add(PublicKeysScreen(viewModel.account))
 
                         stat(
                             page = StatPage.ManageWallet,

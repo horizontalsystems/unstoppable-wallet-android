@@ -48,7 +48,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object UnlinkAccountScreen : HSScreen()
+data class UnlinkAccountScreen(val account: Account) : HSScreen()
 
 class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
