@@ -11,44 +11,45 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.authorizedAction
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
-import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey.EvmPrivateKeyFragment
-import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
-import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyFragment
-import io.horizontalsystems.bankwallet.modules.manageaccount.stellarsecretkey.StellarSecretKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PrivateKeysScreen(val account: Account) : HSScreen()
+data class PrivateKeysScreen(val account: Account) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ManageAccountScreen(backStack, account)
+    }
+}
 
 class PrivateKeysFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Account>(navController) { account ->
-            ManageAccountScreen(navController, account)
-        }
+//        withInput<Account>(navController) { account ->
+//            ManageAccountScreen(navController, account)
+//        }
     }
 
 }
 
 @Composable
-fun ManageAccountScreen(navController: NavController, account: Account) {
+fun ManageAccountScreen(backStack: NavBackStack<HSScreen>, account: Account) {
     val viewModel = viewModel<PrivateKeysViewModel>(factory = PrivateKeysModule.Factory(account))
 
     HSScaffold(
         title = stringResource(R.string.PrivateKeys_Title),
-        onBack = { navController.popBackStack() },
+        onBack = { backStack.removeLastOrNull() },
     ) {
         Column(
             modifier = Modifier
@@ -60,17 +61,18 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     title = stringResource(id = R.string.PrivateKeys_EvmPrivateKey),
                     description = stringResource(R.string.PrivateKeys_EvmPrivateKeyDescription)
                 ) {
-                    navController.authorizedAction {
-                        navController.slideFromRight(
-                            R.id.evmPrivateKeyFragment,
-                            EvmPrivateKeyFragment.Input(key)
-                        )
-
-                        stat(
-                            page = StatPage.PrivateKeys,
-                            event = StatEvent.Open(StatPage.EvmPrivateKey)
-                        )
-                    }
+//                    TODO("xxx nav3")
+//                    navController.authorizedAction {
+//                        navController.slideFromRight(
+//                            R.id.evmPrivateKeyFragment,
+//                            EvmPrivateKeyFragment.Input(key)
+//                        )
+//
+//                        stat(
+//                            page = StatPage.PrivateKeys,
+//                            event = StatEvent.Open(StatPage.EvmPrivateKey)
+//                        )
+//                    }
                 }
             }
             viewModel.viewState.stellarSecretKey?.let { key ->
@@ -78,17 +80,18 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     title = stringResource(id = R.string.PrivateKeys_StellarSecretKey),
                     description = stringResource(R.string.PrivateKeys_StellarSecretKeyDescription)
                 ) {
-                    navController.authorizedAction {
-                        navController.slideFromRight(
-                            R.id.stellarSecretKeyFragment,
-                            StellarSecretKeyFragment.Input(key)
-                        )
-
-                        stat(
-                            page = StatPage.PrivateKeys,
-                            event = StatEvent.Open(StatPage.StellarSecretKey)
-                        )
-                    }
+//                    TODO("xxx nav3")
+//                    navController.authorizedAction {
+//                        navController.slideFromRight(
+//                            R.id.stellarSecretKeyFragment,
+//                            StellarSecretKeyFragment.Input(key)
+//                        )
+//
+//                        stat(
+//                            page = StatPage.PrivateKeys,
+//                            event = StatEvent.Open(StatPage.StellarSecretKey)
+//                        )
+//                    }
                 }
             }
             viewModel.viewState.bip32RootKey?.let { key ->
@@ -96,20 +99,21 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     title = stringResource(id = R.string.PrivateKeys_Bip32RootKey),
                     description = stringResource(id = R.string.PrivateKeys_Bip32RootKeyDescription),
                 ) {
-                    navController.authorizedAction {
-                        navController.slideFromRight(
-                            R.id.showExtendedKeyFragment,
-                            ShowExtendedKeyFragment.Input(
-                                key.hdKey,
-                                key.displayKeyType
-                            )
-                        )
-
-                        stat(
-                            page = StatPage.PrivateKeys,
-                            event = StatEvent.Open(StatPage.Bip32RootKey)
-                        )
-                    }
+//                    TODO("xxx nav3")
+//                    navController.authorizedAction {
+//                        navController.slideFromRight(
+//                            R.id.showExtendedKeyFragment,
+//                            ShowExtendedKeyFragment.Input(
+//                                key.hdKey,
+//                                key.displayKeyType
+//                            )
+//                        )
+//
+//                        stat(
+//                            page = StatPage.PrivateKeys,
+//                            event = StatEvent.Open(StatPage.Bip32RootKey)
+//                        )
+//                    }
                 }
             }
             viewModel.viewState.accountExtendedPrivateKey?.let { key ->
@@ -117,17 +121,18 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     title = stringResource(id = R.string.PrivateKeys_AccountExtendedPrivateKey),
                     description = stringResource(id = R.string.PrivateKeys_AccountExtendedPrivateKeyDescription),
                 ) {
-                    navController.authorizedAction {
-                        navController.slideFromRight(
-                            R.id.showExtendedKeyFragment,
-                            ShowExtendedKeyFragment.Input(key.hdKey, key.displayKeyType)
-                        )
-
-                        stat(
-                            page = StatPage.PrivateKeys,
-                            event = StatEvent.Open(StatPage.AccountExtendedPrivateKey)
-                        )
-                    }
+//                    TODO("xxx nav3")
+//                    navController.authorizedAction {
+//                        navController.slideFromRight(
+//                            R.id.showExtendedKeyFragment,
+//                            ShowExtendedKeyFragment.Input(key.hdKey, key.displayKeyType)
+//                        )
+//
+//                        stat(
+//                            page = StatPage.PrivateKeys,
+//                            event = StatEvent.Open(StatPage.AccountExtendedPrivateKey)
+//                        )
+//                    }
                 }
             }
             viewModel.viewState.moneroKeys?.let { moneroKeys ->
@@ -135,17 +140,18 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     title = stringResource(id = R.string.PrivateKeys_MoneroPrivateKey),
                     description = stringResource(id = R.string.PrivateKeys_MoneroPrivateKeyDescription),
                 ) {
-                    navController.authorizedAction {
-                        navController.slideFromRight(
-                            R.id.showMoneroKeyFragment,
-                            ShowMoneroKeyFragment.Input(moneroKeys)
-                        )
-
-                        stat(
-                            page = StatPage.PrivateKeys,
-                            event = StatEvent.Open(StatPage.MoneroPrivateKey)
-                        )
-                    }
+//                    TODO("xxx nav3")
+//                    navController.authorizedAction {
+//                        navController.slideFromRight(
+//                            R.id.showMoneroKeyFragment,
+//                            ShowMoneroKeyFragment.Input(moneroKeys)
+//                        )
+//
+//                        stat(
+//                            page = StatPage.PrivateKeys,
+//                            event = StatEvent.Open(StatPage.MoneroPrivateKey)
+//                        )
+//                    }
                 }
             }
         }
