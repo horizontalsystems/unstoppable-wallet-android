@@ -28,11 +28,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -41,6 +40,8 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.serializers.HDExtendedKeySerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -63,25 +64,41 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ShowExtendedKeyScreen : HSScreen()
+data class ShowExtendedKeyScreen(
+    @Serializable(with = HDExtendedKeySerializer::class)
+    val extendedRootKey: HDExtendedKey,
+    val displayKeyType: DisplayKeyType
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ShowExtendedKeyScreen(
+            backStack,
+            extendedRootKey,
+            displayKeyType
+        )
+    }
+}
 
 class ShowExtendedKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
-        val hdExtendedKey = input?.extendedRootKey
-        val displayKeyType = input?.displayKeyType
-
-        if (hdExtendedKey == null || displayKeyType == null) {
-            NoExtendKeyScreen()
-        } else {
-            ShowExtendedKeyScreen(
-                navController,
-                hdExtendedKey,
-                displayKeyType
-            )
-        }
+//        val input = navController.getInput<Input>()
+//        val hdExtendedKey = input?.extendedRootKey
+//        val displayKeyType = input?.displayKeyType
+//
+//        if (hdExtendedKey == null || displayKeyType == null) {
+//            NoExtendKeyScreen()
+//        } else {
+//            ShowExtendedKeyScreen(
+//                navController,
+//                hdExtendedKey,
+//                displayKeyType
+//            )
+//        }
     }
 
     @Parcelize
@@ -104,7 +121,7 @@ class ShowExtendedKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ShowExtendedKeyScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     extendedKey: HDExtendedKey,
     displayKeyType: DisplayKeyType
 ) {
@@ -122,13 +139,13 @@ private fun ShowExtendedKeyScreen(
 
     HSScaffold(
         title = viewModel.title.getString(),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),
                 icon = R.drawable.ic_info_24,
                 onClick = {
-                    FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                    FaqManager.showFaqPage(backStack, FaqManager.faqPathPrivateKeys)
                     viewModel.logEvent(StatEvent.Open(StatPage.Info))
                 }
             )
@@ -180,7 +197,7 @@ private fun ShowExtendedKeyScreen(
                                 title = stringResource(R.string.ExtendedKey_Account),
                                 value = viewModel.account.toString(),
                                 infoButtonClick = {
-                                    navController.slideFromBottom(R.id.кeyAccountInfoFragment)
+                                    backStack.add(KeyAccountInfoScreen)
                                 },
                                 onClick = { showAccountSelectorDialog = true }
                             )

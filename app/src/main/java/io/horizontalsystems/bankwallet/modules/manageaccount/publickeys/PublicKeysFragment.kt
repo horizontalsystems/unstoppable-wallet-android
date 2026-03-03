@@ -11,43 +11,50 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.authorizedAction
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.manageaccount.evmaddress.EvmAddressFragment
-import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
-import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyFragment
+import io.horizontalsystems.bankwallet.modules.manageaccount.evmaddress.EvmAddressScreen
+import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyScreen
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PublicKeysScreen(val account: Account) : HSScreen()
+data class PublicKeysScreen(val account: Account) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ManageAccountScreen(backStack, account)
+    }
+}
 
 class PublicKeysFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Account>(navController) { account ->
-            ManageAccountScreen(navController, account)
-        }
+//        withInput<Account>(navController) { account ->
+//            ManageAccountScreen(navController, account)
+//        }
     }
 
 }
 
 @Composable
-fun ManageAccountScreen(navController: NavController, account: Account) {
+fun ManageAccountScreen(backStack: NavBackStack<HSScreen>, account: Account) {
     val viewModel = viewModel<PublicKeysViewModel>(factory = PublicKeysModule.Factory(account))
 
     HSScaffold(
         title = stringResource(R.string.PublicKeys_Title),
-        onBack = { navController.popBackStack() },
+        onBack = { backStack.removeLastOrNull() },
     ) {
         Column(
             modifier = Modifier
@@ -59,10 +66,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     title = stringResource(id = R.string.PublicKeys_EvmAddress),
                     description = stringResource(R.string.PublicKeys_EvmAddress_Description)
                 ) {
-                    navController.slideFromRight(
-                        R.id.evmAddressFragment,
-                        EvmAddressFragment.Input(evmAddress)
-                    )
+                    backStack.add(EvmAddressScreen(evmAddress))
 
                     stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.EvmAddress))
                 }
@@ -72,13 +76,10 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     title = stringResource(id = R.string.PublicKeys_AccountExtendedPublicKey),
                     description = stringResource(id = R.string.PublicKeys_AccountExtendedPublicKeyDescription),
                 ) {
-                    navController.slideFromRight(
-                        R.id.showExtendedKeyFragment,
-                        ShowExtendedKeyFragment.Input(
-                            publicKey.hdKey,
-                            publicKey.accountPublicKey
-                        )
-                    )
+                    backStack.add(ShowExtendedKeyScreen(
+                        publicKey.hdKey,
+                        publicKey.accountPublicKey
+                    ))
 
                     stat(
                         page = StatPage.PublicKeys,
@@ -92,16 +93,17 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     title = stringResource(id = R.string.PublicKeys_MoneroPublicKey),
                     description = stringResource(id = R.string.PublicKeys_MoneroPublicKeyDescription),
                 ) {
-                    navController.authorizedAction {
-                        navController.slideFromRight(
-                            R.id.showMoneroKeyFragment,
-                            ShowMoneroKeyFragment.Input(moneroKeys)
-                        )
-                        stat(
-                            page = StatPage.PublicKeys,
-                            event = StatEvent.Open(StatPage.MoneroPublicKey)
-                        )
-                    }
+//                    TODO("xxx nav3")
+//                    navController.authorizedAction {
+//                        navController.slideFromRight(
+//                            R.id.showMoneroKeyFragment,
+//                            ShowMoneroKeyFragment.Input(moneroKeys)
+//                        )
+//                        stat(
+//                            page = StatPage.PublicKeys,
+//                            event = StatEvent.Open(StatPage.MoneroPublicKey)
+//                        )
+//                    }
                 }
             }
         }
