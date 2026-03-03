@@ -21,11 +21,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -40,23 +41,31 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SetDuressPinIntroScreen : HSScreen()
+data object SetDuressPinIntroScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SetDuressPinIntroScreen(backStack)
+    }
+}
 
 class SetDuressPinIntroFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SetDuressPinIntroScreen(navController)
+//        SetDuressPinIntroScreen(navController)
     }
 }
 
 @Composable
-fun SetDuressPinIntroScreen(navController: NavController) {
+fun SetDuressPinIntroScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel =
         viewModel<SetDuressPinIntroViewModel>(factory = SetDuressPinIntroViewModel.Factory())
 
     HSScaffold(
         title = stringResource(R.string.DuressPin_Title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(
             Modifier
@@ -104,9 +113,9 @@ fun SetDuressPinIntroScreen(navController: NavController) {
                     title = stringResource(R.string.Button_Continue),
                     onClick = {
                         if (viewModel.shouldShowSelectAccounts) {
-                            navController.slideFromRight(R.id.setDuressPinSelectAccounts)
+                            backStack.add(SetDuressPinSelectAccountsScreen)
                         } else {
-                            navController.slideFromRight(R.id.setDuressPinFragment)
+                            backStack.add(SetDuressPinScreen())
                         }
                     },
                 )
