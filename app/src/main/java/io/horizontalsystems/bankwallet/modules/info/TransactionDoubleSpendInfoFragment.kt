@@ -17,11 +17,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoHeader
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -38,19 +40,34 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object TransactionDoubleSpendInfoScreen : HSScreen()
+data class TransactionDoubleSpendInfoScreen(
+    val transactionHash: String,
+    val conflictingTransactionHash: String
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        InfoScreen(
+            txHash = transactionHash,
+            conflictingTxHash = conflictingTransactionHash,
+            onBackClick = { backStack.removeLastOrNull() }
+        )
+    }
+}
 
 class TransactionDoubleSpendInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            InfoScreen(
-                txHash = input.transactionHash,
-                conflictingTxHash = input.conflictingTransactionHash,
-                onBackClick = { navController.popBackStack() }
-            )
-        }
+//        withInput<Input>(navController) { input ->
+//            InfoScreen(
+//                txHash = input.transactionHash,
+//                conflictingTxHash = input.conflictingTransactionHash,
+//                onBackClick = { navController.popBackStack() }
+//            )
+//        }
     }
 
     @Parcelize
