@@ -13,13 +13,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -37,21 +39,31 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object WCNetworksScreen : HSScreen()
+data class WCNetworksScreen(
+    val blockchainTypes: List<@Serializable(with = BlockchainTypeSerializer::class) BlockchainType>
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        NetworksScreen(blockchainTypes, backStack)
+    }
+}
 
 class WCNetworksFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
-        if (input == null) {
-            navController.popBackStack()
-            return
-        }
-        NetworksScreen(
-            input.blockchainTypes,
-            navController = navController,
-        )
+//        val input = navController.getInput<Input>()
+//        if (input == null) {
+//            navController.popBackStack()
+//            return
+//        }
+//        NetworksScreen(
+//            input.blockchainTypes,
+//            navController = navController,
+//        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +86,7 @@ class WCNetworksFragment : BaseComposeFragment() {
 @Composable
 private fun NetworksScreen(
     blockchains: List<BlockchainType>,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
 ) {
     HSScaffold(
         title = stringResource(R.string.WalletConnect_Networks),
@@ -82,7 +94,7 @@ private fun NetworksScreen(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = navController::popBackStack
+                onClick = backStack::removeLastOrNull
             )
         ),
     ) {
