@@ -15,10 +15,10 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.getInput
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
@@ -26,12 +26,29 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object AddressRiskyBottomSheetScreen : HSScreen()
+data class AddressRiskyBottomSheetScreen(val alertText: String) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        RiskyAddressAlertView(
+            alertText = alertText,
+            onCloseClick = {
+                backStack.removeLastOrNull()
+            },
+            onContinueClick = {
+                resultBus.sendResult(result = Result(true))
+            }
+        )
+    }
+
+    data class Result(val canContinue: Boolean)
+}
 
 class AddressRiskyBottomSheetAlert : BaseComposableBottomSheetFragment() {
 
@@ -45,18 +62,18 @@ class AddressRiskyBottomSheetAlert : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val navController = findNavController()
-                navController.getInput<Input>()?.let { input ->
-                    RiskyAddressAlertView(
-                        alertText = input.alertText,
-                        onCloseClick = {
-                            navController.popBackStack()
-                        },
-                        onContinueClick = {
-                            navController.setNavigationResultX(Result(true))
-                        }
-                    )
-                }
+//                val navController = findNavController()
+//                navController.getInput<Input>()?.let { input ->
+//                    RiskyAddressAlertView(
+//                        alertText = input.alertText,
+//                        onCloseClick = {
+//                            navController.popBackStack()
+//                        },
+//                        onContinueClick = {
+//                            navController.setNavigationResultX(Result(true))
+//                        }
+//                    )
+//                }
             }
         }
     }
