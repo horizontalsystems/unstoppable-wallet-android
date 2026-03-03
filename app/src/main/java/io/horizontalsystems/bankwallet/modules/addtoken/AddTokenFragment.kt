@@ -9,7 +9,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -17,17 +16,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.Caution
-import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector.AddTokenBlockchainSelectorScreen
-import io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector.BlockchainSelectorResult
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -43,69 +40,45 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object AddTokenScreen : HSScreen()
+data object AddTokenScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val viewModel = viewModel<AddTokenViewModel>(factory = AddTokenModule.Factory())
+        AddTokenScreen(
+            closeScreen = { backStack.removeLastOrNull() },
+            viewModel = viewModel,
+            backStack = backStack,
+            resultBus = resultBus
+        )
+    }
+}
 
 class AddTokenFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        AddTokenNavHost(navController)
+//        AddTokenNavHost(navController)
     }
 
-}
-
-private const val AddTokenPage = "add_token"
-private const val BlockchainSelectorPage = "blockchain_selector"
-
-@Composable
-private fun AddTokenNavHost(
-    fragmentNavController: NavController,
-    viewModel: AddTokenViewModel = viewModel(factory = AddTokenModule.Factory())
-) {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = AddTokenPage,
-    ) {
-        composable(AddTokenPage) {
-            AddTokenScreen(
-                navController = navController,
-                closeScreen = { fragmentNavController.popBackStack() },
-                viewModel = viewModel
-            )
-        }
-        composablePage(BlockchainSelectorPage) {
-            AddTokenBlockchainSelectorScreen(
-                blockchains = viewModel.blockchains,
-                selectedBlockchain = viewModel.selectedBlockchain,
-                navController = navController
-            )
-        }
-    }
 }
 
 @Composable
 private fun AddTokenScreen(
-    navController: NavController,
     closeScreen: () -> Unit,
     viewModel: AddTokenViewModel,
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
 ) {
-    navController.currentBackStackEntry
-        ?.savedStateHandle
-        ?.getStateFlow<List<Blockchain>>(BlockchainSelectorResult, emptyList())
-        ?.collectAsState()?.value?.let { selectedItems ->
-            if (selectedItems.isNotEmpty()) {
-                viewModel.onBlockchainSelect(selectedItems.first())
-                navController.currentBackStackEntry
-                    ?.savedStateHandle
-                    ?.set<List<Blockchain>>(BlockchainSelectorResult, emptyList())
-            }
-        }
+    ResultEffect<AddTokenBlockchainSelectorScreen.Result>(resultBus) {
+        viewModel.onBlockchainSelect(it.blockchain)
+    }
 
     val uiState = viewModel.uiState
     val view = LocalView.current
@@ -141,7 +114,7 @@ private fun AddTokenScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
-                        onClick = { navController.navigate(BlockchainSelectorPage) }
+                        onClick = { backStack.add(AddTokenBlockchainSelectorScreen) }
                     ) {
                         Image(
                             painter = painterResource(R.drawable.ic_blocks_24),

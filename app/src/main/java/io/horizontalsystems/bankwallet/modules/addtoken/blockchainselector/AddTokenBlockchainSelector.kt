@@ -9,26 +9,55 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenScreen
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenViewModel
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.SharedViewModelStoreNavEntryDecorator
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellBlockchainChecked
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Blockchain
+import kotlinx.serialization.Serializable
 
-const val BlockchainSelectorResult = "blockchain_selector_result_key"
+@Serializable
+data object AddTokenBlockchainSelectorScreen : HSScreen() {
+    override fun getMetadata() = SharedViewModelStoreNavEntryDecorator.parent(
+        AddTokenScreen.toString()
+    )
+
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val viewModel = viewModel<AddTokenViewModel>()
+        AddTokenBlockchainSelectorScreen(
+            blockchains = viewModel.blockchains,
+            selectedBlockchain = viewModel.selectedBlockchain,
+            backStack = backStack,
+            resultBus = resultBus,
+        )
+    }
+
+    data class Result(val blockchain: Blockchain)
+}
 
 @Composable
 fun AddTokenBlockchainSelectorScreen(
     blockchains: List<Blockchain>,
     selectedBlockchain: Blockchain,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
 ) {
     var selectedItem = selectedBlockchain
 
     HSScaffold(
         title = stringResource(R.string.Market_Filter_Blockchains),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
@@ -42,10 +71,8 @@ fun AddTokenBlockchainSelectorScreen(
                         checked = selectedItem == item,
                     ) {
                         selectedItem = item
-                        navController.previousBackStackEntry
-                            ?.savedStateHandle
-                            ?.set(BlockchainSelectorResult, listOf(item))
-                        navController.popBackStack()
+                        resultBus.sendResult(result = AddTokenBlockchainSelectorScreen.Result(item))
+                        backStack.removeLastOrNull()
                     }
                 }
             }
