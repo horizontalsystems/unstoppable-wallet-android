@@ -19,11 +19,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -41,7 +42,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 
 @Composable
-fun EmaSettingsScreen(navController: NavController, indicatorSetting: ChartIndicatorSetting) {
+fun EmaSettingsScreen(backStack: NavBackStack<HSScreen>, indicatorSetting: ChartIndicatorSetting) {
     val viewModel = viewModel<MovingAverageSettingViewModel>(
         factory = MovingAverageSettingViewModel.Factory(indicatorSetting)
     )
@@ -49,7 +50,7 @@ fun EmaSettingsScreen(navController: NavController, indicatorSetting: ChartIndic
 
     if (uiState.finish) {
         LaunchedEffect(uiState.finish) {
-            navController.popBackStack()
+            backStack.removeLastOrNull()
         }
     }
 
@@ -74,7 +75,7 @@ fun EmaSettingsScreen(navController: NavController, indicatorSetting: ChartIndic
 
     HSScaffold(
         title = viewModel.name,
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),

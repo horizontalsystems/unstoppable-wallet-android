@@ -4,54 +4,93 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class IndicatorSettingsScreen(val indicatorId: String) : HSScreen()
+data class IndicatorSettingsScreen(val indicatorId: String) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val indicatorSetting =
+            App.chartIndicatorManager.getChartIndicatorSetting(indicatorId)
+
+        if (indicatorSetting == null) {
+            HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
+            backStack.removeLastOrNull()
+        } else {
+            when (indicatorSetting.type) {
+                ChartIndicatorSetting.IndicatorType.MA -> {
+                    EmaSettingsScreen(
+                        backStack = backStack,
+                        indicatorSetting = indicatorSetting
+                    )
+                }
+
+                ChartIndicatorSetting.IndicatorType.RSI -> {
+                    RsiSettingsScreen(
+                        backStack = backStack,
+                        indicatorSetting = indicatorSetting
+                    )
+                }
+
+                ChartIndicatorSetting.IndicatorType.MACD -> {
+                    MacdSettingsScreen(
+                        backStack = backStack,
+                        indicatorSetting = indicatorSetting
+                    )
+                }
+            }
+        }
+    }
+}
 
 class IndicatorSettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            val indicatorSetting =
-                App.chartIndicatorManager.getChartIndicatorSetting(input.indicatorId)
-
-            if (indicatorSetting == null) {
-                HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
-                navController.popBackStack()
-            } else {
-                when (indicatorSetting.type) {
-                    ChartIndicatorSetting.IndicatorType.MA -> {
-                        EmaSettingsScreen(
-                            navController = navController,
-                            indicatorSetting = indicatorSetting
-                        )
-                    }
-
-                    ChartIndicatorSetting.IndicatorType.RSI -> {
-                        RsiSettingsScreen(
-                            navController = navController,
-                            indicatorSetting = indicatorSetting
-                        )
-                    }
-
-                    ChartIndicatorSetting.IndicatorType.MACD -> {
-                        MacdSettingsScreen(
-                            navController = navController,
-                            indicatorSetting = indicatorSetting
-                        )
-                    }
-                }
-            }
-        }
+//        withInput<Input>(navController) { input ->
+//            val indicatorSetting =
+//                App.chartIndicatorManager.getChartIndicatorSetting(input.indicatorId)
+//
+//            if (indicatorSetting == null) {
+//                HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
+//                navController.popBackStack()
+//            } else {
+//                when (indicatorSetting.type) {
+//                    ChartIndicatorSetting.IndicatorType.MA -> {
+//                        EmaSettingsScreen(
+//                            navController = navController,
+//                            indicatorSetting = indicatorSetting
+//                        )
+//                    }
+//
+//                    ChartIndicatorSetting.IndicatorType.RSI -> {
+//                        RsiSettingsScreen(
+//                            navController = navController,
+//                            indicatorSetting = indicatorSetting
+//                        )
+//                    }
+//
+//                    ChartIndicatorSetting.IndicatorType.MACD -> {
+//                        MacdSettingsScreen(
+//                            navController = navController,
+//                            indicatorSetting = indicatorSetting
+//                        )
+//                    }
+//                }
+//            }
+//        }
     }
 
     @Parcelize
