@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 class ReceiveMoneroAddressViewModel(
@@ -135,6 +136,7 @@ data class ReceiveMoneroUiState(
 }
 
 @Parcelize
+@Serializable
 data class SubaddressViewItem(
     val index: Int,
     val address: String,

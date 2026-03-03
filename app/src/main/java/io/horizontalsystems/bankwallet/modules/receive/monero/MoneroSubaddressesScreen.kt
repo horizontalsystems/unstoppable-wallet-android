@@ -38,7 +38,7 @@ data class SubaddressesParams(
 
 @Composable
 fun MoneroSubaddressesScreen(
-    params: SubaddressesParams,
+    subaddresses: List<SubaddressViewItem>,
     onBackPress: () -> Unit
 ) {
     HSScaffold(
@@ -59,7 +59,7 @@ fun MoneroSubaddressesScreen(
                 paddingBottom = 24.dp
             )
 
-            AddressList(params.subaddresses)
+            AddressList(subaddresses)
 
             VSpacer(36.dp)
         }
