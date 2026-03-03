@@ -204,6 +204,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             amountIn,
             BigDecimal("1"),
             null,
+            null,
+            null,
             true
         )
 
@@ -235,12 +237,13 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal,
         slippage: BigDecimal,
-        recipient: io.horizontalsystems.bankwallet.entities.Address?,
+        destinationAddress: String?,
+        sourceAddress: String?,
+        refundAddress: String?,
         dry: Boolean
     ): UnstoppableAPI.Response.Quote.Route {
         val assetIn = assetsMap[tokenIn]!!
         val assetOut = assetsMap[tokenOut]!!
-        val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
 
         val quote = unstoppableAPI.quote(
             UnstoppableAPI.Request.Quote(
@@ -249,9 +252,9 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                 sellAmount = amountIn.toPlainString(),
                 providers = setOf(provider.id),
                 slippage = slippage.toInt(),
-                destinationAddress = destination,
-                sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn),
-                refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn),
+                destinationAddress = destinationAddress,
+                sourceAddress = sourceAddress,
+                refundAddress = refundAddress,
                 dry = dry
             )
         )
@@ -268,12 +271,18 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         slippage: BigDecimal,
     ): SwapFinalQuote {
+        val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
+        val sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn)
+        val refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn)
+
         val bestRoute = quoteSwapBestRoute(
             tokenIn,
             tokenOut,
             amountIn,
             slippage,
-            recipient,
+            destination,
+            sourceAddress,
+            refundAddress,
             false
         )
 
@@ -345,7 +354,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             BlockchainType.Litecoin,
             BlockchainType.Dash,
             BlockchainType.ECash,
-                 -> {
+                -> {
                 // supported only providers that accepts any type of outputs
                 // providers with specific requirements like thorchain is not supported
                 // if thorchain support needed then it should be handled separately
@@ -495,9 +504,9 @@ interface UnstoppableAPI {
             val sellAmount: String,
             val providers: Set<String>,
             val slippage: Int,
-            val destinationAddress: String,
+            val destinationAddress: String?,
             val sourceAddress: String?,
-            val refundAddress: String,
+            val refundAddress: String?,
             val dry: Boolean,
         )
 
