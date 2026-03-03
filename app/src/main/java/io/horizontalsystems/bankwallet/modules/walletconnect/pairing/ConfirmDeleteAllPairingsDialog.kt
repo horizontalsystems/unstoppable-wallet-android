@@ -17,21 +17,30 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ConfirmDeleteAllPairingsScreen : HSScreen()
+data object ConfirmDeleteAllPairingsScreen : HSScreen(bottomSheet = true) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ConfirmDeleteAllScreen(backStack, resultBus)
+    }
+
+    data class Result(val confirmed: Boolean)
+}
 
 class ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
 
@@ -45,7 +54,7 @@ class ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                ConfirmDeleteAllScreen(findNavController())
+//                ConfirmDeleteAllScreen(findNavController())
             }
         }
     }
@@ -55,14 +64,14 @@ class ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-fun ConfirmDeleteAllScreen(navController: NavController) {
+fun ConfirmDeleteAllScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
     ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_delete_20),
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
             title = stringResource(R.string.WalletConnect_DeleteAllPairs),
             onCloseClick = {
-                navController.popBackStack()
+                backStack.removeLastOrNull()
             }
         ) {
             TextImportantWarning(
@@ -76,8 +85,8 @@ fun ConfirmDeleteAllScreen(navController: NavController) {
                     .padding(horizontal = 24.dp),
                 title = stringResource(R.string.WalletConnect_Pairings_Delete),
                 onClick = {
-                    navController.setNavigationResultX(ConfirmDeleteAllPairingsDialog.Result(true))
-                    navController.popBackStack()
+                    resultBus.sendResult(result = ConfirmDeleteAllPairingsScreen.Result(true))
+                    backStack.removeLastOrNull()
                 }
             )
             Spacer(Modifier.height(32.dp))
