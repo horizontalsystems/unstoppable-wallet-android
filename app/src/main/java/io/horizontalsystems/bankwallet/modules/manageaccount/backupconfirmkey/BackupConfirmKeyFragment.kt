@@ -22,10 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
@@ -37,22 +39,30 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object BackupConfirmKeyScreen : HSScreen()
+data class BackupConfirmKeyScreen(val account: Account) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        RecoveryPhraseVerifyScreen(backStack, account)
+    }
+}
 
 class BackupConfirmKeyFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Account>(navController) { input ->
-            RecoveryPhraseVerifyScreen(navController, input)
-        }
+//        withInput<Account>(navController) { input ->
+//            RecoveryPhraseVerifyScreen(navController, input)
+//        }
     }
 
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
+fun RecoveryPhraseVerifyScreen(backStack: NavBackStack<HSScreen>, account: Account) {
     val viewModel =
         viewModel<BackupConfirmKeyViewModel>(factory = BackupConfirmKeyModule.Factory(account))
     val uiState = viewModel.uiState
@@ -67,7 +77,8 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
                 iconTint = R.color.white
             )
             delay(300)
-            navController.popBackStack(R.id.backupKeyFragment, true)
+//            TODO("xxx nav3")
+//            navController.popBackStack(R.id.backupKeyFragment, true)
         }
     }
 
@@ -78,7 +89,7 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
 
     HSScaffold(
         title = stringResource(R.string.RecoveryPhraseVerify_Title),
-        onBack = { navController.popBackStack() },
+        onBack = { backStack.removeLastOrNull() },
     ) {
         Column {
             InfoText(text = stringResource(R.string.RecoveryPhraseVerify_Description))
