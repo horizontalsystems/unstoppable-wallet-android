@@ -18,20 +18,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenScreen
+import io.horizontalsystems.bankwallet.modules.configuredtoken.ConfiguredTokenInfoScreen
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
-import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
+import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.SelectChainTab
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -54,21 +56,38 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ManageWalletsScreen : HSScreen()
-
-class ManageWalletsFragment : BaseComposeFragment() {
-
-    private val vmFactory by lazy { ManageWalletsModule.Factory() }
-    private val viewModel by viewModels<ManageWalletsViewModel> { vmFactory }
-    private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
-
+data object ManageWalletsScreen : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val vmFactory = remember { ManageWalletsModule.Factory() }
+        val viewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory)
+        val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory)
+
         ManageWalletsScreen(
-            navController,
+            backStack,
+            resultBus,
             viewModel,
             restoreSettingsViewModel
         )
+    }
+}
+
+class ManageWalletsFragment : BaseComposeFragment() {
+
+//    private val vmFactory by lazy { ManageWalletsModule.Factory() }
+//    private val viewModel by viewModels<ManageWalletsViewModel> { vmFactory }
+//    private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
+
+    @Composable
+    override fun GetContent(navController: NavController) {
+//        ManageWalletsScreen(
+//            navController,
+//            viewModel,
+//            restoreSettingsViewModel
+//        )
     }
 
 }
@@ -76,7 +95,8 @@ class ManageWalletsFragment : BaseComposeFragment() {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun ManageWalletsScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
     viewModel: ManageWalletsViewModel,
     restoreSettingsViewModel: RestoreSettingsViewModel
 ) {
@@ -99,33 +119,31 @@ private fun ManageWalletsScreen(
         }
     }
 
+    ResultEffect<BirthdayHeightConfigScreen.Result>(resultBus) {
+        if (it.config != null) {
+            restoreSettingsViewModel.onEnter(it.config)
+        } else {
+            restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+        }
+    }
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
-            resId = R.id.zcashConfigure,
-            input = token
-        ) {
-            if (it.config != null) {
-                restoreSettingsViewModel.onEnter(it.config)
-            } else {
-                restoreSettingsViewModel.onCancelEnterBirthdayHeight()
-            }
-        }
+        backStack.add(BirthdayHeightConfigScreen(token.blockchainType))
 
         stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.BirthdayInput))
     }
 
     HSScaffold(
         title = stringResource(id = R.string.ManageCoins_title),
-        onBack = { navController.popBackStack() },
+        onBack = { backStack.removeLastOrNull() },
         menuItems = if (viewModel.addTokenEnabled) {
             listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
                     icon = R.drawable.ic_add_24,
                     onClick = {
-                        navController.slideFromRight(R.id.addTokenFragment)
+                        backStack.add(AddTokenScreen)
 
                         stat(
                             page = StatPage.CoinManager,
@@ -185,10 +203,7 @@ private fun ManageWalletsScreen(
                                     }
                                 },
                                 onInfoClick = {
-                                    navController.slideFromBottom(
-                                        R.id.configuredTokenInfo,
-                                        viewItem.item
-                                    )
+                                    backStack.add(ConfiguredTokenInfoScreen(viewItem.item))
 
                                     stat(
                                         page = StatPage.CoinManager,
