@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
@@ -23,6 +24,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -32,15 +34,23 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object EvmAddressScreen : HSScreen()
+data class EvmAddressScreen(val evmAddress: String) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        EvmAddressScreen(evmAddress, backStack)
+    }
+}
 
 class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            EvmAddressScreen(input.evmAddress, navController)
-        }
+//        withInput<Input>(navController) { input ->
+//            EvmAddressScreen(input.evmAddress, navController)
+//        }
     }
 
     @Parcelize
@@ -49,17 +59,17 @@ class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
 }
 
 @Composable
-private fun EvmAddressScreen(evmAddress: String, navController: NavController) {
+private fun EvmAddressScreen(evmAddress: String, backStack: NavBackStack<HSScreen>) {
     val view = LocalView.current
     HSScaffold(
         title = stringResource(R.string.PublicKeys_EvmAddress),
-        onBack = { navController.popBackStack() },
+        onBack = { backStack.removeLastOrNull() },
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),
                 icon = R.drawable.ic_info_24,
                 onClick = {
-                    FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                    FaqManager.showFaqPage(backStack, FaqManager.faqPathPrivateKeys)
 
                     stat(page = StatPage.EvmAddress, event = StatEvent.Open(StatPage.Info))
                 }
