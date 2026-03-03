@@ -15,22 +15,31 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ErrorDisplayDialogScreen : HSScreen()
+data class ErrorDisplayDialogScreen(
+    val title: String = "", val text: String = ""
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ErrorDisplayScreen(title, text, backStack)
+    }
+}
 
 class ErrorDisplayDialogFragment : BaseComposableBottomSheetFragment() {
 
@@ -44,11 +53,11 @@ class ErrorDisplayDialogFragment : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val navController = findNavController()
-                val input = navController.getInput<Input>()
-                val title = input?.title ?: ""
-                val text = input?.text ?: ""
-                ErrorDisplayScreen(title, text, navController)
+//                val navController = findNavController()
+//                val input = navController.getInput<Input>()
+//                val title = input?.title ?: ""
+//                val text = input?.text ?: ""
+//                ErrorDisplayScreen(title, text, navController)
             }
         }
     }
@@ -61,7 +70,7 @@ class ErrorDisplayDialogFragment : BaseComposableBottomSheetFragment() {
 private fun ErrorDisplayScreen(
     title: String,
     errorText: String,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     ComposeAppTheme {
         BottomSheetHeader(
@@ -69,7 +78,7 @@ private fun ErrorDisplayScreen(
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
             title = title,
             onCloseClick = {
-                navController.popBackStack()
+                backStack.removeLastOrNull()
             }
         ) {
             VSpacer(12.dp)
@@ -84,7 +93,7 @@ private fun ErrorDisplayScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Button_Ok),
                 onClick = {
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 }
             )
             VSpacer(8.dp)
