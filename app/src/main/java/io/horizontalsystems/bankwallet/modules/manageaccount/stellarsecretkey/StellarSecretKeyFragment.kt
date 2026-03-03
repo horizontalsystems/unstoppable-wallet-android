@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -12,19 +13,28 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.SecretKeyScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object StellarSecretKeyScreen : HSScreen()
+data class StellarSecretKeyScreen(val stellarSecretKey: String) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        StellarSecretKeyScreen(backStack, stellarSecretKey)
+    }
+}
 
 class StellarSecretKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            StellarSecretKeyScreen(navController, input.stellarSecretKey)
-        }
+//        withInput<Input>(navController) { input ->
+//            StellarSecretKeyScreen(navController, input.stellarSecretKey)
+//        }
     }
 
     @Parcelize
@@ -33,11 +43,11 @@ class StellarSecretKeyFragment : BaseComposeFragment(screenshotEnabled = false) 
 
 @Composable
 fun StellarSecretKeyScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     stellarSecretKey: String,
 ) {
     SecretKeyScreen(
-        navController = navController,
+        backStack = backStack,
         secretKey = stellarSecretKey,
         title = stringResource(R.string.StellarSecretKey_Title),
         hideScreenText = stringResource(R.string.StellarSecretKey_ShowSecretKey),

@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -12,19 +13,28 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.SecretKeyScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object EvmPrivateKeyScreen : HSScreen()
+data class EvmPrivateKeyScreen(val evmPrivateKey: String) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        EvmPrivateKeyScreen(backStack, evmPrivateKey)
+    }
+}
 
 class EvmPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            EvmPrivateKeyScreen(navController, input.evmPrivateKey)
-        }
+//        withInput<Input>(navController) { input ->
+//            EvmPrivateKeyScreen(navController, input.evmPrivateKey)
+//        }
     }
 
     @Parcelize
@@ -33,11 +43,11 @@ class EvmPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
 @Composable
 fun EvmPrivateKeyScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     evmPrivateKey: String,
 ) {
     SecretKeyScreen(
-        navController = navController,
+        backStack = backStack,
         secretKey = evmPrivateKey,
         title = stringResource(R.string.EvmPrivateKey_Title),
         hideScreenText = stringResource(R.string.EvmPrivateKey_ShowPrivateKey),
