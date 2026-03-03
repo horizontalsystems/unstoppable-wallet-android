@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.SwapRecord
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchException
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.AbstractSendTransactionService
@@ -291,6 +292,7 @@ class SwapConfirmViewModel(
         }
 
         val record = SwapRecord(
+            accountId = App.accountManager.activeAccount?.id ?: "",
             timestamp = System.currentTimeMillis(),
             providerId = swapProvider.id,
             providerName = swapProvider.title,
