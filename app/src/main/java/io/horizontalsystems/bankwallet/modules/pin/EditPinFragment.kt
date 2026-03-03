@@ -3,24 +3,39 @@ package io.horizontalsystems.bankwallet.modules.pin
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object EditPinScreen : HSScreen()
+data object EditPinScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        PinSet(
+            title = stringResource(R.string.EditPin_Title),
+            description = stringResource(R.string.EditPin_NewPinInfo),
+            dismissWithSuccess = { backStack.removeLastOrNull() },
+            onBackPress = { backStack.removeLastOrNull() }
+        )
+    }
+}
 
 class EditPinFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        PinSet(
-            title = stringResource(R.string.EditPin_Title),
-            description = stringResource(R.string.EditPin_NewPinInfo),
-            dismissWithSuccess = { navController.popBackStack() },
-            onBackPress = { navController.popBackStack() }
-        )
+//        PinSet(
+//            title = stringResource(R.string.EditPin_Title),
+//            description = stringResource(R.string.EditPin_NewPinInfo),
+//            dismissWithSuccess = { navController.popBackStack() },
+//            onBackPress = { navController.popBackStack() }
+//        )
     }
 }
