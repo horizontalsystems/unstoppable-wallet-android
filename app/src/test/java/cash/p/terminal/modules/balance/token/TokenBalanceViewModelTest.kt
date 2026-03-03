@@ -3,6 +3,7 @@ package cash.p.terminal.modules.balance.token
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.managers.StackingManager
@@ -97,6 +98,7 @@ class TokenBalanceViewModelTest : KoinTest {
     private val priceManager = mockk<PriceManager>(relaxed = true)
     private val localStorage = mockk<ILocalStorage>(relaxed = true)
     private val numberFormatter = mockk<io.horizontalsystems.core.IAppNumberFormatter>(relaxed = true)
+    private val contactsRepository = mockk<ContactsRepository>(relaxed = true)
 
     // Controllable flows
     private lateinit var transactionHiddenFlow: MutableStateFlow<TransactionHiddenState>
@@ -153,6 +155,7 @@ class TokenBalanceViewModelTest : KoinTest {
         every { balanceService.balanceItem } returns null
         every { balanceHiddenManager.walletBalanceHiddenFlow(any()) } returns walletBalanceHiddenFlow
         every { balanceHiddenManager.anyTransactionVisibilityChangedFlow } returns anyTransactionVisibilityChangedFlow
+        every { contactsRepository.contactsFlow } returns MutableStateFlow(emptyList())
         every { amlStatusManager.statusUpdates } returns amlStatusUpdates
         every { amlStatusManager.enabledStateFlow } returns amlEnabledStateFlow
         every { amlStatusManager.isEnabled } returns false
@@ -315,6 +318,7 @@ class TokenBalanceViewModelTest : KoinTest {
         priceManager = priceManager,
         localStorage = localStorage,
         numberFormatter = numberFormatter,
+        contactsRepository = contactsRepository,
     )
 
     private fun createHiddenState(

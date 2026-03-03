@@ -12,6 +12,7 @@ import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.managers.StackingManager
@@ -95,6 +96,7 @@ class TokenBalanceViewModel(
     private val priceManager: PriceManager,
     private val localStorage: ILocalStorage,
     private val numberFormatter: IAppNumberFormatter,
+    private val contactsRepository: ContactsRepository,
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val logger = AppLogger("TokenBalanceViewModel-${wallet.coin.code}")
@@ -214,6 +216,12 @@ class TokenBalanceViewModel(
 
         viewModelScope.launch {
             balanceHiddenManager.anyTransactionVisibilityChangedFlow.collect {
+                refreshTransactionsFromCache()
+            }
+        }
+
+        viewModelScope.launch {
+            contactsRepository.contactsFlow.collect {
                 refreshTransactionsFromCache()
             }
         }

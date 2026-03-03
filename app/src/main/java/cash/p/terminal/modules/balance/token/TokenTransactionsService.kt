@@ -7,7 +7,6 @@ import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.nftUids
-import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.HistoricalRateKey
 import cash.p.terminal.modules.transactions.ITransactionRecordRepository
@@ -26,7 +25,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
@@ -41,7 +39,6 @@ class TokenTransactionsService(
     private val rateRepository: TransactionsRateRepository,
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
     private val transactionAdapterManager: TransactionAdapterManager,
-    private val contactsRepository: ContactsRepository,
     private val nftMetadataService: NftMetadataService,
     private val spamManager: SpamManager,
 ) : Clearable {
@@ -60,17 +57,17 @@ class TokenTransactionsService(
             }
         }
         coroutineScope.launch {
-            rateRepository.dataExpiredObservable.asFlow().collect {
+            rateRepository.dataExpiredFlow.collect {
                 handleUpdatedHistoricalRates()
             }
         }
         coroutineScope.launch {
-            rateRepository.historicalRateObservable.asFlow().collect {
+            rateRepository.historicalRateFlow.collect {
                 handleUpdatedHistoricalRate(it.first, it.second)
             }
         }
         coroutineScope.launch {
-            transactionSyncStateRepository.lastBlockInfoObservable.asFlow()
+            transactionSyncStateRepository.lastBlockInfoFlow
                 .collect { (source, lastBlockInfo) ->
                     handleLastBlockInfo(source, lastBlockInfo)
                 }
@@ -80,12 +77,6 @@ class TokenTransactionsService(
                 handle(it)
             }
         }
-        coroutineScope.launch {
-            contactsRepository.contactsFlow.drop(1).collect {
-                handleContactsUpdate()
-            }
-        }
-
         coroutineScope.launch {
             transactionAdapterManager.initializationFlow
                 .filter { it }
@@ -108,12 +99,6 @@ class TokenTransactionsService(
             blockchain = null,
             contact = null
         )
-    }
-
-    private fun handleContactsUpdate() {
-        _transactionItems.update { currentList ->
-            if (currentList.isEmpty()) currentList else currentList.map { it.copy() }
-        }
     }
 
     private fun handle(assetBriefMetadataMap: Map<NftUid, NftAssetBriefMetadata>) {
@@ -183,25 +168,19 @@ class TokenTransactionsService(
             }
         }
 
-        var shouldLoadNext = false
+        val currentItems = _transactionItems.value
+        val newRecords = transactionRecords.filter { record ->
+            currentItems.none { it.record == record }
+        }
 
-        // Atomically update the transaction items
-        _transactionItems.update { currentItems ->
-            // Calculate new records using data class equality (same as original)
-            // A record is "new" if no existing item has an equal record (all fields match)
-            val newRecords = transactionRecords.filter { record ->
-                currentItems.none { it.record == record }
-            }
+        if (newRecords.isNotEmpty() && newRecords.all { it.spam }) {
+            loadNext()
+            return
+        }
 
-            // If all new records are spam, don't update UI - just trigger loading more
-            // This preserves original behavior and prevents UI flickering
-            if (newRecords.isNotEmpty() && newRecords.all { it.spam }) {
-                shouldLoadNext = true
-                return@update currentItems  // Keep current list unchanged, no UI update
-            }
-
+        _transactionItems.update { latestItems ->
             transactionRecords.mapNotNull { record ->
-                val existingItem = currentItems.find { it.record == record }
+                val existingItem = latestItems.find { it.record == record }
 
                 if (record.spam && spamManager.hideSuspiciousTx) return@mapNotNull null
 
@@ -213,11 +192,6 @@ class TokenTransactionsService(
                     existingItem.copy(record = record)
                 }
             }
-        }
-
-        // If all new records were spam, load more to fill the list
-        if (shouldLoadNext) {
-            loadNext()
         }
     }
 

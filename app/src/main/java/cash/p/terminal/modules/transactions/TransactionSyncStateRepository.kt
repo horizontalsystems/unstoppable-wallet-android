@@ -6,13 +6,17 @@ import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.wallet.transaction.TransactionSource
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.supervisorScope
@@ -25,11 +29,11 @@ class TransactionSyncStateRepository(
     private val adapters = mutableMapOf<TransactionSource, ITransactionsAdapter>()
     private val adaptersMutex = Mutex()
 
-    private val syncingSubject = PublishSubject.create<Boolean>()
-    val syncingObservable: Observable<Boolean> get() = syncingSubject.distinctUntilChanged()
+    private val _syncingFlow = MutableStateFlow(false)
+    val syncingFlow: StateFlow<Boolean> = _syncingFlow.asStateFlow()
 
-    private val lastBlockInfoSubject = PublishSubject.create<Pair<TransactionSource, LastBlockInfo>>()
-    val lastBlockInfoObservable: Observable<Pair<TransactionSource, LastBlockInfo>> get() = lastBlockInfoSubject
+    private val _lastBlockInfoFlow = MutableSharedFlow<Pair<TransactionSource, LastBlockInfo>>()
+    val lastBlockInfoFlow: SharedFlow<Pair<TransactionSource, LastBlockInfo>> = _lastBlockInfoFlow.asSharedFlow()
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private var monitoringJob: Job? = null
@@ -66,7 +70,7 @@ class TransactionSyncStateRepository(
                     launch {
                         adapter.lastBlockUpdatedFlowable.asFlow().collect {
                             adapter.lastBlockInfo?.let { lastBlockInfo ->
-                                lastBlockInfoSubject.onNext(Pair(source, lastBlockInfo))
+                                _lastBlockInfoFlow.emit(Pair(source, lastBlockInfo))
                             }
                         }
                     }
@@ -85,7 +89,7 @@ class TransactionSyncStateRepository(
         val syncing = adaptersMutex.withLock {
             adapters.any { it.value.transactionsState is AdapterState.Syncing }
         }
-        syncingSubject.onNext(syncing)
+        _syncingFlow.value = syncing
     }
 
     override fun clear() {

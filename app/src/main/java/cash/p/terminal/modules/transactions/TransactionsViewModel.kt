@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
+import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.core.storage.toRecordUidMap
 import cash.p.terminal.entities.SwapProviderTransaction
 import cash.p.terminal.premium.domain.PremiumSettings
@@ -35,15 +36,19 @@ import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.helpers.DateHelper
 import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase
-import kotlinx.coroutines.Dispatchers
+import io.horizontalsystems.core.DispatcherProvider
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.Date
 
@@ -58,7 +63,9 @@ class TransactionsViewModel(
     private val premiumSettings: PremiumSettings,
     private val amlStatusManager: AmlStatusManager,
     private val adapterManager: IAdapterManager,
-    private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage
+    private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage,
+    private val contactsRepository: ContactsRepository,
+    private val dispatcherProvider: DispatcherProvider,
 ) : ViewModelUiState<TransactionsUiState>() {
 
     var tmpItemToShow: TransactionItem? = null
@@ -76,11 +83,18 @@ class TransactionsViewModel(
     private var syncing = false
     private var hasHiddenTransactions: Boolean = false
     private var filterVersion = 0
+    @Volatile private var awaitingWalletSwitch = false
+    @Volatile private var adaptersReadySinceSwitch = true
+    @Volatile private var cachedConvertedItems: List<TransactionViewItem> = emptyList()
     private var currentFilterType: FilterTransactionType = FilterTransactionType.All
     private var amlPromoAlertEnabled = premiumSettings.getAmlCheckShowAlert()
 
     // Maps transaction record UID to SwapProviderTransaction for reactive updates
     private val swapStatusMap = MutableStateFlow(emptyMap<String, SwapProviderTransaction>())
+    private val reprocessTrigger = MutableSharedFlow<Unit>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
     private var swapObservationJob: Job? = null
     private var statusCheckerJob: Job? = null
     private val updateSwapProviderTransactionsStatusUseCase: UpdateSwapProviderTransactionsStatusUseCase = getKoinInstance()
@@ -94,17 +108,45 @@ class TransactionsViewModel(
     private var refreshViewItemsJob: Job? = null
 
     init {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             service.start()
         }
 
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             transactionAdapterManager.adaptersReadyFlow.collect {
-                handleUpdatedWallets(walletManager.activeWallets)
+                adaptersReadySinceSwitch = true
+                withContext(dispatcherProvider.io) {
+                    handleUpdatedWallets(walletManager.activeWallets)
+                }
+                // Force combine to re-evaluate — needed when StateFlow dedup
+                // prevents emission (e.g. empty→empty account switch)
+                reprocessTrigger.tryEmit(Unit)
             }
         }
 
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
+            var currentAccountId: String? = null
+            walletManager.activeWalletsFlow.collect { wallets ->
+                val newAccountId = wallets.firstOrNull()?.account?.id
+                if (newAccountId != null && newAccountId != currentAccountId) {
+                    if (currentAccountId != null) {
+                        awaitingWalletSwitch = true
+                        adaptersReadySinceSwitch = false
+                        filterVersion++
+                        cachedConvertedItems = emptyList()
+                        viewState = ViewState.Loading
+                        transactions = null
+                        emitState()
+                    }
+                    currentAccountId = newAccountId
+                    withContext(dispatcherProvider.io) {
+                        handleUpdatedWallets(wallets)
+                    }
+                }
+            }
+        }
+
+        viewModelScope.launch {
             transactionFilterService.stateFlow.collect { state ->
                 val transactionWallets = state.filterTokens.map { filterToken ->
                     filterToken?.let {
@@ -115,7 +157,9 @@ class TransactionsViewModel(
                     TransactionWallet(it.token, it.source, it.token.badge)
                 }
 
-                val newTransactionListId = (selectedTransactionWallet?.hashCode() ?: 0).toString() +
+                val accountId = walletManager.activeWallets.firstOrNull()?.account?.id.orEmpty()
+                val newTransactionListId = accountId +
+                        (selectedTransactionWallet?.hashCode() ?: 0).toString() +
                         state.selectedTransactionType.name +
                         state.selectedBlockchain?.uid
 
@@ -123,18 +167,21 @@ class TransactionsViewModel(
                 if (transactionListId != newTransactionListId) {
                     transactionListId = newTransactionListId
                     filterVersion++
+                    cachedConvertedItems = emptyList()
                     viewState = ViewState.Loading
                     transactions = null
                     emitState()
                 }
 
-                service.set(
-                    transactionWallets.filterNotNull(),
-                    selectedTransactionWallet,
-                    state.selectedTransactionType,
-                    state.selectedBlockchain,
-                    state.contact,
-                )
+                withContext(dispatcherProvider.io) {
+                    service.set(
+                        transactionWallets.filterNotNull(),
+                        selectedTransactionWallet,
+                        state.selectedTransactionType,
+                        state.selectedBlockchain,
+                        state.contact,
+                    )
+                }
 
                 filterResetEnabled.postValue(state.resetEnabled)
 
@@ -167,34 +214,60 @@ class TransactionsViewModel(
         }
 
         viewModelScope.launch {
-            service.syncingObservable.asFlow().collect {
+            service.syncingFlow.collect {
                 syncing = it
                 emitState()
             }
         }
 
         viewModelScope.launch {
-            service.itemsObservable.asFlow().collect { items ->
-                handleUpdatedItems(items.distinctBy { it.record.uid })
-            }
+            var lastItemsRef: List<TransactionItem>? = null
+            combine(
+                service.transactionItemsFlow,
+                swapStatusMap,
+                reprocessTrigger.onStart { emit(Unit) }
+            ) { items, _, _ -> items }
+                .collect { items ->
+                    if (items !== lastItemsRef) {
+                        lastItemsRef = items
+                        if (adaptersReadySinceSwitch) {
+                            awaitingWalletSwitch = false
+                        }
+                    } else if (items.isEmpty() && adaptersReadySinceSwitch) {
+                        // StateFlow dedup prevented emission (e.g. empty→empty
+                        // account switch). Empty list is safe to show — clear flag.
+                        awaitingWalletSwitch = false
+                    }
+                    handleUpdatedItems(items.distinctBy { it.record.uid })
+                }
         }
 
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             balanceHiddenManager.balanceHiddenFlow.collect {
-                transactionViewItem2Factory.updateCache()
-                service.refreshList()
+                withContext(dispatcherProvider.default) {
+                    transactionViewItem2Factory.updateCache()
+                }
+                reprocessTrigger.tryEmit(Unit)
             }
         }
 
         viewModelScope.launch {
             balanceHiddenManager.anyTransactionVisibilityChangedFlow.collect {
-                service.refreshList()
+                reprocessTrigger.tryEmit(Unit)
+            }
+        }
+
+        viewModelScope.launch {
+            contactsRepository.contactsFlow.collect {
+                reprocessTrigger.tryEmit(Unit)
             }
         }
 
         viewModelScope.launch {
             transactionHiddenManager.transactionHiddenFlow.collectLatest {
-                service.reload()
+                if (cachedConvertedItems.isNotEmpty()) {
+                    applyHiddenFilter()
+                }
             }
         }
 
@@ -223,42 +296,49 @@ class TransactionsViewModel(
     fun showAllTransactions(show: Boolean) = transactionHiddenManager.showAllTransactions(show)
 
     private fun handleUpdatedItems(items: List<TransactionItem>) {
+        if (awaitingWalletSwitch) return
+
         refreshViewItemsJob?.cancel()
-        refreshViewItemsJob = viewModelScope.launch(Dispatchers.Default) {
+        refreshViewItemsJob = viewModelScope.launch(dispatcherProvider.default) {
             // Capture current filter version to detect if filter changes during processing
             val capturedFilterVersion = filterVersion
 
-            val viewItems =
-                if (transactionHiddenManager.transactionHiddenFlow.value.transactionHidden) {
-                    when (transactionHiddenManager.transactionHiddenFlow.value.transactionDisplayLevel) {
-                        TransactionDisplayLevel.NOTHING -> emptyList()
-                        TransactionDisplayLevel.LAST_1_TRANSACTION -> items.take(1)
-                        TransactionDisplayLevel.LAST_2_TRANSACTIONS -> items.take(2)
-                        TransactionDisplayLevel.LAST_4_TRANSACTIONS -> items.take(4)
-                    }.also { hasHiddenTransactions = items.size != it.size }
-                } else {
-                    items.also { hasHiddenTransactions = false }
-                }.map { item ->
-                    ensureActive()
-                    val matchedSwap = swapStatusMap.value[item.record.uid]
-                    transactionViewItem2Factory.convertToViewItemCached(
-                        transactionItem = item,
-                        matchedSwap = matchedSwap
-                    ).let { viewItem -> amlStatusManager.applyStatus(viewItem) }
-                }.groupBy {
-                    ensureActive()
-                    it.formattedDate
-                }
+            val allViewItems = items.map { item ->
+                ensureActive()
+                val matchedSwap = swapStatusMap.value[item.record.uid]
+                transactionViewItem2Factory.convertToViewItemCached(
+                    transactionItem = item,
+                    matchedSwap = matchedSwap
+                ).let { viewItem -> amlStatusManager.applyStatus(viewItem) }
+            }
 
             ensureActive()
 
             // Only update state if filter version hasn't changed (ignore stale data)
-            if (capturedFilterVersion == filterVersion) {
-                transactions = viewItems
-                viewState = ViewState.Success
-                emitState()
+            if (capturedFilterVersion == filterVersion && !awaitingWalletSwitch) {
+                cachedConvertedItems = allViewItems
+                applyHiddenFilter()
             }
         }
+    }
+
+    private fun applyHiddenFilter() {
+        val allViewItems = cachedConvertedItems
+        val hiddenState = transactionHiddenManager.transactionHiddenFlow.value
+        val filtered = if (hiddenState.transactionHidden) {
+            when (hiddenState.transactionDisplayLevel) {
+                TransactionDisplayLevel.NOTHING -> emptyList()
+                TransactionDisplayLevel.LAST_1_TRANSACTION -> allViewItems.take(1)
+                TransactionDisplayLevel.LAST_2_TRANSACTIONS -> allViewItems.take(2)
+                TransactionDisplayLevel.LAST_4_TRANSACTIONS -> allViewItems.take(4)
+            }.also { hasHiddenTransactions = allViewItems.size != it.size }
+        } else {
+            allViewItems.also { hasHiddenTransactions = false }
+        }
+
+        transactions = filtered.groupBy { it.formattedDate }
+        viewState = ViewState.Success
+        emitState()
     }
 
     private fun observeSwapsForToken(filterToken: FilterToken?) {
@@ -268,7 +348,6 @@ class TransactionsViewModel(
             swapObservationJob = viewModelScope.launch {
                 swapProviderTransactionsStorage.observeAll().collect { swaps ->
                     swapStatusMap.value = swaps.toRecordUidMap()
-                    service.refreshList()
                 }
             }
             return
@@ -286,8 +365,6 @@ class TransactionsViewModel(
                 address = adapter.receiveAddress
             ).collect { swaps ->
                 swapStatusMap.value = swaps.toRecordUidMap()
-                // Refresh current items with updated swap status
-                service.refreshList()
             }
         }
     }

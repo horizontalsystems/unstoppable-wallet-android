@@ -29,7 +29,7 @@ class TransactionAdapterManager(
         MutableStateFlow<Map<TransactionSource, ITransactionsAdapter>>(emptyMap())
     val adaptersReadyFlow = _adaptersState.asStateFlow()
 
-    private val _initializationFlow = MutableStateFlow<Boolean>(false)
+    private val _initializationFlow = MutableStateFlow(false)
     val initializationFlow = _initializationFlow.asStateFlow()
 
     init {
