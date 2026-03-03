@@ -31,9 +31,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -42,13 +42,14 @@ import io.horizontalsystems.bankwallet.core.stats.statPeriod
 import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.topcoins.OptionController
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -71,28 +72,47 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MarketPlatformScreen(val platform: Platform) : HSScreen()
+data class MarketPlatformScreen(val platform: Platform) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val factory = MarketPlatformModule.Factory(platform)
+
+        PlatformScreen(
+            factory = factory,
+            platform = platform,
+            onCloseButtonClick = { backStack.removeLastOrNull() },
+            onCoinClick = { coinUid ->
+                backStack.add(CoinScreen(coinUid))
+
+                stat(page = StatPage.TopPlatform, event = StatEvent.OpenCoin(coinUid))
+            }
+        )
+    }
+}
 
 class MarketPlatformFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
 
-        withInput<Platform>(navController) { platform ->
-            val factory = MarketPlatformModule.Factory(platform)
-
-            PlatformScreen(
-                factory = factory,
-                platform = platform,
-                onCloseButtonClick = { navController.popBackStack() },
-                onCoinClick = { coinUid ->
-                    val arguments = CoinFragment.Input(coinUid)
-                    navController.slideFromRight(R.id.coinFragment, arguments)
-
-                    stat(page = StatPage.TopPlatform, event = StatEvent.OpenCoin(coinUid))
-                }
-            )
-        }
+//        withInput<Platform>(navController) { platform ->
+//            val factory = MarketPlatformModule.Factory(platform)
+//
+//            PlatformScreen(
+//                factory = factory,
+//                platform = platform,
+//                onCloseButtonClick = { navController.popBackStack() },
+//                onCoinClick = { coinUid ->
+//                    val arguments = CoinFragment.Input(coinUid)
+//                    navController.slideFromRight(R.id.coinFragment, arguments)
+//
+//                    stat(page = StatPage.TopPlatform, event = StatEvent.OpenCoin(coinUid))
+//                }
+//            )
+//        }
     }
 }
 
