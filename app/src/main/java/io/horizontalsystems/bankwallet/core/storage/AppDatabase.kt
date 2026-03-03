@@ -74,8 +74,6 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSettingsDao
 import io.horizontalsystems.bankwallet.modules.pin.core.Pin
 import io.horizontalsystems.bankwallet.modules.pin.core.PinDao
-import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesDao
-import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSessionKey
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
 
@@ -94,7 +92,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConne
     NftAssetRecord::class,
     NftMetadataSyncRecord::class,
     NftAssetBriefMetadataRecord::class,
-    ProFeaturesSessionKey::class,
     EvmAddressLabel::class,
     EvmMethodLabel::class,
     SyncerState::class,
@@ -124,7 +121,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun marketFavoritesDao(): MarketFavoritesDao
     abstract fun wcSessionDao(): WCSessionDao
     abstract fun nftDao(): NftDao
-    abstract fun proFeaturesDao(): ProFeaturesDao
     abstract fun evmAddressLabelDao(): EvmAddressLabelDao
     abstract fun evmMethodLabelDao(): EvmMethodLabelDao
     abstract fun syncerStateDao(): SyncerStateDao
