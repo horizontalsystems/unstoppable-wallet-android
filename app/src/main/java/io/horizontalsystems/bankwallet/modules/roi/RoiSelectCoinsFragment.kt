@@ -25,11 +25,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.paidAction
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
@@ -50,19 +52,27 @@ import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object RoiSelectCoinsScreen : HSScreen()
+data object RoiSelectCoinsScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        RoiSelectCoinsScreen(backStack)
+    }
+}
 
 class RoiSelectCoinsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        RoiSelectCoinsScreen(navController)
+//        RoiSelectCoinsScreen(navController)
     }
 
 }
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
-fun RoiSelectCoinsScreen(navController: NavController) {
+fun RoiSelectCoinsScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel = viewModel<RoiSelectCoinsViewModel>(factory = RoiSelectCoinsViewModel.Factory())
 
     val uiState = viewModel.uiState
@@ -73,7 +83,7 @@ fun RoiSelectCoinsScreen(navController: NavController) {
                 title = stringResource(R.string.ROI_SelectCoin_Title),
                 searchHintText = stringResource(R.string.Market_Search),
                 menuItems = listOf(),
-                onClose = { navController.popBackStack() },
+                onClose = { backStack.removeLastOrNull() },
                 onSearchTextChanged = { text ->
                     viewModel.onFilter(text)
                 }
@@ -89,7 +99,7 @@ fun RoiSelectCoinsScreen(navController: NavController) {
                     enabled = uiState.isSaveable,
                     onClick = {
                         viewModel.onApply()
-                        navController.popBackStack()
+                        backStack.removeLastOrNull()
                     }
                 )
             }
@@ -113,7 +123,7 @@ fun RoiSelectCoinsScreen(navController: NavController) {
                                 iconRight = painterResource(R.drawable.ic_down_arrow_20),
                                 title = period.title.getString(),
                                 onClick = {
-                                    navController.paidAction(TokenInsights) {
+                                    backStack.paidAction(TokenInsights) {
                                         dialog = PeriodSelectorDialog(text, period, i)
                                     }
                                 }
@@ -135,7 +145,7 @@ fun RoiSelectCoinsScreen(navController: NavController) {
                     val checked = uiState.selectedCoins.contains(item.performanceCoin)
                     val view = LocalView.current
                     val onClick = {
-                        navController.paidAction(TokenInsights) {
+                        backStack.paidAction(TokenInsights) {
                             try {
                                 viewModel.onToggle(item, !checked)
                             } catch (e: Throwable) {
