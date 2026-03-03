@@ -305,21 +305,6 @@ class BalanceViewItemFactory {
 
             lockedCoinValue(
                 state,
-                item.balanceData.notRelayed,
-                wallet.decimal,
-                wallet.token
-            )?.let {
-                add(
-                    LockedValue(
-                        title = TranslatableString.ResString(R.string.Info_NotRelayed_Title),
-                        info = TranslatableString.ResString(R.string.Info_NotRelayed_Description),
-                        coinValue = it
-                    )
-                )
-            }
-
-            lockedCoinValue(
-                state,
                 item.balanceData.minimumBalance,
                 wallet.decimal,
                 wallet.token
