@@ -8,10 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -23,25 +24,41 @@ data class MarkdownScreen(
     val markdownUrl: String,
     val handleRelativeUrl: Boolean = false,
     val showAsPopup: Boolean = false,
-) : HSScreen()
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        MarkdownScreen(
+            handleRelativeUrl = handleRelativeUrl,
+            showAsPopup = showAsPopup,
+            markdownUrl = markdownUrl,
+            onCloseClick = { backStack.removeLastOrNull() },
+            onUrlClick = { url ->
+                backStack.add(MarkdownScreen(url))
+            }
+        )
+    }
+}
 
 class MarkdownFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            MarkdownScreen(
-                handleRelativeUrl = input.handleRelativeUrl,
-                showAsPopup = input.showAsPopup,
-                markdownUrl = input.markdownUrl,
-                onCloseClick = { navController.popBackStack() },
-                onUrlClick = { url ->
-                    navController.slideFromRight(
-                        R.id.markdownFragment, Input(url)
-                    )
-                }
-            )
-        }
+//        withInput<Input>(navController) { input ->
+//            MarkdownScreen(
+//                handleRelativeUrl = input.handleRelativeUrl,
+//                showAsPopup = input.showAsPopup,
+//                markdownUrl = input.markdownUrl,
+//                onCloseClick = { navController.popBackStack() },
+//                onUrlClick = { url ->
+//                    navController.slideFromRight(
+//                        R.id.markdownFragment, Input(url)
+//                    )
+//                }
+//            )
+//        }
     }
 
     @Parcelize
