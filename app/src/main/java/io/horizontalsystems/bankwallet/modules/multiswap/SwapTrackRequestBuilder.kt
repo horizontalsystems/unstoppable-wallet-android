@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
+import io.horizontalsystems.bankwallet.entities.SwapRecord
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.MayaProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider

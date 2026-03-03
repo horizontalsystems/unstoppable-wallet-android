@@ -1,21 +1,13 @@
-package io.horizontalsystems.bankwallet.modules.multiswap
+package io.horizontalsystems.bankwallet.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-
-enum class SwapStatus {
-    Depositing,
-    Swapping,
-    Sending,
-    Completed,
-    Refunded,
-    Failed,
-}
 
 @Entity
 data class SwapRecord(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+    val accountId: String,
     val timestamp: Long,
     val providerId: String,
     val providerName: String,

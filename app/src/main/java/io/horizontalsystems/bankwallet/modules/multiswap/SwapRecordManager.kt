@@ -1,10 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.storage.SwapRecordDao
+import io.horizontalsystems.bankwallet.entities.SwapRecord
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-class SwapRecordManager(private val swapRecordDao: SwapRecordDao) {
+class SwapRecordManager(
+    private val accountManager: IAccountManager,
+    private val swapRecordDao: SwapRecordDao,
+) {
 
     private val _recordsUpdatedFlow = MutableSharedFlow<Unit>(replay = 1)
     val recordsUpdatedFlow = _recordsUpdatedFlow.asSharedFlow()
@@ -15,11 +20,13 @@ class SwapRecordManager(private val swapRecordDao: SwapRecordDao) {
     }
 
     fun getAll(): List<SwapRecord> {
-        return swapRecordDao.getAll()
+        val accountId = accountManager.activeAccount?.id ?: return emptyList()
+        return swapRecordDao.getAll(accountId)
     }
 
     fun getPending(): List<SwapRecord> {
-        return swapRecordDao.getPending()
+        val accountId = accountManager.activeAccount?.id ?: return emptyList()
+        return swapRecordDao.getPending(accountId)
     }
 
     fun getById(id: Int): SwapRecord? {

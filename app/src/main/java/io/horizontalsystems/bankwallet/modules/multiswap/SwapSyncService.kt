@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap
 
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.entities.SwapRecord
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchProvider

@@ -4,18 +4,18 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapRecord
+import io.horizontalsystems.bankwallet.entities.SwapRecord
 
 @Dao
 interface SwapRecordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(record: SwapRecord)
 
-    @Query("SELECT * FROM SwapRecord ORDER BY timestamp DESC")
-    fun getAll(): List<SwapRecord>
+    @Query("SELECT * FROM SwapRecord WHERE accountId = :accountId ORDER BY timestamp DESC")
+    fun getAll(accountId: String): List<SwapRecord>
 
-    @Query("SELECT * FROM SwapRecord WHERE status NOT IN ('Completed', 'Refunded', 'Failed') ORDER BY timestamp DESC")
-    fun getPending(): List<SwapRecord>
+    @Query("SELECT * FROM SwapRecord WHERE accountId = :accountId AND status NOT IN ('Completed', 'Refunded', 'Failed') ORDER BY timestamp DESC")
+    fun getPending(accountId: String): List<SwapRecord>
 
     @Query("SELECT * FROM SwapRecord WHERE id = :id")
     fun getById(id: Int): SwapRecord?
