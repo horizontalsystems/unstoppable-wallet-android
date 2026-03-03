@@ -39,13 +39,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.basecurrency.BaseCurrencySettingsScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
@@ -69,20 +72,28 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object AppearanceScreen : HSScreen()
+data object AppearanceScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        AppearanceScreen(backStack)
+    }
+}
 
 class AppearanceFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        AppearanceScreen(navController)
+//        AppearanceScreen(navController)
     }
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppearanceScreen(navController: NavController) {
+fun AppearanceScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel = viewModel<AppearanceViewModel>(factory = AppearanceModule.Factory())
     val uiState = viewModel.uiState
 
@@ -99,7 +110,7 @@ fun AppearanceScreen(navController: NavController) {
 
     HSScaffold(
         title = stringResource(R.string.Settings_AppSettings),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier
@@ -127,7 +138,7 @@ fun AppearanceScreen(navController: NavController) {
                             R.string.Settings_Language,
                             value = uiState.currentLanguage,
                             onClick = {
-                                navController.slideFromRight(R.id.languageSettingsFragment)
+                                backStack.add(LanguageSettingsScreen)
 
                                 stat(
                                     page = StatPage.Settings,
@@ -141,7 +152,7 @@ fun AppearanceScreen(navController: NavController) {
                             R.string.Settings_BaseCurrency,
                             value = uiState.baseCurrencyCode,
                             onClick = {
-                                navController.slideFromRight(R.id.baseCurrencySettingsFragment)
+                                backStack.add(BaseCurrencySettingsScreen)
 
                                 stat(
                                     page = StatPage.Settings,
