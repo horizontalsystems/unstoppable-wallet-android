@@ -781,11 +781,12 @@
     <string name="SwapInfo_StatusTitle">Status</string>
     <string name="SwapInfo_StatusDescription">Current cross-chain swap status.</string>
     <string name="SwapInfo_CrossChainNote">Cross-chain swaps are processed automatically and may take some time. If the status does not update immediately, the operation is still in progress.</string>
-    <string name="SwapInfo_StepDepositing">Depositing</string>
-    <string name="SwapInfo_StepSwap">Swap</string>
-    <string name="SwapInfo_StepSend">Send</string>
-    <string name="SwapInfo_StepComplete">Complete</string>
-    <string name="SwapInfo_StepRefund">Refund</string>
+    <string name="SwapInfo_StatusDepositing">Depositing</string>
+    <string name="SwapInfo_StatusSwapping">Swapping</string>
+    <string name="SwapInfo_StatusSending">Sending</string>
+    <string name="SwapInfo_StatusCompleted">Completed</string>
+    <string name="SwapInfo_StatusRefunded">Refunded</string>
+    <string name="SwapInfo_StatusFailed">Failed</string>
     <string name="Button_View">View</string>
 
     <!--Approve-->
