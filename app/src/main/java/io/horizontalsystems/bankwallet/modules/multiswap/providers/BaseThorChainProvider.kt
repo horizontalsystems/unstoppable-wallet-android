@@ -159,19 +159,18 @@ abstract class BaseThorChainProvider(
         tokenOut: Token,
         amountIn: BigDecimal,
         slippage: BigDecimal?,
-        recipient: io.horizontalsystems.bankwallet.entities.Address?,
+        destinationAddress: String?,
         refundAddress: String?,
         fromAddress: String?
     ): Response.QuoteSwap {
         val assetIn = assetsMap[tokenIn]!!
         val assetOut = assetsMap[tokenOut]!!
-        val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
 
         return thornodeAPI.quoteSwap(
             fromAsset = assetIn,
             toAsset = assetOut,
             amount = amountIn.movePointRight(8).toLong(),
-            destination = destination,
+            destination = destinationAddress,
             affiliate = affiliate,
             affiliateBps = affiliateBps,
             streamingInterval = 1,
@@ -194,7 +193,8 @@ abstract class BaseThorChainProvider(
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         slippage: BigDecimal,
     ): SwapFinalQuote {
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, recipient, getRefundAddress(tokenIn), getFromAddress(tokenIn))
+        val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, destination, getRefundAddress(tokenIn), getFromAddress(tokenIn))
 
         val amountOut = quoteSwap.expected_amount_out.movePointLeft(8)
 
@@ -323,7 +323,7 @@ interface ThornodeAPI {
         @Query("from_asset") fromAsset: String,
         @Query("to_asset") toAsset: String,
         @Query("amount") amount: Long,
-        @Query("destination") destination: String,
+        @Query("destination") destination: String?,
         @Query("affiliate") affiliate: String?,
         @Query("affiliate_bps") affiliateBps: Int?,
         @Query("streaming_interval") streamingInterval: Long,
