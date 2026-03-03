@@ -23,11 +23,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -39,31 +41,39 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object WCPairingsScreen : HSScreen()
+data object WCPairingsScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        WCPairingsScreen(backStack, resultBus)
+    }
+}
 
 class WCPairingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        WCPairingsScreen(navController)
+//        WCPairingsScreen(navController)
     }
 
 }
 
 @Composable
-fun WCPairingsScreen(navController: NavController) {
+fun WCPairingsScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
     val viewModel = viewModel<WCPairingsViewModel>(factory = WCPairingsViewModel.Factory())
     val uiState = viewModel.uiState
 
     LaunchedEffect(uiState.closeScreen) {
         if (uiState.closeScreen) {
-            navController.popBackStack()
+            backStack.removeLastOrNull()
         }
     }
 
     HSScaffold(
         title = stringResource(R.string.WalletConnect_PairedDApps),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier
@@ -80,18 +90,17 @@ fun WCPairingsScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(32.dp))
             CellUniversalLawrenceSection(
                 listOf {
+                    ResultEffect<ConfirmDeleteAllPairingsScreen.Result>(resultBus) { result ->
+                        if (result.confirmed) {
+                            viewModel.deleteAll()
+                        }
+                    }
                     RowUniversal(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .fillMaxWidth(),
                         onClick = {
-                            navController.slideFromBottomForResult<ConfirmDeleteAllPairingsDialog.Result>(
-                                R.id.confirmDeleteAllPairingsDialog
-                            ) { result ->
-                                if (result.confirmed) {
-                                    viewModel.deleteAll()
-                                }
-                            }
+                            backStack.add(ConfirmDeleteAllPairingsScreen)
                         }
                     ) {
                         Icon(
