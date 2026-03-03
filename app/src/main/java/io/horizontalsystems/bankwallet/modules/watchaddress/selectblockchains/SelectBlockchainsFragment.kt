@@ -22,10 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
@@ -47,21 +49,35 @@ data class SelectBlockchainsScreen(
     val popOffInclusive: Boolean,
     val accountType: AccountType,
     val accountName: String?,
-) : HSScreen()
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SelectBlockchainsScreen(
+            accountType,
+            accountName,
+            backStack,
+            popOffOnSuccess,
+            popOffInclusive
+        )
+    }
+}
 
 class SelectBlockchainsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            SelectBlockchainsScreen(
-                input.accountType,
-                input.accountName,
-                navController,
-                input.popOffOnSuccess,
-                input.popOffInclusive
-            )
-        }
+//        withInput<Input>(navController) { input ->
+//            SelectBlockchainsScreen(
+//                input.accountType,
+//                input.accountName,
+//                navController,
+//                input.popOffOnSuccess,
+//                input.popOffInclusive
+//            )
+//        }
     }
 
     @Parcelize
@@ -78,7 +94,7 @@ class SelectBlockchainsFragment : BaseComposeFragment() {
 private fun SelectBlockchainsScreen(
     accountType: AccountType,
     accountName: String?,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     popUpToInclusiveId: Int,
     inclusive: Boolean
 ) {
@@ -105,13 +121,14 @@ private fun SelectBlockchainsScreen(
                 iconTint = R.color.white
             )
             delay(300)
-            navController.popBackStack(popUpToInclusiveId, inclusive)
+//            TODO("xxx nav3")
+//            backStack.popBackStack(popUpToInclusiveId, inclusive)
         }
     }
 
     HSScaffold(
         title = stringResource(title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Done),
