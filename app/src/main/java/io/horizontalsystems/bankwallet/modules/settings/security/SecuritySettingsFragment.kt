@@ -22,20 +22,14 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.authorizedAction
-import io.horizontalsystems.bankwallet.core.ensurePinSet
-import io.horizontalsystems.bankwallet.core.paidAction
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
-import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
-import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
@@ -66,7 +60,19 @@ import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SecuritySettingsScreen : HSScreen()
+data object SecuritySettingsScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val securitySettingsViewModel = viewModel<SecuritySettingsViewModel>(factory = SecurityPasscodeSettingsModule.Factory())
+        SecurityCenterScreen(
+            securitySettingsViewModel = securitySettingsViewModel,
+            backStack = backStack,
+        )
+    }
+}
 
 class SecuritySettingsFragment : BaseComposeFragment() {
 
@@ -76,10 +82,10 @@ class SecuritySettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        SecurityCenterScreen(
-            securitySettingsViewModel = securitySettingsViewModel,
-            navController = navController,
-        )
+//        SecurityCenterScreen(
+//            securitySettingsViewModel = securitySettingsViewModel,
+//            navController = navController,
+//        )
     }
 
 }
@@ -87,7 +93,7 @@ class SecuritySettingsFragment : BaseComposeFragment() {
 @Composable
 private fun SecurityCenterScreen(
     securitySettingsViewModel: SecuritySettingsViewModel,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
 ) {
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         securitySettingsViewModel.update()
@@ -97,14 +103,14 @@ private fun SecurityCenterScreen(
 
     HSScaffold(
         title = stringResource(R.string.Settings_SecurityCenter),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(
             Modifier.verticalScroll(rememberScrollState())
         ) {
             PasscodeBlock(
                 securitySettingsViewModel,
-                navController
+                backStack
             )
 
             VSpacer(24.dp)
@@ -195,9 +201,8 @@ private fun SecurityCenterScreen(
                                                 true
                                             }
                                         } else {
-                                            navController.slideFromBottom(
-                                                R.id.defenseSystemFeatureDialog,
-                                                DefenseSystemFeatureDialog.Input(PremiumFeature.getFeature(action))
+                                            backStack.add(
+                                                DefenseSystemFeatureScreen(PremiumFeature.getFeature(action))
                                             )
                                             false
                                         }
@@ -227,25 +232,26 @@ private fun SecurityCenterScreen(
                         },
                         right = {
                             val onClick = {
-                                navController.paidAction(RobberyProtection) {
-                                    if (uiState.pinEnabled) {
-                                        navController.authorizedAction {
-                                            if (uiState.duressPinEnabled) {
-                                                navController.slideFromRight(R.id.editDuressPinFragment)
-                                            } else {
-                                                navController.slideFromRight(R.id.setDuressPinIntroFragment)
-                                            }
-                                        }
-                                    } else {
-                                        navController.ensurePinSet(R.string.PinSet_ForDuress) {
-                                            navController.slideFromRight(R.id.setDuressPinIntroFragment)
-                                        }
-                                    }
-                                }
-                                stat(
-                                    page = StatPage.Security,
-                                    event = StatEvent.OpenPremium(StatPremiumTrigger.DuressMode)
-                                )
+//                                TODO("xxx nav3")
+//                                backStack.paidAction(RobberyProtection) {
+//                                    if (uiState.pinEnabled) {
+//                                        backStack.authorizedAction {
+//                                            if (uiState.duressPinEnabled) {
+//                                                backStack.slideFromRight(R.id.editDuressPinFragment)
+//                                            } else {
+//                                                backStack.slideFromRight(R.id.setDuressPinIntroFragment)
+//                                            }
+//                                        }
+//                                    } else {
+//                                        backStack.ensurePinSet(R.string.PinSet_ForDuress) {
+//                                            backStack.slideFromRight(R.id.setDuressPinIntroFragment)
+//                                        }
+//                                    }
+//                                }
+//                                stat(
+//                                    page = StatPage.Security,
+//                                    event = StatEvent.OpenPremium(StatPremiumTrigger.DuressMode)
+//                                )
                             }
 
                             if (uiState.duressPinEnabled) {
@@ -264,9 +270,10 @@ private fun SecurityCenterScreen(
                                         size = ButtonSize.Small,
                                         icon = painterResource(R.drawable.trash_24)
                                     ) {
-                                        navController.authorizedAction {
-                                            securitySettingsViewModel.disableDuressPin()
-                                        }
+//                                        TODO("xxx nav3")
+//                                        backStack.authorizedAction {
+//                                            securitySettingsViewModel.disableDuressPin()
+//                                        }
                                     }
                                 }
                             } else {
