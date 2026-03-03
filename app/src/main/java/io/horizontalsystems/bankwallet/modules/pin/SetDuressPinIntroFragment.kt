@@ -115,7 +115,7 @@ fun SetDuressPinIntroScreen(backStack: NavBackStack<HSScreen>) {
                         if (viewModel.shouldShowSelectAccounts) {
                             backStack.add(SetDuressPinSelectAccountsScreen)
                         } else {
-                            backStack.add(SetDuressPinScreen())
+                            backStack.add(SetDuressPinScreen(null))
                         }
                     },
                 )

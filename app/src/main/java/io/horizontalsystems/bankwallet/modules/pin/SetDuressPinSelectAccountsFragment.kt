@@ -16,12 +16,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
@@ -37,17 +38,25 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SetDuressPinSelectAccountsScreen : HSScreen()
+data object SetDuressPinSelectAccountsScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SetDuressPinSelectAccountsScreen(backStack)
+    }
+}
 
 class SetDuressPinSelectAccountsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SetDuressPinSelectAccountsScreen(navController)
+//        SetDuressPinSelectAccountsScreen(navController)
     }
 }
 
 @Composable
-fun SetDuressPinSelectAccountsScreen(navController: NavController) {
+fun SetDuressPinSelectAccountsScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel =
         viewModel<SetDuressPinSelectAccountsViewModel>(factory = SetDuressPinSelectAccountsViewModel.Factory())
     val regularAccounts = viewModel.regularAccounts
@@ -56,7 +65,7 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
 
     HSScaffold(
         title = stringResource(R.string.DuressPinSelectAccounts_Title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         bottomBar = {
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
@@ -65,10 +74,7 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
-                        navController.slideFromRight(
-                            R.id.setDuressPinFragment,
-                            SetDuressPinFragment.Input(selected)
-                        )
+                        backStack.add(SetDuressPinScreen(selected))
                     },
                 )
             }

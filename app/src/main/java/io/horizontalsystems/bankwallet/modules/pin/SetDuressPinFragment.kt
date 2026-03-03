@@ -17,7 +17,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SetDuressPinScreen(val accountIds: List<String>? = null) : HSScreen() {
+data class SetDuressPinScreen(val accountIds: List<String>?) : HSScreen() {
     @Composable
     override fun GetContent(
         backStack: NavBackStack<HSScreen>,
