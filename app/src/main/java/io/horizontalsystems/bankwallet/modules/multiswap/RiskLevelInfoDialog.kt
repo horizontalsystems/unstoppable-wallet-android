@@ -20,10 +20,11 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -38,11 +39,18 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSBadgeOutline
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
-import io.horizontalsystems.core.findNavController
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object RiskLevelInfoScreen : HSScreen()
+data object RiskLevelInfoScreen : HSScreen(bottomSheet = true) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        RiskLevelInfoScreen(backStack)
+    }
+}
 
 class RiskLevelInfoDialog : BaseComposableBottomSheetFragment() {
 
@@ -56,8 +64,8 @@ class RiskLevelInfoDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val navController = findNavController()
-                RiskLevelInfoScreen(navController)
+//                val navController = findNavController()
+//                RiskLevelInfoScreen(navController)
             }
         }
     }
@@ -66,10 +74,10 @@ class RiskLevelInfoDialog : BaseComposableBottomSheetFragment() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RiskLevelInfoScreen(navController: NavController) {
+fun RiskLevelInfoScreen(backStack: NavBackStack<HSScreen>) {
     ComposeAppTheme {
         BottomSheetContent(
-            onDismissRequest = navController::popBackStack,
+            onDismissRequest = backStack::removeLastOrNull,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             buttons = {
                 HSButton(
@@ -77,7 +85,7 @@ fun RiskLevelInfoScreen(navController: NavController) {
                     modifier = Modifier.fillMaxWidth(),
                     variant = ButtonVariant.Secondary,
                     onClick = {
-                        navController.popBackStack()
+                        backStack.removeLastOrNull()
                     }
                 )
             },
