@@ -121,8 +121,8 @@ android {
             resValue("string", "blocksDecodedEthereumRpc", "https://api-dev.blocksdecoded.com/v1/ethereum-rpc/mainnet")
             resValue("string", "chainalysisBaseUrl", "https://public.chainalysis.com/api/v1/")
             resValue("string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4")
-            resValue("string", "hashDitBaseUrl", "https://api.diting.pro/v2/hashdit/")
-            resValue("string", "hashDitApiKey", "KuyxZfvJXFrpAcztshhYqeWaRusxyGRDDhFYkeIw")
+            resValue("string", "hashDitBaseUrl", "https://service.hashdit.io/v2/hashdit/")
+            resValue("string", "hashDitApiKey", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
             resValue("string", "uswapApiBaseUrl", "https://swap-dev.unstoppable.money/api/v1/")
             resValue("string", "uswapApiKey", "44fc76602e17e0c8259b6ce3bae3ca90804c6fd8f42ca00e6943a6b1ba7fe242")
         }
