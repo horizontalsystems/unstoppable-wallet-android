@@ -11,12 +11,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -31,13 +32,36 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SelectContactScreen : HSScreen()
+data class SelectContactScreen(
+    val selected: Contact?,
+    @Serializable(with = BlockchainTypeSerializer::class)
+    val blockchainType: BlockchainType?
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SelectContactScreen(
+            backStack,
+            resultBus,
+            selected,
+            blockchainType,
+        )
+    }
+
+    data class Result(val contact: Contact?)
+}
 
 class SelectContactFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        SelectContactScreen(navController, navController.getInput())
+//        SelectContactScreen(
+//            navController,
+//            navController.getInput<Input>()?.selected,
+//            navController.getInput<Input>()?.blockchainType
+//        )
     }
 
     @Parcelize
@@ -49,18 +73,23 @@ class SelectContactFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun SelectContactScreen(navController: NavController, input: SelectContactFragment.Input?) {
+fun SelectContactScreen(
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
+    selected: Contact?,
+    blockchainType: BlockchainType?
+) {
     val viewModel = viewModel<SelectContactViewModel>(
         initializer = SelectContactViewModel.init(
-            input?.selected,
-            input?.blockchainType
+            selected,
+            blockchainType
         )
     )
     val uiState = viewModel.uiState
 
     HSScaffold(
         title = stringResource(R.string.Contacts),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         if (uiState.items.isEmpty()) {
             Column {
@@ -77,8 +106,8 @@ fun SelectContactScreen(navController: NavController, input: SelectContactFragme
                 }
                 items(uiState.items) { contact ->
                     CellContact(contact, uiState.selected) {
-                        navController.setNavigationResultX(SelectContactFragment.Result(contact))
-                        navController.popBackStack()
+                        resultBus.sendResult(result = SelectContactScreen.Result(contact))
+                        backStack.removeLastOrNull()
                     }
                 }
                 item {

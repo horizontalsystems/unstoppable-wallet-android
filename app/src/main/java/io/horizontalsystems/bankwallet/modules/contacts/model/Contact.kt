@@ -1,11 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.contacts.model
 
 import android.os.Parcelable
+import io.horizontalsystems.bankwallet.serializers.BlockchainSerializer
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.util.Objects
 
 @Parcelize
+@Serializable
 data class Contact(
     val uid: String,
     val name: String,
@@ -13,7 +16,9 @@ data class Contact(
 ) : Parcelable
 
 @Parcelize
+@Serializable
 data class ContactAddress(
+    @Serializable(with = BlockchainSerializer::class)
     val blockchain: Blockchain,
     val address: String
 ) : Parcelable {
