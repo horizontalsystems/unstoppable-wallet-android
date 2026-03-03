@@ -348,15 +348,15 @@ private fun StatusRightSlot(status: SwapStatus) {
 @Composable
 private fun SwapStatusSteps(status: SwapStatus, onViewClick: (() -> Unit)?) {
     val normalSteps = listOf(
-        stringResource(R.string.SwapInfo_StepDepositing),
-        stringResource(R.string.SwapInfo_StepSwap),
-        stringResource(R.string.SwapInfo_StepSend),
-        stringResource(R.string.SwapInfo_StepComplete),
+        stringResource(R.string.SwapInfo_StatusDepositing),
+        stringResource(R.string.SwapInfo_StatusSwapping),
+        stringResource(R.string.SwapInfo_StatusSending),
+        stringResource(R.string.SwapInfo_StatusCompleted),
     )
     val refundedSteps = listOf(
-        stringResource(R.string.SwapInfo_StepDepositing),
-        stringResource(R.string.SwapInfo_StepSwap),
-        stringResource(R.string.SwapInfo_StepRefund),
+        stringResource(R.string.SwapInfo_StatusDepositing),
+        stringResource(R.string.SwapInfo_StatusSwapping),
+        stringResource(R.string.SwapInfo_StatusRefunded),
     )
     val viewLabel = stringResource(R.string.Button_View)
 
@@ -529,13 +529,14 @@ private fun StepIndicator(isActive: Boolean, isDone: Boolean, isFailed: Boolean 
     }
 }
 
+@Composable
 private fun SwapStatus.displayName(): String = when (this) {
-    SwapStatus.Depositing -> "Depositing"
-    SwapStatus.Swapping -> "Swapping"
-    SwapStatus.Sending -> "Sending"
-    SwapStatus.Completed -> "Completed"
-    SwapStatus.Refunded -> "Refunded"
-    SwapStatus.Failed -> "Failed"
+    SwapStatus.Depositing -> stringResource(R.string.SwapInfo_StatusDepositing)
+    SwapStatus.Swapping -> stringResource(R.string.SwapInfo_StatusSwapping)
+    SwapStatus.Sending -> stringResource(R.string.SwapInfo_StatusSending)
+    SwapStatus.Completed -> stringResource(R.string.SwapInfo_StatusCompleted)
+    SwapStatus.Refunded -> stringResource(R.string.SwapInfo_StatusRefunded)
+    SwapStatus.Failed -> stringResource(R.string.SwapInfo_StatusFailed)
 }
 
 private fun String.shortenAddress(): String {
