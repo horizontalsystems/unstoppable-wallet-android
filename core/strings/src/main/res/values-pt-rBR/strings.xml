@@ -573,6 +573,7 @@
     <string name="Swap_YouGet">Você recebe</string>
     <string name="Swap_Confirm_Title">Confirmar</string>
     <string name="SwapConfirm_QuoteExpired">A cotação expirou</string>
+    <string name="SwapConfirm_QuoteIsInvalid">A cotação é inválida</string>
     <string name="SwapConfirm_FetchingFinalQuote">Buscando cotação final</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">Sem Controle de Deslizamento</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">Operações entre cadeias dependem da liquidez de terceiros e atrasos, o que pode afetar o valor final.</string>

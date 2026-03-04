@@ -6,6 +6,7 @@ import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.models.Contract
+import io.horizontalsystems.tronkit.network.CreatedTransaction
 import io.horizontalsystems.tronkit.transaction.Fee
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -46,11 +47,15 @@ class SendTronFeeService(private val adapter: ISendTronAdapter, private val feeT
         emitState()
     }
 
-    fun setFeeLimit(feeLimit: Long?) {
+    suspend fun setCreatedTransaction(createdTransaction: CreatedTransaction) {
         resetFees()
-
-        this.feeLimit = feeLimit
-        fee = feeLimit?.toBigDecimal()?.movePointLeft(feeToken.decimals)
+        // Keep the original fee_limit for sending — estimation only affects displayed fee
+        this.feeLimit = createdTransaction.raw_data.fee_limit
+        refreshFees(createdTransaction)
+        // Fall back to fee_limit if estimation failed, so fee balance check still works
+        if (fee == null && feeLimit != null) {
+            fee = feeLimit?.toBigDecimal()?.movePointLeft(feeToken.decimals)
+        }
         emitState()
     }
 
@@ -62,21 +67,24 @@ class SendTronFeeService(private val adapter: ISendTronAdapter, private val feeT
         emitState()
     }
 
-    private suspend fun refreshFees() = withContext(Dispatchers.Default) {
+    private suspend fun refreshFees(
+        createdTransaction: CreatedTransaction? = null
+    ) = withContext(Dispatchers.Default) {
         try {
-            val contract = this@SendTronFeeService.contract
-            val fees: List<Fee>
-
-            if (contract != null) {
-                fees = adapter.estimateFee(contract)
-            } else {
-                val amount = this@SendTronFeeService.amount ?: return@withContext
-                val tronAddress = this@SendTronFeeService.tronAddress ?: return@withContext
-
-                fees = adapter.estimateFee(amount, tronAddress)
+            val currentContract = contract
+            val fees: List<Fee> = when {
+                createdTransaction != null -> adapter.estimateFee(createdTransaction)
+                currentContract != null -> adapter.estimateFee(currentContract)
+                else -> {
+                    val amount = this@SendTronFeeService.amount ?: return@withContext
+                    val tronAddress = this@SendTronFeeService.tronAddress ?: return@withContext
+                    adapter.estimateFee(amount, tronAddress)
+                }
             }
 
-            feeLimit = (fees.find { it is Fee.Energy } as? Fee.Energy)?.feeInSuns
+            if (createdTransaction == null) {
+                feeLimit = (fees.find { it is Fee.Energy } as? Fee.Energy)?.feeInSuns
+            }
 
             var bandwidth: String? = null
             var energy: String? = null

@@ -573,6 +573,7 @@
     <string name="Swap_YouGet">You Get</string>
     <string name="Swap_Confirm_Title">تأكيد</string>
     <string name="SwapConfirm_QuoteExpired">Quote expired</string>
+    <string name="SwapConfirm_QuoteIsInvalid">Quote is invalid</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">بدون تحكم في الانزلاق</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">تعتمد العمليات بين السلاسل على سيولة الأطراف الثالثة والتأخير، مما قد يؤثر على المبلغ النهائي.</string>

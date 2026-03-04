@@ -573,6 +573,7 @@
     <string name="Swap_YouGet">You Get</string>
     <string name="Swap_Confirm_Title">Confirm</string>
     <string name="SwapConfirm_QuoteExpired">Quote expired</string>
+    <string name="SwapConfirm_QuoteIsInvalid">Quote is invalid</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">Sem Controle de Deslizamento</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">Operações entre cadeias dependem da liquidez de terceiros e atrasos, o que pode afetar o valor final.</string>

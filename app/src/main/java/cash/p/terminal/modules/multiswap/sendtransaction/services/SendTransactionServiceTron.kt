@@ -142,7 +142,7 @@ class SendTransactionServiceTron(
             }
 
             is SendTransactionData.Tron.WithCreateTransaction -> {
-                feeService.setFeeLimit(data.transaction.raw_data.fee_limit)
+                feeService.setCreatedTransaction(data.transaction)
             }
 
             is SendTransactionData.Tron.Regular -> {

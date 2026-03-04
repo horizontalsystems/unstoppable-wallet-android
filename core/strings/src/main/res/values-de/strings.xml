@@ -567,6 +567,7 @@
     <string name="Swap_YouGet">Sie erhalten</string>
     <string name="Swap_Confirm_Title">Bestätigen</string>
     <string name="SwapConfirm_QuoteExpired">Angebot abgelaufen</string>
+    <string name="SwapConfirm_QuoteIsInvalid">Angebot ist ungültig</string>
     <string name="SwapConfirm_FetchingFinalQuote">Abrufen des endgültigen Angebots</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">Keine Slippage-Kontrolle</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">Cross-Chain-Operationen hängen von Drittanbieter-Liquidität und Verzögerungen ab, was den Endbetrag beeinflussen kann.</string>

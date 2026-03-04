@@ -568,6 +568,7 @@
     <string name="Swap_YouGet">Obtienes</string>
     <string name="Swap_Confirm_Title">Confirmar</string>
     <string name="SwapConfirm_QuoteExpired">Cotización expirada</string>
+    <string name="SwapConfirm_QuoteIsInvalid">Cotización no válida</string>
     <string name="SwapConfirm_FetchingFinalQuote">Recuperando la comilla final</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">Sin Control de Deslizamiento</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">Las operaciones entre cadenas dependen de la liquidez de terceros y los retrasos, lo que puede afectar el monto final.</string>

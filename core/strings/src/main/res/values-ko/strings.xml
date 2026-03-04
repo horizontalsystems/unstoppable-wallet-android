@@ -573,6 +573,7 @@
     <string name="Swap_YouGet">얻기</string>
     <string name="Swap_Confirm_Title">확인</string>
     <string name="SwapConfirm_QuoteExpired">견적이 만료되었습니다</string>
+    <string name="SwapConfirm_QuoteIsInvalid">견적이 유효하지 않습니다</string>
     <string name="SwapConfirm_FetchingFinalQuote">최종 견적을 가져오는 중</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">슬리피지 제어 없음</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">크로스체인 작업은 제3자 유동성과 지연에 의존하므로 최종 금액에 영향을 줄 수 있습니다.</string>

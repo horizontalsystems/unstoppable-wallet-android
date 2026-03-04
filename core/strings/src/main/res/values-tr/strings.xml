@@ -573,6 +573,7 @@
     <string name="Swap_YouGet">Kazandığınız</string>
     <string name="Swap_Confirm_Title">Onayla</string>
     <string name="SwapConfirm_QuoteExpired">Alıntı süresi doldu</string>
+    <string name="SwapConfirm_QuoteIsInvalid">Teklif geçersiz</string>
     <string name="SwapConfirm_FetchingFinalQuote">Son teklifi alınıyor</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">Kayma Kontrolü Yok</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">Zincirler arası işlemler üçüncü taraf likiditesine ve gecikmelere bağlıdır, bu da nihai tutarı etkileyebilir.</string>
