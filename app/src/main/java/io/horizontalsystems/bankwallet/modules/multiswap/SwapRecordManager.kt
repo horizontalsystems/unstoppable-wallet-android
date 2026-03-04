@@ -43,6 +43,11 @@ class SwapRecordManager(
         _recordsUpdatedFlow.tryEmit(Unit)
     }
 
+    fun updateTransactionHash(id: Int, hash: String) {
+        swapRecordDao.updateTransactionHash(id, hash)
+        _recordsUpdatedFlow.tryEmit(Unit)
+    }
+
     fun updateOutboundTransactionHash(id: Int, hash: String) {
         swapRecordDao.updateOutboundTransactionHash(id, hash)
         _recordsUpdatedFlow.tryEmit(Unit)
