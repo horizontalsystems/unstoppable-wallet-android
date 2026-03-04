@@ -29,29 +29,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.shorten
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statResendType
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsScreen
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
-import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment
-import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment
+import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoScreen
+import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoScreen
+import io.horizontalsystems.bankwallet.modules.info.TransactionStatusInfoScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.transactionInfo.AmountType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.SpeedUpCancelType
-import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
-import io.horizontalsystems.bankwallet.modules.transactionInfo.resendbitcoin.ResendBitcoinFragment
+import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelScreen
+import io.horizontalsystems.bankwallet.modules.transactionInfo.resendbitcoin.ResendBitcoinScreen
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -259,7 +259,7 @@ fun TransactionInfoAddressCell(
     value: String,
     showAdd: Boolean,
     blockchainType: BlockchainType?,
-    navController: NavController? = null,
+    backStack: NavBackStack<HSScreen>? = null,
     onCopy: (() -> Unit)? = null,
     onAddToExisting: (() -> Unit)? = null,
     onAddToNew: (() -> Unit)? = null,
@@ -309,18 +309,18 @@ fun TransactionInfoAddressCell(
             },
             onSelectItem = { action ->
                 blockchainType?.let {
-                    val args = when (action) {
+                    val mode = when (action) {
                         ContactsModule.AddAddressAction.AddToNewContact -> {
                             onAddToNew?.invoke()
-                            ContactsFragment.Input(Mode.AddAddressToNewContact(blockchainType, value))
+                            Mode.AddAddressToNewContact(blockchainType, value)
                         }
 
                         ContactsModule.AddAddressAction.AddToExistingContact -> {
                             onAddToExisting?.invoke()
-                            ContactsFragment.Input(Mode.AddAddressToExistingContact(blockchainType, value))
+                            Mode.AddAddressToExistingContact(blockchainType, value)
                         }
                     }
-                    navController?.slideFromRight(R.id.contactsFragment, args)
+                    backStack?.add(ContactsScreen(mode))
                 }
             })
     }
@@ -344,7 +344,7 @@ fun TransactionInfoContactCell(name: String) {
 @Composable
 fun TransactionInfoStatusCell(
     status: TransactionStatus,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -356,7 +356,7 @@ fun TransactionInfoStatusCell(
         HsIconButton(
             modifier = Modifier.size(20.dp),
             onClick = {
-                navController.slideFromBottom(R.id.statusInfoDialog)
+                backStack.add(TransactionStatusInfoScreen)
                 stat(
                     page = StatPage.TransactionInfo,
                     event = StatEvent.Open(StatPage.Info),
@@ -413,7 +413,7 @@ fun TransactionInfoStatusCell(
 fun TransactionInfoSpeedUpCell(
     transactionHash: String,
     blockchainType: BlockchainType,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -422,7 +422,7 @@ fun TransactionInfoSpeedUpCell(
                 SpeedUpCancelType.SpeedUp,
                 transactionHash,
                 blockchainType,
-                navController
+                backStack
             )
         }
     ) {
@@ -440,7 +440,7 @@ fun TransactionInfoSpeedUpCell(
 fun TransactionInfoCancelCell(
     transactionHash: String,
     blockchainType: BlockchainType,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -449,7 +449,7 @@ fun TransactionInfoCancelCell(
                 SpeedUpCancelType.Cancel,
                 transactionHash,
                 blockchainType,
-                navController
+                backStack
             )
         }
     ) {
@@ -628,7 +628,7 @@ fun TransactionInfoRawTransaction(rawTransaction: () -> String?) {
 @Composable
 fun TransactionInfoBtcLockCell(
     lockState: TransactionInfoViewItem.LockState,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -646,11 +646,7 @@ fun TransactionInfoBtcLockCell(
                 modifier = Modifier.size(20.dp),
                 onClick = {
                     val lockTime = DateHelper.getFullDate(lockState.date)
-
-                    navController.slideFromBottom(
-                        R.id.transactionLockTimeInfoFragment,
-                        TransactionLockTimeInfoFragment.Input(lockTime)
-                    )
+                    backStack.add(TransactionLockTimeInfoScreen(lockTime))
 
                     stat(
                         page = StatPage.TransactionInfo,
@@ -673,7 +669,7 @@ fun TransactionInfoBtcLockCell(
 fun TransactionInfoDoubleSpendCell(
     transactionHash: String,
     conflictingHash: String,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -692,9 +688,8 @@ fun TransactionInfoDoubleSpendCell(
         HsIconButton(
             modifier = Modifier.size(20.dp),
             onClick = {
-                navController.slideFromBottom(
-                    R.id.transactionDoubleSpendInfoFragment,
-                    TransactionDoubleSpendInfoFragment.Input(
+                backStack.add(
+                    TransactionDoubleSpendInfoScreen(
                         transactionHash,
                         conflictingHash
                     )
@@ -749,7 +744,7 @@ private fun openTransactionOptionsModule(
     type: SpeedUpCancelType,
     transactionHash: String,
     blockchainType: BlockchainType,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     when (blockchainType) {
         BlockchainType.Bitcoin,
@@ -757,10 +752,7 @@ private fun openTransactionOptionsModule(
         BlockchainType.ECash,
         BlockchainType.Litecoin,
         BlockchainType.Dash -> {
-            navController.slideFromRight(
-                R.id.resendBitcoinFragment,
-                ResendBitcoinFragment.Input(type)
-            )
+            backStack.add(ResendBitcoinScreen(type))
         }
 
         BlockchainType.Ethereum,
@@ -771,9 +763,12 @@ private fun openTransactionOptionsModule(
         BlockchainType.Base,
         BlockchainType.ZkSync,
         BlockchainType.ArbitrumOne -> {
-            navController.slideFromRight(
-                R.id.transactionSpeedUpCancelFragment,
-                TransactionSpeedUpCancelFragment.Input(blockchainType, type, transactionHash)
+            backStack.add(
+                TransactionSpeedUpCancelScreen(
+                    blockchainType,
+                    type,
+                    transactionHash
+                )
             )
         }
 

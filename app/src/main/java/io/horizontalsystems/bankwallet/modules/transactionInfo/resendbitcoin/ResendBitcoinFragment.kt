@@ -25,11 +25,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.getInputX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.stats.StatEntity
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
-import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.core.stats.StatSection
-import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
@@ -46,7 +41,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionTitleCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TitleAndValueCell
-import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -57,7 +51,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ResendBitcoinScreen : HSScreen()
+data class ResendBitcoinScreen(val optionType: SpeedUpCancelType) : HSScreen()
 
 class ResendBitcoinFragment : BaseComposeFragment() {
 
@@ -161,36 +155,37 @@ class ResendBitcoinFragment : BaseComposeFragment() {
 
                             ConfirmAmountCell(currencyAmount, coinAmount, uiState.coin)
                         }
-                        add {
-                            TransactionInfoAddressCell(
-                                title = stringResource(uiState.addressTitleResId),
-                                value = uiState.address.hex,
-                                showAdd = uiState.contact == null,
-                                blockchainType = uiState.blockchainType,
-                                navController = navController,
-                                onCopy = {
-                                    stat(
-                                        page = StatPage.Resend,
-                                        event = StatEvent.Copy(StatEntity.Address),
-                                        section = StatSection.AddressTo
-                                    )
-                                },
-                                onAddToExisting = {
-                                    stat(
-                                        page = StatPage.Resend,
-                                        event = StatEvent.Open(StatPage.ContactAddToExisting),
-                                        section = StatSection.AddressTo
-                                    )
-                                },
-                                onAddToNew = {
-                                    stat(
-                                        page = StatPage.Resend,
-                                        event = StatEvent.Open(StatPage.ContactNew),
-                                        section = StatSection.AddressTo
-                                    )
-                                }
-                            )
-                        }
+//                        TODO("xxx nav3")
+//                        add {
+//                            TransactionInfoAddressCell(
+//                                title = stringResource(uiState.addressTitleResId),
+//                                value = uiState.address.hex,
+//                                showAdd = uiState.contact == null,
+//                                blockchainType = uiState.blockchainType,
+//                                backStack = navController,
+//                                onCopy = {
+//                                    stat(
+//                                        page = StatPage.Resend,
+//                                        event = StatEvent.Copy(StatEntity.Address),
+//                                        section = StatSection.AddressTo
+//                                    )
+//                                },
+//                                onAddToExisting = {
+//                                    stat(
+//                                        page = StatPage.Resend,
+//                                        event = StatEvent.Open(StatPage.ContactAddToExisting),
+//                                        section = StatSection.AddressTo
+//                                    )
+//                                },
+//                                onAddToNew = {
+//                                    stat(
+//                                        page = StatPage.Resend,
+//                                        event = StatEvent.Open(StatPage.ContactNew),
+//                                        section = StatSection.AddressTo
+//                                    )
+//                                }
+//                            )
+//                        }
                         uiState.contact?.let {
                             add {
                                 TransactionInfoContactCell(name = it.name)

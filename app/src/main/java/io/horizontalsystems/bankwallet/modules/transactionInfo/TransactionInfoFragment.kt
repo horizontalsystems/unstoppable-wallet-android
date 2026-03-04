@@ -7,18 +7,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionCell
@@ -45,23 +46,39 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object TransactionInfoScreen : HSScreen()
+data object TransactionInfoScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val transactionRecord = App.transactionInfoScreenManager.tmpTransactionRecordToShow
+        if (transactionRecord == null) {
+            backStack.removeLastOrNull()
+            return
+        }
+
+        val viewModel = viewModel<TransactionInfoViewModel>(factory = TransactionInfoModule.Factory(transactionRecord))
+
+        TransactionInfoScreen(viewModel, backStack)
+    }
+}
 
 class TransactionInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val transactionRecord = App.transactionInfoScreenManager.tmpTransactionRecordToShow
-        if (transactionRecord == null) {
-            navController.popBackStack(R.id.transactionInfoFragment, true)
-            return
-        }
-
-        val viewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment) {
-            TransactionInfoModule.Factory(transactionRecord)
-        }
-
-        TransactionInfoScreen(viewModel, navController)
+//        val transactionRecord = App.transactionInfoScreenManager.tmpTransactionRecordToShow
+//        if (transactionRecord == null) {
+//            navController.popBackStack(R.id.transactionInfoFragment, true)
+//            return
+//        }
+//
+//        val viewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment) {
+//            TransactionInfoModule.Factory(transactionRecord)
+//        }
+//
+//        TransactionInfoScreen(viewModel, navController)
     }
 
 }
@@ -69,7 +86,7 @@ class TransactionInfoFragment : BaseComposeFragment() {
 @Composable
 fun TransactionInfoScreen(
     viewModel: TransactionInfoViewModel,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
 
     HSScaffold(
@@ -79,26 +96,26 @@ fun TransactionInfoScreen(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 }
             )
         )
     ) {
-        TransactionInfo(viewModel, navController)
+        TransactionInfo(viewModel, backStack)
     }
 }
 
 @Composable
 fun TransactionInfo(
     viewModel: TransactionInfoViewModel,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)
     ) {
         items(viewModel.viewItems) { section ->
-            TransactionInfoSection(section, navController, viewModel::getRawTransaction)
+            TransactionInfoSection(section, backStack, viewModel::getRawTransaction)
         }
     }
 }
@@ -106,7 +123,7 @@ fun TransactionInfo(
 @Composable
 fun TransactionInfoSection(
     section: List<TransactionInfoViewItem>,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     getRawTransaction: () -> String?
 ) {
     //items without background
@@ -154,10 +171,7 @@ fun TransactionInfoSection(
                                 coinIconPlaceholder = viewItem.coinIconPlaceholder,
                                 onClick = viewItem.coinUid?.let {
                                     {
-                                        navController.slideFromRight(
-                                            R.id.coinFragment,
-                                            CoinFragment.Input(it)
-                                        )
+                                        backStack.add(CoinScreen(it))
 
                                         stat(
                                             page = StatPage.TransactionInfo,
@@ -208,7 +222,7 @@ fun TransactionInfoSection(
                                 value = viewItem.value,
                                 showAdd = viewItem.showAdd,
                                 blockchainType = viewItem.blockchainType,
-                                navController = navController,
+                                backStack = backStack,
                                 onCopy = {
                                     stat(
                                         page = StatPage.TransactionInfo,
@@ -244,7 +258,7 @@ fun TransactionInfoSection(
                         add {
                             TransactionInfoStatusCell(
                                 status = viewItem.status,
-                                navController = navController
+                                backStack = backStack
                             )
                         }
                     }
@@ -254,14 +268,14 @@ fun TransactionInfoSection(
                             TransactionInfoSpeedUpCell(
                                 transactionHash = viewItem.transactionHash,
                                 blockchainType = viewItem.blockchainType,
-                                navController = navController
+                                backStack = backStack
                             )
                         }
                         add {
                             TransactionInfoCancelCell(
                                 transactionHash = viewItem.transactionHash,
                                 blockchainType = viewItem.blockchainType,
-                                navController = navController
+                                backStack = backStack
                             )
                         }
                     }
@@ -293,7 +307,7 @@ fun TransactionInfoSection(
                         add {
                             TransactionInfoBtcLockCell(
                                 lockState = viewItem,
-                                navController = navController
+                                backStack = backStack
                             )
                         }
                     }
@@ -303,7 +317,7 @@ fun TransactionInfoSection(
                             TransactionInfoDoubleSpendCell(
                                 transactionHash = viewItem.transactionHash,
                                 conflictingHash = viewItem.conflictingHash,
-                                navController = navController
+                                backStack = backStack
                             )
                         }
                     }
