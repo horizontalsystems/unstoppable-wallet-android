@@ -13,7 +13,10 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -29,7 +32,8 @@ class SwapViewModel(
     private val networkAvailabilityService: NetworkAvailabilityService,
     private val defaultTokenService: SwapDefaultTokenService,
     private val swapTermsManager: SwapTermsManager,
-    tokenIn: Token?
+    tokenIn: Token?,
+    tokenOut: Token? = null,
 ) : ViewModelUiState<SwapUiState>() {
 
     private val quoteLifetime = 20
@@ -97,7 +101,9 @@ class SwapViewModel(
         }
         viewModelScope.launch {
             defaultTokenService.stateFlow.collect {
-                it.tokenOut?.let { quoteService.setTokenOut(it) }
+                if (tokenOut == null) {
+                    it.tokenOut?.let { quoteService.setTokenOut(it) }
+                }
             }
         }
 
@@ -115,6 +121,7 @@ class SwapViewModel(
             quoteService.setTokenIn(it)
             defaultTokenService.setTokenIn(it)
         }
+        tokenOut?.let { quoteService.setTokenOut(it) }
     }
 
     private fun requoteIfTimeout() {
@@ -204,16 +211,19 @@ class SwapViewModel(
 
         quoteService.setAmount(amount)
     }
-    fun onSelectTokenIn(token: Token)  {
+
+    fun onSelectTokenIn(token: Token) {
         quoteService.setTokenIn(token)
 
         stat(page = StatPage.Swap, event = StatEvent.SwapSelectTokenIn(token))
     }
+
     fun onSelectTokenOut(token: Token) {
         quoteService.setTokenOut(token)
 
         stat(page = StatPage.Swap, event = StatEvent.SwapSelectTokenOut(token))
     }
+
     fun onSwitchPairs() {
         quoteService.switchPairs()
 
@@ -235,12 +245,30 @@ class SwapViewModel(
         requoteOnTimeout = false
     }
 
-    class Factory(private val tokenIn: Token?) : ViewModelProvider.Factory {
+    class Factory(private val tokenIn: Token?, private val tokenOut: Token? = null) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val swapQuoteService = SwapQuoteService()
             val tokenBalanceService = TokenBalanceService(App.adapterManager)
             val priceImpactService = PriceImpactService(PriceImpactLevel.Warning)
+
+            val (resolvedTokenIn, resolvedTokenOut) = if (tokenIn == null && tokenOut == null) {
+                val lastRecord = App.swapRecordManager.getAll().firstOrNull()
+                if (lastRecord != null) {
+                    val lastIn = lastRecord.tokenInUid.let { TokenQuery.fromId(it)?.let { App.marketKit.token(it) } }
+                    val lastOut = lastRecord.tokenOutUid.let { TokenQuery.fromId(it)?.let { App.marketKit.token(it) } }
+                    Pair(lastIn, lastOut)
+                } else {
+                    val btcToken = App.walletManager.activeWallets
+                        .firstOrNull { it.token.blockchainType == BlockchainType.Bitcoin }
+                        ?.token
+                        ?: App.marketKit.token(TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)))
+                    val xmrToken = App.marketKit.token(TokenQuery(BlockchainType.Monero, TokenType.Native))
+                    Pair(btcToken, xmrToken)
+                }
+            } else {
+                Pair(tokenIn, tokenOut)
+            }
 
             return SwapViewModel(
                 swapQuoteService,
@@ -253,7 +281,8 @@ class SwapViewModel(
                 NetworkAvailabilityService(App.connectivityManager),
                 SwapDefaultTokenService(App.marketKit),
                 App.swapTermsManager,
-                tokenIn
+                resolvedTokenIn,
+                resolvedTokenOut,
             ) as T
         }
     }
