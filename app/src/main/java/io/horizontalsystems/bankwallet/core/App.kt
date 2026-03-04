@@ -332,7 +332,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         scannedTransactionStorage = ScannedTransactionStorage(appDatabase.scannedTransactionDao())
         contactsRepository = ContactsRepository(marketKit)
         recentAddressManager = RecentAddressManager(accountManager, appDatabase.recentAddressDao(), ActionCompletedDelegate)
-        swapRecordManager = SwapRecordManager(appDatabase.swapRecordDao())
+        swapRecordManager = SwapRecordManager(accountManager, appDatabase.swapRecordDao())
         swapSyncService = SwapSyncService(swapRecordManager, appConfigProvider)
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
