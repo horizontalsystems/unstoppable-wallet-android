@@ -1616,7 +1616,7 @@ O aplicativo permite que você crie um backup com uma senha simples para sua con
     <string name="estimated_annual_interest">Juros anuais estimados</string>
     <string name="accruals">Accruals</string>
     <string name="payouts">Payouts</string>
-    <string name="investment_chart">Investment chart</string>
+    <string name="how_my_income_grows">Como minha renda cresce</string>
     <string name="payouts_history">Payouts History</string>
     <string name="pos_calculator">POS Calculator</string>
     <string name="pos_calculator_pirate_description">Calculation of profitability mining PirateCash staking in the pool.</string>

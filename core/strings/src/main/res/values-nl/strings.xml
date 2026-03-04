@@ -1622,7 +1622,7 @@ De app stelt u in staat een back-up te maken met een eenvoudig wachtwoord voor u
     <string name="estimated_annual_interest">Geschatte jaarlijkse rente</string>
     <string name="accruals">Accruals</string>
     <string name="payouts">Payouts</string>
-    <string name="investment_chart">Investment chart</string>
+    <string name="how_my_income_grows">Hoe mijn inkomen groeit</string>
     <string name="payouts_history">Payouts History</string>
     <string name="pos_calculator">POS Calculator</string>
     <string name="pos_calculator_pirate_description">Calculation of profitability mining PirateCash staking in the pool.</string>

@@ -301,7 +301,7 @@ private fun PirateCoinScreenWithGraph(
             Text(
                 style = ComposeAppTheme.typography.body,
                 color = ComposeAppTheme.colors.leah,
-                text = stringResource(id = R.string.investment_chart),
+                text = stringResource(id = R.string.how_my_income_grows),
                 modifier = Modifier.padding(vertical = 14.dp, horizontal = 16.dp)
             )
             Chart(
