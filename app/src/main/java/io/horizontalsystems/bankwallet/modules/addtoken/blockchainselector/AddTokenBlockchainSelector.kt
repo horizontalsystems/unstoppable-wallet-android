@@ -16,7 +16,6 @@ import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenScreen
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
-import io.horizontalsystems.bankwallet.modules.nav3.SharedViewModelStoreNavEntryDecorator
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellBlockchainChecked
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -25,9 +24,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data object AddTokenBlockchainSelectorScreen : HSScreen() {
-    override fun getMetadata(backStack: NavBackStack<HSScreen>) = SharedViewModelStoreNavEntryDecorator.parent(
-        AddTokenScreen.toString()
-    )
+    override fun getParentVMKey(backStack: NavBackStack<HSScreen>): String? {
+        return backStack.findLast { it is AddTokenScreen }?.toString()
+    }
 
     @Composable
     override fun GetContent(

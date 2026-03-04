@@ -51,7 +51,7 @@ class Nav3Fragment : BaseComposeFragment() {
 @Serializable
 abstract class HSScreen(val bottomSheet: Boolean = false, val screenshotEnabled: Boolean = true) : NavKey {
     @OptIn(ExperimentalMaterial3Api::class)
-    open fun getMetadata(backStack: NavBackStack<HSScreen>) = buildMap {
+    fun getMetadata(backStack: NavBackStack<HSScreen>) = buildMap {
         if (bottomSheet) {
             putAll(BottomSheetSceneStrategy.bottomSheet())
         }
@@ -78,9 +78,9 @@ abstract class HSScreen(val bottomSheet: Boolean = false, val screenshotEnabled:
 
 @Serializable
 data object Child : HSScreen() {
-    override fun getMetadata(backStack: NavBackStack<HSScreen>) = SharedViewModelStoreNavEntryDecorator.parent(
-        Home.toString()
-    )
+    override fun getParentVMKey(backStack: NavBackStack<HSScreen>): String? {
+        return backStack.findLast { it is Home }?.toString()
+    }
 
     @Composable
     override fun GetContent(
