@@ -283,6 +283,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
             )
             SwapStatusSteps(
                 status = uiState.status,
+                isSingleChain = uiState.isSingleChain,
                 depositingTxUrl = uiState.depositingTxUrl,
                 sendingTxUrl = uiState.sendingTxUrl,
             )
@@ -347,7 +348,7 @@ private fun StatusRightSlot(status: SwapStatus) {
 }
 
 @Composable
-private fun SwapStatusSteps(status: SwapStatus, depositingTxUrl: String?, sendingTxUrl: String?) {
+private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositingTxUrl: String?, sendingTxUrl: String?) {
     val context = LocalContext.current
     val normalSteps = listOf(
         stringResource(R.string.SwapInfo_StatusDepositing),
@@ -360,47 +361,75 @@ private fun SwapStatusSteps(status: SwapStatus, depositingTxUrl: String?, sendin
         stringResource(R.string.SwapInfo_StatusSwapping),
         stringResource(R.string.SwapInfo_StatusRefunded),
     )
+    val singleChainNormalSteps = listOf(
+        stringResource(R.string.SwapInfo_StatusSwapping),
+        stringResource(R.string.SwapInfo_StatusCompleted),
+    )
+    val singleChainFailedSteps = listOf(
+        stringResource(R.string.SwapInfo_StatusSwapping),
+        stringResource(R.string.SwapInfo_StatusFailed),
+    )
     val viewLabel = stringResource(R.string.Button_View)
 
     val steps: List<String>
     val activeIndex: Int
     val failedIndex: Int?
 
-    when (status) {
-        SwapStatus.Refunded -> {
-            steps = refundedSteps
-            activeIndex = steps.size // all done
-            failedIndex = null
+    if (isSingleChain) {
+        when (status) {
+            SwapStatus.Completed -> {
+                steps = singleChainNormalSteps
+                activeIndex = steps.size
+                failedIndex = null
+            }
+            SwapStatus.Failed -> {
+                steps = singleChainFailedSteps
+                activeIndex = -1
+                failedIndex = 0
+            }
+            else -> {
+                steps = singleChainNormalSteps
+                activeIndex = 0
+                failedIndex = null
+            }
         }
+    } else {
+        when (status) {
+            SwapStatus.Refunded -> {
+                steps = refundedSteps
+                activeIndex = steps.size
+                failedIndex = null
+            }
 
-        SwapStatus.Failed -> {
-            steps = normalSteps
-            activeIndex = -1
-            failedIndex = 0
-        }
+            SwapStatus.Failed -> {
+                steps = normalSteps
+                activeIndex = -1
+                failedIndex = 0
+            }
 
-        SwapStatus.Depositing -> {
-            steps = normalSteps
-            activeIndex = 0
-            failedIndex = null
-        }
+            SwapStatus.Depositing -> {
+                steps = normalSteps
+                activeIndex = 0
+                failedIndex = null
+            }
 
-        SwapStatus.Swapping -> {
-            steps = normalSteps
-            activeIndex = 1
-            failedIndex = null
-        }
+            SwapStatus.Swapping -> {
+                steps = normalSteps
+                activeIndex = 1
+                failedIndex = null
+            }
 
-        SwapStatus.Sending -> {
-            steps = normalSteps
-            activeIndex = 2
-            failedIndex = null
-        }
+            SwapStatus.Sending -> {
+                steps = normalSteps
+                activeIndex = 2
+                failedIndex = null
+            }
 
-        SwapStatus.Completed -> {
-            steps = normalSteps
-            activeIndex = steps.size
-            failedIndex = null
+            SwapStatus.Completed -> {
+                steps = normalSteps
+                activeIndex = steps.size
+                failedIndex = null
+            }
         }
     }
 

@@ -44,6 +44,7 @@ class SwapInfoViewModel(
     private var fee: String? = null
     private var depositingTxUrl: String? = null
     private var sendingTxUrl: String? = null
+    private var isSingleChain: Boolean = false
 
     override fun createState() = SwapInfoUiState(
         tokenInImageUrl = tokenInImageUrl,
@@ -64,6 +65,7 @@ class SwapInfoViewModel(
         fee = fee,
         depositingTxUrl = depositingTxUrl,
         sendingTxUrl = sendingTxUrl,
+        isSingleChain = isSingleChain,
     )
 
     init {
@@ -98,6 +100,7 @@ class SwapInfoViewModel(
         fee = formatFee(record.networkFeeAmount, record.networkFeeCoinCode)
         depositingTxUrl = record.transactionHash?.let { buildTxUrl(record.tokenInBlockchainTypeUid, it) }
         sendingTxUrl = record.outboundTransactionHash?.let { buildTxUrl(record.tokenOutBlockchainTypeUid, it) }
+        isSingleChain = record.tokenInBlockchainTypeUid == record.tokenOutBlockchainTypeUid
 
         emitState()
     }
@@ -189,4 +192,5 @@ data class SwapInfoUiState(
     val fee: String?,
     val depositingTxUrl: String?,
     val sendingTxUrl: String?,
+    val isSingleChain: Boolean,
 )
