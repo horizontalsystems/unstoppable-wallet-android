@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.coinIconUrl
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -52,8 +53,8 @@ class SwapHistoryViewModel(
         viewItems.addAll(records.map { record ->
             SwapHistoryViewItem(
                 id = record.id,
-                tokenInImageUrl = coinImageUrl(record.tokenInCoinUid),
-                tokenOutImageUrl = coinImageUrl(record.tokenOutCoinUid),
+                tokenInImageUrl = record.tokenInCoinUid.coinIconUrl,
+                tokenOutImageUrl = record.tokenOutCoinUid.coinIconUrl,
                 amountIn = formatAmount(record.amountIn, record.tokenInCoinCode),
                 amountOut = record.amountOut?.let { formatAmount(it, record.tokenOutCoinCode) },
                 fiatAmountIn = null,
@@ -100,9 +101,6 @@ class SwapHistoryViewModel(
             emitState()
         }
     }
-
-    private fun coinImageUrl(coinUid: String) =
-        "https://cdn.blocksdecoded.com/coin-icons/32px/$coinUid@3x.png"
 
     private fun formatAmount(amountStr: String, coinCode: String): String {
         val amount = amountStr.toBigDecimalOrNull() ?: return amountStr
