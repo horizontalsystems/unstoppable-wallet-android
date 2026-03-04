@@ -44,7 +44,7 @@ class SwapHistoryViewModel(
         }
     }
 
-    private suspend fun loadItems() {
+    private fun loadItems() {
         val currency = currencyManager.baseCurrency
         val records = swapRecordManager.getAll()
 

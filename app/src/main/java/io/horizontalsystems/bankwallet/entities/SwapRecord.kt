@@ -31,6 +31,7 @@ data class SwapRecord(
     val recipientAddress: String?,
     val sourceAddress: String?,
     val transactionHash: String?,
+    val outboundTransactionHash: String? = null,
 
     val slippage: String?,
     val networkFeeCoinCode: String?,
