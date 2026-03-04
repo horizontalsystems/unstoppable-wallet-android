@@ -51,6 +51,10 @@ class SwapSyncService(
             } else {
                 unstoppableAPI.track(request)
             }
+            if (record.transactionHash == null && response.hash != null) {
+                swapRecordManager.updateTransactionHash(record.id, response.hash)
+            }
+
             val outboundHash = response.legs
                 ?.firstOrNull { leg ->
                     leg.type == "native_send" &&
