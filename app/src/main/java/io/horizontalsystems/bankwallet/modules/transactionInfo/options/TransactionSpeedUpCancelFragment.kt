@@ -14,16 +14,14 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
@@ -39,15 +37,31 @@ data class TransactionSpeedUpCancelScreen(
     val blockchainType: BlockchainType,
     val optionType: SpeedUpCancelType,
     val transactionHash: String
-) : HSScreen()
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        TransactionSpeedUpCancelScreen(
+            backStack,
+            resultBus,
+            blockchainType,
+            transactionHash,
+            optionType,
+        )
+    }
+
+    data class Result(val success: Boolean)
+}
 
 class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            TransactionSpeedUpCancelScreen(navController, input)
-        }
+//        withInput<Input>(navController) { input ->
+//            TransactionSpeedUpCancelScreen(navController, input)
+//        }
     }
 
     @Parcelize
@@ -63,22 +77,20 @@ class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
 
 @Composable
 private fun TransactionSpeedUpCancelScreen(
-    navController: NavController,
-    input: TransactionSpeedUpCancelFragment.Input
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
+    blockchainType: BlockchainType,
+    transactionHash: String,
+    optionType: SpeedUpCancelType
 ) {
     val logger = remember { AppLogger("tx-speedUp-cancel") }
     val view = LocalView.current
 
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.transactionSpeedUpCancelFragment)
-    }
-
     val viewModel = viewModel<TransactionSpeedUpCancelViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
         factory = TransactionSpeedUpCancelViewModel.Factory(
-            input.blockchainType,
-            input.transactionHash,
-            input.optionType,
+            blockchainType,
+            transactionHash,
+            optionType,
         )
     )
 
@@ -87,7 +99,7 @@ private fun TransactionSpeedUpCancelScreen(
     LaunchedEffect(uiState.error) {
         if (uiState.error is TransactionAlreadyInBlock) {
             HudHelper.showErrorMessage(view, R.string.TransactionInfoOptions_Warning_TransactionInBlock)
-            navController.popBackStack()
+            backStack.removeLastOrNull()
         }
     }
 
@@ -96,9 +108,9 @@ private fun TransactionSpeedUpCancelScreen(
     ConfirmTransactionScreen(
         title = viewModel.title,
         initialLoading = uiState.initialLoading,
-        onClickBack = { navController.popBackStack() },
+        onClickBack = { backStack.removeLastOrNull() },
         onClickFeeSettings = {
-            navController.slideFromBottom(R.id.transactionSpeedUpCancelTransactionSettings)
+            backStack.add(TransactionSpeedUpCancelTransactionSettingsScreen)
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
@@ -122,11 +134,11 @@ private fun TransactionSpeedUpCancelScreen(
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            navController.setNavigationResultX(TransactionSpeedUpCancelFragment.Result(true))
-                            navController.popBackStack()
+                            resultBus.sendResult(result = TransactionSpeedUpCancelScreen.Result(true))
+                            backStack.removeLastOrNull()
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
-                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                            backStack.add(ErrorBottomSheetScreen(t.message ?: t.javaClass.simpleName))
                         }
 
                         isSending = false
@@ -138,13 +150,14 @@ private fun TransactionSpeedUpCancelScreen(
             )
         }
     ) {
-        SendEvmTransactionView(
-            navController,
-            uiState.sectionViewItems,
-            sendTransactionState.cautions,
-            sendTransactionState.fields,
-            sendTransactionState.networkFee,
-            StatPage.Resend
-        )
+//        TODO("xxx nav3")
+//        SendEvmTransactionView(
+//            backStack,
+//            uiState.sectionViewItems,
+//            sendTransactionState.cautions,
+//            sendTransactionState.fields,
+//            sendTransactionState.networkFee,
+//            StatPage.Resend
+//        )
     }
 }
