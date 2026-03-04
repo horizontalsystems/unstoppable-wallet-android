@@ -51,6 +51,18 @@ class SwapSyncService(
             } else {
                 unstoppableAPI.track(request)
             }
+            val outboundHash = response.legs
+                ?.firstOrNull { leg ->
+                    leg.type == "native_send" &&
+                        (leg.toAsset == response.toAsset || leg.toAddress == response.toAddress) &&
+                        leg.hash != null
+                }
+                ?.hash
+
+            if (outboundHash != null && outboundHash != record.outboundTransactionHash) {
+                swapRecordManager.updateOutboundTransactionHash(record.id, outboundHash)
+            }
+
             val newStatus = mapStatus(response)
                 ?.takeIf { it != SwapStatus.valueOf(record.status) }
                 ?: return
