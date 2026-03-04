@@ -19,9 +19,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.MenuItem
 import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyModule.MoneroKeyType
 import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyModule.MoneroKeys
@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -42,20 +43,28 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ShowMoneroKeyScreen : HSScreen()
+data class ShowMoneroKeyScreen(val keys: MoneroKeys) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        ShowMoneroKeyScreen(backStack, keys)
+    }
+}
 
 class ShowMoneroKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
-        val keys = input?.keys
-
-        if (keys == null) {
-            NoKeysScreen()
-        } else {
-            ShowMoneroKeyScreen(navController, keys)
-        }
+//        val input = navController.getInput<Input>()
+//        val keys = input?.keys
+//
+//        if (keys == null) {
+//            NoKeysScreen()
+//        } else {
+//            ShowMoneroKeyScreen(navController, keys)
+//        }
     }
 
     @Parcelize
@@ -65,7 +74,7 @@ class ShowMoneroKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ShowMoneroKeyScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     keys: MoneroKeys
 ) {
     val view = LocalView.current
@@ -76,7 +85,7 @@ private fun ShowMoneroKeyScreen(
 
     HSScaffold(
         title = stringResource(keys.title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column {
             Column(
@@ -161,10 +170,4 @@ private fun ShowMoneroKeyScreen(
             )
         }
     }
-}
-
-
-@Composable
-private fun NoKeysScreen() {
-
 }
