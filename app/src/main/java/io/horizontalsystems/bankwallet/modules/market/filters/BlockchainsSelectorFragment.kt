@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market.filters
 
-import android.os.Bundle
-import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,12 +14,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -32,44 +32,59 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellBlockchainChecked
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
-import io.horizontalsystems.core.findNavController
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object BlockchainsSelectorScreen : HSScreen()
-
-class BlockchainsSelectorFragment : BaseComposeFragment() {
-
-    private val viewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment) {
-        MarketFiltersModule.Factory()
+data object BlockchainsSelectorScreen : HSScreen() {
+    override fun getParentVMKey(backStack: NavBackStack<HSScreen>): String? {
+        return backStack.findLast { it is MarketFiltersScreen }?.toString()
     }
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val viewModel = viewModel<MarketFiltersViewModel>()
         FilterByBlockchainsScreen(
             viewModel,
-            navController,
+            backStack,
         )
     }
+}
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+class BlockchainsSelectorFragment : BaseComposeFragment() {
 
-        requireActivity().onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                }
-            })
+//    private val viewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment) {
+//        MarketFiltersModule.Factory()
+//    }
+
+    @Composable
+    override fun GetContent(navController: NavController) {
+//        FilterByBlockchainsScreen(
+//            viewModel,
+//            navController,
+//        )
     }
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//
+//        requireActivity().onBackPressedDispatcher.addCallback(
+//            this,
+//            object : OnBackPressedCallback(true) {
+//                override fun handleOnBackPressed() {
+//                    findNavController().popBackStack()
+//                }
+//            })
+//    }
 
 }
 
 @Composable
 private fun FilterByBlockchainsScreen(
     viewModel: MarketFiltersViewModel,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     val uiState = viewModel.uiState
 
@@ -89,7 +104,7 @@ private fun FilterByBlockchainsScreen(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
-                        onClick = navController::popBackStack
+                        onClick = backStack::removeLastOrNull
                     )
                 ),
             )
@@ -141,7 +156,7 @@ private fun FilterByBlockchainsScreen(
                         )
                     },
                     onClick = {
-                        navController.popBackStack()
+                        backStack.removeLastOrNull()
                     },
                 )
             }

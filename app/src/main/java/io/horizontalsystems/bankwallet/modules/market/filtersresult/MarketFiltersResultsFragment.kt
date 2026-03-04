@@ -12,24 +12,25 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.paidAction
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketSignalsFragment
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketSignalsScreen
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersScreen
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.navigateWithPaidAction
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -45,33 +46,50 @@ import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object MarketFiltersResultsScreen : HSScreen()
+data object MarketFiltersResultsScreen : HSScreen() {
+    override fun getParentVMKey(backStack: NavBackStack<HSScreen>): String? {
+        return backStack.findLast { it is MarketFiltersScreen }?.toString()
+    }
+
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val marketSearchFilterViewModel = viewModel<MarketFiltersViewModel>()
+        val viewModel = viewModel<MarketFiltersResultViewModel>(
+            factory = MarketFiltersResultsModule.Factory(marketSearchFilterViewModel.service)
+        )
+
+        SearchResultsScreen(viewModel, backStack, resultBus)
+    }
+}
 
 class MarketFiltersResultsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val viewModel = getViewModel()
-
-        if (viewModel == null) {
-            navController.popBackStack()
-            return
-        }
-
-        SearchResultsScreen(viewModel, navController)
+//        val viewModel = getViewModel()
+//
+//        if (viewModel == null) {
+//            navController.popBackStack()
+//            return
+//        }
+//
+//        SearchResultsScreen(viewModel, navController)
     }
 
-    private fun getViewModel(): MarketFiltersResultViewModel? {
-        return try {
-            val marketSearchFilterViewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment)
-            val viewModel by viewModels<MarketFiltersResultViewModel> {
-                MarketFiltersResultsModule.Factory(marketSearchFilterViewModel.service)
-            }
-            viewModel
-        } catch (e: RuntimeException) {
-            null
-        }
-    }
+//    private fun getViewModel(): MarketFiltersResultViewModel? {
+//        return try {
+//            val marketSearchFilterViewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment)
+//            val viewModel by viewModels<MarketFiltersResultViewModel> {
+//                MarketFiltersResultsModule.Factory(marketSearchFilterViewModel.service)
+//            }
+//            viewModel
+//        } catch (e: RuntimeException) {
+//            null
+//        }
+//    }
 
 }
 
@@ -79,7 +97,8 @@ class MarketFiltersResultsFragment : BaseComposeFragment() {
 @Composable
 private fun SearchResultsScreen(
     viewModel: MarketFiltersResultViewModel,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus
 ) {
 
     val uiState = viewModel.uiState
@@ -88,7 +107,7 @@ private fun SearchResultsScreen(
 
     HSScaffold(
         title = stringResource(R.string.Market_AdvancedSearch_Results),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(Modifier.navigationBarsPadding()) {
             Crossfade(uiState.viewState, label = "") { state ->
@@ -122,8 +141,7 @@ private fun SearchResultsScreen(
                                 )
                             },
                             onCoinClick = { coinUid ->
-                                val arguments = CoinFragment.Input(coinUid)
-                                navController.slideFromRight(R.id.coinFragment, arguments)
+                                backStack.add(CoinScreen(coinUid))
 
                                 stat(
                                     page = StatPage.AdvancedSearchResults,
@@ -142,6 +160,11 @@ private fun SearchResultsScreen(
                                             }
                                         )
                                         HSpacer(width = 12.dp)
+                                        ResultEffect<MarketSignalsScreen.Result>(resultBus) {
+                                            if (it.enabled) {
+                                                viewModel.showSignals()
+                                            }
+                                        }
                                         HSButton(
                                             variant = ButtonVariant.Secondary,
                                             style = ButtonStyle.Solid,
@@ -149,15 +172,7 @@ private fun SearchResultsScreen(
                                             title = stringResource(id = R.string.Market_Signals),
                                             onClick = {
                                                 if (!uiState.showSignal) {
-                                                    navController.paidAction(TradeSignals) {
-                                                        navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
-                                                            R.id.marketSignalsFragment
-                                                        ) {
-                                                            if (it.enabled) {
-                                                                viewModel.showSignals()
-                                                            }
-                                                        }
-                                                    }
+                                                    backStack.navigateWithPaidAction(TradeSignals, MarketSignalsScreen)
                                                     stat(
                                                         page = StatPage.AdvancedSearchResults,
                                                         event = StatEvent.OpenPremium(

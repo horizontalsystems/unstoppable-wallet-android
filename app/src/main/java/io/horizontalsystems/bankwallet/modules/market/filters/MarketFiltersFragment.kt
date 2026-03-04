@@ -27,13 +27,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.paidAction
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
@@ -46,7 +44,11 @@ import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModul
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.PricePeriod
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.TradingSignals
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.TradingVolume
+import io.horizontalsystems.bankwallet.modules.market.filtersresult.MarketFiltersResultsScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.navigateWithPaidAction
+import io.horizontalsystems.bankwallet.modules.nav3.paidAction
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
@@ -70,20 +72,26 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object MarketFiltersScreen : HSScreen()
+data object MarketFiltersScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val viewModel = viewModel<MarketFiltersViewModel>(factory = MarketFiltersModule.Factory())
+
+        AdvancedSearchScreen(viewModel, backStack)
+    }
+}
 
 class MarketFiltersFragment : BaseComposeFragment() {
 
-    private val viewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment) {
-        MarketFiltersModule.Factory()
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
-        AdvancedSearchScreen(
-            viewModel,
-            navController,
-        )
+//        AdvancedSearchScreen(
+//            viewModel,
+//            navController,
+//        )
     }
 
 }
@@ -92,7 +100,7 @@ class MarketFiltersFragment : BaseComposeFragment() {
 @Composable
 private fun AdvancedSearchScreen(
     viewModel: MarketFiltersViewModel,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
 ) {
     val uiState = viewModel.uiState
     val errorMessage = uiState.errorMessage
@@ -104,7 +112,7 @@ private fun AdvancedSearchScreen(
 
     HSScaffold(
         title = stringResource(R.string.Market_Filters),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
@@ -121,10 +129,10 @@ private fun AdvancedSearchScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 AdvancedSearchContent(
-                    navController = navController,
+                    backStack = backStack,
                     viewModel = viewModel,
                     onFilterByBlockchainsClick = {
-                        navController.slideFromBottom(R.id.blockchainsSelectorFragment)
+                        backStack.add(BlockchainsSelectorScreen)
                     },
                     showBottomSheet = { type ->
                         bottomSheetType = type
@@ -140,9 +148,7 @@ private fun AdvancedSearchScreen(
                         .padding(horizontal = 16.dp),
                     title = uiState.buttonTitle,
                     onClick = {
-                        navController.slideFromRight(
-                            R.id.marketAdvancedSearchResultsFragment
-                        )
+                        backStack.add(MarketFiltersResultsScreen)
                     },
                     showSpinner = uiState.showSpinner,
                     enabled = uiState.buttonEnabled,
@@ -275,7 +281,7 @@ private fun BSContent(
 
 @Composable
 fun AdvancedSearchContent(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     viewModel: MarketFiltersViewModel,
     onFilterByBlockchainsClick: () -> Unit,
     showBottomSheet: (MarketFiltersModule.FilterDropdown) -> Unit,
@@ -312,9 +318,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_Sectors,
             value = if (uiState.sectors.size == 1 && uiState.sectors[0].item == null) null else uiState.sectors.size.toString(),
             onDropdownClick = {
-                navController.paidAction(AdvancedSearch) {
-                    navController.slideFromBottom(R.id.sectorsSelectorFragment)
-                }
+                backStack.navigateWithPaidAction(AdvancedSearch, SectorsSelectorScreen)
                 stat(
                     page = StatPage.AdvancedSearch,
                     event = StatEvent.OpenPremium(StatPremiumTrigger.Sectors)
@@ -331,7 +335,7 @@ fun AdvancedSearchContent(
             value = uiState.priceChange.title,
             valueColor = uiState.priceChange.item?.color ?: TextColor.Grey,
             onDropdownClick = {
-                navController.paidAction(AdvancedSearch) {
+                backStack.paidAction(AdvancedSearch) {
                     showBottomSheet(PriceChange)
                 }
                 stat(
@@ -344,7 +348,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_PricePeriod,
             value = uiState.period.title,
             onDropdownClick = {
-                navController.paidAction(AdvancedSearch) {
+                backStack.paidAction(AdvancedSearch) {
                     showBottomSheet(PricePeriod)
                 }
                 stat(
@@ -358,7 +362,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_TradingSignals,
             value = uiState.filterTradingSignal.title,
             onDropdownClick = {
-                navController.paidAction(AdvancedSearch) {
+                backStack.paidAction(AdvancedSearch) {
                     showBottomSheet(TradingSignals)
                 }
                 stat(
@@ -371,7 +375,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_PriceCloseTo,
             value = uiState.priceCloseTo?.titleResId?.let { stringResource(it) },
             onDropdownClick = {
-                navController.paidAction(AdvancedSearch) {
+                backStack.paidAction(AdvancedSearch) {
                     showBottomSheet(PriceCloseTo)
                 }
                 stat(
@@ -389,7 +393,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_OutperformedBtc,
             enabled = uiState.outperformedBtcOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                backStack.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedBtcOn(it)
                 }
                 stat(
@@ -402,7 +406,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_OutperformedEth,
             enabled = uiState.outperformedEthOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                backStack.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedEthOn(it)
                 }
                 stat(
@@ -415,7 +419,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_OutperformedBnb,
             enabled = uiState.outperformedBnbOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                backStack.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedBnbOn(it)
                 }
                 stat(
@@ -428,7 +432,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_OutperformedSnp,
             enabled = uiState.outperformedSnpOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                backStack.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedSnpOn(it)
                 }
                 stat(
@@ -441,7 +445,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_OutperformedGold,
             enabled = uiState.outperformedGoldOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                backStack.paidAction(AdvancedSearch) {
                     viewModel.updateOutperformedGoldOn(it)
                 }
                 stat(
@@ -460,7 +464,7 @@ fun AdvancedSearchContent(
             subtitle = R.string.Market_Filter_SolidCex_Description,
             enabled = uiState.solidCexOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                backStack.paidAction(AdvancedSearch) {
                     viewModel.updateSolidCexOn(it)
                 }
                 stat(
@@ -474,7 +478,7 @@ fun AdvancedSearchContent(
             subtitle = R.string.Market_Filter_SolidDex_Description,
             enabled = uiState.solidDexOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                backStack.paidAction(AdvancedSearch) {
                     viewModel.updateSolidDexOn(it)
                 }
                 stat(
@@ -488,7 +492,7 @@ fun AdvancedSearchContent(
             subtitle = R.string.Market_Filter_GoodDistribution_Description,
             enabled = uiState.goodDistributionOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                backStack.paidAction(AdvancedSearch) {
                     viewModel.updateGoodDistributionOn(it)
                 }
                 stat(
@@ -501,7 +505,7 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_ListedOnTopExchanges,
             enabled = uiState.listedOnTopExchangesOn,
             onChecked = {
-                navController.paidAction(AdvancedSearch) {
+                backStack.paidAction(AdvancedSearch) {
                     viewModel.updateListedOnTopExchangesOn(it)
                 }
                 stat(
