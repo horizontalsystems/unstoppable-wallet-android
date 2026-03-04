@@ -25,7 +25,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data object AddTokenBlockchainSelectorScreen : HSScreen() {
-    override fun getMetadata() = SharedViewModelStoreNavEntryDecorator.parent(
+    override fun getMetadata(backStack: NavBackStack<HSScreen>) = SharedViewModelStoreNavEntryDecorator.parent(
         AddTokenScreen.toString()
     )
 
