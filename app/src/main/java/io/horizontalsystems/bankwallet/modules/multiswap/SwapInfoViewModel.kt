@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.coinIconUrl
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
@@ -41,7 +42,8 @@ class SwapInfoViewModel(
     private var recipientAddress: String? = null
     private var sourceAddress: String? = null
     private var fee: String? = null
-    private var txUrl: String? = null
+    private var depositingTxUrl: String? = null
+    private var sendingTxUrl: String? = null
 
     override fun createState() = SwapInfoUiState(
         tokenInImageUrl = tokenInImageUrl,
@@ -60,7 +62,8 @@ class SwapInfoViewModel(
         recipientAddress = recipientAddress,
         sourceAddress = sourceAddress,
         fee = fee,
-        txUrl = txUrl,
+        depositingTxUrl = depositingTxUrl,
+        sendingTxUrl = sendingTxUrl,
     )
 
     init {
@@ -93,7 +96,8 @@ class SwapInfoViewModel(
         recipientAddress = record.recipientAddress
         sourceAddress = record.sourceAddress
         fee = formatFee(record.networkFeeAmount, record.networkFeeCoinCode)
-        txUrl = record.transactionHash?.let { buildTxUrl(record.providerId, it) }
+        depositingTxUrl = record.transactionHash?.let { buildTxUrl(record.tokenInBlockchainTypeUid, it) }
+        sendingTxUrl = record.outboundTransactionHash?.let { buildTxUrl(record.tokenOutBlockchainTypeUid, it) }
 
         emitState()
     }
@@ -120,11 +124,31 @@ class SwapInfoViewModel(
         return numberFormatter.formatFiatShort(fiat, symbol, decimals)
     }
 
-    private fun buildTxUrl(providerId: String, txHash: String): String? = when (providerId) {
-        "thorchain" -> "https://thorchain.net/tx/$txHash"
-        "mayachain" -> "https://www.mayascan.org/tx/$txHash"
-        else -> null
-    }
+    private fun buildTxUrl(blockchainTypeUid: String, txHash: String): String? =
+        when (BlockchainType.fromUid(blockchainTypeUid)) {
+            BlockchainType.Bitcoin -> "https://blockchair.com/bitcoin/transaction/$txHash"
+            BlockchainType.BitcoinCash -> "https://blockchair.com/bitcoin-cash/transaction/$txHash"
+            BlockchainType.ECash -> "https://blockchair.com/ecash/transaction/$txHash"
+            BlockchainType.Litecoin -> "https://blockchair.com/litecoin/transaction/$txHash"
+            BlockchainType.Dash -> "https://blockchair.com/dash/transaction/$txHash"
+            BlockchainType.Zcash -> "https://blockchair.com/zcash/transaction/$txHash"
+            BlockchainType.Monero -> "https://blockchair.com/monero/transaction/$txHash"
+            BlockchainType.Ethereum -> "https://etherscan.io/tx/$txHash"
+            BlockchainType.BinanceSmartChain -> "https://bscscan.com/tx/$txHash"
+            BlockchainType.Polygon -> "https://polygonscan.com/tx/$txHash"
+            BlockchainType.Optimism -> "https://optimistic.etherscan.io/tx/$txHash"
+            BlockchainType.ArbitrumOne -> "https://arbiscan.io/tx/$txHash"
+            BlockchainType.Avalanche -> "https://snowtrace.io/tx/$txHash"
+            BlockchainType.Gnosis -> "https://gnosisscan.io/tx/$txHash"
+            BlockchainType.Fantom -> "https://ftmscan.com/tx/$txHash"
+            BlockchainType.Base -> "https://basescan.org/tx/$txHash"
+            BlockchainType.ZkSync -> "https://era.zksync.network/tx/$txHash"
+            BlockchainType.Solana -> "https://solscan.io/tx/$txHash"
+            BlockchainType.Tron -> "https://tronscan.io/#/transaction/$txHash"
+            BlockchainType.Ton -> "https://tonviewer.com/transaction/$txHash"
+            BlockchainType.Stellar -> "https://stellar.expert/explorer/public/tx/$txHash"
+            is BlockchainType.Unsupported -> null
+        }
 
     private fun formatFee(feeAmount: String?, feeCoinCode: String?): String? {
         if (feeAmount == null || feeCoinCode == null) return null
@@ -163,5 +187,6 @@ data class SwapInfoUiState(
     val recipientAddress: String?,
     val sourceAddress: String?,
     val fee: String?,
-    val txUrl: String?,
+    val depositingTxUrl: String?,
+    val sendingTxUrl: String?,
 )

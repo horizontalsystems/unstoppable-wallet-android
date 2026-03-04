@@ -33,7 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,6 +48,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -89,7 +90,6 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
     var showStatusSheet by remember { mutableStateOf(false) }
     val view = LocalView.current
     val leah = ComposeAppTheme.colors.leah
-    val uriHandler = LocalUriHandler.current
 
     HSScaffold(
         title = stringResource(R.string.SwapHistory_Title),
@@ -283,7 +283,8 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
             )
             SwapStatusSteps(
                 status = uiState.status,
-                onViewClick = uiState.txUrl?.let { url -> { uriHandler.openUri(url) } },
+                depositingTxUrl = uiState.depositingTxUrl,
+                sendingTxUrl = uiState.sendingTxUrl,
             )
             subhead2_grey(
                 text = stringResource(R.string.SwapInfo_CrossChainNote),
@@ -346,7 +347,8 @@ private fun StatusRightSlot(status: SwapStatus) {
 }
 
 @Composable
-private fun SwapStatusSteps(status: SwapStatus, onViewClick: (() -> Unit)?) {
+private fun SwapStatusSteps(status: SwapStatus, depositingTxUrl: String?, sendingTxUrl: String?) {
+    val context = LocalContext.current
     val normalSteps = listOf(
         stringResource(R.string.SwapInfo_StatusDepositing),
         stringResource(R.string.SwapInfo_StatusSwapping),
@@ -419,14 +421,19 @@ private fun SwapStatusSteps(status: SwapStatus, onViewClick: (() -> Unit)?) {
             val isActive = activeIndex == index
             val isFirst = index == 0
             val isLast = index == steps.lastIndex
-            val showView = onViewClick != null && (isDone || isActive || isFailed)
+            val stepUrl: String? = when (index) {
+                0 -> depositingTxUrl
+                2 if steps.size == 4 -> sendingTxUrl
+                else -> null
+            }
+            val showView = stepUrl != null && (isDone || isActive || isFailed)
             val connectorColor = if (isDone) green else blade
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp)
-                    .then(if (showView) Modifier.clickable { onViewClick() } else Modifier)
+                    .then(if (showView) Modifier.clickable { LinkHelper.openLinkInAppBrowser(context, stepUrl) } else Modifier)
                     .padding(end = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
