@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.coinIconUrl
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.core.helpers.DateHelper
@@ -76,10 +77,10 @@ class SwapInfoViewModel(
         val priceIn = fetchHistoricalPrice(record.tokenInCoinUid, currency.code, timestampSeconds)
         val priceOut = fetchHistoricalPrice(record.tokenOutCoinUid, currency.code, timestampSeconds)
 
-        tokenInImageUrl = coinImageUrl(record.tokenInCoinUid)
+        tokenInImageUrl = record.tokenInCoinUid.coinIconUrl
         tokenInCode = record.tokenInCoinCode
         tokenInBadge = record.tokenInBadge
-        tokenOutImageUrl = coinImageUrl(record.tokenOutCoinUid)
+        tokenOutImageUrl = record.tokenOutCoinUid.coinIconUrl
         tokenOutCode = record.tokenOutCoinCode
         tokenOutBadge = record.tokenOutBadge
         amountIn = formatAmount(record.amountIn, record.tokenInCoinCode)
@@ -96,9 +97,6 @@ class SwapInfoViewModel(
 
         emitState()
     }
-
-    private fun coinImageUrl(coinUid: String) =
-        "https://cdn.blocksdecoded.com/coin-icons/32px/$coinUid@3x.png"
 
     private fun formatAmount(amountStr: String, coinCode: String): String {
         val amount = amountStr.toBigDecimalOrNull() ?: return amountStr
