@@ -52,9 +52,11 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import android.os.Parcelable
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.getInput
+import kotlinx.parcelize.Parcelize
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -106,14 +108,19 @@ import java.net.UnknownHostException
 class SwapFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapScreen(navController, navController.getInput(), navController::popBackStack)
+        val input = navController.getInput<Input>()
+        SwapScreen(navController, input?.tokenIn, input?.tokenOut, navController::popBackStack)
     }
+
+    @Parcelize
+    data class Input(val tokenIn: Token? = null, val tokenOut: Token? = null) : Parcelable
 }
 
 @Composable
 fun SwapScreen(
     navController: NavController,
     tokenIn: Token? = null,
+    tokenOut: Token? = null,
     onClickClose: (() -> Unit)? = null,
     bottomPadding: Dp = 0.dp,
     closeAfterSwap: Boolean = true
@@ -121,7 +128,7 @@ fun SwapScreen(
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = currentBackStackEntry!!,
-        factory = SwapViewModel.Factory(tokenIn)
+        factory = SwapViewModel.Factory(tokenIn, tokenOut)
     )
     val uiState = viewModel.uiState
     val context = LocalContext.current

@@ -56,6 +56,7 @@ import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceContextMenuItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceUiState
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapFragment
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.ReceiveAllowedState
@@ -537,7 +538,7 @@ private fun handleContextMenuClick(
         BalanceContextMenuItem.Swap -> {
             navController.slideFromRight(
                 R.id.multiswap,
-                balanceViewItem.wallet.token
+                SwapFragment.Input(tokenIn = balanceViewItem.wallet.token)
             )
 
             stat(
