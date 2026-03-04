@@ -1,6 +1,7 @@
-package io.horizontalsystems.bankwallet.modules.restoreaccount
+package io.horizontalsystems.bankwallet.modules.restoreaccount.screens
 
 import androidx.compose.runtime.Composable
+import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuModule.RestoreOption
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestorePhrase
