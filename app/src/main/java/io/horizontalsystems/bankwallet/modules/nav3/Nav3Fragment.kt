@@ -38,6 +38,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 class Nav3Fragment : BaseComposeFragment() {
 
@@ -49,21 +50,25 @@ class Nav3Fragment : BaseComposeFragment() {
 }
 
 @Serializable
-abstract class HSScreen(val bottomSheet: Boolean = false, val screenshotEnabled: Boolean = true) : NavKey {
+abstract class HSScreen(
+    val bottomSheet: Boolean = false,
+    val screenshotEnabled: Boolean = true,
+    val parentScreenClass: KClass<out HSScreen>? = null,
+) : NavKey {
     @OptIn(ExperimentalMaterial3Api::class)
     fun getMetadata(backStack: NavBackStack<HSScreen>) = buildMap {
         if (bottomSheet) {
             putAll(BottomSheetSceneStrategy.bottomSheet())
         }
-        getParentVMKey(backStack)?.let {
-            putAll(
-                SharedViewModelStoreNavEntryDecorator.parent(it)
-            )
+        parentScreenClass?.let {
+            backStack.findLast {
+                it::class == parentScreenClass
+            }?.let { parentScreen ->
+                putAll(
+                    SharedViewModelStoreNavEntryDecorator.parent(parentScreen.toString())
+                )
+            }
         }
-    }
-
-    open fun getParentVMKey(backStack: NavBackStack<HSScreen>): String? {
-        return null
     }
 
     private val className = this.javaClass.simpleName
@@ -77,11 +82,7 @@ abstract class HSScreen(val bottomSheet: Boolean = false, val screenshotEnabled:
 }
 
 @Serializable
-data object Child : HSScreen() {
-    override fun getParentVMKey(backStack: NavBackStack<HSScreen>): String? {
-        return backStack.findLast { it is Home }?.toString()
-    }
-
+data object Child : HSScreen(parentScreenClass = Home::class) {
     @Composable
     override fun GetContent(
         backStack: NavBackStack<HSScreen>,

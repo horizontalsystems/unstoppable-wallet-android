@@ -46,11 +46,9 @@ import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object MarketFiltersResultsScreen : HSScreen() {
-    override fun getParentVMKey(backStack: NavBackStack<HSScreen>): String? {
-        return backStack.findLast { it is MarketFiltersScreen }?.toString()
-    }
-
+data object MarketFiltersResultsScreen : HSScreen(
+    parentScreenClass = MarketFiltersScreen::class
+) {
     @Composable
     override fun GetContent(
         backStack: NavBackStack<HSScreen>,

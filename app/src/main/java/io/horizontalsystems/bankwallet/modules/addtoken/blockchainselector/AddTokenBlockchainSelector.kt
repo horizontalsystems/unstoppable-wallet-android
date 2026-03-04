@@ -23,11 +23,7 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object AddTokenBlockchainSelectorScreen : HSScreen() {
-    override fun getParentVMKey(backStack: NavBackStack<HSScreen>): String? {
-        return backStack.findLast { it is AddTokenScreen }?.toString()
-    }
-
+data object AddTokenBlockchainSelectorScreen : HSScreen(parentScreenClass = AddTokenScreen::class) {
     @Composable
     override fun GetContent(
         backStack: NavBackStack<HSScreen>,

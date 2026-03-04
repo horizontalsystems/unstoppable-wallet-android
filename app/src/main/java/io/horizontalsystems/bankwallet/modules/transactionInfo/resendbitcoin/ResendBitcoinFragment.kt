@@ -46,11 +46,9 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ResendBitcoinScreen(val optionType: SpeedUpCancelType) : HSScreen() {
-    override fun getParentVMKey(backStack: NavBackStack<HSScreen>): String? {
-        return backStack.findLast { it is TransactionInfoScreen }?.toString()
-    }
-
+data class ResendBitcoinScreen(val optionType: SpeedUpCancelType) : HSScreen(
+    parentScreenClass = TransactionInfoScreen::class
+) {
     @Composable
     override fun GetContent(
         backStack: NavBackStack<HSScreen>,

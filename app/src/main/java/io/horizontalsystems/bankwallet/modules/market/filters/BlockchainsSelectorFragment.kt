@@ -35,11 +35,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object BlockchainsSelectorScreen : HSScreen() {
-    override fun getParentVMKey(backStack: NavBackStack<HSScreen>): String? {
-        return backStack.findLast { it is MarketFiltersScreen }?.toString()
-    }
-
+data object BlockchainsSelectorScreen : HSScreen(
+    parentScreenClass = MarketFiltersScreen::class
+) {
     @Composable
     override fun GetContent(
         backStack: NavBackStack<HSScreen>,
