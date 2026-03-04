@@ -1,35 +1,39 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo.options
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.R
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object TransactionSpeedUpCancelTransactionSettingsScreen : HSScreen()
+data object TransactionSpeedUpCancelTransactionSettingsScreen : HSScreen(
+    parentScreenClass = TransactionSpeedUpCancelScreen::class
+) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        TransactionSpeedUpCancelTransactionSettingsScreen(backStack)
+    }
+}
 
 class TransactionSpeedUpCancelTransactionSettingsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        TransactionSpeedUpCancelTransactionSettingsScreen(navController)
+//        TransactionSpeedUpCancelTransactionSettingsScreen(navController)
     }
 }
 
 @Composable
-fun TransactionSpeedUpCancelTransactionSettingsScreen(navController: NavController) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.transactionSpeedUpCancelFragment)
-    }
-
-    val viewModel = viewModel<TransactionSpeedUpCancelViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-    )
+fun TransactionSpeedUpCancelTransactionSettingsScreen(backStack: NavBackStack<HSScreen>) {
+    val viewModel = viewModel<TransactionSpeedUpCancelViewModel>()
 
     val sendTransactionService = viewModel.sendTransactionService
-
-    sendTransactionService.GetSettingsContent(navController)
+//    TODO("xxx nav3")
+//    sendTransactionService.GetSettingsContent(backStack)
 }
