@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.address
 
-import HashDitAddressValidator
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager

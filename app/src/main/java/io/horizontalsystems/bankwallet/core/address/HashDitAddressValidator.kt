@@ -1,10 +1,10 @@
+package io.horizontalsystems.bankwallet.core.address
 
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
-import kotlinx.coroutines.delay
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -37,9 +37,9 @@ class HashDitAddressValidator(
         val request = AddressSecurityRequest(chain.id.toString(), address.hex)
 
         var response = apiService.addressSecurity(request)
-        while (response.status == "in progress") {
-            delay((response.pollAfter ?: 10) * 1000L)
+        if (response.status == "in progress") {
             response = apiService.addressSecurity(request)
+            if (response.status == "in progress") throw CheckInProgressException()
         }
         return (response.data?.overall_score?.toIntOrNull() ?: 0) >= 60
     }
@@ -61,7 +61,6 @@ class HashDitAddressValidator(
     data class AddressSecurityResponse(
         val code: String,
         val status: String,
-        val pollAfter: Int?,
         val data: Data?
     ) {
         data class Data(
@@ -72,3 +71,4 @@ class HashDitAddressValidator(
 }
 
 class UnsupportedBlockchainType : Exception()
+class CheckInProgressException : Exception()
