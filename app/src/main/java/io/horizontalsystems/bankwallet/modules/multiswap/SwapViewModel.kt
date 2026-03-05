@@ -6,7 +6,9 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -17,6 +19,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -32,6 +35,9 @@ class SwapViewModel(
     private val networkAvailabilityService: NetworkAvailabilityService,
     private val defaultTokenService: SwapDefaultTokenService,
     private val swapTermsManager: SwapTermsManager,
+    private val swapRecordManager: SwapRecordManager,
+    private val marketKit: MarketKitWrapper,
+    private val walletManager: WalletManager,
     tokenIn: Token?,
     tokenOut: Token? = null,
 ) : ViewModelUiState<SwapUiState>() {
@@ -117,11 +123,43 @@ class SwapViewModel(
         fiatServiceIn.setCurrency(currency)
         fiatServiceOut.setCurrency(currency)
         networkAvailabilityService.start(viewModelScope)
-        tokenIn?.let {
-            quoteService.setTokenIn(it)
-            defaultTokenService.setTokenIn(it)
+
+
+        if (tokenIn == null && tokenOut == null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val (resolvedIn, resolvedOut) = resolveDefaultTokens()
+                resolvedIn?.let {
+                    quoteService.setTokenIn(it)
+                    defaultTokenService.setTokenIn(it)
+                }
+                resolvedOut?.let { quoteService.setTokenOut(it) }
+            }
+        } else {
+            tokenIn?.let {
+                quoteService.setTokenIn(it)
+                defaultTokenService.setTokenIn(it)
+            }
+            tokenOut?.let { quoteService.setTokenOut(it) }
         }
-        tokenOut?.let { quoteService.setTokenOut(it) }
+    }
+
+    private fun resolveDefaultTokens(): Pair<Token?, Token?> {
+        val lastRecord = swapRecordManager.getAll().firstOrNull()
+        return if (lastRecord != null) {
+            val lastIn = TokenQuery.fromId(lastRecord.tokenInUid)?.let { marketKit.token(it) }
+            val lastOut = TokenQuery.fromId(lastRecord.tokenOutUid)?.let { marketKit.token(it) }
+            Pair(lastIn, lastOut)
+        } else {
+            val btcToken = walletManager.activeWallets
+                .firstOrNull { it.token.blockchainType == BlockchainType.Bitcoin }
+                ?.token
+                ?: marketKit.token(TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)))
+            val xmrToken = walletManager.activeWallets
+                .firstOrNull { it.token.blockchainType == BlockchainType.Monero }
+                ?.token
+                ?: marketKit.token(TokenQuery(BlockchainType.Monero, TokenType.Native))
+            Pair(btcToken, xmrToken)
+        }
     }
 
     private fun requoteIfTimeout() {
@@ -252,24 +290,6 @@ class SwapViewModel(
             val tokenBalanceService = TokenBalanceService(App.adapterManager)
             val priceImpactService = PriceImpactService(PriceImpactLevel.Warning)
 
-            val (resolvedTokenIn, resolvedTokenOut) = if (tokenIn == null && tokenOut == null) {
-                val lastRecord = App.swapRecordManager.getAll().firstOrNull()
-                if (lastRecord != null) {
-                    val lastIn = lastRecord.tokenInUid.let { TokenQuery.fromId(it)?.let { App.marketKit.token(it) } }
-                    val lastOut = lastRecord.tokenOutUid.let { TokenQuery.fromId(it)?.let { App.marketKit.token(it) } }
-                    Pair(lastIn, lastOut)
-                } else {
-                    val btcToken = App.walletManager.activeWallets
-                        .firstOrNull { it.token.blockchainType == BlockchainType.Bitcoin }
-                        ?.token
-                        ?: App.marketKit.token(TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)))
-                    val xmrToken = App.marketKit.token(TokenQuery(BlockchainType.Monero, TokenType.Native))
-                    Pair(btcToken, xmrToken)
-                }
-            } else {
-                Pair(tokenIn, tokenOut)
-            }
-
             return SwapViewModel(
                 swapQuoteService,
                 tokenBalanceService,
@@ -279,10 +299,13 @@ class SwapViewModel(
                 FiatService(App.marketKit),
                 TimerService(),
                 NetworkAvailabilityService(App.connectivityManager),
-                SwapDefaultTokenService(App.marketKit),
+                SwapDefaultTokenService(App.marketKit, App.walletManager),
                 App.swapTermsManager,
-                resolvedTokenIn,
-                resolvedTokenOut,
+                App.swapRecordManager,
+                App.marketKit,
+                App.walletManager,
+                tokenIn,
+                tokenOut,
             ) as T
         }
     }
