@@ -38,18 +38,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
 import io.horizontalsystems.bankwallet.modules.moneronetwork.addnode.AddMoneroNodeScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.getShape
@@ -73,46 +71,30 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object MoneroNetworkScreen : HSScreen()
+data object MoneroNetworkScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        MoneroNetworkScreen(
+            backStack = backStack,
+            onBackPress = { backStack.removeLastOrNull() },
+        )
+    }
+}
 
 class MoneroNetworkFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        MoneroNetworkNavHost(navController)
     }
 
-}
-
-private const val MoneroNetworkPage = "monero_network"
-private const val AddNodePage = "add_node"
-
-@Composable
-private fun MoneroNetworkNavHost(
-    fragmentNavController: NavController
-) {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = MoneroNetworkPage,
-    ) {
-        composable(MoneroNetworkPage) {
-            MoneroNetworkScreen(
-                navController = navController,
-                onBackPress = { fragmentNavController.popBackStack() },
-            )
-        }
-        composablePopup(AddNodePage) {
-            AddMoneroNodeScreen(
-                navController = navController
-            )
-        }
-    }
 }
 
 @Composable
 private fun MoneroNetworkScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     onBackPress: () -> Unit,
 ) {
     val viewModel = viewModel<MoneroNetworkViewModel>(factory = MoneroNetworkModule.Factory())
@@ -224,7 +206,7 @@ private fun MoneroNetworkScreen(
                     item {
                         Spacer(Modifier.height(32.dp))
                         AddButton {
-                            navController.navigate(AddNodePage)
+                            backStack.add(AddMoneroNodeScreen)
                         }
                         Spacer(Modifier.height(60.dp))
                     }
