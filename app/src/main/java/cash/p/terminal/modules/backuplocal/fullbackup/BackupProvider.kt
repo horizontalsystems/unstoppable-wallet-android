@@ -1190,11 +1190,6 @@ data class DecryptedFullBackup(
     val contacts: List<Contact>
 )
 
-data class BackupItem(
-    val title: String,
-    val subtitle: String
-)
-
 data class BackupItems(
     val accounts: List<Account>,
     val watchWallets: Int?,

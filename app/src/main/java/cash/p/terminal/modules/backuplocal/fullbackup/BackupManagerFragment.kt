@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.backuplocal.fullbackup
 
-import android.util.Base64
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
@@ -28,7 +27,7 @@ import cash.p.terminal.core.Caution
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.core.openInputStreamSafe
-import cash.p.terminal.modules.backuplocal.BackupLocalModule
+import cash.p.terminal.core.validateAndSaveBackup
 import cash.p.terminal.navigation.slideFromBottom
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.importwallet.getFileName
@@ -40,8 +39,10 @@ import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.body_jacob
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class BackupManagerFragment : BaseComposeFragment() {
 
@@ -51,14 +52,14 @@ class BackupManagerFragment : BaseComposeFragment() {
             onBackClick = {
                 navController.popBackStack()
             },
-            onRestoreBackup = { jsonString, fileName ->
+            onRestoreBackup = { backupFilePath, fileName ->
                 navController.navigateWithTermsAccepted {
                     navController.slideFromBottom(
                         R.id.restoreLocalFragment,
                         RestoreLocalFragment.Input(
                             R.id.backupManagerFragment,
                             false,
-                            jsonString,
+                            backupFilePath,
                             fileName,
                         )
                     )
@@ -77,7 +78,7 @@ class BackupManagerFragment : BaseComposeFragment() {
 @Composable
 private fun BackupManagerScreen(
     onBackClick: () -> Unit,
-    onRestoreBackup: (jsonString: String, fileName: String?) -> Unit,
+    onRestoreBackup: (backupFilePath: String, fileName: String?) -> Unit,
     onCreateBackup: () -> Unit,
 ) {
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -86,29 +87,18 @@ private fun BackupManagerScreen(
 
     val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let { uriNonNull ->
-            context.contentResolver.openInputStreamSafe(uriNonNull)?.use { inputStream ->
+            val fileName = context.getFileName(uriNonNull)
+            coroutineScope.launch(Dispatchers.IO) {
                 try {
-                    // Read as bytes to detect format
-                    val bytes = inputStream.readBytes()
-                    val validator = BackupFileValidator()
-
-                    val backupData: String
-                    if (BackupLocalModule.BackupV4Binary.isBinaryFormat(bytes)) {
-                        // Binary V4 format - validate and encode to Base64 for transport
-                        validator.validateBinary(bytes)
-                        backupData = Base64.encodeToString(bytes, Base64.NO_WRAP)
-                    } else {
-                        // JSON format - validate as before
-                        val jsonString = String(bytes, Charsets.UTF_8)
-                        validator.validate(jsonString)
-                        backupData = jsonString
+                    context.contentResolver.openInputStreamSafe(uriNonNull)?.use { inputStream ->
+                        val bytes = inputStream.readBytes()
+                        val backupFilePath = validateAndSaveBackup(bytes)
+                        withContext(Dispatchers.Main) {
+                            onRestoreBackup(backupFilePath, fileName)
+                        }
                     }
-
-                    val fileName = context.getFileName(uriNonNull)
-                    onRestoreBackup(backupData, fileName)
                 } catch (e: Throwable) {
-                    //show backup file parsing error
-                    coroutineScope.launch {
+                    withContext(Dispatchers.Main) {
                         delay(300)
                         bottomSheetState.show()
                     }

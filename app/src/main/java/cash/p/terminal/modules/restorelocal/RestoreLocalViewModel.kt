@@ -1,10 +1,10 @@
 package cash.p.terminal.modules.restorelocal
 
-import android.util.Base64
 import androidx.lifecycle.viewModelScope
 import com.google.gson.GsonBuilder
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
+import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.backuplocal.BackupLocalModule
@@ -18,16 +18,18 @@ import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsViewModel
 import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsViewModel.WalletBackupViewItem
 import cash.p.terminal.modules.restorelocal.RestoreLocalModule.UiState
 import cash.p.terminal.strings.helpers.Translator
-import kotlinx.coroutines.Dispatchers
+import com.google.gson.JsonParser
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class RestoreLocalViewModel(
-    private val backupJsonString: String?,
+    private val backupFilePath: String?,
     private val accountFactory: IAccountFactory,
     private val backupProvider: BackupProvider,
     private val backupViewItemFactory: BackupViewItemFactory,
+    private val dispatcherProvider: DispatcherProvider,
     fileName: String?,
 ) : ViewModelUiState<UiState>() {
 
@@ -58,33 +60,37 @@ class RestoreLocalViewModel(
     }
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherProvider.io) {
             try {
-                // First, try to detect binary format (Base64 encoded from ImportWalletFragment)
-                val binaryData = tryDecodeAsBinary(backupJsonString)
-                if (binaryData != null) {
-                    backupV4Binary = binaryData
+                val file = backupFilePath?.let { File(it) }
+                val bytes = file?.readBytes()
+                file?.delete()
+
+                if (bytes != null && BackupLocalModule.BackupV4Binary.isBinaryFormat(bytes)) {
+                    backupV4Binary = bytes
                 } else {
-                    // Not binary, proceed with JSON parsing
+                    val jsonString = bytes?.let { String(it, Charsets.UTF_8) }
+
                     val gson = GsonBuilder()
                         .disableHtmlEscaping()
                         .enableComplexMapKeySerialization()
                         .create()
 
-                    // Check for V3 format
-                    backupV3 = backupJsonString?.let { backupProvider.parseV3Backup(it) }
+                    backupV3 = jsonString?.let { backupProvider.parseV3Backup(it) }
 
                     if (backupV3 == null) {
-                        // Legacy format parsing
                         fullBackup = try {
-                            val backup = gson.fromJson(backupJsonString, FullBackup::class.java)
-                            backup.version // if single walletBackup it will throw exception
+                            val backup = gson.fromJson(jsonString, FullBackup::class.java)
+                            backup.version
+                            if (JsonParser.parseString(jsonString).asJsonObject.has("crypto")) {
+                                error("Single wallet")
+                            }
                             backup
                         } catch (ex: Exception) {
                             null
                         }
 
-                        walletBackup = gson.fromJson(backupJsonString, WalletBackup::class.java)
+                        walletBackup = gson.fromJson(jsonString, WalletBackup::class.java)
                         manualBackup = walletBackup?.manualBackup ?: false
                     }
                 }
@@ -92,25 +98,6 @@ class RestoreLocalViewModel(
                 parseError = e
                 emitState()
             }
-        }
-    }
-
-    /**
-     * Attempts to decode input as Base64 and check for V4 binary format.
-     * Returns the binary data if valid, null otherwise.
-     */
-    private fun tryDecodeAsBinary(input: String?): ByteArray? {
-        if (input == null) return null
-        return try {
-            val decoded = Base64.decode(input, Base64.NO_WRAP)
-            if (BackupLocalModule.BackupV4Binary.isBinaryFormat(decoded)) {
-                decoded
-            } else {
-                null
-            }
-        } catch (e: Exception) {
-            // Not valid Base64 or not binary format
-            null
         }
     }
 
@@ -164,7 +151,7 @@ class RestoreLocalViewModel(
         showButtonSpinner = true
         emitState()
 
-        return viewModelScope.launch(Dispatchers.IO) {
+        return viewModelScope.launch(dispatcherProvider.io) {
             try {
                 val decrypted = backupProvider.restoreFromV4BinaryBackup(binaryData, passphrase)
 
@@ -199,7 +186,7 @@ class RestoreLocalViewModel(
                 parseError = e
             }
 
-            withContext(Dispatchers.Main) {
+            withContext(dispatcherProvider.main) {
                 showButtonSpinner = false
                 emitState()
             }
@@ -221,7 +208,7 @@ class RestoreLocalViewModel(
         showButtonSpinner = true
         emitState()
 
-        return viewModelScope.launch(Dispatchers.IO) {
+        return viewModelScope.launch(dispatcherProvider.io) {
             try {
                 val gson = GsonBuilder()
                     .disableHtmlEscaping()
@@ -234,7 +221,10 @@ class RestoreLocalViewModel(
                 // Try to parse as FullBackup first
                 val parsedFullBackup = try {
                     val fb = gson.fromJson(innerJson, FullBackup::class.java)
-                    fb.version // throws if not FullBackup
+                    fb.version
+                    if (JsonParser.parseString(innerJson).asJsonObject.has("crypto")) {
+                        error("Single wallet")
+                    }
                     fb
                 } catch (ex: Exception) {
                     null
@@ -277,7 +267,7 @@ class RestoreLocalViewModel(
                 parseError = e
             }
 
-            withContext(Dispatchers.Main) {
+            withContext(dispatcherProvider.main) {
                 showButtonSpinner = false
                 emitState()
             }
@@ -288,7 +278,7 @@ class RestoreLocalViewModel(
         showButtonSpinner = true
         emitState()
 
-        return viewModelScope.launch(Dispatchers.IO) {
+        return viewModelScope.launch(dispatcherProvider.io) {
             try {
                 val decrypted = backupProvider.decryptedFullBackup(it, passphrase)
                 val backupItems = backupProvider.fullBackupItems(decrypted)
@@ -306,7 +296,7 @@ class RestoreLocalViewModel(
                 parseError = e
             }
 
-            withContext(Dispatchers.Main) {
+            withContext(dispatcherProvider.main) {
                 showButtonSpinner = false
                 emitState()
             }
@@ -325,7 +315,7 @@ class RestoreLocalViewModel(
         showButtonSpinner = true
         emitState()
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherProvider.io) {
             try {
                 backupProvider.restoreFullBackup(decryptedFullBackup, passphrase)
                 restored = true
@@ -338,7 +328,7 @@ class RestoreLocalViewModel(
             }
 
             showButtonSpinner = false
-            withContext(Dispatchers.Main) {
+            withContext(dispatcherProvider.main) {
                 emitState()
             }
         }
@@ -348,7 +338,7 @@ class RestoreLocalViewModel(
     private fun restoreSingleWallet(backup: WalletBackup, accountName: String) {
         showButtonSpinner = true
         emitState()
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherProvider.io) {
             try {
                 val type = backupProvider.accountType(backup, passphrase)
                 if (backup.enabledWallets.isNullOrEmpty()) {
@@ -368,7 +358,7 @@ class RestoreLocalViewModel(
                 parseError = e
             }
             showButtonSpinner = false
-            withContext(Dispatchers.Main) {
+            withContext(dispatcherProvider.main) {
                 emitState()
             }
         }

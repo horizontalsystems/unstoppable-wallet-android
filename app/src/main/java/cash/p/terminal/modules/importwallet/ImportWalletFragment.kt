@@ -4,7 +4,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
@@ -30,14 +29,10 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.Caution
-import cash.p.terminal.core.openInputStreamSafe
 import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.navigation.openQrScanner
 import cash.p.terminal.navigation.slideFromBottom
-import android.util.Base64
-import cash.p.terminal.modules.backuplocal.BackupLocalModule
-import cash.p.terminal.modules.backuplocal.fullbackup.BackupFileValidator
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.restorelocal.RestoreLocalFragment
@@ -54,7 +49,6 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
-import timber.log.Timber
 import java.io.File
 
 
@@ -102,6 +96,20 @@ private fun ImportWalletScreen(
                         )
                     }
                 }
+
+                is ImportWalletViewModel.NavigationEvent.OpenRestoreLocal -> {
+                    navController.navigateWithTermsAccepted {
+                        navController.slideFromBottom(
+                            R.id.restoreLocalFragment,
+                            RestoreLocalFragment.Input(
+                                popUpToInclusiveId,
+                                inclusive,
+                                event.backupFilePath,
+                                event.fileName
+                            )
+                        )
+                    }
+                }
             }
         }
     }
@@ -114,56 +122,19 @@ private fun ImportWalletScreen(
         }
     }
 
+    // Handle backup file error
+    if (viewModel.backupFileError) {
+        LaunchedEffect(Unit) {
+            delay(300)
+            bottomSheetState.show()
+            viewModel.onBackupFileErrorShown()
+        }
+    }
+
     val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let { uriNonNull ->
-            try {
-                context.contentResolver.openInputStreamSafe(uriNonNull)?.use { inputStream ->
-                    try {
-                        // Read as bytes to detect format
-                        val bytes = inputStream.readBytes()
-                        val validator = BackupFileValidator()
-
-                        val backupData: String
-                        if (BackupLocalModule.BackupV4Binary.isBinaryFormat(bytes)) {
-                            // Binary V4 format - validate and encode to Base64 for transport
-                            validator.validateBinary(bytes)
-                            backupData = Base64.encodeToString(bytes, Base64.NO_WRAP)
-                        } else {
-                            // JSON format - validate as before
-                            val jsonString = String(bytes, Charsets.UTF_8)
-                            validator.validate(jsonString)
-                            backupData = jsonString
-                        }
-
-                        navController.navigateWithTermsAccepted {
-                            val fileName = context.getFileName(uriNonNull)
-                            navController.slideFromBottom(
-                                R.id.restoreLocalFragment,
-                                RestoreLocalFragment.Input(
-                                    popUpToInclusiveId,
-                                    inclusive,
-                                    backupData,
-                                    fileName
-                                )
-                            )
-                        }
-                    } catch (e: Throwable) {
-                        Log.e("TAG", "ImportWalletScreen: ", e)
-                        //show backup file parsing error
-                        coroutineScope.launch {
-                            delay(300)
-                            bottomSheetState.show()
-                        }
-                    }
-                }
-            } catch (e: Throwable) {
-                Timber.d("Not able to open input stream: ${e.localizedMessage}")
-                //show backup file parsing error
-                coroutineScope.launch {
-                    delay(300)
-                    bottomSheetState.show()
-                }
-            }
+            val fileName = context.getFileName(uriNonNull)
+            viewModel.processBackupFile(context.contentResolver, uriNonNull, fileName)
         }
     }
 

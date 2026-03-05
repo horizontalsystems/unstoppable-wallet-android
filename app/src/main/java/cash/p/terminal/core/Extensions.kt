@@ -31,6 +31,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import cash.p.terminal.R
+import cash.p.terminal.modules.backuplocal.BackupLocalModule
+import cash.p.terminal.modules.backuplocal.fullbackup.BackupFileValidator
 import cash.p.terminal.modules.main.MainActivity
 import cash.p.terminal.modules.market.topplatforms.Platform
 import cash.p.terminal.modules.premium.about.AboutPremiumFragment
@@ -52,6 +54,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.java.KoinJavaComponent.inject
+import java.io.File
 import java.math.BigDecimal
 import java.util.Locale
 import java.util.Optional
@@ -374,6 +377,22 @@ inline fun <T> tryOrNull(block: () -> T): T? {
     } catch (_: Throwable) {
         null
     }
+}
+
+fun writeBackupToTempFile(data: ByteArray): String {
+    val file = File.createTempFile("backup_", ".tmp", App.instance.cacheDir)
+    file.writeBytes(data)
+    return file.absolutePath
+}
+
+fun validateAndSaveBackup(bytes: ByteArray): String {
+    val validator = BackupFileValidator()
+    if (BackupLocalModule.BackupV4Binary.isBinaryFormat(bytes)) {
+        validator.validateBinary(bytes)
+    } else {
+        validator.validate(String(bytes, Charsets.UTF_8))
+    }
+    return writeBackupToTempFile(bytes)
 }
 
 fun Context.hasNFC(): Boolean {
