@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,16 +21,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.main.MainScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -45,28 +45,28 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object TransactionsFilterScreen : HSScreen()
+data object TransactionsFilterScreen : HSScreen(
+    parentScreenClass = MainScreen::class
+) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val viewModel = viewModel<TransactionsViewModel>()
+
+        FilterScreen(
+            backStack,
+            resultBus,
+            viewModel
+        )
+    }
+}
 
 class TransactionsFilterFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val viewModel: TransactionsViewModel? = try {
-            navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
-        } catch (e: IllegalStateException) {
-            Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
-            null
-        }
-
-        if (viewModel == null) {
-            navController.popBackStack(R.id.filterCoinFragment, true)
-            return
-        }
-
-        FilterScreen(
-            navController,
-            viewModel
-        )
     }
 
 }
@@ -74,7 +74,8 @@ class TransactionsFilterFragment : BaseComposeFragment() {
 
 @Composable
 fun FilterScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
     viewModel: TransactionsViewModel,
 ) {
     val filterResetEnabled by viewModel.filterResetEnabled.observeAsState(false)
@@ -95,7 +96,7 @@ fun FilterScreen(
 
     HSScaffold(
         title = stringResource(R.string.Transactions_Filter),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
@@ -122,7 +123,7 @@ fun FilterScreen(
                                 ?: stringResource(id = R.string.Transactions_Filter_AllBlockchains),
                             valueColor = if (filterBlockchain != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                             onClick = {
-                                navController.slideFromRight(R.id.filterBlockchainFragment)
+                                backStack.add(FilterBlockchainScreen)
                             }
                         )
                     }
@@ -136,7 +137,7 @@ fun FilterScreen(
                                 ?: stringResource(id = R.string.Transactions_Filter_AllCoins),
                             valueColor = if (filterBlockchain != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                             onClick = {
-                                navController.slideFromRight(R.id.filterCoinFragment)
+                                backStack.add(FilterCoinScreen)
                             }
                         )
                     }
@@ -144,21 +145,21 @@ fun FilterScreen(
                 VSpacer(32.dp)
                 CellSingleLineLawrenceSection(
                     listOf {
+                        ResultEffect<SelectContactScreen.Result>(resultBus) {
+                            viewModel.onEnterContact(it.contact)
+                        }
                         FilterDropdownCell(
                             title = stringResource(R.string.Transactions_Filter_Contacts),
                             value = filterContact?.name
                                 ?: stringResource(id = R.string.Transactions_Filter_AllContacts),
                             valueColor = if (filterContact != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                             onClick = {
-                                navController.slideFromRightForResult<SelectContactFragment.Result>(
-                                    R.id.selectContact,
-                                    SelectContactFragment.Input(
+                                backStack.add(
+                                    SelectContactScreen(
                                         filterContact,
                                         filterBlockchain?.type
                                     )
-                                ) {
-                                    viewModel.onEnterContact(it.contact)
-                                }
+                                )
                             }
                         )
                     }
@@ -188,7 +189,7 @@ fun FilterScreen(
                         .padding(horizontal = 16.dp),
                     title = stringResource(R.string.Button_Apply),
                     onClick = {
-                        navController.popBackStack()
+                        backStack.removeLastOrNull()
                     },
                 )
             }

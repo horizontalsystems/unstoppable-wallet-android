@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -23,16 +22,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.modules.main.MainScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.B2
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
@@ -42,37 +43,36 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object FilterCoinScreen : HSScreen()
+data object FilterCoinScreen : HSScreen(
+    parentScreenClass = MainScreen::class
+) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val viewModel = viewModel<TransactionsViewModel>()
+
+        FilterCoinScreen(backStack, viewModel)
+    }
+}
 
 class FilterCoinFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val viewModel: TransactionsViewModel? = try {
-            navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
-        } catch (e: IllegalStateException) {
-            Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
-            null
-        }
-
-        if (viewModel == null) {
-            navController.popBackStack(R.id.filterCoinFragment, true)
-            return
-        }
-
-        FilterCoinScreen(navController, viewModel)
     }
 
 }
 
 
 @Composable
-fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewModel) {
+fun FilterCoinScreen(backStack: NavBackStack<HSScreen>, viewModel: TransactionsViewModel) {
     val filterCoins by viewModel.filterTokensLiveData.observeAsState()
 
     HSScaffold(
         title = stringResource(R.string.Transactions_Filter_ChooseCoin),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column {
             filterCoins?.let { filterCoins ->
@@ -86,7 +86,7 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
                                     .fillMaxSize()
                                     .clickable {
                                         viewModel.setFilterToken(it.item)
-                                        navController.popBackStack()
+                                        backStack.removeLastOrNull()
                                     }
                                     .padding(horizontal = 16.dp),
                                 verticalAlignment = Alignment.CenterVertically
