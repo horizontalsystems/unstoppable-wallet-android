@@ -1,36 +1,42 @@
 package io.horizontalsystems.bankwallet.modules.send.evm.settings
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.R
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SendEvmNonceSettingsScreen : HSScreen()
+data object SendEvmNonceSettingsScreen : HSScreen(
+    parentScreenClass = SendEvmConfirmationScreen::class
+) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        NonceSettingsScreen(backStack)
+    }
+}
 
 class SendEvmNonceSettingsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        NonceSettingsScreen(navController)
+//        NonceSettingsScreen(navController)
     }
 }
 
 @Composable
-fun NonceSettingsScreen(navController: NavController) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.sendEvmConfirmationFragment)
-    }
-
-    val viewModel = viewModel<SendEvmConfirmationViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-    )
+fun NonceSettingsScreen(backStack: NavBackStack<HSScreen>) {
+    val viewModel = viewModel<SendEvmConfirmationViewModel>()
 
     val sendTransactionService = viewModel.sendTransactionService
 
-    sendTransactionService.GetNonceSettingsContent(navController)
+//    TODO("xxx nav3")
+//    sendTransactionService.GetNonceSettingsContent(backStack)
 }

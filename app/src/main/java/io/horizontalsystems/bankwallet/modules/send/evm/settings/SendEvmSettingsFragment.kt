@@ -1,36 +1,42 @@
 package io.horizontalsystems.bankwallet.modules.send.evm.settings
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.R
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SendEvmSettingsScreen : HSScreen()
+data object SendEvmSettingsScreen : HSScreen(
+    parentScreenClass = SendEvmConfirmationScreen::class
+) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SendEvmSettingsScreen(backStack)
+    }
+}
 
 class SendEvmSettingsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SendEvmSettingsScreen(navController)
+//        SendEvmSettingsScreen(navController)
     }
 }
 
 @Composable
-fun SendEvmSettingsScreen(navController: NavController) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.sendEvmConfirmationFragment)
-    }
-
-    val viewModel = viewModel<SendEvmConfirmationViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-    )
+fun SendEvmSettingsScreen(navController: NavBackStack<HSScreen>) {
+    val viewModel = viewModel<SendEvmConfirmationViewModel>()
 
     val sendTransactionService = viewModel.sendTransactionService
 
-    sendTransactionService.GetSettingsContent(navController)
+//    TODO("xxx nav3")
+//    sendTransactionService.GetSettingsContent(navController)
 }
