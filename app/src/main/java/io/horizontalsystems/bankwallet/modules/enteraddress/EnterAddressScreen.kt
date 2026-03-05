@@ -9,19 +9,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.tonapps.tonkeeper.api.shortAddress
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -35,14 +40,19 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputAddress
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.marketkit.models.Token
 
 @Composable
@@ -101,7 +111,7 @@ fun EnterAddressScreen(
                         viewModel.onEnterAddress(it)
                     }
                 } else if (uiState.addressCheckEnabled || uiState.addressValidationError != null) {
-                    AddressDefenseMessage(
+                    AddressCheck(
                         uiState.addressValidationInProgress,
                         uiState.addressValidationError,
                         uiState.checkResults,
@@ -134,63 +144,6 @@ fun EnterAddressScreen(
     }
 }
 
-@Composable
-private fun AddressDefenseMessage(
-    addressValidationInProgress: Boolean,
-    addressValidationError: Throwable?,
-    checkResults: Map<AddressCheckType, AddressCheckData>,
-    onActivateClick: () -> Unit
-) {
-    val noSubscription = checkResults.any { it.value.checkResult == AddressCheckResult.NotAllowed }
-    val detectedType = checkResults.entries.firstOrNull { it.value.checkResult == AddressCheckResult.Detected }?.key
-    val invalidAddress = addressValidationError != null
-
-    val level = when {
-        addressValidationInProgress -> DefenseAlertLevel.IDLE
-        invalidAddress -> DefenseAlertLevel.DANGER
-        noSubscription -> DefenseAlertLevel.WARNING
-        detectedType != null -> DefenseAlertLevel.DANGER
-        else -> DefenseAlertLevel.SAFE
-    }
-
-    val title: Int = when {
-        addressValidationInProgress -> R.string.WalletConnect_Checking
-        invalidAddress -> R.string.Send_Address_Error_InvalidAddress
-        noSubscription -> R.string.AddressEnter_NeedSubscription_Title
-        detectedType != null -> detectedType.detectedErrorTitle
-        else -> R.string.AddressEnter_Safe_Title
-    }
-
-    val content: Int? = when {
-        addressValidationInProgress -> null
-        invalidAddress -> R.string.Send_Address_Error_InvalidAddress_Description
-        noSubscription -> R.string.AddressEnter_NeedSubscription_Content
-        detectedType != null -> detectedType.detectedErrorDescription
-        else -> R.string.AddressEnter_Safe_Content
-    }
-
-    val icon = when (level) {
-        DefenseAlertLevel.WARNING -> R.drawable.warning_filled_24
-        DefenseAlertLevel.DANGER -> R.drawable.warning_filled_24
-        DefenseAlertLevel.SAFE -> R.drawable.shield_check_filled_24
-        DefenseAlertLevel.IDLE -> null
-    }
-
-    val actionText = when {
-        noSubscription && !addressValidationInProgress -> R.string.Button_Activate
-        else -> null
-    }
-
-    DefenseSystemMessage(
-        level = level,
-        title = stringResource(title),
-        content = content?.let { stringResource(it) },
-        above = false,
-        icon = icon,
-        actionText = actionText?.let { stringResource(it)},
-        onClick = onActivateClick
-    )
-}
 
 @Composable
 fun AddressSuggestions(
@@ -245,6 +198,156 @@ private fun AddressCardContainer(
     Column(modifier = modifier) {
         content()
     }
+}
+
+@Composable
+fun AddressCheck(
+    addressValidationInProgress: Boolean,
+    addressValidationError: Throwable?,
+    checkResults: Map<AddressCheckType, AddressCheckData>,
+    onClick: (type: AddressCheckType) -> Unit
+) {
+    if (addressValidationInProgress) {
+        //show nothing
+    } else if (addressValidationError != null) {
+        val errorMessage = addressValidationError.getErrorMessage()
+        if (errorMessage != null) {
+            TextImportantError(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                icon = R.drawable.ic_attention_20,
+                title = stringResource(R.string.SwapSettings_Error_InvalidAddress),
+                text = errorMessage
+            )
+            VSpacer(32.dp)
+        }
+    }
+
+    if (checkResults.isNotEmpty()) {
+        SectionHeader(
+            title = stringResource(R.string.Premium_UpgradeFeature_SecureSend),
+            icon = R.drawable.defense_gradient_filled_24
+        )
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .border(
+                    0.5.dp,
+                    ComposeAppTheme.colors.blade,
+                    RoundedCornerShape(16.dp)
+                )
+        ) {
+            checkResults.entries.forEachIndexed { index, (addressCheckType, checkData) ->
+                CheckCell(
+                    title = stringResource(addressCheckType.title),
+                    checkType = addressCheckType,
+                    inProgress = checkData.inProgress,
+                    showDivider = index != 0,
+                    checkResult = checkData.checkResult,
+                    onClick
+                )
+            }
+        }
+    }
+
+    checkResults.forEach { (addressCheckType, addressCheckData) ->
+        if (addressCheckData.checkResult == AddressCheckResult.Detected) {
+            TextImportantError(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                icon = R.drawable.ic_attention_20,
+                title = stringResource(addressCheckType.detectedErrorTitle),
+                text = stringResource(addressCheckType.detectedErrorDescription)
+            )
+            VSpacer(16.dp)
+        }
+    }
+
+    if (checkResults.any { it.value.checkResult == AddressCheckResult.Detected }) {
+        VSpacer(32.dp)
+    }
+}
+
+@Composable
+private fun Throwable.getErrorMessage() = when (this) {
+    is StellarAssetAdapter.NoTrustlineError -> {
+        stringResource(R.string.Error_AssetNotEnabled, code)
+    }
+
+    else -> this.message
+}
+
+@Composable
+private fun CheckCell(
+    title: String,
+    checkType: AddressCheckType,
+    inProgress: Boolean,
+    showDivider: Boolean,
+    checkResult: AddressCheckResult,
+    onClick: (type: AddressCheckType) -> Unit
+) {
+    BoxBordered(
+        top = showDivider
+    ) {
+        CellPrimary(
+            middle = {
+                CellMiddleInfo(
+                    subtitle = title.hs
+                )
+            },
+            right = {
+                if (checkResult == AddressCheckResult.NotAllowed) {
+                    CheckLocked()
+                } else {
+                    CheckValue(inProgress, checkResult)
+                }
+            },
+            onClick = { onClick(checkType) }
+        )
+    }
+}
+
+@Composable
+fun CheckValue(
+    inProgress: Boolean,
+    checkResult: AddressCheckResult,
+) {
+    if (inProgress) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(20.dp),
+            color = ComposeAppTheme.colors.grey,
+            strokeWidth = 2.dp
+        )
+    } else {
+        val color = when (checkResult) {
+            AddressCheckResult.Clear -> ComposeAppTheme.colors.remus
+            AddressCheckResult.Detected -> ComposeAppTheme.colors.lucian
+            else -> ComposeAppTheme.colors.grey
+        }
+        val text = when (checkResult) {
+            AddressCheckResult.Clear ->
+                stringResource(checkResult.title)
+            AddressCheckResult.Detected ->
+                stringResource(checkResult.title)
+            else ->
+                stringResource(R.string.NotAvailable)
+        }
+
+        CellRightInfo(
+            titleSubheadSb = text.hs(color = color)
+        )
+    }
+}
+
+@Composable
+fun CheckLocked() {
+    Icon(
+        painter = painterResource(R.drawable.lock_filled_24),
+        contentDescription = null,
+        modifier = Modifier.size(20.dp),
+        tint = ComposeAppTheme.colors.andy,
+    )
 }
 
 @Composable
