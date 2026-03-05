@@ -481,11 +481,11 @@
     <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
     <string name="Send_Address_SanctionCheck">Sanctions Check</string>
     <string name="Send_Address_ErrorMessage_PhishingDetected">Phishing Address Detected!</string>
-    <string name="Send_Address_ErrorMessage_BlacklistDetected">Blacklisted Address Detected!</string>
-    <string name="Send_Address_ErrorMessage_SanctionDetected">Sanctioned Address Detected!</string>
-    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Phishing address detected. Sending here will steal your funds.</string>
-    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">This address is blacklisted. Funds may be frozen.</string>
-    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Sanctioned address detected. Transfer may be blocked.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">Blacklisted Address</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected">Sanctioned Address</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">The address you entered may be fraudulent. Scammers often alter the first and last characters. Verify the full address carefully before proceeding to avoid loss.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">The address you entered is flagged as blacklisted. Transactions to this address could lead to loss or other risks. Please verify the recipient\'s details before proceeding.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">The address you entered is flagged as sanctioned. Transactions to this address could lead to loss or other risks. Please verify the recipient\'s details before proceeding.</string>
     <string name="AddressEnter_NeedSubscription_Title">Attention!</string>
     <string name="AddressEnter_NeedSubscription_Content">Secure Send is off. Your transfer may go to a risky address and funds can be lost.</string>
     <string name="AddressEnter_Safe_Title">Safe</string>

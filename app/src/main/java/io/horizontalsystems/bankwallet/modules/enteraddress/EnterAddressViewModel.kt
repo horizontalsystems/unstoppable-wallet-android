@@ -123,6 +123,9 @@ class EnterAddressViewModel(
             try {
                 val addressString = addressExtractor.extractAddressFromUri(value.trim())
                 this.value = addressString
+                if (addressCheckEnabled) {
+                    checkResults = availableCheckTypes.associateWith { AddressCheckData(true) }
+                }
                 emitState()
 
                 processAddress(addressString)
@@ -162,9 +165,6 @@ class EnterAddressViewModel(
                     emitState()
                 } else if (addressCheckEnabled) {
                     if (UserSubscriptionManager.isActionAllowed(ScamProtection)) {
-                        checkResults = availableCheckTypes.associateWith { AddressCheckData(true) }
-                        emitState()
-
                         for (type in availableCheckTypes) {
                             val checkResult = try {
                                 if (addressCheckManager.isClear(type, address, token)) {
@@ -181,10 +181,6 @@ class EnterAddressViewModel(
                             ensureActive()
                             checkResults += mapOf(type to AddressCheckData(false, checkResult))
                             emitState()
-
-                            if (type == AddressCheckType.Phishing && checkResult == AddressCheckResult.Detected) {
-                                break
-                            }
                         }
                     } else {
                         checkResults = availableCheckTypes.associateWith { AddressCheckData(false, AddressCheckResult.NotAllowed) }
