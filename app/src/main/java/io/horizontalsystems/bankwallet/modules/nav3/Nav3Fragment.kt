@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScree
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
+import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectSendRequestScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -165,6 +166,9 @@ fun NavExample(mainActivityViewModel: MainActivityViewModel) {
                 metadata = hSScreen.getMetadata(backStack)
             ) {
                 if (currentScreen is MainScreen) {
+                    currentScreen.mainActivityViewModel = mainActivityViewModel
+                }
+                if (currentScreen is TonConnectSendRequestScreen) {
                     currentScreen.mainActivityViewModel = mainActivityViewModel
                 }
                 hSScreen.GetContent(backStack, resultBus)

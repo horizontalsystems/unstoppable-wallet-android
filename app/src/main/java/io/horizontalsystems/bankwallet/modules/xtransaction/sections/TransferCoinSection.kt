@@ -2,11 +2,12 @@ package io.horizontalsystems.bankwallet.modules.xtransaction.sections
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.entities.TransactionValue
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AddressCell
 import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AmountCellTV
 import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AmountColor
@@ -27,7 +28,7 @@ fun TransferCoinSection(
     comment: String?,
     statPage: StatPage,
     addressStatSection: StatSection,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     transactionInfoHelper: TransactionInfoHelper,
     blockchainType: BlockchainType,
 ) {
@@ -38,7 +39,7 @@ fun TransferCoinSection(
             coinAmountColor = coinAmountColor,
             coinAmountSign = coinAmountSign,
             transactionInfoHelper = transactionInfoHelper,
-            navController = navController,
+            backStack = backStack,
             statPage = statPage,
             borderTop = false
         )
@@ -52,7 +53,7 @@ fun TransferCoinSection(
             blockchainType = blockchainType,
             statPage = statPage,
             statSection = addressStatSection,
-            navController = navController
+            backStack = backStack
         )
         contact?.let {
             TitleAndValueCell(

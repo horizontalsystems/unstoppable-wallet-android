@@ -3,11 +3,12 @@ package io.horizontalsystems.bankwallet.modules.xtransaction.sections.ton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.entities.TransactionValue
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AddressCell
 import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AmountCellTV
@@ -20,7 +21,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
 fun ContractCallSection(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     operation: String,
     address: String,
     transactionValue: TransactionValue,
@@ -43,7 +44,7 @@ fun ContractCallSection(
             blockchainType = blockchainType,
             statPage = StatPage.TonConnect,
             statSection = StatSection.AddressTo,
-            navController = navController
+            backStack = backStack
         )
 
         AmountCellTV(
@@ -52,7 +53,7 @@ fun ContractCallSection(
             coinAmountColor = AmountColor.Negative,
             coinAmountSign = AmountSign.Minus,
             transactionInfoHelper = transactionInfoHelper,
-            navController = navController,
+            backStack = backStack,
             statPage = StatPage.TonConnect
         )
     }

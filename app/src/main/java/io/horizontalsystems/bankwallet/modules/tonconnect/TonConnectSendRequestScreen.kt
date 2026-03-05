@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.tonconnect
 
-import androidx.activity.ComponentActivity
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,20 +11,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
-import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.xtransaction.cells.HeaderCell
 import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.TransactionInfoHelper
 import io.horizontalsystems.bankwallet.modules.xtransaction.sections.BurnSection
@@ -41,17 +39,15 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
-import io.horizontalsystems.core.SnackbarDuration
-import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
-fun TonConnectSendRequestScreen(navController: NavController) {
+fun TonConnectSendRequestScreen(
+    backStack: NavBackStack<HSScreen>,
+    mainActivityViewModel: MainActivityViewModel
+) {
     val logger = remember { AppLogger("ton-connect request") }
-    val mainActivityViewModel =
-        viewModel<MainActivityViewModel>(viewModelStoreOwner = LocalContext.current as ComponentActivity)
+
     val viewModel = viewModel<TonConnectSendRequestViewModel>(initializer = {
         val sendRequestEntity = mainActivityViewModel.tcSendRequest.value
         mainActivityViewModel.onTcSendRequestHandled()
@@ -66,7 +62,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
     val uiState = viewModel.uiState
 
     ConfirmTransactionScreen(
-        onClickBack = navController::popBackStack,
+        onClickBack = backStack::removeLastOrNull,
         onClickFeeSettings = null,
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
@@ -78,7 +74,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                     title = stringResource(R.string.Button_Close),
                     enabled = true,
                     onClick = {
-                        navController.popBackStack()
+                        backStack.removeLastOrNull()
                     }
                 )
             } else {
@@ -89,31 +85,32 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                     title = stringResource(R.string.Button_Confirm),
                     enabled = uiState.confirmEnabled && buttonEnabled,
                     onClick = {
-                        navController.authorizedAction {
-                            coroutineScope.launch {
-                                buttonEnabled = false
-                                HudHelper.showInProcessMessage(
-                                    view,
-                                    R.string.Send_Sending,
-                                    SnackbarDuration.INDEFINITE
-                                )
-
-                                try {
-                                    logger.info("click confirm button")
-                                    viewModel.confirm()
-                                    logger.info("success")
-
-                                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
-                                    delay(1200)
-                                } catch (t: Throwable) {
-                                    logger.warning("failed", t)
-                                    HudHelper.showErrorMessage(view, t.message ?: t.javaClass.simpleName)
-                                }
-
-                                buttonEnabled = true
-                                navController.popBackStack()
-                            }
-                        }
+//                        TODO("xxx nav3")
+//                        navController.authorizedAction {
+//                            coroutineScope.launch {
+//                                buttonEnabled = false
+//                                HudHelper.showInProcessMessage(
+//                                    view,
+//                                    R.string.Send_Sending,
+//                                    SnackbarDuration.INDEFINITE
+//                                )
+//
+//                                try {
+//                                    logger.info("click confirm button")
+//                                    viewModel.confirm()
+//                                    logger.info("success")
+//
+//                                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+//                                    delay(1200)
+//                                } catch (t: Throwable) {
+//                                    logger.warning("failed", t)
+//                                    HudHelper.showErrorMessage(view, t.message ?: t.javaClass.simpleName)
+//                                }
+//
+//                                buttonEnabled = true
+//                                navController.popBackStack()
+//                            }
+//                        }
                     }
                 )
                 VSpacer(16.dp)
@@ -123,7 +120,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                     enabled = uiState.rejectEnabled,
                     onClick = {
                         viewModel.reject()
-                        navController.popBackStack()
+                        backStack.removeLastOrNull()
                     }
                 )
             }
@@ -150,7 +147,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                         TonConnectRequestActionSection(
                             action = action,
                             transactionInfoHelper = transactionInfoHelper,
-                            navController = navController
+                            backStack = backStack
                         )
                     }
                     VSpacer(12.dp)
@@ -158,7 +155,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                     FeeSection(
                         transactionInfoHelper = transactionInfoHelper,
                         fee = record.fee,
-                        navController = navController
+                        backStack = backStack
                     )
                 }
             }
@@ -170,20 +167,20 @@ fun TonConnectSendRequestScreen(navController: NavController) {
 fun TonConnectRequestActionSection(
     action: TonTransactionRecord.Action,
     transactionInfoHelper: TransactionInfoHelper,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
 ) {
     when (val actionType = action.type) {
         is TonTransactionRecord.Action.Type.Burn -> {
             BurnSection(
                 transactionValue = actionType.value,
                 transactionInfoHelper = transactionInfoHelper,
-                navController = navController
+                backStack = backStack
             )
         }
 
         is TonTransactionRecord.Action.Type.ContractCall -> {
             ContractCallSection(
-                navController = navController,
+                backStack = backStack,
                 operation = actionType.operation,
                 address = actionType.address,
                 transactionValue = actionType.value,
@@ -202,7 +199,7 @@ fun TonConnectRequestActionSection(
             MintSection(
                 transactionValue = actionType.value,
                 transactionInfoHelper = transactionInfoHelper,
-                navController = navController
+                backStack = backStack
             )
         }
 
@@ -212,7 +209,7 @@ fun TonConnectRequestActionSection(
                 address = actionType.from,
                 comment = actionType.comment,
                 statPage = StatPage.TonConnect,
-                navController = navController,
+                backStack = backStack,
                 transactionInfoHelper = transactionInfoHelper,
                 blockchainType = BlockchainType.Ton
             )
@@ -225,7 +222,7 @@ fun TonConnectRequestActionSection(
                 comment = actionType.comment,
                 sentToSelf = actionType.sentToSelf,
                 statPage = StatPage.TonConnect,
-                navController = navController,
+                backStack = backStack,
                 transactionInfoHelper = transactionInfoHelper,
                 blockchainType = BlockchainType.Ton
             )
@@ -234,7 +231,7 @@ fun TonConnectRequestActionSection(
         is TonTransactionRecord.Action.Type.Swap -> {
             SwapSection(
                 transactionInfoHelper = transactionInfoHelper,
-                navController = navController,
+                backStack = backStack,
                 transactionValueIn = actionType.valueIn,
                 transactionValueOut = actionType.valueOut
             )

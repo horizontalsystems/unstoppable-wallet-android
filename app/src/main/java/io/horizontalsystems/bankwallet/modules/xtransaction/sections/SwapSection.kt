@@ -2,10 +2,11 @@ package io.horizontalsystems.bankwallet.modules.xtransaction.sections
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.TransactionValue
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AmountCellTV
 import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AmountColor
 import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AmountSign
@@ -15,7 +16,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 @Composable
 fun SwapSection(
     transactionInfoHelper: TransactionInfoHelper,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     transactionValueIn: TransactionValue,
     transactionValueOut: TransactionValue,
 ) {
@@ -26,7 +27,7 @@ fun SwapSection(
             coinAmountColor = AmountColor.Negative,
             coinAmountSign = AmountSign.Minus,
             transactionInfoHelper = transactionInfoHelper,
-            navController = navController,
+            backStack = backStack,
             statPage = StatPage.TonConnect,
             borderTop = false,
         )
@@ -37,7 +38,7 @@ fun SwapSection(
             coinAmountColor = AmountColor.Positive,
             coinAmountSign = AmountSign.Plus,
             transactionInfoHelper = transactionInfoHelper,
-            navController = navController,
+            backStack = backStack,
             statPage = StatPage.TonConnect,
             borderTop = true,
         )

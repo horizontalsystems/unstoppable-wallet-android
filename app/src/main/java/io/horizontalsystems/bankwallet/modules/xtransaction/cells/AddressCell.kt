@@ -10,17 +10,17 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsScreen
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
@@ -40,7 +40,7 @@ fun AddressCell(
     blockchainType: BlockchainType?,
     statPage: StatPage,
     statSection: StatSection,
-    navController: NavController? = null,
+    backStack: NavBackStack<HSScreen>? = null,
     borderTop: Boolean = true
 ) {
     val view = LocalView.current
@@ -90,18 +90,16 @@ fun AddressCell(
             },
             onSelectItem = { action ->
                 blockchainType?.let {
-                    val args = when (action) {
+                    val mode = when (action) {
                         ContactsModule.AddAddressAction.AddToNewContact -> {
                             stat(
                                 page = statPage,
                                 event = StatEvent.Open(StatPage.ContactNew),
                                 section = statSection
                             )
-                            ContactsFragment.Input(
-                                Mode.AddAddressToNewContact(
-                                    blockchainType,
-                                    value
-                                )
+                            Mode.AddAddressToNewContact(
+                                blockchainType,
+                                value
                             )
                         }
 
@@ -111,15 +109,13 @@ fun AddressCell(
                                 event = StatEvent.Open(StatPage.ContactAddToExisting),
                                 section = statSection
                             )
-                            ContactsFragment.Input(
-                                Mode.AddAddressToExistingContact(
-                                    blockchainType,
-                                    value
-                                )
+                            Mode.AddAddressToExistingContact(
+                                blockchainType,
+                                value
                             )
                         }
                     }
-                    navController?.slideFromRight(R.id.contactsFragment, args)
+                    backStack?.add(ContactsScreen(mode))
                 }
             })
     }
