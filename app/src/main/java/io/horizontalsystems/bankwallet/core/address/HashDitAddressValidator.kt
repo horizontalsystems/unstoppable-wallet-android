@@ -5,6 +5,7 @@ import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.delay
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -38,6 +39,7 @@ class HashDitAddressValidator(
 
         var response = apiService.addressSecurity(request)
         if (response.status == "in progress") {
+            delay(1000L)
             response = apiService.addressSecurity(request)
             if (response.status == "in progress") throw CheckInProgressException()
         }
