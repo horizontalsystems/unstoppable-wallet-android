@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.privacy
 
+import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -15,16 +17,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.settings.privacy.tor.SecurityTorSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.privacy.tor.SecurityTorSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.SecurityCenterCell
@@ -36,69 +40,69 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
-import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 import kotlin.system.exitProcess
 
 @Serializable
-data object PrivacySettingsScreen : HSScreen()
-
-class PrivacySettingsFragment : BaseComposeFragment() {
-
-    private val torViewModel by viewModels<SecurityTorSettingsViewModel> {
-        SecurityTorSettingsModule.Factory()
-    }
-
+data object PrivacySettingsScreen : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val torViewModel = viewModel<SecurityTorSettingsViewModel>(
+            factory = SecurityTorSettingsModule.Factory()
+        )
+        val activity = LocalActivity.current
         PrivacyScreen(
-            navController = navController,
+            backStack = backStack,
             torViewModel = torViewModel,
-            showAppRestartAlert = { showAppRestartAlert() },
-            restartApp = { restartApp() },
+            showAppRestartAlert = { showAppRestartAlert(torViewModel) },
+            restartApp = { restartApp(activity) },
         )
     }
 
-    private fun showAppRestartAlert() {
+    private fun showAppRestartAlert(torViewModel: SecurityTorSettingsViewModel) {
         val warningTitle = if (torViewModel.torCheckEnabled) {
-            getString(R.string.Tor_Connection_Enable)
+            Translator.getString(R.string.Tor_Connection_Enable)
         } else {
-            getString(R.string.Tor_Connection_Disable)
+            Translator.getString(R.string.Tor_Connection_Disable)
         }
 
         val actionButton = if (torViewModel.torCheckEnabled) {
-            getString(R.string.Button_Enable)
+            Translator.getString(R.string.Button_Enable)
         } else {
-            getString(R.string.Button_Disable)
+            Translator.getString(R.string.Button_Disable)
         }
 
-        ConfirmationDialog.show(
-            icon = R.drawable.ic_tor_connection_24,
-            title = getString(R.string.Tor_Alert_Title),
-            warningTitle = warningTitle,
-            warningText = getString(R.string.SettingsSecurity_AppRestartWarning),
-            actionButtonTitle = actionButton,
-            transparentButtonTitle = getString(R.string.Alert_Cancel),
-            fragmentManager = childFragmentManager,
-            listener = object : ConfirmationDialog.Listener {
-                override fun onActionButtonClick() {
-                    torViewModel.setTorEnabled()
-                }
-
-                override fun onTransparentButtonClick() {
-                    torViewModel.resetSwitch()
-                }
-
-                override fun onCancelButtonClick() {
-                    torViewModel.resetSwitch()
-                }
-            }
-        )
+//        TODO("xxx nav3")
+//        ConfirmationDialog.show(
+//            icon = R.drawable.ic_tor_connection_24,
+//            title = Translator.getString(R.string.Tor_Alert_Title),
+//            warningTitle = warningTitle,
+//            warningText = Translator.getString(R.string.SettingsSecurity_AppRestartWarning),
+//            actionButtonTitle = actionButton,
+//            transparentButtonTitle = Translator.getString(R.string.Alert_Cancel),
+//            fragmentManager = childFragmentManager,
+//            listener = object : ConfirmationDialog.Listener {
+//                override fun onActionButtonClick() {
+//                    torViewModel.setTorEnabled()
+//                }
+//
+//                override fun onTransparentButtonClick() {
+//                    torViewModel.resetSwitch()
+//                }
+//
+//                override fun onCancelButtonClick() {
+//                    torViewModel.resetSwitch()
+//                }
+//            }
+//        )
     }
 
-    private fun restartApp() {
+    private fun restartApp(activity: Activity?) {
         activity?.let {
             MainModule.startAsNewTask(it)
             exitProcess(0)
@@ -106,9 +110,15 @@ class PrivacySettingsFragment : BaseComposeFragment() {
     }
 }
 
+class PrivacySettingsFragment : BaseComposeFragment() {
+    @Composable
+    override fun GetContent(navController: NavController) {
+    }
+}
+
 @Composable
 fun PrivacyScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     torViewModel: SecurityTorSettingsViewModel,
     showAppRestartAlert: () -> Unit = {},
     restartApp: () -> Unit = {},
@@ -124,7 +134,7 @@ fun PrivacyScreen(
 
     HSScaffold(
         title = stringResource(R.string.Settings_Privacy),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier
