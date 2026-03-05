@@ -2,16 +2,14 @@ package io.horizontalsystems.bankwallet.modules.contacts
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.modules.contacts.screen.AddressScreen
@@ -22,142 +20,150 @@ import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.AddressViewMod
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactViewModel
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactsViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.core.parcelable
-import io.horizontalsystems.core.setNavigationResult
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ContactsScreen(val mode: Mode) : HSScreen()
+data class ContactsScreen(val mode: Mode = Mode.Full) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val screen = when (mode) {
+            is Mode.AddAddressToExistingContact -> {
+                val addAddress = App.marketKit.blockchain(mode.blockchainType.uid)?.let { blockchain ->
+                    ContactAddress(blockchain, mode.address)
+                }
+
+                contacts(mode, addAddress)
+            }
+            is Mode.AddAddressToNewContact -> {
+                val addAddress = App.marketKit.blockchain(mode.blockchainType.uid)?.let { blockchain ->
+                    ContactAddress(blockchain, mode.address)
+                }
+                contact(mode, addAddress = addAddress)
+            }
+            Mode.Full -> {
+                contacts(mode, null as Nothing?)
+            }
+        }
+
+        screen.GetContent(backStack, resultBus)
+    }
+}
 
 class ContactsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ContactsNavHost(
-            navController = navController,
-            mode = navController.getInput<Input>()?.mode ?: Mode.Full
-        )
     }
 
     @Parcelize
     data class Input(val mode: Mode) : Parcelable
 }
 
-@Composable
-fun ContactsNavHost(navController: NavController, mode: Mode) {
-    val navHostController = rememberNavController()
-
-    val startDestination: String
-    val addAddress: ContactAddress?
-
-    when (mode) {
-        is Mode.AddAddressToExistingContact -> {
-            startDestination = "contacts"
-            addAddress = App.marketKit.blockchain(mode.blockchainType.uid)?.let { blockchain ->
-                ContactAddress(blockchain, mode.address)
-            }
-        }
-        is Mode.AddAddressToNewContact -> {
-            startDestination = "contact"
-            addAddress = App.marketKit.blockchain(mode.blockchainType.uid)?.let { blockchain ->
-                ContactAddress(blockchain, mode.address)
-            }
-        }
-        Mode.Full -> {
-            startDestination = "contacts"
-            addAddress = null
-        }
-    }
-
-    NavHost(
-        navController = navHostController,
-        startDestination = startDestination
+@Serializable
+data class contacts(val mode: Mode, val addAddress: ContactAddress?) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
     ) {
-        composable("contacts") { backStackEntry ->
-            val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(mode))
-            ContactsScreen(
-                viewModel = viewModel,
-                onNavigateToBack = { navController.popBackStack() },
-                onNavigateToCreateContact = { navHostController.navigate("contact") },
-                onNavigateToContact = { contact ->
-                    backStackEntry.savedStateHandle["contact"] = contact
-                    backStackEntry.savedStateHandle["new_address"] = addAddress
-
-                    navHostController.navigate("contact")
-                }
-            )
-        }
-        composablePage(route = "contact") { backStackEntry ->
-            val contact = navHostController.previousBackStackEntry?.savedStateHandle?.get<Contact>("contact")
-            val newAddress = navHostController.previousBackStackEntry?.savedStateHandle?.get<ContactAddress>("new_address") ?: addAddress
-
-            navHostController.previousBackStackEntry?.savedStateHandle?.set("contact", null)
-            navHostController.previousBackStackEntry?.savedStateHandle?.set("new_address", null)
-
-            val viewModel = viewModel<ContactViewModel>(factory = ContactsModule.ContactViewModelFactory(contact, newAddress))
-
-            ContactScreen(
-                viewModel = viewModel,
-                onNavigateToBack = {
-                    if (mode == Mode.Full) {
-                        navHostController.popBackStack()
-                    } else {
-                        navController.popBackStack()
-                    }
-                },
-                onNavigateToAddress = { address ->
-                    navHostController.getNavigationResult("contacts_address_result") { bundle ->
-                        bundle.parcelable<ContactAddress>("added_address")?.let { editedAddress ->
-                            viewModel.setAddress(editedAddress)
-                        }
-                        bundle.parcelable<ContactAddress>("deleted_address")?.let { deletedAddress ->
-                            viewModel.deleteAddress(deletedAddress)
-                        }
-                    }
-
-                    backStackEntry.savedStateHandle["contact_uid"] = viewModel.contact.uid
-                    backStackEntry.savedStateHandle["address"] = address
-                    backStackEntry.savedStateHandle["defined_addresses"] = viewModel.uiState.addressViewItems.map { it.contactAddress }
-
-                    navHostController.navigate("address")
-                }
-            )
-        }
-        composablePage(
-            route = "address"
-        ) {
-            val contactUid = navHostController.previousBackStackEntry?.savedStateHandle?.get<String>("contact_uid")
-            val address = navHostController.previousBackStackEntry?.savedStateHandle?.get<ContactAddress>("address")
-            val definedAddresses = navHostController.previousBackStackEntry?.savedStateHandle?.get<List<ContactAddress>>("defined_addresses")
-
-            val viewModel = viewModel<AddressViewModel>(
-                factory = ContactsModule.AddressViewModelFactory(
-                    contactUid = contactUid,
-                    contactAddress = address,
-                    definedAddresses = definedAddresses
-                )
-            )
-
-            AddressNavHost(
-                viewModel = viewModel,
-                onAddAddress = { contactAddress ->
-                    navHostController.setNavigationResult(
-                        "contacts_address_result",
-                        bundleOf("added_address" to contactAddress)
-                    )
-                },
-                onDeleteAddress = { contactAddress ->
-                    navHostController.setNavigationResult(
-                        "contacts_address_result",
-                        bundleOf("deleted_address" to contactAddress)
-                    )
-                },
-                onCloseNavHost = { navHostController.popBackStack() }
-            )
-        }
+        val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(mode))
+        ContactsScreen(
+            viewModel = viewModel,
+            onNavigateToBack = { backStack.removeLastUntil(ContactsScreen::class, true) },
+            onNavigateToCreateContact = { backStack.add(contact(mode)) },
+            onNavigateToContact = { contact ->
+                backStack.add(contact(mode, contact, addAddress))
+            }
+        )
     }
+}
+
+@Serializable
+data class contact(
+    val mode: Mode,
+    val contact1: Contact? = null,
+    val addAddress: ContactAddress? = null
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val contact = contact1
+        val newAddress = addAddress
+
+        val viewModel = viewModel<ContactViewModel>(factory = ContactsModule.ContactViewModelFactory(contact, newAddress))
+
+        ResultEffect<address.Result>(resultBus) { result ->
+            result.added_address?.let {
+                viewModel.setAddress(it)
+            }
+            result.deleted_address?.let {
+                viewModel.deleteAddress(it)
+            }
+        }
+
+        ContactScreen(
+            viewModel = viewModel,
+            onNavigateToBack = {
+                if (mode == Mode.Full) {
+                    backStack.removeLastOrNull()
+                } else {
+                    backStack.removeLastUntil(ContactsScreen::class, true)
+                }
+            },
+            onNavigateToAddress = { address ->
+                backStack.add(
+                    address(
+                        viewModel.contact.uid,
+                        address,
+                        viewModel.uiState.addressViewItems.map { it.contactAddress }
+                    )
+                )
+            }
+        )
+    }
+}
+
+@Serializable
+data class address(
+    val contactUid: String,
+    val address: ContactAddress?,
+    val definedAddresses: List<ContactAddress>
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val viewModel = viewModel<AddressViewModel>(
+            factory = ContactsModule.AddressViewModelFactory(
+                contactUid = contactUid,
+                contactAddress = address,
+                definedAddresses = definedAddresses
+            )
+        )
+
+        AddressNavHost(
+            viewModel = viewModel,
+            onAddAddress = { contactAddress ->
+                resultBus.sendResult(result = Result(added_address = contactAddress))
+            },
+            onDeleteAddress = { contactAddress ->
+                resultBus.sendResult(result = Result(deleted_address = contactAddress))
+            },
+            onCloseNavHost = { backStack.removeLastOrNull() }
+        )
+    }
+
+    data class Result(val added_address: ContactAddress? = null, val deleted_address: ContactAddress? = null)
 }
 
 @Composable
