@@ -40,11 +40,11 @@ fun SubscriptionNavHost(
         startDestination = "select_subscription",
     ) {
         composable("select_subscription") {
-            PremiumFeaturesScreen(
-                navController,
-                navHostController,
-                onClose = onClose
-            )
+//            PremiumFeaturesScreen(
+//                navController,
+//                navHostController,
+//                onClose = onClose
+//            )
         }
         composablePopup("premium_subscribed_page") {
             PremiumSubscribedScreen(

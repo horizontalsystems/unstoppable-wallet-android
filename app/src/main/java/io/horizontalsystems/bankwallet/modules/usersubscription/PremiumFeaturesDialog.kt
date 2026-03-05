@@ -33,7 +33,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,10 +41,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PlanItems
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.TitleCenteredTopBar
@@ -60,13 +60,24 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object PremiumFeaturesScreen : HSScreen()
+data object PremiumFeaturesScreen : HSScreen(bottomSheet = true) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        PremiumFeaturesScreen(
+            backStack = backStack,
+            navHostController = null,
+            onClose = { backStack.removeLastOrNull() }
+        )
+    }
+}
 
 class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
 
@@ -80,14 +91,14 @@ class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                ComposeAppTheme {
-                    val navController = findNavController()
-                    PremiumFeaturesScreen(
-                        navController = navController,
-                        navHostController = null,
-                        onClose = { navController.popBackStack() }
-                    )
-                }
+//                ComposeAppTheme {
+//                    val navController = findNavController()
+//                    PremiumFeaturesScreen(
+//                        navController = navController,
+//                        navHostController = null,
+//                        onClose = { navController.popBackStack() }
+//                    )
+//                }
             }
         }
     }
@@ -96,7 +107,7 @@ class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PremiumFeaturesScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     navHostController: NavController?,
     onClose: () -> Unit
 ) {
@@ -149,21 +160,21 @@ fun PremiumFeaturesScreen(
                 VSpacer(24.dp)
                 uiState.defenseSystemFeatures
                 FeaturesSection(
-                    navController = navController,
+                    backStack = backStack,
                     icon = R.drawable.defense_gradient_filled_24,
                     title = stringResource(R.string.Premium_DefenseSystem),
                     features = uiState.defenseSystemFeatures,
                 )
 
                 FeaturesSection(
-                    navController = navController,
+                    backStack = backStack,
                     icon = R.drawable.plus_gradient_filled_24,
                     title = stringResource(R.string.Premium_AdvancedControls),
                     features = uiState.advancedControlsFeatures,
                 )
 
                 FeaturesSection(
-                    navController = navController,
+                    backStack = backStack,
                     icon = R.drawable.market_gradient_filled_24,
                     title = stringResource(R.string.Premium_MarketInsights),
                     features = uiState.marketInsightsFeatures,
@@ -253,7 +264,7 @@ fun PremiumFeaturesScreen(
                                 isPlanSelectBottomSheetVisible = true
                             } ?: run {
                                 onClose.invoke()
-                                navController.slideFromBottom(R.id.selectSubscriptionPlanDialog)
+                                backStack.add(SelectPlanScreen)
                             }
                         }
                     )
@@ -283,7 +294,7 @@ fun PremiumFeaturesScreen(
 
 @Composable
 fun FeaturesSection(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     icon: Int,
     title: String,
     features: List<IPaidAction>
@@ -296,9 +307,8 @@ fun FeaturesSection(
             items = features,
             onItemClick = { action ->
                 val feature = PremiumFeature.getFeature(action)
-                navController.slideFromBottom(
-                    R.id.defenseSystemFeatureDialog,
-                    DefenseSystemFeatureDialog.Input(feature)
+                backStack.add(
+                    DefenseSystemFeatureScreen(feature)
                 )
             }
         )
@@ -328,10 +338,10 @@ private fun ActionText() {
 @Composable
 private fun PremiumFeaturesScreenPreview() {
     ComposeAppTheme {
-        val ctx = LocalContext.current
-        PremiumFeaturesScreen(
-            navController = NavController(ctx),
-            navHostController = null
-        ) {}
+//        val ctx = LocalContext.current
+//        PremiumFeaturesScreen(
+//            backStack = NavController(ctx),
+//            navHostController = null
+//        ) {}
     }
 }
