@@ -20,18 +20,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.eip20approve.ConfirmTokenSection
 import io.horizontalsystems.bankwallet.modules.eip20approve.SpenderCell
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
+import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -45,14 +45,33 @@ import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 @Serializable
-data object Eip20RevokeConfirmScreen : HSScreen()
+data class Eip20RevokeConfirmScreen(
+    @Serializable(with = TokenSerializer::class)
+    val token: Token,
+    val spenderAddress: String,
+    @Serializable(with = BigDecimalSerializer::class)
+    val allowance: BigDecimal,
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        Eip20RevokeScreen(
+            backStack,
+            resultBus,
+            token,
+            spenderAddress,
+            allowance
+        )
+    }
+
+    data class Result(val revoked: Boolean)
+}
 
 class Eip20RevokeConfirmFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            Eip20RevokeScreen(navController, input)
-        }
     }
 
     @Parcelize
@@ -67,16 +86,18 @@ class Eip20RevokeConfirmFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFragment.Input) {
-    val currentBackStackEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.eip20RevokeConfirmFragment)
-    }
+fun Eip20RevokeScreen(
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
+    token: Token,
+    spenderAddress: String,
+    allowance: BigDecimal
+) {
     val viewModel = viewModel<Eip20RevokeConfirmViewModel>(
-        viewModelStoreOwner = currentBackStackEntry,
         factory = Eip20RevokeConfirmViewModel.Factory(
-            input.token,
-            input.spenderAddress,
-            input.allowance
+            token,
+            spenderAddress,
+            allowance
         )
     )
 
@@ -86,9 +107,9 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
     ConfirmTransactionScreen(
         title = stringResource(R.string.Swap_ConfirmRevoke_Title),
         initialLoading = uiState.initialLoading,
-        onClickBack = navController::popBackStack,
+        onClickBack = backStack::removeLastOrNull,
         onClickFeeSettings = {
-            navController.slideFromRight(R.id.eip20RevokeTransactionSettingsFragment)
+            backStack.add(Eip20RevokeTransactionSettingsScreen)
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
@@ -108,10 +129,10 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            navController.setNavigationResultX(Eip20RevokeConfirmFragment.Result(true))
-                            navController.popBackStack()
+                            resultBus.sendResult(result = Eip20RevokeConfirmScreen.Result(true))
+                            backStack.removeLastOrNull()
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                            backStack.add(ErrorBottomSheetScreen(t.message ?: t.javaClass.simpleName))
                         }
 
                         buttonTitle = R.string.Swap_Revoke
@@ -145,13 +166,14 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
                 }
             )
 
-            DataFieldFeeTemplate(
-                navController = navController,
-                primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
-                secondary = uiState.networkFee?.secondary?.getFormattedPlain(),
-                title = stringResource(id = R.string.FeeSettings_NetworkFee),
-                infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
-            )
+//            TODO("xxx nav3")
+//            DataFieldFeeTemplate(
+//                navController = backStack,
+//                primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
+//                secondary = uiState.networkFee?.secondary?.getFormattedPlain(),
+//                title = stringResource(id = R.string.FeeSettings_NetworkFee),
+//                infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+//            )
         }
 
         if (uiState.cautions.isNotEmpty()) {
