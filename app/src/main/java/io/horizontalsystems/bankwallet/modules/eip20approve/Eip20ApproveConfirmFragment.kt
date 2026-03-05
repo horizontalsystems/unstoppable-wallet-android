@@ -22,22 +22,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.OnlyRequired
 import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.Unlimited
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -58,14 +56,24 @@ import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 @Serializable
-data object Eip20ApproveConfirmScreen : HSScreen() {
+data object Eip20ApproveConfirmScreen : HSScreen(
+    parentScreenClass = Eip20ApproveScreen::class
+) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        Eip20ApproveConfirmScreen(backStack, resultBus)
+    }
+
     data class Result(val approved: Boolean)
 }
 
 class Eip20ApproveConfirmFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        Eip20ApproveConfirmScreen(navController)
+//        Eip20ApproveConfirmScreen(navController)
     }
 
     @Parcelize
@@ -73,13 +81,8 @@ class Eip20ApproveConfirmFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun Eip20ApproveConfirmScreen(navController: NavController) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.eip20ApproveFragment)
-    }
-    val viewModel = viewModel<Eip20ApproveViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-    )
+fun Eip20ApproveConfirmScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
+    val viewModel = viewModel<Eip20ApproveViewModel>()
 
     val view = LocalView.current
     val uiState = viewModel.uiState
@@ -87,9 +90,9 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
     ConfirmTransactionScreen(
         title = stringResource(R.string.Swap_ConfirmApprove_Title),
         initialLoading = uiState.initialLoading,
-        onClickBack = navController::popBackStack,
+        onClickBack = backStack::removeLastOrNull,
         onClickFeeSettings = {
-            navController.slideFromRight(R.id.eip20ApproveTransactionSettingsFragment)
+            backStack.add(Eip20ApproveTransactionSettingsScreen)
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
@@ -109,10 +112,10 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            navController.setNavigationResultX(Eip20ApproveConfirmFragment.Result(true))
-                            navController.popBackStack()
+                            resultBus.sendResult(result = Eip20ApproveConfirmScreen.Result(true))
+                            backStack.removeLastOrNull()
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                            backStack.add(ErrorBottomSheetScreen(t.message ?: t.javaClass.simpleName))
                         }
 
                         buttonTitle = R.string.Swap_Approve
@@ -155,14 +158,14 @@ fun Eip20ApproveConfirmScreen(navController: NavController) {
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                 }
             )
-
-            DataFieldFeeTemplate(
-                navController = navController,
-                primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
-                secondary = uiState.networkFee?.secondary?.getFormattedPlain(),
-                title = stringResource(id = R.string.FeeSettings_NetworkFee),
-                infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
-            )
+//            TODO("xxx nav3")
+//            DataFieldFeeTemplate(
+//                navController = backStack,
+//                primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
+//                secondary = uiState.networkFee?.secondary?.getFormattedPlain(),
+//                title = stringResource(id = R.string.FeeSettings_NetworkFee),
+//                infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+//            )
         }
 
         if (uiState.cautions.isNotEmpty()) {
