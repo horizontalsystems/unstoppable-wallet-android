@@ -58,7 +58,9 @@ import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 @Serializable
-data object Eip20ApproveConfirmScreen : HSScreen()
+data object Eip20ApproveConfirmScreen : HSScreen() {
+    data class Result(val approved: Boolean)
+}
 
 class Eip20ApproveConfirmFragment : BaseComposeFragment() {
     @Composable

@@ -7,19 +7,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
+import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -37,15 +39,26 @@ import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 @Serializable
-data object Eip20ApproveScreen : HSScreen()
+data class Eip20ApproveScreen(
+    @Serializable(with = TokenSerializer::class)
+    val token: Token,
+    @Serializable(with = BigDecimalSerializer::class)
+    val requiredAllowance: BigDecimal,
+    val spenderAddress: String
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        Eip20ApproveScreen(backStack, resultBus, token, requiredAllowance, spenderAddress)
+    }
+}
 
 class Eip20ApproveFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            Eip20ApproveScreen(navController, input)
-        }
     }
 
     @Parcelize
@@ -57,18 +70,18 @@ class Eip20ApproveFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment.Input) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.eip20ApproveFragment)
-    }
-
-
+fun Eip20ApproveScreen(
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
+    token: Token,
+    requiredAllowance: BigDecimal,
+    spenderAddress: String
+) {
     val viewModel = viewModel<Eip20ApproveViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
         factory = Eip20ApproveViewModel.Factory(
-            input.token,
-            input.requiredAllowance,
-            input.spenderAddress,
+            token,
+            requiredAllowance,
+            spenderAddress,
         )
     )
 
@@ -80,11 +93,15 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = navController::popBackStack
+                onClick = backStack::removeLastOrNull
             )
         ),
         bottomBar = {
             ButtonsGroupWithShade {
+                ResultEffect<Eip20ApproveConfirmScreen.Result>() {
+                    resultBus.sendResult(result = it)
+                    backStack.removeLastOrNull()
+                }
                 ButtonPrimaryYellow(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -92,10 +109,7 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
                     title = stringResource(R.string.Button_Next),
                     onClick = {
                         viewModel.freeze()
-                        navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>(R.id.eip20ApproveConfirmFragment) {
-                            navController.setNavigationResultX(it)
-                            navController.popBackStack()
-                        }
+                        backStack.add(Eip20ApproveConfirmScreen)
                     },
                 )
             }
