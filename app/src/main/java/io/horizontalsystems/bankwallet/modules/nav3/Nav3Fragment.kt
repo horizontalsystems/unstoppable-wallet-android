@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
+import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinScreen
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
 import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectSendRequestScreen
@@ -200,5 +201,17 @@ fun NavBackStack<HSScreen>.navigateWithTermsAccepted(screen: HSScreen) {
         add(TermsScreen(screen))
     } else {
         add(screen)
+    }
+}
+
+fun NavBackStack<HSScreen>.removeLastUntil(klass: KClass<ReceiveChooseCoinScreen>, inclusive: Boolean) {
+    val index = indexOfLast { it::class == klass }
+    if (index != -1) {
+        for (i in lastIndex downTo (index + 1)) {
+            removeAt(i)
+        }
+        if (inclusive) {
+            removeAt(index)
+        }
     }
 }

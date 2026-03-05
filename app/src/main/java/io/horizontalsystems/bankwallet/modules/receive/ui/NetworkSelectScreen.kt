@@ -13,12 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.NetworkSelectViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -37,7 +38,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NetworkSelectScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     activeAccount: Account,
     fullCoin: FullCoin,
     closeModule: () -> Unit,
@@ -53,7 +54,7 @@ fun NetworkSelectScreen(
 
     HSScaffold(
         title = stringResource(R.string.Balance_Network),
-        onBack = { navController.popBackStack() },
+        onBack = { backStack.removeLastOrNull() },
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
