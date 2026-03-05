@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,15 +25,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
-import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.SessionRequestUI
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.DataBlock
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.FeeCell
@@ -61,17 +58,13 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WCSignEthereumTransactionRequestScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     logger: AppLogger,
     blockchainType: BlockchainType,
     transaction: WalletConnectTransaction,
     sessionRequestUI: SessionRequestUI.Content,
 ) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.wcRequestFragment)
-    }
     val viewModel = viewModel<WCSignEthereumTransactionRequestViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
         factory = WCSignEthereumTransactionRequestViewModel.Factory(
             blockchainType = blockchainType,
             transaction = transaction,
@@ -88,7 +81,7 @@ fun WCSignEthereumTransactionRequestScreen(
     val doneMessage = stringResource(R.string.Hud_Text_Done)
 
     BottomSheetContent(
-        onDismissRequest = navController::popBackStack,
+        onDismissRequest = backStack::removeLastOrNull,
         sheetState = sheetState,
     ) { snackbarActions ->
         Column(
@@ -148,9 +141,8 @@ fun WCSignEthereumTransactionRequestScreen(
                 DataBlock(
                     sections = uiState.sectionViewItems,
                     onInfoClick = {
-                        navController.slideFromBottom(
-                            R.id.feeSettingsInfoDialog,
-                            FeeSettingsInfoDialog.Input(feeText, feeInfoText)
+                        backStack.add(
+                            FeeSettingsInfoScreen(feeText, feeInfoText)
                         )
                     },
                     onCopy = {
@@ -167,9 +159,8 @@ fun WCSignEthereumTransactionRequestScreen(
                         primaryValue = fee.primary.getFormatted(),
                         secondaryValue = fee.secondary?.getFormatted(),
                         onInfoClick = {
-                            navController.slideFromBottom(
-                                R.id.feeSettingsInfoDialog,
-                                FeeSettingsInfoDialog.Input(feeText, feeInfoText)
+                            backStack.add(
+                                FeeSettingsInfoScreen(feeText, feeInfoText)
                             )
                         }
                     )
@@ -183,7 +174,7 @@ fun WCSignEthereumTransactionRequestScreen(
                     modifier = Modifier.weight(1f),
                     onClick = {
                         viewModel.reject()
-                        navController.popBackStack()
+                        backStack.removeLastOrNull()
                     }
                 )
                 HSButton(
@@ -204,7 +195,7 @@ fun WCSignEthereumTransactionRequestScreen(
                                 Toast.makeText(view.context, t.javaClass.simpleName, Toast.LENGTH_SHORT).show()
                             }
 
-                            navController.popBackStack()
+                            backStack.removeLastOrNull()
                         }
                     }
                 )
@@ -214,7 +205,7 @@ fun WCSignEthereumTransactionRequestScreen(
 
     ConfirmTransactionScreen(
         title = stringResource(id = R.string.WalletConnect_SignMessageRequest_Title),
-        onClickBack = navController::popBackStack,
+        onClickBack = backStack::removeLastOrNull,
         onClickFeeSettings = null,
         buttonsSlot = {
             ButtonPrimaryYellow(
@@ -234,7 +225,7 @@ fun WCSignEthereumTransactionRequestScreen(
                             HudHelper.showErrorMessage(view, t.javaClass.simpleName)
                         }
 
-                        navController.popBackStack()
+                        backStack.removeLastOrNull()
                     }
                 }
             )
@@ -244,18 +235,19 @@ fun WCSignEthereumTransactionRequestScreen(
                 title = stringResource(R.string.Button_Reject),
                 onClick = {
                     viewModel.reject()
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 }
             )
         }
     ) {
-        SendEvmTransactionView(
-            navController,
-            uiState.sectionViewItems,
-            uiState.cautions,
-            uiState.transactionFields,
-            uiState.networkFee,
-            StatPage.WalletConnect
-        )
+//        TODO("xxx nav3")
+//        SendEvmTransactionView(
+//            backStack,
+//            uiState.sectionViewItems,
+//            uiState.cautions,
+//            uiState.transactionFields,
+//            uiState.networkFee,
+//            StatPage.WalletConnect
+//        )
     }
 }
