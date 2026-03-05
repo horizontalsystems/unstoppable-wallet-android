@@ -19,11 +19,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.activatetoken.ActivateTokenFragment
+import io.horizontalsystems.bankwallet.modules.activatetoken.ActivateTokenScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
@@ -40,23 +42,25 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
 
 @Composable
-fun ReceiveStellarAssetScreen(navController: NavController, wallet: Wallet, receiveEntryPointDestId: Int) {
+fun ReceiveStellarAssetScreen(
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
+    wallet: Wallet,
+    receiveEntryPointDestId: Int
+) {
     val viewModel = viewModel<ReceiveStellarAssetViewModel>(factory = ReceiveStellarAssetViewModel.Factory(wallet))
     val uiState = viewModel.uiState
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
 
-    val runActivation = {
-        navController.slideFromBottomForResult<ActivateTokenFragment.Result>(
-            R.id.activateTokenFragment,
-            wallet
-        ) {
-            scope.launch {
-                viewModel.onActivationResult(it.activated)
-                sheetState.hide()
-            }
-        }
+    ResultEffect<ActivateTokenScreen.Result>(resultBus) {
+        viewModel.onActivationResult(it.activated)
+        sheetState.hide()
+    }
+
+    val runActivation: () -> Unit = {
+        backStack.add(ActivateTokenScreen(wallet))
     }
 
     LaunchedEffect(uiState.activationRequired) {
@@ -147,12 +151,13 @@ fun ReceiveStellarAssetScreen(navController: NavController, wallet: Wallet, rece
                     }
                 }
             },
-            onBackPress = { navController.popBackStack() },
+            onBackPress = { backStack.removeLastOrNull() },
             closeModule = {
                 if (receiveEntryPointDestId == 0) {
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 } else {
-                    navController.popBackStack(receiveEntryPointDestId, true)
+//                    TODO("xxx nav3")
+//                    backStack.popBackStack(receiveEntryPointDestId, true)
                 }
             }
         )

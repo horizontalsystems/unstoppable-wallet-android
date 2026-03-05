@@ -10,10 +10,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -21,7 +21,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
-fun ReceiveMoneroScreen(navController: NavController, wallet: Wallet, receiveEntryPointDestId: Int) {
+fun ReceiveMoneroScreen(backStack: NavBackStack<HSScreen>, wallet: Wallet, receiveEntryPointDestId: Int) {
     val addressViewModel = viewModel<ReceiveMoneroAddressViewModel>(factory = ReceiveMoneroAddressViewModel.Factory(wallet))
 
     val uiState = addressViewModel.uiState
@@ -36,10 +36,7 @@ fun ReceiveMoneroScreen(navController: NavController, wallet: Wallet, receiveEnt
                 RowUniversal(
                     modifier = Modifier.height(52.dp),
                     onClick = {
-                        navController.slideFromRight(
-                            R.id.moneroSubaddressesFragment,
-                            SubaddressesParams(uiState.subaddresses)
-                        )
+                        backStack.add(MoneroSubaddressesScreen(uiState.subaddresses))
                     }
                 ) {
                     subhead2_grey(
@@ -58,12 +55,13 @@ fun ReceiveMoneroScreen(navController: NavController, wallet: Wallet, receiveEnt
                 }
             }
         },
-        onBackPress = { navController.popBackStack() },
+        onBackPress = { backStack.removeLastOrNull() },
         closeModule = {
             if (receiveEntryPointDestId == 0) {
-                navController.popBackStack()
+                backStack.removeLastOrNull()
             } else {
-                navController.popBackStack(receiveEntryPointDestId, true)
+//                TODO("xxx nav3")
+//                backStack.popBackStack(receiveEntryPointDestId, true)
             }
         }
     )

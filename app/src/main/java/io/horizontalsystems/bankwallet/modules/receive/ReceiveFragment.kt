@@ -12,11 +12,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.receive.monero.ReceiveMoneroScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressesParams
@@ -35,27 +36,25 @@ data class ReceiveScreen(
     val wallet: Wallet,
     val receiveEntryPointDestId: Int = 0,
     val isTransparentAddress: Boolean = false
-) : HSScreen()
-
-class ReceiveFragment : BaseComposeFragment() {
-
+) : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) {
-            val wallet = it.wallet
-            val token = wallet.token
-            when (token.blockchainType) {
-                BlockchainType.Stellar -> {
-                    if (token.type is TokenType.Asset) {
-                        ReceiveStellarAssetScreen(navController, wallet, it.receiveEntryPointDestId)
-                    } else if (token.type == TokenType.Native) {
-                        ReceiveScreen(navController, wallet, it.receiveEntryPointDestId, it.isTransparentAddress)
-                    }
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val token = wallet.token
+        when (token.blockchainType) {
+            BlockchainType.Stellar -> {
+                if (token.type is TokenType.Asset) {
+                    ReceiveStellarAssetScreen(backStack, resultBus, wallet, receiveEntryPointDestId)
+                } else if (token.type == TokenType.Native) {
+                    ReceiveScreen(backStack, wallet, receiveEntryPointDestId, isTransparentAddress)
                 }
+            }
 
-                BlockchainType.Monero -> {
-                    ReceiveMoneroScreen(navController, wallet, it.receiveEntryPointDestId)
-                }
+            BlockchainType.Monero -> {
+                ReceiveMoneroScreen(backStack, wallet, receiveEntryPointDestId)
+            }
 //        BlockchainType.ArbitrumOne -> TODO()
 //        BlockchainType.Avalanche -> TODO()
 //        BlockchainType.Base -> TODO()
@@ -76,11 +75,57 @@ class ReceiveFragment : BaseComposeFragment() {
 //        is BlockchainType.Unsupported -> TODO()
 //        BlockchainType.Zcash -> TODO()
 //        BlockchainType.ZkSync -> TODO()
-                else -> {
-                    ReceiveScreen(navController, wallet, it.receiveEntryPointDestId, it.isTransparentAddress)
-                }
+            else -> {
+                ReceiveScreen(backStack, wallet, receiveEntryPointDestId, isTransparentAddress)
             }
         }
+    }
+}
+
+class ReceiveFragment : BaseComposeFragment() {
+
+    @Composable
+    override fun GetContent(navController: NavController) {
+//        withInput<Input>(navController) {
+//            val wallet = it.wallet
+//            val token = wallet.token
+//            when (token.blockchainType) {
+//                BlockchainType.Stellar -> {
+//                    if (token.type is TokenType.Asset) {
+//                        ReceiveStellarAssetScreen(navController, wallet, it.receiveEntryPointDestId)
+//                    } else if (token.type == TokenType.Native) {
+//                        ReceiveScreen(navController, wallet, it.receiveEntryPointDestId, it.isTransparentAddress)
+//                    }
+//                }
+//
+//                BlockchainType.Monero -> {
+//                    ReceiveMoneroScreen(navController, wallet, it.receiveEntryPointDestId)
+//                }
+////        BlockchainType.ArbitrumOne -> TODO()
+////        BlockchainType.Avalanche -> TODO()
+////        BlockchainType.Base -> TODO()
+////        BlockchainType.BinanceSmartChain -> TODO()
+////        BlockchainType.Bitcoin -> TODO()
+////        BlockchainType.BitcoinCash -> TODO()
+////        BlockchainType.Dash -> TODO()
+////        BlockchainType.ECash -> TODO()
+////        BlockchainType.Ethereum -> TODO()
+////        BlockchainType.Fantom -> TODO()
+////        BlockchainType.Gnosis -> TODO()
+////        BlockchainType.Litecoin -> TODO()
+////        BlockchainType.Optimism -> TODO()
+////        BlockchainType.Polygon -> TODO()
+////        BlockchainType.Solana -> TODO()
+////        BlockchainType.Ton -> TODO()
+////        BlockchainType.Tron -> TODO()
+////        is BlockchainType.Unsupported -> TODO()
+////        BlockchainType.Zcash -> TODO()
+////        BlockchainType.ZkSync -> TODO()
+//                else -> {
+//                    ReceiveScreen(navController, wallet, it.receiveEntryPointDestId, it.isTransparentAddress)
+//                }
+//            }
+//        }
     }
 
     @Parcelize
@@ -94,7 +139,7 @@ class ReceiveFragment : BaseComposeFragment() {
 
 @Composable
 fun ReceiveScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     wallet: Wallet,
     receiveEntryPointDestId: Int,
     isTransparentAddress: Boolean,
@@ -114,12 +159,13 @@ fun ReceiveScreen(
                 RowUniversal(
                     modifier = Modifier.height(52.dp),
                     onClick = {
-                        navController.slideFromRight(
-                            R.id.btcUsedAddressesFragment,
-                            UsedAddressesParams(
-                                wallet.coin.name,
-                                uiState.usedAddresses,
-                                uiState.usedChangeAddresses
+                        backStack.add(
+                            BtcUsedAddressesScreen(
+                                UsedAddressesParams(
+                                    wallet.coin.name,
+                                    uiState.usedAddresses,
+                                    uiState.usedChangeAddresses
+                                )
                             )
                         )
                     }
@@ -140,11 +186,14 @@ fun ReceiveScreen(
                 }
             }
         },
-        onBackPress = { navController.popBackStack() },
+        onBackPress = { backStack.removeLastOrNull() },
         closeModule = if (receiveEntryPointDestId == 0) {
             null
         } else {
-            { navController.popBackStack(receiveEntryPointDestId, true) }
+            {
+//                TODO("xxx nav3")
+//                backStack.popBackStack(receiveEntryPointDestId, true)
+            }
         }
     )
 }
