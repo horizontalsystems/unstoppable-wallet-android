@@ -14,7 +14,7 @@ class WriteBackupToTempFileTest {
 
     @Before
     fun setUp() {
-        val tmpDir = File(System.getProperty("java.io.tmpdir"))
+        val tmpDir = File(requireNotNull(System.getProperty("java.io.tmpdir")))
         CoreApp.instance = mockk(relaxed = true) {
             every { cacheDir } returns tmpDir
         }
