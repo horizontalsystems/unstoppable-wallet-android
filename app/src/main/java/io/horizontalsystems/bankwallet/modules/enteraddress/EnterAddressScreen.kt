@@ -116,10 +116,14 @@ fun EnterAddressScreen(
                         uiState.addressValidationError,
                         uiState.checkResults,
                     ) {
-                        navController.slideFromBottom(
-                            R.id.defenseSystemFeatureDialog,
-                            DefenseSystemFeatureDialog.Input(PremiumFeature.SecureSendFeature)
-                        )
+                        if (uiState.hasPremium){
+                            navController.slideFromBottom(R.id.secureSendConfigDialog)
+                        } else {
+                            navController.slideFromBottom(
+                                R.id.defenseSystemFeatureDialog,
+                                DefenseSystemFeatureDialog.Input(PremiumFeature.SecureSendFeature)
+                            )
+                        }
                     }
                 }
 
@@ -224,6 +228,7 @@ fun AddressCheck(
 
     if (checkResults.isNotEmpty()) {
         SectionHeader(
+            modifier = Modifier.padding(horizontal = 16.dp),
             title = stringResource(R.string.Premium_UpgradeFeature_SecureSend),
             icon = R.drawable.defense_gradient_filled_24
         )
@@ -244,6 +249,7 @@ fun AddressCheck(
                     title = stringResource(addressCheckType.title),
                     checkType = addressCheckType,
                     inProgress = checkData.inProgress,
+                    disabled = checkData.disabled,
                     showDivider = index != 0,
                     checkResult = checkData.checkResult,
                     onClick
@@ -283,6 +289,7 @@ private fun CheckCell(
     title: String,
     checkType: AddressCheckType,
     inProgress: Boolean,
+    disabled: Boolean,
     showDivider: Boolean,
     checkResult: AddressCheckResult,
     onClick: (type: AddressCheckType) -> Unit
@@ -297,15 +304,22 @@ private fun CheckCell(
                 )
             },
             right = {
-                if (checkResult == AddressCheckResult.NotAllowed) {
-                    CheckLocked()
-                } else {
-                    CheckValue(inProgress, checkResult)
+                when {
+                    checkResult == AddressCheckResult.NotAllowed -> CheckLocked()
+                    disabled -> CheckDisabled()
+                    else -> CheckValue(inProgress, checkResult)
                 }
             },
             onClick = { onClick(checkType) }
         )
     }
+}
+
+@Composable
+fun CheckDisabled() {
+    CellRightInfo(
+        titleSubheadSb = stringResource(R.string.SecureSend_Config_Disabled).hs(color = ComposeAppTheme.colors.leah)
+    )
 }
 
 @Composable

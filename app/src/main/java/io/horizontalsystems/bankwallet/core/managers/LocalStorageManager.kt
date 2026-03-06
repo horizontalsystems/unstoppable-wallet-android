@@ -668,4 +668,34 @@ class LocalStorageManager(
             preferences.edit().putStringSet(DISABLED_PAID_ACTIONS, value).apply()
             _disabledPaidActionsFlow.update { value }
         }
+
+    private val _phishingDetectionEnabledFlow = MutableStateFlow(preferences.getBoolean("phishingDetectionEnabled", true))
+    override val phishingDetectionEnabledFlow = _phishingDetectionEnabledFlow.asStateFlow()
+
+    private val _blacklistDetectionEnabledFlow = MutableStateFlow(preferences.getBoolean("blacklistDetectionEnabled", false))
+    override val blacklistDetectionEnabledFlow = _blacklistDetectionEnabledFlow.asStateFlow()
+
+    private val _sanctionsDetectionEnabledFlow = MutableStateFlow(preferences.getBoolean("sanctionsDetectionEnabled", false))
+    override val sanctionsDetectionEnabledFlow = _sanctionsDetectionEnabledFlow.asStateFlow()
+
+    override var phishingDetectionEnabled: Boolean
+        get() = preferences.getBoolean("phishingDetectionEnabled", true)
+        set(value) {
+            preferences.edit { putBoolean("phishingDetectionEnabled", value) }
+            _phishingDetectionEnabledFlow.update { value }
+        }
+
+    override var blacklistDetectionEnabled: Boolean
+        get() = preferences.getBoolean("blacklistDetectionEnabled", false)
+        set(value) {
+            preferences.edit { putBoolean("blacklistDetectionEnabled", value) }
+            _blacklistDetectionEnabledFlow.update { value }
+        }
+
+    override var sanctionsDetectionEnabled: Boolean
+        get() = preferences.getBoolean("sanctionsDetectionEnabled", false)
+        set(value) {
+            preferences.edit { putBoolean("sanctionsDetectionEnabled", value) }
+            _sanctionsDetectionEnabledFlow.update { value }
+        }
 }
