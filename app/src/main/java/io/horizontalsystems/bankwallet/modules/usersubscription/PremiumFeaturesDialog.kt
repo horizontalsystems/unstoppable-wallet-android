@@ -317,7 +317,7 @@ fun FeaturesSection(
     title: String,
     features: List<IPaidAction>
 ) {
-    SectionHeader(title = title, icon)
+    SectionHeader(title = title, icon = icon)
     Column(
         modifier = Modifier.clip(RoundedCornerShape(16.dp))
     ) {

@@ -480,6 +480,11 @@
     <string name="Send_Address_PhishingCheck">Phishing Check</string>
     <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
     <string name="Send_Address_SanctionCheck">Sanctions Check</string>
+    <string name="SecureSend_Config_Subtitle">Choose security checks.</string>
+    <string name="SecureSend_Config_PhishingCheckDescription">Detects suspicious addresses before confirming the transfer.</string>
+    <string name="SecureSend_Config_BlacklistCheckDescription">Checks the address against fraud and high-risk databases.</string>
+    <string name="SecureSend_Config_SanctionCheckDescription">Verifies whether the address is subject to sanctions restrictions.</string>
+    <string name="SecureSend_Config_Disabled">Disabled</string>
     <string name="Send_Address_ErrorMessage_PhishingDetected">Phishing Address Detected!</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected">Blacklisted Address</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected">Sanctioned Address</string>

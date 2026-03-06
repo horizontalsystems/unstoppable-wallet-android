@@ -62,6 +62,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.subscriptions.core.RobberyProtection
+import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 
 class SecuritySettingsFragment : BaseComposeFragment() {
@@ -138,6 +139,7 @@ private fun SecurityCenterScreen(
             )
 
             SectionHeader(
+                modifier = Modifier.padding(horizontal = 16.dp),
                 title = stringResource(R.string.Premium_DefenseSystem),
                 icon = R.drawable.defense_gradient_filled_24
             )
@@ -168,7 +170,11 @@ private fun SecurityCenterScreen(
                                         }
                                     }
                                 ) {
-                                    securitySettingsViewModel.setActionEnabled(action, it)
+                                    if (action == SecureSend){
+                                        navController.slideFromBottom(R.id.secureSendConfigDialog)
+                                    } else {
+                                        securitySettingsViewModel.setActionEnabled(action, it)
+                                    }
                                 }
                             }
                         )
