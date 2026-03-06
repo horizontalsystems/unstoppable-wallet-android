@@ -31,6 +31,7 @@ import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
@@ -81,28 +82,37 @@ class EnterAddressViewModel(
     }
 
     init {
-        initialAddress?.let {
-            onEnterAddress(initialAddress)
+        initialAddress?.let { onEnterAddress(it) }
+        observeSubscription()
+        observeCheckSettings()
+    }
+
+    private fun cancelAllJobs() {
+        parseAddressJob?.cancel()
+        checkJobs.values.forEach { it.cancel() }
+        checkJobs.clear()
+    }
+
+    private fun buildInitialCheckResults(): Map<AddressCheckType, AddressCheckData> =
+        if (UserSubscriptionManager.isActionAllowed(ScamProtection)) {
+            availableCheckTypes.associateWith { type ->
+                if (isCheckEnabled(type)) AddressCheckData(inProgress = true, disabled = false)
+                else AddressCheckData(inProgress = false, disabled = true)
+            }
+        } else {
+            availableCheckTypes.associateWith {
+                AddressCheckData(inProgress = false, disabled = false, checkResult = AddressCheckResult.NotAllowed)
+            }
         }
 
+    private fun observeSubscription() {
         viewModelScope.launch {
             UserSubscriptionManager.activeSubscriptionStateFlow.collect { subscription ->
                 hasPremium = subscription != null
                 if (value.isNotEmpty()) {
-                    parseAddressJob?.cancel()
-                    checkJobs.values.forEach { it.cancel() }
-                    checkJobs.clear()
+                    cancelAllJobs()
                     if (addressCheckEnabled) {
-                        checkResults = if (UserSubscriptionManager.isActionAllowed(ScamProtection)) {
-                            availableCheckTypes.associateWith { type ->
-                                if (isCheckEnabled(type)) AddressCheckData(inProgress = true, disabled = false)
-                                else AddressCheckData(inProgress = false, disabled = true)
-                            }
-                        } else {
-                            availableCheckTypes.associateWith {
-                                AddressCheckData(inProgress = false, disabled = false, checkResult = AddressCheckResult.NotAllowed)
-                            }
-                        }
+                        checkResults = buildInitialCheckResults()
                         addressValidationInProgress = true
                         emitState()
                     }
@@ -110,7 +120,9 @@ class EnterAddressViewModel(
                 }
             }
         }
+    }
 
+    private fun observeCheckSettings() {
         val settingsFlows = mapOf(
             AddressCheckType.Phishing to localStorage.phishingDetectionEnabledFlow,
             AddressCheckType.Blacklist to localStorage.blacklistDetectionEnabledFlow,
@@ -190,9 +202,7 @@ class EnterAddressViewModel(
     )
 
     fun onEnterAddress(value: String) {
-        parseAddressJob?.cancel()
-        checkJobs.values.forEach { it.cancel() }
-        checkJobs.clear()
+        cancelAllJobs()
 
         address = null
         inputState = null
@@ -209,16 +219,7 @@ class EnterAddressViewModel(
                 val addressString = addressExtractor.extractAddressFromUri(value.trim())
                 this.value = addressString
                 if (addressCheckEnabled) {
-                    checkResults = if (UserSubscriptionManager.isActionAllowed(ScamProtection)) {
-                        availableCheckTypes.associateWith { type ->
-                            if (isCheckEnabled(type)) AddressCheckData(inProgress = true, disabled = false)
-                            else AddressCheckData(inProgress = false, disabled = true)
-                        }
-                    } else {
-                        availableCheckTypes.associateWith {
-                            AddressCheckData(inProgress = false, disabled = false, checkResult = AddressCheckResult.NotAllowed)
-                        }
-                    }
+                    checkResults = buildInitialCheckResults()
                 }
                 emitState()
 
@@ -233,68 +234,65 @@ class EnterAddressViewModel(
     private fun processAddress(addressText: String) {
         parseAddressJob = viewModelScope.launch(Dispatchers.Default) {
             try {
-                val address = parseDomain(addressText)
-                try {
-                    addressValidator.validate(address)
-                    ensureActive()
-
-                    this@EnterAddressViewModel.address = address
-                    addressValidationError = null
-
-                    emitState()
-                } catch (cancellation: CancellationException) {
-                    throw cancellation
-                } catch (e: Throwable) {
-                    ensureActive()
-
-                    this@EnterAddressViewModel.address = null
-                    addressValidationInProgress = false
-                    addressValidationError = e
-
-                    emitState()
-                }
-
-                if (addressValidationError != null) {
-                    checkResults = mapOf()
-                    addressValidationInProgress = false
-                    inputState = DataState.Error(Exception())
-                    emitState()
-                } else if (addressCheckEnabled) {
-                    if (UserSubscriptionManager.isActionAllowed(ScamProtection)) {
-                        for (type in availableCheckTypes) {
-                            if (isCheckEnabled(type)) {
-                                startCheckJob(type, address)
-                            } else {
-                                checkResults += mapOf(type to AddressCheckData(inProgress = false, disabled = true))
-                                emitState()
-                            }
-                        }
-                        tryFinalizeProcessing()
-                    } else {
-                        checkResults = availableCheckTypes.associateWith { AddressCheckData(inProgress = false, disabled = false, checkResult = AddressCheckResult.NotAllowed) }
-                        addressValidationInProgress = false
-                        inputState = DataState.Success(address)
-                        emitState()
-                    }
-                } else {
-                    addressValidationInProgress = false
-                    inputState = DataState.Success(address)
-                    emitState()
-                }
+                val address = validateAddress(addressText) ?: return@launch
+                dispatchChecks(address)
             } catch (_: CancellationException) {
             } catch (e: Throwable) {
                 inputState = DataState.Error(e)
-
                 ensureActive()
                 emitState()
             }
         }
     }
 
-    private fun parseDomain(addressText: String): Address {
-        return domainParser.supportedHandler(addressText)?.parseAddress(addressText) ?: Address(
-            addressText
-        )
+    private suspend fun validateAddress(addressText: String): Address? {
+        val address = domainParser.supportedHandler(addressText)
+            ?.parseAddress(addressText) ?: Address(addressText)
+        return try {
+            addressValidator.validate(address)
+            currentCoroutineContext().ensureActive()
+            this.address = address
+            addressValidationError = null
+            emitState()
+            address
+        } catch (_: CancellationException) {
+            throw CancellationException()
+        } catch (e: Throwable) {
+            currentCoroutineContext().ensureActive()
+            this.address = null
+            addressValidationInProgress = false
+            addressValidationError = e
+            checkResults = mapOf()
+            inputState = DataState.Error(Exception())
+            emitState()
+            null
+        }
+    }
+
+    private fun dispatchChecks(address: Address) {
+        if (!addressCheckEnabled) {
+            addressValidationInProgress = false
+            inputState = DataState.Success(address)
+            emitState()
+            return
+        }
+        if (!UserSubscriptionManager.isActionAllowed(ScamProtection)) {
+            checkResults = availableCheckTypes.associateWith {
+                AddressCheckData(inProgress = false, disabled = false, checkResult = AddressCheckResult.NotAllowed)
+            }
+            addressValidationInProgress = false
+            inputState = DataState.Success(address)
+            emitState()
+            return
+        }
+        for (type in availableCheckTypes) {
+            if (isCheckEnabled(type)) startCheckJob(type, address)
+            else {
+                checkResults += mapOf(type to AddressCheckData(inProgress = false, disabled = true))
+                emitState()
+            }
+        }
+        tryFinalizeProcessing()
     }
 
     class Factory(
