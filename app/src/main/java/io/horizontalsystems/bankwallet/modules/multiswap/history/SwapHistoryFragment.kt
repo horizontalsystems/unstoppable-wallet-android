@@ -33,10 +33,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderStick
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -51,23 +52,30 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SwapHistoryScreen : HSScreen()
+data object SwapHistoryScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SwapHistoryScreen(backStack)
+    }
+}
 
 class SwapHistoryFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapHistoryScreen(navController)
     }
 }
 
 @Composable
-fun SwapHistoryScreen(navController: NavController) {
+fun SwapHistoryScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel = viewModel<SwapHistoryViewModel>(factory = SwapHistoryViewModel.Factory())
     val uiState = viewModel.uiState
 
     HSScaffold(
         title = stringResource(R.string.SwapHistory_Title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         if (uiState.items.isEmpty()) {
             Box(
@@ -97,9 +105,8 @@ fun SwapHistoryScreen(navController: NavController) {
                         SwapHistoryCell(
                             item = item,
                             onClick = {
-                                navController.slideFromRight(
-                                    R.id.swapInfoFragment,
-                                    SwapInfoFragment.Input(item.id),
+                                backStack.add(
+                                    SwapInfoScreen(item.id)
                                 )
                             },
                         )

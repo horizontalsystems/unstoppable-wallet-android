@@ -71,7 +71,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SwapInfoScreen : HSScreen()
+data class SwapInfoScreen(val recordId: Int) : HSScreen()
 
 class SwapInfoFragment : BaseComposeFragment() {
     @Composable
