@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
+import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -39,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -51,23 +53,20 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import android.os.Parcelable
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
-import io.horizontalsystems.bankwallet.core.getInput
-import kotlinx.parcelize.Parcelize
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -104,6 +103,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.net.UnknownHostException
@@ -112,13 +112,25 @@ import java.net.UnknownHostException
 data class SwapScreen(
     @Serializable(with = TokenSerializer::class)
     val tokenIn: Token? = null
-) : HSScreen()
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SwapScreen(
+            backStack = backStack,
+            resultBus = resultBus,
+            tokenIn = tokenIn,
+            tokenOut = null,
+            onClickClose = backStack::removeLastOrNull
+        )
+    }
+}
 
 class SwapFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
-        SwapScreen(navController, input?.tokenIn, input?.tokenOut, navController::popBackStack)
     }
 
     @Parcelize
@@ -127,29 +139,19 @@ class SwapFragment : BaseComposeFragment() {
 
 @Composable
 fun SwapScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
     tokenIn: Token? = null,
     tokenOut: Token? = null,
     onClickClose: (() -> Unit)? = null,
     bottomPadding: Dp = 0.dp,
     closeAfterSwap: Boolean = true
 ) {
-    val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapViewModel>(
-        viewModelStoreOwner = currentBackStackEntry!!,
         factory = SwapViewModel.Factory(tokenIn, tokenOut)
     )
     val uiState = viewModel.uiState
     val context = LocalContext.current
-
-    val onClickCoinFrom = {
-        navController.slideFromBottomForResult<Token>(
-            R.id.swapSelectCoinFragment,
-            SwapSelectCoinFragment.Input(uiState.tokenOut, context.getString(R.string.Swap_YouPay))
-        ) {
-            viewModel.onSelectTokenIn(it)
-        }
-    }
 
 //    LaunchedEffect(Unit) {
 //        if (tokenIn == null) {
@@ -158,50 +160,68 @@ fun SwapScreen(
 //        }
 //    }
 
+    ResultEffect<SwapSelectCoinScreen.Result>(resultBus) {
+//        TODO("xxx nav3")
+//        viewModel.onSelectTokenIn(it.token)
+//        viewModel.onSelectTokenOut(it.token)
+    }
+
+    ResultEffect<SwapConfirmScreen.Result>(resultBus) {
+        if (it.success && closeAfterSwap) {
+            backStack.removeLastOrNull()
+        }
+    }
+
+    val resources = LocalResources.current
     SwapScreenInner(
         uiState = uiState,
         onClickClose = onClickClose,
-        onClickCoinFrom = onClickCoinFrom,
+        onClickCoinFrom = {
+            backStack.add(
+                SwapSelectCoinScreen(
+                    uiState.tokenOut,
+                    resources.getString(R.string.Swap_YouPay)
+                )
+            )
+        },
         onClickCoinTo = {
-            navController.slideFromBottomForResult<Token>(
-                R.id.swapSelectCoinFragment,
-                SwapSelectCoinFragment.Input(uiState.tokenIn, context.getString(R.string.Swap_YouGet))
-            ) {
-                viewModel.onSelectTokenOut(it)
-            }
+            backStack.add(
+                SwapSelectCoinScreen(
+                    uiState.tokenIn,
+                    resources.getString(R.string.Swap_YouGet)
+                )
+            )
         },
         onSwitchPairs = viewModel::onSwitchPairs,
         onEnterAmount = viewModel::onEnterAmount,
         onEnterAmountPercentage = viewModel::onEnterAmountPercentage,
         onEnterFiatAmount = viewModel::onEnterFiatAmount,
         onClickProvider = {
-            navController.slideFromBottom(R.id.swapSelectProvider)
+            backStack.add(SwapSelectProviderScreen)
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
         onClickNext = {
-            val navigateToSwapConfirm = {
-                navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
-                    if (it.success) {
-                        if (closeAfterSwap) {
-                            navController.popBackStack()
-                        } else {
-                            viewModel.onEnterAmount(null)
-                        }
-                    }
-                }
-                stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
-            }
-
-            if (uiState.needToAcceptTerms) {
-                navController.slideFromRightForResult<SwapTermsFragment.Result>(R.id.swapTermsFragment) {
-                    if (it.accepted) {
-                        navigateToSwapConfirm.invoke()
-                    }
-                }
-            } else {
-                navigateToSwapConfirm.invoke()
-            }
+//            TODO("xxx nav3")
+//            val navigateToSwapConfirm = {
+//                navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
+//                    if (it.success) {
+//                        if (closeAfterSwap) {
+//                            navController.popBackStack()
+//                        } else {
+//                            viewModel.onEnterAmount(null)
+//                        }
+//                    }
+//                }
+//                stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
+//            }
+//
+//            if (uiState.needToAcceptTerms) {
+//                backStack.navigateWithTermsAccepted(SwapConfirmScreen)
+//            } else {
+//                backStack.add(SwapConfirmScreen)
+//            }
+//            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
         },
         onActionStarted = {
             viewModel.onActionStarted()
@@ -209,7 +229,7 @@ fun SwapScreen(
         onActionCompleted = {
             viewModel.onActionCompleted()
         },
-        navController = navController,
+        backStack = backStack,
         onResume = viewModel::enableRequoteOnTimeout,
         onPause = viewModel::disableRequoteOnTimeout,
         bottomPadding = bottomPadding,
@@ -230,7 +250,7 @@ private fun SwapScreenInner(
     onClickNext: () -> Unit,
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     onResume: () -> Unit,
     onPause: () -> Unit,
     bottomPadding: Dp = 0.dp,
@@ -251,7 +271,7 @@ private fun SwapScreenInner(
                 title = TranslatableString.ResString(R.string.SwapHistory_Title),
                 icon = R.drawable.ic_circle_clock_24,
                 onClick = {
-                    navController.slideFromRight(R.id.swapHistoryFragment)
+                    backStack.add(SwapHistoryScreen)
                 }
             )),
         onBack = onClickClose,
@@ -426,8 +446,9 @@ private fun SwapScreenInner(
                                 title = title,
                                 enabled = !action.inProgress,
                                 onClick = {
-                                    onActionStarted.invoke()
-                                    action.execute(navController, onActionCompleted)
+//                                    TODO("xxx nav3")
+//                                    onActionStarted.invoke()
+//                                    action.execute(backStack, onActionCompleted)
                                 },
                                 loadingIndicator = action.inProgress
                             )

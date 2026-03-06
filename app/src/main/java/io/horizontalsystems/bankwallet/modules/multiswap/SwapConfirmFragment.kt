@@ -88,7 +88,9 @@ import java.math.BigDecimal
 import java.util.Locale
 
 @Serializable
-data object SwapConfirmScreen : HSScreen()
+data object SwapConfirmScreen : HSScreen() {
+    data class Result(val success: Boolean)
+}
 
 class SwapConfirmFragment : BaseComposeFragment() {
     @Composable

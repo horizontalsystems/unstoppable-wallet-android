@@ -45,6 +45,7 @@ import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceScreen
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredScreen
 import io.horizontalsystems.bankwallet.modules.market.MarketScreen
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.NavExample
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
@@ -206,15 +207,13 @@ private fun MainScreen(
                 when (navItem) {
                     MainNavigation.Market -> MarketScreen(backStack, resultBus)
                     MainNavigation.Balance -> BalanceScreen(backStack)
-                    MainNavigation.Swap -> {
-//                        TODO("xxx nav3")
-//                        SwapScreen(
-//                            fragmentNavController,
-//                            onClickClose = null,
-//                            bottomPadding = navigationBarHeight,
-//                            closeAfterSwap = false
-//                        )
-                    }
+                    MainNavigation.Swap -> SwapScreen(
+                        backStack = backStack,
+                        resultBus = resultBus,
+                        onClickClose = null,
+                        bottomPadding = navigationBarHeight,
+                        closeAfterSwap = false
+                    )
 //                    MainNavigation.Transactions -> TransactionsScreen(backStack)
                     MainNavigation.Settings -> SettingsScreen(backStack)
                 }

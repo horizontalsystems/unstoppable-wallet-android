@@ -8,12 +8,19 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SwapSelectCoinScreen : HSScreen()
+data class SwapSelectCoinScreen(
+    @Serializable(with = TokenSerializer::class)
+    val token: Token?,
+    val title: String
+) : HSScreen() {
+    data class Result(val token: Token)
+}
 
 class SwapSelectCoinFragment : BaseComposeFragment() {
     @Composable
