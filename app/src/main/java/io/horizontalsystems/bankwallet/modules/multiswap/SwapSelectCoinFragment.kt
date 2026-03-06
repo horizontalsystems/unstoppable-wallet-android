@@ -4,10 +4,10 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
@@ -19,15 +19,20 @@ data class SwapSelectCoinScreen(
     val token: Token?,
     val title: String
 ) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SwapSelectCoinScreen(backStack, resultBus, token, title)
+    }
+
     data class Result(val token: Token)
 }
 
 class SwapSelectCoinFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
-
-        SwapSelectCoinScreen(navController, input?.token, input?.title)
     }
 
     @Parcelize
@@ -37,7 +42,8 @@ class SwapSelectCoinFragment : BaseComposeFragment() {
 
 @Composable
 private fun SwapSelectCoinScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
     token: Token?,
     title: String?
 ) {
@@ -50,9 +56,9 @@ private fun SwapSelectCoinScreen(
         title = title ?: "",
         coinBalanceItems = uiState.coinBalanceItems,
         onSearchTextChanged = viewModel::setQuery,
-        onClose = navController::popBackStack
+        onClose = backStack::removeLastOrNull
     ) {
-        navController.setNavigationResultX(it.token)
-        navController.popBackStack()
+        resultBus.sendResult(result = SwapSelectCoinScreen.Result(it.token))
+        backStack.removeLastOrNull()
     }
 }
