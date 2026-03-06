@@ -25,15 +25,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -56,25 +57,28 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsSectionButtons
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SwapSelectProviderScreen : HSScreen()
+data object SwapSelectProviderScreen : HSScreen(
+    usePreviousScreenVmScope = true
+) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SwapSelectProviderScreen(backStack)
+    }
+}
 
 class SwapSelectProviderFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapSelectProviderScreen(navController)
+//        SwapSelectProviderScreen(navController)
     }
 }
 
 @Composable
-fun SwapSelectProviderScreen(navController: NavController) {
-    val previousBackStackEntry = remember { navController.previousBackStackEntry }
-    if (previousBackStackEntry == null) {
-        navController.popBackStack()
-        return
-    }
-    val swapViewModel = viewModel<SwapViewModel>(
-        viewModelStoreOwner = previousBackStackEntry,
-    )
+fun SwapSelectProviderScreen(backStack: NavBackStack<HSScreen>) {
+    val swapViewModel = viewModel<SwapViewModel>()
     val viewModel = viewModel<SwapSelectProviderViewModel>(
         factory = SwapSelectProviderViewModel.Factory(
             swapViewModel.uiState.quotes,
@@ -85,7 +89,7 @@ fun SwapSelectProviderScreen(navController: NavController) {
     val uiState = viewModel.uiState
 
     SwapSelectProviderScreenInner(
-        onClickClose = navController::popBackStack,
+        onClickClose = backStack::removeLastOrNull,
         quotes = uiState.quoteViewItems,
         currentQuote = uiState.selectedQuote,
         sortType = uiState.sortType,
@@ -93,11 +97,11 @@ fun SwapSelectProviderScreen(navController: NavController) {
             viewModel.setSortType(it)
         },
         onBadgeClick = {
-            navController.slideFromBottom(R.id.riskLevelInfoBottomSheet)
+            backStack.add(RiskLevelInfoScreen)
         }
     ) {
         swapViewModel.onSelectQuote(it)
-        navController.popBackStack()
+        backStack.removeLastOrNull()
 
         stat(page = StatPage.SwapProvider, event = StatEvent.SwapSelectProvider(it.provider.id))
     }

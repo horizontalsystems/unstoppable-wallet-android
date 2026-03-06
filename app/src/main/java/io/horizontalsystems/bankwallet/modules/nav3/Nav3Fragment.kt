@@ -55,11 +55,19 @@ abstract class HSScreen(
     val bottomSheet: Boolean = false,
     val screenshotEnabled: Boolean = true,
     val parentScreenClass: KClass<out HSScreen>? = null,
+    val usePreviousScreenVmScope: Boolean = false,
 ) : NavKey {
     @OptIn(ExperimentalMaterial3Api::class)
     fun getMetadata(backStack: NavBackStack<HSScreen>) = buildMap {
         if (bottomSheet) {
             putAll(BottomSheetSceneStrategy.bottomSheet())
+        }
+        if (usePreviousScreenVmScope) {
+            backStack.getOrNull(backStack.lastIndex - 1)?.let { parentScreen ->
+                putAll(
+                    SharedViewModelStoreNavEntryDecorator.parent(parentScreen.toString())
+                )
+            }
         }
         parentScreenClass?.let {
             backStack.findLast {
