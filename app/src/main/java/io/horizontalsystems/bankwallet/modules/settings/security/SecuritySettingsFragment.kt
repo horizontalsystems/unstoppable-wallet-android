@@ -160,7 +160,12 @@ private fun SecurityCenterScreen(
                                     checked = defenseAction.enabled,
                                     confirmChange = {
                                         if (UserSubscriptionManager.isActionAllowed(action)) {
-                                            true
+                                            if (action == SecureSend) {
+                                                navController.slideFromBottom(R.id.secureSendConfigDialog)
+                                                false
+                                            } else {
+                                                true
+                                            }
                                         } else {
                                             navController.slideFromBottom(
                                                 R.id.defenseSystemFeatureDialog,
@@ -170,11 +175,7 @@ private fun SecurityCenterScreen(
                                         }
                                     }
                                 ) {
-                                    if (action == SecureSend){
-                                        navController.slideFromBottom(R.id.secureSendConfigDialog)
-                                    } else {
-                                        securitySettingsViewModel.setActionEnabled(action, it)
-                                    }
+                                    securitySettingsViewModel.setActionEnabled(action, it)
                                 }
                             }
                         )
