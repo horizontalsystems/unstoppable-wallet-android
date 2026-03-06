@@ -13,14 +13,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.NumberInputWithButtons
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -33,14 +35,24 @@ import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 @Serializable
-data object SwapSettingsSlippageScreen : HSScreen()
+data class SwapSettingsSlippageScreen(
+    @Serializable(with = BigDecimalSerializer::class)
+    val slippage: BigDecimal
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SwapSlippageSettingsScreen(backStack, resultBus, slippage)
+    }
+
+    data class Result(val slippage: BigDecimal)
+}
 
 class SwapSettingsSlippageFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            SwapSlippageSettingsScreen(navController, input.slippage)
-        }
     }
 
     @Parcelize
@@ -52,7 +64,8 @@ class SwapSettingsSlippageFragment : BaseComposeFragment() {
 
 @Composable
 fun SwapSlippageSettingsScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
     initialSlippage: BigDecimal
 ) {
     val viewModel = viewModel<SwapTransactionSlippageViewModel>(
@@ -62,7 +75,7 @@ fun SwapSlippageSettingsScreen(
 
     HSScaffold(
         title = stringResource(R.string.SendEvmSettings_SlippageTolerance),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
@@ -82,10 +95,10 @@ fun SwapSlippageSettingsScreen(
                     title = stringResource(id = R.string.Button_Apply),
                     enabled = uiState.applyEnabled,
                     onClick = {
-                        navController.setNavigationResultX(
-                            SwapSettingsSlippageFragment.Result(uiState.slippage)
+                        resultBus.sendResult(
+                            result = SwapSettingsSlippageScreen.Result(uiState.slippage)
                         )
-                        navController.popBackStack()
+                        backStack.removeLastOrNull()
                     }
                 )
             }
