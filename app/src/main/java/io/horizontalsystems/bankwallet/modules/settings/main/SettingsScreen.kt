@@ -44,7 +44,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupManagerScreen
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsScreen
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsScreen
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRouterScreen
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredScreen
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
@@ -291,7 +291,7 @@ private fun SettingSections(
                     R.string.Contacts,
                     R.drawable.ic_user_20,
                     onClick = {
-                        backStack.add(ContactsScreen(Mode.Full))
+                        backStack.add(ContactsRouterScreen(Mode.Full))
 
                         stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Contacts))
                     }

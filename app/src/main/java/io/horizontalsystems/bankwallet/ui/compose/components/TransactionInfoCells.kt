@@ -39,7 +39,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statResendType
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsScreen
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRouterScreen
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoScreen
 import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoScreen
@@ -320,7 +320,7 @@ fun TransactionInfoAddressCell(
                             Mode.AddAddressToExistingContact(blockchainType, value)
                         }
                     }
-                    backStack?.add(ContactsScreen(mode))
+                    backStack?.add(ContactsRouterScreen(mode))
                 }
             })
     }

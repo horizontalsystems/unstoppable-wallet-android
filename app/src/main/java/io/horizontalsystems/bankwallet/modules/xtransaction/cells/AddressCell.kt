@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsScreen
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRouterScreen
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -115,7 +115,7 @@ fun AddressCell(
                             )
                         }
                     }
-                    backStack?.add(ContactsScreen(mode))
+                    backStack?.add(ContactsRouterScreen(mode))
                 }
             })
     }
