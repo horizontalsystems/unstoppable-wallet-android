@@ -65,9 +65,9 @@ class WCRequestFragment : BaseComposeFragment() {
     }
 
     private fun showError(e: Throwable) {
-        activity?.let { activity ->
+        view?.let { view ->
             HudHelper.showErrorMessage(
-                activity.findViewById(R.id.content),
+                view,
                 e.message ?: e::class.java.simpleName
             )
         }
