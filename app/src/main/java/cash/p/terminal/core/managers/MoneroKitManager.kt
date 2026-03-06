@@ -509,7 +509,11 @@ class MoneroKitWrapper(
         val wallet = moneroWalletService.wallet
             ?: throw IllegalStateException("Monero wallet not initialized")
         val txData = buildTxData(amount, address, memo, wallet)
-        return wallet.estimateTransactionFee(txData)
+        val fee = wallet.estimateTransactionFee(txData)
+        if (fee < 0) {
+            throw IllegalStateException("Failed to estimate fee: wallet not synced with daemon")
+        }
+        return fee
     }
 
     private fun buildTxData(
@@ -571,6 +575,7 @@ class MoneroKitWrapper(
     }
 
     fun getTransactions(): List<TransactionInfo> {
+        if (!isStarted) return emptyList()
         return try {
             var transactions = moneroWalletService.wallet?.history?.all ?: emptyList()
             if (transactions.isEmpty()) {
@@ -591,7 +596,10 @@ class MoneroKitWrapper(
         wallet: Wallet?,
         full: Boolean
     ): Boolean {
-        val connectionStatus = moneroWalletService.connectionStatus
+        if (!isStarted) return false
+
+        val connectionStatus = tryOrNull { moneroWalletService.connectionStatus }
+            ?: ConnectionStatus.ConnectionStatus_Disconnected
 
         if (connectionStatus != lastLoggedConnectionStatus) {
             logger.info(
