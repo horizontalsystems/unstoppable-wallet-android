@@ -17,11 +17,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+@Serializable
 sealed class BackupType {
+    @Serializable
     class SingleWalletBackup(val accountId: String) : BackupType()
+    @Serializable
     class FullBackup(val accountIds: List<String>) : BackupType()
 }
 
