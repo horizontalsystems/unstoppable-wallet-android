@@ -69,7 +69,6 @@ class TokenBalanceModule {
                 rateRepository = TransactionsRateRepository(App.currencyManager, App.marketKit),
                 transactionSyncStateRepository = transactionSyncStateRepository,
                 transactionAdapterManager = transactionAdapterManager,
-                contactsRepository = App.contactsRepository,
                 nftMetadataService = NftMetadataService(App.nftMetadataManager),
                 spamManager = getKoinInstance()
             )
@@ -106,6 +105,7 @@ class TokenBalanceModule {
                 priceManager = App.priceManager,
                 localStorage = App.localStorage,
                 numberFormatter = numberFormatter,
+                contactsRepository = getKoinInstance(),
             ) as T
         }
     }

@@ -5,11 +5,12 @@ import cash.p.terminal.wallet.Clearable
 import io.horizontalsystems.core.CurrencyManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import io.horizontalsystems.core.entities.CurrencyValue
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
@@ -21,20 +22,18 @@ class TransactionsRateRepository(
     private val baseCurrency get() = currencyManager.baseCurrency
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    private val dataExpiredSubject = PublishSubject.create<Unit>()
-    val dataExpiredObservable: Observable<Unit> = dataExpiredSubject
+    private val _dataExpiredFlow = MutableSharedFlow<Unit>()
+    val dataExpiredFlow: SharedFlow<Unit> = _dataExpiredFlow.asSharedFlow()
 
-    private val historicalRateSubject =
-        PublishSubject.create<Pair<HistoricalRateKey, CurrencyValue>>()
-    val historicalRateObservable: Observable<Pair<HistoricalRateKey, CurrencyValue>> =
-        historicalRateSubject
+    private val _historicalRateFlow = MutableSharedFlow<Pair<HistoricalRateKey, CurrencyValue>>()
+    val historicalRateFlow: SharedFlow<Pair<HistoricalRateKey, CurrencyValue>> = _historicalRateFlow.asSharedFlow()
 
     private val requestedXRates = mutableMapOf<HistoricalRateKey, Unit>()
 
     init {
         coroutineScope.launch {
             currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
-                dataExpiredSubject.onNext(Unit)
+                _dataExpiredFlow.emit(Unit)
             }
         }
     }
@@ -59,7 +58,7 @@ class TransactionsRateRepository(
                 )
 
                 if (rate != null  && rate.compareTo(BigDecimal.ZERO) != 0) {
-                    historicalRateSubject.onNext(Pair(key, CurrencyValue(baseCurrency, rate)))
+                    _historicalRateFlow.emit(Pair(key, CurrencyValue(baseCurrency, rate)))
                 }
             } catch (e: Throwable) {
                 Log.w(

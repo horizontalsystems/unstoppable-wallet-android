@@ -17,7 +17,6 @@ object TransactionsModule {
             val transactionsService = TransactionsService(
                 rateRepository = TransactionsRateRepository(App.currencyManager, App.marketKit),
                 transactionSyncStateRepository = TransactionSyncStateRepository(App.transactionAdapterManager),
-                contactsRepository = App.contactsRepository,
                 nftMetadataService = NftMetadataService(App.nftMetadataManager),
                 spamManager = getKoinInstance()
             )
@@ -37,7 +36,9 @@ object TransactionsModule {
                 premiumSettings = getKoinInstance(),
                 amlStatusManager = getKoinInstance(),
                 adapterManager = App.adapterManager,
-                swapProviderTransactionsStorage = getKoinInstance()
+                swapProviderTransactionsStorage = getKoinInstance(),
+                contactsRepository = getKoinInstance(),
+                dispatcherProvider = getKoinInstance(),
             ) as T
         }
     }
