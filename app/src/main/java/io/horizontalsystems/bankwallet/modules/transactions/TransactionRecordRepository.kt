@@ -253,6 +253,7 @@ class TransactionRecordRepository(
 
         records
             .sortedDescending()
+            .distinctBy { it.uid }
             .take(expectedItemsCount)
             .let {
                 if (it.size < expectedItemsCount) {
