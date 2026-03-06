@@ -8,7 +8,9 @@ import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.subscriptions.core.IPaidAction
+import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 
 class SecuritySettingsViewModel(
@@ -45,11 +47,35 @@ class SecuritySettingsViewModel(
                 refreshDefenseSystemActions()
             }
         }
+
+        viewModelScope.launch {
+            localStorage.phishingDetectionEnabledFlow.drop(1).collect {
+                refreshDefenseSystemActions()
+            }
+        }
+        viewModelScope.launch {
+            localStorage.blacklistDetectionEnabledFlow.drop(1).collect {
+                refreshDefenseSystemActions()
+            }
+        }
+        viewModelScope.launch {
+            localStorage.sanctionsDetectionEnabledFlow.drop(1).collect {
+                refreshDefenseSystemActions()
+            }
+        }
     }
 
     private fun refreshDefenseSystemActions() {
-        defenseSystemActions = paidActionSettingsManager.toggleableActions.map {
-            DefenseSystemAction(it, paidActionSettingsManager.isActionActive(it))
+        val anyDetectionEnabled = localStorage.phishingDetectionEnabled
+            || localStorage.blacklistDetectionEnabled
+            || localStorage.sanctionsDetectionEnabled
+
+        defenseSystemActions = paidActionSettingsManager.toggleableActions.map { action ->
+            val enabled = when (action) {
+                SecureSend -> anyDetectionEnabled && UserSubscriptionManager.isActionAllowed(action)
+                else -> paidActionSettingsManager.isActionActive(action)
+            }
+            DefenseSystemAction(action, enabled)
         }
 
         emitState()
@@ -92,7 +118,7 @@ class SecuritySettingsViewModel(
     }
 
     fun update() {
-        emitState()
+        refreshDefenseSystemActions()
     }
 
     fun setActionEnabled(action: IPaidAction, enabled: Boolean) {

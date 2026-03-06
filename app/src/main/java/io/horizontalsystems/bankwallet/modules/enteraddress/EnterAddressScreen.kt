@@ -360,7 +360,7 @@ fun CheckLocked() {
         painter = painterResource(R.drawable.lock_filled_24),
         contentDescription = null,
         modifier = Modifier.size(20.dp),
-        tint = ComposeAppTheme.colors.andy,
+        tint = ComposeAppTheme.colors.grey,
     )
 }
 
