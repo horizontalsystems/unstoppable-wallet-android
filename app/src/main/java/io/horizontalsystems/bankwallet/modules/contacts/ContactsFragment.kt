@@ -4,12 +4,9 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.modules.contacts.screen.AddressScreen
@@ -151,68 +148,52 @@ data class address(
             )
         )
 
-        AddressNavHost(
+        AddressScreen(
             viewModel = viewModel,
-            onAddAddress = { contactAddress ->
+            onNavigateToBlockchainSelector = {
+                backStack.add(blockchainSelector)
+            },
+            onDone = { contactAddress ->
                 resultBus.sendResult(result = Result(added_address = contactAddress))
+
+                backStack.removeLastOrNull()
             },
-            onDeleteAddress = { contactAddress ->
+            onDelete = { contactAddress ->
                 resultBus.sendResult(result = Result(deleted_address = contactAddress))
+
+                backStack.removeLastOrNull()
             },
-            onCloseNavHost = { backStack.removeLastOrNull() }
+            onNavigateToBack = {
+                backStack.removeLastOrNull()
+            }
         )
+
     }
 
     data class Result(val added_address: ContactAddress? = null, val deleted_address: ContactAddress? = null)
 }
 
-@Composable
-fun AddressNavHost(
-    viewModel: AddressViewModel,
-    onAddAddress: (ContactAddress) -> Unit,
-    onDeleteAddress: (ContactAddress) -> Unit,
-    onCloseNavHost: () -> Unit
+@Serializable
+data object blockchainSelector : HSScreen(
+    parentScreenClass = address::class
 ) {
-    val navHostController = rememberNavController()
-
-    NavHost(
-        navController = navHostController,
-        startDestination = "address",
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
     ) {
-        composablePage(route = "address") {
-            AddressScreen(
-                viewModel = viewModel,
-                onNavigateToBlockchainSelector = {
-                    navHostController.navigate("blockchainSelector")
-                },
-                onDone = { contactAddress ->
-                    onAddAddress(contactAddress)
+        val viewModel = viewModel<AddressViewModel>()
+        BlockchainSelectorScreen(
+            blockchains = viewModel.uiState.availableBlockchains,
+            selectedBlockchain = viewModel.uiState.blockchain,
+            onSelectBlockchain = { blockchain ->
+                viewModel.onEnterBlockchain(blockchain)
 
-                    onCloseNavHost()
-                },
-                onDelete = { contactAddress ->
-                    onDeleteAddress(contactAddress)
-
-                    onCloseNavHost()
-                },
-                onNavigateToBack = {
-                    onCloseNavHost()
-                }
-            )
-        }
-        composablePage(route = "blockchainSelector") {
-            BlockchainSelectorScreen(
-                blockchains = viewModel.uiState.availableBlockchains,
-                selectedBlockchain = viewModel.uiState.blockchain,
-                onSelectBlockchain = { blockchain ->
-                    viewModel.onEnterBlockchain(blockchain)
-
-                    navHostController.popBackStack()
-                },
-                onNavigateToBack = {
-                    navHostController.popBackStack()
-                }
-            )
-        }
+                backStack.removeLastOrNull()
+            },
+            onNavigateToBack = {
+                backStack.removeLastOrNull()
+            }
+        )
     }
 }
