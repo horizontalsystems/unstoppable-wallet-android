@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
@@ -31,6 +32,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsVi
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldNonce
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceService
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
@@ -242,7 +244,7 @@ class SendTransactionServiceEvm(
     }
 
     @Composable
-    override fun GetNonceSettingsContent(navController: NavController) {
+    override fun GetNonceSettingsContent(backStack: NavBackStack<HSScreen>) {
         val nonceViewModel = viewModel<SendEvmNonceViewModel>(initializer = {
             SendEvmNonceViewModel(nonceService)
         })
@@ -252,7 +254,7 @@ class SendTransactionServiceEvm(
         SendEvmNonceSettingsScreen(
             viewModel = sendSettingsViewModel,
             nonceViewModel = nonceViewModel,
-            navController = navController
+            backStack = backStack
         )
     }
 
@@ -320,11 +322,11 @@ fun SendEvmFeeSettingsScreen(
 fun SendEvmNonceSettingsScreen(
     viewModel: SendEvmSettingsViewModel,
     nonceViewModel: SendEvmNonceViewModel,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     HSScaffold(
         title = stringResource(R.string.SendEvmSettings_Nonce),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),

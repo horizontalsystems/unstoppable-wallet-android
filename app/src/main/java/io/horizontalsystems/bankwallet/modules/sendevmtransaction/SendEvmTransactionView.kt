@@ -28,7 +28,6 @@ import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -77,14 +76,16 @@ fun SendEvmTransactionView(
         ) {
             if (transactionFields.isNotEmpty()) {
                 transactionFields.forEachIndexed { index, field ->
-                    field.GetContent(navController)
+//                    TODO("xxx nav3")
+//                    field.GetContent(navController)
                 }
             }
-            DataFieldFee(
-                navController,
-                networkFee?.primary?.getFormattedPlain() ?: "---",
-                networkFee?.secondary?.getFormattedPlain()
-            )
+//            TODO("xxx nav3")
+//            DataFieldFee(
+//                navController,
+//                networkFee?.primary?.getFormattedPlain() ?: "---",
+//                networkFee?.secondary?.getFormattedPlain()
+//            )
         }
 
         if (cautions.isNotEmpty()) {
@@ -106,11 +107,14 @@ fun SectionView(viewItems: List<ViewItem>, navController: NavController, statPag
                 is ViewItem.Address -> AddressCell(address = item.address, contact = item.contact)
                 is ViewItem.Input -> TitleValueHex(item.title, item.value.shorten(), item.value)
                 is ViewItem.TokenItem -> Token(item)
-                is ViewItem.Fee -> DataFieldFee(
-                    navController,
-                    item.networkFee.primary.getFormattedPlain() ?: "---",
-                    item.networkFee.secondary?.getFormattedPlain() ?: "---"
-                )
+                is ViewItem.Fee -> {
+//                    TODO("xxx nav3")
+//                    DataFieldFee(
+//                        navController,
+//                        item.networkFee.primary.getFormattedPlain() ?: "---",
+//                        item.networkFee.secondary?.getFormattedPlain() ?: "---"
+//                    )
+                }
             }
         }
         if (viewItems.size == 2) {

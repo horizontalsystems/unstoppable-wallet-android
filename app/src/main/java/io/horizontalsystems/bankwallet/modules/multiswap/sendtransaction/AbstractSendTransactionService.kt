@@ -2,12 +2,14 @@ package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ServiceState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +28,7 @@ abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasN
     @Composable
     open fun GetSettingsContent(navController: NavController) = Unit
     @Composable
-    open fun GetNonceSettingsContent(navController: NavController) = Unit
+    open fun GetNonceSettingsContent(backStack: NavBackStack<HSScreen>) = Unit
     abstract suspend fun sendTransaction(mevProtectionEnabled: Boolean = false): SendTransactionResult
 
     fun refreshUuid() {

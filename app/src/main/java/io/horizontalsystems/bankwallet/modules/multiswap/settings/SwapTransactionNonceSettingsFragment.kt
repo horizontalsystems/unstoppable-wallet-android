@@ -3,32 +3,35 @@ package io.horizontalsystems.bankwallet.modules.multiswap.settings
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapConfirmViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SwapTransactionNonceSettingsScreen : HSScreen()
+data object SwapTransactionNonceSettingsScreen : HSScreen(usePreviousScreenVmScope = true) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SwapTransactionNonceSettingsScreen(backStack)
+    }
+}
 
 class SwapTransactionNonceSettingsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapTransactionNonceSettingsScreen(navController)
     }
 }
 
 @Composable
-fun SwapTransactionNonceSettingsScreen(navController: NavController) {
-    val previousBackStackEntry = navController.previousBackStackEntry ?: run {
-        navController.popBackStack()
-        return
-    }
-    val viewModel = viewModel<SwapConfirmViewModel>(
-        viewModelStoreOwner = previousBackStackEntry,
-    )
+fun SwapTransactionNonceSettingsScreen(backStack: NavBackStack<HSScreen>) {
+    val viewModel = viewModel<SwapConfirmViewModel>()
 
     val sendTransactionService = viewModel.sendTransactionService
 
-    sendTransactionService.GetNonceSettingsContent(navController)
+    sendTransactionService.GetNonceSettingsContent(backStack)
 }
