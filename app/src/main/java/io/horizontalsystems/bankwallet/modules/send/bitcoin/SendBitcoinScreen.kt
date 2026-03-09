@@ -24,26 +24,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.address.HSAddressCell
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
-import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
-import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
+import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScreen
@@ -58,71 +55,66 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 
-const val SendBtcPage = "send_btc"
-const val SendBtcAdvancedSettingsPage = "send_btc_advanced_settings"
-const val TransactionInputsSortInfoPage = "transaction_input_sort_info_settings"
-const val UtxoExpertModePage = "utxo_expert_mode_page"
-
-@Composable
-fun SendBitcoinNavHost(
-    title: String,
-    fragmentNavController: NavController,
-    viewModel: SendBitcoinViewModel,
-    amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int,
-    amount: BigDecimal?,
-    riskyAddress: Boolean
-) {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = SendBtcPage,
+@Serializable
+data object SendBtcAdvancedSettingsPage : HSScreen(parentScreenClass = SendScreen::class) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
     ) {
-        composable(SendBtcPage) {
-            SendBitcoinScreen(
-                title,
-                fragmentNavController,
-                navController,
-                viewModel,
-                amountInputModeViewModel,
-                sendEntryPointDestId,
-                amount,
-                riskyAddress
-            )
-        }
-        composablePage(SendBtcAdvancedSettingsPage) {
-            SendBtcAdvancedSettingsScreen(
-                fragmentNavController = fragmentNavController,
-                navController = navController,
-                sendBitcoinViewModel = viewModel,
-                amountInputType = amountInputModeViewModel.inputType,
-            )
-        }
-        composablePopup(TransactionInputsSortInfoPage) { BtcTransactionInputSortInfoScreen { navController.popBackStack() } }
-        composablePage(UtxoExpertModePage) {
-            UtxoExpertModeScreen(
-                adapter = viewModel.adapter,
-                token = viewModel.wallet.token,
-                customUnspentOutputs = viewModel.customUnspentOutputs,
-                updateUnspentOutputs = {
-                    viewModel.updateCustomUnspentOutputs(it)
-                },
-                onBackClick = {
-                    navController.popBackStack()
-                }
-            )
-        }
+        val viewModel = viewModel<SendBitcoinViewModel>()
+        val amountInputModeViewModel = viewModel<AmountInputModeViewModel>()
+
+        SendBtcAdvancedSettingsScreen(
+            backStack = backStack,
+            sendBitcoinViewModel = viewModel,
+            amountInputType = amountInputModeViewModel.inputType,
+        )
+    }
+}
+
+@Serializable
+data object TransactionInputsSortInfoPage : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        BtcTransactionInputSortInfoScreen { backStack.removeLastOrNull() }
+    }
+}
+
+data object UtxoExpertModePage : HSScreen(parentScreenClass = SendScreen::class) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val viewModel = viewModel<SendBitcoinViewModel>()
+
+        UtxoExpertModeScreen(
+            adapter = viewModel.adapter,
+            token = viewModel.wallet.token,
+            customUnspentOutputs = viewModel.customUnspentOutputs,
+            updateUnspentOutputs = {
+                viewModel.updateCustomUnspentOutputs(it)
+            },
+            onBackClick = {
+                backStack.removeLastOrNull()
+            }
+        )
     }
 }
 
 @Composable
 fun SendBitcoinScreen(
     title: String,
-    fragmentNavController: NavController,
-    composeNavController: NavController,
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
@@ -156,12 +148,12 @@ fun SendBitcoinScreen(
 
         HSScaffold(
             title = title,
-            onBack = { fragmentNavController.popBackStack() },
+            onBack = { backStack.removeLastOrNull() },
             menuItems = listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
                     icon = R.drawable.manage_24,
-                    onClick = { composeNavController.navigate(SendBtcAdvancedSettingsPage) }
+                    onClick = { backStack.add(SendBtcAdvancedSettingsPage) }
                 ),
             ),
         ) {
@@ -178,7 +170,7 @@ fun SendBitcoinScreen(
                         value = uiState.address.hex,
                         riskyAddress = riskyAddress
                     ) {
-                        fragmentNavController.popBackStack()
+                        backStack.removeLastOrNull()
                     }
                     VSpacer(16.dp)
                 }
@@ -229,18 +221,19 @@ fun SendBitcoinScreen(
                         UtxoCell(
                             utxoData = utxoData,
                             onClick = {
-                                composeNavController.navigate(UtxoExpertModePage)
+                                backStack.add(UtxoExpertModePage)
                             }
                         )
                     }
-                    HSFeeRaw(
-                        coinCode = wallet.coin.code,
-                        coinDecimal = viewModel.coinMaxAllowedDecimals,
-                        fee = fee,
-                        amountInputType = amountInputType,
-                        rate = rate,
-                        navController = fragmentNavController
-                    )
+//                    TODO("xxx nav3")
+//                    HSFeeRaw(
+//                        coinCode = wallet.coin.code,
+//                        coinDecimal = viewModel.coinMaxAllowedDecimals,
+//                        fee = fee,
+//                        amountInputType = amountInputType,
+//                        rate = rate,
+//                        navController = backStack
+//                    )
                 }
 
                 feeRateCaution?.let {
@@ -252,6 +245,12 @@ fun SendBitcoinScreen(
 
                 VSpacer(16.dp)
 
+                ResultEffect<AddressRiskyBottomSheetScreen.Result>(resultBus) {
+                    if (it.canContinue) {
+                        openConfirm(backStack, sendEntryPointDestId)
+                    }
+                }
+
                 ButtonPrimaryYellow(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -260,16 +259,13 @@ fun SendBitcoinScreen(
                     onClick = {
                         if (riskyAddress) {
                             keyboardController?.hide()
-                            fragmentNavController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
-                                R.id.addressRiskyBottomSheetAlert,
-                                AddressRiskyBottomSheetAlert.Input(
+                            backStack.add(
+                                AddressRiskyBottomSheetScreen(
                                     alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
                                 )
-                            ) {
-                                openConfirm(fragmentNavController, sendEntryPointDestId)
-                            }
+                            )
                         } else {
-                            openConfirm(fragmentNavController, sendEntryPointDestId)
+                            openConfirm(backStack, sendEntryPointDestId)
                         }
                     },
                     enabled = proceedEnabled
@@ -281,12 +277,11 @@ fun SendBitcoinScreen(
 }
 
 private fun openConfirm(
-    fragmentNavController: NavController,
+    backStack: NavBackStack<HSScreen>,
     sendEntryPointDestId: Int
 ) {
-    fragmentNavController.slideFromRight(
-        R.id.sendConfirmation,
-        SendConfirmationFragment.Input(
+    backStack.add(
+        SendConfirmationScreen(
             SendConfirmationFragment.Type.Bitcoin,
             sendEntryPointDestId
         )

@@ -27,15 +27,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
-import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.TransactionInputsSortInfoPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -57,13 +55,11 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendBtcAdvancedSettingsScreen(
-    fragmentNavController: NavController,
-    navController: NavHostController,
+    backStack: NavBackStack<HSScreen>,
     sendBitcoinViewModel: SendBitcoinViewModel,
     amountInputType: AmountInputType,
 ) {
@@ -90,7 +86,7 @@ fun SendBtcAdvancedSettingsScreen(
     ComposeAppTheme {
         HSScaffold(
             title = stringResource(R.string.Send_Advanced),
-            onBack = navController::popBackStack,
+            onBack = backStack::removeLastOrNull,
             menuItems = listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Button_Reset),
@@ -107,34 +103,36 @@ fun SendBtcAdvancedSettingsScreen(
             ) {
 
                 VSpacer(12.dp)
-                HSFee(
-                    coinCode = wallet.coin.code,
-                    coinDecimal = sendBitcoinViewModel.coinMaxAllowedDecimals,
-                    fee = sendUiState.fee,
-                    amountInputType = amountInputType,
-                    rate = rate,
-                    navController = fragmentNavController
-                )
+//                TODO("xxx nav3")
+//                HSFee(
+//                    coinCode = wallet.coin.code,
+//                    coinDecimal = sendBitcoinViewModel.coinMaxAllowedDecimals,
+//                    fee = sendUiState.fee,
+//                    amountInputType = amountInputType,
+//                    rate = rate,
+//                    navController = backStack
+//                )
 
                 if (feeRateVisible) {
                     VSpacer(24.dp)
-                    EvmSettingsInput(
-                        title = stringResource(R.string.FeeSettings_FeeRate),
-                        info = stringResource(R.string.FeeSettings_FeeRate_Info),
-                        value = feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
-                        decimals = 0,
-                        caution = feeRateCaution,
-                        navController = fragmentNavController,
-                        onValueChange = {
-                            sendBitcoinViewModel.updateFeeRate(it.toInt())
-                        },
-                        onClickIncrement = {
-                            sendBitcoinViewModel.incrementFeeRate()
-                        },
-                        onClickDecrement = {
-                            sendBitcoinViewModel.decrementFeeRate()
-                        }
-                    )
+//                    TODO("xxx nav3")
+//                    EvmSettingsInput(
+//                        title = stringResource(R.string.FeeSettings_FeeRate),
+//                        info = stringResource(R.string.FeeSettings_FeeRate_Info),
+//                        value = feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
+//                        decimals = 0,
+//                        caution = feeRateCaution,
+//                        navController = fragmentNavController,
+//                        onValueChange = {
+//                            sendBitcoinViewModel.updateFeeRate(it.toInt())
+//                        },
+//                        onClickIncrement = {
+//                            sendBitcoinViewModel.incrementFeeRate()
+//                        },
+//                        onClickDecrement = {
+//                            sendBitcoinViewModel.decrementFeeRate()
+//                        }
+//                    )
                     InfoText(
                         text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
                     )
@@ -143,7 +141,7 @@ fun SendBtcAdvancedSettingsScreen(
                 if (uiState.transactionSortingSupported) {
                     VSpacer(24.dp)
                     TransactionDataSortSettings(
-                        navController,
+                        backStack,
                         wallet.coin.code,
                         viewModel.uiState.transactionSortTitle,
                     ) {
@@ -332,7 +330,7 @@ private fun BottomSheetTransactionOrderSelector(
 
 @Composable
 private fun TransactionDataSortSettings(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     coinCode: String,
     valueTitle: String,
     onClick: () -> Unit
@@ -340,8 +338,9 @@ private fun TransactionDataSortSettings(
     HeaderText(
         text = stringResource(R.string.BtcBlockchainSettings_TransactionSettings),
         onInfoClick = {
-            navController.navigate(TransactionInputsSortInfoPage)
-        })
+            backStack.add(TransactionInputsSortInfoPage)
+        }
+    )
     CellUniversalLawrenceSection(
         listOf {
             RowUniversal() {

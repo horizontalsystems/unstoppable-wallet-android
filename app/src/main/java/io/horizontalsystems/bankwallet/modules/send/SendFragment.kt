@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
@@ -77,16 +78,16 @@ data class SendScreen(
             BlockchainType.Dash -> {
                 val factory = SendBitcoinModule.Factory(wallet, address, hideAddress)
                 val sendBitcoinViewModel = viewModel<SendBitcoinViewModel>(factory = factory)
-//                TODO("xxx nav3")
-//                SendBitcoinNavHost(
-//                    title = title,
-//                    fragmentNavController = backStack,
-//                    viewModel = sendBitcoinViewModel,
-//                    amountInputModeViewModel = amountInputModeViewModel,
-//                    sendEntryPointDestId = sendEntryPointDestId,
-//                    amount = amount,
-//                    riskyAddress = riskyAddress
-//                )
+                SendBitcoinScreen(
+                    title = title,
+                    backStack = backStack,
+                    resultBus = resultBus,
+                    viewModel = sendBitcoinViewModel,
+                    amountInputModeViewModel = amountInputModeViewModel,
+                    sendEntryPointDestId = sendEntryPointDestId,
+                    amount = amount,
+                    riskyAddress = riskyAddress
+                )
             }
 
             BlockchainType.Zcash -> {
