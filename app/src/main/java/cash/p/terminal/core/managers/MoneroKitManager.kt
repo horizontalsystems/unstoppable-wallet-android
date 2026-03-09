@@ -38,11 +38,10 @@ import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.core.sizeInMb
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -53,7 +52,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeout
 import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 import java.io.File
@@ -70,6 +68,7 @@ class MoneroKitManager(
             Log.d("MoneroKitManager", "Coroutine error", throwable)
         })
     var moneroKitWrapper: MoneroKitWrapper? = null
+    private val lifecycleJobs = mutableListOf<Job>()
 
     private var useCount = AtomicInt(0)
     var currentAccount: Account? = null
@@ -123,6 +122,8 @@ class MoneroKitManager(
     }
 
     private suspend fun stopKit() {
+        lifecycleJobs.forEach { it.cancel() }
+        lifecycleJobs.clear()
         currentAccount = null
         moneroKitWrapper?.stop()
     }
@@ -131,21 +132,34 @@ class MoneroKitManager(
         moneroKitWrapper?.start()
     }
 
+    private suspend fun pauseKit() {
+        moneroKitWrapper?.pause()
+    }
+
+    private suspend fun resumeOrStartKit() {
+        val wrapper = moneroKitWrapper ?: return
+        if (!wrapper.resume()) {
+            startKit()
+        }
+    }
+
     private fun subscribeToEvents() {
-        coroutineScope.launch {
+        lifecycleJobs.forEach { it.cancel() }
+        lifecycleJobs.clear()
+
+        lifecycleJobs += coroutineScope.launch {
             backgroundManager.stateFlow.collect { state ->
                 if (state == BackgroundManagerState.EnterForeground) {
-                    startKit()
+                    resumeOrStartKit()
                 } else if (state == BackgroundManagerState.EnterBackground) {
-                    stopKit()
+                    pauseKit()
                 }
             }
         }
-        coroutineScope.launch {
+        lifecycleJobs += coroutineScope.launch {
             connectivityManager.networkAvailabilityFlow.collect { connected ->
-                println("Connection status: $connected")
-                if (connected) {
-                    startKit()
+                if (connected && backgroundManager.inForeground) {
+                    resumeOrStartKit()
                 }
             }
         }
@@ -173,6 +187,7 @@ class MoneroKitWrapper(
     private var lastLoggedSyncProgress: Int = -1
 
     private var isStarted = false
+    private var isPaused = false
     private val lifecycleMutex = Mutex()
 
     private val _syncState = MutableStateFlow<AdapterState>(AdapterState.Syncing())
@@ -190,8 +205,6 @@ class MoneroKitWrapper(
     )
     val transactionsStateUpdatedFlow = _transactionsStateUpdatedFlow.asSharedFlow()
 
-    @Volatile
-    private var pendingTxDeferred: CompletableDeferred<String>? = null
 
     private suspend fun restoreFromBip39(
         account: Account,
@@ -448,12 +461,41 @@ class MoneroKitWrapper(
         if (isStarted) {
             logger.info("stop: stopping service saveWallet=$saveWallet")
             isStarted = false
+            isPaused = false
             moneroWalletService.stop(saveWallet)
             lastLoggedSyncProgress = -1
             lastLoggedConnectionStatus = null
             logger.info("stop: service stopped")
         } else {
             logger.info("stop: skip, service already stopped")
+        }
+    }
+
+    suspend fun pause() = lifecycleMutex.withLock {
+        if (isStarted && !isPaused) {
+            logger.info("pause: pausing wallet refresh")
+            moneroWalletService.pause()
+            isPaused = true
+            logger.info("pause: done")
+        } else {
+            logger.info("pause: skip, isStarted=$isStarted isPaused=$isPaused")
+        }
+    }
+
+    suspend fun resume(): Boolean = lifecycleMutex.withLock {
+        if (isStarted && isPaused) {
+            logger.info("resume: resuming wallet refresh")
+            val resumed = moneroWalletService.resume(this)
+            if (resumed) {
+                isPaused = false
+                logger.info("resume: done")
+            } else {
+                logger.info("resume: service resume returned false")
+            }
+            return@withLock resumed
+        } else {
+            logger.info("resume: skip, isStarted=$isStarted isPaused=$isPaused")
+            return@withLock false
         }
     }
 
@@ -477,28 +519,12 @@ class MoneroKitWrapper(
         amount: BigDecimal,
         address: String,
         memo: String?
-    ): String {
-        val deferred = CompletableDeferred<String>()
-        pendingTxDeferred = deferred
-
-        try {
-            val wallet = moneroWalletService.wallet
-                ?: throw IllegalStateException("Monero wallet not initialized")
-            val txData = buildTxData(amount, address, memo, wallet)
-            moneroWalletService.prepareTransaction("send", txData)
-            moneroWalletService.sendTransaction(memo)
-
-            return withTimeout(SEND_TIMEOUT_MS) { deferred.await() }
-        } catch (e: TimeoutCancellationException) {
-            val timeoutError =
-                IllegalStateException("Transaction timed out after ${SEND_TIMEOUT_MS}ms")
-            deferred.completeExceptionally(timeoutError)
-            throw timeoutError
-        } finally {
-            if (pendingTxDeferred === deferred) {
-                pendingTxDeferred = null
-            }
-        }
+    ): String = withContext(Dispatchers.IO) {
+        val wallet = moneroWalletService.wallet
+            ?: throw IllegalStateException("Monero wallet not initialized")
+        val txData = buildTxData(amount, address, memo, wallet)
+        moneroWalletService.prepareTransaction(txData)
+        moneroWalletService.sendTransaction(memo)
     }
 
     fun estimateFee(
@@ -509,7 +535,11 @@ class MoneroKitWrapper(
         val wallet = moneroWalletService.wallet
             ?: throw IllegalStateException("Monero wallet not initialized")
         val txData = buildTxData(amount, address, memo, wallet)
-        return wallet.estimateTransactionFee(txData)
+        val fee = wallet.estimateTransactionFee(txData)
+        if (fee < 0) {
+            throw IllegalStateException("Failed to estimate fee: wallet not synced with daemon")
+        }
+        return fee
     }
 
     private fun buildTxData(
@@ -525,10 +555,6 @@ class MoneroKitWrapper(
         memo?.let {
             this.userNotes = UserNotes(it)
         }
-    }
-
-    companion object {
-        private const val SEND_TIMEOUT_MS = 60_000L
     }
 
     fun statusInfo(): Map<String, Any> {
@@ -571,6 +597,7 @@ class MoneroKitWrapper(
     }
 
     fun getTransactions(): List<TransactionInfo> {
+        if (!isStarted) return emptyList()
         return try {
             var transactions = moneroWalletService.wallet?.history?.all ?: emptyList()
             if (transactions.isEmpty()) {
@@ -591,7 +618,10 @@ class MoneroKitWrapper(
         wallet: Wallet?,
         full: Boolean
     ): Boolean {
-        val connectionStatus = moneroWalletService.connectionStatus
+        if (!isStarted) return false
+
+        val connectionStatus = tryOrNull { moneroWalletService.connectionStatus }
+            ?: ConnectionStatus.ConnectionStatus_Disconnected
 
         if (connectionStatus != lastLoggedConnectionStatus) {
             logger.info(
@@ -680,50 +710,6 @@ class MoneroKitWrapper(
             logger.info("onProgress(value): $n")
         }
         Timber.d("onProgress: $n")
-    }
-
-    override fun onTransactionCreated(
-        tag: String?,
-        pendingTransaction: PendingTransaction?
-    ) {
-        logger.info("onTransactionCreated: tag=$tag status=${pendingTransaction?.status}")
-        Timber.d("onTransactionCreated: $tag, $pendingTransaction")
-    }
-
-    override fun onTransactionSent(txid: String?) {
-        logger.info("onTransactionSent: txid=${txid ?: "null"}")
-        Timber.d("onTransactionSent: $txid")
-
-        val deferred = pendingTxDeferred
-        if (deferred == null) {
-            logger.info("onTransactionSent: no pending deferred to complete (may have timed out)")
-            Timber.w("onTransactionSent: no pending deferred to complete")
-            return
-        }
-
-        if (txid != null) {
-            deferred.complete(txid)
-        } else {
-            deferred.completeExceptionally(
-                IllegalStateException("Transaction sent without txid")
-            )
-        }
-    }
-
-    override fun onSendTransactionFailed(error: String?) {
-        logger.info("onSendTransactionFailed: error=$error")
-        Timber.d("onSendTransactionFailed: $error")
-
-        val deferred = pendingTxDeferred
-        if (deferred == null) {
-            logger.info("onSendTransactionFailed: no pending deferred to complete")
-            Timber.w("onSendTransactionFailed: no pending deferred to complete")
-            return
-        }
-
-        deferred.completeExceptionally(
-            IllegalStateException(error ?: "Transaction failed")
-        )
     }
 
     override fun onWalletStarted(walletStatus: Wallet.Status?) {

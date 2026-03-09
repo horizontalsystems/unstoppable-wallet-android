@@ -30,6 +30,9 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
             .firstOrNull { it?.isDestroyed == false }
 
     private var foregroundActivityCount: Int = 0
+
+    val inForeground: Boolean
+        @Synchronized get() = foregroundActivityCount > 0
     private var aliveActivityCount: Int = 0
 
     @Synchronized
