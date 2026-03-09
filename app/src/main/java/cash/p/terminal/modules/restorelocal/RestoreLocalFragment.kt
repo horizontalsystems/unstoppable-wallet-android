@@ -83,7 +83,7 @@ class RestoreLocalFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         val input = navController.requireInput<Input>()
         RestoreLocalNavHost(
-            input.jsonFile,
+            input.backupFilePath,
             input.fileName,
             navController,
             input.popOffOnSuccess,
@@ -95,14 +95,14 @@ class RestoreLocalFragment : BaseComposeFragment() {
     data class Input(
         val popOffOnSuccess: Int,
         val popOffInclusive: Boolean,
-        val jsonFile: String,
+        val backupFilePath: String,
         val fileName: String?
     ) : Parcelable
 }
 
 @Composable
 private fun RestoreLocalNavHost(
-    backupJsonString: String?,
+    backupFilePath: String?,
     fileName: String?,
     fragmentNavController: NavController,
     popUpToInclusiveId: Int,
@@ -113,7 +113,7 @@ private fun RestoreLocalNavHost(
     val mainViewModel: RestoreViewModel = viewModel()
     val viewModel = viewModel<RestoreLocalViewModel>(
         factory = RestoreLocalModule.Factory(
-            backupJsonString,
+            backupFilePath,
             fileName
         )
     )

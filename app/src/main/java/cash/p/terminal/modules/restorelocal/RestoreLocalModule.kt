@@ -3,6 +3,7 @@ package cash.p.terminal.modules.restorelocal
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
+import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupViewItemFactory
 import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsViewModel.OtherBackupViewItem
@@ -11,16 +12,17 @@ import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsViewModel
 object RestoreLocalModule {
 
     class Factory(
-        private val backupJsonString: String?,
+        private val backupFilePath: String?,
         private val fileName: String?,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return RestoreLocalViewModel(
-                backupJsonString = backupJsonString,
+                backupFilePath = backupFilePath,
                 accountFactory = App.accountFactory,
                 backupProvider = App.backupProvider,
                 backupViewItemFactory = BackupViewItemFactory(),
+                dispatcherProvider = getKoinInstance(),
                 fileName = fileName
             ) as T
         }
