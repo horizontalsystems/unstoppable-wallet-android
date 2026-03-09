@@ -15,4 +15,6 @@ data class SendUiState(
     val cautions: List<HSCaution>,
     val showAddressInput: Boolean,
     val address: Address?,
+    val fee: BigDecimal? = null,
+    val feeLoading: Boolean = false,
 )

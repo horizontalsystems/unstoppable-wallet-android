@@ -226,6 +226,11 @@ interface ISendStellarAdapter : IBalanceAdapter {
     suspend fun send(amount: BigDecimal, address: String, memo: String?)
 }
 
+interface INativeBalanceProvider {
+    val nativeBalanceData: BalanceData
+    val nativeBalanceUpdatedFlow: Flow<Unit>
+}
+
 interface ISendTronAdapter : IBalanceAdapter {
     val trxBalanceData: BalanceData
 

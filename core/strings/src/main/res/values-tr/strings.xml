@@ -441,6 +441,28 @@
     <string name="FeeInfo_TronActivationFee_Description">This address is not active. Transferring TRX or TRC-10 tokens to an inactive account address will activate the account.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Tüketilen Kaynaklar</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Band Width, blockchain veritabanında saklanan işlem baytlarının boyutunu ölçen birimdir. İşlem ne kadar büyük olursa, o kadar fazla bant genişliği kaynağı tüketilir.\n\nEnergy, TRON sanal makinesinin TRON ağında belirli işlemleri gerçekleştirmek için ihtiyaç duyduğu hesaplama miktarını ölçen birimdir.\n\nAkıllı sözleşmeden beri işlemlerin yürütülmesi için bilgi işlem kaynakları gerekir, her akıllı sözleşme işleminin energy ücretini ödemesi gerekir.</string>
+
+    <!--Network Fee Warning-->
+    <string name="network_fee_warning_title">%s Ağ Komisyonu</string>
+    <string name="network_fee_warning_body_protocol">%1$s ağ protokolü, bu işlemin ağ komisyonunu ödemek için en az %2$s gerektiğini belirtmektedir.</string>
+    <string name="network_fee_warning_body_balance">Bakiyenizde %s tutarından az bulunmaktadır.</string>
+    <string name="network_fee_warning_body_protocol_bold">en az %s</string>
+    <string name="network_fee_warning_body_balance_bold">%s tutarından az</string>
+    <string name="network_fee_warning_body_case_not_completed_prefix">ancak </string>
+    <string name="network_fee_warning_body_case_not_sent_prefix">ve </string>
+    <string name="network_fee_warning_body_risk">Bu bakiyeyle, gerçek komisyonun beklenenden yüksek olma riski bulunmaktadır.</string>
+    <string name="network_fee_warning_body_risk_bold">beklenenden yüksek olma</string>
+    <string name="network_fee_warning_body_case_intro">Bu durumda:</string>
+    <string name="network_fee_warning_body_case_debited">bakiyenizden %s düşülecek,</string>
+    <string name="network_fee_warning_body_case_not_completed">işlem tamamlanmayabilir,</string>
+    <string name="network_fee_warning_body_case_not_sent">paralar alıcıya gönderilmeyecektir.</string>
+    <string name="network_fee_warning_body_confirm_intro">Devam ederek şunları onaylarsınız:</string>
+    <string name="network_fee_warning_body_confirm_understand">%s ağının işleyiş özelliklerini anlıyorsunuz,</string>
+    <string name="network_fee_warning_body_confirm_risk">komisyon kaybı riskinin farkındasınız,</string>
+    <string name="network_fee_warning_body_confirm_accept">başarısız bir işlemin olası sonuçlarını kabul ediyorsunuz.</string>
+    <string name="network_fee_warning_points_header">Kabul edilecek maddeler:</string>
+    <string name="network_fee_warning_checkbox">Riski anlıyor ve kabul ediyorum</string>
+
     <!--Tron-->
     <string name="Tron_AddressNotActive_Warning">Bu adres aktif değil</string>
     <string name="Tron_AddressNotActive_Title">Aktif Adres Değil</string>
@@ -552,6 +574,7 @@
     <string name="Swap_YouGet">Kazandığınız</string>
     <string name="Swap_Confirm_Title">Onayla</string>
     <string name="SwapConfirm_QuoteExpired">Alıntı süresi doldu</string>
+    <string name="SwapConfirm_QuoteIsInvalid">Teklif geçersiz</string>
     <string name="SwapConfirm_FetchingFinalQuote">Son teklifi alınıyor</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">Kayma Kontrolü Yok</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">Zincirler arası işlemler üçüncü taraf likiditesine ve gecikmelere bağlıdır, bu da nihai tutarı etkileyebilir.</string>

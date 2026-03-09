@@ -21,7 +21,7 @@ import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.address.HSAddressInput
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
-import cash.p.terminal.modules.availablebalance.AvailableBalance
+import cash.p.terminal.modules.fee.FeeInfoSection
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendFragment.ProceedActionData
 import cash.p.terminal.modules.send.SendScreen
@@ -121,13 +121,17 @@ fun SendTronScreen(
             )
 
             Spacer(modifier = Modifier.height(12.dp))
-            AvailableBalance(
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                availableBalance = availableBalance,
-                amountInputType = amountInputType,
-                rate = viewModel.coinRate
+            FeeInfoSection(
+                tokenIn = wallet.token,
+                displayBalance = viewModel.displayBalance,
+                balanceHidden = viewModel.balanceHidden,
+                feeToken = viewModel.feeToken,
+                feeCoinBalance = viewModel.feeCoinBalance,
+                feePrimary = viewModel.formatFeePrimary(uiState.fee),
+                feeSecondary = viewModel.formatFeeSecondary(uiState.fee, viewModel.feeCoinRate),
+                insufficientFeeBalance = viewModel.isInsufficientFeeBalance(uiState.fee),
+                onBalanceClicked = viewModel::toggleHideBalance,
+                feeLoading = uiState.feeLoading,
             )
 
             Spacer(modifier = Modifier.height(12.dp))

@@ -437,6 +437,28 @@
     <string name="FeeInfo_TronActivationFee_Description">This address is not active. Transferring TRX or TRC-10 tokens to an inactive account address will activate the account.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">消耗的资源</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth 是衡量存储在区块链数据库中的交易字节大小的单位。 交易越大，消耗的带宽资源就越多。\n\nEnergy 是衡量波场虚拟机在波场网络上执行特定操作所需计算量的单位。\n\n自智能合约 交易需要计算资源来执行，每笔智能合约交易都需要支付 energy费用。</string>
+
+    <!--Network Fee Warning-->
+    <string name="network_fee_warning_title">%s 网络手续费</string>
+    <string name="network_fee_warning_body_protocol">%1$s 网络协议规定，支付此交易的网络手续费至少需要 %2$s。</string>
+    <string name="network_fee_warning_body_balance">您的余额不足 %s。</string>
+    <string name="network_fee_warning_body_protocol_bold">至少需要 %s</string>
+    <string name="network_fee_warning_body_balance_bold">不足 %s</string>
+    <string name="network_fee_warning_body_case_not_completed_prefix">但</string>
+    <string name="network_fee_warning_body_case_not_sent_prefix"></string>
+    <string name="network_fee_warning_body_risk">在此余额下，实际手续费可能高于预期。</string>
+    <string name="network_fee_warning_body_risk_bold">可能高于预期</string>
+    <string name="network_fee_warning_body_case_intro">在这种情况下：</string>
+    <string name="network_fee_warning_body_case_debited">%s 将从您的余额中扣除，</string>
+    <string name="network_fee_warning_body_case_not_completed">交易可能无法完成，</string>
+    <string name="network_fee_warning_body_case_not_sent">代币将不会发送给收款人。</string>
+    <string name="network_fee_warning_body_confirm_intro">继续操作即表示您确认：</string>
+    <string name="network_fee_warning_body_confirm_understand">了解 %s 网络的运作方式，</string>
+    <string name="network_fee_warning_body_confirm_risk">知晓手续费损失的风险，</string>
+    <string name="network_fee_warning_body_confirm_accept">接受交易失败可能带来的后果。</string>
+    <string name="network_fee_warning_points_header">需要同意的事项：</string>
+    <string name="network_fee_warning_checkbox">我理解并接受风险</string>
+
     <!--Tron-->
     <string name="Tron_AddressNotActive_Warning">此地址未激活</string>
     <string name="Tron_AddressNotActive_Title">未激活的地址</string>
@@ -548,6 +570,7 @@
     <string name="Swap_YouGet">您获得</string>
     <string name="Swap_Confirm_Title">确认</string>
     <string name="SwapConfirm_QuoteExpired">报价已过期</string>
+    <string name="SwapConfirm_QuoteIsInvalid">报价无效</string>
     <string name="SwapConfirm_FetchingFinalQuote">正在获取最终报价</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">无滑点控制</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">跨链操作依赖于第三方流动性和延迟，这可能会影响最终金额。</string>

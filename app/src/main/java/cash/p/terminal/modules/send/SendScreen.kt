@@ -3,6 +3,7 @@ package cash.p.terminal.modules.send
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -38,7 +39,7 @@ fun SendScreen(
             )
         )
 
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        Column(modifier = Modifier.imePadding().verticalScroll(rememberScrollState())) {
             content.invoke(this)
         }
     }

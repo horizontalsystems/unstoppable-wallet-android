@@ -1,6 +1,7 @@
 package cash.p.terminal.core.adapters
 
 import cash.p.terminal.core.ICoinManager
+import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.managers.TonKitWrapper
 import cash.p.terminal.core.managers.toAdapterState
@@ -31,7 +32,7 @@ class JettonAdapter(
     tonKitWrapper: TonKitWrapper,
     addressStr: String,
     wallet: Wallet,
-) : BaseTonAdapter(tonKitWrapper, wallet.decimal), ISendTonAdapter {
+) : BaseTonAdapter(tonKitWrapper, wallet.decimal), ISendTonAdapter, INativeBalanceProvider {
 
     private val address = Address.parse(addressStr)
     private var jettonBalance = tonKit.jettonBalanceMap[address]
@@ -53,8 +54,8 @@ class JettonAdapter(
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    private val getBaseToken: Token? =
-        coinManager.getToken(TokenQuery(wallet.token.blockchainType, TokenType.Native))
+    private val nativeToken: Token =
+        requireNotNull(coinManager.getToken(TokenQuery(wallet.token.blockchainType, TokenType.Native)))
 
     override fun start() {
         coroutineScope.launch {
@@ -79,6 +80,14 @@ class JettonAdapter(
 
     override val fee: StateFlow<BigDecimal> = MutableStateFlow(BigDecimal.ZERO)
 
+    // INativeBalanceProvider
+
+    override val nativeBalanceData: BalanceData
+        get() = BalanceData(tonKit.account?.balance?.toBigDecimal()?.movePointLeft(nativeToken.decimals) ?: BigDecimal.ZERO)
+
+    override val nativeBalanceUpdatedFlow: Flow<Unit>
+        get() = tonKit.accountFlow.map { }
+
     override suspend fun send(amount: BigDecimal, address: FriendlyAddress, memo: String?) {
         tonKit.send(
             jettonBalance?.walletAddress!!,
@@ -97,7 +106,7 @@ class JettonAdapter(
         address: FriendlyAddress,
         memo: String?,
     ): BigDecimal {
-        val baseDecimals = getBaseToken?.decimals ?: decimals
+        val baseDecimals = nativeToken.decimals
         val estimateFee = tonKit.estimateFee(
             jettonWallet = jettonBalance?.walletAddress!!,
             recipient = address,

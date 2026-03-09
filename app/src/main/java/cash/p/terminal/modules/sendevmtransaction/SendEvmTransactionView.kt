@@ -22,7 +22,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.multiswap.ui.DataField
-import cash.p.terminal.modules.multiswap.ui.DataFieldFee
+import cash.p.terminal.modules.fee.DataFieldFee
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.strings.helpers.shorten

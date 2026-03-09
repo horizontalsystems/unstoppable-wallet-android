@@ -3,6 +3,7 @@ package cash.p.terminal.core.adapters
 import android.content.Context
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ICoinManager
+import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.StackingManager
 import cash.p.terminal.data.repository.EvmTransactionRepository
@@ -37,7 +38,7 @@ internal class Eip20Adapter(
     private val wallet: Wallet,
     evmLabelManager: EvmLabelManager,
     private val stackingManager: StackingManager
-) : BaseEvmAdapter(evmTransactionRepository, wallet.decimal, coinManager) {
+) : BaseEvmAdapter(evmTransactionRepository, wallet.decimal, coinManager), INativeBalanceProvider {
 
     private val transactionConverter = EvmTransactionConverter(
         coinManager = coinManager,
@@ -93,6 +94,14 @@ internal class Eip20Adapter(
 
     // For ERC-20 tokens, fee is paid in native token, not the token itself
     override val fee: StateFlow<BigDecimal> = MutableStateFlow(BigDecimal.ZERO)
+
+    // INativeBalanceProvider
+
+    override val nativeBalanceData: BalanceData
+        get() = BalanceData(balanceInBigDecimal(evmTransactionRepository.accountState?.balance, EvmAdapter.decimal))
+
+    override val nativeBalanceUpdatedFlow: Flow<Unit>
+        get() = evmTransactionRepository.accountStateFlowable.map { }.asFlow()
 
     override fun getTransactionData(amount: BigDecimal, address: Address): TransactionData {
         val amountBigInt = amount.movePointRight(decimal).toBigInteger()

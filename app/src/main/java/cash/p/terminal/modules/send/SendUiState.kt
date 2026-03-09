@@ -12,5 +12,7 @@ data class SendUiState(
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
     val address: Address?,
-    val cautions: List<CautionViewItem> = emptyList()
+    val cautions: List<CautionViewItem> = emptyList(),
+    val fee: BigDecimal? = null,
+    val feeLoading: Boolean = false,
 )

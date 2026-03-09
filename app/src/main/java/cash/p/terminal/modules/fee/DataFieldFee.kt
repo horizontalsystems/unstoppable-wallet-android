@@ -1,10 +1,12 @@
-package cash.p.terminal.modules.multiswap.ui
+package cash.p.terminal.modules.fee
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,17 +18,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.modules.multiswap.QuoteInfoRow
 import cash.p.terminal.ui_compose.components.InfoBottomSheet
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun DataFieldFee(
     primary: String,
     secondary: String,
     borderTop: Boolean = false,
+    loading: Boolean = false,
     title: String = stringResource(id = R.string.fee),
 ) {
     val infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
@@ -51,10 +54,20 @@ fun DataFieldFee(
 
         },
         value = {
-            Column(horizontalAlignment = Alignment.End) {
-                subhead2_leah(text = primary)
-                VSpacer(height = 1.dp)
-                subhead2_grey(text = secondary)
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    color = ComposeAppTheme.colors.grey,
+                    strokeWidth = 2.dp
+                )
+            } else {
+                Column(horizontalAlignment = Alignment.End) {
+                    subhead2_leah(text = primary)
+                    if (secondary.isNotEmpty()) {
+                        VSpacer(height = 1.dp)
+                        subhead2_grey(text = secondary)
+                    }
+                }
             }
         }
     )

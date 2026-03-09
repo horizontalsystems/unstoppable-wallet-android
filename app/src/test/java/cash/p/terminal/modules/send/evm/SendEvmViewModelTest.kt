@@ -42,6 +42,8 @@ import org.junit.Test
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import org.koin.test.KoinTestRule
 import java.math.BigDecimal
 
@@ -57,6 +59,8 @@ class SendEvmViewModelTest : KoinTest {
     private val addressService = mockk<SendEvmAddressService>(relaxed = true)
     private val evmBlockchainManager = mockk<EvmBlockchainManager>()
     private val adapterManager = mockk<IAdapterManager>(relaxed = true)
+    private val balanceHiddenManager = mockk<IBalanceHiddenManager>(relaxed = true)
+    private val marketKit = mockk<MarketKitWrapper>(relaxed = true)
 
     private lateinit var amountStateFlow: MutableStateFlow<SendAmountService.State>
     private lateinit var addressStateFlow: MutableStateFlow<SendEvmAddressService.State>
@@ -92,6 +96,8 @@ class SendEvmViewModelTest : KoinTest {
             module {
                 single { evmBlockchainManager }
                 single { mockk<ContactsRepository>(relaxed = true) }
+                single<IBalanceHiddenManager> { balanceHiddenManager }
+                single<MarketKitWrapper> { marketKit }
             }
         )
     }
@@ -116,6 +122,7 @@ class SendEvmViewModelTest : KoinTest {
         every { xRateService.getRate(any()) } returns null
         every { xRateService.getRateFlow(any()) } returns flowOf<CurrencyValue>()
         every { evmBlockchainManager.getBaseToken(BlockchainType.BinanceSmartChain) } returns testToken
+        every { balanceHiddenManager.balanceHiddenFlow } returns MutableStateFlow(false)
         every { adapter.getTransactionData(any(), any()) } returns testTransactionData
 
         every { amountService.setAmount(any()) } answers {

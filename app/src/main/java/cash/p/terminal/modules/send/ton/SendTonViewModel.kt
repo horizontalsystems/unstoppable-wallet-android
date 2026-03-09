@@ -34,7 +34,7 @@ import java.net.UnknownHostException
 class SendTonViewModel(
     wallet: Wallet,
     private val sendToken: Token,
-    val feeToken: Token,
+    override val feeToken: Token,
     val adapter: ISendTonAdapter,
     private val xRateService: XRateService,
     private val amountService: SendTonAmountService,
@@ -65,6 +65,9 @@ class SendTonViewModel(
         private set
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
+
+    override fun getEstimatedFee(): BigDecimal? = (feeState.feeStatus as? FeeStatus.Success)?.fee
+    override fun onSendRequested() = onClickSend()
 
     private val logger: AppLogger = AppLogger("send-ton")
 
@@ -143,7 +146,7 @@ class SendTonViewModel(
         )
     }
 
-    fun onClickSend() {
+    private fun onClickSend() {
         logger.info("click send button")
 
         viewModelScope.launch {

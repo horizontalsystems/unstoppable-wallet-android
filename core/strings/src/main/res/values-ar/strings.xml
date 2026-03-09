@@ -441,6 +441,28 @@
     <string name="FeeInfo_TronActivationFee_Description">This address is not active. Transferring TRX or TRC-10 tokens to an inactive account address will activate the account.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Resources Consumed</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth is the unit that measures the size of the transaction bytes stored in the blockchain database. The larger the transaction, the more bandwidth resources will be consumed.\n\nEnergy is the unit that measures the amount of computation required by the TRON virtual machine to perform specific operations on the TRON network.\n\nSince smart contract transactions require computing resources to execute, each smart contract transaction requires to pay for the energy fee.</string>
+
+    <!--Network Fee Warning-->
+    <string name="network_fee_warning_title">رسوم شبكة %s</string>
+    <string name="network_fee_warning_body_protocol">ينص بروتوكول شبكة %1$s على أنه يلزم %2$s على الأقل لدفع رسوم الشبكة لهذه المعاملة.</string>
+    <string name="network_fee_warning_body_balance">رصيدك أقل من %s.</string>
+    <string name="network_fee_warning_body_protocol_bold">%s على الأقل</string>
+    <string name="network_fee_warning_body_balance_bold">أقل من %s</string>
+    <string name="network_fee_warning_body_case_not_completed_prefix">لكن </string>
+    <string name="network_fee_warning_body_case_not_sent_prefix">و</string>
+    <string name="network_fee_warning_body_risk">بهذا الرصيد، هناك خطر أن تكون الرسوم الفعلية أعلى من المتوقع.</string>
+    <string name="network_fee_warning_body_risk_bold">أعلى من المتوقع</string>
+    <string name="network_fee_warning_body_case_intro">في هذه الحالة:</string>
+    <string name="network_fee_warning_body_case_debited">سيتم خصم %s من رصيدك،</string>
+    <string name="network_fee_warning_body_case_not_completed">قد لا تكتمل المعاملة،</string>
+    <string name="network_fee_warning_body_case_not_sent">لن يتم إرسال العملات إلى المستلم.</string>
+    <string name="network_fee_warning_body_confirm_intro">بالمتابعة، فإنك تؤكد أنك:</string>
+    <string name="network_fee_warning_body_confirm_understand">تفهم تفاصيل كيفية عمل شبكة %s،</string>
+    <string name="network_fee_warning_body_confirm_risk">تدرك خطر فقدان العمولة،</string>
+    <string name="network_fee_warning_body_confirm_accept">تقبل العواقب المحتملة لمعاملة غير ناجحة.</string>
+    <string name="network_fee_warning_points_header">نقاط يجب الموافقة عليها:</string>
+    <string name="network_fee_warning_checkbox">أفهم وأقبل المخاطر</string>
+
     <!--Tron-->
     <string name="Tron_AddressNotActive_Warning">This address is not active</string>
     <string name="Tron_AddressNotActive_Title">Not Active Address</string>
@@ -552,6 +574,7 @@
     <string name="Swap_YouGet">You Get</string>
     <string name="Swap_Confirm_Title">تأكيد</string>
     <string name="SwapConfirm_QuoteExpired">Quote expired</string>
+    <string name="SwapConfirm_QuoteIsInvalid">Quote is invalid</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">بدون تحكم في الانزلاق</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">تعتمد العمليات بين السلاسل على سيولة الأطراف الثالثة والتأخير، مما قد يؤثر على المبلغ النهائي.</string>

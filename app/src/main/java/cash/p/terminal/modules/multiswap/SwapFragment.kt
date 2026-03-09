@@ -53,7 +53,8 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.multiswap.action.ActionCreate
-import cash.p.terminal.modules.multiswap.ui.FeeInfoSection
+import cash.p.terminal.modules.fee.FeeInfoSection
+import cash.p.terminal.modules.fee.QuoteInfoRow
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.navigation.entity.SwapParams
 import cash.p.terminal.modules.multiswap.settings.SwapTransactionSettingsScreen
@@ -214,7 +215,7 @@ fun SwapScreen(navController: NavController, tokenIn: Token?, tokenOut: Token?) 
                 fragmentNavController = navController,
                 swapNavController = swapNavController,
                 swapViewModel = viewModel,
-                onOpenSettings = { swapNavController.navigate(SwapTransactionSettingsPage) }
+                onOpenSettings = { swapNavController.navigate(SwapTransactionSettingsPage) },
             )
         }
         composablePage<SwapSettingsPage> {

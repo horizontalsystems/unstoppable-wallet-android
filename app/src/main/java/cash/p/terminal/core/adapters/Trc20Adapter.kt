@@ -1,6 +1,7 @@
 package cash.p.terminal.core.adapters
 
 import cash.p.terminal.core.ICoinManager
+import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.ISendTronAdapter
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.TronKitWrapper
@@ -26,7 +27,7 @@ class Trc20Adapter(
     contractAddress: String,
     wallet: Wallet,
     baseToken: Token,
-) : BaseTronAdapter(tronKitWrapper, wallet.decimal), ISendTronAdapter {
+) : BaseTronAdapter(tronKitWrapper, wallet.decimal), ISendTronAdapter, INativeBalanceProvider {
 
     private val contractAddress: Address = Address.fromBase58(contractAddress)
 
@@ -77,6 +78,14 @@ class Trc20Adapter(
 
     override val trxBalanceData: BalanceData
         get() = BalanceData(balanceInBigDecimal(tronKit.trxBalance, TronAdapter.decimal))
+
+    // INativeBalanceProvider
+
+    override val nativeBalanceData: BalanceData
+        get() = trxBalanceData
+
+    override val nativeBalanceUpdatedFlow: Flow<Unit>
+        get() = tronKit.trxBalanceFlow.map { }
 
     override suspend fun estimateFee(amount: BigDecimal, to: Address): List<Fee> =
         withContext(Dispatchers.IO) {

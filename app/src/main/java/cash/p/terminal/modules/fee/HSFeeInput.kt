@@ -13,32 +13,7 @@ import cash.p.terminal.core.App
 import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.amount.AmountInputType
-import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import java.math.BigDecimal
-
-@Composable
-fun HSFee(
-    coinCode: String,
-    coinDecimal: Int,
-    fee: BigDecimal?,
-    amountInputType: AmountInputType,
-    rate: CurrencyValue?,
-    navController: NavController,
-    viewState: ViewState? = null
-) {
-    CellUniversalLawrenceSection(
-        listOf {
-            HSFeeRaw(
-                coinCode = coinCode,
-                coinDecimal = coinDecimal,
-                fee = fee,
-                amountInputType = amountInputType,
-                rate = rate,
-                navController = navController,
-                viewState = viewState
-            )
-        })
-}
 
 @Composable
 fun HSFeeRaw(
@@ -53,32 +28,6 @@ fun HSFeeRaw(
     viewState: ViewState? = null
 ) {
 
-    var formatted by remember { mutableStateOf<FeeItem?>(null) }
-
-    LaunchedEffect(fee, amountInputType, rate) {
-        formatted = getFormatted(fee, rate, coinCode, coinDecimal, amountInputType)
-    }
-
-    FeeCell(
-        title = title,
-        info = info,
-        value = formatted,
-        viewState = viewState,
-    )
-}
-
-@Composable
-fun HSFeeRawWithViewState(
-    title: String = stringResource(R.string.Send_Fee),
-    info: String = stringResource(R.string.Send_Fee_Info),
-    coinCode: String,
-    coinDecimal: Int,
-    fee: BigDecimal?,
-    viewState: ViewState,
-    amountInputType: AmountInputType,
-    rate: CurrencyValue?,
-    navController: NavController
-) {
     var formatted by remember { mutableStateOf<FeeItem?>(null) }
 
     LaunchedEffect(fee, amountInputType, rate) {
