@@ -10,7 +10,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -259,7 +258,7 @@ class SendTransactionServiceEvm(
     }
 
     @Composable
-    override fun GetSettingsContent(navController: NavController) {
+    override fun GetSettingsContent(backStack: NavBackStack<HSScreen>) {
         val feeSettingsViewModel = viewModel<ViewModel>(
             factory = EvmFeeModule.Factory(
                 feeService,
@@ -273,7 +272,7 @@ class SendTransactionServiceEvm(
         SendEvmFeeSettingsScreen(
             viewModel = sendSettingsViewModel,
             feeSettingsViewModel = feeSettingsViewModel,
-            navController = navController
+            backStack = backStack
         )
     }
 }
@@ -282,11 +281,11 @@ class SendTransactionServiceEvm(
 fun SendEvmFeeSettingsScreen(
     viewModel: SendEvmSettingsViewModel,
     feeSettingsViewModel: ViewModel,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     HSScaffold(
         title = stringResource(R.string.SendEvmSettings_Title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
@@ -303,11 +302,11 @@ fun SendEvmFeeSettingsScreen(
         ) {
             when (feeSettingsViewModel) {
                 is LegacyFeeSettingsViewModel -> {
-                    LegacyFeeSettings(feeSettingsViewModel, navController)
+                    LegacyFeeSettings(feeSettingsViewModel, backStack)
                 }
 
                 is Eip1559FeeSettingsViewModel -> {
-                    Eip1559FeeSettings(feeSettingsViewModel, navController)
+                    Eip1559FeeSettings(feeSettingsViewModel, backStack)
                 }
             }
 

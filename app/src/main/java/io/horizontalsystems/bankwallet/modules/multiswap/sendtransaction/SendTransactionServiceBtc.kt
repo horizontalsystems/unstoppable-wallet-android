@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
@@ -19,11 +19,9 @@ import io.horizontalsystems.bankwallet.core.adapters.BitcoinFeeInfo
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
-import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinAddressService
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinAmountService
@@ -42,7 +40,6 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransactionService(true, false) {
     private val adapter = App.adapterManager.getAdapterForToken<ISendBitcoinAdapter>(token)!!
@@ -177,12 +174,12 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
     }
 
     @Composable
-    override fun GetSettingsContent(navController: NavController) {
+    override fun GetSettingsContent(backStack: NavBackStack<HSScreen>) {
         val sendSettingsViewModel = viewModel<SendBtcSettingsViewModel>(
             factory = SendBtcSettingsViewModel.Factory(feeRateService, feeService, token)
         )
 
-        SendBtcFeeSettingsScreen(navController, sendSettingsViewModel)
+        SendBtcFeeSettingsScreen(backStack, sendSettingsViewModel)
     }
 
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult.Btc {
@@ -205,14 +202,14 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
 
 @Composable
 fun SendBtcFeeSettingsScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     viewModel: SendBtcSettingsViewModel
 ) {
     val uiState = viewModel.uiState
 
     HSScaffold(
         title = stringResource(R.string.SendEvmSettings_Title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
@@ -230,34 +227,36 @@ fun SendBtcFeeSettingsScreen(
                 .fillMaxSize()
         ) {
             VSpacer(12.dp)
-            HSFee(
-                coinCode = viewModel.token.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fee = uiState.fee,
-                amountInputType = AmountInputType.COIN,
-                rate = uiState.rate,
-                navController = navController
-            )
+//            TODO("xxx nav3")
+//            HSFee(
+//                coinCode = viewModel.token.coin.code,
+//                coinDecimal = viewModel.coinMaxAllowedDecimals,
+//                fee = uiState.fee,
+//                amountInputType = AmountInputType.COIN,
+//                rate = uiState.rate,
+//                navController = backStack
+//            )
 
             if (viewModel.feeRateChangeable) {
                 VSpacer(24.dp)
-                EvmSettingsInput(
-                    title = stringResource(R.string.FeeSettings_FeeRate),
-                    info = stringResource(R.string.FeeSettings_FeeRate_Info),
-                    value = uiState.feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
-                    decimals = 0,
-                    caution = uiState.feeRateCaution,
-                    navController = navController,
-                    onValueChange = {
-                        viewModel.updateFeeRate(it.toInt())
-                    },
-                    onClickIncrement = {
-                        viewModel.incrementFeeRate()
-                    },
-                    onClickDecrement = {
-                        viewModel.decrementFeeRate()
-                    }
-                )
+//                TODO("xxx nav3")
+//                EvmSettingsInput(
+//                    title = stringResource(R.string.FeeSettings_FeeRate),
+//                    info = stringResource(R.string.FeeSettings_FeeRate_Info),
+//                    value = uiState.feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
+//                    decimals = 0,
+//                    caution = uiState.feeRateCaution,
+//                    navController = backStack,
+//                    onValueChange = {
+//                        viewModel.updateFeeRate(it.toInt())
+//                    },
+//                    onClickIncrement = {
+//                        viewModel.incrementFeeRate()
+//                    },
+//                    onClickDecrement = {
+//                        viewModel.decrementFeeRate()
+//                    }
+//                )
                 InfoText(
                     text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
                 )

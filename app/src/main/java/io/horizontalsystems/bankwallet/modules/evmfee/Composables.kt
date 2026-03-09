@@ -35,14 +35,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialog
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialogScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.animations.shake
@@ -65,7 +66,7 @@ import java.math.BigDecimal
 @Composable
 fun Eip1559FeeSettings(
     viewModel: Eip1559FeeSettingsViewModel,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     val summaryViewItem = viewModel.feeSummaryViewItem
     val currentBaseFee = viewModel.currentBaseFee
@@ -81,7 +82,7 @@ fun Eip1559FeeSettings(
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
             FeeField(
-                navController = navController,
+                backStack = backStack,
                 title = stringResource(R.string.FeeSettings_NetworkFee),
                 info = stringResource(R.string.FeeSettings_NetworkFee_Info),
                 primary = summaryViewItem?.fee?.primary ?: "---",
@@ -89,14 +90,14 @@ fun Eip1559FeeSettings(
             )
             HsDivider()
             FeeField(
-                navController = navController,
+                backStack = backStack,
                 title = stringResource(R.string.FeeSettings_GasLimit),
                 info = stringResource(R.string.FeeSettings_GasLimit_Info),
                 primary = summaryViewItem?.gasLimit ?: "",
             )
             HsDivider()
             FeeField(
-                navController = navController,
+                backStack = backStack,
                 title = stringResource(R.string.FeeSettings_BaseFee),
                 info = stringResource(R.string.FeeSettings_BaseFee_Info),
                 primary = currentBaseFee ?: "",
@@ -113,7 +114,7 @@ fun Eip1559FeeSettings(
                     decimals = maxFee.scale.decimals,
                     warnings = maxFee.warnings,
                     errors = maxFee.errors,
-                    navController = navController,
+                    backStack = backStack,
                     onValueChange = {
                         viewModel.onSelectGasPrice(maxFee.wei(it), priorityFee.weiValue)
                     },
@@ -132,7 +133,7 @@ fun Eip1559FeeSettings(
                     decimals = priorityFee.scale.decimals,
                     warnings = priorityFee.warnings,
                     errors = priorityFee.errors,
-                    navController = navController,
+                    backStack = backStack,
                     onValueChange = {
                         viewModel.onSelectGasPrice(maxFee.weiValue, priorityFee.wei(it))
                     },
@@ -156,7 +157,7 @@ fun EvmSettingsInput(
     decimals: Int,
     warnings: List<Warning>,
     errors: List<Throwable>,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
     onClickDecrement: () -> Unit
@@ -173,7 +174,7 @@ fun EvmSettingsInput(
         value = value,
         decimals = decimals,
         textColor = textColor,
-        navController = navController,
+        backStack = backStack,
         onValueChange = onValueChange,
         onClickIncrement = onClickIncrement,
         onClickDecrement = onClickDecrement
@@ -198,17 +199,18 @@ fun EvmSettingsInput(
         else -> ComposeAppTheme.colors.leah
     }
 
-    EvmSettingsInput(
-        title = title,
-        info = info,
-        value = value,
-        decimals = decimals,
-        textColor = textColor,
-        navController = navController,
-        onValueChange = onValueChange,
-        onClickIncrement = onClickIncrement,
-        onClickDecrement = onClickDecrement
-    )
+//    TODO("xxx nav3")
+//    EvmSettingsInput(
+//        title = title,
+//        info = info,
+//        value = value,
+//        decimals = decimals,
+//        textColor = textColor,
+//        backStack = navController,
+//        onValueChange = onValueChange,
+//        onClickIncrement = onClickIncrement,
+//        onClickDecrement = onClickDecrement
+//    )
 }
 
 @Composable
@@ -218,15 +220,14 @@ private fun EvmSettingsInput(
     value: BigDecimal,
     decimals: Int,
     textColor: Color,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
     onClickDecrement: () -> Unit,
 ) {
     HeaderText(text = title) {
-        navController.slideFromBottom(
-            R.id.swapInfoDialog,
-            SwapInfoDialog.Input(title, info)
+        backStack.add(
+            SwapInfoDialogScreen(title, info)
         )
     }
 
@@ -347,7 +348,7 @@ fun ButtonsGroupWithShade(
 @Composable
 fun LegacyFeeSettings(
     viewModel: LegacyFeeSettingsViewModel,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     val summaryViewItem = viewModel.feeSummaryViewItem
     val viewItem = viewModel.feeViewItem
@@ -361,7 +362,7 @@ fun LegacyFeeSettings(
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
             FeeField(
-                navController = navController,
+                backStack = backStack,
                 title = stringResource(R.string.FeeSettings_NetworkFee),
                 info = stringResource(R.string.FeeSettings_NetworkFee_Info),
                 primary = summaryViewItem?.fee?.primary ?: "---",
@@ -369,7 +370,7 @@ fun LegacyFeeSettings(
             )
             HsDivider()
             FeeField(
-                navController = navController,
+                backStack = backStack,
                 title = stringResource(R.string.FeeSettings_GasLimit),
                 info = stringResource(R.string.FeeSettings_GasLimit_Info),
                 primary = summaryViewItem?.gasLimit ?: "---",
@@ -377,24 +378,25 @@ fun LegacyFeeSettings(
         }
 
         viewItem?.let { fee ->
-            EvmSettingsInput(
-                title = stringResource(R.string.FeeSettings_GasPrice),
-                info = stringResource(R.string.FeeSettings_GasPrice_Info),
-                value = BigDecimal(fee.weiValue).divide(BigDecimal(fee.scale.scaleValue)),
-                decimals = fee.scale.decimals,
-                warnings = fee.warnings,
-                errors = fee.errors,
-                navController = navController,
-                onValueChange = {
-                    viewModel.onSelectGasPrice(fee.wei(it))
-                },
-                onClickIncrement = {
-                    viewModel.onIncrementGasPrice(fee.weiValue)
-                },
-                onClickDecrement = {
-                    viewModel.onDecrementGasPrice(fee.weiValue)
-                }
-            )
+//            TODO("xxx nav3")
+//            EvmSettingsInput(
+//                title = stringResource(R.string.FeeSettings_GasPrice),
+//                info = stringResource(R.string.FeeSettings_GasPrice_Info),
+//                value = BigDecimal(fee.weiValue).divide(BigDecimal(fee.scale.scaleValue)),
+//                decimals = fee.scale.decimals,
+//                warnings = fee.warnings,
+//                errors = fee.errors,
+//                navController = backStack,
+//                onValueChange = {
+//                    viewModel.onSelectGasPrice(fee.wei(it))
+//                },
+//                onClickIncrement = {
+//                    viewModel.onIncrementGasPrice(fee.weiValue)
+//                },
+//                onClickDecrement = {
+//                    viewModel.onDecrementGasPrice(fee.weiValue)
+//                }
+//            )
         }
     }
 }
@@ -426,7 +428,7 @@ fun Cautions(cautions: List<CautionViewItem>) {
 
 @Composable
 private fun FeeField(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     primary: String,
     secondary: String? = null,
     title: String,
@@ -439,9 +441,8 @@ private fun FeeField(
                 icon = painterResource(R.drawable.ic_info_filled_20),
                 iconTint = ComposeAppTheme.colors.grey,
                 onIconClick = {
-                    navController.slideFromBottom(
-                        R.id.swapInfoDialog,
-                        SwapInfoDialog.Input(title, info)
+                    backStack.add(
+                        SwapInfoDialogScreen(title, info)
                     )
                 }
             )
