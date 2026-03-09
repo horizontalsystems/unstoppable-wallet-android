@@ -146,7 +146,11 @@ class TokenBalanceViewModel(
             if (isStakingCoin) {
                 stakingAddress = adapterManager.getReceiveAdapterForWallet(wallet)?.receiveAddress
                 stakingAddress?.let { address ->
-                    stackingManager.loadInvestmentData(wallet, address)
+                    stackingManager.loadInvestmentData(
+                        wallet = wallet,
+                        address = address,
+                        forceUpdate = true
+                    )
                 }
             }
 
@@ -345,14 +349,12 @@ class TokenBalanceViewModel(
         val threshold = BigDecimal(stackingType.minStackingAmount)
         val balance = balanceItem.balanceData.total
 
-        if (balance < threshold) {
-            stakingCheckJob?.cancel()
-            stakingStatus = StakingStatus.INACTIVE
-            stakingChecked = false
-            emitState()
-            return
-        }
+        stakingStatus = if (balance >= threshold) StakingStatus.ACTIVE else StakingStatus.INACTIVE
+        emitState()
 
+        if (stakingStatus == StakingStatus.ACTIVE) return
+
+        stakingCheckJob?.cancel()
         if (stakingChecked) return
         stakingChecked = true
 

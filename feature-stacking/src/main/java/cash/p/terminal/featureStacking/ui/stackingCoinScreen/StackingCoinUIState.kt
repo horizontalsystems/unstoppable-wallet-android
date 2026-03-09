@@ -24,6 +24,5 @@ internal data class StackingCoinUIState(
     val isWatchAccount: Boolean = false,
     val isRefreshing: Boolean = false
 ) {
-    fun isWaitingForStacking(): Boolean =
-        balance < minStackingAmount || unpaidStr == null || unpaidStr == ""
+    fun isWaitingForStacking(): Boolean = balance < minStackingAmount
 }

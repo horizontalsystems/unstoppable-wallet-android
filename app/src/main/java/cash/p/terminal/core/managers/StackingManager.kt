@@ -1,6 +1,6 @@
 package cash.p.terminal.core.managers
 
-import android.util.Log
+import timber.log.Timber
 import cash.p.terminal.featureStacking.ui.staking.StackingType
 import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import cash.p.terminal.wallet.Wallet
@@ -56,8 +56,10 @@ class StackingManager(
         }
         scope.launch(
             CoroutineExceptionHandler { _, throwable ->
-                Log.e("StackingManager", "Error loading investment data", throwable)
-                _unpaidFlow.value = BigDecimal.ZERO
+                Timber.e(throwable, "Error loading investment data")
+                if (_unpaidFlow.value == null) {
+                    _unpaidFlow.value = BigDecimal.ZERO
+                }
             }) {
             piratePlaceRepository.getInvestmentData(
                 coinGeckoUid = coin.lowercase(),
