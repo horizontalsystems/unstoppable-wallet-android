@@ -12,19 +12,21 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.address.HSAddressCell
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
-import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -35,12 +37,13 @@ import java.math.BigDecimal
 @Composable
 fun SendTronScreen(
     title: String,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     viewModel: SendTronViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     amount: BigDecimal?,
-    riskyAddress: Boolean
+    riskyAddress: Boolean,
+    resultBus: ResultEventBus
 ) {
     val view = LocalView.current
     val wallet = viewModel.wallet
@@ -67,7 +70,7 @@ fun SendTronScreen(
 
         SendScreen(
             title = title,
-            onBack = { navController.popBackStack() }
+            onBack = { backStack.removeLastOrNull() }
         ) {
             VSpacer(16.dp)
             if (uiState.showAddressInput) {
@@ -76,7 +79,7 @@ fun SendTronScreen(
                     value = uiState.address.hex,
                     riskyAddress = riskyAddress
                 ) {
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 }
                 VSpacer(16.dp)
             }
@@ -110,6 +113,12 @@ fun SendTronScreen(
                 rate = viewModel.coinRate
             )
 
+            ResultEffect<AddressRiskyBottomSheetScreen.Result>(resultBus) {
+                if (it.canContinue) {
+                    openConfirm(viewModel, backStack, sendEntryPointDestId)
+                }
+            }
+
             ButtonPrimaryYellow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -120,16 +129,13 @@ fun SendTronScreen(
                         HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)
                     } else if (riskyAddress) {
                         keyboardController?.hide()
-                        navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
-                            R.id.addressRiskyBottomSheetAlert,
-                            AddressRiskyBottomSheetAlert.Input(
+                        backStack.add(
+                            AddressRiskyBottomSheetScreen(
                                 alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
                             )
-                        ) {
-                            openConfirm(viewModel, navController, sendEntryPointDestId)
-                        }
+                        )
                     } else {
-                        openConfirm(viewModel, navController, sendEntryPointDestId)
+                        openConfirm(viewModel, backStack, sendEntryPointDestId)
                     }
                 },
                 enabled = proceedEnabled
@@ -141,14 +147,13 @@ fun SendTronScreen(
 
 private fun openConfirm(
     viewModel: SendTronViewModel,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     sendEntryPointDestId: Int
 ) {
     viewModel.onNavigateToConfirmation()
 
-    navController.slideFromRight(
-        R.id.sendConfirmation,
-        SendConfirmationFragment.Input(
+    backStack.add(
+        SendConfirmationScreen(
             SendConfirmationFragment.Type.Tron,
             sendEntryPointDestId
         )

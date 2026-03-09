@@ -35,6 +35,7 @@ import io.horizontalsystems.bankwallet.modules.send.ton.SendTonModule
 import io.horizontalsystems.bankwallet.modules.send.ton.SendTonScreen
 import io.horizontalsystems.bankwallet.modules.send.ton.SendTonViewModel
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronModule
+import io.horizontalsystems.bankwallet.modules.send.tron.SendTronScreen
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
@@ -165,16 +166,16 @@ data class SendScreen(
             BlockchainType.Tron -> {
                 val factory = SendTronModule.Factory(wallet, address, hideAddress)
                 val sendTronViewModel = viewModel<SendTronViewModel>(factory = factory)
-//                TODO("xxx nav3")
-//                SendTronScreen(
-//                    title = title,
-//                    navController = backStack,
-//                    viewModel = sendTronViewModel,
-//                    amountInputModeViewModel = amountInputModeViewModel,
-//                    sendEntryPointDestId = sendEntryPointDestId,
-//                    amount = amount,
-//                    riskyAddress = riskyAddress
-//                )
+                SendTronScreen(
+                    title = title,
+                    backStack = backStack,
+                    viewModel = sendTronViewModel,
+                    amountInputModeViewModel = amountInputModeViewModel,
+                    sendEntryPointDestId = sendEntryPointDestId,
+                    amount = amount,
+                    riskyAddress = riskyAddress,
+                    resultBus = resultBus
+                )
             }
 
             BlockchainType.Stellar -> {
