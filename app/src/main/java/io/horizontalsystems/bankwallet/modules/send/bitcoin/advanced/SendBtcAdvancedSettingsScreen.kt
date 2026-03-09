@@ -31,11 +31,13 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
-import io.horizontalsystems.bankwallet.modules.send.bitcoin.TransactionInputsSortInfoPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
@@ -55,6 +57,25 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object SendBtcAdvancedSettingsScreen : HSScreen(parentScreenClass = SendScreen::class) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val viewModel = viewModel<SendBitcoinViewModel>()
+        val amountInputModeViewModel = viewModel<AmountInputModeViewModel>()
+
+        SendBtcAdvancedSettingsScreen(
+            backStack = backStack,
+            sendBitcoinViewModel = viewModel,
+            amountInputType = amountInputModeViewModel.inputType,
+        )
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -338,7 +359,7 @@ private fun TransactionDataSortSettings(
     HeaderText(
         text = stringResource(R.string.BtcBlockchainSettings_TransactionSettings),
         onInfoClick = {
-            backStack.add(TransactionInputsSortInfoPage)
+            backStack.add(BtcTransactionInputSortInfoScreen)
         }
     )
     CellUniversalLawrenceSection(

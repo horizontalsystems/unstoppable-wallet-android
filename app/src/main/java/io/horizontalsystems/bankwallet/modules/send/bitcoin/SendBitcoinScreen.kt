@@ -40,8 +40,6 @@ import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
-import io.horizontalsystems.bankwallet.modules.send.SendScreen
-import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.utxoexpert.UtxoExpertModeScreen
@@ -55,60 +53,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import kotlinx.serialization.Serializable
 import java.math.BigDecimal
-
-
-@Serializable
-data object SendBtcAdvancedSettingsPage : HSScreen(parentScreenClass = SendScreen::class) {
-    @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
-    ) {
-        val viewModel = viewModel<SendBitcoinViewModel>()
-        val amountInputModeViewModel = viewModel<AmountInputModeViewModel>()
-
-        SendBtcAdvancedSettingsScreen(
-            backStack = backStack,
-            sendBitcoinViewModel = viewModel,
-            amountInputType = amountInputModeViewModel.inputType,
-        )
-    }
-}
-
-@Serializable
-data object TransactionInputsSortInfoPage : HSScreen() {
-    @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
-    ) {
-        BtcTransactionInputSortInfoScreen { backStack.removeLastOrNull() }
-    }
-}
-
-data object UtxoExpertModePage : HSScreen(parentScreenClass = SendScreen::class) {
-    @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
-    ) {
-        val viewModel = viewModel<SendBitcoinViewModel>()
-
-        UtxoExpertModeScreen(
-            adapter = viewModel.adapter,
-            token = viewModel.wallet.token,
-            customUnspentOutputs = viewModel.customUnspentOutputs,
-            updateUnspentOutputs = {
-                viewModel.updateCustomUnspentOutputs(it)
-            },
-            onBackClick = {
-                backStack.removeLastOrNull()
-            }
-        )
-    }
-}
 
 @Composable
 fun SendBitcoinScreen(
@@ -153,7 +98,7 @@ fun SendBitcoinScreen(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
                     icon = R.drawable.manage_24,
-                    onClick = { backStack.add(SendBtcAdvancedSettingsPage) }
+                    onClick = { backStack.add(SendBtcAdvancedSettingsScreen) }
                 ),
             ),
         ) {
@@ -221,7 +166,7 @@ fun SendBitcoinScreen(
                         UtxoCell(
                             utxoData = utxoData,
                             onClick = {
-                                backStack.add(UtxoExpertModePage)
+                                backStack.add(UtxoExpertModeScreen)
                             }
                         )
                     }

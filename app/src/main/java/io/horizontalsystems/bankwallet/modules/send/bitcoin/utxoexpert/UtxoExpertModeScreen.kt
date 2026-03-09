@@ -22,9 +22,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.shorten
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.send.SendScreen
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -40,6 +45,28 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.marketkit.models.Token
+
+data object UtxoExpertModeScreen : HSScreen(parentScreenClass = SendScreen::class) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        val viewModel = viewModel<SendBitcoinViewModel>()
+
+        UtxoExpertModeScreen(
+            adapter = viewModel.adapter,
+            token = viewModel.wallet.token,
+            customUnspentOutputs = viewModel.customUnspentOutputs,
+            updateUnspentOutputs = {
+                viewModel.updateCustomUnspentOutputs(it)
+            },
+            onBackClick = {
+                backStack.removeLastOrNull()
+            }
+        )
+    }
+}
 
 @Composable
 fun UtxoExpertModeScreen(
