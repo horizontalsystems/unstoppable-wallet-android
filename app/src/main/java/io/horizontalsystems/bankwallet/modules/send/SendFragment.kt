@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroModule
+import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroScreen
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroViewModel
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaModule
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaScreen
@@ -197,17 +198,17 @@ data class SendScreen(
             BlockchainType.Monero -> {
                 val factory = SendMoneroModule.Factory(wallet, address, hideAddress)
                 val sendMoneroViewModel = viewModel<SendMoneroViewModel>(factory = factory)
-//                TODO("xxx nav3")
-//                SendMoneroScreen(
-//                    title,
-//                    backStack,
-//                    sendMoneroViewModel,
-//                    amountInputModeViewModel,
-//                    sendEntryPointDestId,
-//                    amount,
-//                    memo,
-//                    riskyAddress = riskyAddress
-//                )
+                SendMoneroScreen(
+                    title = title,
+                    backStack = backStack,
+                    resultBus = resultBus,
+                    viewModel = sendMoneroViewModel,
+                    amountInputModeViewModel = amountInputModeViewModel,
+                    sendEntryPointDestId = sendEntryPointDestId,
+                    amount = amount,
+                    memo = memo,
+                    riskyAddress = riskyAddress
+                )
             }
 
 
