@@ -1,3 +1,38 @@
+## 🚀 Version 0.52.1 Update
+_Release date: March 10, 2026_
+
+### ✨ Improvements
+
+- **Improved user experience when sending TRX / JETTON tokens**
+  Added information about insufficient token balance during the send process.
+
+- **Increased synchronization speed for Bitcoin (BIP44)**
+
+- **Improved staking status display mechanism**
+  Enhanced the visibility of staking process and status.
+
+- **Reduced delay when updating transaction history**
+  Improved the mechanism for refreshing transaction history after switching between wallets.
+
+---
+
+### 🐛 Fixes
+
+- **Fixed crashes related to Monero wallet operations**
+
+- **Fixed crash when attempting to sign a message via WalletConnect**
+  The crash occurred only when an error happened during request processing (for example, when the session was disconnected or expired) and the application attempted to display the error message.
+
+- **Fixed an issue where swapping USDT TRC-20 to Polygon via Quickex was impossible**
+  The issue occurred because `finalNetworkFeeAmount` was returned as null.
+
+- **Fixed an issue where USDT Jetton was not syncing (Adapter Unavailable)**
+
+- **Fixed crash during backup restoration (TransactionTooLargeException)**
+  The application could crash while restoring a backup file if the user minimized the app on the password input screen after selecting the backup file. The issue was more common on low-resource devices and with large backup files.
+
+
+
 ## 🚀 Version 0.52.0 Update
 _Release date: March 1, 2026_
 
