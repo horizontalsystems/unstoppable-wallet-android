@@ -148,28 +148,22 @@ class EvmSyncSourceManager(
             BlockchainType.Base -> listOf(
                 evmSyncSource(
                     blockchainType,
-                    "Base",
-                    RpcSource.baseRpcHttp(),
+                    "PublicNode",
+                    RpcSource.Http(listOf(URI("https://base-rpc.publicnode.com")), null),
                     defaultTransactionSource(blockchainType)
                 ),
                 evmSyncSource(
                     blockchainType,
                     "dRPC",
-                    RpcSource.Http(
-                        listOf(URI("https://base.drpc.org")),
-                        null
-                    ),
+                    RpcSource.Http(listOf(URI("https://base.drpc.org")), null),
                     defaultTransactionSource(blockchainType)
                 ),
                 evmSyncSource(
                     blockchainType,
-                    "PublicNode",
-                    RpcSource.Http(
-                        listOf(URI("https://base-rpc.publicnode.com")),
-                        null
-                    ),
+                    "Base",
+                    RpcSource.baseRpcHttp(),
                     defaultTransactionSource(blockchainType)
-                )
+                ),
             )
 
             BlockchainType.ZkSync -> listOf(
