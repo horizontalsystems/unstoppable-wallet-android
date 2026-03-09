@@ -21,13 +21,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -54,7 +56,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 
 @Composable
 fun SendEvmTransactionView(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     items: List<SectionViewItem>,
     cautions: List<CautionViewItem>,
     transactionFields: List<DataField>,
@@ -63,7 +65,7 @@ fun SendEvmTransactionView(
 ) {
     Column {
         items.forEach { sectionViewItem ->
-            SectionView(sectionViewItem.viewItems, navController, statPage)
+            SectionView(sectionViewItem.viewItems, backStack, statPage)
             VSpacer(16.dp)
         }
 
@@ -95,7 +97,7 @@ fun SendEvmTransactionView(
 }
 
 @Composable
-fun SectionView(viewItems: List<ViewItem>, navController: NavController, statPage: StatPage) {
+fun SectionView(viewItems: List<ViewItem>, backStack: NavBackStack<HSScreen>, statPage: StatPage) {
     Box {
         CellUniversalLawrenceSection(viewItems) { item ->
             when (item) {
@@ -108,12 +110,11 @@ fun SectionView(viewItems: List<ViewItem>, navController: NavController, statPag
                 is ViewItem.Input -> TitleValueHex(item.title, item.value.shorten(), item.value)
                 is ViewItem.TokenItem -> Token(item)
                 is ViewItem.Fee -> {
-//                    TODO("xxx nav3")
-//                    DataFieldFee(
-//                        navController,
-//                        item.networkFee.primary.getFormattedPlain() ?: "---",
-//                        item.networkFee.secondary?.getFormattedPlain() ?: "---"
-//                    )
+                    DataFieldFee(
+                        backStack,
+                        item.networkFee.primary.getFormattedPlain() ?: "---",
+                        item.networkFee.secondary?.getFormattedPlain() ?: "---"
+                    )
                 }
             }
         }

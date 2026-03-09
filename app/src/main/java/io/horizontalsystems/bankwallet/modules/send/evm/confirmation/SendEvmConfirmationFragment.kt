@@ -16,18 +16,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceSettingsScreen
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsScreen
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.serializers.TransactionDataSerializer
@@ -49,15 +52,26 @@ data class SendEvmConfirmationScreen(
     @Serializable(with = BlockchainTypeSerializer::class)
     val blockchainType: BlockchainType,
     val sendEntryPointDestId: Int
-) : HSScreen()
+) : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SendEvmConfirmationScreen(
+            backStack,
+            transactionData,
+            additionalInfo,
+            blockchainType,
+            sendEntryPointDestId
+        )
+    }
+}
 
 class SendEvmConfirmationFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            SendEvmConfirmationScreen(navController, input)
-        }
     }
 
     @Parcelize
@@ -89,20 +103,19 @@ class SendEvmConfirmationFragment : BaseComposeFragment() {
 
 @Composable
 private fun SendEvmConfirmationScreen(
-    navController: NavController,
-    input: SendEvmConfirmationFragment.Input
+    backStack: NavBackStack<HSScreen>,
+    transactionData: TransactionData,
+    additionalInfo: SendEvmData.AdditionalInfo?,
+    blockchainType: BlockchainType,
+    sendEntryPointDestId: Int
 ) {
     val logger = remember { AppLogger("send-evm") }
 
-    val currentBackStackEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.sendEvmConfirmationFragment)
-    }
     val viewModel = viewModel<SendEvmConfirmationViewModel>(
-        viewModelStoreOwner = currentBackStackEntry,
         factory = SendEvmConfirmationViewModel.Factory(
-            input.transactionData,
-            input.additionalInfo,
-            input.blockchainType,
+            transactionData,
+            additionalInfo,
+            blockchainType,
         )
     )
     val uiState = viewModel.uiState
@@ -110,12 +123,12 @@ private fun SendEvmConfirmationScreen(
     ConfirmTransactionScreen(
         title = stringResource(R.string.Send_Confirmation_Title),
         initialLoading = uiState.initialLoading,
-        onClickBack = { navController.popBackStack() },
+        onClickBack = { backStack.removeLastOrNull() },
         onClickFeeSettings = {
-            navController.slideFromBottom(R.id.sendEvmSettingsFragment)
+            backStack.add(SendEvmSettingsScreen)
         },
         onClickNonceSettings = {
-            navController.slideFromBottom(R.id.sendEvmNonceSettingsFragment)
+            backStack.add(SendEvmNonceSettingsScreen)
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
@@ -143,10 +156,11 @@ private fun SendEvmConfirmationScreen(
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
 
-                            navController.popBackStack(input.sendEntryPointDestId, true)
+//                            TODO("xxx nav3")
+//                            backStack.popBackStack(sendEntryPointDestId, true)
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
-                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                            backStack.add(ErrorBottomSheetScreen(t.message ?: t.javaClass.simpleName))
                         }
 
                         sendButtonTitle = R.string.Send_Confirmation_Send_Button
@@ -158,7 +172,7 @@ private fun SendEvmConfirmationScreen(
         }
     ) {
         SendEvmTransactionView(
-            navController,
+            backStack,
             uiState.sectionViewItems,
             uiState.cautions,
             uiState.transactionFields,
