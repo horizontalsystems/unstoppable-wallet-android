@@ -61,7 +61,7 @@ zxing = "4.3.0"
 qrose = "1.0.1"
 
 # Reown (WalletConnect)
-reownBom = "1.6.5"
+reownBom = "1.6.8"
 
 # Web3
 web3j = "4.9.0"

@@ -481,8 +481,11 @@ class MainViewModel(
         val (tab, deeplinkPageData) = getNavigationDataForDeeplink(uri)
         deeplinkPage = deeplinkPageData
         currentMainTab = tab
-        selectedTabIndex = items.indexOf(tab)
+        val newTabIndex = items.indexOf(tab)
+        updateSelectedTab(selectedTabIndex, newTabIndex)
+        selectedTabIndex = newTabIndex
         syncNavigation()
+        emitState()
     }
 
     fun onSendOpened() {
