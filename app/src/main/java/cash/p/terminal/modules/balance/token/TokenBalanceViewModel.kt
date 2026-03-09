@@ -350,11 +350,10 @@ class TokenBalanceViewModel(
         val balance = balanceItem.balanceData.total
 
         stakingStatus = if (balance >= threshold) StakingStatus.ACTIVE else StakingStatus.INACTIVE
+        stakingCheckJob?.cancel()
         emitState()
 
         if (stakingStatus == StakingStatus.ACTIVE) return
-
-        stakingCheckJob?.cancel()
         if (stakingChecked) return
         stakingChecked = true
 
