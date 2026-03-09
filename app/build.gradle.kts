@@ -67,15 +67,21 @@ android {
     }
 
     flavorDimensions += "distribution"
+
+    val uswapApiKeyAndroid = "a32d6d05ef80c878c49eb7692aa6e2b36c4c0c7777b89e2c3c4d8e512a7cea61"
+    val uswapApiKeyFdroid = "6e928d1db31e481ae57d42f34a9b7d58a64d7e2380f7ea696e652bd9a0ee516e"
+
     productFlavors {
         create("base") {
             dimension = "distribution"
             signingConfig = signingConfigs.getByName("debug")
+            resValue("string", "uswapApiKey", uswapApiKeyAndroid)
         }
 
         create("fdroid") {
             dimension = "distribution"
             buildConfigField("boolean", "FDROID_BUILD", "true")
+            resValue("string", "uswapApiKey", uswapApiKeyFdroid)
         }
 
         create("fdroidCi") {
@@ -83,6 +89,7 @@ android {
             applicationIdSuffix = ".fdroidci"
             buildConfigField("boolean", "FDROID_BUILD", "true")
             signingConfig = signingConfigs.getByName("appCenter")
+            resValue("string", "uswapApiKey", uswapApiKeyFdroid)
         }
 
         create("ci") {
@@ -90,6 +97,7 @@ android {
             applicationIdSuffix = ".appcenter"
             versionCode = System.getenv("BUILD_NUMBER")?.toIntOrNull() ?: defaultConfig.versionCode
             signingConfig = signingConfigs.getByName("appCenter")
+            resValue("string", "uswapApiKey", uswapApiKeyAndroid)
         }
     }
 
@@ -124,7 +132,6 @@ android {
             resValue("string", "hashDitBaseUrl", "https://service.hashdit.io/v2/hashdit/")
             resValue("string", "hashDitApiKey", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
             resValue("string", "uswapApiBaseUrl", "https://swap-dev.unstoppable.money/api/v1/")
-            resValue("string", "uswapApiKey", "44fc76602e17e0c8259b6ce3bae3ca90804c6fd8f42ca00e6943a6b1ba7fe242")
         }
 
         release {
@@ -157,7 +164,6 @@ android {
             resValue("string", "hashDitBaseUrl", "https://service.hashdit.io/v2/hashdit/")
             resValue("string", "hashDitApiKey", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
             resValue("string", "uswapApiBaseUrl", "https://swap-api.unstoppable.money/v1/")
-            resValue("string", "uswapApiKey", "44fc76602e17e0c8259b6ce3bae3ca90804c6fd8f42ca00e6943a6b1ba7fe242")
         }
     }
 
