@@ -153,7 +153,6 @@ class AdapterFactory(
         val tonKitWrapper = tonKitManager.getTonKitWrapper(
             account = wallet.account,
             blockchainType = wallet.token.blockchainType,
-            tokenType = wallet.token.type
         )
 
         return JettonAdapter(
@@ -381,7 +380,6 @@ class AdapterFactory(
                         tonKitManager.getTonKitWrapper(
                             account = wallet.account,
                             blockchainType = wallet.token.blockchainType,
-                            tokenType = wallet.token.type
                         )
                     )
                 }
@@ -474,7 +472,6 @@ class AdapterFactory(
         val tonKitWrapper = tonKitManager.getTonKitWrapper(
             account = source.account,
             blockchainType = source.blockchain.type,
-            tokenType = TokenType.Native
         )
         val address = tonKitWrapper.tonKit.receiveAddress
 

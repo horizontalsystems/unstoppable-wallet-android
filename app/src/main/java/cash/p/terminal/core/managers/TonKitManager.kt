@@ -70,7 +70,6 @@ class TonKitManager(
     fun getTonKitWrapper(
         account: Account,
         blockchainType: BlockchainType?,
-        tokenType: TokenType?
     ): TonKitWrapper {
         if (this.tonKitWrapper != null && currentAccount != account) {
             stop()
@@ -82,7 +81,6 @@ class TonKitManager(
                     account.toTonWallet(
                         hardwarePublicKeyStorage,
                         blockchainType,
-                        tokenType
                     ), account
                 )
             scope.launch {
@@ -99,22 +97,18 @@ class TonKitManager(
     fun getTonWallet(
         account: Account,
         blockchainType: BlockchainType?,
-        tokenType: TokenType?
     ) = account.toTonWallet(
         hardwarePublicKeyStorage,
         blockchainType,
-        tokenType
     )
 
     fun getNonActiveTonKitWrapper(
         account: Account,
         blockchainType: BlockchainType?,
-        tokenType: TokenType?
     ) = createKitInstance(
         getTonWallet(
             account,
             blockchainType,
-            tokenType
         ), account
     )
 
@@ -314,9 +308,8 @@ fun SyncState.toAdapterState(): AdapterState = when (this) {
 fun Account.toTonWalletFullAccess(
     hardwarePublicKeyStorage: HardwarePublicKeyStorage,
     blockchainType: BlockchainType?,
-    tokenType: TokenType?
 ): TonWallet.FullAccess {
-    val toTonWallet = toTonWallet(hardwarePublicKeyStorage, blockchainType, tokenType)
+    val toTonWallet = toTonWallet(hardwarePublicKeyStorage, blockchainType)
 
     return toTonWallet as? TonWallet.FullAccess ?: throw IllegalArgumentException("Watch Only")
 }
@@ -324,7 +317,6 @@ fun Account.toTonWalletFullAccess(
 fun Account.toTonWallet(
     hardwarePublicKeyStorage: HardwarePublicKeyStorage,
     blockchainType: BlockchainType?,
-    tokenType: TokenType?
 ) = when (this.type) {
     is AccountType.Mnemonic -> {
         val hdWallet = HDWallet(
@@ -343,16 +335,20 @@ fun Account.toTonWallet(
 
     is AccountType.HardwareCard -> {
         runBlocking {
-            val hardwarePublicKey =
-                hardwarePublicKeyStorage.getKey(
-                    accountId = id,
-                    blockchainType = blockchainType
-                        ?: throw IllegalArgumentException("Blockchain type is null"),
-                    tokenType = tokenType
-                        ?: throw IllegalArgumentException("Token type is null")
-                )
+            val resolvedBlockchainType = blockchainType
+                ?: throw IllegalArgumentException("Blockchain type is null")
+            // All TON tokens share the same key/address (derivation path m/44'/607'/0').
+            // Try Native first, then fall back to any available key for this blockchain
+            // (covers case where only Jetton tokens were added without native TON).
+            val hardwarePublicKey = hardwarePublicKeyStorage.getKey(
+                accountId = id,
+                blockchainType = resolvedBlockchainType,
+                tokenType = TokenType.Native
+            ) ?: hardwarePublicKeyStorage.getAllPublicKeys(id).firstOrNull {
+                it.blockchainType == resolvedBlockchainType.uid
+            }
             if (hardwarePublicKey == null || hardwarePublicKey.type != HardwarePublicKeyType.ADDRESS) {
-                throw UnsupportedException("Hardware card does not have a public key for TON")
+                throw UnsupportedException("Hardware public key not found for TON (accountId=$id, blockchainType=$resolvedBlockchainType)")
             }
             TonWallet.FullAccess(
                 PublicKeyEd25519(ByteString(hardwarePublicKey.key.value.hexStringToByteArray())),

@@ -31,7 +31,7 @@ class TonWalletDerivationTest {
             .split(" ")
 
         val account = createMnemonicAccount(words)
-        val tonWallet = account.toTonWallet(hardwarePublicKeyStorage, null, null)
+        val tonWallet = account.toTonWallet(hardwarePublicKeyStorage, null)
 
         assert(tonWallet is TonWallet.Seed)
     }
@@ -42,7 +42,7 @@ class TonWalletDerivationTest {
             .split(" ")
 
         val account = createMnemonicAccount(words)
-        val tonWallet = account.toTonWallet(hardwarePublicKeyStorage, null, null)
+        val tonWallet = account.toTonWallet(hardwarePublicKeyStorage, null)
 
         assert(tonWallet is TonWallet.Seed)
     }

@@ -146,7 +146,7 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
                     val intent = Intent(Intent.ACTION_SENDTO).apply {
                         data = Uri.parse("mailto:")
                         putExtra(Intent.EXTRA_EMAIL, arrayOf(viewModel.reportEmail))
-                        putExtra(Intent.EXTRA_TEXT, error)
+                        putExtra(Intent.EXTRA_TEXT, viewModel.buildReportBody(error))
                     }
 
                     try {

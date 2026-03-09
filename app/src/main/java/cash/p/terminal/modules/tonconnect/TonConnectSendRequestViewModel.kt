@@ -141,14 +141,12 @@ class TonConnectSendRequestViewModel(
         val tonWallet = account.toTonWalletFullAccess(
             hardwarePublicKeyStorage,
             BlockchainType.Ton,
-            TokenType.Native
         ).also {
             tonWallet = it
         }
         val tonKitWrapper = App.tonKitManager.getNonActiveTonKitWrapper(
             account = account,
             blockchainType = BlockchainType.Ton,
-            tokenType = TokenType.Native
         ).also {
             tonKitWrapper = it
         }
