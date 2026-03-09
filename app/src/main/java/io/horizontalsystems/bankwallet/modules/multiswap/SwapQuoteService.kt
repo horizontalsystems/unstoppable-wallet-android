@@ -63,24 +63,20 @@ class SwapQuoteService {
 
     fun start() {
         coroutineScope.launch {
-            startProviders()
-
-            runQuotation(silent = true)
-        }
-    }
-
-    private suspend fun startProviders() = coroutineScope {
-        allProviders
-            .map {
-                async {
-                    try {
-                        it.start()
-                    } catch (e: Throwable) {
-                        Log.d("AAA", "error on starting ${it.id}, $e", e)
+            allProviders
+                .map {
+                    async {
+                        try {
+                            it.start()
+                        } catch (e: Throwable) {
+                            Log.d("AAA", "error on starting ${it.id}, $e", e)
+                        }
                     }
                 }
-            }
-            .awaitAll()
+                .awaitAll()
+
+            runQuotation()
+        }
     }
 
     private fun emitState() {
