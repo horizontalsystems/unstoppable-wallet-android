@@ -45,10 +45,11 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
 data class RestoreLocalScreen(
-    val popOffOnSuccess: Int,
+    val popOffOnSuccess: KClass<out HSScreen>,
     val popOffInclusive: Boolean,
     val jsonFile: String,
     val fileName: String?,

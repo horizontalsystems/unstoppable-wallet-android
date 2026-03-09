@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigScreen
 import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -37,10 +38,11 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
 data class WatchAddressScreen(
-    val popOffOnSuccess: Int = R.id.watchAddressFragment,
+    val popOffOnSuccess: KClass<out HSScreen> = WatchAddressScreen::class,
     val popOffInclusive: Boolean = true
 ) : HSScreen() {
     @Composable
@@ -67,7 +69,7 @@ class WatchAddressFragment : BaseComposeFragment() {
 @Composable
 fun WatchAddressScreen(
     backStack: NavBackStack<HSScreen>,
-    popUpToInclusiveId: Int,
+    popUpToInclusiveId: KClass<out HSScreen>,
     inclusive: Boolean,
     resultBus: ResultEventBus
 ) {
@@ -89,8 +91,7 @@ fun WatchAddressScreen(
                 iconTint = R.color.white
             )
             delay(300)
-//            TODO("xxx nav3")
-//            backStack.popBackStack(popUpToInclusiveId, inclusive)
+            backStack.removeLastUntil(popUpToInclusiveId, inclusive)
         }
     }
 

@@ -59,7 +59,7 @@ data object BackupManagerScreen : HSScreen() {
             onRestoreBackup = { jsonString, fileName ->
                 backStack.navigateWithTermsAccepted(
                     RestoreLocalScreen(
-                        R.id.backupManagerFragment,
+                        BackupManagerScreen::class,
                         false,
                         jsonString,
                         fileName,

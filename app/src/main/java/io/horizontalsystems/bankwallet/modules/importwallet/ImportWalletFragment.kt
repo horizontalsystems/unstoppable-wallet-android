@@ -54,10 +54,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import java.io.File
+import kotlin.reflect.KClass
 
 @Serializable
 data class ImportWalletScreen(
-    val popOffOnSuccess: Int = R.id.importWalletFragment,
+    val popOffOnSuccess: KClass<out HSScreen> = ImportWalletScreen::class,
     val popOffInclusive: Boolean = true
 ) : HSScreen() {
     @Composable
@@ -86,7 +87,7 @@ class ImportWalletFragment : BaseComposeFragment() {
 @Composable
 private fun ImportWalletScreen(
     backStack: NavBackStack<HSScreen>,
-    popUpToInclusiveId: Int,
+    popUpToInclusiveId: KClass<out HSScreen>,
     inclusive: Boolean
 ) {
     val context = LocalContext.current

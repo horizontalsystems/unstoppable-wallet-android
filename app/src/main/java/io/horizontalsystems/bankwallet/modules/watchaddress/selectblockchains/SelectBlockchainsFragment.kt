@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
@@ -42,10 +43,11 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
 data class SelectBlockchainsScreen(
-    val popOffOnSuccess: Int,
+    val popOffOnSuccess: KClass<out HSScreen>,
     val popOffInclusive: Boolean,
     val accountType: AccountType,
     val accountName: String?,
@@ -95,7 +97,7 @@ private fun SelectBlockchainsScreen(
     accountType: AccountType,
     accountName: String?,
     backStack: NavBackStack<HSScreen>,
-    popUpToInclusiveId: Int,
+    popUpToInclusiveId: KClass<out HSScreen>,
     inclusive: Boolean
 ) {
     val viewModel = viewModel<SelectBlockchainsViewModel>(
@@ -121,8 +123,7 @@ private fun SelectBlockchainsScreen(
                 iconTint = R.color.white
             )
             delay(300)
-//            TODO("xxx nav3")
-//            backStack.popBackStack(popUpToInclusiveId, inclusive)
+            backStack.removeLastUntil(popUpToInclusiveId, inclusive)
         }
     }
 

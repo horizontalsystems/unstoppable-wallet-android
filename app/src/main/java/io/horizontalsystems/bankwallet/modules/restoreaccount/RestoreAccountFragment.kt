@@ -15,10 +15,11 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.screens.RestorePhr
 import io.horizontalsystems.bankwallet.modules.restoreaccount.screens.RestorePhraseNonStandardScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.screens.RestoreSelectCoinsScreen
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
 data class RestoreAccountScreen(
-    val popOffOnSuccess: Int,
+    val popOffOnSuccess: KClass<out HSScreen>,
     val popOffInclusive: Boolean
 ) : HSScreen() {
     @Composable

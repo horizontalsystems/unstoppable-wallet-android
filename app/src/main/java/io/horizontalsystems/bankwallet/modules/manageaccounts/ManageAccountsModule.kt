@@ -6,11 +6,14 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 object ManageAccountsModule {
-    @Parcelize
-    data class Input(val popOffOnSuccess: Int, val popOffInclusive: Boolean) : Parcelable
+    @Serializable
+    data class Input(val popOffOnSuccess: KClass<out HSScreen>, val popOffInclusive: Boolean)
 
     class Factory(private val mode: Mode) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")

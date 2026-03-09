@@ -39,10 +39,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
 data class CreateAccountScreen(
-    val popOffOnSuccess: Int = R.id.createAccountFragment,
+    val popOffOnSuccess: KClass<out HSScreen> = CreateAccountScreen::class,
     val popOffInclusive: Boolean = true
 ) : HSScreen() {
     @Composable

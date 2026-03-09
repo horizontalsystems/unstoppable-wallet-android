@@ -105,12 +105,12 @@ fun ManageAccountsScreen(backStack: NavBackStack<HSScreen>, mode: ManageAccounts
 
                 val args = when (mode) {
                     ManageAccountsModule.Mode.Manage -> ManageAccountsModule.Input(
-                        R.id.manageAccountsFragment,
+                        ManageAccountsScreen::class,
                         false
                     )
 
                     ManageAccountsModule.Mode.Switcher -> ManageAccountsModule.Input(
-                        R.id.manageAccountsFragment,
+                        ManageAccountsScreen::class,
                         true
                     )
                 }
