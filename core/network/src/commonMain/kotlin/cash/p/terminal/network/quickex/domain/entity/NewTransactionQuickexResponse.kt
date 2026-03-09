@@ -30,5 +30,5 @@ data class InstrumentInfo(
 data class ClaimedPublicRate(
     val price: BigDecimal,
     val claimedAmountToReceive: BigDecimal,
-    val finalNetworkFeeAmount: BigDecimal
+    val finalNetworkFeeAmount: BigDecimal?
 )

@@ -35,5 +35,5 @@ internal class InstrumentInfoDto(
 internal class ClaimedPublicRateDto(
     val price: String,
     val claimedAmountToReceive: String,
-    val finalNetworkFeeAmount: String
+    val finalNetworkFeeAmount: String?
 )

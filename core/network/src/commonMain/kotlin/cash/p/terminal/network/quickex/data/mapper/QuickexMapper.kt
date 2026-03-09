@@ -81,7 +81,7 @@ internal class QuickexMapper {
             claimedPublicRate = ClaimedPublicRate(
                 price = dto.claimedPublicRate.price.toBigDecimal(),
                 claimedAmountToReceive = dto.claimedPublicRate.claimedAmountToReceive.toBigDecimal(),
-                finalNetworkFeeAmount = dto.claimedPublicRate.finalNetworkFeeAmount.toBigDecimal()
+                finalNetworkFeeAmount = dto.claimedPublicRate.finalNetworkFeeAmount?.toBigDecimal()
             ),
         )
 
