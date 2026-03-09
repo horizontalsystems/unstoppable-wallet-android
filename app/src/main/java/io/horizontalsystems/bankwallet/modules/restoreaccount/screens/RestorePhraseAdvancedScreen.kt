@@ -11,9 +11,13 @@ import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
-data object RestorePhraseAdvancedScreen : RestoreAccountChildScreen() {
+data class RestorePhraseAdvancedScreen(
+    val popOffOnSuccess: KClass<out HSScreen>,
+    val popOffInclusive: Boolean
+) : RestoreAccountChildScreen() {
     @Composable
     override fun GetContent(
         backStack: NavBackStack<HSScreen>,
@@ -25,9 +29,11 @@ data object RestorePhraseAdvancedScreen : RestoreAccountChildScreen() {
         AdvancedRestoreScreen(
             restoreMenuViewModel = restoreMenuViewModel,
             mainViewModel = mainViewModel,
-            openSelectCoinsScreen = { backStack.add(RestoreSelectCoinsScreen) },
+            openSelectCoinsScreen = {
+                backStack.add(RestoreSelectCoinsScreen(popOffOnSuccess, popOffInclusive))
+            },
             openNonStandardRestore = {
-                backStack.add(RestorePhraseNonStandardScreen)
+                backStack.add(RestorePhraseNonStandardScreen(popOffOnSuccess, popOffInclusive))
 
                 stat(
                     page = StatPage.ImportWalletFromKeyAdvanced,

@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
@@ -27,9 +26,6 @@ data class RestoreAccountScreen(
         backStack: NavBackStack<HSScreen>,
         resultBus: ResultEventBus
     ) {
-        val popUpToInclusiveId = popOffOnSuccess ?: R.id.restoreAccountFragment
-        val inclusive = popOffInclusive ?: false
-
         val restoreMenuViewModel = viewModel<RestoreMenuViewModel>(factory = RestoreMenuModule.Factory())
         val mainViewModel = viewModel<RestoreViewModel>()
 
@@ -37,9 +33,9 @@ data class RestoreAccountScreen(
             advanced = false,
             restoreMenuViewModel = restoreMenuViewModel,
             mainViewModel = mainViewModel,
-            openRestoreAdvanced = { backStack.add(RestorePhraseAdvancedScreen) },
-            openSelectCoins = { backStack.add(RestoreSelectCoinsScreen) },
-            openNonStandardRestore = { backStack.add(RestorePhraseNonStandardScreen) },
+            openRestoreAdvanced = { backStack.add(RestorePhraseAdvancedScreen(popOffOnSuccess, popOffInclusive)) },
+            openSelectCoins = { backStack.add(RestoreSelectCoinsScreen(popOffOnSuccess, popOffInclusive)) },
+            openNonStandardRestore = { backStack.add(RestorePhraseNonStandardScreen(popOffOnSuccess, popOffInclusive)) },
             onBackClick = { backStack.removeLastOrNull() },
         )
     }

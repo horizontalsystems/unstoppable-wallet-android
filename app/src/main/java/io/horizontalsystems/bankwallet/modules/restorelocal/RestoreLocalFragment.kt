@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
@@ -75,10 +76,11 @@ data class RestoreLocalScreen(
             statPage = statPage,
             onBackClick = { backStack.removeLastOrNull() },
             close = {
-//                    TODO("xxx nav3")
-//                    backStack.popBackStack(popUpToInclusiveId, popUpInclusive)
+                backStack.removeLastUntil(popOffOnSuccess, popOffInclusive)
             },
-            openSelectCoins = { backStack.add(RestoreLocalSelectCoins) },
+            openSelectCoins = {
+                backStack.add(RestoreLocalSelectCoins(popOffOnSuccess, popOffInclusive))
+            },
             openBackupItems = { backStack.add(RestoreLocalBackupFile) }
         )
 
