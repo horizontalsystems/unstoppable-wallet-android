@@ -387,6 +387,8 @@ class WCSessionViewModel(
             try {
                 approve(proposal.proposerPublicKey)
                 connected = true
+                closeDialog = true
+                emitState()
             } catch (t: Throwable) {
                 WCDelegate.sessionProposalEvent = null
                 showErrorLiveEvent.postValue(t.message)
@@ -444,12 +446,10 @@ class WCSessionViewModel(
                     onError = { error ->
                         continuation.resumeWithException(error.throwable)
                         WCDelegate.sessionProposalEvent = null
-                        closeDialog = true
                     },
                     onSuccess = {
                         continuation.resume(Unit)
                         WCDelegate.sessionProposalEvent = null
-                        closeDialog = true
                     })
             }
         }

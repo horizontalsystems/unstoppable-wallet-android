@@ -61,6 +61,12 @@ class MainActivityViewModel(
         wcEvent.postValue(null)
     }
 
+    fun reEmitPendingWcProposalIfNeeded() {
+        if (wcEvent.value == null && WCDelegate.sessionProposalEvent != null) {
+            wcEvent.postValue(WCDelegate.sessionProposalEvent!!.first)
+        }
+    }
+
     fun onTcSendRequestHandled() {
         tcSendRequest.postValue(null)
     }

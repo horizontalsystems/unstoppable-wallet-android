@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.main
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.animation.Crossfade
@@ -129,8 +128,9 @@ private fun MainScreen(
     val activityIntent by mainActivityViewModel.intentLiveData.observeAsState()
     LaunchedEffect(activityIntent) {
         activityIntent?.data?.let {
-            mainActivityViewModel.intentHandled()
+            delay(1000)
             viewModel.handleDeepLink(it)
+            mainActivityViewModel.intentHandled()
         }
     }
 
@@ -299,6 +299,7 @@ private fun MainScreen(
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         viewModel.onResume()
+        mainActivityViewModel.reEmitPendingWcProposalIfNeeded()
     }
 }
 

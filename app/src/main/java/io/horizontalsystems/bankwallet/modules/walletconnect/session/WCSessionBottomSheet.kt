@@ -20,6 +20,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -213,6 +217,7 @@ private fun ActionButtons(
     onDisconnectClick: () -> Unit,
     onCancelClick: () -> Unit,
 ) {
+    var connectButtonEnabled by remember { mutableStateOf(true) }
     buttonsStates?.let { buttons ->
         ButtonsGroupHorizontal {
             if (buttons.cancel.visible) {
@@ -229,7 +234,11 @@ private fun ActionButtons(
                     title = stringResource(R.string.Button_Connect),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
-                    onClick = onConnectClick
+                    enabled = connectButtonEnabled,
+                    onClick = {
+                        connectButtonEnabled = false
+                        onConnectClick()
+                    }
                 )
             }
             if (buttons.disconnect.visible || buttons.remove.visible) {
