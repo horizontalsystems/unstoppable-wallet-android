@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.receive.monero.ReceiveMoneroScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressesParams
@@ -30,11 +31,12 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
 data class ReceiveScreen(
     val wallet: Wallet,
-    val receiveEntryPointDestId: Int = 0,
+    val receiveEntryPointDestId: KClass<out HSScreen>? = null,
     val isTransparentAddress: Boolean = false
 ) : HSScreen() {
     @Composable
@@ -141,7 +143,7 @@ class ReceiveFragment : BaseComposeFragment() {
 fun ReceiveScreen(
     backStack: NavBackStack<HSScreen>,
     wallet: Wallet,
-    receiveEntryPointDestId: Int,
+    receiveEntryPointDestId: KClass<out HSScreen>?,
     isTransparentAddress: Boolean,
 ) {
     val addressViewModel =
@@ -187,12 +189,11 @@ fun ReceiveScreen(
             }
         },
         onBackPress = { backStack.removeLastOrNull() },
-        closeModule = if (receiveEntryPointDestId == 0) {
+        closeModule = if (receiveEntryPointDestId == null) {
             null
         } else {
             {
-//                TODO("xxx nav3")
-//                backStack.popBackStack(receiveEntryPointDestId, true)
+                backStack.removeLastUntil(receiveEntryPointDestId, true)
             }
         }
     )

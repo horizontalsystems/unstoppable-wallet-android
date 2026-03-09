@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.activatetoken.ActivateTokenScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
@@ -40,13 +41,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 @Composable
 fun ReceiveStellarAssetScreen(
     backStack: NavBackStack<HSScreen>,
     resultBus: ResultEventBus,
     wallet: Wallet,
-    receiveEntryPointDestId: Int
+    receiveEntryPointDestId: KClass<out HSScreen>?
 ) {
     val viewModel = viewModel<ReceiveStellarAssetViewModel>(factory = ReceiveStellarAssetViewModel.Factory(wallet))
     val uiState = viewModel.uiState
@@ -153,11 +155,10 @@ fun ReceiveStellarAssetScreen(
             },
             onBackPress = { backStack.removeLastOrNull() },
             closeModule = {
-                if (receiveEntryPointDestId == 0) {
+                if (receiveEntryPointDestId == null) {
                     backStack.removeLastOrNull()
                 } else {
-//                    TODO("xxx nav3")
-//                    backStack.popBackStack(receiveEntryPointDestId, true)
+                    backStack.removeLastUntil(receiveEntryPointDestId, true)
                 }
             }
         )

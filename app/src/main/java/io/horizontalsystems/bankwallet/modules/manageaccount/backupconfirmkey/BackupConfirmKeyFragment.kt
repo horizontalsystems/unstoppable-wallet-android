@@ -26,8 +26,10 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
@@ -77,8 +79,7 @@ fun RecoveryPhraseVerifyScreen(backStack: NavBackStack<HSScreen>, account: Accou
                 iconTint = R.color.white
             )
             delay(300)
-//            TODO("xxx nav3")
-//            navController.popBackStack(R.id.backupKeyFragment, true)
+            backStack.removeLastUntil(BackupKeyScreen::class, true)
         }
     }
 

@@ -14,14 +14,16 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import kotlin.reflect.KClass
 
 @Composable
-fun ReceiveMoneroScreen(backStack: NavBackStack<HSScreen>, wallet: Wallet, receiveEntryPointDestId: Int) {
+fun ReceiveMoneroScreen(backStack: NavBackStack<HSScreen>, wallet: Wallet, receiveEntryPointDestId: KClass<out HSScreen>?) {
     val addressViewModel = viewModel<ReceiveMoneroAddressViewModel>(factory = ReceiveMoneroAddressViewModel.Factory(wallet))
 
     val uiState = addressViewModel.uiState
@@ -57,11 +59,10 @@ fun ReceiveMoneroScreen(backStack: NavBackStack<HSScreen>, wallet: Wallet, recei
         },
         onBackPress = { backStack.removeLastOrNull() },
         closeModule = {
-            if (receiveEntryPointDestId == 0) {
+            if (receiveEntryPointDestId == null) {
                 backStack.removeLastOrNull()
             } else {
-//                TODO("xxx nav3")
-//                backStack.popBackStack(receiveEntryPointDestId, true)
+                backStack.removeLastUntil(receiveEntryPointDestId, true)
             }
         }
     )

@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statAccountType
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
@@ -62,8 +63,7 @@ data class CreateAccountScreen(
             },
             onBackClick = { backStack.removeLastOrNull() },
             onFinish = {
-//                TODO("xxx nav3")
-//                backStack.popBackStack(popUpToInclusiveId, inclusive)
+                backStack.removeLastUntil(popOffOnSuccess, popOffInclusive)
             },
         )
     }

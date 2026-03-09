@@ -74,7 +74,7 @@ fun onSelectWallet(
     backStack.add(
         ReceiveScreen(
             wallet,
-            R.id.receiveChooseCoinFragment,
+            ReceiveChooseCoinScreen::class,
             isTransparentAddress
         )
     )
