@@ -19,6 +19,8 @@ package io.horizontalsystems.bankwallet.modules.nav3
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ProvidedValue
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.lifecycle.HasDefaultViewModelProviderFactory
@@ -34,6 +36,7 @@ import androidx.lifecycle.enableSavedStateHandles
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation3.runtime.NavEntry
@@ -63,6 +66,7 @@ fun <T : Any> rememberSharedViewModelStoreNavEntryDecorator(
         SharedViewModelStoreNavEntryDecorator(
             viewModelStoreOwner.viewModelStore,
             removeViewModelStoreOnPop,
+            viewModelStoreOwner
         )
     }
 }
@@ -90,6 +94,7 @@ fun <T : Any> rememberSharedViewModelStoreNavEntryDecorator(
 class SharedViewModelStoreNavEntryDecorator<T : Any>(
     viewModelStore: ViewModelStore,
     removeViewModelStoreOnPop: () -> Boolean,
+    viewModelStoreOwner: ViewModelStoreOwner,
 ) :
     NavEntryDecorator<T>(
         onPop = ({ key ->
@@ -106,35 +111,13 @@ class SharedViewModelStoreNavEntryDecorator<T : Any>(
 
             val savedStateRegistryOwner = LocalSavedStateRegistryOwner.current
             val childViewModelStoreOwner = remember {
-                object :
-                    ViewModelStoreOwner,
-                    SavedStateRegistryOwner by savedStateRegistryOwner,
-                    HasDefaultViewModelProviderFactory {
-                    override val viewModelStore: ViewModelStore
-                        get() = viewModelStore
-
-                    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
-                        get() = SavedStateViewModelFactory()
-
-                    override val defaultViewModelCreationExtras: CreationExtras
-                        get() =
-                            MutableCreationExtras().also {
-                                it[SAVED_STATE_REGISTRY_OWNER_KEY] = this
-                                it[VIEW_MODEL_STORE_OWNER_KEY] = this
-                            }
-
-                    init {
-                        require(this.lifecycle.currentState == Lifecycle.State.INITIALIZED) {
-                            "The Lifecycle state is already beyond INITIALIZED. The " +
-                                    "SharedViewModelStoreNavEntryDecorator requires adding the " +
-                                    "SavedStateNavEntryDecorator to ensure support for " +
-                                    "SavedStateHandles."
-                        }
-                        enableSavedStateHandles()
-                    }
-                }
+                ChildViewModelStoreOwner(savedStateRegistryOwner, viewModelStore)
             }
-            CompositionLocalProvider(LocalViewModelStoreOwner provides childViewModelStoreOwner) {
+
+            CompositionLocalProvider(
+                LocalRootViewModelStoreOwner provides viewModelStoreOwner,
+                LocalViewModelStoreOwner provides childViewModelStoreOwner
+            ) {
                 entry.Content()
             }
         },
@@ -176,4 +159,67 @@ private fun ViewModelStore.getEntryViewModel(): EntryViewModel {
             factory = viewModelFactory { initializer { EntryViewModel() } },
         )
     return provider[EntryViewModel::class]
+}
+
+private class ChildViewModelStoreOwner(
+    savedStateRegistryOwner: SavedStateRegistryOwner,
+    override val viewModelStore: ViewModelStore
+):
+    ViewModelStoreOwner,
+    SavedStateRegistryOwner by savedStateRegistryOwner,
+    HasDefaultViewModelProviderFactory {
+
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = SavedStateViewModelFactory()
+
+    override val defaultViewModelCreationExtras: CreationExtras
+        get() =
+            MutableCreationExtras().also {
+                it[SAVED_STATE_REGISTRY_OWNER_KEY] = this
+                it[VIEW_MODEL_STORE_OWNER_KEY] = this
+            }
+
+    init {
+        require(this.lifecycle.currentState == Lifecycle.State.INITIALIZED) {
+            "The Lifecycle state is already beyond INITIALIZED. The " +
+                    "SharedViewModelStoreNavEntryDecorator requires adding the " +
+                    "SavedStateNavEntryDecorator to ensure support for " +
+                    "SavedStateHandles."
+        }
+        enableSavedStateHandles()
+    }
+}
+
+private object LocalRootViewModelStoreOwner {
+    private val LocalRootViewModelStoreOwner = compositionLocalOf<ViewModelStoreOwner?> { null }
+
+    val current: ViewModelStoreOwner?
+        @Composable get() = LocalRootViewModelStoreOwner.current
+
+    infix fun provides(
+        viewModelStoreOwner: ViewModelStoreOwner
+    ): ProvidedValue<ViewModelStoreOwner?> {
+        return LocalRootViewModelStoreOwner.provides(viewModelStoreOwner)
+    }
+}
+
+@Composable
+fun rememberChildViewModelStoreOwner(contentKey: Any) : ViewModelStoreOwner {
+    val rootViewModelStoreOwner = checkNotNull(LocalRootViewModelStoreOwner.current) {
+        "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
+    }
+    val rootViewModelStore = rootViewModelStoreOwner.viewModelStore
+    val childViewModelStore = rootViewModelStore.getEntryViewModel().viewModelStoreForKey(contentKey)
+    val savedStateRegistryOwner = LocalSavedStateRegistryOwner.current
+
+    return remember {
+        ChildViewModelStoreOwner(savedStateRegistryOwner, childViewModelStore)
+    }
+}
+
+@Composable
+inline fun <reified VM : ViewModel> viewModelForContentKey(contentKey: Any) : VM {
+    return viewModel(
+        viewModelStoreOwner = rememberChildViewModelStoreOwner(contentKey),
+    )
 }
