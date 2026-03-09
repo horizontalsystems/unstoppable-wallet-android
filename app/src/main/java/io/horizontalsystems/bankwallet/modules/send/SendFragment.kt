@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroModule
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroViewModel
@@ -114,19 +115,19 @@ data class SendScreen(
                 val sendEvmViewModel = viewModel<SendEvmViewModel>(
                     factory = SendEvmModule.Factory(wallet, address, hideAddress, adapter)
                 )
-//                TODO("xxx nav3")
-//                SendEvmScreen(
-//                    title = title,
-//                    navController = backStack,
-//                    amountInputModeViewModel = amountInputModeViewModel,
-//                    viewModel = sendEvmViewModel,
-//                    address = address,
-//                    wallet = wallet,
-//                    amount = amount,
-//                    hideAddress = hideAddress,
-//                    riskyAddress = riskyAddress,
-//                    sendEntryPointDestId = sendEntryPointDestId
-//                )
+                SendEvmScreen(
+                    title = title,
+                    backStack = backStack,
+                    resultBus = resultBus,
+                    amountInputModeViewModel = amountInputModeViewModel,
+                    viewModel = sendEvmViewModel,
+                    address = address,
+                    wallet = wallet,
+                    amount = amount,
+                    hideAddress = hideAddress,
+                    riskyAddress = riskyAddress,
+                    sendEntryPointDestId = sendEntryPointDestId
+                )
             }
 
             BlockchainType.Solana -> {

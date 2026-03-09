@@ -12,11 +12,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
@@ -25,9 +23,12 @@ import io.horizontalsystems.bankwallet.modules.address.HSAddressCell
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
-import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
-import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -38,7 +39,8 @@ import java.math.BigDecimal
 @Composable
 fun SendEvmScreen(
     title: String,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
     amountInputModeViewModel: AmountInputModeViewModel,
     viewModel: SendEvmViewModel,
     address: Address,
@@ -71,7 +73,7 @@ fun SendEvmScreen(
 
         SendScreen(
             title = title,
-            onBack = { navController.popBackStack() }
+            onBack = { backStack.removeLastOrNull() }
         ) {
             VSpacer(16.dp)
             if (uiState.showAddressInput) {
@@ -80,7 +82,7 @@ fun SendEvmScreen(
                     value = uiState.address.hex,
                     riskyAddress = riskyAddress,
                 ) {
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 }
                 VSpacer(16.dp)
             }
@@ -114,6 +116,19 @@ fun SendEvmScreen(
                 rate = viewModel.coinRate
             )
 
+            ResultEffect<AddressRiskyBottomSheetScreen.Result>(resultBus) {
+                if (it.canContinue) {
+                    viewModel.getSendData()?.let { sendData ->
+                        openSendConfirm(
+                            sendData,
+                            viewModel.wallet.token.blockchainType,
+                            backStack,
+                            sendEntryPointDestId
+                        )
+                    }
+                }
+            }
+
             ButtonPrimaryYellow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -125,24 +140,16 @@ fun SendEvmScreen(
                         HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)
                     } else if (riskyAddress) {
                         keyboardController?.hide()
-                        navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
-                            R.id.addressRiskyBottomSheetAlert,
-                            AddressRiskyBottomSheetAlert.Input(
+                        backStack.add(
+                            AddressRiskyBottomSheetScreen(
                                 alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
                             )
-                        ) {
-                            openSendConfirm(
-                                sendData,
-                                viewModel.wallet.token.blockchainType,
-                                navController,
-                                sendEntryPointDestId
-                            )
-                        }
+                        )
                     } else {
                         openSendConfirm(
                             sendData,
                             viewModel.wallet.token.blockchainType,
-                            navController,
+                            backStack,
                             sendEntryPointDestId
                         )
                     }
@@ -156,13 +163,13 @@ fun SendEvmScreen(
 private fun openSendConfirm(
     sendEvmData: SendEvmData,
     blockchainType: BlockchainType,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     sendEntryPointDestId: Int
 ) {
-    navController.slideFromRight(
-        R.id.sendEvmConfirmationFragment,
-        SendEvmConfirmationFragment.Input(
-            sendData = sendEvmData,
+    backStack.add(
+        SendEvmConfirmationScreen(
+            transactionData = sendEvmData.transactionData,
+            additionalInfo = sendEvmData.additionalInfo,
             blockchainType = blockchainType,
             sendEntryPointDestId = sendEntryPointDestId
         )
