@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.address.HSAddressCell
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
+import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
@@ -170,15 +171,14 @@ fun SendBitcoinScreen(
                             }
                         )
                     }
-//                    TODO("xxx nav3")
-//                    HSFeeRaw(
-//                        coinCode = wallet.coin.code,
-//                        coinDecimal = viewModel.coinMaxAllowedDecimals,
-//                        fee = fee,
-//                        amountInputType = amountInputType,
-//                        rate = rate,
-//                        navController = backStack
-//                    )
+                    HSFeeRaw(
+                        coinCode = wallet.coin.code,
+                        coinDecimal = viewModel.coinMaxAllowedDecimals,
+                        fee = fee,
+                        amountInputType = amountInputType,
+                        rate = rate,
+                        backStack = backStack
+                    )
                 }
 
                 feeRateCaution?.let {

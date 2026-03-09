@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo.resendbitcoin
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -22,9 +23,16 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatSection
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
+import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
@@ -38,6 +46,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionTitleCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TitleAndValueCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -156,37 +165,36 @@ fun ResendBitcoinScreen(
 
                         ConfirmAmountCell(currencyAmount, coinAmount, uiState.coin)
                     }
-//                        TODO("xxx nav3")
-//                        add {
-//                            TransactionInfoAddressCell(
-//                                title = stringResource(uiState.addressTitleResId),
-//                                value = uiState.address.hex,
-//                                showAdd = uiState.contact == null,
-//                                blockchainType = uiState.blockchainType,
-//                                backStack = navController,
-//                                onCopy = {
-//                                    stat(
-//                                        page = StatPage.Resend,
-//                                        event = StatEvent.Copy(StatEntity.Address),
-//                                        section = StatSection.AddressTo
-//                                    )
-//                                },
-//                                onAddToExisting = {
-//                                    stat(
-//                                        page = StatPage.Resend,
-//                                        event = StatEvent.Open(StatPage.ContactAddToExisting),
-//                                        section = StatSection.AddressTo
-//                                    )
-//                                },
-//                                onAddToNew = {
-//                                    stat(
-//                                        page = StatPage.Resend,
-//                                        event = StatEvent.Open(StatPage.ContactNew),
-//                                        section = StatSection.AddressTo
-//                                    )
-//                                }
-//                            )
-//                        }
+                    add {
+                        TransactionInfoAddressCell(
+                            title = stringResource(uiState.addressTitleResId),
+                            value = uiState.address.hex,
+                            showAdd = uiState.contact == null,
+                            blockchainType = uiState.blockchainType,
+                            backStack = backStack,
+                            onCopy = {
+                                stat(
+                                    page = StatPage.Resend,
+                                    event = StatEvent.Copy(StatEntity.Address),
+                                    section = StatSection.AddressTo
+                                )
+                            },
+                            onAddToExisting = {
+                                stat(
+                                    page = StatPage.Resend,
+                                    event = StatEvent.Open(StatPage.ContactAddToExisting),
+                                    section = StatSection.AddressTo
+                                )
+                            },
+                            onAddToNew = {
+                                stat(
+                                    page = StatPage.Resend,
+                                    event = StatEvent.Open(StatPage.ContactNew),
+                                    section = StatSection.AddressTo
+                                )
+                            }
+                        )
+                    }
                     uiState.contact?.let {
                         add {
                             TransactionInfoContactCell(name = it.name)
@@ -210,17 +218,16 @@ fun ResendBitcoinScreen(
                 CellUniversalLawrenceSection(topSectionItems)
 
                 VSpacer(16.dp)
-//                TODO("xxx nav3")
-//                HSFee(
-//                    coinCode = uiState.feeCoin.code,
-//                    coinDecimal = uiState.coinMaxAllowedDecimals,
-//                    fee = uiState.fee,
-//                    amountInputType = AmountInputType.COIN,
-//                    rate = uiState.coinRate,
-//                    navController = backStack
-//                )
-//
-//                Spacer(modifier = Modifier.height(24.dp))
+                HSFee(
+                    coinCode = uiState.feeCoin.code,
+                    coinDecimal = uiState.coinMaxAllowedDecimals,
+                    fee = uiState.fee,
+                    amountInputType = AmountInputType.COIN,
+                    rate = uiState.coinRate,
+                    backStack = backStack
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
                 EvmSettingsInput(
                     title = stringResource(R.string.TransactionInfoOptions_Rbf_FeeTitle),
                     info = stringResource(R.string.FeeSettings_FeeRate_Info),

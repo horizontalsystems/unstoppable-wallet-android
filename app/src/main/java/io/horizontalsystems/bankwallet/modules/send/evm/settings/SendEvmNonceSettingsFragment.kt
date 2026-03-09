@@ -37,6 +37,5 @@ fun NonceSettingsScreen(backStack: NavBackStack<HSScreen>) {
 
     val sendTransactionService = viewModel.sendTransactionService
 
-//    TODO("xxx nav3")
-//    sendTransactionService.GetNonceSettingsContent(backStack)
+    sendTransactionService.GetNonceSettingsContent(backStack)
 }

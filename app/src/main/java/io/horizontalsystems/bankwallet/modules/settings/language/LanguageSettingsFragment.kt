@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.language
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -42,11 +44,11 @@ data object LanguageSettingsScreen : HSScreen() {
         backStack: NavBackStack<HSScreen>,
         resultBus: ResultEventBus
     ) {
+        val activity = LocalActivity.current
         LanguageScreen(
             backStack,
             {
-//                TODO("xxx nav3")
-//                activity?.let { MainModule.startAsNewTask(it) }
+                activity?.let { MainModule.startAsNewTask(it) }
             }
         )
     }

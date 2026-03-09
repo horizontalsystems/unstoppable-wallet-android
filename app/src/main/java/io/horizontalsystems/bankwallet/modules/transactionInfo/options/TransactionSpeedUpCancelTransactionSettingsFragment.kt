@@ -25,7 +25,6 @@ data object TransactionSpeedUpCancelTransactionSettingsScreen : HSScreen(
 class TransactionSpeedUpCancelTransactionSettingsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-//        TransactionSpeedUpCancelTransactionSettingsScreen(navController)
     }
 }
 
@@ -34,6 +33,5 @@ fun TransactionSpeedUpCancelTransactionSettingsScreen(backStack: NavBackStack<HS
     val viewModel = viewModel<TransactionSpeedUpCancelViewModel>()
 
     val sendTransactionService = viewModel.sendTransactionService
-//    TODO("xxx nav3")
-//    sendTransactionService.GetSettingsContent(backStack)
+    sendTransactionService.GetSettingsContent(backStack)
 }

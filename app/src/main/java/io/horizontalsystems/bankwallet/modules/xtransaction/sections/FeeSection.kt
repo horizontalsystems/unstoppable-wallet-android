@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionValue
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
+import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.TransactionInfoHelper
 
@@ -19,13 +21,12 @@ fun FeeSection(
             value = it
         )
     }
-//    TODO("xxx nav3")
-//    HSFee(
-//        coinCode = fee.coinCode,
-//        coinDecimal = fee.decimals,
-//        fee = fee.value,
-//        amountInputType = AmountInputType.COIN,
-//        rate = rateCurrencyValue,
-//        navController = backStack
-//    )
+    HSFee(
+        coinCode = fee.coinCode,
+        coinDecimal = fee.decimals,
+        fee = fee.value,
+        amountInputType = AmountInputType.COIN,
+        rate = rateCurrencyValue,
+        backStack = backStack
+    )
 }

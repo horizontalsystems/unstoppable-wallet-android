@@ -26,16 +26,14 @@ data object WCEvmTransactionSettingsScreen : HSScreen(
 class WCEvmTransactionSettingsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-//        WCEvmTransactionSettingsScreen(navController)
     }
 }
 
 @Composable
-fun WCEvmTransactionSettingsScreen(navController: NavBackStack<HSScreen>) {
+fun WCEvmTransactionSettingsScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel = viewModel<WCSendEthereumTransactionRequestViewModel>()
 
     val sendTransactionService = viewModel.sendTransactionService
 
-//    TODO("xxx nav3")
-//    sendTransactionService.GetSettingsContent(navController)
+    sendTransactionService.GetSettingsContent(backStack)
 }

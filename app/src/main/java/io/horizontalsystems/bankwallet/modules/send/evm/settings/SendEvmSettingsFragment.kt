@@ -32,11 +32,10 @@ class SendEvmSettingsFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun SendEvmSettingsScreen(navController: NavBackStack<HSScreen>) {
+fun SendEvmSettingsScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel = viewModel<SendEvmConfirmationViewModel>()
 
     val sendTransactionService = viewModel.sendTransactionService
 
-//    TODO("xxx nav3")
-//    sendTransactionService.GetSettingsContent(navController)
+    sendTransactionService.GetSettingsContent(backStack)
 }

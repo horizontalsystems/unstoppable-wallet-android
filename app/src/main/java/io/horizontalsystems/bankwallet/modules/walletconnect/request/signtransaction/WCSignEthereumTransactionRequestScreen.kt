@@ -29,9 +29,11 @@ import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
+import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.SessionRequestUI
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.DataBlock
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.FeeCell
@@ -240,14 +242,13 @@ fun WCSignEthereumTransactionRequestScreen(
             )
         }
     ) {
-//        TODO("xxx nav3")
-//        SendEvmTransactionView(
-//            backStack,
-//            uiState.sectionViewItems,
-//            uiState.cautions,
-//            uiState.transactionFields,
-//            uiState.networkFee,
-//            StatPage.WalletConnect
-//        )
+        SendEvmTransactionView(
+            backStack,
+            uiState.sectionViewItems,
+            uiState.cautions,
+            uiState.transactionFields,
+            uiState.networkFee,
+            StatPage.WalletConnect
+        )
     }
 }

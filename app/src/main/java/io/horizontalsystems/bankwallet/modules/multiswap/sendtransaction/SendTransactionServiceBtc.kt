@@ -19,8 +19,10 @@ import io.horizontalsystems.bankwallet.core.adapters.BitcoinFeeInfo
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
+import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -229,15 +231,14 @@ fun SendBtcFeeSettingsScreen(
                 .fillMaxSize()
         ) {
             VSpacer(12.dp)
-//            TODO("xxx nav3")
-//            HSFee(
-//                coinCode = viewModel.token.coin.code,
-//                coinDecimal = viewModel.coinMaxAllowedDecimals,
-//                fee = uiState.fee,
-//                amountInputType = AmountInputType.COIN,
-//                rate = uiState.rate,
-//                navController = backStack
-//            )
+            HSFee(
+                coinCode = viewModel.token.coin.code,
+                coinDecimal = viewModel.coinMaxAllowedDecimals,
+                fee = uiState.fee,
+                amountInputType = AmountInputType.COIN,
+                rate = uiState.rate,
+                backStack = backStack
+            )
 
             if (viewModel.feeRateChangeable) {
                 VSpacer(24.dp)

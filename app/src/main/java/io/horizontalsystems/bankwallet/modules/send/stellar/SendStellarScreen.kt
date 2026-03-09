@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.address.HSAddressCell
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
+import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
@@ -118,15 +119,14 @@ fun SendStellarScreen(
             }
 
             VSpacer(16.dp)
-//            TODO("xxx nav3")
-//            HSFee(
-//                coinCode = viewModel.feeToken.coin.code,
-//                coinDecimal = viewModel.feeTokenMaxAllowedDecimals,
-//                fee = fee,
-//                amountInputType = amountInputType,
-//                rate = viewModel.feeCoinRate,
-//                navController = backStack,
-//            )
+            HSFee(
+                coinCode = viewModel.feeToken.coin.code,
+                coinDecimal = viewModel.feeTokenMaxAllowedDecimals,
+                fee = fee,
+                amountInputType = amountInputType,
+                rate = viewModel.feeCoinRate,
+                backStack = backStack,
+            )
 
             ResultEffect<AddressRiskyBottomSheetScreen.Result>(resultBus) {
                 if (it.canContinue) {

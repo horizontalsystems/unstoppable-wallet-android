@@ -18,10 +18,12 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
@@ -150,14 +152,13 @@ private fun TransactionSpeedUpCancelScreen(
             )
         }
     ) {
-//        TODO("xxx nav3")
-//        SendEvmTransactionView(
-//            backStack,
-//            uiState.sectionViewItems,
-//            sendTransactionState.cautions,
-//            sendTransactionState.fields,
-//            sendTransactionState.networkFee,
-//            StatPage.Resend
-//        )
+        SendEvmTransactionView(
+            backStack,
+            uiState.sectionViewItems,
+            sendTransactionState.cautions,
+            sendTransactionState.fields,
+            sendTransactionState.networkFee,
+            StatPage.Resend
+        )
     }
 }

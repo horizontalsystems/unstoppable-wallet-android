@@ -78,16 +78,14 @@ fun SendEvmTransactionView(
         ) {
             if (transactionFields.isNotEmpty()) {
                 transactionFields.forEachIndexed { index, field ->
-//                    TODO("xxx nav3")
-//                    field.GetContent(navController)
+                    field.GetContent(backStack)
                 }
             }
-//            TODO("xxx nav3")
-//            DataFieldFee(
-//                navController,
-//                networkFee?.primary?.getFormattedPlain() ?: "---",
-//                networkFee?.secondary?.getFormattedPlain()
-//            )
+            DataFieldFee(
+                backStack,
+                networkFee?.primary?.getFormattedPlain() ?: "---",
+                networkFee?.secondary?.getFormattedPlain()
+            )
         }
 
         if (cautions.isNotEmpty()) {

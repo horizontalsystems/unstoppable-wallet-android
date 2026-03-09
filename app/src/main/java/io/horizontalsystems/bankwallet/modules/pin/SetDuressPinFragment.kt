@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
@@ -33,8 +34,7 @@ data class SetDuressPinScreen(val accountIds: List<String>?) : HSScreen() {
             dismissWithSuccess = {
                 viewModel.onDuressPinSet()
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Created)
-//                TODO("xxx nav3")
-//                navController.popBackStack(R.id.setDuressPinIntroFragment, true)
+                backStack.removeLastUntil(SetDuressPinIntroScreen::class, true)
             },
             onBackPress = { backStack.removeLastOrNull() },
             forDuress = true

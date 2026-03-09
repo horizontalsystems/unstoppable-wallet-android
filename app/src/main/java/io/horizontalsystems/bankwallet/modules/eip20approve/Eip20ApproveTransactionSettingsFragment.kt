@@ -30,11 +30,10 @@ class Eip20ApproveTransactionSettingsFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun Eip20ApproveTransactionSettingsScreen(navController: NavBackStack<HSScreen>) {
+fun Eip20ApproveTransactionSettingsScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel = viewModel<Eip20ApproveViewModel>()
 
     val sendTransactionService = viewModel.sendTransactionService
 
-//    TODO("xxx nav3")
-//    sendTransactionService.GetSettingsContent(navController)
+    sendTransactionService.GetSettingsContent(backStack)
 }
