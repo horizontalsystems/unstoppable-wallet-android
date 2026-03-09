@@ -160,7 +160,7 @@ class TonConnectNewViewModelTest {
         val manifest = manifest()
         mockkStatic("cash.p.terminal.core.managers.TonKitManagerKt")
         every {
-            any<Account>().toTonWalletFullAccess(any(), any(), any())
+            any<Account>().toTonWalletFullAccess(any(), any())
         } returns mockk(relaxed = true)
         coEvery { tonConnectKit.getManifest(request.payload.manifestUrl) } returns manifest
         coEvery { tonConnectKit.connect(any(), any(), any(), any()) } returns mockk(relaxed = true)
@@ -187,7 +187,7 @@ class TonConnectNewViewModelTest {
         val manifest = manifest()
         mockkStatic("cash.p.terminal.core.managers.TonKitManagerKt")
         every {
-            any<Account>().toTonWalletFullAccess(any(), any(), any())
+            any<Account>().toTonWalletFullAccess(any(), any())
         } returns mockk(relaxed = true)
         coEvery { tonConnectKit.getManifest(request.payload.manifestUrl) } returns manifest
         coEvery {

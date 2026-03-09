@@ -15,4 +15,5 @@ class SyncErrorViewModel(
         service.retry()
     }
 
+    fun buildReportBody(error: String): String = service.buildReportBody(error)
 }

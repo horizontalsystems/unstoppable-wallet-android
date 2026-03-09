@@ -6,7 +6,6 @@ import cash.p.terminal.core.managers.toTonWalletFullAccess
 import cash.p.terminal.core.storage.HardwarePublicKeyStorage
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.IAccountManager
-import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.supportsTonConnect
 import com.tonapps.wallet.data.tonconnect.entities.DAppManifestEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
@@ -93,7 +92,6 @@ class TonConnectNewViewModel(
                     account.toTonWalletFullAccess(
                         hardwarePublicKeyStorage,
                         BlockchainType.Ton,
-                        TokenType.Native
                     )
                 )
                 println("TonConnect connect result: $res")
