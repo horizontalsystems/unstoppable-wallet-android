@@ -57,7 +57,6 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -517,7 +516,7 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 fun PriceImpactField(
     priceImpact: BigDecimal?,
     priceImpactLevel: PriceImpactLevel?,
-    navController: NavController
+    backStack: NavBackStack<HSScreen>
 ) {
     if (priceImpact == null || priceImpactLevel == null) return
 
@@ -529,9 +528,8 @@ fun PriceImpactField(
         value = stringResource(R.string.Swap_Percent, priceImpact.toPlainString())
             .hs(color = getPriceImpactColor(priceImpactLevel)),
         onInfoClick = {
-            navController.slideFromBottom(
-                R.id.swapInfoDialog,
-                SwapInfoDialog.Input(infoTitle, infoText)
+            backStack.add(
+                SwapInfoDialogScreen(infoTitle, infoText)
             )
         }
     )

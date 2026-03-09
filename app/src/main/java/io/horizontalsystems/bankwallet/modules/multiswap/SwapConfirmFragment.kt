@@ -29,33 +29,34 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.R.drawable.close_e_filled_24
 import io.horizontalsystems.bankwallet.R.drawable.shield_check_filled_24
 import io.horizontalsystems.bankwallet.R.drawable.warning_filled_24
-import io.horizontalsystems.bankwallet.R.id.defenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsRecipientFragment
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsSlippageFragment
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsRecipientScreen
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsSlippageScreen
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionNonceSettingsScreen
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionSettingsScreen
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog.Input
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForContentKey
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -89,13 +90,20 @@ import java.util.Locale
 
 @Serializable
 data object SwapConfirmScreen : HSScreen() {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SwapConfirmScreen(backStack, resultBus)
+    }
+
     data class Result(val success: Boolean)
 }
 
 class SwapConfirmFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapConfirmScreen(navController)
     }
 
     @Parcelize
@@ -103,43 +111,35 @@ class SwapConfirmFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun SwapConfirmScreen(navController: NavController) {
-    val previousBackStackEntry = remember { navController.previousBackStackEntry }
-    if (previousBackStackEntry == null) {
-        navController.popBackStack()
-        return
-    }
-    val swapViewModel = viewModel<SwapViewModel>(
-        viewModelStoreOwner = previousBackStackEntry,
-    )
+fun SwapConfirmScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
+    val prevScreen = backStack[backStack.lastIndex - 1]
+    val swapViewModel = viewModelForContentKey<SwapViewModel>(prevScreen.contentKey())
 
     val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
 
-    val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapConfirmViewModel>(
-        viewModelStoreOwner = currentBackStackEntry!!,
         initializer = SwapConfirmViewModel.init(currentQuote)
     )
 
     val uiState = viewModel.uiState
 
     if (uiState.error != null) {
-        SwapConfirmError(navController, viewModel, uiState, uiState.error)
+        SwapConfirmError(backStack, viewModel, uiState, uiState.error)
     } else {
-        SwapConfirmInternal(navController, viewModel, uiState)
+        SwapConfirmInternal(backStack, resultBus, viewModel, uiState)
     }
 }
 
 @Composable
 private fun SwapConfirmError(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     viewModel: SwapConfirmViewModel,
     uiState: SwapConfirmUiState,
     error: Throwable
 ) {
     HSScaffold(
         title = stringResource(R.string.Swap_Confirm_Title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Settings_Title),
@@ -183,52 +183,54 @@ private fun SwapConfirmError(
 
 @Composable
 private fun SwapConfirmInternal(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
+    resultBus: ResultEventBus,
     viewModel: SwapConfirmViewModel,
     uiState: SwapConfirmUiState
 ) {
     val coroutineScope = rememberCoroutineScope()
     val view = LocalView.current
 
-    val onClickSettings = if (uiState.hasSettings) {
+    val onClickSettings: (() -> Unit)? = if (uiState.hasSettings) {
         {
-            navController.slideFromRight(R.id.swapTransactionSettings)
+            backStack.add(SwapTransactionSettingsScreen)
         }
     } else {
         null
     }
 
-    val onClickNonceSettings = if (uiState.hasNonceSettings) {
+    val onClickNonceSettings: (() -> Unit)? = if (uiState.hasNonceSettings) {
         {
-            navController.slideFromRight(R.id.swapTransactionNonceSettings)
+            backStack.add(SwapTransactionNonceSettingsScreen)
         }
     } else {
         null
+    }
+
+    ResultEffect<SwapSettingsSlippageScreen.Result>(resultBus) {
+        viewModel.setSlippage(it.slippage)
+    }
+    ResultEffect<SwapSettingsRecipientScreen.Result>(resultBus) {
+        viewModel.setRecipient(it.address)
     }
 
     ConfirmTransactionScreen(
         title = stringResource(R.string.Swap_Confirm_Title),
         initialLoading = uiState.initialLoading,
-        onClickBack = navController::popBackStack,
+        onClickBack = backStack::removeLastOrNull,
         onClickFeeSettings = onClickSettings,
         onClickNonceSettings = onClickNonceSettings,
         onClickSlippageSettings = uiState.slippage?.let { slippage ->
             {
-                navController.slideFromRightForResult<SwapSettingsSlippageFragment.Result>(
-                    R.id.swapSettingsSlippage,
-                    SwapSettingsSlippageFragment.Input(slippage)
-                ) {
-                    viewModel.setSlippage(it.slippage)
-                }
+                backStack.add(
+                    SwapSettingsSlippageScreen(slippage)
+                )
             }
         },
         onClickRecipientSettings = {
-            navController.slideFromRightForResult<SwapSettingsRecipientFragment.Result>(
-                R.id.swapSettingsRecipient,
-                SwapSettingsRecipientFragment.Input(uiState.tokenIn, uiState.recipient)
-            ) {
-                viewModel.setRecipient(it.address)
-            }
+            backStack.add(
+                SwapSettingsRecipientScreen(uiState.tokenIn, uiState.recipient)
+            )
         },
         defenseSlot = {
             uiState.swapDefenseSystemMessage?.let { message ->
@@ -239,11 +241,10 @@ private fun SwapConfirmInternal(
                     DefenseAlertLevel.IDLE -> close_e_filled_24
                 }
 
-                val onClick = message.requiredPaidAction?.let {
+                val onClick: (() -> Unit)? = message.requiredPaidAction?.let {
                     {
-                        navController.slideFromBottom(
-                            defenseSystemFeatureDialog,
-                            Input(PremiumFeature.getFeature(paidAction = message.requiredPaidAction))
+                        backStack.add(
+                            DefenseSystemFeatureScreen(PremiumFeature.getFeature(paidAction = message.requiredPaidAction))
                         )
                     }
                 }
@@ -284,10 +285,10 @@ private fun SwapConfirmInternal(
 
                                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                                 delay(1200)
-                                navController.setNavigationResultX(SwapConfirmFragment.Result(true))
-                                navController.popBackStack()
+                                resultBus.sendResult(result = SwapConfirmScreen.Result(true))
+                                backStack.removeLastOrNull()
                             } catch (t: Throwable) {
-                                navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                                backStack.add(ErrorBottomSheetScreen(t.message ?: t.javaClass.simpleName))
                             }
 
                             swapButtonTitle = R.string.Swap
@@ -345,7 +346,7 @@ private fun SwapConfirmInternal(
                     amountOut = amountOut,
                     statPage = StatPage.SwapConfirmation,
                 )
-                PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
+                PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, backStack)
                 uiState.amountOutMin?.let { amountOutMin ->
                     val infoTitle = stringResource(id = R.string.Swap_MinimumReceived)
                     val infoText = stringResource(id = R.string.Swap_MinimumReceivedDescription)
@@ -354,9 +355,8 @@ private fun SwapConfirmInternal(
                         value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull()
                             .hs(ComposeAppTheme.colors.leah),
                         onInfoClick = {
-                            navController.slideFromBottom(
-                                R.id.swapInfoDialog,
-                                SwapInfoDialog.Input(infoTitle, infoText)
+                            backStack.add(
+                                SwapInfoDialogScreen(infoTitle, infoText)
                             )
                         }
                     )
@@ -368,22 +368,21 @@ private fun SwapConfirmInternal(
                         title = stringResource(id = R.string.Swap_EstimatedTime),
                         value = "~${formatDuration(estimatedTime)}".hs(ComposeAppTheme.colors.leah),
                         onInfoClick = {
-                            navController.slideFromBottom(
-                                R.id.swapInfoDialog,
-                                SwapInfoDialog.Input(infoTitle, infoText)
+                            backStack.add(
+                                SwapInfoDialogScreen(infoTitle, infoText)
                             )
                         }
                     )
                 }
                 uiState.quoteFields.forEach {
-                    it.GetContent(navController)
+                    it.GetContent(backStack)
                 }
             }
             uiState.transactionFields.forEachIndexed { index, field ->
-                field.GetContent(navController)
+                field.GetContent(backStack)
             }
             DataFieldFee(
-                navController,
+                backStack,
                 uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
                 uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
             )
