@@ -14,7 +14,6 @@ import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
@@ -39,6 +38,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.serialization.Serializable
+import java.util.UUID
 import kotlin.reflect.KClass
 
 class Nav3Fragment : BaseComposeFragment() {
@@ -57,6 +57,10 @@ abstract class HSScreen(
     val parentScreenClass: KClass<out HSScreen>? = null,
     val usePreviousScreenVmScope: Boolean = false,
 ) : NavKey {
+    val uuid = UUID.randomUUID().toString()
+
+    fun contentKey() = "$className(#$uuid)"
+
     @OptIn(ExperimentalMaterial3Api::class)
     fun getMetadata(backStack: NavBackStack<HSScreen>) = buildMap {
         if (bottomSheet) {
@@ -65,7 +69,7 @@ abstract class HSScreen(
         if (usePreviousScreenVmScope) {
             backStack.getOrNull(backStack.lastIndex - 1)?.let { parentScreen ->
                 putAll(
-                    SharedViewModelStoreNavEntryDecorator.parent(parentScreen.toString())
+                    SharedViewModelStoreNavEntryDecorator.parent(parentScreen.contentKey())
                 )
             }
         }
@@ -74,7 +78,7 @@ abstract class HSScreen(
                 it::class == parentScreenClass
             }?.let { parentScreen ->
                 putAll(
-                    SharedViewModelStoreNavEntryDecorator.parent(parentScreen.toString())
+                    SharedViewModelStoreNavEntryDecorator.parent(parentScreen.contentKey())
                 )
             }
         }
@@ -162,8 +166,6 @@ fun NavExample(mainActivityViewModel: MainActivityViewModel) {
         entryDecorators = listOf(
             // Add the default decorators for managing scenes and saving state
             rememberSaveableStateHolderNavEntryDecorator(),
-            // Then add the view model store decorator
-            rememberViewModelStoreNavEntryDecorator(),
             rememberSharedViewModelStoreNavEntryDecorator(),
         ),
         backStack = backStack,
@@ -171,6 +173,7 @@ fun NavExample(mainActivityViewModel: MainActivityViewModel) {
         entryProvider = { hSScreen ->
             NavEntry(
                 key = hSScreen,
+                contentKey = hSScreen.contentKey(),
                 metadata = hSScreen.getMetadata(backStack)
             ) {
                 if (currentScreen is MainScreen) {
