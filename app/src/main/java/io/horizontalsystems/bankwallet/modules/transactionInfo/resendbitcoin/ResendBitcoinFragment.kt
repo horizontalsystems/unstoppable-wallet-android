@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
@@ -220,23 +221,23 @@ fun ResendBitcoinScreen(
 //                )
 //
 //                Spacer(modifier = Modifier.height(24.dp))
-//                EvmSettingsInput(
-//                    title = stringResource(R.string.TransactionInfoOptions_Rbf_FeeTitle),
-//                    info = stringResource(R.string.FeeSettings_FeeRate_Info),
-//                    value = uiState.minFee.toBigDecimal(),
-//                    decimals = 0,
-//                    caution = uiState.feeCaution,
-//                    navController = backStack,
-//                    onValueChange = {
-//                        resendViewModel.setMinFee(it.toLong())
-//                    },
-//                    onClickIncrement = {
-//                        resendViewModel.incrementMinFee()
-//                    },
-//                    onClickDecrement = {
-//                        resendViewModel.decrementMinFee()
-//                    }
-//                )
+                EvmSettingsInput(
+                    title = stringResource(R.string.TransactionInfoOptions_Rbf_FeeTitle),
+                    info = stringResource(R.string.FeeSettings_FeeRate_Info),
+                    value = uiState.minFee.toBigDecimal(),
+                    decimals = 0,
+                    caution = uiState.feeCaution,
+                    backStack = backStack,
+                    onValueChange = {
+                        resendViewModel.setMinFee(it.toLong())
+                    },
+                    onClickIncrement = {
+                        resendViewModel.incrementMinFee()
+                    },
+                    onClickDecrement = {
+                        resendViewModel.decrementMinFee()
+                    }
+                )
 
                 uiState.feeCaution?.let {
                     FeeRateCaution(

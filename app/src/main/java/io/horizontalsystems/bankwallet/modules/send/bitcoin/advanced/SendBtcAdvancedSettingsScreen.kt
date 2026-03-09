@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
@@ -58,6 +59,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import java.math.BigDecimal
 
 @Serializable
 data object SendBtcAdvancedSettingsScreen : HSScreen(parentScreenClass = SendScreen::class) {
@@ -136,24 +138,23 @@ fun SendBtcAdvancedSettingsScreen(
 
                 if (feeRateVisible) {
                     VSpacer(24.dp)
-//                    TODO("xxx nav3")
-//                    EvmSettingsInput(
-//                        title = stringResource(R.string.FeeSettings_FeeRate),
-//                        info = stringResource(R.string.FeeSettings_FeeRate_Info),
-//                        value = feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
-//                        decimals = 0,
-//                        caution = feeRateCaution,
-//                        navController = fragmentNavController,
-//                        onValueChange = {
-//                            sendBitcoinViewModel.updateFeeRate(it.toInt())
-//                        },
-//                        onClickIncrement = {
-//                            sendBitcoinViewModel.incrementFeeRate()
-//                        },
-//                        onClickDecrement = {
-//                            sendBitcoinViewModel.decrementFeeRate()
-//                        }
-//                    )
+                    EvmSettingsInput(
+                        title = stringResource(R.string.FeeSettings_FeeRate),
+                        info = stringResource(R.string.FeeSettings_FeeRate_Info),
+                        value = feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
+                        decimals = 0,
+                        caution = feeRateCaution,
+                        backStack = backStack,
+                        onValueChange = {
+                            sendBitcoinViewModel.updateFeeRate(it.toInt())
+                        },
+                        onClickIncrement = {
+                            sendBitcoinViewModel.incrementFeeRate()
+                        },
+                        onClickDecrement = {
+                            sendBitcoinViewModel.decrementFeeRate()
+                        }
+                    )
                     InfoText(
                         text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
                     )

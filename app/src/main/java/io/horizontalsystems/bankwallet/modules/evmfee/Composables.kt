@@ -34,7 +34,6 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
@@ -188,7 +187,7 @@ fun EvmSettingsInput(
     value: BigDecimal,
     decimals: Int,
     caution: HSCaution?,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
     onClickDecrement: () -> Unit
@@ -199,18 +198,17 @@ fun EvmSettingsInput(
         else -> ComposeAppTheme.colors.leah
     }
 
-//    TODO("xxx nav3")
-//    EvmSettingsInput(
-//        title = title,
-//        info = info,
-//        value = value,
-//        decimals = decimals,
-//        textColor = textColor,
-//        backStack = navController,
-//        onValueChange = onValueChange,
-//        onClickIncrement = onClickIncrement,
-//        onClickDecrement = onClickDecrement
-//    )
+    EvmSettingsInput(
+        title = title,
+        info = info,
+        value = value,
+        decimals = decimals,
+        textColor = textColor,
+        backStack = backStack,
+        onValueChange = onValueChange,
+        onClickIncrement = onClickIncrement,
+        onClickDecrement = onClickDecrement
+    )
 }
 
 @Composable
@@ -378,25 +376,24 @@ fun LegacyFeeSettings(
         }
 
         viewItem?.let { fee ->
-//            TODO("xxx nav3")
-//            EvmSettingsInput(
-//                title = stringResource(R.string.FeeSettings_GasPrice),
-//                info = stringResource(R.string.FeeSettings_GasPrice_Info),
-//                value = BigDecimal(fee.weiValue).divide(BigDecimal(fee.scale.scaleValue)),
-//                decimals = fee.scale.decimals,
-//                warnings = fee.warnings,
-//                errors = fee.errors,
-//                navController = backStack,
-//                onValueChange = {
-//                    viewModel.onSelectGasPrice(fee.wei(it))
-//                },
-//                onClickIncrement = {
-//                    viewModel.onIncrementGasPrice(fee.weiValue)
-//                },
-//                onClickDecrement = {
-//                    viewModel.onDecrementGasPrice(fee.weiValue)
-//                }
-//            )
+            EvmSettingsInput(
+                title = stringResource(R.string.FeeSettings_GasPrice),
+                info = stringResource(R.string.FeeSettings_GasPrice_Info),
+                value = BigDecimal(fee.weiValue).divide(BigDecimal(fee.scale.scaleValue)),
+                decimals = fee.scale.decimals,
+                warnings = fee.warnings,
+                errors = fee.errors,
+                backStack = backStack,
+                onValueChange = {
+                    viewModel.onSelectGasPrice(fee.wei(it))
+                },
+                onClickIncrement = {
+                    viewModel.onIncrementGasPrice(fee.weiValue)
+                },
+                onClickDecrement = {
+                    viewModel.onDecrementGasPrice(fee.weiValue)
+                }
+            )
         }
     }
 }

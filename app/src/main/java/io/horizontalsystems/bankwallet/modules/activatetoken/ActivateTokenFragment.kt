@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenError
@@ -149,12 +150,11 @@ fun ActivateTokenScreen(
 
         VSpacer(height = 16.dp)
         SectionUniversalLawrence {
-//            TODO("xxx nav3")
-//            DataFieldFee(
-//                backStack,
-//                uiState.feeCoinValue?.getFormattedFull() ?: "---",
-//                uiState.feeFiatValue?.getFormattedFull() ?: "---"
-//            )
+            DataFieldFee(
+                backStack,
+                uiState.feeCoinValue?.getFormattedFull() ?: "---",
+                uiState.feeFiatValue?.getFormattedFull() ?: "---"
+            )
         }
 
         uiState.error?.let { error ->

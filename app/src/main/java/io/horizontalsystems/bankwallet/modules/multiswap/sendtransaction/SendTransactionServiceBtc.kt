@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -40,6 +41,7 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransactionService(true, false) {
     private val adapter = App.adapterManager.getAdapterForToken<ISendBitcoinAdapter>(token)!!
@@ -239,24 +241,23 @@ fun SendBtcFeeSettingsScreen(
 
             if (viewModel.feeRateChangeable) {
                 VSpacer(24.dp)
-//                TODO("xxx nav3")
-//                EvmSettingsInput(
-//                    title = stringResource(R.string.FeeSettings_FeeRate),
-//                    info = stringResource(R.string.FeeSettings_FeeRate_Info),
-//                    value = uiState.feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
-//                    decimals = 0,
-//                    caution = uiState.feeRateCaution,
-//                    navController = backStack,
-//                    onValueChange = {
-//                        viewModel.updateFeeRate(it.toInt())
-//                    },
-//                    onClickIncrement = {
-//                        viewModel.incrementFeeRate()
-//                    },
-//                    onClickDecrement = {
-//                        viewModel.decrementFeeRate()
-//                    }
-//                )
+                EvmSettingsInput(
+                    title = stringResource(R.string.FeeSettings_FeeRate),
+                    info = stringResource(R.string.FeeSettings_FeeRate_Info),
+                    value = uiState.feeRate?.toBigDecimal() ?: BigDecimal.ZERO,
+                    decimals = 0,
+                    caution = uiState.feeRateCaution,
+                    backStack = backStack,
+                    onValueChange = {
+                        viewModel.updateFeeRate(it.toInt())
+                    },
+                    onClickIncrement = {
+                        viewModel.incrementFeeRate()
+                    },
+                    onClickDecrement = {
+                        viewModel.decrementFeeRate()
+                    }
+                )
                 InfoText(
                     text = stringResource(R.string.FeeSettings_FeeRate_RecommendedInfo),
                 )
