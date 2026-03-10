@@ -32,6 +32,7 @@ class SwapQuoteService {
         USwapProvider(UProvider.QuickEx),
         USwapProvider(UProvider.LetsExchange),
         USwapProvider(UProvider.StealthEx),
+        USwapProvider(UProvider.Exolix),
         USwapProvider(UProvider.Swapuz),
     )
 

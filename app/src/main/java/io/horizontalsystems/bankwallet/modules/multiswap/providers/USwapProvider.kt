@@ -363,6 +363,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     UProvider.QuickEx,
                     UProvider.LetsExchange,
                     UProvider.StealthEx,
+                    UProvider.Exolix,
                     UProvider.Swapuz
                 )
 
@@ -432,6 +433,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     UProvider.QuickEx,
                     UProvider.LetsExchange,
                     UProvider.StealthEx,
+                    UProvider.Exolix,
                     UProvider.Swapuz
                 )
 
@@ -452,6 +454,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     UProvider.QuickEx,
                     UProvider.LetsExchange,
                     UProvider.StealthEx,
+                    UProvider.Exolix,
                     UProvider.Swapuz
                 )
 

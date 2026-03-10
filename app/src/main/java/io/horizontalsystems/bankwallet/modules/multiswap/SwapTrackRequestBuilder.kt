@@ -54,6 +54,7 @@ object SwapTrackRequestBuilder {
             "u_${UProvider.QuickEx.id}",
             "u_${UProvider.LetsExchange.id}",
             "u_${UProvider.StealthEx.id}",
+            "u_${UProvider.Exolix.id}",
             "u_${UProvider.Swapuz.id}" -> UnstoppableAPI.Request.Track(
                 provider = providerApiName,
                 providerSwapId = record.providerSwapId,
