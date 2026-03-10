@@ -753,7 +753,6 @@
 
     <string name="SwapSort_BestPrice">Best Price</string>
     <string name="SwapSort_BestTime">Best Time</string>
-    <string name="SwapSort_Recommended">Recommended</string>
 
     <string name="RiskLevel_ProviderRiskLevel">Provider Risk Levels</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">The labels below explain different risk levels of swap providers. Choose accordingly.</string>
