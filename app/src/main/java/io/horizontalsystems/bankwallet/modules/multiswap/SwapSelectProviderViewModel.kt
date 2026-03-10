@@ -50,8 +50,7 @@ class SwapSelectProviderViewModel(
 
     private fun List<SwapProviderQuote>.sorted(): List<SwapProviderQuote> {
         return when (sortType) {
-            ProviderSortType.BestPrice,
-            ProviderSortType.Recommended -> sortedByDescending { it.amountOut }
+            ProviderSortType.BestPrice -> sortedByDescending { it.amountOut }
             ProviderSortType.BestTime -> sortedBy { it.estimationTime ?: Long.MAX_VALUE }
         }
     }
@@ -124,5 +123,4 @@ data class QuoteViewItem(
 enum class ProviderSortType(val title: Int) {
     BestPrice(R.string.SwapSort_BestPrice),
     BestTime(R.string.SwapSort_BestTime),
-    Recommended(R.string.SwapSort_Recommended);
 }

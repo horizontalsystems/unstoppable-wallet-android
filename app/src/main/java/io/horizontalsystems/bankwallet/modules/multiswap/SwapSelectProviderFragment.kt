@@ -111,7 +111,6 @@ private fun SwapSelectProviderScreenInner(
                         sortTypes = listOf(
                             ProviderSortType.BestPrice,
                             ProviderSortType.BestTime,
-                            ProviderSortType.Recommended
                         ),
                         onSelectSortType = {
                             onSortTypeChange.invoke(it)
