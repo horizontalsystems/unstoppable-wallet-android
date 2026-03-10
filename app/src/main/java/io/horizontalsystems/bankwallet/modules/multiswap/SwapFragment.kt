@@ -160,9 +160,10 @@ fun SwapScreen(
 //    }
 
     ResultEffect<SwapSelectCoinScreen.Result>(resultBus) {
-//        TODO("xxx nav3")
-//        viewModel.onSelectTokenIn(it.token)
-//        viewModel.onSelectTokenOut(it.token)
+        when (it.type) {
+            SwapSelectCoinScreen.Type.In -> viewModel.onSelectTokenIn(it.token)
+            SwapSelectCoinScreen.Type.Out -> viewModel.onSelectTokenOut(it.token)
+        }
     }
 
     ResultEffect<SwapConfirmScreen.Result>(resultBus) {
@@ -179,7 +180,8 @@ fun SwapScreen(
             backStack.add(
                 SwapSelectCoinScreen(
                     uiState.tokenOut,
-                    resources.getString(R.string.Swap_YouPay)
+                    resources.getString(R.string.Swap_YouPay),
+                    SwapSelectCoinScreen.Type.In
                 )
             )
         },
@@ -187,7 +189,8 @@ fun SwapScreen(
             backStack.add(
                 SwapSelectCoinScreen(
                     uiState.tokenIn,
-                    resources.getString(R.string.Swap_YouGet)
+                    resources.getString(R.string.Swap_YouGet),
+                    SwapSelectCoinScreen.Type.Out
                 )
             )
         },

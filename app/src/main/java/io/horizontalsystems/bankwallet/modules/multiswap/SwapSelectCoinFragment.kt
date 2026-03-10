@@ -16,18 +16,29 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SwapSelectCoinScreen(
     @Serializable(with = TokenSerializer::class)
-    val token: Token?,
-    val title: String
+    val otherSelectedToken: Token?,
+    val title: String,
+    val type: Type
 ) : HSScreen() {
     @Composable
     override fun GetContent(
         backStack: NavBackStack<HSScreen>,
         resultBus: ResultEventBus
     ) {
-        SwapSelectCoinScreen(backStack, resultBus, token, title)
+        SwapSelectCoinScreen(
+            backStack,
+            resultBus,
+            otherSelectedToken,
+            title,
+            type
+        )
     }
 
-    data class Result(val token: Token)
+    data class Result(val token: Token, val type: Type)
+
+    enum class Type {
+        In, Out
+    }
 }
 
 class SwapSelectCoinFragment : BaseComposeFragment() {
@@ -44,11 +55,12 @@ class SwapSelectCoinFragment : BaseComposeFragment() {
 private fun SwapSelectCoinScreen(
     backStack: NavBackStack<HSScreen>,
     resultBus: ResultEventBus,
-    token: Token?,
-    title: String?
+    otherSelectedToken: Token?,
+    title: String?,
+    type: SwapSelectCoinScreen.Type
 ) {
     val viewModel = viewModel<SwapSelectCoinViewModel>(
-        factory = SwapSelectCoinViewModel.Factory(token)
+        factory = SwapSelectCoinViewModel.Factory(otherSelectedToken)
     )
     val uiState = viewModel.uiState
 
@@ -58,7 +70,7 @@ private fun SwapSelectCoinScreen(
         onSearchTextChanged = viewModel::setQuery,
         onClose = backStack::removeLastOrNull
     ) {
-        resultBus.sendResult(result = SwapSelectCoinScreen.Result(it.token))
+        resultBus.sendResult(result = SwapSelectCoinScreen.Result(it.token, type))
         backStack.removeLastOrNull()
     }
 }
