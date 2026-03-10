@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -49,9 +50,13 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
-data object RestoreLocalBackupFile : RestoreLocalChildScreen() {
+data class RestoreLocalBackupFile(
+    val popOffOnSuccess: KClass<out HSScreen>,
+    val popOffInclusive: Boolean,
+) : RestoreLocalChildScreen() {
     @Composable
     override fun GetContent(
         backStack: NavBackStack<HSScreen>,
@@ -63,8 +68,7 @@ data object RestoreLocalBackupFile : RestoreLocalChildScreen() {
             viewModel,
             onBackClick = { backStack.removeLastOrNull() },
             close = {
-//                    TODO("xxx nav3")
-//                    backStack.popBackStack(popUpToInclusiveId, popUpInclusive)
+                backStack.removeLastUntil(popOffOnSuccess, popOffInclusive)
             },
             reloadApp = { activity?.let { MainModule.startAsNewTask(it) } }
         )

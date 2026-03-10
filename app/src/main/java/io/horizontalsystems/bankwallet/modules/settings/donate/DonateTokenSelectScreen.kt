@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
+import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -45,7 +46,7 @@ data object DonateTokenSelectScreen : HSScreen() {
                     backStack.add(SendScreen(
                         wallet = viewItem.wallet,
                         title = sendTitle,
-                        sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                        sendEntryPointDestId = SendTokenSelectScreen::class,
                         address = Address(donateAddress),
                         hideAddress = true
                     ))

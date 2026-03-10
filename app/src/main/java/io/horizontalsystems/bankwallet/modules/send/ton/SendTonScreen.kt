@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 @Composable
 fun SendTonScreen(
@@ -40,7 +41,7 @@ fun SendTonScreen(
     backStack: NavBackStack<HSScreen>,
     viewModel: SendTonViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int,
+    sendEntryPointDestId: KClass<out HSScreen>,
     amount: BigDecimal?,
     riskyAddress: Boolean,
     resultBus: ResultEventBus
@@ -160,7 +161,7 @@ fun SendTonScreen(
 
 private fun openConfirm(
     backStack: NavBackStack<HSScreen>,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: KClass<out HSScreen>
 ) {
     backStack.add(
         SendConfirmationScreen(

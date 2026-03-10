@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
-import io.horizontalsystems.bankwallet.R.id.enterAddressFragment
 import io.horizontalsystems.bankwallet.R.string.Button_Next
 import io.horizontalsystems.bankwallet.R.string.Send_EnterAddress
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -18,12 +17,13 @@ import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 @Serializable
 data class EnterAddressScreen(
     val wallet: Wallet,
     val title: String,
-    val sendEntryPointDestId: Int? = null,
+    val sendEntryPointDestId: KClass<out HSScreen>? = null,
     val address: String? = null,
     @Serializable(with = BigDecimalSerializer::class)
     val amount: BigDecimal? = null,
@@ -45,7 +45,7 @@ data class EnterAddressScreen(
             address?.let {
                 backStack.add(SendScreen(
                     wallet = wallet,
-                    sendEntryPointDestId = sendEntryPointDestId ?: enterAddressFragment,
+                    sendEntryPointDestId = sendEntryPointDestId ?: EnterAddressScreen::class,
                     title = title,
                     address = it,
                     riskyAddress = risky,

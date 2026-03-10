@@ -10,11 +10,12 @@ import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment.Type
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
 data class SendConfirmationScreen(
     val type: Type,
-    val sendEntryPointDestId: Int
+    val sendEntryPointDestId: KClass<out HSScreen>
 ) : HSScreen(
     parentScreenClass = SendScreen::class
 ) {

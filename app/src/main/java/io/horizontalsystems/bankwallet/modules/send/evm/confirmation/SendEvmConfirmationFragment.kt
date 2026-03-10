@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceSettingsScreen
@@ -43,6 +44,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
 data class SendEvmConfirmationScreen(
@@ -51,7 +53,7 @@ data class SendEvmConfirmationScreen(
     val additionalInfo: SendEvmData.AdditionalInfo?,
     @Serializable(with = BlockchainTypeSerializer::class)
     val blockchainType: BlockchainType,
-    val sendEntryPointDestId: Int
+    val sendEntryPointDestId: KClass<out HSScreen>
 ) : HSScreen() {
     @Composable
     override fun GetContent(
@@ -107,7 +109,7 @@ private fun SendEvmConfirmationScreen(
     transactionData: TransactionData,
     additionalInfo: SendEvmData.AdditionalInfo?,
     blockchainType: BlockchainType,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: KClass<out HSScreen>
 ) {
     val logger = remember { AppLogger("send-evm") }
 
@@ -156,8 +158,7 @@ private fun SendEvmConfirmationScreen(
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
 
-//                            TODO("xxx nav3")
-//                            backStack.popBackStack(sendEntryPointDestId, true)
+                            backStack.removeLastUntil(sendEntryPointDestId, true)
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
                             backStack.add(ErrorBottomSheetScreen(t.message ?: t.javaClass.simpleName))

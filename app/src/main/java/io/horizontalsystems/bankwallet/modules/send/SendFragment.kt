@@ -48,12 +48,13 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 @Serializable
 data class SendScreen(
     val wallet: Wallet,
     val title: String,
-    val sendEntryPointDestId: Int,
+    val sendEntryPointDestId: KClass<out HSScreen>,
     val address: Address,
     val riskyAddress: Boolean = false,
     @Serializable(with = BigDecimalSerializer::class)

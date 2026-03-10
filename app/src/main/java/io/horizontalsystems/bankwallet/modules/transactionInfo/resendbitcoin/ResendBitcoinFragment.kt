@@ -36,6 +36,7 @@ import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.send.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
@@ -95,7 +96,7 @@ fun ResendBitcoinScreen(
     backStack: NavBackStack<HSScreen>,
     resendViewModel: ResendBitcoinViewModel
 ) {
-    val closeUntilDestId = R.id.transactionInfoFragment
+    val closeUntilDestId = TransactionInfoScreen::class
     val uiState = resendViewModel.uiState
 
     val view = LocalView.current
@@ -126,8 +127,7 @@ fun ResendBitcoinScreen(
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         //additional close for cases when user closes app immediately after sending
         if (uiState.sendResult is SendResult.Sent) {
-//            TODO("xxx nav3")
-//            backStack.popBackStack(closeUntilDestId, true)
+            backStack.removeLastUntil(closeUntilDestId, true)
         }
     }
 

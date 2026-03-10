@@ -46,7 +46,7 @@ data class SendTokenSelectScreen(
                     EnterAddressScreen(
                         wallet = it.wallet,
                         title = sendTitle,
-                        sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                        sendEntryPointDestId = SendTokenSelectScreen::class,
                         address = address,
                         amount = amount,
                         memo = memo,

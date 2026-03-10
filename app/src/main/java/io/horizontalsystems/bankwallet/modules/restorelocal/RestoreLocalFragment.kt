@@ -81,7 +81,7 @@ data class RestoreLocalScreen(
             openSelectCoins = {
                 backStack.add(RestoreLocalSelectCoins(popOffOnSuccess, popOffInclusive))
             },
-            openBackupItems = { backStack.add(RestoreLocalBackupFile) }
+            openBackupItems = { backStack.add(RestoreLocalBackupFile(popOffOnSuccess, popOffInclusive)) }
         )
 
     }
