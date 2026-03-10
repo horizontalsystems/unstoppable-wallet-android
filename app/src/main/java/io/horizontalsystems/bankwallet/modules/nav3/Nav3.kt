@@ -2,144 +2,31 @@ package io.horizontalsystems.bankwallet.modules.nav3
 
 import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSerializable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
-import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.serialization.NavBackStackSerializer
 import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
-import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
 import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectSendRequestScreen
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
-import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
-import kotlinx.serialization.Serializable
-import java.util.UUID
 import kotlin.reflect.KClass
 
-class Nav3Fragment : BaseComposeFragment() {
-
-    @Composable
-    override fun GetContent(navController: NavController) {
-//        NavExample(mainActivityViewModel)
-    }
-
-}
-
-@Serializable
-abstract class HSScreen(
-    val bottomSheet: Boolean = false,
-    val screenshotEnabled: Boolean = true,
-    val parentScreenClass: KClass<out HSScreen>? = null,
-    val usePreviousScreenVmScope: Boolean = false,
-) : NavKey {
-    val uuid = UUID.randomUUID().toString()
-
-    fun contentKey() = "$className(#$uuid)"
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    fun getMetadata(backStack: NavBackStack<HSScreen>) = buildMap {
-        if (bottomSheet) {
-            putAll(BottomSheetSceneStrategy.bottomSheet())
-        }
-        if (usePreviousScreenVmScope) {
-            backStack.getOrNull(backStack.lastIndex - 1)?.let { parentScreen ->
-                putAll(
-                    SharedViewModelStoreNavEntryDecorator.parent(parentScreen.contentKey())
-                )
-            }
-        }
-        parentScreenClass?.let {
-            backStack.findLast {
-                it::class == parentScreenClass
-            }?.let { parentScreen ->
-                putAll(
-                    SharedViewModelStoreNavEntryDecorator.parent(parentScreen.contentKey())
-                )
-            }
-        }
-    }
-
-    private val className = this.javaClass.simpleName
-
-    @Composable
-    open fun GetContent(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
-        HSScaffold(title = "TODO") {
-            body_leah(className)
-        }
-    }
-}
-
-@Serializable
-data object Child : HSScreen(parentScreenClass = Home::class) {
-    @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
-    ) {
-        val parentViewModel = viewModel(modelClass = SharedViewModel::class)
-        HSScaffold(title = "Child") {
-            title3_leah("uuid: " + parentViewModel.uuid)
-        }
-    }
-}
-
-@Serializable
-data object Home : HSScreen() {
-    @Composable
-    override fun GetContent(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
-        val viewModel = viewModel(modelClass = SharedViewModel::class)
-
-        HSScaffold(title = "Nav3") {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                title3_leah("viewModel.uuid: " + viewModel.uuid)
-
-                HSButton(title = "Child") {
-                    backStack.add(Child)
-                }
-
-                var resultString by remember { mutableStateOf("Default") }
-                ResultEffect<TermsFragment.Result>(resultBus) {
-                    resultString = "termsAccepted: ${it.termsAccepted}"
-                }
-
-                title3_leah(resultString)
-
-                HSButton(title = "Terms") {
-//                    backStack.add(Terms)
-                }
-            }
-        }
-    }
-}
-
 @Composable
-fun NavExample(mainActivityViewModel: MainActivityViewModel) {
+fun Nav3(mainActivityViewModel: MainActivityViewModel) {
     val resultBus = remember { ResultEventBus() }
 
     val backStack = rememberSerializable(
