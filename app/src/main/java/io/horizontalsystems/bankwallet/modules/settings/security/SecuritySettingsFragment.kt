@@ -54,7 +54,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
-import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.serialization.Serializable
@@ -195,7 +194,8 @@ private fun SecurityCenterScreen(
                                     confirmChange = {
                                         if (UserSubscriptionManager.isActionAllowed(action)) {
                                             if (action == SecureSend) {
-                                                navController.slideFromBottom(R.id.secureSendConfigDialog)
+//                                                TODO("xxx nav3")
+//                                                navController.slideFromBottom(R.id.secureSendConfigDialog)
                                                 false
                                             } else {
                                                 true
