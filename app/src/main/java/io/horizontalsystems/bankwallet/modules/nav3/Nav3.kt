@@ -55,6 +55,7 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
             // Add the default decorators for managing scenes and saving state
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberSharedViewModelStoreNavEntryDecorator(),
+            rememberResultEventBusNavEntryDecorator(),
         ),
         backStack = backStack,
         sceneStrategy = bottomSheetStrategy,

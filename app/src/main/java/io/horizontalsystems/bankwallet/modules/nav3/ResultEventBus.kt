@@ -2,10 +2,13 @@ package io.horizontalsystems.bankwallet.modules.nav3
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
+import androidx.navigation3.runtime.NavEntryDecorator
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
@@ -71,3 +74,20 @@ class ResultEventBus {
         channelMap.remove(resultKey)
     }
 }
+
+@Composable
+fun <T : Any> rememberResultEventBusNavEntryDecorator(): ResultEventBusNavEntryDecorator<T> {
+    return remember {
+        ResultEventBusNavEntryDecorator(ResultEventBus())
+    }
+}
+
+class ResultEventBusNavEntryDecorator<T : Any>(val resultEventBus: ResultEventBus) : NavEntryDecorator<T>(
+    onPop = { },
+    decorate = { entry ->
+        CompositionLocalProvider(LocalResultEventBus provides resultEventBus) {
+            entry.Content()
+        }
+    },
+)
+
