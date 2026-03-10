@@ -119,8 +119,7 @@ fun ResendBitcoinScreen(
     LaunchedEffect(uiState.sendResult) {
         if (uiState.sendResult is SendResult.Sent) {
             delay(1200)
-//            TODO("xxx nav3")
-//            backStack.popBackStack(closeUntilDestId, true)
+            backStack.removeLastUntil(closeUntilDestId, true)
         }
     }
 
