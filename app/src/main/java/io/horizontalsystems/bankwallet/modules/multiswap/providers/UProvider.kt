@@ -47,6 +47,15 @@ enum class UProvider(
         true,
         RiskLevel.CONTROLLED
     ),
+    Exolix(
+        "EXOLIX",
+        "Exolix",
+        R.drawable.swap_provider_exolix,
+        SwapProviderType.CEX,
+        true,
+        true,
+        RiskLevel.CONTROLLED
+    ),
     Swapuz(
         "SWAPUZ",
         "Swapuz",
