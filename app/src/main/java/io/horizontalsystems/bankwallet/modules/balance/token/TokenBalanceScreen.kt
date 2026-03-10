@@ -311,7 +311,7 @@ fun TokenBalanceScreen(
                         coroutineScope.launch {
                             bottomSheetState.hide()
                             bottomSheetContent = null
-                            backStack.add(ShieldZcashScreen(wallet, R.id.tokenBalanceFragment))
+                            backStack.add(ShieldZcashScreen(wallet, TokenBalanceScreen::class))
                         }
                     },
                     onClose = {

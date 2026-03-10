@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.eip20approve.ConfirmTokenSection
 import io.horizontalsystems.bankwallet.modules.eip20approve.SpenderCell
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
@@ -166,14 +167,13 @@ fun Eip20RevokeScreen(
                 }
             )
 
-//            TODO("xxx nav3")
-//            DataFieldFeeTemplate(
-//                navController = backStack,
-//                primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
-//                secondary = uiState.networkFee?.secondary?.getFormattedPlain(),
-//                title = stringResource(id = R.string.FeeSettings_NetworkFee),
-//                infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
-//            )
+            DataFieldFeeTemplate(
+                backStack = backStack,
+                primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
+                secondary = uiState.networkFee?.secondary?.getFormattedPlain(),
+                title = stringResource(id = R.string.FeeSettings_NetworkFee),
+                infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+            )
         }
 
         if (uiState.cautions.isNotEmpty()) {

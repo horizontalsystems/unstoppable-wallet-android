@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import java.math.BigDecimal
@@ -67,14 +68,13 @@ fun HSFeeRaw(
     LaunchedEffect(fee, amountInputType, rate) {
         formatted = getFormatted(fee, rate, coinCode, coinDecimal, amountInputType)
     }
-//    TODO("xxx nav3")
-//    DataFieldFeeTemplate(
-//        navController = backStack,
-//        primary = formatted?.primary ?: "---",
-//        secondary = formatted?.secondary ?: "---",
-//        title = title,
-//        infoText = info
-//    )
+    DataFieldFeeTemplate(
+        backStack = backStack,
+        primary = formatted?.primary ?: "---",
+        secondary = formatted?.secondary ?: "---",
+        title = title,
+        infoText = info
+    )
 }
 
 private fun getFormatted(

@@ -11,11 +11,12 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
 data class ShieldZcashScreen(
     val wallet: Wallet,
-    val entryPointDestId: Int
+    val entryPointDestId: KClass<out HSScreen>
 ) : HSScreen() {
     @Composable
     override fun GetContent(
