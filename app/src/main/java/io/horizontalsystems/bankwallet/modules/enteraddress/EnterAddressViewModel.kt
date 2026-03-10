@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.core.factories.AddressValidatorFactory
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
-import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.entities.Address
@@ -46,7 +45,6 @@ class EnterAddressViewModel(
     private val addressValidator: EnterAddressValidator,
     private val addressCheckManager: AddressCheckManager,
     private val allowNull: Boolean,
-    paidActionSettingsManager: PaidActionSettingsManager,
     private val localStorage: ILocalStorage
 ) : ViewModelUiState<EnterAddressUiState>() {
     private val recentEnabled = localStorage.recentlySentEnabled
@@ -68,7 +66,12 @@ class EnterAddressViewModel(
     private var hasPremium = UserSubscriptionManager.isActionAllowed(SecureSend)
 
     private val addressExtractor = AddressExtractor(token.blockchainType, addressUriParser)
-    private val addressCheckEnabled = paidActionSettingsManager.isActionEnabled(SecureSend)
+    private val addressCheckEnabled: Boolean
+        get() {
+            return hasPremium && (localStorage.phishingDetectionEnabled
+                    || localStorage.blacklistDetectionEnabled
+                    || localStorage.sanctionsDetectionEnabled)
+        }
 
     private val recentlySentAddress = if (recentEnabled) recentAddress else null
 
@@ -111,11 +114,9 @@ class EnterAddressViewModel(
                 hasPremium = subscription != null
                 if (value.isNotEmpty()) {
                     cancelAllJobs()
-                    if (addressCheckEnabled) {
-                        checkResults = buildInitialCheckResults()
-                        addressValidationInProgress = true
-                        emitState()
-                    }
+                    checkResults = buildInitialCheckResults()
+                    addressValidationInProgress = true
+                    emitState()
                     processAddress(value)
                 }
             }
@@ -197,7 +198,6 @@ class EnterAddressViewModel(
         addressValidationInProgress = addressValidationInProgress,
         addressValidationError = addressValidationError,
         checkResults = checkResults,
-        addressCheckEnabled = addressCheckEnabled,
         hasPremium = hasPremium
     )
 
@@ -218,9 +218,7 @@ class EnterAddressViewModel(
             try {
                 val addressString = addressExtractor.extractAddressFromUri(value.trim())
                 this.value = addressString
-                if (addressCheckEnabled) {
-                    checkResults = buildInitialCheckResults()
-                }
+                checkResults = buildInitialCheckResults()
                 emitState()
 
                 processAddress(addressString)
@@ -334,7 +332,6 @@ class EnterAddressViewModel(
                 addressValidator,
                 addressCheckManager,
                 allowNull,
-                App.paidActionSettingsManager,
                 App.localStorage
             ) as T
         }
@@ -352,7 +349,6 @@ data class EnterAddressUiState(
     val addressValidationInProgress: Boolean,
     val addressValidationError: Throwable?,
     val checkResults: Map<AddressCheckType, AddressCheckData>,
-    val addressCheckEnabled: Boolean,
     val hasPremium: Boolean,
 ) {
     val risky = checkResults.any { result -> result.value.checkResult == AddressCheckResult.Detected }

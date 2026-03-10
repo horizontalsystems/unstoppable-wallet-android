@@ -110,7 +110,7 @@ fun EnterAddressScreen(
                     ) {
                         viewModel.onEnterAddress(it)
                     }
-                } else if (uiState.addressCheckEnabled || uiState.addressValidationError != null) {
+                } else {
                     AddressCheck(
                         uiState.addressValidationInProgress,
                         uiState.addressValidationError,
