@@ -1,12 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.ui
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.multiswap.FeeRow
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialog
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialogScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 
 @Composable
@@ -27,7 +24,7 @@ fun DataFieldFee(
 
 @Composable
 fun DataFieldFeeTemplate(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     primary: String,
     secondary: String?,
     title: String,
@@ -39,9 +36,8 @@ fun DataFieldFeeTemplate(
         valueToken = primary,
         onInfoClick = infoText?.let {
             {
-                navController.slideFromBottom(
-                    R.id.swapInfoDialog,
-                    SwapInfoDialog.Input(title, infoText)
+                backStack.add(
+                    SwapInfoDialogScreen(title, infoText)
                 )
             }
         }

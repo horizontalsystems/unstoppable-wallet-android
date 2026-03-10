@@ -29,24 +29,25 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.AddressCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -67,10 +68,11 @@ import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 @Composable
 fun SendConfirmationScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     coinMaxAllowedDecimals: Int,
     feeCoinMaxAllowedDecimals: Int,
     rate: CurrencyValue?,
@@ -84,16 +86,12 @@ fun SendConfirmationScreen(
     fee: BigDecimal?,
     memo: String?,
     onClickSend: () -> Unit,
-    sendEntryPointDestId: Int,
+    sendEntryPointDestId: KClass<out HSScreen>?,
     title: String? = null,
     error: Throwable? = null,
     additionalFields: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
-    val closeUntilDestId = if (sendEntryPointDestId == 0) {
-        R.id.sendXFragment
-    } else {
-        sendEntryPointDestId
-    }
+    val closeUntilDestId = sendEntryPointDestId ?: SendScreen::class
     val view = LocalView.current
     when (sendResult) {
         is SendResult.Sent -> {
@@ -105,9 +103,8 @@ fun SendConfirmationScreen(
         }
 
         is SendResult.Failed -> {
-            navController.slideFromBottom(
-                R.id.errorBottomSheet,
-                ErrorBottomSheet.Input(
+            backStack.add(
+                ErrorBottomSheetScreen(
                     sendResult.caution.getDescription() ?: sendResult.caution.getString()
                 )
             )
@@ -119,19 +116,19 @@ fun SendConfirmationScreen(
     LaunchedEffect(sendResult) {
         if (sendResult is SendResult.Sent) {
             delay(1200)
-            navController.popBackStack(closeUntilDestId, true)
+            backStack.removeLastUntil(closeUntilDestId, true)
         }
     }
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         if (sendResult is SendResult.Sent) {
-            navController.popBackStack(closeUntilDestId, true)
+            backStack.removeLastUntil(closeUntilDestId, true)
         }
     }
 
     HSScaffold(
         title = title ?: stringResource(R.string.Send_Confirmation_Title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
         bottomBar = {
             ButtonsGroupWithShade {
                 SendButton(
@@ -169,7 +166,7 @@ fun SendConfirmationScreen(
                 feeCoinMaxAllowedDecimals = feeCoinMaxAllowedDecimals,
                 fee = fee,
                 feeCoinRate = feeCoinRate,
-                navController = navController,
+                backStack = backStack,
                 memo = memo,
                 additionalFields = additionalFields
             )
@@ -187,7 +184,7 @@ fun ConfirmationBottomSection(
     feeCoinMaxAllowedDecimals: Int,
     fee: BigDecimal?,
     feeCoinRate: CurrencyValue?,
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     memo: String?,
     customFeeInfo: String? = null,
     additionalFields: (@Composable ColumnScope.() -> Unit)? = null,
@@ -217,7 +214,7 @@ fun ConfirmationBottomSection(
 
         formattedFee?.let { formattedFee ->
             DataFieldFeeTemplate(
-                navController = navController,
+                backStack = backStack,
                 primary = formattedFee.primary,
                 secondary = formattedFee.secondary,
                 title = stringResource(id = R.string.FeeSettings_NetworkFee),

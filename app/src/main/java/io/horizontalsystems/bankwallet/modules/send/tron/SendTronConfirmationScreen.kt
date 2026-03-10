@@ -27,19 +27,23 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.send.ConfirmationBottomSection
 import io.horizontalsystems.bankwallet.modules.send.ConfirmationTopSection
 import io.horizontalsystems.bankwallet.modules.send.SendResult
+import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.modules.send.getFormattedFee
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -52,18 +56,15 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
+import kotlin.reflect.KClass
 
 @Composable
 fun SendTronConfirmationScreen(
-    navController: NavController,
+    backStack: NavBackStack<HSScreen>,
     sendViewModel: SendTronViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: KClass<out HSScreen>?
 ) {
-    val closeUntilDestId = if (sendEntryPointDestId == 0) {
-        R.id.sendXFragment
-    } else {
-        sendEntryPointDestId
-    }
+    val closeUntilDestId = sendEntryPointDestId ?: SendScreen::class
     val confirmationData = sendViewModel.confirmationData ?: return
 
     val uiState = sendViewModel.uiState
@@ -96,9 +97,8 @@ fun SendTronConfirmationScreen(
         }
 
         is SendResult.Failed -> {
-            navController.slideFromBottom(
-                R.id.errorBottomSheet,
-                ErrorBottomSheet.Input(sendResult.caution.getDescription() ?: sendResult.caution.getString())
+            backStack.add(
+                ErrorBottomSheetScreen(sendResult.caution.getDescription() ?: sendResult.caution.getString())
             )
         }
 
@@ -108,20 +108,20 @@ fun SendTronConfirmationScreen(
     LaunchedEffect(sendResult) {
         if (sendResult is SendResult.Sent) {
             delay(1200)
-            navController.popBackStack(closeUntilDestId, true)
+            backStack.removeLastUntil(closeUntilDestId, true)
         }
     }
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         //additional close for cases when user closes app immediately after sending
         if (sendResult is SendResult.Sent) {
-            navController.popBackStack(closeUntilDestId, true)
+            backStack.removeLastUntil(closeUntilDestId, true)
         }
     }
 
     HSScaffold(
         title = stringResource(R.string.Send_Confirmation_Title),
-        onBack = navController::popBackStack,
+        onBack = backStack::removeLastOrNull,
     ) {
         Box(
             modifier = Modifier.fillMaxSize()
@@ -146,13 +146,13 @@ fun SendTronConfirmationScreen(
                     feeCoinMaxAllowedDecimals = feeCoinMaxAllowedDecimals,
                     fee = fee,
                     feeCoinRate = feeCoinRate,
-                    navController = navController,
+                    backStack = backStack,
                     memo = memo,
                     customFeeInfo = stringResource(R.string.FeeInfo_TronFee_Description)
                 ) {
                     resourcesConsumed?.let {
                         DataFieldFeeTemplate(
-                            navController = navController,
+                            backStack = backStack,
                             primary = it,
                             secondary = null,
                             title = stringResource(R.string.FeeInfo_TronResourcesConsumed_Title),
@@ -167,7 +167,7 @@ fun SendTronConfirmationScreen(
                         }
                         formattedActivationFee?.let {
                             DataFieldFeeTemplate(
-                                navController = navController,
+                                backStack = backStack,
                                 primary = it.primary,
                                 secondary = it.secondary,
                                 title = stringResource(R.string.FeeInfo_TronActivationFee_Title),
