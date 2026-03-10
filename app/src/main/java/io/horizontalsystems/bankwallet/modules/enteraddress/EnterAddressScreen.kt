@@ -36,6 +36,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
+import io.horizontalsystems.bankwallet.modules.settings.security.securesend.SecureSendConfigScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputAddress
@@ -119,8 +120,7 @@ fun EnterAddressScreen(
                         uiState.checkResults,
                     ) {
                         if (uiState.hasPremium){
-//                            TODO("xxx nav3")
-//                            navController.slideFromBottom(R.id.secureSendConfigDialog)
+                            backStack.add(SecureSendConfigScreen)
                         } else {
                             backStack.add(DefenseSystemFeatureScreen(PremiumFeature.SecureSendFeature))
                         }

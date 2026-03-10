@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScree
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
+import io.horizontalsystems.bankwallet.modules.settings.security.securesend.SecureSendConfigScreen
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.descriptionStringRes
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.titleStringRes
@@ -194,8 +195,7 @@ private fun SecurityCenterScreen(
                                     confirmChange = {
                                         if (UserSubscriptionManager.isActionAllowed(action)) {
                                             if (action == SecureSend) {
-//                                                TODO("xxx nav3")
-//                                                navController.slideFromBottom(R.id.secureSendConfigDialog)
+                                                backStack.add(SecureSendConfigScreen)
                                                 false
                                             } else {
                                                 true

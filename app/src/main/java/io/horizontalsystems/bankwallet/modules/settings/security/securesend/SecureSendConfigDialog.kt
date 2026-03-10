@@ -15,9 +15,10 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
@@ -31,7 +32,18 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
-import io.horizontalsystems.core.findNavController
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object SecureSendConfigScreen : HSScreen(bottomSheet = true) {
+    @Composable
+    override fun GetContent(
+        backStack: NavBackStack<HSScreen>,
+        resultBus: ResultEventBus
+    ) {
+        SecureSendConfigScreen(backStack)
+    }
+}
 
 class SecureSendConfigDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
@@ -44,11 +56,6 @@ class SecureSendConfigDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val navController = findNavController()
-
-                ComposeAppTheme {
-                    SecureSendConfigScreen(navController)
-                }
             }
         }
     }
@@ -56,13 +63,13 @@ class SecureSendConfigDialog : BaseComposableBottomSheetFragment() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SecureSendConfigScreen(navController: NavController) {
+private fun SecureSendConfigScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel = viewModel<SecureSendConfigViewModel>(factory = SecureSendConfigModule.Factory())
     val uiState = viewModel.uiState
 
     BottomSheetContent(
         onDismissRequest = {
-            navController.popBackStack()
+            backStack.removeLastOrNull()
         },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         buttons = {
@@ -71,7 +78,7 @@ private fun SecureSendConfigScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth(),
                 variant = ButtonVariant.Primary,
                 onClick = {
-                    navController.popBackStack()
+                    backStack.removeLastOrNull()
                 }
             )
         },
