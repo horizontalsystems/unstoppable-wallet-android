@@ -14,6 +14,10 @@ class SwapRecordManager(
     private val _recordsUpdatedFlow = MutableSharedFlow<Unit>(replay = 1)
     val recordsUpdatedFlow = _recordsUpdatedFlow.asSharedFlow()
 
+    init {
+        _recordsUpdatedFlow.tryEmit(Unit)
+    }
+
     fun save(record: SwapRecord) {
         swapRecordDao.insert(record)
         _recordsUpdatedFlow.tryEmit(Unit)
