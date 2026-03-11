@@ -778,6 +778,7 @@
     <!-- Swap History -->
     <string name="SwapHistory_Title">Swap History</string>
     <string name="SwapHistory_EmptyList">No swaps yet</string>
+    <string name="SwapInfo_Title">Swap Info</string>
 
     <!-- Swap Info -->
     <string name="SwapInfo_Provider">Provider</string>
