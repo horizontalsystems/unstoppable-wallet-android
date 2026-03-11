@@ -28,7 +28,7 @@ import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.entities.CurrencyValue
-import kotlinx.coroutines.Dispatchers
+import io.horizontalsystems.core.DispatcherProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
@@ -50,6 +50,7 @@ class TransactionInfoService(
     private val nftMetadataService: NftMetadataService,
     private val updateSwapProviderTransactionsStatusUseCase: UpdateSwapProviderTransactionsStatusUseCase,
     private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage,
+    private val dispatcherProvider: DispatcherProvider,
     transactionStatusUrl: Pair<String, String>?
 ) {
     private val balanceHiddenManager: IBalanceHiddenManager by inject(IBalanceHiddenManager::class.java)
@@ -282,7 +283,7 @@ class TransactionInfoService(
         handleRecordUpdate(newRecord)
     }
 
-    suspend fun start() = withContext(Dispatchers.IO) {
+    suspend fun start() = withContext(dispatcherProvider.io) {
         // Load swap transaction data asynchronously
         userSwapTransactionId?.let { id ->
             swapProviderTransactionsStorage.getTransaction(id)?.let { swapTransaction ->
@@ -393,7 +394,7 @@ class TransactionInfoService(
         }
     }
 
-    private suspend fun fetchRates() = withContext(Dispatchers.IO) {
+    private suspend fun fetchRates() = withContext(dispatcherProvider.io) {
         val originalUids = coinUidsForRates
         val uidToGeckoId = marketKit.coinGeckoIds(originalUids)
         val timestamp = transactionRecord.timestamp

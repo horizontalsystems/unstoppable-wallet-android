@@ -37,6 +37,7 @@ object TransactionInfoModule {
                 nftMetadataService = NftMetadataService(App.nftMetadataManager),
                 updateSwapProviderTransactionsStatusUseCase = getKoinInstance(),
                 swapProviderTransactionsStorage = getKoinInstance(),
+                dispatcherProvider = getKoinInstance(),
                 transactionStatusUrl = transactionItem.transactionStatusUrl
             )
             val factory = TransactionInfoViewItemFactory(

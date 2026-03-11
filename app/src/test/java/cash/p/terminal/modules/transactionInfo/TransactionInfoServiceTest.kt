@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.transactionInfo
 
 import cash.p.terminal.core.ITransactionsAdapter
+import cash.p.terminal.core.TestDispatcherProvider
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
@@ -13,6 +14,7 @@ import cash.p.terminal.network.changenow.domain.entity.TransactionStatusEnum
 import cash.p.terminal.network.swaprepository.SwapProvider
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
+import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.CurrencyManager
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -21,13 +23,14 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.reactivex.subjects.PublishSubject
 import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -45,7 +48,7 @@ import java.math.BigDecimal
 @OptIn(ExperimentalCoroutinesApi::class)
 class TransactionInfoServiceTest : KoinTest {
 
-    private val dispatcher = StandardTestDispatcher()
+    private val dispatcher = UnconfinedTestDispatcher()
 
     private val adapter = mockk<ITransactionsAdapter>(relaxed = true)
     private val marketKit = mockk<MarketKitWrapper>(relaxed = true)
@@ -59,6 +62,7 @@ class TransactionInfoServiceTest : KoinTest {
     private val balanceHiddenManager = mockk<IBalanceHiddenManager>(relaxUnitFun = true)
     private val pendingTransactionMatcher = mockk<PendingTransactionMatcher>(relaxed = true)
     private val amlStatusManager = mockk<AmlStatusManager>(relaxed = true)
+    private lateinit var dispatcherProvider: DispatcherProvider
 
     private val lastBlockSubject = PublishSubject.create<Unit>()
 
@@ -76,6 +80,7 @@ class TransactionInfoServiceTest : KoinTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(dispatcher)
+        dispatcherProvider = TestDispatcherProvider(dispatcher, CoroutineScope(dispatcher))
 
         every { transactionRecord.uid } returns "tx-uid-1"
         every { transactionRecord.transactionHash } returns "0xabc"
@@ -137,6 +142,7 @@ class TransactionInfoServiceTest : KoinTest {
         nftMetadataService = nftMetadataService,
         updateSwapProviderTransactionsStatusUseCase = updateSwapProviderTransactionsStatusUseCase,
         swapProviderTransactionsStorage = swapProviderTransactionsStorage,
+        dispatcherProvider = dispatcherProvider,
         transactionStatusUrl = null
     )
 
@@ -197,7 +203,6 @@ class TransactionInfoServiceTest : KoinTest {
         backgroundScope.launch { service.start() }
         advanceUntilIdle()
 
-        // Wait for start() to complete and emit first item
         service.transactionInfoItemFlow.first()
 
         coVerify(exactly = 1) {
