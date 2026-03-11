@@ -23,6 +23,7 @@ import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.NftMetadataService
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.modules.transactions.toUniversalStatus
+import cash.p.terminal.network.changenow.domain.entity.toStatus
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.CurrencyManager
@@ -74,7 +75,7 @@ class TransactionInfoService(
 
     var transactionInfoItem = TransactionInfoItem(
         record = transactionRecord,
-        externalStatus = TransactionStatus.Pending,
+        externalStatus = null,
         lastBlockInfo = adapter.lastBlockInfo,
         explorerData = TransactionInfoModule.ExplorerData(
             adapter.explorerTitle,
@@ -293,7 +294,8 @@ class TransactionInfoService(
                     swapCoinCodeIn = getCoinCode(swapTransaction.coinUidIn),
                     swapCoinUidOut = swapTransaction.coinUidOut,
                     swapCoinUidIn = swapTransaction.coinUidIn,
-                    swapProvider = swapTransaction.provider
+                    swapProvider = swapTransaction.provider,
+                    externalStatus = swapTransaction.status.toStatus().toUniversalStatus()
                 )
             }
         }
@@ -326,7 +328,15 @@ class TransactionInfoService(
         launch {
             adapter.lastBlockUpdatedFlowable.asFlow()
                 .collect {
-                    handleLastBlockUpdate(getUserSwapTransactionStatus())
+                    val currentStatus = transactionInfoItem.externalStatus
+                    val swapStatus = if (currentStatus is TransactionStatus.Completed ||
+                        currentStatus is TransactionStatus.Failed
+                    ) {
+                        currentStatus
+                    } else {
+                        getUserSwapTransactionStatus()
+                    }
+                    handleLastBlockUpdate(swapStatus)
                 }
         }
 
