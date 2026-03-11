@@ -178,6 +178,7 @@ class MainActivity : BaseActivity() {
                 showPinLockScreen = isLocked
                 pinLockComposeView.visibility = if (isLocked) VISIBLE else GONE
                 if (isLocked) {
+                    currentFocus?.hideKeyboard(this@MainActivity)
                     window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
                 } else {
                     window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
