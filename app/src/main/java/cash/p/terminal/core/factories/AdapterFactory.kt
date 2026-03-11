@@ -416,15 +416,12 @@ class AdapterFactory(
         val evmTransactionRepository: EvmTransactionRepository by inject(
             EvmTransactionRepository::class.java
         )
-        evmTransactionRepository.setup(
+        val evmKitWrapper = evmTransactionRepository.setup(
             account = source.account,
             blockchainType = blockchainType
         )
         val baseCoin = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
         val syncSource = evmSyncSourceManager.getSyncSource(blockchainType)
-
-        val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType)
-            .getEvmKitWrapper(source.account, blockchainType)
 
         return EvmTransactionsAdapter(
             evmKitWrapper = evmKitWrapper,

@@ -73,16 +73,18 @@ class ShowExtendedKeyViewModel(
     private val Blockchain.extendedKeyCoinType: ExtendedKeyCoinType
         get() = when (this) {
             Blockchain.Litecoin -> ExtendedKeyCoinType.Litecoin
+            Blockchain.Dogecoin -> ExtendedKeyCoinType.Dogecoin
+            Blockchain.Dash -> ExtendedKeyCoinType.Dash
             Blockchain.Bitcoin,
-            Blockchain.BitcoinCash,
-            Blockchain.Dogecoin,
-            Blockchain.Dash -> ExtendedKeyCoinType.Bitcoin
+            Blockchain.BitcoinCash -> ExtendedKeyCoinType.Bitcoin
         }
 
     private val ExtendedKeyCoinType.blockchain: Blockchain
         get() = when (this) {
             ExtendedKeyCoinType.Bitcoin -> Blockchain.Bitcoin
             ExtendedKeyCoinType.Litecoin -> Blockchain.Litecoin
+            ExtendedKeyCoinType.Dogecoin -> Blockchain.Dogecoin
+            ExtendedKeyCoinType.Dash -> Blockchain.Dash
         }
 
     enum class Blockchain(val title: String, val coinType: Int) {
