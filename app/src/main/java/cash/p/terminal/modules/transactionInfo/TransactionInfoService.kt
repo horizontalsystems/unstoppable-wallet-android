@@ -329,9 +329,7 @@ class TransactionInfoService(
             adapter.lastBlockUpdatedFlowable.asFlow()
                 .collect {
                     val currentStatus = transactionInfoItem.externalStatus
-                    val swapStatus = if (currentStatus is TransactionStatus.Completed ||
-                        currentStatus is TransactionStatus.Failed
-                    ) {
+                    val swapStatus = if (currentStatus is TransactionStatus.Completed) {
                         currentStatus
                     } else {
                         getUserSwapTransactionStatus()

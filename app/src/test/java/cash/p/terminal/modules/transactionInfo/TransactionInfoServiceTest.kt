@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -45,7 +45,7 @@ import java.math.BigDecimal
 @OptIn(ExperimentalCoroutinesApi::class)
 class TransactionInfoServiceTest : KoinTest {
 
-    private val dispatcher = UnconfinedTestDispatcher()
+    private val dispatcher = StandardTestDispatcher()
 
     private val adapter = mockk<ITransactionsAdapter>(relaxed = true)
     private val marketKit = mockk<MarketKitWrapper>(relaxed = true)
@@ -151,6 +151,41 @@ class TransactionInfoServiceTest : KoinTest {
     }
 
     @Test
+    fun start_completedSwap_firstEmissionHasCompletedStatus() = runTest(dispatcher) {
+        val swap = createFinishedSwapTransaction()
+        coEvery { swapProviderTransactionsStorage.getTransaction("cn-tx-1") } returns swap
+        coEvery {
+            updateSwapProviderTransactionsStatusUseCase.updateTransactionStatus("cn-tx-1")
+        } returns TransactionStatusEnum.FINISHED
+
+        val service = createService(userSwapTransactionId = "cn-tx-1")
+        backgroundScope.launch { service.start() }
+        advanceUntilIdle()
+
+        val item = service.transactionInfoItemFlow.first()
+        assertEquals(TransactionStatus.Completed, item.externalStatus)
+    }
+
+    @Test
+    fun start_completedSwap_firstEmissionIncludesSwapAmounts() = runTest(dispatcher) {
+        val swap = createFinishedSwapTransaction()
+        coEvery { swapProviderTransactionsStorage.getTransaction("cn-tx-1") } returns swap
+        coEvery {
+            updateSwapProviderTransactionsStatusUseCase.updateTransactionStatus("cn-tx-1")
+        } returns TransactionStatusEnum.FINISHED
+
+        val service = createService(userSwapTransactionId = "cn-tx-1")
+        backgroundScope.launch { service.start() }
+        advanceUntilIdle()
+
+        val item = service.transactionInfoItemFlow.first()
+        assertEquals(BigDecimal("0.1"), item.swapAmountIn)
+        assertEquals(BigDecimal("1.5"), item.swapAmountOut)
+        assertEquals(SwapProvider.CHANGENOW, item.swapProvider)
+        assertEquals(TransactionStatus.Completed, item.externalStatus)
+    }
+
+    @Test
     fun blockUpdate_completedSwap_doesNotRefetchStatus() = runTest(dispatcher) {
         val swap = createFinishedSwapTransaction()
         coEvery { swapProviderTransactionsStorage.getTransaction("cn-tx-1") } returns swap
@@ -161,6 +196,9 @@ class TransactionInfoServiceTest : KoinTest {
         val service = createService(userSwapTransactionId = "cn-tx-1")
         backgroundScope.launch { service.start() }
         advanceUntilIdle()
+
+        // Wait for start() to complete and emit first item
+        service.transactionInfoItemFlow.first()
 
         coVerify(exactly = 1) {
             updateSwapProviderTransactionsStatusUseCase.updateTransactionStatus("cn-tx-1")
@@ -194,11 +232,12 @@ class TransactionInfoServiceTest : KoinTest {
         backgroundScope.launch { service.start() }
         advanceUntilIdle()
 
+        service.transactionInfoItemFlow.first()
+
         coVerify(exactly = 1) {
             updateSwapProviderTransactionsStatusUseCase.updateTransactionStatus("cn-tx-1")
         }
 
-        // Simulate block update — should trigger re-fetch because status is not terminal
         lastBlockSubject.onNext(Unit)
         advanceUntilIdle()
 
@@ -208,21 +247,30 @@ class TransactionInfoServiceTest : KoinTest {
     }
 
     @Test
-    fun start_completedSwap_firstEmissionIncludesSwapAmounts() = runTest(dispatcher) {
-        val swap = createFinishedSwapTransaction()
+    fun blockUpdate_failedSwap_stillRefetchesStatus() = runTest(dispatcher) {
+        val swap = createFinishedSwapTransaction().copy(
+            status = TransactionStatusEnum.UNKNOWN.name.lowercase()
+        )
         coEvery { swapProviderTransactionsStorage.getTransaction("cn-tx-1") } returns swap
         coEvery {
             updateSwapProviderTransactionsStatusUseCase.updateTransactionStatus("cn-tx-1")
-        } returns TransactionStatusEnum.FINISHED
+        } returns TransactionStatusEnum.UNKNOWN
 
         val service = createService(userSwapTransactionId = "cn-tx-1")
         backgroundScope.launch { service.start() }
         advanceUntilIdle()
 
-        val item = service.transactionInfoItemFlow.first()
-        assertEquals(BigDecimal("0.1"), item.swapAmountIn)
-        assertEquals(BigDecimal("1.5"), item.swapAmountOut)
-        assertEquals(SwapProvider.CHANGENOW, item.swapProvider)
-        assertEquals(TransactionStatus.Completed, item.externalStatus)
+        service.transactionInfoItemFlow.first()
+
+        coVerify(exactly = 1) {
+            updateSwapProviderTransactionsStatusUseCase.updateTransactionStatus("cn-tx-1")
+        }
+
+        lastBlockSubject.onNext(Unit)
+        advanceUntilIdle()
+
+        coVerify(exactly = 2) {
+            updateSwapProviderTransactionsStatusUseCase.updateTransactionStatus("cn-tx-1")
+        }
     }
 }
