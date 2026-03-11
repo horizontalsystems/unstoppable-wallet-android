@@ -78,14 +78,14 @@ class MainViewModel(
                 MainNavigation.Market,
                 MainNavigation.Balance,
                 MainNavigation.Swap,
-                MainNavigation.Transactions,
+//                MainNavigation.Transactions,
                 MainNavigation.Settings,
             )
         } else {
             listOf(
                 MainNavigation.Balance,
                 MainNavigation.Swap,
-                MainNavigation.Transactions,
+//                MainNavigation.Transactions,
                 MainNavigation.Settings,
             )
         }
@@ -254,13 +254,13 @@ class MainViewModel(
             )
         }
 
-        MainNavigation.Transactions -> {
-            MainModule.NavigationViewItem(
-                mainNavItem = item,
-                selected = selected,
-                enabled = transactionsEnabled,
-            )
-        }
+//        MainNavigation.Transactions -> {
+//            MainModule.NavigationViewItem(
+//                mainNavItem = item,
+//                selected = selected,
+//                enabled = transactionsEnabled,
+//            )
+//        }
 
         MainNavigation.Settings -> {
             MainModule.NavigationViewItem(
