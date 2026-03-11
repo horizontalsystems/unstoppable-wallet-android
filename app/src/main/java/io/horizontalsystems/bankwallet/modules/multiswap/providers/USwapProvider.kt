@@ -240,7 +240,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         destinationAddress: String?,
         sourceAddress: String?,
         refundAddress: String?,
-        dry: Boolean
+        dry: Boolean,
+        amlCheckAddresses: List<String>? = null,
     ): UnstoppableAPI.Response.Quote.Route {
         val assetIn = assetsMap[tokenIn]!!
         val assetOut = assetsMap[tokenOut]!!
@@ -255,7 +256,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                 destinationAddress = destinationAddress,
                 sourceAddress = sourceAddress,
                 refundAddress = refundAddress,
-                dry = dry
+                dry = dry,
+                amlCheckAddresses = amlCheckAddresses,
             )
         )
 
@@ -270,10 +272,13 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         swapQuote: SwapQuote,
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         slippage: BigDecimal,
+        sourceAddresses: List<String>?,
     ): SwapFinalQuote {
         val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
         val sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn)
         val refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn)
+
+        val amlCheckAddresses = sourceAddresses?.ifEmpty { null }
 
         val bestRoute = quoteSwapBestRoute(
             tokenIn,
@@ -283,7 +288,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             destination,
             sourceAddress,
             refundAddress,
-            false
+            false,
+            amlCheckAddresses,
         )
 
         val amountOut = bestRoute.expectedBuyAmount ?: BigDecimal.ZERO
@@ -511,6 +517,7 @@ interface UnstoppableAPI {
             val sourceAddress: String?,
             val refundAddress: String?,
             val dry: Boolean,
+            val amlCheckAddresses: List<String>? = null,
         )
 
         data class Track(
@@ -556,6 +563,7 @@ interface UnstoppableAPI {
                 val txExtraAttribute: Map<String, String>?,
                 val estimatedTime: EstimatedTime?,
                 val providerSwapId: String?,
+                val passedAmlCheck: Boolean?,
             ) {
                 data class EstimatedTime(
                     val total: Long

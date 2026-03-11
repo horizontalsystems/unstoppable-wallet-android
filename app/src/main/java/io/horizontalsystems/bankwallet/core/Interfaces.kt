@@ -403,6 +403,7 @@ interface ISendBitcoinAdapter {
     val unspentOutputs: List<UnspentOutputInfo>
     val balanceData: BalanceData
     val blockchainType: BlockchainType
+    fun selectUnspentOutputs(value: BigDecimal, feeRate: Int): List<UnspentOutputInfo>
     fun availableBalance(
         feeRate: Int,
         address: String?,

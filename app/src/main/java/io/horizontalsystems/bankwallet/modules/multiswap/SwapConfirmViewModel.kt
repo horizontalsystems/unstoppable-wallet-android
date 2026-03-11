@@ -230,6 +230,7 @@ class SwapConfirmViewModel(
             try {
                 error = null
 
+                val sourceAddresses = SwapHelper.getSourceAddressesForToken(tokenIn, amountIn).ifEmpty { null }
                 val finalQuote = swapProvider.fetchFinalQuote(
                     tokenIn,
                     tokenOut,
@@ -237,7 +238,8 @@ class SwapConfirmViewModel(
                     sendTransactionSettings,
                     swapQuote,
                     recipient,
-                    slippage ?: IMultiSwapProvider.DEFAULT_SLIPPAGE
+                    slippage ?: IMultiSwapProvider.DEFAULT_SLIPPAGE,
+                    sourceAddresses,
                 )
 
                 ensureActive()
