@@ -200,6 +200,7 @@ abstract class BaseThorChainProvider(
         swapQuote: SwapQuote,
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         slippage: BigDecimal,
+        sourceAddresses: List<String>?,
     ): SwapFinalQuote {
         val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
         val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, destination, getRefundAddress(tokenIn), getFromAddress(tokenIn))

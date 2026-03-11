@@ -314,6 +314,10 @@ abstract class BitcoinBaseAdapter(
         return transaction?.let { transactionRecord(it) }
     }
 
+    override fun selectUnspentOutputs(value: BigDecimal, feeRate: Int): List<UnspentOutputInfo> {
+        return kit.selectUnspentOutputs(value.movePointRight(decimal).toLong(), feeRate)
+    }
+
     override fun availableBalance(
         feeRate: Int,
         address: String?,

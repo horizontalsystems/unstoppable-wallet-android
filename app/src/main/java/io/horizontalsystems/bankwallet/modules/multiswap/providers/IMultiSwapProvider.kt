@@ -48,7 +48,8 @@ interface IMultiSwapProvider {
         sendTransactionSettings: SendTransactionSettings?,
         swapQuote: SwapQuote,
         recipient: Address?,
-        slippage: BigDecimal
+        slippage: BigDecimal,
+        sourceAddresses: List<String>? = null,
     ): SwapFinalQuote
 
     companion object {

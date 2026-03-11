@@ -98,6 +98,7 @@ object OneInchProvider : IMultiSwapProvider {
         swapQuote: SwapQuote,
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         slippage: BigDecimal,
+        sourceAddresses: List<String>?,
     ): SwapFinalQuote {
         check(sendTransactionSettings is SendTransactionSettings.Evm)
         if (sendTransactionSettings.gasPriceInfo == null)

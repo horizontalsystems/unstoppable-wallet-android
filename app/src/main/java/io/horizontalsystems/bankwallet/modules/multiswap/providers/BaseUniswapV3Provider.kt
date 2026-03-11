@@ -54,6 +54,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
         swapQuote: SwapQuote,
         recipient: Address?,
         slippage: BigDecimal,
+        sourceAddresses: List<String>?,
     ): SwapFinalQuote {
         check(sendTransactionSettings is SendTransactionSettings.Evm)
 
