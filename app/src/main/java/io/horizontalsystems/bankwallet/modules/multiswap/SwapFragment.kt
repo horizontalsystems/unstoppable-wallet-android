@@ -173,8 +173,12 @@ fun SwapScreen(
         onClickNext = {
             val navigateToSwapConfirm = {
                 navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
-                    if (it.success && closeAfterSwap) {
-                        navController.popBackStack()
+                    if (it.success) {
+                        if (closeAfterSwap) {
+                            navController.popBackStack()
+                        } else {
+                            viewModel.onEnterAmount(null)
+                        }
                     }
                 }
                 stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
