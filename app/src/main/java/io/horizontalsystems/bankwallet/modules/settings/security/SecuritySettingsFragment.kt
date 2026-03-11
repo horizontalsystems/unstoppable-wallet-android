@@ -177,6 +177,13 @@ private fun SecurityCenterScreen(
                                 ) {
                                     securitySettingsViewModel.setActionEnabled(action, it)
                                 }
+                            },
+                            onClick = if (action == SecureSend) {
+                                {
+                                    navController.slideFromBottom(R.id.secureSendConfigDialog)
+                                }
+                            } else {
+                                null
                             }
                         )
                     }
