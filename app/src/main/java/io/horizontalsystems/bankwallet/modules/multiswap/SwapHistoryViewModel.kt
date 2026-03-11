@@ -19,7 +19,6 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Calendar
 import java.util.Date
-import java.util.concurrent.CopyOnWriteArrayList
 
 class SwapHistoryViewModel(
     private val swapRecordManager: SwapRecordManager,
@@ -27,15 +26,11 @@ class SwapHistoryViewModel(
     private val currencyManager: CurrencyManager,
     private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<SwapHistoryUiState>() {
-    private val viewItems = CopyOnWriteArrayList<SwapHistoryViewItem>()
+    @Volatile private var viewItems: List<SwapHistoryViewItem> = emptyList()
 
-    override fun createState() = SwapHistoryUiState(viewItems.toList().groupBy { it.formattedDate })
+    override fun createState() = SwapHistoryUiState(viewItems.groupBy { it.formattedDate })
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            loadItems()
-        }
-        // Reload whenever a record is saved or its status updated
         viewModelScope.launch(Dispatchers.IO) {
             swapRecordManager.recordsUpdatedFlow
                 .collect {
@@ -48,9 +43,7 @@ class SwapHistoryViewModel(
         val currency = currencyManager.baseCurrency
         val records = swapRecordManager.getAll()
 
-        // Emit items immediately without fiat amounts so the list appears instantly
-        viewItems.clear()
-        viewItems.addAll(records.map { record ->
+        viewItems = records.map { record ->
             SwapHistoryViewItem(
                 id = record.id,
                 tokenInImageUrl = record.tokenInCoinUid.coinIconUrl,
@@ -62,7 +55,7 @@ class SwapHistoryViewModel(
                 status = runCatching { SwapStatus.valueOf(record.status) }.getOrDefault(SwapStatus.Depositing),
                 formattedDate = formatDate(Date(record.timestamp)),
             )
-        })
+        }
         emitState()
 
         // Fetch prices lazily — each item updates independently as its price arrives
@@ -89,15 +82,18 @@ class SwapHistoryViewModel(
         currencySymbol: String,
         currencyDecimal: Int,
     ) {
-        val index = viewItems.indexOfFirst { it.id == recordId }
+        val current = viewItems
+        val index = current.indexOfFirst { it.id == recordId }
         if (index == -1) return
 
-        val item = viewItems[index]
+        val item = current[index]
         val fiatIn = formatFiat(amountIn, priceIn, currencySymbol, currencyDecimal)
         val fiatOut = amountOut?.let { formatFiat(it, priceOut, currencySymbol, currencyDecimal) }
 
         if (fiatIn != item.fiatAmountIn || fiatOut != item.fiatAmountOut) {
-            viewItems[index] = item.copy(fiatAmountIn = fiatIn, fiatAmountOut = fiatOut)
+            val updated = current.toMutableList()
+            updated[index] = item.copy(fiatAmountIn = fiatIn, fiatAmountOut = fiatOut)
+            viewItems = updated
             emitState()
         }
     }
