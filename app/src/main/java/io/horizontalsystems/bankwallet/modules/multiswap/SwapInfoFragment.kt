@@ -92,7 +92,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
     val leah = ComposeAppTheme.colors.leah
 
     HSScaffold(
-        title = stringResource(R.string.SwapHistory_Title),
+        title = stringResource(R.string.SwapInfo_Title),
         onBack = navController::popBackStack,
     ) {
         Column(
