@@ -240,7 +240,7 @@ fun Context.findActivity(): Activity? = when (this) {
 
 val BlockchainType.blockTime : Long?
     get() = when (this) {
-        BlockchainType.Ethereum -> 15
+        BlockchainType.Ethereum -> 12
         BlockchainType.BinanceSmartChain,
         BlockchainType.Tron,
             -> 3
@@ -256,7 +256,23 @@ val BlockchainType.blockTime : Long?
 
         BlockchainType.Gnosis,
         BlockchainType.Stellar,
+        BlockchainType.Ton,
             -> 5
+
+        BlockchainType.Bitcoin,
+        BlockchainType.BitcoinCash,
+        BlockchainType.ECash,
+            -> 600
+
+        BlockchainType.Dash,
+        BlockchainType.Litecoin,
+            -> 150
+
+        BlockchainType.Zcash -> 75
+
+        BlockchainType.Monero -> 120
+
+        BlockchainType.ArbitrumOne -> 1
 
         else -> null
     }
