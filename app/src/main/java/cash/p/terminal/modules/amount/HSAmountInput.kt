@@ -71,6 +71,7 @@ fun HSAmountInput(
     inputType: AmountInputType,
     rate: CurrencyValue?,
     amountUnique: AmountUnique? = null,
+    percentageAmountUnique: AmountUnique? = null,
     pasteEnabled: Boolean = true
 ) {
     val viewModel = viewModel<AmountInputViewModel2>(
@@ -115,6 +116,21 @@ fun HSAmountInput(
 
             val text = viewModel.getEnterAmount()
             textState = textState.copy(text = text, selection = TextRange(text.length))
+
+            onValueChange.invoke(viewModel.coinAmount)
+        }
+    }
+
+    LaunchedEffect(percentageAmountUnique) {
+        percentageAmountUnique?.let {
+            if (it.amount.compareTo(BigDecimal.ZERO) == 0) {
+                textState = textState.copy(text = "")
+                viewModel.onEnterAmount("")
+            } else {
+                viewModel.setCoinAmountExternal(it.amount)
+                val text = viewModel.getEnterAmount()
+                textState = textState.copy(text = text, selection = TextRange(text.length))
+            }
 
             onValueChange.invoke(viewModel.coinAmount)
         }

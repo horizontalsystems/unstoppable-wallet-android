@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.send.bitcoin
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +13,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -30,6 +34,7 @@ import cash.p.terminal.core.composablePopup
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.address.AddressParserModule
 import cash.p.terminal.modules.address.AddressParserViewModel
+import cash.p.terminal.modules.address.AmountUnique
 import cash.p.terminal.modules.address.HSAddressInput
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
@@ -37,6 +42,7 @@ import cash.p.terminal.modules.fee.FeeInfoSection
 import cash.p.terminal.modules.memo.HSMemoInput
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendFragment.ProceedActionData
+import cash.p.terminal.modules.send.SendSuggestionsBar
 import cash.p.terminal.modules.send.address.AddressCheckerControl
 import cash.p.terminal.modules.send.address.SmartContractCheckSection
 import cash.p.terminal.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
@@ -45,6 +51,7 @@ import cash.p.terminal.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScre
 import cash.p.terminal.modules.send.bitcoin.utxoexpert.UtxoExpertModeScreen
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui.compose.components.SuggestionsBarHeight
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
@@ -151,6 +158,8 @@ private fun SendBitcoinScreen(
 
     ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
+        var percentageAmountUnique by remember { mutableStateOf<AmountUnique?>(null) }
+        var coinAmount by remember { mutableStateOf<BigDecimal?>(null) }
 
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
@@ -190,108 +199,127 @@ private fun SendBitcoinScreen(
                 }
             )
 
-            Column(modifier = Modifier.imePadding().verticalScroll(rememberScrollState())) {
-                if (uiState.showAddressInput) {
-                    HSAddressInput(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        initial = prefilledData?.address?.let { Address(it) },
-                        tokenQuery = wallet.token.tokenQuery,
-                        coinCode = wallet.coin.code,
-                        error = uiState.addressError,
-                        textPreprocessor = paymentAddressViewModel,
-                        navController = fragmentNavController
-                    ) {
-                        viewModel.onEnterAddress(it)
-                    }
-                    Spacer(modifier = Modifier.height(12.dp))
-                }
-
-                HSAmountInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    focusRequester = focusRequester,
-                    availableBalance = availableBalance ?: BigDecimal.ZERO,
-                    caution = amountCaution,
-                    coinCode = wallet.coin.code,
-                    coinDecimal = viewModel.coinMaxAllowedDecimals,
-                    fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                    onClickHint = {
-                        amountInputModeViewModel.onToggleInputType()
-                    },
-                    onValueChange = {
-                        viewModel.onEnterAmount(it)
-                    },
-                    inputType = amountInputType,
-                    rate = rate,
-                    amountUnique = amountUnique
-                )
-
-                if (uiState.isMemoAvailable) {
-                    VSpacer(12.dp)
-                    HSMemoInput(maxLength = 120) {
-                        viewModel.onEnterMemo(it)
-                    }
-                }
-
-                uiState.utxoData?.let { utxoData ->
-                    Spacer(modifier = Modifier.height(12.dp))
-                    CellUniversalLawrenceSection(listOf {
-                        UtxoCell(
-                            utxoData = utxoData,
-                            onClick = { composeNavController.navigate(UtxoExpertModePage) }
-                        )
-                    })
-                }
-
-                VSpacer(height = 12.dp)
-                FeeInfoSection(
-                    tokenIn = wallet.token,
-                    displayBalance = viewModel.displayBalance,
-                    balanceHidden = viewModel.balanceHidden,
-                    feeToken = viewModel.feeToken,
-                    feeCoinBalance = viewModel.feeCoinBalance,
-                    feePrimary = viewModel.formatFeePrimary(fee),
-                    feeSecondary = viewModel.formatFeeSecondary(fee, rate),
-                    insufficientFeeBalance = viewModel.isInsufficientFeeBalance(fee),
-                    onBalanceClicked = viewModel::toggleHideBalance,
-                )
-
-                feeRateCaution?.let {
-                    FeeRateCaution(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
-                        feeRateCaution = feeRateCaution
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(12.dp))
-                SectionUniversalLawrence {
-                    SwitchWithText(
-                        text = stringResource(R.string.SettingsAddressChecker_RecipientCheck),
-                        checked = addressCheckerControl.uiState.addressCheckByBaseEnabled,
-                        onCheckedChange = addressCheckerControl::onCheckBaseAddressClick
-                    )
-                }
-                SmartContractCheckSection(
-                    token = wallet.token,
-                    navController = fragmentNavController,
-                    addressCheckerControl = addressCheckerControl,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-
-                ButtonPrimaryYellow(
+            Box(modifier = Modifier.weight(1f)) {
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 24.dp),
-                    title = stringResource(R.string.Send_DialogProceed),
-                    onClick = {
-                        onNextClick(
-                            ProceedActionData(
-                                address = uiState.address?.hex,
-                                wallet = wallet,
-                                type = SendConfirmationFragment.Type.Bitcoin,
+                        .imePadding()
+                        .verticalScroll(rememberScrollState())
+                        .padding(bottom = SuggestionsBarHeight)
+                ) {
+                    if (uiState.showAddressInput) {
+                        HSAddressInput(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            initial = prefilledData?.address?.let { Address(it) },
+                            tokenQuery = wallet.token.tokenQuery,
+                            coinCode = wallet.coin.code,
+                            error = uiState.addressError,
+                            textPreprocessor = paymentAddressViewModel,
+                            navController = fragmentNavController
+                        ) {
+                            viewModel.onEnterAddress(it)
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+
+                    HSAmountInput(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        focusRequester = focusRequester,
+                        availableBalance = availableBalance ?: BigDecimal.ZERO,
+                        caution = amountCaution,
+                        coinCode = wallet.coin.code,
+                        coinDecimal = viewModel.coinMaxAllowedDecimals,
+                        fiatDecimal = viewModel.fiatMaxAllowedDecimals,
+                        onClickHint = {
+                            amountInputModeViewModel.onToggleInputType()
+                        },
+                        onValueChange = {
+                            coinAmount = it
+                            viewModel.onEnterAmount(it)
+                        },
+                        inputType = amountInputType,
+                        rate = rate,
+                        amountUnique = amountUnique,
+                        percentageAmountUnique = percentageAmountUnique,
+                    )
+
+                    if (uiState.isMemoAvailable) {
+                        VSpacer(12.dp)
+                        HSMemoInput(maxLength = 120) {
+                            viewModel.onEnterMemo(it)
+                        }
+                    }
+
+                    uiState.utxoData?.let { utxoData ->
+                        Spacer(modifier = Modifier.height(12.dp))
+                        CellUniversalLawrenceSection(listOf {
+                            UtxoCell(
+                                utxoData = utxoData,
+                                onClick = { composeNavController.navigate(UtxoExpertModePage) }
                             )
+                        })
+                    }
+
+                    VSpacer(height = 12.dp)
+                    FeeInfoSection(
+                        tokenIn = wallet.token,
+                        displayBalance = viewModel.displayBalance,
+                        balanceHidden = viewModel.balanceHidden,
+                        feeToken = viewModel.feeToken,
+                        feeCoinBalance = viewModel.feeCoinBalance,
+                        feePrimary = viewModel.formatFeePrimary(fee),
+                        feeSecondary = viewModel.formatFeeSecondary(fee, rate),
+                        insufficientFeeBalance = viewModel.isInsufficientFeeBalance(fee),
+                        onBalanceClicked = viewModel::toggleHideBalance,
+                    )
+
+                    feeRateCaution?.let {
+                        FeeRateCaution(
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                            feeRateCaution = feeRateCaution
                         )
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+                    SectionUniversalLawrence {
+                        SwitchWithText(
+                            text = stringResource(R.string.SettingsAddressChecker_RecipientCheck),
+                            checked = addressCheckerControl.uiState.addressCheckByBaseEnabled,
+                            onCheckedChange = addressCheckerControl::onCheckBaseAddressClick
+                        )
+                    }
+                    SmartContractCheckSection(
+                        token = wallet.token,
+                        navController = fragmentNavController,
+                        addressCheckerControl = addressCheckerControl,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 24.dp),
+                        title = stringResource(R.string.Send_DialogProceed),
+                        onClick = {
+                            onNextClick(
+                                ProceedActionData(
+                                    address = uiState.address?.hex,
+                                    wallet = wallet,
+                                    type = SendConfirmationFragment.Type.Bitcoin,
+                                )
+                            )
+                        },
+                        enabled = proceedEnabled
+                    )
+                }
+                SendSuggestionsBar(
+                    availableBalance = availableBalance ?: BigDecimal.ZERO,
+                    coinDecimal = viewModel.coinMaxAllowedDecimals,
+                    coinAmount = coinAmount,
+                    onAmountChange = { amount ->
+                        coinAmount = amount
+                        viewModel.onEnterAmount(amount)
                     },
-                    enabled = proceedEnabled
+                    onPercentageAmountUnique = { percentageAmountUnique = it },
                 )
             }
         }
