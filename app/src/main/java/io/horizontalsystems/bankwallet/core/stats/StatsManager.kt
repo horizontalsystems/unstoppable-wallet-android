@@ -294,7 +294,7 @@ val MainModule.MainNavigation.statTab: StatTab
         MainModule.MainNavigation.Market -> StatTab.Markets
         MainModule.MainNavigation.Balance -> StatTab.Balance
         MainModule.MainNavigation.Swap -> StatTab.Swap
-        MainModule.MainNavigation.Transactions -> StatTab.Transactions
+//        MainModule.MainNavigation.Transactions -> StatTab.Transactions
         MainModule.MainNavigation.Settings -> StatTab.Settings
     }
 

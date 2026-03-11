@@ -205,10 +205,10 @@ private fun MainScreen(
                         closeAfterSwap = false
                     )
 
-                    MainNavigation.Transactions -> TransactionsScreen(
-                        fragmentNavController,
-                        transactionsViewModel
-                    )
+//                    MainNavigation.Transactions -> TransactionsScreen(
+//                        fragmentNavController,
+//                        transactionsViewModel
+//                    )
 
                     MainNavigation.Settings -> SettingsScreen(fragmentNavController)
                 }
