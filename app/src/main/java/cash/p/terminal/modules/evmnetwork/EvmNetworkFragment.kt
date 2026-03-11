@@ -19,7 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
