@@ -1,10 +1,15 @@
 ## 🚀 Version 0.52.1 Update
-_Release date: March 10, 2026_
+_Release date: March 12, 2026_
 
 ### ✨ Improvements
 
 - **Improved user experience when sending TRX / JETTON tokens**
   Added information about insufficient token balance during the send process.
+
+- **Added additional amount selection buttons for send and swap**
+  Quick selection buttons `25%`, `50%`, `75%`, and `100%` are now available for more convenient amount input.
+
+- **Improved exchange status display mechanism**
 
 - **Increased synchronization speed for Bitcoin (BIP44)**
 
@@ -17,6 +22,15 @@ _Release date: March 10, 2026_
 ---
 
 ### 🐛 Fixes
+
+- **Fixed the position of blockchain sync percentage information on the asset screen**
+
+- **Fixed PIN input being covered by the keyboard when the app is locked**
+  If the keyboard was active at the moment of locking, it is now hidden automatically and no longer covers the PIN input field.
+
+- **Fixed crash when switching between wallets: TooManyRequestsException in ConnectivityManager**
+  When switching between wallets repeatedly, the app could crash with `ConnectivityManager$TooManyRequestsException`.
+  The cause was exceeding Android's system limit on the number of registered `NetworkCallback` instances per application.
 
 - **Fixed crashes related to Monero wallet operations**
 
