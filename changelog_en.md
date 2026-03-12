@@ -19,8 +19,6 @@ _Release date: March 12, 2026_
 - **Reduced delay when updating transaction history**
   Improved the mechanism for refreshing transaction history after switching between wallets.
 
----
-
 ### 🐛 Fixes
 
 - **Fixed the position of blockchain sync percentage information on the asset screen**
