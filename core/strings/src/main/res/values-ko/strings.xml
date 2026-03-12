@@ -533,7 +533,7 @@
     <string name="Swap_Allowance">허용량</string>
     <string name="Swap_Price">금액</string>
     <string name="Swap_AvailableBalance">사용 가능한 잔액</string>
-    <string name="swap_insufficient_fee_balance">잔액이 부족합니다</string>
+    <string name="swap_insufficient_fee_balance">현재 %s 잔액이 거래 수수료를 포함하여 이 거래를 처리하는 데 필요한 금액보다 부족합니다.</string>
     <string name="swap_balance_for_fees">수수료용 잔액</string>
     <string name="fee">수수료</string>
     <string name="estimated_fee">예상 수수료</string>

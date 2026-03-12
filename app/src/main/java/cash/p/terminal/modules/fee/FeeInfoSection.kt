@@ -70,9 +70,10 @@ fun FeeInfoSection(
     }
 
     if (insufficientFeeBalance) {
+        val feeTokenCode = feeToken?.coin?.code ?: tokenIn?.coin?.code ?: ""
         VSpacer(height = 8.dp)
         caption_lucian(
-            text = stringResource(R.string.swap_insufficient_fee_balance),
+            text = stringResource(R.string.swap_insufficient_fee_balance, feeTokenCode),
             modifier = Modifier.padding(horizontal = 32.dp)
         )
     }

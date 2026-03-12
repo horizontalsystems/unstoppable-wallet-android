@@ -539,7 +539,7 @@
     <string name="Swap_Allowance">Разрешение</string>
     <string name="Swap_Price">Цена</string>
     <string name="Swap_AvailableBalance">Доступный баланс</string>
-    <string name="swap_insufficient_fee_balance">Недостаточно средств на балансе</string>
+    <string name="swap_insufficient_fee_balance">Текущий баланс %s ниже суммы, необходимой для проведения этой транзакции, включая комиссию.</string>
     <string name="swap_balance_for_fees">Баланс для комиссий</string>
     <string name="fee">Комиссия</string>
     <string name="estimated_fee">Примерная комиссия</string>

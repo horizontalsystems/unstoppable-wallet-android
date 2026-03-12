@@ -533,7 +533,7 @@
     <string name="Swap_Allowance">کمک هزینه</string>
     <string name="Swap_Price">قیمت</string>
     <string name="Swap_AvailableBalance">موجودی در دسترس</string>
-    <string name="swap_insufficient_fee_balance">موجودی ناکافی در حساب</string>
+    <string name="swap_insufficient_fee_balance">موجودی فعلی %s کمتر از مبلغ مورد نیاز برای پردازش این تراکنش، شامل کارمزد تراکنش، است.</string>
     <string name="swap_balance_for_fees">موجودی برای کارمزدها</string>
     <string name="fee">کارمزد</string>
     <string name="estimated_fee">کارمزد تخمینی</string>

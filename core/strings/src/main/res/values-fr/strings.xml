@@ -529,7 +529,7 @@
     <string name="Swap_Allowance">Allocation</string>
     <string name="Swap_Price">Prix</string>
     <string name="Swap_AvailableBalance">Solde disponible</string>
-    <string name="swap_insufficient_fee_balance">Fonds insuffisants dans le solde</string>
+    <string name="swap_insufficient_fee_balance">Le solde actuel de %s est inférieur au montant requis pour traiter cette transaction, y compris les frais.</string>
     <string name="swap_balance_for_fees">Solde pour les frais</string>
     <string name="fee">Frais</string>
     <string name="estimated_fee">Frais estimés</string>

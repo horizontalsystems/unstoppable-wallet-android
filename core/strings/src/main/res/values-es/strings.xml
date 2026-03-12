@@ -528,7 +528,7 @@
     <string name="Swap_Allowance">Permiso de acceso</string>
     <string name="Swap_Price">Precio</string>
     <string name="Swap_AvailableBalance">Saldo disponible</string>
-    <string name="swap_insufficient_fee_balance">Fondos insuficientes en el saldo</string>
+    <string name="swap_insufficient_fee_balance">El saldo actual de %s es inferior al monto requerido para procesar esta transacción, incluida la comisión.</string>
     <string name="swap_balance_for_fees">Saldo para comisiones</string>
     <string name="fee">Comisión</string>
     <string name="estimated_fee">Tarifa estimada</string>
