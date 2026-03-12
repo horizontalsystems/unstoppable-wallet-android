@@ -52,6 +52,12 @@ allprojects {
                 includeGroup("com.github.piratecash")
             }
         }
+        maven {
+            url = uri("https://piratecash.github.io/ethereum-kit-android")
+            content {
+                includeGroup("com.github.piratecash")
+            }
+        }
         maven { url "https://jitpack.io" }
     }
 }

@@ -80,10 +80,11 @@ internal class EvmTransactionRepository(
     fun setup(
         account: Account,
         blockchainType: BlockchainType
-    ) {
+    ): EvmKitWrapper {
         _blockchainType = blockchainType
-        evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType)
+        return evmBlockchainManager.getEvmKitManager(blockchainType)
             .getEvmKitWrapper(account, blockchainType)
+            .also { evmKitWrapper = it }
     }
 
     fun buildErc20Kit(
