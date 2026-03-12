@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.multiswap.settings
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -37,7 +38,7 @@ fun SwapSettingsScreen(navController: NavController, swapViewModel: SwapViewMode
             )
         },
         bottomBar = {
-            ButtonsGroupWithShade {
+            ButtonsGroupWithShade(modifier = Modifier.navigationBarsPadding()) {
                 ButtonPrimaryYellow(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
