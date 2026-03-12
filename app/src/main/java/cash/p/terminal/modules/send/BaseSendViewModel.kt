@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.isNative
 import cash.p.terminal.entities.CoinValue
 import io.horizontalsystems.core.entities.CurrencyValue
@@ -135,11 +134,12 @@ abstract class BaseSendViewModel<T>(
         // run after base init. yield() suspends so the constructor finishes first.
         viewModelScope.launch {
             yield()
-            val walletAdapter = _adapterManager.getBalanceAdapterForWallet(wallet)
-            if (!wallet.token.type.isNative && walletAdapter is INativeBalanceProvider) {
-                feeCoinBalance = walletAdapter.nativeBalanceData.total
-                walletAdapter.nativeBalanceUpdatedFlow.collect {
-                    feeCoinBalance = walletAdapter.nativeBalanceData.total
+            val ft = feeToken
+            if (!wallet.token.type.isNative && ft != null) {
+                feeCoinBalance = _adapterManager.getAdjustedBalanceDataForToken(ft)?.available
+                val adapter = resolveFeeBalanceAdapter()
+                adapter?.balanceUpdatedFlow?.collect {
+                    feeCoinBalance = _adapterManager.getAdjustedBalanceDataForToken(ft)?.available
                 }
                 return@launch
             }

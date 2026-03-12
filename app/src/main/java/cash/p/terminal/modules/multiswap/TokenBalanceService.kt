@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.multiswap
 
-import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.ServiceState
 import cash.p.terminal.core.isNative
 import cash.p.terminal.wallet.AdapterState
@@ -116,11 +115,9 @@ class TokenBalanceService(
                     adapterManager.getAdapterForToken(it) as? IBalanceAdapter
                 }
                 fee = feeTokenAdapter?.fee?.value
-                feeCoinBalance = if (currentAdapter is INativeBalanceProvider) {
-                    currentAdapter.nativeBalanceData.total
-                } else {
-                    feeTokenAdapter?.balanceData?.total
-                }
+                feeCoinBalance = feeToken?.let {
+                    adapterManager.getAdjustedBalanceDataForToken(it)?.available
+                } ?: feeTokenAdapter?.balanceData?.total
             }
         } else {
             feeToken = null
