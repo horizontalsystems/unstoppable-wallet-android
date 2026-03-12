@@ -143,7 +143,7 @@ fun SwapConfirmScreen(
                     },
                 )
                 VSpacer(height = 12.dp)
-            } else if (!uiState.validQuote) {
+            } else if (!uiState.validQuote && uiState.feeCaution == null) {
                 ButtonPrimaryDefault(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Refresh),
