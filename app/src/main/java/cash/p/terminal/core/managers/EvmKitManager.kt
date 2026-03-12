@@ -13,7 +13,6 @@ import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountOrigin
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.IHardwarePublicKeyStorage
-import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.entities.BlockchainType
@@ -142,10 +141,9 @@ class EvmKitManager(
             is AccountType.HardwareCard -> {
                 val publicKey = runBlocking {
                     requireNotNull(
-                        hardwarePublicKeyStorage.getKey(
+                        hardwarePublicKeyStorage.getKeyByBlockchain(
                             account.id,
-                            blockchainType,
-                            tokenType = TokenType.Native
+                            blockchainType
                         )
                     )
                 }

@@ -53,6 +53,11 @@ class WalletStorageTest {
             tokenType: TokenType
         ) = null
 
+        override suspend fun getKeyByBlockchain(
+            accountId: String,
+            blockchainType: BlockchainType
+        ) = null
+
         override suspend fun getAllPublicKeys(accountId: String) = emptyList<cash.p.terminal.wallet.entities.HardwarePublicKey>()
     }
 

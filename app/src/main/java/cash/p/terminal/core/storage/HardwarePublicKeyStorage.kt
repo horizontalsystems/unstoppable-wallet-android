@@ -29,6 +29,14 @@ class HardwarePublicKeyStorage(private val appDatabase: AppDatabase) : IHardware
             )
         }
 
+    override suspend fun getKeyByBlockchain(accountId: String, blockchainType: BlockchainType) =
+        withContext(Dispatchers.IO) {
+            hardwarePublicKeyDao.getPublicKeyByBlockchain(
+                accountId = accountId,
+                blockchainType = blockchainType.uid
+            )
+        }
+
     override suspend fun getAllPublicKeys(accountId: String): List<HardwarePublicKey> =
         withContext(Dispatchers.IO) {
             hardwarePublicKeyDao.getAllPublicKeys(
