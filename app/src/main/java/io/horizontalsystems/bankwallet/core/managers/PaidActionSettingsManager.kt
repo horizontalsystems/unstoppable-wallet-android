@@ -17,28 +17,28 @@ class PaidActionSettingsManager(
         SwapProtection,
     )
 
-    val disabledActionsFlow: StateFlow<Set<String>> = localStorage.disabledPaidActionsFlow
+    val enabledActionsFlow: StateFlow<Set<String>> = localStorage.enabledPaidActionsFlow
 
     fun isActionEnabled(action: IPaidAction): Boolean {
-        return action.key !in localStorage.disabledPaidActions
+        return action.key in localStorage.enabledPaidActions
     }
 
     fun setActionEnabled(action: IPaidAction, enabled: Boolean) {
-        val current = localStorage.disabledPaidActions.toMutableSet()
+        val current = localStorage.enabledPaidActions.toMutableSet()
 
         if (enabled) {
-            current.remove(action.key)
-        } else {
             current.add(action.key)
+        } else {
+            current.remove(action.key)
         }
 
-        localStorage.disabledPaidActions = current
+        localStorage.enabledPaidActions = current
     }
 
     /**
      * Returns true if action is:
      * 1. Allowed by subscription (user has premium)
-     * 2. Enabled by user (not in disabled list)
+     * 2. Enabled by user (in enabled list)
      */
     fun isActionActive(action: IPaidAction): Boolean {
         return UserSubscriptionManager.isActionAllowed(action) && isActionEnabled(action)

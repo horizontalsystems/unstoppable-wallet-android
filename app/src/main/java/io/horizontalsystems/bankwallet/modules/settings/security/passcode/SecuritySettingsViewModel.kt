@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.security.passcode
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.core.IPinComponent
@@ -37,7 +38,7 @@ class SecuritySettingsViewModel(
         }
 
         viewModelScope.launch {
-            paidActionSettingsManager.disabledActionsFlow.collect {
+            paidActionSettingsManager.enabledActionsFlow.collect {
                 refreshDefenseSystemActions()
             }
         }
@@ -49,26 +50,15 @@ class SecuritySettingsViewModel(
         }
 
         viewModelScope.launch {
-            localStorage.phishingDetectionEnabledFlow.drop(1).collect {
-                refreshDefenseSystemActions()
-            }
-        }
-        viewModelScope.launch {
-            localStorage.blacklistDetectionEnabledFlow.drop(1).collect {
-                refreshDefenseSystemActions()
-            }
-        }
-        viewModelScope.launch {
-            localStorage.sanctionsDetectionEnabledFlow.drop(1).collect {
+            localStorage.enabledPaidActionsFlow.drop(1).collect {
                 refreshDefenseSystemActions()
             }
         }
     }
 
     private fun refreshDefenseSystemActions() {
-        val anyDetectionEnabled = localStorage.phishingDetectionEnabled
-            || localStorage.blacklistDetectionEnabled
-            || localStorage.sanctionsDetectionEnabled
+        val enabledPaidActions = localStorage.enabledPaidActions
+        val anyDetectionEnabled = AddressCheckType.entries.any { it.name in enabledPaidActions }
 
         defenseSystemActions = paidActionSettingsManager.toggleableActions.map { action ->
             val enabled = when (action) {

@@ -142,14 +142,6 @@ interface ILocalStorage {
     var statsLastSyncTime: Long
     var uiStatsEnabled: Boolean?
     var recipientAddressCheckEnabled: Boolean
-    var phishingDetectionEnabled: Boolean
-    var blacklistDetectionEnabled: Boolean
-    var sanctionsDetectionEnabled: Boolean
-
-    val phishingDetectionEnabledFlow: StateFlow<Boolean>
-    val blacklistDetectionEnabledFlow: StateFlow<Boolean>
-    val sanctionsDetectionEnabledFlow: StateFlow<Boolean>
-
     val utxoExpertModeEnabledFlow: StateFlow<Boolean>
     val marketSignalsStateChangedFlow: SharedFlow<Boolean>
 
@@ -158,8 +150,10 @@ interface ILocalStorage {
     var donateUsLastShownDate: Long?
     var lastMigrationVersion: Int?
 
-    var disabledPaidActions: Set<String>
-    val disabledPaidActionsFlow: StateFlow<Set<String>>
+    var enabledPaidActions: Set<String>
+    val enabledPaidActionsFlow: StateFlow<Set<String>>
+
+    fun migrateEnabledPaidActionsFromDisabled()
 
     fun clear()
 }
