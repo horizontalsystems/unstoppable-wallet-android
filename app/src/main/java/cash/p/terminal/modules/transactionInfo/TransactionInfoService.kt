@@ -23,11 +23,12 @@ import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.NftMetadataService
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.modules.transactions.toUniversalStatus
+import cash.p.terminal.network.changenow.domain.entity.toStatus
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.entities.CurrencyValue
-import kotlinx.coroutines.Dispatchers
+import io.horizontalsystems.core.DispatcherProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
@@ -49,6 +50,7 @@ class TransactionInfoService(
     private val nftMetadataService: NftMetadataService,
     private val updateSwapProviderTransactionsStatusUseCase: UpdateSwapProviderTransactionsStatusUseCase,
     private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage,
+    private val dispatcherProvider: DispatcherProvider,
     transactionStatusUrl: Pair<String, String>?
 ) {
     private val balanceHiddenManager: IBalanceHiddenManager by inject(IBalanceHiddenManager::class.java)
@@ -74,7 +76,7 @@ class TransactionInfoService(
 
     var transactionInfoItem = TransactionInfoItem(
         record = transactionRecord,
-        externalStatus = TransactionStatus.Pending,
+        externalStatus = null,
         lastBlockInfo = adapter.lastBlockInfo,
         explorerData = TransactionInfoModule.ExplorerData(
             adapter.explorerTitle,
@@ -281,7 +283,7 @@ class TransactionInfoService(
         handleRecordUpdate(newRecord)
     }
 
-    suspend fun start() = withContext(Dispatchers.IO) {
+    suspend fun start() = withContext(dispatcherProvider.io) {
         // Load swap transaction data asynchronously
         userSwapTransactionId?.let { id ->
             swapProviderTransactionsStorage.getTransaction(id)?.let { swapTransaction ->
@@ -293,7 +295,8 @@ class TransactionInfoService(
                     swapCoinCodeIn = getCoinCode(swapTransaction.coinUidIn),
                     swapCoinUidOut = swapTransaction.coinUidOut,
                     swapCoinUidIn = swapTransaction.coinUidIn,
-                    swapProvider = swapTransaction.provider
+                    swapProvider = swapTransaction.provider,
+                    externalStatus = swapTransaction.status.toStatus().toUniversalStatus()
                 )
             }
         }
@@ -326,7 +329,13 @@ class TransactionInfoService(
         launch {
             adapter.lastBlockUpdatedFlowable.asFlow()
                 .collect {
-                    handleLastBlockUpdate(getUserSwapTransactionStatus())
+                    val currentStatus = transactionInfoItem.externalStatus
+                    val swapStatus = if (currentStatus is TransactionStatus.Completed) {
+                        currentStatus
+                    } else {
+                        getUserSwapTransactionStatus()
+                    }
+                    handleLastBlockUpdate(swapStatus)
                 }
         }
 
@@ -385,7 +394,7 @@ class TransactionInfoService(
         }
     }
 
-    private suspend fun fetchRates() = withContext(Dispatchers.IO) {
+    private suspend fun fetchRates() = withContext(dispatcherProvider.io) {
         val originalUids = coinUidsForRates
         val uidToGeckoId = marketKit.coinGeckoIds(originalUids)
         val timestamp = transactionRecord.timestamp
