@@ -450,9 +450,6 @@ dependencies {
     implementation libs.coil.gif
     implementation 'com.getkeepsafe.relinker:relinker:1.4.5'
 
-    // When using a AppCompat theme
-    implementation libs.accompanist.appcompat.theme
-    implementation libs.accompanist.flowlayout
     implementation libs.accompanist.permissions
 
     // UI Tests
