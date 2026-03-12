@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IMarketStorage
+import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.AppVersion
 import io.horizontalsystems.bankwallet.entities.LaunchPage
@@ -676,10 +677,18 @@ class LocalStorageManager(
         if (preferences.contains(ENABLED_PAID_ACTIONS)) return
         val disabled = preferences.getStringSet("disabled_paid_actions", emptySet()) ?: emptySet()
         val enabled = mutableSetOf<String>()
-        for (key in listOf("ScamProtection", "SwapProtection")) {
-            if (key !in disabled) enabled.add(key)
+        if ("ScamProtection" !in disabled) enabled.add("ScamProtection")
+        if ("SwapProtection" !in disabled) enabled.add("SwapProtection")
+        if ("SecureSend" in disabled) {
+            // User explicitly disabled Secure Send: all checkers OFF
+        } else {
+            // User explicitly enabled Secure Send: all checkers ON
+            enabled.addAll(listOf(
+                AddressCheckType.Phishing.name,
+                AddressCheckType.Blacklist.name,
+                AddressCheckType.Sanction.name,
+            ))
         }
-        enabled.add("Phishing")
         enabledPaidActions = enabled
     }
 }
