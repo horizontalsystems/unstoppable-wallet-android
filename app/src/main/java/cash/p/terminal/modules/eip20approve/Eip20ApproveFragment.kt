@@ -30,7 +30,6 @@ import cash.p.terminal.ui_compose.components.SectionUniversalLawrence
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.headline1_leah
 import cash.p.terminal.ui_compose.components.subhead2_leah
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
 import kotlinx.parcelize.Parcelize
@@ -40,7 +39,9 @@ class Eip20ApproveFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        Eip20ApproveScreen(navController, navController.requireInput())
+        withInput<Input>(navController) { input ->
+            Eip20ApproveScreen(navController, input)
+        }
     }
 
     @Parcelize

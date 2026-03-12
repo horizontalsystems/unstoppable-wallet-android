@@ -25,7 +25,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonSecondaryDefault
@@ -41,13 +40,9 @@ class BackupConfirmKeyFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = try {
-            navController.requireInput<Account>()
-        } catch (e: Exception) {
-            navController.navigateUp()
-            return
+        withInput<Account>(navController) { input ->
+            RecoveryPhraseVerifyScreen(navController, input)
         }
-        RecoveryPhraseVerifyScreen(navController, input)
     }
 
 }

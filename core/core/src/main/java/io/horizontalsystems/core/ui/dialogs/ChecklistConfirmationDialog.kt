@@ -49,7 +49,17 @@ class ChecklistConfirmationDialog : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 val navController = findNavController()
-                val input = navController.requireInput<ChecklistConfirmationInput>()
+                val input = remember {
+                    try {
+                        navController.requireInput<ChecklistConfirmationInput>()
+                    } catch (_: Exception) {
+                        null
+                    }
+                }
+                if (input == null) {
+                    LaunchedEffect(Unit) { navController.navigateUp() }
+                    return@setContent
+                }
 
                 ComposeAppTheme {
                     ChecklistConfirmationScreen(

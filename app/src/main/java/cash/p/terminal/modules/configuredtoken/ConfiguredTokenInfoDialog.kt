@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -56,7 +58,18 @@ class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 val navController = findNavController()
-                ConfiguredTokenInfo(navController, navController.requireInput<Token>())
+                val token = remember {
+                    try {
+                        navController.requireInput<Token>()
+                    } catch (_: Exception) {
+                        null
+                    }
+                }
+                if (token == null) {
+                    LaunchedEffect(Unit) { navController.navigateUp() }
+                    return@setContent
+                }
+                ConfiguredTokenInfo(navController, token)
             }
         }
     }

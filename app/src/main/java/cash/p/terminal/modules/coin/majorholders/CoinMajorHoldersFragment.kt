@@ -26,7 +26,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.MajorHolderItem
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -59,13 +58,13 @@ class CoinMajorHoldersFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-
-        CoinMajorHoldersScreen(
-            input.coinUid,
-            input.blockchain,
-            navController,
-        )
+        withInput<Input>(navController) { input ->
+            CoinMajorHoldersScreen(
+                input.coinUid,
+                input.blockchain,
+                navController,
+            )
+        }
     }
 
     @Parcelize

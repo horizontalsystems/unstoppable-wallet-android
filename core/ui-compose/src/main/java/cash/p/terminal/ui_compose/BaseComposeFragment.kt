@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -87,10 +88,17 @@ abstract class BaseComposeFragment(
         navController: NavController,
         content: @Composable (T) -> Unit
     ) {
-        val input = try {
-            navController.requireInput<T>()
-        } catch (e: Exception) {
-            navController.navigateUp()
+        val input = remember {
+            try {
+                navController.requireInput<T>()
+            } catch (_: Exception) {
+                null
+            }
+        }
+        if (input == null) {
+            LaunchedEffect(Unit) {
+                navController.navigateUp()
+            }
             return
         }
         content(input)

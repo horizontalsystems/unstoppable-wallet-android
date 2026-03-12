@@ -9,7 +9,6 @@ import cash.p.terminal.core.managers.StellarKitManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import io.horizontalsystems.core.entities.BlockchainType
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -19,15 +18,16 @@ class BlockchainStatusFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val blockchainType = navController.requireInput<BlockchainType>()
-        val provider = rememberStatusProvider(blockchainType)
-        val viewModel = koinViewModel<BlockchainStatusViewModel> {
-            parametersOf(provider)
+        withInput<BlockchainType>(navController) { blockchainType ->
+            val provider = rememberStatusProvider(blockchainType)
+            val viewModel = koinViewModel<BlockchainStatusViewModel> {
+                parametersOf(provider)
+            }
+            BlockchainStatusScreen(
+                viewModel = viewModel,
+                onBack = navController::navigateUp
+            )
         }
-        BlockchainStatusScreen(
-            viewModel = viewModel,
-            onBack = navController::navigateUp
-        )
     }
 }
 

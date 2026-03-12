@@ -15,7 +15,6 @@ import cash.p.terminal.modules.manageaccount.generalprivatekey.GeneralPrivateKey
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.tangem.ui.accesscoderecovery.AccessCodeRecoveryDialog
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.navigation.slideFromRightForResult
 import cash.p.terminal.ui_compose.components.HudHelper
 import cash.p.terminal.wallet.IAccountManager
@@ -27,13 +26,13 @@ class ManageAccountFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = try {
-            navController.requireInput<Input>()
-        } catch (e: Exception) {
-            navController.navigateUp()
-            return
+        withInput<Input>(navController) { input ->
+            ManageAccountContent(navController, input)
         }
+    }
 
+    @Composable
+    private fun ManageAccountContent(navController: NavController, input: Input) {
         val accountManager: IAccountManager by inject(IAccountManager::class.java)
         val account = remember { accountManager.account(input.accountId) }
         if (account == null) {

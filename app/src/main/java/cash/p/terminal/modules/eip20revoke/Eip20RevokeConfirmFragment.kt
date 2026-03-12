@@ -30,7 +30,6 @@ import cash.p.terminal.ui_compose.components.HudHelper
 import cash.p.terminal.ui_compose.components.SectionUniversalLawrence
 import cash.p.terminal.ui_compose.components.SnackbarDuration
 import cash.p.terminal.ui_compose.components.VSpacer
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.chartview.cell.BoxBorderedTop
@@ -42,7 +41,9 @@ import java.math.BigDecimal
 class Eip20RevokeConfirmFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        Eip20RevokeScreen(navController, navController.requireInput())
+        withInput<Input>(navController) { input ->
+            Eip20RevokeScreen(navController, input)
+        }
     }
 
     @Parcelize

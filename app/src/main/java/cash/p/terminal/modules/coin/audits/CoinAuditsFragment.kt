@@ -22,7 +22,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.CellFooter
 import cash.p.terminal.ui_compose.components.CellMultilineLawrenceSection
@@ -39,19 +38,20 @@ class CoinAuditsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-        val viewModel = viewModel<CoinAuditsViewModel>(
-            factory = CoinAuditsModule.Factory(input.audits)
-        )
-        CoinAuditsScreen(
-            viewModel = viewModel,
-            onPressBack = {
-                navController.popBackStack()
-            },
-            onClickReportUrl = {
-                LinkHelper.openLinkInAppBrowser(requireContext(), it)
-            }
-        )
+        withInput<Input>(navController) { input ->
+            val viewModel = viewModel<CoinAuditsViewModel>(
+                factory = CoinAuditsModule.Factory(input.audits)
+            )
+            CoinAuditsScreen(
+                viewModel = viewModel,
+                onPressBack = {
+                    navController.popBackStack()
+                },
+                onClickReportUrl = {
+                    LinkHelper.openLinkInAppBrowser(requireContext(), it)
+                }
+            )
+        }
     }
 
     @Parcelize

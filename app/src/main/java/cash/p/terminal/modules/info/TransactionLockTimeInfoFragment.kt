@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.modules.info.ui.InfoHeader
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
@@ -28,10 +27,12 @@ class TransactionLockTimeInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        InfoScreen(
-            navController.requireInput<Input>().lockTime,
-            navController
-        )
+        withInput<Input>(navController) { input ->
+            InfoScreen(
+                input.lockTime,
+                navController
+            )
+        }
     }
 
     @Parcelize

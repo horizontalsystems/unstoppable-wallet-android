@@ -12,7 +12,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.entities.nft.EvmNftRecord
 import cash.p.terminal.entities.nft.NftKey
 import cash.p.terminal.entities.nft.NftUid
@@ -35,7 +34,14 @@ class SendNftFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val factory = getFactory(navController.requireInput<Input>().nftUid)
+        withInput<Input>(navController) { input ->
+            SendNftContent(navController, input.nftUid)
+        }
+    }
+
+    @Composable
+    private fun SendNftContent(navController: NavController, nftUid: String) {
+        val factory = getFactory(nftUid)
 
         when (factory?.evmNftRecord?.nftType) {
             NftType.Eip721 -> {

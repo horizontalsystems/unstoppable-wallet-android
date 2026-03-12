@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
@@ -49,9 +49,20 @@ internal class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 val navController = findNavController()
+                val account = remember {
+                    try {
+                        navController.requireInput<Account>()
+                    } catch (_: Exception) {
+                        null
+                    }
+                }
+                if (account == null) {
+                    LaunchedEffect(Unit) { navController.navigateUp() }
+                    return@setContent
+                }
 
                 ComposeAppTheme {
-                    UnlinkAccountScreen(navController, navController.requireInput())
+                    UnlinkAccountScreen(navController, account)
                 }
             }
         }

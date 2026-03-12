@@ -70,7 +70,7 @@ import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_jacob
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
-import cash.p.terminal.ui_compose.requireInput
+
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.entities.Blockchain
@@ -82,10 +82,9 @@ class EvmNetworkFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        EvmNetworkNavHost(
-            navController,
-            navController.requireInput()
-        )
+        withInput<Blockchain>(navController) { blockchain ->
+            EvmNetworkNavHost(navController, blockchain)
+        }
     }
 
 }

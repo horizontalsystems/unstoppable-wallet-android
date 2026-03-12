@@ -13,7 +13,6 @@ import cash.p.terminal.modules.blockchainstatus.BlockchainStatusScreen
 import cash.p.terminal.modules.blockchainstatus.BlockchainStatusViewModel
 import cash.p.terminal.modules.blockchainstatus.BtcBlockchainStatusProvider
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import io.horizontalsystems.core.entities.Blockchain
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -25,8 +24,9 @@ class BtcBlockchainSettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val blockchain = navController.requireInput<Blockchain>()
-        BtcBlockchainSettingsNavHost(blockchain, navController)
+        withInput<Blockchain>(navController) { blockchain ->
+            BtcBlockchainSettingsNavHost(blockchain, navController)
+        }
     }
 }
 

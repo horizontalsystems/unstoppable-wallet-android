@@ -69,7 +69,6 @@ import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_lucian
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.delay
@@ -81,14 +80,15 @@ class RestoreLocalFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-        RestoreLocalNavHost(
-            input.backupFilePath,
-            input.fileName,
-            navController,
-            input.popOffOnSuccess,
-            input.popOffInclusive
-        ) { activity?.let { MainModule.startAsNewTask(it) } }
+        withInput<Input>(navController) { input ->
+            RestoreLocalNavHost(
+                input.backupFilePath,
+                input.fileName,
+                navController,
+                input.popOffOnSuccess,
+                input.popOffInclusive
+            ) { activity?.let { MainModule.startAsNewTask(it) } }
+        }
     }
 
     @Parcelize

@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.modules.info.ui.InfoHeader
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.strings.helpers.TranslatableString
@@ -43,12 +42,13 @@ class TransactionDoubleSpendInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-        InfoScreen(
-            txHash = input.transactionHash,
-            conflictingTxHash = input.conflictingTransactionHash,
-            onBackClick = { navController.popBackStack() }
-        )
+        withInput<Input>(navController) { input ->
+            InfoScreen(
+                txHash = input.transactionHash,
+                conflictingTxHash = input.conflictingTransactionHash,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
     }
 
     @Parcelize
