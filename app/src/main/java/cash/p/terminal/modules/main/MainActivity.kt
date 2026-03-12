@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -178,9 +179,13 @@ class MainActivity : BaseActivity() {
                 showPinLockScreen = isLocked
                 pinLockComposeView.visibility = if (isLocked) VISIBLE else GONE
                 if (isLocked) {
-                    window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                    val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(window.decorView.windowToken, 0)
+                    window.addFlags(WindowManager.LayoutParams.FLAG_SECURE or
+                            WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
                 } else {
-                    window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE or
+                            WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
                 }
             }
         }
