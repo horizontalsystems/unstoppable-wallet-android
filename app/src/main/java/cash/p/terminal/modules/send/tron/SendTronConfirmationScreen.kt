@@ -224,6 +224,7 @@ fun SendTronConfirmationScreen(
                     insufficientFeeBalance = sendViewModel.isInsufficientFeeBalance(fee),
                     onBalanceClicked = sendViewModel::toggleHideBalance,
                     feeTitle = stringResource(R.string.FeeInfo_TronFee_Title),
+                    feeWarningData = sendViewModel.inlineFeeWarningData,
                 )
 
                 val additionalItems = buildList<@Composable () -> Unit> {

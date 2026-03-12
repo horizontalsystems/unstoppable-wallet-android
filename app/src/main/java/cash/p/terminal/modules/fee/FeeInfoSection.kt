@@ -10,8 +10,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.entities.CoinValue
+import cash.p.terminal.modules.send.fee.NetworkFeeWarningData
 import cash.p.terminal.ui.compose.components.CardsSwapInfo
 import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.caption_jacob
 import cash.p.terminal.ui_compose.components.caption_lucian
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_leah
@@ -32,8 +34,13 @@ fun FeeInfoSection(
     onBalanceClicked: () -> Unit,
     feeTitle: String? = null,
     feeLoading: Boolean = false,
+    feeWarningData: NetworkFeeWarningData? = null,
 ) {
     val isNativeCoinSwap = feeCoinBalance == null
+    val feeWarningText = feeWarningData?.let {
+        stringResource(R.string.fee_warning_low_balance, it.balanceThreshold)
+    }
+    val showWarning = feeWarningText != null && !insufficientFeeBalance
 
     CardsSwapInfo {
         AvailableBalanceField(
@@ -52,7 +59,7 @@ fun FeeInfoSection(
         modifier = Modifier.padding(horizontal = 32.dp, vertical = 4.dp)
     )
 
-    CardsSwapInfo(isError = insufficientFeeBalance) {
+    CardsSwapInfo(isError = insufficientFeeBalance, isWarning = showWarning) {
         FeeCoinBalanceField(
             feeToken = feeToken,
             feeCoinBalance = feeCoinBalance,
@@ -70,9 +77,16 @@ fun FeeInfoSection(
     }
 
     if (insufficientFeeBalance) {
+        val feeTokenCode = feeToken?.coin?.code ?: tokenIn?.coin?.code ?: ""
         VSpacer(height = 8.dp)
         caption_lucian(
-            text = stringResource(R.string.swap_insufficient_fee_balance),
+            text = stringResource(R.string.swap_insufficient_fee_balance, feeTokenCode),
+            modifier = Modifier.padding(horizontal = 32.dp)
+        )
+    } else if (feeWarningText != null) {
+        VSpacer(height = 8.dp)
+        caption_jacob(
+            text = feeWarningText,
             modifier = Modifier.padding(horizontal = 32.dp)
         )
     }

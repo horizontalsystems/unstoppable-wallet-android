@@ -37,6 +37,7 @@ import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.fee.FeeInfoSection
+import cash.p.terminal.modules.send.fee.NetworkFeeWarningData
 import cash.p.terminal.modules.hodler.HSHodler
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
@@ -94,6 +95,7 @@ fun SendConfirmationScreen(
     insufficientFeeBalance: Boolean = false,
     balanceHidden: Boolean = false,
     onBalanceClicked: () -> Unit = {},
+    feeWarningData: NetworkFeeWarningData? = null,
     windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
 ) {
     val closeUntilDestId = if (sendEntryPointDestId == 0) {
@@ -248,6 +250,7 @@ fun SendConfirmationScreen(
                     feeSecondary = feeSecondary,
                     insufficientFeeBalance = insufficientFeeBalance,
                     onBalanceClicked = onBalanceClicked,
+                    feeWarningData = feeWarningData,
                 )
 
                 if (!memo.isNullOrBlank()) {

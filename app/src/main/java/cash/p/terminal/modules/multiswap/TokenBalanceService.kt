@@ -91,7 +91,8 @@ class TokenBalanceService(
     }
 
     private fun refreshAvailableBalance() {
-        val currentAdapter = token?.let { adapterManager.getAdapterForToken(it) as? IBalanceAdapter }
+        val currentAdapter =
+            token?.let { adapterManager.getAdapterForToken(it) as? IBalanceAdapter }
         adapter = currentAdapter
         val adapterAvailableBalance = currentAdapter?.maxSpendableBalance
         val adjusted = token?.let { adapterManager.getAdjustedBalanceDataForToken(it)?.available }
@@ -116,11 +117,10 @@ class TokenBalanceService(
                     adapterManager.getAdapterForToken(it) as? IBalanceAdapter
                 }
                 fee = feeTokenAdapter?.fee?.value
-                feeCoinBalance = if (currentAdapter is INativeBalanceProvider) {
-                    currentAdapter.nativeBalanceData.total
-                } else {
-                    feeTokenAdapter?.balanceData?.total
-                }
+                feeCoinBalance = feeToken?.let {
+                    adapterManager.getAdjustedBalanceDataForToken(it)?.available
+                } ?: (currentAdapter as? INativeBalanceProvider)?.nativeBalanceData?.total
+                        ?: feeTokenAdapter?.balanceData?.total
             }
         } else {
             feeToken = null

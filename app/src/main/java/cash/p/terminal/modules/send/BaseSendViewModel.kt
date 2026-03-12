@@ -67,15 +67,22 @@ abstract class BaseSendViewModel<T>(
     protected open fun getEstimatedFee(): BigDecimal? = null
     protected open fun onSendRequested() {}
 
-    fun onClickSendWithWarningCheck() {
-        val ft = feeToken ?: run { onSendRequested(); return }
-        val data = buildNetworkFeeWarningData(
+    private fun currentFeeWarningData(): NetworkFeeWarningData? {
+        val ft = feeToken ?: return null
+        return buildNetworkFeeWarningData(
             blockchainType = wallet.token.blockchainType,
             tokenType = wallet.token.type,
             feeTokenBalance = feeCoinBalance,
             estimatedFee = getEstimatedFee(),
             feeToken = ft,
         )
+    }
+
+    val inlineFeeWarningData: NetworkFeeWarningData?
+        get() = currentFeeWarningData()
+
+    fun onClickSendWithWarningCheck() {
+        val data = currentFeeWarningData()
         if (data != null) {
             feeWarningData = data
             return
@@ -95,6 +102,12 @@ abstract class BaseSendViewModel<T>(
     private fun resolveFeeBalanceAdapter(): IBalanceAdapter? {
         if (wallet.token.type.isNative) return null
         return feeToken?.let { _adapterManager.getAdapterForToken<IBalanceAdapter>(it) }
+    }
+
+    private fun resolveFeeCoinBalance(ft: Token): BigDecimal? {
+        return _adapterManager.getAdjustedBalanceDataForToken(ft)?.available
+            ?: (_adapterManager.getBalanceAdapterForWallet(wallet) as? INativeBalanceProvider)
+                ?.nativeBalanceData?.total
     }
 
     fun isInsufficientFeeBalance(fee: BigDecimal?): Boolean {
@@ -128,11 +141,15 @@ abstract class BaseSendViewModel<T>(
         // run after base init. yield() suspends so the constructor finishes first.
         viewModelScope.launch {
             yield()
-            val walletAdapter = _adapterManager.getBalanceAdapterForWallet(wallet)
-            if (!wallet.token.type.isNative && walletAdapter is INativeBalanceProvider) {
-                feeCoinBalance = walletAdapter.nativeBalanceData.total
-                walletAdapter.nativeBalanceUpdatedFlow.collect {
-                    feeCoinBalance = walletAdapter.nativeBalanceData.total
+            val ft = feeToken
+            if (!wallet.token.type.isNative && ft != null) {
+                feeCoinBalance = resolveFeeCoinBalance(ft)
+                val feeAdapter = resolveFeeBalanceAdapter()
+                val updateFlow = feeAdapter?.balanceUpdatedFlow
+                    ?: (_adapterManager.getBalanceAdapterForWallet(wallet) as? INativeBalanceProvider)
+                        ?.nativeBalanceUpdatedFlow
+                updateFlow?.collect {
+                    feeCoinBalance = resolveFeeCoinBalance(ft)
                 }
                 return@launch
             }
