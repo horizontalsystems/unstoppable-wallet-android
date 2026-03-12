@@ -69,8 +69,6 @@ import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryJacobCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ErrorScreenWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -93,6 +91,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.core.helpers.HudHelper
 import java.math.BigDecimal
 
@@ -377,7 +377,6 @@ private fun ActionButtonsRow(
         ReceiveActionButton(
             icon = R.drawable.ic_copy_24px,
             buttonText = stringResource(R.string.Button_Copy),
-            emphasized = true,
             onClick = {
                 TextHelper.copyText(uri)
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
@@ -461,23 +460,16 @@ private fun AdditionalDataSection(
 private fun ReceiveActionButton(
     icon: Int,
     buttonText: String,
-    emphasized: Boolean = false,
     onClick: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        if (emphasized) {
-            ButtonPrimaryJacobCircle(
-                icon = icon,
-                onClick = onClick,
-            )
-        } else {
-            ButtonPrimaryCircle(
-                icon = icon,
-                onClick = onClick,
-            )
-        }
+        HSIconButton(
+            variant = ButtonVariant.Secondary,
+            onClick = onClick,
+            icon = painterResource(icon),
+        )
         caption_grey(
             modifier = Modifier.padding(top = 8.dp),
             text = buttonText,
