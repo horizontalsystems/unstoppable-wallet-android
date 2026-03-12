@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.multiswap
 
+import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.ServiceState
 import cash.p.terminal.core.isNative
 import cash.p.terminal.wallet.AdapterState
@@ -90,7 +91,8 @@ class TokenBalanceService(
     }
 
     private fun refreshAvailableBalance() {
-        val currentAdapter = token?.let { adapterManager.getAdapterForToken(it) as? IBalanceAdapter }
+        val currentAdapter =
+            token?.let { adapterManager.getAdapterForToken(it) as? IBalanceAdapter }
         adapter = currentAdapter
         val adapterAvailableBalance = currentAdapter?.maxSpendableBalance
         val adjusted = token?.let { adapterManager.getAdjustedBalanceDataForToken(it)?.available }
@@ -117,7 +119,8 @@ class TokenBalanceService(
                 fee = feeTokenAdapter?.fee?.value
                 feeCoinBalance = feeToken?.let {
                     adapterManager.getAdjustedBalanceDataForToken(it)?.available
-                } ?: feeTokenAdapter?.balanceData?.total
+                } ?: (currentAdapter as? INativeBalanceProvider)?.nativeBalanceData?.total
+                        ?: feeTokenAdapter?.balanceData?.total
             }
         } else {
             feeToken = null

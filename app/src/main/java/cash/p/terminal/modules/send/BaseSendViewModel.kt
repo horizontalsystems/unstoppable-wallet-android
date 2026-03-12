@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
+import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.isNative
 import cash.p.terminal.entities.CoinValue
 import io.horizontalsystems.core.entities.CurrencyValue
@@ -103,6 +104,12 @@ abstract class BaseSendViewModel<T>(
         return feeToken?.let { _adapterManager.getAdapterForToken<IBalanceAdapter>(it) }
     }
 
+    private fun resolveFeeCoinBalance(ft: Token): BigDecimal? {
+        return _adapterManager.getAdjustedBalanceDataForToken(ft)?.available
+            ?: (_adapterManager.getBalanceAdapterForWallet(wallet) as? INativeBalanceProvider)
+                ?.nativeBalanceData?.total
+    }
+
     fun isInsufficientFeeBalance(fee: BigDecimal?): Boolean {
         if (wallet.token.type.isNative) return false
         val currentFee = fee ?: return false
@@ -136,10 +143,13 @@ abstract class BaseSendViewModel<T>(
             yield()
             val ft = feeToken
             if (!wallet.token.type.isNative && ft != null) {
-                feeCoinBalance = _adapterManager.getAdjustedBalanceDataForToken(ft)?.available
-                val adapter = resolveFeeBalanceAdapter()
-                adapter?.balanceUpdatedFlow?.collect {
-                    feeCoinBalance = _adapterManager.getAdjustedBalanceDataForToken(ft)?.available
+                feeCoinBalance = resolveFeeCoinBalance(ft)
+                val feeAdapter = resolveFeeBalanceAdapter()
+                val updateFlow = feeAdapter?.balanceUpdatedFlow
+                    ?: (_adapterManager.getBalanceAdapterForWallet(wallet) as? INativeBalanceProvider)
+                        ?.nativeBalanceUpdatedFlow
+                updateFlow?.collect {
+                    feeCoinBalance = resolveFeeCoinBalance(ft)
                 }
                 return@launch
             }
