@@ -50,8 +50,10 @@ fun HSBadgeOutline(
     color: Color,
 ) {
     Row(
-        modifier = modifier
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
             .border(1.dp, color, RoundedCornerShape(8.dp))
+            .then(modifier)
             .padding(start = 6.dp, end = 6.dp, top = 1.dp, bottom = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
