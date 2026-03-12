@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.multiswap
+package cash.p.terminal.ui.compose.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,11 +8,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.components.BoxTyler44
 import cash.p.terminal.ui_compose.components.ButtonSecondary
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+
+val SuggestionsBarHeight: Dp = 44.dp
 
 @Composable
 fun SuggestionsBar(

@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalView
@@ -18,6 +21,7 @@ import cash.p.terminal.R
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.address.AddressParserModule
 import cash.p.terminal.modules.address.AddressParserViewModel
+import cash.p.terminal.modules.address.AmountUnique
 import cash.p.terminal.modules.address.HSAddressInput
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
@@ -25,6 +29,7 @@ import cash.p.terminal.modules.fee.FeeInfoSection
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendFragment.ProceedActionData
 import cash.p.terminal.modules.send.SendScreen
+import cash.p.terminal.modules.send.SendSuggestionsBar
 import cash.p.terminal.modules.send.address.AddressCheckerControl
 import cash.p.terminal.modules.send.address.SmartContractCheckSection
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
@@ -33,6 +38,7 @@ import cash.p.terminal.ui_compose.components.HudHelper
 import cash.p.terminal.ui_compose.components.SectionUniversalLawrence
 import cash.p.terminal.ui_compose.components.SwitchWithText
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import java.math.BigDecimal
 
 @Composable
 fun SendTronScreen(
@@ -61,6 +67,8 @@ fun SendTronScreen(
 
     ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
+        var percentageAmountUnique by remember { mutableStateOf<AmountUnique?>(null) }
+        var coinAmount by remember { mutableStateOf<BigDecimal?>(null) }
 
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
@@ -83,6 +91,18 @@ fun SendTronScreen(
                 } else {
                     HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)
                 }
+            },
+            bottomOverlay = {
+                SendSuggestionsBar(
+                    availableBalance = availableBalance,
+                    coinDecimal = viewModel.coinMaxAllowedDecimals,
+                    coinAmount = coinAmount,
+                    onAmountChange = { amount ->
+                        coinAmount = amount
+                        viewModel.onEnterAmount(amount)
+                    },
+                    onPercentageAmountUnique = { percentageAmountUnique = it },
+                )
             }
         ) {
 
@@ -113,11 +133,13 @@ fun SendTronScreen(
                     amountInputModeViewModel.onToggleInputType()
                 },
                 onValueChange = {
+                    coinAmount = it
                     viewModel.onEnterAmount(it)
                 },
                 inputType = amountInputType,
                 rate = viewModel.coinRate,
-                amountUnique = amountUnique
+                amountUnique = amountUnique,
+                percentageAmountUnique = percentageAmountUnique,
             )
 
             Spacer(modifier = Modifier.height(12.dp))

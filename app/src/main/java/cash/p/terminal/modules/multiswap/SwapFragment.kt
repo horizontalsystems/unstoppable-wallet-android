@@ -20,7 +20,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.material.Text
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -62,6 +62,7 @@ import cash.p.terminal.ui.compose.Keyboard
 import cash.p.terminal.ui.compose.components.CardsSwapInfo
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HSRow
+import cash.p.terminal.ui.compose.components.SuggestionsBar
 import cash.p.terminal.ui.compose.observeKeyboardState
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar

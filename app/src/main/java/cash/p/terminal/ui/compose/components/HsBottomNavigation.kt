@@ -10,14 +10,11 @@ import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProvideTextStyle
-import androidx.compose.material.primarySurface
 import androidx.compose.material.ripple
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
@@ -70,7 +67,7 @@ import kotlin.math.roundToInt
 @Composable
 fun HsBottomNavigation(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
     contentColor: Color = contentColorFor(backgroundColor),
     elevation: Dp = BottomNavigationDefaults.Elevation,
     windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
@@ -139,11 +136,11 @@ fun RowScope.HsBottomNavigationItem(
     alwaysShowLabel: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     selectedContentColor: Color = LocalContentColor.current,
-    unselectedContentColor: Color = selectedContentColor.copy(alpha = ContentAlpha.medium)
+    unselectedContentColor: Color = selectedContentColor.copy(alpha = 0.74f)
 ) {
     val styledLabel: @Composable (() -> Unit)? = label?.let {
         @Composable {
-            val style = MaterialTheme.typography.caption.copy(textAlign = TextAlign.Center)
+            val style = MaterialTheme.typography.labelSmall.copy(textAlign = TextAlign.Center)
             ProvideTextStyle(style, content = label)
         }
     }
@@ -222,8 +219,7 @@ private fun BottomNavigationTransition(
     val color = lerp(inactiveColor, activeColor, animationProgress)
 
     CompositionLocalProvider(
-        LocalContentColor provides color.copy(alpha = 1f),
-        LocalContentAlpha provides color.alpha,
+        LocalContentColor provides color,
     ) {
         content(animationProgress)
     }
