@@ -538,6 +538,7 @@
     <string name="Swap_Price">Ціна</string>
     <string name="Swap_AvailableBalance">Доступний баланс</string>
     <string name="swap_insufficient_fee_balance">Поточний баланс %s нижчий за суму, необхідну для проведення цієї транзакції, включаючи комісію.</string>
+    <string name="fee_warning_low_balance">Енергія нижча за необхідний рівень. Комісія може становити до %s.</string>
     <string name="swap_balance_for_fees">Баланс для комісій</string>
     <string name="fee">Комісія</string>
     <string name="estimated_fee">Орієнтовна комісія</string>

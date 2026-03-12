@@ -8,6 +8,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.navigation.NavController
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
+import androidx.compose.ui.res.stringResource
+import cash.p.terminal.R
 import cash.p.terminal.modules.send.SendConfirmationScreen
 import cash.p.terminal.modules.send.fee.NetworkFeeWarningOverlay
 
@@ -59,6 +61,9 @@ fun SendTonConfirmationScreen(
         insufficientFeeBalance = sendViewModel.isInsufficientFeeBalance(confirmationData.fee),
         balanceHidden = sendViewModel.balanceHidden,
         onBalanceClicked = sendViewModel::toggleHideBalance,
+        feeWarningText = sendViewModel.inlineFeeWarningData?.let {
+            stringResource(R.string.fee_warning_low_balance, it.balanceThreshold)
+        },
     )
 
     NetworkFeeWarningOverlay(

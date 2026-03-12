@@ -734,6 +734,7 @@ Proceed only if you\'re sure.</string>
     <string name="Swap_Price">Price</string>
     <string name="Swap_AvailableBalance">Available Balance</string>
     <string name="swap_insufficient_fee_balance">The current %s balance is lower than the amount required to process this transaction, including the transaction fee.</string>
+    <string name="fee_warning_low_balance">Energy is lower than necessary. You might pay up to %s in fees.</string>
     <string name="swap_balance_for_fees">Balance for Fees</string>
     <string name="Swap_PriceImpact">Price Impact</string>
     <string name="Swap_PriceImpactTooHigh">P.CASH has disabled swap action for this trade because you\'re getting an extremely unfavorable price. This is due to extremely low liquidity.\nIf you still want to swap please use %s website instead.</string>

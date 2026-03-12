@@ -528,6 +528,7 @@
     <string name="Swap_Price">Preis</string>
     <string name="Swap_AvailableBalance">Verfügbares Guthaben</string>
     <string name="swap_insufficient_fee_balance">Das aktuelle %s-Guthaben ist niedriger als der für diese Transaktion erforderliche Betrag einschließlich der Transaktionsgebühr.</string>
+    <string name="fee_warning_low_balance">Die Energie ist niedriger als erforderlich. Die Gebühren könnten bis zu %s betragen.</string>
     <string name="swap_balance_for_fees">Guthaben für Gebühren</string>
     <string name="fee">Gebühr</string>
     <string name="estimated_fee">Geschätzte Gebühr</string>

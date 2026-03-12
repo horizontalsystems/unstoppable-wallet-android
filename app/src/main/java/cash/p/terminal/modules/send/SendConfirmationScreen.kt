@@ -94,6 +94,7 @@ fun SendConfirmationScreen(
     insufficientFeeBalance: Boolean = false,
     balanceHidden: Boolean = false,
     onBalanceClicked: () -> Unit = {},
+    feeWarningText: String? = null,
     windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
 ) {
     val closeUntilDestId = if (sendEntryPointDestId == 0) {
@@ -248,6 +249,7 @@ fun SendConfirmationScreen(
                     feeSecondary = feeSecondary,
                     insufficientFeeBalance = insufficientFeeBalance,
                     onBalanceClicked = onBalanceClicked,
+                    feeWarningText = feeWarningText,
                 )
 
                 if (!memo.isNullOrBlank()) {

@@ -14,12 +14,13 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 @Composable
 fun CardsSwapInfo(
     isError: Boolean = false,
+    isWarning: Boolean = false,
     content: @Composable (ColumnScope.() -> Unit)
 ) {
-    val borderColor = if (isError) {
-        ComposeAppTheme.colors.lucian
-    } else {
-        ComposeAppTheme.colors.steel20
+    val borderColor = when {
+        isError -> ComposeAppTheme.colors.lucian
+        isWarning -> ComposeAppTheme.colors.jacob
+        else -> ComposeAppTheme.colors.steel20
     }
     Column(
         modifier = Modifier
