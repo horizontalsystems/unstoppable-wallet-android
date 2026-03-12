@@ -16,6 +16,9 @@ interface HardwarePublicKeyDao {
     @Query("SELECT * FROM HardwarePublicKey WHERE accountId = :accountId AND blockchainType = :blockchainType AND tokenType = :tokenType")
     suspend fun getPublicKey(accountId: String, blockchainType: String, tokenType: TokenType): HardwarePublicKey?
 
+    @Query("SELECT * FROM HardwarePublicKey WHERE accountId = :accountId AND blockchainType = :blockchainType LIMIT 1")
+    suspend fun getPublicKeyByBlockchain(accountId: String, blockchainType: String): HardwarePublicKey?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(key: HardwarePublicKey): Long
 

@@ -8,5 +8,6 @@ interface IHardwarePublicKeyStorage {
     fun deleteAll()
     suspend fun save(keys: List<HardwarePublicKey>)
     suspend fun getKey(accountId: String, blockchainType: BlockchainType, tokenType: TokenType): HardwarePublicKey?
+    suspend fun getKeyByBlockchain(accountId: String, blockchainType: BlockchainType): HardwarePublicKey?
     suspend fun getAllPublicKeys(accountId: String): List<HardwarePublicKey>
 }

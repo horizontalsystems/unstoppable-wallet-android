@@ -11,7 +11,6 @@ import cash.p.terminal.core.utils.TronAddressParser
 import cash.p.terminal.tangem.signer.HardwareWalletTronSigner
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountType
-import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.entities.BlockchainType
@@ -122,7 +121,7 @@ class TronKitManager(
         account: Account
     ): TronKitWrapper {
         val hardwarePublicKey = runBlocking {
-            hardwarePublicKeyStorage.getKey(account.id, BlockchainType.Tron, TokenType.Native)
+            hardwarePublicKeyStorage.getKeyByBlockchain(account.id, BlockchainType.Tron)
         } ?: throw UnsupportedException("Hardware card does not have a public key for Tron")
 
         val addressAndPublicKey = TronAddressParser.parseXpubToTronAddress(hardwarePublicKey.key.value)
