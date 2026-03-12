@@ -36,7 +36,7 @@ class SwapDefenseSystemService(
         }
 
         coroutineScope.launch(Dispatchers.Default) {
-            paidActionSettingsManager.disabledActionsFlow.collect {
+            paidActionSettingsManager.enabledActionsFlow.collect {
                 refreshMevProtectionEnabled()
                 refreshSystemMessage()
 

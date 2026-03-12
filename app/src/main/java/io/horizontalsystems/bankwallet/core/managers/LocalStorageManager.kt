@@ -97,7 +97,7 @@ class LocalStorageManager(
     private val PRICE_CHANGE_INTERVAL = "price_change_interval"
     private val UI_STATS_ENABLED = "ui_stats_enabled"
     private val LAST_MIGRATION_VERSION = "last_migration_version"
-    private val DISABLED_PAID_ACTIONS = "disabled_paid_actions"
+    private val ENABLED_PAID_ACTIONS = "enabled_paid_actions"
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
@@ -657,45 +657,29 @@ class LocalStorageManager(
             }
         }
 
-    private val _disabledPaidActionsFlow = MutableStateFlow(
-        preferences.getStringSet(DISABLED_PAID_ACTIONS, emptySet()) ?: emptySet()
+    private val defaultEnabledPaidActions = setOf("ScamProtection", "SwapProtection", "Phishing")
+
+    private val _enabledPaidActionsFlow = MutableStateFlow(
+        preferences.getStringSet(ENABLED_PAID_ACTIONS, null) ?: defaultEnabledPaidActions
     )
-    override val disabledPaidActionsFlow = _disabledPaidActionsFlow.asStateFlow()
+    override val enabledPaidActionsFlow = _enabledPaidActionsFlow.asStateFlow()
 
-    override var disabledPaidActions: Set<String>
-        get() = preferences.getStringSet(DISABLED_PAID_ACTIONS, null) ?: setOf("SecureSend")
+    override var enabledPaidActions: Set<String>
+        get() = preferences.getStringSet(ENABLED_PAID_ACTIONS, null) ?: defaultEnabledPaidActions
         set(value) {
-            preferences.edit().putStringSet(DISABLED_PAID_ACTIONS, value).apply()
-            _disabledPaidActionsFlow.update { value }
+            preferences.edit { putStringSet(ENABLED_PAID_ACTIONS, value) }
+            _enabledPaidActionsFlow.update { value }
         }
 
-    private val _phishingDetectionEnabledFlow = MutableStateFlow(preferences.getBoolean("phishingDetectionEnabled", true))
-    override val phishingDetectionEnabledFlow = _phishingDetectionEnabledFlow.asStateFlow()
-
-    private val _blacklistDetectionEnabledFlow = MutableStateFlow(preferences.getBoolean("blacklistDetectionEnabled", false))
-    override val blacklistDetectionEnabledFlow = _blacklistDetectionEnabledFlow.asStateFlow()
-
-    private val _sanctionsDetectionEnabledFlow = MutableStateFlow(preferences.getBoolean("sanctionsDetectionEnabled", false))
-    override val sanctionsDetectionEnabledFlow = _sanctionsDetectionEnabledFlow.asStateFlow()
-
-    override var phishingDetectionEnabled: Boolean
-        get() = preferences.getBoolean("phishingDetectionEnabled", true)
-        set(value) {
-            preferences.edit { putBoolean("phishingDetectionEnabled", value) }
-            _phishingDetectionEnabledFlow.update { value }
+    override fun migrateEnabledPaidActionsFromDisabled() {
+        if (!preferences.contains("disabled_paid_actions")) return
+        if (preferences.contains(ENABLED_PAID_ACTIONS)) return
+        val disabled = preferences.getStringSet("disabled_paid_actions", emptySet()) ?: emptySet()
+        val enabled = mutableSetOf<String>()
+        for (key in listOf("ScamProtection", "SwapProtection")) {
+            if (key !in disabled) enabled.add(key)
         }
-
-    override var blacklistDetectionEnabled: Boolean
-        get() = preferences.getBoolean("blacklistDetectionEnabled", false)
-        set(value) {
-            preferences.edit { putBoolean("blacklistDetectionEnabled", value) }
-            _blacklistDetectionEnabledFlow.update { value }
-        }
-
-    override var sanctionsDetectionEnabled: Boolean
-        get() = preferences.getBoolean("sanctionsDetectionEnabled", false)
-        set(value) {
-            preferences.edit { putBoolean("sanctionsDetectionEnabled", value) }
-            _sanctionsDetectionEnabledFlow.update { value }
-        }
+        enabled.add("Phishing")
+        enabledPaidActions = enabled
+    }
 }

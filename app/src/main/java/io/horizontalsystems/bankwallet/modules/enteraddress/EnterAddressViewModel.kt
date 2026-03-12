@@ -67,11 +67,7 @@ class EnterAddressViewModel(
 
     private val addressExtractor = AddressExtractor(token.blockchainType, addressUriParser)
     private val addressCheckEnabled: Boolean
-        get() {
-            return hasPremium && (localStorage.phishingDetectionEnabled
-                    || localStorage.blacklistDetectionEnabled
-                    || localStorage.sanctionsDetectionEnabled)
-        }
+        get() = hasPremium && AddressCheckType.entries.any { it.name in localStorage.enabledPaidActions }
 
     private val recentlySentAddress = if (recentEnabled) recentAddress else null
 
@@ -124,18 +120,17 @@ class EnterAddressViewModel(
     }
 
     private fun observeCheckSettings() {
-        val settingsFlows = mapOf(
-            AddressCheckType.Phishing to localStorage.phishingDetectionEnabledFlow,
-            AddressCheckType.Blacklist to localStorage.blacklistDetectionEnabledFlow,
-            AddressCheckType.Sanction to localStorage.sanctionsDetectionEnabledFlow,
-        )
-
-        for ((type, flow) in settingsFlows) {
-            viewModelScope.launch {
-                flow.drop(1).collect { enabled ->
-                    val currentAddress = address ?: return@collect
-                    if (value.isEmpty() || addressValidationError != null) return@collect
-                    if (!enabled) {
+        viewModelScope.launch {
+            var previous = localStorage.enabledPaidActions
+            localStorage.enabledPaidActionsFlow.drop(1).collect { enabledActions ->
+                for (type in availableCheckTypes) {
+                    val key = type.name
+                    val wasEnabled = key in previous
+                    val isEnabled = key in enabledActions
+                    if (wasEnabled == isEnabled) continue
+                    val currentAddress = address ?: continue
+                    if (value.isEmpty() || addressValidationError != null) continue
+                    if (!isEnabled) {
                         checkJobs[type]?.cancel()
                         checkResults += mapOf(type to AddressCheckData(inProgress = false, disabled = true))
                         inputState = if (checkResults.none { it.value.checkResult == AddressCheckResult.Detected })
@@ -149,15 +144,12 @@ class EnterAddressViewModel(
                         startCheckJob(type, currentAddress)
                     }
                 }
+                previous = enabledActions
             }
         }
     }
 
-    private fun isCheckEnabled(type: AddressCheckType) = when (type) {
-        AddressCheckType.Phishing -> localStorage.phishingDetectionEnabled
-        AddressCheckType.Blacklist -> localStorage.blacklistDetectionEnabled
-        AddressCheckType.Sanction -> localStorage.sanctionsDetectionEnabled
-    }
+    private fun isCheckEnabled(type: AddressCheckType) = type.name in localStorage.enabledPaidActions
 
     private fun startCheckJob(type: AddressCheckType, address: Address) {
         checkJobs[type]?.cancel()
