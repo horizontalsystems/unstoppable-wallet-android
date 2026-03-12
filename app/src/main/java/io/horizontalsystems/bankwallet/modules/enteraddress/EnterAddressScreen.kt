@@ -40,12 +40,14 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputAddress
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
+import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
+import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
@@ -216,11 +218,14 @@ fun AddressCheck(
     } else if (addressValidationError != null) {
         val errorMessage = addressValidationError.getErrorMessage()
         if (errorMessage != null) {
-            TextImportantError(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                icon = R.drawable.ic_attention_20,
-                title = stringResource(R.string.SwapSettings_Error_InvalidAddress),
-                text = errorMessage
+            AlertCard(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                format = AlertFormat.Structured,
+                type = AlertType.Critical,
+                titleCustom = stringResource(R.string.SwapSettings_Error_InvalidAddress),
+                text = errorMessage,
             )
             VSpacer(32.dp)
         }
@@ -260,11 +265,14 @@ fun AddressCheck(
 
     checkResults.forEach { (addressCheckType, addressCheckData) ->
         if (addressCheckData.checkResult == AddressCheckResult.Detected) {
-            TextImportantError(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                icon = R.drawable.ic_attention_20,
-                title = stringResource(addressCheckType.detectedErrorTitle),
-                text = stringResource(addressCheckType.detectedErrorDescription)
+            AlertCard(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                format = AlertFormat.Structured,
+                type = AlertType.Critical,
+                titleCustom = stringResource(addressCheckType.detectedErrorTitle),
+                text = stringResource(addressCheckType.detectedErrorDescription),
             )
             VSpacer(16.dp)
         }
