@@ -151,6 +151,13 @@ object AllBridgeProvider : IMultiSwapProvider {
         return tokensMap.contains(tokenFrom) && tokensMap.contains(tokenTo)
     }
 
+    private fun estimationTime(tokenIn: Token, tokenOut: Token, crosschain: Boolean): Long? {
+        if (!crosschain) return tokenIn.blockchainType.blockTime
+        val inTime = tokenIn.blockchainType.blockTime ?: return null
+        val outTime = tokenOut.blockchainType.blockTime ?: return null
+        return inTime + outTime
+    }
+
     override suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
@@ -183,7 +190,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             tokenOut = tokenOut,
             amountIn = amountIn,
             actionRequired = actionRequired,
-            estimationTime = if (crosschain) null else tokenIn.blockchainType.blockTime,
+            estimationTime = estimationTime(tokenIn, tokenOut, crosschain),
         )
     }
 
@@ -283,7 +290,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             sendTransactionData = sendTransactionData,
             priceImpact = null,
             fields = fields,
-            estimatedTime = if (crosschain) null else tokenIn.blockchainType.blockTime,
+            estimatedTime = estimationTime(tokenIn, tokenOut, crosschain),
             slippage = if (crosschain) null else slippage
         )
     }
