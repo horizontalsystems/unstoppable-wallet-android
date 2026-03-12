@@ -265,9 +265,7 @@ fun SwapConfirmScreen(
             feeSecondary = uiState.networkFee?.secondary?.getFormattedPlain() ?: "---",
             insufficientFeeBalance = hasFeeError,
             onBalanceClicked = swapViewModel::toggleHideBalance,
-            feeWarningText = viewModel.inlineFeeWarningData?.let {
-                stringResource(R.string.fee_warning_low_balance, it.balanceThreshold)
-            },
+            feeWarningData = viewModel.inlineFeeWarningData,
         )
 
         if (uiState.mevProtectionAvailable) {

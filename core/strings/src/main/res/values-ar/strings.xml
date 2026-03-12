@@ -534,7 +534,7 @@
     <string name="Swap_Price">Price</string>
     <string name="Swap_AvailableBalance">Available Balance</string>
     <string name="swap_insufficient_fee_balance">رصيد %s الحالي أقل من المبلغ المطلوب لمعالجة هذه المعاملة، بما في ذلك رسوم المعاملة.</string>
-    <string name="fee_warning_low_balance">الطاقة أقل من المستوى المطلوب. قد تدفع رسومًا تصل إلى %s.</string>
+    <string name="fee_warning_low_balance">الرصيد أقل من المستوى المطلوب. قد تدفع رسومًا تصل إلى %s.</string>
     <string name="swap_balance_for_fees">الرصيد للرسوم</string>
     <string name="fee">الرسوم</string>
     <string name="estimated_fee">الرسوم المقدرة</string>

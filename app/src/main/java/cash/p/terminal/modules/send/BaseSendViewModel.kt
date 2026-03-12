@@ -64,30 +64,25 @@ abstract class BaseSendViewModel<T>(
         balanceHiddenManager.toggleBalanceHidden()
     }
 
-    val inlineFeeWarningData: NetworkFeeWarningData?
-        get() {
-            val ft = feeToken ?: return null
-            return buildNetworkFeeWarningData(
-                blockchainType = wallet.token.blockchainType,
-                tokenType = wallet.token.type,
-                feeTokenBalance = feeCoinBalance,
-                estimatedFee = getEstimatedFee(),
-                feeToken = ft,
-            )
-        }
-
     protected open fun getEstimatedFee(): BigDecimal? = null
     protected open fun onSendRequested() {}
 
-    fun onClickSendWithWarningCheck() {
-        val ft = feeToken ?: run { onSendRequested(); return }
-        val data = buildNetworkFeeWarningData(
+    private fun currentFeeWarningData(): NetworkFeeWarningData? {
+        val ft = feeToken ?: return null
+        return buildNetworkFeeWarningData(
             blockchainType = wallet.token.blockchainType,
             tokenType = wallet.token.type,
             feeTokenBalance = feeCoinBalance,
             estimatedFee = getEstimatedFee(),
             feeToken = ft,
         )
+    }
+
+    val inlineFeeWarningData: NetworkFeeWarningData?
+        get() = currentFeeWarningData()
+
+    fun onClickSendWithWarningCheck() {
+        val data = currentFeeWarningData()
         if (data != null) {
             feeWarningData = data
             return

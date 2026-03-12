@@ -534,7 +534,7 @@
     <string name="Swap_Price">Price</string>
     <string name="Swap_AvailableBalance">Available Balance</string>
     <string name="swap_insufficient_fee_balance">Het huidige %s-saldo is lager dan het bedrag dat nodig is om deze transactie te verwerken, inclusief de transactiekosten.</string>
-    <string name="fee_warning_low_balance">De energie is lager dan nodig. De kosten kunnen oplopen tot %s.</string>
+    <string name="fee_warning_low_balance">Het saldo is lager dan nodig. De kosten kunnen oplopen tot %s.</string>
     <string name="swap_balance_for_fees">Saldo voor kosten</string>
     <string name="fee">Kosten</string>
     <string name="estimated_fee">Geschatte kosten</string>
