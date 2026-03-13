@@ -98,8 +98,12 @@ class SwapConfirmFragment : BaseComposeFragment() {
 @Composable
 fun SwapConfirmScreen(navController: NavController) {
     val previousBackStackEntry = remember { navController.previousBackStackEntry }
+    if (previousBackStackEntry == null) {
+        navController.popBackStack()
+        return
+    }
     val swapViewModel = viewModel<SwapViewModel>(
-        viewModelStoreOwner = previousBackStackEntry!!,
+        viewModelStoreOwner = previousBackStackEntry,
     )
 
     val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
