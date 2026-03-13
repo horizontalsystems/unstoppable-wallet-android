@@ -54,8 +54,12 @@ class SwapSelectProviderFragment : BaseComposeFragment() {
 @Composable
 fun SwapSelectProviderScreen(navController: NavController) {
     val previousBackStackEntry = remember { navController.previousBackStackEntry }
+    if (previousBackStackEntry == null) {
+        navController.popBackStack()
+        return
+    }
     val swapViewModel = viewModel<SwapViewModel>(
-        viewModelStoreOwner = previousBackStackEntry!!,
+        viewModelStoreOwner = previousBackStackEntry,
     )
     val viewModel = viewModel<SwapSelectProviderViewModel>(
         factory = SwapSelectProviderViewModel.Factory(
