@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.subscriptions.core.IPaidAction
@@ -15,11 +16,12 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 
 class SecuritySettingsViewModel(
-    private val systemInfoManager: ISystemInfoManager,
+    systemInfoManager: ISystemInfoManager,
     private val pinComponent: IPinComponent,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val localStorage: ILocalStorage,
-    private val paidActionSettingsManager: PaidActionSettingsManager
+    private val paidActionSettingsManager: PaidActionSettingsManager,
+    private val spamManager: SpamManager,
 ) : ViewModelUiState<SecuritySettingsUiState>() {
     val biometricSettingsVisible = systemInfoManager.biometricAuthSupported
 
@@ -27,6 +29,7 @@ class SecuritySettingsViewModel(
     private var duressPinEnabled = pinComponent.isDuressPinSet()
     private var balanceAutoHideEnabled = balanceHiddenManager.balanceAutoHidden
     private var defenseSystemActions = listOf<DefenseSystemAction>()
+    private var hideSuspiciousTxs = spamManager.hideSuspiciousTx
 
     init {
         viewModelScope.launch {
@@ -76,6 +79,7 @@ class SecuritySettingsViewModel(
         biometricsEnabled = pinComponent.isBiometricAuthEnabled,
         duressPinEnabled = duressPinEnabled,
         balanceAutoHideEnabled = balanceAutoHideEnabled,
+        hideSuspiciousTxs = hideSuspiciousTxs,
         autoLockIntervalName = localStorage.autoLockInterval.title,
         defenseSystemActions = defenseSystemActions,
     )
@@ -114,6 +118,12 @@ class SecuritySettingsViewModel(
     fun setActionEnabled(action: IPaidAction, enabled: Boolean) {
         paidActionSettingsManager.setActionEnabled(action, enabled)
     }
+
+    fun hideSuspiciousTxs(hidden: Boolean) {
+        spamManager.updateFilterHideSuspiciousTx(hidden)
+        hideSuspiciousTxs = hidden
+        emitState()
+    }
 }
 
 data class SecuritySettingsUiState(
@@ -121,6 +131,7 @@ data class SecuritySettingsUiState(
     val biometricsEnabled: Boolean,
     val duressPinEnabled: Boolean,
     val balanceAutoHideEnabled: Boolean,
+    val hideSuspiciousTxs: Boolean,
     val autoLockIntervalName: Int,
     val defenseSystemActions: List<DefenseSystemAction>
 )

@@ -986,6 +986,7 @@
     <string name="Settings_AppSettings">Appearance</string>
     <string name="Settings_Subscription">Subscription</string>
     <string name="Settings_AutoLock">Auto-Lock</string>
+    <string name="Settings_AutoLock_Description">Automatically locks the app after a selected time.</string>
     <string name="Settings_Telegram" translatable="false">Telegram</string>
     <string name="Settings_Twitter" translatable="false">Twitter</string>
     <string name="Settings_JoinUnstoppables">Join Unstoppables</string>
@@ -1238,6 +1239,8 @@
     <string name="SettingsSecurity_SyncModeHybridDescription">Fast</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Slow. Highest Privacy.</string>
+    <string name="SettingsSecurity_HideSuspiciousTxs">Hide Suspicious Txs</string>
+    <string name="SettingsSecurity_HideSuspiciousTxs_Description">Hides suspicious small transfers often used in phishing attacks.</string>
 
     <string name="SetDuressPin_Title">Duress Passcode</string>
     <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
