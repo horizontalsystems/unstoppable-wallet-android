@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.security
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,16 +9,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -42,18 +42,16 @@ import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBloc
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.descriptionStringRes
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.titleStringRes
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
-import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsSwitcher
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
@@ -104,39 +102,64 @@ private fun SecurityCenterScreen(
                 navController
             )
 
-            VSpacer(height = 32.dp)
-
-            CellUniversalLawrenceSection {
-                SecurityCenterCell(
-                    start = {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_off_24),
-                            tint = ComposeAppTheme.colors.grey,
-                            modifier = Modifier.size(24.dp),
-                            contentDescription = null
+            VSpacer(24.dp)
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(ComposeAppTheme.colors.lawrence)
+            ) {
+                if (uiState.pinEnabled) {
+                    CellPrimary(
+                        middle = {
+                            CellMiddleInfo(
+                                title = stringResource(R.string.Settings_AutoLock).hs,
+                                subtitle = stringResource(R.string.Settings_AutoLock_Description).hs
+                            )
+                        },
+                        right = {
+                            CellRightNavigation(subtitle = stringResource(uiState.autoLockIntervalName).hs)
+                        },
+                        onClick = { navController.slideFromRight(R.id.autoLockIntervalsFragment) }
+                    )
+                    HsDivider()
+                }
+                CellPrimary(
+                    middle = {
+                        CellMiddleInfo(
+                            title = stringResource(id = R.string.Appearance_BalanceAutoHide).hs,
+                            subtitle = stringResource(R.string.Appearance_BalanceAutoHide_Description).hs
                         )
                     },
-                    center = {
-                        body_leah(
-                            text = stringResource(id = R.string.Appearance_BalanceAutoHide),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    },
-                    end = {
-                        HsSwitch(
+                    right = {
+                        CellRightControlsSwitcher(
                             checked = uiState.balanceAutoHideEnabled,
                             onCheckedChange = {
                                 securitySettingsViewModel.onSetBalanceAutoHidden(it)
                             }
                         )
-                    }
+                    },
+                )
+                HsDivider()
+                CellPrimary(
+                    middle = {
+                        CellMiddleInfo(
+                            title = stringResource(id = R.string.SettingsSecurity_HideSuspiciousTxs).hs,
+                            subtitle = stringResource(R.string.SettingsSecurity_HideSuspiciousTxs_Description).hs
+                        )
+                    },
+                    right = {
+                        CellRightControlsSwitcher(
+                            checked = uiState.hideSuspiciousTxs,
+                            onCheckedChange = {
+                                securitySettingsViewModel.hideSuspiciousTxs(it)
+                            }
+                        )
+                    },
                 )
             }
-            InfoText(
-                text = stringResource(R.string.Appearance_BalanceAutoHide_Description),
-                paddingBottom = 32.dp
-            )
+
+            VSpacer(height = 6.dp)
 
             SectionHeader(
                 modifier = Modifier.padding(horizontal = 16.dp),
