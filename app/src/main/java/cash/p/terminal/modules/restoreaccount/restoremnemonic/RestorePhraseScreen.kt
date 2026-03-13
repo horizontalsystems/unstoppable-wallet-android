@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -103,6 +104,7 @@ import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.ui_compose.components.HudHelper
+import cash.p.terminal.core.launchAfterClearingFocus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -126,6 +128,7 @@ fun RestorePhrase(
     val uiState = viewModel.uiState
     val context = LocalContext.current
     val view = LocalView.current
+    val focusManager = LocalFocusManager.current
     val scannerTitle = stringResource(R.string.Restore_RecoveryPhrase)
 
     // Build initial text from prefill data (words only, passphrase handled separately)
@@ -311,41 +314,43 @@ fun RestorePhrase(
                                 modifier = Modifier.padding(end = 8.dp),
                                 icon = R.drawable.ic_qr_scan_20,
                                 onClick = {
-                                    view.findNavController().openQrScanner(scannerTitle) { scannedText ->
-                                        when (val result = viewModel.handleScannedQrData(scannedText)) {
-                                            is RestoreMnemonicModule.QrScanResult.Success -> {
-                                                val wordsText = result.words.joinToString(" ")
-                                                textState = textState.copy(
-                                                    text = wordsText,
-                                                    selection = TextRange(wordsText.length)
-                                                )
-                                                if (result.passphrase.isNotEmpty()) {
-                                                    passphraseTextState.value = TextFieldValue(
-                                                        text = result.passphrase,
-                                                        selection = TextRange(result.passphrase.length)
+                                    coroutineScope.launchAfterClearingFocus(focusManager) {
+                                        view.findNavController().openQrScanner(scannerTitle) { scannedText ->
+                                            when (val result = viewModel.handleScannedQrData(scannedText)) {
+                                                is RestoreMnemonicModule.QrScanResult.Success -> {
+                                                    val wordsText = result.words.joinToString(" ")
+                                                    textState = textState.copy(
+                                                        text = wordsText,
+                                                        selection = TextRange(wordsText.length)
                                                     )
-                                                }
-                                                viewModel.applyQrScanResult(result)
+                                                    if (result.passphrase.isNotEmpty()) {
+                                                        passphraseTextState.value = TextFieldValue(
+                                                            text = result.passphrase,
+                                                            selection = TextRange(result.passphrase.length)
+                                                        )
+                                                    }
+                                                    viewModel.applyQrScanResult(result)
 
-                                                // Update shared state and navigate to advanced if passphrase present
-                                                if (result.passphrase.isNotEmpty() && !advanced) {
-                                                    mainViewModel.setPrefillData(
-                                                        result.words,
-                                                        result.passphrase,
-                                                        result.moneroHeight
-                                                    )
-                                                    openRestoreAdvanced?.invoke()
+                                                    // Update shared state and navigate to advanced if passphrase present
+                                                    if (result.passphrase.isNotEmpty() && !advanced) {
+                                                        mainViewModel.setPrefillData(
+                                                            result.words,
+                                                            result.passphrase,
+                                                            result.moneroHeight
+                                                        )
+                                                        openRestoreAdvanced?.invoke()
+                                                    }
                                                 }
-                                            }
-                                            is RestoreMnemonicModule.QrScanResult.PlainText -> {
-                                                textState = textState.copy(
-                                                    text = result.text,
-                                                    selection = TextRange(result.text.length)
-                                                )
-                                                viewModel.onEnterMnemonicPhrase(result.text, result.text.length)
-                                            }
-                                            is RestoreMnemonicModule.QrScanResult.Error -> {
-                                                HudHelper.showErrorMessage(view, result.message)
+                                                is RestoreMnemonicModule.QrScanResult.PlainText -> {
+                                                    textState = textState.copy(
+                                                        text = result.text,
+                                                        selection = TextRange(result.text.length)
+                                                    )
+                                                    viewModel.onEnterMnemonicPhrase(result.text, result.text.length)
+                                                }
+                                                is RestoreMnemonicModule.QrScanResult.Error -> {
+                                                    HudHelper.showErrorMessage(view, result.message)
+                                                }
                                             }
                                         }
                                     }

@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,6 +33,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -53,6 +55,7 @@ import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.ui_compose.entities.FormsInputStateWarning
 import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.core.launchAfterClearingFocus
 
 @Composable
 fun FormsInput(
@@ -79,6 +82,8 @@ fun FormsInput(
 ) {
     val focusRequester = remember { FocusRequester() }
     val view = LocalView.current
+    val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
 
     val borderColor = when (state) {
         is DataState.Error -> {
@@ -219,13 +224,15 @@ fun FormsInput(
                         modifier = Modifier.padding(end = if (pasteEnabled) 8.dp else 16.dp),
                         icon = R.drawable.ic_qr_scan_20,
                         onClick = {
-                            view.findNavController().openQrScanner(scannerTitle) { scannedText ->
-                                val textProcessed = textPreprocessor.process(scannedText)
-                                textState = TextFieldValue(
-                                    text = textProcessed,
-                                    selection = TextRange(textProcessed.length)
-                                )
-                                onValueChange(textProcessed)
+                            coroutineScope.launchAfterClearingFocus(focusManager) {
+                                view.findNavController().openQrScanner(scannerTitle) { scannedText ->
+                                    val textProcessed = textPreprocessor.process(scannedText)
+                                    textState = TextFieldValue(
+                                        text = textProcessed,
+                                        selection = TextRange(textProcessed.length)
+                                    )
+                                    onValueChange(textProcessed)
+                                }
                             }
                         }
                     )
@@ -300,6 +307,8 @@ fun FormsInputMultiline(
     onScanQR: (() -> Unit)? = null
 ) {
     val view = LocalView.current
+    val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
 
     val borderColor = when (state) {
         is DataState.Error -> {
@@ -439,16 +448,17 @@ fun FormsInputMultiline(
                             modifier = Modifier.padding(end = if (pasteEnabled) 8.dp else 16.dp),
                             icon = R.drawable.ic_qr_scan_20,
                             onClick = {
-                                view.findNavController().openQrScanner(scannerTitle) { scannedText ->
-                                    val textProcessed = textPreprocessor.process(scannedText)
-                                    textState = textState.copy(
-                                        text = textProcessed,
-                                        selection = TextRange(textProcessed.length)
-                                    )
-                                    onValueChange.invoke(textProcessed)
+                                coroutineScope.launchAfterClearingFocus(focusManager) {
+                                    view.findNavController().openQrScanner(scannerTitle) { scannedText ->
+                                        val textProcessed = textPreprocessor.process(scannedText)
+                                        textState = textState.copy(
+                                            text = textProcessed,
+                                            selection = TextRange(textProcessed.length)
+                                        )
+                                        onValueChange.invoke(textProcessed)
+                                    }
+                                    onScanQR?.invoke()
                                 }
-
-                                onScanQR?.invoke()
                             }
                         )
                     }
