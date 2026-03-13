@@ -82,10 +82,10 @@ class TransactionsViewModel(
     private var viewState: ViewState = ViewState.Loading
     private var syncing = false
     private var hasHiddenTransactions: Boolean = false
-    private var filterVersion = 0
-    @Volatile private var awaitingWalletSwitch = false
-    @Volatile private var adaptersReadySinceSwitch = true
+    @Volatile private var filterVersion = 0
+    @Volatile private var accountVersion = 0
     @Volatile private var cachedConvertedItems: List<TransactionViewItem> = emptyList()
+    @Volatile private var awaitingAdaptersAfterSwitch = false
     private var currentFilterType: FilterTransactionType = FilterTransactionType.All
     private var amlPromoAlertEnabled = premiumSettings.getAmlCheckShowAlert()
 
@@ -114,13 +114,24 @@ class TransactionsViewModel(
 
         viewModelScope.launch {
             transactionAdapterManager.adaptersReadyFlow.collect {
-                adaptersReadySinceSwitch = true
                 withContext(dispatcherProvider.io) {
                     handleUpdatedWallets(walletManager.activeWallets)
                 }
-                // Force combine to re-evaluate — needed when StateFlow dedup
-                // prevents emission (e.g. empty→empty account switch)
+                // Don't clear awaitingAdaptersAfterSwitch here — partial batches from
+                // AdapterManager would trigger service.set() → clear items → unguarded
+                // empty flash. The flag is cleared when first non-empty data arrives
+                // (handleUpdatedItems) or when initializationFlow signals all adapters
+                // are ready (fallback for genuinely empty accounts).
                 reprocessTrigger.tryEmit(Unit)
+            }
+        }
+
+        viewModelScope.launch {
+            transactionAdapterManager.initializationFlow.collect { initialized ->
+                if (initialized && awaitingAdaptersAfterSwitch) {
+                    awaitingAdaptersAfterSwitch = false
+                    reprocessTrigger.tryEmit(Unit)
+                }
             }
         }
 
@@ -130,18 +141,19 @@ class TransactionsViewModel(
                 val newAccountId = wallets.firstOrNull()?.account?.id
                 if (newAccountId != null && newAccountId != currentAccountId) {
                     if (currentAccountId != null) {
-                        awaitingWalletSwitch = true
-                        adaptersReadySinceSwitch = false
+                        accountVersion++
                         filterVersion++
                         cachedConvertedItems = emptyList()
                         viewState = ViewState.Loading
                         transactions = null
+                        awaitingAdaptersAfterSwitch = true
+                        service.cancelPendingLoads()
                         emitState()
                     }
                     currentAccountId = newAccountId
-                    withContext(dispatcherProvider.io) {
-                        handleUpdatedWallets(wallets)
-                    }
+                    // Don't call handleUpdatedWallets here — TransactionAdapterManager
+                    // still holds stale adapters. The adaptersReadyFlow collector will
+                    // call handleUpdatedWallets once adapters are actually ready.
                 }
             }
         }
@@ -221,24 +233,14 @@ class TransactionsViewModel(
         }
 
         viewModelScope.launch {
-            var lastItemsRef: List<TransactionItem>? = null
             combine(
                 service.transactionItemsFlow,
                 swapStatusMap,
                 reprocessTrigger.onStart { emit(Unit) }
             ) { items, _, _ -> items }
                 .collect { items ->
-                    if (items !== lastItemsRef) {
-                        lastItemsRef = items
-                        if (adaptersReadySinceSwitch) {
-                            awaitingWalletSwitch = false
-                        }
-                    } else if (items.isEmpty() && adaptersReadySinceSwitch) {
-                        // StateFlow dedup prevented emission (e.g. empty→empty
-                        // account switch). Empty list is safe to show — clear flag.
-                        awaitingWalletSwitch = false
-                    }
-                    handleUpdatedItems(items.distinctBy { it.record.uid })
+                    val distinct = items.distinctBy { it.record.uid }
+                    handleUpdatedItems(distinct)
                 }
         }
 
@@ -296,11 +298,20 @@ class TransactionsViewModel(
     fun showAllTransactions(show: Boolean) = transactionHiddenManager.showAllTransactions(show)
 
     private fun handleUpdatedItems(items: List<TransactionItem>) {
-        if (awaitingWalletSwitch) return
-
+        // During account switch, skip empty emissions to prevent Loading → Success(empty) flash.
+        // Both cancelPendingLoads and service.set() (triggered by each adapter batch) clear
+        // service items, producing empty emissions. The flag stays true until either:
+        // - first non-empty data arrives (below), or
+        // - initializationFlow signals all adapters ready (fallback for empty accounts)
+        if (items.isEmpty() && awaitingAdaptersAfterSwitch) {
+            return
+        }
+        if (items.isNotEmpty() && awaitingAdaptersAfterSwitch) {
+            awaitingAdaptersAfterSwitch = false
+        }
         refreshViewItemsJob?.cancel()
         refreshViewItemsJob = viewModelScope.launch(dispatcherProvider.default) {
-            // Capture current filter version to detect if filter changes during processing
+            val capturedVersion = accountVersion
             val capturedFilterVersion = filterVersion
 
             val allViewItems = items.map { item ->
@@ -314,8 +325,8 @@ class TransactionsViewModel(
 
             ensureActive()
 
-            // Only update state if filter version hasn't changed (ignore stale data)
-            if (capturedFilterVersion == filterVersion && !awaitingWalletSwitch) {
+            // Discard if account or filter changed during async conversion
+            if (capturedVersion == accountVersion && capturedFilterVersion == filterVersion) {
                 cachedConvertedItems = allViewItems
                 applyHiddenFilter()
             }

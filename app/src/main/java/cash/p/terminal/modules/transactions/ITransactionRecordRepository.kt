@@ -4,10 +4,10 @@ import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
 import io.horizontalsystems.core.entities.Blockchain
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.SharedFlow
 
 interface ITransactionRecordRepository : Clearable {
-    val itemsObservable: Observable<List<TransactionRecord>>
+    val itemsFlow: SharedFlow<List<TransactionRecord>>
 
     fun set(
         transactionWallets: List<TransactionWallet>,
@@ -18,4 +18,5 @@ interface ITransactionRecordRepository : Clearable {
     )
     fun loadNext()
     fun reload()
+    fun cancelPendingLoads()
 }

@@ -32,12 +32,16 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
+import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 
 class AdapterManager(
@@ -167,25 +171,65 @@ class AdapterManager(
             pendingBalanceCalculator.startObserving(activeAccountId)
         }
 
+        // Separate reusable adapters from ones that need creation
+        val reusable = mutableMapOf<Wallet, IAdapter>()
+        val toCreate = mutableListOf<Wallet>()
+
         wallets.forEach { wallet ->
-            var adapter = currentAdapters.remove(wallet)
-            if (adapter == null) {
-                adapterFactory.getAdapterOrNull(wallet)?.let {
-                    it.start()
-                    adapter = it
+            val existing = currentAdapters.remove(wallet)
+            if (existing != null) {
+                reusable[wallet] = existing
+            } else {
+                toCreate.add(wallet)
+            }
+        }
+
+        // Add reusable adapters immediately and subscribe to balance updates
+        adaptersMap.putAll(reusable)
+        reusable.forEach { (wallet, adapter) ->
+            (adapter as? IBalanceAdapter)?.let { subscribeToBalanceUpdates(wallet, it) }
+        }
+
+        // Emit immediately so transaction loading can start with reusable adapters
+        if (reusable.isNotEmpty()) {
+            adaptersReadySubject.onNext(HashMap(adaptersMap))
+        }
+
+        // Create new adapters in parallel with two-phase emission:
+        // Phase 1: early batch after EARLY_BATCH_DELAY_MS — captures fast adapters
+        // Phase 2: final emission after all adapters complete
+        if (toCreate.isNotEmpty()) {
+            supervisorScope {
+                val jobs = toCreate.map { wallet ->
+                    launch {
+                        try {
+                            val adapter = adapterFactory.getAdapterOrNull(wallet)
+                            adapter?.start()
+                            adapter?.let {
+                                adaptersMap[wallet] = it
+                                (it as? IBalanceAdapter)?.let { ba -> subscribeToBalanceUpdates(wallet, ba) }
+                            }
+                        } catch (ex: Exception) {
+                            Timber.e(ex, "Can't get adapter")
+                        }
+                    }
                 }
+
+                // Early batch: emit whatever is ready after a short delay
+                val earlyBatchJob = launch {
+                    delay(EARLY_BATCH_DELAY_MS)
+                    if (jobs.any { it.isActive }) {
+                        adaptersReadySubject.onNext(HashMap(adaptersMap))
+                    }
+                }
+
+                jobs.joinAll()
+                earlyBatchJob.cancel()
             }
 
-            adapter?.let { adaptersMap[wallet] = it }
+            // Final emission with all adapters
+            adaptersReadySubject.onNext(HashMap(adaptersMap))
         }
-
-        adaptersMap.forEach { (wallet, adapter) ->
-            (adapter as? IBalanceAdapter)?.let { balanceAdapter ->
-                subscribeToBalanceUpdates(wallet, balanceAdapter)
-            }
-        }
-
-        adaptersReadySubject.onNext(adaptersMap)
 
         currentAdapters.forEach { (wallet, adapter) ->
             balanceSubscriptionJobs.remove(wallet)?.cancel()
@@ -236,7 +280,7 @@ class AdapterManager(
                     }
                 }
 
-                adaptersReadySubject.onNext(adaptersMap)
+                adaptersReadySubject.onNext(HashMap(adaptersMap))
             }
         }
     }
@@ -315,5 +359,9 @@ class AdapterManager(
                 _walletBalanceUpdatedFlow.emit(wallet)
             }
         }
+    }
+
+    companion object {
+        private const val EARLY_BATCH_DELAY_MS = 2000L
     }
 }

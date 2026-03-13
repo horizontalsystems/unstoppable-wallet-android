@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import org.koin.java.KoinJavaComponent.inject
 
 class TransactionsService(
@@ -39,12 +38,15 @@ class TransactionsService(
 
     val syncingFlow: StateFlow<Boolean> get() = transactionSyncStateRepository.syncingFlow
 
+    @Volatile
+    private var serviceVersion = 0
+
     private val job = SupervisorJob()
     private val coroutineScope = CoroutineScope(Dispatchers.IO + job)
 
     fun start() {
         coroutineScope.launch {
-            transactionRecordRepository.itemsObservable.asFlow().collect {
+            transactionRecordRepository.itemsFlow.collect {
                 handleUpdatedRecords(it)
             }
         }
@@ -78,6 +80,9 @@ class TransactionsService(
         blockchain: Blockchain?,
         contact: Contact?
     ) {
+        serviceVersion++
+        _transactionItems.value = emptyList()
+
         transactionRecordRepository.set(
             transactionWallets,
             transactionWallet,
@@ -144,6 +149,7 @@ class TransactionsService(
     }
 
     private suspend fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>) {
+        val capturedVersion = serviceVersion
         val nftUids = transactionRecords.nftUids
         val nftMetadata = nftMetadataService.assetsBriefMetadata(nftUids)
 
@@ -152,6 +158,11 @@ class TransactionsService(
             coroutineScope.launch {
                 nftMetadataService.fetch(missingNftUids)
             }
+        }
+
+        // Discard stale data if set() or cancelPendingLoads() was called during async work
+        if (capturedVersion != serviceVersion) {
+            return
         }
 
         val currentItems = _transactionItems.value
@@ -165,6 +176,10 @@ class TransactionsService(
         }
 
         _transactionItems.update { latestItems ->
+            // Re-check version inside CAS loop — if set() or cancelPendingLoads()
+            // ran between the outer check and this point, discard stale data.
+            if (capturedVersion != serviceVersion) return@update latestItems
+
             transactionRecords.mapNotNull { record ->
                 val existingItem = latestItems.find { it.record == record }
 
@@ -194,6 +209,15 @@ class TransactionsService(
         transactionRecordRepository.clear()
         rateRepository.clear()
         transactionSyncStateRepository.clear()
+    }
+
+    fun cancelPendingLoads() {
+        serviceVersion++
+        // Clear items to prevent always-on collectors (rates, metadata, block info)
+        // from updating stale items after account switch.
+        // The VM guards against the resulting Loading → Success(empty) flash.
+        _transactionItems.value = emptyList()
+        transactionRecordRepository.cancelPendingLoads()
     }
 
     fun reload() {
