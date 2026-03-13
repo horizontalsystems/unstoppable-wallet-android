@@ -64,6 +64,11 @@ class SwapViewModel(
         }
 
         viewModelScope.launch {
+            balanceHiddenManager.anyWalletVisibilityChangedFlow.collect {
+                emitState()
+            }
+        }
+        viewModelScope.launch {
             networkAvailabilityService.stateFlow.collect {
                 handleUpdatedNetworkState(it)
             }
@@ -156,7 +161,9 @@ class SwapViewModel(
             feeToken = feeToken,
             feeCoinBalance = balanceState.feeCoinBalance,
             insufficientFeeBalance = balanceState.insufficientFeeBalance,
-            balanceHidden = balanceHiddenManager.balanceHiddenFlow.value,
+            balanceHidden = quoteState.tokenIn?.let {
+                balanceHiddenManager.isWalletBalanceHidden(it.tokenQuery.id)
+            } ?: balanceHiddenManager.balanceHidden,
             warningMessage = warningMessage,
             priceImpact = priceImpactState.priceImpact,
             priceImpactLevel = priceImpactState.priceImpactLevel,
@@ -259,7 +266,12 @@ class SwapViewModel(
 
     fun toggleHideBalance() {
         HudHelper.vibrate(App.instance)
-        balanceHiddenManager.toggleBalanceHidden()
+        val tokenIn = quoteState.tokenIn
+        if (tokenIn != null) {
+            balanceHiddenManager.toggleWalletBalanceHidden(tokenIn.tokenQuery.id)
+        } else {
+            balanceHiddenManager.toggleBalanceHidden()
+        }
         emitState()
     }
 

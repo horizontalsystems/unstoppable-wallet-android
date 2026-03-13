@@ -63,9 +63,7 @@ fun FeeInfoSection(
         FeeCoinBalanceField(
             feeToken = feeToken,
             feeCoinBalance = feeCoinBalance,
-            balanceHidden = balanceHidden,
             isError = insufficientFeeBalance,
-            toggleHideBalance = onBalanceClicked,
         )
         DataFieldFee(
             primary = feePrimary,
@@ -139,9 +137,7 @@ private fun AvailableBalanceField(
 private fun FeeCoinBalanceField(
     feeToken: Token?,
     feeCoinBalance: BigDecimal?,
-    balanceHidden: Boolean,
     isError: Boolean,
-    toggleHideBalance: () -> Unit,
 ) {
     if (feeToken == null || feeCoinBalance == null) return
 
@@ -153,7 +149,11 @@ private fun FeeCoinBalanceField(
         },
         value = {
             val text = CoinValue(feeToken, feeCoinBalance).getFormattedFull()
-            BalanceText(text, balanceHidden, isError, toggleHideBalance)
+            if (isError) {
+                subhead2_lucian(text = text)
+            } else {
+                subhead2_leah(text = text)
+            }
         }
     )
 }
