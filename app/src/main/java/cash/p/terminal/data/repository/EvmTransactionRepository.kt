@@ -8,6 +8,7 @@ import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.api.models.AccountState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.core.EthereumKit.HistoricalSyncState
 import io.horizontalsystems.ethereumkit.core.EthereumKit.SyncState
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559GasPriceService.Companion.BLOCKS_COUNT
@@ -20,6 +21,8 @@ import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.reactivex.Flowable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.rx2.await
@@ -58,10 +61,14 @@ internal class EvmTransactionRepository(
     val syncStateFlowable: Flowable<SyncState>
         get() = evmKit.syncStateFlowable
 
+    val historicalSyncState: StateFlow<HistoricalSyncState>
+        get() = evmKit.historicalSyncState
+
     val combinedSyncStateFlow: Flow<Unit>
         get() = merge(
             syncStateFlowable.map {}.asFlow(),
-            transactionsSyncStateFlowable.map {}.asFlow()
+            transactionsSyncStateFlowable.map {}.asFlow(),
+            historicalSyncState.map { }
         )
 
     val accountState: AccountState?

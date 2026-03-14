@@ -77,8 +77,11 @@ internal class Eip20Adapter(
         get() = convertToAdapterState(eip20Kit.syncState)
 
     override val balanceStateUpdatedFlow: Flow<Unit>
-        get() = merge(eip20Kit.syncStateFlowable.asFlow(), stackingManager.unpaidFlow.filterNotNull())
-            .map { }
+        get() = merge(
+            eip20Kit.syncStateFlowable.asFlow().map { },
+            stackingManager.unpaidFlow.filterNotNull().map { },
+            evmTransactionRepository.historicalSyncState.map { }
+        )
 
     override val balanceData: BalanceData
         get() = BalanceData(
@@ -109,7 +112,7 @@ internal class Eip20Adapter(
     }
 
     private fun convertToAdapterState(syncState: SyncState): AdapterState = when (syncState) {
-        is SyncState.Synced -> AdapterState.Synced
+        is SyncState.Synced -> historicalSyncAdapterState() ?: AdapterState.Synced
         is SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
         is SyncState.Syncing -> AdapterState.Syncing()
     }

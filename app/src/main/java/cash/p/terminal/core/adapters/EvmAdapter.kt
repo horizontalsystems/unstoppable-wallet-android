@@ -96,8 +96,8 @@ internal class EvmAdapter(evmTransactionRepository: EvmTransactionRepository, co
                 txSyncState.error !is EthereumKit.SyncError.NotStarted ->
                     AdapterState.NotSynced(txSyncState.error)
 
-            // Fully synced
-            else -> AdapterState.Synced
+            // Fully synced or historical scan in progress
+            else -> historicalSyncAdapterState() ?: AdapterState.Synced
         }
     }
 
