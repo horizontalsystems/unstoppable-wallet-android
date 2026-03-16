@@ -37,6 +37,8 @@ object OneInchProvider : IMultiSwapProvider {
     // TODO take evmCoinAddress from oneInchKit
     private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
 
+    override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = true
+
     override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,

@@ -17,6 +17,7 @@ interface IMultiSwapProvider {
     val aml: Boolean
     val requireTerms: Boolean
     val riskLevel: RiskLevel
+    fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String): Boolean
 
     val titleShort: String
         get() {

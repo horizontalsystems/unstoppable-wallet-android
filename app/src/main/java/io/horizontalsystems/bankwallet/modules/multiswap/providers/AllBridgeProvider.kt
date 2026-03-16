@@ -142,6 +142,9 @@ object AllBridgeProvider : IMultiSwapProvider {
         return tokensMap
     }
 
+    override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) =
+        tokenInBlockchainTypeUid == tokenOutBlockchainTypeUid
+
     override fun supports(blockchainType: BlockchainType): Boolean {
         // overriding fun supports(tokenFrom: Token, tokenTo: Token) makes this method redundant
         return true

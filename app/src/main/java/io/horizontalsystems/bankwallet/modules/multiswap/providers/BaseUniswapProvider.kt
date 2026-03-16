@@ -25,6 +25,8 @@ abstract class BaseUniswapProvider : IMultiSwapProvider {
     override val requireTerms = false
     private val uniswapKit by lazy { UniswapKit.getInstance() }
 
+    override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = true
+
     final override suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
