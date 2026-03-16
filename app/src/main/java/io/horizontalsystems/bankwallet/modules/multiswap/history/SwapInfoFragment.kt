@@ -43,6 +43,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
@@ -195,11 +196,14 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                         CellRightInfoTextIcon(text = uiState.formattedDate.hs(color = leah))
                     },
                 )
-                // Status (clickable → opens bottom sheet)
                 CellSecondary(
-                    onClick = { showStatusSheet = true },
                     middle = {
-                        CellMiddleInfoTextIcon(text = stringResource(R.string.TransactionInfo_Status).hs)
+                        CellMiddleInfoTextIcon(
+                            text = stringResource(R.string.TransactionInfo_Status).hs,
+                            icon = painterResource(R.drawable.ic_info_filled_20),
+                            iconTint = ComposeAppTheme.colors.grey,
+                            onIconClick = { showStatusSheet = true }
+                        )
                     },
                     right = {
                         StatusRightSlot(status = uiState.status)
@@ -245,13 +249,10 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                 }
                 // Fee
                 uiState.fee?.let { fee ->
-                    CellSecondary(
-                        middle = {
-                            CellMiddleInfoTextIcon(text = stringResource(R.string.TransactionInfo_Fee).hs)
-                        },
-                        right = {
-                            CellRightInfoTextIcon(text = fee.hs(color = leah))
-                        },
+                    DataFieldFee(
+                        navController,
+                        fee,
+                        null
                     )
                 }
             }
