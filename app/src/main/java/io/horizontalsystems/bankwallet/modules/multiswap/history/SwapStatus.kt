@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.multiswap
+package io.horizontalsystems.bankwallet.modules.multiswap.history
 
 enum class SwapStatus {
     Depositing,

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.multiswap
+package io.horizontalsystems.bankwallet.modules.multiswap.history
 
 import android.os.Parcelable
 import androidx.compose.foundation.background
@@ -382,11 +382,13 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
                 activeIndex = steps.size
                 failedIndex = null
             }
+
             SwapStatus.Failed -> {
                 steps = singleChainFailedSteps
                 activeIndex = -1
                 failedIndex = 0
             }
+
             else -> {
                 steps = singleChainNormalSteps
                 activeIndex = 0
