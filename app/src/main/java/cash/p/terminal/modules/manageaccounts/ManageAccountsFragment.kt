@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.manageaccounts
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -40,20 +39,16 @@ import cash.p.terminal.ui_compose.components.body_jacob
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_lucian
-import cash.p.terminal.ui_compose.requireInput
+
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class ManageAccountsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = try {
-            navController.requireInput<ManageAccountsModule.Mode>()
-        } catch (e: Exception) {
-            navController.navigateUp()
-            return
+        withInput<ManageAccountsModule.Mode>(navController) { input ->
+            ManageAccountsScreen(navController, input)
         }
-        ManageAccountsScreen(navController, input)
     }
 }
 

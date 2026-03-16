@@ -21,7 +21,6 @@ import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.wallet.imageUrl
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.entities.ViewState
 import io.horizontalsystems.chartview.chart.ChartViewModel
@@ -46,12 +45,13 @@ class MetricsPageFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val metricsType = navController.requireInput<MetricsType>()
-        val factory = MetricsPageModule.Factory(metricsType)
-        val chartViewModel by viewModels<ChartViewModel> { factory }
-        val viewModel by viewModels<MetricsPageViewModel> { factory }
-        MetricsPage(viewModel, chartViewModel, navController) {
-            onCoinClick(it, navController)
+        withInput<MetricsType>(navController) { metricsType ->
+            val factory = MetricsPageModule.Factory(metricsType)
+            val chartViewModel by viewModels<ChartViewModel> { factory }
+            val viewModel by viewModels<MetricsPageViewModel> { factory }
+            MetricsPage(viewModel, chartViewModel, navController) {
+                onCoinClick(it, navController)
+            }
         }
     }
 

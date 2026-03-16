@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.wallet.models.CoinCategory
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.entities.ViewState
 import io.horizontalsystems.chartview.chart.ChartViewModel
@@ -42,16 +42,18 @@ class MarketCategoryFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val factory = MarketCategoryModule.Factory(navController.requireInput())
-        val chartViewModel = viewModel<ChartViewModel>(factory = factory)
-        val viewModel = viewModel<MarketCategoryViewModel>(factory = factory)
+        withInput<CoinCategory>(navController) { coinCategory ->
+            val factory = MarketCategoryModule.Factory(coinCategory)
+            val chartViewModel = viewModel<ChartViewModel>(factory = factory)
+            val viewModel = viewModel<MarketCategoryViewModel>(factory = factory)
 
-        CategoryScreen(
-            viewModel,
-            chartViewModel,
-            { navController.popBackStack() },
-            { coinUid -> onCoinClick(coinUid, navController) }
-        )
+            CategoryScreen(
+                viewModel,
+                chartViewModel,
+                { navController.popBackStack() },
+                { coinUid -> onCoinClick(coinUid, navController) }
+            )
+        }
     }
 
     private fun onCoinClick(coinUid: String, navController: NavController) {

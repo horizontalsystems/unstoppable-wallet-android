@@ -24,7 +24,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.navigation.slideFromBottom
 import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -52,22 +51,23 @@ class TopNftCollectionsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-        val viewModel = viewModel<TopNftCollectionsViewModel>(
-            factory = TopNftCollectionsModule.Factory(
-                input.sortingField,
-                input.timeDuration
+        withInput<Input>(navController) { input ->
+            val viewModel = viewModel<TopNftCollectionsViewModel>(
+                factory = TopNftCollectionsModule.Factory(
+                    input.sortingField,
+                    input.timeDuration
+                )
             )
-        )
 
-        TopNftCollectionsScreen(
-            viewModel,
-            { navController.popBackStack() },
-            { blockchainType, collectionUid ->
-                val args = NftCollectionFragment.Input(collectionUid, blockchainType.uid)
-                navController.slideFromBottom(R.id.nftCollectionFragment, args)
-            }
-        )
+            TopNftCollectionsScreen(
+                viewModel,
+                { navController.popBackStack() },
+                { blockchainType, collectionUid ->
+                    val args = NftCollectionFragment.Input(collectionUid, blockchainType.uid)
+                    navController.slideFromBottom(R.id.nftCollectionFragment, args)
+                }
+            )
+        }
     }
 
     @Parcelize

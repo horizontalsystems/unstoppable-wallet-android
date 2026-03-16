@@ -23,8 +23,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import cash.p.terminal.R
+import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.tvl.TvlModule
@@ -50,11 +50,13 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        CoinTreasuriesScreen(
-            viewModel(
-                factory = CoinTreasuriesModule.Factory(navController.requireInput())
+        withInput<Coin>(navController) { coin ->
+            CoinTreasuriesScreen(
+                viewModel(
+                    factory = CoinTreasuriesModule.Factory(coin)
+                )
             )
-        )
+        }
     }
 
     @Composable

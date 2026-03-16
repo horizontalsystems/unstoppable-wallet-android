@@ -19,7 +19,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.requireInput
 import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui_compose.components.HSSwipeRefresh
@@ -35,17 +34,17 @@ class CoinReportsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-
-        CoinReportsScreen(
-            viewModel = viewModel(factory = CoinReportsModule.Factory(input.coinUid)),
-            onClickNavigation = {
-                navController.popBackStack()
-            },
-            onClickReportUrl = {
-                LinkHelper.openLinkInAppBrowser(requireContext(), it)
-            }
-        )
+        withInput<Input>(navController) { input ->
+            CoinReportsScreen(
+                viewModel = viewModel(factory = CoinReportsModule.Factory(input.coinUid)),
+                onClickNavigation = {
+                    navController.popBackStack()
+                },
+                onClickReportUrl = {
+                    LinkHelper.openLinkInAppBrowser(requireContext(), it)
+                }
+            )
+        }
     }
 
     @Parcelize
