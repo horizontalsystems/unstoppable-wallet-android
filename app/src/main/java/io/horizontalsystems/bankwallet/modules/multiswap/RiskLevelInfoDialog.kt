@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetCo
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSBadgeOutline
@@ -143,4 +144,15 @@ private fun RiskLevelCell(level: RiskLevel, description: String) {
             subtitle = description.hs
         )
     }
+}
+
+@Composable
+private fun getRiskLevelHsString(riskLevel: RiskLevel): HSString {
+    val text = stringResource(riskLevel.title)
+    val color = when (riskLevel) {
+        RiskLevel.AUTO -> ComposeAppTheme.colors.remus
+        RiskLevel.LIMITED -> ComposeAppTheme.colors.ocean
+        RiskLevel.CONTROLLED -> ComposeAppTheme.colors.jacob
+    }
+    return HSString(text, color, false)
 }
