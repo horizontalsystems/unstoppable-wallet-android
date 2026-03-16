@@ -1,13 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
 import android.util.Log
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.AllBridgeProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.MayaProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.UProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.USwapProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,18 +18,7 @@ import kotlinx.coroutines.withTimeout
 import java.math.BigDecimal
 
 class SwapQuoteService {
-    private val allProviders = listOf(
-        OneInchProvider,
-        ThorChainProvider,
-        MayaProvider,
-        AllBridgeProvider,
-        USwapProvider(UProvider.Near),
-        USwapProvider(UProvider.QuickEx),
-        USwapProvider(UProvider.LetsExchange),
-        USwapProvider(UProvider.StealthEx),
-        USwapProvider(UProvider.Exolix),
-        USwapProvider(UProvider.Swapuz),
-    )
+    private val allProviders = MultiSwapProviderRegistry.allProviders
 
     private var amountIn: BigDecimal? = null
     private var tokenIn: Token? = null

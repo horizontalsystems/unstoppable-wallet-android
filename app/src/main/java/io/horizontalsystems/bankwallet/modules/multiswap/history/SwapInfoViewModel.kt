@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.coinIconUrl
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
@@ -100,7 +101,11 @@ class SwapInfoViewModel(
         fee = formatFee(record.networkFeeAmount, record.networkFeeCoinCode)
         depositingTxUrl = record.transactionHash?.let { buildTxUrl(record.tokenInBlockchainTypeUid, it) }
         sendingTxUrl = record.outboundTransactionHash?.let { buildTxUrl(record.tokenOutBlockchainTypeUid, it) }
-        isSingleChain = record.tokenInBlockchainTypeUid == record.tokenOutBlockchainTypeUid
+        isSingleChain = MultiSwapProviderRegistry.isSingleChainSwap(
+            record.providerId,
+            record.tokenInBlockchainTypeUid,
+            record.tokenOutBlockchainTypeUid,
+        )
 
         emitState()
     }

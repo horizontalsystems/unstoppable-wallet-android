@@ -116,6 +116,8 @@ abstract class BaseThorChainProvider(
         return assetsMap
     }
 
+    override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = false
+
     override fun supports(blockchainType: BlockchainType): Boolean {
         // overriding fun supports(tokenFrom: Token, tokenTo: Token) makes this method redundant
         return true
