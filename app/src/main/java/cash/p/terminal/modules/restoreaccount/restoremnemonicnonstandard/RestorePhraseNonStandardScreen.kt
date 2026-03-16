@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -86,6 +87,7 @@ import cash.p.terminal.ui.compose.observeKeyboardState
 import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.ui_compose.components.HudHelper
+import cash.p.terminal.core.launchAfterClearingFocus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -101,6 +103,7 @@ fun RestorePhraseNonStandard(
     val uiState = viewModel.uiState
     val context = LocalContext.current
     val view = LocalView.current
+    val focusManager = LocalFocusManager.current
     val scannerTitle = stringResource(R.string.Restore_RecoveryPhrase)
 
     var textState by rememberSaveable("", stateSaver = TextFieldValue.Saver) {
@@ -238,12 +241,14 @@ fun RestorePhraseNonStandard(
                                 modifier = Modifier.padding(end = 8.dp),
                                 icon = R.drawable.ic_qr_scan_20,
                                 onClick = {
-                                    view.findNavController().openQrScanner(scannerTitle) { scannedText ->
-                                        textState = textState.copy(
-                                            text = scannedText,
-                                            selection = TextRange(scannedText.length)
-                                        )
-                                        viewModel.onEnterMnemonicPhrase(scannedText, scannedText.length)
+                                    coroutineScope.launchAfterClearingFocus(focusManager) {
+                                        view.findNavController().openQrScanner(scannerTitle) { scannedText ->
+                                            textState = textState.copy(
+                                                text = scannedText,
+                                                selection = TextRange(scannedText.length)
+                                            )
+                                            viewModel.onEnterMnemonicPhrase(scannedText, scannedText.length)
+                                        }
                                     }
                                 }
                             )

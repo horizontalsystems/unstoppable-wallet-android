@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +25,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
@@ -42,6 +44,7 @@ import cash.p.terminal.ui_compose.entities.DataState
 import cash.p.terminal.ui_compose.entities.FormsInputStateWarning
 import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.core.launchAfterClearingFocus
 import io.horizontalsystems.core.entities.BlockchainType
 
 @Composable
@@ -59,6 +62,8 @@ fun FormsInputAddress(
     onValueChange: (String) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+    val coroutineScope = rememberCoroutineScope()
     val borderColor = when (state) {
         is DataState.Error -> {
             if (state.error is FormsInputStateWarning) {
@@ -186,7 +191,11 @@ fun FormsInputAddress(
                 ButtonSecondaryCircle(
                     modifier = Modifier.padding(end = 8.dp),
                     icon = R.drawable.ic_qr_scan_20,
-                    onClick = onQrScanClick
+                    onClick = {
+                        coroutineScope.launchAfterClearingFocus(focusManager) {
+                            onQrScanClick()
+                        }
+                    }
                 )
 
                 val clipboardManager = LocalClipboardManager.current

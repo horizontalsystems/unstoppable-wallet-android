@@ -59,6 +59,25 @@ import java.math.BigDecimal
 import java.util.Locale
 import java.util.Optional
 
+import androidx.compose.ui.focus.FocusManager
+import kotlinx.coroutines.CoroutineScope
+
+/**
+ * Clears focus (dismissing keyboard) and launches [action] after a brief delay.
+ * Prevents a Compose bug where .imePadding() gets stuck with stale IME insets
+ * when the keyboard is dismissed during fragment navigation.
+ */
+fun CoroutineScope.launchAfterClearingFocus(
+    focusManager: FocusManager,
+    action: () -> Unit
+) {
+    focusManager.clearFocus()
+    launch {
+        delay(100)
+        action()
+    }
+}
+
 fun String.orHide(hidden: Boolean, hideValue: String = "*****"): String =
     if (hidden) hideValue else this
 
