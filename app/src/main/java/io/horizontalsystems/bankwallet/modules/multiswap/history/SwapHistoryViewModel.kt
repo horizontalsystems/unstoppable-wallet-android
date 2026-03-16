@@ -101,7 +101,7 @@ class SwapHistoryViewModel(
 
     private fun formatAmount(amountStr: String, coinCode: String): String {
         val amount = amountStr.toBigDecimalOrNull() ?: return amountStr
-        return numberFormatter.formatCoinShort(amount, coinCode, 8)
+        return numberFormatter.formatCoinShort(amount, coinCode, 6)
     }
 
     private suspend fun fetchHistoricalPrice(coinUid: String, currencyCode: String, timestampSeconds: Long): BigDecimal? {
