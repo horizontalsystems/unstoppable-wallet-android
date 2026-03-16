@@ -14,6 +14,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class SwapSyncService(
     private val swapRecordManager: SwapRecordManager,
@@ -70,9 +71,9 @@ class SwapSyncService(
             val newStatus = mapStatus(response)
                 ?.takeIf { it != SwapStatus.valueOf(record.status) }
                 ?: return
-            val newAmountOut = response.toAmount?.takeIf { it.isNotEmpty() }
-            if (newAmountOut != null) {
-                swapRecordManager.updateStatusAndAmountOut(record.id, newStatus, newAmountOut)
+            val newAmountOut = response.toAmount?.toBigDecimalOrNull()
+            if (newAmountOut != null && newAmountOut > BigDecimal.ZERO) {
+                swapRecordManager.updateStatusAndAmountOut(record.id, newStatus, response.toAmount)
             } else {
                 swapRecordManager.updateStatus(record.id, newStatus)
             }
