@@ -6,7 +6,6 @@ import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.contacts.ContactsRepository
 import io.horizontalsystems.core.entities.BlockchainType
-import kotlinx.coroutines.launch
 
 class AddressViewModel(
     val blockchainType: BlockchainType,
@@ -19,7 +18,8 @@ class AddressViewModel(
     private val fullAddressParserUseCase = FullAddressParserUseCase(
         blockchainType = blockchainType,
         addressUriParser = addressUriParser,
-        addressParserChain = addressParserChain
+        addressParserChain = addressParserChain,
+        coroutineScope = viewModelScope
     )
 
     val address = fullAddressParserUseCase.address
@@ -31,16 +31,12 @@ class AddressViewModel(
 
     init {
         initial?.hex?.let {
-            viewModelScope.launch {
-                fullAddressParserUseCase.parseAddress(it)
-            }
+            fullAddressParserUseCase.parseAddress(it)
         }
     }
 
     fun parseText(value: String) {
-        viewModelScope.launch {
-            fullAddressParserUseCase.parseText(value)
-        }
+        fullAddressParserUseCase.parseText(value)
     }
 
     fun onAddressError(addressError: Throwable?) =
