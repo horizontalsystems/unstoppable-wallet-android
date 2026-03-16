@@ -80,7 +80,7 @@ class TransactionsViewModel(
     private var transactionListId: String? = null
     private var transactions: Map<String, List<TransactionViewItem>>? = null
     private var viewState: ViewState = ViewState.Loading
-    private var syncing = false
+    private var syncing = service.syncingFlow.value
     private var hasHiddenTransactions: Boolean = false
     @Volatile private var filterVersion = 0
     @Volatile private var accountVersion = 0

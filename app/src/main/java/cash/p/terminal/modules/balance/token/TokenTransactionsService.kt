@@ -45,6 +45,9 @@ class TokenTransactionsService(
     )
     private val _transactionItems = MutableStateFlow<List<TransactionItem>>(emptyList())
     val transactionItemsFlow: StateFlow<List<TransactionItem>> = _transactionItems.asStateFlow()
+    private val _recordsLoadedFlow = MutableStateFlow(false)
+    val recordsLoadedFlow: StateFlow<Boolean> = _recordsLoadedFlow.asStateFlow()
+    val syncingFlow: StateFlow<Boolean> = transactionSyncStateRepository.syncingFlow
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
@@ -90,6 +93,7 @@ class TokenTransactionsService(
         val transactionWallet =
             TransactionWallet(wallet.token, wallet.transactionSource, wallet.badge)
 
+        _recordsLoadedFlow.value = false
         transactionSyncStateRepository.setTransactionWallets(listOf(transactionWallet))
         transactionRecordRepository.set(
             transactionWallets = listOf(transactionWallet),
@@ -157,6 +161,7 @@ class TokenTransactionsService(
     }
 
     private suspend fun handleUpdatedRecords(transactionRecords: List<TransactionRecord>) {
+        _recordsLoadedFlow.value = true
         val nftUids = transactionRecords.nftUids
         val nftMetadata = nftMetadataService.assetsBriefMetadata(nftUids)
 

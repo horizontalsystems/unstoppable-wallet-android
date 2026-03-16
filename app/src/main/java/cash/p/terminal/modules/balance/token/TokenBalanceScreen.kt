@@ -220,7 +220,7 @@ fun TokenBalanceScreen(
                             isShowShieldFunds = uiState.isShowShieldFunds
                         )
                     }
-                    if (transactionItems == null) {
+                    if (transactionItems == null || uiState.syncing) {
                         ListEmptyView(
                             text = stringResource(R.string.Transactions_WaitForSync),
                             icon = R.drawable.ic_clock

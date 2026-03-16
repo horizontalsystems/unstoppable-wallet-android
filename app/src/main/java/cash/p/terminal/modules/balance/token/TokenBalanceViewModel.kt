@@ -66,6 +66,7 @@ import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.logger.AppLogger
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -110,6 +111,8 @@ class TokenBalanceViewModel(
 
     private var balanceViewItem: BalanceViewItem? = null
     private var transactions: Map<String, List<TransactionViewItem>>? = null
+    private var syncing: Boolean =
+        transactionsService.syncingFlow.value || !transactionsService.recordsLoadedFlow.value
     private var hasHiddenTransactions: Boolean = false
     private var amlPromoAlertEnabled = premiumSettings.getAmlCheckShowAlert()
 
@@ -202,6 +205,18 @@ class TokenBalanceViewModel(
         viewModelScope.launch {
             transactionsService.transactionItemsFlow.collect {
                 updateTransactions(it)
+            }
+        }
+
+        viewModelScope.launch {
+            combine(
+                transactionsService.syncingFlow,
+                transactionsService.recordsLoadedFlow
+            ) { syncing, recordsLoaded ->
+                syncing || !recordsLoaded
+            }.collect {
+                syncing = it
+                emitState()
             }
         }
 
@@ -397,7 +412,8 @@ class TokenBalanceViewModel(
         displayDiffPricePeriod = displayDiffPricePeriod,
         displayDiffOptionType = displayDiffOptionType,
         isRoundingAmount = isRoundingAmount,
-        isShowShieldFunds = isShowShieldFunds()
+        isShowShieldFunds = isShowShieldFunds(),
+        syncing = syncing
     )
 
     private fun isShowShieldFunds(): Boolean {
@@ -413,6 +429,10 @@ class TokenBalanceViewModel(
     }
 
     private fun updateTransactions(items: List<TransactionItem>) {
+        // Don't replace null (shows "wait for sync") with empty map (shows "no transactions")
+        // until real records arrive. The initial empty emission from transactionRecordRepository.set()
+        // arrives before actual records are loaded.
+        if (items.isEmpty() && transactions == null) return
         transactions =
             if (transactionHiddenManager.transactionHiddenFlow.value.transactionHidden) {
                 when (transactionHiddenManager.transactionHiddenFlow.value.transactionDisplayLevel) {
@@ -576,6 +596,7 @@ class TokenBalanceViewModel(
     override fun onCleared() {
         super.onCleared()
         balanceService.clear()
+        transactionsService.clear()
         totalBalance.stop()
     }
 
