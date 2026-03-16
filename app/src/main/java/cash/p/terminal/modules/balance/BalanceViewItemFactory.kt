@@ -131,7 +131,8 @@ class BalanceViewItemFactory {
         BlockchainType.PirateCash,
         BlockchainType.Cosanta,
         BlockchainType.Zcash,
-        BlockchainType.Monero -> true
+        BlockchainType.Monero,
+        BlockchainType.BinanceSmartChain -> true
         else -> false
     }
 

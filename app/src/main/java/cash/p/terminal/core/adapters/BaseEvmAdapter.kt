@@ -1,11 +1,15 @@
 package cash.p.terminal.core.adapters
 
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.IAdapter
 import cash.p.terminal.wallet.IBalanceAdapter
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.core.ISendEthereumAdapter
 import cash.p.terminal.data.repository.EvmTransactionRepository
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.ethereumkit.core.EthereumKit
+import timber.log.Timber
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -44,6 +48,20 @@ internal abstract class BaseEvmAdapter(
         balance?.toBigDecimal()?.let {
             return scaleDown(it, decimal)
         } ?: return BigDecimal.ZERO
+    }
+
+    protected fun historicalSyncAdapterState(): AdapterState? {
+        if (evmTransactionRepository.getBlockchainType() != BlockchainType.BinanceSmartChain) return null
+        val histState = evmTransactionRepository.historicalSyncState.value
+        Timber.d("BaseEvmAdapter historicalSyncState: $histState")
+        if (histState is EthereumKit.HistoricalSyncState.Syncing) {
+            Timber.d("BaseEvmAdapter progress: ${histState.progress}, blocks remaining: ${histState.blocksRemaining}")
+            return AdapterState.Syncing(
+                progress = (histState.progress * 100).toInt(),
+                blocksRemained = histState.blocksRemaining
+            )
+        }
+        return null
     }
 
     companion object {
