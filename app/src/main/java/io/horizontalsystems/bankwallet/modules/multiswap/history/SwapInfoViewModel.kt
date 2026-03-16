@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.multiswap
+package io.horizontalsystems.bankwallet.modules.multiswap.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

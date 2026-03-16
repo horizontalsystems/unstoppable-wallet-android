@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.multiswap
+package io.horizontalsystems.bankwallet.modules.multiswap.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -26,7 +26,8 @@ class SwapHistoryViewModel(
     private val currencyManager: CurrencyManager,
     private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<SwapHistoryUiState>() {
-    @Volatile private var viewItems: List<SwapHistoryViewItem> = emptyList()
+    @Volatile
+    private var viewItems: List<SwapHistoryViewItem> = emptyList()
 
     override fun createState() = SwapHistoryUiState(viewItems.groupBy { it.formattedDate })
 

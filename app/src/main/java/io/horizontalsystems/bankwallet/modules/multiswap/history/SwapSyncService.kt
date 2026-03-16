@@ -1,10 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.multiswap
+package io.horizontalsystems.bankwallet.modules.multiswap.history
 
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.entities.SwapRecord
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.bankwallet.entities.SwapRecord
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UnstoppableAPI
 import kotlinx.coroutines.CoroutineScope
@@ -58,8 +58,8 @@ class SwapSyncService(
             val outboundHash = response.legs
                 ?.firstOrNull { leg ->
                     leg.type == "native_send" &&
-                        (leg.toAsset == response.toAsset || leg.toAddress == response.toAddress) &&
-                        leg.hash != null
+                            (leg.toAsset == response.toAsset || leg.toAddress == response.toAddress) &&
+                            leg.hash != null
                 }
                 ?.hash
 
