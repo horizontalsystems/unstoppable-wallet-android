@@ -1,19 +1,26 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -27,14 +34,16 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_leah
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightSelectors
 import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
@@ -160,21 +169,72 @@ private fun SwapSelectProviderScreenInner(
                                     description += stringResource(R.string.Swap_AML)
                                 }
 
-                                CellMiddleInfo(
-                                    eyebrow = provider.title.hs(ComposeAppTheme.colors.leah),
-                                    eyebrowBadge = getRiskLevelHsString(provider.riskLevel),
-                                    onEyebrowBadgeClick = onBadgeClick,
-                                    subtitle = (viewItem.estimationTime?.let { "~${formatDurationShort(it)}" } ?: stringResource(R.string.NotAvailable)).hs,
-                                )
-                            },
-                            right = {
-                                CellRightSelectors(
-                                    subtitle = viewItem.tokenAmount.hs,
-                                    description1 = viewItem.fiatAmount?.hs,
-                                    description2 = getPriceImpact(viewItem.priceImpactData),
-                                    icon = painterResource(icon),
-                                    iconTint = iconTint
-                                )
+                                Row(
+                                    horizontalArrangement = spacedBy(12.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Column(
+                                        modifier = Modifier.weight(1f)
+                                    ) {
+                                        Row {
+                                            headline2_leah(
+                                                text = provider.title,
+                                                modifier = Modifier.weight(1f)
+                                            )
+                                            subheadSB_leah(viewItem.tokenAmount)
+                                        }
+
+                                        Row {
+                                            Row(
+                                                horizontalArrangement = spacedBy(4.dp),
+                                                modifier = Modifier.weight(1f)
+                                            ) {
+                                                Icon(
+                                                    painter = painterResource(R.drawable.clock_filled_24),
+                                                    modifier = Modifier.size(16.dp),
+                                                    tint = ComposeAppTheme.colors.grey,
+                                                    contentDescription = null
+                                                )
+                                                captionSB_grey(
+                                                    text = (viewItem.estimationTime?.let {
+                                                        formatDurationShort(
+                                                            it
+                                                        )
+                                                    } ?: stringResource(R.string.NotAvailable))
+                                                )
+
+                                                RiskCell(provider.riskLevel)
+                                            }
+                                            Row(
+                                                horizontalArrangement = spacedBy(4.dp)
+                                            ) {
+                                                viewItem.fiatAmount?.let {
+                                                    Text(
+                                                        text = it,
+                                                        style = ComposeAppTheme.typography.captionSB,
+                                                        color = ComposeAppTheme.colors.grey,
+                                                        textAlign = TextAlign.End,
+                                                    )
+                                                }
+                                                getPriceImpact(viewItem.priceImpactData)?.let {
+                                                    Text(
+                                                        text = it.text,
+                                                        style = ComposeAppTheme.typography.captionSB,
+                                                        color = it.color ?: ComposeAppTheme.colors.grey,
+                                                        textAlign = TextAlign.End,
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+                                    Icon(
+                                        modifier = Modifier
+                                            .size(20.dp),
+                                        painter = painterResource(icon),
+                                        contentDescription = null,
+                                        tint = iconTint
+                                    )
+                                }
                             },
                             onClick = { onSelectQuote.invoke(viewItem.quote) }
                         )
@@ -183,6 +243,35 @@ private fun SwapSelectProviderScreenInner(
             }
             VSpacer(32.dp)
         }
+    }
+}
+
+@Composable
+fun RiskCell(riskLevel: RiskLevel) {
+    val color = when (riskLevel) {
+        RiskLevel.AUTO -> ComposeAppTheme.colors.remus
+        RiskLevel.CONTROLLED -> ComposeAppTheme.colors.jacob
+        RiskLevel.LIMITED -> ComposeAppTheme.colors.leah
+    }
+    val icon = when (riskLevel) {
+        RiskLevel.AUTO -> R.drawable.shield_check_filled_24
+        RiskLevel.CONTROLLED -> R.drawable.ic_warning_filled_24
+        RiskLevel.LIMITED -> R.drawable.thumbsup_24
+    }
+    Row {
+        Icon(
+            painter = painterResource(icon),
+            modifier = Modifier.size(16.dp),
+            tint = color,
+            contentDescription = null
+        )
+        HSpacer(4.dp)
+        Text(
+            text = stringResource(riskLevel.title),
+            style = ComposeAppTheme.typography.captionSB,
+            color = color,
+            modifier = Modifier.weight(1f),
+        )
     }
 }
 
@@ -214,17 +303,6 @@ fun ProviderSortingSelector(
             onSelectItem = onSelectSortType
         )
     }
-}
-
-@Composable
-fun getRiskLevelHsString(riskLevel: RiskLevel): HSString {
-    val text = stringResource(riskLevel.title)
-    val color = when (riskLevel) {
-        RiskLevel.AUTO -> ComposeAppTheme.colors.remus
-        RiskLevel.LIMITED -> ComposeAppTheme.colors.ocean
-        RiskLevel.CONTROLLED -> ComposeAppTheme.colors.jacob
-    }
-    return HSString(text, color, false)
 }
 
 @Composable
