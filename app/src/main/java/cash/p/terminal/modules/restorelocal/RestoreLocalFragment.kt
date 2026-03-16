@@ -4,6 +4,7 @@ import android.os.Parcelable
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -396,7 +397,7 @@ private fun BackupFileItems(
                 )
             },
             bottomBar = {
-                ButtonsGroupWithShade {
+                ButtonsGroupWithShade(modifier = Modifier.navigationBarsPadding()) {
                     ButtonPrimaryYellow(
                         modifier = Modifier
                             .fillMaxWidth()
