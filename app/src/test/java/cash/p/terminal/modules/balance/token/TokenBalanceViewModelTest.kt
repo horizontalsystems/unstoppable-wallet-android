@@ -150,6 +150,8 @@ class TokenBalanceViewModelTest : KoinTest {
         every { transactionHiddenManager.transactionHiddenFlow } returns transactionHiddenFlow
         every { transactionHiddenManager.showAllTransactions(any()) } returns Unit
         every { transactionsService.transactionItemsFlow } returns transactionItemsFlow
+        every { transactionsService.syncingFlow } returns MutableStateFlow(false)
+        every { transactionsService.recordsLoadedFlow } returns MutableStateFlow(false)
         every { transactionsService.refreshList() } returns Unit
         every { balanceService.balanceItemFlow } returns balanceItemFlow
         every { balanceService.balanceItem } returns null
