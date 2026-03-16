@@ -7,6 +7,9 @@ _Release date: March 16, 2026_
 
 - **Added display of the remaining number of blocks for BEP-20 tokens**
 
+- **Improved wallet status display in system messages**
+  The messages "Please wait until synchronization is complete" and "You don't have any pending or past transactions yet" now reflect the current wallet status more accurately.
+
 ### 🐛 Fixes
 
 - **Fixed an issue where balance hiding was inherited when navigating from the asset screen to swap**
