@@ -17,7 +17,7 @@ enum class UProvider(
         R.drawable.swap_provider_near,
         SwapProviderType.DEX,
         false,
-        false,
+        true,
         RiskLevel.CONTROLLED
     ),
     QuickEx(
@@ -62,7 +62,7 @@ enum class UProvider(
         R.drawable.swap_provider_swapuz,
         SwapProviderType.CEX,
         false,
-        false,
+        true,
         RiskLevel.LIMITED
     );
 }
