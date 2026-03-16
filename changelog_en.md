@@ -1,3 +1,30 @@
+## 🚀 Version 0.52.2 Update
+_Release date: March 16, 2026_
+
+### ✨ Improvements
+
+- **Improved synchronization when switching between wallets and opening the transaction list**
+
+- **Added display of the remaining number of blocks for BEP-20 tokens**
+
+### 🐛 Fixes
+
+- **Fixed an issue where balance hiding was inherited when navigating from the asset screen to swap**
+
+- **Fixed SQLiteDatabaseCorruptException crash in the Zcash SDK on low-end devices**
+  The app could crash with `SQLiteDatabaseCorruptException: database disk image is malformed` while working with a Zcash wallet.
+  The failure occurred inside the Zcash SDK while reading transactions from the database, where DB corruption was not handled and the exception was propagated as a fatal crash.
+
+- **Fixed address editing issue in the send screen**
+
+- **Fixed screen scrolling issue after returning from the scanner in the send screen**
+  If the keyboard was open and the user launched the scanner, not the entire screen could be scrolled after returning.
+
+- **Fixed crash when returning to the backup restore screen after background process death**
+
+- **Fixed the Restore button being covered by the system bar on the Backup File screen**
+
+
 ## 🚀 Version 0.52.1 Update
 _Release date: March 12, 2026_
 
