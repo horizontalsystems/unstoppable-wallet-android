@@ -1,6 +1,7 @@
 package cash.p.terminal.core.adapters.zcash
 
 import android.content.Context
+import android.database.sqlite.SQLiteDatabaseCorruptException
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ISendZcashAdapter
@@ -34,7 +35,6 @@ import cash.z.ecc.android.sdk.WalletInitMode
 import cash.z.ecc.android.sdk.block.processor.CompactBlockProcessor
 import cash.z.ecc.android.sdk.exception.TransactionEncoderException
 import cash.z.ecc.android.sdk.ext.ZcashSdk
-import cash.z.ecc.android.sdk.ext.collectWith
 import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
 import cash.z.ecc.android.sdk.ext.convertZecToZatoshi
 import cash.z.ecc.android.sdk.ext.fromHex
@@ -64,7 +64,6 @@ import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -75,6 +74,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -85,6 +85,7 @@ import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 import java.math.BigDecimal
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.regex.Pattern
 import kotlin.math.max
 
@@ -105,6 +106,10 @@ class ZcashAdapter(
     private val lightWalletEndpoint =
         LightWalletEndpoint(host = "zec.rocks", port = 443, isSecure = true)
 
+    private val recovering = AtomicBoolean(false)
+    private val corruptionRecovery = AtomicBoolean(false)
+
+    @Volatile
     private var synchronizer: CloseableSynchronizer
     private var transactionsProvider: ZcashTransactionsProvider
     private val clearZCashWalletDataUseCase: ClearZCashWalletDataUseCase by inject(
@@ -208,6 +213,7 @@ class ZcashAdapter(
                 synchronizer = synchronizer as SdkSynchronizer
             )
         synchronizer.onProcessorErrorHandler = ::onProcessorError
+        synchronizer.onCriticalErrorHandler = ::onCriticalError
         synchronizer.onChainErrorHandler = ::onChainError
 
         subscribeToEvents()
@@ -299,14 +305,21 @@ class ZcashAdapter(
     private var lastDownloadProgress: Int = 0
 
     private suspend fun createNewSynchronizer() {
-        val walletInitMode = if (existingWallet) {
+        val isRecovery = corruptionRecovery.get()
+        val walletInitMode = if (isRecovery) {
+            WalletInitMode.RestoreWallet
+        } else if (existingWallet) {
             WalletInitMode.ExistingWallet
         } else when (wallet.account.origin) {
             AccountOrigin.Created -> WalletInitMode.NewWallet
             AccountOrigin.Restored -> WalletInitMode.RestoreWallet
         }
 
-        val birthday = when (wallet.account.origin) {
+        val birthday = if (isRecovery) {
+            restoreSettings.birthdayHeight
+                ?.let { max(network.saplingActivationHeight.value, it) }
+                ?.let { BlockHeight.new(it) }
+        } else when (wallet.account.origin) {
             AccountOrigin.Created -> runBlocking {
                 BlockHeight.ofLatestCheckpoint(App.instance, network)
             }
@@ -362,6 +375,7 @@ class ZcashAdapter(
             return
         }
 
+        corruptionRecovery.set(false)
         zcashAccount = tryOrNull { getFirstAccount() }
         receiveAddress = getReceiveAddressOrEmpty()
         transactionsProvider =
@@ -369,6 +383,7 @@ class ZcashAdapter(
                 synchronizer = synchronizer as SdkSynchronizer
             )
         synchronizer.onProcessorErrorHandler = ::onProcessorError
+        synchronizer.onCriticalErrorHandler = ::onCriticalError
         synchronizer.onChainErrorHandler = ::onChainError
     }
 
@@ -642,24 +657,104 @@ class ZcashAdapter(
         ).first().txId
     }
 
-    @OptIn(FlowPreview::class)
     private fun subscribe(synchronizer: SdkSynchronizer) {
         subscriberScope?.cancel()
         val handler = CoroutineExceptionHandler { _, exception ->
             Timber.w(exception, "Zcash synchronizer flow error")
+            if (isDatabaseCorruption(exception)) {
+                handleDatabaseCorruption(exception)
+            }
         }
         val parentJob = synchronizer.coroutineScope.coroutineContext[Job]
         val scope = CoroutineScope(Dispatchers.Main + SupervisorJob(parentJob) + handler)
         subscriberScope = scope
-        synchronizer.allTransactions.collectWith(scope, transactionsProvider::onTransactions)
-        synchronizer.status.collectWith(scope, ::onStatus)
-        synchronizer.progress.collectWith(scope, ::onDownloadProgress)
-        synchronizer.walletBalances.collectWith(scope, ::onBalance)
-        synchronizer.processorInfo.collectWith(scope, ::onProcessorInfo)
+        synchronizer.allTransactions.safeCollectIn(scope, transactionsProvider::onTransactions)
+        synchronizer.status.safeCollectIn(scope, ::onStatus)
+        synchronizer.progress.safeCollectIn(scope, ::onDownloadProgress)
+        synchronizer.walletBalances.safeCollectIn(scope, ::onBalance)
+        synchronizer.processorInfo.safeCollectIn(scope, ::onProcessorInfo)
+    }
+
+    private fun <T> Flow<T>.safeCollectIn(scope: CoroutineScope, block: (T) -> Unit) {
+        scope.launch {
+            catch { e ->
+                Timber.e(e, "Zcash flow collection error")
+                if (isDatabaseCorruption(e)) {
+                    handleDatabaseCorruption(e)
+                }
+            }.collect { block(it) }
+        }
+    }
+
+    private fun isDatabaseCorruption(error: Throwable): Boolean {
+        var cause: Throwable? = error
+        while (cause != null) {
+            if (cause is SQLiteDatabaseCorruptException) return true
+            cause = cause.cause
+        }
+        return false
+    }
+
+    private fun handleDatabaseCorruption(cause: Throwable) {
+        if (!recovering.compareAndSet(false, true)) return
+        Timber.e(cause, "Zcash database corruption detected, recovering")
+        scope.launch {
+            try {
+                syncState = AdapterState.NotSynced(Exception("Database corrupted, recovering"))
+                try {
+                    synchronizer.close()
+                } catch (e: Exception) {
+                    Timber.w(e, "Error closing corrupted synchronizer")
+                }
+                eraseWithRetry()
+                corruptionRecovery.set(true)
+                createNewSynchronizer()
+                subscribe(synchronizer as SdkSynchronizer)
+                subscribeToStatus()
+            } catch (e: Exception) {
+                Timber.e(e, "Zcash database corruption recovery failed")
+                syncState = AdapterState.NotSynced(Exception("Recovery failed", e))
+            } finally {
+                recovering.set(false)
+            }
+        }
+    }
+
+    private suspend fun eraseWithRetry() {
+        val alias = clearZCashWalletDataUseCase.getValidAliasFromAccountId(
+            wallet.account.id, addressSpecTyped
+        )
+        repeat(3) { attempt ->
+            try {
+                Synchronizer.erase(App.instance, network, alias)
+                return
+            } catch (e: IllegalStateException) {
+                if (attempt < 2) {
+                    val delayMs = 1000L * (attempt + 1)
+                    Timber.d("Synchronizer still active, retrying erase in ${delayMs}ms (attempt ${attempt + 1}/3)")
+                    delay(delayMs)
+                } else {
+                    throw IllegalStateException("Failed to erase corrupted database after 3 attempts", e)
+                }
+            }
+        }
     }
 
     private fun onProcessorError(error: Throwable?): Boolean {
-        error?.printStackTrace()
+        Timber.e(error, "Zcash processor error")
+        if (error != null && isDatabaseCorruption(error)) {
+            handleDatabaseCorruption(error)
+            return false
+        }
+        return true
+    }
+
+    private fun onCriticalError(error: Throwable?): Boolean {
+        Timber.e(error, "Zcash critical error")
+        if (error != null && isDatabaseCorruption(error)) {
+            handleDatabaseCorruption(error)
+            return false
+        }
         return true
     }
 
