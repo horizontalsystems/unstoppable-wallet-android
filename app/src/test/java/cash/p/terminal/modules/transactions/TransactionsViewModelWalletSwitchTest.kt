@@ -51,7 +51,7 @@ import org.koin.test.KoinTestRule
  *
  * Verifies that when user switches between wallets (accounts), the ViewModel:
  * 1. Immediately shows Loading state (not old transactions)
- * 2. Doesn't show transactions until adapters are ready
+ * 2. Shows new transactions arriving after switch (defense is at service/repo layer)
  * 3. Shows correct transactions once new data arrives after adapters ready
  * 4. Handles edge case of switching between empty-transaction accounts
  */
@@ -80,6 +80,7 @@ class TransactionsViewModelWalletSwitchTest : KoinTest {
     // Controllable flows
     private lateinit var activeWalletsFlow: MutableStateFlow<List<Wallet>>
     private lateinit var adaptersReadyFlow: MutableStateFlow<Map<TransactionSource, ITransactionsAdapter>>
+    private lateinit var initializationFlow: MutableStateFlow<Boolean>
     private lateinit var transactionItemsFlow: MutableStateFlow<List<TransactionItem>>
     private lateinit var filterStateFlow: MutableStateFlow<TransactionFilterService.State>
     private lateinit var syncingFlow: MutableStateFlow<Boolean>
@@ -102,6 +103,7 @@ class TransactionsViewModelWalletSwitchTest : KoinTest {
 
         activeWalletsFlow = MutableStateFlow(emptyList())
         adaptersReadyFlow = MutableStateFlow(emptyMap())
+        initializationFlow = MutableStateFlow(false)
         transactionItemsFlow = MutableStateFlow(emptyList())
         syncingFlow = MutableStateFlow(false)
         transactionHiddenFlow = MutableStateFlow(
@@ -131,6 +133,7 @@ class TransactionsViewModelWalletSwitchTest : KoinTest {
         every { walletManager.activeWalletsFlow } returns activeWalletsFlow
         every { walletManager.activeWallets } returns emptyList()
         every { transactionAdapterManager.adaptersReadyFlow } returns adaptersReadyFlow
+        every { transactionAdapterManager.initializationFlow } returns initializationFlow
         every { service.transactionItemsFlow } returns transactionItemsFlow
         every { service.syncingFlow } returns syncingFlow
         every { transactionFilterService.stateFlow } returns filterStateFlow
@@ -193,7 +196,7 @@ class TransactionsViewModelWalletSwitchTest : KoinTest {
     }
 
     @Test
-    fun walletSwitch_doesNotShowTransactionsBeforeAdaptersReady() = runTest(dispatcher) {
+    fun walletSwitch_showsItemsArrivingAfterSwitch() = runTest(dispatcher) {
         val walletsA = listOf(createWallet("account-A"))
         every { walletManager.activeWallets } returns walletsA
         activeWalletsFlow.value = walletsA
@@ -216,13 +219,15 @@ class TransactionsViewModelWalletSwitchTest : KoinTest {
         activeWalletsFlow.value = walletsB
         advanceUntilIdle()
 
-        // Items arrive BEFORE adapters are ready (incomplete adapter set)
+        // Items arrive from new account (service/repo layer prevents stale data)
         transactionItemsFlow.value = listOf(createTransactionItem("tx-b1"))
         advanceUntilIdle()
 
-        // Then: must still show Loading (adapters not ready yet)
-        assertEquals(ViewState.Loading, viewModel.uiState.viewState)
-        assertNull(viewModel.uiState.transactions)
+        // Then: items are processed normally — defense is at service/repo layer
+        assertEquals(ViewState.Success, viewModel.uiState.viewState)
+        val shownItems = viewModel.uiState.transactions?.values?.flatten()
+        assertEquals(1, shownItems?.size)
+        assertEquals("tx-b1", shownItems?.first()?.uid)
     }
 
     @Test
@@ -284,6 +289,10 @@ class TransactionsViewModelWalletSwitchTest : KoinTest {
         // Adapters become ready for wallet B
         // transactionItemsFlow is still emptyList() — StateFlow dedup prevents emission
         emitAdaptersReady()
+        advanceUntilIdle()
+
+        // All adapters initialized — clears awaitingAdaptersAfterSwitch for empty accounts
+        initializationFlow.value = true
         advanceUntilIdle()
 
         // Then: must NOT be stuck on Loading — should show Success with empty list

@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.sync.Mutex
@@ -34,8 +33,17 @@ class TransactionAdapterManager(
 
     init {
         coroutineScope.launch {
-            adapterManager.initializationInProgressFlow.filter { it }.collect {
-                _initializationFlow.value = false
+            adapterManager.initializationInProgressFlow.collect { inProgress ->
+                if (inProgress) {
+                    _initializationFlow.value = false
+                } else {
+                    // Wait for any in-progress initAdapters to finish before
+                    // signaling initialization complete. This guarantees
+                    // _adaptersState has the final adapter map.
+                    operationsMutex.withLock {
+                        _initializationFlow.value = true
+                    }
+                }
             }
         }
 
@@ -49,8 +57,6 @@ class TransactionAdapterManager(
 
     private suspend fun initAdapters(adaptersMap: Map<Wallet, IAdapter>) =
         operationsMutex.withLock {
-            _initializationFlow.value = false
-
             val currentAdapters = _adaptersState.value
             val newAdapters = mutableMapOf<TransactionSource, ITransactionsAdapter>()
 
@@ -72,7 +78,6 @@ class TransactionAdapterManager(
             }
 
             _adaptersState.value = newAdapters
-            _initializationFlow.value = true
         }
 
     private suspend fun createTransactionAdapter(

@@ -27,10 +27,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import org.koin.java.KoinJavaComponent.inject
 import java.util.concurrent.Executors
 
@@ -52,7 +50,7 @@ class TokenTransactionsService(
 
     fun start() {
         coroutineScope.launch {
-            transactionRecordRepository.itemsObservable.asFlow().collect {
+            transactionRecordRepository.itemsFlow.collect {
                 handleUpdatedRecords(it)
             }
         }
@@ -78,12 +76,13 @@ class TokenTransactionsService(
             }
         }
         coroutineScope.launch {
-            transactionAdapterManager.initializationFlow
-                .filter { it }
-                .onEach {
-                    handleInitialization()
-                }
+            // Wait for this wallet's specific adapter to be ready rather than
+            // relying on initializationFlow, which may fire before all adapters
+            // are in the map due to partial-batch emissions from AdapterManager.
+            transactionAdapterManager.adaptersReadyFlow
+                .filter { it.containsKey(wallet.transactionSource) }
                 .first()
+            handleInitialization()
         }
     }
 

@@ -9,8 +9,9 @@ import cash.p.terminal.entities.transactionrecords.getShortOutgoingTransactionRe
 import cash.p.terminal.modules.contacts.model.Contact
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,6 +21,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 import java.util.concurrent.atomic.AtomicBoolean
 
 class TransactionRecordRepository(
@@ -36,8 +38,8 @@ class TransactionRecordRepository(
     private var selectedBlockchain: Blockchain? = null
     private var contact: Contact? = null
 
-    private val itemsSubject = PublishSubject.create<List<TransactionRecord>>()
-    override val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
+    private val _itemsFlow = MutableSharedFlow<List<TransactionRecord>>(extraBufferCapacity = 4)
+    override val itemsFlow: SharedFlow<List<TransactionRecord>> = _itemsFlow.asSharedFlow()
 
     @Volatile
     private var loadedPageNumber = 0
@@ -55,6 +57,9 @@ class TransactionRecordRepository(
     // Cache of last load request to avoid duplicate work
     @Volatile
     private var lastLoadRequest: Pair<Int, FilterContext>? = null
+
+    @Volatile
+    private var walletSetVersion = 0
 
     private var transactionWallets: List<TransactionWallet> = listOf()
     private var walletsGroupedBySource: List<TransactionWallet> = listOf()
@@ -98,7 +103,8 @@ class TransactionRecordRepository(
         transactionType = selectedFilterTransactionType,
         wallet = selectedWallet,
         blockchain = selectedBlockchain,
-        contact = contact
+        contact = contact,
+        walletSetVersion = walletSetVersion
     )
 
     private fun groupWalletsBySource(transactionWallets: List<TransactionWallet>): List<TransactionWallet> {
@@ -150,8 +156,11 @@ class TransactionRecordRepository(
         blockchain: Blockchain?,
         contact: Contact?,
     ) {
-        if (this.transactionWallets != transactionWallets || adaptersMap.isEmpty()) {
+        val walletsChanged = this.transactionWallets != transactionWallets || adaptersMap.isEmpty()
+        if (walletsChanged) {
             this.transactionWallets = transactionWallets
+            walletSetVersion++
+            _itemsFlow.tryEmit(emptyList())
             walletsGroupedBySource = groupWalletsBySource(transactionWallets)
 
             // update list of adapters based on wallets
@@ -182,7 +191,7 @@ class TransactionRecordRepository(
             buildExtraSwapAdapters()
         }
 
-        var reload = false
+        var reload = walletsChanged
 
         if (selectedWallet != wallet || wallet == null) {
             selectedWallet = wallet
@@ -276,6 +285,11 @@ class TransactionRecordRepository(
         subscribeForUpdates()
     }
 
+    override fun cancelPendingLoads() {
+        loadingJob?.cancel()
+        updatesJob?.cancel()
+    }
+
     private fun unsubscribeFromUpdates() {
         updatesJob?.cancel()
     }
@@ -304,8 +318,6 @@ class TransactionRecordRepository(
         val currentRequest = Pair(page, requestContext)
 
         // Optimization: Skip if exact same request is already in progress
-        // This commonly happens when handleUpdates() is triggered by adapter updates
-        // but filter parameters haven't actually changed
         if (loadingJob?.isActive == true && lastLoadRequest == currentRequest) {
             return
         }
@@ -314,16 +326,16 @@ class TransactionRecordRepository(
         lastLoadRequest = currentRequest
 
         // Cancel previous load if it's a different request
-        // This avoids wasted work and race conditions
         loadingJob?.cancel()
 
         val itemsCount = page * itemsPerPage
+        val adapters = activeAdapters
 
         loadingJob = coroutineScope.launch {
             try {
-                val records = activeAdapters
-                    .map { async {
-                        it.get(
+                val records = adapters
+                    .map { wrapper -> async {
+                        wrapper.get(
                             limit = itemsCount,
                             requestedFilterType = requestContext.transactionType,
                             requestedContact = requestContext.contact
@@ -371,8 +383,9 @@ class TransactionRecordRepository(
 
                 handleRecords(records, extraRecords, page)
 
-            } catch (e: Throwable) {
-                e.printStackTrace()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Throwable) {
             }
         }
     }
@@ -406,7 +419,7 @@ class TransactionRecordRepository(
             .take(expectedItemsCount)
 
         loadedPageNumber = page
-        itemsSubject.onNext((normalSortedRecords + extraSortedRecords).sortedDescending())
+        _itemsFlow.tryEmit((normalSortedRecords + extraSortedRecords).sortedDescending())
     }
 
     private fun isMatchingSwapProviderTransaction(record: TransactionRecord): Boolean {
@@ -444,5 +457,6 @@ private data class FilterContext(
     val transactionType: FilterTransactionType,
     val wallet: TransactionWallet?,
     val blockchain: Blockchain?,
-    val contact: Contact?
+    val contact: Contact?,
+    val walletSetVersion: Int
 )
