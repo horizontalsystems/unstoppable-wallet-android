@@ -623,7 +623,7 @@
     <string name="Transactions_Title">Transactions</string>
     <string name="Transactions_Hide">Transactions Hide</string>
     <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
-    <string name="Transactions_WaitForSync">Please wait for the sync to finish.</string>
+    <string name="Transactions_WaitForSync">Wacht tot de synchronisatie is voltooid.</string>
     <string name="Transactions_Pending">Pending</string>
     <string name="Transactions_Receive">Received</string>
     <string name="Transactions_Completed">Completed</string>

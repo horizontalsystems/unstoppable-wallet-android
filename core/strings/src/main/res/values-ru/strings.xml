@@ -632,7 +632,7 @@
     <string name="Transactions_Title">Транзакции</string>
     <string name="Transactions_Hide">Скрытие транзакций</string>
     <string name="Transactions_EmptyList">У вас ещё нет незавершенных или прошлых транзакций</string>
-    <string name="Transactions_WaitForSync">Пожалуйста, дождитесь завершение синхронизации.</string>
+    <string name="Transactions_WaitForSync">Пожалуйста, дождитесь завершения синхронизации.</string>
     <string name="Transactions_Pending">В обработке</string>
     <string name="Transactions_Receive">Получено</string>
     <string name="Transactions_ChangeTrust">Изменить доверительную линию</string>
