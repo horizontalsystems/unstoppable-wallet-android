@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.coinIconUrl
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -44,11 +45,17 @@ class SwapHistoryViewModel(
         val currency = currencyManager.baseCurrency
         val records = swapRecordManager.getAll()
 
+        val allUids = records.flatMap { listOf(it.tokenInCoinUid, it.tokenOutCoinUid) }.distinct()
+        val alternativeUrlMap = marketKit.fullCoins(allUids)
+            .associate { it.coin.uid to it.coin.alternativeImageUrl }
+
         viewItems = records.map { record ->
             SwapHistoryViewItem(
                 id = record.id,
                 tokenInImageUrl = record.tokenInCoinUid.coinIconUrl,
                 tokenOutImageUrl = record.tokenOutCoinUid.coinIconUrl,
+                tokenInAlternativeImageUrl = alternativeUrlMap[record.tokenInCoinUid],
+                tokenOutAlternativeImageUrl = alternativeUrlMap[record.tokenOutCoinUid],
                 amountIn = formatAmount(record.amountIn, record.tokenInCoinCode),
                 amountOut = record.amountOut?.let { formatAmount(it, record.tokenOutCoinCode) },
                 fiatAmountIn = null,
@@ -160,6 +167,8 @@ data class SwapHistoryViewItem(
     val id: Int,
     val tokenInImageUrl: String,
     val tokenOutImageUrl: String,
+    val tokenInAlternativeImageUrl: String?,
+    val tokenOutAlternativeImageUrl: String?,
     val amountIn: String,
     val amountOut: String?,
     val fiatAmountIn: String?,
