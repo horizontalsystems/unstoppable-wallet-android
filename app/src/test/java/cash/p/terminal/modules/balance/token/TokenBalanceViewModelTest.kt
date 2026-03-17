@@ -108,6 +108,8 @@ class TokenBalanceViewModelTest : KoinTest {
     private lateinit var anyTransactionVisibilityChangedFlow: MutableSharedFlow<Unit>
     private lateinit var amlStatusUpdates: MutableSharedFlow<AmlStatusManager.AmlStatusUpdate>
     private lateinit var amlEnabledStateFlow: MutableStateFlow<Boolean>
+    private lateinit var syncingFlow: MutableStateFlow<Boolean>
+    private lateinit var recordsLoadedFlow: MutableStateFlow<Boolean>
 
     private lateinit var testWallet: Wallet
 
@@ -150,8 +152,10 @@ class TokenBalanceViewModelTest : KoinTest {
         every { transactionHiddenManager.transactionHiddenFlow } returns transactionHiddenFlow
         every { transactionHiddenManager.showAllTransactions(any()) } returns Unit
         every { transactionsService.transactionItemsFlow } returns transactionItemsFlow
-        every { transactionsService.syncingFlow } returns MutableStateFlow(false)
-        every { transactionsService.recordsLoadedFlow } returns MutableStateFlow(false)
+        syncingFlow = MutableStateFlow(true)
+        recordsLoadedFlow = MutableStateFlow(false)
+        every { transactionsService.syncingFlow } returns syncingFlow
+        every { transactionsService.recordsLoadedFlow } returns recordsLoadedFlow
         every { transactionsService.refreshList() } returns Unit
         every { balanceService.balanceItemFlow } returns balanceItemFlow
         every { balanceService.balanceItem } returns null
@@ -242,6 +246,72 @@ class TokenBalanceViewModelTest : KoinTest {
         // Then: cached transactions are re-processed using the new hidden state
         assertEquals(1, viewModel.uiState.transactions?.values?.flatten()?.size)
         assertEquals(true, viewModel.uiState.hasHiddenTransactions)
+    }
+
+    // endregion
+
+    // region Sync Message Tests (MOBILE-583)
+
+    @Test
+    fun updateTransactions_emptyItemsDuringSyncing_transactionsStaysNull() = runTest(dispatcher) {
+        syncingFlow.value = true
+        recordsLoadedFlow.value = false
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        // Empty items arrive while syncing — guard should block
+        transactionItemsFlow.value = emptyList()
+        advanceUntilIdle()
+
+        assertEquals(null, viewModel.uiState.transactions)
+        assertEquals(true, viewModel.uiState.syncing)
+    }
+
+    @Test
+    fun updateTransactions_syncFinishesNoTransactions_showsEmptyNotNull() = runTest(dispatcher) {
+        syncingFlow.value = true
+        recordsLoadedFlow.value = false
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        // Records loaded, empty items emitted — guard blocks (still syncing)
+        recordsLoadedFlow.value = true
+        transactionItemsFlow.value = emptyList()
+        advanceUntilIdle()
+
+        assertEquals(null, viewModel.uiState.transactions)
+
+        // Sync finishes — re-trigger should set transactions to empty map
+        syncingFlow.value = false
+        advanceUntilIdle()
+
+        assertEquals(false, viewModel.uiState.syncing)
+        assertEquals(emptyMap<String, List<TransactionViewItem>>(), viewModel.uiState.transactions)
+    }
+
+    @Test
+    fun updateTransactions_syncFinishesWithTransactions_showsTransactions() = runTest(dispatcher) {
+        syncingFlow.value = true
+        recordsLoadedFlow.value = false
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        // Non-empty items arrive — guard does not block
+        recordsLoadedFlow.value = true
+        transactionItemsFlow.value = listOf(createTransactionItem("tx-1"))
+        advanceUntilIdle()
+
+        assertEquals(1, viewModel.uiState.transactions?.values?.flatten()?.size)
+
+        // Sync finishes — transactions remain
+        syncingFlow.value = false
+        advanceUntilIdle()
+
+        assertEquals(false, viewModel.uiState.syncing)
+        assertEquals(1, viewModel.uiState.transactions?.values?.flatten()?.size)
     }
 
     // endregion
