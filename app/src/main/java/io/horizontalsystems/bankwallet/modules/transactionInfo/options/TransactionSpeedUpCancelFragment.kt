@@ -41,9 +41,7 @@ data class TransactionSpeedUpCancelScreen(
     val transactionHash: String
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         TransactionSpeedUpCancelScreen(
             backStack,
             blockchainType,

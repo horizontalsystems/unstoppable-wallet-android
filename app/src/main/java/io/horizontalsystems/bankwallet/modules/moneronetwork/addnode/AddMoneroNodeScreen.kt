@@ -31,9 +31,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object AddMoneroNodeScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         AddMoneroNodeScreen(
             backStack = backStack
         )

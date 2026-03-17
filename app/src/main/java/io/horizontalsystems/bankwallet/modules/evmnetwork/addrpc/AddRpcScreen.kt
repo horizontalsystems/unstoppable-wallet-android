@@ -34,9 +34,7 @@ data class AddRpcScreen(
     val blockchain: Blockchain
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         AddRpcScreen(
             backStack = backStack,
             blockchain = blockchain

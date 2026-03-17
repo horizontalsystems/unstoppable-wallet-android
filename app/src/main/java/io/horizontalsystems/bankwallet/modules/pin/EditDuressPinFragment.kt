@@ -13,9 +13,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object EditDuressPinScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         PinSet(
             title = stringResource(id = R.string.EditDuressPin_Title),
             description = stringResource(id = R.string.EditDuressPin_Description),

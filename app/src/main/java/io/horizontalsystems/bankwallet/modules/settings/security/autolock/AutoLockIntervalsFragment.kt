@@ -31,9 +31,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object AutoLockIntervalsScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         AutoLockIntervalsScreen(
             close = { backStack.removeLastOrNull() },
         )

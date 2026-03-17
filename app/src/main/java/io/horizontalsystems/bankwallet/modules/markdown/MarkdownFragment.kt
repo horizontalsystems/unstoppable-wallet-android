@@ -25,9 +25,7 @@ data class MarkdownScreen(
     val showAsPopup: Boolean = false,
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         MarkdownScreen(
             handleRelativeUrl = handleRelativeUrl,
             showAsPopup = showAsPopup,

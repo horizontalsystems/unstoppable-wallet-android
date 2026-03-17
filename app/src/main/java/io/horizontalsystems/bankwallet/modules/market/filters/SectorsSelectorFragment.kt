@@ -43,9 +43,7 @@ data object SectorsSelectorScreen : HSScreen(
     parentScreenClass = MarketFiltersScreen::class
 ) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<MarketFiltersViewModel>()
         SectorsSelectorScreen(
             viewModel,

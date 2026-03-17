@@ -32,9 +32,7 @@ data class SendTokenSelectScreen(
     val memo: String? = null,
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         TokenSelectScreen(
             title = stringResource(R.string.Balance_Send),
             onBack = { backStack.removeLastOrNull() },

@@ -57,9 +57,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object ManageWalletsScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val vmFactory = remember { ManageWalletsModule.Factory() }
         val viewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory)
         val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory)

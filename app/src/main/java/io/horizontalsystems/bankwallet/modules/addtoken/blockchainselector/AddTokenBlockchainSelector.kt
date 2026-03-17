@@ -25,9 +25,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object AddTokenBlockchainSelectorScreen : HSScreen(parentScreenClass = AddTokenScreen::class) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<AddTokenViewModel>()
         AddTokenBlockchainSelectorScreen(
             blockchains = viewModel.blockchains,

@@ -53,9 +53,7 @@ data class MarketSectorScreen(
     val coinCategory: CoinCategory
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val factory = MarketSectorModule.Factory(coinCategory)
         val chartViewModel = viewModel<ChartViewModel>(factory = factory)
         val viewModel = viewModel<MarketSectorViewModel>(factory = factory)

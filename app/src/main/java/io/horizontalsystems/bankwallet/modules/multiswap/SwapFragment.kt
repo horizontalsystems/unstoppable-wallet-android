@@ -112,9 +112,7 @@ data class SwapScreen(
     val tokenIn: Token? = null
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SwapScreen(
             backStack = backStack,
             tokenIn = tokenIn,

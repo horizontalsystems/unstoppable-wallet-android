@@ -35,9 +35,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ZcashAddressTypeSelectScreen(val wallet: Wallet) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ZcashAddressTypeSelectScreen(
             onZcashAddressTypeClick = { isTransparent ->
                 backStack.add(

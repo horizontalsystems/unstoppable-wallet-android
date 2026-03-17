@@ -60,9 +60,7 @@ data object SwapSelectProviderScreen : HSScreen(
     usePreviousScreenVmScope = true
 ) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SwapSelectProviderScreen(backStack)
     }
 }

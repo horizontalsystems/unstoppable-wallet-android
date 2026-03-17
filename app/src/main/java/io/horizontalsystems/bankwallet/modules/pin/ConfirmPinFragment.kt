@@ -14,9 +14,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object ConfirmPinScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val resultBus = LocalResultEventBus.current
         PinConfirm(
             onSuccess = {

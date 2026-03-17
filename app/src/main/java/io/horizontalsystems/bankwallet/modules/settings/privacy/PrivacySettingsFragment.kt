@@ -47,9 +47,7 @@ import kotlin.system.exitProcess
 @Serializable
 data object PrivacySettingsScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val torViewModel = viewModel<SecurityTorSettingsViewModel>(
             factory = SecurityTorSettingsModule.Factory()
         )

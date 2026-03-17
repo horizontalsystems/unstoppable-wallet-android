@@ -26,9 +26,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TransactionLockTimeInfoScreen(val lockTime: String) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         InfoScreen(lockTime, backStack)
     }
 }

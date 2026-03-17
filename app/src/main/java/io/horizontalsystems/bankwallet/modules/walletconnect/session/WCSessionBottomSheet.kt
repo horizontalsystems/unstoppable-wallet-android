@@ -68,9 +68,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WCSessionBottomSheetScreen(val sessionTopic: String) : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<WCSessionViewModel>(factory = WCSessionModule.Factory(sessionTopic))
         WCSessionScreen(backStack, viewModel)
     }

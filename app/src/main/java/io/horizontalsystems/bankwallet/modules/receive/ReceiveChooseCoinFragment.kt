@@ -29,9 +29,7 @@ class ReceiveChooseCoinFragment : BaseComposeFragment() {
 @Serializable
 data object ReceiveChooseCoinScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<ReceiveSharedViewModel>()
         val activeAccount = App.accountManager.activeAccount
         if (activeAccount == null) {

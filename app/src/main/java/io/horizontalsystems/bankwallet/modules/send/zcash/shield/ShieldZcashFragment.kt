@@ -18,9 +18,7 @@ data class ShieldZcashScreen(
     val entryPointDestId: KClass<out HSScreen>
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<ShieldZcashViewModel>(factory = ShieldZcashModule.Factory(wallet))
         ShieldZcashScreen(backStack, viewModel, entryPointDestId)
     }

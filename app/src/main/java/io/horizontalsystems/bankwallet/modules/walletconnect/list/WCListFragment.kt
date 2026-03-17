@@ -13,9 +13,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class WCListScreen(val deepLinkUri: String? = null) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         WCSessionsScreen(
             backStack,
             deepLinkUri

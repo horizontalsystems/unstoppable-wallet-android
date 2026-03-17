@@ -42,9 +42,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BackupConfirmKeyScreen(val account: Account) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         RecoveryPhraseVerifyScreen(backStack, account)
     }
 }

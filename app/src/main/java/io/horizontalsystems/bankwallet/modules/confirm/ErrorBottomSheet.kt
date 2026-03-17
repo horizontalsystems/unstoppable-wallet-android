@@ -32,9 +32,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ErrorBottomSheetScreen(val error: String) : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ErrorBottomSheetScreen(backStack, error)
     }
 }

@@ -48,9 +48,7 @@ data class CoinTreasuriesScreen(
     val coin: Coin
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         CoinTreasuriesScreen(
             viewModel = viewModel(factory = CoinTreasuriesModule.Factory(coin)),
             onBackClick = { backStack.removeLastOrNull() }

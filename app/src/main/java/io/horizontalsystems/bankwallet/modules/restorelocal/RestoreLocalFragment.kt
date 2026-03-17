@@ -56,9 +56,7 @@ data class RestoreLocalScreen(
     val statPage: StatPage
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val mainViewModel = viewModel<RestoreViewModel>()
         val viewModel = viewModel<RestoreLocalViewModel>(
             factory = RestoreLocalModule.Factory(

@@ -14,9 +14,7 @@ data object TonConnectSendRequestScreen : HSScreen() {
     lateinit var mainActivityViewModel: MainActivityViewModel
 
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         TonConnectSendRequestScreen(backStack, mainActivityViewModel)
     }
 }

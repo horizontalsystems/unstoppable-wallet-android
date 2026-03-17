@@ -54,9 +54,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ActivateTokenScreen(val wallet: Wallet) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ActivateTokenScreen(backStack, wallet)
     }
 

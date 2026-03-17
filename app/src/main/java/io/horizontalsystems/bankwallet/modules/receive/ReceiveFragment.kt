@@ -39,9 +39,7 @@ data class ReceiveScreen(
     val isTransparentAddress: Boolean = false
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val token = wallet.token
         when (token.blockchainType) {
             BlockchainType.Stellar -> {

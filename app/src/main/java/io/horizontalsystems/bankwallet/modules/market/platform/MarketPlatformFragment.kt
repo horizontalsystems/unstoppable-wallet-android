@@ -73,9 +73,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MarketPlatformScreen(val platform: Platform) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val factory = MarketPlatformModule.Factory(platform)
 
         PlatformScreen(

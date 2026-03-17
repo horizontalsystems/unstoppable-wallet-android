@@ -47,9 +47,7 @@ data class CreateAccountScreen(
     val popOffInclusive: Boolean = true
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         CreateAccountIntroScreen(
             openCreateAdvancedScreen = {
                 backStack.add(

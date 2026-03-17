@@ -23,9 +23,7 @@ data class SwapSettingsRecipientScreen(
     val recipient: Address?
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val resultBus = LocalResultEventBus.current
         EnterAddressScreen(
             backStack = backStack,

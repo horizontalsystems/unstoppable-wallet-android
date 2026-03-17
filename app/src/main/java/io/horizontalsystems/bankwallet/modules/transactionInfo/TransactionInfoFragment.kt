@@ -47,9 +47,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object TransactionInfoScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val transactionRecord = App.transactionInfoScreenManager.tmpTransactionRecordToShow
         if (transactionRecord == null) {
             backStack.removeLastOrNull()

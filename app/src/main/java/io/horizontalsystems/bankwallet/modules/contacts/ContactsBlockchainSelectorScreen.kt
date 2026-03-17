@@ -13,9 +13,7 @@ data object ContactsBlockchainSelectorScreen : HSScreen(
     parentScreenClass = ContactsAddressScreen::class
 ) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<AddressViewModel>()
         BlockchainSelectorScreen(
             blockchains = viewModel.uiState.availableBlockchains,

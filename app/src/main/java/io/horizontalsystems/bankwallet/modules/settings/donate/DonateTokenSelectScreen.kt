@@ -27,9 +27,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object DonateTokenSelectScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         TokenSelectScreen(
             title = stringResource(R.string.Settings_Donate),
             onBack = { backStack.removeLastOrNull() },

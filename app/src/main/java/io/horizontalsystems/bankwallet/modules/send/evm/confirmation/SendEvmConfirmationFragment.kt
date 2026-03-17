@@ -55,9 +55,7 @@ data class SendEvmConfirmationScreen(
     val sendEntryPointDestId: KClass<out HSScreen>
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SendEvmConfirmationScreen(
             backStack,
             transactionData,

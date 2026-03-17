@@ -27,9 +27,7 @@ data class BirthdayHeightConfigScreen(
     val blockchainType: BlockchainType
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val resultBus = LocalResultEventBus.current
         val onBack: () -> Unit = {
             resultBus.sendResult(result = Result(null))

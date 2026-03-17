@@ -28,9 +28,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object IndicatorsAlertScreen : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         IndicatorsAlertScreen(backStack)
     }
 }

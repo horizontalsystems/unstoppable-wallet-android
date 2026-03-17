@@ -17,9 +17,7 @@ data class ContactsAddressScreen(
     val definedAddresses: List<ContactAddress>
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val resultBus = LocalResultEventBus.current
         val viewModel = viewModel<AddressViewModel>(
             factory = ContactsModule.AddressViewModelFactory(

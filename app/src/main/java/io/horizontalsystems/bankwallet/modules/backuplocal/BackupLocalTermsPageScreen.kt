@@ -10,9 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BackupLocalTermsPageScreen(val backupType: BackupType) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         LocalBackupTermsScreen(
             onTermsAccepted = {
                 backStack.add(BackupLocalPasswordPageScreen(backupType))

@@ -57,9 +57,7 @@ data class RestoreLocalBackupFile(
     val popOffInclusive: Boolean,
 ) : RestoreLocalChildScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<RestoreLocalViewModel>()
         val activity = LocalActivity.current
         BackupFileItems(

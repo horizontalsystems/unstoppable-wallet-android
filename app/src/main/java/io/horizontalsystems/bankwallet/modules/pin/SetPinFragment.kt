@@ -16,9 +16,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SetPinScreen(val descriptionResId: Int? = null) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val resultBus = LocalResultEventBus.current
         PinSet(
             title = stringResource(R.string.PinSet_Title),

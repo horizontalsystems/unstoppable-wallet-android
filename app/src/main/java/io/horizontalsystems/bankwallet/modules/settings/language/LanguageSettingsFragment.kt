@@ -39,9 +39,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object LanguageSettingsScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val activity = LocalActivity.current
         LanguageScreen(
             backStack,

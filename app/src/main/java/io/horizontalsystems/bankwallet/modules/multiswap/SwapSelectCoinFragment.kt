@@ -21,9 +21,7 @@ data class SwapSelectCoinScreen(
     val type: Type
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SwapSelectCoinScreen(
             backStack,
             otherSelectedToken,

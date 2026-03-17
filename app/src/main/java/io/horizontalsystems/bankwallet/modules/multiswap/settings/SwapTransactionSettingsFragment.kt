@@ -12,9 +12,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SwapTransactionSettingsScreen : HSScreen(usePreviousScreenVmScope = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SwapTransactionSettingsScreen(backStack)
     }
 }

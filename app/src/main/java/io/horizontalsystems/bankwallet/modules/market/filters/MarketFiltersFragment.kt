@@ -73,9 +73,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object MarketFiltersScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<MarketFiltersViewModel>(factory = MarketFiltersModule.Factory())
 
         AdvancedSearchScreen(viewModel, backStack)

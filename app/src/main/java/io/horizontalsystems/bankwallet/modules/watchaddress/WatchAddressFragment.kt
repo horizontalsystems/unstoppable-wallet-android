@@ -45,9 +45,7 @@ data class WatchAddressScreen(
     val popOffInclusive: Boolean = true
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         WatchAddressScreen(backStack, popOffOnSuccess, popOffInclusive)
     }
 }

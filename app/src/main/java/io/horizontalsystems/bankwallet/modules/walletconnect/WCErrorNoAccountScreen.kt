@@ -23,9 +23,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object WCErrorNoAccountScreen : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ComposeAppTheme {
             WalletConnectErrorNoAccount {
                 backStack.removeLastOrNull()

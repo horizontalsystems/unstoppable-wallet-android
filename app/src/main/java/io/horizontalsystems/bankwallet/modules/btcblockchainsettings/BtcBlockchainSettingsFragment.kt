@@ -52,9 +52,7 @@ data class BtcBlockchainSettingsScreen(
     val blockchain: Blockchain
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<BtcBlockchainSettingsViewModel>(
             factory = BtcBlockchainSettingsModule.Factory(blockchain)
         )

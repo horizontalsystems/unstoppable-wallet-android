@@ -29,9 +29,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class FeeSettingsInfoScreen(val title: String, val text: String) : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         FeeSettingsInfoScreen(title, text) { backStack.removeLastOrNull() }
     }
 }

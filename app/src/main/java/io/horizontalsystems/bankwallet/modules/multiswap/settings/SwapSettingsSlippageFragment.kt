@@ -40,9 +40,7 @@ data class SwapSettingsSlippageScreen(
     val slippage: BigDecimal
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SwapSlippageSettingsScreen(backStack, slippage)
     }
 

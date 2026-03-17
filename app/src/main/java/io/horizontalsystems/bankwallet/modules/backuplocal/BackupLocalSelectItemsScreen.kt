@@ -10,9 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object BackupLocalSelectItemsScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SelectBackupItemsScreen(
             onNextClick = { accountIdsList ->
                 backStack.add(BackupLocalTermsPageScreen(BackupType.FullBackup(accountIdsList)))

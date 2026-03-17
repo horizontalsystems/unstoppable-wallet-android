@@ -19,9 +19,7 @@ data class ContactScreen(
     val addAddress: ContactAddress? = null
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val contact = contact1
         val newAddress = addAddress
 

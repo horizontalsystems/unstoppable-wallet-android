@@ -52,9 +52,7 @@ data class SelectBlockchainsScreen(
     val accountName: String?,
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SelectBlockchainsScreen(
             accountType,
             accountName,

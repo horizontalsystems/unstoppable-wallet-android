@@ -42,9 +42,7 @@ data class VaultBlockchainsSelectorScreen(
 ) : HSScreen() {
 
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val resultBus = LocalResultEventBus.current
         FilterByBlockchainsScreen(
             blockchains = allBlockchains,

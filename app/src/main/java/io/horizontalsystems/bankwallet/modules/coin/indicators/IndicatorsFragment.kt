@@ -35,9 +35,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object IndicatorsScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         IndicatorsScreen(
             backStack = backStack,
         )

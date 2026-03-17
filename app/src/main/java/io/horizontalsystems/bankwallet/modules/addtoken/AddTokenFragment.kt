@@ -45,9 +45,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object AddTokenScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<AddTokenViewModel>(factory = AddTokenModule.Factory())
         AddTokenScreen(
             closeScreen = { backStack.removeLastOrNull() },

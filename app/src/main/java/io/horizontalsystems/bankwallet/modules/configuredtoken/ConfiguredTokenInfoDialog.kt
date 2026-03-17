@@ -48,9 +48,7 @@ data class ConfiguredTokenInfoScreen(
     val token: Token
 ) : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ConfiguredTokenInfo(backStack, token)
     }
 }

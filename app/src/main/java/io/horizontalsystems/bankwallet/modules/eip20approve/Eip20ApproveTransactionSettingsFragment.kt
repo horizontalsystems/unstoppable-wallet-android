@@ -13,9 +13,7 @@ data object Eip20ApproveTransactionSettingsScreen : HSScreen(
     parentScreenClass = Eip20ApproveScreen::class
 ) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         Eip20ApproveTransactionSettingsScreen(backStack)
     }
 }

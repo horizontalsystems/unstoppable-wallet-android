@@ -12,9 +12,7 @@ data class MoneroSubaddressesScreen(
     val subaddresses: List<SubaddressViewItem>
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         MoneroSubaddressesScreen(subaddresses) { backStack.removeLastOrNull() }
     }
 }

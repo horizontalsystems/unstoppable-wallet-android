@@ -13,9 +13,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ContactsScreen(val mode: Mode, val addAddress: ContactAddress?) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel =
             viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(mode))
         ContactsScreen(

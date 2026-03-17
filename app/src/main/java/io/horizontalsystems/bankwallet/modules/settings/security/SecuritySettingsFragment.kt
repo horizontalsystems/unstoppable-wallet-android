@@ -62,9 +62,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SecuritySettingsScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val securitySettingsViewModel = viewModel<SecuritySettingsViewModel>(factory = SecurityPasscodeSettingsModule.Factory())
         SecurityCenterScreen(
             securitySettingsViewModel = securitySettingsViewModel,

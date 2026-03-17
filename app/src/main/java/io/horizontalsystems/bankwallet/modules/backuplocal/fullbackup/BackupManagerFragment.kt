@@ -47,9 +47,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object BackupManagerScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         BackupManagerScreen(
             onBackClick = {
                 backStack.removeLastOrNull()

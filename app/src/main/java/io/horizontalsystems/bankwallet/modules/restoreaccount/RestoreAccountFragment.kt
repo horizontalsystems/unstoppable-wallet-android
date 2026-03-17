@@ -21,9 +21,7 @@ data class RestoreAccountScreen(
     val popOffInclusive: Boolean
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val restoreMenuViewModel = viewModel<RestoreMenuViewModel>(factory = RestoreMenuModule.Factory())
         val mainViewModel = viewModel<RestoreViewModel>()
 

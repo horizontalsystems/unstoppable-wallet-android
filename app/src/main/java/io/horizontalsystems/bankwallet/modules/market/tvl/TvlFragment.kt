@@ -76,9 +76,7 @@ class TvlFragment : BaseComposeFragment() {
 @Serializable
 data object TvlScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val vmFactory = remember { TvlModule.Factory() }
         val tvlChartViewModel = viewModel<TvlChartViewModel>(factory = vmFactory)
         val viewModel = viewModel<TvlViewModel>(factory = vmFactory)

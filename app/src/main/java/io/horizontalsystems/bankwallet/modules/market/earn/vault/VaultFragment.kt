@@ -62,9 +62,7 @@ data class VaultScreen(
     val assetLogo: String?,
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<VaultViewModel> {
             VaultViewModel(
                 VaultModule.VaultViewItem(

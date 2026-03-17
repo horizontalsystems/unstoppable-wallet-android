@@ -65,9 +65,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CoinRankScreen(val type: RankType) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         CoinRankScreen(type, backStack)
     }
 }

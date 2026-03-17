@@ -17,9 +17,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class IndicatorSettingsScreen(val indicatorId: String) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val indicatorSetting =
             App.chartIndicatorManager.getChartIndicatorSetting(indicatorId)
 

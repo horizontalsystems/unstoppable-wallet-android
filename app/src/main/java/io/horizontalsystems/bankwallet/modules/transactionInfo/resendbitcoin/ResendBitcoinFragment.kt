@@ -60,9 +60,7 @@ data class ResendBitcoinScreen(val optionType: SpeedUpCancelType) : HSScreen(
     parentScreenClass = TransactionInfoScreen::class
 ) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val transactionInfoViewModel = viewModel<TransactionInfoViewModel>()
 
         val vmFactory = remember {

@@ -62,9 +62,7 @@ data class SendScreen(
     val memo: String? = null,
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val amountInputModeViewModel = viewModel<AmountInputModeViewModel>(
             factory = AmountInputModeModule.Factory(wallet.coin.uid)
         )

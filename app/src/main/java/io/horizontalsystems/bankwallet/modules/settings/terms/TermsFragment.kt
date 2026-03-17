@@ -42,9 +42,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TermsScreen(val hsScreen: HSScreen? = null) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         TermsScreen(backStack, hsScreen)
     }
 }

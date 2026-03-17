@@ -44,9 +44,7 @@ import java.net.UnknownHostException
 @Serializable
 data object GuidesScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         GuidesScreen(backStack)
     }
 }

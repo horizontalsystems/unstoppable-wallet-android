@@ -11,9 +11,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object ReceiveNetworkSelectScreen : ReceiveChooseCoinChildScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<ReceiveSharedViewModel>()
         val activeAccount = viewModel.activeAccount
         val fullCoin = viewModel.fullCoin()

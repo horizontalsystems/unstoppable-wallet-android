@@ -32,9 +32,7 @@ data class ErrorDisplayDialogScreen(
     val title: String = "", val text: String = ""
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ErrorDisplayScreen(title, text, backStack)
     }
 }

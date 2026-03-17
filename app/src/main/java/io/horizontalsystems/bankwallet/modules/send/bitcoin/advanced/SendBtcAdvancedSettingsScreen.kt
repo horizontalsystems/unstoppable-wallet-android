@@ -64,9 +64,7 @@ import java.math.BigDecimal
 @Serializable
 data object SendBtcAdvancedSettingsScreen : HSScreen(parentScreenClass = SendScreen::class) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<SendBitcoinViewModel>()
         val amountInputModeViewModel = viewModel<AmountInputModeViewModel>()
 

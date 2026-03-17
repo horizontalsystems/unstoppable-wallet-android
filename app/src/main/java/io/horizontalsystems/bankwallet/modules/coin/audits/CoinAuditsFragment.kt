@@ -39,9 +39,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CoinAuditsScreen(val audits: List<CoinAuditsModule.AuditParcelable>) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<CoinAuditsViewModel>(
             factory = CoinAuditsModule.Factory(audits)
         )

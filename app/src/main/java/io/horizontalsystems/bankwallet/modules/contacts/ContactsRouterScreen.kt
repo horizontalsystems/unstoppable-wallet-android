@@ -10,9 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ContactsRouterScreen(val mode: Mode = Mode.Full) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val screen = when (mode) {
             is Mode.AddAddressToExistingContact -> {
                 val addAddress = App.Companion.marketKit.blockchain(mode.blockchainType.uid)?.let { blockchain ->

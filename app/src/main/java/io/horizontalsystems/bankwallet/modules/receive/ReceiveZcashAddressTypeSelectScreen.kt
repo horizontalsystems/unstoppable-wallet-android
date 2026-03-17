@@ -10,9 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object ReceiveZcashAddressTypeSelectScreen : ReceiveChooseCoinChildScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<ReceiveSharedViewModel>()
         val wallet = viewModel.wallet
         if (wallet == null) {

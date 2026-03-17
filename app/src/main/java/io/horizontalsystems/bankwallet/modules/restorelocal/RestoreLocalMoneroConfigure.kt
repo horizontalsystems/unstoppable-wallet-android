@@ -12,9 +12,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object RestoreLocalMoneroConfigure : RestoreLocalChildScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val mainViewModel = viewModel<RestoreViewModel>()
         RestoreBirthdayHeightScreen(
             blockchainType = BlockchainType.Monero,

@@ -15,9 +15,7 @@ data class RestorePhraseNonStandardScreen(
     val popOffInclusive: Boolean
 ) :  RestoreAccountChildScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val mainViewModel = viewModel<RestoreViewModel>()
 
         RestorePhraseNonStandard(

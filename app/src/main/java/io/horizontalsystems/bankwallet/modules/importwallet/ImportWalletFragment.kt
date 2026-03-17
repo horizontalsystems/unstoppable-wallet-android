@@ -61,9 +61,7 @@ data class ImportWalletScreen(
     val popOffInclusive: Boolean = true
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ImportWalletScreen(backStack, popOffOnSuccess, popOffInclusive)
     }
 }

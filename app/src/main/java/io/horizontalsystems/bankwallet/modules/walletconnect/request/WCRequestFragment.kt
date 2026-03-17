@@ -73,9 +73,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object WCRequestScreen : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val wcRequestRouterViewModel =
             viewModel<WCRequestRouterViewModel>(factory = WCRequestRouterViewModel.Factory())
 

@@ -12,9 +12,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BtcUsedAddressesScreen(val params: UsedAddressesParams) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         UsedAddressScreen(params) { backStack.removeLastOrNull() }
     }
 }

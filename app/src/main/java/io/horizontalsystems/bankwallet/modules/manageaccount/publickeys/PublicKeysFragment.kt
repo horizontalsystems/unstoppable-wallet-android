@@ -28,9 +28,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PublicKeysScreen(val account: Account) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ManageAccountScreen(backStack, account)
     }
 }

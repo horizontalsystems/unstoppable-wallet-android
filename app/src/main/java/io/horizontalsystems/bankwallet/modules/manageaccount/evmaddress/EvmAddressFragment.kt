@@ -35,9 +35,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class EvmAddressScreen(val evmAddress: String) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         EvmAddressScreen(evmAddress, backStack)
     }
 }

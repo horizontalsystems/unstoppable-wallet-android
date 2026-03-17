@@ -74,9 +74,7 @@ data class EvmNetworkScreen(
     val blockchain: Blockchain
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         EvmNetworkScreen(
             backStack = backStack,
             blockchain = blockchain,

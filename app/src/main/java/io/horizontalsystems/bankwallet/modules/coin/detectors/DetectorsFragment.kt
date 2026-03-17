@@ -59,9 +59,7 @@ data class DetectorsScreen(
     val issues: List<IssueParcelable>
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<DetectorsViewModel>(
             factory = DetectorsModule.Factory(title, issues)
         )

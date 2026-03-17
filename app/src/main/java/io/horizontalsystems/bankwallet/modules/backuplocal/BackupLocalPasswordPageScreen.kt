@@ -11,9 +11,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BackupLocalPasswordPageScreen(val backupType: BackupType) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         LocalBackupPasswordScreen(
             backupType = backupType,
             onBackClick = {

@@ -32,9 +32,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object ConfirmDeleteAllPairingsScreen : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ConfirmDeleteAllScreen(backStack)
     }
 

@@ -50,9 +50,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MetricsPageScreen(val metricsType: MetricsType) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val factory = remember { MetricsPageModule.Factory(metricsType) }
         val chartViewModel = viewModel<ChartViewModel>(factory = factory)
         val viewModel = viewModel<MetricsPageViewModel>(factory = factory)

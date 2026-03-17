@@ -14,9 +14,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object ReceiveDerivationSelectScreen : ReceiveChooseCoinChildScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<ReceiveSharedViewModel>()
         val coinUid = viewModel.coinUid
         if (coinUid == null) {

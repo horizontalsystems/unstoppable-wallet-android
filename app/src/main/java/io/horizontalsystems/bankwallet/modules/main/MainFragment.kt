@@ -111,9 +111,7 @@ data object MainScreen : HSScreen() {
     lateinit var mainActivityViewModel: MainActivityViewModel
 
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         MainScreenWithRootedDeviceCheck(
             mainActivityViewModel = mainActivityViewModel,
             backStack = backStack,

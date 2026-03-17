@@ -76,9 +76,7 @@ data class EnterBirthdayHeightScreen(
     val currentBirthdayHeight: Long?
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         EnterBirthdayHeightScreen(
             blockchainType = blockchainType,
             account = account,

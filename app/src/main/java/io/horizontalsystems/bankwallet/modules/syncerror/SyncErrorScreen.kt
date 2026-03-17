@@ -42,9 +42,7 @@ data class SyncErrorScreen(
     val wallet: Wallet, val errorMessage: String?
 ) : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SyncErrorScreen(backStack, wallet)
     }
 }

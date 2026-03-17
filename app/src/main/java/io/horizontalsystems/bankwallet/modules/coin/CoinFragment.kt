@@ -67,9 +67,7 @@ class CoinFragment : BaseComposeFragment() {
 @Serializable
 data class CoinScreen(val coinUid: String) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val coinViewModel = viewModel<CoinViewModel>(factory = CoinModule.Factory(coinUid))
         CoinScreen(
             coinUid,

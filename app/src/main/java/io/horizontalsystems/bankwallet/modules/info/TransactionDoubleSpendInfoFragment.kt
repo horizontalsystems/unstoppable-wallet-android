@@ -44,9 +44,7 @@ data class TransactionDoubleSpendInfoScreen(
     val conflictingTransactionHash: String
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         InfoScreen(
             txHash = transactionHash,
             conflictingTxHash = conflictingTransactionHash,

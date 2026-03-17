@@ -32,9 +32,7 @@ data class SwapInfoDialogScreen(val title: String, val text: String) : HSScreen(
     bottomSheet = true
 ) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SwapInfoView(title, text) { backStack.removeLastOrNull() }
     }
 }

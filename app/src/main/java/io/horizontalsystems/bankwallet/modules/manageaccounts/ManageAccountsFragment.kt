@@ -47,9 +47,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ManageAccountsScreen(val mode: ManageAccountsModule.Mode) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ManageAccountsScreen(backStack, mode)
     }
 }

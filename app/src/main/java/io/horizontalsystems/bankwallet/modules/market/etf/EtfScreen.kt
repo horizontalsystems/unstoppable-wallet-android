@@ -94,9 +94,7 @@ import kotlin.math.abs
 data object EtfScreen : HSScreen() {
 
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         EtfPage(backStack)
     }
 }

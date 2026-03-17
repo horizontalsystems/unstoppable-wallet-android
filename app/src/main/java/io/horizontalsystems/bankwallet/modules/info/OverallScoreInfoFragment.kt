@@ -37,9 +37,7 @@ import java.math.BigDecimal
 @Serializable
 data class OverallScoreInfoScreen(val scoreCategory: ScoreCategory) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val categoryScores = getScores(scoreCategory)
         InfoScreen(
             scoreCategory.title,

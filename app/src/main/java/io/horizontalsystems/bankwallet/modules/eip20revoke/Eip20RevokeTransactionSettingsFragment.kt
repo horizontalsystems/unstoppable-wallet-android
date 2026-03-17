@@ -13,9 +13,7 @@ data object Eip20RevokeTransactionSettingsScreen : HSScreen(
     parentScreenClass = Eip20RevokeConfirmScreen::class
 ) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         Eip20RevokeTransactionSettingsScreen(backStack)
     }
 }

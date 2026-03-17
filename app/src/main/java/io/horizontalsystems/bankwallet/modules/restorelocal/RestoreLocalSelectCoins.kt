@@ -17,9 +17,7 @@ data class RestoreLocalSelectCoins(
     val popOffInclusive: Boolean,
 ) : RestoreLocalChildScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val mainViewModel = viewModel<RestoreViewModel>()
         ManageWalletsScreen(
             mainViewModel = mainViewModel,

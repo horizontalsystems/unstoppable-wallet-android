@@ -12,9 +12,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TokenBalanceScreen(val wallet: Wallet) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<TokenBalanceViewModel>(factory = TokenBalanceModule.Factory(wallet))
 
         TokenBalanceScreen(

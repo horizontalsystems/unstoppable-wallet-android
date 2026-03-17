@@ -18,9 +18,7 @@ data class TonConnectNewScreen(
     val requestEntity: DAppRequestEntity
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val resultBus = LocalResultEventBus.current
         TonConnectNewScreen(
             backStack = backStack,

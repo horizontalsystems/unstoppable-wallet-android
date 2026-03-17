@@ -54,9 +54,7 @@ data class Eip20RevokeConfirmScreen(
     val allowance: BigDecimal,
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         Eip20RevokeScreen(
             backStack,
             token,

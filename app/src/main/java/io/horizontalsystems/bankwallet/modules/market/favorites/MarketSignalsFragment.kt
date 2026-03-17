@@ -43,9 +43,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object MarketSignalsScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         MarketSignalsScreen(backStack)
     }
 

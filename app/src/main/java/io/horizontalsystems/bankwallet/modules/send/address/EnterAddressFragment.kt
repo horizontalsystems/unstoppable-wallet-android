@@ -29,9 +29,7 @@ data class EnterAddressScreen(
     val memo: String? = null,
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         EnterAddressScreen(
             backStack = backStack,
             token = wallet.token,

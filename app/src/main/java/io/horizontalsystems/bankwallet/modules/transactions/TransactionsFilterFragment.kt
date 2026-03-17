@@ -48,9 +48,7 @@ data object TransactionsFilterScreen : HSScreen(
     parentScreenClass = MainScreen::class
 ) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<TransactionsViewModel>()
 
         FilterScreen(

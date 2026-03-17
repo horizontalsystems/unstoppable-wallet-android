@@ -12,9 +12,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BackupLocalScreen(val account: Account? = null) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val screen = if (account != null) {
             BackupLocalTermsPageScreen(BackupType.SingleWalletBackup(account.id))
         } else {

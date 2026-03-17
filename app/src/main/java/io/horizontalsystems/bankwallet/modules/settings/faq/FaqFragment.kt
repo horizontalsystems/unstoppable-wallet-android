@@ -40,9 +40,7 @@ import java.net.UnknownHostException
 @Serializable
 data object FaqListScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         FaqScreen(
             onCloseClick = { backStack.removeLastOrNull() },
             onItemClick = { faqItem ->

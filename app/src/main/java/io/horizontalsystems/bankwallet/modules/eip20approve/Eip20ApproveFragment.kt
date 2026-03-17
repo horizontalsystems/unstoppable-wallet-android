@@ -47,9 +47,7 @@ data class Eip20ApproveScreen(
     val spenderAddress: String
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         Eip20ApproveScreen(backStack, token, requiredAllowance, spenderAddress)
     }
 }

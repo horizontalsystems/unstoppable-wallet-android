@@ -47,9 +47,7 @@ import io.horizontalsystems.marketkit.models.Token
 
 data object UtxoExpertModeScreen : HSScreen(parentScreenClass = SendScreen::class) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val viewModel = viewModel<SendBitcoinViewModel>()
 
         UtxoExpertModeScreen(

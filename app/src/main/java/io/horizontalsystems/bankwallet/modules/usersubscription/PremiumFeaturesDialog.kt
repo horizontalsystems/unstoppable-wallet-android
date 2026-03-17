@@ -58,9 +58,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object PremiumFeaturesScreen : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         PremiumFeaturesScreen(
             backStack = backStack,
             onClose = { backStack.removeLastOrNull() }

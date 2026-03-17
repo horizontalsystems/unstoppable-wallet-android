@@ -65,9 +65,7 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
 @Serializable
 data class BackupRequiredScreen(val account: Account, val text: String) : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         BackupRequiredScreen(backStack, account, text)
     }
 }

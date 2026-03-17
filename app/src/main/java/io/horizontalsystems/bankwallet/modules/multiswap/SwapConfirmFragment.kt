@@ -91,9 +91,7 @@ import java.util.Locale
 @Serializable
 data object SwapConfirmScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SwapConfirmScreen(backStack)
     }
 

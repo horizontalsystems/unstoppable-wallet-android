@@ -43,9 +43,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object RiskLevelInfoScreen : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         RiskLevelInfoScreen(backStack)
     }
 }

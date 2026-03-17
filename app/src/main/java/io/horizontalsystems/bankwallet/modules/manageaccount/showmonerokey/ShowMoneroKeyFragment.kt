@@ -44,9 +44,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ShowMoneroKeyScreen(val keys: MoneroKeys) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ShowMoneroKeyScreen(backStack, keys)
     }
 }

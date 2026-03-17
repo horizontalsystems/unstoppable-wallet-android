@@ -13,9 +13,7 @@ data object TransactionSpeedUpCancelTransactionSettingsScreen : HSScreen(
     parentScreenClass = TransactionSpeedUpCancelScreen::class
 ) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         TransactionSpeedUpCancelTransactionSettingsScreen(backStack)
     }
 }

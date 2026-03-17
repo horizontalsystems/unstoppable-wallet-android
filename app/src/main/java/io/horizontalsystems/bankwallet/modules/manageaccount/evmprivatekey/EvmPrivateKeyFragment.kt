@@ -19,9 +19,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class EvmPrivateKeyScreen(val evmPrivateKey: String) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         EvmPrivateKeyScreen(backStack, evmPrivateKey)
     }
 }

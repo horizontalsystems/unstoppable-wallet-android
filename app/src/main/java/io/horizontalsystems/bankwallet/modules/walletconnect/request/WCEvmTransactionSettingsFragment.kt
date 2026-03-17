@@ -14,9 +14,7 @@ data object WCEvmTransactionSettingsScreen : HSScreen(
     parentScreenClass = WCRequestScreen::class
 ) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         WCEvmTransactionSettingsScreen(backStack)
     }
 }

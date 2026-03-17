@@ -34,9 +34,7 @@ data class SendConfirmationScreen(
     parentScreenClass = SendScreen::class
 ) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         when (type) {
             Type.Bitcoin -> {
                 val sendBitcoinViewModel = viewModel<SendBitcoinViewModel>()

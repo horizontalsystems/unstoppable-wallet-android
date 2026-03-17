@@ -69,9 +69,7 @@ data class ShowExtendedKeyScreen(
     val displayKeyType: DisplayKeyType
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ShowExtendedKeyScreen(
             backStack,
             extendedRootKey,

@@ -27,9 +27,7 @@ data class WCAccountTypeNotSupportedScreen(
     val accountTypeDescription: String
 ) : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ComposeAppTheme {
             WCAccountTypeNotSupportedScreen(
                 accountTypeDescription = accountTypeDescription,

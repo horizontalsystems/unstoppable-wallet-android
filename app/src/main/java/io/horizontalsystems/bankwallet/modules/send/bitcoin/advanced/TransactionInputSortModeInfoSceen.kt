@@ -23,9 +23,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object BtcTransactionInputSortInfoScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         BtcTransactionInputSortInfoScreen { backStack.removeLastOrNull() }
     }
 }

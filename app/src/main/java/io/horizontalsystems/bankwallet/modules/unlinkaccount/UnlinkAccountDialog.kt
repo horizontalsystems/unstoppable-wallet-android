@@ -48,9 +48,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UnlinkAccountScreen(val account: Account) : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         UnlinkAccountScreen(backStack, account)
     }
 }

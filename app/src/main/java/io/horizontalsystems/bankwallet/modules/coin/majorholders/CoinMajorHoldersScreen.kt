@@ -61,9 +61,7 @@ data class CoinMajorHoldersScreen(
     val blockchain: Blockchain
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         CoinMajorHoldersScreen(
             coinUid,
             blockchain,

@@ -68,9 +68,7 @@ data class DefenseSystemFeatureScreen(
     val screen: HSScreen? = null
 ) : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ComposeAppTheme {
             DefenseSystemFeatureScreen(backStack, feature)
         }

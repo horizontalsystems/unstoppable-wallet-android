@@ -15,9 +15,7 @@ data object SendEvmSettingsScreen : HSScreen(
     parentScreenClass = SendEvmConfirmationScreen::class
 ) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SendEvmSettingsScreen(backStack)
     }
 }

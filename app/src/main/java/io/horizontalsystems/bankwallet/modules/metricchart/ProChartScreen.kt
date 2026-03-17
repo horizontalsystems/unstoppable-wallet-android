@@ -22,9 +22,7 @@ data class ProChartScreen(
     val chartType: ProChartModule.ChartType,
 ) : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val chartViewModel = viewModel<ChartViewModel>(
             factory = ProChartModule.Factory(
                 coinUid,

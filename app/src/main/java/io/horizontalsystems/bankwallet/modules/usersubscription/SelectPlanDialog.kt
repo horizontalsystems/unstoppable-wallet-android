@@ -64,9 +64,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SelectPlanScreen : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SelectPlanBottomSheet(
             onDismiss = { backStack.removeLastOrNull() },
             onPurchase = {

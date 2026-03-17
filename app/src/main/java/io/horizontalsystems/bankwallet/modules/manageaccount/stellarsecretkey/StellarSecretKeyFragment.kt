@@ -19,9 +19,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class StellarSecretKeyScreen(val stellarSecretKey: String) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         StellarSecretKeyScreen(backStack, stellarSecretKey)
     }
 }

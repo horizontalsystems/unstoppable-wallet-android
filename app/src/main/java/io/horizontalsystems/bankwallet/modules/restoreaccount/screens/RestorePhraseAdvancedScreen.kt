@@ -18,9 +18,7 @@ data class RestorePhraseAdvancedScreen(
     val popOffInclusive: Boolean
 ) : RestoreAccountChildScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         val restoreMenuViewModel = viewModel<RestoreMenuViewModel>()
         val mainViewModel = viewModel<RestoreViewModel>()
 

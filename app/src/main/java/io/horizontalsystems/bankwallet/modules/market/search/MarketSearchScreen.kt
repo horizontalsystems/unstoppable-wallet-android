@@ -69,9 +69,7 @@ import java.util.Optional
 @Serializable
 data object MarketSearchScreen : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         MarketSearchScreen(backStack)
     }
 }

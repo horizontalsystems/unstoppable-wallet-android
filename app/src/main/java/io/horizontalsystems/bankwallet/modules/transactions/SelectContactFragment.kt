@@ -38,9 +38,7 @@ data class SelectContactScreen(
     val blockchainType: BlockchainType?
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SelectContactScreen(
             backStack,
             selected,

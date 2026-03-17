@@ -74,9 +74,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SwapInfoScreen(val recordId: Int) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SwapInfoScreen(recordId = recordId, backStack = backStack)
     }
 }

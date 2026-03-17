@@ -12,9 +12,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TonConnectMainScreen(val deepLinkUri: String?) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         TonConnectMainScreen(backStack, deepLinkUri)
     }
 }

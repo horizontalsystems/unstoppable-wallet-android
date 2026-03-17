@@ -45,9 +45,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RecoveryPhraseScreen(val account: Account) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         RecoveryPhraseScreen(backStack, account)
     }
 }

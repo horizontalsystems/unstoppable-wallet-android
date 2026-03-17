@@ -42,9 +42,7 @@ data class WCNetworksScreen(
     val blockchainTypes: List<@Serializable(with = BlockchainTypeSerializer::class) BlockchainType>
 ) : HSScreen() {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         NetworksScreen(blockchainTypes, backStack)
     }
 }

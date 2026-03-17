@@ -36,9 +36,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SecureSendConfigScreen : HSScreen(bottomSheet = true) {
     @Composable
-    override fun GetContent(
-        backStack: NavBackStack<HSScreen>
-    ) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         SecureSendConfigScreen(backStack)
     }
 }
