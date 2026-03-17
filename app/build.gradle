@@ -214,6 +214,10 @@ android {
         disable 'LogNotTimber'
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     def bcprovVersionsToRedirect = [
             'bcprov-jdk15on:1.65.01',
             'bcprov-jdk15on:1.66',
