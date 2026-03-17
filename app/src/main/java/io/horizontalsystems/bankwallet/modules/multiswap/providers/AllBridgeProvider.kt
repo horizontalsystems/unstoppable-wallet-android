@@ -81,6 +81,15 @@ object AllBridgeProvider : IMultiSwapProvider {
         "TRX" to BlockchainType.Tron,
     )
 
+    private val chainSymbolByBlockchainTypeUid: Map<String, String> by lazy {
+        blockchainTypes.entries.associate { (symbol, type) -> type.uid to symbol }
+    }
+
+    fun chainSymbol(blockchainTypeUid: String): String? = chainSymbolByBlockchainTypeUid[blockchainTypeUid]
+
+    suspend fun fetchTransferStatus(chain: String, txId: String): Response.TransferStatus =
+        allBridgeAPI.transferStatus(chain, txId)
+
     private var tokensMap = mapOf<Token, ABToken>()
 
     private fun getProxyAddress(bridgeAddress: String) = proxies[bridgeAddress]
@@ -396,6 +405,12 @@ object AllBridgeProvider : IMultiSwapProvider {
 
 
 interface AllBridgeAPI {
+    @GET("/transfer/status")
+    suspend fun transferStatus(
+        @Query("chain") chain: String,
+        @Query("txId") txId: String,
+    ): Response.TransferStatus
+
     @GET("/tokens")
     suspend fun tokens(): List<Response.Token>
 
@@ -447,6 +462,21 @@ interface AllBridgeAPI {
     ): Response.GasFeeOptions
 
     object Response {
+        data class TransferStatus(
+            val send: BridgeTransaction,
+            val receive: BridgeTransaction?,
+            val isSuspended: Boolean,
+        )
+
+        data class BridgeTransaction(
+            val txId: String,
+            val amount: String,
+            val amountFormatted: BigDecimal,
+            val confirmations: Int,
+            val confirmationsNeeded: Int,
+            val blockTime: Long?,
+        )
+
         data class PendingInfo(
             val pendingTxs: Long,
             val estimatedAmount: EstimatedAmount
