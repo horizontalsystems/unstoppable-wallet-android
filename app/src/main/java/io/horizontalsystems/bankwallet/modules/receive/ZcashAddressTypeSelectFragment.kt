@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -37,8 +36,7 @@ import kotlinx.serialization.Serializable
 data class ZcashAddressTypeSelectScreen(val wallet: Wallet) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         ZcashAddressTypeSelectScreen(
             onZcashAddressTypeClick = { isTransparent ->

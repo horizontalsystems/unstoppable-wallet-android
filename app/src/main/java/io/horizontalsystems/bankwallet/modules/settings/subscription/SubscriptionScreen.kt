@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
@@ -31,8 +30,7 @@ import kotlinx.serialization.Serializable
 data object SubscriptionScreen : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         SubscriptionScreen(backStack)
     }

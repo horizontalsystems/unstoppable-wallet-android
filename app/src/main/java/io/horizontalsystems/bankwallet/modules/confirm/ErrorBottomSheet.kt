@@ -18,7 +18,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
@@ -34,8 +33,7 @@ import kotlinx.serialization.Serializable
 data class ErrorBottomSheetScreen(val error: String) : HSScreen(bottomSheet = true) {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         ErrorBottomSheetScreen(backStack, error)
     }

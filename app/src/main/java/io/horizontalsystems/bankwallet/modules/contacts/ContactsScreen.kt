@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ContactsScreen
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactsViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import kotlinx.serialization.Serializable
 
@@ -15,8 +14,7 @@ import kotlinx.serialization.Serializable
 data class ContactsScreen(val mode: Mode, val addAddress: ContactAddress?) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val viewModel =
             viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(mode))

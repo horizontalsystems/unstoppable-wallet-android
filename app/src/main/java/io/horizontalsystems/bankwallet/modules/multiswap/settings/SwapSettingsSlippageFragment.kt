@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.NumberInputWithButtons
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -42,10 +41,9 @@ data class SwapSettingsSlippageScreen(
 ) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
-        SwapSlippageSettingsScreen(backStack, resultBus, slippage)
+        SwapSlippageSettingsScreen(backStack, slippage)
     }
 
     data class Result(val slippage: BigDecimal)
@@ -66,7 +64,6 @@ class SwapSettingsSlippageFragment : BaseComposeFragment() {
 @Composable
 fun SwapSlippageSettingsScreen(
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     initialSlippage: BigDecimal
 ) {
     val resultBus = LocalResultEventBus.current

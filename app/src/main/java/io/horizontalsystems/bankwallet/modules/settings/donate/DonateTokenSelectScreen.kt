@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
@@ -29,8 +28,7 @@ import kotlinx.serialization.Serializable
 data object DonateTokenSelectScreen : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         TokenSelectScreen(
             title = stringResource(R.string.Settings_Donate),

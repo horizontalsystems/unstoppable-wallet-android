@@ -58,7 +58,6 @@ import io.horizontalsystems.bankwallet.modules.market.topsectors.TopSectorsScree
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlScreen
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -76,7 +75,7 @@ import io.horizontalsystems.marketkit.models.MarketGlobal
 import java.math.BigDecimal
 
 @Composable
-fun MarketScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
+fun MarketScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel = viewModel<MarketViewModel>(factory = MarketModule.Factory())
     val uiState = viewModel.uiState
     val tabs = viewModel.tabs
@@ -89,7 +88,7 @@ fun MarketScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
                 Crossfade(uiState.marketGlobal, label = "") {
                     MetricsBoard(backStack, it, uiState.currency)
                 }
-                TabsSection(backStack, resultBus, tabs, uiState.selectedTab) { tab ->
+                TabsSection(backStack, tabs, uiState.selectedTab) { tab ->
                     viewModel.onSelect(tab)
                 }
             }
@@ -138,7 +137,6 @@ fun MarketScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
 @Composable
 fun TabsSection(
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     tabs: Array<Tab>,
     selectedTab: Tab,
     onTabClick: (Tab) -> Unit
@@ -172,8 +170,8 @@ fun TabsSection(
     ) { page ->
         when (tabs[page]) {
             Tab.Coins -> TopCoins(onCoinClick = { onCoinClick(it, backStack) })
-            Tab.Watchlist -> MarketFavoritesScreen(backStack, resultBus)
-            Tab.Earn -> MarketEarnScreen(backStack, resultBus)
+            Tab.Watchlist -> MarketFavoritesScreen(backStack)
+            Tab.Earn -> MarketEarnScreen(backStack)
             Tab.Posts -> MarketPostsScreen()
             Tab.Platform -> TopPlatforms(backStack)
             Tab.Pairs -> TopPairsScreen()

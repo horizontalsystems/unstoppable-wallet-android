@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.createaccount
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
@@ -15,8 +14,7 @@ data class CreateAccountAdvancedScreen(
 ) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         CreateAccountAdvancedScreen(
             onBackClick = { backStack.removeLastOrNull() },

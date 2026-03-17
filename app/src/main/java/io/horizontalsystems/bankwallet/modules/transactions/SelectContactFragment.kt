@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
@@ -40,12 +39,10 @@ data class SelectContactScreen(
 ) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         SelectContactScreen(
             backStack,
-            resultBus,
             selected,
             blockchainType,
         )
@@ -76,7 +73,6 @@ class SelectContactFragment : BaseComposeFragment() {
 @Composable
 fun SelectContactScreen(
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     selected: Contact?,
     blockchainType: BlockchainType?
 ) {

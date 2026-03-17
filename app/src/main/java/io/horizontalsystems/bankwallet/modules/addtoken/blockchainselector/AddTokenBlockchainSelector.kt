@@ -16,7 +16,6 @@ import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenScreen
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellBlockchainChecked
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -27,15 +26,13 @@ import kotlinx.serialization.Serializable
 data object AddTokenBlockchainSelectorScreen : HSScreen(parentScreenClass = AddTokenScreen::class) {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val viewModel = viewModel<AddTokenViewModel>()
         AddTokenBlockchainSelectorScreen(
             blockchains = viewModel.blockchains,
             selectedBlockchain = viewModel.selectedBlockchain,
             backStack = backStack,
-            resultBus = resultBus,
         )
     }
 
@@ -47,7 +44,6 @@ fun AddTokenBlockchainSelectorScreen(
     blockchains: List<Blockchain>,
     selectedBlockchain: Blockchain,
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
 ) {
     val resultBus = LocalResultEventBus.current
     var selectedItem = selectedBlockchain

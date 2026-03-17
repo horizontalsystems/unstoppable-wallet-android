@@ -20,7 +20,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
 import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -49,10 +48,9 @@ data class Eip20ApproveScreen(
 ) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
-        Eip20ApproveScreen(backStack, resultBus, token, requiredAllowance, spenderAddress)
+        Eip20ApproveScreen(backStack, token, requiredAllowance, spenderAddress)
     }
 }
 
@@ -73,7 +71,6 @@ class Eip20ApproveFragment : BaseComposeFragment() {
 @Composable
 fun Eip20ApproveScreen(
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     token: Token,
     requiredAllowance: BigDecimal,
     spenderAddress: String

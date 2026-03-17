@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigScreen
 import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsScreen
@@ -47,10 +46,9 @@ data class WatchAddressScreen(
 ) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
-        WatchAddressScreen(backStack, popOffOnSuccess, popOffInclusive, resultBus)
+        WatchAddressScreen(backStack, popOffOnSuccess, popOffInclusive)
     }
 }
 
@@ -70,8 +68,7 @@ class WatchAddressFragment : BaseComposeFragment() {
 fun WatchAddressScreen(
     backStack: NavBackStack<HSScreen>,
     popUpToInclusiveId: KClass<out HSScreen>,
-    inclusive: Boolean,
-    resultBus: ResultEventBus
+    inclusive: Boolean
 ) {
     val view = LocalView.current
 

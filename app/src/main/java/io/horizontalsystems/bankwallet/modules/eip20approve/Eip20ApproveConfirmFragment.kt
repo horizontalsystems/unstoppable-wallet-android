@@ -37,7 +37,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -63,10 +62,9 @@ data object Eip20ApproveConfirmScreen : HSScreen(
 ) {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
-        Eip20ApproveConfirmScreen(backStack, resultBus)
+        Eip20ApproveConfirmScreen(backStack)
     }
 
     data class Result(val approved: Boolean)
@@ -83,7 +81,7 @@ class Eip20ApproveConfirmFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun Eip20ApproveConfirmScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
+fun Eip20ApproveConfirmScreen(backStack: NavBackStack<HSScreen>) {
     val resultBus = LocalResultEventBus.current
     val viewModel = viewModel<Eip20ApproveViewModel>()
 

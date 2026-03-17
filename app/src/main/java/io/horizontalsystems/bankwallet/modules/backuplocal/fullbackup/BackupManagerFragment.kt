@@ -32,7 +32,6 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.importwallet.getFileName
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -49,8 +48,7 @@ import kotlinx.serialization.Serializable
 data object BackupManagerScreen : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         BackupManagerScreen(
             onBackClick = {

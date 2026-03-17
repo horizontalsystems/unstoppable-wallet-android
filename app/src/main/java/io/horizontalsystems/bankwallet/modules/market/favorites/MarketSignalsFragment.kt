@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -45,10 +44,9 @@ import kotlinx.serialization.Serializable
 data object MarketSignalsScreen : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
-        MarketSignalsScreen(backStack, resultBus)
+        MarketSignalsScreen(backStack)
     }
 
     data class Result(val enabled: Boolean)
@@ -65,7 +63,7 @@ class MarketSignalsFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun MarketSignalsScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
+fun MarketSignalsScreen(backStack: NavBackStack<HSScreen>) {
     val resultBus = LocalResultEventBus.current
     HSScaffold(
         title = stringResource(R.string.Market_Signals),

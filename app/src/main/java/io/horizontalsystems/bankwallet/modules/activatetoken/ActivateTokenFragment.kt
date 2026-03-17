@@ -32,7 +32,6 @@ import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenError
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenViewModel
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -56,10 +55,9 @@ import kotlinx.serialization.Serializable
 data class ActivateTokenScreen(val wallet: Wallet) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
-        ActivateTokenScreen(backStack, wallet, resultBus)
+        ActivateTokenScreen(backStack, wallet)
     }
 
     data class Result(val activated: Boolean)
@@ -81,8 +79,7 @@ class ActivateTokenFragment : BaseComposeFragment() {
 @Composable
 fun ActivateTokenScreen(
     backStack: NavBackStack<HSScreen>,
-    wallet: Wallet,
-    resultBus: ResultEventBus
+    wallet: Wallet
 ) {
     val resultBus = LocalResultEventBus.current
     val viewModel = viewModel<ActivateTokenViewModel>(factory = ActivateTokenViewModel.Factory(wallet))

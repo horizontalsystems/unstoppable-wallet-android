@@ -46,7 +46,6 @@ import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModul
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.TradingVolume
 import io.horizontalsystems.bankwallet.modules.market.filtersresult.MarketFiltersResultsScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.navigateWithPaidAction
 import io.horizontalsystems.bankwallet.modules.nav3.paidAction
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -75,8 +74,7 @@ import kotlinx.serialization.Serializable
 data object MarketFiltersScreen : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val viewModel = viewModel<MarketFiltersViewModel>(factory = MarketFiltersModule.Factory())
 

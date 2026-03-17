@@ -27,7 +27,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -42,7 +41,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object WhyDonateScreen : HSScreen() {
     @Composable
-    override fun GetContent(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         WhyDonateView(
             onClick = {
                 backStack.add(DonateTokenSelectScreen)

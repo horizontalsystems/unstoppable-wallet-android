@@ -40,7 +40,6 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletCell
@@ -70,8 +69,7 @@ import kotlinx.serialization.Serializable
 data class WCSessionBottomSheetScreen(val sessionTopic: String) : HSScreen(bottomSheet = true) {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val viewModel = viewModel<WCSessionViewModel>(factory = WCSessionModule.Factory(sessionTopic))
         WCSessionScreen(backStack, viewModel)

@@ -7,15 +7,13 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapConfirmViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import kotlinx.serialization.Serializable
 
 @Serializable
 data object SwapTransactionSettingsScreen : HSScreen(usePreviousScreenVmScope = true) {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         SwapTransactionSettingsScreen(backStack)
     }

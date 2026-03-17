@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
@@ -39,7 +38,6 @@ import kotlin.reflect.KClass
 fun SendMoneroScreen(
     title: String,
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     viewModel: SendMoneroViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: KClass<out HSScreen>,

@@ -5,15 +5,13 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ContactsRouterScreen(val mode: Mode = Mode.Full) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val screen = when (mode) {
             is Mode.AddAddressToExistingContact -> {
@@ -34,6 +32,6 @@ data class ContactsRouterScreen(val mode: Mode = Mode.Full) : HSScreen() {
             }
         }
 
-        screen.GetContent(backStack, resultBus)
+        screen.GetContent(backStack)
     }
 }

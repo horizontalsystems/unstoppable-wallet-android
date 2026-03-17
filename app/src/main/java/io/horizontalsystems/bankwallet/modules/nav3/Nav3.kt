@@ -71,7 +71,7 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
                 if (currentScreen is TonConnectSendRequestScreen) {
                     currentScreen.mainActivityViewModel = mainActivityViewModel
                 }
-                hSScreen.GetContent(backStack, resultBus)
+                hSScreen.GetContent(backStack)
             }
         }
     )

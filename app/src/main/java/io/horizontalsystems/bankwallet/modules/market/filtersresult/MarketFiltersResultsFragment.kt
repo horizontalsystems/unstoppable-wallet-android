@@ -29,7 +29,6 @@ import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersScree
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.navigateWithPaidAction
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
@@ -51,15 +50,14 @@ data object MarketFiltersResultsScreen : HSScreen(
 ) {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val marketSearchFilterViewModel = viewModel<MarketFiltersViewModel>()
         val viewModel = viewModel<MarketFiltersResultViewModel>(
             factory = MarketFiltersResultsModule.Factory(marketSearchFilterViewModel.service)
         )
 
-        SearchResultsScreen(viewModel, backStack, resultBus)
+        SearchResultsScreen(viewModel, backStack)
     }
 }
 
@@ -95,8 +93,7 @@ class MarketFiltersResultsFragment : BaseComposeFragment() {
 @Composable
 private fun SearchResultsScreen(
     viewModel: MarketFiltersResultViewModel,
-    backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus
+    backStack: NavBackStack<HSScreen>
 ) {
 
     val uiState = viewModel.uiState

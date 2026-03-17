@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.activatetoken.ActivateTokenScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -46,7 +45,6 @@ import kotlin.reflect.KClass
 @Composable
 fun ReceiveStellarAssetScreen(
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     wallet: Wallet,
     receiveEntryPointDestId: KClass<out HSScreen>?
 ) {

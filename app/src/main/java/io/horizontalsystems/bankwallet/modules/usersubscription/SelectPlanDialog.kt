@@ -33,7 +33,6 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.badge
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.gradientBadge
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.noteAmount
@@ -66,8 +65,7 @@ import kotlinx.serialization.Serializable
 data object SelectPlanScreen : HSScreen(bottomSheet = true) {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         SelectPlanBottomSheet(
             onDismiss = { backStack.removeLastOrNull() },

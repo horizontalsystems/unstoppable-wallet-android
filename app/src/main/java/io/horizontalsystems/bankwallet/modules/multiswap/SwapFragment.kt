@@ -65,7 +65,6 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapHistoryScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -114,12 +113,10 @@ data class SwapScreen(
 ) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         SwapScreen(
             backStack = backStack,
-            resultBus = resultBus,
             tokenIn = tokenIn,
             tokenOut = null,
             onClickClose = backStack::removeLastOrNull
@@ -139,7 +136,6 @@ class SwapFragment : BaseComposeFragment() {
 @Composable
 fun SwapScreen(
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     tokenIn: Token? = null,
     tokenOut: Token? = null,
     onClickClose: (() -> Unit)? = null,

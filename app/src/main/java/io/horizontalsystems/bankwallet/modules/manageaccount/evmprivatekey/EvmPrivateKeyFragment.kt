@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.SecretKeyScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -21,8 +20,7 @@ import kotlinx.serialization.Serializable
 data class EvmPrivateKeyScreen(val evmPrivateKey: String) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         EvmPrivateKeyScreen(backStack, evmPrivateKey)
     }

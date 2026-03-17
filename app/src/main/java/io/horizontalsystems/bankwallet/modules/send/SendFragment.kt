@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
@@ -64,8 +63,7 @@ data class SendScreen(
 ) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val amountInputModeViewModel = viewModel<AmountInputModeViewModel>(
             factory = AmountInputModeModule.Factory(wallet.coin.uid)
@@ -82,7 +80,6 @@ data class SendScreen(
                 SendBitcoinScreen(
                     title = title,
                     backStack = backStack,
-                    resultBus = resultBus,
                     viewModel = sendBitcoinViewModel,
                     amountInputModeViewModel = amountInputModeViewModel,
                     sendEntryPointDestId = sendEntryPointDestId,
@@ -102,8 +99,7 @@ data class SendScreen(
                     amountInputModeViewModel = amountInputModeViewModel,
                     sendEntryPointDestId = sendEntryPointDestId,
                     amount = amount,
-                    riskyAddress = riskyAddress,
-                    resultBus = resultBus
+                    riskyAddress = riskyAddress
                 )
             }
 
@@ -125,7 +121,6 @@ data class SendScreen(
                 SendEvmScreen(
                     title = title,
                     backStack = backStack,
-                    resultBus = resultBus,
                     amountInputModeViewModel = amountInputModeViewModel,
                     viewModel = sendEvmViewModel,
                     address = address,
@@ -147,8 +142,7 @@ data class SendScreen(
                     amountInputModeViewModel = amountInputModeViewModel,
                     sendEntryPointDestId = sendEntryPointDestId,
                     amount = amount,
-                    riskyAddress = riskyAddress,
-                    resultBus = resultBus
+                    riskyAddress = riskyAddress
                 )
             }
 
@@ -162,8 +156,7 @@ data class SendScreen(
                     amountInputModeViewModel = amountInputModeViewModel,
                     sendEntryPointDestId = sendEntryPointDestId,
                     amount = amount,
-                    riskyAddress = riskyAddress,
-                    resultBus = resultBus
+                    riskyAddress = riskyAddress
                 )
             }
 
@@ -177,8 +170,7 @@ data class SendScreen(
                     amountInputModeViewModel = amountInputModeViewModel,
                     sendEntryPointDestId = sendEntryPointDestId,
                     amount = amount,
-                    riskyAddress = riskyAddress,
-                    resultBus = resultBus
+                    riskyAddress = riskyAddress
                 )
             }
 
@@ -188,7 +180,6 @@ data class SendScreen(
                 SendStellarScreen(
                     title = title,
                     backStack = backStack,
-                    resultBus = resultBus,
                     viewModel = sendStellarViewModel,
                     amountInputModeViewModel = amountInputModeViewModel,
                     sendEntryPointDestId = sendEntryPointDestId,
@@ -203,7 +194,6 @@ data class SendScreen(
                 SendMoneroScreen(
                     title = title,
                     backStack = backStack,
-                    resultBus = resultBus,
                     viewModel = sendMoneroViewModel,
                     amountInputModeViewModel = amountInputModeViewModel,
                     sendEntryPointDestId = sendEntryPointDestId,

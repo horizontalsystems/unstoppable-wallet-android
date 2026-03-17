@@ -29,7 +29,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -44,10 +43,9 @@ import kotlinx.serialization.Serializable
 data object WCPairingsScreen : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
-        WCPairingsScreen(backStack, resultBus)
+        WCPairingsScreen(backStack)
     }
 }
 
@@ -61,7 +59,7 @@ class WCPairingsFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun WCPairingsScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
+fun WCPairingsScreen(backStack: NavBackStack<HSScreen>) {
     val viewModel = viewModel<WCPairingsViewModel>(factory = WCPairingsViewModel.Factory())
     val uiState = viewModel.uiState
 

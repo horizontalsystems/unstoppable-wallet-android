@@ -38,7 +38,6 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule
 import io.horizontalsystems.bankwallet.modules.manageaccount.privatekeys.PrivateKeysScreen
 import io.horizontalsystems.bankwallet.modules.manageaccount.publickeys.PublicKeysScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -68,8 +67,7 @@ import kotlinx.serialization.Serializable
 data class ManageAccountScreen(val accountId: String) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         ManageAccountScreen(backStack, accountId)
     }

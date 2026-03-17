@@ -38,7 +38,6 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.earn.vault.VaultScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.navigateWithPaidAction
 import io.horizontalsystems.bankwallet.modules.nav3.paidAction
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -69,8 +68,7 @@ import java.math.BigDecimal
 
 @Composable
 fun MarketEarnScreen(
-    backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus
+    backStack: NavBackStack<HSScreen>
 ) {
     val viewModel = viewModel<MarketEarnViewModel>(factory = EarnModule.Factory())
     val uiState = viewModel.uiState

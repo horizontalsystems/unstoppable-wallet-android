@@ -29,7 +29,6 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequi
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -49,8 +48,7 @@ import kotlinx.serialization.Serializable
 data class ManageAccountsScreen(val mode: ManageAccountsModule.Mode) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         ManageAccountsScreen(backStack, mode)
     }

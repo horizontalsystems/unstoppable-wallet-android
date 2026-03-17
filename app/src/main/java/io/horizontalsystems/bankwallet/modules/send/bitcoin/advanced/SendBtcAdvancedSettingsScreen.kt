@@ -37,7 +37,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -66,8 +65,7 @@ import java.math.BigDecimal
 data object SendBtcAdvancedSettingsScreen : HSScreen(parentScreenClass = SendScreen::class) {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val viewModel = viewModel<SendBitcoinViewModel>()
         val amountInputModeViewModel = viewModel<AmountInputModeViewModel>()

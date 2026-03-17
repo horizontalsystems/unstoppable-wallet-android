@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockcha
 import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkScreen
 import io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -44,8 +43,7 @@ data class SyncErrorScreen(
 ) : HSScreen(bottomSheet = true) {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         SyncErrorScreen(backStack, wallet)
     }

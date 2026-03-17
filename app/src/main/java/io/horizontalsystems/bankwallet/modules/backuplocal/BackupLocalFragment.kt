@@ -7,15 +7,13 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupType
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class BackupLocalScreen(val account: Account? = null) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val screen = if (account != null) {
             BackupLocalTermsPageScreen(BackupType.SingleWalletBackup(account.id))
@@ -23,7 +21,7 @@ data class BackupLocalScreen(val account: Account? = null) : HSScreen() {
             BackupLocalSelectItemsScreen
         }
 
-        screen.GetContent(backStack, resultBus)
+        screen.GetContent(backStack)
     }
 }
 

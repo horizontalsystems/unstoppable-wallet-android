@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalScreen
 import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -67,8 +66,7 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
 data class BackupRequiredScreen(val account: Account, val text: String) : HSScreen(bottomSheet = true) {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         BackupRequiredScreen(backStack, account, text)
     }

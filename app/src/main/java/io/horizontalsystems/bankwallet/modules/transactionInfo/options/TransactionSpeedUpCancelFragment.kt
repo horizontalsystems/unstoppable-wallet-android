@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -43,12 +42,10 @@ data class TransactionSpeedUpCancelScreen(
 ) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         TransactionSpeedUpCancelScreen(
             backStack,
-            resultBus,
             blockchainType,
             transactionHash,
             optionType,
@@ -81,7 +78,6 @@ class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
 @Composable
 private fun TransactionSpeedUpCancelScreen(
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     blockchainType: BlockchainType,
     transactionHash: String,
     optionType: SpeedUpCancelType

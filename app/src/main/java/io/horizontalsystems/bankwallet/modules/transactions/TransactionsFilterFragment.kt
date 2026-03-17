@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.main.MainScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -50,14 +49,12 @@ data object TransactionsFilterScreen : HSScreen(
 ) {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val viewModel = viewModel<TransactionsViewModel>()
 
         FilterScreen(
             backStack,
-            resultBus,
             viewModel
         )
     }
@@ -75,7 +72,6 @@ class TransactionsFilterFragment : BaseComposeFragment() {
 @Composable
 fun FilterScreen(
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     viewModel: TransactionsViewModel,
 ) {
     val filterResetEnabled by viewModel.filterResetEnabled.observeAsState(false)

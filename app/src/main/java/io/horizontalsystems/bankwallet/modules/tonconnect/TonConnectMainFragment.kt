@@ -6,7 +6,6 @@ import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -14,8 +13,7 @@ import kotlinx.serialization.Serializable
 data class TonConnectMainScreen(val deepLinkUri: String?) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         TonConnectMainScreen(backStack, deepLinkUri)
     }

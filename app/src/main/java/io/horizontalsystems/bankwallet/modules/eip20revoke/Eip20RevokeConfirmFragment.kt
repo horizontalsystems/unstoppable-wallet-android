@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
 import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -56,12 +55,10 @@ data class Eip20RevokeConfirmScreen(
 ) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         Eip20RevokeScreen(
             backStack,
-            resultBus,
             token,
             spenderAddress,
             allowance
@@ -90,7 +87,6 @@ class Eip20RevokeConfirmFragment : BaseComposeFragment() {
 @Composable
 fun Eip20RevokeScreen(
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     token: Token,
     spenderAddress: String,
     allowance: BigDecimal

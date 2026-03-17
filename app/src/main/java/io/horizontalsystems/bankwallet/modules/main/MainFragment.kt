@@ -48,7 +48,6 @@ import io.horizontalsystems.bankwallet.modules.market.MarketScreen
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.Nav3
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.rateapp.RateApp
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceModule
@@ -58,7 +57,6 @@ import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectSc
 import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
 import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportState
@@ -95,16 +93,14 @@ class MainFragment : BaseComposeFragment() {
 private fun MainScreenWithRootedDeviceCheck(
     rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory()),
     mainActivityViewModel: MainActivityViewModel,
-    backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus
+    backStack: NavBackStack<HSScreen>
 ) {
     if (rootedDeviceViewModel.showRootedDeviceWarning) {
         RootedDeviceScreen { rootedDeviceViewModel.ignoreRootedDeviceWarning() }
     } else {
         MainScreen(
             mainActivityViewModel = mainActivityViewModel,
-            backStack = backStack,
-            resultBus = resultBus
+            backStack = backStack
         )
     }
 }
@@ -116,13 +112,11 @@ data object MainScreen : HSScreen() {
 
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         MainScreenWithRootedDeviceCheck(
             mainActivityViewModel = mainActivityViewModel,
             backStack = backStack,
-            resultBus = resultBus,
         )
     }
 }
@@ -130,8 +124,7 @@ data object MainScreen : HSScreen() {
 @Composable
 private fun MainScreen(
     mainActivityViewModel: MainActivityViewModel,
-    backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus
+    backStack: NavBackStack<HSScreen>
 ) {
     val viewModel = viewModel<MainViewModel>(factory = MainModule.Factory())
     val activityIntent by mainActivityViewModel.intentLiveData.observeAsState()
@@ -206,11 +199,10 @@ private fun MainScreen(
         Column {
             Crossfade(uiState.selectedTabItem) { navItem ->
                 when (navItem) {
-                    MainNavigation.Market -> MarketScreen(backStack, resultBus)
+                    MainNavigation.Market -> MarketScreen(backStack)
                     MainNavigation.Balance -> BalanceScreen(backStack)
                     MainNavigation.Swap -> SwapScreen(
                         backStack = backStack,
-                        resultBus = resultBus,
                         onClickClose = null,
                         bottomPadding = navigationBarHeight,
                         closeAfterSwap = false

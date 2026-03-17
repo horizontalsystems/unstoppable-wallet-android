@@ -8,7 +8,6 @@ import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.DAppRequestEntitySerializer
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -20,8 +19,7 @@ data class TonConnectNewScreen(
 ) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val resultBus = LocalResultEventBus.current
         TonConnectNewScreen(

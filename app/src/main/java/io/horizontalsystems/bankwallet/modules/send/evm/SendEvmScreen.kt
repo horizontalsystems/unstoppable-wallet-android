@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationScreen
@@ -41,7 +40,6 @@ import kotlin.reflect.KClass
 fun SendEvmScreen(
     title: String,
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     amountInputModeViewModel: AmountInputModeViewModel,
     viewModel: SendEvmViewModel,
     address: Address,

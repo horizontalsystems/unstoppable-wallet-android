@@ -47,7 +47,7 @@ abstract class HSScreen(
     private val className = this.javaClass.simpleName
 
     @Composable
-    open fun GetContent(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
+    open fun GetContent(backStack: NavBackStack<HSScreen>) {
         HSScaffold(title = "TODO") {
             body_leah(className)
         }

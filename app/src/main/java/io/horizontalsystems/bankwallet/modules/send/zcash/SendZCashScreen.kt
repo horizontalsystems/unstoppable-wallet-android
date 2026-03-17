@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
@@ -42,8 +41,7 @@ fun SendZCashScreen(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: KClass<out HSScreen>,
     amount: BigDecimal?,
-    riskyAddress: Boolean,
-    resultBus: ResultEventBus
+    riskyAddress: Boolean
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState

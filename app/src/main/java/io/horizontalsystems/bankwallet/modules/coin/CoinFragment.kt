@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsScree
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
@@ -69,15 +68,13 @@ class CoinFragment : BaseComposeFragment() {
 data class CoinScreen(val coinUid: String) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val coinViewModel = viewModel<CoinViewModel>(factory = CoinModule.Factory(coinUid))
         CoinScreen(
             coinUid,
             coinViewModel,
-            backStack,
-            resultBus
+            backStack
         )
 
     }
@@ -87,11 +84,10 @@ data class CoinScreen(val coinUid: String) : HSScreen() {
 fun CoinScreen(
     coinUid: String,
     coinViewModel: CoinViewModel?,
-    backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus
+    backStack: NavBackStack<HSScreen>
 ) {
     if (coinViewModel != null) {
-        CoinTabs(coinViewModel, backStack, resultBus)
+        CoinTabs(coinViewModel, backStack)
     } else {
         CoinNotFound(coinUid, backStack)
     }
@@ -100,8 +96,7 @@ fun CoinScreen(
 @Composable
 fun CoinTabs(
     viewModel: CoinViewModel,
-    backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus
+    backStack: NavBackStack<HSScreen>
 ) {
     val tabs = viewModel.tabs
     val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
@@ -172,8 +167,7 @@ fun CoinTabs(
                     CoinModule.Tab.Overview -> {
                         CoinOverviewScreen(
                             fullCoin = viewModel.fullCoin,
-                            backStack = backStack,
-                            resultBus = resultBus
+                            backStack = backStack
                         )
                     }
 

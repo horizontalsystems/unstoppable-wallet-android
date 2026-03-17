@@ -23,7 +23,6 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownContent
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -37,7 +36,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ReleaseNotesScreen(val showAsClosablePopup: Boolean) : HSScreen() {
     @Composable
-    override fun GetContent(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
+    override fun GetContent(backStack: NavBackStack<HSScreen>) {
         ReleaseNotesScreen(
             closeablePopup = showAsClosablePopup,
             onCloseClick = { backStack.removeLastOrNull() },

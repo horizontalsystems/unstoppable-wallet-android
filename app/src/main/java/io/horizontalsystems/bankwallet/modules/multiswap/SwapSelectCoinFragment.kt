@@ -8,7 +8,6 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
@@ -23,12 +22,10 @@ data class SwapSelectCoinScreen(
 ) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         SwapSelectCoinScreen(
             backStack,
-            resultBus,
             otherSelectedToken,
             title,
             type
@@ -55,7 +52,6 @@ class SwapSelectCoinFragment : BaseComposeFragment() {
 @Composable
 private fun SwapSelectCoinScreen(
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     otherSelectedToken: Token?,
     title: String?,
     type: SwapSelectCoinScreen.Type

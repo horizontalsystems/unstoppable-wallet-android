@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveTokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveSharedViewModel
@@ -31,8 +30,7 @@ class ReceiveChooseCoinFragment : BaseComposeFragment() {
 data object ReceiveChooseCoinScreen : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val viewModel = viewModel<ReceiveSharedViewModel>()
         val activeAccount = App.accountManager.activeAccount

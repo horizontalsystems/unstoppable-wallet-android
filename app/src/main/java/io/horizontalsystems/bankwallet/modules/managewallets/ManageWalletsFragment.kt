@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.modules.configuredtoken.ConfiguredTokenIn
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.SelectChainTab
@@ -59,8 +58,7 @@ import kotlinx.serialization.Serializable
 data object ManageWalletsScreen : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val vmFactory = remember { ManageWalletsModule.Factory() }
         val viewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory)
@@ -68,7 +66,6 @@ data object ManageWalletsScreen : HSScreen() {
 
         ManageWalletsScreen(
             backStack,
-            resultBus,
             viewModel,
             restoreSettingsViewModel
         )
@@ -96,7 +93,6 @@ class ManageWalletsFragment : BaseComposeFragment() {
 @Composable
 private fun ManageWalletsScreen(
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     viewModel: ManageWalletsViewModel,
     restoreSettingsViewModel: RestoreSettingsViewModel
 ) {

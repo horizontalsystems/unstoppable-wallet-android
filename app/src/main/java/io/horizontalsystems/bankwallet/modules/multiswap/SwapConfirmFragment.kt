@@ -55,7 +55,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.viewModelForContentKey
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
@@ -93,10 +92,9 @@ import java.util.Locale
 data object SwapConfirmScreen : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
-        SwapConfirmScreen(backStack, resultBus)
+        SwapConfirmScreen(backStack)
     }
 
     data class Result(val success: Boolean)
@@ -112,7 +110,7 @@ class SwapConfirmFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun SwapConfirmScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
+fun SwapConfirmScreen(backStack: NavBackStack<HSScreen>) {
     val prevScreen = backStack[backStack.lastIndex - 1]
     val swapViewModel = viewModelForContentKey<SwapViewModel>(prevScreen.contentKey())
 
@@ -127,7 +125,7 @@ fun SwapConfirmScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventB
     if (uiState.error != null) {
         SwapConfirmError(backStack, viewModel, uiState, uiState.error)
     } else {
-        SwapConfirmInternal(backStack, resultBus, viewModel, uiState)
+        SwapConfirmInternal(backStack, viewModel, uiState)
     }
 }
 
@@ -185,7 +183,6 @@ private fun SwapConfirmError(
 @Composable
 private fun SwapConfirmInternal(
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
     viewModel: SwapConfirmViewModel,
     uiState: SwapConfirmUiState
 ) {

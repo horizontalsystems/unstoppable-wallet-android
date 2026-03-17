@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector.AddTokenBlockchainSelectorScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -47,15 +46,13 @@ import kotlinx.serialization.Serializable
 data object AddTokenScreen : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val viewModel = viewModel<AddTokenViewModel>(factory = AddTokenModule.Factory())
         AddTokenScreen(
             closeScreen = { backStack.removeLastOrNull() },
             viewModel = viewModel,
-            backStack = backStack,
-            resultBus = resultBus
+            backStack = backStack
         )
     }
 }
@@ -74,7 +71,6 @@ private fun AddTokenScreen(
     closeScreen: () -> Unit,
     viewModel: AddTokenViewModel,
     backStack: NavBackStack<HSScreen>,
-    resultBus: ResultEventBus,
 ) {
     ResultEffect<AddTokenBlockchainSelectorScreen.Result> {
         viewModel.onBlockchainSelect(it.blockchain)

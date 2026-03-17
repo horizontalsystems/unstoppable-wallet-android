@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.receive.monero.ReceiveMoneroScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
@@ -41,14 +40,13 @@ data class ReceiveScreen(
 ) : HSScreen() {
     @Composable
     override fun GetContent(
-        backStack: NavBackStack<HSScreen>,
-        resultBus: ResultEventBus
+        backStack: NavBackStack<HSScreen>
     ) {
         val token = wallet.token
         when (token.blockchainType) {
             BlockchainType.Stellar -> {
                 if (token.type is TokenType.Asset) {
-                    ReceiveStellarAssetScreen(backStack, resultBus, wallet, receiveEntryPointDestId)
+                    ReceiveStellarAssetScreen(backStack, wallet, receiveEntryPointDestId)
                 } else if (token.type == TokenType.Native) {
                     ReceiveScreen(backStack, wallet, receiveEntryPointDestId, isTransparentAddress)
                 }
