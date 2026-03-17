@@ -122,5 +122,28 @@ class ECashAdapter(
         fun clear(walletId: String) {
             ECashKit.clear(App.instance, ECashKit.NetworkType.MainNet, walletId)
         }
+
+        fun firstAddress(accountType: AccountType): String {
+            when (accountType) {
+                is AccountType.Mnemonic -> {
+                    val address = ECashKit.firstAddress(
+                        accountType.seed,
+                        ECashKit.NetworkType.MainNet
+                    )
+                    return address.stringValue
+                }
+                is AccountType.HdExtendedKey -> {
+                    val address = ECashKit.firstAddress(
+                        accountType.hdExtendedKey,
+                        ECashKit.NetworkType.MainNet
+                    )
+                    return address.stringValue
+                }
+                is AccountType.BitcoinAddress -> {
+                    return accountType.address
+                }
+                else -> throw UnsupportedAccountException()
+            }
+        }
     }
 }

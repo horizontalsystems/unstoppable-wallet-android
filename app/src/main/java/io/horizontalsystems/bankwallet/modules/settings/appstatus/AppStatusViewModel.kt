@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.AppLog
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.BaseTonAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
@@ -32,7 +32,7 @@ class AppStatusViewModel(
     private val systemInfoManager: ISystemInfoManager,
     private val localStorage: ILocalStorage,
     private val accountManager: IAccountManager,
-    private val walletManager: IWalletManager,
+    private val walletManager: WalletManager,
     private val adapterManager: IAdapterManager,
     private val marketKit: MarketKitWrapper,
     private val evmBlockchainManager: EvmBlockchainManager,

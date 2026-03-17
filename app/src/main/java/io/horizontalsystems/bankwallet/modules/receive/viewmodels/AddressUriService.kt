@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 
 import io.horizontalsystems.bankwallet.core.ServiceState
+import io.horizontalsystems.bankwallet.core.chainId
 import io.horizontalsystems.bankwallet.core.factories.uriScheme
+import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.entities.AddressUri
 import io.horizontalsystems.marketkit.models.Token
@@ -39,10 +41,19 @@ class AddressUriService(val token: Token) : ServiceState<AddressUriService.State
             address
         } else {
             val addressUri = AddressUri(token.blockchainType.uriScheme ?: "")
+            //if blockchainType of token is EVM we need to attach chainId with prefix @ after address
+            //else we should use old method to add Field.BlockchainUid parameter
+            var address = this.address
+            if (token.blockchainType.isEvm) {
+                // attach chain id after address with '@' prefix
+                address += token.blockchainType.chainId?.let { "@${it}" }
+            } else {
+                addressUri.parameters[AddressUri.Field.BlockchainUid] = token.blockchainType.uid
+            }
+
             addressUri.address = address
 
             addressUri.parameters[AddressUri.Field.amountField(token.blockchainType)] = tmpAmount.toString()
-            addressUri.parameters[AddressUri.Field.BlockchainUid] = token.blockchainType.uid
             if (token.type !is TokenType.Derived && token.type !is TokenType.AddressTyped) {
                 addressUri.parameters[AddressUri.Field.TokenUid] = token.type.id
             }

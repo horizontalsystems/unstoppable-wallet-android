@@ -12,11 +12,13 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.core.utils.ToncoinUriParser
 import io.horizontalsystems.bankwallet.entities.Account
@@ -46,9 +48,11 @@ class BalanceViewModel(
     private val priceManager: PriceManager,
     private val adapterManager: IAdapterManager,
     val isSwapEnabled: Boolean,
-    private val totalService: TotalService
+    private val totalService: TotalService,
+    private val balanceHiddenManager: BalanceHiddenManager
 ) : ViewModelUiState<BalanceUiState>() {
 
+    private var balanceItems = service.balanceItemsFlow.value
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
     private var viewState: ViewState? = null
     private var balanceViewItems = listOf<BalanceViewItem2>()
@@ -56,6 +60,9 @@ class BalanceViewModel(
     private var openSendTokenSelect: OpenSendTokenSelect? = null
     private var errorMessage: String? = null
     private var balanceTabButtonsEnabled = localStorage.balanceTabButtonsEnabled
+    private var balanceHidden = balanceHiddenManager.balanceHiddenFlow.value
+    private var amountRoundingEnabled = localStorage.amountRoundingEnabledFlow.value
+    private var totalUiState = createTotalUiState(totalService.stateFlow.value)
 
     private val sortTypes =
         listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
@@ -66,28 +73,28 @@ class BalanceViewModel(
 
     private var refreshViewItemsJob: Job? = null
 
-    var totalUiState by mutableStateOf(createTotalUIState(totalService.stateFlow.value))
-        private set
-
     init {
         viewModelScope.launch(Dispatchers.Default) {
-            service.balanceItemsFlow
-                .collect { items ->
-                    totalService.setItems(items?.map {
-                        TotalService.BalanceItem(
-                            it.balanceData.total,
-                            service.networkAvailable && it.state !is AdapterState.Synced,
-                            it.coinPrice
-                        )
-                    })
+            service.balanceItemsFlow.collect { items ->
+                totalService.setItems(items?.map {
+                    TotalService.BalanceItem(
+                        it.balanceData.total,
+                        service.networkAvailable && it.state !is AdapterState.Synced,
+                        it.coinPrice
+                    )
+                })
 
-                    refreshViewItems(items)
-                }
+                balanceItems = items
+
+                refreshViewItems()
+            }
         }
 
         viewModelScope.launch {
             totalService.stateFlow.collect {
-                refreshViewItems(service.balanceItemsFlow.value)
+                totalUiState = createTotalUiState(it)
+
+                emitState()
             }
         }
 
@@ -106,19 +113,24 @@ class BalanceViewModel(
 
         viewModelScope.launch(Dispatchers.Default) {
             priceManager.priceChangeIntervalFlow.collect {
-                refreshViewItems(service.balanceItemsFlow.value)
+                refreshViewItems()
             }
         }
 
         viewModelScope.launch(Dispatchers.Default) {
             localStorage.amountRoundingEnabledFlow.collect{
-                refreshViewItems(service.balanceItemsFlow.value)
+                amountRoundingEnabled = it
+
+                totalUiState = createTotalUiState(totalService.stateFlow.value)
+                refreshViewItems()
             }
         }
 
         viewModelScope.launch {
-            totalService.stateFlow.collect {
-                totalUiState = createTotalUIState(it)
+            balanceHiddenManager.balanceHiddenFlow.collect {
+                balanceHidden = it
+
+                emitState()
             }
         }
 
@@ -126,25 +138,22 @@ class BalanceViewModel(
         service.start()
     }
 
-    private fun createTotalUIState(state: TotalService.State) = when (state) {
-        TotalService.State.Hidden -> TotalUIState.Hidden
-        is TotalService.State.Visible -> TotalUIState.Visible(
-            primaryAmountStr = getPrimaryAmount(state, state.showFullAmount) ?: "---",
-            secondaryAmountStr = getSecondaryAmount(state, state.showFullAmount) ?: "---",
-            dimmed = state.dimmed
-        )
-    }
-
     fun toggleBalanceVisibility() {
-        totalService.toggleBalanceVisibility()
+        balanceHiddenManager.toggleBalanceHidden()
     }
 
     fun toggleTotalType() {
         totalService.toggleType()
     }
 
+    private fun createTotalUiState(totalState: TotalService.State) = TotalUIState(
+        primaryAmountStr = getPrimaryAmount(totalState, !amountRoundingEnabled) ?: "---",
+        secondaryAmountStr = getSecondaryAmount(totalState, !amountRoundingEnabled) ?: "---",
+        dimmed = totalState.dimmed
+    )
+
     private fun getPrimaryAmount(
-        totalState: TotalService.State.Visible,
+        totalState: TotalService.State,
         fullFormat: Boolean
     ) = totalState.currencyValue?.let {
         if (fullFormat) {
@@ -155,7 +164,7 @@ class BalanceViewModel(
     }
 
     private fun getSecondaryAmount(
-        totalState: TotalService.State.Visible,
+        totalState: TotalService.State,
         fullFormat: Boolean
     ) = totalState.coinValue?.let {
         if (fullFormat) {
@@ -178,32 +187,32 @@ class BalanceViewModel(
         networkAvailable = service.networkAvailable,
         loading = balanceViewItems.any {
             it.loading
-        }
+        },
+        balanceHidden = balanceHidden,
+        totalUiState = totalUiState
     )
 
-    private suspend fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
+    private fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
         this.balanceViewType = balanceViewType
 
-        service.balanceItemsFlow.value?.let {
-            refreshViewItems(it)
-        }
+        refreshViewItems()
     }
 
-    private fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>?) {
+    private fun refreshViewItems() {
         refreshViewItemsJob?.cancel()
         refreshViewItemsJob = viewModelScope.launch(Dispatchers.Default) {
-            if (balanceItems != null) {
+            val balanceItemsTmp = balanceItems
+            if (balanceItemsTmp != null) {
                 viewState = ViewState.Success
-                balanceViewItems = balanceItems.map { balanceItem ->
+                balanceViewItems = balanceItemsTmp.map { balanceItem ->
                     ensureActive()
                     balanceViewItemFactory.viewItem2(
                         balanceItem,
                         service.baseCurrency,
-                        totalService.balanceHidden,
                         service.isWatchAccount,
                         balanceViewType,
                         service.networkAvailable,
-                        localStorage.amountRoundingEnabled
+                        amountRoundingEnabled
                     )
                 }
             } else {
@@ -250,7 +259,8 @@ class BalanceViewModel(
         emitState()
 
         viewModelScope.launch(Dispatchers.Default) {
-            service.sortType = sortType
+            service.setSortType(sortType)
+            stat(page = StatPage.Balance, event = StatEvent.SwitchSortType(sortType.statSortType))
         }
     }
 
@@ -396,6 +406,8 @@ data class BalanceUiState(
     val sortTypes: List<BalanceSortType>,
     val networkAvailable: Boolean,
     val loading: Boolean,
+    val balanceHidden: Boolean,
+    val totalUiState: TotalUIState
 )
 
 data class OpenSendTokenSelect(
@@ -406,16 +418,11 @@ data class OpenSendTokenSelect(
     val memo: String? = null
 )
 
-sealed class TotalUIState {
-    data class Visible(
-        val primaryAmountStr: String,
-        val secondaryAmountStr: String,
-        val dimmed: Boolean
-    ) : TotalUIState()
-
-    object Hidden : TotalUIState()
-
-}
+data class TotalUIState(
+    val primaryAmountStr: String,
+    val secondaryAmountStr: String,
+    val dimmed: Boolean
+)
 
 enum class HeaderNote {
     None,

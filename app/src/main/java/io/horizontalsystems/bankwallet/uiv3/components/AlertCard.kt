@@ -31,6 +31,7 @@ fun AlertCard(
     format: AlertFormat,
     type: AlertType,
     text: String,
+    titleCustom: String? = null,
     onClick: (() -> Unit)? = null
 ) {
     val alertColor = when (type) {
@@ -68,7 +69,7 @@ fun AlertCard(
                     )
                     HSpacer(8.dp)
                     Text(
-                        text = title,
+                        text = titleCustom ?: title,
                         style = ComposeAppTheme.typography.headline2,
                         color = alertColor,
                     )

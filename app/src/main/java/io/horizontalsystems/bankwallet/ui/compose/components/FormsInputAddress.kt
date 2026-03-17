@@ -27,24 +27,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.contacts.ChooseContactFragment
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 
 @Composable
 fun FormsInputAddress(
@@ -54,23 +50,20 @@ fun FormsInputAddress(
     state: DataState<Address>? = null,
     showStateIcon: Boolean = true,
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
-    navController: NavController,
-    chooseContactEnable: Boolean,
-    blockchainType: BlockchainType?,
     onValueChange: (String) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
     val context = LocalContext.current
 
-    val borderColor = when (state) {
-        is DataState.Error -> {
-            if (state.error is FormsInputStateWarning) {
-                ComposeAppTheme.colors.yellow50
-            } else {
-                ComposeAppTheme.colors.red50
-            }
-        }
-        else -> ComposeAppTheme.colors.blade
+    val borderColor = if (state is DataState.Error && state.error is FormsInputStateWarning) {
+        ComposeAppTheme.colors.yellow50
+    } else {
+        ComposeAppTheme.colors.blade
+    }
+
+    val textColor = when (state) {
+        is DataState.Error -> ComposeAppTheme.colors.lucian
+        else -> ComposeAppTheme.colors.leah
     }
 
     val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
@@ -102,7 +95,7 @@ fun FormsInputAddress(
                     onValueChange.invoke(text)
                 },
                 textStyle = ColoredTextStyle(
-                    color = ComposeAppTheme.colors.leah,
+                    color = textColor,
                     textStyle = ComposeAppTheme.typography.body
                 ),
                 singleLine = false,
@@ -167,21 +160,6 @@ fun FormsInputAddress(
                     }
                 )
             } else {
-                if (chooseContactEnable && blockchainType != null) {
-                    ButtonSecondaryCircle(
-                        modifier = Modifier.padding(end = 8.dp),
-                        icon = R.drawable.ic_user_20,
-                        onClick = {
-                            navController.slideFromRightForResult<ChooseContactFragment.Result>(
-                                R.id.chooseContact,
-                                blockchainType
-                            ) {
-                                val textProcessed = textPreprocessor.process(it.address)
-                                onValueChange.invoke(textProcessed)
-                            }
-                        }
-                    )
-                }
                 val qrScannerLauncher =
                     rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                         if (result.resultCode == Activity.RESULT_OK) {
@@ -201,14 +179,13 @@ fun FormsInputAddress(
                     }
                 )
 
-                val clipboardManager = LocalClipboardManager.current
                 ButtonSecondaryDefault(
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .height(28.dp),
                     title = stringResource(id = R.string.Send_Button_Paste),
                     onClick = {
-                        clipboardManager.getText()?.text?.let { textInClipboard ->
+                        TextHelper.getCopiedText()?.let { textInClipboard ->
                             val textProcessed = textPreprocessor.process(textInClipboard)
                             onValueChange.invoke(textProcessed)
                         }

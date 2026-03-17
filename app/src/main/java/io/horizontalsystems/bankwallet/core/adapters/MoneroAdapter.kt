@@ -168,7 +168,7 @@ class MoneroAdapter(
                 }
 
                 AccountOrigin.Restored -> {
-                    birthdayHeightStr ?: "1"
+                    birthdayHeightStr ?: "0"
                 }
             }
 
@@ -203,7 +203,13 @@ fun Long.scaledDown(decimals: Int): BigDecimal {
 }
 
 fun SyncState.toAdapterState(): AdapterState = when (this) {
-    is SyncState.NotSynced -> AdapterState.NotSynced(error)
+    is SyncState.NotSynced -> {
+        if (error is MoneroKit.SyncError.NotStarted) {
+            AdapterState.Connecting
+        } else {
+            AdapterState.NotSynced(error)
+        }
+    }
     is SyncState.Synced -> AdapterState.Synced
     is SyncState.Connecting -> AdapterState.Connecting
     is SyncState.Syncing -> AdapterState.Syncing(

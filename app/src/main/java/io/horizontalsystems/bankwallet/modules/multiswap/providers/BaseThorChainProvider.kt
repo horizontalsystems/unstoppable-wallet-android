@@ -1,24 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.managers.APIClient
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
-import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuoteThorChain
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteThorChain
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThornodeAPI.Response
-import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.FeeType
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
@@ -40,8 +31,11 @@ abstract class BaseThorChainProvider(
     private val affiliate: String?,
     private val affiliateBps: Int?,
 ) : IMultiSwapProvider {
+    override val type = SwapProviderType.DEX
+    override val aml = false
+    override val requireTerms = false
 
-    private val thornodeAPI =
+    protected val thornodeAPI =
         APIClient.retrofit(baseUrl, 60).create(ThornodeAPI::class.java)
 
     private val blockchainTypes = mapOf(
@@ -54,13 +48,22 @@ abstract class BaseThorChainProvider(
         "LTC" to BlockchainType.Litecoin,
         "BASE" to BlockchainType.Base,
         "DASH" to BlockchainType.Dash,
-//        "ZEC" to BlockchainType.Zcash,
+        "ZEC" to BlockchainType.Zcash,
     )
 
-    private var assets = listOf<Asset>()
+    private var assetsMap = mapOf<Token, String>()
 
     override suspend fun start() {
-        val assets = mutableListOf<Asset>()
+        assetsMap = SwapProviderCacheHelper.getOrFetch(
+            providerId = id,
+            deserialize = { it },
+            serialize = { it },
+            fetch = { fetchAssetsMap() }
+        )
+    }
+
+    private suspend fun fetchAssetsMap(): Map<Token, String> {
+        val assetsMap = mutableMapOf<Token, String>()
 
         val pools = thornodeAPI.pools().filter { it.status.lowercase() == "available" }
         for (pool in pools) {
@@ -83,7 +86,7 @@ abstract class BaseThorChainProvider(
                     }
 
                     App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let { token ->
-                        assets.add(Asset(pool.asset, token))
+                        assetsMap[token] = pool.asset
                     }
                 }
 
@@ -91,8 +94,7 @@ abstract class BaseThorChainProvider(
                 BlockchainType.Bitcoin,
                 BlockchainType.Litecoin,
                 BlockchainType.Dash,
-//                BlockchainType.Zcash,
-                    -> {
+                BlockchainType.Zcash -> {
                     var nativeTokenQueries = blockchainType.nativeTokenQueries
 
                     // filter out taproot for ltc
@@ -103,14 +105,14 @@ abstract class BaseThorChainProvider(
                     }
 
                     val tokens = App.marketKit.tokens(nativeTokenQueries)
-                    assets.addAll(tokens.map { Asset(pool.asset, it) })
+                    assetsMap.putAll(tokens.map { it to pool.asset })
                 }
 
                 else -> Unit
             }
         }
 
-        this.assets = assets
+        return assetsMap
     }
 
     override fun supports(blockchainType: BlockchainType): Boolean {
@@ -119,21 +121,15 @@ abstract class BaseThorChainProvider(
     }
 
     override fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
-        return assets.any { it.token == tokenFrom } && assets.any { it.token == tokenTo }
+        return assetsMap.contains(tokenFrom) && assetsMap.contains(tokenTo)
     }
 
     override suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
-        amountIn: BigDecimal,
-        settings: Map<String, Any?>,
-    ): ISwapQuote {
-        val settingRecipient = SwapSettingRecipient(settings, tokenOut)
-
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, settingRecipient.value)
-
-        val cautions = mutableListOf<HSCaution>()
-        val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
+        amountIn: BigDecimal
+    ): SwapQuote {
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, null, null, refundAddress = null, fromAddress = null)
 
         val routerAddress = quoteSwap.router?.let { router ->
             try {
@@ -148,26 +144,12 @@ abstract class BaseThorChainProvider(
             EvmSwapHelper.actionApprove(allowance, amountIn, it, tokenIn)
         }
 
-        val fields = buildList {
-            settingRecipient.value?.let {
-                add(DataFieldRecipient(it))
-            }
-            add(DataFieldSlippage(settingSlippage.value))
-            if (allowance != null && allowance < amountIn) {
-                add(DataFieldAllowance(allowance, tokenIn))
-            }
-        }
-
-        return SwapQuoteThorChain(
+        return SwapQuote(
             amountOut = quoteSwap.expected_amount_out.movePointLeft(8),
-            priceImpact = null,
-            fields = fields,
-            settings = listOf(settingRecipient, settingSlippage),
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            actionRequired = actionApprove,
-            cautions = cautions
+            actionRequired = actionApprove
         )
     }
 
@@ -176,55 +158,57 @@ abstract class BaseThorChainProvider(
         tokenOut: Token,
         amountIn: BigDecimal,
         slippage: BigDecimal?,
-        recipient: io.horizontalsystems.bankwallet.entities.Address?
+        recipient: io.horizontalsystems.bankwallet.entities.Address?,
+        refundAddress: String?,
+        fromAddress: String?
     ): Response.QuoteSwap {
-        val assetIn = assets.first { it.token == tokenIn }
-        val assetOut = assets.first { it.token == tokenOut }
+        val assetIn = assetsMap[tokenIn]!!
+        val assetOut = assetsMap[tokenOut]!!
         val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
 
         return thornodeAPI.quoteSwap(
-            fromAsset = assetIn.asset,
-            toAsset = assetOut.asset,
+            fromAsset = assetIn,
+            toAsset = assetOut,
             amount = amountIn.movePointRight(8).toLong(),
             destination = destination,
             affiliate = affiliate,
             affiliateBps = affiliateBps,
             streamingInterval = 1,
             streamingQuantity = 0,
-            liquidityToleranceBps = slippage?.movePointRight(2)?.toLong()
+            liquidityToleranceBps = slippage?.movePointRight(2)?.toLong(),
+            refundAddress = refundAddress,
+            fromAddress = fromAddress
         )
     }
+
+    protected open fun getRefundAddress(tokenIn: Token): String? = null
+    protected open fun getFromAddress(tokenIn: Token): String? = null
 
     override suspend fun fetchFinalQuote(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
-        swapQuote: ISwapQuote,
-    ): ISwapFinalQuote {
-        check(swapQuote is SwapQuoteThorChain)
-
-        val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
-        val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
-        val slippage = settingSlippage.value
-
-        val cautions = mutableListOf<HSCaution>()
-
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, settingRecipient.value)
+        swapQuote: SwapQuote,
+        recipient: io.horizontalsystems.bankwallet.entities.Address?,
+        slippage: BigDecimal,
+    ): SwapFinalQuote {
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, recipient, getRefundAddress(tokenIn), getFromAddress(tokenIn))
 
         val amountOut = quoteSwap.expected_amount_out.movePointLeft(8)
 
         val amountOutMin = amountOut.subtract(amountOut.multiply(slippage.movePointLeft(2)))
 
         val fields = buildList {
-            settingRecipient.value?.let {
-                add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
+            recipient?.let {
+                add(DataFieldRecipient(it))
             }
-            add(DataFieldSlippage(slippage))
+            DataFieldSlippage.getField(slippage)?.let {
+                add(it)
+            }
         }
 
-        return SwapFinalQuoteThorChain(
+        return SwapFinalQuote(
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
@@ -238,11 +222,12 @@ abstract class BaseThorChainProvider(
             ),
             priceImpact = null,
             fields = fields,
-            cautions = cautions,
+            estimatedTime = quoteSwap.total_swap_seconds,
+            slippage = slippage
         )
     }
 
-    private fun getSendTransactionData(
+    protected open suspend fun getSendTransactionData(
         tokenIn: Token,
         amountIn: BigDecimal,
         quoteSwap: Response.QuoteSwap,
@@ -254,14 +239,6 @@ abstract class BaseThorChainProvider(
         val router = quoteSwap.router
         val recommendedGasRate = quoteSwap.recommended_gas_rate.toInt()
         val dustThreshold = quoteSwap.dust_threshold?.toInt()
-
-        val outboundFee = CoinValue(tokenOut, quoteSwap.fees.outbound.movePointLeft(8))
-        val liquidityFee = CoinValue(tokenOut, quoteSwap.fees.liquidity.movePointLeft(8))
-
-        val feesMap = mapOf(
-            FeeType.Liquidity to liquidityFee,
-            FeeType.Outbound to outboundFee,
-        )
 
         return when (tokenIn.blockchainType) {
             BlockchainType.ArbitrumOne,
@@ -303,7 +280,6 @@ abstract class BaseThorChainProvider(
                 SendTransactionData.Evm(
                     transactionData = transactionData,
                     gasLimit = null,
-                    feesMap = feesMap
                 )
             }
 
@@ -323,21 +299,20 @@ abstract class BaseThorChainProvider(
                         scriptTypes = listOf(ScriptType.P2PKH, ScriptType.P2WPKHSH, ScriptType.P2WPKH),
                         maxOutputsCountForInputs = 10
                     ),
-                    feesMap = feesMap
                 )
             }
 
             else -> throw IllegalArgumentException()
         }
     }
-
-    data class Asset(val asset: String, val token: Token)
-
 }
 
 interface ThornodeAPI {
     @GET("pools")
     suspend fun pools(): List<Response.Pool>
+
+    @GET("inbound_addresses")
+    suspend fun inboundAddresses(): List<Response.InboundAddress>
 
     @GET("quote/swap")
     suspend fun quoteSwap(
@@ -350,6 +325,8 @@ interface ThornodeAPI {
         @Query("streaming_interval") streamingInterval: Long,
         @Query("streaming_quantity") streamingQuantity: Long,
         @Query("liquidity_tolerance_bps") liquidityToleranceBps: Long?,
+        @Query("refund_address") refundAddress: String?,
+        @Query("from_address") fromAddress: String?,
 
     ): Response.QuoteSwap
 
@@ -386,7 +363,7 @@ interface ThornodeAPI {
 //  "max_streaming_quantity": 8,
 //  "streaming_swap_blocks": 7,
 //  "streaming_swap_seconds": 42,
-//  "total_swap_seconds": 1674
+            val total_swap_seconds: Long?,
         ) {
             data class Fees(
                 val affiliate: BigDecimal,
@@ -399,27 +376,22 @@ interface ThornodeAPI {
         data class Pool(
             val asset: String,
             val status: String,
-// "short_code": "b",
-// "decimals": 6,
-// "pending_inbound_asset": "101713319",
-// "pending_inbound_rune": "464993836",
-// "balance_asset": "3197744873",
-// "balance_rune": "13460619152985",
-// "asset_tor_price": "123456",
-// "pool_units": "14694928607473",
-// "LP_units": "14694928607473",
-// "synth_units": "0",
-// "synth_supply": "0",
-// "savers_depth": "199998",
-// "savers_units": "199998",
-// "savers_fill_bps": "4500",
-// "savers_capacity_remaining": "1000",
-// "synth_mint_paused": true,
-// "synth_supply_remaining": "123456",
-// "loan_collateral": "123456",
-// "loan_collateral_remaining": "123456",
-// "loan_cr": "123456",
-// "derived_depth_bps": "123456"
+        )
+
+        data class InboundAddress(
+            val chain: String,
+            val address: String,
+            val router: String?,
+            val halted: Boolean,
+            val gas_rate: String,
+            val dust_threshold: String?,
+            val shielded_memo_config: ShieldedMemoConfig?,
+        )
+
+        data class ShieldedMemoConfig(
+            val unified_address: String,
+            val uivk: String,
+            val enabled: Boolean,
         )
     }
 }

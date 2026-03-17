@@ -33,25 +33,9 @@ class TermsManager(private val localStorage: ILocalStorage) : ITermsManager {
         }
     }
 
-    init {
+    override fun broadcastTermsAccepted(accepted: Boolean) {
         scope.launch {
-            _termsAcceptedFlow.emit(localStorage.termsAccepted)
-        }
-    }
-
-    fun migrateToTermsV2() {
-        if(localStorage.termsAccepted) {
-            localStorage.termsAccepted = false
-
-            val initialChecked = listOf(
-                TermsModule.TermType.Backup.key,
-                TermsModule.TermType.DisablingPin.key,
-            )
-
-            scope.launch {
-                _termsAcceptedFlow.emit(false)
-            }
-            localStorage.checkedTerms = initialChecked
+            _termsAcceptedFlow.emit(accepted)
         }
     }
 

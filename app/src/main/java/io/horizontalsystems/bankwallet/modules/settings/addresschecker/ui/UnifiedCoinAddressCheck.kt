@@ -22,7 +22,6 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -63,6 +62,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -119,9 +119,6 @@ fun UnifiedAddressCheckScreen(
                         description = stringResource(R.string.SettingsAddressChecker_ChainalysisCheckDescription),
                         onInfoClick = { info ->
                             bottomCheckInfo = info
-                            coroutineScope.launch {
-                                infoModalBottomSheetState.show()
-                            }
                         }
                     ) {
                         NetworkItem(
@@ -137,9 +134,6 @@ fun UnifiedAddressCheckScreen(
                         description = stringResource(R.string.SettingsAddressChecker_HashditCheckDescription),
                         onInfoClick = { info ->
                             bottomCheckInfo = info
-                            coroutineScope.launch {
-                                infoModalBottomSheetState.show()
-                            }
                         }
                     ) {
                         viewModel.hashDitBlockchains.forEach { blockchain ->
@@ -173,9 +167,6 @@ fun UnifiedAddressCheckScreen(
                             description = description,
                             onInfoClick = { info ->
                                 bottomCheckInfo = info
-                                coroutineScope.launch {
-                                    infoModalBottomSheetState.show()
-                                }
                             }
                         ) {
                             fullCoin.tokens.forEach { token ->
@@ -204,8 +195,8 @@ fun UnifiedAddressCheckScreen(
                 hideBottomSheet = {
                     coroutineScope.launch {
                         infoModalBottomSheetState.hide()
+                        bottomCheckInfo = null
                     }
-                    bottomCheckInfo = null
                 }
             )
         }
@@ -342,10 +333,9 @@ fun CheckInfoBottomSheet(
     bottomSheetState: SheetState
 ) {
 
-    ModalBottomSheet(
+    BottomSheetContent(
         onDismissRequest = hideBottomSheet,
-        sheetState = bottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
+        sheetState = bottomSheetState
     ) {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_info_24),

@@ -64,6 +64,7 @@ class LocalStorageManager(
     private val RATE_APP_LAST_REQ_TIME = "rate_app_last_req_time"
     private val BALANCE_HIDDEN = "balance_hidden"
     private val TERMS_AGREED = "terms_agreed"
+    private val SWAP_TERMS_AGREED = "swap_terms_agreed"
     private val CHECKED_TERMS = "checked_terms"
     private val MARKET_CURRENT_TAB = "market_current_tab"
     private val BIOMETRIC_ENABLED = "biometric_auth_enabled"
@@ -96,6 +97,7 @@ class LocalStorageManager(
     private val PRICE_CHANGE_INTERVAL = "price_change_interval"
     private val UI_STATS_ENABLED = "ui_stats_enabled"
     private val LAST_MIGRATION_VERSION = "last_migration_version"
+    private val DISABLED_PAID_ACTIONS = "disabled_paid_actions"
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
@@ -406,6 +408,12 @@ class LocalStorageManager(
             preferences.edit().putBoolean(TERMS_AGREED, value).commit()
         }
 
+    override var swapTermsAccepted: Boolean
+        get() = preferences.getBoolean(SWAP_TERMS_AGREED, false)
+        set(value) {
+            preferences.edit().putBoolean(SWAP_TERMS_AGREED, value).commit()
+        }
+
     override var checkedTerms: List<String>
         get() = preferences.getString(CHECKED_TERMS, null)?.split(",") ?: listOf()
         set(value) {
@@ -641,5 +649,17 @@ class LocalStorageManager(
             value?.let {
                 preferences.edit().putInt(LAST_MIGRATION_VERSION, it).apply()
             }
+        }
+
+    private val _disabledPaidActionsFlow = MutableStateFlow(
+        preferences.getStringSet(DISABLED_PAID_ACTIONS, emptySet()) ?: emptySet()
+    )
+    override val disabledPaidActionsFlow = _disabledPaidActionsFlow.asStateFlow()
+
+    override var disabledPaidActions: Set<String>
+        get() = preferences.getStringSet(DISABLED_PAID_ACTIONS, null) ?: setOf("SecureSend")
+        set(value) {
+            preferences.edit().putStringSet(DISABLED_PAID_ACTIONS, value).apply()
+            _disabledPaidActionsFlow.update { value }
         }
 }

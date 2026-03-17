@@ -35,7 +35,7 @@ class ZcashTransaction : Comparable<ZcashTransaction> {
             if (it.isShielding || internalTransaction) {
                 shieldDirection = if (it.isShielding) ShieldDirection.Shield else ShieldDirection.Unshield
                 feePaid = it.totalSpent - it.totalReceived
-                value = it.totalReceived
+                value = it.netValue
             } else {
                 shieldDirection = null
                 feePaid = it.feePaid

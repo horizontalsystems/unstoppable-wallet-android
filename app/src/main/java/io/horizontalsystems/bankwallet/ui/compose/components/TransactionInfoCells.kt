@@ -566,6 +566,38 @@ fun TransactionInfoExplorerCell(
 }
 
 @Composable
+fun TransactionInfoSecretKeyCell(secretKey: String) {
+    val view = LocalView.current
+
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+    ) {
+        subhead2_grey(text = stringResource(R.string.TransactionInfo_TransactionSecretKey))
+
+        HSpacer(16.dp)
+        subhead1_leah(
+            modifier = Modifier.weight(1f),
+            text = secretKey,
+            textAlign = TextAlign.Right
+        )
+
+        HSpacer(16.dp)
+        ButtonSecondaryCircle(
+            icon = R.drawable.ic_copy_20,
+            onClick = {
+                TextHelper.copyText(secretKey)
+                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+
+                stat(
+                    page = StatPage.TransactionInfo,
+                    event = StatEvent.Copy(StatEntity.TransactionKey)
+                )
+            }
+        )
+    }
+}
+
+@Composable
 fun TransactionInfoRawTransaction(rawTransaction: () -> String?) {
     val view = LocalView.current
     RowUniversal(

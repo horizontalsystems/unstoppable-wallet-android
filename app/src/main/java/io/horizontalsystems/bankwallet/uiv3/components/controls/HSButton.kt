@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -33,6 +35,7 @@ fun HSButton(
     size: ButtonSize = ButtonSize.Medium,
     title: String,
     icon: Painter? = null,
+    loadingIndicator: Boolean = false,
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
@@ -60,9 +63,19 @@ fun HSButton(
             )
             HSpacer(buttonProps.iconRightPadding)
         }
+        if (loadingIndicator) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(16.dp),
+                color = ComposeAppTheme.colors.grey,
+                strokeWidth = 2.dp
+            )
+            HSpacer(width = buttonProps.iconRightPadding)
+        }
         Text(
             text = title,
-            style = buttonProps.textStyle
+            style = buttonProps.textStyle,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -79,6 +92,33 @@ enum class ButtonVariant {
     Primary, Secondary
 }
 
+data class ButtonConfig(
+    val variant: ButtonVariant,
+    val style: ButtonStyle,
+    val size: ButtonSize,
+    val title: String,
+    val onClick: () -> Unit,
+)
+
+@Composable
+fun HSButton(
+    modifier: Modifier = Modifier,
+    buttonConfig: ButtonConfig,
+    icon: Painter? = null,
+    enabled: Boolean = true,
+) {
+    HSButton(
+        modifier = modifier,
+        variant = buttonConfig.variant,
+        style = buttonConfig.style,
+        size = buttonConfig.size,
+        title = buttonConfig.title,
+        icon = icon,
+        enabled = enabled,
+        onClick = buttonConfig.onClick,
+    )
+}
+
 @Composable
 private fun getButtonProps(size: ButtonSize, style: ButtonStyle, variant: ButtonVariant): ButtonProps {
     val buttonHeight: Dp
@@ -91,7 +131,7 @@ private fun getButtonProps(size: ButtonSize, style: ButtonStyle, variant: Button
         ButtonSize.Medium -> {
             buttonHeight = 56.dp
             textStyle = ComposeAppTheme.typography.headline2
-            horizontalPadding = 40.dp
+            horizontalPadding = 16.dp
             iconSize = 24.dp
             iconRightPadding = 8.dp
         }

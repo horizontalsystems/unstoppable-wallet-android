@@ -15,14 +15,14 @@ object TextHelper : IClipboardManager {
         copyTextToClipboard(App.instance, text)
     }
 
-    override fun getCopiedText(): String {
+    override fun getCopiedText(): String? {
         return clipboard?.primaryClip?.itemCount?.let { count ->
             if (count > 0) {
                 clipboard?.primaryClip?.getItemAt(0)?.text?.toString()
             } else {
                 null
             }
-        } ?: ""
+        }
     }
 
     fun getCleanedUrl(link: String): String{

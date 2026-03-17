@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -56,6 +57,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemLoading
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -66,7 +68,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 @Composable
 fun TransactionsScreen(
     navController: NavController,
-    viewModel: TransactionsViewModel
+    viewModel: TransactionsViewModel,
 ) {
     val accountsViewModel =
         viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
@@ -122,11 +124,13 @@ fun TransactionsScreen(
                         if (transactionItems.isEmpty()) {
                             if (syncing) {
                                 ListEmptyView(
+                                    modifier = Modifier.background(ComposeAppTheme.colors.lawrence),
                                     text = stringResource(R.string.Transactions_WaitForSync),
                                     icon = R.drawable.ic_clock
                                 )
                             } else {
                                 ListEmptyView(
+                                    modifier = Modifier.background(ComposeAppTheme.colors.lawrence),
                                     text = stringResource(R.string.Transactions_EmptyList),
                                     icon = R.drawable.ic_outgoingraw
                                 )
@@ -150,7 +154,12 @@ fun TransactionsScreen(
                                 }
                             }
 
-                            LazyColumn(state = listState) {
+                            LazyColumn(
+                                state = listState,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(ComposeAppTheme.colors.lawrence)
+                            ) {
                                 transactionList(
                                     transactionsMap = transactionItems,
                                     willShow = { viewModel.willShow(it) },
@@ -209,7 +218,8 @@ fun LazyListScope.transactionList(
     }
 
     item {
-        Spacer(modifier = Modifier.height(20.dp))
+        VSpacer(20.dp)
+        VSpacer(70.dp)
     }
 }
 

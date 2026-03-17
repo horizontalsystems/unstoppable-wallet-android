@@ -2,9 +2,14 @@ package io.horizontalsystems.bankwallet.modules.send.bitcoin
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -12,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -44,16 +50,14 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdva
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.utxoexpert.UtxoExpertModeScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import java.math.BigDecimal
 
 
@@ -150,22 +154,24 @@ fun SendBitcoinScreen(
             focusRequester.requestFocus()
         }
 
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                title = title,
-                navigationIcon = {
-                    HsBackButton(onClick = { fragmentNavController.popBackStack() })
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
-                        icon = R.drawable.ic_manage_2,
-                        onClick = { composeNavController.navigate(SendBtcAdvancedSettingsPage) }
-                    ),
-                )
-            )
-
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        HSScaffold(
+            title = title,
+            onBack = { fragmentNavController.popBackStack() },
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
+                    icon = R.drawable.manage_24,
+                    onClick = { composeNavController.navigate(SendBtcAdvancedSettingsPage) }
+                ),
+            ),
+        ) {
+            Column(
+                modifier = Modifier
+                    .windowInsetsPadding(WindowInsets.ime)
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+            ) {
+                VSpacer(16.dp)
                 if (uiState.showAddressInput) {
                     HSAddressCell(
                         title = stringResource(R.string.Send_Confirmation_To),
@@ -212,30 +218,30 @@ fun SendBitcoinScreen(
                 }
 
                 VSpacer(16.dp)
-                CellUniversalLawrenceSection(
-                    buildList {
-                        uiState.utxoData?.let { utxoData ->
-                            add {
-                                UtxoCell(
-                                    utxoData = utxoData,
-                                    onClick = {
-                                        composeNavController.navigate(UtxoExpertModePage)
-                                    }
-                                )
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(ComposeAppTheme.colors.lawrence)
+                        .padding(vertical = 8.dp)
+                ) {
+                    uiState.utxoData?.let { utxoData ->
+                        UtxoCell(
+                            utxoData = utxoData,
+                            onClick = {
+                                composeNavController.navigate(UtxoExpertModePage)
                             }
-                        }
-                        add {
-                            HSFeeRaw(
-                                coinCode = wallet.coin.code,
-                                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                                fee = fee,
-                                amountInputType = amountInputType,
-                                rate = rate,
-                                navController = fragmentNavController
-                            )
-                        }
+                        )
                     }
-                )
+                    HSFeeRaw(
+                        coinCode = wallet.coin.code,
+                        coinDecimal = viewModel.coinMaxAllowedDecimals,
+                        fee = fee,
+                        amountInputType = amountInputType,
+                        rate = rate,
+                        navController = fragmentNavController
+                    )
+                }
 
                 feeRateCaution?.let {
                     FeeRateCaution(
@@ -244,10 +250,12 @@ fun SendBitcoinScreen(
                     )
                 }
 
+                VSpacer(16.dp)
+
                 ButtonPrimaryYellow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 16.dp),
+                        .padding(horizontal = 16.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
                         if (riskyAddress) {
@@ -266,6 +274,7 @@ fun SendBitcoinScreen(
                     },
                     enabled = proceedEnabled
                 )
+                VSpacer(32.dp)
             }
         }
     }

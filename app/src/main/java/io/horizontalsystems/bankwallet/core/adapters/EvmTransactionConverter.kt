@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
-import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.tokenIconPlaceholder
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
@@ -57,7 +57,7 @@ class EvmTransactionConverter(
     private val evmKit: EthereumKit
         get() = evmKitWrapper.evmKit
 
-    fun transactionRecord(fullTransaction: FullTransaction): EvmTransactionRecord {
+    suspend fun transactionRecord(fullTransaction: FullTransaction): EvmTransactionRecord {
         val transaction = fullTransaction.transaction
         val protected = MerkleTransactionAdapter.isProtected(fullTransaction)
 
@@ -67,17 +67,25 @@ class EvmTransactionConverter(
             }
 
             is IncomingDecoration -> {
+                val fromAddress = decoration.from.eip55
                 val transactionValue = baseCoinValue(decoration.value, false)
-                val isSpam = SpamManager.isSpam(listOf(TransferEvent(decoration.from.eip55, transactionValue)))
-                EvmIncomingTransactionRecord(transaction, baseToken, source, decoration.from.eip55, transactionValue, isSpam, protected)
+                val isSpam = App.spamManager.isSpam(
+                    transaction.hash,
+                    listOf(TransferEvent(fromAddress, transactionValue)),
+                    source,
+                    transaction.timestamp,
+                    transaction.blockNumber?.toInt()
+                )
+                EvmIncomingTransactionRecord(transaction, baseToken, source, fromAddress, transactionValue, isSpam, protected)
             }
 
             is OutgoingDecoration -> {
+                val toAddress = decoration.to.eip55
                 EvmOutgoingTransactionRecord(
                     transaction,
                     baseToken,
                     source,
-                    decoration.to.eip55,
+                    toAddress,
                     baseCoinValue(decoration.value, true),
                     decoration.sentToSelf,
                     protected
@@ -85,11 +93,12 @@ class EvmTransactionConverter(
             }
 
             is OutgoingEip20Decoration -> {
+                val toAddress = decoration.to.eip55
                 EvmOutgoingTransactionRecord(
                     transaction,
                     baseToken,
                     source,
-                    decoration.to.eip55,
+                    toAddress,
                     getEip20Value(decoration.contractAddress, decoration.value, true, decoration.tokenInfo),
                     decoration.sentToSelf,
                     protected
@@ -222,7 +231,13 @@ class EvmTransactionConverter(
                     }
 
                     transaction.from != address && transaction.to != address -> {
-                        val isSpam = SpamManager.isSpam(incomingEvents + outgoingEvents)
+                        val isSpam = App.spamManager.isSpam(
+                            transaction.hash,
+                            incomingEvents + outgoingEvents,
+                            source,
+                            transaction.timestamp,
+                            transaction.blockNumber?.toInt()
+                        )
                         ExternalContractCallTransactionRecord(
                             transaction, baseToken, source,
                             incomingEvents,

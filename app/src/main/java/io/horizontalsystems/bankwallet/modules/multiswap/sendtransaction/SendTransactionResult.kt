@@ -9,4 +9,7 @@ sealed class SendTransactionResult {
     object Tron : SendTransactionResult()
     object Stellar : SendTransactionResult()
     object Solana : SendTransactionResult()
+    object Ton : SendTransactionResult()
+    object Zcash : SendTransactionResult()
+    object Monero : SendTransactionResult()
 }

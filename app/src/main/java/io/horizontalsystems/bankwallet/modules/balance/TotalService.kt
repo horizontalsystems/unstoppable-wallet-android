@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
+import io.horizontalsystems.bankwallet.core.ServiceState
 import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -14,9 +13,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
@@ -25,25 +21,16 @@ class TotalService(
     private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
     private val baseTokenManager: BaseTokenManager,
-    private val balanceHiddenManager: BalanceHiddenManager,
-    private val localStorage: ILocalStorage,
-) {
-    var balanceHidden = balanceHiddenManager.balanceHidden
-        private set
-
+) : ServiceState<TotalService.State>() {
     private var totalCurrencyValue: CurrencyValue? = null
     private var totalCoinValue: CoinValue? = null
     private var dimmed = false
 
-    private val _stateFlow: MutableStateFlow<State> = MutableStateFlow(
-        State.Visible(
-            currencyValue = totalCurrencyValue,
-            coinValue = totalCoinValue,
-            dimmed = dimmed,
-            showFullAmount = !localStorage.amountRoundingEnabled
-        )
+    override fun createState() = State(
+        currencyValue = totalCurrencyValue,
+        coinValue = totalCoinValue,
+        dimmed = dimmed
     )
-    val stateFlow = _stateFlow.asStateFlow()
 
     private var baseToken: Token? = null
     private var coinPrice: CoinPrice? = null
@@ -65,18 +52,6 @@ class TotalService(
                 handleUpdatedBaseToken(it)
             }
         }
-
-        coroutineScope.launch {
-            balanceHiddenManager.balanceHiddenFlow.collect {
-                handleUpdatedBalanceHidden(it)
-            }
-        }
-
-        coroutineScope.launch {
-            localStorage.amountRoundingEnabledFlow.collect{
-                emitState()
-            }
-        }
     }
 
     fun stop() {
@@ -95,16 +70,6 @@ class TotalService(
 
     fun toggleType() {
         baseTokenManager.toggleBaseToken()
-    }
-
-    fun toggleBalanceVisibility() {
-        balanceHiddenManager.toggleBalanceHidden()
-    }
-
-    private fun handleUpdatedBalanceHidden(balanceHidden: Boolean) {
-        this.balanceHidden = balanceHidden
-
-        emitState()
     }
 
     private fun handleUpdatedCurrency(currency: Currency) {
@@ -187,35 +152,15 @@ class TotalService(
         } ?: false
     }
 
-    private fun emitState() {
-        _stateFlow.update {
-            if (balanceHidden) {
-                State.Hidden
-            } else {
-                State.Visible(
-                    currencyValue = totalCurrencyValue,
-                    coinValue = totalCoinValue,
-                    dimmed = dimmed,
-                    showFullAmount = !localStorage.amountRoundingEnabled
-                )
-            }
-        }
-    }
-
     data class BalanceItem(
         val value: BigDecimal,
         val isValuePending: Boolean,
         val coinPrice: CoinPrice?
     )
 
-    sealed class State {
-        data class Visible(
-            val currencyValue: CurrencyValue?,
-            val coinValue: CoinValue?,
-            val dimmed: Boolean,
-            val showFullAmount: Boolean,
-        ) : State()
-
-        object Hidden : State()
-    }
+    data class State(
+        val currencyValue: CurrencyValue?,
+        val coinValue: CoinValue?,
+        val dimmed: Boolean
+    )
 }

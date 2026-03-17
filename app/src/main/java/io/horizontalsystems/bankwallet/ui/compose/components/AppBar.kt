@@ -43,6 +43,13 @@ data class MenuItem(
     val onClick: () -> Unit,
 ) : IMenuItem()
 
+data class MenuItemDropdown(
+    val title: TranslatableString,
+    @DrawableRes val icon: Int,
+    val enabled: Boolean = true,
+    val items: List<MenuItem>,
+) : IMenuItem()
+
 @Composable
 fun AppBarMenuButton(
     @DrawableRes icon: Int,
@@ -86,7 +93,7 @@ fun AppBar(
 ) {
     val titleComposable: @Composable () -> Unit = {
         title?.let {
-            title3_leah(
+            headline1_leah(
                 text = title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -166,6 +173,7 @@ fun AppBar(
                     }
 
                     is MenuItemLoading -> TODO()
+                    is MenuItemDropdown -> TODO()
                 }
             }
         },

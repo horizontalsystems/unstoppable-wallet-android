@@ -206,7 +206,7 @@ fun MarketSearchScreen(
                             HsDivider()
                         }
                         item {
-                            VSpacer(72.dp)
+                            VSpacer(88.dp)
                         }
                     }
                 }

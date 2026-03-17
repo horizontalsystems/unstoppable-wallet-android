@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
-import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
+import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinAddressService
@@ -33,7 +33,6 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaut
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.settings.SendBtcSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -45,7 +44,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransactionService(true) {
+class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransactionService(true, false) {
     private val adapter = App.adapterManager.getAdapterForToken<ISendBitcoinAdapter>(token)!!
     private val provider = FeeRateProviderFactory.provider(token.blockchainType)!!
     private val feeService = SendBitcoinFeeService(adapter)
@@ -134,15 +133,24 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         emitState()
     }
 
-    override fun createState() = SendTransactionServiceState(
-        uuid = uuid,
-        networkFee = networkFee,
-        cautions = listOfNotNull(amountState.amountCaution, feeRateState.feeRateCaution).map(HSCaution::toCautionViewItem),
-        sendable = amountState.canBeSend && feeRateState.canBeSend && addressState.canBeSend,
-        loading = false,
-        fields = fields,
-        extraFees = extraFees
-    )
+    override fun createState(): SendTransactionServiceState {
+        val sendable = amountState.canBeSend && feeRateState.canBeSend && addressState.canBeSend
+
+        val hasError = amountState.amountCaution?.isError() == true ||
+                feeRateState.feeRateCaution?.isError() == true &&
+                addressState.addressError != null
+
+        val loading = !sendable && !hasError
+
+        return SendTransactionServiceState(
+            uuid = uuid,
+            networkFee = networkFee,
+            cautions = listOfNotNull(amountState.amountCaution, feeRateState.feeRateCaution).map(HSCaution::toCautionViewItem),
+            sendable = sendable,
+            loading = loading,
+            fields = fields,
+        )
+    }
 
     override suspend fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Btc)
@@ -151,7 +159,9 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         changeToFirstInput = data.changeToFirstInput
         utxoFilters = data.utxoFilters
 
-        feeRateService.setRecommendedAndMin(data.recommendedGasRate, data.recommendedGasRate)
+        data.recommendedGasRate?.let {
+            feeRateService.setRecommendedAndMin(it, it)
+        }
 
         feeService.setMemo(memo)
         feeService.setChangeToFirstInput(changeToFirstInput)
@@ -164,8 +174,6 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         amountService.setAmount(data.amount)
 
         addressService.setAddress(Address(data.address))
-
-        setExtraFeesMap(data.feesMap)
     }
 
     @Composable
@@ -222,17 +230,13 @@ fun SendBtcFeeSettingsScreen(
                 .fillMaxSize()
         ) {
             VSpacer(12.dp)
-            CellUniversalLawrenceSection(
-                listOf {
-                    HSFeeRaw(
-                        coinCode = viewModel.token.coin.code,
-                        coinDecimal = viewModel.coinMaxAllowedDecimals,
-                        fee = uiState.fee,
-                        amountInputType = AmountInputType.COIN,
-                        rate = uiState.rate,
-                        navController = navController
-                    )
-                }
+            HSFee(
+                coinCode = viewModel.token.coin.code,
+                coinDecimal = viewModel.coinMaxAllowedDecimals,
+                fee = uiState.fee,
+                amountInputType = AmountInputType.COIN,
+                rate = uiState.rate,
+                navController = navController
             )
 
             if (viewModel.feeRateChangeable) {

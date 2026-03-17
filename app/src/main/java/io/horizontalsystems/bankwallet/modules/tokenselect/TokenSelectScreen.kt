@@ -114,6 +114,7 @@ fun TokenSelectScreen(
                         items(balanceViewItems) { item ->
                             BalanceCardInner2(
                                 viewItem = item,
+                                balanceHidden = uiState.balanceHidden,
                                 type = BalanceCardSubtitleType.CoinName,
                                 onClick = {
                                     isSearchActive = false
@@ -126,7 +127,7 @@ fun TokenSelectScreen(
                             HsDivider()
                         }
                         item {
-                            VSpacer(100.dp)
+                            VSpacer(88.dp)
                         }
                     }
                 }

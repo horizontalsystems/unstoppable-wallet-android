@@ -167,7 +167,8 @@ class MetricsPageFragment : BaseComposeFragment() {
                                                 value = viewItem.coinRate,
                                                 marketDataValue = viewItem.marketDataValue,
                                                 label = viewItem.rank,
-                                            ) { onCoinClick(viewItem.fullCoin.coin.uid) }
+                                                onClick = { onCoinClick(viewItem.fullCoin.coin.uid) },
+                                            )
                                         }
                                     }
                                 }

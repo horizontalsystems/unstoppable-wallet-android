@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -18,7 +19,7 @@ class SolanaRpcSourceManager(
     val rpcSourceUpdateObservable: Observable<Unit>
         get() = rpcSourceSubjectUpdate
 
-    val allRpcSources = listOf(RpcSource.TritonOne, RpcSource.Serum)
+    val allRpcSources = listOf(RpcSource.Alchemy(App.appConfigProvider.solanaAlchemyApiKey))
 
     val rpcSource: RpcSource
         get() {

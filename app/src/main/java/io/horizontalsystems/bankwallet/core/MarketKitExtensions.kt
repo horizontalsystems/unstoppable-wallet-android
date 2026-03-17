@@ -42,31 +42,6 @@ val Token.iconPlaceholder: Int
         else -> R.drawable.coin_placeholder
     }
 
-val Token.swappable: Boolean
-    get() = when (blockchainType) {
-        BlockchainType.Ethereum,
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.Polygon,
-        BlockchainType.Avalanche,
-        BlockchainType.Optimism,
-        BlockchainType.Base,
-        BlockchainType.ZkSync,
-        BlockchainType.Gnosis,
-        BlockchainType.Fantom,
-        BlockchainType.ArbitrumOne,
-        BlockchainType.Bitcoin,
-        BlockchainType.BitcoinCash,
-        BlockchainType.Litecoin,
-        BlockchainType.Dash,
-        BlockchainType.Stellar,
-        BlockchainType.Solana,
-        BlockchainType.Tron,
-        BlockchainType.Zcash,
-            -> true
-
-        else -> false
-    }
-
 val Token.protocolInfo: String
     get() = when (type) {
         TokenType.Native -> {
@@ -315,6 +290,27 @@ val BlockchainType.feePriceScale: FeePriceScale
         BlockchainType.Avalanche -> FeePriceScale.Navax
         else -> FeePriceScale.Gwei
     }
+
+val Long.blockchainTypeFromChainId: BlockchainType?
+    get() {
+        return chainIdBlockchainTypeMap[this]
+    }
+
+val BlockchainType.chainId: Long?
+    get() = chainIdBlockchainTypeMap.entries.firstOrNull { it.value == this }?.key
+
+private val chainIdBlockchainTypeMap: Map<Long, BlockchainType> = mapOf(
+    1L to BlockchainType.Ethereum,
+    56L to BlockchainType.BinanceSmartChain,
+    137L to BlockchainType.Polygon,
+    43114L to BlockchainType.Avalanche,
+    10L to BlockchainType.Optimism,
+    42161L to BlockchainType.ArbitrumOne,
+    100L to BlockchainType.Gnosis,
+    250L to BlockchainType.Fantom,
+    8453L to BlockchainType.Base,
+    324L to BlockchainType.ZkSync,
+)
 
 val BlockchainType.isEvm: Boolean
     get() = when (this) {

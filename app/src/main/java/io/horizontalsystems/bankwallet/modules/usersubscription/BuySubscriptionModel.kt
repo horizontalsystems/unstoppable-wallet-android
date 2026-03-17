@@ -5,15 +5,16 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.BasePlan
 import io.horizontalsystems.subscriptions.core.IPaidAction
-import io.horizontalsystems.subscriptions.core.LossProtection
 import io.horizontalsystems.subscriptions.core.PricingPhase
 import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
+import io.horizontalsystems.subscriptions.core.SwapProtection
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import java.time.Period
+import java.util.Locale
 import kotlin.math.ceil
 
 object BuySubscriptionModel {
@@ -27,7 +28,7 @@ object BuySubscriptionModel {
             SecureSend -> R.string.Premium_UpgradeFeature_SecureSend
             ScamProtection -> R.string.Premium_UpgradeFeature_ScamProtection
             PrioritySupport -> R.string.Premium_UpgradeFeature_PrioritySupport
-            LossProtection -> R.string.Premium_UpgradeFeature_LossProtection
+            SwapProtection -> R.string.Premium_UpgradeFeature_SwapProtection
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 
@@ -40,7 +41,7 @@ object BuySubscriptionModel {
             SecureSend -> R.string.Premium_UpgradeFeature_SecureSend_Description
             ScamProtection -> R.string.Premium_UpgradeFeature_ScamProtection_Description
             PrioritySupport -> R.string.Premium_UpgradeFeature_PrioritySupport_Description
-            LossProtection -> R.string.Premium_UpgradeFeature_LossProtection_Description
+            SwapProtection -> R.string.Premium_UpgradeFeature_SwapProtection_Description
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 
@@ -53,7 +54,7 @@ object BuySubscriptionModel {
             SecureSend -> R.drawable.prem_wallet_in_24
             ScamProtection -> R.drawable.prem_radar_24
             PrioritySupport -> R.drawable.prem_message_24
-            LossProtection -> R.drawable.prem_usd_24
+            SwapProtection -> R.drawable.prem_usd_24
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 
@@ -77,20 +78,19 @@ object BuySubscriptionModel {
     fun BasePlan.badge(): String? {
         return when {
             pricingPhases.last().period.years > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_AnnuallySave)
-            pricingPhases.last().period.months > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_MonthlySave)
+//            pricingPhases.last().period.months > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_MonthlySave)
             else -> null
         }
     }
 
-    //Black Friday discounts
-    //Yearly 50%
-    //Monthly 20%
+    //discounts
+    //Yearly 33%
     val BasePlan.noteAmount: String?
         get() {
             val phase = pricingPhases.last()
             return when {
-                phase.period.years > 0 -> getOriginalPrice(phase, 50.toDouble())
-                phase.period.months > 0 -> getOriginalPrice(phase, 20.toDouble())
+                phase.period.years > 0 -> getYearlySaveAmount(phase)
+//                phase.period.months > 0 -> getOriginalPrice(phase, 20.toDouble())
                 else -> null
             }
         }
@@ -98,8 +98,8 @@ object BuySubscriptionModel {
     val BasePlan.noteText: String?
         get() {
             return when {
-                pricingPhases.last().period.years > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_PerYear)
-                pricingPhases.last().period.months > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_PerMonth)
+                pricingPhases.last().period.years > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_Month)
+//                pricingPhases.last().period.months > 0 -> Translator.getString(R.string.Premium_SubscriptionPeriod_PerMonth)
                 else -> null
             }
         }
@@ -107,10 +107,25 @@ object BuySubscriptionModel {
     val BasePlan.gradientBadge: Boolean
         get() {
             return when {
-                pricingPhases.last().period.years > 0 -> true
+//                pricingPhases.last().period.years > 0 -> true
                 else -> false
             }
         }
+
+    fun getYearlySaveAmount(phase: PricingPhase): String {
+        val currencySymbol = phase.formattedPrice.takeWhile { !it.isDigit() }
+        val price = phase.priceAmountMicros / 1_000_000.0
+
+        val pricePerMonth = price / 12
+
+        // round up to 2 decimal places
+        val rounded = ceil(pricePerMonth * 100) / 100.0
+
+        // format with one fraction digits
+        val priceStr = String.format(Locale.US, "%.1f", rounded)
+
+        return currencySymbol + priceStr
+    }
 
     fun getOriginalPrice(phase: PricingPhase, discountPercent: Double): String {
         val currencySymbol = phase.formattedPrice.takeWhile { !it.isDigit() }
@@ -118,9 +133,11 @@ object BuySubscriptionModel {
 
         val originalPrice = discountedPrice / (1 - discountPercent / 100)
 
-        val rounded = ceil(originalPrice * 10) / 10.0
+        // round up to 2 decimal places
+        val rounded = ceil(originalPrice * 100) / 100.0
 
-        val priceStr =  rounded.toString().trimEnd('0').trimEnd('.')
+        // format with two fraction digits
+        val priceStr = String.format(Locale.US, "%.2f", rounded)
 
         return currencySymbol + priceStr
     }

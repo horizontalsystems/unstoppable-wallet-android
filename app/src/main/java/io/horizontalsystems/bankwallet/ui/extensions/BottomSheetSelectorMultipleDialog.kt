@@ -69,7 +69,7 @@ class BottomSheetSelectorMultipleDialog(
                         title = title,
                         onCloseClick = { close() }
                     ) {
-                        BottomSheetContent()
+                        BSContent()
                     }
                 }
             }
@@ -77,7 +77,7 @@ class BottomSheetSelectorMultipleDialog(
     }
 
     @Composable
-    private fun BottomSheetContent() {
+    private fun BSContent() {
         val localView = LocalView.current
         warning?.let {
             TextImportantWarning(

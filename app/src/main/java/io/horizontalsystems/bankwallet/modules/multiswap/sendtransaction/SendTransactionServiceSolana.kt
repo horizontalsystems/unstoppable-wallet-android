@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class SendTransactionServiceSolana(private val token: Token) : AbstractSendTransactionService(false) {
+class SendTransactionServiceSolana(private val token: Token) : AbstractSendTransactionService(false, false) {
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Tron())
 
     private val adapter = App.adapterManager.getAdapterForToken<ISendSolanaAdapter>(token)!!
@@ -110,6 +110,5 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
         sendable = rawTransaction != null || (amountState.canBeSend && addressState.canBeSend),
         loading = false,
         fields = listOf(),
-        extraFees = extraFees
     )
 }

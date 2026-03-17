@@ -168,7 +168,7 @@ private fun QRScannerScreen(
                     ButtonPrimaryYellow(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Send_Button_Paste),
-                        onClick = { onScan(TextHelper.getCopiedText()) }
+                        onClick = { onScan(TextHelper.getCopiedText() ?: "") }
                     )
                     Spacer(Modifier.height(16.dp))
                 }

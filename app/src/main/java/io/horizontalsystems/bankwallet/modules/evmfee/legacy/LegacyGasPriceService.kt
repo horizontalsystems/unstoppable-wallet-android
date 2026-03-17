@@ -60,9 +60,6 @@ class LegacyGasPriceService(
     }
 
     private fun setGasPriceInternal(value: Long?) {
-        state = DataState.Loading
-        emitState()
-
         setGasPriceJob?.cancel()
         setGasPriceJob = coroutineScope.launch {
             try {

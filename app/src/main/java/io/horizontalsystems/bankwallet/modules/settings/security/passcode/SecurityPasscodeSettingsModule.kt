@@ -14,6 +14,7 @@ object SecurityPasscodeSettingsModule {
                 App.pinComponent,
                 App.balanceHiddenManager,
                 App.localStorage,
+                App.paidActionSettingsManager,
             ) as T
         }
     }

@@ -4,10 +4,8 @@ import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
-import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -19,15 +17,13 @@ import kotlinx.coroutines.rx2.asFlow
 import java.util.concurrent.ConcurrentHashMap
 
 class AdapterManager(
-    private val walletManager: IWalletManager,
+    private val walletManager: WalletManager,
     private val adapterFactory: AdapterFactory,
-    private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
     private val stellarKitManager: StellarKitManager,
-    private val moneroNodeManager: MoneroNodeManager
 ) : IAdapterManager {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -43,59 +39,6 @@ class AdapterManager(
                 initAdapters(wallets)
             }
         }
-        coroutineScope.launch {
-            btcBlockchainManager.restoreModeUpdatedObservable.asFlow().collect {
-                handleUpdatedRestoreMode(it)
-            }
-        }
-        coroutineScope.launch {
-            solanaKitManager.kitStoppedObservable.asFlow().collect {
-                handleUpdatedKit(BlockchainType.Solana)
-            }
-        }
-        for (blockchain in evmBlockchainManager.allBlockchains) {
-            coroutineScope.launch {
-                evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitUpdatedObservable.asFlow()
-                    .collect {
-                        handleUpdatedKit(blockchain.type)
-                    }
-            }
-        }
-        coroutineScope.launch {
-            moneroNodeManager.currentNodeUpdatedFlow.collect {
-                handleUpdatedKit(BlockchainType.Monero)
-            }
-        }
-    }
-
-    private fun handleUpdatedKit(blockchainType: BlockchainType) {
-        val wallets = adaptersMap.keys().toList().filter {
-            it.token.blockchain.type == blockchainType
-        }
-
-        if (wallets.isEmpty()) return
-
-        wallets.forEach {
-            adaptersMap[it]?.stop()
-            adaptersMap.remove(it)
-        }
-
-        initAdapters(walletManager.activeWallets)
-    }
-
-    private fun handleUpdatedRestoreMode(blockchainType: BlockchainType) {
-        val wallets = adaptersMap.keys().toList().filter {
-            it.token.blockchainType == blockchainType
-        }
-
-        if (wallets.isEmpty()) return
-
-        wallets.forEach {
-            adaptersMap[it]?.stop()
-            adaptersMap.remove(it)
-        }
-
-        initAdapters(walletManager.activeWallets)
     }
 
     override suspend fun refresh() {

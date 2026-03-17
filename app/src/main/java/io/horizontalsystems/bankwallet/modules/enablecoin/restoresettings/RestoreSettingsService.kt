@@ -14,7 +14,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.subjects.PublishSubject
 
 class RestoreSettingsService(
-    private val manager: RestoreSettingsManager,
+    private val restoreSettingsManager: RestoreSettingsManager,
     private val zcashBirthdayProvider: ZcashBirthdayProvider,
     private val moneroBirthdayProvider: MoneroBirthdayProvider
 ) : Clearable {
@@ -29,7 +29,7 @@ class RestoreSettingsService(
         if (account != null && account.origin == AccountOrigin.Created) {
             val settings = RestoreSettings()
             blockchainType.restoreSettingTypes.forEach { settingType ->
-                manager.getSettingValueForCreatedAccount(settingType, blockchainType)?.let {
+                restoreSettingsManager.getSettingValueForCreatedAccount(settingType, blockchainType)?.let {
                     settings[settingType] = it
                 }
             }
@@ -37,7 +37,7 @@ class RestoreSettingsService(
             return
         }
 
-        val existingSettings = account?.let { manager.settings(it, blockchainType) } ?: RestoreSettings()
+        val existingSettings = account?.let { restoreSettingsManager.settings(it, blockchainType) } ?: RestoreSettings()
 
         if (blockchainType.restoreSettingTypes.contains(RestoreSettingType.BirthdayHeight)
             && existingSettings.birthdayHeight == null
@@ -50,7 +50,7 @@ class RestoreSettingsService(
     }
 
     fun save(settings: RestoreSettings, account: Account, blockchainType: BlockchainType) {
-        manager.save(settings, account, blockchainType)
+        restoreSettingsManager.save(settings, account, blockchainType)
     }
 
     fun enter(config: BirthdayHeightConfig, token: Token) {

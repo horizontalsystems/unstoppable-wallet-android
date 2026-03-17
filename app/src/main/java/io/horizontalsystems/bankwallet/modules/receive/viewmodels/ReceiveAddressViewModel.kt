@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule.AdditionalData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +31,6 @@ class ReceiveAddressViewModel(
     private var usedAddresses: List<UsedAddress> = listOf()
     private var usedChangeAddresses: List<UsedAddress> = listOf()
     private var amount: BigDecimal? = null
-    private var accountActive = true
     private var blockchainName: String? = null
     private var addressFormat: String? = null
     private var addressType: String? = null
@@ -74,13 +72,11 @@ class ReceiveAddressViewModel(
         mainNet = mainNet,
         usedAddresses = usedAddresses,
         usedChangeAddresses = usedChangeAddresses,
-        showTronAlert = !accountActive,
         uri = addressUriState.uri,
         blockchainName = blockchainName,
         addressFormat = addressFormat,
         addressType = addressType,
         watchAccount = watchAccount,
-        additionalItems = getAdditionalData(),
         amount = amount,
         amountString = amount?.let { App.numberFormatter.formatCoinFull(it, wallet.token.coin.code, wallet.token.decimals) },
         alertText = null,
@@ -111,44 +107,27 @@ class ReceiveAddressViewModel(
     private suspend fun setData() {
         val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
         if (adapter != null) {
-            address = getReceiveAddress(adapter, isTransparentAddress)
+            address = getFreshReceiveAddress(adapter, isTransparentAddress)
             addressUriService.setAddress(address)
             usedAddresses = adapter.usedAddresses(false)
             usedChangeAddresses = adapter.usedAddresses(true)
             mainNet = adapter.isMainNet
             viewState = ViewState.Success
-
-            accountActive = try {
-                adapter.isAddressActive(adapter.receiveAddress)
-            } catch (e: Exception) {
-                viewState = ViewState.Error(e)
-                false
-            }
         } else {
             viewState = ViewState.Error(NullPointerException())
         }
         emitState()
     }
 
-    private fun getReceiveAddress(
+    private suspend fun getFreshReceiveAddress(
         adapter: IReceiveAdapter,
         transparentAddress: Boolean
     ): String {
-        return if (transparentAddress && adapter.receiveAddressTransparent != null) {
-            adapter.receiveAddressTransparent ?: ""
+        return if (transparentAddress) {
+            adapter.getFreshReceiveAddressTransparent() ?: adapter.receiveAddressTransparent ?: ""
         } else {
-            adapter.receiveAddress
+            adapter.getFreshReceiveAddress()
         }
-    }
-
-    private fun getAdditionalData(): List<AdditionalData> {
-        val items = mutableListOf<AdditionalData>()
-
-        if (!accountActive) {
-            items.add(AdditionalData.AccountNotActive)
-        }
-
-        return items
     }
 
     fun onErrorClick() {

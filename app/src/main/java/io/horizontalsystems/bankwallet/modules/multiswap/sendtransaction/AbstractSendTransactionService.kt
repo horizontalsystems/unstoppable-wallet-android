@@ -14,11 +14,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import java.util.UUID
 
-abstract class AbstractSendTransactionService(val hasSettings: Boolean): ServiceState<SendTransactionServiceState>() {
-    open val mevProtectionAvailable: Boolean = false
+abstract class AbstractSendTransactionService(val hasSettings: Boolean, val hasNonceSettings: Boolean): ServiceState<SendTransactionServiceState>() {
+    open val supportsMevProtection: Boolean = false
     abstract val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings>
     protected var uuid = UUID.randomUUID().toString()
-    protected var extraFees = mapOf<FeeType, SendModule.AmountData>()
 
     private val baseCurrency = App.currencyManager.baseCurrency
 
@@ -26,16 +25,12 @@ abstract class AbstractSendTransactionService(val hasSettings: Boolean): Service
     abstract suspend fun setSendTransactionData(data: SendTransactionData)
     @Composable
     open fun GetSettingsContent(navController: NavController) = Unit
+    @Composable
+    open fun GetNonceSettingsContent(navController: NavController) = Unit
     abstract suspend fun sendTransaction(mevProtectionEnabled: Boolean = false): SendTransactionResult
 
     fun refreshUuid() {
         uuid = UUID.randomUUID().toString()
-    }
-
-    protected fun setExtraFeesMap(feesMap: Map<FeeType, CoinValue>) {
-        extraFees = feesMap.mapValues { (_, coinValue) ->
-            getAmountData(coinValue)
-        }
     }
 
     protected fun getAmountData(coinValue: CoinValue): SendModule.AmountData {
@@ -61,5 +56,4 @@ data class SendTransactionServiceState(
     val sendable: Boolean,
     val loading: Boolean,
     val fields: List<DataField>,
-    val extraFees: Map<FeeType, SendModule.AmountData>
 )

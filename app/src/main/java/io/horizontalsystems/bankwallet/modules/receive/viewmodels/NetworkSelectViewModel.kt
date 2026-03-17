@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.eligibleTokens
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.Account
@@ -14,7 +14,7 @@ import io.horizontalsystems.marketkit.models.Token
 class NetworkSelectViewModel(
     val activeAccount: Account,
     val fullCoin: FullCoin,
-    private val walletManager: IWalletManager
+    private val walletManager: WalletManager
 ) : ViewModel() {
     val eligibleTokens = fullCoin.eligibleTokens(activeAccount.type)
 

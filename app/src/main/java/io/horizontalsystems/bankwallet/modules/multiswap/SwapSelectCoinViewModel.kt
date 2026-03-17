@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.core.supports
-import io.horizontalsystems.bankwallet.core.swappable
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
@@ -139,14 +138,13 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
         coinBalanceItems = coinsProvider.getItems()
             .map { it.eligibleTokens(activeAccount.type) }
             .flatten()
-            .map {
-                val balance: BigDecimal? =
-                    activeWallets.firstOrNull { wallet -> wallet.coin.uid == it.coin.uid && wallet.token.blockchainType == it.blockchainType }
-                        ?.let { wallet ->
-                            adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
-                        }
+            .map { token ->
+                val wallet = activeWallets.firstOrNull { it.token == token }
+                val balance = wallet?.let {
+                    adapterManager.getBalanceAdapterForWallet(it)?.balanceData?.available
+                }
 
-                CoinBalanceItem(it, balance, getFiatValue(it, balance))
+                CoinBalanceItem(token, balance, getFiatValue(token, balance))
             }
             .sortedWith(compareByDescending { it.balance })
     }
@@ -154,7 +152,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
     private fun emitState() {
         viewModelScope.launch {
             uiState = SwapSelectCoinUiState(
-                coinBalanceItems = coinBalanceItems.filter { it.token.swappable }
+                coinBalanceItems = coinBalanceItems
             )
         }
     }

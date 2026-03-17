@@ -109,10 +109,9 @@ private fun RecoveryPhraseScreen(
             ConfirmCopyBottomSheet(
                 sheetState = sheetState,
                 onConfirm = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showBottomSheet = false
-                        }
+                    scope.launch {
+                        sheetState.hide()
+                        showBottomSheet = false
                     }
 
                     TextHelper.copyText(viewModel.words.joinToString(" "))
@@ -124,10 +123,9 @@ private fun RecoveryPhraseScreen(
                     )
                 },
                 onDismiss = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showBottomSheet = false
-                        }
+                    scope.launch {
+                        sheetState.hide()
+                        showBottomSheet = false
                     }
                 }
             )

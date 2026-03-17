@@ -262,7 +262,7 @@ fun WCNewSignRequestScreen(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
-    val messageBottomSheetState = rememberModalBottomSheetState()
+    val messageBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var messageBottomSheet by remember { mutableStateOf<String?>(null) }
 
     BottomSheetContent(
@@ -355,10 +355,9 @@ fun WCNewSignRequestScreen(
             message = message,
             sheetState = messageBottomSheetState,
             onDismiss = {
-                scope.launch { messageBottomSheetState.hide() }.invokeOnCompletion {
-                    if (!messageBottomSheetState.isVisible) {
-                        messageBottomSheet = null
-                    }
+                scope.launch {
+                    messageBottomSheetState.hide()
+                    messageBottomSheet = null
                 }
             }
         )
@@ -402,7 +401,7 @@ fun DomainCell(
         },
         right = {
             CellRightControlsButtonText(
-                text = address.hs,
+                subtitle = address.hs,
                 icon = painterResource(id = R.drawable.copy_filled_24),
                 iconTint = ComposeAppTheme.colors.leah
             ) {

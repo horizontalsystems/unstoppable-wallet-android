@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.core.factories
 
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord
 import io.horizontalsystems.bankwallet.core.adapters.StellarTransactionRecord.Type
-import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.tokenIconPlaceholder
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
+import io.horizontalsystems.ethereumkit.core.hexStringToByteArrayOrNull
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -20,7 +21,7 @@ class StellarTransactionConverter(
     private val coinManager: ICoinManager,
     private val baseToken: Token,
 ) {
-    fun convert(operation: Operation): StellarTransactionRecord {
+    suspend fun convert(operation: Operation): StellarTransactionRecord {
         var type: Type = Type.Unsupported(operation.type)
 
         operation.payment?.let { payment ->
@@ -117,7 +118,19 @@ class StellarTransactionConverter(
         }
 
         val eventsForPhishingCheck = StellarTransactionRecord.eventsForPhishingCheck(type)
-        val spam = SpamManager.isSpam(eventsForPhishingCheck)
+        val txHash = operation.transactionHash.hexStringToByteArrayOrNull()
+        val spam = if (txHash != null) {
+            App.spamManager.isSpam(
+                txHash,
+                eventsForPhishingCheck,
+                source,
+                operation.timestamp,
+                null,
+                operation.id
+            )
+        } else {
+            false
+        }
 
         return StellarTransactionRecord(baseToken, source, operation, type, spam)
     }

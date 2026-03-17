@@ -14,6 +14,9 @@
         android:id="@+id/sendEvmSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment" />
     <fragment
+        android:id="@+id/sendEvmNonceSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceSettingsFragment" />
+    <fragment
         android:id="@+id/filterCoinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactions.FilterCoinFragment" />
    <fragment
@@ -313,11 +316,17 @@
         android:id="@+id/swapSelectProvider"
         android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapSelectProviderFragment" />
     <fragment
-        android:id="@+id/swapSettings"
-        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsFragment" />
-    <fragment
         android:id="@+id/swapTransactionSettings"
         android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionSettingsFragment" />
+    <fragment
+        android:id="@+id/swapTransactionNonceSettings"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionNonceSettingsFragment" />
+    <fragment
+        android:id="@+id/swapSettingsSlippage"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsSlippageFragment" />
+    <fragment
+        android:id="@+id/swapSettingsRecipient"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsRecipientFragment" />
     <fragment
         android:id="@+id/swapConfirm"
         android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapConfirmFragment" />
@@ -346,11 +355,17 @@
         android:id="@+id/tokenBalanceFragment"
         android:name="io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceFragment" />
     <fragment
+        android:id="@+id/enterBirthdayHeightFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.balance.token.EnterBirthdayHeightFragment" />
+    <fragment
         android:id="@+id/кeyAccountInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.KeyAccountInfoFragment" />
     <fragment
         android:id="@+id/buySubscriptionFragment"
         android:name="io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostFragment"/>
+    <fragment
+        android:id="@+id/swapTermsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment" />
     <dialog
         android:id="@+id/backupRequiredDialog"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog" />
@@ -396,6 +411,9 @@
     <dialog
         android:id="@+id/buySubscriptionDialog"
         android:name="io.horizontalsystems.bankwallet.modules.usersubscription.PremiumFeaturesDialog"/>
+    <dialog
+        android:id="@+id/errorBottomSheet"
+        android:name="io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet"/>
 
     <!--Wallet Connect-->
     <fragment
@@ -435,9 +453,6 @@
         android:id="@+id/whyDonateFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateFragment"/>
     <fragment
-        android:id="@+id/addressCheckerFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.addresschecker.AddressCheckerFragment"/>
-    <fragment
         android:id="@+id/addressCheckFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.addresschecker.AddressCheckFragment"/>
     <fragment
@@ -452,4 +467,10 @@
     <dialog
         android:id="@+id/wcRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment"/>
+    <dialog
+        android:id="@+id/swapInfoDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialog" />
+    <dialog
+        android:id="@+id/walletSwitchDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.main.WalletSwitchDialog" />
 </navigation>

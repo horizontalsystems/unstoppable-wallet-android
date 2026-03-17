@@ -55,12 +55,12 @@ private fun buildMarkwon(context: Context): Markwon {
                 builder.setFactory(Heading::class.java) { _, props: RenderProps ->
                     val level = CoreProps.HEADING_LEVEL.require(props)
                     if (level == 1) {
-                        arrayOf(
+                        arrayOf<Any>(
                             TextAppearanceSpan(context, R.style.Title3NoColor),
                             ForegroundColorSpan(context.getColor(R.color.leah))
                         )
                     } else {
-                        arrayOf(
+                        arrayOf<Any>(
                             TextAppearanceSpan(context, R.style.Headline2),
                             ForegroundColorSpan(context.getColor(R.color.leah))
                         )

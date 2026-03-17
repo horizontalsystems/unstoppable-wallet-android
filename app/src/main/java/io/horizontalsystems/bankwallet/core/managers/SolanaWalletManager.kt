@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -9,7 +8,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.solanakit.models.FullTokenAccount
 
 class SolanaWalletManager(
-        private val walletManager: IWalletManager,
+        private val walletManager: WalletManager,
         private val accountManager: IAccountManager,
         private val marketKit: MarketKitWrapper
 ) {

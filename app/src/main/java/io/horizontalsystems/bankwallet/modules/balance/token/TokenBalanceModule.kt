@@ -2,8 +2,10 @@ package io.horizontalsystems.bankwallet.modules.balance.token
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.balance.AttentionIcon
 import io.horizontalsystems.bankwallet.modules.balance.BalanceAdapterRepository
 import io.horizontalsystems.bankwallet.modules.balance.BalanceCache
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
@@ -35,7 +37,8 @@ class TokenBalanceModule {
                 TransactionSyncStateRepository(App.transactionAdapterManager),
                 App.contactsRepository,
                 NftMetadataService(App.nftMetadataManager),
-                App.spamManager
+                App.spamManager,
+                App.transactionAdapterManager
             )
 
             return TokenBalanceViewModel(
@@ -45,10 +48,11 @@ class TokenBalanceModule {
                 tokenTransactionsService,
                 TransactionViewItemFactory(App.evmLabelManager, App.contactsRepository, App.balanceHiddenManager, App.localStorage),
                 App.balanceHiddenManager,
-                App.accountManager,
                 App.adapterManager,
                 App.connectivityManager,
                 App.localStorage,
+                App.coinManager,
+                App.restoreSettingsManager,
             ) as T
         }
     }
@@ -58,16 +62,18 @@ class TokenBalanceModule {
         val balanceViewItem: BalanceViewItem?,
         val transactions: Map<String, List<TransactionViewItem>>?,
         val receiveAddress: String?,
-        val failedIconVisible: Boolean,
         val error: TokenBalanceError? = null,
         val failedErrorMessage: String?,
         val warningMessage: String?,
         val alertUnshieldedBalance: BigDecimal?,
+        val attentionIcon: AttentionIcon?,
+        val showTronNotActiveAlert: Boolean,
     )
 
     data class TokenBalanceError(
         val message: String,
         val errorTitle: String? = null,
+        val icon: Int = R.drawable.warning_filled_24,
         val showRetryButton: Boolean = false,
         val showChangeSourceButton: Boolean = false,
     )

@@ -12,7 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -57,6 +56,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
@@ -80,7 +80,7 @@ fun ContactScreen(
     val focusManager = LocalFocusManager.current
 
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState.closeWithSuccess) {
@@ -153,12 +153,11 @@ fun ContactScreen(
             VSpacer(32.dp)
         }
         if (showBottomSheet) {
-            ModalBottomSheet(
+            BottomSheetContent(
                 onDismissRequest = {
                     showBottomSheet = false
                 },
-                sheetState = sheetState,
-                containerColor = ComposeAppTheme.colors.transparent
+                sheetState = sheetState
             ) {
                 when (bottomSheetType) {
                     null -> {
@@ -175,18 +174,16 @@ fun ContactScreen(
                             cautionType = Caution.Type.Error,
                             cancelText = stringResource(R.string.Button_Cancel),
                             onConfirm = {
-                                viewModel::onDelete
-                                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                    if (!sheetState.isVisible) {
-                                        showBottomSheet = false
-                                    }
+                                viewModel.onDelete()
+                                scope.launch {
+                                    sheetState.hide()
+                                    showBottomSheet = false
                                 }
                             },
                             onClose = {
-                                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                    if (!sheetState.isVisible) {
-                                        showBottomSheet = false
-                                    }
+                                scope.launch {
+                                    sheetState.hide()
+                                    showBottomSheet = false
                                 }
                             }
                         )
@@ -203,17 +200,15 @@ fun ContactScreen(
                             cancelText = stringResource(R.string.Contacts_KeepEditing),
                             onConfirm = {
                                 onNavigateToBack()
-                                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                    if (!sheetState.isVisible) {
-                                        showBottomSheet = false
-                                    }
+                                scope.launch {
+                                    sheetState.hide()
+                                    showBottomSheet = false
                                 }
                             },
                             onClose = {
-                                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                    if (!sheetState.isVisible) {
-                                        showBottomSheet = false
-                                    }
+                                scope.launch {
+                                    sheetState.hide()
+                                    showBottomSheet = false
                                 }
                             }
                         )

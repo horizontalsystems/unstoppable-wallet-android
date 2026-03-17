@@ -22,7 +22,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -64,6 +63,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
 
 class AppearanceFragment : BaseComposeFragment() {
@@ -89,7 +89,7 @@ fun AppearanceScreen(navController: NavController) {
     var openPriceChangeIntervalSelector by rememberSaveable { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
 
     HSScaffold(
@@ -325,27 +325,24 @@ fun AppearanceScreen(navController: NavController) {
         }
 
         if (showBottomSheet) {
-            ModalBottomSheet(
+            BottomSheetContent(
                 onDismissRequest = {
                     showBottomSheet = false
                 },
-                sheetState = sheetState,
-                containerColor = ComposeAppTheme.colors.transparent
+                sheetState = sheetState
             ) {
                 AppCloseWarningBottomSheet(
                     onCloseClick = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
+                        scope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
                         }
                     },
                     onChangeClick = {
                         selectedAppIcon?.let { viewModel.onEnterAppIcon(it) }
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
+                        scope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
                         }
                     }
                 )

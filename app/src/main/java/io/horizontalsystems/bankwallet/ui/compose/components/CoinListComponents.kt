@@ -53,6 +53,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
@@ -85,6 +86,7 @@ fun CoinListSlidable(
     onRemoveFavorite: (String) -> Unit,
     onCoinClick: (String) -> Unit,
     userScrollEnabled: Boolean = true,
+    bottomPadding: Dp = 16.dp,
     preItems: LazyListScope.() -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -149,7 +151,7 @@ fun CoinListSlidable(
             }
         }
         item {
-            VSpacer(36.dp)
+            VSpacer(bottomPadding)
         }
         if (scrollToTop) {
             coroutineScope.launch {
@@ -294,11 +296,13 @@ fun ListErrorView(
 
 @Composable
 fun ListEmptyView(
+    modifier: Modifier = Modifier,
     paddingValues: PaddingValues = PaddingValues(),
     text: String,
     @DrawableRes icon: Int
 ) {
     ScreenMessageWithAction(
+        modifier = modifier,
         paddingValues = paddingValues,
         text = text,
         icon = icon
@@ -309,11 +313,12 @@ fun ListEmptyView(
 fun ScreenMessageWithAction(
     text: String,
     @DrawableRes icon: Int,
+    modifier: Modifier = Modifier,
     paddingValues: PaddingValues = PaddingValues(),
     actionsComposable: (@Composable () -> Unit)? = null
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(paddingValues)
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.ime)

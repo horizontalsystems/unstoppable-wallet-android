@@ -33,7 +33,7 @@ class TokenBalanceService(
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     val baseCurrency by xRateRepository::baseCurrency
 
-    suspend fun start() {
+    fun start() {
         balanceAdapterRepository.setWallet(listOf(wallet))
         xRateRepository.setCoinUids(listOf(wallet.coin.uid))
 
@@ -44,9 +44,14 @@ class TokenBalanceService(
             balanceData = balanceAdapterRepository.balanceData(wallet),
             state = balanceAdapterRepository.state(wallet),
             coinPrice = latestRates[wallet.coin.uid],
-            warning = balanceAdapterRepository.warning(wallet)
+            warning = null
         )
 
+        coroutineScope.launch {
+            balanceItem = balanceItem?.copy(
+                warning = balanceAdapterRepository.warning(wallet)
+            )
+        }
         coroutineScope.launch {
             xRateRepository.itemObservable.asFlow().collect {
                 handleXRateUpdate(it)

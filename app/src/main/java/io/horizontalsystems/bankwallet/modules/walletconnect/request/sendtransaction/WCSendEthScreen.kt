@@ -162,18 +162,16 @@ fun WCSendEthRequestScreen(
                     sessionRequestUI.walletName
                 )
 
-                uiState.networkFee?.let { fee ->
-                    FeeCell(
-                        primaryValue = fee.primary.getFormatted(),
-                        secondaryValue = fee.secondary?.getFormatted(),
-                        onInfoClick = {
-                            navController.slideFromBottom(
-                                R.id.feeSettingsInfoDialog,
-                                FeeSettingsInfoDialog.Input(feeText, feeInfoText)
-                            )
-                        }
-                    )
-                }
+                FeeCell(
+                    primaryValue = uiState.networkFee?.primary?.getFormatted(),
+                    secondaryValue = uiState.networkFee?.secondary?.getFormatted(),
+                    onInfoClick = {
+                        navController.slideFromBottom(
+                            R.id.feeSettingsInfoDialog,
+                            FeeSettingsInfoDialog.Input(feeText, feeInfoText)
+                        )
+                    }
+                )
             }
             ButtonsGroupHorizontal {
                 HSButton(
@@ -190,7 +188,7 @@ fun WCSendEthRequestScreen(
                     title = stringResource(R.string.Button_Confirm),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier.weight(1f),
-                    enabled = buttonEnabled,
+                    enabled = buttonEnabled && uiState.sendEnabled,
                     onClick = {
                         coroutineScope.launch {
                             buttonEnabled = false
@@ -227,20 +225,7 @@ fun DataBlock(
     sections.forEach { section ->
         section.viewItems.forEach { item ->
             when (item) {
-                is ViewItem.AmountMulti -> {
-                    item.amounts.forEach { amount ->
-                        TitleValueCell(
-                            stringResource(R.string.WalletConnect_Value),
-                            amount.coinAmount
-                        )
-                    }
-                }
-
                 is ViewItem.Value -> TitleValueCell(item.title, item.value)
-
-                is ViewItem.ValueMulti -> {
-                    TitleValueCell(item.title, item.primaryValue, item.secondaryValue)
-                }
 
                 is ViewItem.Amount -> TitleValueCell(
                     stringResource(R.string.WalletConnect_Value),
@@ -252,7 +237,7 @@ fun DataBlock(
                     item.coinAmount
                 )
 
-                is ViewItem.Address -> CopiableValueCell(item.title, item.value, onCopy)
+                is ViewItem.Address -> CopiableValueCell(item.title, item.address, onCopy)
                 is ViewItem.Input -> CopiableValueCell(item.title, item.value, onCopy)
                 is ViewItem.Fee -> FeeCell(
                     primaryValue = item.networkFee.primary.getFormatted(),
@@ -284,7 +269,7 @@ fun CopiableValueCell(
         },
         right = {
             CellRightControlsButtonText(
-                text = shortedValue.hs,
+                subtitle = shortedValue.hs,
                 icon = painterResource(id = R.drawable.copy_filled_24),
                 iconTint = ComposeAppTheme.colors.leah
             ) {

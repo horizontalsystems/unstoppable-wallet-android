@@ -9,13 +9,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -69,7 +72,9 @@ import io.horizontalsystems.marketkit.models.MarketGlobal
 import java.math.BigDecimal
 
 @Composable
-fun MarketScreen(navController: NavController) {
+fun MarketScreen(
+    navController: NavController,
+) {
     val viewModel = viewModel<MarketViewModel>(factory = MarketModule.Factory())
     val uiState = viewModel.uiState
     val tabs = viewModel.tabs
@@ -89,7 +94,9 @@ fun MarketScreen(navController: NavController) {
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                    .padding(horizontal = 24.dp)
+                    .windowInsetsPadding(WindowInsets.navigationBars)
+                    .padding(bottom = 72.dp),//bottomBar height 56 + 16 padding
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(
@@ -268,7 +275,7 @@ private fun RowScope.MarketTotalCard(
         changeStr = getDiff(changePercentage)
         changePositive = changePercentage > BigDecimal.ZERO
     } else if (changeFiat != null) {
-        changeStr = formatFiatShortened(changeFiat, currency.symbol)
+        changeStr = formatFiatShortened(changeFiat.abs(), currency.symbol)
         changePositive = changeFiat > BigDecimal.ZERO
     } else {
         changeStr = null

@@ -12,6 +12,6 @@ class EncryptionManager(private val keyProvider: IKeyProvider) : IEncryptionMana
 
     @Synchronized
     override fun decrypt(data: String): String {
-        return CipherWrapper().decrypt(data, keyProvider.getKey())
+        return CipherWrapper().decrypt(data, keyProvider.getKey(), keyProvider.getLegacyKey())
     }
 }

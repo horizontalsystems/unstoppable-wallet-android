@@ -18,6 +18,7 @@ import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Flowable
 import io.reactivex.Single
+import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -37,7 +38,7 @@ class Eip20Adapter(
     val eip20Kit: Erc20Kit = Erc20Kit.getInstance(context, this.evmKit, this.contractAddress)
 
     val pendingTransactions: List<TransactionRecord>
-        get() = eip20Kit.getPendingTransactions().map { transactionConverter.transactionRecord(it) }
+        get() = eip20Kit.getPendingTransactions().map { runBlocking { transactionConverter.transactionRecord(it) } }
 
     // IAdapter
 

@@ -82,7 +82,8 @@ fun ButtonPrimaryDefault(
     modifier: Modifier = Modifier,
     title: String,
     onClick: () -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    loadingIndicator: Boolean = false,
 ) {
     ButtonPrimary(
         modifier = modifier,
@@ -93,7 +94,17 @@ fun ButtonPrimaryDefault(
             disabledBackgroundColor = ComposeAppTheme.colors.blade,
             disabledContentColor = ComposeAppTheme.colors.andy,
         ),
-        content = { Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        content = {
+            if (loadingIndicator) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(16.dp),
+                    color = ComposeAppTheme.colors.grey,
+                    strokeWidth = 2.dp
+                )
+                HSpacer(width = 8.dp)
+            }
+            Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        },
         enabled = enabled
     )
 }

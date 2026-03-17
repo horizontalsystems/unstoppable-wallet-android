@@ -12,13 +12,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -38,6 +36,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeaderMultiline
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
@@ -95,7 +94,6 @@ private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
                             modifier = Modifier.padding(horizontal = 16.dp)
                         ) {
                             val view = LocalView.current
-                            val clipboardManager = LocalClipboardManager.current
                             body_leah(
                                 modifier = Modifier.weight(1f),
                                 text = stringResource(R.string.Restore_BirthdayHeight),
@@ -105,7 +103,7 @@ private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
                                 modifier = Modifier.padding(start = 16.dp),
                                 title = birthdayHeight,
                                 onClick = {
-                                    clipboardManager.setText(AnnotatedString(birthdayHeight))
+                                    TextHelper.copyText(birthdayHeight)
                                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                                 }
                             )

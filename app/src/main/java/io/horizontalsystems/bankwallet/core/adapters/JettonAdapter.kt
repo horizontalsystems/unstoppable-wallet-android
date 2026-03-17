@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
-import io.horizontalsystems.bankwallet.core.ISendTonAdapter
 import io.horizontalsystems.bankwallet.core.managers.TonKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toAdapterState
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -21,7 +20,7 @@ class JettonAdapter(
     tonKitWrapper: TonKitWrapper,
     addressStr: String,
     wallet: Wallet,
-) : BaseTonAdapter(tonKitWrapper, wallet.decimal), ISendTonAdapter {
+) : BaseTonAdapter(tonKitWrapper, wallet.decimal) {
 
     private val address = Address.parse(addressStr)
     private var jettonBalance = tonKit.jettonBalanceMap[address]

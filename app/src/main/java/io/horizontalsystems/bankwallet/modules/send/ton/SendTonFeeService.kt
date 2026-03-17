@@ -89,7 +89,8 @@ class SendTonFeeService(private val adapter: ISendTonAdapter) : AutoCloseable {
 
     data class State(
         val fee: BigDecimal?,
-        val inProgress: Boolean
+        val inProgress: Boolean,
+        val canBeSend: Boolean = fee != null && !inProgress
     )
 
     override fun close() {

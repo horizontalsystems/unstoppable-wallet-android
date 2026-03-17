@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 @Composable
 fun BalanceCardInner2(
     viewItem: BalanceViewItem2,
+    balanceHidden: Boolean,
     type: BalanceCardSubtitleType,
     onClickSyncError: (() -> Unit)? = null,
     onClick: (() -> Unit)?
@@ -78,20 +79,23 @@ fun BalanceCardInner2(
             )
         },
         right = {
-            val title = if (viewItem.balanceHidden || viewItem.primaryValue == null) {
+            val title = if (viewItem.notActivated) {
                 null
+            } else if (balanceHidden || viewItem.primaryValue == null) {
+                "* * *".hs
             } else {
                 viewItem.primaryValue.value.hs(dimmed = viewItem.primaryValue.dimmed)
             }
 
             val subtitle = when {
                 viewItem.syncedUntilTextValue != null -> viewItem.syncedUntilTextValue.hs
-                viewItem.balanceHidden || viewItem.secondaryValue == null -> null
+                viewItem.notActivated -> stringResource(R.string.Tron_TokenPage_AddressNotActivated).hs(color = ComposeAppTheme.colors.jacob)
+                balanceHidden || viewItem.secondaryValue == null -> null
                 else -> viewItem.secondaryValue.value.hs(dimmed = viewItem.secondaryValue.dimmed)
             }
 
             CellRightInfo(
-                title = title ?: "* * *".hs,
+                title = title,
                 subtitle = subtitle
             )
         },
@@ -111,7 +115,7 @@ private fun WalletIcon2(
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 1100,
+                durationMillis = 1500,
                 easing = LinearEasing
             )
         )
@@ -139,7 +143,7 @@ private fun WalletIcon2(
                                 useCenter = false,
                                 style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round)
                             )
-                            rotate(degrees = -90f) {
+                            rotate(degrees = rotate) {
                                 drawArc(
                                     color = leah,
                                     startAngle = 0f,
@@ -153,6 +157,13 @@ private fun WalletIcon2(
 
                     SyncingProgressType.Spinner -> {
                         inset(-1.dp.toPx()) {
+                            drawArc(
+                                color = andy,
+                                startAngle = 0f,
+                                sweepAngle = 360f,
+                                useCenter = false,
+                                style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round)
+                            )
                             rotate(degrees = rotate) {
                                 drawArc(
                                     color = leah,

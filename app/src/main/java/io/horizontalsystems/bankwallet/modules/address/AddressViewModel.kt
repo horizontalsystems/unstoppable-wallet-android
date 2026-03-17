@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.utils.AddressUriResult
 import io.horizontalsystems.bankwallet.core.utils.ToncoinUriParser
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,7 +20,6 @@ import kotlinx.coroutines.withContext
 
 class AddressViewModel(
     val blockchainType: BlockchainType,
-    private val contactsRepository: ContactsRepository,
     private val addressUriParser: AddressUriParser,
     private val addressParserChain: AddressParserChain,
     initial: Address?
@@ -40,9 +38,6 @@ class AddressViewModel(
             parseAddress(it)
         }
     }
-
-    fun hasContacts() =
-        contactsRepository.getContactsFiltered(blockchainType).isNotEmpty()
 
     fun parseText(value: String) {
         parseAddressJob?.cancel()

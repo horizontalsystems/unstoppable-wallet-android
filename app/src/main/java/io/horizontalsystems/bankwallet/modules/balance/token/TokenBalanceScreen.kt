@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -26,8 +27,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
@@ -37,6 +40,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.balance.AttentionIconType
 import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
@@ -98,12 +102,30 @@ fun TokenBalanceScreen(
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState =
         rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val tronBottomSheetState =
+        rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var isTronAlertVisible by remember { mutableStateOf(false) }
 
     val loading = uiState.balanceViewItem?.syncingProgress?.progress != null
 
-    LaunchedEffect(uiState.failedIconVisible) {
-        if (uiState.failedIconVisible) {
-            openSyncErrorDialog(uiState, navController)
+    LifecycleResumeEffect(uiState.attentionIcon?.type) {
+        if (uiState.attentionIcon?.type == AttentionIconType.SyncError) {
+            coroutineScope.launch {
+                delay(300)
+                openSyncErrorDialog(uiState, navController)
+            }
+        }
+
+        onPauseOrDispose { }
+    }
+
+    LaunchedEffect(uiState.showTronNotActiveAlert) {
+        if (uiState.showTronNotActiveAlert) {
+            coroutineScope.launch {
+                delay(300)
+                isTronAlertVisible = true
+                viewModel.hideTronNotActiveAlert()
+            }
         }
     }
 
@@ -114,10 +136,6 @@ fun TokenBalanceScreen(
                 info = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Description),
                 coinValue = DeemedValue("", false)
             )
-            coroutineScope.launch {
-                delay(300)
-                bottomSheetState.show()
-            }
             viewModel.transparentZecAmountWarningShown(uiState.alertUnshieldedBalance)
         }
     }
@@ -131,14 +149,23 @@ fun TokenBalanceScreen(
                     add(MenuItemLoading)
                 }
 
-                uiState.failedIconVisible -> {
+                uiState.attentionIcon != null -> {
+                    val color = if (uiState.attentionIcon.caution.type == Caution.Type.Error) {
+                        ComposeAppTheme.colors.lucian
+                    } else {
+                        ComposeAppTheme.colors.jacob
+                    }
                     add(
                         MenuItem(
                             icon = R.drawable.ic_warning_filled_24,
-                            title = TranslatableString.ResString(R.string.BalanceSyncError_Title),
-                            tint = ComposeAppTheme.colors.lucian,
+                            title = TranslatableString.PlainString(uiState.attentionIcon.caution.text),
+                            tint = color,
                             onClick = {
-                                openSyncErrorDialog(uiState, navController)
+                                if (uiState.attentionIcon.type == AttentionIconType.SyncError) {
+                                    openSyncErrorDialog(uiState, navController)
+                                } else if (uiState.attentionIcon.type == AttentionIconType.TronNotActive) {
+                                    isTronAlertVisible = true
+                                }
                             }
                         )
                     )
@@ -204,47 +231,39 @@ fun TokenBalanceScreen(
                 .background(ComposeAppTheme.colors.lawrence)
         ) {
             item {
-                uiState.balanceViewItem?.let {
+                uiState.balanceViewItem?.let { balanceViewItem ->
                     TokenBalanceHeader(
-                        balanceViewItem = it,
+                        balanceViewItem = balanceViewItem,
                         navController = navController,
                         viewModel = viewModel,
-                        showBottomSheet = { content ->
-                            bottomSheetContent = content
-                            coroutineScope.launch {
-                                bottomSheetState.show()
-                            }
-                        },
+                        receiveAddress = uiState.receiveAddress,
+                        warning = uiState.warningMessage,
                         onClickReceive = onClickReceive,
                         loading = loading
                     )
 
-                    if (it.isWatchAccount) {
-                        uiState.receiveAddress?.let { receiveAddress ->
-                            CellPrimary(
-                                middle = {
-                                    CellMiddleInfoTextIcon(text = stringResource(R.string.Balance_ReceiveAddress).hs)
-                                },
-                                right = {
-                                    CellRightNavigation(
-                                        subtitle = receiveAddress.shorten()
-                                            .hs(color = ComposeAppTheme.colors.leah)
+                    balanceViewItem.birthdayHeight?.let { birthdayHeight ->
+                        BirthdayHeightCell(
+                            birthdayHeight = birthdayHeight,
+                            onClick = {
+                                navController.slideFromRight(
+                                    R.id.enterBirthdayHeightFragment,
+                                    EnterBirthdayHeightFragment.Input(
+                                        blockchainType = balanceViewItem.wallet.token.blockchainType,
+                                        account = balanceViewItem.wallet.account,
+                                        currentBirthdayHeight = birthdayHeight
                                     )
-                                },
-                                backgroundColor = ComposeAppTheme.colors.tyler,
-                                onClick = onClickReceive
-                            )
-                        }
-                    }
-
-                    uiState.warningMessage?.let { warning ->
-                        TextAttention(
-                            modifier = Modifier
-                                .background(ComposeAppTheme.colors.tyler)
-                                .padding(16.dp),
-                            text = warning
+                                )
+                            }
                         )
                     }
+
+                    LockedBalanceSection(
+                        balanceViewItem = balanceViewItem,
+                        showBottomSheet = { content ->
+                            bottomSheetContent = content
+                        }
+                    )
                 }
             }
 
@@ -256,7 +275,7 @@ fun TokenBalanceScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 64.dp),
-                            icon = painterResource(R.drawable.warning_filled_24),
+                            icon = painterResource(it.icon),
                             iconTint = ComposeAppTheme.colors.grey,
                             title = it.errorTitle,
                             text = it.message,
@@ -289,8 +308,8 @@ fun TokenBalanceScreen(
                     onClose = {
                         coroutineScope.launch {
                             bottomSheetState.hide()
+                            bottomSheetContent = null
                         }
-                        bottomSheetContent = null
                     }
                 )
             }
@@ -304,18 +323,18 @@ fun TokenBalanceScreen(
                     onShieldClick = { wallet ->
                         coroutineScope.launch {
                             bottomSheetState.hide()
+                            bottomSheetContent = null
+                            navController.slideFromRight(
+                                R.id.shieldZcash,
+                                ShieldZcashFragment.Input(wallet, R.id.tokenBalanceFragment)
+                            )
                         }
-                        bottomSheetContent = null
-                        navController.slideFromRight(
-                            R.id.shieldZcash,
-                            ShieldZcashFragment.Input(wallet, R.id.tokenBalanceFragment)
-                        )
                     },
                     onClose = {
                         coroutineScope.launch {
                             bottomSheetState.hide()
+                            bottomSheetContent = null
                         }
-                        bottomSheetContent = null
                     }
                 )
             }
@@ -327,13 +346,53 @@ fun TokenBalanceScreen(
                     hideBottomSheet = {
                         coroutineScope.launch {
                             bottomSheetState.hide()
+                            bottomSheetContent = null
                         }
-                        bottomSheetContent = null
                     }
                 )
             }
         }
 
+    }
+    if (isTronAlertVisible) {
+        val context = LocalContext.current
+        TronAlertBottomSheet(
+            hideBottomSheet = {
+                coroutineScope.launch {
+                    tronBottomSheetState.hide()
+                    isTronAlertVisible = false
+                }
+            },
+            onActionButtonClick = {
+                coroutineScope.launch {
+                    tronBottomSheetState.hide()
+                    isTronAlertVisible = false
+
+                    try {
+                        val wallet = viewModel.getWalletForTronReceive()
+                        navController.slideFromRight(
+                            R.id.receiveFragment,
+                            ReceiveFragment.Input(wallet)
+                        )
+                    } catch (e: BackupRequiredError) {
+                        val text = Translator.getString(
+                            R.string.ManageAccount_BackupRequired_Description,
+                            e.account.name,
+                            e.coinTitle
+                        )
+                        navController.slideFromBottom(
+                            R.id.backupRequiredDialog,
+                            BackupRequiredDialog.Input(e.account, text)
+                        )
+
+                        stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
+                    } catch (e: IllegalStateException) {
+                        Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            },
+            bottomSheetState = tronBottomSheetState,
+        )
     }
 
 }
@@ -373,7 +432,8 @@ private fun TokenBalanceHeader(
     balanceViewItem: BalanceViewItem,
     navController: NavController,
     viewModel: TokenBalanceViewModel,
-    showBottomSheet: (LockedValue) -> Unit = { _ -> },
+    receiveAddress: String?,
+    warning: String?,
     onClickReceive: () -> Unit,
     loading: Boolean
 ) {
@@ -393,6 +453,18 @@ private fun TokenBalanceHeader(
         } else {
             val color = if (loading) {
                 ComposeAppTheme.colors.andy
+            } else if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive) {
+                ComposeAppTheme.colors.andy
+            } else if (balanceViewItem.primaryValue.dimmed) {
+                ComposeAppTheme.colors.grey
+            } else {
+                null
+            }
+
+            val bodyColor = if (loading) {
+                ComposeAppTheme.colors.andy
+            } else if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive) {
+                ComposeAppTheme.colors.jacob
             } else if (balanceViewItem.primaryValue.dimmed) {
                 ComposeAppTheme.colors.grey
             } else {
@@ -400,10 +472,14 @@ private fun TokenBalanceHeader(
             }
 
             title = balanceViewItem.primaryValue.value.hs(color = color)
-            body =
-                (balanceViewItem.syncingTextValue ?: balanceViewItem.secondaryValue?.value ?: "").hs(
-                    color = color
-                )
+            val bodyText = when {
+                balanceViewItem.syncingTextValue != null -> balanceViewItem.syncingTextValue
+                balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive -> balanceViewItem.attentionIcon.caution.text
+                balanceViewItem.secondaryValue?.value != null -> balanceViewItem.secondaryValue.value
+                else -> ""
+            }
+
+            body = bodyText.hs(color = bodyColor)
         }
 
         CardsElementAmountText(
@@ -422,7 +498,23 @@ private fun TokenBalanceHeader(
                 stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
             },
         )
-
+        if (balanceViewItem.isWatchAccount) {
+            receiveAddress?.let { receiveAddress ->
+                CellPrimary(
+                    middle = {
+                        CellMiddleInfoTextIcon(text = stringResource(R.string.Balance_ReceiveAddress).hs)
+                    },
+                    right = {
+                        CellRightNavigation(
+                            subtitle = receiveAddress.shorten()
+                                .hs(color = ComposeAppTheme.colors.leah)
+                        )
+                    },
+                    backgroundColor = ComposeAppTheme.colors.tyler,
+                    onClick = onClickReceive
+                )
+            }
+        }
         if (!balanceViewItem.isWatchAccount) {
             ButtonsRow(
                 viewItem = balanceViewItem,
@@ -430,10 +522,44 @@ private fun TokenBalanceHeader(
                 onClickReceive = onClickReceive
             )
         }
+        warning?.let { warning ->
+            TextAttention(
+                modifier = Modifier
+                    .background(ComposeAppTheme.colors.tyler)
+                    .padding(16.dp),
+                text = warning
+            )
+        }
+    }
+}
 
-        LockedBalanceSection(
-            balanceViewItem = balanceViewItem,
-            showBottomSheet = showBottomSheet,
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TronAlertBottomSheet(
+    hideBottomSheet: () -> Unit,
+    onActionButtonClick: () -> Unit,
+    bottomSheetState: SheetState,
+) {
+    BottomSheetContent(
+        onDismissRequest = hideBottomSheet,
+        sheetState = bottomSheetState,
+        buttons = {
+            HSButton(
+                title = stringResource(R.string.Button_ViewMyAddress),
+                variant = ButtonVariant.Secondary,
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onActionButtonClick
+            )
+        }
+    ) {
+        BottomSheetHeaderV3(
+            image72 = painterResource(R.drawable.warning_filled_24),
+            imageTint = ComposeAppTheme.colors.jacob,
+            title = stringResource(R.string.Tron_TokenPage_AddressNotActive_Title)
+        )
+        TextBlock(
+            text = stringResource(R.string.Tron_TokenPage_AddressNotActive_Info),
+            textAlign = TextAlign.Center
         )
     }
 }
@@ -466,6 +592,27 @@ private fun LockedBalanceSection(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun BirthdayHeightCell(
+    birthdayHeight: Long,
+    onClick: () -> Unit
+) {
+    BoxBordered(bottom = true) {
+        CellPrimary(
+            middle = {
+                CellMiddleInfo(eyebrow = stringResource(R.string.Restore_BirthdayHeight).hs)
+            },
+            right = {
+                CellRightNavigation(
+                    subtitle = birthdayHeight.toString().hs(color = ComposeAppTheme.colors.leah)
+                )
+            },
+            backgroundColor = ComposeAppTheme.colors.lawrence,
+            onClick = onClick
+        )
     }
 }
 
@@ -505,7 +652,7 @@ fun InfoBottomSheet(
 fun ZcashLockedBalanceBottomSheet(
     sheetState: SheetState,
     wallet: Wallet,
-    title: String ,
+    title: String,
     info: String,
     onShieldClick: (Wallet) -> Unit,
     onClose: () -> Unit
@@ -718,7 +865,7 @@ private fun ButtonsRow(
 @Preview
 @Composable
 private fun InfoBottomSheetPreview() {
-    val bottomSheetState = rememberModalBottomSheetState()
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val lockedValue = LockedValue(
         title = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalanceDetected_Info_Title),
         info = TranslatableString.ResString(R.string.Balance_Zcash_UnshieldedBalance_Info_Description),

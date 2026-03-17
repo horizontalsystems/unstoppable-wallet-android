@@ -19,17 +19,17 @@ class WalletStorage(
         val enabledWallets = storage.enabledWallets(account.id)
 
         val queries = enabledWallets.mapNotNull { TokenQuery.fromId(it.tokenQueryId) }
-        val tokens = marketKit.tokens(queries)
+        val tokensMap = marketKit.tokens(queries).associate { it.tokenQuery.id to it }
 
         val blockchainUids = queries.map { it.blockchainType.uid }
         val blockchains = marketKit.blockchains(blockchainUids)
 
         return enabledWallets.mapNotNull { enabledWallet ->
-            val tokenQuery = TokenQuery.fromId(enabledWallet.tokenQueryId) ?: return@mapNotNull null
-
-            tokens.find { it.tokenQuery == tokenQuery }?.let { token ->
-                return@mapNotNull Wallet(token, account)
+            tokensMap[enabledWallet.tokenQueryId]?.let {
+                return@mapNotNull Wallet(it, account)
             }
+
+            val tokenQuery = TokenQuery.fromId(enabledWallet.tokenQueryId) ?: return@mapNotNull null
 
             if (enabledWallet.coinName != null && enabledWallet.coinCode != null && enabledWallet.coinDecimals != null) {
                 val coinUid = tokenQuery.customCoinUid
@@ -55,16 +55,7 @@ class WalletStorage(
     }
 
     override fun save(wallets: List<Wallet>) {
-        val enabledWallets = mutableListOf<EnabledWallet>()
-
-        wallets.forEachIndexed { index, wallet ->
-
-            enabledWallets.add(
-                enabledWallet(wallet, index)
-            )
-        }
-
-        storage.save(enabledWallets)
+        storage.save(wallets.map { enabledWallet(it) })
     }
 
     override fun delete(wallets: List<Wallet>) {
@@ -79,15 +70,12 @@ class WalletStorage(
         storage.deleteAll()
     }
 
-    private fun enabledWallet(wallet: Wallet, index: Int? = null): EnabledWallet {
-        return EnabledWallet(
-            wallet.token.tokenQuery.id,
-            wallet.account.id,
-            index,
-            wallet.coin.name,
-            wallet.coin.code,
-            wallet.decimal,
-            wallet.coin.image
-        )
-    }
+    private fun enabledWallet(wallet: Wallet) = EnabledWallet(
+        tokenQueryId = wallet.token.tokenQuery.id,
+        accountId = wallet.account.id,
+        coinName = wallet.coin.name,
+        coinCode = wallet.coin.code,
+        coinDecimals = wallet.decimal,
+        coinImage = wallet.coin.image
+    )
 }

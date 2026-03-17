@@ -40,6 +40,7 @@ fun SendEvmScreen(
     title: String,
     navController: NavController,
     amountInputModeViewModel: AmountInputModeViewModel,
+    viewModel: SendEvmViewModel,
     address: Address,
     wallet: Wallet,
     amount: BigDecimal?,
@@ -47,9 +48,6 @@ fun SendEvmScreen(
     riskyAddress: Boolean,
     sendEntryPointDestId: Int,
 ) {
-    val viewModel = viewModel<SendEvmViewModel>(
-        factory = SendEvmModule.Factory(wallet, address, hideAddress)
-    )
     val uiState = viewModel.uiState
 
     val availableBalance = uiState.availableBalance
@@ -75,6 +73,7 @@ fun SendEvmScreen(
             title = title,
             onBack = { navController.popBackStack() }
         ) {
+            VSpacer(16.dp)
             if (uiState.showAddressInput) {
                 HSAddressCell(
                     title = stringResource(R.string.Send_Confirmation_To),

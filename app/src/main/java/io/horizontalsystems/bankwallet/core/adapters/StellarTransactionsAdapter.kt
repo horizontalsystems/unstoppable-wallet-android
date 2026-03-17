@@ -20,13 +20,13 @@ import io.horizontalsystems.stellarkit.TagQuery
 import io.horizontalsystems.stellarkit.room.StellarAsset
 import io.horizontalsystems.stellarkit.room.Tag
 import io.reactivex.Flowable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
-import kotlinx.coroutines.rx2.rxSingle
 
 class StellarTransactionsAdapter(
-    stellarKitWrapper: StellarKitWrapper,
+    val stellarKitWrapper: StellarKitWrapper,
     private val transactionConverter: StellarTransactionConverter,
 ) : ITransactionsAdapter {
     private val stellarKit = stellarKitWrapper.stellarKit
@@ -41,33 +41,29 @@ class StellarTransactionsAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = Flowable.empty()
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Single<List<TransactionRecord>> = try {
+    ): List<TransactionRecord> = try {
         val tagQuery = getTagQuery(token, transactionType, address)
         val beforeId = (from as StellarTransactionRecord?)?.operation?.id
 
-        rxSingle {
-            stellarKit.operationsBefore(tagQuery, fromId = beforeId, limit = limit)
-                .map {
-                    transactionConverter.convert(it)
-                }
-        }
+        stellarKit.operationsBefore(tagQuery, fromId = beforeId, limit = limit)
+            .map {
+                transactionConverter.convert(it)
+            }
     } catch (e: NotSupportedException) {
-        Single.just(listOf())
+        listOf()
     }
 
-    override fun getTransactionsAfter(fromTransactionId: String?): Single<List<TransactionRecord>> {
-        return rxSingle {
-            stellarKit.operationsAfter(TagQuery(null, null, null), fromTransactionId?.toLongOrNull(), 10000)
-                .map {
-                    transactionConverter.convert(it)
-                }
-        }
+    override suspend fun getTransactionsAfter(fromTransactionId: String?): List<TransactionRecord> {
+        return stellarKit.operationsAfter(TagQuery(null, null, null), fromTransactionId?.toLongOrNull(), 10000)
+            .map {
+                transactionConverter.convert(it)
+            }
     }
 
     private fun getTagQuery(
@@ -100,11 +96,11 @@ class StellarTransactionsAdapter(
         )
     }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> = try {
+    ): Flow<List<TransactionRecord>> = try {
         val tagQuery = getTagQuery(token, transactionType, address)
 
         stellarKit
@@ -114,12 +110,18 @@ class StellarTransactionsAdapter(
                     transactionConverter.convert(it)
                 }
             }
-            .asFlowable()
     } catch (e: NotSupportedException) {
-        Flowable.empty()
+        emptyFlow()
     }
 
     override fun getTransactionUrl(transactionHash: String): String {
         return "https://stellar.expert/explorer/public/tx/${transactionHash}"
+    }
+
+    override suspend fun getStellarOperationsBefore(
+        fromId: Long?,
+        limit: Int
+    ): List<io.horizontalsystems.stellarkit.room.Operation> {
+        return stellarKit.operationsBefore(TagQuery(null, null, null), fromId = fromId, limit = limit)
     }
 }

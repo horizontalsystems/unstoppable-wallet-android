@@ -60,6 +60,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun BalanceCardSwipable(
     viewItem: BalanceViewItem2,
+    balanceHidden: Boolean,
     revealed: Boolean,
     onReveal: (Int) -> Unit,
     onConceal: () -> Unit,
@@ -93,6 +94,7 @@ fun BalanceCardSwipable(
                     onClick = onClick,
                     onClickSyncError = onClickSyncError,
                     viewItem = viewItem,
+                    balanceHidden = balanceHidden,
                     onContextMenuItemClick = onContextMenuItemClick
                 )
             }
@@ -105,6 +107,7 @@ fun BalanceCard(
     onClick: () -> Unit,
     onClickSyncError: () -> Unit,
     viewItem: BalanceViewItem2,
+    balanceHidden: Boolean,
     onContextMenuItemClick: (BalanceContextMenuItem) -> Unit,
 ) {
 
@@ -175,6 +178,7 @@ fun BalanceCard(
         Box(modifier = Modifier.background(ComposeAppTheme.colors.lawrence)) {
             BalanceCardInner2(
                 viewItem = viewItem,
+                balanceHidden = balanceHidden,
                 type = BalanceCardSubtitleType.Rate,
                 onClickSyncError = onClickSyncError,
                 onClick = null

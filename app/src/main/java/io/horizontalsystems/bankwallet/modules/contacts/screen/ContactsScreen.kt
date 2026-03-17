@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -55,6 +54,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.SnackbarDuration
@@ -195,14 +195,8 @@ fun ContactsScreen(
                         itemsIndexed(uiState.contacts) { index, contact ->
                             Contact(contact) {
                                 if (viewModel.shouldShowReplaceWarning(contact)) {
-                                    coroutineScope.launch {
-                                        bottomSheetType =
-                                            ContactsScreenBottomSheetType.ReplaceAddressConfirmation
-                                        selectedContact = contact
-                                        coroutineScope.launch {
-                                            bottomSheetState.show()
-                                        }
-                                    }
+                                    selectedContact = contact
+                                    bottomSheetType = ContactsScreenBottomSheetType.ReplaceAddressConfirmation
                                 } else {
                                     isSearchActive = false
                                     coroutineScope.launch {
@@ -253,13 +247,7 @@ fun ContactsScreen(
                         when (action) {
                             ContactsModule.ContactsAction.Restore -> {
                                 if (viewModel.shouldShowRestoreWarning()) {
-                                    coroutineScope.launch {
-                                        bottomSheetType =
-                                            ContactsScreenBottomSheetType.RestoreContactsConfirmation
-                                        coroutineScope.launch {
-                                            bottomSheetState.show()
-                                        }
-                                    }
+                                    bottomSheetType = ContactsScreenBottomSheetType.RestoreContactsConfirmation
                                 } else {
                                     restoreLauncher.launch(arrayOf("application/json"))
                                 }
@@ -286,15 +274,11 @@ fun ContactsScreen(
             }
         }
         bottomSheetType?.let { type ->
-            ModalBottomSheet(
+            BottomSheetContent(
                 onDismissRequest = {
-                    coroutineScope.launch {
-                        bottomSheetState.hide()
-                    }
                     bottomSheetType = null
                 },
-                sheetState = bottomSheetState,
-                containerColor = ComposeAppTheme.colors.transparent
+                sheetState = bottomSheetState
             ) {
                 when (type) {
                     ContactsScreenBottomSheetType.ReplaceAddressConfirmation -> {
@@ -313,6 +297,7 @@ fun ContactsScreen(
                                 selectedContact?.let {
                                     coroutineScope.launch {
                                         bottomSheetState.hide()
+                                        bottomSheetType = null
                                         onNavigateToContact(it)
                                     }
                                 }
@@ -338,6 +323,7 @@ fun ContactsScreen(
                             onConfirm = {
                                 coroutineScope.launch {
                                     bottomSheetState.hide()
+                                    bottomSheetType = null
                                     restoreLauncher.launch(arrayOf("application/json"))
                                 }
                             },

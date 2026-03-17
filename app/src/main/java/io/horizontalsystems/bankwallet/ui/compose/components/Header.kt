@@ -8,7 +8,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -67,26 +66,26 @@ fun HeaderText(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(32.dp),
-        verticalAlignment = Alignment.CenterVertically,
+            .height(56.dp)
+            .padding(bottom = 12.dp),
+        verticalAlignment = Alignment.Bottom,
     ) {
-        subhead2_grey(
-            modifier = Modifier.padding(horizontal = 32.dp),
+        subheadSB_grey(
+            modifier = Modifier.padding(start = 32.dp),
             text = text,
             maxLines = 1
         )
         onInfoClick?.let { onClick ->
-            Spacer(Modifier.weight(1f))
             Icon(
                 modifier = Modifier
-                    .padding(end = 24.dp)
+                    .padding(end = 24.dp, start = 8.dp)
                     .size(20.dp)
                     .clickable(
                         onClick = onClick,
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
                     ),
-                painter = painterResource(R.drawable.ic_info_20),
+                painter = painterResource(R.drawable.ic_info_filled_20),
                 tint = ComposeAppTheme.colors.grey,
                 contentDescription = stringResource(R.string.Info_Title),
             )

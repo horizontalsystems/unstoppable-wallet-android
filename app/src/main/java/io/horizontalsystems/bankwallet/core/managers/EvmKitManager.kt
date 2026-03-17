@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BackgroundManager
@@ -32,6 +30,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.net.URI
@@ -197,11 +196,16 @@ class EvmKitManager(
     private fun subscribeToEvents(){
         job = coroutineScope.launch {
             backgroundManager.stateFlow.collect { state ->
-                if (state == BackgroundManagerState.EnterForeground) {
-                    evmKitWrapper?.evmKit?.let { kit ->
-                        Handler(Looper.getMainLooper()).postDelayed({
+                when (state) {
+                    BackgroundManagerState.EnterForeground -> {
+                        evmKitWrapper?.evmKit?.let { kit ->
+                            kit.onEnterForeground()
+                            delay(1000)
                             kit.refresh()
-                        }, 1000)
+                        }
+                    }
+                    BackgroundManagerState.EnterBackground -> {
+                        evmKitWrapper?.evmKit?.onEnterBackground()
                     }
                 }
             }

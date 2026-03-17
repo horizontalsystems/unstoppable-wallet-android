@@ -16,7 +16,7 @@ fun TextBlock(
     subhead_grey(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 32.dp, vertical = 16.dp),
+            .padding(horizontal = 32.dp, vertical = 12.dp),
         text = text,
         textAlign = textAlign
     )

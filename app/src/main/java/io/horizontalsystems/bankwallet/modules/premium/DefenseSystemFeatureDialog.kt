@@ -50,11 +50,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.IPaidAction
-import io.horizontalsystems.subscriptions.core.LossProtection
 import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
+import io.horizontalsystems.subscriptions.core.SwapProtection
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.parcelize.Parcelize
@@ -81,7 +81,6 @@ class DefenseSystemFeatureDialog : BaseComposableBottomSheetFragment() {
                     DefenseSystemFeatureScreen(
                         navController,
                         input.feature,
-                        input.showAllFeaturesButton
                     )
                 }
             }
@@ -89,7 +88,7 @@ class DefenseSystemFeatureDialog : BaseComposableBottomSheetFragment() {
     }
 
     @Parcelize
-    data class Input(val feature: PremiumFeature, val showAllFeaturesButton: Boolean = false) :
+    data class Input(val feature: PremiumFeature) :
         Parcelable
 }
 
@@ -104,20 +103,25 @@ enum class PremiumFeature(
         R.string.Premium_UpgradeFeature_SecureSend_BigDescription,
         R.drawable.prem_securesend
     ),
-    LossProtectionFeature(
-        R.string.Premium_UpgradeFeature_LossProtection,
-        R.string.Premium_UpgradeFeature_LossProtection_BigDescription,
-        R.drawable.prem_lossprotection
-    ),
     ScamProtectionFeature(
         R.string.Premium_UpgradeFeature_ScamProtection,
         R.string.Premium_UpgradeFeature_ScamProtection_BigDescription,
         R.drawable.prem_scamprotection
     ),
+    SwapProtectionFeature(
+        R.string.Premium_UpgradeFeature_SwapProtection,
+        R.string.Premium_UpgradeFeature_SwapProtection_BigDescription,
+        R.drawable.prem_swapprotection
+    ),
     RobberyProtectionFeature(
         R.string.Premium_UpgradeFeature_RobberyProtection,
         R.string.Premium_UpgradeFeature_RobberyProtection_BigDescription,
         R.drawable.prem_robberyprotection
+    ),
+    PrioritySupportFeature(
+        R.string.Premium_UpgradeFeature_PrioritySupport,
+        R.string.Premium_UpgradeFeature_PrioritySupport_BigDescription,
+        R.drawable.prem_prioritysupport
     ),
     TokenInsightsFeature(
         R.string.Premium_UpgradeFeature_TokenInsights,
@@ -133,11 +137,6 @@ enum class PremiumFeature(
         R.string.Premium_UpgradeFeature_TradeSignals,
         R.string.Premium_UpgradeFeature_TradeSignals_BigDescription,
         R.drawable.prem_tradesignals
-    ),
-    PrioritySupportFeature(
-        R.string.Premium_UpgradeFeature_PrioritySupport,
-        R.string.Premium_UpgradeFeature_PrioritySupport_BigDescription,
-        R.drawable.prem_prioritysupport
     );
 
     companion object {
@@ -149,7 +148,7 @@ enum class PremiumFeature(
             SecureSend -> SecureSendFeature
             ScamProtection -> ScamProtectionFeature
             PrioritySupport -> PrioritySupportFeature
-            LossProtection -> LossProtectionFeature
+            SwapProtection -> SwapProtectionFeature
             else -> throw IllegalArgumentException("Unknown paid action")
         }
     }
@@ -161,7 +160,6 @@ enum class PremiumFeature(
 private fun DefenseSystemFeatureScreen(
     navController: NavController,
     feature: PremiumFeature,
-    showAllFeaturesButton: Boolean
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val features = remember { PremiumFeature.entries.toTypedArray() }
@@ -254,19 +252,17 @@ private fun DefenseSystemFeatureScreen(
                 )
             }
 
-            if (showAllFeaturesButton) {
-                subhead1_jacob(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            navController.popBackStack()
-                            navController.slideFromBottom(R.id.buySubscriptionDialog)
-                        }
-                        .padding(horizontal = 32.dp, vertical = 12.dp),
-                    text = stringResource(R.string.Premium_OnePurchaseUnlocksAllPremium),
-                    textAlign = TextAlign.Center
-                )
-            }
+            subhead1_jacob(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        navController.popBackStack()
+                        navController.slideFromBottom(R.id.buySubscriptionDialog)
+                    }
+                    .padding(horizontal = 32.dp, vertical = 12.dp),
+                text = stringResource(R.string.Premium_OnePurchaseUnlocksAllPremium),
+                textAlign = TextAlign.Center
+            )
         }
         ButtonsStack {
             HSButton(

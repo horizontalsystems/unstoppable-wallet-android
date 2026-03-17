@@ -74,7 +74,7 @@ fun WCSessionsScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showInvalidUrlBottomSheet by remember { mutableStateOf(false) }
     var removeSessionBottomSheet by remember {
         mutableStateOf<WalletConnectListModule.SessionViewItem?>(
@@ -175,19 +175,17 @@ fun WCSessionsScreen(
             WCInvalidUrlBottomSheet(
                 sheetState = sheetState,
                 onConfirm = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showInvalidUrlBottomSheet = false
-                        }
+                    scope.launch {
+                        sheetState.hide()
+                        showInvalidUrlBottomSheet = false
                     }
 
                     qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
                 },
                 onDismiss = {
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showInvalidUrlBottomSheet = false
-                        }
+                    scope.launch {
+                        sheetState.hide()
+                        showInvalidUrlBottomSheet = false
                     }
                 }
             )

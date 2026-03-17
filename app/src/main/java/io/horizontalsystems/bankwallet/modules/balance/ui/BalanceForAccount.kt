@@ -52,11 +52,16 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BalanceForAccount(navController: NavController, accountViewItem: AccountViewItem) {
+fun BalanceForAccount(
+    navController: NavController,
+    accountViewItem: AccountViewItem,
+) {
     val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
 
     val context = LocalContext.current
-    val sheetState = androidx.compose.material3.rememberModalBottomSheetState()
+    val sheetState = androidx.compose.material3.rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
     var isWCInvalidUrlBottomSheetVisible by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
@@ -80,7 +85,6 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
             LaunchedEffect(viewModel.connectionResult) {
                 scope.launch {
                     delay(300)
-                    sheetState.show()
                     isWCInvalidUrlBottomSheetVisible = true
                 }
             }
@@ -149,7 +153,6 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                         accountViewItem,
                         navController,
                         uiState,
-                        viewModel.totalUiState,
                     ) {
                         onScanClick(viewModel, qrScannerLauncher, context, navController)
                     }
@@ -166,19 +169,16 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
         WCInvalidUrlBottomSheet(
             sheetState = sheetState,
             onConfirm = {
-                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                    if (!sheetState.isVisible) {
-                        isWCInvalidUrlBottomSheetVisible = false
-                    }
+                scope.launch {
+                    sheetState.hide()
+                    isWCInvalidUrlBottomSheetVisible = false
+                    qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
                 }
-
-                qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
             },
             onDismiss = {
-                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                    if (!sheetState.isVisible) {
-                        isWCInvalidUrlBottomSheetVisible = false
-                    }
+                scope.launch {
+                    sheetState.hide()
+                    isWCInvalidUrlBottomSheetVisible = false
                 }
             }
         )

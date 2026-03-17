@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
 import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
@@ -33,7 +33,7 @@ class Eip20RevokeConfirmViewModel(
     private val token: Token,
     private val allowance: BigDecimal,
     private val spenderAddress: String,
-    private val walletManager: IWalletManager,
+    private val walletManager: WalletManager,
     private val adapterManager: IAdapterManager,
     val sendTransactionService: AbstractSendTransactionService,
     private val currencyManager: CurrencyManager,
@@ -41,6 +41,7 @@ class Eip20RevokeConfirmViewModel(
     private val contactsRepository: ContactsRepository,
 ) : ViewModelUiState<Eip20RevokeUiState>() {
     private val currency = currencyManager.baseCurrency
+    private var initialLoading = true
     private var sendTransactionState = sendTransactionService.stateFlow.value
     private var fiatAmount: BigDecimal? = null
     private val contact = contactsRepository.getContactsFiltered(
@@ -57,7 +58,8 @@ class Eip20RevokeConfirmViewModel(
         fiatAmount = fiatAmount,
         spenderAddress = spenderAddress,
         contact = contact,
-        revokeEnabled = sendTransactionState.sendable
+        revokeEnabled = sendTransactionState.sendable,
+        initialLoading = initialLoading,
     )
 
     val uuid = UUID.randomUUID().toString()
@@ -77,6 +79,8 @@ class Eip20RevokeConfirmViewModel(
         viewModelScope.launch {
             sendTransactionService.stateFlow.collect { transactionState ->
                 sendTransactionState = transactionState
+                initialLoading = initialLoading && transactionState.loading
+
                 emitState()
             }
         }
@@ -154,4 +158,5 @@ data class Eip20RevokeUiState(
     val spenderAddress: String,
     val contact: Contact?,
     val revokeEnabled: Boolean,
+    val initialLoading: Boolean,
 )

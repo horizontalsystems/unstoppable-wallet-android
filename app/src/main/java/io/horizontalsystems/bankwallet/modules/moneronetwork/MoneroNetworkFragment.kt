@@ -181,7 +181,7 @@ private fun MoneroNetworkScreen(
                         VSpacer(12.dp)
                         subhead2_grey(
                             modifier = Modifier.padding(horizontal = 32.dp),
-                            text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription)
+                            text = stringResource(R.string.MoneroNodeSettings_Description)
                         )
                         VSpacer(32.dp)
                     }

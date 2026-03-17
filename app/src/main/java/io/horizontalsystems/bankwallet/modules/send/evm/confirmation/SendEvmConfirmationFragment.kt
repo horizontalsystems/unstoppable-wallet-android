@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -23,11 +24,11 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -93,29 +94,32 @@ private fun SendEvmConfirmationScreen(
     val uiState = viewModel.uiState
 
     ConfirmTransactionScreen(
+        title = stringResource(R.string.Send_Confirmation_Title),
+        initialLoading = uiState.initialLoading,
         onClickBack = { navController.popBackStack() },
-        onClickSettings = {
+        onClickFeeSettings = {
             navController.slideFromBottom(R.id.sendEvmSettingsFragment)
         },
-        onClickClose = null,
+        onClickNonceSettings = {
+            navController.slideFromBottom(R.id.sendEvmNonceSettingsFragment)
+        },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
             val view = LocalView.current
-
+            var sendButtonTitle by remember { mutableIntStateOf(R.string.Send_Confirmation_Send_Button) }
             var buttonEnabled by remember { mutableStateOf(true) }
 
             ButtonPrimaryYellow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),
-                title = stringResource(R.string.Send_Confirmation_Send_Button),
+                title = stringResource(sendButtonTitle),
                 onClick = {
                     logger.info("click send button")
+                    sendButtonTitle = R.string.Send_Sending
+                    buttonEnabled = false
 
                     coroutineScope.launch {
-                        buttonEnabled = false
-                        HudHelper.showInProcessMessage(view, R.string.Send_Sending, SnackbarDuration.INDEFINITE)
-
                         try {
                             logger.info("sending tx")
                             viewModel.send()
@@ -128,9 +132,10 @@ private fun SendEvmConfirmationScreen(
                             navController.popBackStack(input.sendEntryPointDestId, true)
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
-                            HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                         }
 
+                        sendButtonTitle = R.string.Send_Confirmation_Send_Button
                         buttonEnabled = true
                     }
                 },

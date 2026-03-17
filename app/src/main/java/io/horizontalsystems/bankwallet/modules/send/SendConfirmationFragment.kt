@@ -6,7 +6,6 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroConfirmationScreen
@@ -24,7 +23,6 @@ import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
 import kotlinx.parcelize.Parcelize
 
 class SendConfirmationFragment : BaseComposeFragment() {
-    val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment)
 
     @Composable
     override fun GetContent(navController: NavController) {
@@ -36,7 +34,6 @@ class SendConfirmationFragment : BaseComposeFragment() {
                     SendBitcoinConfirmationScreen(
                         navController,
                         sendBitcoinViewModel,
-                        amountInputModeViewModel,
                         input.sendEntryPointDestId
                     )
                 }
@@ -47,7 +44,6 @@ class SendConfirmationFragment : BaseComposeFragment() {
                     SendZCashConfirmationScreen(
                         navController,
                         sendZCashViewModel,
-                        amountInputModeViewModel,
                         input.sendEntryPointDestId
                     )
                 }
@@ -63,7 +59,6 @@ class SendConfirmationFragment : BaseComposeFragment() {
                         SendTronConfirmationScreen(
                             navController,
                             viewModel,
-                            amountInputModeViewModel,
                             input.sendEntryPointDestId
                         )
                     } ?: navController.popBackStack()
@@ -75,7 +70,6 @@ class SendConfirmationFragment : BaseComposeFragment() {
                     SendSolanaConfirmationScreen(
                         navController,
                         sendSolanaViewModel,
-                        amountInputModeViewModel,
                         input.sendEntryPointDestId
                     )
                 }
@@ -86,7 +80,6 @@ class SendConfirmationFragment : BaseComposeFragment() {
                     SendTonConfirmationScreen(
                         navController,
                         sendTonViewModel,
-                        amountInputModeViewModel,
                         input.sendEntryPointDestId
                     )
                 }
@@ -97,7 +90,6 @@ class SendConfirmationFragment : BaseComposeFragment() {
                     SendStellarConfirmationScreen(
                         navController,
                         sendStellarViewModel,
-                        amountInputModeViewModel,
                         input.sendEntryPointDestId
                     )
                 }
@@ -108,7 +100,6 @@ class SendConfirmationFragment : BaseComposeFragment() {
                     SendMoneroConfirmationScreen(
                         navController,
                         sendMoneroViewModel,
-                        amountInputModeViewModel,
                         input.sendEntryPointDestId
                     )
                 }

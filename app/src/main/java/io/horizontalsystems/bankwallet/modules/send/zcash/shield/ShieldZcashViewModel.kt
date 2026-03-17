@@ -59,7 +59,7 @@ class ShieldZcashViewModel(
             fee = null,
             address = null,
             contact = null,
-            coin = wallet.coin,
+            token = wallet.token,
             feeCoin = wallet.coin,
             memo = null
         )

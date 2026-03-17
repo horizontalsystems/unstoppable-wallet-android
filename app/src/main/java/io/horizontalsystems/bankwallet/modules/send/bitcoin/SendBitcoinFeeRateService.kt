@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.bitcoin
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.modules.send.SendErrorFetchFeeRateFailed
@@ -38,7 +39,8 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
             if (recommendedFeeRate == null) {
                 setRecommendedAndMin(feeRates.recommended, feeRates.minimum)
             }
-        } catch (_: Throwable) {
+        } catch (error: Throwable) {
+            Log.e("SendBitcoinFeeRateService", "feeRateProvider.getFeeRates()", error )
         }
     }
 

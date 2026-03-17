@@ -1,7 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
+import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -11,7 +12,18 @@ interface IMultiSwapProvider {
     val id: String
     val title: String
     val icon: Int
-    val priority: Int
+    val type: SwapProviderType
+    val aml: Boolean
+    val requireTerms: Boolean
+
+    val titleShort: String
+        get() {
+            return if (title.length > 10) {
+                title.take(7) + "..."
+            } else {
+                title
+            }
+        }
 
     suspend fun start() = Unit
 
@@ -24,16 +36,25 @@ interface IMultiSwapProvider {
     suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
-        amountIn: BigDecimal,
-        settings: Map<String, Any?>
-    ): ISwapQuote
+        amountIn: BigDecimal
+    ): SwapQuote
 
     suspend fun fetchFinalQuote(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
-        swapQuote: ISwapQuote
-    ) : ISwapFinalQuote
+        swapQuote: SwapQuote,
+        recipient: Address?,
+        slippage: BigDecimal
+    ): SwapFinalQuote
+
+    companion object {
+        val DEFAULT_SLIPPAGE: BigDecimal = BigDecimal("1")
+    }
+}
+
+enum class SwapProviderType(val title: String) {
+    DEX("DEX"),
+    CEX("CEX")
 }

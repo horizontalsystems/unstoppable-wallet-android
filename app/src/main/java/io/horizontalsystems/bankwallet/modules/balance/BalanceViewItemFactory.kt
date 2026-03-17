@@ -4,9 +4,9 @@ import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.diff
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.swappable
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.warningText
@@ -26,7 +26,6 @@ data class BalanceViewItem(
     val syncingProgress: SyncingProgress,
     val syncingTextValue: String?,
     val syncedUntilTextValue: String?,
-    val failedIconVisible: Boolean,
     val coinIconVisible: Boolean,
     val badge: String?,
     val swapVisible: Boolean,
@@ -34,12 +33,15 @@ data class BalanceViewItem(
     val errorMessage: String?,
     val isWatchAccount: Boolean,
     val warning: WarningText?,
-    val balanceHidden: Boolean
+    val balanceHidden: Boolean,
+    val attentionIcon: AttentionIcon?,
+    val birthdayHeight: Long? = null
 )
 
 data class WarningText(
-    val title: TranslatableString,
-    val text: TranslatableString
+    val title: TranslatableString? = null,
+    val text: TranslatableString,
+    val icon: Int? = null,
 )
 
 open class LockedValue(
@@ -47,6 +49,15 @@ open class LockedValue(
     val info: TranslatableString,
     val coinValue: DeemedValue<String>
 )
+
+data class AttentionIcon(
+    val caution: Caution,
+    val type: AttentionIconType,
+)
+
+enum class AttentionIconType {
+    SyncError, TronNotActive
+}
 
 class ZcashLockedValue(
     title: TranslatableString,
@@ -78,7 +89,7 @@ data class BalanceViewItem2(
     val badge: String?,
     val errorMessage: String?,
     val isWatchAccount: Boolean,
-    val balanceHidden: Boolean,
+    val notActivated: Boolean,
     val loading: Boolean
 )
 
@@ -86,6 +97,7 @@ data class DeemedValue<T>(val value: T, val dimmed: Boolean = false)
 enum class SyncingProgressType {
     Spinner, ProgressWithRing
 }
+
 data class SyncingProgress(val type: SyncingProgressType?, val progress: Int?)
 
 class BalanceViewItemFactory {
@@ -100,12 +112,14 @@ class BalanceViewItemFactory {
                     SyncingProgress(SyncingProgressType.Spinner, progressValue)
                 }
             }
+
             is AdapterState.Downloading -> {
                 val progressValue = state.progress ?: getDefaultSyncingProgress(blockchainType)
                 SyncingProgress(SyncingProgressType.ProgressWithRing, progressValue)
             }
+
             is AdapterState.Connecting -> SyncingProgress(SyncingProgressType.Spinner, 10)
-            is AdapterState.SearchingTxs -> SyncingProgress(SyncingProgressType.Spinner,10)
+            is AdapterState.SearchingTxs -> SyncingProgress(SyncingProgressType.Spinner, 10)
             else -> SyncingProgress(null, null)
         }
     }
@@ -118,6 +132,7 @@ class BalanceViewItemFactory {
         BlockchainType.Dash,
         BlockchainType.Zcash,
         BlockchainType.Monero -> true
+
         else -> false
     }
 
@@ -159,16 +174,18 @@ class BalanceViewItemFactory {
                 when {
                     state.blocksRemained != null -> Translator.getString(R.string.Balance_BlocksRemaining, state.blocksRemained)
                     state.progress != null && state.progress > 0 -> {
-                        val text = Translator.getString(R.string.Balance_Syncing_WithProgress, state.progress.toString())
+                        val text = Translator.getString(R.string.Balance_Syncing)
                         if (syncedUntil != null) {
                             "$text - $syncedUntil"
                         } else {
                             text
                         }
                     }
+
                     else -> Translator.getString(R.string.Balance_Syncing)
                 }
             }
+
             is AdapterState.Downloading -> {
                 if (withDetails) {
                     val progressValue = state.progress ?: 10
@@ -177,6 +194,7 @@ class BalanceViewItemFactory {
                     Translator.getString(R.string.Balance_Downloading)
                 }
             }
+
             is AdapterState.Connecting -> Translator.getString(R.string.WalletConnect_Status_Connecting)
             is AdapterState.SearchingTxs -> Translator.getString(R.string.Balance_SearchingTransactions)
             else -> null
@@ -192,7 +210,7 @@ class BalanceViewItemFactory {
 
         val text = when (state) {
             is AdapterState.Syncing -> {
-                if (state.lastBlockDate != null && state.blocksRemained == null ) {
+                if (state.lastBlockDate != null && state.blocksRemained == null) {
                     Translator.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(state.lastBlockDate, "MMM d, yyyy"))
                 } else {
                     null
@@ -354,6 +372,26 @@ class BalanceViewItemFactory {
 
         val syncedUntil = getSyncedUntilText(state)
 
+        val attentionIcon = if (networkAvailable && state is AdapterState.NotSynced) {
+            AttentionIcon(
+                caution = Caution(
+                    text = Translator.getString(R.string.SyncError),
+                    type = Caution.Type.Error
+                ),
+                type = AttentionIconType.SyncError
+            )
+        } else if (item.warning is BalanceModule.BalanceWarning.TronInactiveAccountWarning) {
+            AttentionIcon(
+                caution = Caution(
+                    text = Translator.getString(R.string.Tron_TokenPage_AddressNotActivated),
+                    type = Caution.Type.Warning
+                ),
+                type = AttentionIconType.TronNotActive
+            )
+        } else {
+            null
+        }
+
         return BalanceViewItem(
             wallet = item.wallet,
             primaryValue = primaryValue,
@@ -363,21 +401,20 @@ class BalanceViewItemFactory {
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),
             syncingTextValue = getSyncingText(state, syncedUntil, true),
             syncedUntilTextValue = syncedUntil,
-            failedIconVisible = networkAvailable && state is AdapterState.NotSynced,
             coinIconVisible = state !is AdapterState.NotSynced,
             badge = wallet.badge,
-            swapVisible = App.instance.isSwapEnabled && wallet.token.swappable,
+            swapVisible = App.instance.isSwapEnabled,
             errorMessage = errorMessage,
             isWatchAccount = watchAccount,
             warning = item.warning?.warningText,
-            balanceHidden = hideBalance
+            balanceHidden = hideBalance,
+            attentionIcon = attentionIcon
         )
     }
 
     fun viewItem2(
         item: BalanceModule.BalanceItem,
         currency: Currency,
-        hideBalance: Boolean,
         watchAccount: Boolean,
         balanceViewType: BalanceViewType,
         networkAvailable: Boolean,
@@ -418,7 +455,7 @@ class BalanceViewItemFactory {
             badge = wallet.badge,
             errorMessage = errorMessage,
             isWatchAccount = watchAccount,
-            balanceHidden = hideBalance,
+            notActivated = item.warning is BalanceModule.BalanceWarning.TronInactiveAccountWarning,
             loading = state is AdapterState.Syncing || state is AdapterState.SearchingTxs
         )
     }

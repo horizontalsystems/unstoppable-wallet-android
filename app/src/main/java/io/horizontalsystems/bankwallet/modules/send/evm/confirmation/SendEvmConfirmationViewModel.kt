@@ -34,6 +34,7 @@ class SendEvmConfirmationViewModel(
     private val recentAddressManager: RecentAddressManager,
     private val blockchainType: BlockchainType
 ) : ViewModelUiState<SendEvmConfirmationUiState>() {
+    private var initialLoading = true
     private var sendTransactionState = sendTransactionService.stateFlow.value
 
     private val transactionDecoration = sendTransactionService.decorate(transactionData)
@@ -47,6 +48,8 @@ class SendEvmConfirmationViewModel(
         viewModelScope.launch {
             sendTransactionService.stateFlow.collect { transactionState ->
                 sendTransactionState = transactionState
+                initialLoading = initialLoading && transactionState.loading
+
                 emitState()
             }
         }
@@ -63,7 +66,8 @@ class SendEvmConfirmationViewModel(
         cautions = sendTransactionState.cautions,
         sendEnabled = sendTransactionState.sendable,
         transactionFields = sendTransactionState.fields,
-        sectionViewItems = sectionViewItems
+        sectionViewItems = sectionViewItems,
+        initialLoading = initialLoading,
     )
 
     suspend fun send() = withContext(Dispatchers.Default) {
@@ -134,5 +138,6 @@ data class SendEvmConfirmationUiState(
     val cautions: List<CautionViewItem>,
     val sendEnabled: Boolean,
     val transactionFields: List<DataField>,
-    val sectionViewItems: List<SectionViewItem>
+    val sectionViewItems: List<SectionViewItem>,
+    val initialLoading: Boolean
 )

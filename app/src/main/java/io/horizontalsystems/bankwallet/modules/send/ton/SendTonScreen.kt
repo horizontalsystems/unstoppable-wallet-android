@@ -16,7 +16,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.address.HSAddressCell
@@ -71,6 +70,7 @@ fun SendTonScreen(
             title = title,
             onBack = { navController.popBackStack() }
         ) {
+            VSpacer(16.dp)
             if (uiState.showAddressInput) {
                 HSAddressCell(
                     title = stringResource(R.string.Send_Confirmation_To),
@@ -124,7 +124,6 @@ fun SendTonScreen(
                 amountInputType = amountInputType,
                 rate = viewModel.feeCoinRate,
                 navController = navController,
-                viewState = if (feeInProgress) ViewState.Loading else null
             )
 
             ButtonPrimaryYellow(

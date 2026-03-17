@@ -3,17 +3,20 @@ package io.horizontalsystems.bankwallet.modules.balance.token
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.balance.AttentionIcon
+import io.horizontalsystems.bankwallet.modules.balance.AttentionIconType
 import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
@@ -24,6 +27,8 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItemFactory
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -37,10 +42,11 @@ class TokenBalanceViewModel(
     private val transactionsService: TokenTransactionsService,
     private val transactionViewItem2Factory: TransactionViewItemFactory,
     private val balanceHiddenManager: BalanceHiddenManager,
-    private val accountManager: IAccountManager,
     private val adapterManager: IAdapterManager,
     private val connectivityManager: ConnectivityManager,
     private val localStorage: ILocalStorage,
+    private val coinManager: ICoinManager,
+    private val restoreSettingsManager: RestoreSettingsManager,
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
@@ -49,11 +55,12 @@ class TokenBalanceViewModel(
     private var transactions: Map<String, List<TransactionViewItem>>? = null
     private var addressForAccount: String? = null
     private var error: TokenBalanceModule.TokenBalanceError? = null
-    private var failedIconVisible = false
     private var failedErrorMessage: String? = null
     private var waringMessage: String? = null
     private var loadingTransactions = true
     private var alertUnshieldedBalance: BigDecimal? = null
+    private var attentionIcon: AttentionIcon? = null
+    private var showTronNotActiveAlert: Boolean? = null
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -86,6 +93,16 @@ class TokenBalanceViewModel(
             transactionsService.start()
         }
 
+        viewModelScope.launch {
+            restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
+                if (blockchainType == wallet.token.blockchainType) {
+                    balanceService.balanceItem?.let {
+                        updateBalanceViewItem(it)
+                    }
+                }
+            }
+        }
+
         if (wallet.account.type is AccountType.MoneroWatchAccount) {
             waringMessage = Translator.getString(R.string.Watch_Monero_Warning)
         }
@@ -96,11 +113,12 @@ class TokenBalanceViewModel(
         balanceViewItem = balanceViewItem,
         transactions = transactions,
         receiveAddress = addressForAccount,
-        failedIconVisible = failedIconVisible,
         failedErrorMessage = failedErrorMessage,
         error = error,
         warningMessage = waringMessage,
         alertUnshieldedBalance = alertUnshieldedBalance,
+        attentionIcon = attentionIcon,
+        showTronNotActiveAlert = showTronNotActiveAlert ?: false,
     )
 
     private fun setReceiveAddressForWatchAccount() {
@@ -129,7 +147,7 @@ class TokenBalanceViewModel(
             connectivityManager.isConnected
         )
 
-        failedIconVisible = balanceViewItem.failedIconVisible
+        attentionIcon = balanceViewItem.attentionIcon
         failedErrorMessage = balanceViewItem.errorMessage
 
         if (wallet.account.isWatchAccount) {
@@ -140,11 +158,18 @@ class TokenBalanceViewModel(
             handleZcashBalanceUpdate(balanceItem)
         }
 
+        val birthdayHeight = getBirthdayHeight()
+
         this.balanceViewItem = balanceViewItem.copy(
             primaryValue = balanceViewItem.primaryValue?.let {
                 it.copy(value = it.value + " " + balanceViewItem.wallet.coin.code)
-            }
+            },
+            birthdayHeight = birthdayHeight
         )
+
+        if (balanceViewItem.attentionIcon?.type == AttentionIconType.TronNotActive && showTronNotActiveAlert == null) {
+            showTronNotActiveAlert = true
+        }
 
         updateErrorState()
         emitState()
@@ -161,7 +186,7 @@ class TokenBalanceViewModel(
         }
     }
 
-    private fun getLastAlertedUnshieldedBalance(wallet: Wallet) : BigDecimal? {
+    private fun getLastAlertedUnshieldedBalance(wallet: Wallet): BigDecimal? {
         return localStorage.zcashUnshieldedBalanceAlerts.get(wallet.account.id)
     }
 
@@ -179,10 +204,11 @@ class TokenBalanceViewModel(
                     message = Translator.getString(R.string.Transactions_WaitForSync),
                 )
             } else if (balanceViewItem?.warning != null) {
-                balanceViewItem?.warning?.let{
+                balanceViewItem?.warning?.let {
                     TokenBalanceModule.TokenBalanceError(
                         message = it.text.toString(),
-                        errorTitle = it.title.toString()
+                        errorTitle = it.title?.toString(),
+                        icon = it.icon ?: R.drawable.warning_filled_24
                     )
                 }
             } else {
@@ -195,13 +221,25 @@ class TokenBalanceViewModel(
         }
     }
 
-    @Throws(BackupRequiredError::class, IllegalStateException::class)
+    @Throws(BackupRequiredError::class)
     fun getWalletForReceive(): Wallet {
-        val account =
-            accountManager.activeAccount ?: throw IllegalStateException("Active account is not set")
         when {
-            account.hasAnyBackup -> return wallet
-            else -> throw BackupRequiredError(account, wallet.coin.name)
+            wallet.account.hasAnyBackup -> return wallet
+            else -> throw BackupRequiredError(wallet.account, wallet.coin.name)
+        }
+    }
+
+    @Throws(BackupRequiredError::class, IllegalStateException::class)
+    fun getWalletForTronReceive(): Wallet {
+        when {
+            wallet.account.hasAnyBackup -> {
+                val tronToken =
+                    coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalStateException("Tron token not found")
+                val tronWallet = wallet.copy(token = tronToken)
+                return tronWallet
+            }
+
+            else -> throw BackupRequiredError(wallet.account, wallet.coin.name)
         }
     }
 
@@ -225,6 +263,19 @@ class TokenBalanceViewModel(
         this.alertUnshieldedBalance = null
 
         emitState()
+    }
+
+    fun hideTronNotActiveAlert() {
+        showTronNotActiveAlert = false
+        emitState()
+    }
+
+    private fun getBirthdayHeight(): Long? {
+        val blockchainType = wallet.token.blockchainType
+        if (blockchainType != BlockchainType.Zcash && blockchainType != BlockchainType.Monero) {
+            return null
+        }
+        return restoreSettingsManager.settings(wallet.account, blockchainType).birthdayHeight
     }
 
     override fun onCleared() {

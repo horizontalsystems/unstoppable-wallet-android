@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.balance.token
 
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
+import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -38,6 +39,7 @@ class TokenTransactionsService(
     private val contactsRepository: ContactsRepository,
     private val nftMetadataService: NftMetadataService,
     private val spamManager: SpamManager,
+    private val transactionAdapterManager: TransactionAdapterManager,
 ) : Clearable {
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -88,6 +90,21 @@ class TokenTransactionsService(
             null,
             null
         )
+
+        coroutineScope.launch {
+            transactionAdapterManager.adaptersReadyFlow.drop(1).collect { adaptersMap ->
+                if (!adaptersMap.containsKey(wallet.transactionSource)) return@collect
+
+                transactionRecordRepository.invalidateAdapters()
+                transactionRecordRepository.set(
+                    listOf(transactionWallet),
+                    transactionWallet,
+                    FilterTransactionType.All,
+                    null,
+                    null
+                )
+            }
+        }
     }
 
     @Synchronized

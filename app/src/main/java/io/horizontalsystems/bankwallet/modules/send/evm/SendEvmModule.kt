@@ -61,8 +61,8 @@ object SendEvmModule {
         private val wallet: Wallet,
         private val address: Address,
         private val hideAddress: Boolean,
+        private val adapter: ISendEthereumAdapter
     ) : ViewModelProvider.Factory {
-        val adapter = App.adapterManager.getAdapterForWallet<ISendEthereumAdapter>(wallet) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

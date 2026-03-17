@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subheadR_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSPreview
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonConfig
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
@@ -38,6 +39,7 @@ fun CardsErrorMessageDefault(
     onClick: (() -> Unit)? = null,
     onClick2: (() -> Unit)? = null,
     onClick3: (() -> Unit)? = null,
+    button4config: ButtonConfig? = null
 ) {
     Column(
         modifier = modifier,
@@ -86,6 +88,12 @@ fun CardsErrorMessageDefault(
                     style = ButtonStyle.Transparent,
                     title = buttonTitle3,
                     onClick = onClick3
+                )
+            }
+            if (button4config != null) {
+                HSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    buttonConfig = button4config
                 )
             }
         }

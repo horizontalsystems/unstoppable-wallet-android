@@ -6,15 +6,16 @@ import io.horizontalsystems.bankwallet.core.adapters.MoneroAdapter.Companion.DEC
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.monerokit.model.TransactionInfo
 import io.horizontalsystems.monerokit.model.TransactionInfo.Direction
 import io.reactivex.Flowable
-import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
 
 class MoneroTransactionsAdapter(
@@ -37,27 +38,23 @@ class MoneroTransactionsAdapter(
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = kit.lastBlockUpdatedFlow.asFlowable()
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?
-    ): Single<List<TransactionRecord>> {
+    ): List<TransactionRecord> {
         return transactionsProvider.getTransactions(from?.transactionHash, transactionType, address, limit)
-            .map { transactions ->
-                transactions.map {
-                    getTransactionRecord(it)
-                }
-            }
+            .map { getTransactionRecord(it) }
     }
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?
-    ): Flowable<List<TransactionRecord>> {
-        return transactionsProvider.getNewTransactionsFlowable(transactionType)
+    ): Flow<List<TransactionRecord>> {
+        return transactionsProvider.getNewTransactionsFlow(transactionType)
             .map { transactions ->
                 transactions.map { getTransactionRecord(it) }
             }
@@ -71,7 +68,7 @@ class MoneroTransactionsAdapter(
         return when (transaction.direction) {
             Direction.Direction_In -> {
                 val subaddress = kit.getSubaddress(transaction.accountIndex, transaction.addressIndex)
-                BitcoinIncomingTransactionRecord(
+                MoneroIncomingTransactionRecord(
                     token = wallet.token,
                     uid = transaction.hash,
                     transactionHash = transaction.hash,
@@ -81,9 +78,6 @@ class MoneroTransactionsAdapter(
                     timestamp = transaction.timestamp,
                     fee = transaction.fee.scaledDown(DECIMALS),
                     failed = transaction.isFailed,
-                    lockInfo = null,
-                    conflictingHash = null,
-                    showRawTransaction = false,
                     amount = transaction.amount.scaledDown(DECIMALS),
                     from = null,
                     to = subaddress?.address,
@@ -93,7 +87,7 @@ class MoneroTransactionsAdapter(
             }
 
             Direction.Direction_Out -> {
-                BitcoinOutgoingTransactionRecord(
+                MoneroOutgoingTransactionRecord(
                     token = wallet.token,
                     uid = transaction.hash,
                     transactionHash = transaction.hash,
@@ -103,15 +97,12 @@ class MoneroTransactionsAdapter(
                     timestamp = transaction.timestamp,
                     fee = transaction.fee.scaledDown(DECIMALS),
                     failed = transaction.isFailed,
-                    lockInfo = null,
-                    conflictingHash = null,
-                    showRawTransaction = false,
                     amount = transaction.amount.scaledDown(DECIMALS).negate(),
-                    to = null,
+                    to = if (transaction.transfers.isNullOrEmpty()) null else transaction.transfers[0].address,
                     sentToSelf = false,
                     memo = transaction.notes,
                     source = wallet.transactionSource,
-                    replaceable = false
+                    txKey = kit.getTxKey(transaction.hash)
                 )
             }
         }

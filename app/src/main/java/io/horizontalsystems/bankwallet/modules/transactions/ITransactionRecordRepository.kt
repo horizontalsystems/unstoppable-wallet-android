@@ -18,4 +18,5 @@ interface ITransactionRecordRepository : Clearable {
     )
     fun loadNext()
     fun reload()
+    fun invalidateAdapters()
 }

@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.os.Handler
-import android.os.Looper
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.BackgroundManagerState
@@ -16,6 +14,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
@@ -60,11 +59,13 @@ class SolanaKitManager(
             val accountType = account.type
             this.solanaKitWrapper = when (accountType) {
                 is AccountType.Mnemonic -> {
-                    createKitInstance(accountType, account)
+                    createKitInstanceFromMnemonic(accountType, account)
                 }
+
                 is AccountType.SolanaAddress -> {
-                    createKitInstance(accountType, account)
+                    createKitInstanceFromAddress(accountType, account)
                 }
+
                 else -> throw UnsupportedAccountException()
             }
             startKit()
@@ -77,7 +78,7 @@ class SolanaKitManager(
         return this.solanaKitWrapper!!
     }
 
-    private fun createKitInstance(
+    private fun createKitInstanceFromMnemonic(
         accountType: AccountType.Mnemonic,
         account: Account
     ): SolanaKitWrapper {
@@ -90,15 +91,14 @@ class SolanaKitManager(
             addressString = address,
             rpcSource = rpcSourceManager.rpcSource,
             walletId = account.id,
-            solscanApiKey = appConfigProvider.solscanApiKey
         )
 
         return SolanaKitWrapper(kit, signer)
     }
 
-    private fun createKitInstance(
-            accountType: AccountType.SolanaAddress,
-            account: Account
+    private fun createKitInstanceFromAddress(
+        accountType: AccountType.SolanaAddress,
+        account: Account
     ): SolanaKitWrapper {
         val address = accountType.address
 
@@ -107,7 +107,6 @@ class SolanaKitManager(
             addressString = address,
             rpcSource = rpcSourceManager.rpcSource,
             walletId = account.id,
-            solscanApiKey = appConfigProvider.solscanApiKey
         )
 
         return SolanaKitWrapper(kit, null)
@@ -147,11 +146,17 @@ class SolanaKitManager(
     private fun subscribeToEvents() {
         backgroundEventListenerJob = coroutineScope.launch {
             backgroundManager.stateFlow.collect { state ->
-                if (state == BackgroundManagerState.EnterForeground) {
-                    solanaKitWrapper?.solanaKit?.let { kit ->
-                        Handler(Looper.getMainLooper()).postDelayed({
+                when (state) {
+                    BackgroundManagerState.EnterForeground -> {
+                        solanaKitWrapper?.solanaKit?.let { kit ->
+                            kit.resume()
+                            delay(1000)
                             kit.refresh()
-                        }, 1000)
+                        }
+                    }
+
+                    BackgroundManagerState.EnterBackground -> {
+                        solanaKitWrapper?.solanaKit?.pause()
                     }
                 }
             }

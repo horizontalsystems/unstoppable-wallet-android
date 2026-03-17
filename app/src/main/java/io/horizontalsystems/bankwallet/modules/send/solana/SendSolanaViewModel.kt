@@ -111,7 +111,7 @@ class SendSolanaViewModel(
             fee = SolanaKit.fee,
             address = address,
             contact = contact,
-            coin = wallet.coin,
+            token = wallet.token,
             feeCoin = feeToken.coin,
             memo = null
         )

@@ -58,6 +58,8 @@ sealed class TransactionInfoViewItem {
     class WarningMessage(val message: String) : TransactionInfoViewItem()
 
     class Description(val text: String) : TransactionInfoViewItem()
+
+    class TransactionSecretKey(val key: String) : TransactionInfoViewItem()
 }
 
 enum class AmountType {

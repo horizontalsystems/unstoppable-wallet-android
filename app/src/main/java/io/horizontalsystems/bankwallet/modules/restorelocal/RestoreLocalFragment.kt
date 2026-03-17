@@ -10,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,7 +38,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -49,7 +47,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
-import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigScreen
+import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -65,6 +63,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
@@ -152,8 +151,8 @@ private fun RestoreLocalNavHost(
                 onBackClick = { navController.popBackStack() }
             ) { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) }
         }
-        composablePopup("zcash_configure") {
-            BirthdayHeightConfigScreen(
+        composablePage("zcash_configure") {
+            RestoreBirthdayHeightScreen(
                 blockchainType = BlockchainType.Zcash,
                 onCloseWithResult = { config ->
                     mainViewModel.setBirthdayHeightConfig(config)
@@ -165,8 +164,8 @@ private fun RestoreLocalNavHost(
                 }
             )
         }
-        composablePopup("monero_configure") {
-            BirthdayHeightConfigScreen(
+        composablePage("monero_configure") {
+            RestoreBirthdayHeightScreen(
                 blockchainType = BlockchainType.Monero,
                 onCloseWithResult = { config ->
                     mainViewModel.setBirthdayHeightConfig(config)
@@ -339,7 +338,7 @@ private fun BackupFileItems(
     }
 
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
 
     HSScaffold(
@@ -406,12 +405,11 @@ private fun BackupFileItems(
             }
         }
         if (showBottomSheet) {
-            ModalBottomSheet(
+            BottomSheetContent(
                 onDismissRequest = {
                     showBottomSheet = false
                 },
-                sheetState = sheetState,
-                containerColor = ComposeAppTheme.colors.transparent
+                sheetState = sheetState
             ) {
                 ConfirmationBottomSheet(
                     title = stringResource(R.string.BackupManager_MergeTitle),
@@ -423,17 +421,15 @@ private fun BackupFileItems(
                     cancelText = stringResource(R.string.Button_Cancel),
                     onConfirm = {
                         viewModel.restoreFullBackup()
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
+                        scope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
                         }
                     },
                     onClose = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
+                        scope.launch {
+                            sheetState.hide()
+                            showBottomSheet = false
                         }
                     }
                 )

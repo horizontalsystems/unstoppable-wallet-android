@@ -51,6 +51,7 @@ import io.horizontalsystems.bankwallet.core.managers.NftAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataSyncer
 import io.horizontalsystems.bankwallet.core.managers.NumberFormatter
+import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
@@ -62,6 +63,7 @@ import io.horizontalsystems.bankwallet.core.managers.SolanaWalletManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.StellarAccountManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
+import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
 import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
 import io.horizontalsystems.bankwallet.core.managers.TermsManager
 import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
@@ -91,7 +93,7 @@ import io.horizontalsystems.bankwallet.core.storage.EvmSyncSourceStorage
 import io.horizontalsystems.bankwallet.core.storage.MoneroNodeStorage
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
 import io.horizontalsystems.bankwallet.core.storage.RestoreSettingsStorage
-import io.horizontalsystems.bankwallet.core.storage.SpamAddressStorage
+import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
@@ -155,7 +157,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var appConfigProvider: AppConfigProvider
         lateinit var adapterManager: IAdapterManager
         lateinit var transactionAdapterManager: TransactionAdapterManager
-        lateinit var walletManager: IWalletManager
+        lateinit var walletManager: WalletManager
         lateinit var walletActivator: WalletActivator
         lateinit var tokenAutoEnableManager: TokenAutoEnableManager
         lateinit var walletStorage: IWalletStorage
@@ -184,6 +186,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var wcManager: WCManager
         lateinit var wcWalletRequestHandler: WCWalletRequestHandler
         lateinit var termsManager: ITermsManager
+        lateinit var swapTermsManager: SwapTermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKitWrapper
         lateinit var priceManager: PriceManager
@@ -207,12 +210,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var contactsRepository: ContactsRepository
         lateinit var chartIndicatorManager: ChartIndicatorManager
         lateinit var backupProvider: BackupProvider
+        lateinit var scannedTransactionStorage: ScannedTransactionStorage
         lateinit var spamManager: SpamManager
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
         lateinit var recentAddressManager: RecentAddressManager
         lateinit var roiManager: RoiManager
         lateinit var appIconService: AppIconService
+        lateinit var paidActionSettingsManager: PaidActionSettingsManager
         var trialExpired: Boolean = false
     }
 
@@ -241,6 +246,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             marketStorage = this
         }
 
+        paidActionSettingsManager = PaidActionSettingsManager(localStorage)
+
         val appConfig = AppConfigProvider(localStorage)
         appConfigProvider = appConfig
 
@@ -268,6 +275,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         accountsStorage = AccountsStorage(appDatabase)
         restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
 
+        zcashBirthdayProvider = ZcashBirthdayProvider(this)
+        moneroBirthdayProvider = MoneroBirthdayProvider()
+        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider, moneroBirthdayProvider)
+
         AppLog.logsDao = appDatabase.logsDao()
 
         accountCleaner = AccountCleaner()
@@ -281,14 +292,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
 
         walletManager = WalletManager(accountManager, walletStorage)
+
+        moneroNodeStorage = MoneroNodeStorage(appDatabase)
+        moneroNodeManager = MoneroNodeManager(blockchainSettingsStorage, moneroNodeStorage, marketKit)
         coinManager = CoinManager(marketKit, walletManager)
 
         solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
         val solanaWalletManager = SolanaWalletManager(walletManager, accountManager, marketKit)
         solanaKitManager = SolanaKitManager(appConfigProvider, solanaRpcSourceManager, solanaWalletManager, backgroundManager)
-
-        moneroNodeStorage = MoneroNodeStorage(appDatabase)
-        moneroNodeManager = MoneroNodeManager(blockchainSettingsStorage, moneroNodeStorage,marketKit)
 
         tronKitManager = TronKitManager(appConfigProvider, backgroundManager)
         tonKitManager = TonKitManager(backgroundManager)
@@ -314,7 +325,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         walletActivator = WalletActivator(walletManager, marketKit)
         tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
 
-        spamManager = SpamManager(localStorage, SpamAddressStorage(appDatabase.spamAddressDao()))
+        scannedTransactionStorage = ScannedTransactionStorage(appDatabase.scannedTransactionDao())
+        contactsRepository = ContactsRepository(marketKit)
         recentAddressManager = RecentAddressManager(accountManager, appDatabase.recentAddressDao(), ActionCompletedDelegate)
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
@@ -352,10 +364,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        zcashBirthdayProvider = ZcashBirthdayProvider(this)
-        moneroBirthdayProvider = MoneroBirthdayProvider()
-        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider, moneroBirthdayProvider)
-
         evmLabelManager = EvmLabelManager(
             EvmLabelProvider(),
             appDatabase.evmAddressLabelDao(),
@@ -382,17 +390,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         adapterManager = AdapterManager(
             walletManager,
             adapterFactory,
-            btcBlockchainManager,
             evmBlockchainManager,
             solanaKitManager,
             tronKitManager,
             tonKitManager,
             stellarKitManager,
-            moneroNodeManager
         )
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
-
-        spamManager.set(transactionAdapterManager)
+        spamManager = SpamManager(localStorage, scannedTransactionStorage, contactsRepository, transactionAdapterManager)
 
         feeCoinProvider = FeeTokenProvider(marketKit)
 
@@ -415,6 +420,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         wcWalletRequestHandler = WCWalletRequestHandler(evmBlockchainManager)
 
         termsManager = TermsManager(localStorage)
+        swapTermsManager = SwapTermsManager(localStorage)
 
         marketWidgetManager = MarketWidgetManager()
         marketFavoritesManager = MarketFavoritesManager(appDatabase, localStorage, marketWidgetManager)
@@ -445,7 +451,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
         balanceHiddenManager = BalanceHiddenManager(localStorage, backgroundManager)
 
-        contactsRepository = ContactsRepository(marketKit)
         chartIndicatorManager = ChartIndicatorManager(appDatabase.chartIndicatorSettingsDao(), localStorage)
 
         appIconService = AppIconService(localStorage)
@@ -495,8 +500,16 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     }
 
     override fun newImageLoader(): ImageLoader {
+        val cacheDir = java.io.File(cacheDir, "http_cache")
+        val okHttpClient = okhttp3.OkHttpClient.Builder()
+            .cache(okhttp3.Cache(cacheDir, 10L * 1024 * 1024)) // 10 MB
+            .addNetworkInterceptor(NotFoundCacheInterceptor())
+            .build()
+
         return ImageLoader.Builder(this)
             .crossfade(true)
+            .okHttpClient(okHttpClient)
+            .respectCacheHeaders(true)
             .components {
                 add(SvgDecoder.Factory())
                 if (Build.VERSION.SDK_INT >= 28) {
@@ -601,6 +614,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     private fun startTasks() {
         coroutineScope.launch {
             EthereumKit.init()
+            walletManager.start(restoreSettingsManager, moneroNodeManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager)
             adapterManager.startAdapterManager()
             marketKit.sync()
             rateAppManager.onAppLaunch()
@@ -634,9 +648,27 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         coroutineScope.launch(Dispatchers.IO) {
             delay(3000)
-            val termsManager = TermsManager(localStorage)
             val migrationManager = MigrationManager(localStorage, termsManager)
             migrationManager.runMigrations()
         }
+    }
+}
+
+/**
+ * OkHttp network interceptor that makes 404 responses cacheable for 24 hours.
+ * Without this, 404s have no cache headers and are re-fetched every time.
+ * This avoids repeated network requests for missing images (e.g. coin icons),
+ * allowing the app to skip straight to the alternative URL on subsequent loads.
+ */
+private class NotFoundCacheInterceptor : okhttp3.Interceptor {
+    override fun intercept(chain: okhttp3.Interceptor.Chain): okhttp3.Response {
+        val response = chain.proceed(chain.request())
+        if (response.code == 404) {
+            return response.newBuilder()
+                .header("Cache-Control", "public, max-age=86400")
+                .removeHeader("Pragma")
+                .build()
+        }
+        return response
     }
 }

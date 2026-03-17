@@ -41,12 +41,15 @@ import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 import java.util.Date
 
@@ -107,16 +110,16 @@ abstract class BitcoinBaseAdapter(
     final override val unspentOutputs: List<UnspentOutputInfo>
         get() = kit.getUnspentOutputs(UtxoFilters())
 
-    override fun getTransactionRecordsFlowable(
+    override fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> = when (address) {
-        null -> getTransactionRecordsFlowable(transactionType)
-        else -> Flowable.empty()
+    ): Flow<List<TransactionRecord>> = when (address) {
+        null -> getTransactionRecordsFlow(transactionType)
+        else -> emptyFlow()
     }
 
-    private fun getTransactionRecordsFlowable(transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+    private fun getTransactionRecordsFlow(transactionType: FilterTransactionType): Flow<List<TransactionRecord>> {
         val observable: Observable<List<TransactionRecord>> = when (transactionType) {
             FilterTransactionType.All -> {
                 transactionRecordsSubject
@@ -149,7 +152,7 @@ abstract class BitcoinBaseAdapter(
             }
         }
 
-        return observable.toFlowable(BackpressureStrategy.BUFFER)
+        return observable.toFlowable(BackpressureStrategy.BUFFER).asFlow()
     }
 
     override val debugInfo: String = ""
@@ -180,26 +183,28 @@ abstract class BitcoinBaseAdapter(
         kit.refresh()
     }
 
-    override fun getTransactionsAsync(
+    override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ) = when (address) {
-        null -> getTransactionsAsync(from, limit, transactionType)
-        else -> Single.just(listOf())
+    ): List<TransactionRecord> = when (address) {
+        null -> getTransactionsList(from, limit, transactionType)
+        else -> listOf()
     }
 
-    private fun getTransactionsAsync(
+    private suspend fun getTransactionsList(
         from: TransactionRecord?,
         limit: Int,
         transactionType: FilterTransactionType
-    ): Single<List<TransactionRecord>> {
+    ): List<TransactionRecord> {
         return try {
-            kit.transactions(from?.uid, getBitcoinTransactionTypeFilter(transactionType), limit).map { it.map { tx -> transactionRecord(tx) } }
+            kit.transactions(from?.uid, getBitcoinTransactionTypeFilter(transactionType), limit)
+                .await()
+                .map { tx -> transactionRecord(tx) }
         } catch (e: UnsupportedFilterException) {
-            Single.just(listOf())
+            listOf()
         }
     }
 

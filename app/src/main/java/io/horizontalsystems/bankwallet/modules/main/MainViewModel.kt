@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
-import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AddressUri
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.balance.OpenSendTokenSelect
@@ -88,6 +87,9 @@ class MainViewModel(
                 MainNavigation.Settings,
             )
         }
+    private val selectedTabItem: MainNavigation
+        get() = mainNavItems.firstOrNull { it.selected }?.mainNavItem
+            ?: MainNavigation.Balance
 
     private var selectedTabIndex = getTabIndexToOpen()
     private var deeplinkPage: DeeplinkPage? = null
@@ -95,20 +97,13 @@ class MainViewModel(
     private var showRateAppDialog = false
     private var showWhatsNew = false
     private var showDonationPage = false
-    private var activeWallet = accountManager.activeAccount
     private var wcSupportState: WCManager.SupportState? = null
     private var torEnabled = localStorage.torEnabled
     private var openSendTokenSelect: OpenSendTokenSelect? = null
 
-    val wallets: List<Account>
-        get() = accountManager.accounts.filter { !it.isWatchAccount }
-
-    val watchWallets: List<Account>
-        get() = accountManager.accounts.filter { it.isWatchAccount }
-
     init {
-        localStorage.marketsTabEnabledFlow.collectWith(viewModelScope) {
-            marketsTabEnabled = it
+        localStorage.marketsTabEnabledFlow.collectWith(viewModelScope) { enabled ->
+            marketsTabEnabled = enabled
             syncNavigation()
         }
 
@@ -151,13 +146,6 @@ class MainViewModel(
             }
         }
 
-        accountManager.activeAccountStateFlow.collectWith(viewModelScope) {
-            (it as? ActiveAccountState.ActiveAccount)?.let { state ->
-                activeWallet = state.account
-                emitState()
-            }
-        }
-
         viewModelScope.launch {
             actionCompletedDelegate.walletEvents.collect { event ->
                 //ContactAddedToRecent event triggered after successful send transaction
@@ -172,16 +160,15 @@ class MainViewModel(
     }
 
     override fun createState() = MainModule.UiState(
-        selectedTabIndex = selectedTabIndex,
         deeplinkPage = deeplinkPage,
         mainNavItems = mainNavItems,
         showRateAppDialog = showRateAppDialog,
         showWhatsNew = showWhatsNew,
         showDonationPage = showDonationPage,
-        activeWallet = activeWallet,
         wcSupportState = wcSupportState,
         torEnabled = torEnabled,
         openSend = openSendTokenSelect,
+        selectedTabItem = selectedTabItem,
     )
 
     private fun isTransactionsTabEnabled(): Boolean = !accountManager.isAccountsEmpty
@@ -203,12 +190,6 @@ class MainViewModel(
         emitState()
     }
 
-    fun onSelect(account: Account) {
-        accountManager.setActiveAccountId(account.id)
-        activeWallet = account
-        emitState()
-    }
-
     fun onResume() {
         viewModelScope.launch {
             if (!pinComponent.isLocked && releaseNotesManager.shouldShowChangeLog()) {
@@ -218,11 +199,32 @@ class MainViewModel(
     }
 
     fun onSelect(mainNavItem: MainNavigation) {
+        val newIndex = items.indexOf(mainNavItem)
+
+        if (newIndex == selectedTabIndex) {
+            return
+        }
+
         if (mainNavItem != MainNavigation.Settings) {
             currentMainTab = mainNavItem
         }
-        selectedTabIndex = items.indexOf(mainNavItem)
-        syncNavigation()
+
+        updateSelectedTab(selectedTabIndex, newIndex)
+        selectedTabIndex = newIndex
+        emitState()
+    }
+
+    private fun updateSelectedTab(oldIndex: Int, newIndex: Int) {
+        mainNavItems = mainNavItems.toMutableList().apply {
+            // Deselect old tab
+            if (oldIndex in indices) {
+                this[oldIndex] = this[oldIndex].copy(selected = false)
+            }
+            // Select new tab
+            if (newIndex in indices) {
+                this[newIndex] = this[newIndex].copy(selected = true)
+            }
+        }
     }
 
     private fun updateTransactionsTabEnabled() {
@@ -372,11 +374,24 @@ class MainViewModel(
     }
 
     private fun syncNavigation() {
-        mainNavItems = navigationItems()
-        if (selectedTabIndex >= mainNavItems.size) {
-            selectedTabIndex = mainNavItems.size - 1
+        val currentNavItem = mainNavItems.getOrNull(selectedTabIndex)?.mainNavItem
+        val newIndex = currentNavItem?.let { items.indexOf(it) } ?: -1
+        selectedTabIndex = if (newIndex >= 0) newIndex else items.indexOf(MainNavigation.Balance).coerceAtLeast(0)
+
+        val newNavItems = navigationItems()
+
+        // Only update if structure changed
+        val structureChanged = mainNavItems.size != newNavItems.size ||
+                mainNavItems.zip(newNavItems).any { (old, new) ->
+                    old.mainNavItem != new.mainNavItem ||
+                            old.enabled != new.enabled ||
+                            old.badge != new.badge
+                }
+
+        if (structureChanged) {
+            mainNavItems = newNavItems
+            emitState()
         }
-        emitState()
     }
 
     private suspend fun showWhatsNew() {

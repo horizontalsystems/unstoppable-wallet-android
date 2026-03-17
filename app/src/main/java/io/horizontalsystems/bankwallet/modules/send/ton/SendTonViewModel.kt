@@ -97,7 +97,7 @@ class SendTonViewModel(
         availableBalance = amountState.availableBalance,
         amountCaution = amountState.amountCaution,
         addressError = addressState.addressError,
-        canBeSend = amountState.canBeSend && addressState.canBeSend,
+        canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.canBeSend,
         showAddressInput = showAddressInput,
         fee = feeState.fee,
         feeInProgress = feeState.inProgress,
@@ -119,7 +119,7 @@ class SendTonViewModel(
             fee = feeState.fee!!,
             address = address,
             contact = contact,
-            coin = wallet.coin,
+            token = wallet.token,
             feeCoin = feeToken.coin,
             memo = memo,
         )

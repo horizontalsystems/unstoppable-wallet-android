@@ -8,7 +8,9 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceScreenState
 
 @Composable
-fun BalanceScreen(navController: NavController) {
+fun BalanceScreen(
+    navController: NavController,
+) {
     val viewModel = viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
 
     when (val tmpAccount = viewModel.balanceScreenState) {

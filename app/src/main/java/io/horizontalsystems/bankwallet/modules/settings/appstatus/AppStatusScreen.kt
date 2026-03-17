@@ -10,11 +10,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ShareCompat
@@ -38,6 +36,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -48,7 +47,6 @@ fun AppStatusScreen(
 ) {
     val viewModel = viewModel<AppStatusViewModel>(factory = AppStatusModule.Factory())
     val uiState = viewModel.uiState
-    val clipboardManager = LocalClipboardManager.current
     val localView = LocalView.current
     val context = LocalContext.current
 
@@ -72,7 +70,7 @@ fun AppStatusScreen(
                     title = stringResource(R.string.Button_Copy),
                     onClick = {
                         uiState.appStatusAsText?.let {
-                            clipboardManager.setText(AnnotatedString(it))
+                            TextHelper.copyText(it)
                             HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
 
                             stat(

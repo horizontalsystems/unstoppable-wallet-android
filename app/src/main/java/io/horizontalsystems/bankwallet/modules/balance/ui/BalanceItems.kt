@@ -195,7 +195,6 @@ fun BalanceItems(
     accountViewItem: AccountViewItem,
     navController: NavController,
     uiState: BalanceUiState,
-    totalState: TotalUIState,
     onScanClick: () -> Unit,
 ) {
     val rateAppViewModel = viewModel<RateAppViewModel>(factory = RateAppModule.Factory())
@@ -257,7 +256,7 @@ fun BalanceItems(
         ) {
             item {
                 TotalBalanceRow(
-                    totalState = totalState,
+                    totalState = uiState.totalUiState,
                     onClickTitle = remember {
                         {
                             viewModel.toggleBalanceVisibility()
@@ -274,7 +273,8 @@ fun BalanceItems(
                             stat(page = StatPage.Balance, event = StatEvent.ToggleConversionCoin)
                         }
                     },
-                    loading = uiState.loading
+                    loading = uiState.loading,
+                    balanceHidden = uiState.balanceHidden
                 )
             }
 
@@ -386,23 +386,20 @@ fun BalanceItems(
                         right = {
                             accountViewItem.watchAddress?.let { watchAddress ->
                                 CellRightControlsButtonText(
-                                    text = watchAddress.shorten().hs(color = ComposeAppTheme.colors.leah),
+                                    subtitle = watchAddress.shorten().hs(color = ComposeAppTheme.colors.leah),
                                     icon = painterResource(id = R.drawable.copy_filled_24),
                                     iconTint = ComposeAppTheme.colors.leah,
+                                    onClick = {
+                                        TextHelper.copyText(accountViewItem.watchAddress)
+                                        HudHelper.showSuccessMessage(
+                                            view,
+                                            R.string.Hud_Text_Copied
+                                        )
+                                    }
                                 )
                             }
                         },
                         backgroundColor = ComposeAppTheme.colors.tyler,
-                        onClick = {
-                            accountViewItem.watchAddress?.let { watchAddress ->
-                                TextHelper.copyText(watchAddress)
-                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-//                                        stat(
-//                                            page = StatPage.Balance,
-//                                            event = StatEvent.CopyAddress(viewItem.wallet.token.blockchain.uid)
-//                                        )
-                            }
-                        }
                     )
                 }
             }
@@ -453,6 +450,7 @@ fun BalanceItems(
                     BoxBordered(top = true, bottom = index == balanceViewItems.size - 1) {
                         BalanceCardSwipable(
                             viewItem = item,
+                            balanceHidden = uiState.balanceHidden,
                             revealed = revealedCardId == item.wallet.hashCode(),
                             onReveal = { walletHashCode ->
                                 if (revealedCardId != walletHashCode) {
@@ -486,6 +484,9 @@ fun BalanceItems(
                     }
 
                 }
+            }
+            item{
+                VSpacer(70.dp)
             }
         }
     }
@@ -703,33 +704,30 @@ fun TotalBalanceRow(
     totalState: TotalUIState,
     onClickTitle: () -> Unit,
     onClickSubtitle: () -> Unit,
-    loading: Boolean
+    loading: Boolean,
+    balanceHidden: Boolean
 ) {
-    when (totalState) {
-        TotalUIState.Hidden -> {
-            CardsElementAmountText(
-                title = "* * *".hs,
-                body = "".hs,
-                onClickTitle = onClickTitle,
-                onClickSubtitle = onClickSubtitle
-            )
+    if (balanceHidden) {
+        CardsElementAmountText(
+            title = "* * *".hs,
+            body = "".hs,
+            onClickTitle = onClickTitle,
+            onClickSubtitle = onClickSubtitle
+        )
+    } else {
+        val color = if (loading) {
+            ComposeAppTheme.colors.andy
+        } else if (totalState.dimmed) {
+            ComposeAppTheme.colors.grey
+        } else {
+            null
         }
 
-        is TotalUIState.Visible -> {
-            val color = if (loading) {
-                ComposeAppTheme.colors.andy
-            } else if (totalState.dimmed) {
-                ComposeAppTheme.colors.grey
-            } else {
-                null
-            }
-
-            CardsElementAmountText(
-                title = totalState.primaryAmountStr.hs(color = color),
-                body = totalState.secondaryAmountStr.hs(color = color),
-                onClickTitle = onClickTitle,
-                onClickSubtitle = onClickSubtitle,
-            )
-        }
+        CardsElementAmountText(
+            title = totalState.primaryAmountStr.hs(color = color),
+            body = totalState.secondaryAmountStr.hs(color = color),
+            onClickTitle = onClickTitle,
+            onClickSubtitle = onClickSubtitle,
+        )
     }
 }

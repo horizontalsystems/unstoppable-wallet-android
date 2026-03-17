@@ -6,24 +6,22 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
-import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.math.BigDecimal
-import java.util.concurrent.CopyOnWriteArrayList
 
 class BalanceService(
     private val activeWalletRepository: BalanceActiveWalletRepository,
@@ -38,15 +36,8 @@ class BalanceService(
     val networkAvailable by connectivityManager::isConnected
     val baseCurrency by xRateRepository::baseCurrency
 
-    var sortType: BalanceSortType
-        get() = localStorage.sortType
-        set(value) {
-            localStorage.sortType = value
-
-            sortAndEmitItems()
-
-            stat(page = StatPage.Balance, event = StatEvent.SwitchSortType(value.statSortType))
-        }
+    var sortType = localStorage.sortType
+        private set
 
     var isWatchAccount = false
         private set
@@ -56,19 +47,15 @@ class BalanceService(
 
     private var hideZeroBalances = false
 
-    private val allBalanceItems = CopyOnWriteArrayList<BalanceModule.BalanceItem>()
+    private var allBalanceItems = listOf<BalanceModule.BalanceItem>()
 
-    /* getBalanceItems should return new immutable list */
-    private fun getBalanceItems(): List<BalanceModule.BalanceItem> = if (hideZeroBalances) {
-        allBalanceItems.filter { it.wallet.token.type.isNative || it.balanceData.total > BigDecimal.ZERO }
-    } else {
-        allBalanceItems.toList()
-    }
+    private val mutex = Mutex()
 
     private val _balanceItemsFlow = MutableStateFlow<List<BalanceModule.BalanceItem>?>(null)
     val balanceItemsFlow = _balanceItemsFlow.asStateFlow()
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var sortAndEmitJob: Job? = null
 
     fun start() {
         coroutineScope.launch {
@@ -93,35 +80,51 @@ class BalanceService(
         }
     }
 
-    @Synchronized
-    private fun sortAndEmitItems() {
-        val sorted = balanceSorter.sort(allBalanceItems, sortType)
-        allBalanceItems.clear()
-        allBalanceItems.addAll(sorted)
+    fun setSortType(value: BalanceSortType) {
+        sortType = value
+        localStorage.sortType = value
 
-        _balanceItemsFlow.update {
-            getBalanceItems()
+        sortAndEmitItems()
+    }
+
+    private fun sortAndEmitItems() {
+        sortAndEmitJob?.cancel()
+        sortAndEmitJob = coroutineScope.launch {
+            allBalanceItems = balanceSorter.sort(allBalanceItems, sortType)
+
+            ensureActive()
+
+            _balanceItemsFlow.update {
+                if (hideZeroBalances) {
+                    allBalanceItems.filter { it.wallet.token.type.isNative || it.balanceData.total > BigDecimal.ZERO }
+                } else {
+                    allBalanceItems
+                }
+            }
         }
     }
 
-    @Synchronized
-    private fun handleAdaptersReady() {
+    private suspend fun handleAdaptersReady() = mutex.withLock {
+        val allBalanceItems = this.allBalanceItems.toMutableList()
         for (i in 0 until allBalanceItems.size) {
             val balanceItem = allBalanceItems[i]
 
             allBalanceItems[i] = balanceItem.copy(
                 balanceData = adapterRepository.balanceData(balanceItem.wallet),
                 state = adapterRepository.state(balanceItem.wallet),
+                warning = adapterRepository.warning(balanceItem.wallet)
             )
         }
+
+        this.allBalanceItems = allBalanceItems
 
         sortAndEmitItems()
     }
 
-    @Synchronized
-    private fun handleAdapterUpdate(wallet: Wallet) {
+    private suspend fun handleAdapterUpdate(wallet: Wallet) = mutex.withLock {
         val indexOfFirst = allBalanceItems.indexOfFirst { it.wallet == wallet }
         if (indexOfFirst != -1) {
+            val allBalanceItems = allBalanceItems.toMutableList()
             val itemToUpdate = allBalanceItems[indexOfFirst]
 
             allBalanceItems[indexOfFirst] = itemToUpdate.copy(
@@ -129,12 +132,14 @@ class BalanceService(
                 state = adapterRepository.state(wallet),
             )
 
+            this.allBalanceItems = allBalanceItems
+
             sortAndEmitItems()
         }
     }
 
-    @Synchronized
-    private fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) {
+    private suspend fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) = mutex.withLock {
+        val allBalanceItems = allBalanceItems.toMutableList()
         for (i in 0 until allBalanceItems.size) {
             val balanceItem = allBalanceItems[i]
 
@@ -143,11 +148,12 @@ class BalanceService(
             }
         }
 
+        this.allBalanceItems = allBalanceItems
+
         sortAndEmitItems()
     }
 
-    @Synchronized
-    private fun handleWalletsUpdate(wallets: List<Wallet>) {
+    private suspend fun handleWalletsUpdate(wallets: List<Wallet>) = mutex.withLock {
         isWatchAccount = accountManager.activeAccount?.isWatchAccount == true
         hideZeroBalances = accountManager.activeAccount?.type?.hideZeroBalances == true
 
@@ -164,8 +170,7 @@ class BalanceService(
             )
         }
 
-        this.allBalanceItems.clear()
-        this.allBalanceItems.addAll(balanceItems)
+        allBalanceItems = balanceItems
 
         sortAndEmitItems()
     }
@@ -180,11 +185,8 @@ class BalanceService(
         adapterRepository.clear()
     }
 
-    val disabledWalletSubject = PublishSubject.create<Wallet>()
     fun disable(wallet: Wallet) {
         activeWalletRepository.disable(wallet)
-
-        disabledWalletSubject.onNext(wallet)
     }
 
     fun enable(wallet: Wallet) {

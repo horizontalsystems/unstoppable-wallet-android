@@ -8,12 +8,18 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 class RestoreSettingsManager(
-        private val storage: IRestoreSettingsStorage,
-        private val zcashBirthdayProvider: ZcashBirthdayProvider,
-        private val moneroBirthdayProvider: MoneroBirthdayProvider
+    private val storage: IRestoreSettingsStorage,
+    private val zcashBirthdayProvider: ZcashBirthdayProvider,
+    private val moneroBirthdayProvider: MoneroBirthdayProvider
 ) {
+    private val _settingsUpdatedFlow = MutableSharedFlow<BlockchainType>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val settingsUpdatedFlow = _settingsUpdatedFlow.asSharedFlow()
+
     fun settings(account: Account, blockchainType: BlockchainType): RestoreSettings {
         val records = storage.restoreSettings(account.id, blockchainType.uid)
 
@@ -42,6 +48,7 @@ class RestoreSettingsManager(
         }
 
         storage.save(records)
+        _settingsUpdatedFlow.tryEmit(blockchainType)
     }
 
     fun getSettingValueForCreatedAccount(settingType: RestoreSettingType, blockchainType: BlockchainType): String? {
@@ -51,9 +58,11 @@ class RestoreSettingsManager(
                     BlockchainType.Zcash -> {
                         return zcashBirthdayProvider.getLatestCheckpointBlockHeight().toString()
                     }
+
                     BlockchainType.Monero -> {
                         return moneroBirthdayProvider.restoreHeightForNewWallet().toString()
                     }
+
                     else -> null
                 }
             }
@@ -85,7 +94,7 @@ class RestoreSettings {
     var birthdayHeight: Long?
         get() = values[RestoreSettingType.BirthdayHeight]?.toLongOrNull()
         set(value) {
-            values[RestoreSettingType.BirthdayHeight] = value?.toString() ?: ""
+            values[RestoreSettingType.BirthdayHeight] = value?.toString() ?: "0"
         }
 
     fun isNotEmpty() = values.isNotEmpty()

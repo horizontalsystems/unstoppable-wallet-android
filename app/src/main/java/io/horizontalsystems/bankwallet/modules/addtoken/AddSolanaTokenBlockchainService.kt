@@ -9,7 +9,7 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.solanakit.core.TokenProvider
 import io.horizontalsystems.solanakit.models.Address
-import io.horizontalsystems.solanakit.transactions.SolanaFmService
+import io.horizontalsystems.solanakit.transactions.JupiterApiService
 
 class AddSolanaTokenBlockchainService(
     private val blockchain: Blockchain,
@@ -45,8 +45,8 @@ class AddSolanaTokenBlockchainService(
     }
 
     companion object {
-        fun getInstance(blockchain: Blockchain): AddSolanaTokenBlockchainService {
-            val tokenProvider = TokenProvider(SolanaFmService())
+        fun getInstance(blockchain: Blockchain, jupiterApiKey: String): AddSolanaTokenBlockchainService {
+            val tokenProvider = TokenProvider(JupiterApiService(jupiterApiKey))
             return AddSolanaTokenBlockchainService(blockchain, tokenProvider)
         }
     }

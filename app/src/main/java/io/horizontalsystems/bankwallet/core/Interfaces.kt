@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core
 import android.os.Parcelable
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.tonapps.wallet.data.core.entity.SendRequestEntity
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinFeeInfo
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
@@ -109,6 +110,7 @@ interface ILocalStorage {
     var balanceAutoHideEnabled: Boolean
     var balanceTotalCoinUid: String?
     var termsAccepted: Boolean
+    var swapTermsAccepted: Boolean
     var checkedTerms: List<String>
     var mainShowedOnce: Boolean
     var notificationId: String?
@@ -147,6 +149,9 @@ interface ILocalStorage {
     val priceChangeIntervalFlow: StateFlow<PriceChangeInterval>
     var donateUsLastShownDate: Long?
     var lastMigrationVersion: Int?
+
+    var disabledPaidActions: Set<String>
+    val disabledPaidActionsFlow: StateFlow<Set<String>>
 
     fun clear()
 }
@@ -234,7 +239,7 @@ interface INetworkManager {
 
 interface IClipboardManager {
     fun copyText(text: String)
-    fun getCopiedText(): String
+    fun getCopiedText(): String?
     val hasPrimaryClip: Boolean
 }
 
@@ -279,25 +284,40 @@ interface ITransactionsAdapter {
     val lastBlockUpdatedFlowable: Flowable<Unit>
     val additionalTokenQueries: List<TokenQuery> get() = listOf()
 
-    fun getTransactionsAsync(
+    suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Single<List<TransactionRecord>>
+    ): List<TransactionRecord>
 
-    fun getTransactionsAfter(
+    suspend fun getTransactionsAfter(
         fromTransactionId: String?
-    ): Single<List<TransactionRecord>> = Single.just(emptyList())
+    ): List<TransactionRecord> = emptyList()
+
+    suspend fun getFullTransactionsBefore(
+        fromTransactionHash: ByteArray?,
+        limit: Int
+    ): List<io.horizontalsystems.ethereumkit.models.FullTransaction> = emptyList()
+
+    suspend fun getTronFullTransactionsBefore(
+        fromTransactionHash: ByteArray?,
+        limit: Int
+    ): List<io.horizontalsystems.tronkit.models.FullTransaction> = emptyList()
+
+    suspend fun getStellarOperationsBefore(
+        fromId: Long?,
+        limit: Int
+    ): List<io.horizontalsystems.stellarkit.room.Operation> = emptyList()
 
     fun getRawTransaction(transactionHash: String): String? = null
 
-    fun getTransactionRecordsFlowable(
+    fun getTransactionRecordsFlow(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?
-    ): Flowable<List<TransactionRecord>>
+    ): Flow<List<TransactionRecord>>
 
     fun getTransactionUrl(transactionHash: String): String
 }
@@ -342,6 +362,24 @@ interface IReceiveAdapter {
 
     val receiveAddressTransparent: String?
         get() = null
+
+    /**
+     * Gets a fresh unified/shielded address for receiving funds.
+     * For Zcash, this returns a custom unified address with Orchard and Sapling receivers.
+     * For other chains, returns the standard receive address.
+     */
+    suspend fun getFreshReceiveAddress(): String {
+        return receiveAddress
+    }
+
+    /**
+     * Gets a fresh transparent address for receiving funds.
+     * For Zcash, this returns a single-use ephemeral transparent address.
+     * For other chains, returns the standard transparent address or null.
+     */
+    suspend fun getFreshReceiveAddressTransparent(): String? {
+        return receiveAddressTransparent
+    }
 
     suspend fun isAddressActive(address: String): Boolean {
         return true
@@ -411,10 +449,10 @@ interface ISendEthereumAdapter {
 
 interface ISendZcashAdapter {
     val availableBalance: BigDecimal
-    val fee: BigDecimal
 
     suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
     suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger)
+    suspend fun fee(amount: BigDecimal, address: String, memo: String): BigDecimal
 }
 
 interface IAdapter {
@@ -434,8 +472,11 @@ interface ISendSolanaAdapter {
 
 interface ISendTonAdapter {
     val availableBalance: BigDecimal
+    suspend fun sign(request: SendRequestEntity): String
     suspend fun send(amount: BigDecimal, address: FriendlyAddress, memo: String?)
     suspend fun estimateFee(amount: BigDecimal, address: FriendlyAddress, memo: String?) : BigDecimal
+    suspend fun send(boc: String)
+    suspend fun estimateFee(boc: String) : BigDecimal
 }
 
 interface ISendStellarAdapter {
@@ -490,18 +531,6 @@ interface IEnabledWalletStorage {
     fun save(enabledWallets: List<EnabledWallet>)
     fun delete(enabledWallets: List<EnabledWallet>)
     fun deleteAll()
-}
-
-interface IWalletManager {
-    val activeWallets: List<Wallet>
-    val activeWalletsUpdatedObservable: Observable<List<Wallet>>
-
-    fun save(wallets: List<Wallet>)
-    fun saveEnabledWallets(enabledWallets: List<EnabledWallet>)
-    fun delete(wallets: List<Wallet>)
-    fun clear()
-    fun handle(newWallets: List<Wallet>, deletedWallets: List<Wallet>)
-    fun getWallets(account: Account): List<Wallet>
 }
 
 interface IAppNumberFormatter {
@@ -584,6 +613,7 @@ interface ITermsManager {
     val allTermsAccepted: Boolean
     val checkedTermIds: List<String>
     fun acceptTerms()
+    fun broadcastTermsAccepted(accepted: Boolean)
 }
 
 interface Clearable {

@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hodler.LockTimeInterval
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.CoinCategory
 import io.horizontalsystems.marketkit.models.CoinInvestment
 import io.horizontalsystems.marketkit.models.CoinTreasury
@@ -236,3 +237,26 @@ fun Context.findActivity(): Activity? = when (this) {
     is ContextWrapper -> baseContext.findActivity()
     else -> null
 }
+
+val BlockchainType.blockTime : Long?
+    get() = when (this) {
+        BlockchainType.Ethereum -> 15
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.Tron,
+            -> 3
+
+        BlockchainType.Polygon,
+        BlockchainType.Avalanche,
+        BlockchainType.Optimism,
+        BlockchainType.ArbitrumOne,
+        BlockchainType.Fantom,
+        BlockchainType.Base,
+        BlockchainType.ZkSync,
+            -> 2
+
+        BlockchainType.Gnosis,
+        BlockchainType.Stellar,
+            -> 5
+
+        else -> null
+    }

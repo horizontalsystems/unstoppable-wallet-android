@@ -1,18 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -59,44 +58,44 @@ import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
-import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.CardsSwapInfo
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
-import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HSRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemTimeoutIndicator
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.micro_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_jacob
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
+import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
+import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
+import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellGroup
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsButtonText
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.delay
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
@@ -117,17 +116,26 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
+    val onClickCoinFrom = {
+        navController.slideFromBottomForResult<Token>(
+            R.id.swapSelectCoinFragment,
+            SwapSelectCoinFragment.Input(uiState.tokenOut, context.getString(R.string.Swap_YouPay))
+        ) {
+            viewModel.onSelectTokenIn(it)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        if (tokenIn == null) {
+            delay(300)
+            onClickCoinFrom.invoke()
+        }
+    }
+
     SwapScreenInner(
         uiState = uiState,
         onClickClose = navController::popBackStack,
-        onClickCoinFrom = {
-            navController.slideFromBottomForResult<Token>(
-                R.id.swapSelectCoinFragment,
-                SwapSelectCoinFragment.Input(uiState.tokenOut, context.getString(R.string.Swap_YouPay))
-            ) {
-                viewModel.onSelectTokenIn(it)
-            }
-        },
+        onClickCoinFrom = onClickCoinFrom,
         onClickCoinTo = {
             navController.slideFromBottomForResult<Token>(
                 R.id.swapSelectCoinFragment,
@@ -145,20 +153,25 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
-        onClickProviderSettings = {
-            navController.slideFromRight(R.id.swapSettings)
-
-            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapSettings))
-        },
-        onTimeout = viewModel::reQuote,
         onClickNext = {
-            navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
-                if (it.success) {
-                    navController.popBackStack()
+            val navigateToSwapConfirm = {
+                navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
+                    if (it.success) {
+                        navController.popBackStack()
+                    }
                 }
+                stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
             }
 
-            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
+            if (uiState.needToAcceptTerms) {
+                navController.slideFromRightForResult<SwapTermsFragment.Result>(R.id.swapTermsFragment) {
+                    if (it.accepted) {
+                        navigateToSwapConfirm.invoke()
+                    }
+                }
+            } else {
+                navigateToSwapConfirm.invoke()
+            }
         },
         onActionStarted = {
             viewModel.onActionStarted()
@@ -166,7 +179,9 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         onActionCompleted = {
             viewModel.onActionCompleted()
         },
-        navController = navController
+        navController = navController,
+        onResume = viewModel::enableRequoteOnTimeout,
+        onPause = viewModel::disableRequoteOnTimeout,
     )
 }
 
@@ -181,19 +196,18 @@ private fun SwapScreenInner(
     onEnterFiatAmount: (BigDecimal?) -> Unit,
     onEnterAmountPercentage: (Int) -> Unit,
     onClickProvider: () -> Unit,
-    onClickProviderSettings: () -> Unit,
-    onTimeout: () -> Unit,
     onClickNext: () -> Unit,
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,
     navController: NavController,
+    onResume: () -> Unit,
+    onPause: () -> Unit,
 ) {
-    LifecycleResumeEffect(uiState.timeout) {
-        if (uiState.timeout) {
-            onTimeout.invoke()
+    LifecycleResumeEffect(Unit) {
+        onResume.invoke()
+        onPauseOrDispose {
+            onPause.invoke()
         }
-
-        onPauseOrDispose { }
     }
 
     val quote = uiState.quote
@@ -201,13 +215,6 @@ private fun SwapScreenInner(
     HSScaffold(
         title = stringResource(R.string.Swap),
         onBack = onClickClose,
-        menuItems = buildList {
-            uiState.timeRemainingProgress?.let { timeRemainingProgress ->
-                add(
-                    MenuItemTimeoutIndicator(timeRemainingProgress)
-                )
-            }
-        }
     ) {
         val focusManager = LocalFocusManager.current
         val keyboardState by observeKeyboardState()
@@ -217,7 +224,7 @@ private fun SwapScreenInner(
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                VSpacer(height = 12.dp)
+                VSpacer(height = 16.dp)
                 SwapInput(
                     amountIn = uiState.amountIn,
                     fiatAmountIn = uiState.fiatAmountIn,
@@ -241,7 +248,7 @@ private fun SwapScreenInner(
                 VSpacer(height = 8.dp)
                 AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
 
-                VSpacer(height = 12.dp)
+                VSpacer(height = 16.dp)
 
                 when (val currentStep = uiState.currentStep) {
                     is SwapStep.InputRequired -> {
@@ -273,24 +280,11 @@ private fun SwapScreenInner(
                         )
                     }
 
-                    SwapStep.Initializing -> {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
-                            title = stringResource(R.string.Swap_Initializing),
-                            enabled = false,
-                            loadingIndicator = true,
-                            onClick = {}
-                        )
-                    }
-
                     is SwapStep.Error -> {
                         val errorText = when (val error = currentStep.error) {
                             SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
                             is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
                             is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
-                            is PriceImpactTooHigh -> stringResource(id = R.string.Swap_ErrorHighPriceImpact)
                             is UnknownHostException -> stringResource(id = R.string.Hud_Text_NoInternet)
                             is TokenNotEnabled -> stringResource(id = R.string.Swap_ErrorTokenNotEnabled)
                             is WalletSyncing -> stringResource(id = R.string.Swap_ErrorWalletSyncing)
@@ -325,7 +319,8 @@ private fun SwapScreenInner(
                             onClick = {
                                 onActionStarted.invoke()
                                 action.execute(navController, onActionCompleted)
-                            }
+                            },
+                            loadingIndicator = action.inProgress
                         )
                     }
 
@@ -340,38 +335,64 @@ private fun SwapScreenInner(
                     }
                 }
 
-                VSpacer(height = 12.dp)
+                VSpacer(height = 16.dp)
                 if (quote != null) {
-                    CardsSwapInfo {
-                        ProviderField(quote.provider, onClickProvider, onClickProviderSettings)
-                        PriceField(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut, StatPage.Swap)
-                        PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
-                        quote.fields.forEach {
-                            it.GetContent(navController, false)
-                        }
-                    }
-                }
+                    CellGroup(
+                        paddingValues = PaddingValues(horizontal = 16.dp)
+                    ) {
+                        CellSecondary(
+                            left = {
+                                CellLeftImage(
+                                    painter = painterResource(quote.provider.icon),
+                                    type = ImageType.Rectangle,
+                                    size = 24,
+                                )
+                            },
+                            middle = {
+                                CellMiddleInfoTextIcon(
+                                    text = quote.provider.titleShort.hs,
+                                    icon = painterResource(R.drawable.arrow_s_down_24),
+                                    iconTint = ComposeAppTheme.colors.grey,
+                                    onIconClick = onClickProvider
+                                )
+                            },
+                            right = {
+                                var showRegularPrice by remember { mutableStateOf(true) }
+                                val swapPriceUIHelper = SwapPriceUIHelper(
+                                    quote.tokenIn,
+                                    quote.tokenOut,
+                                    quote.amountIn,
+                                    quote.amountOut
+                                )
 
-                if (uiState.error is PriceImpactTooHigh) {
-                    VSpacer(height = 12.dp)
-                    TextImportantError(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        icon = R.drawable.ic_attention_20,
-                        title = stringResource(id = R.string.Swap_PriceImpact),
-                        text = stringResource(id = R.string.Swap_PriceImpactTooHigh, uiState.error.providerTitle ?: "")
-                    )
-                } else if (uiState.currentStep is SwapStep.ActionRequired) {
-                    uiState.currentStep.action.getDescription()?.let { actionDescription ->
-                        VSpacer(height = 12.dp)
-                        TextImportantWarning(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            text = actionDescription
+                                val priceStr = if (showRegularPrice) {
+                                    swapPriceUIHelper.priceStr
+                                } else {
+                                    swapPriceUIHelper.priceInvStr
+                                }
+
+                                CellRightControlsButtonText(
+                                    description = priceStr.hs(color = ComposeAppTheme.colors.leah),
+                                    onClick = {
+                                        showRegularPrice = !showRegularPrice
+                                    }
+                                )
+                            },
+                            onClick = onClickProvider
                         )
                     }
                 }
 
-                if (uiState.cautions.isNotEmpty()) {
-                    Cautions(cautions = uiState.cautions)
+                if (uiState.currentStep is SwapStep.ActionRequired) {
+                    uiState.currentStep.action.getDescription()?.let { actionDescription ->
+                        VSpacer(height = 16.dp)
+                        AlertCard(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            format = AlertFormat.Structured,
+                            type = AlertType.Caution,
+                            text = actionDescription
+                        )
+                    }
                 }
 
                 VSpacer(height = 32.dp)
@@ -434,116 +455,43 @@ fun PriceImpactField(
     val infoText = stringResource(id = R.string.SwapInfo_PriceImpactDescription)
 
     QuoteInfoRow(
-        title = {
-            subhead2_grey(text = stringResource(R.string.Swap_PriceImpact))
-
-            Image(
-                modifier = Modifier
-                    .padding(horizontal = 8.dp)
-                    .clickable(
-                        onClick = {
-                            navController.slideFromBottom(
-                                R.id.feeSettingsInfoDialog,
-                                FeeSettingsInfoDialog.Input(infoTitle, infoText)
-                            )
-                        },
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ),
-                painter = painterResource(id = R.drawable.ic_info_20),
-                contentDescription = ""
-            )
-        },
-        value = {
-            Text(
-                text = stringResource(R.string.Swap_Percent, (priceImpact * BigDecimal.valueOf(-1)).toPlainString()),
-                style = ComposeAppTheme.typography.subheadR,
-                color = getPriceImpactColor(priceImpactLevel),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+        title = stringResource(R.string.Swap_PriceImpact),
+        value = stringResource(R.string.Swap_Percent, priceImpact.toPlainString())
+            .hs(color = getPriceImpactColor(priceImpactLevel)),
+        onInfoClick = {
+            navController.slideFromBottom(
+                R.id.swapInfoDialog,
+                SwapInfoDialog.Input(infoTitle, infoText)
             )
         }
     )
 }
 
 @Composable
-private fun ProviderField(
-    swapProvider: IMultiSwapProvider,
-    onClickProvider: () -> Unit,
-    onClickProviderSettings: () -> Unit,
+fun PriceField(
+    tokenIn: Token,
+    tokenOut: Token,
+    amountIn: BigDecimal,
+    amountOut: BigDecimal,
+    statPage: StatPage,
 ) {
-    HSRow(
-        modifier = Modifier
-            .height(40.dp)
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        borderBottom = true,
-    ) {
-        Selector(
-            icon = {
-                Image(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(swapProvider.icon),
-                    contentDescription = null
-                )
-            },
-            text = {
-                subhead1_leah(text = swapProvider.title)
-            },
-            onClickSelect = onClickProvider
-        )
-        HFillSpacer(minWidth = 16.dp)
-        Icon(
-            modifier = Modifier.clickable(
-                onClick = onClickProviderSettings
-            ),
-            painter = painterResource(R.drawable.ic_manage_2),
-            contentDescription = "",
-            tint = ComposeAppTheme.colors.grey
-        )
-    }
-}
-
-@Composable
-fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut: BigDecimal, statPage: StatPage) {
     if (amountIn <= BigDecimal.ZERO || amountOut <= BigDecimal.ZERO) return
 
     var showRegularPrice by remember { mutableStateOf(true) }
     val swapPriceUIHelper = SwapPriceUIHelper(tokenIn, tokenOut, amountIn, amountOut)
 
     QuoteInfoRow(
-        title = {
-            subhead2_grey(text = stringResource(R.string.Swap_Price))
+        title = stringResource(R.string.Swap_Price),
+        value = if (showRegularPrice) {
+            swapPriceUIHelper.priceStr.hs(color = ComposeAppTheme.colors.leah)
+        } else {
+            swapPriceUIHelper.priceInvStr.hs(color = ComposeAppTheme.colors.leah)
         },
-        value = {
-            Row(
-                modifier = Modifier
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = {
-                            showRegularPrice = !showRegularPrice
+        onCellClick = {
+            showRegularPrice = !showRegularPrice
 
-                            stat(page = statPage, event = StatEvent.TogglePrice)
-                        }
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                subhead2_leah(
-                    text = if (showRegularPrice) {
-                        swapPriceUIHelper.priceStr
-                    } else {
-                        swapPriceUIHelper.priceInvStr
-                    }
-                )
-                HSpacer(width = 8.dp)
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_arrow_swap3_20),
-                    contentDescription = "invert price",
-                    tint = ComposeAppTheme.colors.grey
-                )
-            }
-        }
+            stat(page = statPage, event = StatEvent.TogglePrice)
+        },
     )
 }
 
@@ -705,12 +653,12 @@ private fun CoinSelector(
         text = {
             if (token != null) {
                 Column {
-                    subhead1_leah(text = token.coin.code)
+                    headline2_leah(text = token.coin.code)
                     VSpacer(height = 1.dp)
-                    micro_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
+                    subhead_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
                 }
             } else {
-                subhead1_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
+                headline2_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
             }
         },
         onClickSelect = onClickCoin
@@ -869,10 +817,11 @@ fun AmountInput(
 @Composable
 fun getPriceImpactColor(priceImpactLevel: PriceImpactLevel?): Color {
     return when (priceImpactLevel) {
-        PriceImpactLevel.Normal -> ComposeAppTheme.colors.grey
+        PriceImpactLevel.Normal -> ComposeAppTheme.colors.leah
         PriceImpactLevel.Warning -> ComposeAppTheme.colors.jacob
+        PriceImpactLevel.High -> ComposeAppTheme.colors.lucian
         PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
 
-        else -> ComposeAppTheme.colors.grey
+        else -> ComposeAppTheme.colors.leah
     }
 }

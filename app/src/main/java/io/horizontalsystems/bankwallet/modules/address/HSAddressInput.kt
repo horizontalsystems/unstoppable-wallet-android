@@ -5,7 +5,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputAddress
@@ -21,7 +20,6 @@ fun HSAddressInput(
     coinCode: String,
     error: Throwable? = null,
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
-    navController: NavController,
     onError: ((Throwable?) -> Unit)? = null,
     onValueChange: ((Address?) -> Unit)? = null,
 ) {
@@ -35,7 +33,6 @@ fun HSAddressInput(
         viewModel = viewModel,
         error = error,
         textPreprocessor = textPreprocessor,
-        navController = navController,
         onError = onError,
         onValueChange = onValueChange
     )
@@ -47,7 +44,6 @@ fun HSAddressInput(
     viewModel: AddressViewModel,
     error: Throwable? = null,
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
-    navController: NavController,
     onError: ((Throwable?) -> Unit)? = null,
     onValueChange: ((Address?) -> Unit)? = null,
 ) {
@@ -69,9 +65,6 @@ fun HSAddressInput(
         hint = stringResource(id = R.string.Send_Hint_Address),
         state = viewModel.inputState,
         textPreprocessor = textPreprocessor,
-        navController = navController,
-        chooseContactEnable = viewModel.hasContacts(),
-        blockchainType = viewModel.blockchainType,
     ) {
         viewModel.parseText(it)
     }

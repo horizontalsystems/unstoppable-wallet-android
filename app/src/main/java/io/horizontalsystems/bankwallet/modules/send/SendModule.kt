@@ -33,8 +33,8 @@ object SendModule {
 
         fun getFormatted(): String {
             val prefix = if (approximate) "~" else ""
-            return prefix + when (this) {
-                is CoinValueInfo -> coinValue.getFormattedFull()
+            return when (this) {
+                is CoinValueInfo -> prefix + coinValue.getFormatted()
                 is CurrencyValueInfo -> App.numberFormatter.formatFiatFull(
                     currencyValue.value, currencyValue.currency.symbol
                 )
@@ -43,13 +43,13 @@ object SendModule {
 
         fun getFormattedPlain(): String {
             val prefix = if (approximate) "~" else ""
-            return prefix + when (this) {
+            return when (this) {
                 is CoinValueInfo -> {
-                    App.numberFormatter.formatCoinFull(value, coinValue.coin.code, coinValue.decimal)
+                    prefix + App.numberFormatter.formatCoinFull(value, coinValue.coin.code, coinValue.decimal)
                 }
 
                 is CurrencyValueInfo -> {
-                    App.numberFormatter.formatFiatFull(currencyValue.value, currencyValue.currency.symbol)
+                    App.numberFormatter.formatFiatShort(currencyValue.value, currencyValue.currency.symbol, 4)
                 }
             }
         }

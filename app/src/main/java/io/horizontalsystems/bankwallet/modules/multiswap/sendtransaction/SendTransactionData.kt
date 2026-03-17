@@ -1,29 +1,26 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.network.CreatedTransaction
+import org.json.JSONObject
 import java.math.BigDecimal
 
 sealed class SendTransactionData {
     data class Evm(
         val transactionData: TransactionData,
         val gasLimit: Long?,
-        val feesMap: Map<FeeType, CoinValue> = mapOf()
     ): SendTransactionData()
 
     data class Btc(
         val address: String,
-        val memo: String,
+        val memo: String?,
         val amount: BigDecimal,
-        val recommendedGasRate: Int,
+        val recommendedGasRate: Int?,
         val minimumSendAmount: Int?,
         val changeToFirstInput: Boolean,
         val utxoFilters: UtxoFilters,
-        val feesMap: Map<FeeType, CoinValue>
     ) : SendTransactionData()
 
     sealed class Tron : SendTransactionData() {
@@ -53,9 +50,36 @@ sealed class SendTransactionData {
 
         data class WithTransactionEnvelope(val transactionEnvelope: String) : Stellar()
     }
-}
 
-enum class FeeType(val stringResId: Int) {
-    Outbound(R.string.Fee_OutboundFee),
-    Liquidity(R.string.Fee_LiquidityFee);
+    sealed class Ton : SendTransactionData() {
+        data class Regular(
+            val address: String,
+            val amount: BigDecimal,
+            val memo: String?
+        ) : Ton()
+
+        data class SendRequest(val requestJson: JSONObject) : Ton()
+    }
+
+    sealed class Zcash : SendTransactionData() {
+        data class Regular(
+            val address: String,
+            val amount: BigDecimal,
+            val memo: String,
+        ) : Zcash()
+
+        data class ShieldedMemo(
+            val address: String,
+            val amount: BigDecimal,
+            val memo: String,
+            val memoShieldedAddress: String,
+        ) : Zcash()
+    }
+
+    data class Monero(
+        val address: String,
+        val amount: BigDecimal,
+        val memo: String?,
+    ) : SendTransactionData()
+
 }

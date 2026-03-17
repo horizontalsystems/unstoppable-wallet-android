@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,6 +65,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
 
 class MarketPlatformFragment : BaseComposeFragment() {
@@ -105,8 +106,7 @@ private fun PlatformScreen(
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    val infoModalBottomSheetState =
-        androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val infoModalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isInfoBottomSheetVisible by remember { mutableStateOf(false) }
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
 
@@ -118,9 +118,6 @@ private fun PlatformScreen(
                 title = TranslatableString.ResString(R.string.Info_Title),
                 icon = R.drawable.ic_info_24,
                 onClick = {
-                    coroutineScope.launch {
-                        infoModalBottomSheetState.show()
-                    }
                     isInfoBottomSheetVisible = true
                 },
             )
@@ -252,8 +249,8 @@ private fun PlatformScreen(
             hideBottomSheet = {
                 coroutineScope.launch {
                     infoModalBottomSheetState.hide()
+                    isInfoBottomSheetVisible = false
                 }
-                isInfoBottomSheetVisible = false
             }
         )
     }
@@ -301,10 +298,9 @@ fun InfoBottomSheet(
     hideBottomSheet: () -> Unit,
     bottomSheetState: SheetState
 ) {
-    ModalBottomSheet(
+    BottomSheetContent(
         onDismissRequest = hideBottomSheet,
-        sheetState = bottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
+        sheetState = bottomSheetState
     ) {
         BottomSheetHeader(
             iconPainter = painterResource(icon),

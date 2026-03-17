@@ -2,23 +2,17 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.core.blockTime
 import io.horizontalsystems.bankwallet.core.hexToByteArray
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.APIClient
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
-import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.AllBridgeAPI.Response
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.ISwapSetting
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
-import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -36,8 +30,10 @@ import java.math.BigInteger
 object AllBridgeProvider : IMultiSwapProvider {
     override val id = "allbridge"
     override val title = "AllBridge"
-    override val icon = R.drawable.allbridge
-    override val priority = 0
+    override val icon = R.drawable.swap_provider_allbridge
+    override val type = SwapProviderType.DEX
+    override val aml = true
+    override val requireTerms = false
     private val feePaymentMethod = FeePaymentMethod.StableCoin
 
     private val proxies = mapOf(
@@ -84,12 +80,21 @@ object AllBridgeProvider : IMultiSwapProvider {
         "TRX" to BlockchainType.Tron,
     )
 
-    private var tokenPairs = listOf<AllBridgeTokenPair>()
+    private var tokensMap = mapOf<Token, ABToken>()
 
     private fun getProxyAddress(bridgeAddress: String) = proxies[bridgeAddress]
 
     override suspend fun start() {
-        val tokenPairs = mutableListOf<AllBridgeTokenPair>()
+        tokensMap = SwapProviderCacheHelper.getOrFetch(
+            providerId = id,
+            deserialize = { APIClient.gson.fromJson(it, ABToken::class.java) },
+            serialize = { APIClient.gson.toJson(it) },
+            fetch = { fetchTokensMap() }
+        )
+    }
+
+    private suspend fun fetchTokensMap(): Map<Token, ABToken> {
+        val tokensMap = mutableMapOf<Token, ABToken>()
 
         val tokens = allBridgeAPI.tokens()
         tokens.forEach { abToken ->
@@ -128,12 +133,12 @@ object AllBridgeProvider : IMultiSwapProvider {
 
             if (blockchainType != null && tokenType != null) {
                 App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
-                    tokenPairs.add(AllBridgeTokenPair(abToken, it))
+                    tokensMap[it] = ABToken(abToken.tokenAddress, abToken.bridgeAddress, abToken.decimals)
                 }
             }
         }
 
-        this.tokenPairs = tokenPairs
+        return tokensMap
     }
 
     override fun supports(blockchainType: BlockchainType): Boolean {
@@ -142,69 +147,41 @@ object AllBridgeProvider : IMultiSwapProvider {
     }
 
     override fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
-        return tokenPairs.any { it.token == tokenFrom } && tokenPairs.any { it.token == tokenTo }
+        return tokensMap.contains(tokenFrom) && tokensMap.contains(tokenTo)
     }
 
     override suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        settings: Map<String, Any?>,
-    ): ISwapQuote {
-        val settingRecipient = SwapSettingRecipient(settings, tokenOut)
-        var settingSlippage: SwapSettingSlippage? = null
-
+    ): SwapQuote {
         val amountOut = estimateAmountOut(tokenIn, tokenOut, amountIn)
 
-        val tokenPairIn = tokenPairs.first { it.token == tokenIn }
-        val bridgeAddress = tokenPairIn.abToken.bridgeAddress
+        val tokenPairIn = tokensMap[tokenIn]!!
+        val bridgeAddress = tokenPairIn.bridgeAddress
 
-        val cautions = mutableListOf<HSCaution>()
-        val allowance: BigDecimal?
         val actionRequired: ISwapProviderAction?
 
         if (tokenIn.blockchainType.isEvm) {
             val proxyAddress = getProxyAddress(bridgeAddress)
             val finalAddress = proxyAddress ?: bridgeAddress
 
-            allowance = EvmSwapHelper.getAllowance(tokenIn, finalAddress)
+            val allowance = EvmSwapHelper.getAllowance(tokenIn, finalAddress)
             actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, finalAddress, tokenIn)
         } else if (tokenIn.blockchainType == BlockchainType.Tron) {
-            allowance = SwapHelper.getAllowanceTrc20(tokenIn, bridgeAddress)
+            val allowance = SwapHelper.getAllowanceTrc20(tokenIn, bridgeAddress)
             actionRequired = SwapHelper.actionApproveTrc20(allowance, amountIn, bridgeAddress, tokenIn)
         } else {
-            allowance = null
             actionRequired = null
         }
 
-        val crosschain = tokenIn.blockchainType != tokenOut.blockchainType
-        if (!crosschain) {
-            settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
-        }
-
-        val fields = buildList {
-            settingRecipient.value?.let {
-                add(DataFieldRecipient(it))
-            }
-            settingSlippage?.value?.let {
-                add(DataFieldSlippage(it))
-            }
-            if (allowance != null && allowance < amountIn) {
-                add(DataFieldAllowance(allowance, tokenIn))
-            }
-        }
-
-        return object : ISwapQuote {
-            override val amountOut: BigDecimal = amountOut
-            override val priceImpact: BigDecimal? = null
-            override val fields: List<DataField> = fields
-            override val settings: List<ISwapSetting> = listOfNotNull(settingRecipient, settingSlippage)
-            override val tokenIn: Token = tokenIn
-            override val tokenOut: Token = tokenOut
-            override val amountIn: BigDecimal = amountIn
-            override val actionRequired: ISwapProviderAction? = actionRequired
-            override val cautions: List<HSCaution> = cautions
-        }
+        return SwapQuote(
+            amountOut = amountOut,
+            tokenIn = tokenIn,
+            tokenOut = tokenOut,
+            amountIn = amountIn,
+            actionRequired = actionRequired,
+        )
     }
 
     private suspend fun estimateAmountOut(
@@ -212,15 +189,15 @@ object AllBridgeProvider : IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal,
     ): BigDecimal {
-        val tokenPairIn = tokenPairs.first { it.token == tokenIn }
-        val tokenPairOut = tokenPairs.first { it.token == tokenOut }
+        val tokenPairIn = tokensMap[tokenIn]!!
+        val tokenPairOut = tokensMap[tokenOut]!!
 
-        val sourceToken = tokenPairIn.abToken.tokenAddress
-        val destinationToken = tokenPairOut.abToken.tokenAddress
+        val sourceToken = tokenPairIn.tokenAddress
+        val destinationToken = tokenPairOut.tokenAddress
 
         var resAmountIn = amountIn
 
-        val bridgeAddress = tokenPairIn.abToken.bridgeAddress
+        val bridgeAddress = tokenPairIn.bridgeAddress
 
         getProxyAddress(bridgeAddress)?.let { proxyAddress ->
             val proxyFee = EvmSwapHelper.getAllBridgeProxyFee(proxyAddress, amountIn)
@@ -247,7 +224,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             }
         }
 
-        val amount = resAmountIn.movePointRight(tokenPairIn.abToken.decimals).toBigInteger()
+        val amount = resAmountIn.movePointRight(tokenPairIn.decimals).toBigInteger()
 
         // to get the minimum expected receive amount used endpoint pendingInfo instead of bridgeReceiveCalculate
         val pendingInfo = allBridgeAPI.pendingInfo(
@@ -263,26 +240,18 @@ object AllBridgeProvider : IMultiSwapProvider {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-        swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?,
-        swapQuote: ISwapQuote,
-    ): ISwapFinalQuote {
-        val cautions = mutableListOf<HSCaution>()
-
-        val settingRecipient = SwapSettingRecipient(swapSettings, tokenOut)
-        var settingSlippage: SwapSettingSlippage? = null
-
-        val crosschain = tokenIn.blockchainType != tokenOut.blockchainType
-        if (!crosschain) {
-            settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
-        }
-
-        val slippage = settingSlippage?.value
-
+        swapQuote: SwapQuote,
+        recipient: io.horizontalsystems.bankwallet.entities.Address?,
+        slippage: BigDecimal,
+    ): SwapFinalQuote {
         val amountOut = estimateAmountOut(tokenIn, tokenOut, amountIn)
 
-        val amountOutMin = slippage?.let {
-            amountOut - amountOut / BigDecimal(100) * slippage
+        val crosschain = tokenIn.blockchainType != tokenOut.blockchainType
+        val finalSlippage = if (crosschain) null else slippage
+
+        val amountOutMin = finalSlippage?.let {
+            amountOut - amountOut / BigDecimal(100) * it
         }
 
         val sendTransactionData = getSendTransactionData(
@@ -290,29 +259,30 @@ object AllBridgeProvider : IMultiSwapProvider {
             tokenOut,
             amountIn,
             amountOutMin ?: amountOut,
-            settingRecipient.value
+            recipient
         )
 
         val fields = buildList {
-            settingRecipient.value?.let {
-                add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
+            recipient?.let {
+                add(DataFieldRecipient(it))
             }
-            settingSlippage?.value?.let {
-                add(DataFieldSlippage(it))
+            DataFieldSlippage.getField(finalSlippage)?.let {
+                add(it)
             }
         }
 
-        return object : ISwapFinalQuote {
-            override val tokenIn: Token = tokenIn
-            override val tokenOut: Token = tokenOut
-            override val amountIn: BigDecimal = amountIn
-            override val amountOut: BigDecimal = amountOut
-            override val amountOutMin: BigDecimal? = amountOutMin
-            override val sendTransactionData: SendTransactionData = sendTransactionData
-            override val priceImpact: BigDecimal? = null
-            override val fields: List<DataField> = fields
-            override val cautions: List<HSCaution> = cautions
-        }
+        return SwapFinalQuote(
+            tokenIn = tokenIn,
+            tokenOut = tokenOut,
+            amountIn = amountIn,
+            amountOut = amountOut,
+            amountOutMin = amountOutMin,
+            sendTransactionData = sendTransactionData,
+            priceImpact = null,
+            fields = fields,
+            estimatedTime = if (crosschain) null else tokenIn.blockchainType.blockTime,
+            slippage = if (crosschain) null else slippage
+        )
     }
 
     private suspend fun getSendTransactionData(
@@ -322,11 +292,11 @@ object AllBridgeProvider : IMultiSwapProvider {
         expectedAmountOutMin: BigDecimal,
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
     ): SendTransactionData {
-        val tokenPairIn = tokenPairs.first { it.token == tokenIn }
-        val tokenPairOut = tokenPairs.first { it.token == tokenOut }
+        val tokenPairIn = tokensMap[tokenIn]!!
+        val tokenPairOut = tokensMap[tokenOut]!!
         val recipientStr = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
 
-        val amount = amountIn.movePointRight(tokenPairIn.abToken.decimals).toBigInteger()
+        val amount = amountIn.movePointRight(tokenPairIn.decimals).toBigInteger()
 
         var solanaTxFeeParams: String? = null
         var solanaTxFeeValue: String? = null
@@ -337,14 +307,14 @@ object AllBridgeProvider : IMultiSwapProvider {
         }
 
         val rawTransactionStr = if (tokenIn.blockchainType == tokenOut.blockchainType) {
-            val amountOutMinInt = expectedAmountOutMin.movePointRight(tokenPairOut.abToken.decimals).toBigInteger()
+            val amountOutMinInt = expectedAmountOutMin.movePointRight(tokenPairOut.decimals).toBigInteger()
 
             allBridgeAPI.rawSwap(
                 amount = amount,
                 sender = SwapHelper.getReceiveAddressForToken(tokenIn),
                 recipient = recipientStr,
-                sourceToken = tokenPairIn.abToken.tokenAddress,
-                destinationToken = tokenPairOut.abToken.tokenAddress,
+                sourceToken = tokenPairIn.tokenAddress,
+                destinationToken = tokenPairOut.tokenAddress,
                 minimumReceiveAmount = amountOutMinInt,
                 solanaTxFeeParams = solanaTxFeeParams,
                 solanaTxFeeValue = solanaTxFeeValue,
@@ -354,8 +324,8 @@ object AllBridgeProvider : IMultiSwapProvider {
                 amount = amount,
                 sender = SwapHelper.getReceiveAddressForToken(tokenIn),
                 recipient = recipientStr,
-                sourceToken = tokenPairIn.abToken.tokenAddress,
-                destinationToken = tokenPairOut.abToken.tokenAddress,
+                sourceToken = tokenPairIn.tokenAddress,
+                destinationToken = tokenPairOut.tokenAddress,
                 feePaymentMethod = feePaymentMethod.value,
                 solanaTxFeeParams = solanaTxFeeParams,
                 solanaTxFeeValue = solanaTxFeeValue,
@@ -521,4 +491,4 @@ interface AllBridgeAPI {
     }
 }
 
-data class AllBridgeTokenPair(val abToken: Response.Token, val token: Token)
+data class ABToken(val tokenAddress: String, val bridgeAddress: String, val decimals: Int)

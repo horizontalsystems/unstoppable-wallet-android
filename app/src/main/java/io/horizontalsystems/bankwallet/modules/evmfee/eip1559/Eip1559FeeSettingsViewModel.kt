@@ -61,19 +61,19 @@ class Eip1559FeeSettingsViewModel(
     }
 
     fun onIncrementMaxFee(maxFee: Long, priorityFee: Long) {
-        gasPriceService.setGasPrice(maxFee + scale.scaleValue, priorityFee)
+        gasPriceService.setGasPrice(maxFee * 110 / 100, priorityFee)
     }
 
     fun onDecrementMaxFee(maxFee: Long, priorityFee: Long) {
-        gasPriceService.setGasPrice((maxFee - scale.scaleValue).coerceAtLeast(0), priorityFee)
+        gasPriceService.setGasPrice(maxFee * 90 / 100, priorityFee)
     }
 
     fun onIncrementPriorityFee(maxFee: Long, priorityFee: Long) {
-        gasPriceService.setGasPrice(maxFee, priorityFee + scale.scaleValue)
+        gasPriceService.setGasPrice(maxFee, priorityFee * 110 / 100)
     }
 
     fun onDecrementPriorityFee(maxFee: Long, priorityFee: Long) {
-        gasPriceService.setGasPrice(maxFee, (priorityFee - scale.scaleValue).coerceAtLeast(0))
+        gasPriceService.setGasPrice(maxFee, priorityFee * 90 / 100)
     }
 
     private fun sync(state: DataState<GasPriceInfo>) {

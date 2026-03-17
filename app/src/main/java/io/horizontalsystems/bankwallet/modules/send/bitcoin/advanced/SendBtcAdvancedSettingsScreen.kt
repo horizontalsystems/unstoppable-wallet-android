@@ -13,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,7 +34,7 @@ import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
-import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
+import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.TransactionInputsSortInfoPage
@@ -56,6 +55,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
@@ -84,7 +84,7 @@ fun SendBtcAdvancedSettingsScreen(
 
     val uiState = viewModel.uiState
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
 
     ComposeAppTheme {
@@ -107,17 +107,13 @@ fun SendBtcAdvancedSettingsScreen(
             ) {
 
                 VSpacer(12.dp)
-                CellUniversalLawrenceSection(
-                    listOf {
-                        HSFeeRaw(
-                            coinCode = wallet.coin.code,
-                            coinDecimal = sendBitcoinViewModel.coinMaxAllowedDecimals,
-                            fee = sendUiState.fee,
-                            amountInputType = amountInputType,
-                            rate = rate,
-                            navController = fragmentNavController
-                        )
-                    }
+                HSFee(
+                    coinCode = wallet.coin.code,
+                    coinDecimal = sendBitcoinViewModel.coinMaxAllowedDecimals,
+                    fee = sendUiState.fee,
+                    amountInputType = amountInputType,
+                    rate = rate,
+                    navController = fragmentNavController
                 )
 
                 if (feeRateVisible) {
@@ -219,12 +215,11 @@ fun SendBtcAdvancedSettingsScreen(
                 VSpacer(32.dp)
             }
             if (showBottomSheet) {
-                ModalBottomSheet(
+                BottomSheetContent(
                     onDismissRequest = {
                         showBottomSheet = false
                     },
-                    sheetState = sheetState,
-                    containerColor = ComposeAppTheme.colors.transparent
+                    sheetState = sheetState
                 ) {
                     BottomSheetTransactionOrderSelector(
                         items = uiState.transactionSortOptions,
@@ -232,10 +227,9 @@ fun SendBtcAdvancedSettingsScreen(
                             viewModel.setTransactionMode(mode)
                         },
                         onCloseClick = {
-                            scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                if (!sheetState.isVisible) {
-                                    showBottomSheet = false
-                                }
+                            scope.launch {
+                                sheetState.hide()
+                                showBottomSheet = false
                             }
                         }
                     )
