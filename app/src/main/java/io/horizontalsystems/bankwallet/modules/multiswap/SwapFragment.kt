@@ -253,7 +253,6 @@ private fun SwapScreenInner(
 
         Box(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.fillMaxSize()) {
-                VSpacer(height = 16.dp)
                 SwapInput(
                     amountIn = uiState.amountIn,
                     fiatAmountIn = uiState.fiatAmountIn,
@@ -611,7 +610,7 @@ private fun SwapCoinInputIn(
         verticalAlignment = Alignment.CenterVertically
     ) {
         CoinSelector(token, onClickCoin)
-        HSpacer(width = 8.dp)
+        HSpacer(width = 16.dp)
         Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
             AmountInput(
                 value = coinAmount,
@@ -644,7 +643,6 @@ private fun SwapCoinInputTo(
         verticalAlignment = Alignment.CenterVertically
     ) {
         CoinSelector(token, onClickCoin)
-        HSpacer(width = 8.dp)
         Column(
             modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.End
@@ -696,7 +694,7 @@ private fun CoinSelector(
             if (token != null) {
                 Column {
                     headline2_leah(text = token.coin.code)
-                    VSpacer(height = 1.dp)
+                    VSpacer(height = 5.dp)
                     BadgeText(
                         text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native),
                         background = ComposeAppTheme.colors.blade,
@@ -777,7 +775,7 @@ private fun Selector(
         verticalAlignment = Alignment.CenterVertically
     ) {
         icon.invoke(this)
-        HSpacer(width = 8.dp)
+        HSpacer(width = 16.dp)
         text.invoke(this)
         HSpacer(width = 8.dp)
         Icon(
