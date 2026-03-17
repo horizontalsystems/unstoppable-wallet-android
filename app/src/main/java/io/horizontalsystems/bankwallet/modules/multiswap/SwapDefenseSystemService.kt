@@ -52,7 +52,7 @@ class SwapDefenseSystemService(
 
     override fun createState() = State(
         systemMessage = systemMessage,
-        mevProtectionEnabled = actionAllowed && actionEnabled,
+        mevProtectionEnabled = supportsMevProtection && actionAllowed && actionEnabled,
     )
 
     fun setPriceImpact(fiatPriceImpact: BigDecimal?, fiatPriceImpactLevel: PriceImpactLevel?) {
