@@ -117,7 +117,7 @@ class TransactionRecordRepositoryWalletSwitchTest {
 
         val emissions = mutableListOf<List<TransactionRecord>>()
         val recordBReceived = CompletableDeferred<Unit>()
-        val collectorJob = launch {
+        val collectorJob = launch(Dispatchers.Unconfined) {
             repository.itemsFlow.collect { records ->
                 emissions.add(records)
                 if (records.any { it.uid == "record-B" }) {
