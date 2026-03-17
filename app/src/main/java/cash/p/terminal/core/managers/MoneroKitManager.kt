@@ -507,7 +507,7 @@ class MoneroKitWrapper(
         }
         try {
             logger.info("refresh: restarting wallet")
-            stopInternal()
+            stopInternal(saveWallet = false)
             startInternal()
         } catch (e: Exception) {
             logger.warning("refresh: failed to restart wallet", e)
