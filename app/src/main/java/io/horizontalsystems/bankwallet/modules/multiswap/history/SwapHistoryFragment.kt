@@ -115,6 +115,7 @@ private fun SwapHistoryCell(item: SwapHistoryViewItem, onClick: () -> Unit) {
             left = {
                 SwapCoinIcon(
                     imageUrl = item.tokenInImageUrl,
+                    alternativeImageUrl = item.tokenInAlternativeImageUrl,
                     showSpinner = item.status == SwapStatus.Depositing,
                 )
             },
@@ -157,6 +158,7 @@ private fun SwapHistoryCell(item: SwapHistoryViewItem, onClick: () -> Unit) {
             right = {
                 SwapCoinIcon(
                     imageUrl = item.tokenOutImageUrl,
+                    alternativeImageUrl = item.tokenOutAlternativeImageUrl,
                     showSpinner = item.status == SwapStatus.Swapping || item.status == SwapStatus.Sending,
                 )
             },
@@ -167,7 +169,7 @@ private fun SwapHistoryCell(item: SwapHistoryViewItem, onClick: () -> Unit) {
 }
 
 @Composable
-private fun SwapCoinIcon(imageUrl: String, showSpinner: Boolean) {
+private fun SwapCoinIcon(imageUrl: String, alternativeImageUrl: String?, showSpinner: Boolean) {
     val leah = ComposeAppTheme.colors.leah
     val andy = ComposeAppTheme.colors.andy
 
@@ -214,6 +216,7 @@ private fun SwapCoinIcon(imageUrl: String, showSpinner: Boolean) {
         HsImageCircle(
             modifier = Modifier.size(32.dp),
             url = imageUrl,
+            alternativeUrl = alternativeImageUrl,
             placeholder = R.drawable.coin_placeholder,
         )
     }
@@ -242,6 +245,8 @@ private fun SwapHistoryCellPreview() {
             id = 1,
             tokenInImageUrl = ethUrl,
             tokenOutImageUrl = btcUrl,
+            tokenInAlternativeImageUrl = null,
+            tokenOutAlternativeImageUrl = null,
             amountIn = "1.5 ETH",
             amountOut = "0.0004203 BTC",
             fiatAmountIn = "$2,850.00",
@@ -253,6 +258,8 @@ private fun SwapHistoryCellPreview() {
             id = 2,
             tokenInImageUrl = usdtUrl,
             tokenOutImageUrl = ethUrl,
+            tokenInAlternativeImageUrl = null,
+            tokenOutAlternativeImageUrl = null,
             amountIn = "500 USDT",
             amountOut = null,
             fiatAmountIn = "$500.00",
@@ -264,6 +271,8 @@ private fun SwapHistoryCellPreview() {
             id = 3,
             tokenInImageUrl = btcUrl,
             tokenOutImageUrl = usdtUrl,
+            tokenInAlternativeImageUrl = null,
+            tokenOutAlternativeImageUrl = null,
             amountIn = "0.1 BTC",
             amountOut = "6,720 USDT",
             fiatAmountIn = "$6,720.00",
@@ -275,6 +284,8 @@ private fun SwapHistoryCellPreview() {
             id = 4,
             tokenInImageUrl = ethUrl,
             tokenOutImageUrl = usdtUrl,
+            tokenInAlternativeImageUrl = null,
+            tokenOutAlternativeImageUrl = null,
             amountIn = "0.5 ETH",
             amountOut = null,
             fiatAmountIn = "$950.00",
