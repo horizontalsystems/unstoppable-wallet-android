@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
+import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockIntervalsScreen
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.securesend.SecureSendConfigScreen
@@ -131,7 +132,7 @@ private fun SecurityCenterScreen(
                         right = {
                             CellRightNavigation(subtitle = stringResource(uiState.autoLockIntervalName).hs)
                         },
-                        onClick = { navController.slideFromRight(R.id.autoLockIntervalsFragment) }
+                        onClick = { backStack.add(AutoLockIntervalsScreen) }
                     )
                     HsDivider()
                 }
@@ -213,7 +214,7 @@ private fun SecurityCenterScreen(
                             },
                             onClick = if (action == SecureSend) {
                                 {
-                                    navController.slideFromBottom(R.id.secureSendConfigDialog)
+                                    backStack.add(SecureSendConfigScreen)
                                 }
                             } else {
                                 null
