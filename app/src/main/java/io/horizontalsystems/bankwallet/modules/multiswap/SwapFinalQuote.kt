@@ -20,4 +20,5 @@ data class SwapFinalQuote(
     val fromAsset: String? = null,
     val toAsset: String? = null,
     val depositAddress: String? = null,
+    val passedAmlCheck: Boolean? = null,
 )

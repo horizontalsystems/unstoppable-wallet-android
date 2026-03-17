@@ -38,6 +38,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     override val icon = provider.icon
     override val type = provider.type
     override val aml = provider.aml
+    override val amlPrecheck = provider.amlPrecheck
     override val requireTerms = provider.requireTerms
     override val riskLevel = provider.riskLevel
 
@@ -230,7 +231,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             tokenOut = tokenOut,
             amountIn = amountIn,
             actionRequired = actionApprove,
-            estimationTime = bestRoute.estimatedTime?.total
+            estimationTime = bestRoute.estimatedTime?.total,
+            passedAmlCheck = bestRoute.passedAmlCheck,
         )
     }
 
@@ -327,6 +329,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             fromAsset = assetsMap[tokenIn],
             toAsset = assetsMap[tokenOut],
             depositAddress = bestRoute.inboundAddress,
+            passedAmlCheck = bestRoute.passedAmlCheck,
         )
     }
 

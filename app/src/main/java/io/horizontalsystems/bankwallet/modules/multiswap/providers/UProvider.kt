@@ -8,6 +8,7 @@ enum class UProvider(
     val icon: Int,
     val type: SwapProviderType,
     val aml: Boolean,
+    val amlPrecheck: Boolean,
     val requireTerms: Boolean,
     val riskLevel: RiskLevel,
 ) {
@@ -16,6 +17,7 @@ enum class UProvider(
         "Near",
         R.drawable.swap_provider_near,
         SwapProviderType.DEX,
+        false,
         false,
         true,
         RiskLevel.CONTROLLED
@@ -27,6 +29,7 @@ enum class UProvider(
         SwapProviderType.CEX,
         true,
         true,
+        true,
         RiskLevel.CONTROLLED
     ),
     LetsExchange(
@@ -35,6 +38,7 @@ enum class UProvider(
         R.drawable.swap_provider_letsexchange,
         SwapProviderType.CEX,
         true,
+        false,
         true,
         RiskLevel.CONTROLLED
     ),
@@ -44,6 +48,7 @@ enum class UProvider(
         R.drawable.swap_provider_stealthex,
         SwapProviderType.CEX,
         true,
+        false,
         true,
         RiskLevel.CONTROLLED
     ),
@@ -53,6 +58,7 @@ enum class UProvider(
         R.drawable.swap_provider_exolix,
         SwapProviderType.CEX,
         true,
+        false,
         true,
         RiskLevel.CONTROLLED
     ),
@@ -61,6 +67,7 @@ enum class UProvider(
         "Swapuz",
         R.drawable.swap_provider_swapuz,
         SwapProviderType.CEX,
+        false,
         false,
         true,
         RiskLevel.LIMITED
