@@ -214,8 +214,12 @@ class TokenBalanceViewModel(
                 transactionsService.recordsLoadedFlow
             ) { syncing, recordsLoaded ->
                 syncing || !recordsLoaded
-            }.collect {
-                syncing = it
+            }.collect { newSyncing ->
+                val wasSyncing = syncing
+                syncing = newSyncing
+                if (wasSyncing && !newSyncing && transactions == null) {
+                    updateTransactions(transactionsService.transactionItemsFlow.value)
+                }
                 emitState()
             }
         }
@@ -429,10 +433,10 @@ class TokenBalanceViewModel(
     }
 
     private fun updateTransactions(items: List<TransactionItem>) {
-        // Don't replace null (shows "wait for sync") with empty map (shows "no transactions")
-        // until real records arrive. The initial empty emission from transactionRecordRepository.set()
-        // arrives before actual records are loaded.
-        if (items.isEmpty() && transactions == null) return
+        // Skip the initial empty emission from transactionRecordRepository.set() while
+        // still syncing. Once syncing finishes, allow empty items through so coins with
+        // zero transactions show "no transactions" instead of "wait for sync" forever.
+        if (items.isEmpty() && transactions == null && syncing) return
         transactions =
             if (transactionHiddenManager.transactionHiddenFlow.value.transactionHidden) {
                 when (transactionHiddenManager.transactionHiddenFlow.value.transactionDisplayLevel) {
