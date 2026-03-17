@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.core.ITransactionsAdapter
+import cash.p.terminal.core.TestDispatcherProvider
 import cash.p.terminal.core.managers.PendingTransactionRepository
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
@@ -13,14 +14,12 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeout
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -45,6 +44,8 @@ class TransactionRecordRepositoryWalletSwitchTest {
 
     @Test
     fun switchAccountWithSameFilters_slowGetTransactions_oldResultDiscarded() = runTest {
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+
         startKoin {
             modules(module {
                 single { mockk<cash.p.terminal.core.managers.CoinManager>(relaxed = true) }
@@ -112,17 +113,14 @@ class TransactionRecordRepositoryWalletSwitchTest {
             adapterManager = adapterManager,
             swapProviderTransactionsStorage = mockk(relaxed = true),
             pendingRepository = pendingRepository,
-            pendingConverter = mockk(relaxed = true)
+            pendingConverter = mockk(relaxed = true),
+            dispatcherProvider = TestDispatcherProvider(testDispatcher, this)
         )
 
         val emissions = mutableListOf<List<TransactionRecord>>()
-        val recordBReceived = CompletableDeferred<Unit>()
-        val collectorJob = launch {
+        val collectorJob = launch(testDispatcher) {
             repository.itemsFlow.collect { records ->
                 emissions.add(records)
-                if (records.any { it.uid == "record-B" }) {
-                    recordBReceived.complete(Unit)
-                }
             }
         }
 
@@ -134,6 +132,7 @@ class TransactionRecordRepositoryWalletSwitchTest {
             blockchain = null,
             contact = null
         )
+        advanceUntilIdle()
 
         // Step 2: While A is still suspended, switch to B (same filters)
         repository.set(
@@ -143,18 +142,11 @@ class TransactionRecordRepositoryWalletSwitchTest {
             blockchain = null,
             contact = null
         )
+        advanceUntilIdle()
 
         // Step 3: Open the gate — adapter A's getTransactions() returns
         adapterAGate.complete(Unit)
-
-        // Wait for record-B using real wall-clock time (repo runs on Dispatchers.IO)
-        withContext(Dispatchers.Default) {
-            withTimeout(5000) {
-                recordBReceived.await()
-            }
-            // Settle time for any stale emission from adapter A
-            delay(300)
-        }
+        advanceUntilIdle()
 
         assertTrue(
             "record-B from new account should appear in emissions, " +

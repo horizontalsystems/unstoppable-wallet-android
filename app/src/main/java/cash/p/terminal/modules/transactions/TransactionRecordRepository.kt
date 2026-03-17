@@ -12,8 +12,8 @@ import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import io.horizontalsystems.core.DispatcherProvider
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -28,7 +28,8 @@ class TransactionRecordRepository(
     private val adapterManager: TransactionAdapterManager,
     private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage,
     private val pendingRepository: PendingTransactionRepository,
-    private val pendingConverter: PendingTransactionConverter
+    private val pendingConverter: PendingTransactionConverter,
+    private val dispatcherProvider: DispatcherProvider
 ) : ITransactionRecordRepository {
 
     @Volatile
@@ -50,7 +51,7 @@ class TransactionRecordRepository(
     private val adaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
     private val extraSwapAdaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
 
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private val coroutineScope = CoroutineScope(dispatcherProvider.io)
     private var updatesJob: Job? = null
     private var loadingJob: Job? = null
 
