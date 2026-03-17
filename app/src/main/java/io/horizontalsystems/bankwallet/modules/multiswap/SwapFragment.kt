@@ -11,11 +11,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -279,6 +277,7 @@ private fun SwapScreenInner(
                         .fillMaxWidth()
                         .weight(1f)
                         .background(ComposeAppTheme.colors.lawrence)
+                        .imePadding()
                 ) {
                     Column(
                         modifier = Modifier
@@ -290,7 +289,7 @@ private fun SwapScreenInner(
                             AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
                         }
 
-                        VSpacer(height = 16.dp)
+                        VSpacer(height = 8.dp)
                         if (quote != null) {
                             CellSecondary(
                                 left = {
@@ -433,35 +432,24 @@ private fun SwapScreenInner(
                             )
                         }
                     }
-                    VSpacer(height = 16.dp + bottomPadding)
-                }
-            }
-
-
-            if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
-                val hasNonZeroBalance =
-                    uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        // Add IME (keyboard) padding to push content above keyboard
-                        .windowInsetsPadding(
-                            WindowInsets.ime
+                    if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
+                        val hasNonZeroBalance =
+                            uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
+                        VSpacer(height = 16.dp)
+                        SuggestionsBar(
+                            onDelete = {
+                                onEnterAmount.invoke(null)
+                            },
+                            onSelect = {
+                                focusManager.clearFocus()
+                                onEnterAmountPercentage.invoke(it)
+                            },
+                            selectEnabled = hasNonZeroBalance,
+                            deleteEnabled = uiState.amountIn != null,
                         )
-                        .systemBarsPadding()
-                ) {
-                    SuggestionsBar(
-                        modifier = Modifier.align(Alignment.BottomCenter),
-                        onDelete = {
-                            onEnterAmount.invoke(null)
-                        },
-                        onSelect = {
-                            focusManager.clearFocus()
-                            onEnterAmountPercentage.invoke(it)
-                        },
-                        selectEnabled = hasNonZeroBalance,
-                        deleteEnabled = uiState.amountIn != null,
-                    )
+                    } else {
+                        VSpacer(height = 16.dp + bottomPadding)
+                    }
                 }
             }
         }
