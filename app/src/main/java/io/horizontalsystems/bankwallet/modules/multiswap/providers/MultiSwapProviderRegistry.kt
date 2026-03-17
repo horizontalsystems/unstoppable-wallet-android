@@ -4,11 +4,11 @@ object MultiSwapProviderRegistry {
     val allProviders: List<IMultiSwapProvider> = listOf(
         // Single-chain DEX providers
         OneInchProvider,
-        UniswapProvider,
-        UniswapV3Provider,
-        PancakeSwapProvider,
-        PancakeSwapV3Provider,
-        QuickSwapProvider,
+//        UniswapProvider,
+//        UniswapV3Provider,
+//        PancakeSwapProvider,
+//        PancakeSwapV3Provider,
+//        QuickSwapProvider,
         // Cross-chain providers
         ThorChainProvider,
         MayaProvider,
