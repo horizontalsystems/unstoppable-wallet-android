@@ -184,6 +184,17 @@ class AdapterManager(
             }
         }
 
+        // Stop old adapters that won't be reused BEFORE creating new ones.
+        // This is critical for Zcash: its SDK forbids creating a new Synchronizer
+        // while another one with the same alias is still active.
+        currentAdapters.forEach { (wallet, adapter) ->
+            balanceSubscriptionJobs.remove(wallet)?.cancel()
+            adapter.stop()
+            coroutineScope.launch {
+                adapterFactory.unlinkAdapter(wallet)
+            }
+        }
+
         // Add reusable adapters immediately and subscribe to balance updates
         adaptersMap.putAll(reusable)
         reusable.forEach { (wallet, adapter) ->
@@ -229,14 +240,6 @@ class AdapterManager(
 
             // Final emission with all adapters
             adaptersReadySubject.onNext(HashMap(adaptersMap))
-        }
-
-        currentAdapters.forEach { (wallet, adapter) ->
-            balanceSubscriptionJobs.remove(wallet)?.cancel()
-            adapter.stop()
-            coroutineScope.launch {
-                adapterFactory.unlinkAdapter(wallet)
-            }
         }
 
         // Stop observing if account changed
