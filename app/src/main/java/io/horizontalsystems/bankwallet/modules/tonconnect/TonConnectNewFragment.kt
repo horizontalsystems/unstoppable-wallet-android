@@ -7,6 +7,7 @@ import androidx.navigation3.runtime.NavBackStack
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.DAppRequestEntitySerializer
 import kotlinx.parcelize.Parcelize
@@ -22,6 +23,7 @@ data class TonConnectNewScreen(
         backStack: NavBackStack<HSScreen>,
         resultBus: ResultEventBus
     ) {
+        val resultBus = LocalResultEventBus.current
         TonConnectNewScreen(
             backStack = backStack,
             requestEntity = requestEntity,

@@ -119,7 +119,7 @@ private fun ManageWalletsScreen(
         }
     }
 
-    ResultEffect<BirthdayHeightConfigScreen.Result>(resultBus) {
+    ResultEffect<BirthdayHeightConfigScreen.Result> {
         if (it.config != null) {
             restoreSettingsViewModel.onEnter(it.config)
         } else {

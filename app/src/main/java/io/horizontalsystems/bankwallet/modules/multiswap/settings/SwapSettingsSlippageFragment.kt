@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.NumberInputWithButtons
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -68,6 +69,7 @@ fun SwapSlippageSettingsScreen(
     resultBus: ResultEventBus,
     initialSlippage: BigDecimal
 ) {
+    val resultBus = LocalResultEventBus.current
     val viewModel = viewModel<SwapTransactionSlippageViewModel>(
         initializer = SwapTransactionSlippageViewModel.init(initialSlippage)
     )

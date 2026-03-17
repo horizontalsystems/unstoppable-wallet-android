@@ -145,7 +145,7 @@ fun FilterScreen(
                 VSpacer(32.dp)
                 CellSingleLineLawrenceSection(
                     listOf {
-                        ResultEffect<SelectContactScreen.Result>(resultBus) {
+                        ResultEffect<SelectContactScreen.Result> {
                             viewModel.onEnterContact(it.contact)
                         }
                         FilterDropdownCell(

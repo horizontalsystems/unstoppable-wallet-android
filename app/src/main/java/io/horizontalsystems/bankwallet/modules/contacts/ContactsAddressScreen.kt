@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
 import io.horizontalsystems.bankwallet.modules.contacts.screen.AddressScreen
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.AddressViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import kotlinx.serialization.Serializable
 
@@ -21,6 +22,7 @@ data class ContactsAddressScreen(
         backStack: NavBackStack<HSScreen>,
         resultBus: ResultEventBus
     ) {
+        val resultBus = LocalResultEventBus.current
         val viewModel = viewModel<AddressViewModel>(
             factory = ContactsModule.AddressViewModelFactory(
                 contactUid = contactUid,

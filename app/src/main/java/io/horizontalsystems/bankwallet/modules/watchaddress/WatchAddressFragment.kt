@@ -106,7 +106,7 @@ fun WatchAddressScreen(
         ))
     }
 
-    ResultEffect<BirthdayHeightConfigScreen.Result>(resultBus) { result ->
+    ResultEffect<BirthdayHeightConfigScreen.Result> { result ->
         if (result.config != null) {
             viewModel.onBirthdayHeightEntered(result.config.birthdayHeight?.toLongOrNull())
         } else {

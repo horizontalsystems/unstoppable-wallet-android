@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
@@ -77,6 +78,7 @@ fun Eip20ApproveScreen(
     requiredAllowance: BigDecimal,
     spenderAddress: String
 ) {
+    val resultBus = LocalResultEventBus.current
     val viewModel = viewModel<Eip20ApproveViewModel>(
         factory = Eip20ApproveViewModel.Factory(
             token,
@@ -98,7 +100,7 @@ fun Eip20ApproveScreen(
         ),
         bottomBar = {
             ButtonsGroupWithShade {
-                ResultEffect<Eip20ApproveConfirmScreen.Result>() {
+                ResultEffect<Eip20ApproveConfirmScreen.Result> {
                     resultBus.sendResult(result = it)
                     backStack.removeLastOrNull()
                 }

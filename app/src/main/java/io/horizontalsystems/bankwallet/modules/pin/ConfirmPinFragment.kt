@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinConfirm
 import kotlinx.parcelize.Parcelize
@@ -18,6 +19,7 @@ data object ConfirmPinScreen : HSScreen() {
         backStack: NavBackStack<HSScreen>,
         resultBus: ResultEventBus
     ) {
+        val resultBus = LocalResultEventBus.current
         PinConfirm(
             onSuccess = {
                 resultBus.sendResult(result = Result(true))

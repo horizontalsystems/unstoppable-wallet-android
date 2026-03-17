@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
@@ -85,6 +86,7 @@ private fun TransactionSpeedUpCancelScreen(
     transactionHash: String,
     optionType: SpeedUpCancelType
 ) {
+    val resultBus = LocalResultEventBus.current
     val logger = remember { AppLogger("tx-speedUp-cancel") }
     val view = LocalView.current
 

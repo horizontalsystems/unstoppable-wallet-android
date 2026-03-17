@@ -159,14 +159,14 @@ fun SwapScreen(
 //        }
 //    }
 
-    ResultEffect<SwapSelectCoinScreen.Result>(resultBus) {
+    ResultEffect<SwapSelectCoinScreen.Result> {
         when (it.type) {
             SwapSelectCoinScreen.Type.In -> viewModel.onSelectTokenIn(it.token)
             SwapSelectCoinScreen.Type.Out -> viewModel.onSelectTokenOut(it.token)
         }
     }
 
-    ResultEffect<SwapConfirmScreen.Result>(resultBus) {
+    ResultEffect<SwapConfirmScreen.Result> {
         if (it.success && closeAfterSwap) {
             backStack.removeLastOrNull()
         }

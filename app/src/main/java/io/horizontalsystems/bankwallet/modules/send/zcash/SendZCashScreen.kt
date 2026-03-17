@@ -121,7 +121,7 @@ fun SendZCashScreen(
                 }
             }
 
-            ResultEffect<AddressRiskyBottomSheetScreen.Result>(resultBus) {
+            ResultEffect<AddressRiskyBottomSheetScreen.Result> {
                 if (it.canContinue) {
                     openConfirm(backStack, sendEntryPointDestId)
                 }

@@ -76,7 +76,7 @@ private fun AddTokenScreen(
     backStack: NavBackStack<HSScreen>,
     resultBus: ResultEventBus,
 ) {
-    ResultEffect<AddTokenBlockchainSelectorScreen.Result>(resultBus) {
+    ResultEffect<AddTokenBlockchainSelectorScreen.Result> {
         viewModel.onBlockchainSelect(it.blockchain)
     }
 

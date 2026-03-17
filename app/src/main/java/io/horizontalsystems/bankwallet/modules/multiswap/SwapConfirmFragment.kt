@@ -53,6 +53,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactio
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionSettingsScreen
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.viewModelForContentKey
@@ -188,6 +189,7 @@ private fun SwapConfirmInternal(
     viewModel: SwapConfirmViewModel,
     uiState: SwapConfirmUiState
 ) {
+    val resultBus = LocalResultEventBus.current
     val coroutineScope = rememberCoroutineScope()
     val view = LocalView.current
 
@@ -207,10 +209,10 @@ private fun SwapConfirmInternal(
         null
     }
 
-    ResultEffect<SwapSettingsSlippageScreen.Result>(resultBus) {
+    ResultEffect<SwapSettingsSlippageScreen.Result> {
         viewModel.setSlippage(it.slippage)
     }
-    ResultEffect<SwapSettingsRecipientScreen.Result>(resultBus) {
+    ResultEffect<SwapSettingsRecipientScreen.Result> {
         viewModel.setRecipient(it.address)
     }
 

@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.enteraddress.EnterAddressScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.marketkit.models.Token
@@ -27,6 +28,7 @@ data class SwapSettingsRecipientScreen(
         backStack: NavBackStack<HSScreen>,
         resultBus: ResultEventBus
     ) {
+        val resultBus = LocalResultEventBus.current
         EnterAddressScreen(
             backStack = backStack,
             token = token,

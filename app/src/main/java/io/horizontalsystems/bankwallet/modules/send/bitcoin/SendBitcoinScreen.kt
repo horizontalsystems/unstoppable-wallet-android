@@ -191,7 +191,7 @@ fun SendBitcoinScreen(
 
                 VSpacer(16.dp)
 
-                ResultEffect<AddressRiskyBottomSheetScreen.Result>(resultBus) {
+                ResultEffect<AddressRiskyBottomSheetScreen.Result> {
                     if (it.canContinue) {
                         openConfirm(backStack, sendEntryPointDestId)
                     }

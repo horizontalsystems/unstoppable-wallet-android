@@ -90,7 +90,7 @@ fun WCPairingsScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBu
             Spacer(modifier = Modifier.height(32.dp))
             CellUniversalLawrenceSection(
                 listOf {
-                    ResultEffect<ConfirmDeleteAllPairingsScreen.Result>(resultBus) { result ->
+                    ResultEffect<ConfirmDeleteAllPairingsScreen.Result> { result ->
                         if (result.confirmed) {
                             viewModel.deleteAll()
                         }

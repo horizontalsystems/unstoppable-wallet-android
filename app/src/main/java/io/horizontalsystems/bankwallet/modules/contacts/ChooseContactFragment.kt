@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -84,6 +85,7 @@ fun ChooseContactScreen(
     backStack: NavBackStack<HSScreen>,
     resultBus: ResultEventBus
 ) {
+    val resultBus = LocalResultEventBus.current
     val viewModel = viewModel<ChooseContactViewModel>(factory = ChooseContactViewModel.Factory(blockchainType))
 
     val items = viewModel.items

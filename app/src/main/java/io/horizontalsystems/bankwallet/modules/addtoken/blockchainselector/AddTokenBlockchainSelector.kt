@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenScreen
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellBlockchainChecked
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
@@ -48,6 +49,7 @@ fun AddTokenBlockchainSelectorScreen(
     backStack: NavBackStack<HSScreen>,
     resultBus: ResultEventBus,
 ) {
+    val resultBus = LocalResultEventBus.current
     var selectedItem = selectedBlockchain
 
     HSScaffold(

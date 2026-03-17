@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.marketkit.models.Token
@@ -59,6 +60,7 @@ private fun SwapSelectCoinScreen(
     title: String?,
     type: SwapSelectCoinScreen.Type
 ) {
+    val resultBus = LocalResultEventBus.current
     val viewModel = viewModel<SwapSelectCoinViewModel>(
         factory = SwapSelectCoinViewModel.Factory(otherSelectedToken)
     )

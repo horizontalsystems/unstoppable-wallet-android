@@ -56,7 +56,7 @@ fun ReceiveStellarAssetScreen(
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
 
-    ResultEffect<ActivateTokenScreen.Result>(resultBus) {
+    ResultEffect<ActivateTokenScreen.Result> {
         viewModel.onActivationResult(it.activated)
         sheetState.hide()
     }

@@ -155,7 +155,7 @@ fun MarketFavoritesScreen(
                                         )
                                         HSpacer(width = 12.dp)
 
-                                        ResultEffect<MarketSignalsScreen.Result>(resultBus) {
+                                        ResultEffect<MarketSignalsScreen.Result> {
                                             if (it.enabled) {
                                                 viewModel.showSignals()
                                             }

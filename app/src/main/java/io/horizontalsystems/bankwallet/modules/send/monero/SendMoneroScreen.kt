@@ -131,7 +131,7 @@ fun SendMoneroScreen(
                 backStack = backStack,
             )
 
-            ResultEffect<AddressRiskyBottomSheetScreen.Result>(resultBus) {
+            ResultEffect<AddressRiskyBottomSheetScreen.Result> {
                 if (it.canContinue) {
                     openConfirm(backStack, sendEntryPointDestId)
                 }

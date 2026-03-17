@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.modules.eip20approve.SpenderCell
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
 import io.horizontalsystems.bankwallet.serializers.TokenSerializer
@@ -94,6 +95,7 @@ fun Eip20RevokeScreen(
     spenderAddress: String,
     allowance: BigDecimal
 ) {
+    val resultBus = LocalResultEventBus.current
     val viewModel = viewModel<Eip20RevokeConfirmViewModel>(
         factory = Eip20RevokeConfirmViewModel.Factory(
             token,

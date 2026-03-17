@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.core.findNavController
@@ -31,6 +32,7 @@ data class BirthdayHeightConfigScreen(
         backStack: NavBackStack<HSScreen>,
         resultBus: ResultEventBus
     ) {
+        val resultBus = LocalResultEventBus.current
         val onBack: () -> Unit = {
             resultBus.sendResult(result = Result(null))
             backStack.removeLastOrNull()

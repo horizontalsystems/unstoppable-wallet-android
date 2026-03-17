@@ -34,7 +34,7 @@ data class ContactScreen(
             )
         )
 
-        ResultEffect<ContactsAddressScreen.Result>(resultBus) { result ->
+        ResultEffect<ContactsAddressScreen.Result> { result ->
             result.added_address?.let {
                 viewModel.setAddress(it)
             }

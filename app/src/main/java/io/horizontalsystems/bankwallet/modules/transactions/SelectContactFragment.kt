@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -79,6 +80,7 @@ fun SelectContactScreen(
     selected: Contact?,
     blockchainType: BlockchainType?
 ) {
+    val resultBus = LocalResultEventBus.current
     val viewModel = viewModel<SelectContactViewModel>(
         initializer = SelectContactViewModel.init(
             selected,

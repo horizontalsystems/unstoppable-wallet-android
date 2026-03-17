@@ -110,7 +110,7 @@ fun CoinOverviewScreen(
     val manageWalletsViewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory1)
     val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory1)
 
-    ResultEffect<BirthdayHeightConfigScreen.Result>(resultBus) {
+    ResultEffect<BirthdayHeightConfigScreen.Result> {
         if (it.config != null) {
             restoreSettingsViewModel.onEnter(it.config)
         } else {

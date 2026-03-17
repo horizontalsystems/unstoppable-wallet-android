@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheetScreen
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenError
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenViewModel
@@ -83,6 +84,7 @@ fun ActivateTokenScreen(
     wallet: Wallet,
     resultBus: ResultEventBus
 ) {
+    val resultBus = LocalResultEventBus.current
     val viewModel = viewModel<ActivateTokenViewModel>(factory = ActivateTokenViewModel.Factory(wallet))
 
     val uiState = viewModel.uiState

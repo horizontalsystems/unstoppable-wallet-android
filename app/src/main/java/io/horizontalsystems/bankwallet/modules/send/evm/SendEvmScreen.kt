@@ -117,7 +117,7 @@ fun SendEvmScreen(
                 rate = viewModel.coinRate
             )
 
-            ResultEffect<AddressRiskyBottomSheetScreen.Result>(resultBus) {
+            ResultEffect<AddressRiskyBottomSheetScreen.Result> {
                 if (it.canContinue) {
                     viewModel.getSendData()?.let { sendData ->
                         openSendConfirm(

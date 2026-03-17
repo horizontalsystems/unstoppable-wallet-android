@@ -171,7 +171,7 @@ fun MarketEarnScreen(
                                         )
                                         HSpacer(width = 12.dp)
 
-                                        ResultEffect<VaultBlockchainsSelectorScreen.Result>(resultBus) {
+                                        ResultEffect<VaultBlockchainsSelectorScreen.Result> {
                                             viewModel.onBlockchainsSelected(it.selected)
                                         }
                                         HSDropdownButton(

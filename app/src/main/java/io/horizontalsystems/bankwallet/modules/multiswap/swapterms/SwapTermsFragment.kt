@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.highlightText
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -61,6 +62,7 @@ class SwapTermsFragment : BaseComposeFragment() {
 
 @Composable
 fun SwapTermsScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
+    val resultBus = LocalResultEventBus.current
     val viewModel = viewModel<SwapTermsViewModel>(factory = SwapTermsModule.Factory())
     val uiState = viewModel.uiState
     val terms = uiState.terms

@@ -36,6 +36,7 @@ import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.Unlimi
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -83,6 +84,7 @@ class Eip20ApproveConfirmFragment : BaseComposeFragment() {
 
 @Composable
 fun Eip20ApproveConfirmScreen(backStack: NavBackStack<HSScreen>, resultBus: ResultEventBus) {
+    val resultBus = LocalResultEventBus.current
     val viewModel = viewModel<Eip20ApproveViewModel>()
 
     val view = LocalView.current

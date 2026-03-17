@@ -8,6 +8,7 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import kotlinx.parcelize.Parcelize
@@ -20,6 +21,7 @@ data class SetPinScreen(val descriptionResId: Int? = null) : HSScreen() {
         backStack: NavBackStack<HSScreen>,
         resultBus: ResultEventBus
     ) {
+        val resultBus = LocalResultEventBus.current
         PinSet(
             title = stringResource(R.string.PinSet_Title),
             description = stringResource(descriptionResId ?: R.string.PinSet_Info),

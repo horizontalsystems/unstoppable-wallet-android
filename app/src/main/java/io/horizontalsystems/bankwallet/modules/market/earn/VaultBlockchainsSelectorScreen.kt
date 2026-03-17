@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.paidAction
 import io.horizontalsystems.bankwallet.serializers.BlockchainSerializer
@@ -46,6 +47,7 @@ data class VaultBlockchainsSelectorScreen(
         backStack: NavBackStack<HSScreen>,
         resultBus: ResultEventBus
     ) {
+        val resultBus = LocalResultEventBus.current
         FilterByBlockchainsScreen(
             blockchains = allBlockchains,
             selected = selected,
