@@ -20,8 +20,10 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -39,6 +41,7 @@ class SwapViewModel(
     private val swapRecordManager: SwapRecordManager,
     private val marketKit: MarketKitWrapper,
     private val walletManager: WalletManager,
+    private val adapterManager: IAdapterManager,
     tokenIn: Token?,
     tokenOut: Token? = null,
 ) : ViewModelUiState<SwapUiState>() {
@@ -111,6 +114,12 @@ class SwapViewModel(
                 if (tokenOut == null) {
                     it.tokenOut?.let { quoteService.setTokenOut(it) }
                 }
+            }
+        }
+
+        viewModelScope.launch {
+            adapterManager.adaptersReadyObservable.asFlow().collect {
+                balanceService.refresh()
             }
         }
 
@@ -305,6 +314,7 @@ class SwapViewModel(
                 App.swapRecordManager,
                 App.marketKit,
                 App.walletManager,
+                App.adapterManager,
                 tokenIn,
                 tokenOut,
             ) as T
