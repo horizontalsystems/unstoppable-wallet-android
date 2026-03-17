@@ -15,6 +15,8 @@ interface IMultiSwapProvider {
     val icon: Int
     val type: SwapProviderType
     val aml: Boolean
+    val amlPrecheck: Boolean
+        get() = false
     val requireTerms: Boolean
     val riskLevel: RiskLevel
     fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String): Boolean
