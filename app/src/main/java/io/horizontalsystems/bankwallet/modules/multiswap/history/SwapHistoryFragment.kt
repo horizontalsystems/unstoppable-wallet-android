@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -42,10 +43,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 class SwapHistoryFragment : BaseComposeFragment() {
@@ -123,8 +125,8 @@ private fun SwapHistoryCell(item: SwapHistoryViewItem, onClick: () -> Unit) {
                 ) {
                     Box(modifier = Modifier.weight(1f)) {
                         CellMiddleInfo(
-                            title = item.amountIn.hs,
-                            subtitle = item.fiatAmountIn?.hs,
+                            subtitle = item.amountIn.hs(ComposeAppTheme.colors.leah),
+                            description = item.fiatAmountIn?.hs,
                         )
                     }
                     val (statusIcon, statusTint) = statusIconAndTint(item.status)
@@ -134,14 +136,21 @@ private fun SwapHistoryCell(item: SwapHistoryViewItem, onClick: () -> Unit) {
                         tint = statusTint,
                         contentDescription = null,
                     )
-                    Box(
+                    Column(
                         modifier = Modifier.weight(1f),
-                        contentAlignment = Alignment.CenterEnd,
+                        horizontalAlignment = Alignment.End,
                     ) {
-                        CellRightInfo(
-                            title = (item.amountOut ?: "---").hs,
-                            subtitle = item.fiatAmountOut?.hs,
+                        subheadSB_leah(
+                            text = item.amountOut ?: "---",
+                            textAlign = TextAlign.End,
                         )
+
+                        item.fiatAmountOut?.let {
+                            captionSB_grey(
+                                text = it,
+                                textAlign = TextAlign.End,
+                            )
+                        }
                     }
                 }
             },
@@ -219,4 +228,66 @@ private fun statusIconAndTint(status: SwapStatus): Pair<Int, Color> = when (stat
     SwapStatus.Completed -> Pair(R.drawable.ic_done_filled_20, ComposeAppTheme.colors.remus)
     SwapStatus.Refunded -> Pair(R.drawable.ic_arrow_return_20, ComposeAppTheme.colors.grey)
     SwapStatus.Failed -> Pair(R.drawable.ic_warning_filled_20, ComposeAppTheme.colors.redL)
+}
+
+@Preview
+@Composable
+private fun SwapHistoryCellPreview() {
+    val ethUrl = ""
+    val btcUrl = ""
+    val usdtUrl = ""
+
+    val items = listOf(
+        SwapHistoryViewItem(
+            id = 1,
+            tokenInImageUrl = ethUrl,
+            tokenOutImageUrl = btcUrl,
+            amountIn = "1.5 ETH",
+            amountOut = "0.0004203 BTC",
+            fiatAmountIn = "$2,850.00",
+            fiatAmountOut = "$2,831.40",
+            status = SwapStatus.Completed,
+            formattedDate = "March 17",
+        ),
+        SwapHistoryViewItem(
+            id = 2,
+            tokenInImageUrl = usdtUrl,
+            tokenOutImageUrl = ethUrl,
+            amountIn = "500 USDT",
+            amountOut = null,
+            fiatAmountIn = "$500.00",
+            fiatAmountOut = null,
+            status = SwapStatus.Swapping,
+            formattedDate = "March 17",
+        ),
+        SwapHistoryViewItem(
+            id = 3,
+            tokenInImageUrl = btcUrl,
+            tokenOutImageUrl = usdtUrl,
+            amountIn = "0.1 BTC",
+            amountOut = "6,720 USDT",
+            fiatAmountIn = "$6,720.00",
+            fiatAmountOut = "$6,720.00",
+            status = SwapStatus.Refunded,
+            formattedDate = "March 16",
+        ),
+        SwapHistoryViewItem(
+            id = 4,
+            tokenInImageUrl = ethUrl,
+            tokenOutImageUrl = usdtUrl,
+            amountIn = "0.5 ETH",
+            amountOut = null,
+            fiatAmountIn = "$950.00",
+            fiatAmountOut = null,
+            status = SwapStatus.Failed,
+            formattedDate = "March 16",
+        ),
+    )
+    ComposeAppTheme(darkTheme = false) {
+        Column {
+            items.forEach { item ->
+                SwapHistoryCell(item = item, onClick = {})
+            }
+        }
+    }
 }
