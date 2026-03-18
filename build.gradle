@@ -46,19 +46,21 @@ allprojects {
         google()
         mavenCentral()
         mavenLocal()
-        maven {
-            url = uri("https://piratecash.github.io/monero-kit-android")
-            content {
-                includeGroup("com.github.piratecash")
-            }
-        }
-        maven {
-            url = uri("https://piratecash.github.io/ethereum-kit-android")
-            content {
-                includeGroup("com.github.piratecash")
-            }
-        }
         maven { url "https://jitpack.io" }
+        if (!project.hasProperty('fdroid')) {
+            maven {
+                url = uri("https://piratecash.github.io/monero-kit-android")
+                content {
+                    includeGroup("com.github.piratecash")
+                }
+            }
+            maven {
+                url = uri("https://piratecash.github.io/ethereum-kit-android")
+                content {
+                    includeGroup("com.github.piratecash")
+                }
+            }
+        }
     }
 }
 
