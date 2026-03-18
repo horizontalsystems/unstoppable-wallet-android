@@ -1,5 +1,5 @@
 ## 🚀 Version 0.52.2 Update
-_Release date: March 16, 2026_
+_Release date: March 17, 2026_
 
 ### ✨ Improvements
 
@@ -14,9 +14,15 @@ _Release date: March 16, 2026_
 
 - **Fixed an issue where balance hiding was inherited when navigating from the asset screen to swap**
 
+- **Fixed ZEC adapter creation issue when switching between wallets**
+  When switching between wallets via the `Manage Wallets` menu, ZEC adapters could fail to initialize, and all address types (`Shielded`, `Transparent`, `Unified`) showed the error `Another synchronizer is currently active`.
+  As a result, the ZEC wallet did not synchronize after switching accounts.
+
 - **Fixed SQLiteDatabaseCorruptException crash in the Zcash SDK on low-end devices**
   The app could crash with `SQLiteDatabaseCorruptException: database disk image is malformed` while working with a Zcash wallet.
   The failure occurred inside the Zcash SDK while reading transactions from the database, where DB corruption was not handled and the exception was propagated as a fatal crash.
+
+- **Fixed Monero crash: invalid chunk state when deallocating address**
 
 - **Fixed address editing issue in the send screen**
 
