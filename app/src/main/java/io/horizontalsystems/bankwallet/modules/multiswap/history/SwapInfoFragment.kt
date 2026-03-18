@@ -104,69 +104,72 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
             VSpacer(12.dp)
 
             // Token pair card
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(ComposeAppTheme.colors.lawrence),
+            Box(
+                contentAlignment = Alignment.Center,
             ) {
-                CellPrimary(
-                    left = {
-                        HsImageCircle(
-                            modifier = Modifier.size(32.dp),
-                            url = uiState.tokenInImageUrl,
-                            alternativeUrl = uiState.tokenInAlternativeImageUrl,
-                            placeholder = R.drawable.coin_placeholder,
-                        )
-                    },
-                    middle = {
-                        CellMiddleInfo(
-                            title = uiState.tokenInCode.hs,
-                            subtitle = (uiState.tokenInBadge ?: stringResource(id = R.string.CoinPlatforms_Native)).hs,
-                        )
-                    },
-                    right = {
-                        CellRightInfo(
-                            titleSubheadSb = uiState.amountIn.hs,
-                            subtitle = uiState.fiatAmountIn?.hs,
-                        )
-                    },
-                )
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center,
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(ComposeAppTheme.colors.lawrence),
                 ) {
-                    HsDivider()
-                    Icon(
-                        modifier = Modifier
-                            .size(20.dp)
-                            .background(ComposeAppTheme.colors.lawrence),
-                        painter = painterResource(R.drawable.ic_arrow_down_20),
-                        tint = ComposeAppTheme.colors.grey,
-                        contentDescription = null,
+                    CellPrimary(
+                        left = {
+                            HsImageCircle(
+                                modifier = Modifier.size(32.dp),
+                                url = uiState.tokenInImageUrl,
+                                alternativeUrl = uiState.tokenInAlternativeImageUrl,
+                                placeholder = R.drawable.coin_placeholder,
+                            )
+                        },
+                        middle = {
+                            CellMiddleInfo(
+                                title = uiState.tokenInCode.hs,
+                                subtitle = (uiState.tokenInBadge
+                                    ?: stringResource(id = R.string.CoinPlatforms_Native)).hs,
+                            )
+                        },
+                        right = {
+                            CellRightInfo(
+                                titleSubheadSb = uiState.amountIn.hs,
+                                subtitle = uiState.fiatAmountIn?.hs,
+                            )
+                        },
+                    )
+                    CellPrimary(
+                        left = {
+                            HsImageCircle(
+                                modifier = Modifier.size(32.dp),
+                                url = uiState.tokenOutImageUrl,
+                                alternativeUrl = uiState.tokenOutAlternativeImageUrl,
+                                placeholder = R.drawable.coin_placeholder,
+                            )
+                        },
+                        middle = {
+                            CellMiddleInfo(
+                                title = uiState.tokenOutCode.hs,
+                                subtitle = (uiState.tokenOutBadge
+                                    ?: stringResource(id = R.string.CoinPlatforms_Native)).hs,
+                            )
+                        },
+                        right = {
+                            CellRightInfo(
+                                titleSubheadSb = (uiState.amountOut ?: "---").hs,
+                                subtitle = uiState.fiatAmountOut?.hs,
+                            )
+                        },
                     )
                 }
-                CellPrimary(
-                    left = {
-                        HsImageCircle(
-                            modifier = Modifier.size(32.dp),
-                            url = uiState.tokenOutImageUrl,
-                            alternativeUrl = uiState.tokenOutAlternativeImageUrl,
-                            placeholder = R.drawable.coin_placeholder,
-                        )
-                    },
-                    middle = {
-                        CellMiddleInfo(
-                            title = uiState.tokenOutCode.hs,
-                            subtitle = (uiState.tokenOutBadge ?: stringResource(id = R.string.CoinPlatforms_Native)).hs,
-                        )
-                    },
-                    right = {
-                        CellRightInfo(
-                            titleSubheadSb = (uiState.amountOut ?: "---").hs,
-                            subtitle = uiState.fiatAmountOut?.hs,
-                        )
-                    },
+                HsDivider(
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+                Icon(
+                    modifier = Modifier
+                        .size(20.dp)
+                        .background(ComposeAppTheme.colors.lawrence),
+                    painter = painterResource(R.drawable.ic_arrow_down_20),
+                    tint = ComposeAppTheme.colors.grey,
+                    contentDescription = null,
                 )
             }
 
@@ -467,7 +470,12 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp)
-                    .then(if (showView) Modifier.clickable { LinkHelper.openLinkInAppBrowser(context, stepUrl) } else Modifier)
+                    .then(if (showView) Modifier.clickable {
+                        LinkHelper.openLinkInAppBrowser(
+                            context,
+                            stepUrl
+                        )
+                    } else Modifier)
                     .padding(end = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
