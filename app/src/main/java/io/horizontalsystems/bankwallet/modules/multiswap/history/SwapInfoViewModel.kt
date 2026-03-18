@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.coinIconUrl
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -28,9 +29,11 @@ class SwapInfoViewModel(
 ) : ViewModelUiState<SwapInfoUiState>() {
 
     private var tokenInImageUrl: String = ""
+    private var tokenInAlternativeImageUrl: String? = null
     private var tokenInCode: String = ""
     private var tokenInBadge: String? = null
     private var tokenOutImageUrl: String = ""
+    private var tokenOutAlternativeImageUrl: String? = null
     private var tokenOutCode: String = ""
     private var tokenOutBadge: String? = null
     private var amountIn: String = ""
@@ -49,9 +52,11 @@ class SwapInfoViewModel(
 
     override fun createState() = SwapInfoUiState(
         tokenInImageUrl = tokenInImageUrl,
+        tokenInAlternativeImageUrl = tokenInAlternativeImageUrl,
         tokenInCode = tokenInCode,
         tokenInBadge = tokenInBadge,
         tokenOutImageUrl = tokenOutImageUrl,
+        tokenOutAlternativeImageUrl = tokenOutAlternativeImageUrl,
         tokenOutCode = tokenOutCode,
         tokenOutBadge = tokenOutBadge,
         amountIn = amountIn,
@@ -83,10 +88,14 @@ class SwapInfoViewModel(
         val priceIn = fetchHistoricalPrice(record.tokenInCoinUid, currency.code, timestampSeconds)
         val priceOut = fetchHistoricalPrice(record.tokenOutCoinUid, currency.code, timestampSeconds)
 
+        val coins = marketKit.fullCoins(listOf(record.tokenInCoinUid, record.tokenOutCoinUid))
+            .associateBy { it.coin.uid }
         tokenInImageUrl = record.tokenInCoinUid.coinIconUrl
+        tokenInAlternativeImageUrl = coins[record.tokenInCoinUid]?.coin?.alternativeImageUrl
         tokenInCode = record.tokenInCoinCode
         tokenInBadge = record.tokenInBadge
         tokenOutImageUrl = record.tokenOutCoinUid.coinIconUrl
+        tokenOutAlternativeImageUrl = coins[record.tokenOutCoinUid]?.coin?.alternativeImageUrl
         tokenOutCode = record.tokenOutCoinCode
         tokenOutBadge = record.tokenOutBadge
         amountIn = formatAmount(record.amountIn, record.tokenInCoinCode)
@@ -180,9 +189,11 @@ class SwapInfoViewModel(
 
 data class SwapInfoUiState(
     val tokenInImageUrl: String,
+    val tokenInAlternativeImageUrl: String?,
     val tokenInCode: String,
     val tokenInBadge: String?,
     val tokenOutImageUrl: String,
+    val tokenOutAlternativeImageUrl: String?,
     val tokenOutCode: String,
     val tokenOutBadge: String?,
     val amountIn: String,

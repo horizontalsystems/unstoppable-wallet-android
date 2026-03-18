@@ -115,6 +115,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                         HsImageCircle(
                             modifier = Modifier.size(32.dp),
                             url = uiState.tokenInImageUrl,
+                            alternativeUrl = uiState.tokenInAlternativeImageUrl,
                             placeholder = R.drawable.coin_placeholder,
                         )
                     },
@@ -150,6 +151,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                         HsImageCircle(
                             modifier = Modifier.size(32.dp),
                             url = uiState.tokenOutImageUrl,
+                            alternativeUrl = uiState.tokenOutAlternativeImageUrl,
                             placeholder = R.drawable.coin_placeholder,
                         )
                     },
