@@ -30,7 +30,7 @@ enum class UProvider(
         true,
         true,
         true,
-        RiskLevel.CONTROLLED
+        RiskLevel.PRECHECK
     ),
     LetsExchange(
         "LETSEXCHANGE",
