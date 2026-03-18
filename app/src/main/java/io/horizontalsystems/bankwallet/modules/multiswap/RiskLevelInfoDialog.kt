@@ -115,6 +115,15 @@ fun RiskLevelList() {
     CellPrimary(
         middle = {
             RiskLevelCell(
+                RiskLevel.PRECHECK,
+                stringResource(R.string.RiskLevel_Precheck_Description)
+            )
+        }
+    )
+    HsDivider()
+    CellPrimary(
+        middle = {
+            RiskLevelCell(
                 RiskLevel.LIMITED,
                 stringResource(R.string.RiskLevel_Limited_Description)
             )
@@ -153,6 +162,7 @@ private fun getRiskLevelHsString(riskLevel: RiskLevel): HSString {
         RiskLevel.AUTO -> ComposeAppTheme.colors.remus
         RiskLevel.LIMITED -> ComposeAppTheme.colors.ocean
         RiskLevel.CONTROLLED -> ComposeAppTheme.colors.jacob
+        RiskLevel.PRECHECK -> ComposeAppTheme.colors.leah
     }
     return HSString(text, color, false)
 }

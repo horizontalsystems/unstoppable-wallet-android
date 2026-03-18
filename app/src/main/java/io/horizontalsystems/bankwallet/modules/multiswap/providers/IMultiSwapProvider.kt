@@ -68,5 +68,6 @@ enum class SwapProviderType(val title: String) {
 enum class RiskLevel(val title: Int) {
     AUTO(R.string.RiskLevel_Auto),
     LIMITED(R.string.RiskLevel_Limited),
-    CONTROLLED(R.string.RiskLevel_Controlled);
+    CONTROLLED(R.string.RiskLevel_Controlled),
+    PRECHECK(R.string.RiskLevel_Precheck)
 }

@@ -261,12 +261,14 @@ fun RiskCell(
     val color = when (riskLevel) {
         RiskLevel.AUTO -> ComposeAppTheme.colors.remus
         RiskLevel.CONTROLLED -> ComposeAppTheme.colors.jacob
-        RiskLevel.LIMITED -> ComposeAppTheme.colors.leah
+        RiskLevel.LIMITED -> ComposeAppTheme.colors.ocean
+        RiskLevel.PRECHECK -> ComposeAppTheme.colors.leah
     }
     val icon = when (riskLevel) {
         RiskLevel.AUTO -> R.drawable.shield_check_filled_24
         RiskLevel.CONTROLLED -> R.drawable.ic_warning_filled_24
         RiskLevel.LIMITED -> R.drawable.thumbsup_24
+        RiskLevel.PRECHECK -> R.drawable.ic_warning_filled_24
     }
     Row(
         modifier = Modifier.clickable { onClick.invoke() },
