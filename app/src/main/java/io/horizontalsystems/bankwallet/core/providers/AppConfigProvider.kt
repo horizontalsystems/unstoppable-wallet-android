@@ -72,6 +72,10 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         Translator.getString(R.string.marketApiKey)
     }
 
+    val newsApiKey by lazy {
+        Translator.getString(R.string.cryptoCompareApiKey)
+    }
+
     val openSeaApiKey by lazy {
         Translator.getString(R.string.openSeaApiKey)
     }
