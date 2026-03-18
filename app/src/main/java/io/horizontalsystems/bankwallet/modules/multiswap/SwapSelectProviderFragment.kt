@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -207,7 +208,9 @@ private fun SwapSelectProviderScreenInner(
                                                     } ?: stringResource(R.string.NotAvailable))
                                                 )
 
-                                                RiskCell(provider.riskLevel)
+                                                RiskCell(provider.riskLevel) {
+                                                    onBadgeClick.invoke()
+                                                }
                                             }
                                             Row(
                                                 horizontalArrangement = spacedBy(4.dp)
@@ -251,7 +254,10 @@ private fun SwapSelectProviderScreenInner(
 }
 
 @Composable
-fun RiskCell(riskLevel: RiskLevel) {
+fun RiskCell(
+    riskLevel: RiskLevel,
+    onClick: () -> Unit
+) {
     val color = when (riskLevel) {
         RiskLevel.AUTO -> ComposeAppTheme.colors.remus
         RiskLevel.CONTROLLED -> ComposeAppTheme.colors.jacob
@@ -262,7 +268,9 @@ fun RiskCell(riskLevel: RiskLevel) {
         RiskLevel.CONTROLLED -> R.drawable.ic_warning_filled_24
         RiskLevel.LIMITED -> R.drawable.thumbsup_24
     }
-    Row {
+    Row(
+        modifier = Modifier.clickable { onClick.invoke() },
+    ) {
         Icon(
             painter = painterResource(icon),
             modifier = Modifier.size(16.dp),
