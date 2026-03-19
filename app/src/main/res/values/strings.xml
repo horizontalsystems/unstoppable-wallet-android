@@ -791,12 +791,10 @@
     <!-- Swap Info -->
     <string name="SwapInfo_Provider">Provider</string>
     <string name="SwapInfo_SourceAddress">Source Address</string>
-    <string name="SwapInfo_StatusTitle">Status</string>
-    <string name="SwapInfo_StatusDescription">Current cross-chain swap status.</string>
-    <string name="SwapInfo_CrossChainNote">Cross-chain swaps are processed automatically and may take some time. If the status does not update immediately, the operation is still in progress.</string>
+    <string name="SwapInfo_StatusTitle">Transaction Status</string>
     <string name="SwapInfo_StatusDepositing">Depositing</string>
-    <string name="SwapInfo_StatusSwapping">Swapping</string>
-    <string name="SwapInfo_StatusSending">Sending</string>
+    <string name="SwapInfo_StatusSwapping">Swap</string>
+    <string name="SwapInfo_StatusSending">Send</string>
     <string name="SwapInfo_StatusCompleted">Completed</string>
     <string name="SwapInfo_StatusRefunded">Refunded</string>
     <string name="SwapInfo_StatusFailed">Failed</string>

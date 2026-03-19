@@ -21,14 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,7 +30,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -48,11 +40,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
-import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
@@ -62,8 +53,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfoTextIco
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
-import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
@@ -79,7 +68,6 @@ class SwapInfoFragment : BaseComposeFragment() {
     data class Input(val recordId: Int) : Parcelable
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwapInfoScreen(recordId: Int, navController: NavController) {
     val viewModel = viewModel<SwapInfoViewModel>(
@@ -87,7 +75,6 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
         factory = SwapInfoViewModel.Factory(recordId),
     )
     val uiState = viewModel.uiState
-    var showStatusSheet by remember { mutableStateOf(false) }
     val view = LocalView.current
     val leah = ComposeAppTheme.colors.leah
 
@@ -200,19 +187,6 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                         CellRightInfoTextIcon(text = uiState.formattedDate.hs(color = leah))
                     },
                 )
-                CellSecondary(
-                    middle = {
-                        CellMiddleInfoTextIcon(
-                            text = stringResource(R.string.TransactionInfo_Status).hs,
-                            icon = painterResource(R.drawable.ic_info_filled_20),
-                            iconTint = ComposeAppTheme.colors.grey,
-                            onIconClick = { showStatusSheet = true }
-                        )
-                    },
-                    right = {
-                        StatusRightSlot(status = uiState.status)
-                    },
-                )
                 // Recipient
                 uiState.recipientAddress?.let { address ->
                     CellSecondary(
@@ -234,93 +208,24 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                 }
             }
 
-            VSpacer(32.dp)
-        }
-    }
+            VSpacer(24.dp)
 
-    if (showStatusSheet) {
-        BottomSheetContent(
-            onDismissRequest = { showStatusSheet = false },
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            buttons = {
-                HSButton(
-                    title = stringResource(R.string.Button_Done),
-                    variant = ButtonVariant.Primary,
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { showStatusSheet = false },
-                )
-            }
-        ) {
-            BottomSheetHeaderV3(title = stringResource(R.string.SwapInfo_StatusTitle))
-            subhead2_grey(
-                text = stringResource(R.string.SwapInfo_StatusDescription),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                textAlign = TextAlign.Center,
+
+            subheadSB_grey(
+                text = stringResource(R.string.SwapInfo_StatusTitle),
+                modifier = Modifier.padding(horizontal = 32.dp),
             )
+
+            VSpacer(12.dp)
+
             SwapStatusSteps(
                 status = uiState.status,
                 isSingleChain = uiState.isSingleChain,
                 depositingTxUrl = uiState.depositingTxUrl,
                 sendingTxUrl = uiState.sendingTxUrl,
             )
-            subhead2_grey(
-                text = stringResource(R.string.SwapInfo_CrossChainNote),
-                modifier = Modifier.padding(start = 32.dp, end = 32.dp, top = 12.dp, bottom = 48.dp),
-            )
-        }
-    }
-}
 
-@Composable
-private fun StatusRightSlot(status: SwapStatus) {
-    val leah = ComposeAppTheme.colors.leah
-
-    val isSpinning = status == SwapStatus.Depositing ||
-            status == SwapStatus.Swapping ||
-            status == SwapStatus.Sending
-
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = status.displayName(),
-            style = ComposeAppTheme.typography.subheadSB,
-            color = leah,
-        )
-
-        if (isSpinning) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(20.dp),
-                color = ComposeAppTheme.colors.leah,
-                backgroundColor = ComposeAppTheme.colors.andy,
-                strokeWidth = 2.dp
-            )
-        } else {
-            when (status) {
-                SwapStatus.Completed -> Icon(
-                    modifier = Modifier.size(20.dp),
-                    painter = painterResource(R.drawable.ic_done_filled_20),
-                    tint = ComposeAppTheme.colors.remus,
-                    contentDescription = null,
-                )
-
-                SwapStatus.Failed -> Icon(
-                    modifier = Modifier.size(20.dp),
-                    painter = painterResource(R.drawable.ic_warning_filled_20),
-                    tint = ComposeAppTheme.colors.redL,
-                    contentDescription = null,
-                )
-
-                SwapStatus.Refunded -> Icon(
-                    modifier = Modifier.size(20.dp),
-                    painter = painterResource(R.drawable.ic_arrow_return_20),
-                    tint = ComposeAppTheme.colors.grey,
-                    contentDescription = null,
-                )
-            }
+            VSpacer(32.dp)
         }
     }
 }
@@ -421,8 +326,8 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
             .padding(horizontal = 16.dp)
             .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
             .clip(RoundedCornerShape(16.dp))
+            .background(ComposeAppTheme.colors.lawrence)
             .padding(vertical = 8.dp)
-            .background(ComposeAppTheme.colors.lawrence),
     ) {
         steps.forEachIndexed { index, label ->
             val isFailed = failedIndex == index
@@ -548,16 +453,6 @@ private fun StepIndicator(isActive: Boolean, isDone: Boolean, isFailed: Boolean 
             contentDescription = null,
         )
     }
-}
-
-@Composable
-private fun SwapStatus.displayName(): String = when (this) {
-    SwapStatus.Depositing -> stringResource(R.string.SwapInfo_StatusDepositing)
-    SwapStatus.Swapping -> stringResource(R.string.SwapInfo_StatusSwapping)
-    SwapStatus.Sending -> stringResource(R.string.SwapInfo_StatusSending)
-    SwapStatus.Completed -> stringResource(R.string.SwapInfo_StatusCompleted)
-    SwapStatus.Refunded -> stringResource(R.string.SwapInfo_StatusRefunded)
-    SwapStatus.Failed -> stringResource(R.string.SwapInfo_StatusFailed)
 }
 
 private fun String.shortenAddress(): String {
