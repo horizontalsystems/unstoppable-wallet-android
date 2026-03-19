@@ -222,6 +222,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                 status = uiState.status,
                 isSingleChain = uiState.isSingleChain,
                 depositingTxUrl = uiState.depositingTxUrl,
+                swappingTxUrl = uiState.swappingTxUrl,
                 sendingTxUrl = uiState.sendingTxUrl,
             )
 
@@ -231,7 +232,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
 }
 
 @Composable
-private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositingTxUrl: String?, sendingTxUrl: String?) {
+private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositingTxUrl: String?, swappingTxUrl: String?, sendingTxUrl: String?) {
     val context = LocalContext.current
     val normalSteps = listOf(
         stringResource(R.string.SwapInfo_StatusDepositing),
@@ -337,6 +338,7 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
             val isLast = index == steps.lastIndex
             val stepUrl: String? = when (index) {
                 0 -> depositingTxUrl
+                1 if steps.size > 2 -> swappingTxUrl
                 2 if steps.size == 4 -> sendingTxUrl
                 else -> null
             }
