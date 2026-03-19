@@ -29,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
@@ -48,6 +47,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.market.MarketScreen
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapScreen
+import io.horizontalsystems.bankwallet.modules.nav3.Nav3
 import io.horizontalsystems.bankwallet.modules.rateapp.RateApp
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceModule
@@ -56,8 +56,6 @@ import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceViewMode
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
 import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsScreen
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportState
@@ -66,28 +64,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItem
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.HsNavigationBarItemDefaults
 import kotlinx.coroutines.delay
-import kotlin.system.exitProcess
 
 class MainFragment : BaseComposeFragment() {
     private val mainActivityViewModel by activityViewModels<MainActivityViewModel>()
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val backStackEntry = navController.safeGetBackStackEntry(R.id.mainFragment)
-
-        backStackEntry?.let {
-            val viewModel =
-                ViewModelProvider(backStackEntry.viewModelStore, TransactionsModule.Factory())
-                    .get(TransactionsViewModel::class.java)
-            MainScreenWithRootedDeviceCheck(
-                transactionsViewModel = viewModel,
-                navController = navController,
-                mainActivityViewModel = mainActivityViewModel
-            )
-        } ?: run {
-            requireActivity().finishAndRemoveTask()
-            exitProcess(0)
-        }
+        Nav3(mainActivityViewModel)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
