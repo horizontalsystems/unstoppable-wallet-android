@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun NetworkSelectScreen(
-    navController: NavController,
+    navController: NavHostController,
     activeAccount: Account,
     fullCoin: FullCoin,
     closeModule: () -> Unit,

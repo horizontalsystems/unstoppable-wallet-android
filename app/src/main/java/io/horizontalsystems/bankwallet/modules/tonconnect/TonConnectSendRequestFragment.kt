@@ -1,8 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.tonconnect
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 
 class TonConnectSendRequestFragment : BaseComposeFragment() {
     @Composable

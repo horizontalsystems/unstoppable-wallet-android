@@ -1,8 +1,14 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.annotation.IdRes
+import androidx.annotation.MainThread
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -30,17 +36,101 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.Factory
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
-open class BaseComposableBottomSheetFragment : BottomSheetDialogFragment() {
+open class BaseComposableBottomSheetFragment : HSScreen(bottomSheet = true) {
+
+    val viewLifecycleOwner: LifecycleOwner = TODO()
+    var arguments: Bundle? = TODO()
+
+    fun getString(i: Int) : String {
+        TODO()
+    }
+
+    open fun onCancel(dialog: DialogInterface) {
+
+    }
+
+    @MainThread
+    public inline fun <reified VM : ViewModel> navGraphViewModels(
+        @IdRes navGraphId: Int,
+        noinline extrasProducer: (() -> CreationExtras)? = null,
+        noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null
+    ): Lazy<VM> {
+        TODO()
+//        val backStackEntry by lazy { findNavController().getBackStackEntry(navGraphId) }
+//        val storeProducer: () -> ViewModelStore = { backStackEntry.viewModelStore }
+//        return createViewModelLazy(
+//            VM::class,
+//            storeProducer,
+//            { extrasProducer?.invoke() ?: backStackEntry.defaultViewModelCreationExtras },
+//            factoryProducer ?: { backStackEntry.defaultViewModelProviderFactory }
+//        )
+    }
+
+    fun show(fragmentManager: FragmentManager, string: String) {
+
+    }
+
+    fun requireArguments() : Bundle {
+        TODO()
+    }
+
+    fun dismiss() {
+
+    }
+
+    public inline fun <reified VM : ViewModel> viewModels(
+        noinline ownerProducer: () -> ViewModelStoreOwner = { TODO() },
+        noinline extrasProducer: (() -> CreationExtras)? = null,
+        noinline factoryProducer: (() -> Factory)? = null
+    ): Lazy<VM> {
+        TODO()
+    }
+
+    open fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        TODO()
+    }
+
+    open fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    }
+
+    open fun close() {
+        TODO()
+    }
+
+    fun requireContext(): Context {
+        TODO()
+    }
+
+    fun findNavController(): NavController {
+        TODO()
+    }
+
+}
+
+open class BaseComposableBottomSheetFragmentX : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

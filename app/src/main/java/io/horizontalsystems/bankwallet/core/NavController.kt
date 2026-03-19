@@ -2,12 +2,11 @@ package io.horizontalsystems.bankwallet.core
 
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import androidx.annotation.IdRes
 import androidx.core.os.bundleOf
-import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
@@ -141,17 +140,18 @@ private fun <T : Parcelable> NavController.navigateForResult(
 }
 
 private fun <T: Parcelable> NavController.getNavigationResultX(key: String, onResult: (T) -> Unit) {
-    currentBackStackEntry?.let { backStackEntry ->
-        backStackEntry.savedStateHandle.getLiveData<T>(key).observe(backStackEntry) {
-            onResult.invoke(it)
-
-            backStackEntry.savedStateHandle.remove<T>(key)
-        }
-    }
+//    currentBackStackEntry?.let { backStackEntry ->
+//        backStackEntry.savedStateHandle.getLiveData<T>(key).observe(backStackEntry) {
+//            onResult.invoke(it)
+//
+//            backStackEntry.savedStateHandle.remove<T>(key)
+//        }
+//    }
 }
 
 inline fun <reified T: Parcelable> NavController.getInput() : T? {
-    return currentBackStackEntry?.arguments?.getInputX()
+    TODO()
+//    return currentBackStackEntry?.arguments?.getInputX()
 }
 
 inline fun <reified T: Parcelable> Bundle.getInputX() : T? {
@@ -163,11 +163,11 @@ inline fun <reified T: Parcelable> NavController.requireInput() : T {
 }
 
 fun <T: Parcelable> NavController.setNavigationResultX(result: T) {
-    val resultKey = currentBackStackEntry?.arguments?.getString("resultKey")
-
-    if (resultKey == null) {
-        Log.w("AAA", "No key registered to set the result")
-    } else {
-        previousBackStackEntry?.savedStateHandle?.set(resultKey, result)
-    }
+//    val resultKey = currentBackStackEntry?.arguments?.getString("resultKey")
+//
+//    if (resultKey == null) {
+//        Log.w("AAA", "No key registered to set the result")
+//    } else {
+//        previousBackStackEntry?.savedStateHandle?.set(resultKey, result)
+//    }
 }

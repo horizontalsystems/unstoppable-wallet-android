@@ -42,10 +42,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PlanItems
@@ -61,7 +62,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -80,11 +80,12 @@ class PremiumFeaturesFragment : BaseFragment() {
             setContent {
                 ComposeAppTheme {
                     val navController = findNavController()
-                    PremiumFeaturesScreen(
-                        navController = navController,
-                        navHostController = null,
-                        onClose = { navController.popBackStack() }
-                    )
+//                    TODO("xxx nav3")
+//                    PremiumFeaturesScreen(
+//                        navController = navController,
+//                        navHostController = null,
+//                        onClose = { navController.popBackStack() }
+//                    )
                 }
             }
         }
@@ -126,7 +127,7 @@ class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
 @Composable
 fun PremiumFeaturesScreen(
     navController: NavController,
-    navHostController: NavController?,
+    navHostController: NavHostController?,
     onClose: () -> Unit
 ) {
     val viewModel = viewModel<BuySubscriptionViewModel> {
@@ -358,9 +359,9 @@ private fun ActionText() {
 private fun PremiumFeaturesScreenPreview() {
     ComposeAppTheme {
         val ctx = LocalContext.current
-        PremiumFeaturesScreen(
-            navController = NavController(ctx),
-            navHostController = null
-        ) {}
+//        PremiumFeaturesScreen(
+//            navController = NavController(ctx),
+//            navHostController = null
+//        ) {}
     }
 }

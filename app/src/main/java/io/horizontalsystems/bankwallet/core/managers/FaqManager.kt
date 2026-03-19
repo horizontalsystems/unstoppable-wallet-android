@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import androidx.navigation.NavController
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializationContext
@@ -13,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Faq
 import io.horizontalsystems.bankwallet.entities.FaqMap
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.Request

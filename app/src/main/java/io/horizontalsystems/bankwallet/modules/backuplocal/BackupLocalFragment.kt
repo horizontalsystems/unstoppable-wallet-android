@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBack
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupType
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.LocalBackupPasswordScreen
 import io.horizontalsystems.bankwallet.modules.backuplocal.terms.LocalBackupTermsScreen
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 
 class BackupLocalFragment : BaseComposeFragment() {
 

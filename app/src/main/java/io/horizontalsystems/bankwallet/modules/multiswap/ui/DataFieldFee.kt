@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.modules.multiswap.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.multiswap.FeeRow
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialog
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 
 @Composable
 fun DataFieldFee(
