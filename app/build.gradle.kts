@@ -70,18 +70,22 @@ android {
 
     val uswapApiKeyAndroid = "a32d6d05ef80c878c49eb7692aa6e2b36c4c0c7777b89e2c3c4d8e512a7cea61"
     val uswapApiKeyFdroid = "6e928d1db31e481ae57d42f34a9b7d58a64d7e2380f7ea696e652bd9a0ee516e"
+    val oneInchFeeAddressAndroid = "0xe42BBeE8389548fAe35C09072065b7fEc582b590"
+    val oneInchFeeAddressFdroid = "0x8009267B9929196f74720F2f1496bbD7B79945F1"
 
     productFlavors {
         create("base") {
             dimension = "distribution"
             signingConfig = signingConfigs.getByName("debug")
             resValue("string", "uswapApiKey", uswapApiKeyAndroid)
+            resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressAndroid)
         }
 
         create("fdroid") {
             dimension = "distribution"
             buildConfigField("boolean", "FDROID_BUILD", "true")
             resValue("string", "uswapApiKey", uswapApiKeyFdroid)
+            resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressFdroid)
         }
 
         create("fdroidCi") {
@@ -90,6 +94,7 @@ android {
             buildConfigField("boolean", "FDROID_BUILD", "true")
             signingConfig = signingConfigs.getByName("appCenter")
             resValue("string", "uswapApiKey", uswapApiKeyFdroid)
+            resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressFdroid)
         }
 
         create("ci") {
@@ -98,6 +103,7 @@ android {
             versionCode = System.getenv("BUILD_NUMBER")?.toIntOrNull() ?: defaultConfig.versionCode
             signingConfig = signingConfigs.getByName("appCenter")
             resValue("string", "uswapApiKey", uswapApiKeyAndroid)
+            resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressAndroid)
         }
     }
 

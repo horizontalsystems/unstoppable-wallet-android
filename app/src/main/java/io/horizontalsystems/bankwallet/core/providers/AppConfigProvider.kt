@@ -216,4 +216,8 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         Translator.getString(R.string.uswapApiKey)
     }
 
+    val oneInchPartnerFeeAddress by lazy {
+        Translator.getString(R.string.oneInchPartnerFeeAddress)
+    }
+
 }
