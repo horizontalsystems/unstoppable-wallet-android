@@ -44,8 +44,6 @@ class SwapInfoViewModel(
     private var formattedDate: String = ""
     private var status: SwapStatus = SwapStatus.Depositing
     private var recipientAddress: String? = null
-    private var sourceAddress: String? = null
-    private var fee: String? = null
     private var depositingTxUrl: String? = null
     private var sendingTxUrl: String? = null
     private var isSingleChain: Boolean = false
@@ -67,8 +65,6 @@ class SwapInfoViewModel(
         formattedDate = formattedDate,
         status = status,
         recipientAddress = recipientAddress,
-        sourceAddress = sourceAddress,
-        fee = fee,
         depositingTxUrl = depositingTxUrl,
         sendingTxUrl = sendingTxUrl,
         isSingleChain = isSingleChain,
@@ -106,8 +102,6 @@ class SwapInfoViewModel(
         formattedDate = DateHelper.formatDate(Date(record.timestamp), "MMM d, yyyy, HH:mm")
         status = runCatching { SwapStatus.valueOf(record.status) }.getOrDefault(SwapStatus.Depositing)
         recipientAddress = record.recipientAddress
-        sourceAddress = record.sourceAddress
-        fee = formatFee(record.networkFeeAmount, record.networkFeeCoinCode)
         depositingTxUrl = record.transactionHash?.let { buildTxUrl(record.tokenInBlockchainTypeUid, it) }
         sendingTxUrl = record.outboundTransactionHash?.let { buildTxUrl(record.tokenOutBlockchainTypeUid, it) }
         isSingleChain = MultiSwapProviderRegistry.isSingleChainSwap(
@@ -167,12 +161,6 @@ class SwapInfoViewModel(
             is BlockchainType.Unsupported -> null
         }
 
-    private fun formatFee(feeAmount: String?, feeCoinCode: String?): String? {
-        if (feeAmount == null || feeCoinCode == null) return null
-        val amount = feeAmount.toBigDecimalOrNull() ?: return null
-        return numberFormatter.formatCoinShort(amount, feeCoinCode, 8)
-    }
-
     class Factory(private val recordId: Int) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -204,8 +192,6 @@ data class SwapInfoUiState(
     val formattedDate: String,
     val status: SwapStatus,
     val recipientAddress: String?,
-    val sourceAddress: String?,
-    val fee: String?,
     val depositingTxUrl: String?,
     val sendingTxUrl: String?,
     val isSingleChain: Boolean,
