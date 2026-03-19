@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.LifecycleResumeEffect
-import androidx.navigation.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
 
 @Composable

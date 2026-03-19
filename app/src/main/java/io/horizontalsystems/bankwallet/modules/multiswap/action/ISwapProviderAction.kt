@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.action
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 
 interface ISwapProviderAction {
     val inProgress: Boolean

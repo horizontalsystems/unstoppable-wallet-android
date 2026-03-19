@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.modules.multiswap.action
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.eip20revoke.Eip20RevokeConfirmFragment
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 

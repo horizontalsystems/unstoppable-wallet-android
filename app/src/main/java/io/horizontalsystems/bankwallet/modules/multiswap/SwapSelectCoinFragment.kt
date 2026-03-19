@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.multiswap
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 

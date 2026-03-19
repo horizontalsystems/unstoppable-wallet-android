@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.screen.ContactsScreen
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.AddressViewModel
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactViewModel
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactsViewModel
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult

@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
 import androidx.compose.runtime.Composable
-import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 

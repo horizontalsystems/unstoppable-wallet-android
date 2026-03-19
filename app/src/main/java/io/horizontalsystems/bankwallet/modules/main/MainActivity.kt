@@ -16,12 +16,9 @@ import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
-import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.hideKeyboard
@@ -86,11 +83,13 @@ class MainActivity : BaseActivity() {
             if (wcEvent != null) {
                 when (wcEvent) {
                     is Wallet.Model.SessionRequest -> {
-                        navController.slideFromBottom(R.id.wcRequestFragment)
+//                        TODO("xxx nav3")
+//                        navController.slideFromBottom(R.id.wcRequestFragment)
                     }
 
                     is Wallet.Model.SessionProposal -> {
-                        navController.slideFromBottom(R.id.wcSessionBottomSheetDialog)
+//                        TODO("xxx nav3")
+//                        navController.slideFromBottom(R.id.wcSessionBottomSheetDialog)
                     }
 
                     is Wallet.Model.Error -> {
@@ -114,26 +113,28 @@ class MainActivity : BaseActivity() {
 
         viewModel.tcSendRequest.observe(this) { request ->
             if (request != null) {
-                navController.slideFromBottom(R.id.tcSendRequestFragment)
+//                TODO("xxx nav3")
+//                navController.slideFromBottom(R.id.tcSendRequestFragment)
             }
         }
 
         viewModel.tcDappRequest.observe(this) { request ->
             if (request != null) {
-                navController.slideFromBottomForResult<TonConnectNewFragment.Result>(
-                    R.id.tcNewFragment,
-                    request.dAppRequest
-                ) { result ->
-                    if (request.closeAppOnResult) {
-                        if (result.approved) {
-                            //Need delay to get connected before closing activity
-                            closeAfterDelay()
-                        } else {
-                            finish()
-                        }
-                    }
-                }
-                viewModel.onTcDappRequestHandled()
+//                TODO("xxx nav3")
+//                navController.slideFromBottomForResult<TonConnectNewFragment.Result>(
+//                    R.id.tcNewFragment,
+//                    request.dAppRequest
+//                ) { result ->
+//                    if (request.closeAppOnResult) {
+//                        if (result.approved) {
+//                            //Need delay to get connected before closing activity
+//                            closeAfterDelay()
+//                        } else {
+//                            finish()
+//                        }
+//                    }
+//                }
+//                viewModel.onTcDappRequestHandled()
             }
         }
 

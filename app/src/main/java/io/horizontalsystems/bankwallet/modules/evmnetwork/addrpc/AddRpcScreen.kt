@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -28,7 +28,7 @@ import io.horizontalsystems.marketkit.models.Blockchain
 
 @Composable
 fun AddRpcScreen(
-    navController: NavController,
+    navController: NavHostController,
     blockchain: Blockchain,
 ) {
     val viewModel = viewModel<AddRpcViewModel>(factory = AddRpcModule.Factory(blockchain))

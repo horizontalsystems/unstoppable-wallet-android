@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.list
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCSessionsScreen
 import kotlinx.parcelize.Parcelize
 

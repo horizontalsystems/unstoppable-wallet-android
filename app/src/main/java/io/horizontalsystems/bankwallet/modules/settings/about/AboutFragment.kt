@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -22,10 +22,10 @@ import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
-import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -62,13 +62,16 @@ private fun AboutNavHost(fragmentNavController: NavController) {
             ReleaseNotesScreen(false, { navController.popBackStack() })
         }
         composablePage(AppStatusPage) { AppStatusScreen(navController) }
-        composablePopup(TermsPage) { TermsScreen(navController) }
+        composablePopup(TermsPage) {
+//            TODO("xxx nav3")
+//            TermsScreen(navController)
+        }
     }
 }
 
 @Composable
 private fun AboutScreen(
-    navController: NavController,
+    navController: NavHostController,
     onBackPress: () -> Unit,
     aboutViewModel: AboutViewModel = viewModel(factory = AboutModule.Factory()),
 ) {
@@ -87,7 +90,7 @@ private fun AboutScreen(
 @Composable
 private fun SettingSections(
     viewModel: AboutViewModel,
-    navController: NavController
+    navController: NavHostController
 ) {
 
     val context = LocalContext.current

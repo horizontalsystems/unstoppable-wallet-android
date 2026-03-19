@@ -135,8 +135,9 @@ class ConfirmationDialog(
             )
             val transaction = fragmentManager.beginTransaction()
 
-            transaction.add(fragment, "bottom_coin_settings_alert_dialog")
-            transaction.commitAllowingStateLoss()
+//            TODO("xxx nav3")
+//            transaction.add(fragment, "bottom_coin_settings_alert_dialog")
+//            transaction.commitAllowingStateLoss()
         }
     }
 }

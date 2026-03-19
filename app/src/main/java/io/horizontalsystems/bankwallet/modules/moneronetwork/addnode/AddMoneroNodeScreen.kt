@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -28,7 +28,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 @Composable
 fun AddMoneroNodeScreen(
-    navController: NavController
+    navController: NavHostController
 ) {
     val viewModel = viewModel<AddMoneroNodeViewModel>(factory = AddMoneroNodeModule.Factory())
     if (viewModel.viewState.closeScreen) {

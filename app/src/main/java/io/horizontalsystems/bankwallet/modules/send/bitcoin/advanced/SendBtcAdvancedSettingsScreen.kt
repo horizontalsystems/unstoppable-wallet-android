@@ -27,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
@@ -36,6 +35,7 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodlerInput
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.TransactionInputsSortInfoPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -332,7 +332,7 @@ private fun BottomSheetTransactionOrderSelector(
 
 @Composable
 private fun TransactionDataSortSettings(
-    navController: NavController,
+    navController: NavHostController,
     coinCode: String,
     valueTitle: String,
     onClick: () -> Unit

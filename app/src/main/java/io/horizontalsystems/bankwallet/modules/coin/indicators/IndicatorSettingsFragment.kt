@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.modules.coin.indicators
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 

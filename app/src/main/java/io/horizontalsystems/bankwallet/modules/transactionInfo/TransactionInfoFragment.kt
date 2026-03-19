@@ -8,8 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -19,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -36,11 +35,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoCont
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoDoubleSpendCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoExplorerCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoRawTransaction
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSecretKeyCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSentToSelfCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSpeedUpCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoStatusCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoTransactionHashCell
-import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoSecretKeyCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionNftAmountCell
 import io.horizontalsystems.bankwallet.ui.compose.components.WarningMessageCell
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold

@@ -10,7 +10,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
@@ -31,6 +30,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsVi
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldNonce
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceService
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel

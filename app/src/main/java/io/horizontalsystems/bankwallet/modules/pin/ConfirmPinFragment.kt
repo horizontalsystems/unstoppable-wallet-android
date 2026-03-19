@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.pin
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
+import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinConfirm
 import kotlinx.parcelize.Parcelize
 
