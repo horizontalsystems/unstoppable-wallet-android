@@ -106,7 +106,7 @@ class MainFragment : Fragment() {
 }
 
 @Composable
-private fun MainScreenWithRootedDeviceCheck(
+fun MainScreenWithRootedDeviceCheck(
     transactionsViewModel: TransactionsViewModel,
     navController: NavController,
     rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory()),
