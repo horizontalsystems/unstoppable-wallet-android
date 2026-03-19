@@ -119,19 +119,19 @@ fun SendConfirmationScreen(
     LaunchedEffect(sendResult) {
         if (sendResult is SendResult.Sent) {
             delay(1200)
-            navController.popBackStack(closeUntilDestId, true)
+            navController.removeLastUntil(closeUntilDestId, true)
         }
     }
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         if (sendResult is SendResult.Sent) {
-            navController.popBackStack(closeUntilDestId, true)
+            navController.removeLastUntil(closeUntilDestId, true)
         }
     }
 
     HSScaffold(
         title = title ?: stringResource(R.string.Send_Confirmation_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         bottomBar = {
             ButtonsGroupWithShade {
                 SendButton(

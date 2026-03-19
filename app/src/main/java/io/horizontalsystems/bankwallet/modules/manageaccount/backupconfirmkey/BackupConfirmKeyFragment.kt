@@ -62,7 +62,7 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
                 iconTint = R.color.white
             )
             delay(300)
-            navController.popBackStack(R.id.backupKeyFragment, true)
+            navController.removeLastUntil(R.id.backupKeyFragment, true)
         }
     }
 
@@ -73,7 +73,7 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
 
     HSScaffold(
         title = stringResource(R.string.RecoveryPhraseVerify_Title),
-        onBack = { navController.popBackStack() },
+        onBack = { navController.removeLastOrNull() },
     ) {
         Column {
             InfoText(text = stringResource(R.string.RecoveryPhraseVerify_Description))

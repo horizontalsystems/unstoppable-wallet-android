@@ -76,7 +76,7 @@ private fun TransactionSpeedUpCancelScreen(
     LaunchedEffect(uiState.error) {
         if (uiState.error is TransactionAlreadyInBlock) {
             HudHelper.showErrorMessage(view, R.string.TransactionInfoOptions_Warning_TransactionInBlock)
-            navController.popBackStack()
+            navController.removeLastOrNull()
         }
     }
 
@@ -85,7 +85,7 @@ private fun TransactionSpeedUpCancelScreen(
     ConfirmTransactionScreen(
         title = viewModel.title,
         initialLoading = uiState.initialLoading,
-        onClickBack = { navController.popBackStack() },
+        onClickBack = { navController.removeLastOrNull() },
         onClickFeeSettings = {
             navController.slideFromBottom(R.id.transactionSpeedUpCancelTransactionSettings)
         },
@@ -112,7 +112,7 @@ private fun TransactionSpeedUpCancelScreen(
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
                             navController.setNavigationResultX(TransactionSpeedUpCancelFragment.Result(true))
-                            navController.popBackStack()
+                            navController.removeLastOrNull()
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
                             navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))

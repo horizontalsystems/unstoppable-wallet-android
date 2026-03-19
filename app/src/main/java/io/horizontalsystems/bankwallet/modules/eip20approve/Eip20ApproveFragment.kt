@@ -75,7 +75,7 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = navController::popBackStack
+                onClick = navController::removeLastOrNull
             )
         ),
         bottomBar = {
@@ -89,7 +89,7 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
                         viewModel.freeze()
                         navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>(R.id.eip20ApproveConfirmFragment) {
                             navController.setNavigationResultX(it)
-                            navController.popBackStack()
+                            navController.removeLastOrNull()
                         }
                     },
                 )

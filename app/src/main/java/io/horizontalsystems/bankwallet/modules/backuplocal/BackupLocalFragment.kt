@@ -42,7 +42,7 @@ private fun FullBackupNavHost(fragmentNavController: NavController) {
                     navController.navigate("terms_page$accountIds")
                 },
                 onBackClick = {
-                    fragmentNavController.popBackStack()
+                    fragmentNavController.removeLastOrNull()
                 }
             )
         }
@@ -73,7 +73,7 @@ private fun FullBackupNavHost(fragmentNavController: NavController) {
                     navController.popBackStack()
                 },
                 onFinish = {
-                    fragmentNavController.popBackStack()
+                    fragmentNavController.removeLastOrNull()
                 }
             )
         }
@@ -93,7 +93,7 @@ private fun SingleWalletBackupNavHost(fragmentNavController: NavController, acco
                     navController.navigate("password_page")
                 },
                 onBackClick = {
-                    fragmentNavController.popBackStack()
+                    fragmentNavController.removeLastOrNull()
                 }
             )
         }
@@ -104,7 +104,7 @@ private fun SingleWalletBackupNavHost(fragmentNavController: NavController, acco
                     navController.popBackStack()
                 },
                 onFinish = {
-                    fragmentNavController.popBackStack()
+                    fragmentNavController.removeLastOrNull()
                 }
             )
         }

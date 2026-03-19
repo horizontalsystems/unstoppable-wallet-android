@@ -109,20 +109,20 @@ class ResendBitcoinFragment : BaseComposeFragment() {
         LaunchedEffect(uiState.sendResult) {
             if (uiState.sendResult is SendResult.Sent) {
                 delay(1200)
-                navController.popBackStack(closeUntilDestId, true)
+                navController.removeLastUntil(closeUntilDestId, true)
             }
         }
 
         LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
             //additional close for cases when user closes app immediately after sending
             if (uiState.sendResult is SendResult.Sent) {
-                navController.popBackStack(closeUntilDestId, true)
+                navController.removeLastUntil(closeUntilDestId, true)
             }
         }
 
         HSScaffold(
             title = stringResource(uiState.titleResId),
-            onBack = navController::popBackStack,
+            onBack = navController::removeLastOrNull,
         ) {
             Column {
                 Column(

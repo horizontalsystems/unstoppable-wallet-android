@@ -52,13 +52,13 @@ fun WCPairingsScreen(navController: NavController) {
 
     LaunchedEffect(uiState.closeScreen) {
         if (uiState.closeScreen) {
-            navController.popBackStack()
+            navController.removeLastOrNull()
         }
     }
 
     HSScaffold(
         title = stringResource(R.string.WalletConnect_PairedDApps),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier

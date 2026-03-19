@@ -91,7 +91,7 @@ fun WCSendEthRequestScreen(
     val feeInfoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
 
     BottomSheetContent(
-        onDismissRequest = navController::popBackStack,
+        onDismissRequest = navController::removeLastOrNull,
         sheetState = sheetState,
     ) { snackbarActions ->
         Column(
@@ -181,7 +181,7 @@ fun WCSendEthRequestScreen(
                     modifier = Modifier.weight(1f),
                     onClick = {
                         viewModel.reject()
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 )
                 HSButton(
@@ -207,7 +207,7 @@ fun WCSendEthRequestScreen(
                             }
 
                             buttonEnabled = true
-                            navController.popBackStack()
+                            navController.removeLastOrNull()
                         }
                     }
                 )

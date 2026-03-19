@@ -43,7 +43,7 @@ fun SubscriptionScreen(navController: NavController) {
 
     HSScaffold(
         title = stringResource(R.string.Settings_Subscription),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column {
             VSpacer(12.dp)

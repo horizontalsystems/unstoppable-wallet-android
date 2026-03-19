@@ -51,7 +51,7 @@ private fun BlockchainSettingsScreen(
 
     HSScaffold(
         title = stringResource(R.string.BlockchainSettings_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier

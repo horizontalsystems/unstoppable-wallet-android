@@ -67,7 +67,7 @@ class SwapSelectProviderFragment : BaseComposeFragment() {
 fun SwapSelectProviderScreen(navController: NavController) {
     val previousBackStackEntry = remember { navController.previousBackStackEntry }
     if (previousBackStackEntry == null) {
-        navController.popBackStack()
+        navController.removeLastOrNull()
         return
     }
     val swapViewModel = viewModel<SwapViewModel>(
@@ -83,7 +83,7 @@ fun SwapSelectProviderScreen(navController: NavController) {
     val uiState = viewModel.uiState
 
     SwapSelectProviderScreenInner(
-        onClickClose = navController::popBackStack,
+        onClickClose = navController::removeLastOrNull,
         quotes = uiState.quoteViewItems,
         currentQuote = uiState.selectedQuote,
         sortType = uiState.sortType,
@@ -95,7 +95,7 @@ fun SwapSelectProviderScreen(navController: NavController) {
         }
     ) {
         swapViewModel.onSelectQuote(it)
-        navController.popBackStack()
+        navController.removeLastOrNull()
 
         stat(page = StatPage.SwapProvider, event = StatEvent.SwapSelectProvider(it.provider.id))
     }

@@ -58,12 +58,12 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
     val finish = viewModel.finish
 
     if (finish) {
-        navController.popBackStack()
+        navController.removeLastOrNull()
     }
 
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         LazyColumn(
             modifier = Modifier.navigationBarsPadding()

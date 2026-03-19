@@ -63,7 +63,7 @@ private fun BtcBlockchainSettingsScreen(
 ) {
 
     if (viewModel.closeScreen) {
-        navController.popBackStack()
+        navController.removeLastOrNull()
     }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
@@ -87,7 +87,7 @@ private fun BtcBlockchainSettingsScreen(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
                         onClick = {
-                            navController.popBackStack()
+                            navController.removeLastOrNull()
                         }
                     )
                 )

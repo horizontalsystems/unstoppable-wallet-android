@@ -44,7 +44,7 @@ class VaultBlockchainsSelectorFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<Input>()
         if (input == null) {
-            navController.popBackStack()
+            navController.removeLastOrNull()
             return
         }
         FilterByBlockchainsScreen(
@@ -53,7 +53,7 @@ class VaultBlockchainsSelectorFragment : BaseComposeFragment() {
             navController = navController,
             onDone = { selected ->
                 navController.setNavigationResultX(Result(selected))
-                navController.popBackStack()
+                navController.removeLastOrNull()
             },
         )
     }
@@ -65,7 +65,7 @@ class VaultBlockchainsSelectorFragment : BaseComposeFragment() {
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
+                    findNavController().removeLastOrNull()
                 }
             })
     }

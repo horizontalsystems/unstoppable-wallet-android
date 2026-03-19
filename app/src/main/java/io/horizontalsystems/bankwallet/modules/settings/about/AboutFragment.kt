@@ -55,7 +55,7 @@ private fun AboutNavHost(fragmentNavController: NavController) {
         composable(AboutPage) {
             AboutScreen(
                 navController,
-                { fragmentNavController.popBackStack() }
+                { fragmentNavController.removeLastOrNull() }
             )
         }
         composablePage(ReleaseNotesPage) {

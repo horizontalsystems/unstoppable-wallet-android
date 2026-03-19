@@ -58,7 +58,7 @@ class MarketSectorFragment : BaseComposeFragment() {
             SectorScreen(
                 viewModel = viewModel,
                 chartViewModel = chartViewModel,
-                onCloseButtonClick = { navController.popBackStack() },
+                onCloseButtonClick = { navController.removeLastOrNull() },
                 onCoinClick = { coinUid -> onCoinClick(coinUid, navController) }
             )
         }

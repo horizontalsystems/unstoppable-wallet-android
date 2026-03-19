@@ -40,7 +40,7 @@ class TermsFragment : BaseComposeFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.onBackPressedDispatcher?.addCallback(this) {
             findNavController().setNavigationResultX(Result(false))
-            findNavController().popBackStack()
+            findNavController().removeLastOrNull()
         }
     }
 
@@ -62,7 +62,7 @@ fun TermsScreen(
     LaunchedEffect(viewModel.closeWithTermsAgreed) {
         if (viewModel.closeWithTermsAgreed) {
             navController.setNavigationResultX(TermsFragment.Result(true))
-            navController.popBackStack()
+            navController.removeLastOrNull()
             viewModel.onTermsAgreedConsumed()
         }
     }
@@ -75,7 +75,7 @@ fun TermsScreen(
                 icon = R.drawable.ic_close,
                 onClick = {
                     navController.setNavigationResultX(TermsFragment.Result(false))
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 }
             )
         )

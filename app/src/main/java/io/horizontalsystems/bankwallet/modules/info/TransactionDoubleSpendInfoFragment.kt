@@ -43,7 +43,7 @@ class TransactionDoubleSpendInfoFragment : BaseComposeFragment() {
             InfoScreen(
                 txHash = input.transactionHash,
                 conflictingTxHash = input.conflictingTransactionHash,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.removeLastOrNull() }
             )
         }
     }

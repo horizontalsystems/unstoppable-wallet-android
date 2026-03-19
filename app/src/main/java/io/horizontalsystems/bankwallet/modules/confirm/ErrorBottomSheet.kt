@@ -60,7 +60,7 @@ fun ErrorBottomSheetScreen(
 ) {
     ComposeAppTheme {
         BottomSheetContent(
-            onDismissRequest = navController::popBackStack,
+            onDismissRequest = navController::removeLastOrNull,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             buttons = {
                 HSButton(
@@ -69,7 +69,7 @@ fun ErrorBottomSheetScreen(
                     variant = ButtonVariant.Secondary,
                     onClick = {
                         TextHelper.copyText(error)
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 )
             },

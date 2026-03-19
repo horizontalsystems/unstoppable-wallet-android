@@ -69,7 +69,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 iconTint = R.color.white
             )
             delay(300)
-            navController.popBackStack(popUpToInclusiveId, inclusive)
+            navController.removeLastUntil(popUpToInclusiveId, inclusive)
         }
     }
 
@@ -104,7 +104,7 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
 
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_WatchAddress),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = buildList {
             when (submitType) {
                 is SubmitButtonType.Watch -> {

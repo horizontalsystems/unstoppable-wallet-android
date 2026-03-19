@@ -69,7 +69,7 @@ private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
             iconPainter = uiState.iconSource.painter(),
             title = uiState.title,
             subtitle = uiState.subtitle,
-            onCloseClick = { navController.popBackStack() }
+            onCloseClick = { navController.removeLastOrNull() }
         ) {
             when (val tokenInfoType = uiState.tokenInfoType) {
                 is ConfiguredTokenInfoType.Contract -> {

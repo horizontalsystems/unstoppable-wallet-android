@@ -48,7 +48,7 @@ class WhyDonateFragment : BaseComposeFragment() {
                 stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
             },
             onClose = {
-                navController.popBackStack()
+                navController.removeLastOrNull()
             }
         )
     }

@@ -96,7 +96,7 @@ fun ActivateTokenScreen(
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
                             navController.setNavigationResultX(ActivateTokenFragment.Result(true))
-                            navController.popBackStack()
+                            navController.removeLastOrNull()
                         } catch (t: Throwable) {
                             navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                         }

@@ -43,7 +43,7 @@ class CoinAuditsFragment : BaseComposeFragment() {
             CoinAuditsScreen(
                 viewModel = viewModel,
                 onPressBack = {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 },
                 onClickReportUrl = {
                     LinkHelper.openLinkInAppBrowser(requireContext(), it)

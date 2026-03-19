@@ -69,7 +69,7 @@ fun SendMoneroScreen(
 
         SendScreen(
             title = title,
-            onBack = { navController.popBackStack() }
+            onBack = { navController.removeLastOrNull() }
         ) {
             VSpacer(16.dp)
             if (uiState.showAddressInput) {
@@ -78,7 +78,7 @@ fun SendMoneroScreen(
                     value = uiState.address.hex,
                     riskyAddress = riskyAddress
                 ) {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 }
                 VSpacer(16.dp)
             }

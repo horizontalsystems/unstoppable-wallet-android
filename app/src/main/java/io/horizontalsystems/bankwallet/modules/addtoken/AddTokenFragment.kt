@@ -72,7 +72,7 @@ private fun AddTokenNavHost(
         composable(AddTokenPage) {
             AddTokenScreen(
                 navController = navController,
-                closeScreen = { fragmentNavController.popBackStack() },
+                closeScreen = { fragmentNavController.removeLastOrNull() },
                 viewModel = viewModel
             )
         }

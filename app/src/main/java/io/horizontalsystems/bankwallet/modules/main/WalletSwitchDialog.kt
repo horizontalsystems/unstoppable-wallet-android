@@ -47,7 +47,7 @@ private fun WalletSwitchScreen(navController: NavController) {
     ComposeAppTheme {
         BottomSheetContent(
             onDismissRequest = {
-                navController.popBackStack()
+                navController.removeLastOrNull()
             },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         ) {
@@ -57,7 +57,7 @@ private fun WalletSwitchScreen(navController: NavController) {
                 selectedAccount = uiState.activeWallet,
                 onSelectListener = { account ->
                     viewModel.onSelect(account)
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
 
                     stat(
                         page = StatPage.SwitchWallet,
@@ -65,7 +65,7 @@ private fun WalletSwitchScreen(navController: NavController) {
                     )
                 },
                 onCancelClick = {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 }
             )
         }

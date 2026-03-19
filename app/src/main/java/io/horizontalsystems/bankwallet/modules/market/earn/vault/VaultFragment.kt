@@ -88,7 +88,7 @@ private fun VaultScreen(
 
     HSScaffold(
         title = uiState.vaultViewItem.assetSymbol,
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(Modifier.navigationBarsPadding()) {
             HSSwipeRefresh(

@@ -14,8 +14,8 @@ class EditPinFragment : BaseComposeFragment(screenshotEnabled = false) {
         PinSet(
             title = stringResource(R.string.EditPin_Title),
             description = stringResource(R.string.EditPin_NewPinInfo),
-            dismissWithSuccess = { navController.popBackStack() },
-            onBackPress = { navController.popBackStack() }
+            dismissWithSuccess = { navController.removeLastOrNull() },
+            onBackPress = { navController.removeLastOrNull() }
         )
     }
 }

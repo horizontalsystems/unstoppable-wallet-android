@@ -66,7 +66,7 @@ private fun RecoveryPhraseScreen(
 
     HSScaffold(
         title = stringResource(R.string.RecoveryPhrase_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),

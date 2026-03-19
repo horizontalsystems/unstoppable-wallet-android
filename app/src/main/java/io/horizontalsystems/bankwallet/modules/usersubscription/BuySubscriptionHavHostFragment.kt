@@ -18,7 +18,7 @@ class BuySubscriptionHavHostFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         SubscriptionNavHost(
             navController = navController,
-            onClose = { navController.popBackStack() })
+            onClose = { navController.removeLastOrNull() })
     }
 
     @Parcelize

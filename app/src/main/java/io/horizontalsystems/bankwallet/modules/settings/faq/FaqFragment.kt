@@ -40,7 +40,7 @@ class FaqListFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         FaqScreen(
-            onCloseClick = { navController.popBackStack() },
+            onCloseClick = { navController.removeLastOrNull() },
             onItemClick = { faqItem ->
                 navController.slideFromRight(
                     R.id.markdownFragment,

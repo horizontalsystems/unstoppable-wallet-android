@@ -58,12 +58,12 @@ fun ReceiveMoneroScreen(navController: NavController, wallet: Wallet, receiveEnt
                 }
             }
         },
-        onBackPress = { navController.popBackStack() },
+        onBackPress = { navController.removeLastOrNull() },
         closeModule = {
             if (receiveEntryPointDestId == 0) {
-                navController.popBackStack()
+                navController.removeLastOrNull()
             } else {
-                navController.popBackStack(receiveEntryPointDestId, true)
+                navController.removeLastUntil(receiveEntryPointDestId, true)
             }
         }
     )

@@ -37,13 +37,13 @@ fun MacdSettingsScreen(navController: NavController, indicatorSetting: ChartIndi
 
     if (uiState.finish) {
         LaunchedEffect(uiState.finish) {
-            navController.popBackStack()
+            navController.removeLastOrNull()
         }
     }
 
     HSScaffold(
         title = viewModel.name,
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),

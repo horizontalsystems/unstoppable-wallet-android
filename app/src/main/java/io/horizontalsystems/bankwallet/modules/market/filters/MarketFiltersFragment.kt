@@ -98,7 +98,7 @@ private fun AdvancedSearchScreen(
 
     HSScaffold(
         title = stringResource(R.string.Market_Filters),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),

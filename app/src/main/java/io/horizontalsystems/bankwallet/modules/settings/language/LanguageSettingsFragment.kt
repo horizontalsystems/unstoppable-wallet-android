@@ -53,7 +53,7 @@ private fun LanguageScreen(
     )
 ) {
     if (viewModel.closeScreen) {
-        navController.popBackStack()
+        navController.removeLastOrNull()
     }
 
     if (viewModel.reloadApp) {
@@ -62,7 +62,7 @@ private fun LanguageScreen(
 
     HSScaffold(
         title = stringResource(R.string.Settings_Language),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier

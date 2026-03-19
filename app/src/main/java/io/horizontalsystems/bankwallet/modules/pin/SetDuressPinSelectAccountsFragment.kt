@@ -51,7 +51,7 @@ fun SetDuressPinSelectAccountsScreen(navController: NavController) {
 
     HSScaffold(
         title = stringResource(R.string.DuressPinSelectAccounts_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         bottomBar = {
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(

@@ -39,7 +39,7 @@ class WCNetworksFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<Input>()
         if (input == null) {
-            navController.popBackStack()
+            navController.removeLastOrNull()
             return
         }
         NetworksScreen(
@@ -55,7 +55,7 @@ class WCNetworksFragment : BaseComposeFragment() {
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
+                    findNavController().removeLastOrNull()
                 }
             })
     }
@@ -76,7 +76,7 @@ private fun NetworksScreen(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = navController::popBackStack
+                onClick = navController::removeLastOrNull
             )
         ),
     ) {

@@ -88,7 +88,7 @@ fun WCSignEthereumTransactionRequestScreen(
     val doneMessage = stringResource(R.string.Hud_Text_Done)
 
     BottomSheetContent(
-        onDismissRequest = navController::popBackStack,
+        onDismissRequest = navController::removeLastOrNull,
         sheetState = sheetState,
     ) { snackbarActions ->
         Column(
@@ -183,7 +183,7 @@ fun WCSignEthereumTransactionRequestScreen(
                     modifier = Modifier.weight(1f),
                     onClick = {
                         viewModel.reject()
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 )
                 HSButton(
@@ -204,7 +204,7 @@ fun WCSignEthereumTransactionRequestScreen(
                                 Toast.makeText(view.context, t.javaClass.simpleName, Toast.LENGTH_SHORT).show()
                             }
 
-                            navController.popBackStack()
+                            navController.removeLastOrNull()
                         }
                     }
                 )
@@ -214,7 +214,7 @@ fun WCSignEthereumTransactionRequestScreen(
 
     ConfirmTransactionScreen(
         title = stringResource(id = R.string.WalletConnect_SignMessageRequest_Title),
-        onClickBack = navController::popBackStack,
+        onClickBack = navController::removeLastOrNull,
         onClickFeeSettings = null,
         buttonsSlot = {
             ButtonPrimaryYellow(
@@ -234,7 +234,7 @@ fun WCSignEthereumTransactionRequestScreen(
                             HudHelper.showErrorMessage(view, t.javaClass.simpleName)
                         }
 
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 }
             )
@@ -244,7 +244,7 @@ fun WCSignEthereumTransactionRequestScreen(
                 title = stringResource(R.string.Button_Reject),
                 onClick = {
                     viewModel.reject()
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 }
             )
         }

@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 
 class WCErrorNoAccountFragment : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
@@ -38,7 +37,7 @@ class WCErrorNoAccountFragment : BaseComposableBottomSheetFragment() {
             setContent {
                 ComposeAppTheme {
                     WalletConnectErrorNoAccount() {
-                        findNavController().popBackStack()
+                        findNavController().removeLastOrNull()
                     }
                 }
             }

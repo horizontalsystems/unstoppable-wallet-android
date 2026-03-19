@@ -38,9 +38,9 @@ private fun SwapSelectCoinScreen(
         title = title ?: "",
         coinBalanceItems = uiState.coinBalanceItems,
         onSearchTextChanged = viewModel::setQuery,
-        onClose = navController::popBackStack
+        onClose = navController::removeLastOrNull
     ) {
         navController.setNavigationResultX(it.token)
-        navController.popBackStack()
+        navController.removeLastOrNull()
     }
 }

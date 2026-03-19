@@ -157,7 +157,7 @@ fun SendBitcoinScreen(
 
         HSScaffold(
             title = title,
-            onBack = { fragmentNavController.popBackStack() },
+            onBack = { fragmentNavController.removeLastOrNull() },
             menuItems = listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
@@ -179,7 +179,7 @@ fun SendBitcoinScreen(
                         value = uiState.address.hex,
                         riskyAddress = riskyAddress
                     ) {
-                        fragmentNavController.popBackStack()
+                        fragmentNavController.removeLastOrNull()
                     }
                     VSpacer(16.dp)
                 }

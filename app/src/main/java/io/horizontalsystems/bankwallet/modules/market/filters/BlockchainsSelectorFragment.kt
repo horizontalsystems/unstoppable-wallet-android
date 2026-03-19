@@ -52,7 +52,7 @@ class BlockchainsSelectorFragment : BaseComposeFragment() {
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
+                    findNavController().removeLastOrNull()
                 }
             })
     }
@@ -82,7 +82,7 @@ private fun FilterByBlockchainsScreen(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
-                        onClick = navController::popBackStack
+                        onClick = navController::removeLastOrNull
                     )
                 ),
             )
@@ -134,7 +134,7 @@ private fun FilterByBlockchainsScreen(
                         )
                     },
                     onClick = {
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     },
                 )
             }

@@ -30,7 +30,7 @@ class AutoLockIntervalsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         AutoLockIntervalsScreen(
-            close = { navController.popBackStack() },
+            close = { navController.removeLastOrNull() },
         )
     }
 

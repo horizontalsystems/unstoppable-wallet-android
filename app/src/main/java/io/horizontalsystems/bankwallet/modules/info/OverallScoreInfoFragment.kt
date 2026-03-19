@@ -56,7 +56,7 @@ private fun InfoScreen(
 ) {
     HSScaffold(
         title = "",
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier

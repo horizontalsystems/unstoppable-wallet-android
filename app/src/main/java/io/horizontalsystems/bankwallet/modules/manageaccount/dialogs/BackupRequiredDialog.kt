@@ -63,7 +63,7 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
 fun BackupRequiredScreen(navController: NavController, account: Account, text: String) {
     ComposeAppTheme {
         BottomSheetContent(
-            onDismissRequest = navController::popBackStack,
+            onDismissRequest = navController::removeLastOrNull,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             buttons = {
                 HSButton(
@@ -100,7 +100,7 @@ fun BackupRequiredScreen(navController: NavController, account: Account, text: S
                     style = ButtonStyle.Transparent,
                     variant = ButtonVariant.Secondary,
                     size = ButtonSize.Medium,
-                    onClick = navController::popBackStack
+                    onClick = navController::removeLastOrNull
                 )
             },
             content = {

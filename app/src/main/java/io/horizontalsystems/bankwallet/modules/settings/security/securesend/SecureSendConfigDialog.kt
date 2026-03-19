@@ -61,7 +61,7 @@ private fun SecureSendConfigScreen(navController: NavController) {
 
     BottomSheetContent(
         onDismissRequest = {
-            navController.popBackStack()
+            navController.removeLastOrNull()
         },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         buttons = {
@@ -70,7 +70,7 @@ private fun SecureSendConfigScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth(),
                 variant = ButtonVariant.Primary,
                 onClick = {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 }
             )
         },

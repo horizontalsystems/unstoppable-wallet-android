@@ -87,7 +87,7 @@ fun CoinTabs(
 
     HSScaffold(
         title = viewModel.fullCoin.coin.code,
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = buildList {
             if (viewModel.isWatchlistEnabled) {
                 if (viewModel.isFavorite) {
@@ -180,7 +180,7 @@ fun CoinTabs(
 fun CoinNotFound(coinUid: String, navController: NavController) {
     HSScaffold(
         title = coinUid,
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         ListEmptyView(
             text = stringResource(R.string.CoinPage_CoinNotFound, coinUid),

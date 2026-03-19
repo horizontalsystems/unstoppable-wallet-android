@@ -75,7 +75,7 @@ fun ContactsNavHost(navController: NavController, mode: Mode) {
             val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(mode))
             ContactsScreen(
                 viewModel = viewModel,
-                onNavigateToBack = { navController.popBackStack() },
+                onNavigateToBack = { navController.removeLastOrNull() },
                 onNavigateToCreateContact = { navHostController.navigate("contact") },
                 onNavigateToContact = { contact ->
                     backStackEntry.savedStateHandle["contact"] = contact
@@ -100,7 +100,7 @@ fun ContactsNavHost(navController: NavController, mode: Mode) {
                     if (mode == Mode.Full) {
                         navHostController.popBackStack()
                     } else {
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 },
                 onNavigateToAddress = { address ->

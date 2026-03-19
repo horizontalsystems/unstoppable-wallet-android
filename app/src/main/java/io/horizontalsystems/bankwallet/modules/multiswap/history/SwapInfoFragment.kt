@@ -81,7 +81,7 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
 
     HSScaffold(
         title = stringResource(R.string.SwapInfo_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier

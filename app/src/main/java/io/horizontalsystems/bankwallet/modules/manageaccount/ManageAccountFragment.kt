@@ -79,12 +79,12 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
         viewModel<ManageAccountViewModel>(factory = ManageAccountModule.Factory(accountId))
 
     if (viewModel.viewState.closeScreen) {
-        navController.popBackStack()
+        navController.removeLastOrNull()
         viewModel.onClose()
     }
     HSScaffold(
         title = viewModel.viewState.title,
-        onBack = { navController.popBackStack() },
+        onBack = { navController.removeLastOrNull() },
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.ManageAccount_Save),

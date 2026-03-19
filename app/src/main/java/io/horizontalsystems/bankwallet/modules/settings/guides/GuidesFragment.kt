@@ -61,7 +61,7 @@ fun GuidesScreen(navController: NavController) {
 
     HSScaffold(
         title = stringResource(R.string.Guides_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(modifier = Modifier.navigationBarsPadding()) {
             Crossfade(viewState) { viewState ->

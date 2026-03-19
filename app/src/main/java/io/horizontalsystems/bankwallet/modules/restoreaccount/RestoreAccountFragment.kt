@@ -56,7 +56,7 @@ private fun RestoreAccountNavHost(
 
     val view = LocalView.current
     val onFinish: () -> Unit = {
-        fragmentNavController.popBackStack(popUpToInclusiveId, inclusive)
+        fragmentNavController.removeLastUntil(popUpToInclusiveId, inclusive)
     }
 
     val uiState = mainViewModel.uiState
@@ -93,7 +93,7 @@ private fun RestoreAccountNavHost(
                 openRestoreAdvanced = { navController.navigate("restore_phrase_advanced") },
                 openSelectCoins = { mainViewModel.requestOpenSelectCoinsScreen() },
                 openNonStandardRestore = { navController.navigate("restore_phrase_nonstandard") },
-                onBackClick = { fragmentNavController.popBackStack() },
+                onBackClick = { fragmentNavController.removeLastOrNull() },
             )
         }
         composablePage("restore_phrase_advanced") {

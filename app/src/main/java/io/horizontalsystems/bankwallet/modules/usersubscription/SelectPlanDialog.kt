@@ -53,7 +53,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSSelector
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.subscriptions.core.HSPurchase
 import io.horizontalsystems.subscriptions.core.numberOfDays
 
@@ -72,9 +71,9 @@ class SelectPlanDialog : BaseComposableBottomSheetFragment() {
                 ComposeAppTheme {
                     val navController = findNavController()
                     SelectPlanBottomSheet(
-                        onDismiss = { navController.popBackStack() },
+                        onDismiss = { navController.removeLastOrNull() },
                         onPurchase = {
-                            navController.popBackStack()
+                            navController.removeLastOrNull()
                             navController.slideFromBottom(R.id.premiumSubscribedDialog)
                         },
                     )

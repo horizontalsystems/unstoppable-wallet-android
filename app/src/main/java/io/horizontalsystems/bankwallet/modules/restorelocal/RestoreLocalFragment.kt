@@ -124,8 +124,8 @@ private fun RestoreLocalNavHost(
                 viewModel = viewModel,
                 mainViewModel = mainViewModel,
                 statPage = statPage,
-                onBackClick = { fragmentNavController.popBackStack() },
-                close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) },
+                onBackClick = { fragmentNavController.removeLastOrNull() },
+                close = { fragmentNavController.removeLastUntil(popUpToInclusiveId, popUpInclusive) },
                 openSelectCoins = { navController.navigate("restore_select_coins") },
                 openBackupItems = { navController.navigate("backup_file") }
             )
@@ -134,7 +134,7 @@ private fun RestoreLocalNavHost(
             BackupFileItems(
                 viewModel,
                 onBackClick = { navController.popBackStack() },
-                close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) },
+                close = { fragmentNavController.removeLastUntil(popUpToInclusiveId, popUpInclusive) },
                 reloadApp = reloadApp
             )
         }
@@ -149,7 +149,7 @@ private fun RestoreLocalNavHost(
                     }
                 },
                 onBackClick = { navController.popBackStack() }
-            ) { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) }
+            ) { fragmentNavController.removeLastUntil(popUpToInclusiveId, popUpInclusive) }
         }
         composablePage("zcash_configure") {
             RestoreBirthdayHeightScreen(

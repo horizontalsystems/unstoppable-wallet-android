@@ -21,7 +21,7 @@ class IndicatorSettingsFragment : BaseComposeFragment() {
 
             if (indicatorSetting == null) {
                 HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
-                navController.popBackStack()
+                navController.removeLastOrNull()
             } else {
                 when (indicatorSetting.type) {
                     ChartIndicatorSetting.IndicatorType.MA -> {

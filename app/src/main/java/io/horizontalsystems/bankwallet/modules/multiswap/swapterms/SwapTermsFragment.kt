@@ -52,7 +52,7 @@ fun SwapTermsScreen(navController: NavController) {
 
     HSScaffold(
         title = stringResource(R.string.SwapTerms_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         bottomBar = {
             ButtonsGroupWithShade {
                 ButtonPrimaryYellow(
@@ -65,7 +65,7 @@ fun SwapTermsScreen(navController: NavController) {
                         viewModel.onConfirm()
 
                         navController.setNavigationResultX(SwapTermsFragment.Result(true))
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 )
             }

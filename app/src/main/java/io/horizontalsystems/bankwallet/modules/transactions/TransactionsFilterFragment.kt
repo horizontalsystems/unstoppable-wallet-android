@@ -53,7 +53,7 @@ class TransactionsFilterFragment : BaseComposeFragment() {
         }
 
         if (viewModel == null) {
-            navController.popBackStack(R.id.filterCoinFragment, true)
+            navController.removeLastUntil(R.id.filterCoinFragment, true)
             return
         }
 
@@ -89,7 +89,7 @@ fun FilterScreen(
 
     HSScaffold(
         title = stringResource(R.string.Transactions_Filter),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
@@ -182,7 +182,7 @@ fun FilterScreen(
                         .padding(horizontal = 16.dp),
                     title = stringResource(R.string.Button_Apply),
                     onClick = {
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     },
                 )
             }

@@ -72,7 +72,7 @@ class DefenseSystemFeatureDialog : BaseComposableBottomSheetFragment() {
                 val navController = findNavController()
                 val input: Input = navController.getInput()
                     ?: run {
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                         return@setContent
                     }
 
@@ -166,7 +166,7 @@ private fun DefenseSystemFeatureScreen(
 
     BottomSheetContent(
         onDismissRequest = {
-            navController.popBackStack()
+            navController.removeLastOrNull()
         },
         sheetState = sheetState
     ) {
@@ -234,7 +234,7 @@ private fun DefenseSystemFeatureScreen(
                         icon = painterResource(id = R.drawable.ic_close),
                         variant = ButtonVariant.Secondary,
                         size = ButtonSize.Small,
-                        onClick = { navController.popBackStack() }
+                        onClick = { navController.removeLastOrNull() }
                     )
                 }
             }
@@ -255,7 +255,7 @@ private fun DefenseSystemFeatureScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                         navController.slideFromBottom(R.id.buySubscriptionDialog)
                     }
                     .padding(horizontal = 32.dp, vertical = 12.dp),
@@ -269,7 +269,7 @@ private fun DefenseSystemFeatureScreen(
                 variant = ButtonVariant.Primary,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                     navController.slideFromBottom(R.id.selectSubscriptionPlanDialog)
                 }
             )

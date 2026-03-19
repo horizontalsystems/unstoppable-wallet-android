@@ -50,7 +50,7 @@ class BackupManagerFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         BackupManagerScreen(
             onBackClick = {
-                navController.popBackStack()
+                navController.removeLastOrNull()
             },
             onRestoreBackup = { jsonString, fileName ->
                 navController.navigateWithTermsAccepted {

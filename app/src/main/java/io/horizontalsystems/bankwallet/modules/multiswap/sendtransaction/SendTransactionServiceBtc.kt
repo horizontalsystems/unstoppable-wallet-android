@@ -212,7 +212,7 @@ fun SendBtcFeeSettingsScreen(
 
     HSScaffold(
         title = stringResource(R.string.SendEvmSettings_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),

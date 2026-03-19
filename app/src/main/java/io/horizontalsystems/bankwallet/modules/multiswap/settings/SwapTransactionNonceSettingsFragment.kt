@@ -16,7 +16,7 @@ class SwapTransactionNonceSettingsFragment : BaseComposeFragment() {
 @Composable
 fun SwapTransactionNonceSettingsScreen(navController: NavController) {
     val previousBackStackEntry = navController.previousBackStackEntry ?: run {
-        navController.popBackStack()
+        navController.removeLastOrNull()
         return
     }
     val viewModel = viewModel<SwapConfirmViewModel>(

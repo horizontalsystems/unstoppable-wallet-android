@@ -22,9 +22,9 @@ class SetPinFragment : BaseComposeFragment(screenshotEnabled = false) {
             description = stringResource(input?.descriptionResId ?: R.string.PinSet_Info),
             dismissWithSuccess = {
                 navController.setNavigationResultX(Result(true))
-                navController.popBackStack()
+                navController.removeLastOrNull()
             },
-            onBackPress = { navController.popBackStack() }
+            onBackPress = { navController.removeLastOrNull() }
         )
     }
 

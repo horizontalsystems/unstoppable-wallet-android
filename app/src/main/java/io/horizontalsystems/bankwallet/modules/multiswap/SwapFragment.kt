@@ -113,7 +113,7 @@ class SwapFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<Input>()
-        SwapScreen(navController, input?.tokenIn, input?.tokenOut, navController::popBackStack)
+        SwapScreen(navController, input?.tokenIn, input?.tokenOut, navController::removeLastOrNull)
     }
 
     @Parcelize

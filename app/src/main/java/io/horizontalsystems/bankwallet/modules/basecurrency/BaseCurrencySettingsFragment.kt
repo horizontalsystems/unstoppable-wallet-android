@@ -79,7 +79,7 @@ private fun BaseCurrencyScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
 
     if (viewModel.closeScreen) {
-        navController.popBackStack()
+        navController.removeLastOrNull()
     }
 
     if (viewModel.showDisclaimer) {
@@ -90,7 +90,7 @@ private fun BaseCurrencyScreen(
 
     HSScaffold(
         title = stringResource(R.string.SettingsCurrency_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             Modifier

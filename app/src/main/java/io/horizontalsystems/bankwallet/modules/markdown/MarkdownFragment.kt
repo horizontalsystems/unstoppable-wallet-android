@@ -25,7 +25,7 @@ class MarkdownFragment : BaseComposeFragment() {
                 handleRelativeUrl = input.handleRelativeUrl,
                 showAsPopup = input.showAsPopup,
                 markdownUrl = input.markdownUrl,
-                onCloseClick = { navController.popBackStack() },
+                onCloseClick = { navController.removeLastOrNull() },
                 onUrlClick = { url ->
                     navController.slideFromRight(
                         R.id.markdownFragment, Input(url)

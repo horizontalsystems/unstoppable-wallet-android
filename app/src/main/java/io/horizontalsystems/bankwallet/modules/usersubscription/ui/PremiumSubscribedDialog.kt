@@ -32,7 +32,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
-import io.horizontalsystems.core.findNavController
 
 class PremiumSubscribedDialog : BaseComposableBottomSheetFragment() {
 
@@ -49,7 +48,7 @@ class PremiumSubscribedDialog : BaseComposableBottomSheetFragment() {
                 ComposeAppTheme {
                     val navController = findNavController()
                     PremiumSubscribedScreen(
-                        onCloseClick = navController::popBackStack,
+                        onCloseClick = navController::removeLastOrNull,
                     )
                 }
             }

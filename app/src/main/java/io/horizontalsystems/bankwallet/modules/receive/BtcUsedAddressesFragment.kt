@@ -10,7 +10,7 @@ class BtcUsedAddressesFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<UsedAddressesParams>(navController) {
-            UsedAddressScreen(it) { navController.popBackStack() }
+            UsedAddressScreen(it) { navController.removeLastOrNull() }
         }
     }
 }

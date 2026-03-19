@@ -17,7 +17,7 @@ class TonConnectNewFragment : BaseComposeFragment() {
                 requestEntity = input,
                 onResult = { approved ->
                     navController.setNavigationResultX(Result(approved))
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 },
             )
         }

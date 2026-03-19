@@ -46,7 +46,7 @@ class ZcashAddressTypeSelectFragment : BaseComposeFragment() {
                     )
                 },
                 onBackPress = {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 })
         }
     }

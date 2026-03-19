@@ -71,7 +71,7 @@ private fun ShowMoneroKeyScreen(
 
     HSScaffold(
         title = stringResource(keys.title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column {
             Column(

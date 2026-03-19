@@ -15,10 +15,10 @@ class ConfirmPinFragment : BaseComposeFragment(screenshotEnabled = false) {
         PinConfirm(
             onSuccess = {
                 navController.setNavigationResultX(Result(true))
-                navController.popBackStack()
+                navController.removeLastOrNull()
             },
             onCancel = {
-                navController.popBackStack()
+                navController.removeLastOrNull()
             }
         )
     }

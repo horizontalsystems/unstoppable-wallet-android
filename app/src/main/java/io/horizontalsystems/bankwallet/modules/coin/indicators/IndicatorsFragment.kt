@@ -57,7 +57,7 @@ fun IndicatorsScreen(navController: NavController) {
 
     HSScaffold(
         title = stringResource(R.string.CoinPage_Indicators),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column {
             HeaderText(

@@ -55,7 +55,7 @@ fun SelectContactScreen(navController: NavController, input: SelectContactFragme
 
     HSScaffold(
         title = stringResource(R.string.Contacts),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         if (uiState.items.isEmpty()) {
             Column {
@@ -73,7 +73,7 @@ fun SelectContactScreen(navController: NavController, input: SelectContactFragme
                 items(uiState.items) { contact ->
                     CellContact(contact, uiState.selected) {
                         navController.setNavigationResultX(SelectContactFragment.Result(contact))
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 }
                 item {

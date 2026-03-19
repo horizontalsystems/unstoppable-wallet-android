@@ -46,7 +46,7 @@ class FilterBlockchainFragment : BaseComposeFragment() {
         }
 
         if (viewModel == null) {
-            navController.popBackStack(R.id.filterBlockchainFragment, true)
+            navController.removeLastUntil(R.id.filterBlockchainFragment, true)
             return
         }
 
@@ -61,7 +61,7 @@ fun FilterBlockchainScreen(navController: NavController, viewModel: Transactions
 
     HSScaffold(
         title = stringResource(R.string.Transactions_Filter_ChooseBlockchain),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column {
             filterBlockchains?.let { blockchains ->
@@ -89,7 +89,7 @@ private fun BlockchainCell(
                 .fillMaxSize()
                 .clickable {
                     viewModel.onEnterFilterBlockchain(filterItem)
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 }
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically

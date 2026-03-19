@@ -10,7 +10,7 @@ class AddressCheckFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         UnifiedAddressCheckScreen(
-            onClose = { navController.popBackStack() }
+            onClose = { navController.removeLastOrNull() }
         )
     }
 }

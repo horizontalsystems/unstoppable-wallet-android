@@ -14,8 +14,8 @@ class EditDuressPinFragment : BaseComposeFragment(screenshotEnabled = false) {
         PinSet(
             title = stringResource(id = R.string.EditDuressPin_Title),
             description = stringResource(id = R.string.EditDuressPin_Description),
-            dismissWithSuccess = { navController.popBackStack() },
-            onBackPress = { navController.popBackStack() },
+            dismissWithSuccess = { navController.removeLastOrNull() },
+            onBackPress = { navController.removeLastOrNull() },
             forDuress = true
         )
     }

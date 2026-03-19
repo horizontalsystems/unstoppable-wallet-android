@@ -65,7 +65,7 @@ private fun ProUsersInfoScreen(navController: NavController, features: List<Stri
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.ProUsersInfo_UnstoppablePass),
         onCloseClick = {
-            navController.popBackStack()
+            navController.removeLastOrNull()
         }
     ) {
 
@@ -102,7 +102,7 @@ private fun ProUsersInfoScreen(navController: NavController, features: List<Stri
                 .fillMaxWidth(),
             title = stringResource(R.string.Hud_Text_LearnMore),
             onClick = {
-                navController.popBackStack()
+                navController.removeLastOrNull()
             },
             enabled = false
         )

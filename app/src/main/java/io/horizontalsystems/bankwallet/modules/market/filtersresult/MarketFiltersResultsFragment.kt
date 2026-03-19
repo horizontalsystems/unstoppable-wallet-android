@@ -48,7 +48,7 @@ class MarketFiltersResultsFragment : BaseComposeFragment() {
         val viewModel = getViewModel()
 
         if (viewModel == null) {
-            navController.popBackStack()
+            navController.removeLastOrNull()
             return
         }
 
@@ -82,7 +82,7 @@ private fun SearchResultsScreen(
 
     HSScaffold(
         title = stringResource(R.string.Market_AdvancedSearch_Results),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(Modifier.navigationBarsPadding()) {
             Crossfade(uiState.viewState, label = "") { state ->
