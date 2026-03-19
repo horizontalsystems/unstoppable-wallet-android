@@ -208,9 +208,12 @@ private fun SwapSelectProviderScreenInner(
                                                     } ?: stringResource(R.string.NotAvailable))
                                                 )
 
-                                                RiskCell(provider.riskLevel) {
-                                                    onBadgeClick.invoke()
-                                                }
+                                                RiskCell(
+                                                    modifier = Modifier.clickable {
+                                                        onBadgeClick.invoke()
+                                                    },
+                                                    provider.riskLevel
+                                                )
                                             }
                                             Row(
                                                 horizontalArrangement = spacedBy(4.dp)
@@ -255,8 +258,8 @@ private fun SwapSelectProviderScreenInner(
 
 @Composable
 fun RiskCell(
+    modifier: Modifier = Modifier,
     riskLevel: RiskLevel,
-    onClick: () -> Unit
 ) {
     val color = when (riskLevel) {
         RiskLevel.AUTO -> ComposeAppTheme.colors.remus
@@ -270,9 +273,7 @@ fun RiskCell(
         RiskLevel.LIMITED -> R.drawable.thumbsup_24
         RiskLevel.PRECHECK -> R.drawable.ic_warning_filled_24
     }
-    Row(
-        modifier = Modifier.clickable { onClick.invoke() },
-    ) {
+    Row(modifier = modifier) {
         Icon(
             painter = painterResource(icon),
             modifier = Modifier.size(16.dp),
@@ -286,7 +287,6 @@ fun RiskCell(
             color = color,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            modifier = Modifier.weight(1f),
         )
     }
 }
