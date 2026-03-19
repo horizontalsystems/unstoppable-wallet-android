@@ -39,9 +39,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -646,10 +650,10 @@ private fun SwapCoinInputTo(
             }
             VSpacer(height = 3.dp)
             if (fiatAmount == null) {
-                body_grey(text = "0${currency.symbol}")
+                body_grey(text = "${currency.symbol}0")
             } else {
                 Row {
-                    body_grey(text = "${fiatAmount.toPlainString()}${currency.symbol}")
+                    body_grey(text = "${currency.symbol}${fiatAmount.toPlainString()}")
                     fiatPriceImpact?.let { diff ->
                         HSpacer(width = 4.dp)
                         Text(
@@ -707,45 +711,51 @@ fun FiatAmountInput(
     var text by remember(value) {
         mutableStateOf(value?.toPlainString() ?: "")
     }
-    Row {
-        BasicTextField(
-            modifier = Modifier.weight(1f),
-            value = text,
-            onValueChange = {
-                try {
-                    val amount = if (it.isBlank()) {
-                        null
-                    } else {
-                        it.toBigDecimal()
-                    }
-                    text = it
-                    onValueChange.invoke(amount)
-                } catch (e: Exception) {
-
+    val displayTransformation = remember(currency.symbol) {
+        VisualTransformation { originalText ->
+            val prefixLen = currency.symbol.length
+            val isEmpty = originalText.text.isEmpty()
+            val visual = AnnotatedString(currency.symbol + originalText.text + if (isEmpty) "0" else "")
+            TransformedText(
+                text = visual,
+                offsetMapping = object : OffsetMapping {
+                    override fun originalToTransformed(offset: Int) =
+                        if (isEmpty) prefixLen + 1 else offset + prefixLen
+                    override fun transformedToOriginal(offset: Int) =
+                        (offset - prefixLen).coerceIn(0, originalText.text.length)
                 }
-            },
-            enabled = enabled,
-            textStyle = ColoredTextStyle(
-                color = ComposeAppTheme.colors.grey,
-                textStyle = ComposeAppTheme.typography.body,
-                textAlign = TextAlign.End
-            ),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Decimal
-            ),
-            cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
-            decorationBox = { innerTextField ->
-                if (text.isEmpty()) {
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
-                        body_grey(text = "0")
-                    }
-                }
-                innerTextField()
-            },
-        )
-        body_grey(text = currency.symbol)
+            )
+        }
     }
+    BasicTextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = text,
+        onValueChange = {
+            try {
+                val amount = if (it.isBlank()) {
+                    null
+                } else {
+                    it.toBigDecimal()
+                }
+                text = it
+                onValueChange.invoke(amount)
+            } catch (e: Exception) {
+
+            }
+        },
+        enabled = enabled,
+        textStyle = ColoredTextStyle(
+            color = ComposeAppTheme.colors.grey,
+            textStyle = ComposeAppTheme.typography.body,
+            textAlign = TextAlign.End
+        ),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Decimal
+        ),
+        cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
+        visualTransformation = displayTransformation,
+    )
 }
 
 @Composable
