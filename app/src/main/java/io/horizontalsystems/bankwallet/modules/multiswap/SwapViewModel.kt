@@ -56,7 +56,7 @@ class SwapViewModel(
     private var fiatAmountIn: BigDecimal? = null
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountInputEnabled = false
-    private val currency = currencyManager.baseCurrency
+    private var currency = currencyManager.baseCurrency
     private var requoteOnTimeout = true
     private var swapTermsAccepted = swapTermsManager.swapTermsAcceptedStateFlow.value
 
@@ -132,6 +132,16 @@ class SwapViewModel(
 
         fiatServiceIn.setCurrency(currency)
         fiatServiceOut.setCurrency(currency)
+
+        viewModelScope.launch {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
+                currency = currencyManager.baseCurrency
+                fiatServiceIn.setCurrency(currency)
+                fiatServiceOut.setCurrency(currency)
+                emitState()
+            }
+        }
+
         networkAvailabilityService.start(viewModelScope)
 
 
