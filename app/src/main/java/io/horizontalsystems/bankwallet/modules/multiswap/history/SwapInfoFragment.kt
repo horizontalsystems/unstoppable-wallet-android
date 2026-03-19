@@ -43,7 +43,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
@@ -231,33 +230,6 @@ fun SwapInfoScreen(recordId: Int, navController: NavController) {
                                 },
                             )
                         },
-                    )
-                }
-                // Source address
-                uiState.sourceAddress?.let { address ->
-                    CellSecondary(
-                        middle = {
-                            CellMiddleInfoTextIcon(text = stringResource(R.string.SwapInfo_SourceAddress).hs)
-                        },
-                        right = {
-                            CellRightControlsButtonText(
-                                subtitle = address.shortenAddress().hs(color = leah),
-                                icon = painterResource(R.drawable.copy_filled_24),
-                                iconTint = leah,
-                                onIconClick = {
-                                    TextHelper.copyText(address)
-                                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                                },
-                            )
-                        },
-                    )
-                }
-                // Fee
-                uiState.fee?.let { fee ->
-                    DataFieldFee(
-                        navController,
-                        fee,
-                        null
                     )
                 }
             }

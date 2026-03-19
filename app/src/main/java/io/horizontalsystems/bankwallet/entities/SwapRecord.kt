@@ -33,10 +33,6 @@ data class SwapRecord(
     val transactionHash: String?,
     val outboundTransactionHash: String? = null,
 
-    val slippage: String?,
-    val networkFeeCoinCode: String?,
-    val networkFeeAmount: String?,
-
     val providerSwapId: String?,
     val fromAsset: String?,
     val toAsset: String?,
