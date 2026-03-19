@@ -68,14 +68,14 @@ private fun CreateAccountNavHost(
         composable("create_account_intro") {
             CreateAccountIntroScreen(
                 openCreateAdvancedScreen = { navController.navigate("create_account_advanced") },
-                onBackClick = { fragmentNavController.popBackStack() },
-                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) },
+                onBackClick = { fragmentNavController.removeLastOrNull() },
+                onFinish = { fragmentNavController.removeLastUntil(popUpToInclusiveId, inclusive) },
             )
         }
         composablePage("create_account_advanced") {
             CreateAccountAdvancedScreen(
                 onBackClick = { navController.popBackStack() },
-                onFinish = { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) }
+                onFinish = { fragmentNavController.removeLastUntil(popUpToInclusiveId, inclusive) }
             )
         }
     }

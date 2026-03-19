@@ -105,7 +105,7 @@ class SwapConfirmFragment : BaseComposeFragment() {
 fun SwapConfirmScreen(navController: NavController) {
     val previousBackStackEntry = remember { navController.previousBackStackEntry }
     if (previousBackStackEntry == null) {
-        navController.popBackStack()
+        navController.removeLastOrNull()
         return
     }
     val swapViewModel = viewModel<SwapViewModel>(
@@ -138,7 +138,7 @@ private fun SwapConfirmError(
 ) {
     HSScaffold(
         title = stringResource(R.string.Swap_Confirm_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Settings_Title),
@@ -208,7 +208,7 @@ private fun SwapConfirmInternal(
     ConfirmTransactionScreen(
         title = stringResource(R.string.Swap_Confirm_Title),
         initialLoading = uiState.initialLoading,
-        onClickBack = navController::popBackStack,
+        onClickBack = navController::removeLastOrNull,
         onClickFeeSettings = onClickSettings,
         onClickNonceSettings = onClickNonceSettings,
         onClickSlippageSettings = uiState.slippage?.let { slippage ->
@@ -256,7 +256,7 @@ private fun SwapConfirmInternal(
                                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                                 delay(1200)
                                 navController.setNavigationResultX(SwapConfirmFragment.Result(true))
-                                navController.popBackStack()
+                                navController.removeLastOrNull()
                             } catch (t: Throwable) {
                                 navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                             }

@@ -64,7 +64,7 @@ fun SwapHistoryScreen(navController: NavController) {
 
     HSScaffold(
         title = stringResource(R.string.SwapHistory_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         if (uiState.items.isEmpty()) {
             Box(

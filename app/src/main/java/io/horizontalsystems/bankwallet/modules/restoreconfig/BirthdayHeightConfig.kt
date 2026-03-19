@@ -38,12 +38,12 @@ class BirthdayHeightConfig : BaseComposeFragment() {
 
     private fun closeWithConfig(config: BirthdayHeightConfig, navController: NavController) {
         navController.setNavigationResultX(Result(config))
-        navController.popBackStack()
+        navController.removeLastOrNull()
     }
 
     private fun close(navController: NavController) {
         navController.setNavigationResultX(Result(null))
-        navController.popBackStack()
+        navController.removeLastOrNull()
     }
 
     @Parcelize

@@ -34,7 +34,7 @@ class CoinReportsFragment : BaseComposeFragment() {
             CoinReportsScreen(
                 viewModel = viewModel(factory = CoinReportsModule.Factory(input.coinUid)),
                 onClickNavigation = {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 },
                 onClickReportUrl = {
                     LinkHelper.openLinkInAppBrowser(requireContext(), it)

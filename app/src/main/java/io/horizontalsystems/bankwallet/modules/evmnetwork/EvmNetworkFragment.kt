@@ -97,7 +97,7 @@ private fun EvmNetworkNavHost(
             EvmNetworkScreen(
                 navController = navController,
                 blockchain = blockchain,
-                onBackPress = { fragmentNavController.popBackStack() },
+                onBackPress = { fragmentNavController.removeLastOrNull() },
             )
         }
         composablePopup(AddRpcPage) {

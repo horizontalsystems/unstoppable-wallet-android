@@ -57,7 +57,7 @@ class TransactionInfoFragment : BaseComposeFragment() {
 
         val transactionRecord = viewModelTxs?.tmpTransactionRecordToShow
         if (transactionRecord == null) {
-            navController.popBackStack(R.id.transactionInfoFragment, true)
+            navController.removeLastUntil(R.id.transactionInfoFragment, true)
             return
         }
 
@@ -83,7 +83,7 @@ fun TransactionInfoScreen(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 }
             )
         )

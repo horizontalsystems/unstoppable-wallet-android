@@ -68,7 +68,7 @@ fun RoiSelectCoinsScreen(navController: NavController) {
                 title = stringResource(R.string.ROI_SelectCoin_Title),
                 searchHintText = stringResource(R.string.Market_Search),
                 menuItems = listOf(),
-                onClose = { navController.popBackStack() },
+                onClose = { navController.removeLastOrNull() },
                 onSearchTextChanged = { text ->
                     viewModel.onFilter(text)
                 }
@@ -84,7 +84,7 @@ fun RoiSelectCoinsScreen(navController: NavController) {
                     enabled = uiState.isSaveable,
                     onClick = {
                         viewModel.onApply()
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 )
             }

@@ -24,7 +24,7 @@ class CoinAnalyticsInfoFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<AnalyticInfo>(navController) { input ->
-            CoinAnalyticsInfoScreen(input) { navController.popBackStack() }
+            CoinAnalyticsInfoScreen(input) { navController.removeLastOrNull() }
         }
     }
 }

@@ -57,7 +57,7 @@ fun SwapSlippageSettingsScreen(
 
     HSScaffold(
         title = stringResource(R.string.SendEvmSettings_SlippageTolerance),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Reset),
@@ -80,7 +80,7 @@ fun SwapSlippageSettingsScreen(
                         navController.setNavigationResultX(
                             SwapSettingsSlippageFragment.Result(uiState.slippage)
                         )
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 )
             }

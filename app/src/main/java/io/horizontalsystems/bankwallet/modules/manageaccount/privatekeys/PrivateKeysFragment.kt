@@ -43,7 +43,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
 
     HSScaffold(
         title = stringResource(R.string.PrivateKeys_Title),
-        onBack = { navController.popBackStack() },
+        onBack = { navController.removeLastOrNull() },
     ) {
         Column(
             modifier = Modifier

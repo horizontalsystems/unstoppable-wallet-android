@@ -56,7 +56,7 @@ fun ConfirmDeleteAllScreen(navController: NavController) {
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
             title = stringResource(R.string.WalletConnect_DeleteAllPairs),
             onCloseClick = {
-                navController.popBackStack()
+                navController.removeLastOrNull()
             }
         ) {
             TextImportantWarning(
@@ -71,7 +71,7 @@ fun ConfirmDeleteAllScreen(navController: NavController) {
                 title = stringResource(R.string.WalletConnect_Pairings_Delete),
                 onClick = {
                     navController.setNavigationResultX(ConfirmDeleteAllPairingsDialog.Result(true))
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 }
             )
             Spacer(Modifier.height(32.dp))

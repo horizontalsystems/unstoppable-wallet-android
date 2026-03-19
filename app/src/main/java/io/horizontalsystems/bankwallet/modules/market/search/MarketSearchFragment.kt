@@ -229,7 +229,7 @@ fun MarketSearchScreen(
                         viewModel.searchByQuery(query)
                     }
                 ) {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 }
             }
         }

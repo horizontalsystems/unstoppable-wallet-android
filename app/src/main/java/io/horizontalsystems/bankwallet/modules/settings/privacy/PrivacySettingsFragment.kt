@@ -118,7 +118,7 @@ fun PrivacyScreen(
 
     HSScaffold(
         title = stringResource(R.string.Settings_Privacy),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier

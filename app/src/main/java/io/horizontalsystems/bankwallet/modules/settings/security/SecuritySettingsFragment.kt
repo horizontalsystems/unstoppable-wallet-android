@@ -91,7 +91,7 @@ private fun SecurityCenterScreen(
 
     HSScaffold(
         title = stringResource(R.string.Settings_SecurityCenter),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             Modifier.verticalScroll(rememberScrollState())

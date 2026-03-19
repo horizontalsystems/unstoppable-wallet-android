@@ -16,6 +16,6 @@ fun WcRequestPreScreen(navController: NavController) {
     if (uiState is DataState.Success) {
         WcRequestScreen(navController, uiState.data.sessionRequest, uiState.data.wcAction)
     } else if (uiState is DataState.Error) {
-        WcRequestError { navController.popBackStack() }
+        WcRequestError { navController.removeLastOrNull() }
     }
 }

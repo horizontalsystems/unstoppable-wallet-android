@@ -8,7 +8,7 @@ class MoneroSubaddressesFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<SubaddressesParams>(navController) {
-            MoneroSubaddressesScreen(it) { navController.popBackStack() }
+            MoneroSubaddressesScreen(it) { navController.removeLastOrNull() }
         }
     }
 }

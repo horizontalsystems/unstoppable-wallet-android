@@ -69,7 +69,7 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet) {
     ComposeAppTheme {
         BottomSheetContent(
             onDismissRequest = {
-                navController.popBackStack()
+                navController.removeLastOrNull()
             },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             buttons = {
@@ -79,7 +79,7 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet) {
                     variant = ButtonVariant.Secondary,
                     onClick = {
                         viewModel.retry()
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 )
                 if (viewModel.sourceChangeable) {
@@ -90,7 +90,7 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet) {
                         variant = ButtonVariant.Secondary,
                         size = ButtonSize.Medium,
                         onClick = {
-                            navController.popBackStack()
+                            navController.removeLastOrNull()
 
                             val blockchainWrapper = viewModel.blockchainWrapper
                             when (blockchainWrapper) {

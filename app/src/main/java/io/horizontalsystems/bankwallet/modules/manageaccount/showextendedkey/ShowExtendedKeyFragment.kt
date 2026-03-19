@@ -117,7 +117,7 @@ private fun ShowExtendedKeyScreen(
 
     HSScaffold(
         title = viewModel.title.getString(),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),

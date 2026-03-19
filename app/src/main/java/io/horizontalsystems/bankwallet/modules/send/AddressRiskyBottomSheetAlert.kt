@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 
 class AddressRiskyBottomSheetAlert : BaseComposableBottomSheetFragment() {
@@ -45,7 +44,7 @@ class AddressRiskyBottomSheetAlert : BaseComposableBottomSheetFragment() {
                     RiskyAddressAlertView(
                         alertText = input.alertText,
                         onCloseClick = {
-                            navController.popBackStack()
+                            navController.removeLastOrNull()
                         },
                         onContinueClick = {
                             navController.setNavigationResultX(Result(true))

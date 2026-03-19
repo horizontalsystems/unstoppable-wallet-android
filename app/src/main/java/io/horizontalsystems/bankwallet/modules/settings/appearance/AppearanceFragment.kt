@@ -94,7 +94,7 @@ fun AppearanceScreen(navController: NavController) {
 
     HSScaffold(
         title = stringResource(R.string.Settings_AppSettings),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier

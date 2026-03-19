@@ -47,7 +47,7 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
         withInput<Coin>(navController) { input ->
             CoinTreasuriesScreen(
                 viewModel = viewModel(factory = CoinTreasuriesModule.Factory(input)),
-                onBackClick = { findNavController().popBackStack() }
+                onBackClick = { findNavController().removeLastOrNull() }
             )
         }
     }

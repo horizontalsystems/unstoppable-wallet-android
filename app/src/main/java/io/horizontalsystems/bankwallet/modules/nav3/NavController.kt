@@ -7,11 +7,11 @@ import androidx.navigation.NavOptions
 
 class NavController {
 
-    fun popBackStack() {
+    fun removeLastOrNull() {
         TODO()
     }
 
-    fun popBackStack(i: Int, b: Boolean) {
+    fun removeLastUntil(i: Int, b: Boolean) {
         TODO()
     }
 

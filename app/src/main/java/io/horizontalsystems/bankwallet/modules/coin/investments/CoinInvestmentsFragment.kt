@@ -49,7 +49,7 @@ class CoinInvestmentsFragment : BaseComposeFragment() {
             CoinInvestmentsScreen(
                 viewModel = viewModel(factory = CoinInvestmentsModule.Factory(input.coinUid)),
                 onClickNavigation = {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 },
                 onClickFundUrl = {
                     LinkHelper.openLinkInAppBrowser(requireContext(), it)

@@ -66,7 +66,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
     val uiState = viewModel.uiState
 
     ConfirmTransactionScreen(
-        onClickBack = navController::popBackStack,
+        onClickBack = navController::removeLastOrNull,
         onClickFeeSettings = null,
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
@@ -78,7 +78,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                     title = stringResource(R.string.Button_Close),
                     enabled = true,
                     onClick = {
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 )
             } else {
@@ -111,7 +111,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                                 }
 
                                 buttonEnabled = true
-                                navController.popBackStack()
+                                navController.removeLastOrNull()
                             }
                         }
                     }
@@ -123,7 +123,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                     enabled = uiState.rejectEnabled,
                     onClick = {
                         viewModel.reject()
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 )
             }

@@ -81,7 +81,7 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
     ConfirmTransactionScreen(
         title = stringResource(R.string.Swap_ConfirmRevoke_Title),
         initialLoading = uiState.initialLoading,
-        onClickBack = navController::popBackStack,
+        onClickBack = navController::removeLastOrNull,
         onClickFeeSettings = {
             navController.slideFromRight(R.id.eip20RevokeTransactionSettingsFragment)
         },
@@ -104,7 +104,7 @@ fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFra
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
                             navController.setNavigationResultX(Eip20RevokeConfirmFragment.Result(true))
-                            navController.popBackStack()
+                            navController.removeLastOrNull()
                         } catch (t: Throwable) {
                             navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                         }

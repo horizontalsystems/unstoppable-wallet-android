@@ -121,7 +121,7 @@ private fun ImportWalletScreen(
 
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_ImportWallet),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())

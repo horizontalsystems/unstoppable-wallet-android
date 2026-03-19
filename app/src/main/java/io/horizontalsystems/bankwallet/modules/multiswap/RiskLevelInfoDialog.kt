@@ -63,7 +63,7 @@ class RiskLevelInfoDialog : BaseComposableBottomSheetFragment() {
 fun RiskLevelInfoScreen(navController: NavController) {
     ComposeAppTheme {
         BottomSheetContent(
-            onDismissRequest = navController::popBackStack,
+            onDismissRequest = navController::removeLastOrNull,
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
             buttons = {
                 HSButton(
@@ -71,7 +71,7 @@ fun RiskLevelInfoScreen(navController: NavController) {
                     modifier = Modifier.fillMaxWidth(),
                     variant = ButtonVariant.Secondary,
                     onClick = {
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 )
             },

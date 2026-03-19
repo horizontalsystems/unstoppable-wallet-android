@@ -50,7 +50,7 @@ fun SecretKeyScreen(
 
     HSScaffold(
         title = title,
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),

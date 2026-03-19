@@ -26,7 +26,7 @@ class SwapSettingsRecipientFragment : BaseComposeFragment() {
                 initialAddress = input.recipient?.hex
             ) { address, _ ->
                 navController.setNavigationResultX<Result>(Result(address))
-                navController.popBackStack()
+                navController.removeLastOrNull()
             }
         }
     }

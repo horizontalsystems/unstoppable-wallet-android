@@ -50,7 +50,7 @@ private fun IndicatorsAlertScreen(navController: NavController) {
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
             title = stringResource(R.string.CoinPage_Indicators),
             onCloseClick = {
-                navController.popBackStack()
+                navController.removeLastOrNull()
             }
         ) {
             InfoText(

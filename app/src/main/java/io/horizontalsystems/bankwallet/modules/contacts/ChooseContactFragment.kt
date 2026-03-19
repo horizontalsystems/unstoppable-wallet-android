@@ -112,7 +112,7 @@ fun ChooseContactScreen(
                             viewModel.onEnterQuery(null)
                             searchMode = false
                         } else {
-                            navController.popBackStack()
+                            navController.removeLastOrNull()
                         }
                     })
                 },
@@ -148,7 +148,7 @@ fun ChooseContactScreen(
                                     .fillMaxWidth()
                                     .clickable {
                                         navController.setNavigationResultX(ChooseContactFragment.Result(contact.address))
-                                        navController.popBackStack()
+                                        navController.removeLastOrNull()
                                     }
                                     .padding(horizontal = 16.dp, vertical = 12.dp)
                             ) {

@@ -48,7 +48,7 @@ private fun EvmAddressScreen(evmAddress: String, navController: NavController) {
     val view = LocalView.current
     HSScaffold(
         title = stringResource(R.string.PublicKeys_EvmAddress),
-        onBack = { navController.popBackStack() },
+        onBack = { navController.removeLastOrNull() },
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),

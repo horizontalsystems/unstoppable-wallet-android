@@ -27,7 +27,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 
 class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
@@ -47,10 +46,10 @@ class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
                     WCAccountTypeNotSupportedScreen(
                         accountTypeDescription = navController.getInput<Input>()?.accountTypeDescription ?: "",
                         onCloseClick = {
-                            navController.popBackStack()
+                            navController.removeLastOrNull()
                         },
                         onSwitchClick = {
-                            navController.popBackStack()
+                            navController.removeLastOrNull()
                             navController.slideFromRight(
                                 R.id.manageAccountsFragment,
                                 ManageAccountsModule.Mode.Manage

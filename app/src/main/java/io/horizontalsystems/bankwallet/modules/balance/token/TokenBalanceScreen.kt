@@ -143,7 +143,7 @@ fun TokenBalanceScreen(
 
     HSScaffold(
         title = uiState.title,
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = buildList {
             when {
                 loading -> {

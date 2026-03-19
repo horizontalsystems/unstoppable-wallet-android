@@ -50,7 +50,7 @@ class FilterCoinFragment : BaseComposeFragment() {
         }
 
         if (viewModel == null) {
-            navController.popBackStack(R.id.filterCoinFragment, true)
+            navController.removeLastUntil(R.id.filterCoinFragment, true)
             return
         }
 
@@ -66,7 +66,7 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
 
     HSScaffold(
         title = stringResource(R.string.Transactions_Filter_ChooseCoin),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column {
             filterCoins?.let { filterCoins ->
@@ -80,7 +80,7 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
                                     .fillMaxSize()
                                     .clickable {
                                         viewModel.setFilterToken(it.item)
-                                        navController.popBackStack()
+                                        navController.removeLastOrNull()
                                     }
                                     .padding(horizontal = 16.dp),
                                 verticalAlignment = Alignment.CenterVertically

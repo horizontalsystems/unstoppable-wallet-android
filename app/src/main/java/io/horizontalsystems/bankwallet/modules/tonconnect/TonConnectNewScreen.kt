@@ -59,7 +59,7 @@ fun TonConnectNewScreen(
 
     LaunchedEffect(uiState.finish) {
         if (uiState.finish) {
-            navController.popBackStack()
+            navController.removeLastOrNull()
         }
     }
 
@@ -76,7 +76,7 @@ fun TonConnectNewScreen(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = { navController.popBackStack() }
+                onClick = { navController.removeLastOrNull() }
             )
         ),
         bottomBar = {

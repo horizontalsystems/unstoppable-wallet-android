@@ -61,7 +61,7 @@ class DetectorsFragment : BaseComposeFragment() {
             DetectorsScreen(
                 viewModel = viewModel,
                 onBackClick = {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 },
             )
         }

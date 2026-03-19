@@ -58,7 +58,7 @@ abstract class BaseComposeFragment(
         val input = try {
             navController.requireInput<T>()
         } catch (e: NullPointerException) {
-            navController.popBackStack()
+            navController.removeLastOrNull()
             return
         }
         content(input)
@@ -179,7 +179,7 @@ abstract class BaseComposeFragmentX(
         val input = try {
             navController.requireInput<T>()
         } catch (e: NullPointerException) {
-            navController.popBackStack()
+            navController.removeLastOrNull()
             return
         }
         content(input)

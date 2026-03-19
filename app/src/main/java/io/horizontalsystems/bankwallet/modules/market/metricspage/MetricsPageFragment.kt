@@ -85,7 +85,7 @@ class MetricsPageFragment : BaseComposeFragment() {
                     title = TranslatableString.ResString(R.string.Button_Close),
                     icon = R.drawable.ic_close,
                     onClick = {
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 )
             )

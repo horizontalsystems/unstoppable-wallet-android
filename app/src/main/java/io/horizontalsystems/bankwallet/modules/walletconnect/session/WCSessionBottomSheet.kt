@@ -118,12 +118,12 @@ fun WCSessionScreen(
 
     LaunchedEffect(uiState.closeDialog) {
         if (uiState.closeDialog) {
-            navController.popBackStack()
+            navController.removeLastOrNull()
         }
     }
 
     BottomSheetContent(
-        onDismissRequest = navController::popBackStack,
+        onDismissRequest = navController::removeLastOrNull,
         sheetState = sheetState,
     ) { snackbarActions ->
         uiState.showError?.let {
@@ -262,7 +262,7 @@ fun WCSessionScreen(
             onDisconnectClick = { viewModel.disconnect() },
             onCancelClick = {
                 viewModel.rejectProposal()
-                navController.popBackStack()
+                navController.removeLastOrNull()
             }
         )
 

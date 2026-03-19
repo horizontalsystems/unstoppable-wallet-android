@@ -66,7 +66,7 @@ fun TokenSelectScreen(
 
     HSScaffold(
         title = title,
-        onBack = { navController.popBackStack() },
+        onBack = { navController.removeLastOrNull() },
     ) {
 
         Column {

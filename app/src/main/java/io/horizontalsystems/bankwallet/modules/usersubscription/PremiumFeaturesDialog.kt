@@ -115,7 +115,7 @@ class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
                     PremiumFeaturesScreen(
                         navController = navController,
                         navHostController = null,
-                        onClose = { navController.popBackStack() }
+                        onClose = { navController.removeLastOrNull() }
                     )
                 }
             }

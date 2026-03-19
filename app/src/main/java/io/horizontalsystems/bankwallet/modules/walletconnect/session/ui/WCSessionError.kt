@@ -30,7 +30,7 @@ fun WCSessionError(
                 .padding(start = 16.dp, end = 16.dp, bottom = 32.dp)
                 .align(Alignment.BottomCenter),
             title = stringResource(R.string.Button_Close),
-            onClick = { navController.popBackStack() }
+            onClick = { navController.removeLastOrNull() }
         )
     }
 }

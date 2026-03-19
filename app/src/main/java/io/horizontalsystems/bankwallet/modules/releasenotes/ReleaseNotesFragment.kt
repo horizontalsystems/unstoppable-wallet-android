@@ -41,7 +41,7 @@ class ReleaseNotesFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         ReleaseNotesScreen(
             closeablePopup = navController.getInput<Input>()?.showAsClosablePopup ?: false,
-            onCloseClick = { navController.popBackStack() },
+            onCloseClick = { navController.removeLastOrNull() },
         )
     }
 

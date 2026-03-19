@@ -60,7 +60,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
                             viewModel,
                             input.sendEntryPointDestId
                         )
-                    } ?: navController.popBackStack()
+                    } ?: navController.removeLastOrNull()
                 }
 
                 Type.Solana -> {

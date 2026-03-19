@@ -96,7 +96,7 @@ private fun SendEvmConfirmationScreen(
     ConfirmTransactionScreen(
         title = stringResource(R.string.Send_Confirmation_Title),
         initialLoading = uiState.initialLoading,
-        onClickBack = { navController.popBackStack() },
+        onClickBack = { navController.removeLastOrNull() },
         onClickFeeSettings = {
             navController.slideFromBottom(R.id.sendEvmSettingsFragment)
         },
@@ -129,7 +129,7 @@ private fun SendEvmConfirmationScreen(
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
 
-                            navController.popBackStack(input.sendEntryPointDestId, true)
+                            navController.removeLastUntil(input.sendEntryPointDestId, true)
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
                             navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))

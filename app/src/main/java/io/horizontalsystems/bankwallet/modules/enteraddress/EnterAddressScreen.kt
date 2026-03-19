@@ -82,7 +82,7 @@ fun EnterAddressScreen(
 
     HSScaffold(
         title = title,
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier.windowInsetsPadding(WindowInsets.ime)

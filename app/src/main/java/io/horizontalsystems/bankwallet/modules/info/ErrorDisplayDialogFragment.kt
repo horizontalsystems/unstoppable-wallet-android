@@ -63,7 +63,7 @@ private fun ErrorDisplayScreen(
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
             title = title,
             onCloseClick = {
-                navController.popBackStack()
+                navController.removeLastOrNull()
             }
         ) {
             VSpacer(12.dp)
@@ -78,7 +78,7 @@ private fun ErrorDisplayScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Button_Ok),
                 onClick = {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 }
             )
             VSpacer(8.dp)

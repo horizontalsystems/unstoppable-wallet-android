@@ -93,13 +93,13 @@ class WCRequestFragment : BaseComposableBottomSheetFragment() {
                     val blockchainType = uiState.blockchainType
 
                     if (blockchainType == null) {
-                        WcRequestError { navController.popBackStack() }
+                        WcRequestError { navController.removeLastOrNull() }
                     } else if (blockchainType.isEvm) {
                         WcRequestEvm(navController)
                     } else if (blockchainType is BlockchainType.Stellar) {
                         WcRequestPreScreen(navController)
                     } else {
-                        WcRequestError { navController.popBackStack() }
+                        WcRequestError { navController.removeLastOrNull() }
                     }
                 }
             }
@@ -164,7 +164,7 @@ fun WcRequestEvm(navController: NavController) {
                         composableScope.launch {
                             try {
                                 wcRequestEvmViewModel.allow()
-                                navController.popBackStack()
+                                navController.removeLastOrNull()
                             } catch (e: Throwable) {
                                 showError(view, e)
                             }
@@ -175,7 +175,7 @@ fun WcRequestEvm(navController: NavController) {
                         composableScope.launch {
                             try {
                                 wcRequestEvmViewModel.reject()
-                                navController.popBackStack()
+                                navController.removeLastOrNull()
                             } catch (e: Throwable) {
                                 showError(view, e)
                             }
@@ -187,7 +187,7 @@ fun WcRequestEvm(navController: NavController) {
         }
 
         is SessionRequestUI.Initial -> {
-            WcRequestError { navController.popBackStack() }
+            WcRequestError { navController.removeLastOrNull() }
         }
     }
 }
@@ -265,7 +265,7 @@ fun WCNewSignRequestScreen(
     var messageBottomSheet by remember { mutableStateOf<String?>(null) }
 
     BottomSheetContent(
-        onDismissRequest = navController::popBackStack,
+        onDismissRequest = navController::removeLastOrNull,
         sheetState = sheetState
     ) { snackbarActions ->
         Column(

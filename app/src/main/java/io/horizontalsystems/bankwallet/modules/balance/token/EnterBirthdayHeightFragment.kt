@@ -73,7 +73,7 @@ class EnterBirthdayHeightFragment : BaseComposeFragment() {
                 blockchainType = input.blockchainType,
                 account = input.account,
                 currentBirthdayHeight = input.currentBirthdayHeight,
-                onCloseClick = { navController.popBackStack() }
+                onCloseClick = { navController.removeLastOrNull() }
             )
         }
     }

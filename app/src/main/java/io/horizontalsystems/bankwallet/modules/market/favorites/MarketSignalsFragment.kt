@@ -51,12 +51,12 @@ class MarketSignalsFragment : BaseComposeFragment() {
 fun MarketSignalsScreen(navController: NavController) {
     HSScaffold(
         title = stringResource(R.string.Market_Signals),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = navController::popBackStack
+                onClick = navController::removeLastOrNull
             )
         ),
     ) {
@@ -123,7 +123,7 @@ fun MarketSignalsScreen(navController: NavController) {
                     title = stringResource(R.string.Market_Signal_TurnOn),
                     onClick = {
                         navController.setNavigationResultX(MarketSignalsFragment.Result(true))
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     }
                 )
             }

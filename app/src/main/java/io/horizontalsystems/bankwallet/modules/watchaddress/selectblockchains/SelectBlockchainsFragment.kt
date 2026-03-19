@@ -95,13 +95,13 @@ private fun SelectBlockchainsScreen(
                 iconTint = R.color.white
             )
             delay(300)
-            navController.popBackStack(popUpToInclusiveId, inclusive)
+            navController.removeLastUntil(popUpToInclusiveId, inclusive)
         }
     }
 
     HSScaffold(
         title = stringResource(title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Done),

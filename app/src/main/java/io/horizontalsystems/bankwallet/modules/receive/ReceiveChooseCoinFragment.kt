@@ -110,7 +110,7 @@ fun ReceiveChooseCoinScreen(
                     onSelect = { wallet ->
                         onSelectWallet(wallet, fragmentNavController)
                     },
-                    closeModule = { fragmentNavController.popBackStack() },
+                    closeModule = { fragmentNavController.removeLastOrNull() },
                     onBackPress = navigateBack(fragmentNavController, navController)
                 )
             }
@@ -130,7 +130,7 @@ fun ReceiveChooseCoinScreen(
                     onSelect = { wallet ->
                         onSelectWallet(wallet, fragmentNavController)
                     },
-                    closeModule = { fragmentNavController.popBackStack() },
+                    closeModule = { fragmentNavController.removeLastOrNull() },
                     onBackPress = navigateBack(fragmentNavController, navController)
                 )
             }
@@ -146,7 +146,7 @@ fun ReceiveChooseCoinScreen(
                     navController = navController,
                     activeAccount = activeAccount,
                     fullCoin = fullCoin,
-                    closeModule = { fragmentNavController.popBackStack() },
+                    closeModule = { fragmentNavController.removeLastOrNull() },
                     onSelect = { wallet ->
                         onSelectWallet(wallet, fragmentNavController)
                     }
@@ -165,7 +165,7 @@ fun ReceiveChooseCoinScreen(
                         onSelectWallet(wallet, fragmentNavController, isTransparent)
                     },
                     onBackPress = navigateBack(fragmentNavController, navController),
-                    closeModule = { fragmentNavController.popBackStack() }
+                    closeModule = { fragmentNavController.removeLastOrNull() }
                 )
             }
         }
@@ -195,7 +195,7 @@ fun navigateBack(
 ): () -> Unit = {
     val result = navController.popBackStack()
     if (!result) {
-        fragmentNavController.popBackStack()
+        fragmentNavController.removeLastOrNull()
     }
 }
 
@@ -214,5 +214,5 @@ inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
 fun CloseWithMessage(navController: NavController) {
     val view = LocalView.current
     HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
-    navController.popBackStack()
+    navController.removeLastOrNull()
 }

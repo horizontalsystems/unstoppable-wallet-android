@@ -80,7 +80,7 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
 
     BottomSheetContent(
         onDismissRequest = {
-            navController.popBackStack()
+            navController.removeLastOrNull()
         },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         buttons = {
@@ -92,7 +92,7 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
                 onClick = {
                     viewModel.onUnlink()
                     HudHelper.showSuccessMessage(view, doneConfirmationMessage)
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
 
                     stat(page = StatPage.UnlinkWallet, event = StatEvent.Delete(StatEntity.Wallet))
                 }

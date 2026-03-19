@@ -97,7 +97,7 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
     ) {
         HSScaffold(
             title = stringResource(R.string.TonConnect_Title),
-            onBack = navController::popBackStack,
+            onBack = navController::removeLastOrNull,
         ) {
             Column {
                 val dapps = uiState.dapps

@@ -108,20 +108,20 @@ fun SendTronConfirmationScreen(
     LaunchedEffect(sendResult) {
         if (sendResult is SendResult.Sent) {
             delay(1200)
-            navController.popBackStack(closeUntilDestId, true)
+            navController.removeLastUntil(closeUntilDestId, true)
         }
     }
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         //additional close for cases when user closes app immediately after sending
         if (sendResult is SendResult.Sent) {
-            navController.popBackStack(closeUntilDestId, true)
+            navController.removeLastUntil(closeUntilDestId, true)
         }
     }
 
     HSScaffold(
         title = stringResource(R.string.Send_Confirmation_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Box(
             modifier = Modifier.fillMaxSize()

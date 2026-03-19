@@ -112,7 +112,7 @@ private fun ManageWalletsScreen(
 
     HSScaffold(
         title = stringResource(id = R.string.ManageCoins_title),
-        onBack = { navController.popBackStack() },
+        onBack = { navController.removeLastOrNull() },
         menuItems = if (viewModel.addTokenEnabled) {
             listOf(
                 MenuItem(

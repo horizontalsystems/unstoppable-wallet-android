@@ -57,7 +57,7 @@ class SectorsSelectorFragment : BaseComposeFragment() {
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
+                    findNavController().removeLastOrNull()
                 }
             })
     }
@@ -89,7 +89,7 @@ fun SectorsSelectorScreen(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
-                        onClick = navController::popBackStack
+                        onClick = navController::removeLastOrNull
                     )
                 ),
             )
@@ -169,7 +169,7 @@ fun SectorsSelectorScreen(
                         stringResource(R.string.Market_Filters_Select, selectedItems.size)
                     },
                     onClick = {
-                        navController.popBackStack()
+                        navController.removeLastOrNull()
                     },
                 )
             }

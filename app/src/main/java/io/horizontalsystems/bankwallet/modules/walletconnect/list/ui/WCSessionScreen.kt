@@ -122,7 +122,7 @@ fun WCSessionsScreen(
 
     HSScaffold(
         title = stringResource(R.string.DAppConnection_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Info_Title),

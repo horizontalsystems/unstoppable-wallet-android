@@ -51,7 +51,7 @@ fun SetDuressPinIntroScreen(navController: NavController) {
 
     HSScaffold(
         title = stringResource(R.string.DuressPin_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             Modifier

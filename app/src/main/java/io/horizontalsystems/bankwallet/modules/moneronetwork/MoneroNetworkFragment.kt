@@ -95,7 +95,7 @@ private fun MoneroNetworkNavHost(
         composable(MoneroNetworkPage) {
             MoneroNetworkScreen(
                 navController = navController,
-                onBackPress = { fragmentNavController.popBackStack() },
+                onBackPress = { fragmentNavController.removeLastOrNull() },
             )
         }
         composablePopup(AddNodePage) {

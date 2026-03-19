@@ -16,14 +16,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 
 class ProUsersActivateDialog : BaseComposableBottomSheetFragment() {
     private val authorizationViewModel by navGraphViewModels<YakAuthorizationViewModel>(R.id.coinFragment)
@@ -40,7 +38,7 @@ class ProUsersActivateDialog : BaseComposableBottomSheetFragment() {
             setContent {
                 ComposeAppTheme {
                     ProUsersActivateScreen(
-                        { findNavController().popBackStack() },
+                        { findNavController().removeLastOrNull() },
                         { authorizationViewModel.onActivateClick() }
                     )
                 }
