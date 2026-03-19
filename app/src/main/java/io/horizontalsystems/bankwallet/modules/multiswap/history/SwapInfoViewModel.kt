@@ -10,7 +10,9 @@ import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.coinIconUrl
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.MayaProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.MultiSwapProviderRegistry
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +47,7 @@ class SwapInfoViewModel(
     private var status: SwapStatus = SwapStatus.Depositing
     private var recipientAddress: String? = null
     private var depositingTxUrl: String? = null
+    private var swappingTxUrl: String? = null
     private var sendingTxUrl: String? = null
     private var isSingleChain: Boolean = false
 
@@ -66,6 +69,7 @@ class SwapInfoViewModel(
         status = status,
         recipientAddress = recipientAddress,
         depositingTxUrl = depositingTxUrl,
+        swappingTxUrl = swappingTxUrl,
         sendingTxUrl = sendingTxUrl,
         isSingleChain = isSingleChain,
     )
@@ -103,6 +107,7 @@ class SwapInfoViewModel(
         status = runCatching { SwapStatus.valueOf(record.status) }.getOrDefault(SwapStatus.Depositing)
         recipientAddress = record.recipientAddress
         depositingTxUrl = record.transactionHash?.let { buildTxUrl(record.tokenInBlockchainTypeUid, it) }
+        swappingTxUrl = record.transactionHash?.let { buildProviderTxUrl(record.providerId, it) }
         sendingTxUrl = record.outboundTransactionHash?.let { buildTxUrl(record.tokenOutBlockchainTypeUid, it) }
         isSingleChain = MultiSwapProviderRegistry.isSingleChainSwap(
             record.providerId,
@@ -133,6 +138,12 @@ class SwapInfoViewModel(
         val price = price ?: return null
         val fiat = (amount * price).setScale(decimals, RoundingMode.DOWN).stripTrailingZeros()
         return numberFormatter.formatFiatShort(fiat, symbol, decimals)
+    }
+
+    private fun buildProviderTxUrl(providerId: String, txHash: String): String? = when (providerId) {
+        ThorChainProvider.id -> "https://thorchain.net/tx/$txHash"
+        MayaProvider.id -> "https://www.mayascan.org/tx/$txHash"
+        else -> null
     }
 
     private fun buildTxUrl(blockchainTypeUid: String, txHash: String): String? =
@@ -193,6 +204,7 @@ data class SwapInfoUiState(
     val status: SwapStatus,
     val recipientAddress: String?,
     val depositingTxUrl: String?,
+    val swappingTxUrl: String?,
     val sendingTxUrl: String?,
     val isSingleChain: Boolean,
 )
