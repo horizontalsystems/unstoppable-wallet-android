@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -59,10 +60,12 @@ import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceModule
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceScreen
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceViewModel
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
+import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
 import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
@@ -165,7 +168,7 @@ private fun MainScreen(
                             },
                             onLongClick = if (destination.selected && destination.mainNavItem == MainNavigation.Balance) {
                                 {
-                                    fragmentNavController.slideFromBottom(R.id.walletSwitchDialog)
+                                    fragmentNavController.addFromBottom(WalletSwitchDialog())
                                     stat(
                                         page = StatPage.Main,
                                         event = StatEvent.Open(StatPage.SwitchWallet)
@@ -229,7 +232,7 @@ private fun MainScreen(
 
     if (uiState.showDonationPage) {
         LaunchedEffect(Unit) {
-            fragmentNavController.slideFromBottom(R.id.whyDonateFragment)
+            fragmentNavController.addFromBottom(WhyDonateFragment())
             viewModel.donationShown()
         }
     }
@@ -248,7 +251,7 @@ private fun MainScreen(
     if (uiState.wcSupportState != null) {
         when (val wcSupportState = uiState.wcSupportState) {
             SupportState.NotSupportedDueToNoActiveAccount -> {
-                fragmentNavController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                fragmentNavController.addFromBottom(WCErrorNoAccountFragment())
             }
 
             is SupportState.NotSupportedDueToNonBackedUpAccount -> {

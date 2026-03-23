@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.addFromRight
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -48,6 +48,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceAccountsViewModel
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceScreenState
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HSCircularProgressIndicator
@@ -185,7 +186,7 @@ private fun onTransactionClick(
 
     viewModel.tmpTransactionRecordToShow = transactionItem.record
 
-    navController.slideFromBottom(R.id.transactionInfoFragment)
+    navController.addFromBottom(TransactionInfoFragment())
 
     stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionInfo))
 }

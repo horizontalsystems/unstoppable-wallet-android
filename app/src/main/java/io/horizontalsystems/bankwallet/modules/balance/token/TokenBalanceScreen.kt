@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
@@ -57,6 +58,7 @@ import io.horizontalsystems.bankwallet.modules.receive.ZcashAddressTypeSelectFra
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.zcash.shield.ShieldZcashFragment
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.transactionList
@@ -424,7 +426,7 @@ private fun onTransactionClick(
     val transactionItem = tokenBalanceViewModel.getTransactionItem(transactionViewItem) ?: return
     transactionsViewModel.tmpTransactionRecordToShow = transactionItem.record
 
-    navController.slideFromBottom(R.id.transactionInfoFragment)
+    navController.addFromBottom(TransactionInfoFragment())
 
     stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.TransactionInfo))
 }

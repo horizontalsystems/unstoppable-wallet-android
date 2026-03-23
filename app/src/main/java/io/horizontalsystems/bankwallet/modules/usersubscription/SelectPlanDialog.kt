@@ -30,13 +30,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.badge
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.gradientBadge
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.noteAmount
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.noteText
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.stringRepresentation
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.title
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumSubscribedDialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeOrangeGradient
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
@@ -74,7 +75,7 @@ class SelectPlanDialog : BaseComposableBottomSheetFragment() {
                         onDismiss = { navController.removeLastOrNull() },
                         onPurchase = {
                             navController.removeLastOrNull()
-                            navController.slideFromBottom(R.id.premiumSubscribedDialog)
+                            navController.addFromBottom(PremiumSubscribedDialog())
                         },
                     )
                 }

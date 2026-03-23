@@ -17,6 +17,7 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -83,7 +84,7 @@ private fun TransactionSpeedUpCancelScreen(
         initialLoading = uiState.initialLoading,
         onClickBack = { navController.removeLastOrNull() },
         onClickFeeSettings = {
-            navController.slideFromBottom(R.id.transactionSpeedUpCancelTransactionSettings)
+            navController.addFromBottom(TransactionSpeedUpCancelTransactionSettingsFragment())
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()

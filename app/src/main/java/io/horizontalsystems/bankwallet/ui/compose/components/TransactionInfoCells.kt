@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -45,6 +46,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment
 import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment
+import io.horizontalsystems.bankwallet.modules.info.TransactionStatusInfoFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.transactionInfo.AmountType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
@@ -357,7 +359,7 @@ fun TransactionInfoStatusCell(
         HsIconButton(
             modifier = Modifier.size(20.dp),
             onClick = {
-                navController.slideFromBottom(R.id.statusInfoDialog)
+                navController.addFromBottom(TransactionStatusInfoFragment())
                 stat(
                     page = StatPage.TransactionInfo,
                     event = StatEvent.Open(StatPage.Info),
