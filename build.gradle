@@ -42,12 +42,15 @@ plugins {
     id 'io.gitlab.arturbosch.detekt' version '1.23.8'
 }
 
-detekt {
-    buildUponDefaultConfig = true
-    config.setFrom("$rootDir/config/detekt/detekt.yml")
-    parallel = true
-    // Disable type resolution to avoid Kotlin version conflicts
-    // Type resolution requires matching Kotlin compiler version
+subprojects {
+    apply plugin: 'io.gitlab.arturbosch.detekt'
+
+    detekt {
+        buildUponDefaultConfig = true
+        config.setFrom("$rootDir/config/detekt/detekt.yml")
+        baseline = file("detekt-baseline.xml")
+        parallel = true
+    }
 }
 
 allprojects {
