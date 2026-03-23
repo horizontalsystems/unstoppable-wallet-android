@@ -33,10 +33,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderStick
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -52,13 +53,13 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 class SwapHistoryFragment : BaseComposeFragment() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         SwapHistoryScreen(navController)
     }
 }
 
 @Composable
-fun SwapHistoryScreen(navController: NavController) {
+fun SwapHistoryScreen(navController: NavBackStack<HSScreen>) {
     val viewModel = viewModel<SwapHistoryViewModel>(factory = SwapHistoryViewModel.Factory())
     val uiState = viewModel.uiState
 

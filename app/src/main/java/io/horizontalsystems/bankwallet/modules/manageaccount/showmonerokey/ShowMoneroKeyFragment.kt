@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
@@ -27,7 +28,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowM
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -42,7 +43,7 @@ import kotlinx.parcelize.Parcelize
 class ShowMoneroKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         val input = navController.getInput<Input>()
         val keys = input?.keys
 
@@ -60,7 +61,7 @@ class ShowMoneroKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ShowMoneroKeyScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     keys: MoneroKeys
 ) {
     val view = LocalView.current

@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -46,7 +47,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.balance.BalanceAccountsViewModel
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceScreenState
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HSCircularProgressIndicator
@@ -67,7 +68,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 
 @Composable
 fun TransactionsScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     viewModel: TransactionsViewModel,
 ) {
     val accountsViewModel =
@@ -178,7 +179,7 @@ fun TransactionsScreen(
 private fun onTransactionClick(
     transactionViewItem: TransactionViewItem,
     viewModel: TransactionsViewModel,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     val transactionItem = viewModel.getTransactionItem(transactionViewItem) ?: return
 

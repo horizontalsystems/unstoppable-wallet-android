@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.address
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R.id.enterAddressFragment
 import io.horizontalsystems.bankwallet.R.id.sendXFragment
 import io.horizontalsystems.bankwallet.R.string.Button_Next
@@ -11,14 +12,14 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enteraddress.EnterAddressScreen
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendFragment.Input
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 class EnterAddressFragment : BaseComposeFragment() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<Input>(navController) { input ->
             EnterAddressScreen(
                 navController = navController,

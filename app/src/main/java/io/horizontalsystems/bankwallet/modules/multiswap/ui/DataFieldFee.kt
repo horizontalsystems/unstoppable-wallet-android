@@ -2,15 +2,16 @@ package io.horizontalsystems.bankwallet.modules.multiswap.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.multiswap.FeeRow
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialog
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 
 @Composable
 fun DataFieldFee(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     primary: String,
     secondary: String?,
 ) {
@@ -25,7 +26,7 @@ fun DataFieldFee(
 
 @Composable
 fun DataFieldFeeTemplate(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     primary: String,
     secondary: String?,
     title: String,

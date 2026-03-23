@@ -1,18 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.xtransaction.sections
 
 import androidx.compose.runtime.Composable
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.fee.HSFee
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.TransactionInfoHelper
 
 @Composable
 fun FeeSection(
     transactionInfoHelper: TransactionInfoHelper,
     fee: TransactionValue.CoinValue,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
 ) {
     val rateCurrencyValue = transactionInfoHelper.getXRate(fee.coinUid)?.let {
         CurrencyValue(

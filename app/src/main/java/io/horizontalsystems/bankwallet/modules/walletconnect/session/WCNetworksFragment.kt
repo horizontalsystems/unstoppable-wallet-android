@@ -12,13 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.title
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -36,7 +37,7 @@ import kotlinx.parcelize.Parcelize
 class WCNetworksFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         val input = navController.getInput<Input>()
         if (input == null) {
             navController.removeLastOrNull()
@@ -68,7 +69,7 @@ class WCNetworksFragment : BaseComposeFragment() {
 @Composable
 private fun NetworksScreen(
     blockchains: List<BlockchainType>,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
 ) {
     HSScaffold(
         title = stringResource(R.string.WalletConnect_Networks),

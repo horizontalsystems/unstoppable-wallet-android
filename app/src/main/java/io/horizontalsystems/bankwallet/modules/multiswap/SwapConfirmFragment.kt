@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.R.id.defenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -54,7 +55,8 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsRecipientFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsSlippageFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForPrevScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog.Input
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -93,7 +95,7 @@ import java.util.Locale
 
 class SwapConfirmFragment : BaseComposeFragment() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         SwapConfirmScreen(navController)
     }
 
@@ -102,21 +104,11 @@ class SwapConfirmFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun SwapConfirmScreen(navController: NavController) {
-    val previousBackStackEntry = remember { navController.previousBackStackEntry }
-    if (previousBackStackEntry == null) {
-        navController.removeLastOrNull()
-        return
-    }
-    val swapViewModel = viewModel<SwapViewModel>(
-        viewModelStoreOwner = previousBackStackEntry,
-    )
-
+fun SwapConfirmScreen(navController: NavBackStack<HSScreen>) {
+    val swapViewModel = navController.viewModelForPrevScreen<SwapViewModel>()
     val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
 
-    val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapConfirmViewModel>(
-        viewModelStoreOwner = currentBackStackEntry!!,
         initializer = SwapConfirmViewModel.init(currentQuote)
     )
 
@@ -131,7 +123,7 @@ fun SwapConfirmScreen(navController: NavController) {
 
 @Composable
 private fun SwapConfirmError(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     viewModel: SwapConfirmViewModel,
     uiState: SwapConfirmUiState,
     error: Throwable
@@ -182,7 +174,7 @@ private fun SwapConfirmError(
 
 @Composable
 private fun SwapConfirmInternal(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     viewModel: SwapConfirmViewModel,
     uiState: SwapConfirmUiState,
 ) {

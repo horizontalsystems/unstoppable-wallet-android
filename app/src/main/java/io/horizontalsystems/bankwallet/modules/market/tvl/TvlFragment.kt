@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -32,7 +33,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.TvlDiffType
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -67,11 +68,11 @@ class TvlFragment : BaseComposeFragment() {
     private val viewModel by viewModels<TvlViewModel> { vmFactory }
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         TvlScreen(viewModel, tvlChartViewModel, navController) { onCoinClick(it, navController) }
     }
 
-    private fun onCoinClick(coinUid: String?, navController: NavController) {
+    private fun onCoinClick(coinUid: String?, navController: NavBackStack<HSScreen>) {
         if (coinUid != null) {
             val arguments = CoinFragment.Input(coinUid)
             navController.slideFromRight(R.id.coinFragment, arguments)
@@ -88,7 +89,7 @@ class TvlFragment : BaseComposeFragment() {
 private fun TvlScreen(
     tvlViewModel: TvlViewModel,
     chartViewModel: TvlChartViewModel,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     onCoinClick: (String?) -> Unit
 ) {
     val itemsViewState by tvlViewModel.viewStateLiveData.observeAsState()

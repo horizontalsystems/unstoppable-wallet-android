@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -40,7 +41,7 @@ import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHolder
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -60,7 +61,7 @@ import io.horizontalsystems.marketkit.models.FullCoin
 @Composable
 fun CoinAnalyticsScreen(
     fullCoin: FullCoin,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     fragmentManager: FragmentManager
 ) {
     val viewModel =
@@ -111,7 +112,7 @@ fun CoinAnalyticsScreen(
 @Composable
 private fun AnalyticsData(
     blocks: List<CoinAnalyticsModule.BlockViewItem>,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     fragmentManager: FragmentManager,
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -135,7 +136,7 @@ private fun AnalyticsData(
 @Composable
 private fun AnalyticsBlock(
     block: CoinAnalyticsModule.BlockViewItem,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     fragmentManager: FragmentManager,
 ) {
     AnalyticsContainer(
@@ -204,7 +205,7 @@ private fun AnalyticsBlock(
 private fun FooterCell(
     item: CoinAnalyticsModule.FooterType,
     index: Int,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
 ) {
     when (item) {
         is CoinAnalyticsModule.FooterType.FooterItem -> {
@@ -269,7 +270,7 @@ private fun FooterCell(
 @Composable
 private fun AnalyticsPreviewBlock(
     block: CoinAnalyticsModule.BlockViewItem,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     AnalyticsContainer(
         showFooterDivider = block.showFooterDivider,
@@ -373,7 +374,7 @@ private fun PreviewFooterCell(
 
 private fun handleActionClick(
     action: CoinAnalyticsModule.ActionType,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     when (action) {
         is CoinAnalyticsModule.ActionType.OpenTokenHolders -> {

@@ -28,6 +28,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
@@ -42,7 +43,7 @@ import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
@@ -70,7 +71,7 @@ const val UtxoExpertModePage = "utxo_expert_mode_page"
 @Composable
 fun SendBitcoinNavHost(
     title: String,
-    fragmentNavController: NavController,
+    fragmentNavController: NavBackStack<HSScreen>,
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
@@ -122,7 +123,7 @@ fun SendBitcoinNavHost(
 @Composable
 fun SendBitcoinScreen(
     title: String,
-    fragmentNavController: NavController,
+    fragmentNavController: NavBackStack<HSScreen>,
     composeNavController: NavHostController,
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
@@ -282,7 +283,7 @@ fun SendBitcoinScreen(
 }
 
 private fun openConfirm(
-    fragmentNavController: NavController,
+    fragmentNavController: NavBackStack<HSScreen>,
     sendEntryPointDestId: Int
 ) {
     fragmentNavController.slideFromRight(

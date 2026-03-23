@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
+import android.annotation.SuppressLint
 import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -56,6 +57,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
@@ -70,7 +72,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
@@ -112,7 +114,7 @@ import java.net.UnknownHostException
 
 class SwapFragment : BaseComposeFragment() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         val input = navController.getInput<Input>()
         SwapScreen(navController, input?.tokenIn, input?.tokenOut, navController::removeLastOrNull)
     }
@@ -122,18 +124,17 @@ class SwapFragment : BaseComposeFragment() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 fun SwapScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     tokenIn: Token? = null,
     tokenOut: Token? = null,
     onClickClose: (() -> Unit)? = null,
     bottomPadding: Dp = 0.dp,
     closeAfterSwap: Boolean = true
 ) {
-    val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapViewModel>(
-        viewModelStoreOwner = currentBackStackEntry!!,
         factory = SwapViewModel.Factory(tokenIn, tokenOut)
     )
     val uiState = viewModel.uiState
@@ -281,7 +282,7 @@ private fun SwapScreenInner(
     onClickNext: () -> Unit,
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     onResume: () -> Unit,
     onPause: () -> Unit,
     bottomPadding: Dp = 0.dp,
@@ -589,7 +590,7 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 fun PriceImpactField(
     priceImpact: BigDecimal?,
     priceImpactLevel: PriceImpactLevel?,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     if (priceImpact == null || priceImpactLevel == null) return
 

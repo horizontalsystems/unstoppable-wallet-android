@@ -9,10 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoHeader
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -23,7 +24,7 @@ import kotlinx.parcelize.Parcelize
 class TransactionLockTimeInfoFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<Input>(navController) { input ->
             InfoScreen(input.lockTime, navController)
         }
@@ -36,7 +37,7 @@ class TransactionLockTimeInfoFragment : BaseComposeFragment() {
 @Composable
 private fun InfoScreen(
     lockDate: String,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
 
     val description = stringResource(R.string.Info_LockTime_Description, lockDate)

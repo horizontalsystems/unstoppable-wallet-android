@@ -5,11 +5,12 @@ import android.os.Parcelable
 import android.view.View
 import androidx.activity.addCallback
 import androidx.compose.runtime.Composable
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
@@ -23,7 +24,7 @@ class BirthdayHeightConfig : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         val blockchainType = navController.getInput<Token>()?.blockchainType
             ?: navController.getInput<BlockchainType>()
 
@@ -36,12 +37,12 @@ class BirthdayHeightConfig : BaseComposeFragment() {
         }
     }
 
-    private fun closeWithConfig(config: BirthdayHeightConfig, navController: NavController) {
+    private fun closeWithConfig(config: BirthdayHeightConfig, navController: NavBackStack<HSScreen>) {
         navController.setNavigationResultX(Result(config))
         navController.removeLastOrNull()
     }
 
-    private fun close(navController: NavController) {
+    private fun close(navController: NavBackStack<HSScreen>) {
         navController.setNavigationResultX(Result(null))
         navController.removeLastOrNull()
     }

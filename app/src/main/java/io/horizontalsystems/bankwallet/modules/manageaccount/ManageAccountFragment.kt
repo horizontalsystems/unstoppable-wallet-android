@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.authorizedAction
@@ -36,7 +37,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.BackupItem
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.KeyAction
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -63,7 +64,7 @@ import kotlinx.parcelize.Parcelize
 class ManageAccountFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<Input>(navController) { input ->
             ManageAccountScreen(navController, input.accountId)
         }
@@ -74,7 +75,7 @@ class ManageAccountFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun ManageAccountScreen(navController: NavController, accountId: String) {
+fun ManageAccountScreen(navController: NavBackStack<HSScreen>, accountId: String) {
     val viewModel =
         viewModel<ManageAccountViewModel>(factory = ManageAccountModule.Factory(accountId))
 
@@ -193,7 +194,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
 private fun BackupActions(
     backupActions: List<BackupItem>,
     account: Account,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     val actionItems = mutableListOf<@Composable () -> Unit>()
     val infoItems = mutableListOf<@Composable () -> Unit>()
@@ -262,7 +263,7 @@ private fun BackupActions(
 @Composable
 private fun KeyActions(
     viewModel: ManageAccountViewModel,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     val actionItems = mutableListOf<@Composable () -> Unit>()
 

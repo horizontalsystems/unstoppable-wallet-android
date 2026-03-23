@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
@@ -29,7 +30,7 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -49,7 +50,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 class MetricsPageFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<MetricsType>(navController) { metricsType ->
             val factory = MetricsPageModule.Factory(metricsType)
             val chartViewModel by viewModels<ChartViewModel> { factory }
@@ -62,7 +63,7 @@ class MetricsPageFragment : BaseComposeFragment() {
         }
     }
 
-    private fun onCoinClick(coinUid: String, navController: NavController) {
+    private fun onCoinClick(coinUid: String, navController: NavBackStack<HSScreen>) {
         val arguments = CoinFragment.Input(coinUid)
 
         navController.slideFromRight(R.id.coinFragment, arguments)
@@ -73,7 +74,7 @@ class MetricsPageFragment : BaseComposeFragment() {
     fun MetricsPage(
         viewModel: MetricsPageViewModel,
         chartViewModel: ChartViewModel,
-        navController: NavController,
+        navController: NavBackStack<HSScreen>,
         onCoinClick: (String) -> Unit,
     ) {
         val uiState = viewModel.uiState

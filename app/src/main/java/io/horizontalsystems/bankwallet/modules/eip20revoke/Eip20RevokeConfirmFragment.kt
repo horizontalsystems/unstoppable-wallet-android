@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
@@ -30,7 +31,7 @@ import io.horizontalsystems.bankwallet.modules.eip20approve.ConfirmTokenSection
 import io.horizontalsystems.bankwallet.modules.eip20approve.SpenderCell
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -44,7 +45,7 @@ import java.math.BigDecimal
 
 class Eip20RevokeConfirmFragment : BaseComposeFragment() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<Input>(navController) { input ->
             Eip20RevokeScreen(navController, input)
         }
@@ -62,12 +63,8 @@ class Eip20RevokeConfirmFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFragment.Input) {
-    val currentBackStackEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.eip20RevokeConfirmFragment)
-    }
+fun Eip20RevokeScreen(navController: NavBackStack<HSScreen>, input: Eip20RevokeConfirmFragment.Input) {
     val viewModel = viewModel<Eip20RevokeConfirmViewModel>(
-        viewModelStoreOwner = currentBackStackEntry,
         factory = Eip20RevokeConfirmViewModel.Factory(
             input.token,
             input.spenderAddress,

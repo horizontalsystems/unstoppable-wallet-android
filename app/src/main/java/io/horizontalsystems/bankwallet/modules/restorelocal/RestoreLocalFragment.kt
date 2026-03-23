@@ -32,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -44,7 +45,8 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.OtherBacku
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
@@ -73,7 +75,7 @@ import kotlinx.parcelize.Parcelize
 class RestoreLocalFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<Input>(navController) { input ->
             RestoreLocalNavHost(
                 input.jsonFile,
@@ -101,7 +103,7 @@ private fun RestoreLocalNavHost(
     backupJsonString: String?,
     fileName: String?,
     statPage: StatPage,
-    fragmentNavController: NavController,
+    fragmentNavController: NavBackStack<HSScreen>,
     popUpToInclusiveId: Int,
     popUpInclusive: Boolean,
     reloadApp: () -> Unit,

@@ -19,9 +19,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.Factory
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
 
 abstract class BaseFragment : HSScreen() {
     val viewLifecycleOwner: LifecycleOwner = TODO()
@@ -38,7 +38,7 @@ abstract class BaseFragment : HSScreen() {
         TODO()
     }
 
-    fun findNavController() : NavController {
+    fun findNavController() : NavBackStack<HSScreen> {
         TODO()
     }
 

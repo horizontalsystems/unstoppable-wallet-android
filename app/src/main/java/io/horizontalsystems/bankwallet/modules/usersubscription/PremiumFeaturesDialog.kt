@@ -43,10 +43,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PlanItems
@@ -126,7 +127,7 @@ class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PremiumFeaturesScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     navHostController: NavHostController?,
     onClose: () -> Unit
 ) {
@@ -313,7 +314,7 @@ fun PremiumFeaturesScreen(
 
 @Composable
 fun FeaturesSection(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     icon: Int,
     title: String,
     features: List<IPaidAction>

@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
@@ -25,7 +26,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragme
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -41,7 +42,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 class ManageAccountsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<ManageAccountsModule.Mode>(navController) { input ->
             ManageAccountsScreen(navController, input)
         }
@@ -49,7 +50,7 @@ class ManageAccountsFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModule.Mode) {
+fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAccountsModule.Mode) {
     BackupRequiredAlert(navController)
 
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
@@ -156,7 +157,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
 private fun AccountsSection(
     accounts: List<AccountViewItem>,
     viewModel: ManageAccountsViewModel,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     CellUniversalLawrenceSection(items = accounts) { accountViewItem ->
         RowUniversal(

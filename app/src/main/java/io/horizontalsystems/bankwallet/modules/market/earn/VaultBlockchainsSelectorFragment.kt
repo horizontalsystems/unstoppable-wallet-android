@@ -19,12 +19,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -41,7 +42,7 @@ import kotlinx.parcelize.Parcelize
 class VaultBlockchainsSelectorFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         val input = navController.getInput<Input>()
         if (input == null) {
             navController.removeLastOrNull()
@@ -82,7 +83,7 @@ class VaultBlockchainsSelectorFragment : BaseComposeFragment() {
 private fun FilterByBlockchainsScreen(
     blockchains: List<Blockchain>,
     selected: List<Blockchain>,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     onDone: (List<Blockchain>) -> Unit,
 ) {
     var selectedBlockchains = remember { mutableStateListOf<Blockchain>() }

@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
@@ -46,7 +47,7 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.Restor
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -69,7 +70,7 @@ import io.horizontalsystems.marketkit.models.LinkType
 @Composable
 fun CoinOverviewScreen(
     fullCoin: FullCoin,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     val vmFactory by lazy { CoinOverviewModule.Factory(fullCoin) }
     val viewModel = viewModel<CoinOverviewViewModel>(factory = vmFactory)
@@ -288,7 +289,7 @@ fun CoinOverviewScreen(
     )
 }
 
-private fun onClick(coinLink: CoinLink, context: Context, navController: NavController) {
+private fun onClick(coinLink: CoinLink, context: Context, navController: NavBackStack<HSScreen>) {
     val absoluteUrl = getAbsoluteUrl(coinLink)
 
     when (coinLink.linkType) {
