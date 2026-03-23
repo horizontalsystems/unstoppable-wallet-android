@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -41,6 +42,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCInvalidUrlBottomSheet

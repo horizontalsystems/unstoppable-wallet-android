@@ -24,6 +24,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.ensurePinSet
@@ -41,6 +42,7 @@ import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockIntervalsFragment
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
+import io.horizontalsystems.bankwallet.modules.settings.security.securesend.SecureSendConfigDialog
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.descriptionStringRes
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.titleStringRes
@@ -187,7 +189,7 @@ private fun SecurityCenterScreen(
                                     confirmChange = {
                                         if (UserSubscriptionManager.isActionAllowed(action)) {
                                             if (action == SecureSend) {
-                                                navController.slideFromBottom(R.id.secureSendConfigDialog)
+                                                navController.addFromBottom(SecureSendConfigDialog())
                                                 false
                                             } else {
                                                 true
@@ -206,7 +208,7 @@ private fun SecurityCenterScreen(
                             },
                             onClick = if (action == SecureSend) {
                                 {
-                                    navController.slideFromBottom(R.id.secureSendConfigDialog)
+                                    navController.addFromBottom(SecureSendConfigDialog())
                                 }
                             } else {
                                 null

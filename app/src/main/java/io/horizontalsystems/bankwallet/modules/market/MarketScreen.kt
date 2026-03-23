@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -47,12 +48,15 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.Tab
 import io.horizontalsystems.bankwallet.modules.market.earn.MarketEarnScreen
+import io.horizontalsystems.bankwallet.modules.market.etf.EtfFragment
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesScreen
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment
 import io.horizontalsystems.bankwallet.modules.market.topcoins.TopCoins
 import io.horizontalsystems.bankwallet.modules.market.toppairs.TopPairsScreen
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatforms
 import io.horizontalsystems.bankwallet.modules.market.topsectors.TopSectorsScreen
+import io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -106,7 +110,7 @@ fun MarketScreen(
                         .background(ComposeAppTheme.colors.blade)
                         .height(48.dp)
                         .clickable {
-                            navController.slideFromBottom(R.id.marketSearchFragment)
+                            navController.addFromBottom(MarketSearchFragment())
                             stat(
                                 page = StatPage.Markets,
                                 event = StatEvent.Open(StatPage.MarketSearch)
@@ -326,11 +330,11 @@ private fun RowScope.MarketTotalCard(
 private fun openMetricsPage(metricsType: MetricsType, navController: NavBackStack<HSScreen>) {
     when (metricsType) {
         MetricsType.TvlInDefi -> {
-            navController.slideFromBottom(R.id.tvlFragment)
+            navController.addFromBottom(TvlFragment())
         }
 
         MetricsType.Etf -> {
-            navController.slideFromBottom(R.id.etfFragment)
+            navController.addFromBottom(EtfFragment())
         }
 
         else -> {

@@ -20,11 +20,14 @@ import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.solananetwork.SolanaNetworkFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -116,7 +119,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Solana -> {
-            navController.slideFromBottom(R.id.solanaNetworkFragment)
+            navController.addFromBottom(SolanaNetworkFragment())
 
             stat(
                 page = StatPage.BlockchainSettings,
@@ -125,7 +128,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Monero -> {
-            navController.slideFromBottom(R.id.moneroNetworkFragment)
+            navController.addFromBottom(MoneroNetworkFragment())
 
             stat(
                 page = StatPage.BlockchainSettings,

@@ -13,12 +13,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostFragment
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -72,7 +73,7 @@ fun SubscriptionScreen(navController: NavBackStack<HSScreen>) {
                     CellUniversal(
                         borderTop = false,
                         onClick = {
-                            navController.slideFromBottom(R.id.buySubscriptionFragment)
+                            navController.addFromBottom(BuySubscriptionHavHostFragment())
                             stat(
                                 page = StatPage.PurchaseList,
                                 event = StatEvent.OpenPremium(StatPremiumTrigger.GetPremium)

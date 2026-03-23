@@ -30,9 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.paidAction
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
@@ -120,7 +120,7 @@ private fun AdvancedSearchScreen(
                     navController = navController,
                     viewModel = viewModel,
                     onFilterByBlockchainsClick = {
-                        navController.slideFromBottom(R.id.blockchainsSelectorFragment)
+                        navController.addFromBottom(BlockchainsSelectorFragment())
                     },
                     showBottomSheet = { type ->
                         bottomSheetType = type
@@ -307,7 +307,7 @@ fun AdvancedSearchContent(
             value = if (uiState.sectors.size == 1 && uiState.sectors[0].item == null) null else uiState.sectors.size.toString(),
             onDropdownClick = {
                 navController.paidAction(AdvancedSearch) {
-                    navController.slideFromBottom(R.id.sectorsSelectorFragment)
+                    navController.addFromBottom(SectorsSelectorFragment())
                 }
                 stat(
                     page = StatPage.AdvancedSearch,

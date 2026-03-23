@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -40,6 +41,7 @@ import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsF
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
+import io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
@@ -412,7 +414,7 @@ private fun handleActionClick(
         }
 
         CoinAnalyticsModule.ActionType.OpenTvl -> {
-            navController.slideFromBottom(R.id.tvlFragment)
+            navController.addFromBottom(TvlFragment())
         }
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {

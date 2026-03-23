@@ -38,8 +38,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -48,6 +48,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectL
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListUiState
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel.ConnectionResult
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -150,7 +151,7 @@ fun WCSessionsScreen(
                         },
                         onRequestClick = { requestViewItem ->
                             viewModel.setRequestToOpen(requestViewItem.request)
-                            navController.slideFromBottom(R.id.wcRequestFragment)
+                            navController.addFromBottom(WCRequestFragment())
                         }
                     )
                 }

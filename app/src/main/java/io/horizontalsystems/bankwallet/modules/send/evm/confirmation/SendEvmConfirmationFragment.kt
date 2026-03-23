@@ -19,6 +19,7 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -29,6 +30,8 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceSettingsFragment
+import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
@@ -96,10 +99,10 @@ private fun SendEvmConfirmationScreen(
         initialLoading = uiState.initialLoading,
         onClickBack = { navController.removeLastOrNull() },
         onClickFeeSettings = {
-            navController.slideFromBottom(R.id.sendEvmSettingsFragment)
+            navController.addFromBottom(SendEvmSettingsFragment())
         },
         onClickNonceSettings = {
-            navController.slideFromBottom(R.id.sendEvmNonceSettingsFragment)
+            navController.addFromBottom(SendEvmNonceSettingsFragment())
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()

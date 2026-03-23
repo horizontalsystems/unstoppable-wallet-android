@@ -35,11 +35,13 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
@@ -57,13 +59,16 @@ import io.horizontalsystems.bankwallet.modules.settings.appearance.AppearanceFra
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
 import io.horizontalsystems.bankwallet.modules.settings.donate.DonateTokenSelectFragment
+import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonateFragment
 import io.horizontalsystems.bankwallet.modules.settings.faq.FaqListFragment
 import io.horizontalsystems.bankwallet.modules.settings.guides.GuidesFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.ui.BannerCarousel
 import io.horizontalsystems.bankwallet.modules.settings.privacy.PrivacySettingsFragment
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsFragment
 import io.horizontalsystems.bankwallet.modules.settings.subscription.SubscriptionFragment
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -128,7 +133,7 @@ private fun SettingSections(
             add {
                 SubscriptionBanner(
                     onClick = {
-                        navController.slideFromBottom(R.id.buySubscriptionFragment)
+                        navController.addFromBottom(BuySubscriptionHavHostFragment())
                         stat(
                             page = StatPage.Settings,
                             event = StatEvent.OpenPremium(StatPremiumTrigger.Banner)
@@ -141,7 +146,7 @@ private fun SettingSections(
             add {
                 DonateBanner(
                     onClick = {
-                        navController.slideFromBottom(R.id.whyDonateFragment)
+                        navController.addFromBottom(WhyDonateFragment())
                     }
                 )
             }
@@ -217,7 +222,7 @@ private fun SettingSections(
                         }
 
                         WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-                            navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                            navController.addFromBottom(WCErrorNoAccountFragment())
                         }
 
                         is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {

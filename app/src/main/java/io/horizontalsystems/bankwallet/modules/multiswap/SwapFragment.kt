@@ -59,6 +59,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.getInput
@@ -256,7 +257,7 @@ fun SwapScreen(
         onEnterAmountPercentage = viewModel::onEnterAmountPercentage,
         onEnterFiatAmount = viewModel::onEnterFiatAmount,
         onClickProvider = {
-            navController.slideFromBottom(R.id.swapSelectProvider)
+            navController.addFromBottom(SwapSelectProviderFragment())
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },

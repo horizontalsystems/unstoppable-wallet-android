@@ -18,9 +18,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
@@ -110,7 +112,7 @@ private fun SyncErrorScreen(navController: NavBackStack<HSScreen>, wallet: Walle
                                 }
 
                                 SyncErrorModule.BlockchainWrapper.Monero -> {
-                                    navController.slideFromBottom(R.id.moneroNetworkFragment)
+                                    navController.addFromBottom(MoneroNetworkFragment())
                                 }
 
                                 else -> {}
