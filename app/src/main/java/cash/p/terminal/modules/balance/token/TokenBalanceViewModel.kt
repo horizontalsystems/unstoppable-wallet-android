@@ -74,6 +74,7 @@ import java.math.BigDecimal
 
 private const val ADAPTER_AWAIT_TIMEOUT_MS = 5000L
 
+@Suppress("LongParameterList")
 class TokenBalanceViewModel(
     private val totalBalance: TotalBalance,
     private val wallet: Wallet,

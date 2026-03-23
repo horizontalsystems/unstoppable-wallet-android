@@ -406,6 +406,169 @@ class ZcashAdapterCorruptionRecoveryTest {
         coVerify(timeout = VERIFY_TIMEOUT, exactly = 1) { Synchronizer.erase(any(), any(), any()) }
     }
 
+    // --- Zombie adapter (MOBILE-587) ---
+
+    @Test
+    fun stop_thenEnterForeground_doesNotRestartSynchronizer() = runTest(dispatcher) {
+        val bgStateFlow = MutableStateFlow<BackgroundManagerState>(BackgroundManagerState.Unknown)
+        every { backgroundManager.stateFlow } returns bgStateFlow
+
+        var zombieRestartCount = 0
+        coEvery {
+            Synchronizer.new(
+                context = any(), zcashNetwork = any(), alias = any(),
+                lightWalletEndpoint = any(), birthday = any(), walletInitMode = any(),
+                setup = any(), isTorEnabled = any(), isExchangeRateEnabled = any()
+            )
+        } answers {
+            zombieRestartCount++
+            mockSynchronizer
+        }
+
+        adapter = createAdapter()
+
+        // Simulate AdapterManager stopping the old adapter during wallet switch
+        adapter.stop()
+        statusFlow.value = Synchronizer.Status.STOPPED
+
+        // Simulate app returning to foreground — stopped adapter must NOT react
+        // scope is cancelled so the stateFlow collector is dead
+        bgStateFlow.value = BackgroundManagerState.EnterForeground
+
+        coVerify(exactly = 0, timeout = VERIFY_TIMEOUT) {
+            Synchronizer.new(
+                context = any(), zcashNetwork = any(), alias = any(),
+                lightWalletEndpoint = any(), birthday = any(), walletInitMode = any(),
+                setup = any(), isTorEnabled = any(), isExchangeRateEnabled = any()
+            )
+        }
+        assertEquals(
+            "Stopped adapter must not restart synchronizer on foreground event",
+            0,
+            zombieRestartCount
+        )
+    }
+
+    @Test
+    fun stop_whileStartInFlight_cancelsStart() = runTest(dispatcher) {
+        val bgStateFlow = MutableStateFlow<BackgroundManagerState>(BackgroundManagerState.Unknown)
+        every { backgroundManager.stateFlow } returns bgStateFlow
+
+        val startReached = java.util.concurrent.CountDownLatch(1)
+        val cancelled = java.util.concurrent.CountDownLatch(1)
+        coEvery {
+            Synchronizer.new(
+                context = any(), zcashNetwork = any(), alias = any(),
+                lightWalletEndpoint = any(), birthday = any(), walletInitMode = any(),
+                setup = any(), isTorEnabled = any(), isExchangeRateEnabled = any()
+            )
+        } coAnswers {
+            startReached.countDown()
+            try {
+                kotlinx.coroutines.suspendCancellableCoroutine<Nothing> { }
+            } finally {
+                cancelled.countDown()
+            }
+        }
+
+        adapter = createAdapter()
+
+        statusFlow.value = Synchronizer.Status.STOPPED
+        bgStateFlow.value = BackgroundManagerState.EnterForeground
+
+        assertTrue(
+            "Synchronizer.new() must be reached before stop()",
+            startReached.await(VERIFY_TIMEOUT, java.util.concurrent.TimeUnit.MILLISECONDS)
+        )
+        adapter.stop()
+
+        assertTrue(
+            "Coroutine must be cancelled by stop()",
+            cancelled.await(VERIFY_TIMEOUT, java.util.concurrent.TimeUnit.MILLISECONDS)
+        )
+    }
+
+    @Test
+    fun enterBackground_whileStartInFlight_cancelsStart() = runTest(dispatcher) {
+        val bgStateFlow = MutableStateFlow<BackgroundManagerState>(BackgroundManagerState.Unknown)
+        every { backgroundManager.stateFlow } returns bgStateFlow
+
+        val startReached = java.util.concurrent.CountDownLatch(1)
+        val cancelled = java.util.concurrent.CountDownLatch(1)
+        coEvery {
+            Synchronizer.new(
+                context = any(), zcashNetwork = any(), alias = any(),
+                lightWalletEndpoint = any(), birthday = any(), walletInitMode = any(),
+                setup = any(), isTorEnabled = any(), isExchangeRateEnabled = any()
+            )
+        } coAnswers {
+            startReached.countDown()
+            try {
+                kotlinx.coroutines.suspendCancellableCoroutine<Nothing> { }
+            } finally {
+                cancelled.countDown()
+            }
+        }
+
+        adapter = createAdapter()
+
+        statusFlow.value = Synchronizer.Status.STOPPED
+        bgStateFlow.value = BackgroundManagerState.EnterForeground
+
+        assertTrue(
+            "Synchronizer.new() must be reached before enterBackground",
+            startReached.await(VERIFY_TIMEOUT, java.util.concurrent.TimeUnit.MILLISECONDS)
+        )
+        bgStateFlow.value = BackgroundManagerState.EnterBackground
+
+        assertTrue(
+            "Coroutine must be cancelled by enterBackground",
+            cancelled.await(VERIFY_TIMEOUT, java.util.concurrent.TimeUnit.MILLISECONDS)
+        )
+    }
+
+    // --- Pause / resume (background → foreground) ---
+
+    @Test
+    fun enterBackground_thenEnterForeground_restartsSynchronizer() = runTest(dispatcher) {
+        val bgStateFlow = MutableStateFlow<BackgroundManagerState>(BackgroundManagerState.Unknown)
+        every { backgroundManager.stateFlow } returns bgStateFlow
+
+        var restartCount = 0
+        coEvery {
+            Synchronizer.new(
+                context = any(), zcashNetwork = any(), alias = any(),
+                lightWalletEndpoint = any(), birthday = any(), walletInitMode = any(),
+                setup = any(), isTorEnabled = any(), isExchangeRateEnabled = any()
+            )
+        } answers {
+            restartCount++
+            mockSynchronizer
+        }
+
+        adapter = createAdapter()
+
+        // Simulate app going to background (pause — not full dispose)
+        bgStateFlow.value = BackgroundManagerState.EnterBackground
+        statusFlow.value = Synchronizer.Status.STOPPED
+
+        // Simulate app returning to foreground
+        bgStateFlow.value = BackgroundManagerState.EnterForeground
+
+        coVerify(timeout = VERIFY_TIMEOUT) {
+            Synchronizer.new(
+                context = any(), zcashNetwork = any(), alias = any(),
+                lightWalletEndpoint = any(), birthday = any(), walletInitMode = any(),
+                setup = any(), isTorEnabled = any(), isExchangeRateEnabled = any()
+            )
+        }
+        assertEquals(
+            "Paused adapter must restart synchronizer on foreground event",
+            1,
+            restartCount
+        )
+    }
+
     // --- Erase retry ---
 
     @Test
