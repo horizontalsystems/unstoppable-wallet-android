@@ -569,6 +569,68 @@ class ZcashAdapterCorruptionRecoveryTest {
         )
     }
 
+    // --- Sync progress preservation ---
+
+    private fun awaitState(predicate: (AdapterState) -> Boolean) {
+        val deadline = System.currentTimeMillis() + VERIFY_TIMEOUT
+        while (!predicate(adapter.balanceState)) {
+            if (System.currentTimeMillis() > deadline) {
+                throw AssertionError("Timed out waiting for state, current: ${adapter.balanceState}")
+            }
+            Thread.sleep(50)
+        }
+    }
+
+    @Test
+    fun onStatus_syncingWhileAlreadySyncingWithProgress_preservesProgress() = runTest(dispatcher) {
+        adapter = createAdapter()
+        adapter.start()
+
+        // Wait for subscribe() to process initial SYNCING status
+        awaitState { it is AdapterState.Syncing }
+
+        // SDK reports progress via onDownloadProgress
+        progressFlow.value = PercentDecimal(0.99f)
+
+        // subscriberScope uses Dispatchers.Main (UnconfinedTestDispatcher) — immediate
+        awaitState { it is AdapterState.Syncing && it.progress == 99 }
+
+        // SDK re-emits SYNCING status (e.g. entering new scan phase)
+        statusFlow.value = Synchronizer.Status.SYNCING
+
+        // Progress must NOT be wiped
+        val state = adapter.balanceState
+        assertTrue(
+            "Should still be Syncing after re-emitted SYNCING status",
+            state is AdapterState.Syncing
+        )
+        assertEquals(
+            "Progress must be preserved when SDK re-emits SYNCING",
+            99,
+            (state as AdapterState.Syncing).progress
+        )
+    }
+
+    @Test
+    fun onStatus_syncingFromNonSyncingState_createsFreshSyncing() = runTest(dispatcher) {
+        adapter = createAdapter()
+        adapter.start()
+
+        // Wait for subscribe() to process initial SYNCING status
+        awaitState { it is AdapterState.Syncing }
+
+        // Move to STOPPED
+        statusFlow.value = Synchronizer.Status.STOPPED
+        awaitState { it is AdapterState.NotSynced }
+
+        // Transition to SYNCING — should create fresh Syncing (no progress)
+        statusFlow.value = Synchronizer.Status.SYNCING
+        awaitState { it is AdapterState.Syncing }
+
+        val state = adapter.balanceState as AdapterState.Syncing
+        assertEquals("Fresh Syncing should have no progress", null, state.progress)
+    }
+
     // --- Erase retry ---
 
     @Test
