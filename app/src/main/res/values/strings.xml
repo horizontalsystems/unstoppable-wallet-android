@@ -735,6 +735,9 @@
     <string name="SwapDefense_Attention_Description">Protection is off. Bots may interfere with your swap and make you lose money.</string>
     <string name="SwapDefense_Safe_Title">Protected</string>
     <string name="SwapDefense_Safe_Description">I’m blocking bots from taking value in your swap.</string>
+    <string name="SwapConfirm_SwapProtection">Swap Protection</string>
+    <string name="SwapConfirm_Mev">MEV</string>
+    <string name="SwapConfirm_MevDescription">Turn on protection to secure your swap and avoid losing value to bots.</string>
     <string name="SwapError_FailedToFetchQuote">Failed to fetch quote.</string>
 
     <string name="SwapTerms_Title">Swap Terms</string>

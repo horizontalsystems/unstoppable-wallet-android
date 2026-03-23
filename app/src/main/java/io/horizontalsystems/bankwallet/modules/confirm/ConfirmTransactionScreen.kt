@@ -33,7 +33,6 @@ fun ConfirmTransactionScreen(
     onClickNonceSettings: (() -> Unit)? = null,
     onClickSlippageSettings: (() -> Unit)? = null,
     onClickRecipientSettings: (() -> Unit)? = null,
-    defenseSlot: (@Composable ColumnScope.() -> Unit)? = null,
     buttonsSlot: @Composable() (ColumnScope.() -> Unit),
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
@@ -110,12 +109,6 @@ fun ConfirmTransactionScreen(
                     Column(
                         modifier = Modifier.align(Alignment.BottomCenter)
                     ) {
-
-                        defenseSlot?.let {
-                            it.invoke(this)
-                            VSpacer(height = 16.dp)
-                        }
-
                         ButtonsGroupWithShade {
                             Column(
                                 modifier = Modifier.padding(horizontal = 16.dp),
