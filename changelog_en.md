@@ -14,6 +14,8 @@ _Release date: March 23, 2026_
 - **Fixed staking badge behavior for PIRATE**
   Pool activation is now displayed correctly starting from `100 PIRATE`.
 
+- **Fixed ZEC synchronization getting stuck when switching between wallets**
+
 - **Fixed crash when opening the coin selection screen**
 
 
