@@ -19,11 +19,14 @@ import cash.p.terminal.modules.multiswap.TokenBalanceService
 import cash.p.terminal.modules.multiswap.providers.ChangeNowProvider
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.modules.multiswap.providers.QuickexProvider
+import cash.p.terminal.modules.multiswap.action.ActionCreate
 import cash.p.terminal.wallet.IAdapterManager
+import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.badge
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
+import cash.p.terminal.wallet.useCases.WalletUseCase
 import cash.p.terminal.wallet.coinImageUrl
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.IAppNumberFormatter
@@ -50,6 +53,8 @@ class MultiSwapExchangeViewModel(
     currencyManager: CurrencyManager,
     adapterManager: IAdapterManager,
     private val balanceHiddenManager: IBalanceHiddenManager,
+    private val walletManager: IWalletManager,
+    private val walletUseCase: WalletUseCase,
 ) : ViewModel() {
 
     var uiState by mutableStateOf<MultiSwapExchangeUiState?>(null)
@@ -83,6 +88,7 @@ class MultiSwapExchangeViewModel(
     private var leg2QuotingJob: Job? = null
     private var leg2QuoteFetched = false
     private var leg2Quoting = false
+    private var creatingWallets = false
     private var timerState = timerService.stateFlow.value
 
     var timeRemainingProgress by mutableStateOf<Float?>(null)
@@ -107,6 +113,11 @@ class MultiSwapExchangeViewModel(
         viewModelScope.launch {
             balanceHiddenManager.anyWalletVisibilityChangedFlow.collect {
                 updateLeg2BalanceHidden()
+            }
+        }
+        viewModelScope.launch {
+            walletManager.activeWalletsFlow.collect {
+                currentSwap?.let { swap -> uiState = mapToUiState(swap) }
             }
         }
     }
@@ -325,6 +336,12 @@ class MultiSwapExchangeViewModel(
 
         val hasQuotes = selectedLeg2Quote != null
         val buttonState = resolveButtonState(leg1Status, leg2Status, hasQuotes, timerState.timeout, quoting = leg2Quoting)
+        val actionCreate = if (buttonState == ButtonState.Enabled) {
+            if (tokenIntermediate != null && tokenOut != null) {
+                selectedLeg2Quote?.provider?.getCreateTokenActionRequired(tokenIntermediate, tokenOut)
+                    ?.let { ActionCreate(creatingWallets, it.descriptionResId, it.tokensToAdd) }
+            } else null
+        } else null
         val showContinueLater = leg2Status != LegStatus.Completed
             && leg1Status != LegStatus.Failed
             && leg2Status != LegStatus.Failed
@@ -389,6 +406,7 @@ class MultiSwapExchangeViewModel(
             leg1Clickable = (swap.leg1InfoRecordUid ?: swap.leg1TransactionId) != null,
             leg2ProviderClickable = leg1Status == LegStatus.Completed && leg2Status == LegStatus.Pending && hasQuotes,
             leg2Quoting = leg2Quoting,
+            actionCreate = actionCreate,
         )
     }
 
@@ -404,6 +422,22 @@ class MultiSwapExchangeViewModel(
         viewModelScope.launch {
             pendingMultiSwapStorage.delete(pendingMultiSwapId)
             closeScreen = true
+        }
+    }
+
+    fun createMissingWallets(tokens: Set<Token>) {
+        if (creatingWallets) return
+        creatingWallets = true
+        currentSwap?.let { uiState = mapToUiState(it) }
+        viewModelScope.launch {
+            try {
+                walletUseCase.createWallets(tokens)
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to create wallets")
+            } finally {
+                creatingWallets = false
+                currentSwap?.let { uiState = mapToUiState(it) }
+            }
         }
     }
 
@@ -446,6 +480,7 @@ data class MultiSwapExchangeUiState(
     val leg1Clickable: Boolean = false,
     val leg2ProviderClickable: Boolean = false,
     val leg2Quoting: Boolean = false,
+    val actionCreate: ActionCreate? = null,
 )
 
 data class LegUiState(

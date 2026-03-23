@@ -90,6 +90,7 @@ internal fun MultiSwapExchangeScreen(
     onBack: () -> Unit,
     onClickProvider: () -> Unit,
     onClickLeg1: () -> Unit = {},
+    swapButtonTitle: String = stringResource(R.string.Swap),
 ) {
     var showCancelConfirmation by remember { mutableStateOf(false) }
 
@@ -208,6 +209,7 @@ internal fun MultiSwapExchangeScreen(
             BottomButtons(
                 buttonState = uiState.buttonState,
                 showContinueLater = uiState.showContinueLater,
+                swapButtonTitle = swapButtonTitle,
                 onSwap = onSwap,
                 onRefresh = onRefresh,
                 onClose = onContinueLater,
@@ -464,6 +466,7 @@ private fun Selector(
 private fun BottomButtons(
     buttonState: ButtonState,
     showContinueLater: Boolean,
+    swapButtonTitle: String,
     onSwap: () -> Unit,
     onRefresh: () -> Unit,
     onClose: () -> Unit,
@@ -485,7 +488,7 @@ private fun BottomButtons(
                 ButtonState.Enabled -> {
                     ButtonPrimaryYellow(
                         modifier = buttonModifier,
-                        title = stringResource(R.string.Swap),
+                        title = swapButtonTitle,
                         onClick = onSwap,
                     )
                 }
@@ -511,7 +514,7 @@ private fun BottomButtons(
 
                 ButtonState.Disabled -> ButtonPrimaryYellow(
                     modifier = buttonModifier,
-                    title = stringResource(R.string.Swap),
+                    title = swapButtonTitle,
                     onClick = {},
                     enabled = false,
                 )

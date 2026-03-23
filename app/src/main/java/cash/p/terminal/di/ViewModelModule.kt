@@ -135,6 +135,8 @@ val viewModelModule = module {
             currencyManager = get(),
             adapterManager = get(),
             balanceHiddenManager = get(),
+            walletManager = get(),
+            walletUseCase = get(),
         )
     }
 }

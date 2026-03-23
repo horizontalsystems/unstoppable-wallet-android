@@ -64,6 +64,7 @@ class BaseSendViewModelAdapterSyncTest {
     @After
     fun tearDown() {
         viewModelStore.clear()
+        dispatcher.scheduler.advanceUntilIdle()
         Dispatchers.resetMain()
         stopKoin()
         unmockkAll()

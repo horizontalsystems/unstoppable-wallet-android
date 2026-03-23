@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.multiswap.exchange
 
+import cash.p.terminal.R
 import cash.p.terminal.core.storage.PendingMultiSwapStorage
 import cash.p.terminal.core.usecase.FetchSwapQuotesUseCase
 import cash.p.terminal.core.usecase.SyncPendingMultiSwapUseCase
@@ -10,6 +11,7 @@ import cash.p.terminal.modules.multiswap.MultiSwapOnChainMonitor
 import cash.p.terminal.modules.multiswap.SwapProviderQuote
 import cash.p.terminal.modules.multiswap.SwapQuoteService
 import cash.p.terminal.modules.multiswap.TimerService
+import cash.p.terminal.modules.multiswap.action.ActionCreate
 import cash.p.terminal.modules.multiswap.exchange.MultiSwapExchangeViewModel.Companion.resolveButtonState
 import cash.p.terminal.modules.multiswap.providers.ChangeNowProvider
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
@@ -17,11 +19,14 @@ import cash.p.terminal.modules.multiswap.providers.QuickexProvider
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IBalanceAdapter
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
+import cash.p.terminal.wallet.useCases.WalletUseCase
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.IAppNumberFormatter
@@ -45,6 +50,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -71,6 +77,9 @@ class MultiSwapExchangeViewModelTest {
     private val balanceHiddenManager = mockk<IBalanceHiddenManager>(relaxed = true) {
         every { anyWalletVisibilityChangedFlow } returns MutableSharedFlow()
     }
+    private val walletManager = mockk<IWalletManager>(relaxed = true)
+    private val walletUseCase = mockk<WalletUseCase>(relaxed = true)
+    private val activeWalletsFlow = MutableStateFlow<List<Wallet>>(emptyList())
     private val currencyManager = mockk<CurrencyManager> {
         every { baseCurrency } returns Currency("USD", "$", 2, 0)
     }
@@ -84,13 +93,17 @@ class MultiSwapExchangeViewModelTest {
     fun setUp() {
         Dispatchers.setMain(dispatcher)
         coEvery { pendingMultiSwapStorage.getById(any()) } returns null
+        every { walletManager.activeWalletsFlow } returns activeWalletsFlow
     }
 
     private val viewModelStore = androidx.lifecycle.ViewModelStore()
 
     @After
     fun tearDown() {
+        // Clear VM before resetMain to avoid leaked coroutines on cancelled Dispatchers.Main
         viewModelStore.clear()
+        // Process any pending cancellation tasks
+        dispatcher.scheduler.advanceUntilIdle()
         Dispatchers.resetMain()
         unmockkAll()
     }
@@ -588,6 +601,198 @@ class MultiSwapExchangeViewModelTest {
         assertEquals(BigDecimal("10.0"), vm.leg2BalanceStateFlow.value.displayBalance)
     }
 
+    // --- actionCreate tests ---
+
+    @Test
+    fun mapToUiState_enabledWithMissingWallets_setsActionCreate() = runTest(dispatcher) {
+        setupTokenResolution()
+        val actionCreate = ActionCreate(
+            inProgress = false,
+            descriptionResId = R.string.swap_create_wallet_description,
+            tokensToAdd = setOf(testToken),
+        )
+        val provider = mockOnChainProvider()
+        every { provider.getCreateTokenActionRequired(any(), any()) } returns actionCreate
+        every { swapQuoteService.providers } returns listOf(provider)
+        val quote = createQuote(provider)
+        coEvery { fetchSwapQuotesUseCase(any(), any(), any(), any(), any(), any()) } returns listOf(quote)
+
+        val vm = createViewModel()
+        swapsFlow.value = listOf(completedLeg1Swap())
+        advanceUntilIdle()
+
+        assertNotNull(vm.uiState?.actionCreate)
+        assertEquals(setOf(testToken), vm.uiState?.actionCreate?.tokensToAdd)
+    }
+
+    @Test
+    fun mapToUiState_enabledWithWalletsPresent_actionCreateNull() = runTest(dispatcher) {
+        setupTokenResolution()
+        val provider = mockOnChainProvider()
+        every { provider.getCreateTokenActionRequired(any(), any()) } returns null
+        every { swapQuoteService.providers } returns listOf(provider)
+        val quote = createQuote(provider)
+        coEvery { fetchSwapQuotesUseCase(any(), any(), any(), any(), any(), any()) } returns listOf(quote)
+
+        val vm = createViewModel()
+        swapsFlow.value = listOf(completedLeg1Swap())
+        advanceUntilIdle()
+
+        assertNull(vm.uiState?.actionCreate)
+    }
+
+    @Test
+    fun mapToUiState_expiredWithMissingWallets_actionCreateNull() = runTest(dispatcher) {
+        val timerStateFlow = createMockTimerStateFlow()
+        val timerService = createMockTimerService(timerStateFlow)
+        setupTokenResolution()
+        val actionCreate = ActionCreate(
+            inProgress = false,
+            descriptionResId = R.string.swap_create_wallet_description,
+            tokensToAdd = setOf(testToken),
+        )
+        val provider = mockOnChainProvider()
+        every { provider.getCreateTokenActionRequired(any(), any()) } returns actionCreate
+        every { swapQuoteService.providers } returns listOf(provider)
+        val quote = createQuote(provider)
+        coEvery { fetchSwapQuotesUseCase(any(), any(), any(), any(), any(), any()) } returns listOf(quote)
+
+        val vm = createViewModel(timerService)
+        swapsFlow.value = listOf(completedLeg1Swap())
+        advanceUntilIdle()
+
+        // Simulate timer timeout -> Refresh overrides Enabled
+        timerStateFlow.tryEmit(TimerService.State(remaining = null, timeout = true))
+        advanceUntilIdle()
+
+        assertEquals(ButtonState.Refresh, vm.uiState?.buttonState)
+        assertNull(vm.uiState?.actionCreate)
+    }
+
+    @Test
+    fun createMissingWallets_walletsCreated_clearsActionCreate() = runTest(dispatcher) {
+        setupTokenResolution()
+        val actionCreate = ActionCreate(
+            inProgress = false,
+            descriptionResId = R.string.swap_create_wallet_description,
+            tokensToAdd = setOf(testToken),
+        )
+        val provider = mockOnChainProvider()
+        every { provider.getCreateTokenActionRequired(any(), any()) } returns actionCreate
+        every { swapQuoteService.providers } returns listOf(provider)
+        val quote = createQuote(provider)
+        coEvery { fetchSwapQuotesUseCase(any(), any(), any(), any(), any(), any()) } returns listOf(quote)
+
+        val vm = createViewModel()
+        swapsFlow.value = listOf(completedLeg1Swap())
+        advanceUntilIdle()
+        assertNotNull(vm.uiState?.actionCreate)
+
+        // Simulate wallets now present -> provider returns null
+        every { provider.getCreateTokenActionRequired(any(), any()) } returns null
+        vm.createMissingWallets(setOf(testToken))
+        activeWalletsFlow.value = listOf(mockk(relaxed = true))
+        advanceUntilIdle()
+
+        assertNull(vm.uiState?.actionCreate)
+    }
+
+    @Test
+    fun walletsDeletedExternally_actionCreateAppears() = runTest(dispatcher) {
+        setupTokenResolution()
+        val actionCreate = ActionCreate(
+            inProgress = false,
+            descriptionResId = R.string.swap_create_wallet_description,
+            tokensToAdd = setOf(testToken),
+        )
+        val provider = mockOnChainProvider()
+        every { provider.getCreateTokenActionRequired(any(), any()) } returns null
+        every { swapQuoteService.providers } returns listOf(provider)
+        val quote = createQuote(provider)
+        coEvery { fetchSwapQuotesUseCase(any(), any(), any(), any(), any(), any()) } returns listOf(quote)
+
+        val vm = createViewModel()
+        swapsFlow.value = listOf(completedLeg1Swap())
+        advanceUntilIdle()
+        assertNull(vm.uiState?.actionCreate)
+
+        // Simulate wallets deleted -> provider now returns actionCreate
+        every { provider.getCreateTokenActionRequired(any(), any()) } returns actionCreate
+        activeWalletsFlow.value = listOf(mockk(relaxed = true))
+        advanceUntilIdle()
+
+        assertNotNull(vm.uiState?.actionCreate)
+    }
+
+    @Test
+    fun createMissingWallets_doubleTap_secondCallIgnored() = runTest(dispatcher) {
+        setupTokenResolution()
+        val actionCreate = ActionCreate(
+            inProgress = false,
+            descriptionResId = R.string.swap_create_wallet_description,
+            tokensToAdd = setOf(testToken),
+        )
+        val provider = mockOnChainProvider()
+        every { provider.getCreateTokenActionRequired(any(), any()) } returns actionCreate
+        every { swapQuoteService.providers } returns listOf(provider)
+        val quote = createQuote(provider)
+        coEvery { fetchSwapQuotesUseCase(any(), any(), any(), any(), any(), any()) } returns listOf(quote)
+
+        // Make createWallets suspend so we can test re-entry
+        coEvery { walletUseCase.createWallets(any()) } coAnswers {
+            kotlinx.coroutines.delay(5000)
+            true
+        }
+
+        val vm = createViewModel()
+        swapsFlow.value = listOf(completedLeg1Swap())
+        advanceUntilIdle()
+
+        // First call starts creation — don't advance, so it stays in-flight
+        vm.createMissingWallets(setOf(testToken))
+        assertTrue(requireNotNull(vm.uiState?.actionCreate).inProgress)
+
+        // Second call is ignored (re-entry guard)
+        vm.createMissingWallets(setOf(testToken))
+
+        // Advance to let first call complete
+        advanceUntilIdle()
+
+        // createWallets called only once
+        coVerify(exactly = 1) { walletUseCase.createWallets(setOf(testToken)) }
+    }
+
+    @Test
+    fun createMissingWallets_exception_resetsCreatingState() = runTest(dispatcher) {
+        setupTokenResolution()
+        val actionCreate = ActionCreate(
+            inProgress = false,
+            descriptionResId = R.string.swap_create_wallet_description,
+            tokensToAdd = setOf(testToken),
+        )
+        val provider = mockOnChainProvider()
+        every { provider.getCreateTokenActionRequired(any(), any()) } returns actionCreate
+        every { swapQuoteService.providers } returns listOf(provider)
+        val quote = createQuote(provider)
+        coEvery { fetchSwapQuotesUseCase(any(), any(), any(), any(), any(), any()) } returns listOf(quote)
+        coEvery { walletUseCase.createWallets(any()) } throws RuntimeException("NFC failed")
+
+        val vm = createViewModel()
+        swapsFlow.value = listOf(completedLeg1Swap())
+        advanceUntilIdle()
+
+        // Create wallets fails
+        vm.createMissingWallets(setOf(testToken))
+        advanceUntilIdle()
+
+        // inProgress resets, user can retry
+        assertFalse(requireNotNull(vm.uiState?.actionCreate).inProgress)
+
+        // Second call is NOT blocked
+        vm.createMissingWallets(setOf(testToken))
+        coVerify(exactly = 2) { walletUseCase.createWallets(setOf(testToken)) }
+    }
+
     // --- helpers ---
 
     private fun createMockTimerStateFlow(): MutableSharedFlow<TimerService.State> {
@@ -643,6 +848,8 @@ class MultiSwapExchangeViewModelTest {
         currencyManager = currencyManager,
         adapterManager = adapterManager,
         balanceHiddenManager = balanceHiddenManager,
+        walletManager = walletManager,
+        walletUseCase = walletUseCase,
     )
         viewModelStore.put("test-vm", vm)
         return vm

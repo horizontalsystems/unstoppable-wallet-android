@@ -2,6 +2,7 @@ package cash.p.terminal.modules.multiswap.exchanges
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -137,9 +138,19 @@ private fun ExchangeDetailContent(
                 uiState = viewModel.uiState,
                 timeRemainingProgress = { viewModel.timeRemainingProgress },
                 onSwap = {
-                    if (viewModel.selectedLeg2Quote != null) {
+                    val action = viewModel.uiState?.actionCreate
+                    if (action != null && !action.inProgress) {
+                        viewModel.createMissingWallets(action.tokensToAdd)
+                    } else if (action == null && viewModel.selectedLeg2Quote != null) {
                         detailNavController.navigate(ConfirmSwapRoute)
                     }
+                },
+                swapButtonTitle = when {
+                    viewModel.uiState?.actionCreate?.inProgress == true ->
+                        stringResource(R.string.swap_creating_wallets)
+                    viewModel.uiState?.actionCreate != null ->
+                        stringResource(R.string.swap_create_wallets)
+                    else -> stringResource(R.string.Swap)
                 },
                 onRefresh = viewModel::refreshQuotes,
                 onContinueLater = viewModel::onContinueLater,

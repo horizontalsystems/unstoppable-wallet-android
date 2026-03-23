@@ -57,6 +57,11 @@ class SwapConfirmViewModelLeg2Test {
     }
     private val provider = mockk<IMultiSwapProvider>(relaxed = true) {
         every { mevProtectionAvailable } returns false
+        // Suspend forever so fetchFinalQuote's Dispatchers.IO coroutine doesn't complete
+        // and leak cancellation exceptions on VM cleanup
+        coEvery { fetchFinalQuote(any(), any(), any(), any(), any(), any()) } coAnswers {
+            kotlinx.coroutines.awaitCancellation()
+        }
     }
 
     private val sendTransactionServiceState = SendTransactionServiceState(
@@ -103,6 +108,7 @@ class SwapConfirmViewModelLeg2Test {
     @After
     fun tearDown() {
         viewModelStore.clear()
+        dispatcher.scheduler.advanceUntilIdle()
         Dispatchers.resetMain()
         stopKoin()
         unmockkAll()
