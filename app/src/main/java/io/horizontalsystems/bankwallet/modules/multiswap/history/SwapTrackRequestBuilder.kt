@@ -12,14 +12,13 @@ object SwapTrackRequestBuilder {
     // ChainId by blockchainTypeUid for EVM chains
     private val evmChainIds = mapOf(
         "ethereum" to "1",
-        "binanceSmartChain" to "56",
-        "polygon" to "137",
+        "binance-smart-chain" to "56",
+        "polygon-pos" to "137",
         "avalanche" to "43114",
-        "optimism" to "10",
+        "optimistic-ethereum" to "10",
         "base" to "8453",
-        "arbitrumOne" to "42161",
+        "arbitrum-one" to "42161",
         "gnosis" to "100",
-        "fantom" to "250",
     )
 
     fun build(record: SwapRecord): UnstoppableAPI.Request.Track {
