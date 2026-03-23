@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
@@ -15,7 +16,8 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuModule
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuViewModel
@@ -29,7 +31,7 @@ import kotlinx.coroutines.delay
 class RestoreAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         val input = navController.getInput<ManageAccountsModule.Input>()
         val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.restoreAccountFragment
         val inclusive = input?.popOffInclusive ?: false
@@ -45,7 +47,7 @@ class RestoreAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
 
 @Composable
 private fun RestoreAccountNavHost(
-    fragmentNavController: NavController,
+    fragmentNavController: NavBackStack<HSScreen>,
     popUpToInclusiveId: Int,
     inclusive: Boolean
 ) {

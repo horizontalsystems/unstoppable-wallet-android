@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import com.tonapps.tonkeeper.api.shortAddress
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
@@ -33,7 +34,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -59,7 +60,7 @@ import io.horizontalsystems.marketkit.models.Token
 
 @Composable
 fun EnterAddressScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     token: Token,
     title: String,
     buttonTitle: String,

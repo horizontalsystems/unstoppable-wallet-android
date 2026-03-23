@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -41,7 +42,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.RankType
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -63,7 +64,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 class CoinRankFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<RankType>(navController) { type ->
             CoinRankScreen(type, navController)
         }
@@ -74,7 +75,7 @@ class CoinRankFragment : BaseComposeFragment() {
 @Composable
 private fun CoinRankScreen(
     type: RankType,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     viewModel: CoinRankViewModel = viewModel(
         factory = CoinRankModule.Factory(type)
     )
@@ -156,7 +157,7 @@ private fun CoinRankScreen(
 private fun LazyListScope.coinRankList(
     items: List<CoinRankModule.RankViewItem>,
     type: RankType,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     item {
         HsDivider()

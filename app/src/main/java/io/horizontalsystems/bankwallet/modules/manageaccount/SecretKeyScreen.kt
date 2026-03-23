@@ -17,12 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
@@ -35,7 +36,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SecretKeyScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     secretKey: String,
     title: String,
     hideScreenText: String,

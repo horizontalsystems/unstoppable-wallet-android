@@ -14,12 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import java.math.BigDecimal
 
@@ -30,7 +31,7 @@ fun HSFee(
     fee: BigDecimal?,
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
 ) {
     Column(
         modifier = Modifier
@@ -59,7 +60,7 @@ fun HSFeeRaw(
     fee: BigDecimal?,
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
 ) {
 
     var formatted by remember { mutableStateOf<FeeItem?>(null) }

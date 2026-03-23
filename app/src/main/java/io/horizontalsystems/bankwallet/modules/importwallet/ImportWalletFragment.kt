@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.Caution
@@ -38,7 +39,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupFileValidator
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -57,7 +58,7 @@ import java.io.File
 class ImportWalletFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         val input = navController.getInput<ManageAccountsModule.Input>()
         val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.importWalletFragment
         val inclusive = input?.popOffInclusive ?: true
@@ -70,7 +71,7 @@ class ImportWalletFragment : BaseComposeFragment() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ImportWalletScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     popUpToInclusiveId: Int,
     inclusive: Boolean
 ) {

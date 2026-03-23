@@ -12,6 +12,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.paidAction
@@ -26,7 +27,8 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketSignalsFragment
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersViewModel
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
@@ -44,7 +46,7 @@ import io.horizontalsystems.subscriptions.core.TradeSignals
 class MarketFiltersResultsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         val viewModel = getViewModel()
 
         if (viewModel == null) {
@@ -73,7 +75,7 @@ class MarketFiltersResultsFragment : BaseComposeFragment() {
 @Composable
 private fun SearchResultsScreen(
     viewModel: MarketFiltersResultViewModel,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
 
     val uiState = viewModel.uiState

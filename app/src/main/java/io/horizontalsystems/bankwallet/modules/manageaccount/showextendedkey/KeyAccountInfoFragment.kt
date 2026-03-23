@@ -10,10 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoBody
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -21,13 +22,13 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 class KeyAccountInfoFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         InfoScreen(navController)
     }
 }
 
 @Composable
-private fun InfoScreen(navController: NavController) {
+private fun InfoScreen(navController: NavBackStack<HSScreen>) {
     HSScaffold(
         title = stringResource(R.string.ExtendedKey_Account),
         menuItems = listOf(

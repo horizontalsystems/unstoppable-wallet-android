@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.isCustom
@@ -50,7 +51,7 @@ import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceActionButton
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFragment
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
 import io.horizontalsystems.bankwallet.modules.receive.ZcashAddressTypeSelectFragment
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
@@ -96,7 +97,7 @@ import kotlinx.coroutines.launch
 fun TokenBalanceScreen(
     viewModel: TokenBalanceViewModel,
     transactionsViewModel: TransactionsViewModel,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     val uiState = viewModel.uiState
     var bottomSheetContent by remember { mutableStateOf<LockedValue?>(null) }
@@ -400,7 +401,7 @@ fun TokenBalanceScreen(
 
 private fun openSyncErrorDialog(
     uiState: TokenBalanceModule.TokenBalanceUiState,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     val wallet = uiState.balanceViewItem?.wallet
     val errorMessage = uiState.failedErrorMessage
@@ -418,7 +419,7 @@ private fun onTransactionClick(
     transactionViewItem: TransactionViewItem,
     tokenBalanceViewModel: TokenBalanceViewModel,
     transactionsViewModel: TransactionsViewModel,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     val transactionItem = tokenBalanceViewModel.getTransactionItem(transactionViewItem) ?: return
     transactionsViewModel.tmpTransactionRecordToShow = transactionItem.record
@@ -431,7 +432,7 @@ private fun onTransactionClick(
 @Composable
 private fun TokenBalanceHeader(
     balanceViewItem: BalanceViewItem,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     viewModel: TokenBalanceViewModel,
     receiveAddress: String?,
     warning: String?,
@@ -800,7 +801,7 @@ private fun LockedBalanceZcashCell(
 @Composable
 private fun ButtonsRow(
     viewItem: BalanceViewItem,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     onClickReceive: () -> Unit
 ) {
     BalanceButtonsGroup {

@@ -37,6 +37,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -48,7 +49,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.EvmSyncSource
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
 import io.horizontalsystems.bankwallet.modules.evmnetwork.addrpc.AddRpcScreen
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.getShape
@@ -72,7 +73,7 @@ import io.horizontalsystems.marketkit.models.Blockchain
 class EvmNetworkFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<Blockchain>(navController) { input ->
             EvmNetworkNavHost(navController, input)
         }
@@ -85,7 +86,7 @@ private const val AddRpcPage = "add_rpc"
 
 @Composable
 private fun EvmNetworkNavHost(
-    fragmentNavController: NavController,
+    fragmentNavController: NavBackStack<HSScreen>,
     blockchain: Blockchain
 ) {
     val navController = rememberNavController()

@@ -15,11 +15,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.highlightText
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -36,7 +37,7 @@ import kotlinx.parcelize.Parcelize
 class SwapTermsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         SwapTermsScreen(navController)
     }
 
@@ -45,7 +46,7 @@ class SwapTermsFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun SwapTermsScreen(navController: NavController) {
+fun SwapTermsScreen(navController: NavBackStack<HSScreen>) {
     val viewModel = viewModel<SwapTermsViewModel>(factory = SwapTermsModule.Factory())
     val uiState = viewModel.uiState
     val terms = uiState.terms

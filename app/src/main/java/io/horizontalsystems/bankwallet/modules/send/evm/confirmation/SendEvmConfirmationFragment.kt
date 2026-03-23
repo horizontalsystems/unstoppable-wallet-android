@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -24,7 +25,8 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
@@ -40,7 +42,7 @@ import kotlinx.parcelize.Parcelize
 class SendEvmConfirmationFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<Input>(navController) { input ->
             SendEvmConfirmationScreen(navController, input)
         }
@@ -75,16 +77,12 @@ class SendEvmConfirmationFragment : BaseComposeFragment() {
 
 @Composable
 private fun SendEvmConfirmationScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     input: SendEvmConfirmationFragment.Input
 ) {
     val logger = remember { AppLogger("send-evm") }
 
-    val currentBackStackEntry = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.sendEvmConfirmationFragment)
-    }
     val viewModel = viewModel<SendEvmConfirmationViewModel>(
-        viewModelStoreOwner = currentBackStackEntry,
         factory = SendEvmConfirmationViewModel.Factory(
             input.transactionData,
             input.additionalInfo,

@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -20,7 +21,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.BCH_ADDRESS_FORMAT_SCREEN
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.COIN_SELECT_SCREEN
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.DERIVATION_SELECT_SCREEN
@@ -36,7 +37,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 
 class ReceiveChooseCoinFragment : BaseComposeFragment() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         ReceiveChooseCoinScreen(navController)
     }
 }
@@ -51,7 +52,7 @@ object ReceiveChooseCoinRoutes {
 
 @Composable
 fun ReceiveChooseCoinScreen(
-    fragmentNavController: NavController
+    fragmentNavController: NavBackStack<HSScreen>
 ) {
     val navController = rememberNavController()
 
@@ -174,7 +175,7 @@ fun ReceiveChooseCoinScreen(
 
 private fun onSelectWallet(
     wallet: Wallet,
-    fragmentNavController: NavController,
+    fragmentNavController: NavBackStack<HSScreen>,
     isTransparentAddress: Boolean = false,
 ) {
     fragmentNavController.slideFromRight(
@@ -190,7 +191,7 @@ private fun onSelectWallet(
 }
 
 fun navigateBack(
-    fragmentNavController: NavController,
+    fragmentNavController: NavBackStack<HSScreen>,
     navController: NavHostController
 ): () -> Unit = {
     val result = navController.popBackStack()
@@ -211,7 +212,7 @@ inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
 }
 
 @Composable
-fun CloseWithMessage(navController: NavController) {
+fun CloseWithMessage(navController: NavBackStack<HSScreen>) {
     val view = LocalView.current
     HudHelper.showErrorMessage(view, stringResource(id = R.string.Error_ParameterNotSet))
     navController.removeLastOrNull()

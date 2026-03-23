@@ -5,17 +5,18 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumSubscribedScreen
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.parcelize.Parcelize
 
 class BuySubscriptionHavHostFragment : BaseComposeFragment() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         SubscriptionNavHost(
             navController = navController,
             onClose = { navController.removeLastOrNull() })
@@ -30,7 +31,7 @@ class BuySubscriptionHavHostFragment : BaseComposeFragment() {
 
 @Composable
 fun SubscriptionNavHost(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     onClose: () -> Unit
 ) {
     val navHostController = rememberNavController()

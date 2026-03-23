@@ -27,8 +27,8 @@ import androidx.lifecycle.ViewModelProvider.Factory
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import kotlin.reflect.KClass
 
@@ -52,7 +52,7 @@ abstract class BaseComposeFragment(
 
     @Composable
     protected inline fun <reified T : Parcelable> withInput(
-        navController: NavController,
+        navController: NavBackStack<HSScreen>,
         content: @Composable (T) -> Unit
     ) {
         val input = try {
@@ -82,7 +82,7 @@ abstract class BaseComposeFragment(
         TODO()
     }
 
-    fun findNavController(): NavController {
+    fun findNavController(): NavBackStack<HSScreen> {
         TODO()
     }
 
@@ -173,7 +173,7 @@ abstract class BaseComposeFragmentX(
 
     @Composable
     protected inline fun <reified T : Parcelable> withInput(
-        navController: NavController,
+        navController: NavBackStack<HSScreen>,
         content: @Composable (T) -> Unit
     ) {
         val input = try {
@@ -186,7 +186,7 @@ abstract class BaseComposeFragmentX(
     }
 
     @Composable
-    abstract fun GetContent(navController: NavController)
+    abstract fun GetContent(navController: NavBackStack<HSScreen>)
 
     override fun onResume() {
         super.onResume()

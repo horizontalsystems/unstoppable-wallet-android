@@ -20,7 +20,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
@@ -36,7 +36,8 @@ import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.OnlyRe
 import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.Unlimited
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -57,7 +58,7 @@ import java.math.BigDecimal
 
 class Eip20ApproveConfirmFragment : BaseComposeFragment() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         Eip20ApproveConfirmScreen(navController)
     }
 
@@ -66,13 +67,8 @@ class Eip20ApproveConfirmFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun Eip20ApproveConfirmScreen(navController: NavController) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.eip20ApproveFragment)
-    }
-    val viewModel = viewModel<Eip20ApproveViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-    )
+fun Eip20ApproveConfirmScreen(navController: NavBackStack<HSScreen>) {
+    val viewModel = navController.viewModelForScreen<Eip20ApproveViewModel>(Eip20ApproveFragment::class)
 
     val view = LocalView.current
     val uiState = viewModel.uiState

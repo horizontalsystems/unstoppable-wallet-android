@@ -32,10 +32,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
@@ -59,7 +60,7 @@ import kotlinx.parcelize.Parcelize
 
 class SwapInfoFragment : BaseComposeFragment() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<Input>(navController) { input ->
             SwapInfoScreen(recordId = input.recordId, navController = navController)
         }
@@ -70,7 +71,7 @@ class SwapInfoFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun SwapInfoScreen(recordId: Int, navController: NavController) {
+fun SwapInfoScreen(recordId: Int, navController: NavBackStack<HSScreen>) {
     val viewModel = viewModel<SwapInfoViewModel>(
         key = recordId.toString(),
         factory = SwapInfoViewModel.Factory(recordId),

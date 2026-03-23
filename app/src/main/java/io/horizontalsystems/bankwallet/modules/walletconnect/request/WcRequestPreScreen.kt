@@ -2,11 +2,12 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 
 @Composable
-fun WcRequestPreScreen(navController: NavController) {
+fun WcRequestPreScreen(navController: NavBackStack<HSScreen>) {
     val viewModelPre = viewModel<WCRequestPreViewModel>(
         factory = WCRequestPreViewModel.Factory()
     )

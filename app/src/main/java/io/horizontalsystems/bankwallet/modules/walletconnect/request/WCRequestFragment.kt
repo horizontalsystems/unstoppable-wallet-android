@@ -36,12 +36,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.isEvm
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCSendEthRequestScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.signtransaction.WCSignEthereumTransactionRequestScreen
@@ -108,7 +109,7 @@ class WCRequestFragment : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-fun WcRequestEvm(navController: NavController) {
+fun WcRequestEvm(navController: NavBackStack<HSScreen>) {
     val wcRequestEvmViewModel =
         viewModel<WCRequestEvmViewModel>(factory = WCRequestEvmViewModel.Factory())
     val composableScope = rememberCoroutineScope()
@@ -255,7 +256,7 @@ fun WcRequestError(
 @Composable
 fun WCNewSignRequestScreen(
     sessionRequestUI: SessionRequestUI.Content,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     onAllow: () -> Unit,
     onDecline: () -> Unit
 ) {

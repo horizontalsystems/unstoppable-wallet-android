@@ -16,11 +16,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -58,7 +59,7 @@ class SyncErrorDialog : BaseComposableBottomSheetFragment() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SyncErrorScreen(navController: NavController, wallet: Wallet) {
+private fun SyncErrorScreen(navController: NavBackStack<HSScreen>, wallet: Wallet) {
     val viewModel = viewModel<SyncErrorViewModel>(factory = SyncErrorModule.Factory(wallet))
     val text = if (viewModel.sourceChangeable) {
         stringResource(R.string.BalanceSyncError_ChangableSourceErrorText)

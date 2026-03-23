@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.nav3
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainScreenWithRootedDeviceCheck
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
@@ -14,7 +15,7 @@ data object MainScreen : HSScreen() {
     lateinit var mainActivityViewModel: MainActivityViewModel
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         MainScreenWithRootedDeviceCheck(
             transactionsViewModel = viewModel<TransactionsViewModel>(factory = TransactionsModule.Factory()),
             navController = navController,

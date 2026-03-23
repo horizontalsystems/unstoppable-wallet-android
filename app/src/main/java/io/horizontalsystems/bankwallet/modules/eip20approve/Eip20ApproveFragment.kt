@@ -7,18 +7,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -37,7 +37,7 @@ import java.math.BigDecimal
 class Eip20ApproveFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<Input>(navController) { input ->
             Eip20ApproveScreen(navController, input)
         }
@@ -52,14 +52,8 @@ class Eip20ApproveFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment.Input) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.eip20ApproveFragment)
-    }
-
-
+fun Eip20ApproveScreen(navController: NavBackStack<HSScreen>, input: Eip20ApproveFragment.Input) {
     val viewModel = viewModel<Eip20ApproveViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
         factory = Eip20ApproveViewModel.Factory(
             input.token,
             input.requiredAllowance,

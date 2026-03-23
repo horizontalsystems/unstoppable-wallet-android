@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -62,7 +63,7 @@ import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFragment
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
@@ -194,7 +195,7 @@ fun BalanceItems(
     balanceViewItems: List<BalanceViewItem2>,
     viewModel: BalanceViewModel,
     accountViewItem: AccountViewItem,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     uiState: BalanceUiState,
     onScanClick: () -> Unit,
 ) {
@@ -507,7 +508,7 @@ fun BalanceItems(
 private fun handleContextMenuClick(
     menuItem: BalanceContextMenuItem,
     balanceViewItem: BalanceViewItem2,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     onAddressCopyClick: (Wallet) -> Unit,
     onDisable: (BalanceViewItem2) -> Unit
 ) {
@@ -563,7 +564,7 @@ private fun handleContextMenuClick(
     }
 }
 
-private fun handleReceiveAddress(viewModel: BalanceViewModel, wallet: Wallet, view: View, navController: NavController) {
+private fun handleReceiveAddress(viewModel: BalanceViewModel, wallet: Wallet, view: View, navController: NavBackStack<HSScreen>) {
     val address = viewModel.getReceiveAddress(wallet)
     val receiveAllowedState = viewModel.getReceiveAllowedState()
 
@@ -580,7 +581,7 @@ private fun showErrorAddressUnavailable(view: View) {
 
 private fun showBackupRequiredDialog(
     account: Account,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     val text = Translator.getString(
         R.string.Balance_Receive_BackupRequired_Description,

@@ -10,11 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.WalletSwitchBottomSheet
@@ -40,7 +41,7 @@ class WalletSwitchDialog : BaseComposableBottomSheetFragment() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun WalletSwitchScreen(navController: NavController) {
+private fun WalletSwitchScreen(navController: NavBackStack<HSScreen>) {
     val viewModel = viewModel<WalletSwitchViewModel>(factory = WalletSwitchViewModel.Factory())
     val uiState = viewModel.uiState
 

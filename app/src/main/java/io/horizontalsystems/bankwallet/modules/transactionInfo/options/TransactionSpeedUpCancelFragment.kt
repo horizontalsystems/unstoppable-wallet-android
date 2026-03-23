@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -21,7 +22,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
@@ -33,7 +34,7 @@ import kotlinx.parcelize.Parcelize
 class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<Input>(navController) { input ->
             TransactionSpeedUpCancelScreen(navController, input)
         }
@@ -52,18 +53,13 @@ class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
 
 @Composable
 private fun TransactionSpeedUpCancelScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     input: TransactionSpeedUpCancelFragment.Input
 ) {
     val logger = remember { AppLogger("tx-speedUp-cancel") }
     val view = LocalView.current
 
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.transactionSpeedUpCancelFragment)
-    }
-
     val viewModel = viewModel<TransactionSpeedUpCancelViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
         factory = TransactionSpeedUpCancelViewModel.Factory(
             input.blockchainType,
             input.transactionHash,

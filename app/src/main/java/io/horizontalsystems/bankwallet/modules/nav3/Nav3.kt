@@ -69,7 +69,7 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
 //                    currentScreen.mainActivityViewModel = mainActivityViewModel
 //                }
 //                hSScreen.GetContent(backStack)
-                hSScreen.GetContent(NavController())
+                hSScreen.GetContent(backStack)
             }
         }
     )
@@ -101,6 +101,9 @@ fun NavBackStack<HSScreen>.navigateWithTermsAccepted(screen: HSScreen) {
     }
 }
 
+fun NavBackStack<HSScreen>.removeLastUntil(i: Int, inclusive: Boolean) {
+}
+
 fun NavBackStack<HSScreen>.removeLastUntil(klass: KClass<out HSScreen>, inclusive: Boolean) {
     val index = indexOfLast { it::class == klass }
     if (index != -1) {
@@ -116,6 +119,15 @@ fun NavBackStack<HSScreen>.removeLastUntil(klass: KClass<out HSScreen>, inclusiv
 @Composable
 inline fun <reified VM : ViewModel> NavBackStack<HSScreen>.viewModelForScreen(klass: KClass<out HSScreen>) : VM {
     val hSScreen = checkNotNull(findLast { it::class == klass })
+
+    return viewModel(
+        viewModelStoreOwner = rememberChildViewModelStoreOwner(hSScreen.contentKey()),
+    )
+}
+
+@Composable
+inline fun <reified VM : ViewModel> NavBackStack<HSScreen>.viewModelForPrevScreen() : VM {
+    val hSScreen = this[lastIndex - 1]
 
     return viewModel(
         viewModelStoreOwner = rememberChildViewModelStoreOwner(hSScreen.contentKey()),

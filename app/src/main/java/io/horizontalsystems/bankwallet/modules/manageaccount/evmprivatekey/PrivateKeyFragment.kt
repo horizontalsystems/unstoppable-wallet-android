@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -10,13 +11,13 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.SecretKeyScreen
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.parcelize.Parcelize
 
 class PrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<Input>(navController) { input ->
             PrivateKeyScreen(navController, input.privateKey, input.type)
         }
@@ -33,7 +34,7 @@ class PrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
 @Composable
 fun PrivateKeyScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     evmPrivateKey: String,
     type: PrivateKeyFragment.Type,
 ) {

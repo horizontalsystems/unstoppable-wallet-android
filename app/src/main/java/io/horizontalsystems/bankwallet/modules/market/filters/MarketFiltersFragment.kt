@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.paidAction
@@ -44,7 +45,7 @@ import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModul
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.PricePeriod
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.TradingSignals
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.TradingVolume
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
@@ -73,7 +74,7 @@ class MarketFiltersFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         AdvancedSearchScreen(
             viewModel,
             navController,
@@ -86,7 +87,7 @@ class MarketFiltersFragment : BaseComposeFragment() {
 @Composable
 private fun AdvancedSearchScreen(
     viewModel: MarketFiltersViewModel,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
 ) {
     val uiState = viewModel.uiState
     val errorMessage = uiState.errorMessage
@@ -269,7 +270,7 @@ private fun BSContent(
 
 @Composable
 fun AdvancedSearchContent(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     viewModel: MarketFiltersViewModel,
     onFilterByBlockchainsClick: () -> Unit,
     showBottomSheet: (MarketFiltersModule.FilterDropdown) -> Unit,

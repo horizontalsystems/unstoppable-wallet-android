@@ -5,8 +5,9 @@ import android.os.Parcelable
 import androidx.annotation.IdRes
 import androidx.core.os.bundleOf
 import androidx.navigation.NavOptions
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
@@ -17,7 +18,7 @@ import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import java.util.UUID
 
-fun NavController.slideFromRight(@IdRes resId: Int, input: Parcelable? = null, xxx: NavOptions.Builder.() -> Unit = { }) {
+fun NavBackStack<HSScreen>.slideFromRight(@IdRes resId: Int, input: Parcelable? = null, xxx: NavOptions.Builder.() -> Unit = { }) {
     val builder = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_right)
         .setExitAnim(android.R.anim.fade_out)
@@ -31,10 +32,11 @@ fun NavController.slideFromRight(@IdRes resId: Int, input: Parcelable? = null, x
     val args = input?.let {
         bundleOf("input" to it)
     }
-    navigate(resId, args, navOptions)
+//    TODO("xxx nav3")
+//    navigate(resId, args, navOptions)
 }
 
-fun NavController.slideFromBottom(@IdRes resId: Int, input: Parcelable? = null) {
+fun NavBackStack<HSScreen>.slideFromBottom(@IdRes resId: Int, input: Parcelable? = null) {
     val navOptions = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_bottom)
         .setExitAnim(android.R.anim.fade_out)
@@ -45,10 +47,11 @@ fun NavController.slideFromBottom(@IdRes resId: Int, input: Parcelable? = null) 
     val args = input?.let {
         bundleOf("input" to it)
     }
-    navigate(resId, args, navOptions)
+//    TODO("xxx nav3")
+//    navigate(resId, args, navOptions)
 }
 
-fun NavController.authorizedAction(action: () -> Unit) {
+fun NavBackStack<HSScreen>.authorizedAction(action: () -> Unit) {
     if (App.pinComponent.isPinSet) {
         slideFromBottomForResult<ConfirmPinFragment.Result>(R.id.confirmPinFragment) {
             if (it.success) {
@@ -60,7 +63,7 @@ fun NavController.authorizedAction(action: () -> Unit) {
     }
 }
 
-fun NavController.paidAction(paidAction: IPaidAction, block: () -> Unit) {
+fun NavBackStack<HSScreen>.paidAction(paidAction: IPaidAction, block: () -> Unit) {
     if (UserSubscriptionManager.isActionAllowed(paidAction)) {
         block.invoke()
     } else {
@@ -72,7 +75,7 @@ fun NavController.paidAction(paidAction: IPaidAction, block: () -> Unit) {
     }
 }
 
-fun NavController.navigateWithTermsAccepted(action: () -> Unit) {
+fun NavBackStack<HSScreen>.navigateWithTermsAccepted(action: () -> Unit) {
     if (!App.termsManager.allTermsAccepted) {
         slideFromBottomForResult<TermsFragment.Result>(R.id.termsFragment) { result ->
             if (result.termsAccepted) {
@@ -84,7 +87,7 @@ fun NavController.navigateWithTermsAccepted(action: () -> Unit) {
     }
 }
 
-fun NavController.ensurePinSet(descriptionResId: Int, action: () -> Unit) {
+fun NavBackStack<HSScreen>.ensurePinSet(descriptionResId: Int, action: () -> Unit) {
     if (App.pinComponent.isPinSet) {
         action.invoke()
     } else {
@@ -94,7 +97,7 @@ fun NavController.ensurePinSet(descriptionResId: Int, action: () -> Unit) {
     }
 }
 
-fun <T: Parcelable> NavController.slideFromBottomForResult(
+fun <T: Parcelable> NavBackStack<HSScreen>.slideFromBottomForResult(
     @IdRes resId: Int,
     input: Parcelable? = null,
     onResult: (T) -> Unit
@@ -109,7 +112,7 @@ fun <T: Parcelable> NavController.slideFromBottomForResult(
     navigateForResult(resId, input, navOptions, onResult)
 }
 
-fun <T: Parcelable> NavController.slideFromRightForResult(
+fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(
     @IdRes resId: Int,
     input: Parcelable? = null,
     onResult: (T) -> Unit
@@ -124,7 +127,7 @@ fun <T: Parcelable> NavController.slideFromRightForResult(
     navigateForResult(resId, input, navOptions, onResult)
 }
 
-private fun <T : Parcelable> NavController.navigateForResult(
+private fun <T : Parcelable> NavBackStack<HSScreen>.navigateForResult(
     resId: Int,
     input: Parcelable?,
     navOptions: NavOptions,
@@ -136,10 +139,11 @@ private fun <T : Parcelable> NavController.navigateForResult(
     input?.let {
         bundle.putParcelable("input", it)
     }
-    navigate(resId, bundle, navOptions)
+//    TODO("xxx nav3")
+//    navigate(resId, bundle, navOptions)
 }
 
-private fun <T: Parcelable> NavController.getNavigationResultX(key: String, onResult: (T) -> Unit) {
+private fun <T: Parcelable> NavBackStack<HSScreen>.getNavigationResultX(key: String, onResult: (T) -> Unit) {
 //    currentBackStackEntry?.let { backStackEntry ->
 //        backStackEntry.savedStateHandle.getLiveData<T>(key).observe(backStackEntry) {
 //            onResult.invoke(it)
@@ -149,7 +153,7 @@ private fun <T: Parcelable> NavController.getNavigationResultX(key: String, onRe
 //    }
 }
 
-inline fun <reified T: Parcelable> NavController.getInput() : T? {
+inline fun <reified T: Parcelable> NavBackStack<HSScreen>.getInput() : T? {
     TODO()
 //    return currentBackStackEntry?.arguments?.getInputX()
 }
@@ -158,11 +162,11 @@ inline fun <reified T: Parcelable> Bundle.getInputX() : T? {
     return parcelable("input")
 }
 
-inline fun <reified T: Parcelable> NavController.requireInput() : T {
+inline fun <reified T: Parcelable> NavBackStack<HSScreen>.requireInput() : T {
     return getInput()!!
 }
 
-fun <T: Parcelable> NavController.setNavigationResultX(result: T) {
+fun <T: Parcelable> NavBackStack<HSScreen>.setNavigationResultX(result: T) {
 //    val resultKey = currentBackStackEntry?.arguments?.getString("resultKey")
 //
 //    if (resultKey == null) {

@@ -11,6 +11,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
@@ -25,7 +26,7 @@ import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinListOrderable
@@ -46,7 +47,7 @@ import io.horizontalsystems.subscriptions.core.TradeSignals
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MarketFavoritesScreen(
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     val viewModel = viewModel<MarketFavoritesViewModel>(factory = MarketFavoritesModule.Factory())
     val uiState = viewModel.uiState

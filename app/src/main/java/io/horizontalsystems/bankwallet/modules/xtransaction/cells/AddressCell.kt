@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -20,7 +21,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
@@ -40,7 +41,7 @@ fun AddressCell(
     blockchainType: BlockchainType?,
     statPage: StatPage,
     statSection: StatSection,
-    navController: NavController? = null,
+    navController: NavBackStack<HSScreen>? = null,
     borderTop: Boolean = true
 ) {
     val view = LocalView.current

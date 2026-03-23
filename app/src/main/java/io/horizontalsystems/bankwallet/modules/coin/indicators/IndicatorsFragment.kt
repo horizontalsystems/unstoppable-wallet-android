@@ -14,11 +14,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -33,7 +34,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 class IndicatorsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         IndicatorsScreen(
             navController = navController,
         )
@@ -42,7 +43,7 @@ class IndicatorsFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun IndicatorsScreen(navController: NavController) {
+fun IndicatorsScreen(navController: NavBackStack<HSScreen>) {
     val chartIndicatorsViewModel =
         viewModel<ChartIndicatorsViewModel>(factory = ChartIndicatorsViewModel.Factory())
 

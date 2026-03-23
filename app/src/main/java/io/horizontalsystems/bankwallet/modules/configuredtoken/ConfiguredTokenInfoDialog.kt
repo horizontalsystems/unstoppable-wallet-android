@@ -19,10 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.requireInput
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -60,7 +61,7 @@ class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
+private fun ConfiguredTokenInfo(navController: NavBackStack<HSScreen>, token: Token) {
     val viewModel = viewModel<ConfiguredTokenInfoViewModel>(factory = ConfiguredTokenInfoViewModel.Factory(token))
     val uiState = viewModel.uiState
 

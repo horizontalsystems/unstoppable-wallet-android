@@ -41,6 +41,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -49,7 +50,7 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
 import io.horizontalsystems.bankwallet.modules.moneronetwork.addnode.AddMoneroNodeScreen
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.getShape
@@ -74,7 +75,7 @@ import kotlinx.coroutines.launch
 class MoneroNetworkFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         MoneroNetworkNavHost(navController)
     }
 
@@ -85,7 +86,7 @@ private const val AddNodePage = "add_node"
 
 @Composable
 private fun MoneroNetworkNavHost(
-    fragmentNavController: NavController
+    fragmentNavController: NavBackStack<HSScreen>
 ) {
     val navController = rememberNavController()
     NavHost(

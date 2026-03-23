@@ -1,28 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo.options
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.lifecycle.viewmodel.compose.viewModel
-import io.horizontalsystems.bankwallet.R
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 
 class TransactionSpeedUpCancelTransactionSettingsFragment : BaseComposeFragment() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         TransactionSpeedUpCancelTransactionSettingsScreen(navController)
     }
 }
 
 @Composable
-fun TransactionSpeedUpCancelTransactionSettingsScreen(navController: NavController) {
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.transactionSpeedUpCancelFragment)
-    }
-
-    val viewModel = viewModel<TransactionSpeedUpCancelViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
-    )
+fun TransactionSpeedUpCancelTransactionSettingsScreen(navController: NavBackStack<HSScreen>) {
+    val viewModel = navController.viewModelForScreen<TransactionSpeedUpCancelViewModel>(TransactionSpeedUpCancelFragment::class)
 
     val sendTransactionService = viewModel.sendTransactionService
 

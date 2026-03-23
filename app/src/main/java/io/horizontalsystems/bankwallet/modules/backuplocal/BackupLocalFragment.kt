@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.getInput
@@ -13,12 +14,12 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBack
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupType
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.LocalBackupPasswordScreen
 import io.horizontalsystems.bankwallet.modules.backuplocal.terms.LocalBackupTermsScreen
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 
 class BackupLocalFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         val account = navController.getInput<Account>()
         if (account != null) {
             SingleWalletBackupNavHost(navController, account.id)
@@ -29,7 +30,7 @@ class BackupLocalFragment : BaseComposeFragment() {
 }
 
 @Composable
-private fun FullBackupNavHost(fragmentNavController: NavController) {
+private fun FullBackupNavHost(fragmentNavController: NavBackStack<HSScreen>) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
@@ -81,7 +82,7 @@ private fun FullBackupNavHost(fragmentNavController: NavController) {
 }
 
 @Composable
-private fun SingleWalletBackupNavHost(fragmentNavController: NavController, accountId: String) {
+private fun SingleWalletBackupNavHost(fragmentNavController: NavBackStack<HSScreen>, accountId: String) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,

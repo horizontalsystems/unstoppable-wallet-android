@@ -30,10 +30,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import com.tonapps.wallet.data.tonconnect.entities.DAppEntity
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.getShape
@@ -49,7 +50,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 @Composable
 fun TonConnectSessionList(
     dapps: Map<String, List<DAppEntity>>,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     onDelete: (DAppEntity) -> Unit
 ) {
     var revealedCardId by remember { mutableStateOf<String?>(null) }

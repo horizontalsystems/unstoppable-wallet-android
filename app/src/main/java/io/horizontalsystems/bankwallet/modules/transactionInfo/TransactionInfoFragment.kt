@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -17,7 +18,8 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -47,7 +49,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 class TransactionInfoFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         val viewModelTxs: TransactionsViewModel? = try {
             navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
         } catch (e: IllegalStateException) {
@@ -73,7 +75,7 @@ class TransactionInfoFragment : BaseComposeFragment() {
 @Composable
 fun TransactionInfoScreen(
     viewModel: TransactionInfoViewModel,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
 
     HSScaffold(
@@ -95,7 +97,7 @@ fun TransactionInfoScreen(
 @Composable
 fun TransactionInfo(
     viewModel: TransactionInfoViewModel,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -110,7 +112,7 @@ fun TransactionInfo(
 @Composable
 fun TransactionInfoSection(
     section: List<TransactionInfoViewItem>,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     getRawTransaction: () -> String?
 ) {
     //items without background

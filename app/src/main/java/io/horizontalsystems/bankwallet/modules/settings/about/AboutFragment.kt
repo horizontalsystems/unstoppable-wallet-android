@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
@@ -22,7 +23,7 @@ import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
@@ -34,7 +35,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 class AboutFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         AboutNavHost(navController)
     }
 
@@ -46,7 +47,7 @@ private const val AppStatusPage = "app_status"
 private const val TermsPage = "terms"
 
 @Composable
-private fun AboutNavHost(fragmentNavController: NavController) {
+private fun AboutNavHost(fragmentNavController: NavBackStack<HSScreen>) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,

@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
@@ -19,7 +20,7 @@ import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.NumberInputWithButtons
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -32,7 +33,7 @@ import java.math.BigDecimal
 
 class SwapSettingsSlippageFragment : BaseComposeFragment() {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<Input>(navController) { input ->
             SwapSlippageSettingsScreen(navController, input.slippage)
         }
@@ -47,7 +48,7 @@ class SwapSettingsSlippageFragment : BaseComposeFragment() {
 
 @Composable
 fun SwapSlippageSettingsScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     initialSlippage: BigDecimal
 ) {
     val viewModel = viewModel<SwapTransactionSlippageViewModel>(

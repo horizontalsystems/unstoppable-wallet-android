@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
@@ -29,7 +30,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.PassphraseCell
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.SeedPhraseList
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
@@ -42,7 +43,7 @@ import kotlinx.coroutines.launch
 class RecoveryPhraseFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<Account>(navController) { input ->
             RecoveryPhraseScreen(navController, input)
         }
@@ -53,7 +54,7 @@ class RecoveryPhraseFragment : BaseComposeFragment(screenshotEnabled = false) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RecoveryPhraseScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     account: Account,
 ) {
     val viewModel =

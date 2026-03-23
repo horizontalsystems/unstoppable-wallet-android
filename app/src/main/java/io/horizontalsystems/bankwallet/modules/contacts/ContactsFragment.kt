@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
@@ -20,7 +21,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.screen.ContactsScreen
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.AddressViewModel
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactViewModel
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactsViewModel
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
@@ -30,7 +31,7 @@ import kotlinx.parcelize.Parcelize
 class ContactsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         ContactsNavHost(
             navController = navController,
             mode = navController.getInput<Input>()?.mode ?: Mode.Full
@@ -42,7 +43,7 @@ class ContactsFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun ContactsNavHost(navController: NavController, mode: Mode) {
+fun ContactsNavHost(navController: NavBackStack<HSScreen>, mode: Mode) {
     val navHostController = rememberNavController()
 
     val startDestination: String

@@ -10,12 +10,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -31,7 +32,7 @@ import kotlinx.parcelize.Parcelize
 class SelectContactFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
         SelectContactScreen(navController, navController.getInput())
     }
 
@@ -44,7 +45,7 @@ class SelectContactFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun SelectContactScreen(navController: NavController, input: SelectContactFragment.Input?) {
+fun SelectContactScreen(navController: NavBackStack<HSScreen>, input: SelectContactFragment.Input?) {
     val viewModel = viewModel<SelectContactViewModel>(
         initializer = SelectContactViewModel.init(
             input?.selected,

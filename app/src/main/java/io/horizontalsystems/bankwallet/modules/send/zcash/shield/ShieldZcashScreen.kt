@@ -7,13 +7,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
 
 @Composable
 fun ShieldZcashScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     viewModel: ShieldZcashViewModel,
     sendEntryPointDestId: Int
 ) {

@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -47,7 +48,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
 import io.horizontalsystems.bankwallet.modules.settings.main.ui.BannerCarousel
@@ -72,7 +73,7 @@ import io.horizontalsystems.subscriptions.core.SecureSend
 
 @Composable
 fun SettingsScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     viewModel: MainSettingsViewModel = viewModel(factory = MainSettingsModule.Factory()),
 ) {
 
@@ -104,7 +105,7 @@ fun SettingsScreen(
 @Composable
 private fun SettingSections(
     viewModel: MainSettingsViewModel,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
 ) {
     val uiState = viewModel.uiState
     val context = LocalContext.current

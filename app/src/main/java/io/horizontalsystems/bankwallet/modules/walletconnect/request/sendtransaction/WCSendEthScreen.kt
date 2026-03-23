@@ -29,13 +29,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.SessionRequestUI
@@ -63,18 +64,14 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WCSendEthRequestScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     logger: AppLogger,
     blockchainType: BlockchainType,
     transaction: WalletConnectTransaction,
     sessionRequestUI: SessionRequestUI.Content,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
-        navController.getBackStackEntry(R.id.wcRequestFragment)
-    }
     val viewModel = viewModel<WCSendEthereumTransactionRequestViewModel>(
-        viewModelStoreOwner = viewModelStoreOwner,
         factory = WCSendEthereumTransactionRequestViewModel.Factory(
             blockchainType = blockchainType,
             transaction = transaction,
