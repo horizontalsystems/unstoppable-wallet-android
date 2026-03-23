@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import cash.p.terminal.core.defaultTokenQuery
@@ -15,6 +14,7 @@ import cash.p.terminal.core.supported
 import cash.p.terminal.core.supports
 import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.receive.FullCoinsProvider
+import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.entities.BlockchainType
@@ -25,8 +25,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
-class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewModel() {
-    private val activeAccount = App.accountManager.activeAccount!!
+class SwapSelectCoinViewModel(
+    private val otherSelectedToken: Token?,
+    private val activeAccount: Account
+) : ViewModel() {
     private val coinsProvider = FullCoinsProvider(App.marketKit, activeAccount)
     private val adapterManager = App.adapterManager
     private val currencyManager = App.currencyManager
@@ -174,12 +176,6 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
         return marketKit.coinPrice(token.coin.uid, currency.code)?.value
     }
 
-    class Factory(private val otherSelectedToken: Token?) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapSelectCoinViewModel(otherSelectedToken) as T
-        }
-    }
 }
 
 data class SwapSelectCoinUiState(
