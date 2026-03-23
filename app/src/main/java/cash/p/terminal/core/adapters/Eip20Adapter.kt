@@ -13,6 +13,7 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.BalanceData
 import io.horizontalsystems.erc20kit.core.Erc20Kit
+import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.SyncState
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
@@ -80,7 +81,8 @@ internal class Eip20Adapter(
         get() = merge(
             eip20Kit.syncStateFlowable.asFlow().map { },
             stackingManager.unpaidFlow.filterNotNull().map { },
-            evmTransactionRepository.historicalSyncState.map { }
+            evmTransactionRepository.historicalSyncState.map { },
+            evmTransactionRepository.forwardSyncState.map { }
         )
 
     override val balanceData: BalanceData
@@ -112,9 +114,13 @@ internal class Eip20Adapter(
     }
 
     private fun convertToAdapterState(syncState: SyncState): AdapterState = when (syncState) {
-        is SyncState.Synced -> historicalSyncAdapterState() ?: AdapterState.Synced
+        is SyncState.Synced -> historicalSyncAdapterState()
+            ?: forwardSyncAdapterState()
+            ?: AdapterState.Synced
         is SyncState.NotSynced -> AdapterState.NotSynced(syncState.error)
-        is SyncState.Syncing -> AdapterState.Syncing()
+        is SyncState.Syncing -> historicalSyncAdapterState()
+            ?: forwardSyncAdapterState()
+            ?: AdapterState.Syncing()
     }
 
     fun allowance(

@@ -64,11 +64,15 @@ internal class EvmTransactionRepository(
     val historicalSyncState: StateFlow<HistoricalSyncState>
         get() = evmKit.historicalSyncState
 
+    val forwardSyncState: StateFlow<EthereumKit.ForwardSyncState>
+        get() = evmKit.forwardSyncState
+
     val combinedSyncStateFlow: Flow<Unit>
         get() = merge(
             syncStateFlowable.map {}.asFlow(),
             transactionsSyncStateFlowable.map {}.asFlow(),
-            historicalSyncState.map { }
+            historicalSyncState.map { },
+            forwardSyncState.map { }
         )
 
     val accountState: AccountState?
