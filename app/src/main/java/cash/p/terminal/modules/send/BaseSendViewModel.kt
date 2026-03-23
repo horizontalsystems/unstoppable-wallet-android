@@ -38,6 +38,10 @@ abstract class BaseSendViewModel<T>(
     var isSynced by mutableStateOf(true)
         private set
 
+    var hasAdapterError by mutableStateOf(false)
+        private set
+    private var autoRetried = false
+
     open val feeToken: Token? by lazy {
         val token = wallet.token
         if (token.type.isNative) {
@@ -127,12 +131,37 @@ abstract class BaseSendViewModel<T>(
         return rate?.copy(value = f.times(rate.value))?.getFormattedFull() ?: ""
     }
 
+    private fun handleAdapterState(state: AdapterState) {
+        isSynced = state is AdapterState.Synced
+        when (state) {
+            is AdapterState.Synced -> {
+                hasAdapterError = false
+                autoRetried = false
+            }
+            is AdapterState.NotSynced -> {
+                if (!autoRetried) {
+                    autoRetried = true
+                    _adapterManager.refreshByWallet(wallet)
+                } else {
+                    hasAdapterError = true
+                }
+            }
+            else -> {
+                hasAdapterError = false
+            }
+        }
+    }
+
+    fun retryAdapterSync() {
+        _adapterManager.refreshByWallet(wallet)
+    }
+
     init {
         _adapterManager.getBalanceAdapterForWallet(wallet)?.let { adapter ->
-            isSynced = adapter.balanceState is AdapterState.Synced
+            handleAdapterState(adapter.balanceState)
             viewModelScope.launch {
                 adapter.balanceStateUpdatedFlow.collect {
-                    isSynced = adapter.balanceState is AdapterState.Synced
+                    handleAdapterState(adapter.balanceState)
                 }
             }
         }

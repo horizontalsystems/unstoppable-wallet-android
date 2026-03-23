@@ -766,12 +766,20 @@ Proceed only if you\'re sure.</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_Quoting">Quoting</string>
     <string name="Swap_Providers">Providers</string>
+    <string name="swap_through">Via</string>
+    <string name="swap_you_send">You Send</string>
+    <string name="swap_you_receive">You Receive</string>
+    <string name="swap_continue_later">Continue Later</string>
+    <string name="multi_swap_cancel_swap">Cancel Swap</string>
+    <string name="multi_swap_cancel_swap_warning">The first swap has already been completed. The intermediate coins are in your wallet and will remain yours. Only the second swap step will be canceled.</string>
+    <string name="swap_leg_title">Swap %d</string>
     <string name="Swap_SwapProvider_Title">Swap Provider</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
     <string name="Swap_YouPay">You Pay</string>
     <string name="Swap_YouGet">You Get</string>
     <string name="Swap_Confirm_Title">Confirm</string>
+    <string name="SwapConfirm_QuoteExpiresIn">Quote expires in %d</string>
     <string name="SwapConfirm_QuoteExpired">Quote expired</string>
     <string name="SwapConfirm_QuoteIsInvalid">Quote is invalid</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
@@ -1205,6 +1213,7 @@ Proceed only if you\'re sure.</string>
     <string name="blockchain_status">Blockchain Status</string>
     <string name="btc_blockchain_settings_restore_source_change_warning">After changing source the wallet will have to resync itself.</string>
     <string name="send_confirmation_syncing_warning">Wallet is still syncing. Please wait for sync to complete before sending.</string>
+    <string name="send_confirmation_sync_error_warning">Wallet sync failed. Tap Retry to reconnect.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source P.CASH app should use for synchronizing wallet(s).</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
@@ -2234,4 +2243,13 @@ Proceed only if you\'re sure.</string>
     <string name="connect_mini_app_connection_failed">The connection was failure.</string>
     <string name="connect_mini_app_close">Close</string>
     <string name="connect_mini_app_try_again">Try again</string>
+
+    <!--Multi-Swap-->
+    <string name="multi_swap_completed">Swap completed</string>
+    <string name="multi_swap_no_providers">No providers available</string>
+    <string name="multi_swap_finding_best_provider">Finding best provider…</string>
+    <string name="multi_swap_list_title">Swaps</string>
+    <string name="multi_swap_continue">Continue swap</string>
+    <string name="multi_swap_unfinished">Unfinished swap</string>
+    <string name="multi_swap_unfinished_plural">Unfinished swaps (%d)</string>
 </resources>

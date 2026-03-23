@@ -23,11 +23,8 @@ import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
-import cash.p.terminal.network.changenow.api.ChangeNowHelper
 import cash.p.terminal.network.changenow.domain.entity.TransactionStatusEnum
 import cash.p.terminal.network.changenow.domain.entity.toStatus
-import cash.p.terminal.network.quickex.api.QuickexHelper
-import cash.p.terminal.network.swaprepository.SwapProvider
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.ui_compose.ColorName
@@ -1509,20 +1506,7 @@ class TransactionViewItemFactory(
             TransactionStatusEnum.VERIFYING -> R.string.transaction_swap_status_verifying
             TransactionStatusEnum.UNKNOWN -> R.string.transaction_swap_status_unknown
         }
-        val transactionStatusUrl = when (transaction.provider) {
-            SwapProvider.CHANGENOW -> {
-                ChangeNowHelper.CHANGE_NOW_URL to ChangeNowHelper.getViewTransactionUrl(
-                    transaction.transactionId
-                )
-            }
-
-            SwapProvider.QUICKEX -> {
-                QuickexHelper.QUICKEX_URL to QuickexHelper.getViewTransactionUrl(
-                    transaction.transactionId,
-                    transaction.addressOut
-                )
-            }
-        }
+        val transactionStatusUrl = transaction.toStatusUrl()
 
         return TransactionViewItem(
             uid = recordUid,

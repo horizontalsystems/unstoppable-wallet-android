@@ -44,6 +44,7 @@ import cash.p.terminal.ui.compose.components.SectionTitleCell
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
 import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HSpacer
@@ -275,11 +276,26 @@ fun SendTronConfirmationScreen(
                     .navigationBarsPadding()
                     .padding(bottom = 16.dp)
             ) {
-                if (!sendViewModel.isSynced) {
-                    TextImportantWarning(
-                        modifier = Modifier.padding(bottom = 12.dp),
-                        text = stringResource(R.string.send_confirmation_syncing_warning)
-                    )
+                when {
+                    sendViewModel.hasAdapterError -> {
+                        TextImportantWarning(
+                            modifier = Modifier.padding(bottom = 12.dp),
+                            text = stringResource(R.string.send_confirmation_sync_error_warning)
+                        )
+                        ButtonPrimaryDefault(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 12.dp),
+                            title = stringResource(R.string.Button_Retry),
+                            onClick = sendViewModel::retryAdapterSync
+                        )
+                    }
+                    !sendViewModel.isSynced -> {
+                        TextImportantWarning(
+                            modifier = Modifier.padding(bottom = 12.dp),
+                            text = stringResource(R.string.send_confirmation_syncing_warning)
+                        )
+                    }
                 }
                 SendButton(
                     modifier = Modifier.fillMaxWidth(),

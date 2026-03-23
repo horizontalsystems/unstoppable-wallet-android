@@ -22,8 +22,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material.Text
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -57,6 +57,7 @@ import cash.p.terminal.modules.displayoptions.DisplayDiffOptionType
 import cash.p.terminal.modules.displayoptions.DisplayPricePeriod
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
+import cash.p.terminal.modules.multiswap.exchanges.MultiSwapExchangesFragment
 import cash.p.terminal.modules.rateapp.RateAppModule
 import cash.p.terminal.modules.rateapp.RateAppViewModel
 import cash.p.terminal.modules.sendtokenselect.SendTokenSelectFragment
@@ -78,6 +79,7 @@ import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui_compose.components.HudHelper
+import cash.p.terminal.ui_compose.components.RowWithArrow
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_leah
@@ -418,6 +420,27 @@ fun BalanceItems(
                 }
             }
 
+            if (uiState.pendingSwapCount > 0) {
+                item {
+                    PendingSwapBanner(
+                        count = uiState.pendingSwapCount,
+                        modifier = Modifier.padding(vertical = 22.dp, horizontal = 16.dp),
+                        onClick = {
+                            if (uiState.pendingSwapCount == 1) {
+                                uiState.singlePendingSwapId?.let { id ->
+                                    navController.slideFromRight(
+                                        R.id.multiSwapExchanges,
+                                        MultiSwapExchangesFragment.ARG_PENDING_MULTI_SWAP_ID to id,
+                                    )
+                                }
+                            } else {
+                                navController.slideFromRight(R.id.multiSwapExchanges)
+                            }
+                        }
+                    )
+                }
+            }
+
             if (balanceViewItems.isEmpty()) {
                 item {
                     NoCoinsBlock()
@@ -604,6 +627,26 @@ fun TotalBalanceRow(
                 onClickSubtitle = onClickSubtitle,
             )
         }
+    }
+}
+
+@Composable
+private fun PendingSwapBanner(count: Int, modifier: Modifier, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(12.dp)
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .border(1.dp, ComposeAppTheme.colors.grey, shape)
+    ) {
+        RowWithArrow(
+            text = if (count == 1) {
+                stringResource(R.string.multi_swap_unfinished)
+            } else {
+                stringResource(R.string.multi_swap_unfinished_plural, count)
+            },
+            onClick = onClick
+        )
     }
 }
 

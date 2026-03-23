@@ -64,8 +64,7 @@ import java.math.BigDecimal
 
 @Composable
 fun Eip1559FeeSettings(
-    viewModel: Eip1559FeeSettingsViewModel,
-    navController: NavController
+    viewModel: Eip1559FeeSettingsViewModel
 ) {
     val summaryViewItem = viewModel.feeSummaryViewItem
     val currentBaseFee = viewModel.currentBaseFee
@@ -338,8 +337,7 @@ fun ButtonsGroupWithShade(
 
 @Composable
 fun LegacyFeeSettings(
-    viewModel: LegacyFeeSettingsViewModel,
-    navController: NavController
+    viewModel: LegacyFeeSettingsViewModel
 ) {
     val summaryViewItem = viewModel.feeSummaryViewItem
     val viewItem = viewModel.feeViewItem

@@ -569,6 +569,7 @@
     <string name="Swap_YouPay">Usted paga</string>
     <string name="Swap_YouGet">Obtienes</string>
     <string name="Swap_Confirm_Title">Confirmar</string>
+    <string name="SwapConfirm_QuoteExpiresIn">La cotización expira en %d</string>
     <string name="SwapConfirm_QuoteExpired">Cotización expirada</string>
     <string name="SwapConfirm_QuoteIsInvalid">Cotización no válida</string>
     <string name="SwapConfirm_FetchingFinalQuote">Recuperando la comilla final</string>
@@ -881,6 +882,7 @@
     <string name="blockchain_status">Estado de Blockchain</string>
     <string name="btc_blockchain_settings_restore_source_change_warning">Después de cambiar la fuente, el monedero tendrá que resinc sí mismo.</string>
     <string name="send_confirmation_syncing_warning">La billetera aún se está sincronizando. Espere a que se complete la sincronización antes de enviar.</string>
+    <string name="send_confirmation_sync_error_warning">Error de sincronización de billetera. Toca Reintentar para reconectar.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Elige la fuente que la aplicación P.CASH debería usar para sincronizar la(s) cartera(s).</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entradas/Salidas</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Ajustes de la transacción</string>
@@ -1788,4 +1790,19 @@ La aplicación le permite crear una copia de seguridad con una contraseña senci
     <string name="native_library_error_title">No se puede iniciar</string>
     <string name="native_library_error_message">No se pudo cargar un componente requerido. Por favor, intente reinstalar la aplicación desde Play Store.</string>
     <string name="native_library_error_close">Cerrar</string>
+    <!--Multi-Swap-->
+    <string name="multi_swap_completed">Intercambio completado</string>
+    <string name="multi_swap_no_providers">No hay proveedores disponibles</string>
+    <string name="multi_swap_finding_best_provider">Buscando el mejor proveedor…</string>
+    <string name="multi_swap_list_title">Intercambios</string>
+    <string name="multi_swap_continue">Continuar intercambio</string>
+    <string name="multi_swap_unfinished">Intercambio sin terminar</string>
+    <string name="multi_swap_unfinished_plural">Intercambios sin terminar (%d)</string>
+    <string name="swap_through">Vía</string>
+    <string name="swap_you_send">Usted envía</string>
+    <string name="swap_you_receive">Usted recibe</string>
+    <string name="swap_continue_later">Continuar más tarde</string>
+    <string name="multi_swap_cancel_swap">Cancelar intercambio</string>
+    <string name="multi_swap_cancel_swap_warning">El primer intercambio ya se ha completado. Las monedas intermedias están en su billetera y seguirán siendo suyas. Solo se cancelará el segundo paso del intercambio.</string>
+    <string name="swap_leg_title">Intercambio %d</string>
 </resources>

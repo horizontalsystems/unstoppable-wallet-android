@@ -93,6 +93,7 @@ class TransactionsViewModelWalletSwitchTest : KoinTest {
         modules(
             module {
                 single { mockk<cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase>(relaxed = true) }
+                single { mockk<cash.p.terminal.core.usecase.SyncPendingMultiSwapUseCase>(relaxed = true) }
             }
         )
     }

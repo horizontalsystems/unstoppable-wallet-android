@@ -40,6 +40,7 @@ import cash.p.terminal.modules.fee.FeeInfoSection
 import cash.p.terminal.modules.send.fee.NetworkFeeWarningData
 import cash.p.terminal.modules.hodler.HSHodler
 import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.CoinImage
@@ -88,6 +89,8 @@ fun SendConfirmationScreen(
     onClickSend: () -> Unit,
     sendEntryPointDestId: Int,
     isSynced: Boolean,
+    hasAdapterError: Boolean,
+    onRetrySync: () -> Unit,
     sendToken: Token? = null,
     feeToken: Token? = null,
     feeCoinBalance: BigDecimal? = null,
@@ -267,11 +270,26 @@ fun SendConfirmationScreen(
                     .navigationBarsPadding()
                     .padding(bottom = 16.dp)
             ) {
-                if (!isSynced) {
-                    TextImportantWarning(
-                        modifier = Modifier.padding(bottom = 12.dp),
-                        text = stringResource(R.string.send_confirmation_syncing_warning)
-                    )
+                when {
+                    hasAdapterError -> {
+                        TextImportantWarning(
+                            modifier = Modifier.padding(bottom = 12.dp),
+                            text = stringResource(R.string.send_confirmation_sync_error_warning)
+                        )
+                        ButtonPrimaryDefault(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 12.dp),
+                            title = stringResource(R.string.Button_Retry),
+                            onClick = onRetrySync
+                        )
+                    }
+                    !isSynced -> {
+                        TextImportantWarning(
+                            modifier = Modifier.padding(bottom = 12.dp),
+                            text = stringResource(R.string.send_confirmation_syncing_warning)
+                        )
+                    }
                 }
                 SendButton(
                     modifier = Modifier.fillMaxWidth(),

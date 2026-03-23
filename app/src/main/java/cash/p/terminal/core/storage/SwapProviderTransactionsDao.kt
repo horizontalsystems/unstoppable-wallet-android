@@ -144,4 +144,28 @@ interface SwapProviderTransactionsDao {
         tolerance: Double,
         limit: Int
     ): List<SwapProviderTransaction>
+
+    @Query("""
+        SELECT * FROM SwapProviderTransaction
+        WHERE provider = :provider
+        AND coinUidOut = :coinUidOut
+        AND blockchainTypeOut = :blockchainTypeOut
+        AND addressOut = :addressOut
+        AND CAST(amountOut AS REAL) != 0
+        AND ABS(CAST(amountOut AS REAL) - :expectedAmount) / CAST(amountOut AS REAL) < :tolerance
+        AND date >= :dateFrom
+        AND date <= :dateTo
+        ORDER BY ABS(CAST(amountOut AS REAL) - :expectedAmount) ASC
+        LIMIT 1
+    """)
+    fun getByProviderAndTokenOut(
+        provider: String,
+        coinUidOut: String,
+        blockchainTypeOut: String,
+        addressOut: String,
+        expectedAmount: Double,
+        tolerance: Double,
+        dateFrom: Long,
+        dateTo: Long,
+    ): SwapProviderTransaction?
 }

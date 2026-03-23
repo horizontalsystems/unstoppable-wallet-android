@@ -402,7 +402,7 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Used Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">An executed transaction with this nonce already exists.</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">Network Fee</string>
+    <string name="FeeSettings_NetworkFee">Netwerkkosten</string>
     <string name="FeeSettings_NetworkFee_Info">The estimated cost of sending given transaction on the network.</string>
     <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
     <string name="FeeSettings_GasPrice_Info">The fee for transacting on the network is measured in gas units. Gas Price is the amount a user is willing to spend per unit of gas. When the network is busy, gas prices are high, and low when it\'s idle. An insufficient gas price is often a reason for a transaction to remain pending for an extended period.</string>
@@ -544,13 +544,13 @@
     <string name="Swap_MinimumReceived">Guaranteed Amount</string>
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Recipient</string>
-    <string name="Swap_ErrorNoProviders">No Providers</string>
+    <string name="Swap_ErrorNoProviders">Geen aanbieders</string>
     <string name="Swap_ErrorNoQuote">No Quote</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
     <string name="swap_out_of_min_amount">Onder minimumbedrag %s</string>
-    <string name="Swap_ErrorHighPriceImpact">High price impact</string>
-    <string name="Swap_ErrorWalletSyncing">Wallet is Syncing</string>
-    <string name="Swap_ErrorWalletNotSynced">Wallet Not Synced</string>
+    <string name="Swap_ErrorHighPriceImpact">Hoge prijsimpact</string>
+    <string name="Swap_ErrorWalletSyncing">Wallet wordt gesynchroniseerd</string>
+    <string name="Swap_ErrorWalletNotSynced">Wallet niet gesynchroniseerd</string>
     <string name="Swap_Proceed">Next</string>
     <string name="Swap_SelectTokenIn">Select Token In</string>
     <string name="Swap_SelectTokenOut">Select Token Out</string>
@@ -566,7 +566,7 @@
     <string name="Swap_Approve">Approve</string>
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Swapping</string>
-    <string name="Swap_Quoting">Quoting</string>
+    <string name="Swap_Quoting">Prijsopgave</string>
     <string name="Swap_Providers">Providers</string>
     <string name="Swap_SwapProvider_Title">Swap Provider</string>
     <string name="Swap_AmountMin">(min)</string>
@@ -574,8 +574,9 @@
     <string name="Swap_YouPay">You Pay</string>
     <string name="Swap_YouGet">You Get</string>
     <string name="Swap_Confirm_Title">Confirm</string>
-    <string name="SwapConfirm_QuoteExpired">Quote expired</string>
-    <string name="SwapConfirm_QuoteIsInvalid">Quote is invalid</string>
+    <string name="SwapConfirm_QuoteExpiresIn">Offerte verloopt over %d</string>
+    <string name="SwapConfirm_QuoteExpired">Offerte verlopen</string>
+    <string name="SwapConfirm_QuoteIsInvalid">Offerte is ongeldig</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">Geen Slippage Controle</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">Cross-chain operaties zijn afhankelijk van derde partij liquiditeit en vertragingen, wat het eindbedrag kan beïnvloeden.</string>
@@ -886,6 +887,7 @@
     <string name="blockchain_status">Blockchain Status</string>
     <string name="btc_blockchain_settings_restore_source_change_warning">After changing source the wallet will have to resync itself.</string>
     <string name="send_confirmation_syncing_warning">Portemonnee synchroniseert nog. Wacht tot de synchronisatie voltooid is voordat u verstuurt.</string>
+    <string name="send_confirmation_sync_error_warning">Wallet-synchronisatie mislukt. Tik op Opnieuw proberen om opnieuw te verbinden.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source P.CASH app should use for synchronizing wallet(s).</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
@@ -1803,4 +1805,19 @@ De app stelt u in staat een back-up te maken met een eenvoudig wachtwoord voor u
     <string name="native_library_error_title">Kan niet starten</string>
     <string name="native_library_error_message">Een vereist onderdeel kon niet worden geladen. Probeer de app opnieuw te installeren vanuit de Play Store.</string>
     <string name="native_library_error_close">Sluiten</string>
+    <!--Multi-Swap-->
+    <string name="multi_swap_completed">Ruil voltooid</string>
+    <string name="multi_swap_no_providers">Geen providers beschikbaar</string>
+    <string name="multi_swap_finding_best_provider">Beste aanbieder zoeken…</string>
+    <string name="multi_swap_list_title">Ruilingen</string>
+    <string name="multi_swap_continue">Ruil voortzetten</string>
+    <string name="multi_swap_unfinished">Onvoltooide ruil</string>
+    <string name="multi_swap_unfinished_plural">Onvoltooide ruilingen (%d)</string>
+    <string name="swap_through">Via</string>
+    <string name="swap_you_send">U verzendt</string>
+    <string name="swap_you_receive">U ontvangt</string>
+    <string name="swap_continue_later">Later doorgaan</string>
+    <string name="multi_swap_cancel_swap">Ruil annuleren</string>
+    <string name="multi_swap_cancel_swap_warning">De eerste ruil is al voltooid. De tussenliggende munten staan in uw portemonnee en blijven van u. Alleen de tweede ruilstap wordt geannuleerd.</string>
+    <string name="swap_leg_title">Ruil %d</string>
 </resources>

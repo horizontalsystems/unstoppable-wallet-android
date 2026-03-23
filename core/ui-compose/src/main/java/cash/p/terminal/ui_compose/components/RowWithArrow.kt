@@ -18,11 +18,12 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 @Composable
 fun RowWithArrow(
     text: String,
+    modifier: Modifier = Modifier,
     showAlert: Boolean = false,
     onClick: (() -> Unit)
 ) {
     RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = modifier.padding(horizontal = 16.dp),
         onClick = onClick
     ) {
         body_leah(

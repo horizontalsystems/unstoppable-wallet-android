@@ -409,6 +409,9 @@
         android:id="@id/multiswap"
         android:name="cash.p.terminal.modules.multiswap.SwapFragment" />
     <fragment
+        android:id="@id/multiSwapExchanges"
+        android:name="cash.p.terminal.modules.multiswap.exchanges.MultiSwapExchangesFragment" />
+    <fragment
         android:id="@+id/stacking"
         android:name="cash.p.terminal.featureStacking.ui.staking.StackingFragment" />
     <fragment

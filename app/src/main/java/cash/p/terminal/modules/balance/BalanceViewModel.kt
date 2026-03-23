@@ -13,6 +13,7 @@ import cash.p.terminal.core.adapters.zcash.ZcashAddressValidator
 import cash.p.terminal.core.factories.uriScheme
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.managers.SeedPhraseQrCrypto
+import cash.p.terminal.core.storage.PendingMultiSwapStorage
 import cash.p.terminal.core.supported
 import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.core.utils.AddressUriResult
@@ -91,6 +92,10 @@ class BalanceViewModel(
     private val coinManager: ICoinManager by inject(ICoinManager::class.java)
     private val walletUseCase: WalletUseCase by inject(WalletUseCase::class.java)
     private val seedPhraseQrCrypto: SeedPhraseQrCrypto by inject(SeedPhraseQrCrypto::class.java)
+    private val pendingMultiSwapStorage: PendingMultiSwapStorage by inject(PendingMultiSwapStorage::class.java)
+
+    private var pendingSwapCount = 0
+    private var singlePendingSwapId: String? = null
 
     private val getHardwarePublicKeyForWalletUseCase: GetHardwarePublicKeyForWalletUseCase by inject(
         GetHardwarePublicKeyForWalletUseCase::class.java
@@ -176,6 +181,14 @@ class BalanceViewModel(
             }
         }
 
+        viewModelScope.launch {
+            pendingMultiSwapStorage.getAll().collect { swaps ->
+                pendingSwapCount = swaps.size
+                singlePendingSwapId = swaps.singleOrNull()?.id
+                emitState()
+            }
+        }
+
         service.start()
 
         totalBalance.start(viewModelScope)
@@ -200,7 +213,9 @@ class BalanceViewModel(
         sortTypes = sortTypes,
         showStackingForWatchAccount = showStackingForWatchAccount,
         displayDiffOptionType = displayDiffOptionType,
-        displayPricePeriod = displayDiffPricePeriod
+        displayPricePeriod = displayDiffPricePeriod,
+        pendingSwapCount = pendingSwapCount,
+        singlePendingSwapId = singlePendingSwapId
     )
 
     private fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
@@ -564,7 +579,9 @@ data class BalanceUiState(
     val sortType: BalanceSortType,
     val sortTypes: List<BalanceSortType>,
     val displayDiffOptionType: DisplayDiffOptionType,
-    val displayPricePeriod: DisplayPricePeriod
+    val displayPricePeriod: DisplayPricePeriod,
+    val pendingSwapCount: Int = 0,
+    val singlePendingSwapId: String? = null
 )
 
 data class OpenSendTokenSelect(

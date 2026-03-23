@@ -24,9 +24,12 @@ import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.fee.FeeInfoSection
+import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.modules.multiswap.ui.SwapProviderField
+import cash.p.terminal.modules.multiswap.exchanges.MultiSwapExchangesFragment
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.send.fee.NetworkFeeWarningOverlay
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
@@ -59,23 +62,25 @@ import java.math.BigDecimal
 fun SwapConfirmScreen(
     fragmentNavController: NavController,
     swapNavController: NavController,
-    swapViewModel: SwapViewModel,
+    quote: SwapProviderQuote,
+    settings: Map<String, Any?>,
+    provider: IMultiSwapProvider?,
+    displayBalance: BigDecimal?,
+    balanceHidden: Boolean,
+    feeToken: Token?,
+    feeCoinBalance: BigDecimal?,
+    onToggleHideBalance: () -> Unit,
     onOpenSettings: (() -> Unit)? = null,
+    multiSwapLegInfo: MultiSwapLegInfo? = null,
 ) {
     val view = LocalView.current
 
-    val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: run {
-        LaunchedEffect(Unit) {
-            swapNavController.popBackStack()
-        }
-        return
-    }
-    val settings = remember { swapViewModel.getSettings() }
-
     val currentBackStackEntry = remember { swapNavController.currentBackStackEntry }
     val viewModel = viewModel<SwapConfirmViewModel>(
-        viewModelStoreOwner = currentBackStackEntry!!,
-        factory = SwapConfirmViewModel.provideFactory(currentQuote, settings, fragmentNavController)
+        viewModelStoreOwner = requireNotNull(currentBackStackEntry),
+        factory = SwapConfirmViewModel.provideFactory(
+            quote, settings, fragmentNavController, multiSwapLegInfo
+        )
     )
 
     val uiState = viewModel.uiState
@@ -110,16 +115,25 @@ fun SwapConfirmScreen(
     LaunchedEffect(sendResult) {
         if (sendResult is SendResult.Sent || sendResult is SendResult.SentButQueued) {
             delay(1200)
-            fragmentNavController.navigateUp()
+            val multiSwapId = viewModel.completedMultiSwapId
+            if (multiSwapId != null && multiSwapLegInfo is MultiSwapLegInfo.Leg1) {
+                fragmentNavController.popBackStack(R.id.multiswap, inclusive = true)
+                fragmentNavController.slideFromRight(
+                    R.id.multiSwapExchanges,
+                    MultiSwapExchangesFragment.ARG_PENDING_MULTI_SWAP_ID to multiSwapId,
+                )
+            } else if (multiSwapLegInfo is MultiSwapLegInfo.Leg2) {
+                fragmentNavController.popBackStack(R.id.multiSwapExchanges, inclusive = true)
+            } else {
+                fragmentNavController.navigateUp()
+            }
         }
     }
 
     ConfirmTransactionScreen(
         onClickBack = swapNavController::navigateUp,
-        onClickSettings = if (uiState.isAdvancedSettingsAvailable) {
-            {
-                onOpenSettings?.invoke()
-            }
+        onClickSettings = if (uiState.isAdvancedSettingsAvailable && onOpenSettings != null) {
+            { onOpenSettings.invoke() }
         } else {
             null
         },
@@ -162,12 +176,27 @@ fun SwapConfirmScreen(
                 VSpacer(height = 12.dp)
                 subhead1_leah(text = stringResource(id = R.string.SwapConfirm_QuoteExpired))
             } else {
-                if (!viewModel.isSynced) {
-                    TextImportantWarning(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.send_confirmation_syncing_warning)
-                    )
-                    VSpacer(height = 12.dp)
+                when {
+                    viewModel.hasAdapterError -> {
+                        TextImportantWarning(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(R.string.send_confirmation_sync_error_warning)
+                        )
+                        VSpacer(height = 8.dp)
+                        ButtonPrimaryDefault(
+                            modifier = Modifier.fillMaxWidth(),
+                            title = stringResource(R.string.Button_Retry),
+                            onClick = viewModel::retryAdapterSync
+                        )
+                        VSpacer(height = 12.dp)
+                    }
+                    !viewModel.isSynced -> {
+                        TextImportantWarning(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(R.string.send_confirmation_syncing_warning)
+                        )
+                        VSpacer(height = 12.dp)
+                    }
                 }
                 // Disable button during swap and navigation delay (allow retry only on Failed)
                 val swapInProgress = sendResult != null && sendResult !is SendResult.Failed
@@ -181,7 +210,7 @@ fun SwapConfirmScreen(
                 )
                 if (uiState.expiresIn != null) {
                     VSpacer(height = 12.dp)
-                    subhead1_leah(text = "Quote expires in ${uiState.expiresIn}")
+                    subhead1_leah(text = stringResource(R.string.SwapConfirm_QuoteExpiresIn, uiState.expiresIn))
                 }
             }
         }
@@ -230,10 +259,10 @@ fun SwapConfirmScreen(
                         subvalue = subvalue
                     )
                 }
-                swapViewModel.uiState.quote?.provider?.let { provider ->
+                provider?.let { p ->
                     SwapProviderField(
-                        title = provider.title,
-                        iconId = provider.icon
+                        title = p.title,
+                        iconId = p.icon
                     )
                 }
                 uiState.quoteFields.forEach {
@@ -253,18 +282,17 @@ fun SwapConfirmScreen(
         }
 
         VSpacer(height = 16.dp)
-        val swapUiState = swapViewModel.uiState
         val hasFeeError = uiState.feeCaution != null
         FeeInfoSection(
             tokenIn = uiState.tokenIn,
-            displayBalance = swapUiState.displayBalance,
-            balanceHidden = swapUiState.balanceHidden,
-            feeToken = swapUiState.feeToken,
-            feeCoinBalance = swapUiState.feeCoinBalance,
+            displayBalance = displayBalance,
+            balanceHidden = balanceHidden,
+            feeToken = feeToken,
+            feeCoinBalance = feeCoinBalance,
             feePrimary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
             feeSecondary = uiState.networkFee?.secondary?.getFormattedPlain() ?: "---",
             insufficientFeeBalance = hasFeeError,
-            onBalanceClicked = swapViewModel::toggleHideBalance,
+            onBalanceClicked = onToggleHideBalance,
             feeWarningData = viewModel.inlineFeeWarningData,
         )
 

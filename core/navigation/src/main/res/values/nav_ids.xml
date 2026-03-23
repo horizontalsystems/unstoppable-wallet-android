@@ -1,5 +1,6 @@
 <resources>
     <item name="multiswap" type="id"/>
+    <item name="multiSwapExchanges" type="id"/>
     <item name="coinFragment" type="id"/>
     <item name="addAccessCodeDialog" type="id"/>
     <item name="resetBackupDialog" type="id"/>

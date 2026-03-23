@@ -372,11 +372,11 @@ fun SendEvmFeeSettingsScreen(
 
         when (feeSettingsViewModel) {
             is LegacyFeeSettingsViewModel -> {
-                LegacyFeeSettings(feeSettingsViewModel, navController)
+                LegacyFeeSettings(feeSettingsViewModel)
             }
 
             is Eip1559FeeSettingsViewModel -> {
-                Eip1559FeeSettings(feeSettingsViewModel, navController)
+                Eip1559FeeSettings(feeSettingsViewModel)
             }
         }
 

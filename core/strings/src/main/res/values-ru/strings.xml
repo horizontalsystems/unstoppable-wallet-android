@@ -574,12 +574,20 @@
     <string name="Swap_Swapping">Обмен</string>
     <string name="Swap_Quoting">Котировка</string>
     <string name="Swap_Providers">Провайдеры</string>
+    <string name="swap_through">Через</string>
+    <string name="swap_you_send">Вы отправляете</string>
+    <string name="swap_you_receive">Вы получите</string>
+    <string name="swap_continue_later">Продолжить позже</string>
+    <string name="multi_swap_cancel_swap">Отказаться от обмена</string>
+    <string name="multi_swap_cancel_swap_warning">Первый обмен уже завершён. Промежуточные монеты находятся в вашем кошельке и останутся у вас. Будет отменён только второй шаг обмена.</string>
+    <string name="swap_leg_title">Обмен %d</string>
     <string name="Swap_SwapProvider_Title">Провайдер</string>
     <string name="Swap_AmountMin">(мин)</string>
     <string name="Swap_AmountMax">(макс)</string>
     <string name="Swap_YouPay">Вы платите</string>
     <string name="Swap_YouGet">Вы получите</string>
     <string name="Swap_Confirm_Title">Подтвердить</string>
+    <string name="SwapConfirm_QuoteExpiresIn">Котировка истекает через %d</string>
     <string name="SwapConfirm_QuoteExpired">Котировка истекла</string>
     <string name="SwapConfirm_QuoteIsInvalid">Котировка недействительна</string>
     <string name="SwapConfirm_FetchingFinalQuote">Получение котировки</string>
@@ -900,6 +908,7 @@
     <string name="blockchain_status">Статус блокчейна</string>
     <string name="btc_blockchain_settings_restore_source_change_warning">После изменения источника восстановления, кошелек должен будет повторно синхронизироваться с блокчейном.</string>
     <string name="send_confirmation_syncing_warning">Кошелёк ещё синхронизируется. Пожалуйста, дождитесь окончания синхронизации перед отправкой.</string>
+    <string name="send_confirmation_sync_error_warning">Ошибка синхронизации кошелька. Нажмите «Повторить» для переподключения.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Выберите источник данных для восстановления кошелька. Восстановление из блокчейна занимает значительно больше времени.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Вводы/Выводы</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Настройки транзакций</string>
@@ -1978,4 +1987,13 @@
     <string name="connect_mini_app_connection_failed">Не удалось выполнить подключение.</string>
     <string name="connect_mini_app_close">Закрыть</string>
     <string name="connect_mini_app_try_again">Попробовать снова</string>
+
+    <!--Multi-Swap-->
+    <string name="multi_swap_completed">Обмен завершён</string>
+    <string name="multi_swap_no_providers">Нет доступных провайдеров</string>
+    <string name="multi_swap_finding_best_provider">Поиск лучшего провайдера…</string>
+    <string name="multi_swap_list_title">Обмены</string>
+    <string name="multi_swap_continue">Продолжить обмен</string>
+    <string name="multi_swap_unfinished">Незавершенный обмен</string>
+    <string name="multi_swap_unfinished_plural">Незавершенные обмены (%d)</string>
 </resources>

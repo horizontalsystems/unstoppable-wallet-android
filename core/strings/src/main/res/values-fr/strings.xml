@@ -570,6 +570,7 @@
     <string name="Swap_YouPay">Vous payez</string>
     <string name="Swap_YouGet">Vous recevez</string>
     <string name="Swap_Confirm_Title">Confirmer</string>
+    <string name="SwapConfirm_QuoteExpiresIn">Le devis expire dans %d</string>
     <string name="SwapConfirm_QuoteExpired">Devis expiré</string>
     <string name="SwapConfirm_QuoteIsInvalid">Devis invalide</string>
     <string name="SwapConfirm_FetchingFinalQuote">Récupération du devis final</string>
@@ -882,6 +883,7 @@
     <string name="blockchain_status">Statut de la Blockchain</string>
     <string name="btc_blockchain_settings_restore_source_change_warning">Après avoir changé de source, le portefeuille devra se resynchroniser lui-même.</string>
     <string name="send_confirmation_syncing_warning">Le portefeuille est encore en cours de synchronisation. Veuillez attendre la fin de la synchronisation avant d\'envoyer.</string>
+    <string name="send_confirmation_sync_error_warning">Échec de la synchronisation du portefeuille. Appuyez sur Réessayer pour reconnecter.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Sélectionnez la source de données pour restaurer le portefeuille avec les transactions.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entrées/Sorties</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Paramètres de transaction</string>
@@ -1794,4 +1796,19 @@ La aplicación permite crear una copia de seguridad con una contraseña sencilla
     <string name="native_library_error_title">Impossible de démarrer</string>
     <string name="native_library_error_message">Un composant requis n\'a pas pu être chargé. Veuillez réinstaller l\'application depuis le Play Store.</string>
     <string name="native_library_error_close">Fermer</string>
+    <!--Multi-Swap-->
+    <string name="multi_swap_completed">Échange terminé</string>
+    <string name="multi_swap_no_providers">Aucun fournisseur disponible</string>
+    <string name="multi_swap_finding_best_provider">Recherche du meilleur fournisseur…</string>
+    <string name="multi_swap_list_title">Échanges</string>
+    <string name="multi_swap_continue">Continuer l\'échange</string>
+    <string name="multi_swap_unfinished">Échange non terminé</string>
+    <string name="multi_swap_unfinished_plural">Échanges non terminés (%d)</string>
+    <string name="swap_through">Via</string>
+    <string name="swap_you_send">Vous envoyez</string>
+    <string name="swap_you_receive">Vous recevez</string>
+    <string name="swap_continue_later">Continuer plus tard</string>
+    <string name="multi_swap_cancel_swap">Annuler l\'échange</string>
+    <string name="multi_swap_cancel_swap_warning">Le premier échange a déjà été effectué. Les jetons intermédiaires sont dans votre portefeuille et resteront les vôtres. Seule la deuxième étape de l\'échange sera annulée.</string>
+    <string name="swap_leg_title">Échange %d</string>
 </resources>

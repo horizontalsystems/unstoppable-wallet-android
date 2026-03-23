@@ -402,7 +402,7 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Usado Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Já existe uma transação executada agora.</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">Network Fee</string>
+    <string name="FeeSettings_NetworkFee">Taxa de Rede</string>
     <string name="FeeSettings_NetworkFee_Info">The estimated cost of sending given transaction on the network.</string>
     <string name="FeeSettings_GasLimit_Info">A complexidade da transação é medida em unidades chamadas \"gas\". Ela varia dependendo do contrato inteligente ser executado. O Limite de Gas é estimado o gas máximo necessário para o executar. O gas real utilizado normalmente será mais baixo.</string>
     <string name="FeeSettings_GasPrice_Info">A taxa para transação na rede é medida em unidades de gás. O preço do gás é a quantidade que um usuário está disposto a gastar por unidade de gás. Quando a rede está ocupada, os preços do gás são altos e baixos quando está inativa. Um preço de gás insuficiente é frequentemente uma razão para que uma transação permaneça pendente por um período prolongado.</string>
@@ -544,13 +544,13 @@
     <string name="Swap_MinimumReceived">Valor garantido</string>
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Recipient</string>
-    <string name="Swap_ErrorNoProviders">No Providers</string>
+    <string name="Swap_ErrorNoProviders">Sem fornecedores</string>
     <string name="Swap_ErrorNoQuote">No Quote</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="swap_out_of_min_amount">Abaixo do valor mínimo %s</string>
     <string name="Swap_ErrorHighPriceImpact">Alto impacto no preço</string>
-    <string name="Swap_ErrorWalletSyncing">Wallet is Syncing</string>
-    <string name="Swap_ErrorWalletNotSynced">Wallet Not Synced</string>
+    <string name="Swap_ErrorWalletSyncing">A carteira está a sincronizar</string>
+    <string name="Swap_ErrorWalletNotSynced">Carteira não sincronizada</string>
     <string name="Swap_Proceed">Próximo</string>
     <string name="Swap_SelectTokenIn">Select Token In</string>
     <string name="Swap_SelectTokenOut">Select Token Out</string>
@@ -566,7 +566,7 @@
     <string name="Swap_Approve">Aprovar</string>
     <string name="Swap_Approving">Aprovando</string>
     <string name="Swap_Swapping">Trocando</string>
-    <string name="Swap_Quoting">Quoting</string>
+    <string name="Swap_Quoting">Cotação</string>
     <string name="Swap_Providers">Providers</string>
     <string name="Swap_SwapProvider_Title">Fornecedor de swap</string>
     <string name="Swap_AmountMin">(min)</string>
@@ -574,8 +574,9 @@
     <string name="Swap_YouPay">You Pay</string>
     <string name="Swap_YouGet">You Get</string>
     <string name="Swap_Confirm_Title">Confirm</string>
-    <string name="SwapConfirm_QuoteExpired">Quote expired</string>
-    <string name="SwapConfirm_QuoteIsInvalid">Quote is invalid</string>
+    <string name="SwapConfirm_QuoteExpiresIn">Cotação expira em %d</string>
+    <string name="SwapConfirm_QuoteExpired">Cotação expirada</string>
+    <string name="SwapConfirm_QuoteIsInvalid">Cotação inválida</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">Sem Controle de Deslizamento</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">Operações entre cadeias dependem da liquidez de terceiros e atrasos, o que pode afetar o valor final.</string>
@@ -886,6 +887,7 @@
     <string name="blockchain_status">Estado da Blockchain</string>
     <string name="btc_blockchain_settings_restore_source_change_warning">Após alterar a fonte de restauração, a carteira terá que ressincronizar-se com a blockchain do Bitcoin.</string>
     <string name="send_confirmation_syncing_warning">A carteira ainda está sincronizando. Aguarde a conclusão da sincronização antes de enviar.</string>
+    <string name="send_confirmation_sync_error_warning">Falha na sincronização da carteira. Toque em Tentar novamente para reconectar.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Selecione uma fonte de dados para restauração de carteira. Restaurar da blockchain leva consideravelmente mais tempo.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entrada/Saída</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Configurações de transação</string>
@@ -1796,4 +1798,19 @@
     <string name="native_library_error_title">Não foi possível iniciar</string>
     <string name="native_library_error_message">Não foi possível carregar um componente necessário. Por favor, reinstale a aplicação a partir da Play Store.</string>
     <string name="native_library_error_close">Fechar</string>
+    <!--Multi-Swap-->
+    <string name="multi_swap_completed">Troca concluída</string>
+    <string name="multi_swap_no_providers">Nenhum provedor disponível</string>
+    <string name="multi_swap_finding_best_provider">Procurando o melhor provedor…</string>
+    <string name="multi_swap_list_title">Trocas</string>
+    <string name="multi_swap_continue">Continuar troca</string>
+    <string name="multi_swap_unfinished">Troca não finalizada</string>
+    <string name="multi_swap_unfinished_plural">Trocas não finalizadas (%d)</string>
+    <string name="swap_through">Via</string>
+    <string name="swap_you_send">Você envia</string>
+    <string name="swap_you_receive">Você recebe</string>
+    <string name="swap_continue_later">Continuar depois</string>
+    <string name="multi_swap_cancel_swap">Cancelar troca</string>
+    <string name="multi_swap_cancel_swap_warning">A primeira troca já foi concluída. As moedas intermediárias estão na sua carteira e continuarão suas. Apenas o segundo passo da troca será cancelado.</string>
+    <string name="swap_leg_title">Troca %d</string>
 </resources>

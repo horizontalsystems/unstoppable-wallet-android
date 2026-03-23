@@ -402,7 +402,7 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Used Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">An executed transaction with this nonce already exists.</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">Network Fee</string>
+    <string name="FeeSettings_NetworkFee">کارمزد شبکه</string>
     <string name="FeeSettings_NetworkFee_Info">The estimated cost of sending given transaction on the network.</string>
     <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
     <string name="FeeSettings_GasPrice_Info">کارمزد تراکنش در شبکه بر حسب واحد گاز سنجیده می شود. قیمت گاز مبلغی است که کاربر مایل است برای هر واحد گاز هزینه کند. وقتی شبکه شلوغ است، قیمت گاز بالاست و وقتی خلوت است پایین. قیمت ناکافی گاز اغلب دلیلی برای معلق ماندن یک معامله برای مدت طولانی است.</string>
@@ -544,13 +544,13 @@
     <string name="Swap_MinimumReceived">مقدار تضمین شده</string>
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">گیرنده</string>
-    <string name="Swap_ErrorNoProviders">No Providers</string>
+    <string name="Swap_ErrorNoProviders">ارائه‌دهنده‌ای موجود نیست</string>
     <string name="Swap_ErrorNoQuote">No Quote</string>
     <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
     <string name="swap_out_of_min_amount">کمتر از حداقل مبلغ %s</string>
     <string name="Swap_ErrorHighPriceImpact">تأثیر بالای قیمت</string>
-    <string name="Swap_ErrorWalletSyncing">Wallet is Syncing</string>
-    <string name="Swap_ErrorWalletNotSynced">Wallet Not Synced</string>
+    <string name="Swap_ErrorWalletSyncing">کیف پول در حال همگام‌سازی است</string>
+    <string name="Swap_ErrorWalletNotSynced">کیف پول همگام‌سازی نشده</string>
     <string name="Swap_Proceed">بعدي</string>
     <string name="Swap_SelectTokenIn">Select Token In</string>
     <string name="Swap_SelectTokenOut">Select Token Out</string>
@@ -566,7 +566,7 @@
     <string name="Swap_Approve">تایید</string>
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">در حال جابجایی</string>
-    <string name="Swap_Quoting">Quoting</string>
+    <string name="Swap_Quoting">دریافت قیمت</string>
     <string name="Swap_Providers">Providers</string>
     <string name="Swap_SwapProvider_Title">ارائه‌دهنده مبادله</string>
     <string name="Swap_AmountMin">(دقیقه)</string>
@@ -574,8 +574,9 @@
     <string name="Swap_YouPay">شما می پردازید</string>
     <string name="Swap_YouGet">شما دریافت می کنید</string>
     <string name="Swap_Confirm_Title">تاييد</string>
-    <string name="SwapConfirm_QuoteExpired">Quote expired</string>
-    <string name="SwapConfirm_QuoteIsInvalid">Quote is invalid</string>
+    <string name="SwapConfirm_QuoteExpiresIn">قیمت پیشنهادی در %d منقضی می‌شود</string>
+    <string name="SwapConfirm_QuoteExpired">قیمت پیشنهادی منقضی شده است</string>
+    <string name="SwapConfirm_QuoteIsInvalid">قیمت پیشنهادی نامعتبر است</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">بدون کنترل لغزش</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">عملیات زنجیره‌ای متقابل به نقدینگی اشخاص ثالث و تاخیرات بستگی دارد که ممکن است بر مبلغ نهایی تأثیر بگذارد.</string>
@@ -885,6 +886,7 @@
     <string name="blockchain_status">وضعیت بلاکچین</string>
     <string name="btc_blockchain_settings_restore_source_change_warning">After changing source the wallet will have to resync itself.</string>
     <string name="send_confirmation_syncing_warning">کیف پول هنوز در حال همگام‌سازی است. لطفاً قبل از ارسال منتظر تکمیل همگام‌سازی بمانید.</string>
+    <string name="send_confirmation_sync_error_warning">همگام‌سازی کیف پول ناموفق بود. برای اتصال مجدد روی «تلاش مجدد» بزنید.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source P.CASH app should use for synchronizing wallet(s).</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
@@ -1801,4 +1803,19 @@
     <string name="native_library_error_title">راه‌اندازی ناموفق</string>
     <string name="native_library_error_message">بارگذاری یک جزء ضروری ناموفق بود. لطفاً برنامه را از Play Store دوباره نصب کنید.</string>
     <string name="native_library_error_close">بستن</string>
+    <!--Multi-Swap-->
+    <string name="multi_swap_completed">مبادله انجام شد</string>
+    <string name="multi_swap_no_providers">هیچ ارائه‌دهنده‌ای موجود نیست</string>
+    <string name="multi_swap_finding_best_provider">جستجوی بهترین ارائه‌دهنده…</string>
+    <string name="multi_swap_list_title">مبادلات</string>
+    <string name="multi_swap_continue">ادامه مبادله</string>
+    <string name="multi_swap_unfinished">مبادله ناتمام</string>
+    <string name="multi_swap_unfinished_plural">مبادلات ناتمام (%d)</string>
+    <string name="swap_through">از طریق</string>
+    <string name="swap_you_send">شما ارسال می‌کنید</string>
+    <string name="swap_you_receive">شما دریافت می‌کنید</string>
+    <string name="swap_continue_later">ادامه در آینده</string>
+    <string name="multi_swap_cancel_swap">لغو تبادل</string>
+    <string name="multi_swap_cancel_swap_warning">اولین تبادل قبلاً انجام شده است. سکه‌های واسطه در کیف پول شما هستند و متعلق به شما باقی می‌مانند. فقط مرحله دوم تبادل لغو خواهد شد.</string>
+    <string name="swap_leg_title">مبادله %d</string>
 </resources>

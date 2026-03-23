@@ -72,4 +72,6 @@ interface IMultiSwapProvider {
 
     suspend fun getWarningMessage(tokenIn: Token, tokenOut: Token): TranslatableString? = null
 
+    fun getProviderTransactionId(): String? = null
+
 }

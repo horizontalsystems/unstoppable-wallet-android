@@ -20,6 +20,7 @@ import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.core.storage.EnabledWalletsStorage
 import cash.p.terminal.core.storage.EvmSyncSourceStorage
 import cash.p.terminal.core.storage.HardwarePublicKeyStorage
+import cash.p.terminal.core.storage.PendingMultiSwapStorage
 import cash.p.terminal.core.storage.PendingTransactionStorage
 import cash.p.terminal.core.storage.RestoreSettingsStorage
 import cash.p.terminal.core.storage.SpamAddressStorage
@@ -95,9 +96,11 @@ val storageModule = module {
     single { get<AppDatabase>().moneroFileDao() }
     single { get<AppDatabase>().zcashSingleUseAddressDao() }
     single { get<AppDatabase>().spamAddressDao() }
+    single { get<AppDatabase>().pendingMultiSwapDao() }
     single { get<AppDatabase>().pendingTransactionDao() }
     single { get<AppDatabase>().swapProviderTransactionsDao() }
     single { get<AppDatabase>().pinDao() }
+    singleOf(::PendingMultiSwapStorage)
     singleOf(::PendingTransactionStorage)
     singleOf(::PinDbStorage)
     single {

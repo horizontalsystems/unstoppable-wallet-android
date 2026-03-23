@@ -175,6 +175,7 @@ class SwapViewModel(
             fiatAmountInputEnabled = fiatAmountInputEnabled,
             fiatPriceImpactLevel = priceImpactState.fiatPriceImpactLevel,
             timeout = timerState.timeout,
+            multiSwapRoute = quoteState.multiSwapRoute,
         )
     }
 
@@ -215,7 +216,9 @@ class SwapViewModel(
         fiatServiceIn.setToken(quoteState.tokenIn)
         fiatServiceIn.setAmount(quoteState.amountIn)
         fiatServiceOut.setToken(quoteState.tokenOut)
-        fiatServiceOut.setAmount(quoteState.quote?.amountOut)
+        val finalAmountOut = quoteState.multiSwapRoute?.selectedLeg2Quote?.amountOut
+            ?: quoteState.quote?.amountOut
+        fiatServiceOut.setAmount(finalAmountOut)
 
         emitState() // Emit immediately so UI updates without waiting for warning
         fetchWarningMessageAsync()
@@ -282,6 +285,9 @@ class SwapViewModel(
         }
     }
 
+    fun onSelectLeg1Quote(quote: SwapProviderQuote) = quoteService.selectLeg1Quote(quote)
+    fun onSelectLeg2Quote(quote: SwapProviderQuote) = quoteService.selectLeg2Quote(quote)
+
     fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
     fun reQuote() = quoteService.reQuote()
@@ -302,7 +308,8 @@ class SwapViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val swapQuoteService: SwapQuoteService by inject(SwapQuoteService::class.java)
-            val tokenBalanceService = TokenBalanceService(App.adapterManager, App.marketKit)
+            val marketKit: MarketKitWrapper by inject(MarketKitWrapper::class.java)
+            val tokenBalanceService = TokenBalanceService(App.adapterManager, marketKit)
             val priceImpactService = PriceImpactService()
 
             return SwapViewModel(
@@ -310,11 +317,11 @@ class SwapViewModel(
                 balanceService = tokenBalanceService,
                 priceImpactService = priceImpactService,
                 currencyManager = App.currencyManager,
-                fiatServiceIn = FiatService(App.marketKit),
-                fiatServiceOut = FiatService(App.marketKit),
+                fiatServiceIn = FiatService(marketKit),
+                fiatServiceOut = FiatService(marketKit),
                 timerService = TimerService(),
                 networkAvailabilityService = NetworkAvailabilityService(App.connectivityManager),
-                marketKit = App.marketKit,
+                marketKit = marketKit,
                 tokenIn = tokenIn,
                 tokenOut = tokenOut
             ) as T
@@ -350,6 +357,7 @@ data class SwapUiState(
     val fiatAmountInputEnabled: Boolean,
     val fiatPriceImpactLevel: PriceImpactLevel?,
     val timeout: Boolean,
+    val multiSwapRoute: MultiSwapRoute?,
 ) {
     val currentStep: SwapStep = when {
         error != null -> SwapStep.Error(error)

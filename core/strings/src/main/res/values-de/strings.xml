@@ -560,7 +560,7 @@
     <string name="Swap_Approve">Genehmigen</string>
     <string name="Swap_Approving">Wird bestätigt</string>
     <string name="Swap_Swapping">Swapping</string>
-    <string name="Swap_Quoting">Quoting</string>
+    <string name="Swap_Quoting">Preisabfrage</string>
     <string name="Swap_Providers">Anbieter</string>
     <string name="Swap_SwapProvider_Title">Swap-Anbieter</string>
     <string name="Swap_AmountMin">(Min.)</string>
@@ -568,6 +568,7 @@
     <string name="Swap_YouPay">Sie bezahlen</string>
     <string name="Swap_YouGet">Sie erhalten</string>
     <string name="Swap_Confirm_Title">Bestätigen</string>
+    <string name="SwapConfirm_QuoteExpiresIn">Angebot läuft in %d ab</string>
     <string name="SwapConfirm_QuoteExpired">Angebot abgelaufen</string>
     <string name="SwapConfirm_QuoteIsInvalid">Angebot ist ungültig</string>
     <string name="SwapConfirm_FetchingFinalQuote">Abrufen des endgültigen Angebots</string>
@@ -878,6 +879,7 @@
     <string name="blockchain_status">Blockchain-Status</string>
     <string name="btc_blockchain_settings_restore_source_change_warning">Nach dem Ändern der Quelle muss die Brieftasche sich selbst synchronisieren.</string>
     <string name="send_confirmation_syncing_warning">Wallet synchronisiert sich noch. Bitte warten Sie, bis die Synchronisierung abgeschlossen ist, bevor Sie senden.</string>
+    <string name="send_confirmation_sync_error_warning">Wallet-Synchronisierung fehlgeschlagen. Tippen Sie auf „Wiederholen", um erneut zu verbinden.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Wählen Sie die Datenquelle für die Wiederherstellung des Wallets mit Transaktionen aus.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Ein-/Ausgänge</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Transaktionseinstellungen</string>
@@ -1789,4 +1791,19 @@ Die App ermöglicht es Ihnen, aus Bequemlichkeit ein Backup mit einem einfachen 
     <string name="native_library_error_title">Start nicht möglich</string>
     <string name="native_library_error_message">Eine erforderliche Komponente konnte nicht geladen werden. Bitte versuchen Sie, die App aus dem Play Store neu zu installieren.</string>
     <string name="native_library_error_close">Schließen</string>
+    <!--Multi-Swap-->
+    <string name="multi_swap_completed">Tausch abgeschlossen</string>
+    <string name="multi_swap_no_providers">Keine Anbieter verfügbar</string>
+    <string name="multi_swap_finding_best_provider">Besten Anbieter suchen…</string>
+    <string name="multi_swap_list_title">Tausche</string>
+    <string name="multi_swap_continue">Tausch fortsetzen</string>
+    <string name="multi_swap_unfinished">Unvollständiger Tausch</string>
+    <string name="multi_swap_unfinished_plural">Unvollständige Tausche (%d)</string>
+    <string name="swap_through">Über</string>
+    <string name="swap_you_send">Sie senden</string>
+    <string name="swap_you_receive">Sie erhalten</string>
+    <string name="swap_continue_later">Später fortfahren</string>
+    <string name="multi_swap_cancel_swap">Tausch abbrechen</string>
+    <string name="multi_swap_cancel_swap_warning">Der erste Tausch wurde bereits abgeschlossen. Die Zwischenmünzen befinden sich in Ihrer Wallet und bleiben Ihnen erhalten. Nur der zweite Tauschschritt wird abgebrochen.</string>
+    <string name="swap_leg_title">Tausch %d</string>
 </resources>

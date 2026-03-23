@@ -42,12 +42,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent
-import timber.log.Timber
 import java.math.BigDecimal
 
 class QuickexProvider(
@@ -86,17 +84,9 @@ class QuickexProvider(
 
     private var swapProviderTransaction: SwapProviderTransaction? = null
 
-    init {
-        loadCurrencies()
-    }
-
-    private fun loadCurrencies() {
-        coroutineScope.launch(CoroutineExceptionHandler { _, throwable ->
-            Timber.d("QuickexProvider: loadCurrencies error: ${throwable.message}")
-        }) {
-            currencies.clear()
-            currencies.addAll(quickexRepository.getAvailablePairs())
-        }
+    override suspend fun start() {
+        currencies.clear()
+        currencies.addAll(quickexRepository.getAvailablePairs())
     }
 
     override suspend fun supports(tokenFrom: Token, tokenTo: Token) =
@@ -553,4 +543,6 @@ class QuickexProvider(
             }
         }
     }
+
+    override fun getProviderTransactionId(): String? = swapProviderTransaction?.transactionId
 }

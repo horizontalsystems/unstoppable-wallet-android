@@ -578,6 +578,7 @@
     <string name="Swap_YouPay">Ви платите</string>
     <string name="Swap_YouGet">Ви отримаєте</string>
     <string name="Swap_Confirm_Title">Підтвердити</string>
+    <string name="SwapConfirm_QuoteExpiresIn">Котирування закінчується через %d</string>
     <string name="SwapConfirm_QuoteExpired">Термін дії котирування минув</string>
     <string name="SwapConfirm_QuoteIsInvalid">Котирування недійсне</string>
     <string name="SwapConfirm_FetchingFinalQuote">Отримання котирування</string>
@@ -899,6 +900,7 @@
     <string name="blockchain_status">Статус блокчейну</string>
     <string name="btc_blockchain_settings_restore_source_change_warning">Після зміни джерела відновлення, гаманець повинен буде повторно синхронізуватися з блокчейном.</string>
     <string name="send_confirmation_syncing_warning">Гаманець ще синхронізується. Будь ласка, зачекайте завершення синхронізації перед відправленням.</string>
+    <string name="send_confirmation_sync_error_warning">Помилка синхронізації гаманця. Натисніть «Повторити» для повторного підключення.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Виберіть джерело даних для відновлення гаманця. Відновлення з блокчейну займає значно більше часу.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Входи/Виходи</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Налаштування транзакцій</string>
@@ -1957,4 +1959,19 @@
     <string name="native_library_error_title">Неможливо запустити</string>
     <string name="native_library_error_message">Не вдалося завантажити необхідний компонент. Будь ласка, спробуйте перевстановити додаток з Play Store.</string>
     <string name="native_library_error_close">Закрити</string>
+    <!--Multi-Swap-->
+    <string name="multi_swap_completed">Обмін завершено</string>
+    <string name="multi_swap_no_providers">Немає доступних провайдерів</string>
+    <string name="multi_swap_finding_best_provider">Пошук найкращого провайдера…</string>
+    <string name="multi_swap_list_title">Обміни</string>
+    <string name="multi_swap_continue">Продовжити обмін</string>
+    <string name="multi_swap_unfinished">Незавершений обмін</string>
+    <string name="multi_swap_unfinished_plural">Незавершені обміни (%d)</string>
+    <string name="swap_through">Через</string>
+    <string name="swap_you_send">Ви відправляєте</string>
+    <string name="swap_you_receive">Ви отримаєте</string>
+    <string name="swap_continue_later">Продовжити пізніше</string>
+    <string name="multi_swap_cancel_swap">Скасувати обмін</string>
+    <string name="multi_swap_cancel_swap_warning">Перший обмін вже завершено. Проміжні монети знаходяться у вашому гаманці та залишаться вашими. Буде скасовано лише другий крок обміну.</string>
+    <string name="swap_leg_title">Обмін %d</string>
 </resources>

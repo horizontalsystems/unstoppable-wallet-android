@@ -51,6 +51,8 @@ internal fun SendEvmConfirmationScreen(
         onClickSend = sendViewModel::onClickSend,
         sendEntryPointDestId = sendEntryPointDestId,
         isSynced = sendViewModel.isSynced,
+        hasAdapterError = sendViewModel.hasAdapterError,
+        onRetrySync = sendViewModel::retryAdapterSync,
         sendToken = sendViewModel.wallet.token,
         feeToken = sendViewModel.feeToken,
         feeCoinBalance = sendViewModel.feeCoinBalance,

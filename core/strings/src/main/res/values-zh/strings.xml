@@ -570,6 +570,7 @@
     <string name="Swap_YouPay">您支付</string>
     <string name="Swap_YouGet">您获得</string>
     <string name="Swap_Confirm_Title">确认</string>
+    <string name="SwapConfirm_QuoteExpiresIn">报价将在 %d 后过期</string>
     <string name="SwapConfirm_QuoteExpired">报价已过期</string>
     <string name="SwapConfirm_QuoteIsInvalid">报价无效</string>
     <string name="SwapConfirm_FetchingFinalQuote">正在获取最终报价</string>
@@ -882,6 +883,7 @@
     <string name="blockchain_status">区块链状态</string>
     <string name="btc_blockchain_settings_restore_source_change_warning">在更改源后，钱包将必须重新同步自己。</string>
     <string name="send_confirmation_syncing_warning">钱包仍在同步中。请等待同步完成后再发送。</string>
+    <string name="send_confirmation_sync_error_warning">钱包同步失败。点击重试以重新连接。</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">通过交易为恢复钱包选择数据源。</string>
     <string name="BtcBlockchainSettings_InputsOutputs">输入/输出</string>
     <string name="BtcBlockchainSettings_TransactionSettings">交易设置</string>
@@ -1785,4 +1787,19 @@
     <string name="native_library_error_title">无法启动</string>
     <string name="native_library_error_message">无法加载所需组件。请尝试从 Play 商店重新安装应用。</string>
     <string name="native_library_error_close">关闭</string>
+    <!--Multi-Swap-->
+    <string name="multi_swap_completed">兑换完成</string>
+    <string name="multi_swap_no_providers">没有可用的提供商</string>
+    <string name="multi_swap_finding_best_provider">正在查找最佳提供商…</string>
+    <string name="multi_swap_list_title">兑换列表</string>
+    <string name="multi_swap_continue">继续兑换</string>
+    <string name="multi_swap_unfinished">未完成的兑换</string>
+    <string name="multi_swap_unfinished_plural">未完成的兑换 (%d)</string>
+    <string name="swap_through">经由</string>
+    <string name="swap_you_send">发送金额</string>
+    <string name="swap_you_receive">接收金额</string>
+    <string name="swap_continue_later">稍后继续</string>
+    <string name="multi_swap_cancel_swap">取消兑换</string>
+    <string name="multi_swap_cancel_swap_warning">第一步兑换已完成。中间代币在您的钱包中，将继续归您所有。仅第二步兑换会被取消。</string>
+    <string name="swap_leg_title">兑换 %d</string>
 </resources>

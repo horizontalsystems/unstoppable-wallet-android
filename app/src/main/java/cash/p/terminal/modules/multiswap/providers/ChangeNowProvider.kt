@@ -42,7 +42,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -86,19 +85,13 @@ class ChangeNowProvider(
 
     private var swapProviderTransaction: SwapProviderTransaction? = null
 
-    init {
-        loadCurrencies()
+    override suspend fun start() {
+        currencies.clear()
+        currencies.addAll(changeNowRepository.getAvailableCurrencies().sortedBy { it.ticker })
     }
 
     override suspend fun supports(tokenFrom: Token, tokenTo: Token) =
         supports(tokenFrom) && supports(tokenTo)
-
-    private fun loadCurrencies() {
-        coroutineScope.launch {
-            currencies.clear()
-            currencies.addAll(changeNowRepository.getAvailableCurrencies().sortedBy { it.ticker })
-        }
-    }
 
     override suspend fun supports(token: Token): Boolean =
         withContext(coroutineScope.coroutineContext) {
@@ -473,4 +466,6 @@ class ChangeNowProvider(
             }
         }
     }
+
+    override fun getProviderTransactionId(): String? = swapProviderTransaction?.transactionId
 }

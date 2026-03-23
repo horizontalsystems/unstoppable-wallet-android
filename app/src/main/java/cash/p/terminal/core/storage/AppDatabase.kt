@@ -65,6 +65,11 @@ import cash.p.terminal.core.storage.migrations.Migration_87_88
 import cash.p.terminal.core.storage.migrations.Migration_88_89
 import cash.p.terminal.core.storage.migrations.Migration_89_90
 import cash.p.terminal.core.storage.migrations.Migration_90_91
+import cash.p.terminal.core.storage.migrations.Migration_91_92
+import cash.p.terminal.core.storage.migrations.Migration_92_93
+import cash.p.terminal.core.storage.migrations.Migration_93_94
+import cash.p.terminal.core.storage.migrations.Migration_94_95
+import cash.p.terminal.core.storage.migrations.Migration_95_96
 import cash.p.terminal.core.storage.typeconverter.DatabaseConverters
 import cash.p.terminal.entities.ActiveAccount
 import cash.p.terminal.entities.BlockchainSettingRecord
@@ -73,6 +78,7 @@ import cash.p.terminal.entities.EvmAddressLabel
 import cash.p.terminal.entities.EvmMethodLabel
 import cash.p.terminal.entities.EvmSyncSourceRecord
 import cash.p.terminal.entities.MoneroFileRecord
+import cash.p.terminal.entities.PendingMultiSwap
 import cash.p.terminal.entities.PendingTransactionEntity
 import cash.p.terminal.entities.RecentAddress
 import cash.p.terminal.entities.RestoreSettingRecord
@@ -100,7 +106,7 @@ import io.horizontalsystems.core.storage.LogEntry
 import io.horizontalsystems.core.storage.LogsDao
 
 @Database(
-    version = 91,
+    version = 96,
     exportSchema = false,
     entities = [
         EnabledWallet::class,
@@ -129,6 +135,7 @@ import io.horizontalsystems.core.storage.LogsDao
         SpamAddress::class,
         SpamScanState::class,
         MoneroFileRecord::class,
+        PendingMultiSwap::class,
         PendingTransactionEntity::class,
         ZcashSingleUseAddress::class,
         UserDeletedWallet::class
@@ -158,6 +165,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun hardwarePublicKeyDao(): HardwarePublicKeyDao
     abstract fun recentAddressDao(): RecentAddressDao
     abstract fun moneroFileDao(): MoneroFileDao
+    abstract fun pendingMultiSwapDao(): PendingMultiSwapDao
     abstract fun pendingTransactionDao(): PendingTransactionDao
     abstract fun zcashSingleUseAddressDao(): ZcashSingleUseAddressDao
     abstract fun userDeletedWalletDao(): UserDeletedWalletDao
@@ -237,7 +245,12 @@ abstract class AppDatabase : RoomDatabase() {
                     Migration_87_88,
                     Migration_88_89,
                     Migration_89_90,
-                    Migration_90_91
+                    Migration_90_91,
+                    Migration_91_92,
+                    Migration_92_93,
+                    Migration_93_94,
+                    Migration_94_95,
+                    Migration_95_96
                 )
                 .build()
         }

@@ -574,6 +574,7 @@
     <string name="Swap_YouPay">Você Paga</string>
     <string name="Swap_YouGet">Você recebe</string>
     <string name="Swap_Confirm_Title">Confirmar</string>
+    <string name="SwapConfirm_QuoteExpiresIn">A cotação expira em %d</string>
     <string name="SwapConfirm_QuoteExpired">A cotação expirou</string>
     <string name="SwapConfirm_QuoteIsInvalid">A cotação é inválida</string>
     <string name="SwapConfirm_FetchingFinalQuote">Buscando cotação final</string>
@@ -884,6 +885,7 @@
     <string name="blockchain_status">Status da Blockchain</string>
     <string name="btc_blockchain_settings_restore_source_change_warning">Após alterar a fonte, a carteira terá que ressincronizar.</string>
     <string name="send_confirmation_syncing_warning">A carteira ainda está sincronizando. Aguarde a conclusão da sincronização antes de enviar.</string>
+    <string name="send_confirmation_sync_error_warning">Falha na sincronização da carteira. Toque em Tentar novamente para reconectar.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Selecione uma fonte de dados para restaurar uma carteira com transações.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entrada/Saída</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Configurações de transação</string>
@@ -1796,4 +1798,19 @@ O aplicativo permite que você crie um backup com uma senha simples para sua con
     <string name="native_library_error_title">Não foi possível iniciar</string>
     <string name="native_library_error_message">Não foi possível carregar um componente necessário. Por favor, reinstale o aplicativo pela Play Store.</string>
     <string name="native_library_error_close">Fechar</string>
+    <!--Multi-Swap-->
+    <string name="multi_swap_completed">Troca concluída</string>
+    <string name="multi_swap_no_providers">Nenhum provedor disponível</string>
+    <string name="multi_swap_finding_best_provider">Procurando o melhor provedor…</string>
+    <string name="multi_swap_list_title">Trocas</string>
+    <string name="multi_swap_continue">Continuar troca</string>
+    <string name="multi_swap_unfinished">Troca não finalizada</string>
+    <string name="multi_swap_unfinished_plural">Trocas não finalizadas (%d)</string>
+    <string name="swap_through">Via</string>
+    <string name="swap_you_send">Você envia</string>
+    <string name="swap_you_receive">Você recebe</string>
+    <string name="swap_continue_later">Continuar depois</string>
+    <string name="multi_swap_cancel_swap">Cancelar troca</string>
+    <string name="multi_swap_cancel_swap_warning">A primeira troca já foi concluída. As moedas intermediárias estão na sua carteira e continuarão suas. Apenas a segunda etapa da troca será cancelada.</string>
+    <string name="swap_leg_title">Troca %d</string>
 </resources>

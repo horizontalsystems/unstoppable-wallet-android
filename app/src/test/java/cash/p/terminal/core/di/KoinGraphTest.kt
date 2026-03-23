@@ -10,6 +10,7 @@ import cash.p.terminal.modules.configuredtoken.ConfiguredTokenInfoViewModel
 import cash.p.terminal.modules.createaccount.passphraseterms.PassphraseTermsViewModel
 import cash.p.terminal.modules.manageaccount.safetyrules.SafetyRulesModule
 import cash.p.terminal.modules.manageaccount.safetyrules.SafetyRulesViewModel
+import cash.p.terminal.modules.multiswap.TimerService
 import cash.p.terminal.modules.pin.hiddenwallet.HiddenWalletPinPolicy
 import cash.p.terminal.modules.settings.advancedsecurity.AdvancedSecurityViewModel
 import cash.p.terminal.modules.settings.advancedsecurity.securereset.SecureResetTermsViewModel
@@ -45,7 +46,7 @@ class KoinGraphTest : KoinTest {
         }
 
         fullModule.verify(
-            extraTypes = listOf(Application::class, Context::class, HttpClientEngine::class),
+            extraTypes = listOf(Application::class, Context::class, HttpClientEngine::class, TimerService::class),
             injections = injectedParameters(
                 definition<AccountTypeNotSupportedViewModel>(AccountTypeNotSupportedDialog.Input::class),
                 definition<HiddenWalletPinPolicy >(IPinComponent::class),

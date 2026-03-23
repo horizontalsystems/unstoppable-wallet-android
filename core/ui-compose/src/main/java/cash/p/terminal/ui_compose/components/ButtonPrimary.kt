@@ -102,9 +102,10 @@ fun ButtonPrimaryDefault(
 
 @Composable
 fun ButtonPrimaryTransparent(
-    modifier: Modifier = Modifier,
     title: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    textColor: Color= Color.Unspecified,
     enabled: Boolean = true
 ) {
 
@@ -144,6 +145,7 @@ fun ButtonPrimaryTransparent(
                 content = {
                     Text(
                         text = title,
+                        color = textColor,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )

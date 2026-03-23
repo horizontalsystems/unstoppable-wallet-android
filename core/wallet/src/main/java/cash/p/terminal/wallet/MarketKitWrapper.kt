@@ -2,6 +2,7 @@ package cash.p.terminal.wallet
 
 import android.content.Context
 import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.exceptions.InvalidAuthTokenException
 import cash.p.terminal.wallet.exceptions.NoAuthTokenException
 import cash.p.terminal.wallet.entities.Coin
@@ -66,6 +67,9 @@ class MarketKitWrapper(
     fun coinGeckoIds(uids: List<String>) = marketKit.coinGeckoIds(uids)
 
     fun token(query: TokenQuery) = marketKit.token(query)
+
+    fun nativeToken(blockchainType: BlockchainType): Token? =
+        token(TokenQuery(blockchainType, TokenType.Native))
 
     fun tokens(queries: List<TokenQuery>) = marketKit.tokens(queries)
 

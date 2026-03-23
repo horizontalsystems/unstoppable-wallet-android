@@ -4,43 +4,44 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.MutableLiveData
-import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
+import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.AmlStatusManager
-import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
-import cash.p.terminal.modules.contacts.ContactsRepository
-import cash.p.terminal.core.storage.toRecordUidMap
-import cash.p.terminal.entities.SwapProviderTransaction
-import cash.p.terminal.premium.domain.PremiumSettings
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.core.managers.TransactionHiddenManager
-import cash.p.terminal.wallet.IAdapterManager
+import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
+import cash.p.terminal.core.storage.toRecordUidMap
+import cash.p.terminal.core.tryOrNull
+import cash.p.terminal.core.usecase.SyncPendingMultiSwapUseCase
 import cash.p.terminal.entities.LastBlockInfo
+import cash.p.terminal.entities.SwapProviderTransaction
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
+import cash.p.terminal.premium.domain.PremiumSettings
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.ui_compose.ColoredValue
+import cash.p.terminal.ui_compose.entities.ViewState
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.badge
 import cash.p.terminal.wallet.managers.TransactionDisplayLevel
+import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.CurrencyValue
-import cash.p.terminal.ui_compose.entities.ViewState
-import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.helpers.DateHelper
-import cash.p.terminal.core.getKoinInstance
-import cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase
-import io.horizontalsystems.core.DispatcherProvider
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -82,10 +83,14 @@ class TransactionsViewModel(
     private var viewState: ViewState = ViewState.Loading
     private var syncing = service.syncingFlow.value
     private var hasHiddenTransactions: Boolean = false
-    @Volatile private var filterVersion = 0
-    @Volatile private var accountVersion = 0
-    @Volatile private var cachedConvertedItems: List<TransactionViewItem> = emptyList()
-    @Volatile private var awaitingAdaptersAfterSwitch = false
+    @Volatile
+    private var filterVersion = 0
+    @Volatile
+    private var accountVersion = 0
+    @Volatile
+    private var cachedConvertedItems: List<TransactionViewItem> = emptyList()
+    @Volatile
+    private var awaitingAdaptersAfterSwitch = false
     private var currentFilterType: FilterTransactionType = FilterTransactionType.All
     private var amlPromoAlertEnabled = premiumSettings.getAmlCheckShowAlert()
 
@@ -97,7 +102,7 @@ class TransactionsViewModel(
     )
     private var swapObservationJob: Job? = null
     private var statusCheckerJob: Job? = null
-    private val updateSwapProviderTransactionsStatusUseCase: UpdateSwapProviderTransactionsStatusUseCase = getKoinInstance()
+    private val syncPendingMultiSwapUseCase: SyncPendingMultiSwapUseCase = getKoinInstance()
 
     val balanceHidden: Boolean
         get() = balanceHiddenManager.balanceHidden
@@ -457,11 +462,7 @@ class TransactionsViewModel(
     }
 
     private suspend fun updateAllUnfinishedSwapStatuses() {
-        walletManager.activeWallets.forEach { wallet ->
-            adapterManager.getReceiveAdapterForWallet(wallet)?.let { adapter ->
-                updateSwapProviderTransactionsStatusUseCase(wallet.token, adapter.receiveAddress)
-            }
-        }
+        syncPendingMultiSwapUseCase()
     }
 
     override fun onCleared() {
@@ -473,6 +474,40 @@ class TransactionsViewModel(
             transactionStatusUrl = viewItem.transactionStatusUrl,
             changeNowTransactionId = viewItem.changeNowTransactionId
         )
+
+    suspend fun getTransactionItem(recordUid: String): TransactionItem? {
+        val item = service.getTransactionItem(recordUid)
+            ?: findTransactionRecordInAdapters(recordUid)?.let {
+                TransactionItem(
+                    record = it,
+                    currencyValue = null,
+                    lastBlockInfo = null,
+                    nftMetadata = emptyMap(),
+                )
+            }
+            ?: return null
+
+        val swapTx = swapProviderTransactionsStorage.getByOutgoingRecordUid(recordUid)
+            ?: swapProviderTransactionsStorage.getByIncomingRecordUid(recordUid)
+        return if (swapTx != null) {
+            item.copy(
+                changeNowTransactionId = swapTx.transactionId,
+                transactionStatusUrl = swapTx.toStatusUrl(),
+            )
+        } else {
+            item
+        }
+    }
+
+    private suspend fun findTransactionRecordInAdapters(recordUid: String): TransactionRecord? {
+        for ((_, adapter) in transactionAdapterManager.adaptersReadyFlow.value) {
+            val record = tryOrNull {
+                adapter.getTransactions(null, null, 100, FilterTransactionType.All, null)
+            }?.firstOrNull { it.uid == recordUid }
+            if (record != null) return record
+        }
+        return null
+    }
 
     fun updateFilterHideSuspiciousTx(checked: Boolean) {
         transactionFilterService.updateFilterHideSuspiciousTx(checked)

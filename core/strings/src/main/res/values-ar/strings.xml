@@ -402,7 +402,7 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Used Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">An executed transaction with this nonce already exists.</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">Network Fee</string>
+    <string name="FeeSettings_NetworkFee">رسوم الشبكة</string>
     <string name="FeeSettings_NetworkFee_Info">The estimated cost of sending given transaction on the network.</string>
     <string name="FeeSettings_GasLimit_Info">Transaction complexity is measured in units called \"gas\". It varies depending on the smart contract being executed. The Gas Limit is the estimated maximum gas needed to execute it. The actual gas used will normally be lower.</string>
     <string name="FeeSettings_GasPrice_Info">The fee for transacting on the network is measured in gas units. Gas Price is the amount a user is willing to spend per unit of gas. When the network is busy, gas prices are high, and low when it\'s idle. An insufficient gas price is often a reason for a transaction to remain pending for an extended period.</string>
@@ -544,13 +544,13 @@
     <string name="Swap_MinimumReceived">Guaranteed Amount</string>
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Recipient</string>
-    <string name="Swap_ErrorNoProviders">No Providers</string>
+    <string name="Swap_ErrorNoProviders">لا يوجد مزودون</string>
     <string name="Swap_ErrorNoQuote">No Quote</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
     <string name="swap_out_of_min_amount">أقل من الحد الأدنى للمبلغ %s</string>
-    <string name="Swap_ErrorHighPriceImpact">High price impact</string>
-    <string name="Swap_ErrorWalletSyncing">Wallet is Syncing</string>
-    <string name="Swap_ErrorWalletNotSynced">Wallet Not Synced</string>
+    <string name="Swap_ErrorHighPriceImpact">تأثير كبير على السعر</string>
+    <string name="Swap_ErrorWalletSyncing">جارٍ مزامنة المحفظة</string>
+    <string name="Swap_ErrorWalletNotSynced">المحفظة غير متزامنة</string>
     <string name="Swap_Proceed">التالي</string>
     <string name="Swap_SelectTokenIn">Select Token In</string>
     <string name="Swap_SelectTokenOut">Select Token Out</string>
@@ -566,7 +566,7 @@
     <string name="Swap_Approve">قبول</string>
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Swapping</string>
-    <string name="Swap_Quoting">Quoting</string>
+    <string name="Swap_Quoting">تسعير</string>
     <string name="Swap_Providers">Providers</string>
     <string name="Swap_SwapProvider_Title">Swap Provider</string>
     <string name="Swap_AmountMin">(min)</string>
@@ -574,8 +574,9 @@
     <string name="Swap_YouPay">You Pay</string>
     <string name="Swap_YouGet">You Get</string>
     <string name="Swap_Confirm_Title">تأكيد</string>
-    <string name="SwapConfirm_QuoteExpired">Quote expired</string>
-    <string name="SwapConfirm_QuoteIsInvalid">Quote is invalid</string>
+    <string name="SwapConfirm_QuoteExpiresIn">تنتهي صلاحية عرض السعر خلال %d</string>
+    <string name="SwapConfirm_QuoteExpired">انتهت صلاحية عرض السعر</string>
+    <string name="SwapConfirm_QuoteIsInvalid">عرض السعر غير صالح</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
     <string name="SwapWarning_SlippageNotAvailable_Title">بدون تحكم في الانزلاق</string>
     <string name="SwapWarning_SlippageNotAvailable_Description">تعتمد العمليات بين السلاسل على سيولة الأطراف الثالثة والتأخير، مما قد يؤثر على المبلغ النهائي.</string>
@@ -886,6 +887,7 @@
     <string name="blockchain_status">حالة البلوكشين</string>
     <string name="btc_blockchain_settings_restore_source_change_warning">After changing source the wallet will have to resync itself.</string>
     <string name="send_confirmation_syncing_warning">المحفظة لا تزال في طور المزامنة. يرجى الانتظار حتى اكتمال المزامنة قبل الإرسال.</string>
+    <string name="send_confirmation_sync_error_warning">فشلت مزامنة المحفظة. انقر على إعادة المحاولة لإعادة الاتصال.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source P.CASH app should use for synchronizing wallet(s).</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
@@ -1809,4 +1811,19 @@
     <string name="native_library_error_title">تعذر البدء</string>
     <string name="native_library_error_message">تعذر تحميل مكون مطلوب. يرجى محاولة إعادة تثبيت التطبيق من متجر Play.</string>
     <string name="native_library_error_close">إغلاق</string>
+    <!--Multi-Swap-->
+    <string name="multi_swap_completed">تم التبادل</string>
+    <string name="multi_swap_no_providers">لا يوجد مزودون متاحون</string>
+    <string name="multi_swap_finding_best_provider">جارٍ البحث عن أفضل مزود…</string>
+    <string name="multi_swap_list_title">التبادلات</string>
+    <string name="multi_swap_continue">متابعة التبادل</string>
+    <string name="multi_swap_unfinished">تبادل غير مكتمل</string>
+    <string name="multi_swap_unfinished_plural">تبادلات غير مكتملة (%d)</string>
+    <string name="swap_through">عبر</string>
+    <string name="swap_you_send">أنت ترسل</string>
+    <string name="swap_you_receive">أنت تستلم</string>
+    <string name="swap_continue_later">المتابعة لاحقاً</string>
+    <string name="multi_swap_cancel_swap">إلغاء التبادل</string>
+    <string name="multi_swap_cancel_swap_warning">تم إتمام التبادل الأول بالفعل. العملات الوسيطة موجودة في محفظتك وستبقى ملكك. سيتم إلغاء الخطوة الثانية من التبادل فقط.</string>
+    <string name="swap_leg_title">مبادلة %d</string>
 </resources>

@@ -2,6 +2,7 @@ package cash.p.terminal.core.storage
 
 import cash.p.terminal.core.utils.SwapTransactionMatcher
 import cash.p.terminal.entities.SwapProviderTransaction
+import cash.p.terminal.network.swaprepository.SwapProvider
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.DispatcherProvider
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +18,8 @@ class SwapProviderTransactionsStorage(
         const val THRESHOLD_MSEC = 40_000
         const val AMOUNT_TOLERANCE = 0.005 // 0.5%
         const val FINISHED_AT_WINDOW_MS = 1_800_000L // ±30 minutes
+        const val LEGACY_WINDOW_BEFORE_MS = 3_600_000L  // 1 hour before
+        const val LEGACY_WINDOW_AFTER_MS = 10_800_000L  // 3 hours after
     }
 
     fun save(
@@ -120,6 +123,24 @@ class SwapProviderTransactionsStorage(
         amountOutReal: BigDecimal?,
         finishedAt: Long?
     ) = dao.updateStatusFields(transactionId, status, amountOutReal, finishedAt)
+
+    fun getByProviderAndTokenOut(
+        provider: SwapProvider,
+        coinUidOut: String,
+        blockchainTypeOut: String,
+        addressOut: String,
+        expectedAmount: BigDecimal,
+        legStartTime: Long,
+    ): SwapProviderTransaction? = dao.getByProviderAndTokenOut(
+        provider = provider.name,
+        coinUidOut = coinUidOut,
+        blockchainTypeOut = blockchainTypeOut,
+        addressOut = addressOut,
+        expectedAmount = expectedAmount.toDouble(),
+        tolerance = AMOUNT_TOLERANCE,
+        dateFrom = legStartTime - LEGACY_WINDOW_BEFORE_MS,
+        dateTo = legStartTime + LEGACY_WINDOW_AFTER_MS,
+    )
 
     fun getUnmatchedSwapsByTokenOut(
         coinUid: String,

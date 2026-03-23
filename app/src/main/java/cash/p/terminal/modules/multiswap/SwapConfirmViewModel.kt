@@ -12,9 +12,13 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.storage.PendingMultiSwapStorage
+import cash.p.terminal.entities.PendingMultiSwap
 import cash.p.terminal.modules.send.BaseSendViewModel
 import cash.p.terminal.wallet.IAdapterManager
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ethereum.CautionViewItem
@@ -49,6 +53,7 @@ import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 import java.math.BigDecimal
+import java.util.UUID
 import kotlin.coroutines.cancellation.CancellationException
 
 class SwapConfirmViewModel(
@@ -63,12 +68,19 @@ class SwapConfirmViewModel(
     private val timerService: TimerService,
     private val priceImpactService: PriceImpactService,
     wallet: Wallet,
-    adapterManager: IAdapterManager
+    adapterManager: IAdapterManager,
+    private val multiSwapLegInfo: MultiSwapLegInfo? = null,
 ) : BaseSendViewModel<SwapConfirmUiState>(wallet, adapterManager) {
     private val localStorage: ILocalStorage by inject(ILocalStorage::class.java)
+    private val pendingMultiSwapStorage: PendingMultiSwapStorage by inject(PendingMultiSwapStorage::class.java)
 
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
+
+    var completedMultiSwapId by mutableStateOf<String?>(null)
+        private set
+
+    val isMultiSwap: Boolean get() = multiSwapLegInfo != null
 
     override fun getEstimatedFee(): BigDecimal? = sendTransactionState.networkFee?.primary?.value
     override fun onSendRequested() = executeSwap()
@@ -328,6 +340,7 @@ class SwapConfirmViewModel(
         viewModelScope.launch {
             try {
                 val result = swap()
+                handleMultiSwapCompletion(result)
                 onTransactionCompleted(result)
 
                 sendResult = if (result is SendTransactionResult.Btc && result.isQueued) {
@@ -352,6 +365,55 @@ class SwapConfirmViewModel(
         }
     }
 
+    private suspend fun handleMultiSwapCompletion(result: SendTransactionResult) {
+        val legInfo = multiSwapLegInfo ?: return
+        when (legInfo) {
+            is MultiSwapLegInfo.Leg1 -> createPendingMultiSwap(legInfo, result)
+            is MultiSwapLegInfo.Leg2 -> updatePendingMultiSwapLeg2(legInfo)
+        }
+    }
+
+    private suspend fun createPendingMultiSwap(
+        legInfo: MultiSwapLegInfo.Leg1,
+        result: SendTransactionResult,
+    ) {
+        val id = UUID.randomUUID().toString()
+        val record = PendingMultiSwap(
+            id = id,
+            createdAt = System.currentTimeMillis(),
+            coinUidIn = legInfo.coinUidIn,
+            blockchainTypeIn = legInfo.blockchainTypeIn,
+            amountIn = legInfo.amountIn,
+            coinUidIntermediate = legInfo.coinUidIntermediate,
+            blockchainTypeIntermediate = legInfo.blockchainTypeIntermediate,
+            coinUidOut = legInfo.coinUidOut,
+            blockchainTypeOut = legInfo.blockchainTypeOut,
+            leg1ProviderId = legInfo.leg1ProviderId,
+            leg1IsOffChain = swapProvider is ChangeNowProvider || swapProvider is QuickexProvider,
+            leg1TransactionId = result.getRecordUid(),
+            leg1AmountOut = amountOut,
+            leg1Status = PendingMultiSwap.STATUS_EXECUTING,
+            leg2ProviderId = legInfo.leg2ProviderId,
+            leg2IsOffChain = legInfo.leg2IsOffChain,
+            leg2TransactionId = null,
+            leg2AmountOut = null,
+            leg2Status = PendingMultiSwap.STATUS_PENDING,
+            expectedAmountOut = legInfo.expectedAmountOut,
+        )
+        pendingMultiSwapStorage.insert(record)
+        swapProvider.getProviderTransactionId()?.let { providerTxId ->
+            pendingMultiSwapStorage.setLeg1ProviderTransactionId(id, providerTxId)
+        }
+        completedMultiSwapId = id
+    }
+
+    private suspend fun updatePendingMultiSwapLeg2(
+        legInfo: MultiSwapLegInfo.Leg2,
+    ) {
+        pendingMultiSwapStorage.delete(legInfo.pendingMultiSwapId)
+        completedMultiSwapId = legInfo.pendingMultiSwapId
+    }
+
     fun onTransactionCompleted(result: SendTransactionResult) {
         if (swapProvider is ChangeNowProvider) {
             swapProvider.onTransactionCompleted(result)
@@ -365,7 +427,8 @@ class SwapConfirmViewModel(
         fun provideFactory(
             quote: SwapProviderQuote,
             settings: Map<String, Any?>,
-            navController: NavController
+            navController: NavController,
+            multiSwapLegInfo: MultiSwapLegInfo? = null,
         ) = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(
@@ -417,23 +480,45 @@ class SwapConfirmViewModel(
 
                 // When wallet is null the dummy service above (sendable=false)
                 // prevents any swap execution while the screen navigates back.
+                val marketKit: MarketKitWrapper = getKoinInstance()
                 return SwapConfirmViewModel(
                     swapProvider = quote.provider,
                     swapQuote = quote.swapQuote,
                     swapSettings = settings,
                     currencyManager = App.currencyManager,
-                    fiatServiceIn = FiatService(App.marketKit),
-                    fiatServiceOut = FiatService(App.marketKit),
-                    fiatServiceOutMin = FiatService(App.marketKit),
+                    fiatServiceIn = FiatService(marketKit),
+                    fiatServiceOut = FiatService(marketKit),
+                    fiatServiceOutMin = FiatService(marketKit),
                     sendTransactionService = sendTransactionService,
                     timerService = TimerService(),
                     priceImpactService = PriceImpactService(),
                     wallet = wallet ?: App.walletManager.activeWallets.first(),
-                    adapterManager = App.adapterManager
+                    adapterManager = App.adapterManager,
+                    multiSwapLegInfo = multiSwapLegInfo,
                 ) as T
             }
         }
     }
+}
+
+sealed class MultiSwapLegInfo {
+    data class Leg1(
+        val coinUidIn: String,
+        val blockchainTypeIn: String,
+        val amountIn: BigDecimal,
+        val coinUidIntermediate: String,
+        val blockchainTypeIntermediate: String,
+        val coinUidOut: String,
+        val blockchainTypeOut: String,
+        val leg1ProviderId: String,
+        val leg2ProviderId: String,
+        val leg2IsOffChain: Boolean,
+        val expectedAmountOut: BigDecimal,
+    ) : MultiSwapLegInfo()
+
+    data class Leg2(
+        val pendingMultiSwapId: String,
+    ) : MultiSwapLegInfo()
 }
 
 data class SwapConfirmUiState(

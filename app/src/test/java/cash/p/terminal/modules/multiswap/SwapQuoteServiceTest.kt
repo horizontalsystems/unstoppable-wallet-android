@@ -1,30 +1,35 @@
 package cash.p.terminal.modules.multiswap
 
+import cash.p.terminal.core.usecase.FetchSwapQuotesUseCase
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
+import java.math.BigDecimal
 import cash.p.terminal.modules.multiswap.providers.StonFiProvider
 import cash.p.terminal.wallet.Token
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
-import org.junit.Rule
+import org.junit.Before
 import org.junit.Test
+import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import org.koin.test.KoinTest
-import org.koin.test.KoinTestRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class SwapQuoteServiceTest : KoinTest {
+class SwapQuoteServiceTest {
 
     private val stonFiProvider = mockk<StonFiProvider>(relaxed = true)
     private val dispatcher = StandardTestDispatcher()
@@ -32,15 +37,19 @@ class SwapQuoteServiceTest : KoinTest {
     private val tokenIn = mockk<Token>()
     private val tokenOut = mockk<Token>()
 
-    @get:Rule
-    val koinRule = KoinTestRule.create {
-        modules(module { single { stonFiProvider } })
+    @Before
+    fun setUp() {
+        Dispatchers.setMain(dispatcher)
+        startKoin {
+            modules(module { single { stonFiProvider } })
+        }
     }
 
     @After
     fun tearDown() {
-        unmockkAll()
+        Dispatchers.resetMain()
         stopKoin()
+        unmockkAll()
     }
 
     @Test
@@ -56,6 +65,7 @@ class SwapQuoteServiceTest : KoinTest {
         val service = createService(listOf(slowProvider))
         service.setTokenIn(tokenIn)
         service.setTokenOut(tokenOut)
+        service.setAmount(BigDecimal.ONE)
         advanceUntilIdle()
 
         val state = service.stateFlow.value
@@ -112,6 +122,7 @@ class SwapQuoteServiceTest : KoinTest {
         val service = createService(listOf(failingProvider))
         service.setTokenIn(tokenIn)
         service.setTokenOut(tokenOut)
+        service.setAmount(BigDecimal.ONE)
         advanceUntilIdle()
 
         val state = service.stateFlow.value
@@ -128,16 +139,57 @@ class SwapQuoteServiceTest : KoinTest {
         val service = createService(listOf(unsupported))
         service.setTokenIn(tokenIn)
         service.setTokenOut(tokenOut)
+        service.setAmount(BigDecimal.ONE)
         advanceUntilIdle()
 
         val state = service.stateFlow.value
         assertTrue(state.error is NoSupportedSwapProvider)
     }
 
+    @Test
+    fun start_callsStartOnAllProviders() = runTest(dispatcher) {
+        val provider1 = mockk<IMultiSwapProvider>(relaxed = true) {
+            every { id } returns "provider1"
+        }
+        val provider2 = mockk<IMultiSwapProvider>(relaxed = true) {
+            every { id } returns "provider2"
+        }
+
+        val service = createService(listOf(provider1, provider2))
+        service.start()
+        advanceUntilIdle()
+
+        coVerify(exactly = 1) { provider1.start() }
+        coVerify(exactly = 1) { provider2.start() }
+    }
+
+    @Test
+    fun start_providerThrows_continuesWithOthers() = runTest(dispatcher) {
+        val failingProvider = mockk<IMultiSwapProvider>(relaxed = true) {
+            every { id } returns "failing"
+            coEvery { start() } throws RuntimeException("init failed")
+        }
+        val healthyProvider = mockk<IMultiSwapProvider>(relaxed = true) {
+            every { id } returns "healthy"
+        }
+
+        val service = createService(listOf(failingProvider, healthyProvider))
+        service.start()
+        advanceUntilIdle()
+
+        coVerify(exactly = 1) { failingProvider.start() }
+        coVerify(exactly = 1) { healthyProvider.start() }
+    }
+
     private fun createService(providers: List<IMultiSwapProvider>): SwapQuoteService {
+        val routeResolver = mockk<MultiSwapRouteResolver>(relaxed = true) {
+            coEvery { findRoute(any(), any(), any(), any(), any()) } returns null
+        }
         return SwapQuoteService(
             mockk(relaxed = true),
-            mockk(relaxed = true)
+            mockk(relaxed = true),
+            routeResolver,
+            FetchSwapQuotesUseCase(),
         ).apply {
             allProviders = providers
             coroutineScope = CoroutineScope(dispatcher)
