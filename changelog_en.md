@@ -1,3 +1,22 @@
+## 🚀 Version 0.53.0 Update
+_Release date: March 23, 2026_
+
+### ✨ Improvements
+
+- **Added support for complex swaps through two providers**
+  The app now supports multi-hop swaps through an intermediate asset.
+  For example, swapping `PIRATE Jetton` to `PIRATE BEP-20` is performed through the route `PIRATE Jetton -> TON -> PIRATE BEP-20`.
+
+- **Improved the logic for displaying the remaining number of blocks after restarting the app**
+
+### 🐛 Fixes
+
+- **Fixed staking badge behavior for PIRATE**
+  Pool activation is now displayed correctly starting from `100 PIRATE`.
+
+- **Fixed crash when opening the coin selection screen**
+
+
 ## 🚀 Version 0.52.2 Update
 _Release date: March 17, 2026_
 
