@@ -10,7 +10,6 @@ import cash.p.terminal.core.managers.StackingManager
 import cash.p.terminal.modules.displayoptions.DisplayDiffOptionType
 import cash.p.terminal.modules.displayoptions.DisplayPricePeriod
 import cash.p.terminal.core.managers.TransactionHiddenManager
-import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.balance.BalanceViewItem
@@ -35,6 +34,8 @@ import cash.p.terminal.wallet.balance.DeemedValue
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.wallet.managers.TransactionDisplayLevel
 import cash.p.terminal.wallet.managers.TransactionHiddenState
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.WalletFactory
 import cash.p.terminal.wallet.tokenQueryId
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.entities.Blockchain
@@ -93,7 +94,6 @@ class TokenBalanceViewModelTest : KoinTest {
     private val premiumSettings = mockk<PremiumSettings>()
     private val amlStatusManager = mockk<AmlStatusManager>()
     private val marketFavoritesManager = mockk<MarketFavoritesManager>(relaxed = true)
-    private val piratePlaceRepository = mockk<PiratePlaceRepository>(relaxed = true)
     private val stackingManager = mockk<StackingManager>(relaxed = true)
     private val priceManager = mockk<PriceManager>(relaxed = true)
     private val localStorage = mockk<ILocalStorage>(relaxed = true)
@@ -160,6 +160,7 @@ class TokenBalanceViewModelTest : KoinTest {
         every { balanceService.balanceItemFlow } returns balanceItemFlow
         every { balanceService.balanceItem } returns null
         every { balanceHiddenManager.walletBalanceHiddenFlow(any()) } returns walletBalanceHiddenFlow
+        every { balanceHiddenManager.isWalletBalanceHidden(any()) } returns false
         every { balanceHiddenManager.anyTransactionVisibilityChangedFlow } returns anyTransactionVisibilityChangedFlow
         every { contactsRepository.contactsFlow } returns MutableStateFlow(emptyList())
         every { amlStatusManager.statusUpdates } returns amlStatusUpdates
@@ -167,6 +168,8 @@ class TokenBalanceViewModelTest : KoinTest {
         every { amlStatusManager.isEnabled } returns false
         every { amlStatusManager.applyStatus(any()) } answers { firstArg() }
         every { premiumSettings.getAmlCheckShowAlert() } returns false
+        every { totalBalance.stateFlow } returns MutableStateFlow(TotalService.State.Hidden)
+        every { stackingManager.unpaidFlow } returns MutableStateFlow<BigDecimal?>(BigDecimal.ZERO)
         every { priceManager.displayPricePeriodFlow } returns MutableStateFlow(DisplayPricePeriod.ONE_DAY)
         every { priceManager.displayDiffOptionTypeFlow } returns MutableStateFlow(DisplayDiffOptionType.BOTH)
         every { localStorage.displayDiffPricePeriod } returns DisplayPricePeriod.ONE_DAY
@@ -368,6 +371,81 @@ class TokenBalanceViewModelTest : KoinTest {
 
     // endregion
 
+    // region Staking Status Tests (MOBILE-588)
+
+    @Test
+    fun stakingStatus_balanceAboveThreshold_showsActive() = runTest(dispatcher) {
+        val pirateWallet = createPirateCashWallet()
+        testWallet = pirateWallet
+
+        val balanceItem = createBalanceItem(balance = BigDecimal("150"), wallet = pirateWallet)
+        every { balanceService.balanceItem } returns balanceItem
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } returns createBalanceViewItem()
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(TokenBalanceModule.StakingStatus.ACTIVE, viewModel.uiState.stakingStatus)
+    }
+
+    @Test
+    fun stakingStatus_balanceBelowThreshold_showsInactive() = runTest(dispatcher) {
+        val pirateWallet = createPirateCashWallet()
+        testWallet = pirateWallet
+
+        val balanceItem = createBalanceItem(balance = BigDecimal("1"), wallet = pirateWallet)
+        every { balanceService.balanceItem } returns balanceItem
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } returns createBalanceViewItem()
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(TokenBalanceModule.StakingStatus.INACTIVE, viewModel.uiState.stakingStatus)
+    }
+
+    @Test
+    fun stakingStatus_balanceBelowThresholdWithUnpaidRewards_showsInactive() = runTest(dispatcher) {
+        val pirateWallet = createPirateCashWallet()
+        testWallet = pirateWallet
+
+        // Simulate unpaid rewards from StackingManager
+        val unpaidFlow = MutableStateFlow<BigDecimal?>(BigDecimal("0.7897"))
+        every { stackingManager.unpaidFlow } returns unpaidFlow
+
+        val balanceItem = createBalanceItem(balance = BigDecimal("1"), wallet = pirateWallet)
+        every { balanceService.balanceItem } returns balanceItem
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } returns createBalanceViewItem()
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        // MOBILE-588: Must show INACTIVE even when unpaid rewards exist
+        assertEquals(TokenBalanceModule.StakingStatus.INACTIVE, viewModel.uiState.stakingStatus)
+    }
+
+    @Test
+    fun stakingStatus_balanceExactlyAtThreshold_showsActive() = runTest(dispatcher) {
+        val pirateWallet = createPirateCashWallet()
+        testWallet = pirateWallet
+
+        val balanceItem = createBalanceItem(balance = BigDecimal("100"), wallet = pirateWallet)
+        every { balanceService.balanceItem } returns balanceItem
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } returns createBalanceViewItem()
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(TokenBalanceModule.StakingStatus.ACTIVE, viewModel.uiState.stakingStatus)
+    }
+
+    // endregion
+
     // region Helper Methods
 
     private fun createViewModel(): TokenBalanceViewModel = TokenBalanceViewModel(
@@ -385,7 +463,6 @@ class TokenBalanceViewModelTest : KoinTest {
         premiumSettings = premiumSettings,
         amlStatusManager = amlStatusManager,
         marketFavoritesManager = marketFavoritesManager,
-        piratePlaceRepository = piratePlaceRepository,
         stackingManager = stackingManager,
         priceManager = priceManager,
         localStorage = localStorage,
@@ -465,9 +542,29 @@ class TokenBalanceViewModelTest : KoinTest {
         warning = null
     )
 
-    private fun createBalanceItem() = BalanceItem(
-        wallet = testWallet,
-        balanceData = BalanceData(available = BigDecimal("1.5")),
+    private fun createPirateCashWallet(): Wallet {
+        val pirateCoin = Coin(uid = "pirate-cash", name = "PirateCash", code = "PIRATE")
+        val pirateToken = Token(
+            coin = pirateCoin,
+            blockchain = Blockchain(
+                type = BlockchainType.BinanceSmartChain,
+                name = "BNB Smart Chain",
+                eip3091url = null
+            ),
+            type = TokenType.Eip20(cash.p.terminal.wallet.BuildConfig.PIRATE_CONTRACT),
+            decimals = 18
+        )
+        val account = mockk<Account>(relaxed = true)
+        val walletFactory = WalletFactory(mockk(relaxed = true))
+        return walletFactory.create(pirateToken, account, null)!!
+    }
+
+    private fun createBalanceItem(
+        balance: BigDecimal = BigDecimal("1.5"),
+        wallet: Wallet = testWallet
+    ) = BalanceItem(
+        wallet = wallet,
+        balanceData = BalanceData(available = balance),
         state = AdapterState.Synced,
         sendAllowed = true,
         coinPrice = null

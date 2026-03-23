@@ -24,7 +24,6 @@ import cash.p.terminal.modules.transactions.TransactionSyncStateRepository
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionsRateRepository
 import cash.p.terminal.wallet.IAdapterManager
-import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import io.horizontalsystems.core.IAppNumberFormatter
@@ -47,7 +46,6 @@ class TokenBalanceModule {
             )
             val dispatcherProvider: DispatcherProvider by inject(DispatcherProvider::class.java)
             val marketFavoritesManager: MarketFavoritesManager by inject(MarketFavoritesManager::class.java)
-            val piratePlaceRepository: PiratePlaceRepository by inject(PiratePlaceRepository::class.java)
             val stackingManager: StackingManager by inject(StackingManager::class.java)
             val balanceService = TokenBalanceService(
                 wallet = wallet,
@@ -100,7 +98,6 @@ class TokenBalanceModule {
                 premiumSettings = getKoinInstance(),
                 amlStatusManager = getKoinInstance(),
                 marketFavoritesManager = marketFavoritesManager,
-                piratePlaceRepository = piratePlaceRepository,
                 stackingManager = stackingManager,
                 priceManager = App.priceManager,
                 localStorage = App.localStorage,
