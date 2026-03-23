@@ -50,9 +50,14 @@ class SwapDefenseSystemService(
         actionEnabled = paidActionSettingsManager.isActionEnabled(SwapProtection)
     }
 
+    fun setSwapProtectionEnabled(enabled: Boolean) {
+        paidActionSettingsManager.setActionEnabled(SwapProtection, enabled)
+    }
+
     override fun createState() = State(
         systemMessage = systemMessage,
         mevProtectionEnabled = supportsMevProtection && actionAllowed && actionEnabled,
+        mevProtectionActionAllowed = actionAllowed,
     )
 
     fun setPriceImpact(fiatPriceImpact: BigDecimal?, fiatPriceImpactLevel: PriceImpactLevel?) {
@@ -131,6 +136,7 @@ class SwapDefenseSystemService(
 
     data class State(
         val systemMessage: DefenseSystemMessage?,
-        val mevProtectionEnabled: Boolean
+        val mevProtectionEnabled: Boolean,
+        val mevProtectionActionAllowed: Boolean,
     )
 }

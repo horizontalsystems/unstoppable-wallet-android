@@ -204,6 +204,9 @@ class SwapConfirmViewModel(
         hasSettings = sendTransactionService.hasSettings,
         hasNonceSettings = sendTransactionService.hasNonceSettings,
         swapDefenseSystemMessage = swapDefenseState.systemMessage,
+        mevProtectionEnabled = swapDefenseState.mevProtectionEnabled,
+        supportsMevProtection = sendTransactionService.supportsMevProtection,
+        mevProtectionActionAllowed = swapDefenseState.mevProtectionActionAllowed,
         recipient = recipient,
         slippage = slippage,
         estimatedTime = estimatedTime,
@@ -342,6 +345,10 @@ class SwapConfirmViewModel(
         refresh()
     }
 
+    fun setMevProtectionEnabled(enabled: Boolean) {
+        swapDefenseSystemService.setSwapProtectionEnabled(enabled)
+    }
+
     companion object {
         fun init(quote: SwapProviderQuote): CreationExtras.() -> SwapConfirmViewModel = {
             val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
@@ -385,6 +392,9 @@ data class SwapConfirmUiState(
     val hasSettings: Boolean,
     val hasNonceSettings: Boolean,
     val swapDefenseSystemMessage: DefenseSystemMessage?,
+    val mevProtectionEnabled: Boolean,
+    val supportsMevProtection: Boolean,
+    val mevProtectionActionAllowed: Boolean,
     val recipient: Address?,
     val slippage: BigDecimal?,
     val estimatedTime: Long?,
