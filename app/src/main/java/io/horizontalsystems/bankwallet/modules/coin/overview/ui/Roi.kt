@@ -19,9 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.modules.coin.RoiViewItem
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.roi.RoiSelectCoinsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -108,7 +109,7 @@ fun Roi(roi: List<RoiViewItem>, navController: NavBackStack<HSScreen>) {
         }
 
         CellUniversal(
-            onClick = { navController.slideFromRight(R.id.roiSelectCoinsFragment) }
+            onClick = { navController.addFromRight(RoiSelectCoinsFragment()) }
         ) {
             subhead2_leah(text = stringResource(R.string.CoinPage_ROI_SelectCoins))
             HFillSpacer(16.dp)

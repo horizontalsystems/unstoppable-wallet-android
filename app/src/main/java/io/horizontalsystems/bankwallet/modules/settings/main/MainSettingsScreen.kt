@@ -35,25 +35,37 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupManagerFragment
+import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.settings.about.AboutFragment
+import io.horizontalsystems.bankwallet.modules.settings.addresschecker.AddressCheckFragment
+import io.horizontalsystems.bankwallet.modules.settings.appearance.AppearanceFragment
 import io.horizontalsystems.bankwallet.modules.settings.banners.DonateBanner
 import io.horizontalsystems.bankwallet.modules.settings.banners.SubscriptionBanner
+import io.horizontalsystems.bankwallet.modules.settings.donate.DonateTokenSelectFragment
+import io.horizontalsystems.bankwallet.modules.settings.faq.FaqListFragment
+import io.horizontalsystems.bankwallet.modules.settings.guides.GuidesFragment
 import io.horizontalsystems.bankwallet.modules.settings.main.ui.BannerCarousel
+import io.horizontalsystems.bankwallet.modules.settings.privacy.PrivacySettingsFragment
+import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsFragment
+import io.horizontalsystems.bankwallet.modules.settings.subscription.SubscriptionFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
@@ -158,7 +170,7 @@ private fun SettingSections(
                 R.string.BlockchainSettings_Title,
                 R.drawable.box_24,
                 onClick = {
-                    navController.slideFromRight(R.id.blockchainSettingsFragment)
+                    navController.addFromRight(BlockchainSettingsFragment())
 
                     stat(
                         page = StatPage.Settings,
@@ -172,7 +184,7 @@ private fun SettingSections(
                 R.drawable.shield_24,
                 showAlert = uiState.securityCenterShowAlert,
                 onClick = {
-                    navController.slideFromRight(R.id.securitySettingsFragment)
+                    navController.addFromRight(SecuritySettingsFragment())
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Security))
                 }
@@ -182,7 +194,7 @@ private fun SettingSections(
                 R.string.Settings_Privacy,
                 R.drawable.lock_24,
                 onClick = {
-                    navController.slideFromRight(R.id.privacySettingsFragment)
+                    navController.addFromRight(PrivacySettingsFragment())
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
                 }
@@ -196,7 +208,7 @@ private fun SettingSections(
                 onClick = {
                     when (val state = viewModel.walletConnectSupportState) {
                         WCManager.SupportState.Supported -> {
-                            navController.slideFromRight(R.id.wcListFragment)
+                            navController.addFromRight(WCListFragment())
 
                             stat(
                                 page = StatPage.Settings,
@@ -280,7 +292,7 @@ private fun SettingSections(
                     R.string.Settings_AppSettings,
                     R.drawable.uw_logo_24,
                     onClick = {
-                        navController.slideFromRight(R.id.appearanceFragment)
+                        navController.addFromRight(AppearanceFragment())
 
                         stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Appearance))
                     }
@@ -293,7 +305,7 @@ private fun SettingSections(
                         R.drawable.premium_24,
                         value = if (uiState.hasSubscription) stringResource(R.string.SettingsSubscription_Active) else null,
                         onClick = {
-                            navController.slideFromRight(R.id.subscriptionFragment)
+                            navController.addFromRight(SubscriptionFragment())
                         }
                     )
                 }
@@ -304,7 +316,7 @@ private fun SettingSections(
                     R.string.BackupManager_Title,
                     R.drawable.file_24,
                     onClick = {
-                        navController.slideFromRight(R.id.backupManagerFragment)
+                        navController.addFromRight(BackupManagerFragment())
 
                         stat(
                             page = StatPage.Settings,
@@ -351,7 +363,7 @@ private fun SettingSections(
             iconTint = ComposeAppTheme.colors.jacob,
             onClick = {
                 navController.paidAction(SecureSend) {
-                    navController.slideFromRight(R.id.addressCheckFragment)
+                    navController.addFromRight(AddressCheckFragment())
                 }
                 stat(
                     page = StatPage.Settings,
@@ -371,7 +383,7 @@ private fun SettingSections(
                 R.drawable.ic_info_20,
                 showAlert = uiState.aboutAppShowAlert,
                 onClick = {
-                    navController.slideFromRight(R.id.aboutAppFragment)
+                    navController.addFromRight(AboutFragment())
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.AboutApp))
                 }
@@ -401,7 +413,7 @@ private fun SettingSections(
                 R.string.Settings_Faq,
                 R.drawable.message_24,
                 onClick = {
-                    navController.slideFromRight(R.id.faqListFragment)
+                    navController.addFromRight(FaqListFragment())
                 }
             )
         }, {
@@ -409,7 +421,7 @@ private fun SettingSections(
                 R.string.Guides_Title,
                 R.drawable.book_24,
                 onClick = {
-                    navController.slideFromRight(R.id.academyFragment)
+                    navController.addFromRight(GuidesFragment())
                 }
             )
         })
@@ -452,7 +464,7 @@ private fun SettingSections(
                 R.string.Settings_Donate,
                 R.drawable.ic_heart_24,
                 onClick = {
-                    navController.slideFromRight(R.id.donateTokenSelectFragment)
+                    navController.addFromRight(DonateTokenSelectFragment())
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
                 }

@@ -23,10 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -78,7 +78,7 @@ fun Eip20ApproveConfirmScreen(navController: NavBackStack<HSScreen>) {
         initialLoading = uiState.initialLoading,
         onClickBack = navController::removeLastOrNull,
         onClickFeeSettings = {
-            navController.slideFromRight(R.id.eip20ApproveTransactionSettingsFragment)
+            navController.addFromRight(Eip20ApproveTransactionSettingsFragment())
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()
