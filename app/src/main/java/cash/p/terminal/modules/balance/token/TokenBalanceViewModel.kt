@@ -20,7 +20,6 @@ import cash.p.terminal.core.managers.TransactionHiddenManager
 import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.core.storage.toRecordUidMap
 import cash.p.terminal.core.swappable
-import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase
 import cash.p.terminal.entities.SwapProviderTransaction
 import cash.p.terminal.featureStacking.ui.staking.StackingType
@@ -42,7 +41,6 @@ import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionViewItemFactory
 import cash.p.terminal.modules.transactions.withClearedAmlStatus
 import cash.p.terminal.modules.transactions.withUpdatedAmlStatus
-import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import cash.p.terminal.network.pirate.domain.useCase.GetChangeNowAssociatedCoinTickerUseCase
 import cash.p.terminal.premium.domain.PremiumSettings
 import cash.p.terminal.wallet.AdapterState
@@ -72,7 +70,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.math.BigDecimal
 
 private const val ADAPTER_AWAIT_TIMEOUT_MS = 5000L
@@ -92,7 +89,6 @@ class TokenBalanceViewModel(
     private val premiumSettings: PremiumSettings,
     private val amlStatusManager: AmlStatusManager,
     private val marketFavoritesManager: MarketFavoritesManager,
-    private val piratePlaceRepository: PiratePlaceRepository,
     private val stackingManager: StackingManager,
     private val priceManager: PriceManager,
     private val localStorage: ILocalStorage,
@@ -133,8 +129,6 @@ class TokenBalanceViewModel(
     private var isFavorite = marketFavoritesManager.isCoinInFavorites(wallet.coin.uid)
     private var stakingStatus: StakingStatus? = null
     private var stakingUnpaid: String? = null
-    private var stakingChecked = false
-    private var stakingCheckJob: Job? = null
     private var stakingAddress: String? = null
 
     private var displayDiffPricePeriod = localStorage.displayDiffPricePeriod
@@ -369,35 +363,7 @@ class TokenBalanceViewModel(
         val balance = balanceItem.balanceData.total
 
         stakingStatus = if (balance >= threshold) StakingStatus.ACTIVE else StakingStatus.INACTIVE
-        stakingCheckJob?.cancel()
         emitState()
-
-        if (stakingStatus == StakingStatus.ACTIVE) return
-        if (stakingChecked) return
-        stakingChecked = true
-
-        stakingCheckJob = viewModelScope.launch {
-            try {
-                val address = stakingAddress ?: return@launch
-                val coinId =
-                    if (wallet.isPirateCash()) {
-                        StackingType.PCASH.value.lowercase()
-                    } else {
-                        StackingType.COSANTA.value.lowercase()
-                    }
-                val investmentData = piratePlaceRepository.getInvestmentData(coinId, address)
-                val unrealized = tryOrNull { investmentData.unrealizedValue.toBigDecimal() }
-                stakingStatus = if (unrealized != null && unrealized > BigDecimal.ZERO) {
-                    StakingStatus.ACTIVE
-                } else {
-                    StakingStatus.INACTIVE
-                }
-            } catch (e: Exception) {
-                Timber.e(e, "Error checking staking status")
-                stakingStatus = StakingStatus.INACTIVE
-            }
-            emitState()
-        }
     }
 
     override fun createState() = TokenBalanceUiState(
