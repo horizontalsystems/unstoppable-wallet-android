@@ -40,6 +40,7 @@ import cash.p.terminal.modules.walletconnect.AccountTypeNotSupportedViewModel
 import cash.p.terminal.modules.solananetwork.SolanaNetworkService
 import cash.p.terminal.modules.solananetwork.SolanaNetworkViewModel
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigureViewModel
+import cash.p.terminal.modules.multiswap.SwapSelectCoinViewModel
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.DefaultDispatcherProvider
@@ -116,5 +117,11 @@ val viewModelModule = module {
     }
     viewModel { (mode: SafetyRulesModule.SafetyRulesMode, termTitles: List<String>) ->
         SafetyRulesViewModel(mode = mode, termTitles = termTitles, localStorage = get())
+    }
+    viewModel { (otherSelectedToken: Token?, activeAccount: Account) ->
+        SwapSelectCoinViewModel(
+            otherSelectedToken = otherSelectedToken,
+            activeAccount = activeAccount
+        )
     }
 }
