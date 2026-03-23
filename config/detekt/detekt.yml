@@ -1,0 +1,83 @@
+# Detekt configuration for Android/Compose/Koin project
+# Based on default config with project-specific overrides
+
+build:
+  maxIssues: 0  # fail on any issue (strict mode)
+
+complexity:
+  CyclomaticComplexMethod:
+    active: true
+    threshold: 15
+  LongMethod:
+    active: true
+    threshold: 60
+  LongParameterList:
+    active: true
+    functionThreshold: 8
+    constructorThreshold: 10
+    ignoreDefaultParameters: true
+    ignoreDataClasses: true
+    ignoreAnnotatedParameter: ['Composable']
+  TooManyFunctions:
+    active: true
+    thresholdInFiles: 15
+    thresholdInClasses: 15
+    thresholdInInterfaces: 15
+    thresholdInObjects: 15
+    thresholdInEnums: 15
+    ignoreDeprecated: true
+    ignorePrivate: true
+    ignoreOverridden: true
+
+exceptions:
+  TooGenericExceptionCaught:
+    active: false  # common pattern in swap/network code
+  SwallowedException:
+    active: false  # try/catch with Timber logging is our pattern
+
+naming:
+  FunctionNaming:
+    active: true
+    # Allow PascalCase for Composable functions
+    functionPattern: '([a-z][a-zA-Z0-9]*)|([A-Z][a-zA-Z0-9]*)'
+  TopLevelPropertyNaming:
+    active: true
+    constantPattern: '[A-Z][A-Za-z0-9_]*'
+  MatchingDeclarationName:
+    active: false  # multiple top-level declarations per file is common
+
+style:
+  ForbiddenComment:
+    active: false  # we use TODO comments
+  MagicNumber:
+    active: false  # too noisy for UI code with dp/sp values
+  MaxLineLength:
+    active: true
+    maxLineLength: 150
+    excludeCommentStatements: true
+    excludePackageStatements: true
+    excludeImportStatements: true
+  ReturnCount:
+    active: true
+    max: 5
+    excludeGuardClauses: true
+  UnusedImports:
+    active: true
+  UnusedPrivateMember:
+    active: true
+    allowedNames: '(_.*|Preview.*)'
+  WildcardImport:
+    active: false  # Compose imports often use wildcard
+  UnnecessaryAbstractClass:
+    active: false  # ViewModelUiState pattern uses abstract classes
+  ForbiddenMethodCall:
+    active: true
+    methods:
+      - 'kotlin.io.println'
+      - 'kotlin.io.print'
+
+potential-bugs:
+  CastToNullableType:
+    active: false  # as? is legitimate pattern
+  UnsafeCast:
+    active: true
