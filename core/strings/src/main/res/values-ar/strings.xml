@@ -663,7 +663,7 @@
     <string name="Transactions_Filter_ChooseBlockchain">Choose Blockchain</string>
     <string name="Transactions_Incoming">Received</string>
     <string name="Transactions_Outgoing">Sent</string>
-    <string name="Transactions_Swaps">Swaps</string>
+    <string name="Transactions_Swaps">التبادلات</string>
     <string name="Transactions_Approvals">Approvals</string>
     <string name="Transactions_Unknown">Unknown Transaction</string>
     <string name="Transactions_TonTransaction">Ton Transaction</string>
@@ -1815,7 +1815,6 @@
     <string name="multi_swap_completed">تم التبادل</string>
     <string name="multi_swap_no_providers">لا يوجد مزودون متاحون</string>
     <string name="multi_swap_finding_best_provider">جارٍ البحث عن أفضل مزود…</string>
-    <string name="multi_swap_list_title">التبادلات</string>
     <string name="multi_swap_continue">متابعة التبادل</string>
     <string name="multi_swap_unfinished">تبادل غير مكتمل</string>
     <string name="multi_swap_unfinished_plural">تبادلات غير مكتملة (%d)</string>

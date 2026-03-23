@@ -663,7 +663,7 @@
     <string name="Transactions_Filter_ChooseBlockchain">Blockchain Seç</string>
     <string name="Transactions_Incoming">Alındı</string>
     <string name="Transactions_Outgoing">Gönderildi</string>
-    <string name="Transactions_Swaps">Swap</string>
+    <string name="Transactions_Swaps">Takaslar</string>
     <string name="Transactions_Approvals">Onaylar</string>
     <string name="Transactions_Unknown">Bilinmeyen İşlem</string>
     <string name="Transactions_TonTransaction">Ton Transaction</string>
@@ -1804,7 +1804,6 @@ Uygulama, kolaylık sağlaması için basit bir şifreyle yedek oluşturmanıza 
     <string name="multi_swap_completed">Takas tamamlandı</string>
     <string name="multi_swap_no_providers">Kullanılabilir sağlayıcı yok</string>
     <string name="multi_swap_finding_best_provider">En iyi sağlayıcı aranıyor…</string>
-    <string name="multi_swap_list_title">Takaslar</string>
     <string name="multi_swap_continue">Takasa devam et</string>
     <string name="multi_swap_unfinished">Tamamlanmamış takas</string>
     <string name="multi_swap_unfinished_plural">Tamamlanmamış takaslar (%d)</string>

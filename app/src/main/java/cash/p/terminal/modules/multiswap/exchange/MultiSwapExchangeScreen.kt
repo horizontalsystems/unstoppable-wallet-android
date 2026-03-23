@@ -545,7 +545,7 @@ private fun BottomButtons(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CancelSwapBottomSheet(
+internal fun CancelSwapBottomSheet(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {

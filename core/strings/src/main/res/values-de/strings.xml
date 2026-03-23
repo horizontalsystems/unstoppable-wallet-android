@@ -656,7 +656,7 @@
     <string name="Transactions_Filter_ChooseBlockchain">Blockchain auswählen</string>
     <string name="Transactions_Incoming">Erhalten</string>
     <string name="Transactions_Outgoing">Gesendet</string>
-    <string name="Transactions_Swaps">Swaps</string>
+    <string name="Transactions_Swaps">Tausche</string>
     <string name="Transactions_Approvals">Genehmigungen</string>
     <string name="Transactions_Unknown">Unbekannte Transaktion</string>
     <string name="Transactions_TonTransaction">Ton Transaction</string>
@@ -1795,7 +1795,6 @@ Die App ermöglicht es Ihnen, aus Bequemlichkeit ein Backup mit einem einfachen 
     <string name="multi_swap_completed">Tausch abgeschlossen</string>
     <string name="multi_swap_no_providers">Keine Anbieter verfügbar</string>
     <string name="multi_swap_finding_best_provider">Besten Anbieter suchen…</string>
-    <string name="multi_swap_list_title">Tausche</string>
     <string name="multi_swap_continue">Tausch fortsetzen</string>
     <string name="multi_swap_unfinished">Unvollständiger Tausch</string>
     <string name="multi_swap_unfinished_plural">Unvollständige Tausche (%d)</string>

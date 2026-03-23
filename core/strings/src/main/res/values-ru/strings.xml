@@ -1992,7 +1992,6 @@
     <string name="multi_swap_completed">Обмен завершён</string>
     <string name="multi_swap_no_providers">Нет доступных провайдеров</string>
     <string name="multi_swap_finding_best_provider">Поиск лучшего провайдера…</string>
-    <string name="multi_swap_list_title">Обмены</string>
     <string name="multi_swap_continue">Продолжить обмен</string>
     <string name="multi_swap_unfinished">Незавершенный обмен</string>
     <string name="multi_swap_unfinished_plural">Незавершенные обмены (%d)</string>

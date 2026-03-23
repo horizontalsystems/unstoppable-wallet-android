@@ -663,7 +663,7 @@
     <string name="Transactions_Filter_ChooseBlockchain">Choose Blockchain</string>
     <string name="Transactions_Incoming">Received</string>
     <string name="Transactions_Outgoing">Sent</string>
-    <string name="Transactions_Swaps">Swaps</string>
+    <string name="Transactions_Swaps">Ruilingen</string>
     <string name="Transactions_Approvals">Approvals</string>
     <string name="Transactions_Unknown">Unknown Transaction</string>
     <string name="Transactions_TonTransaction">Ton Transaction</string>
@@ -1809,7 +1809,6 @@ De app stelt u in staat een back-up te maken met een eenvoudig wachtwoord voor u
     <string name="multi_swap_completed">Ruil voltooid</string>
     <string name="multi_swap_no_providers">Geen providers beschikbaar</string>
     <string name="multi_swap_finding_best_provider">Beste aanbieder zoeken…</string>
-    <string name="multi_swap_list_title">Ruilingen</string>
     <string name="multi_swap_continue">Ruil voortzetten</string>
     <string name="multi_swap_unfinished">Onvoltooide ruil</string>
     <string name="multi_swap_unfinished_plural">Onvoltooide ruilingen (%d)</string>

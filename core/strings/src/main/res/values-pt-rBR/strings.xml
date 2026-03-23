@@ -1802,7 +1802,6 @@ O aplicativo permite que você crie um backup com uma senha simples para sua con
     <string name="multi_swap_completed">Troca concluída</string>
     <string name="multi_swap_no_providers">Nenhum provedor disponível</string>
     <string name="multi_swap_finding_best_provider">Procurando o melhor provedor…</string>
-    <string name="multi_swap_list_title">Trocas</string>
     <string name="multi_swap_continue">Continuar troca</string>
     <string name="multi_swap_unfinished">Troca não finalizada</string>
     <string name="multi_swap_unfinished_plural">Trocas não finalizadas (%d)</string>

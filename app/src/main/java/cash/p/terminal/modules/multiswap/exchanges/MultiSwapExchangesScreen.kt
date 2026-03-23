@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
+import cash.p.terminal.modules.multiswap.exchange.CancelSwapBottomSheet
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.DraggableCardSimple
 import cash.p.terminal.ui_compose.components.HSpacer
@@ -53,12 +54,23 @@ internal fun MultiSwapExchangesScreen(
     onBack: () -> Unit,
 ) {
     var revealedCardId by remember { mutableStateOf<String?>(null) }
+    var deleteConfirmationId by remember { mutableStateOf<String?>(null) }
+
+    deleteConfirmationId?.let { id ->
+        CancelSwapBottomSheet(
+            onConfirm = {
+                deleteConfirmationId = null
+                onDelete(id)
+            },
+            onDismiss = { deleteConfirmationId = null },
+        )
+    }
 
     Scaffold(
         containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
-                title = stringResource(R.string.multi_swap_list_title),
+                title = stringResource(R.string.Transactions_Swaps),
                 navigationIcon = { HsBackButton(onClick = onBack) },
             )
         }
@@ -76,7 +88,7 @@ internal fun MultiSwapExchangesScreen(
                     onReveal = { revealedCardId = item.id },
                     onConceal = { revealedCardId = null },
                     onClick = { onSelect(item.id) },
-                    onDelete = { onDelete(item.id) },
+                    onDelete = { deleteConfirmationId = item.id },
                 )
                 VSpacer(height = 8.dp)
             }

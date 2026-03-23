@@ -659,7 +659,7 @@
     <string name="Transactions_Filter_ChooseBlockchain">Choisir la blockchain</string>
     <string name="Transactions_Incoming">Reçue</string>
     <string name="Transactions_Outgoing">Envoyée</string>
-    <string name="Transactions_Swaps">Echanger</string>
+    <string name="Transactions_Swaps">Échanges</string>
     <string name="Transactions_Approvals">Approbations</string>
     <string name="Transactions_Unknown">Transaction inconnue</string>
     <string name="Transactions_TonTransaction">Ton Transaction</string>
@@ -1800,7 +1800,6 @@ La aplicación permite crear una copia de seguridad con una contraseña sencilla
     <string name="multi_swap_completed">Échange terminé</string>
     <string name="multi_swap_no_providers">Aucun fournisseur disponible</string>
     <string name="multi_swap_finding_best_provider">Recherche du meilleur fournisseur…</string>
-    <string name="multi_swap_list_title">Échanges</string>
     <string name="multi_swap_continue">Continuer l\'échange</string>
     <string name="multi_swap_unfinished">Échange non terminé</string>
     <string name="multi_swap_unfinished_plural">Échanges non terminés (%d)</string>

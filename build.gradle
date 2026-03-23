@@ -51,6 +51,10 @@ subprojects {
         baseline = file("detekt-baseline.xml")
         parallel = true
     }
+
+    dependencies {
+        detektPlugins "io.nlopez.compose.rules:detekt:0.4.22"
+    }
 }
 
 allprojects {

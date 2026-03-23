@@ -659,7 +659,7 @@
     <string name="Transactions_Filter_ChooseBlockchain">选择区块链</string>
     <string name="Transactions_Incoming">已收到</string>
     <string name="Transactions_Outgoing">已发送</string>
-    <string name="Transactions_Swaps">掉期交易</string>
+    <string name="Transactions_Swaps">兑换列表</string>
     <string name="Transactions_Approvals">批准</string>
     <string name="Transactions_Unknown">未知交易</string>
     <string name="Transactions_TonTransaction">Ton Transaction</string>
@@ -1791,7 +1791,6 @@
     <string name="multi_swap_completed">兑换完成</string>
     <string name="multi_swap_no_providers">没有可用的提供商</string>
     <string name="multi_swap_finding_best_provider">正在查找最佳提供商…</string>
-    <string name="multi_swap_list_title">兑换列表</string>
     <string name="multi_swap_continue">继续兑换</string>
     <string name="multi_swap_unfinished">未完成的兑换</string>
     <string name="multi_swap_unfinished_plural">未完成的兑换 (%d)</string>

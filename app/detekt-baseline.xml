@@ -81,6 +81,67 @@
     <ID>ComplexCondition:TransactionInfoViewItemFactory.kt$TransactionInfoViewItemFactory$transactionItem.swapAmountOut != null &amp;&amp; transactionItem.swapCoinCodeOut != null &amp;&amp; transactionItem.swapCoinCodeIn != null &amp;&amp; transactionItem.swapAmountIn != null</ID>
     <ID>ComplexCondition:TransactionViewItemFactoryHelper.kt$TransactionViewItemFactoryHelper$decimalValueIn == null || decimalValueOut == null || valueInDecimals == null || valueOutDecimals == null</ID>
     <ID>ComplexCondition:TronAccountManager.kt$TronAccountManager$initial &amp;&amp; account.origin == AccountOrigin.Restored &amp;&amp; !account.isWatchAccount &amp;&amp; !shouldAutoEnableTokens</ID>
+    <ID>ComposableNaming:MainSettingsScreen.kt$previewSettingsScreen</ID>
+    <ID>ComposableParamOrder:Badge.kt$Badge</ID>
+    <ID>ComposableParamOrder:Badge.kt$BadgeBase</ID>
+    <ID>ComposableParamOrder:Badge.kt$BadgeText</ID>
+    <ID>ComposableParamOrder:Badge.kt$BadgeWithDiff</ID>
+    <ID>ComposableParamOrder:BalanceCard.kt$BalanceCard</ID>
+    <ID>ComposableParamOrder:BalanceItems.kt$Note</ID>
+    <ID>ComposableParamOrder:BalanceItems.kt$NoteError</ID>
+    <ID>ComposableParamOrder:BalanceItems.kt$NoteWarning</ID>
+    <ID>ComposableParamOrder:BlockchainSettingsFragment.kt$BlockchainSettingsBlock</ID>
+    <ID>ComposableParamOrder:ButtonPrimaryCustomColor.kt$ButtonPrimaryCustomColor</ID>
+    <ID>ComposableParamOrder:CheckAddressInput.kt$CheckAddressInput</ID>
+    <ID>ComposableParamOrder:CoinListComponents.kt$CoinList</ID>
+    <ID>ComposableParamOrder:CoinListComponents.kt$ListEmptyView</ID>
+    <ID>ComposableParamOrder:CoinListComponents.kt$ScreenMessageWithAction</ID>
+    <ID>ComposableParamOrder:CoinListOrderable.kt$CoinListOrderable</ID>
+    <ID>ComposableParamOrder:Components.kt$AnalyticsFooterCell</ID>
+    <ID>ComposableParamOrder:Components.kt$BoxItemCell</ID>
+    <ID>ComposableParamOrder:ConfirmTransactionScreen.kt$ConfirmTransactionScreen</ID>
+    <ID>ComposableParamOrder:EtfFragment.kt$GraphicPointer</ID>
+    <ID>ComposableParamOrder:EvmNetworkFragment.kt$RpcCell</ID>
+    <ID>ComposableParamOrder:Forms.kt$FormsInput</ID>
+    <ID>ComposableParamOrder:Forms.kt$FormsInputMultiline</ID>
+    <ID>ComposableParamOrder:FormsInputAddress.kt$FormsInputAddress</ID>
+    <ID>ComposableParamOrder:HSAddressInput.kt$HSAddressInput</ID>
+    <ID>ComposableParamOrder:HSAmountInput.kt$HSAmountInput</ID>
+    <ID>ComposableParamOrder:HSFeeInput.kt$HSFeeRaw</ID>
+    <ID>ComposableParamOrder:HeaderCell.kt$HeaderCell</ID>
+    <ID>ComposableParamOrder:IndicatorsFragment.kt$IndicatorCell</ID>
+    <ID>ComposableParamOrder:MarkdownContent.kt$MarkdownContent</ID>
+    <ID>ComposableParamOrder:MarketCell.kt$MarketCoin</ID>
+    <ID>ComposableParamOrder:MarketCell.kt$MarketCoinClear</ID>
+    <ID>ComposableParamOrder:MarketFiltersFragment.kt$AdvancedSearchSwitch</ID>
+    <ID>ComposableParamOrder:MarketFiltersFragment.kt$SingleSelectBottomSheetContent</ID>
+    <ID>ComposableParamOrder:NftAssetFragment.kt$ChipVerticalGrid</ID>
+    <ID>ComposableParamOrder:PinNumpad.kt$ImageKey</ID>
+    <ID>ComposableParamOrder:PinNumpad.kt$PinNumpad</ID>
+    <ID>ComposableParamOrder:PinTopBlock.kt$PinTopBlock</ID>
+    <ID>ComposableParamOrder:QRScannerScreen.kt$QRScannerScreen</ID>
+    <ID>ComposableParamOrder:QuoteInfoRow.kt$QuoteInfoRow</ID>
+    <ID>ComposableParamOrder:ReceiveAddressScreen.kt$AmountInputDialog</ID>
+    <ID>ComposableParamOrder:ReceiveAddressScreen.kt$ReceiveAddressScreen</ID>
+    <ID>ComposableParamOrder:RestorePhraseScreen.kt$RestorePhrase</ID>
+    <ID>ComposableParamOrder:RestorePhraseScreen.kt$SuggestionsBar</ID>
+    <ID>ComposableParamOrder:SearchBar.kt$SearchBar</ID>
+    <ID>ComposableParamOrder:SearchBarV2.kt$SearchBarV2</ID>
+    <ID>ComposableParamOrder:SelectorDialogCompose.kt$SelectorDialogCompose</ID>
+    <ID>ComposableParamOrder:SemiCircleChart.kt$SemiCircleChart</ID>
+    <ID>ComposableParamOrder:SuggestionsBar.kt$SuggestionsBar</ID>
+    <ID>ComposableParamOrder:SwapConfirmScreen.kt$TokenRow</ID>
+    <ID>ComposableParamOrder:SwapConfirmScreen.kt$TokenRowPure</ID>
+    <ID>ComposableParamOrder:SwapConfirmScreen.kt$TokenRowUnlimited</ID>
+    <ID>ComposableParamOrder:SwapDirectionIndicator.kt$SwapDirectionIndicatorContent</ID>
+    <ID>ComposableParamOrder:SwapSettingsComponents.kt$InputWithButtons</ID>
+    <ID>ComposableParamOrder:TokenBalanceScreen.kt$TokenBalanceScreen</ID>
+    <ID>ComposableParamOrder:TokenSelectScreen.kt$TokenSelectScreen</ID>
+    <ID>ComposableParamOrder:TonConnectSessionList.kt$TCSessionCell</ID>
+    <ID>ComposableParamOrder:TransactionsScreen.kt$TransactionCell</ID>
+    <ID>ComposableParamOrder:UnifiedCoinAddressCheck.kt$SecurityCheckCard</ID>
+    <ID>ComposableParamOrder:UnifiedCoinAddressCheck.kt$UnifiedAddressCheckScreen</ID>
+    <ID>ComposableParamOrder:WCSessionCell.kt$WCSessionCell</ID>
     <ID>ConstructorParameterNaming:BaseThorChainProvider.kt$ThornodeAPI.Response.QuoteSwap$val dust_threshold: String?</ID>
     <ID>ConstructorParameterNaming:BaseThorChainProvider.kt$ThornodeAPI.Response.QuoteSwap$val expected_amount_out: BigDecimal</ID>
     <ID>ConstructorParameterNaming:BaseThorChainProvider.kt$ThornodeAPI.Response.QuoteSwap$val inbound_address: String</ID>
@@ -146,6 +207,9 @@
     <ID>ConstructorParameterNaming:OpenSeaService.kt$OpenSeaNftApiResponse.Event$val total_price: BigDecimal?</ID>
     <ID>ConstructorParameterNaming:OpenSeaService.kt$OpenSeaNftApiResponse.Event.PaymentToken$val eth_price: BigDecimal</ID>
     <ID>ConstructorParameterNaming:OpenSeaService.kt$OpenSeaNftApiResponse.Events$val asset_events: List&lt;Event&gt;</ID>
+    <ID>ContentSlotReused:CrossSlide.kt$content</ID>
+    <ID>ContentSlotReused:MarkdownContent.kt$&lt;no name provided&gt;$visitChildren</ID>
+    <ID>ContentSlotReused:TokenSelectScreen.kt$header</ID>
     <ID>CyclomaticComplexMethod:AboutPremiumScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun AboutPremiumScreen( uiState: AboutPremiumUiState, uiEvents: Flow&lt;TrialPremiumResult&gt;, onRetryClick: () -&gt; Unit, onCloseClick: () -&gt; Unit, onUrlClick: (String) -&gt; Unit, onTryForFreeClick: () -&gt; Unit )</ID>
     <ID>CyclomaticComplexMethod:AccountsStorage.kt$AccountsStorage$private fun toAccount(record: AccountRecord?): Account?</ID>
     <ID>CyclomaticComplexMethod:AdapterFactory.kt$AdapterFactory$private suspend fun getAdapter(wallet: Wallet)</ID>
@@ -303,6 +367,30 @@
     <ID>InvalidPackageDeclaration:RxBaseTest.kt$package cash.p.terminal.modules</ID>
     <ID>InvalidPackageDeclaration:TransactionViewItemFactoryTest.kt$package cash.p.terminal.core.factories</ID>
     <ID>InvalidPackageDeclaration:VersionTest.kt$package cash.p.terminal.core.managers</ID>
+    <ID>LambdaParameterEventTrailing:BalanceItems.kt$onClick</ID>
+    <ID>LambdaParameterEventTrailing:BalanceItems.kt$onClose</ID>
+    <ID>LambdaParameterEventTrailing:CheckAddressInput.kt$onValueChange</ID>
+    <ID>LambdaParameterEventTrailing:Components.kt$onActionClick</ID>
+    <ID>LambdaParameterEventTrailing:EtfFragment.kt$onSelect</ID>
+    <ID>LambdaParameterEventTrailing:Forms.kt$onValueChange</ID>
+    <ID>LambdaParameterEventTrailing:FormsInputAddress.kt$onValueChange</ID>
+    <ID>LambdaParameterEventTrailing:MarkdownContent.kt$onUrlClick</ID>
+    <ID>LambdaParameterEventTrailing:ReceiveAddressScreen.kt$onClick</ID>
+    <ID>LambdaParameterEventTrailing:ResendBitcoinFragment.kt$ResendBitcoinFragment$onClickSend</ID>
+    <ID>LambdaParameterEventTrailing:RestorePhraseScreen.kt$onClick</ID>
+    <ID>LambdaParameterEventTrailing:SwapDirectionIndicator.kt$onClick</ID>
+    <ID>LambdaParameterEventTrailing:SwapSettingsComponents.kt$onValueChange</ID>
+    <ID>LambdaParameterInRestartableEffect:AddTokenFragment.kt$onCompleted</ID>
+    <ID>LambdaParameterInRestartableEffect:ContactScreen.kt$onNavigateToBack</ID>
+    <ID>LambdaParameterInRestartableEffect:DuplicateWalletScreen.kt$onFinish</ID>
+    <ID>LambdaParameterInRestartableEffect:HardwareWalletFragment.kt$onFinish</ID>
+    <ID>LambdaParameterInRestartableEffect:LazyListState.kt$onLoadMore</ID>
+    <ID>LambdaParameterInRestartableEffect:MainFragment.kt$intentHandled</ID>
+    <ID>LambdaParameterInRestartableEffect:MoneroConfigureFragment.kt$onCloseWithResult</ID>
+    <ID>LambdaParameterInRestartableEffect:MultiSwapExchangesFragment.kt$onBack</ID>
+    <ID>LambdaParameterInRestartableEffect:QRScannerScreen.kt$onErrorMessageConsumed</ID>
+    <ID>LambdaParameterInRestartableEffect:QRScannerScreen.kt$onScan</ID>
+    <ID>LambdaParameterInRestartableEffect:RestoreBlockchains.kt$onFinish</ID>
     <ID>LargeClass:BackupProvider.kt$BackupProvider</ID>
     <ID>LargeClass:CoinAnalyticsViewModel.kt$CoinAnalyticsViewModel : ViewModelUiState</ID>
     <ID>LargeClass:DeniableEncryptionManagerTest.kt$DeniableEncryptionManagerTest</ID>
@@ -680,6 +768,200 @@
     <ID>LongParameterList:UtxoExpertModeScreen.kt$( id: String, selected: Boolean, showTopBorder: Boolean, title: String, subtitle: String, value: String, subValue: String?, onItemClicked: (String) -&gt; Unit, topRoundedCorners: Boolean, bottomRoundedCorners: Boolean )</ID>
     <ID>LoopWithTooManyJumpStatements:NftHoldingsService.kt$NftHoldingsService$for</ID>
     <ID>LoopWithTooManyJumpStatements:SyncPendingMultiSwapUseCase.kt$SyncPendingMultiSwapUseCase$for</ID>
+    <ID>Material2:AddressEnterBottomSheet.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:AddressScreen.kt$import androidx.compose.material.ExperimentalMaterialApi</ID>
+    <ID>Material2:AddressScreen.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:AddressScreen.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:AddressScreen.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:Alert.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:Alert.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:AmlCheckPromoBanner.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:AmlCheckPromoBanner.kt$import androidx.compose.material.ripple</ID>
+    <ID>Material2:AmlCheckRow.kt$import androidx.compose.material.ripple</ID>
+    <ID>Material2:AmountCell.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:AppIconScreen.kt$import androidx.compose.material.ExperimentalMaterialApi</ID>
+    <ID>Material2:AppIconScreen.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:AppIconScreen.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:AppIconScreen.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:BackupManagerFragment.kt$import androidx.compose.material.ExperimentalMaterialApi</ID>
+    <ID>Material2:BackupManagerFragment.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:BackupManagerFragment.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:BackupManagerFragment.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:Badge.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:BalanceCard.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:BalanceCard.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:BalanceForAccount.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:BalanceForAccount.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:BalanceForAccount.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:BalanceItems.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:BaseCurrencySettingsFragment.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:BaseCurrencySettingsFragment.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:BaseCurrencySettingsFragment.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:BlockchainSettingsFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:BottomSheetsElements.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:BtcBlockchainSettingsScreen.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:ButtonPrimaryCustomColor.kt$import androidx.compose.material.ExperimentalMaterialApi</ID>
+    <ID>Material2:CardTabs.kt$import androidx.compose.material.ScrollableTabRow</ID>
+    <ID>Material2:CardTabs.kt$import androidx.compose.material.Tab</ID>
+    <ID>Material2:CardTabs.kt$import androidx.compose.material.TabRowDefaults</ID>
+    <ID>Material2:CellNews.kt$import androidx.compose.material.Card</ID>
+    <ID>Material2:CellNews.kt$import androidx.compose.material.ExperimentalMaterialApi</ID>
+    <ID>Material2:CellNews.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:CellTweet.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:CheckAddressInput.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:CoinAnalyticsInfoFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:CoinAuditsFragment.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:CoinImage.kt$import androidx.compose.material.ripple</ID>
+    <ID>Material2:CoinListComponents.kt$import androidx.compose.material.Card</ID>
+    <ID>Material2:CoinListComponents.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:CoinListComponents.kt$import androidx.compose.material.ExperimentalMaterialApi</ID>
+    <ID>Material2:CoinListComponents.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:CoinListOrderable.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:CoinMajorHoldersFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:CoinMarketsScreen.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:CoinOverviewScreen.kt$import androidx.compose.material.CircularProgressIndicator</ID>
+    <ID>Material2:CoinRankFragment.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:Components.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:Components.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:ContactScreen.kt$import androidx.compose.material.ExperimentalMaterialApi</ID>
+    <ID>Material2:ContactScreen.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:ContactScreen.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:ContactScreen.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:ContactsScreen.kt$import androidx.compose.material.ExperimentalMaterialApi</ID>
+    <ID>Material2:ContactsScreen.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:ContactsScreen.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:ContactsScreen.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:Containers.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:Contracts.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:CreateAccountAdvanced.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:CrossSlide.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:DetectorsFragment.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:DoubleText.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:EtfFragment.kt$import androidx.compose.material.CircularProgressIndicator</ID>
+    <ID>Material2:EvmNetworkFragment.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:EvmNetworkFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:EvmPrivateKeyFragment.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:EvmPrivateKeyFragment.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:EvmPrivateKeyFragment.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:FeeCell.kt$import androidx.compose.material.CircularProgressIndicator</ID>
+    <ID>Material2:FeeCell.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:FeePriorityInfoFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:FilterBlockchainFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:FilterCoinFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:Forms.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:FormsInputAddress.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:GeneralPrivateKeyFragment.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:GeneralPrivateKeyFragment.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:GeneralPrivateKeyFragment.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:GuidesFragment.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:HSAmountInput.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:HSAmountInput.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:HSRow.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:HsBottomNavigation.kt$import androidx.compose.material.ripple</ID>
+    <ID>Material2:HsSlider.kt$import androidx.compose.material.Slider</ID>
+    <ID>Material2:HsSlider.kt$import androidx.compose.material.SliderDefaults</ID>
+    <ID>Material2:HsTextButton.kt$import androidx.compose.material.ExperimentalMaterialApi</ID>
+    <ID>Material2:HsTextButton.kt$import androidx.compose.material.LocalRippleConfiguration</ID>
+    <ID>Material2:HsTextButton.kt$import androidx.compose.material.TextButton</ID>
+    <ID>Material2:ImportWalletFragment.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:ImportWalletFragment.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:ImportWalletFragment.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:InfoHeader.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:InfoHeader.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:KeyAccountInfoFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:MainFragment.kt$import androidx.compose.material.BadgedBox</ID>
+    <ID>Material2:MainSettingsScreen.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:MainSettingsScreen.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:ManageAccountScreen.kt$import androidx.compose.material.ripple</ID>
+    <ID>Material2:ManageWalletsScreen.kt$import androidx.compose.material.CircularProgressIndicator</ID>
+    <ID>Material2:MarkdownFooter.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:MarkdownFooter.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:MarketCategoryFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:MarketCell.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:MarketFiltersFragment.kt$import androidx.compose.material.ExperimentalMaterialApi</ID>
+    <ID>Material2:MarketFiltersFragment.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:MarketFiltersFragment.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:MarketFiltersFragment.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:MarketFiltersResultsFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:MarketOverviewBoards.kt$import androidx.compose.material.ExperimentalMaterialApi</ID>
+    <ID>Material2:MarketOverviewBoards.kt$import androidx.compose.material.LocalMinimumInteractiveComponentEnforcement</ID>
+    <ID>Material2:MarketOverviewMetrics.kt$import androidx.compose.material.Card</ID>
+    <ID>Material2:MarketOverviewMetrics.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:MarketScreen.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:MarketSearchFragment.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:MarketsSectionHeader.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:NftAssetFragment.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:NftCollectionEventsScreen.kt$import androidx.compose.material.*</ID>
+    <ID>Material2:NftCollectionOverviewScreen.kt$import androidx.compose.material.Card</ID>
+    <ID>Material2:NftCollectionOverviewScreen.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:NftPreview.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:OverallScoreInfoFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:OverallScoreInfoFragment.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:PrivacyScreen.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:PrivacyScreen.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:QRScannerScreen.kt$androidx.compose.material.CircularProgressIndicator( modifier = Modifier.size(48.dp), color = ComposeAppTheme.colors.leah )</ID>
+    <ID>Material2:ReceiveStellarAssetScreen.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:ReceiveStellarAssetScreen.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:ReceiveStellarAssetScreen.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:RestoreLocalFragment.kt$import androidx.compose.material.ExperimentalMaterialApi</ID>
+    <ID>Material2:RestoreLocalFragment.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:RestoreLocalFragment.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:RestoreLocalFragment.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:Roi.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:SearchBar.kt$import androidx.compose.material.OutlinedTextField</ID>
+    <ID>Material2:SearchBar.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:SearchBar.kt$import androidx.compose.material.TextFieldDefaults</ID>
+    <ID>Material2:SearchBar.kt$import androidx.compose.material.TopAppBar</ID>
+    <ID>Material2:SearchBarV2.kt$import androidx.compose.material.OutlinedTextField</ID>
+    <ID>Material2:SearchBarV2.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:SearchBarV2.kt$import androidx.compose.material.TextFieldDefaults</ID>
+    <ID>Material2:SecretKeyScreen.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:SecretKeyScreen.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:SecretKeyScreen.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:SelectBlockchainsFragment.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:SelectBlockchainsFragment.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:SelectSwapCoinDialogScreen.kt$import androidx.compose.material.CircularProgressIndicator</ID>
+    <ID>Material2:SelectorDialogCompose.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:SelectorDialogCompose.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:SendBtcAdvancedSettingsScreen.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:SendBtcAdvancedSettingsScreen.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:SendBtcAdvancedSettingsScreen.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:SendEvmTransactionView.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:SetDuressPinIntroFragment.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:ShowExtendedKeyFragment.kt$import androidx.compose.material.ExperimentalMaterialApi</ID>
+    <ID>Material2:ShowExtendedKeyFragment.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:ShowExtendedKeyFragment.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:ShowExtendedKeyFragment.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:SolanaNetworkFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:SubscriptionInfoFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:SuggestionsBar.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:SwapConfirmScreen.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:SwapDirectionIndicator.kt$import androidx.compose.material.ripple</ID>
+    <ID>Material2:SwapFragment.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:SwapFragment.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:SwapSelectProviderScreen.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:SwapSettingsComponents.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:Title.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:TonConnectMainScreen.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:TonConnectMainScreen.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:TonConnectMainScreen.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:TopNftCollectionsFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:TransactionDoubleSpendInfoFragment.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:TransactionDoubleSpendInfoFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:TransactionInputSortModeInfoSceen.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:TransactionLockTimeInfoFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:TransactionStatusInfoFragment.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:TransactionsFilterFragment.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:TransactionsScreen.kt$import androidx.compose.material.Surface</ID>
+    <ID>Material2:TransactionsScreen.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:UnifiedCoinAddressCheck.kt$import androidx.compose.material.Card</ID>
+    <ID>Material2:UtxoExpertModeScreen.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:WCSessionCell.kt$import androidx.compose.material.Divider</ID>
+    <ID>Material2:WCSessionFragment.kt$import androidx.compose.material.Text</ID>
+    <ID>Material2:WCSessionScreen.kt$import androidx.compose.material.ModalBottomSheetLayout</ID>
+    <ID>Material2:WCSessionScreen.kt$import androidx.compose.material.ModalBottomSheetValue</ID>
+    <ID>Material2:WCSessionScreen.kt$import androidx.compose.material.rememberModalBottomSheetState</ID>
+    <ID>Material2:WcRequestScreen.kt$import androidx.compose.material.Scaffold</ID>
     <ID>MaxLineLength:About.kt$About(text = "Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator. Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator. Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator. Bitcoin is a cryptocurrency and worldwide payment system. It is the first decentralized digital currency, as the system works without a central bank or single administrator. Bitcoin is a cryptocurrency")</ID>
     <ID>MaxLineLength:AddRpcViewModel.kt$AddRpcViewModel$urlCaution = Caution(cash.p.terminal.strings.helpers.Translator.getString(R.string.AddEvmSyncSource_Warning_UrlExists), Caution.Type.Warning)</ID>
     <ID>MaxLineLength:AppStatusScreen.kt$BlockContent.Text("So then I thought what if I use chat GPT, save a link to my home screen on my phone, and start a new thread on it called MyFitness app. For anyone not familiar with chat GPT you can essentially give it prompts and get it to give outputs that provide information you need. Not always 100% correct but you can give it feedback to adjust as needed.")</ID>
@@ -787,6 +1069,358 @@
     <ID>MayBeConst:ChartIndicatorManager.kt$ChartIndicatorManager.Companion$val rsiPeriod = 12</ID>
     <ID>MayBeConst:TransactionViewItemFactoryHelper.kt$TransactionViewItemFactoryHelper$val zeroAddress = "0x0000000000000000000000000000000000000000"</ID>
     <ID>MemberNameEqualsClassName:T.kt$T$fun t(reset: Boolean = false)</ID>
+    <ID>ModifierComposed:Shake.kt$shake</ID>
+    <ID>ModifierMissing:About.kt$About</ID>
+    <ID>ModifierMissing:AboutPremiumScreen.kt$AboutPremiumScreen</ID>
+    <ID>ModifierMissing:ActionRow.kt$ActionsRow</ID>
+    <ID>ModifierMissing:ActivateSubscriptionFragment.kt$ActivateSubscriptionScreen</ID>
+    <ID>ModifierMissing:ActivateTokenFragment.kt$ActivateTokenScreen</ID>
+    <ID>ModifierMissing:AddRpcScreen.kt$AddRpcScreen</ID>
+    <ID>ModifierMissing:AddTokenBlockchainSelector.kt$AddTokenBlockchainSelectorScreen</ID>
+    <ID>ModifierMissing:AdditionalDataCell2.kt$AdditionalDataCell2</ID>
+    <ID>ModifierMissing:AddressCell.kt$AddressCell</ID>
+    <ID>ModifierMissing:AddressCheckBlockchainSelector.kt$AddressCheckBlockchainSelectorScreen</ID>
+    <ID>ModifierMissing:AddressCheckTokenSelector.kt$AddressCheckTokenSelectorScreen</ID>
+    <ID>ModifierMissing:AddressCheckerFragment.kt$AddressCheckerScreen</ID>
+    <ID>ModifierMissing:AddressEnterBottomSheet.kt$InfoBlock</ID>
+    <ID>ModifierMissing:AddressFormatSelectScreen.kt$AddressFormatCell</ID>
+    <ID>ModifierMissing:AddressFormatSelectScreen.kt$AddressFormatSelectScreen</ID>
+    <ID>ModifierMissing:Alert.kt$AlertHeader</ID>
+    <ID>ModifierMissing:Alert.kt$AlertItem</ID>
+    <ID>ModifierMissing:AmountCell.kt$AmountCell</ID>
+    <ID>ModifierMissing:AppStatusScreen.kt$AppStatusScreen</ID>
+    <ID>ModifierMissing:AssetSettingsScreen.kt$AssetSettingsScreen</ID>
+    <ID>ModifierMissing:BackupConfirmKeyFragment.kt$RecoveryPhraseVerifyScreen</ID>
+    <ID>ModifierMissing:BackupKeyFragment.kt$RecoveryPhraseScreen</ID>
+    <ID>ModifierMissing:BackupLocalPassword.kt$LocalBackupPasswordScreen</ID>
+    <ID>ModifierMissing:BackupLocalTerms.kt$LocalBackupTermsScreen</ID>
+    <ID>ModifierMissing:BackupRecoveryPhraseDialog.kt$BackupRecoveryPhraseScreen</ID>
+    <ID>ModifierMissing:BackupRequiredDialog.kt$BackupRequiredScreen</ID>
+    <ID>ModifierMissing:BalanceCard.kt$BalanceCard</ID>
+    <ID>ModifierMissing:BalanceCard.kt$BalanceCardInner</ID>
+    <ID>ModifierMissing:BalanceCard.kt$BalanceCardSwipable</ID>
+    <ID>ModifierMissing:BalanceForAccount.kt$BalanceTitleRow</ID>
+    <ID>ModifierMissing:BalanceItems.kt$BalanceItems</ID>
+    <ID>ModifierMissing:BalanceNoAccount.kt$BalanceNoAccount</ID>
+    <ID>ModifierMissing:BlockchainSelectorScreen.kt$BlockchainSelectorScreen</ID>
+    <ID>ModifierMissing:BlockchainSettingsFragment.kt$BlockchainSettingsBlock</ID>
+    <ID>ModifierMissing:BottomSheetSelectorMultiple.kt$BottomSheetSelectorMultiple</ID>
+    <ID>ModifierMissing:BottomSheetsElements.kt$BottomSheetsElementsButtons</ID>
+    <ID>ModifierMissing:BottomSheetsElements.kt$BottomSheetsElementsCheckbox</ID>
+    <ID>ModifierMissing:BottomSheetsElements.kt$BottomSheetsElementsHeader</ID>
+    <ID>ModifierMissing:BottomSheetsElements.kt$BottomSheetsElementsInput</ID>
+    <ID>ModifierMissing:BottomSheetsElements.kt$BottomSheetsElementsText</ID>
+    <ID>ModifierMissing:CardTabs.kt$CardTabs</ID>
+    <ID>ModifierMissing:CardsSwapInfo.kt$CardsSwapInfo</ID>
+    <ID>ModifierMissing:CellLink.kt$CellLink</ID>
+    <ID>ModifierMissing:CellNews.kt$CellNews</ID>
+    <ID>ModifierMissing:CellTweet.kt$CellTweet</ID>
+    <ID>ModifierMissing:ChooseContactFragment.kt$ChooseContactScreen</ID>
+    <ID>ModifierMissing:CoinAuditsFragment.kt$CoinAudit</ID>
+    <ID>ModifierMissing:CoinAuditsFragment.kt$CoinAuditHeader</ID>
+    <ID>ModifierMissing:CoinFragment.kt$CoinNotFound</ID>
+    <ID>ModifierMissing:CoinFragment.kt$CoinTabs</ID>
+    <ID>ModifierMissing:CoinImage.kt$CoinIconWithSyncProgress</ID>
+    <ID>ModifierMissing:CoinInvestmentsFragment.kt$CoinInvestmentFund</ID>
+    <ID>ModifierMissing:CoinInvestmentsFragment.kt$CoinInvestmentHeader</ID>
+    <ID>ModifierMissing:CoinListComponents.kt$CategoryCard</ID>
+    <ID>ModifierMissing:CoinListComponents.kt$CoinList</ID>
+    <ID>ModifierMissing:CoinListComponents.kt$DescriptionCard</ID>
+    <ID>ModifierMissing:CoinListComponents.kt$ListErrorView</ID>
+    <ID>ModifierMissing:CoinListComponents.kt$TopCloseButton</ID>
+    <ID>ModifierMissing:CoinListOrderable.kt$CoinListOrderable</ID>
+    <ID>ModifierMissing:CoinMarketsScreen.kt$CoinMarketCell</ID>
+    <ID>ModifierMissing:CoinMarketsScreen.kt$CoinMarketList</ID>
+    <ID>ModifierMissing:CoinMarketsScreen.kt$CoinMarketsMenu</ID>
+    <ID>ModifierMissing:CoinMarketsScreen.kt$CoinMarketsScreen</ID>
+    <ID>ModifierMissing:CoinOverviewScreen.kt$CoinOverviewScreen</ID>
+    <ID>ModifierMissing:CoinOverviewScreen.kt$Error</ID>
+    <ID>ModifierMissing:CoinScreenTitle.kt$CoinScreenTitle</ID>
+    <ID>ModifierMissing:CoinTweetsScreen.kt$CoinTweetsScreen</ID>
+    <ID>ModifierMissing:Components.kt$AnalyticsBlockHeader</ID>
+    <ID>ModifierMissing:Components.kt$AnalyticsChart</ID>
+    <ID>ModifierMissing:Components.kt$AnalyticsContainer</ID>
+    <ID>ModifierMissing:Components.kt$AnalyticsContentNumber</ID>
+    <ID>ModifierMissing:Components.kt$AnalyticsFooterCell</ID>
+    <ID>ModifierMissing:Composables.kt$Cautions</ID>
+    <ID>ModifierMissing:Composables.kt$Eip1559FeeSettings</ID>
+    <ID>ModifierMissing:Composables.kt$FeeInfoCell</ID>
+    <ID>ModifierMissing:Composables.kt$LegacyFeeSettings</ID>
+    <ID>ModifierMissing:ConfirmDeleteAllPairingsDialog.kt$ConfirmDeleteAllScreen</ID>
+    <ID>ModifierMissing:ConfirmTransactionScreen.kt$ConfirmTransactionScreen</ID>
+    <ID>ModifierMissing:ContactScreen.kt$ConfirmationBottomSheet</ID>
+    <ID>ModifierMissing:ContactsScreen.kt$Contact</ID>
+    <ID>ModifierMissing:Containers.kt$Box44</ID>
+    <ID>ModifierMissing:Contracts.kt$Contracts</ID>
+    <ID>ModifierMissing:CreateAccountAdvanced.kt$CreateAccountAdvancedScreen</ID>
+    <ID>ModifierMissing:CreateAccountAdvanced.kt$MnemonicLanguageCell</ID>
+    <ID>ModifierMissing:CreateAccountAdvanced.kt$PassphraseCell</ID>
+    <ID>ModifierMissing:DataFieldFee.kt$DataFieldFee</ID>
+    <ID>ModifierMissing:DescriptionMarkdown.kt$DescriptionMarkdown</ID>
+    <ID>ModifierMissing:Descriptions.kt$Description</ID>
+    <ID>ModifierMissing:DetectorsFragment.kt$DetectorCell</ID>
+    <ID>ModifierMissing:DetectorsFragment.kt$IssueList</ID>
+    <ID>ModifierMissing:DisplayOptionsScreen.kt$PriceParametersSection</ID>
+    <ID>ModifierMissing:DonateAddressesFragment.kt$DonateScreen</ID>
+    <ID>ModifierMissing:DoubleText.kt$DoubleText</ID>
+    <ID>ModifierMissing:DuplicateWalletScreen.kt$DuplicateWalletScreen</ID>
+    <ID>ModifierMissing:DuressPasscodeBlock.kt$DuressPasscodeBlock</ID>
+    <ID>ModifierMissing:Eip20ApproveFragment.kt$Eip20ApproveScreen</ID>
+    <ID>ModifierMissing:Eip20RevokeConfirmFragment.kt$Eip20RevokeScreen</ID>
+    <ID>ModifierMissing:EmaSettingsScreen.kt$EmaSettingsScreen</ID>
+    <ID>ModifierMissing:EtfFragment.kt$ChartEtf</ID>
+    <ID>ModifierMissing:EtfFragment.kt$EtfPage</ID>
+    <ID>ModifierMissing:EvmNetworkFragment.kt$RpcCell</ID>
+    <ID>ModifierMissing:FeeCell.kt$FeeCell</ID>
+    <ID>ModifierMissing:FeeInfoSection.kt$FeeInfoSection</ID>
+    <ID>ModifierMissing:FilterBlockchainFragment.kt$FilterBlockchainScreen</ID>
+    <ID>ModifierMissing:FilterCoinFragment.kt$FilterCoinScreen</ID>
+    <ID>ModifierMissing:GuidesFragment.kt$GuidesScreen</ID>
+    <ID>ModifierMissing:HSAddressCell.kt$HSAddressCell</ID>
+    <ID>ModifierMissing:HSHodlerInput.kt$HSHodler</ID>
+    <ID>ModifierMissing:HSHodlerInput.kt$HSHodlerInput</ID>
+    <ID>ModifierMissing:HSMemoInput.kt$HSMemoInput</ID>
+    <ID>ModifierMissing:HeaderCell.kt$HeaderCell</ID>
+    <ID>ModifierMissing:HsSlider.kt$HsSlider</ID>
+    <ID>ModifierMissing:HsTextButton.kt$HsTextButton</ID>
+    <ID>ModifierMissing:IndicatorsFragment.kt$IndicatorsScreen</ID>
+    <ID>ModifierMissing:InfoBlocks.kt$BulletedText</ID>
+    <ID>ModifierMissing:InfoErrorMessageDefault.kt$InfoErrorMessageDefault</ID>
+    <ID>ModifierMissing:InfoHeader.kt$InfoH1</ID>
+    <ID>ModifierMissing:InfoHeader.kt$InfoH3</ID>
+    <ID>ModifierMissing:Links.kt$Links</ID>
+    <ID>ModifierMissing:MacdSettingsScreen.kt$MacdSettingsScreen</ID>
+    <ID>ModifierMissing:MainSettingsScreen.kt$HsSettingCell</ID>
+    <ID>ModifierMissing:MainSettingsScreen.kt$SettingsScreen</ID>
+    <ID>ModifierMissing:ManageAccountsFragment.kt$ManageAccountsScreen</ID>
+    <ID>ModifierMissing:MarkdownFooter.kt$MarkdownFooter</ID>
+    <ID>ModifierMissing:MarketCategoryFragment.kt$CategoryScreen</ID>
+    <ID>ModifierMissing:MarketCell.kt$MarketCoin</ID>
+    <ID>ModifierMissing:MarketCell.kt$MarketCoinClear</ID>
+    <ID>ModifierMissing:MarketCell.kt$MarketCoinFirstRow</ID>
+    <ID>ModifierMissing:MarketCell.kt$MarketCoinSecondRow</ID>
+    <ID>ModifierMissing:MarketCell.kt$MarketDataValueComponent</ID>
+    <ID>ModifierMissing:MarketData.kt$MarketData</ID>
+    <ID>ModifierMissing:MarketOverviewBoards.kt$BoardsView</ID>
+    <ID>ModifierMissing:MarketOverviewMisc.kt$SeeAllButton</ID>
+    <ID>ModifierMissing:MarketOverviewScreen.kt$MarketOverviewScreen</ID>
+    <ID>ModifierMissing:MarketOverviewTopNft.kt$TopNftCollectionsBoardView</ID>
+    <ID>ModifierMissing:MarketOverviewTopPlatforms.kt$TopPlatformsBoardView</ID>
+    <ID>ModifierMissing:MarketPostsScreen.kt$MarketPostsScreen</ID>
+    <ID>ModifierMissing:MarketScreen.kt$MarketScreen</ID>
+    <ID>ModifierMissing:MarketScreen.kt$MetricsBoard</ID>
+    <ID>ModifierMissing:MarketScreen.kt$TabsSection</ID>
+    <ID>ModifierMissing:MarketSearchFragment.kt$MarketSearchResults</ID>
+    <ID>ModifierMissing:MarketSearchFragment.kt$MarketSearchScreen</ID>
+    <ID>ModifierMissing:MarketSignalsFragment.kt$MarketSignalsScreen</ID>
+    <ID>ModifierMissing:MarketsHorizontalCards.kt$MarketsHorizontalCards</ID>
+    <ID>ModifierMissing:MarketsSectionHeader.kt$MarketsSectionHeader</ID>
+    <ID>ModifierMissing:MessageToSign.kt$MessageToSign</ID>
+    <ID>ModifierMissing:MetricsPageFragment.kt$MetricsPageFragment$MetricsPage</ID>
+    <ID>ModifierMissing:MoneroConfigureFragment.kt$MoneroConfigureScreen</ID>
+    <ID>ModifierMissing:MoneroConfigureFragment.kt$ZcashAppBar</ID>
+    <ID>ModifierMissing:NetworkSelectScreen.kt$NetworkCell</ID>
+    <ID>ModifierMissing:NetworkSelectScreen.kt$NetworkSelectScreen</ID>
+    <ID>ModifierMissing:NftAssetFragment.kt$NftAssetScreen</ID>
+    <ID>ModifierMissing:NftCollectionEventsScreen.kt$NftEvent</ID>
+    <ID>ModifierMissing:NftCollectionOverviewScreen.kt$NftCollectionOverviewScreen</ID>
+    <ID>ModifierMissing:NftHoldingsFragment.kt$NftHoldingsScreen</ID>
+    <ID>ModifierMissing:NftPreview.kt$NftAssetPreview</ID>
+    <ID>ModifierMissing:PasscodeBlock.kt$PasscodeBlock</ID>
+    <ID>ModifierMissing:PassphraseTermsScreen.kt$PassphraseTermsScreen</ID>
+    <ID>ModifierMissing:PinConfirm.kt$PinConfirm</ID>
+    <ID>ModifierMissing:PinNumpad.kt$PinNumpad</ID>
+    <ID>ModifierMissing:PinSetView.kt$PinSet</ID>
+    <ID>ModifierMissing:PinUnlockView.kt$PinUnlock</ID>
+    <ID>ModifierMissing:PrivacyScreen.kt$PrivacyScreen</ID>
+    <ID>ModifierMissing:PrivateKeysFragment.kt$ManageAccountScreen</ID>
+    <ID>ModifierMissing:PublicKeysFragment.kt$ManageAccountScreen</ID>
+    <ID>ModifierMissing:QRScannerScreen.kt$QRScannerScreen</ID>
+    <ID>ModifierMissing:QuoteInfoRow.kt$QuoteInfoRow</ID>
+    <ID>ModifierMissing:ReceiveAddressScreen.kt$ReceiveAddressScreen</ID>
+    <ID>ModifierMissing:ReceiveFragment.kt$ReceiveScreen</ID>
+    <ID>ModifierMissing:ReceiveTokenSelectScreen.kt$ReceiveCoin</ID>
+    <ID>ModifierMissing:ReceiveTokenSelectScreen.kt$ReceiveTokenSelectScreen</ID>
+    <ID>ModifierMissing:ReleaseNotesFragment.kt$ReleaseNotesScreen</ID>
+    <ID>ModifierMissing:RestoreBlockchains.kt$ManageWalletsScreen</ID>
+    <ID>ModifierMissing:RestoreByMenu.kt$ByMenu</ID>
+    <ID>ModifierMissing:RestorePhraseNonStandardScreen.kt$RestorePhraseNonStandard</ID>
+    <ID>ModifierMissing:RestorePhraseScreen.kt$MoneroMode</ID>
+    <ID>ModifierMissing:RestorePhraseScreen.kt$RestorePhrase</ID>
+    <ID>ModifierMissing:RestorePrivateKeyScreen.kt$RestorePrivateKey</ID>
+    <ID>ModifierMissing:Roi.kt$Roi</ID>
+    <ID>ModifierMissing:RootedDeviceScreen.kt$RootedDeviceScreen</ID>
+    <ID>ModifierMissing:RsiSettingsScreen.kt$RsiSettingsScreen</ID>
+    <ID>ModifierMissing:SafetyRulesScreen.kt$SafetyRulesScreen</ID>
+    <ID>ModifierMissing:SearchBar.kt$SearchBar</ID>
+    <ID>ModifierMissing:SearchBarV2.kt$SearchBarV2</ID>
+    <ID>ModifierMissing:SecurityCheckFragment.kt$AddressCheck</ID>
+    <ID>ModifierMissing:SecurityCheckFragment.kt$CheckLocked</ID>
+    <ID>ModifierMissing:SecurityCheckFragment.kt$CheckValue</ID>
+    <ID>ModifierMissing:SecurityCheckFragment.kt$SecurityCheckScreen</ID>
+    <ID>ModifierMissing:SecuritySettingsFragment.kt$SecurityCenterCell</ID>
+    <ID>ModifierMissing:SelectBackupItemsScreen.kt$OtherBackupItems</ID>
+    <ID>ModifierMissing:SelectBackupItemsScreen.kt$SelectBackupItemsScreen</ID>
+    <ID>ModifierMissing:SelectContactFragment.kt$SelectContactScreen</ID>
+    <ID>ModifierMissing:SelectSwapCoinDialogScreen.kt$SelectSwapCoinDialogScreen</ID>
+    <ID>ModifierMissing:SendBitcoinScreen.kt$UtxoCell</ID>
+    <ID>ModifierMissing:SendBtcAdvancedSettingsScreen.kt$RbfSwitch</ID>
+    <ID>ModifierMissing:SendBtcAdvancedSettingsScreen.kt$UtxoSwitch</ID>
+    <ID>ModifierMissing:SendConfirmationScreen.kt$ConfirmAmountCell</ID>
+    <ID>ModifierMissing:SendConfirmationScreen.kt$MemoCell</ID>
+    <ID>ModifierMissing:SendConfirmationScreen.kt$SendConfirmationScreen</ID>
+    <ID>ModifierMissing:SendEip1155Screen.kt$SendEip1155Screen</ID>
+    <ID>ModifierMissing:SendEip721Screen.kt$SendEip721Screen</ID>
+    <ID>ModifierMissing:SendEvmTransactionView.kt$SendEvmTransactionView</ID>
+    <ID>ModifierMissing:SendEvmTransactionView.kt$TitleValue</ID>
+    <ID>ModifierMissing:SendMoneroScreen.kt$SendMoneroScreen</ID>
+    <ID>ModifierMissing:SendScreen.kt$SendScreen</ID>
+    <ID>ModifierMissing:SendSmsNotificationScreen.kt$SendSmsNotificationScreen</ID>
+    <ID>ModifierMissing:SendSolanaScreen.kt$SendSolanaScreen</ID>
+    <ID>ModifierMissing:SendStellarScreen.kt$SendStellarScreen</ID>
+    <ID>ModifierMissing:SendSuggestionsBar.kt$SendSuggestionsBar</ID>
+    <ID>ModifierMissing:SendTonScreen.kt$SendTonScreen</ID>
+    <ID>ModifierMissing:SendTransactionServiceBitcoin.kt$SendBtcFeeSettingsScreen</ID>
+    <ID>ModifierMissing:SendTransactionServiceEvm.kt$SendEvmFeeSettingsScreen</ID>
+    <ID>ModifierMissing:SendTronConfirmationScreen.kt$SendTronConfirmationScreen</ID>
+    <ID>ModifierMissing:SendTronScreen.kt$SendTronScreen</ID>
+    <ID>ModifierMissing:SendZCashScreen.kt$SendZCashScreen</ID>
+    <ID>ModifierMissing:SetDuressPinIntroFragment.kt$SetDuressPinIntroScreen</ID>
+    <ID>ModifierMissing:SetDuressPinSelectAccountsFragment.kt$SetDuressPinSelectAccountsScreen</ID>
+    <ID>ModifierMissing:SharedComponents.kt$ActionButton</ID>
+    <ID>ModifierMissing:SharedComponents.kt$ConfirmCopyBottomSheet</ID>
+    <ID>ModifierMissing:SharedComponents.kt$HidableContent</ID>
+    <ID>ModifierMissing:SharedComponents.kt$KeyActionItem</ID>
+    <ID>ModifierMissing:SharedComponents.kt$PassphraseCell</ID>
+    <ID>ModifierMissing:SharedComponents.kt$SeedPhraseList</ID>
+    <ID>ModifierMissing:SharedComponents.kt$SeedPhraseQrCard</ID>
+    <ID>ModifierMissing:SwapConfirmScreen.kt$SwapConfirmScreen</ID>
+    <ID>ModifierMissing:SwapConfirmScreen.kt$TokenRowPure</ID>
+    <ID>ModifierMissing:SwapConfirmScreen.kt$TokenRowUnlimited</ID>
+    <ID>ModifierMissing:SwapFragment.kt$PriceField</ID>
+    <ID>ModifierMissing:SwapFragment.kt$PriceImpactField</ID>
+    <ID>ModifierMissing:SwapProviderField.kt$SwapProviderField</ID>
+    <ID>ModifierMissing:SwapSelectProviderScreen.kt$SwapSelectProviderScreen</ID>
+    <ID>ModifierMissing:SwapSettingsComponents.kt$RecipientAddress</ID>
+    <ID>ModifierMissing:SwapSettingsComponents.kt$SlippageAmount</ID>
+    <ID>ModifierMissing:SwapSettingsComponents.kt$TransactionDeadlineInput</ID>
+    <ID>ModifierMissing:SwapSettingsScreen.kt$SwapSettingsScreen</ID>
+    <ID>ModifierMissing:SystemPinBlock.kt$SystemPinBlock</ID>
+    <ID>ModifierMissing:TechnicalAdvice.kt$TechnicalAdviceBlock</ID>
+    <ID>ModifierMissing:TermsFragment.kt$TermsScreen</ID>
+    <ID>ModifierMissing:Title.kt$Title</ID>
+    <ID>ModifierMissing:TitleAndValueCell.kt$TitleAndValueCell</ID>
+    <ID>ModifierMissing:TokenBalanceScreen.kt$TokenBalanceScreen</ID>
+    <ID>ModifierMissing:TokenVariants.kt$TokenVariants</ID>
+    <ID>ModifierMissing:TonConnectNewScreen.kt$TonConnectNewScreen</ID>
+    <ID>ModifierMissing:TonConnectSendRequestScreen.kt$TonConnectSendRequestScreen</ID>
+    <ID>ModifierMissing:TonConnectSessionList.kt$TCSessionCell</ID>
+    <ID>ModifierMissing:TonConnectSessionList.kt$TonConnectSessionList</ID>
+    <ID>ModifierMissing:TopCoins.kt$OptionController</ID>
+    <ID>ModifierMissing:TopNftCollectionsFragment.kt$TopNftCollectionsScreen</ID>
+    <ID>ModifierMissing:TopPairsBoardView.kt$TopPairsBoardView</ID>
+    <ID>ModifierMissing:TopPairsScreen.kt$TopPairItem</ID>
+    <ID>ModifierMissing:TopPairsScreen.kt$TopPairsScreen</ID>
+    <ID>ModifierMissing:TopPlatforms.kt$TopPlatformItem</ID>
+    <ID>ModifierMissing:TopPlatforms.kt$TopPlatforms</ID>
+    <ID>ModifierMissing:TorBlock.kt$TorBlock</ID>
+    <ID>ModifierMissing:TransactionDoubleSpendInfoFragment.kt$ConflictingTransactions</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$DescriptionCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$PriceWithToggleCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$SectionTitleCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionAmountCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoAddressCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoAmlCheckCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoBtcLockCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoCancelCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoContactCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoDoubleSpendCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoExplorerCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoRawTransaction</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoRbfCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoSentToSelfCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoSpeedUpCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoStatusCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoTransactionHashCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionNftAmountCell</ID>
+    <ID>ModifierMissing:TransactionInfoCells.kt$WarningMessageCell</ID>
+    <ID>ModifierMissing:TransactionInfoFragment.kt$TransactionInfo</ID>
+    <ID>ModifierMissing:TransactionInfoFragment.kt$TransactionInfoScreen</ID>
+    <ID>ModifierMissing:TransactionInputSortModeInfoSceen.kt$BtcTransactionInputSortInfoScreen</ID>
+    <ID>ModifierMissing:TransactionsScreen.kt$TransactionCell</ID>
+    <ID>ModifierMissing:TransactionsScreen.kt$TransactionsScreen</ID>
+    <ID>ModifierMissing:UnifiedCoinAddressCheck.kt$NetworkItem</ID>
+    <ID>ModifierMissing:UnifiedCoinAddressCheck.kt$SecurityCheckCard</ID>
+    <ID>ModifierMissing:UnifiedCoinAddressCheck.kt$UnifiedAddressCheckScreen</ID>
+    <ID>ModifierMissing:UsedAddressesScreen.kt$TransactionInfoAddressCell</ID>
+    <ID>ModifierMissing:UsedAddressesScreen.kt$UsedAddressScreen</ID>
+    <ID>ModifierMissing:UtxoExpertModeScreen.kt$UtxoExpertModeScreen</ID>
+    <ID>ModifierMissing:WCErrorNoAccountFragment.kt$WalletConnectErrorNoAccount</ID>
+    <ID>ModifierMissing:WCPairingsFragment.kt$Pairing</ID>
+    <ID>ModifierMissing:WCPairingsFragment.kt$WCPairingsScreen</ID>
+    <ID>ModifierMissing:WCRequestFragment.kt$ActionButtons</ID>
+    <ID>ModifierMissing:WCRequestFragment.kt$WCNewSignRequestScreen</ID>
+    <ID>ModifierMissing:WCRequestFragment.kt$WCRequestFragment$WcRequestEvm</ID>
+    <ID>ModifierMissing:WCRequestFragment.kt$WcRequestError</ID>
+    <ID>ModifierMissing:WCSendEthScreen.kt$WCSendEthRequestScreen</ID>
+    <ID>ModifierMissing:WCSessionCell.kt$WCSessionCell</ID>
+    <ID>ModifierMissing:WCSessionCells.kt$BlockchainCell</ID>
+    <ID>ModifierMissing:WCSessionCells.kt$DropDownCell</ID>
+    <ID>ModifierMissing:WCSessionCells.kt$StatusCell</ID>
+    <ID>ModifierMissing:WCSessionCells.kt$TitleValueCell</ID>
+    <ID>ModifierMissing:WCSessionError.kt$WCSessionError</ID>
+    <ID>ModifierMissing:WCSessionFragment.kt$RequestCell</ID>
+    <ID>ModifierMissing:WCSessionFragment.kt$WCSessionPage</ID>
+    <ID>ModifierMissing:WCSessionList.kt$WCSessionList</ID>
+    <ID>ModifierMissing:WCSignEthereumTransactionRequestScreen.kt$WCSignEthereumTransactionRequestScreen</ID>
+    <ID>ModifierMissing:WatchAddressFragment.kt$WatchAddressScreen</ID>
+    <ID>ModifierMissing:WcRequestScreen.kt$WcRequestScreen</ID>
+    <ID>ModifierMissing:ZcashConfigureFragment.kt$ZcashAppBar</ID>
+    <ID>ModifierMissing:ZcashConfigureFragment.kt$ZcashConfigureScreen</ID>
+    <ID>ModifierNotUsedAtRoot:HSRow.kt$modifier = modifier</ID>
+    <ID>ModifierNotUsedAtRoot:SuggestionsBar.kt$modifier = modifier</ID>
+    <ID>ModifierReused:SuggestionsBar.kt$Box(modifier = modifier) { BoxTyler44(borderTop = true) { Row( modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceAround ) { percents.forEach { percent -&gt; ButtonSecondary( enabled = selectEnabled, onClick = { onSelect.invoke(percent) } ) { Text( text = "$percent%", modifier = modifier, style = ComposeAppTheme.typography.captionSB, color = if (selectEnabled) { ComposeAppTheme.colors.leah } else { ComposeAppTheme.colors.grey50 }, ) } } ButtonSecondaryCircle( icon = R.drawable.ic_delete_20, enabled = deleteEnabled, tint = if (deleteEnabled) { ComposeAppTheme.colors.leah } else { ComposeAppTheme.colors.grey50 }, onClick = onDelete ) } } }</ID>
+    <ID>ModifierReused:SuggestionsBar.kt$Text( text = "$percent%", modifier = modifier, style = ComposeAppTheme.typography.captionSB, color = if (selectEnabled) { ComposeAppTheme.colors.leah } else { ComposeAppTheme.colors.grey50 }, )</ID>
+    <ID>ModifierWithoutDefault:BalanceItems.kt$modifier</ID>
+    <ID>ModifierWithoutDefault:CoinImage.kt$modifier</ID>
+    <ID>ModifierWithoutDefault:ManageWalletsScreen.kt$modifier</ID>
+    <ID>ModifierWithoutDefault:ReceiveAddressScreen.kt$modifier</ID>
+    <ID>ModifierWithoutDefault:ResendBitcoinFragment.kt$ResendBitcoinFragment$modifier</ID>
+    <ID>ModifierWithoutDefault:SecurityCheckFragment.kt$modifier</ID>
+    <ID>ModifierWithoutDefault:SendBtcAdvancedSettingsScreen.kt$modifier</ID>
+    <ID>ModifierWithoutDefault:SendConfirmationScreen.kt$modifier</ID>
+    <ID>ModifierWithoutDefault:SendTronConfirmationScreen.kt$modifier</ID>
+    <ID>ModifierWithoutDefault:SwapSelectProviderScreen.kt$modifier</ID>
+    <ID>MultipleEmitters:AboutFragment.kt$SettingSections</ID>
+    <ID>MultipleEmitters:AppIconScreen.kt$AppIconContent</ID>
+    <ID>MultipleEmitters:BlockchainSettingsFragment.kt$BlockchainSettingsBlock</ID>
+    <ID>MultipleEmitters:BottomSheetSelectorMultipleDialog.kt$BottomSheetSelectorMultipleDialog$BottomSheetContent</ID>
+    <ID>MultipleEmitters:CoinAuditsFragment.kt$CoinAuditHeader</ID>
+    <ID>MultipleEmitters:CoinMajorHoldersFragment.kt$HoldersGeneralInfo</ID>
+    <ID>MultipleEmitters:Components.kt$AnalyticsContainer</ID>
+    <ID>MultipleEmitters:Components.kt$AnalyticsFooterCell</ID>
+    <ID>MultipleEmitters:Components.kt$BoxItemCell</ID>
+    <ID>MultipleEmitters:Components.kt$RatingCell</ID>
+    <ID>MultipleEmitters:DonateTokenSelectFragment.kt$DonateHeader</ID>
+    <ID>MultipleEmitters:DonateTokenSelectFragment.kt$GetAddressCell</ID>
+    <ID>MultipleEmitters:FeeInfoSection.kt$FeeInfoSection</ID>
+    <ID>MultipleEmitters:MainFragment.kt$MainScreen</ID>
+    <ID>MultipleEmitters:MarketOverviewTopNft.kt$TopNftCollectionsBoardView</ID>
+    <ID>MultipleEmitters:MarketOverviewTopPlatforms.kt$TopPlatformsBoardView</ID>
+    <ID>MultipleEmitters:RestorePhraseNonStandardScreen.kt$BottomSection</ID>
+    <ID>MultipleEmitters:RestorePhraseScreen.kt$BottomSection</ID>
+    <ID>MultipleEmitters:SecurityCheckFragment.kt$AddressCheck</ID>
+    <ID>MultipleEmitters:SendEip1155Screen.kt$ItemCountInput</ID>
+    <ID>MultipleEmitters:SendTronConfirmationScreen.kt$Cautions</ID>
+    <ID>MultipleEmitters:TokenBalanceScreen.kt$ButtonsRow</ID>
+    <ID>MultipleEmitters:TopPairsBoardView.kt$TopPairsBoardView</ID>
+    <ID>MultipleEmitters:TransactionDoubleSpendInfoFragment.kt$ConflictingTransactions</ID>
+    <ID>MutableStateAutoboxing:CardTabs.kt$mutableStateOf(0)</ID>
+    <ID>MutableStateAutoboxing:CellNews.kt$mutableStateOf(0)</ID>
+    <ID>MutableStateAutoboxing:ShowExtendedKeyViewModel.kt$ShowExtendedKeyViewModel$mutableStateOf(0)</ID>
+    <ID>MutableStateParam:ReceiveAddressScreen.kt$openAmountDialog</ID>
+    <ID>MutableStateParam:RestorePhraseScreen.kt$passphraseTextState</ID>
     <ID>NestedBlockDepth:AllBridgeProvider.kt$AllBridgeProvider$override suspend fun start()</ID>
     <ID>NestedBlockDepth:BackupProvider.kt$BackupProvider$private suspend fun restoreWallets(walletBackupItems: List&lt;WalletBackupItem&gt;)</ID>
     <ID>NestedBlockDepth:BackupProvider.kt$BackupProvider$suspend fun restoreSingleWalletBackup( type: AccountType, accountName: String, backup: BackupLocalModule.WalletBackup )</ID>
@@ -1056,6 +1690,93 @@
     <ID>NewLineAtEndOfFile:WCSessionModule.kt$cash.p.terminal.modules.walletconnect.session.WCSessionModule.kt</ID>
     <ID>NewLineAtEndOfFile:WCUtils.kt$cash.p.terminal.modules.walletconnect.WCUtils.kt</ID>
     <ID>NewLineAtEndOfFile:ZCashUfvkParser.kt$cash.p.terminal.modules.address.ZCashUfvkParser.kt</ID>
+    <ID>ParameterNaming:AddTokenFragment.kt$onCompleted</ID>
+    <ID>ParameterNaming:AddressScreen.kt$onDone</ID>
+    <ID>ParameterNaming:AmlAddressSelectionBottomSheet.kt$onAddressSelected</ID>
+    <ID>ParameterNaming:BackupLocalTerms.kt$onTermsAccepted</ID>
+    <ID>ParameterNaming:BottomSheetSelectorMultiple.kt$onItemsSelected</ID>
+    <ID>ParameterNaming:CoinMarketsScreen.kt$onToggleVerified</ID>
+    <ID>ParameterNaming:DisplayOptionsScreen.kt$onPercentChangeToggled</ID>
+    <ID>ParameterNaming:DisplayOptionsScreen.kt$onPriceChangeToggled</ID>
+    <ID>ParameterNaming:DisplayOptionsScreen.kt$onPricePeriodChanged</ID>
+    <ID>ParameterNaming:DisplayOptionsScreen.kt$onRoundingAmountMainPageToggled</ID>
+    <ID>ParameterNaming:DisplayOptionsScreen.kt$onRoundingAmountToggled</ID>
+    <ID>ParameterNaming:DisplayTransactionsScreen.kt$onBackPressed</ID>
+    <ID>ParameterNaming:DisplayTransactionsScreen.kt$onItemSelected</ID>
+    <ID>ParameterNaming:FeeInfoSection.kt$onBalanceClicked</ID>
+    <ID>ParameterNaming:HardwareWalletBiometricBlock.kt$onValueChanged</ID>
+    <ID>ParameterNaming:KeyStoreActivity.kt$onTermsAccepted</ID>
+    <ID>ParameterNaming:ManageAccountScreen.kt$onCloseClicked</ID>
+    <ID>ParameterNaming:ManageAccountScreen.kt$onNameChanged</ID>
+    <ID>ParameterNaming:ManageAccountScreen.kt$onSaveClicked</ID>
+    <ID>ParameterNaming:ManageWalletsScreen.kt$onBackPressed</ID>
+    <ID>ParameterNaming:MarketFiltersFragment.kt$onChecked</ID>
+    <ID>ParameterNaming:NftCollectionAssetsScreen.kt$onBottomReached</ID>
+    <ID>ParameterNaming:QRScannerScreen.kt$onErrorMessageConsumed</ID>
+    <ID>ParameterNaming:QRScannerScreen.kt$onGalleryImagePicked</ID>
+    <ID>ParameterNaming:ReleaseNotesFragment.kt$onWhatsNewShown</ID>
+    <ID>ParameterNaming:RootedDeviceScreen.kt$onIgnoreWarningClicked</ID>
+    <ID>ParameterNaming:SearchBar.kt$onSearchTextChanged</ID>
+    <ID>ParameterNaming:SearchBarV2.kt$onSearchTextChanged</ID>
+    <ID>ParameterNaming:SecuritySettingsFragment.kt$onChangeDisplayClicked</ID>
+    <ID>ParameterNaming:SecuritySettingsFragment.kt$onDisableTransactionAutoHidePinClicked</ID>
+    <ID>ParameterNaming:SecuritySettingsFragment.kt$onSetTransactionAutoHidePinClicked</ID>
+    <ID>ParameterNaming:SelectSwapCoinDialogScreen.kt$onSearchTextChanged</ID>
+    <ID>ParameterNaming:SendConfirmationScreen.kt$onBalanceClicked</ID>
+    <ID>ParameterNaming:SendSmsNotificationScreen.kt$onAccountSelected</ID>
+    <ID>ParameterNaming:SendSmsNotificationScreen.kt$onAddressChanged</ID>
+    <ID>ParameterNaming:SendSmsNotificationScreen.kt$onMemoChanged</ID>
+    <ID>ParameterNaming:SendSmsNotificationScreen.kt$onSaveSuccessShown</ID>
+    <ID>ParameterNaming:SendSmsNotificationScreen.kt$onTestResultShown</ID>
+    <ID>ParameterNaming:SharedComponents.kt$onToggleHidden</ID>
+    <ID>ParameterNaming:SwapFragment.kt$onActionCompleted</ID>
+    <ID>ParameterNaming:SwapFragment.kt$onActionStarted</ID>
+    <ID>ParameterNaming:SwapFragment.kt$onBalanceClicked</ID>
+    <ID>ParameterNaming:TokenBalanceFragment.kt$onShowAllTransactionsClicked</ID>
+    <ID>ParameterNaming:TokenBalanceScreen.kt$onShowAllTransactionsClicked</ID>
+    <ID>ParameterNaming:TokenBalanceScreen.kt$onStackingClicked</ID>
+    <ID>ParameterNaming:TransactionAutoHideBlock.kt$onChangeDisplayClicked</ID>
+    <ID>ParameterNaming:TransactionAutoHideBlock.kt$onDisablePinClicked</ID>
+    <ID>ParameterNaming:TransactionAutoHideBlock.kt$onPinClicked</ID>
+    <ID>ParameterNaming:TransactionsFilterFragment.kt$onChecked</ID>
+    <ID>ParameterNaming:TransactionsScreen.kt$onShowAllTransactionsClicked</ID>
+    <ID>ParameterNaming:UtxoExpertModeScreen.kt$onItemClicked</ID>
+    <ID>PreviewPublic:About.kt$AboutPreview</ID>
+    <ID>PreviewPublic:AddressCheckerFragment.kt$Preview_AddressChecker</ID>
+    <ID>PreviewPublic:AppStatusScreen.kt$StatusBlockPreview</ID>
+    <ID>PreviewPublic:Badge.kt$BadgeCirclePreview</ID>
+    <ID>PreviewPublic:Badge.kt$BadgeCircleSignal_Preview</ID>
+    <ID>PreviewPublic:Badge.kt$BadgePreview</ID>
+    <ID>PreviewPublic:Badge.kt$BadgeWithDiffPreview</ID>
+    <ID>PreviewPublic:BiometricDisabledDialog.kt$Preview_BiometricDisabledDialog</ID>
+    <ID>PreviewPublic:CardTabs.kt$PreviewCardTabs</ID>
+    <ID>PreviewPublic:CellTweet.kt$CellTweetPreview</ID>
+    <ID>PreviewPublic:CoinListComponents.kt$CardPreview</ID>
+    <ID>PreviewPublic:CoinListComponents.kt$PreviewListErrorView</ID>
+    <ID>PreviewPublic:CoinOverviewScreen.kt$LoadingPreview</ID>
+    <ID>PreviewPublic:CoinScreenTitle.kt$CoinScreenTitlePreviewLongTitle</ID>
+    <ID>PreviewPublic:CoinScreenTitle.kt$CoinScreenTitlePreviewNoRank</ID>
+    <ID>PreviewPublic:CoinScreenTitle.kt$CoinScreenTitlePreviewShortTitle</ID>
+    <ID>PreviewPublic:Contracts.kt$ContractsPreview</ID>
+    <ID>PreviewPublic:DataFieldRecipientExtended.kt$DataFieldRecipientExtendedPreview</ID>
+    <ID>PreviewPublic:DonateAddressesFragment.kt$DonateScreenPreview</ID>
+    <ID>PreviewPublic:InfoErrorMessageDefault.kt$InfoErrorMessageDefaultPreview</ID>
+    <ID>PreviewPublic:Links.kt$LinksPreview</ID>
+    <ID>PreviewPublic:MarketCell.kt$PreviewMarketCoin</ID>
+    <ID>PreviewPublic:MarketData.kt$MarketDataPreview</ID>
+    <ID>PreviewPublic:MarketPlatformFragment.kt$HeaderContentPreview</ID>
+    <ID>PreviewPublic:MarketPostsScreen.kt$PreviewMarketPostView</ID>
+    <ID>PreviewPublic:MarketSearchFragment.kt$MarketCoinPreview</ID>
+    <ID>PreviewPublic:PinNumpad.kt$Preview_Pin</ID>
+    <ID>PreviewPublic:PinNumpad.kt$Preview_PinLocked</ID>
+    <ID>PreviewPublic:PinTopBlock.kt$Preview_PinTopBlockEnabled</ID>
+    <ID>PreviewPublic:PinTopBlock.kt$Preview_PinTopBlockLocked</ID>
+    <ID>PreviewPublic:QuoteInfoRow.kt$QuoteInfoRowPreview</ID>
+    <ID>PreviewPublic:ReleaseNotesFragment.kt$ReleaseNotesScreenPreview</ID>
+    <ID>PreviewPublic:RootedDeviceScreen.kt$Preview_RootedDeviceScreen</ID>
+    <ID>PreviewPublic:SemiCircleChart.kt$SemiCircleChartPreview</ID>
+    <ID>PreviewPublic:UnifiedCoinAddressCheck.kt$SecurityCheckScreenPreview</ID>
+    <ID>PreviewPublic:WCSessionError.kt$PreviewWCSessionsEmpty</ID>
     <ID>PrintStackTrace:BalanceAdapterRepository.kt$BalanceAdapterRepository$e</ID>
     <ID>PrintStackTrace:EncryptDecryptManager.kt$EncryptDecryptManager.Companion$e</ID>
     <ID>PrintStackTrace:NftMetadataSyncer.kt$NftMetadataSyncer$error</ID>
@@ -1442,5 +2163,137 @@
     <ID>VariableNaming:TonHelperKtTest.kt$TonHelperKtTest$private val USER_WALLET_ADDRESS = "UQAQnxLqlX2B6w4jQzzzPWA8eyWZVZBz6Y0D_8noARLOaEAn"</ID>
     <ID>VariableNaming:TorControl.kt$TorControl$private val CONTROL_SOCKET_TIMEOUT = 60000</ID>
     <ID>VariableNaming:TorControl.kt$TorControl$private val MAX_BOOTSTRAP_CHECK_TRIES = 60</ID>
+    <ID>ViewModelForwarding:AboutFragment.kt$SettingSections(aboutViewModel, navController)</ID>
+    <ID>ViewModelForwarding:AddTokenFragment.kt$AddTokenScreen( navController = navController, onBack = { fragmentNavController.popBackStack() }, onCompleted = { result -&gt; fragmentNavController.setNavigationResultX(result) fragmentNavController.popBackStack() }, viewModel = viewModel )</ID>
+    <ID>ViewModelForwarding:CoinMajorHoldersFragment.kt$CoinMajorHoldersContent(viewModel)</ID>
+    <ID>ViewModelForwarding:ContactsFragment.kt$AddressScreen( viewModel = viewModel, onNavigateToBlockchainSelector = { navHostController.navigate("blockchainSelector") }, onDone = { contactAddress -&gt; onAddAddress(contactAddress) onCloseNavHost() }, onDelete = { contactAddress -&gt; onDeleteAddress(contactAddress) onCloseNavHost() }, onNavigateToBack = { onCloseNavHost() } )</ID>
+    <ID>ViewModelForwarding:FilterBlockchainFragment.kt$BlockchainCell(viewModel, filterItem, navController)</ID>
+    <ID>ViewModelForwarding:IntroActivity.kt$StaticContent(viewModel, pagerState, closeActivity, pageCount)</ID>
+    <ID>ViewModelForwarding:MainFragment.kt$MainScreen( transactionsViewModel = transactionsViewModel, fragmentNavController = navController, intentLiveData = intent, intentHandled = intentHandled )</ID>
+    <ID>ViewModelForwarding:MainFragment.kt$TransactionsScreen( navController = fragmentNavController, paddingValues = paddingValues, viewModel = transactionsViewModel, onShowAllTransactionsClicked = { fragmentNavController.authorizedAction( ConfirmPinFragment.InputConfirm( descriptionResId = R.string.Unlock_EnterPasscode_Transactions_Hide, pinType = PinType.TRANSACTIONS_HIDE ) ) { transactionsViewModel.showAllTransactions(true) } } )</ID>
+    <ID>ViewModelForwarding:MainSettingsScreen.kt$SettingSections(viewModel, fragmentNavController)</ID>
+    <ID>ViewModelForwarding:ManageAccountsFragment.kt$AccountsSection(it, viewModel, navController)</ID>
+    <ID>ViewModelForwarding:MarketFiltersFragment.kt$AdvancedSearchContent( viewModel = viewModel, onFilterByBlockchainsClick = { navController.slideFromRight(R.id.blockchainsSelectorFragment) }, showBottomSheet = { type -&gt; bottomSheetType = type coroutineScope.launch { modalBottomSheetState.show() } } )</ID>
+    <ID>ViewModelForwarding:MarketFiltersFragment.kt$BottomSheetContent( bottomSheetType = bottomSheetType, viewModel = viewModel, onClose = { coroutineScope.launch { modalBottomSheetState.hide() } } )</ID>
+    <ID>ViewModelForwarding:NftAssetFragment.kt$NftAssetEvents(viewModel)</ID>
+    <ID>ViewModelForwarding:NftAssetFragment.kt$NftAssetInfo(viewModel, navController, coroutineScope)</ID>
+    <ID>ViewModelForwarding:NftCollectionFragment.kt$NftCollectionOverviewScreen( viewModel, onCopyText = { TextHelper.copyText(it) HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied) }, onOpenUrl = { LinkHelper.openLinkInAppBrowser(context, it) } )</ID>
+    <ID>ViewModelForwarding:RestoreAccountAdvanced.kt$RestorePhrase( advanced = true, restoreMenuViewModel = restoreMenuViewModel, mainViewModel = mainViewModel, openSelectCoins = openSelectCoinsScreen, openNonStandardRestore = openNonStandardRestore, onBackClick = onBackClick, onFinish = onFinish, prefillWords = prefillWords, prefillPassphrase = prefillPassphrase, prefillMoneroHeight = prefillMoneroHeight )</ID>
+    <ID>ViewModelForwarding:RestoreAccountAdvanced.kt$RestorePrivateKey( restoreMenuViewModel = restoreMenuViewModel, mainViewModel = mainViewModel, openSelectCoinsScreen = openSelectCoinsScreen, onBackClick = onBackClick, )</ID>
+    <ID>ViewModelForwarding:RestorePhraseScreen.kt$RestoreByMenu(restoreMenuViewModel)</ID>
+    <ID>ViewModelForwarding:RestorePrivateKeyScreen.kt$RestoreByMenu(restoreMenuViewModel)</ID>
+    <ID>ViewModelForwarding:SecuritySettingsFragment.kt$DuressPasscodeBlock( securitySettingsViewModel, navController )</ID>
+    <ID>ViewModelForwarding:SecuritySettingsFragment.kt$PasscodeBlock( securitySettingsViewModel, navController )</ID>
+    <ID>ViewModelForwarding:SecuritySettingsFragment.kt$TorBlock( torViewModel, showAppRestartAlert, )</ID>
+    <ID>ViewModelForwarding:SendBitcoinConfirmationScreen.kt$LifecycleResumeEffect(sendViewModel) { if (refresh) { confirmationData = sendViewModel.getConfirmationData() } onPauseOrDispose { refresh = true } }</ID>
+    <ID>ViewModelForwarding:SendBitcoinScreen.kt$SendBitcoinScreen( title = title, fragmentNavController = fragmentNavController, composeNavController = navController, viewModel = viewModel, amountInputModeViewModel = amountInputModeViewModel, prefilledData = prefilledData, addressCheckerControl = addressCheckerControl, onNextClick = onNextClick )</ID>
+    <ID>ViewModelForwarding:SendBitcoinScreen.kt$SendBtcAdvancedSettingsScreen( fragmentNavController = fragmentNavController, navController = navController, sendBitcoinViewModel = viewModel, amountInputType = amountInputModeViewModel.inputType, )</ID>
+    <ID>ViewModelForwarding:SendEip1155Screen.kt$HSAddressInput( modifier = Modifier.padding(horizontal = 16.dp), viewModel = addressViewModel, inputState = addressViewModel.inputState.collectAsStateWithLifecycle().value, address = addressViewModel.address.collectAsStateWithLifecycle().value, value = addressViewModel.value.collectAsStateWithLifecycle().value, error = viewModel.uiState.addressError, textPreprocessor = addressParserViewModel, navController = navController, ) { address -&gt; viewModel.onEnterAddress(address) }</ID>
+    <ID>ViewModelForwarding:SendEip721Screen.kt$HSAddressInput( modifier = Modifier.padding(horizontal = 16.dp), viewModel = addressViewModel, inputState = addressViewModel.inputState.collectAsStateWithLifecycle().value, address = addressViewModel.address.collectAsStateWithLifecycle().value, value = addressViewModel.value.collectAsStateWithLifecycle().value, error = viewModel.uiState.addressError, textPreprocessor = addressParserViewModel, navController = navController, ) { address -&gt; viewModel.onEnterAddress(address) }</ID>
+    <ID>ViewModelForwarding:SendEvmConfirmationScreen.kt$LifecycleResumeEffect(sendViewModel) { if (refresh) { confirmationData = sendViewModel.getConfirmationData() } onPauseOrDispose { refresh = true } }</ID>
+    <ID>ViewModelForwarding:SendMoneroConfirmationScreen.kt$LifecycleResumeEffect(sendViewModel) { if (refresh) { confirmationData = sendViewModel.getConfirmationData() } onPauseOrDispose { refresh = true } }</ID>
+    <ID>ViewModelForwarding:SendSolanaConfirmationScreen.kt$LifecycleResumeEffect(sendViewModel) { if (refresh) { confirmationData = sendViewModel.getConfirmationData() } onPauseOrDispose { refresh = true } }</ID>
+    <ID>ViewModelForwarding:SendTonConfirmationScreen.kt$LifecycleResumeEffect(sendViewModel) { if (refresh) { confirmationData = sendViewModel.getConfirmationData() } onPauseOrDispose { refresh = true } }</ID>
+    <ID>ViewModelForwarding:SendTransactionServiceEvm.kt$Eip1559FeeSettings(feeSettingsViewModel)</ID>
+    <ID>ViewModelForwarding:SendTransactionServiceEvm.kt$LegacyFeeSettings(feeSettingsViewModel)</ID>
+    <ID>ViewModelForwarding:SendZCashConfirmationScreen.kt$LifecycleResumeEffect(sendViewModel) { if (refresh) { confirmationData = sendViewModel.getConfirmationData() } onPauseOrDispose { refresh = true } }</ID>
+    <ID>ViewModelForwarding:TokenBalanceFragment.kt$TokenBalanceScreen( viewModel = viewModel, transactionsViewModel = transactionsViewModel, navController = fragmentNavController, onStackingClicked = { fragmentNavController.slideFromRight( resId = R.id.stacking, input = if (wallet.isPirateCash()) StackingType.PCASH else StackingType.COSANTA ) }, onShowAllTransactionsClicked = onShowAllTransactionsClicked, onClickSubtitle = onClickSubtitle, onRefresh = viewModel::refresh, refreshing = viewModel.refreshing, onSettingsClick = { navController.navigate(TokenBalanceRoute.Settings) } )</ID>
+    <ID>ViewModelForwarding:TokenBalanceScreen.kt$ButtonsRow( viewItem = balanceViewItem, navController = navController, viewModel = viewModel, onStackingClicked = onStackingClicked, isShowShieldFunds = isShowShieldFunds )</ID>
+    <ID>ViewModelForwarding:TokenBalanceScreen.kt$TokenBalanceHeader( balanceViewItem = it, navController = navController, viewModel = viewModel, uiState = uiState, onStackingClicked = onStackingClicked, onClickSubtitle = onClickSubtitle, isShowShieldFunds = uiState.isShowShieldFunds )</ID>
+    <ID>ViewModelForwarding:TransactionInfoFragment.kt$TransactionInfo( viewModel = viewModel, navController = navController, onAmlInfoClick = { showAmlInfoSheet = true }, onAmlRiskClick = { addresses, status -&gt; if (addresses.size == 1) { navController.slideFromRight( R.id.addressCheckFragment, AddressCheckFragment.Input(addresses.first()) ) } else { amlAddressSelectionData = AmlAddressSelectionData( addresses = addresses.map { address -&gt; address to (amlStatusManager.getAddressStatus(address) ?: status) } ) } } )</ID>
+    <ID>ViewModelForwarding:WCSessionFragment.kt$ActionButtons(viewModel, it)</ID>
+    <ID>ViewModelForwarding:WCSessionFragment.kt$WCSessionListContent(navController, viewModel)</ID>
+    <ID>ViewModelInjection:ActivateSubscriptionFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:ActivateTokenFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:AddRpcScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:AddressCheckBlockchainSelector.kt$viewModel</ID>
+    <ID>ViewModelInjection:AddressCheckTokenSelector.kt$viewModel</ID>
+    <ID>ViewModelInjection:AddressCheckerFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:AppearanceFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:BackupAlert.kt$viewModel</ID>
+    <ID>ViewModelInjection:BackupConfirmKeyFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:BackupLocalPassword.kt$viewModel</ID>
+    <ID>ViewModelInjection:BalanceForAccount.kt$viewModel</ID>
+    <ID>ViewModelInjection:BalanceItems.kt$rateAppViewModel</ID>
+    <ID>ViewModelInjection:BalanceScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:ChooseContactFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:CoinAnalyticsScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:CoinMarketsScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:CoinOverviewScreen.kt$chartViewModel</ID>
+    <ID>ViewModelInjection:CoinOverviewScreen.kt$manageWalletsViewModel</ID>
+    <ID>ViewModelInjection:CoinOverviewScreen.kt$restoreSettingsViewModel</ID>
+    <ID>ViewModelInjection:CoinOverviewScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:CoinTweetsScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:EmaSettingsScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:EvmNetworkFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:GuidesFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:HSAddressInput.kt$viewModel</ID>
+    <ID>ViewModelInjection:HSAmountInput.kt$viewModel</ID>
+    <ID>ViewModelInjection:IndicatorsFragment.kt$chartIndicatorsViewModel</ID>
+    <ID>ViewModelInjection:MacdSettingsScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:ManageAccountFragment.kt$ManageAccountFragment$viewModel</ID>
+    <ID>ViewModelInjection:ManageAccountsFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:MarketScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:MarketSignalsFragment.kt$marketFavoritesViewModel</ID>
+    <ID>ViewModelInjection:NetworkSelectScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:NftAssetFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:NftCollectionAssetsScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:NftCollectionEventsScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:NftHoldingsFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:PersonalSupportFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:PinConfirm.kt$viewModel</ID>
+    <ID>ViewModelInjection:PrivateKeysFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:PublicKeysFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:ReceiveFragment.kt$addressViewModel</ID>
+    <ID>ViewModelInjection:ReceiveStellarAssetScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:ReceiveTokenSelectScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:RecoveryPhraseFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:RestoreAccountFragment.kt$mainViewModel</ID>
+    <ID>ViewModelInjection:RestoreAccountFragment.kt$restoreMenuViewModel</ID>
+    <ID>ViewModelInjection:RestoreBlockchains.kt$blockchainTokensViewModel</ID>
+    <ID>ViewModelInjection:RestoreBlockchains.kt$restoreSettingsViewModel</ID>
+    <ID>ViewModelInjection:RestoreBlockchains.kt$viewModel</ID>
+    <ID>ViewModelInjection:RestoreLocalFragment.kt$mainViewModel</ID>
+    <ID>ViewModelInjection:RestoreLocalFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:RestorePhraseNonStandardScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:RestorePrivateKeyScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:RsiSettingsScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:SecurityCheckFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:SelectBackupItemsScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:SelectBlockchainsFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:SelectContactFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:SendBitcoinScreen.kt$paymentAddressViewModel</ID>
+    <ID>ViewModelInjection:SendBtcAdvancedSettingsScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:SendEvmScreen.kt$paymentAddressViewModel</ID>
+    <ID>ViewModelInjection:SendMoneroScreen.kt$paymentAddressViewModel</ID>
+    <ID>ViewModelInjection:SendSolanaScreen.kt$paymentAddressViewModel</ID>
+    <ID>ViewModelInjection:SendStellarScreen.kt$paymentAddressViewModel</ID>
+    <ID>ViewModelInjection:SendTonScreen.kt$paymentAddressViewModel</ID>
+    <ID>ViewModelInjection:SendTronScreen.kt$paymentAddressViewModel</ID>
+    <ID>ViewModelInjection:SendZCashScreen.kt$paymentAddressViewModel</ID>
+    <ID>ViewModelInjection:SetDuressPinIntroFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:ShowExtendedKeyFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:SwapConfirmScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:SwapFragment.kt$manageWalletsViewModel</ID>
+    <ID>ViewModelInjection:SwapFragment.kt$restoreSettingsViewModel</ID>
+    <ID>ViewModelInjection:SwapFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:SwapSelectCoinScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:SwapSettingsScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:SwapTransactionSettingsScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:SyncErrorDialog.kt$viewModel</ID>
+    <ID>ViewModelInjection:TonConnectNewScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:TonConnectSendRequestScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:TopCoins.kt$viewModel</ID>
+    <ID>ViewModelInjection:TopPairsScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:TransactionsScreen.kt$accountsViewModel</ID>
+    <ID>ViewModelInjection:UnifiedCoinAddressCheck.kt$viewModel</ID>
+    <ID>ViewModelInjection:UnlinkAccountDialog.kt$viewModel</ID>
+    <ID>ViewModelInjection:UtxoExpertModeScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:WCPairingsFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:WCRequestFragment.kt$WCRequestFragment$wcRequestEvmViewModel</ID>
+    <ID>ViewModelInjection:WCSessionScreen.kt$viewModel</ID>
+    <ID>ViewModelInjection:WatchAddressFragment.kt$viewModel</ID>
+    <ID>ViewModelInjection:WcRequestPreScreen.kt$viewModelPre</ID>
+    <ID>ViewModelInjection:WcRequestScreen.kt$viewModel</ID>
   </CurrentIssues>
 </SmellBaseline>

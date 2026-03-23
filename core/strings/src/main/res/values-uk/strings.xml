@@ -1963,7 +1963,6 @@
     <string name="multi_swap_completed">Обмін завершено</string>
     <string name="multi_swap_no_providers">Немає доступних провайдерів</string>
     <string name="multi_swap_finding_best_provider">Пошук найкращого провайдера…</string>
-    <string name="multi_swap_list_title">Обміни</string>
     <string name="multi_swap_continue">Продовжити обмін</string>
     <string name="multi_swap_unfinished">Незавершений обмін</string>
     <string name="multi_swap_unfinished_plural">Незавершені обміни (%d)</string>

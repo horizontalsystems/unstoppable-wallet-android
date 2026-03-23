@@ -663,7 +663,7 @@
     <string name="Transactions_Filter_ChooseBlockchain">انتخاب زنجیره بلوکی</string>
     <string name="Transactions_Incoming">دريافت شد</string>
     <string name="Transactions_Outgoing">ارسال شد</string>
-    <string name="Transactions_Swaps">جابجایی</string>
+    <string name="Transactions_Swaps">مبادلات</string>
     <string name="Transactions_Approvals">تایید ها</string>
     <string name="Transactions_Unknown">معامله ناشناخته</string>
     <string name="Transactions_TonTransaction">Ton Transaction</string>
@@ -1807,7 +1807,6 @@
     <string name="multi_swap_completed">مبادله انجام شد</string>
     <string name="multi_swap_no_providers">هیچ ارائه‌دهنده‌ای موجود نیست</string>
     <string name="multi_swap_finding_best_provider">جستجوی بهترین ارائه‌دهنده…</string>
-    <string name="multi_swap_list_title">مبادلات</string>
     <string name="multi_swap_continue">ادامه مبادله</string>
     <string name="multi_swap_unfinished">مبادله ناتمام</string>
     <string name="multi_swap_unfinished_plural">مبادلات ناتمام (%d)</string>

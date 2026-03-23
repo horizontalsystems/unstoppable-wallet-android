@@ -2248,7 +2248,6 @@ Proceed only if you\'re sure.</string>
     <string name="multi_swap_completed">Swap completed</string>
     <string name="multi_swap_no_providers">No providers available</string>
     <string name="multi_swap_finding_best_provider">Finding best provider…</string>
-    <string name="multi_swap_list_title">Swaps</string>
     <string name="multi_swap_continue">Continue swap</string>
     <string name="multi_swap_unfinished">Unfinished swap</string>
     <string name="multi_swap_unfinished_plural">Unfinished swaps (%d)</string>

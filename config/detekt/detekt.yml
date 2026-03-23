@@ -81,3 +81,85 @@ potential-bugs:
     active: false  # as? is legitimate pattern
   UnsafeCast:
     active: true
+
+# Compose rules (io.nlopez.compose.rules)
+Compose:
+  # Naming
+  ComposableAnnotationNaming:
+    active: true
+  ComposableNaming:
+    active: true
+  CompositionLocalNaming:
+    active: true
+  ParameterNaming:
+    active: true
+  PreviewAnnotationNaming:
+    active: true
+  PreviewNaming:
+    active: false
+  ModifierNaming:
+    active: true
+
+  # Parameter ordering
+  ComposableParamOrder:
+    active: true  # Modifier should be first optional param
+  ContentTrailingLambda:
+    active: true  # content lambda should be last
+  LambdaParameterEventTrailing:
+    active: true  # event lambdas after state params
+
+  # Modifier rules
+  ModifierClickableOrder:
+    active: true
+  ModifierComposed:
+    active: true
+  ModifierMissing:
+    active: true  # top-level Composables should accept Modifier
+  ModifierNotUsedAtRoot:
+    active: true
+  ModifierReused:
+    active: true
+  ModifierWithoutDefault:
+    active: true  # Modifier param should default to Modifier
+
+  # Stability & performance
+  MutableParams:
+    active: true
+  MutableStateAutoboxing:
+    active: true
+  MutableStateParam:
+    active: true
+  RememberMissing:
+    active: true
+  RememberContentMissing:
+    active: true
+  LambdaParameterInRestartableEffect:
+    active: true
+  UnstableCollections:
+    active: false  # too noisy, requires @Immutable annotations everywhere
+
+  # Architecture
+  ViewModelForwarding:
+    active: true  # don't pass ViewModel to child Composables
+  ViewModelInjection:
+    active: true  # inject VM at top level only
+  ContentEmitterReturningValues:
+    active: true
+  MultipleEmitters:
+    active: true
+  ContentSlotReused:
+    active: true
+
+  # Material
+  Material2:
+    active: true  # catch Material 2 usage (forbidden per CLAUDE.md)
+
+  # Visibility
+  DefaultsVisibility:
+    active: true
+  PreviewPublic:
+    active: true  # preview functions should be private
+
+  # Composition locals
+  CompositionLocalAllowlist:
+    active: false  # no allowlist configured yet
