@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -39,6 +40,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
+import io.horizontalsystems.bankwallet.modules.coin.indicators.IndicatorsFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewModule
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.HudMessageType
@@ -193,7 +195,7 @@ fun CoinOverviewScreen(
                                                 modifier = Modifier.height(28.dp),
                                                 icon = R.drawable.ic_setting_20
                                             ) {
-                                                navController.slideFromRight(R.id.indicatorsFragment)
+                                                navController.addFromRight(IndicatorsFragment())
 
                                                 stat(
                                                     page = StatPage.CoinOverview,

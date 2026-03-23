@@ -60,17 +60,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapHistoryFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -303,7 +304,7 @@ private fun SwapScreenInner(
                 title = TranslatableString.ResString(R.string.SwapHistory_Title),
                 icon = R.drawable.ic_circle_clock_24,
                 onClick = {
-                    navController.slideFromRight(R.id.swapHistoryFragment)
+                    navController.addFromRight(SwapHistoryFragment())
                 }
             )),
         onBack = onClickClose,

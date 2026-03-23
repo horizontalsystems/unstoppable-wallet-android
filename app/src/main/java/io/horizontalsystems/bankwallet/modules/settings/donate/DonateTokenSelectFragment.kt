@@ -8,6 +8,7 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -58,7 +59,7 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
         ) {
             DonateHeader(
                 onClick = {
-                    navController.slideFromRight(R.id.donateAddressesFragment)
+                    navController.addFromRight(DonateAddressesFragment())
 
                     stat(page = StatPage.Donate, event = StatEvent.Open(StatPage.DonateAddressList))
                 }

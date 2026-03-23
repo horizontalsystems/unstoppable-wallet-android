@@ -24,18 +24,21 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.ensurePinSet
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.pin.EditDuressPinFragment
+import io.horizontalsystems.bankwallet.modules.pin.SetDuressPinIntroFragment
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
+import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockIntervalsFragment
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
@@ -120,7 +123,7 @@ private fun SecurityCenterScreen(
                         right = {
                             CellRightNavigation(subtitle = stringResource(uiState.autoLockIntervalName).hs)
                         },
-                        onClick = { navController.slideFromRight(R.id.autoLockIntervalsFragment) }
+                        onClick = { navController.addFromRight(AutoLockIntervalsFragment()) }
                     )
                     HsDivider()
                 }
@@ -226,14 +229,14 @@ private fun SecurityCenterScreen(
                                     if (uiState.pinEnabled) {
                                         navController.authorizedAction {
                                             if (uiState.duressPinEnabled) {
-                                                navController.slideFromRight(R.id.editDuressPinFragment)
+                                                navController.addFromRight(EditDuressPinFragment())
                                             } else {
-                                                navController.slideFromRight(R.id.setDuressPinIntroFragment)
+                                                navController.addFromRight(SetDuressPinIntroFragment())
                                             }
                                         }
                                     } else {
                                         navController.ensurePinSet(R.string.PinSet_ForDuress) {
-                                            navController.slideFromRight(R.id.setDuressPinIntroFragment)
+                                            navController.addFromRight(SetDuressPinIntroFragment())
                                         }
                                     }
                                 }

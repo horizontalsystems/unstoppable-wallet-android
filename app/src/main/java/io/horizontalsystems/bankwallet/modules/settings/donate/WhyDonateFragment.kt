@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -45,7 +45,7 @@ class WhyDonateFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         WhyDonateView(
             onClick = {
-                navController.slideFromRight(R.id.donateTokenSelectFragment)
+                navController.addFromRight(DonateTokenSelectFragment())
                 stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
             },
             onClose = {

@@ -36,13 +36,13 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.R.id.defenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.CoinValue
@@ -54,6 +54,8 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsRecipientFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsSlippageFragment
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionNonceSettingsFragment
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionSettingsFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.viewModelForPrevScreen
@@ -183,7 +185,7 @@ private fun SwapConfirmInternal(
 
     val onClickSettings = if (uiState.hasSettings) {
         {
-            navController.slideFromRight(R.id.swapTransactionSettings)
+            navController.addFromRight(SwapTransactionSettingsFragment())
         }
     } else {
         null
@@ -191,7 +193,7 @@ private fun SwapConfirmInternal(
 
     val onClickNonceSettings = if (uiState.hasNonceSettings) {
         {
-            navController.slideFromRight(R.id.swapTransactionNonceSettings)
+            navController.addFromRight(SwapTransactionNonceSettingsFragment())
         }
     } else {
         null
