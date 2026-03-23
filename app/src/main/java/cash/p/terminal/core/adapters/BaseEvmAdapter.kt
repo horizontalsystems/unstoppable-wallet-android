@@ -64,6 +64,17 @@ internal abstract class BaseEvmAdapter(
         return null
     }
 
+    protected fun forwardSyncAdapterState(): AdapterState? {
+        val fwdState = evmTransactionRepository.forwardSyncState.value
+        if (fwdState is EthereumKit.ForwardSyncState.Syncing) {
+            return AdapterState.Syncing(
+                progress = 0,
+                blocksRemained = fwdState.blocksRemaining
+            )
+        }
+        return null
+    }
+
     companion object {
         const val confirmationsThreshold: Int = 12
     }
