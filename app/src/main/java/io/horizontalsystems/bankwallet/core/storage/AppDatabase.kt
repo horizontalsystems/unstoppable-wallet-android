@@ -49,6 +49,7 @@ import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_71_72
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_72_73
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_73_74
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_74_75
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_75_76
 import io.horizontalsystems.bankwallet.entities.ActiveAccount
 import io.horizontalsystems.bankwallet.entities.BlockchainSettingRecord
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
@@ -80,7 +81,7 @@ import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSe
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
 
-@Database(version = 75, exportSchema = false, entities = [
+@Database(version = 76, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -198,6 +199,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_72_73,
                             Migration_73_74,
                             Migration_74_75,
+                    Migration_75_76,
                     )
                     .build()
         }

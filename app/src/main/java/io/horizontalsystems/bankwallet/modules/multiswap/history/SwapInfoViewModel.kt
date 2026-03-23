@@ -106,7 +106,7 @@ class SwapInfoViewModel(
         providerName = record.providerName
         formattedDate = DateHelper.formatDate(Date(record.timestamp), "MMM d, yyyy, HH:mm")
         status = runCatching { SwapStatus.valueOf(record.status) }.getOrDefault(SwapStatus.Depositing)
-        recipientAddress = record.recipientAddress
+        recipientAddress = record.recipientAddress.takeIf { record.customRecipientAddress }
         depositingTxUrl = record.transactionHash?.let { buildTxUrl(record.tokenInBlockchainTypeUid, it) }
         swappingTxUrl = buildProviderTxUrl(record.providerId, record.transactionHash, record.depositAddress)
         sendingTxUrl = record.outboundTransactionHash?.let { buildTxUrl(record.tokenOutBlockchainTypeUid, it) }
