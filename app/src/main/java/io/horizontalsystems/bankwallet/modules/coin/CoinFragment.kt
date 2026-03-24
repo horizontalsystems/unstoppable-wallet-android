@@ -10,7 +10,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
@@ -42,8 +41,7 @@ class CoinFragment(val input: Input) : BaseComposeFragment() {
         CoinScreen(
             input.coinUid,
             viewModel(factory = CoinModule.Factory(input.coinUid)),
-            navController,
-            childFragmentManager
+            navController
         )
     }
 
@@ -55,11 +53,10 @@ class CoinFragment(val input: Input) : BaseComposeFragment() {
 fun CoinScreen(
     coinUid: String,
     coinViewModel: CoinViewModel?,
-    navController: NavBackStack<HSScreen>,
-    fragmentManager: FragmentManager
+    navController: NavBackStack<HSScreen>
 ) {
     if (coinViewModel != null) {
-        CoinTabs(coinViewModel, navController, fragmentManager)
+        CoinTabs(coinViewModel, navController)
     } else {
         CoinNotFound(coinUid, navController)
     }
@@ -68,8 +65,7 @@ fun CoinScreen(
 @Composable
 fun CoinTabs(
     viewModel: CoinViewModel,
-    navController: NavBackStack<HSScreen>,
-    fragmentManager: FragmentManager
+    navController: NavBackStack<HSScreen>
 ) {
     val tabs = viewModel.tabs
     val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
@@ -151,8 +147,7 @@ fun CoinTabs(
                     CoinModule.Tab.Details -> {
                         CoinAnalyticsScreen(
                             fullCoin = viewModel.fullCoin,
-                            navController = navController,
-                            fragmentManager = fragmentManager
+                            navController = navController
                         )
                     }
                 }

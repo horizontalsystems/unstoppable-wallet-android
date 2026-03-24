@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
@@ -47,6 +46,7 @@ import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment
 import io.horizontalsystems.bankwallet.modules.info.OverallScoreInfoFragment
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
+import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment.Input
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
@@ -67,8 +67,7 @@ import io.horizontalsystems.marketkit.models.FullCoin
 @Composable
 fun CoinAnalyticsScreen(
     fullCoin: FullCoin,
-    navController: NavBackStack<HSScreen>,
-    fragmentManager: FragmentManager
+    navController: NavBackStack<HSScreen>
 ) {
     val viewModel =
         viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin))
@@ -97,7 +96,6 @@ fun CoinAnalyticsScreen(
                             AnalyticsData(
                                 item.blocks,
                                 navController,
-                                fragmentManager,
                             )
                         }
 
@@ -119,7 +117,6 @@ fun CoinAnalyticsScreen(
 private fun AnalyticsData(
     blocks: List<CoinAnalyticsModule.BlockViewItem>,
     navController: NavBackStack<HSScreen>,
-    fragmentManager: FragmentManager,
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(blocks) { block ->
@@ -129,7 +126,6 @@ private fun AnalyticsData(
                 AnalyticsBlock(
                     block,
                     navController,
-                    fragmentManager,
                 )
             }
         }
@@ -143,7 +139,6 @@ private fun AnalyticsData(
 private fun AnalyticsBlock(
     block: CoinAnalyticsModule.BlockViewItem,
     navController: NavBackStack<HSScreen>,
-    fragmentManager: FragmentManager,
 ) {
     AnalyticsContainer(
         showFooterDivider = block.showFooterDivider,
@@ -186,11 +181,14 @@ private fun AnalyticsBlock(
                     val coinUid = block.analyticChart?.coinUid
                     val chartType = block.analyticChart?.chartType
                     if (coinUid != null && chartType != null) {
-                        ProChartFragment.show(
-                            fragmentManager,
-                            coinUid,
-                            Translator.getString(chartType.titleRes),
-                            chartType,
+                        navController.add(
+                            ProChartFragment(
+                                Input(
+                                    coinUid,
+                                    Translator.getString(chartType.titleRes),
+                                    chartType.ordinal
+                                )
+                            )
                         )
                     }
                 }
