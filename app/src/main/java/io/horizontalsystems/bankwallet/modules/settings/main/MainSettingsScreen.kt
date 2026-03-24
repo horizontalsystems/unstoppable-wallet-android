@@ -164,8 +164,7 @@ private fun SettingSections(
                 showAlert = uiState.manageWalletShowAlert,
                 onClick = {
                     navController.slideFromRight(
-                        ManageAccountsFragment(),
-                        ManageAccountsModule.Mode.Manage
+                        ManageAccountsFragment(ManageAccountsModule.Mode.Manage)
                     )
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ManageWallets))
@@ -278,8 +277,7 @@ private fun SettingSections(
                     R.drawable.user_24,
                     onClick = {
                         navController.slideFromRight(
-                            ContactsFragment(),
-                            ContactsFragment.Input(Mode.Full)
+                            ContactsFragment(ContactsFragment.Input(Mode.Full))
                         )
 
                         stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Contacts))

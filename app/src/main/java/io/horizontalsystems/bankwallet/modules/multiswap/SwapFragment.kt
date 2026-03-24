@@ -62,7 +62,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.badge
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
@@ -113,10 +112,9 @@ import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
-class SwapFragment : BaseComposeFragment() {
+class SwapFragment(val input: Input? = null) : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val input = navController.getInput<Input>()
         SwapScreen(navController, input?.tokenIn, input?.tokenOut, navController::removeLastOrNull)
     }
 

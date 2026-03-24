@@ -17,7 +17,7 @@ import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import java.util.UUID
 
-fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen, input: Parcelable) {
+fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
 //    TODO("xxx nav3")
 //    navigate(resId, args, navOptions)
 }

@@ -323,7 +323,7 @@ fun TransactionInfoAddressCell(
                             ContactsFragment.Input(Mode.AddAddressToExistingContact(blockchainType, value))
                         }
                     }
-                    navController?.slideFromRight(ContactsFragment(), args)
+                    navController?.slideFromRight(ContactsFragment(args))
                 }
             })
     }
@@ -761,8 +761,7 @@ private fun openTransactionOptionsModule(
         BlockchainType.Litecoin,
         BlockchainType.Dash -> {
             navController.slideFromRight(
-                ResendBitcoinFragment(),
-                ResendBitcoinFragment.Input(type)
+                ResendBitcoinFragment(ResendBitcoinFragment.Input(type))
             )
         }
 
@@ -775,8 +774,7 @@ private fun openTransactionOptionsModule(
         BlockchainType.ZkSync,
         BlockchainType.ArbitrumOne -> {
             navController.slideFromRight(
-                TransactionSpeedUpCancelFragment(),
-                TransactionSpeedUpCancelFragment.Input(blockchainType, type, transactionHash)
+                TransactionSpeedUpCancelFragment(TransactionSpeedUpCancelFragment.Input(blockchainType, type, transactionHash))
             )
         }
 

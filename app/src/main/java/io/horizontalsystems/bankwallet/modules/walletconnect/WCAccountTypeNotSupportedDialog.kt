@@ -52,8 +52,7 @@ class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
                         onSwitchClick = {
                             navController.removeLastOrNull()
                             navController.slideFromRight(
-                                ManageAccountsFragment(),
-                                ManageAccountsModule.Mode.Manage
+                                ManageAccountsFragment(ManageAccountsModule.Mode.Manage)
                             )
                         }
                     )

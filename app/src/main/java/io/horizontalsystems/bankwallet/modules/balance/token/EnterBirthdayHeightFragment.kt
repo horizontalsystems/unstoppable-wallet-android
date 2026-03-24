@@ -65,18 +65,16 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 
-class EnterBirthdayHeightFragment : BaseComposeFragment() {
+class EnterBirthdayHeightFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            EnterBirthdayHeightScreen(
-                blockchainType = input.blockchainType,
-                account = input.account,
-                currentBirthdayHeight = input.currentBirthdayHeight,
-                onCloseClick = { navController.removeLastOrNull() }
-            )
-        }
+        EnterBirthdayHeightScreen(
+            blockchainType = input.blockchainType,
+            account = input.account,
+            currentBirthdayHeight = input.currentBirthdayHeight,
+            onCloseClick = { navController.removeLastOrNull() }
+        )
     }
 
     @Parcelize

@@ -30,25 +30,24 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
 
-class ReceiveFragment : BaseComposeFragment() {
+class ReceiveFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) {
-            val wallet = it.wallet
-            val token = wallet.token
-            when (token.blockchainType) {
-                BlockchainType.Stellar -> {
-                    if (token.type is TokenType.Asset) {
-                        ReceiveStellarAssetScreen(navController, wallet, it.receiveEntryPointDestId)
-                    } else if (token.type == TokenType.Native) {
-                        ReceiveScreen(navController, wallet, it.receiveEntryPointDestId, it.isTransparentAddress)
-                    }
+        val wallet = input.wallet
+        val token = wallet.token
+        when (token.blockchainType) {
+            BlockchainType.Stellar -> {
+                if (token.type is TokenType.Asset) {
+                    ReceiveStellarAssetScreen(navController, wallet, input.receiveEntryPointDestId)
+                } else if (token.type == TokenType.Native) {
+                    ReceiveScreen(navController, wallet, input.receiveEntryPointDestId, input.isTransparentAddress)
                 }
+            }
 
-                BlockchainType.Monero -> {
-                    ReceiveMoneroScreen(navController, wallet, it.receiveEntryPointDestId)
-                }
+            BlockchainType.Monero -> {
+                ReceiveMoneroScreen(navController, wallet, input.receiveEntryPointDestId)
+            }
 //        BlockchainType.ArbitrumOne -> TODO()
 //        BlockchainType.Avalanche -> TODO()
 //        BlockchainType.Base -> TODO()
@@ -70,10 +69,9 @@ class ReceiveFragment : BaseComposeFragment() {
 //        BlockchainType.Zcash -> TODO()
 //        BlockchainType.ZkSync -> TODO()
                 else -> {
-                    ReceiveScreen(navController, wallet, it.receiveEntryPointDestId, it.isTransparentAddress)
+                    ReceiveScreen(navController, wallet, input.receiveEntryPointDestId, input.isTransparentAddress)
                 }
             }
-        }
     }
 
     @Parcelize
@@ -108,12 +106,11 @@ fun ReceiveScreen(
                     modifier = Modifier.height(52.dp),
                     onClick = {
                         navController.slideFromRight(
-                            BtcUsedAddressesFragment(),
-                            UsedAddressesParams(
+                            BtcUsedAddressesFragment(UsedAddressesParams(
                                 wallet.coin.name,
                                 uiState.usedAddresses,
                                 uiState.usedChangeAddresses
-                            )
+                            ))
                         )
                     }
                 ) {

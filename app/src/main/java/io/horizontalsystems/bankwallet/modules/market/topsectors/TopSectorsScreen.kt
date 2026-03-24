@@ -122,8 +122,7 @@ fun TopSectorsScreen(
                                 BoxBordered(bottom = true) {
                                     TopSectorItem(item) { coinCategory ->
                                         navController.slideFromRight(
-                                            MarketSectorFragment(),
-                                            coinCategory
+                                            MarketSectorFragment(coinCategory)
                                         )
                                     }
                                 }

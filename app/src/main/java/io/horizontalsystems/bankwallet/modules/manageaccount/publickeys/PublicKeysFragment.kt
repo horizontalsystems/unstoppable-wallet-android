@@ -26,13 +26,11 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
-class PublicKeysFragment : BaseComposeFragment() {
+class PublicKeysFragment(val input: Account) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Account>(navController) { account ->
-            ManageAccountScreen(navController, account)
-        }
+        ManageAccountScreen(navController, input)
     }
 
 }
@@ -56,8 +54,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                     description = stringResource(R.string.PublicKeys_EvmAddress_Description)
                 ) {
                     navController.slideFromRight(
-                        AddressFragment(),
-                        AddressFragment.Input(evmAddress, AddressFragment.Type.Evm)
+                        AddressFragment(AddressFragment.Input(evmAddress, AddressFragment.Type.Evm))
                     )
 
                     stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.EvmAddress))
@@ -82,11 +79,10 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                     description = stringResource(id = R.string.PublicKeys_AccountExtendedPublicKeyDescription),
                 ) {
                     navController.slideFromRight(
-                        ShowExtendedKeyFragment(),
-                        ShowExtendedKeyFragment.Input(
+                        ShowExtendedKeyFragment(ShowExtendedKeyFragment.Input(
                             publicKey.hdKey,
                             publicKey.accountPublicKey
-                        )
+                        ))
                     )
 
                     stat(
@@ -103,8 +99,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            ShowMoneroKeyFragment(),
-                            ShowMoneroKeyFragment.Input(moneroKeys)
+                            ShowMoneroKeyFragment(ShowMoneroKeyFragment.Input(moneroKeys))
                         )
                         stat(
                             page = StatPage.PublicKeys,

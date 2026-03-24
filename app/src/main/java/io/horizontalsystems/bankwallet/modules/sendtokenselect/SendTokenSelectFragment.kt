@@ -8,7 +8,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -20,12 +19,10 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
-class SendTokenSelectFragment : BaseComposeFragment() {
+class SendTokenSelectFragment(val input: Input? = null) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val input = navController.getInput<Input>()
-
         val blockchainTypes = input?.blockchainTypes
         val tokenTypes = input?.tokenTypes
         val view = LocalView.current
@@ -35,15 +32,14 @@ class SendTokenSelectFragment : BaseComposeFragment() {
             onClickItem = {
                 val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
                 navController.slideFromRight(
-                    EnterAddressFragment(),
-                    EnterAddressFragment.Input(
+                    EnterAddressFragment(EnterAddressFragment.Input(
                         wallet = it.wallet,
                         title = sendTitle,
                         sendEntryPointDestId = R.id.sendTokenSelectFragment,
                         address = input?.address,
                         amount = input?.amount,
                         memo = input?.memo,
-                    )
+                    ))
                 )
             },
             viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes, tokenTypes)),

@@ -289,14 +289,13 @@ private fun MainScreen(
 
     uiState.openSend?.let { openSend ->
         fragmentNavController.slideFromRight(
-            SendTokenSelectFragment(),
-            SendTokenSelectFragment.Input(
+            SendTokenSelectFragment(SendTokenSelectFragment.Input(
                 openSend.blockchainTypes,
                 openSend.tokenTypes,
                 openSend.address,
                 openSend.amount,
                 openSend.memo,
-            )
+            ))
         )
         viewModel.onSendOpened()
     }

@@ -149,10 +149,9 @@ private fun openConfirm(
     sendEntryPointDestId: Int
 ) {
     navController.slideFromRight(
-        SendConfirmationFragment(),
-        SendConfirmationFragment.Input(
+        SendConfirmationFragment(SendConfirmationFragment.Input(
             SendConfirmationFragment.Type.ZCash,
             sendEntryPointDestId
-        )
+        ))
     )
 }

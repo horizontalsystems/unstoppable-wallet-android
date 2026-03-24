@@ -185,7 +185,7 @@ fun TokenBalanceScreen(
                             val coinUid = uiState.balanceViewItem.wallet.coin.uid
                             val arguments = CoinFragment.Input(coinUid)
 
-                            navController.slideFromRight(CoinFragment(), arguments)
+                            navController.slideFromRight(CoinFragment(arguments))
 
                             stat(
                                 page = StatPage.TokenPage,
@@ -202,13 +202,11 @@ fun TokenBalanceScreen(
                 val wallet = viewModel.getWalletForReceive()
                 if (wallet.token.blockchainType == BlockchainType.Zcash) {
                     navController.slideFromRight(
-                        ZcashAddressTypeSelectFragment(),
-                        ZcashAddressTypeSelectFragment.Input(wallet)
+                        ZcashAddressTypeSelectFragment(ZcashAddressTypeSelectFragment.Input(wallet))
                     )
                 } else {
                     navController.slideFromRight(
-                        ReceiveFragment(),
-                        ReceiveFragment.Input(wallet)
+                        ReceiveFragment(ReceiveFragment.Input(wallet))
                     )
                 }
 
@@ -251,12 +249,11 @@ fun TokenBalanceScreen(
                             birthdayHeight = birthdayHeight,
                             onClick = {
                                 navController.slideFromRight(
-                                    EnterBirthdayHeightFragment(),
-                                    EnterBirthdayHeightFragment.Input(
+                                    EnterBirthdayHeightFragment(EnterBirthdayHeightFragment.Input(
                                         blockchainType = balanceViewItem.wallet.token.blockchainType,
                                         account = balanceViewItem.wallet.account,
                                         currentBirthdayHeight = birthdayHeight
-                                    )
+                                    ))
                                 )
                             }
                         )
@@ -329,8 +326,7 @@ fun TokenBalanceScreen(
                             bottomSheetState.hide()
                             bottomSheetContent = null
                             navController.slideFromRight(
-                                ShieldZcashFragment(),
-                                ShieldZcashFragment.Input(wallet, R.id.tokenBalanceFragment)
+                                ShieldZcashFragment(ShieldZcashFragment.Input(wallet, R.id.tokenBalanceFragment))
                             )
                         }
                     },
@@ -375,8 +371,7 @@ fun TokenBalanceScreen(
                     try {
                         val wallet = viewModel.getWalletForTronReceive()
                         navController.slideFromRight(
-                            ReceiveFragment(),
-                            ReceiveFragment.Input(wallet)
+                            ReceiveFragment(ReceiveFragment.Input(wallet))
                         )
                     } catch (e: BackupRequiredError) {
                         val text = Translator.getString(
@@ -816,7 +811,7 @@ private fun ButtonsRow(
                 val coinUid = viewItem.wallet.coin.uid
                 val arguments = CoinFragment.Input(coinUid)
 
-                navController.slideFromRight(CoinFragment(), arguments)
+                navController.slideFromRight(CoinFragment(arguments))
 
                 stat(page = StatPage.TokenPage, event = StatEvent.OpenCoin(coinUid))
             },
@@ -837,11 +832,10 @@ private fun ButtonsRow(
                     viewItem.wallet.token.fullCoin.coin.code
                 )
                 navController.slideFromRight(
-                    EnterAddressFragment(),
-                    EnterAddressFragment.Input(
+                    EnterAddressFragment(EnterAddressFragment.Input(
                         wallet = viewItem.wallet,
                         title = sendTitle
-                    )
+                    ))
                 )
 
                 stat(
@@ -856,7 +850,7 @@ private fun ButtonsRow(
                 icon = R.drawable.ic_swap_circle_24,
                 title = stringResource(R.string.Swap),
                 onClick = {
-                    navController.slideFromRight(SwapFragment(), SwapFragment.Input(tokenIn = viewItem.wallet.token))
+                    navController.slideFromRight(SwapFragment(SwapFragment.Input(tokenIn = viewItem.wallet.token)))
 
                     stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.Swap))
                 },

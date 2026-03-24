@@ -348,7 +348,7 @@ private fun openMetricsPage(metricsType: MetricsType, navController: NavBackStac
 private fun onCoinClick(coinUid: String, navController: NavBackStack<HSScreen>) {
     val arguments = CoinFragment.Input(coinUid)
 
-    navController.slideFromRight(CoinFragment(), arguments)
+    navController.slideFromRight(CoinFragment(arguments))
 
     stat(page = StatPage.Markets, event = StatEvent.OpenCoin(coinUid), section = StatSection.Coins)
 }

@@ -17,32 +17,29 @@ import io.horizontalsystems.bankwallet.modules.send.SendFragment.Input
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
-class EnterAddressFragment : BaseComposeFragment() {
+class EnterAddressFragment(val input: Input) : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            EnterAddressScreen(
-                navController = navController,
-                token = input.wallet.token,
-                title = stringResource(Send_EnterAddress),
-                buttonTitle = stringResource(Button_Next),
-                allowNull = false,
-                initialAddress = input.address
-            ) { address, risky ->
-                address?.let {
-                    navController.slideFromRight(
-                        SendFragment(),
-                        Input(
-                            wallet = input.wallet,
-                            sendEntryPointDestId = input.sendEntryPointDestId ?: enterAddressFragment,
-                            title = input.title,
-                            address = it,
-                            riskyAddress = risky,
-                            amount = input.amount,
-                            memo = input.memo,
-                        )
-                    )
-                }
+        EnterAddressScreen(
+            navController = navController,
+            token = input.wallet.token,
+            title = stringResource(Send_EnterAddress),
+            buttonTitle = stringResource(Button_Next),
+            allowNull = false,
+            initialAddress = input.address
+        ) { address, risky ->
+            address?.let {
+                navController.slideFromRight(
+                    SendFragment(Input(
+                        wallet = input.wallet,
+                        sendEntryPointDestId = input.sendEntryPointDestId ?: enterAddressFragment,
+                        title = input.title,
+                        address = it,
+                        riskyAddress = risky,
+                        amount = input.amount,
+                        memo = input.memo,
+                    ))
+                )
             }
         }
     }

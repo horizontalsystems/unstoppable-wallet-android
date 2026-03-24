@@ -64,13 +64,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
-class ManageAccountFragment : BaseComposeFragment() {
+class ManageAccountFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            ManageAccountScreen(navController, input.accountId)
-        }
+        ManageAccountScreen(navController, input.accountId)
     }
 
     @Parcelize
@@ -280,8 +278,7 @@ private fun KeyActions(
                     ) {
                         navController.authorizedAction {
                             navController.slideFromRight(
-                                RecoveryPhraseFragment(),
-                                viewModel.account
+                                RecoveryPhraseFragment(viewModel.account)
                             )
 
                             stat(
@@ -300,8 +297,7 @@ private fun KeyActions(
                         icon = painterResource(id = R.drawable.ic_key_20)
                     ) {
                         navController.slideFromRight(
-                            PrivateKeysFragment(),
-                            viewModel.account
+                            PrivateKeysFragment(viewModel.account)
                         )
 
                         stat(
@@ -319,8 +315,7 @@ private fun KeyActions(
                         icon = painterResource(id = R.drawable.icon_binocule_20)
                     ) {
                         navController.slideFromRight(
-                            PublicKeysFragment(),
-                            viewModel.account
+                            PublicKeysFragment(viewModel.account)
                         )
 
                         stat(

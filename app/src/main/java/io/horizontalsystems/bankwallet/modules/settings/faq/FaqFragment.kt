@@ -44,8 +44,7 @@ class FaqListFragment : BaseComposeFragment() {
             onCloseClick = { navController.removeLastOrNull() },
             onItemClick = { faqItem ->
                 navController.slideFromRight(
-                    MarkdownFragment(),
-                    MarkdownFragment.Input(faqItem.markdown)
+                    MarkdownFragment(MarkdownFragment.Input(faqItem.markdown))
                 )
 
                 stat(page = StatPage.Faq, event = StatEvent.OpenArticle(faqItem.markdown))

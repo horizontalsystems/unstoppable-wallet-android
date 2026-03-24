@@ -51,21 +51,19 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import kotlinx.parcelize.Parcelize
 
-class DetectorsFragment : BaseComposeFragment() {
+class DetectorsFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            val viewModel = viewModel<DetectorsViewModel>(
-                factory = DetectorsModule.Factory(input.title, input.issues)
-            )
-            DetectorsScreen(
-                viewModel = viewModel,
-                onBackClick = {
-                    navController.removeLastOrNull()
-                },
-            )
-        }
+        val viewModel = viewModel<DetectorsViewModel>(
+            factory = DetectorsModule.Factory(input.title, input.issues)
+        )
+        DetectorsScreen(
+            viewModel = viewModel,
+            onBackClick = {
+                navController.removeLastOrNull()
+            },
+        )
     }
 
     @Parcelize

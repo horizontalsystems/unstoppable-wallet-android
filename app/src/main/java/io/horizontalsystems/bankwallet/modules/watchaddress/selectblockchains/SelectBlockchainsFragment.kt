@@ -41,19 +41,17 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.parcelize.Parcelize
 
-class SelectBlockchainsFragment : BaseComposeFragment() {
+class SelectBlockchainsFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            SelectBlockchainsScreen(
-                input.accountType,
-                input.accountName,
-                navController,
-                input.popOffOnSuccess,
-                input.popOffInclusive
-            )
-        }
+        SelectBlockchainsScreen(
+            input.accountType,
+            input.accountName,
+            navController,
+            input.popOffOnSuccess,
+            input.popOffInclusive
+        )
     }
 
     @Parcelize

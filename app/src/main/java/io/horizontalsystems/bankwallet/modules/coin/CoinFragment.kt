@@ -34,18 +34,16 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-class CoinFragment : BaseComposeFragment() {
+class CoinFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            CoinScreen(
-                input.coinUid,
-                coinViewModel(input.coinUid),
-                navController,
-                childFragmentManager
-            )
-        }
+        CoinScreen(
+            input.coinUid,
+            coinViewModel(input.coinUid),
+            navController,
+            childFragmentManager
+        )
     }
 
     private fun coinViewModel(coinUid: String): CoinViewModel? = try {

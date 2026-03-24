@@ -161,7 +161,7 @@ private fun AnalyticsBlock(
                     isPreview = false,
                     onInfoClick = block.info?.let { info ->
                         {
-                            navController.slideFromRight(CoinAnalyticsInfoFragment(), info)
+                            navController.slideFromRight(CoinAnalyticsInfoFragment(info))
                         }
                     }
                 )
@@ -294,7 +294,7 @@ private fun AnalyticsPreviewBlock(
                     isPreview = true,
                     onInfoClick = block.info?.let { info ->
                         {
-                            navController.slideFromRight(CoinAnalyticsInfoFragment(), info)
+                            navController.slideFromRight(CoinAnalyticsInfoFragment(info))
                         }
                     }
                 )
@@ -391,21 +391,21 @@ private fun handleActionClick(
 
         is CoinAnalyticsModule.ActionType.OpenAudits -> {
             val arguments = CoinAuditsFragment.Input(action.audits)
-            navController.slideFromRight(CoinAuditsFragment(), arguments)
+            navController.slideFromRight(CoinAuditsFragment(arguments))
         }
 
         is CoinAnalyticsModule.ActionType.OpenTreasuries -> {
-            navController.slideFromRight(CoinTreasuriesFragment(), action.coin)
+            navController.slideFromRight(CoinTreasuriesFragment(action.coin))
         }
 
         is CoinAnalyticsModule.ActionType.OpenReports -> {
             val arguments = CoinReportsFragment.Input(action.coinUid)
-            navController.slideFromRight(CoinReportsFragment(), arguments)
+            navController.slideFromRight(CoinReportsFragment(arguments))
         }
 
         is CoinAnalyticsModule.ActionType.OpenInvestors -> {
             val arguments = CoinInvestmentsFragment.Input(action.coinUid)
-            navController.slideFromRight(CoinInvestmentsFragment(), arguments)
+            navController.slideFromRight(CoinInvestmentsFragment(arguments))
         }
 
         is CoinAnalyticsModule.ActionType.OpenRank -> {
@@ -413,7 +413,7 @@ private fun handleActionClick(
         }
 
         is CoinAnalyticsModule.ActionType.OpenOverallScoreInfo -> {
-            navController.slideFromRight(OverallScoreInfoFragment(), action.scoreCategory)
+            navController.slideFromRight(OverallScoreInfoFragment(action.scoreCategory))
         }
 
         CoinAnalyticsModule.ActionType.OpenTvl -> {
@@ -422,7 +422,7 @@ private fun handleActionClick(
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {
             val params = DetectorsFragment.Input(action.title, action.issues)
-            navController.slideFromRight(DetectorsFragment(), params)
+            navController.slideFromRight(DetectorsFragment(params))
         }
     }
 }

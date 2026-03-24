@@ -297,8 +297,7 @@ private fun onClick(coinLink: CoinLink, context: Context, navController: NavBack
     when (coinLink.linkType) {
         LinkType.Guide -> {
             navController.slideFromRight(
-                MarkdownFragment(),
-                MarkdownFragment.Input(absoluteUrl, true)
+                MarkdownFragment(MarkdownFragment.Input(absoluteUrl, true))
             )
         }
 

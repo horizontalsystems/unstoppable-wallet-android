@@ -42,13 +42,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-class SendEvmConfirmationFragment : BaseComposeFragment() {
+class SendEvmConfirmationFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            SendEvmConfirmationScreen(navController, input)
-        }
+        SendEvmConfirmationScreen(navController, input)
     }
 
     @Parcelize

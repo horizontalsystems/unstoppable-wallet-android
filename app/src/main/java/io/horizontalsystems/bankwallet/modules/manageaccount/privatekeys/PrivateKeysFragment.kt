@@ -27,13 +27,11 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
-class PrivateKeysFragment : BaseComposeFragment() {
+class PrivateKeysFragment(val input: Account) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Account>(navController) { account ->
-            ManageAccountScreen(navController, account)
-        }
+        ManageAccountScreen(navController, input)
     }
 
 }
@@ -58,8 +56,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            PrivateKeyFragment(),
-                            PrivateKeyFragment.Input(key, PrivateKeyFragment.Type.Evm)
+                            PrivateKeyFragment(PrivateKeyFragment.Input(key, PrivateKeyFragment.Type.Evm))
                         )
 
                         stat(
@@ -94,8 +91,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            StellarSecretKeyFragment(),
-                            StellarSecretKeyFragment.Input(key)
+                            StellarSecretKeyFragment(StellarSecretKeyFragment.Input(key))
                         )
 
                         stat(
@@ -112,11 +108,10 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            ShowExtendedKeyFragment(),
-                            ShowExtendedKeyFragment.Input(
+                            ShowExtendedKeyFragment(ShowExtendedKeyFragment.Input(
                                 key.hdKey,
                                 key.displayKeyType
-                            )
+                            ))
                         )
 
                         stat(
@@ -133,8 +128,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            ShowExtendedKeyFragment(),
-                            ShowExtendedKeyFragment.Input(key.hdKey, key.displayKeyType)
+                            ShowExtendedKeyFragment(ShowExtendedKeyFragment.Input(key.hdKey, key.displayKeyType))
                         )
 
                         stat(
@@ -151,8 +145,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            ShowMoneroKeyFragment(),
-                            ShowMoneroKeyFragment.Input(moneroKeys)
+                            ShowMoneroKeyFragment(ShowMoneroKeyFragment.Input(moneroKeys))
                         )
 
                         stat(

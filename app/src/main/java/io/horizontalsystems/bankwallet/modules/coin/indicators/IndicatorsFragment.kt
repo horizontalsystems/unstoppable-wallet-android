@@ -81,8 +81,7 @@ fun IndicatorsScreen(navController: NavBackStack<HSScreen>) {
                     },
                     onEditClick = {
                         navController.slideFromRight(
-                            IndicatorSettingsFragment(),
-                            IndicatorSettingsFragment.Input(indicator.id)
+                            IndicatorSettingsFragment(IndicatorSettingsFragment.Input(indicator.id))
                         )
                     }
                 )
@@ -100,8 +99,7 @@ fun IndicatorsScreen(navController: NavBackStack<HSScreen>) {
                     },
                     onEditClick = {
                         navController.slideFromRight(
-                            IndicatorSettingsFragment(),
-                            IndicatorSettingsFragment.Input(indicator.id)
+                            IndicatorSettingsFragment(IndicatorSettingsFragment.Input(indicator.id))
                         )
                     }
                 )

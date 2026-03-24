@@ -21,7 +21,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.HSCaution
-import io.horizontalsystems.bankwallet.core.getInputX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -54,16 +53,12 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.parcelize.Parcelize
 
-class ResendBitcoinFragment : BaseComposeFragment() {
+class ResendBitcoinFragment(val input: Input) : BaseComposeFragment() {
 
     @Parcelize
     data class Input(val optionType: SpeedUpCancelType) : Parcelable
 
     private val transactionInfoViewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment)
-
-    private val input by lazy {
-        requireArguments().getInputX<Input>()!!
-    }
 
     private val vmFactory by lazy {
         ResendBitcoinModule.Factory(

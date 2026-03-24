@@ -32,13 +32,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
+class TransactionSpeedUpCancelFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            TransactionSpeedUpCancelScreen(navController, input)
-        }
+        TransactionSpeedUpCancelScreen(navController, input)
     }
 
     @Parcelize
