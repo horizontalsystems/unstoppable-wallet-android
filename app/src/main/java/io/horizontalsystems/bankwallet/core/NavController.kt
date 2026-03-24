@@ -65,7 +65,7 @@ fun NavBackStack<HSScreen>.ensurePinSet(descriptionResId: Int, action: () -> Uni
     if (App.pinComponent.isPinSet) {
         action.invoke()
     } else {
-        slideFromRightForResult<SetPinFragment.Result>(SetPinFragment(), SetPinFragment.Input(descriptionResId)) {
+        slideFromRightForResult<SetPinFragment.Result>(SetPinFragment(SetPinFragment.Input(descriptionResId))) {
             action.invoke()
         }
     }
@@ -86,9 +86,9 @@ fun <T: Parcelable> NavBackStack<HSScreen>.slideFromBottomForResult(
     navigateForResult(resId, input, navOptions, onResult)
 }
 
-fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(screen: HSScreen, onResult: (T) -> Unit) = Unit
-
-fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(screen: HSScreen, input: Parcelable? = null, onResult: (T) -> Unit) = Unit
+fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(screen: HSScreen, onResult: (T) -> Unit) {
+//    TODO("xxx nav3")
+}
 
 private fun <T : Parcelable> NavBackStack<HSScreen>.navigateForResult(
     resId: Int,

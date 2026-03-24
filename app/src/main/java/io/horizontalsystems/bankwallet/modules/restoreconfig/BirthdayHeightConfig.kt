@@ -15,7 +15,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 
-class BirthdayHeightConfig : BaseComposeFragment() {
+class BirthdayHeightConfig(blockchainType: BlockchainType) : BaseComposeFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.onBackPressedDispatcher?.addCallback(this) {

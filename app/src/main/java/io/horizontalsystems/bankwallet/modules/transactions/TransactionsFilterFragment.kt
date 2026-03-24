@@ -147,10 +147,11 @@ fun FilterScreen(
                             valueColor = if (filterContact != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                             onClick = {
                                 navController.slideFromRightForResult<SelectContactFragment.Result>(
-                                    SelectContactFragment(),
-                                    SelectContactFragment.Input(
-                                        filterContact,
-                                        filterBlockchain?.type
+                                    SelectContactFragment(
+                                        SelectContactFragment.Input(
+                                            filterContact,
+                                            filterBlockchain?.type
+                                        )
                                     )
                                 ) {
                                     viewModel.onEnterContact(it.contact)

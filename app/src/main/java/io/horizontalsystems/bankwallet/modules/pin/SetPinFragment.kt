@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import kotlinx.parcelize.Parcelize
 
-class SetPinFragment : BaseComposeFragment(screenshotEnabled = false) {
+class SetPinFragment(input1: Input? = null) : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
