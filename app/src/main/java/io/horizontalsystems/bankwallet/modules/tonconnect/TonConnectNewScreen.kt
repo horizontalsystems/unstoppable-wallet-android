@@ -29,8 +29,8 @@ import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.TitleValueCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.DropDownCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.TitleValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault

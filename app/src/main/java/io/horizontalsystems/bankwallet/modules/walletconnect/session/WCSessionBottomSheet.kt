@@ -48,7 +48,6 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.WalletCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -312,6 +311,24 @@ private fun ActionButtons(
             }
         }
     }
+}
+
+@Composable
+fun WalletCell(
+    name: String,
+) {
+    CellSecondary(
+        middle = {
+            CellMiddleInfo(
+                eyebrow = stringResource(R.string.Wallet_Title).hs,
+            )
+        },
+        right = {
+            CellRightInfo(
+                titleSubheadSb = name.hs,
+            )
+        },
+    )
 }
 
 @Composable
