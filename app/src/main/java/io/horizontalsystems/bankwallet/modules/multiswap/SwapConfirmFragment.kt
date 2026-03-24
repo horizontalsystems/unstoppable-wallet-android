@@ -212,7 +212,7 @@ private fun SwapConfirmInternal(
         onClickSlippageSettings = uiState.slippage?.let { slippage ->
             {
                 navController.slideFromRightForResult<SwapSettingsSlippageFragment.Result>(
-                    R.id.swapSettingsSlippage,
+                    SwapSettingsSlippageFragment(),
                     SwapSettingsSlippageFragment.Input(slippage)
                 ) {
                     viewModel.setSlippage(it.slippage)
@@ -221,7 +221,7 @@ private fun SwapConfirmInternal(
         },
         onClickRecipientSettings = {
             navController.slideFromRightForResult<SwapSettingsRecipientFragment.Result>(
-                R.id.swapSettingsRecipient,
+                SwapSettingsRecipientFragment(),
                 SwapSettingsRecipientFragment.Input(uiState.tokenIn, uiState.recipient)
             ) {
                 viewModel.setRecipient(it.address)

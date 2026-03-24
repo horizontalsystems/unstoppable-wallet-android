@@ -81,7 +81,7 @@ fun Eip20ApproveScreen(navController: NavBackStack<HSScreen>, input: Eip20Approv
                     title = stringResource(R.string.Button_Next),
                     onClick = {
                         viewModel.freeze()
-                        navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>(R.id.eip20ApproveConfirmFragment) {
+                        navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>(Eip20ApproveConfirmFragment()) {
                             navController.setNavigationResultX(it)
                             navController.removeLastOrNull()
                         }

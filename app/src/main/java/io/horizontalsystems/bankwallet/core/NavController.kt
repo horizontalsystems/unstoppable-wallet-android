@@ -65,7 +65,7 @@ fun NavBackStack<HSScreen>.ensurePinSet(descriptionResId: Int, action: () -> Uni
     if (App.pinComponent.isPinSet) {
         action.invoke()
     } else {
-        slideFromRightForResult<SetPinFragment.Result>(R.id.setPinFragment, SetPinFragment.Input(descriptionResId)) {
+        slideFromRightForResult<SetPinFragment.Result>(SetPinFragment(), SetPinFragment.Input(descriptionResId)) {
             action.invoke()
         }
     }
@@ -86,20 +86,9 @@ fun <T: Parcelable> NavBackStack<HSScreen>.slideFromBottomForResult(
     navigateForResult(resId, input, navOptions, onResult)
 }
 
-fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(
-    @IdRes resId: Int,
-    input: Parcelable? = null,
-    onResult: (T) -> Unit
-) {
-    val navOptions = NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_from_right)
-        .setExitAnim(android.R.anim.fade_out)
-        .setPopEnterAnim(android.R.anim.fade_in)
-        .setPopExitAnim(R.anim.slide_to_right)
-        .build()
+fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(screen: HSScreen, onResult: (T) -> Unit) = Unit
 
-    navigateForResult(resId, input, navOptions, onResult)
-}
+fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(screen: HSScreen, input: Parcelable? = null, onResult: (T) -> Unit) = Unit
 
 private fun <T : Parcelable> NavBackStack<HSScreen>.navigateForResult(
     resId: Int,

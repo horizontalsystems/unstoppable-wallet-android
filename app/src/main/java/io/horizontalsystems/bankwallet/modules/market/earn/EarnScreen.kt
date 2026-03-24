@@ -173,7 +173,7 @@ fun MarketEarnScreen(
                                             title = uiState.chainSelectorMenuTitle,
                                             onClick = {
                                                 navController.slideFromRightForResult<VaultBlockchainsSelectorFragment.Result>(
-                                                    R.id.vaultsBlockchainsSelectorFragment,
+                                                    VaultBlockchainsSelectorFragment(),
                                                     VaultBlockchainsSelectorFragment.Input(
                                                         uiState.selectedBlockchains,
                                                         uiState.blockchains
