@@ -228,8 +228,7 @@ private fun SettingSections(
                         is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
                             val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
                             navController.slideFromBottom(
-                                BackupRequiredDialog(),
-                                BackupRequiredDialog.Input(state.account, text)
+                                BackupRequiredDialog(BackupRequiredDialog.Input(state.account, text))
                             )
 
                             stat(
@@ -240,8 +239,7 @@ private fun SettingSections(
 
                         is WCManager.SupportState.NotSupported -> {
                             navController.slideFromBottom(
-                                WCAccountTypeNotSupportedDialog(),
-                                WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
+                                WCAccountTypeNotSupportedDialog(WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription))
                             )
                         }
                     }

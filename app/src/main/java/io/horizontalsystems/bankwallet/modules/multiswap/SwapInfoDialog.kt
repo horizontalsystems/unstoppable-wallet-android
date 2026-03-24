@@ -24,10 +24,9 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHe
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
-import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 
-class SwapInfoDialog : BaseComposableBottomSheetFragment() {
+class SwapInfoDialog(input1: Input) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

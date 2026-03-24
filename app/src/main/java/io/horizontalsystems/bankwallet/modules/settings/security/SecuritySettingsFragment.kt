@@ -196,8 +196,7 @@ private fun SecurityCenterScreen(
                                             }
                                         } else {
                                             navController.slideFromBottom(
-                                                DefenseSystemFeatureDialog(),
-                                                DefenseSystemFeatureDialog.Input(PremiumFeature.getFeature(action))
+                                                DefenseSystemFeatureDialog(DefenseSystemFeatureDialog.Input(PremiumFeature.getFeature(action))),
                                             )
                                             false
                                         }

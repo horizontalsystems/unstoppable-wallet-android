@@ -72,7 +72,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-class RestoreLocalFragment : BaseComposeFragment() {
+class RestoreLocalFragment(input1: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

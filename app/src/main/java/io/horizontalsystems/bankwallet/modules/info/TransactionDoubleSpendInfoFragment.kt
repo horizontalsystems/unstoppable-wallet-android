@@ -36,7 +36,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
-class TransactionDoubleSpendInfoFragment : BaseComposeFragment() {
+class TransactionDoubleSpendInfoFragment(input1: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

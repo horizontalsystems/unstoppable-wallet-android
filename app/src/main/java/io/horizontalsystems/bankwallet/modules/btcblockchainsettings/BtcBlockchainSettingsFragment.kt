@@ -43,7 +43,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.Blockchain
 
-class BtcBlockchainSettingsFragment : BaseComposeFragment() {
+class BtcBlockchainSettingsFragment(blockchain: Blockchain) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

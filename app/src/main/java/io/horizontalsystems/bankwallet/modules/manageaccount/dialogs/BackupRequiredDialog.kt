@@ -37,7 +37,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
 
-class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
+class BackupRequiredDialog(input1: Input) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,8 +74,7 @@ fun BackupRequiredScreen(navController: NavBackStack<HSScreen>, account: Account
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         navController.slideFromBottom(
-                            BackupKeyFragment(),
-                            account
+                            BackupKeyFragment(account)
                         )
 
                         stat(
@@ -89,7 +88,7 @@ fun BackupRequiredScreen(navController: NavBackStack<HSScreen>, account: Account
                     modifier = Modifier.fillMaxWidth(),
                     variant = ButtonVariant.Secondary,
                     onClick = {
-                        navController.slideFromBottom(BackupLocalFragment(), account)
+                        navController.slideFromBottom(BackupLocalFragment(account))
 
                         stat(
                             page = StatPage.BackupRequired,

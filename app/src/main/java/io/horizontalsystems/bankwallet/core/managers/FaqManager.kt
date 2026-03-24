@@ -39,8 +39,7 @@ object FaqManager {
 
     fun showFaqPage(navController: NavBackStack<HSScreen>, path: String, language: String = "en") {
         navController.slideFromBottom(
-            MarkdownFragment(MarkdownFragment.Input(getFaqUrl(path, language), true, true)),
-            MarkdownFragment.Input(getFaqUrl(path, language), true, true)
+            MarkdownFragment(MarkdownFragment.Input(getFaqUrl(path, language), true, true))
         )
     }
 

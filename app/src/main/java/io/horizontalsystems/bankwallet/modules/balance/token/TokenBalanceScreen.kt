@@ -218,8 +218,7 @@ fun TokenBalanceScreen(
                     e.coinTitle
                 )
                 navController.slideFromBottom(
-                    BackupRequiredDialog(),
-                    BackupRequiredDialog.Input(e.account, text)
+                    BackupRequiredDialog(BackupRequiredDialog.Input(e.account, text))
                 )
 
                 stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
@@ -380,8 +379,7 @@ fun TokenBalanceScreen(
                             e.coinTitle
                         )
                         navController.slideFromBottom(
-                            BackupRequiredDialog(),
-                            BackupRequiredDialog.Input(e.account, text)
+                            BackupRequiredDialog(BackupRequiredDialog.Input(e.account, text))
                         )
 
                         stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
@@ -405,8 +403,7 @@ private fun openSyncErrorDialog(
 
     wallet?.let {
         navController.slideFromBottom(
-            SyncErrorDialog(),
-            SyncErrorDialog.Input(wallet, errorMessage)
+            SyncErrorDialog(SyncErrorDialog.Input(wallet, errorMessage))
         )
     }
 }

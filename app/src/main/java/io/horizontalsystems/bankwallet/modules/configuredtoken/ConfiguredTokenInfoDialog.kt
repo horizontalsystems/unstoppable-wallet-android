@@ -41,7 +41,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
 
-class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
+class ConfiguredTokenInfoDialog(item: Token) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

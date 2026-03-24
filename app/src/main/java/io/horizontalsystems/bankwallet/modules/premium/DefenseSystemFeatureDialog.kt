@@ -61,7 +61,7 @@ import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.parcelize.Parcelize
 
-class DefenseSystemFeatureDialog : BaseComposableBottomSheetFragment() {
+class DefenseSystemFeatureDialog(input1: Input) : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

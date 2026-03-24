@@ -108,9 +108,10 @@ fun SendConfirmationScreen(
 
         is SendResult.Failed -> {
             navController.slideFromBottom(
-                ErrorBottomSheet(),
-                ErrorBottomSheet.Input(
-                    sendResult.caution.getDescription() ?: sendResult.caution.getString()
+                ErrorBottomSheet(
+                    ErrorBottomSheet.Input(
+                        sendResult.caution.getDescription() ?: sendResult.caution.getString()
+                    )
                 )
             )
         }

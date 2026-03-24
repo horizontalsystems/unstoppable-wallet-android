@@ -339,7 +339,7 @@ private fun openMetricsPage(metricsType: MetricsType, navController: NavBackStac
         }
 
         else -> {
-            navController.slideFromBottom(MetricsPageFragment(), metricsType)
+            navController.slideFromBottom(MetricsPageFragment(metricsType))
         }
     }
 

@@ -256,7 +256,9 @@ private fun SwapConfirmInternal(
                                 navController.setNavigationResultX(SwapConfirmFragment.Result(true))
                                 navController.removeLastOrNull()
                             } catch (t: Throwable) {
-                                navController.slideFromBottom(ErrorBottomSheet(), ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                                navController.slideFromBottom(ErrorBottomSheet(
+                                    ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName)
+                                ))
                             }
 
                             swapButtonTitle = R.string.Swap
@@ -324,8 +326,7 @@ private fun SwapConfirmInternal(
                             .hs(ComposeAppTheme.colors.leah),
                         onInfoClick = {
                             navController.slideFromBottom(
-                                SwapInfoDialog(),
-                                SwapInfoDialog.Input(infoTitle, infoText)
+                                SwapInfoDialog(SwapInfoDialog.Input(infoTitle, infoText))
                             )
                         }
                     )
@@ -338,8 +339,7 @@ private fun SwapConfirmInternal(
                         value = "~${formatDuration(estimatedTime)}".hs(ComposeAppTheme.colors.leah),
                         onInfoClick = {
                             navController.slideFromBottom(
-                                SwapInfoDialog(),
-                                SwapInfoDialog.Input(infoTitle, infoText)
+                                SwapInfoDialog(SwapInfoDialog.Input(infoTitle, infoText))
                             )
                         }
                     )

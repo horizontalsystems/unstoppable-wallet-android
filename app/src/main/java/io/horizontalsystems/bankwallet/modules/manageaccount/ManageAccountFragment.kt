@@ -178,8 +178,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, accountId: String
                             icon = painterResource(id = R.drawable.ic_delete_20)
                         ) {
                             navController.slideFromBottom(
-                                UnlinkAccountDialog(),
-                                viewModel.account
+                                UnlinkAccountDialog(viewModel.account)
                             )
 
                             stat(
@@ -215,8 +214,7 @@ private fun BackupActions(
                     ) {
                         navController.authorizedAction {
                             navController.slideFromBottom(
-                                BackupKeyFragment(),
-                                account
+                                BackupKeyFragment(account)
                             )
 
                             stat(
@@ -236,7 +234,7 @@ private fun BackupActions(
                         attention = action.showAttention
                     ) {
                         navController.authorizedAction {
-                            navController.slideFromBottom(BackupLocalFragment(), account)
+                            navController.slideFromBottom(BackupLocalFragment(account))
 
                             stat(
                                 page = StatPage.ManageWallet,

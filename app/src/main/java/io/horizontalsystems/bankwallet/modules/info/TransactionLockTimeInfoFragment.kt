@@ -21,7 +21,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.parcelize.Parcelize
 
-class TransactionLockTimeInfoFragment : BaseComposeFragment() {
+class TransactionLockTimeInfoFragment(input1: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

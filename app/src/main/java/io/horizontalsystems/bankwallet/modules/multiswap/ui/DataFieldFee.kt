@@ -39,8 +39,7 @@ fun DataFieldFeeTemplate(
         onInfoClick = infoText?.let {
             {
                 navController.slideFromBottom(
-                    SwapInfoDialog(),
-                    SwapInfoDialog.Input(title, infoText)
+                    SwapInfoDialog(SwapInfoDialog.Input(title, infoText))
                 )
             }
         }

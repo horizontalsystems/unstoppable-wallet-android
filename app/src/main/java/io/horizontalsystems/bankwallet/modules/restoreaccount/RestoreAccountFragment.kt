@@ -28,7 +28,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 
-class RestoreAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
+class RestoreAccountFragment(input1: ManageAccountsModule.Input) : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

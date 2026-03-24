@@ -101,8 +101,7 @@ private fun onClick(
     when (item.blockchainItem) {
         is BlockchainSettingsModule.BlockchainItem.Btc -> {
             navController.slideFromBottom(
-                BtcBlockchainSettingsFragment(),
-                item.blockchainItem.blockchain
+                BtcBlockchainSettingsFragment(item.blockchainItem.blockchain)
             )
 
             stat(
@@ -112,7 +111,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Evm -> {
-            navController.slideFromBottom(EvmNetworkFragment(), item.blockchainItem.blockchain)
+            navController.slideFromBottom(EvmNetworkFragment(item.blockchainItem.blockchain))
 
             stat(
                 page = StatPage.BlockchainSettings,

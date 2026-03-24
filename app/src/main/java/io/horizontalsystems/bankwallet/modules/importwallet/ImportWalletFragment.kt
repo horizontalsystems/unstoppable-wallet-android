@@ -91,14 +91,15 @@ private fun ImportWalletScreen(
                         navController.navigateWithTermsAccepted {
                             val fileName = context.getFileName(uriNonNull)
                             navController.slideFromBottom(
-                                RestoreLocalFragment(),
-                                RestoreLocalFragment.Input(
-                                    popUpToInclusiveId,
-                                    inclusive,
-                                    jsonString,
-                                    fileName,
-                                    StatPage.ImportWalletFromFiles
-                                )
+                                RestoreLocalFragment(
+                                    RestoreLocalFragment.Input(
+                                        popUpToInclusiveId,
+                                        inclusive,
+                                        jsonString,
+                                        fileName,
+                                        StatPage.ImportWalletFromFiles
+                                    )
+                                ),
                             )
 
                             stat(
@@ -134,8 +135,7 @@ private fun ImportWalletScreen(
                 onClick = {
                     navController.navigateWithTermsAccepted {
                         navController.slideFromBottom(
-                            RestoreAccountFragment(),
-                            ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
+                            RestoreAccountFragment(ManageAccountsModule.Input(popUpToInclusiveId, inclusive))
                         )
 
                         stat(

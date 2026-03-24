@@ -263,8 +263,7 @@ fun onSyncErrorClicked(viewItem: BalanceViewItem2, viewModel: BalanceViewModel, 
             val errorMessage = syncErrorDetails.errorMessage
 
             navController.slideFromBottom(
-                SyncErrorDialog(),
-                SyncErrorDialog.Input(wallet, errorMessage)
+                SyncErrorDialog(SyncErrorDialog.Input(wallet, errorMessage))
             )
         }
 

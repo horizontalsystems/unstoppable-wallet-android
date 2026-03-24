@@ -19,7 +19,10 @@ fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
 //    navigate(resId, args, navOptions)
 }
 
-fun NavBackStack<HSScreen>.slideFromBottom(screen: HSScreen, input: Parcelable) = Unit
+fun NavBackStack<HSScreen>.slideFromBottom(screen: HSScreen) {
+//    TODO("xxx nav3")
+//    navigate(resId, args, navOptions)
+}
 
 fun NavBackStack<HSScreen>.authorizedAction(action: () -> Unit) {
     if (App.pinComponent.isPinSet) {
