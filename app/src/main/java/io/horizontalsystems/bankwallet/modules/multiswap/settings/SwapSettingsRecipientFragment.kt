@@ -14,21 +14,19 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 
-class SwapSettingsRecipientFragment(input1: Input) : BaseComposeFragment() {
+class SwapSettingsRecipientFragment(val input: Input) : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            EnterAddressScreen(
-                navController = navController,
-                token = input.token,
-                title = stringResource(SendEvmSettings_SetRecipient),
-                buttonTitle = stringResource(Button_Apply),
-                allowNull = true,
-                initialAddress = input.recipient?.hex
-            ) { address, _ ->
-                navController.setNavigationResultX<Result>(Result(address))
-                navController.removeLastOrNull()
-            }
+        EnterAddressScreen(
+            navController = navController,
+            token = input.token,
+            title = stringResource(SendEvmSettings_SetRecipient),
+            buttonTitle = stringResource(Button_Apply),
+            allowNull = true,
+            initialAddress = input.recipient?.hex
+        ) { address, _ ->
+            navController.setNavigationResultX<Result>(Result(address))
+            navController.removeLastOrNull()
         }
     }
 

@@ -72,20 +72,18 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-class RestoreLocalFragment(input1: Input) : BaseComposeFragment() {
+class RestoreLocalFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            RestoreLocalNavHost(
-                input.jsonFile,
-                input.fileName,
-                input.statPage,
-                navController,
-                input.popOffOnSuccess,
-                input.popOffInclusive
-            ) { activity?.let { MainModule.startAsNewTask(it) } }
-        }
+        RestoreLocalNavHost(
+            input.jsonFile,
+            input.fileName,
+            input.statPage,
+            navController,
+            input.popOffOnSuccess,
+            input.popOffInclusive
+        ) { activity?.let { MainModule.startAsNewTask(it) } }
     }
 
     @Parcelize

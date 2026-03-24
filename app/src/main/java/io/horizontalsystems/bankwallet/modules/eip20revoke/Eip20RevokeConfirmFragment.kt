@@ -43,12 +43,10 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
-class Eip20RevokeConfirmFragment(input1: Input) : BaseComposeFragment() {
+class Eip20RevokeConfirmFragment(val input: Input) : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            Eip20RevokeScreen(navController, input)
-        }
+        Eip20RevokeScreen(navController, input)
     }
 
     @Parcelize

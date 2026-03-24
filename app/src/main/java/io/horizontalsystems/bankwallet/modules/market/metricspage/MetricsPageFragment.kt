@@ -47,19 +47,17 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 
-class MetricsPageFragment(metricsType1: MetricsType) : BaseComposeFragment() {
+class MetricsPageFragment(val metricsType: MetricsType) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<MetricsType>(navController) { metricsType ->
-            val factory = MetricsPageModule.Factory(metricsType)
-            val chartViewModel by viewModels<ChartViewModel> { factory }
-            val viewModel by viewModels<MetricsPageViewModel> { factory }
-            MetricsPage(viewModel, chartViewModel, navController) {
-                onCoinClick(it, navController)
+        val factory = MetricsPageModule.Factory(metricsType)
+        val chartViewModel by viewModels<ChartViewModel> { factory }
+        val viewModel by viewModels<MetricsPageViewModel> { factory }
+        MetricsPage(viewModel, chartViewModel, navController) {
+            onCoinClick(it, navController)
 
-                stat(page = metricsType.statPage, event = StatEvent.OpenCoin(it))
-            }
+            stat(page = metricsType.statPage, event = StatEvent.OpenCoin(it))
         }
     }
 

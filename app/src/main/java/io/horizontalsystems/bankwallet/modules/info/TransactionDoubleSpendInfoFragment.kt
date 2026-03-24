@@ -36,17 +36,15 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
-class TransactionDoubleSpendInfoFragment(input1: Input) : BaseComposeFragment() {
+class TransactionDoubleSpendInfoFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            InfoScreen(
-                txHash = input.transactionHash,
-                conflictingTxHash = input.conflictingTransactionHash,
-                onBackClick = { navController.removeLastOrNull() }
-            )
-        }
+        InfoScreen(
+            txHash = input.transactionHash,
+            conflictingTxHash = input.conflictingTransactionHash,
+            onBackClick = { navController.removeLastOrNull() }
+        )
     }
 
     @Parcelize

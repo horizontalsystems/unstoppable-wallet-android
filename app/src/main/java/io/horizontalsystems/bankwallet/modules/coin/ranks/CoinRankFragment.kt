@@ -61,13 +61,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
-class CoinRankFragment(type1: RankType) : BaseComposeFragment() {
+class CoinRankFragment(val type: RankType) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<RankType>(navController) { type ->
-            CoinRankScreen(type, navController)
-        }
+        CoinRankScreen(type, navController)
     }
 }
 
