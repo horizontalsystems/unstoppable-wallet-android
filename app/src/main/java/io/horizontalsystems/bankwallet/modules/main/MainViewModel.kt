@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.balance.OpenSendTokenSelect
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
+import io.horizontalsystems.bankwallet.modules.market.platform.MarketPlatformFragment
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
@@ -324,7 +325,7 @@ class MainViewModel(
                 when {
                     deeplinkString.contains("coin-page") -> {
                         uid?.let {
-                            deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.Input(it))
+                            deeplinkPage = DeeplinkPage(CoinFragment(CoinFragment.Input(it)))
 
                             stat(page = StatPage.Widget, event = StatEvent.OpenCoin(it))
                         }
@@ -334,7 +335,7 @@ class MainViewModel(
                         val title = deepLink.getQueryParameter("title")
                         if (title != null && uid != null) {
                             val platform = Platform(uid, title)
-                            deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, platform)
+                            deeplinkPage = DeeplinkPage(MarketPlatformFragment(platform))
 
                             stat(
                                 page = StatPage.Widget,
@@ -350,7 +351,7 @@ class MainViewModel(
             deeplinkString.startsWith("wc:") -> {
                 wcSupportState = wcManager.getWalletConnectSupportState()
                 if (wcSupportState == WCManager.SupportState.Supported) {
-                    deeplinkPage = DeeplinkPage(R.id.wcListFragment, WCListFragment.Input(deeplinkString))
+                    deeplinkPage = DeeplinkPage(WCListFragment(WCListFragment.Input(deeplinkString)))
                     tab = MainNavigation.Settings
                 }
             }

@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.modules.balance.OpenSendTokenSelect
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import kotlinx.parcelize.Parcelize
 
@@ -103,6 +104,5 @@ object MainModule {
 }
 
 data class DeeplinkPage(
-    val navigationId: Int,
-    val input: Parcelable
+    val screen: HSScreen
 )

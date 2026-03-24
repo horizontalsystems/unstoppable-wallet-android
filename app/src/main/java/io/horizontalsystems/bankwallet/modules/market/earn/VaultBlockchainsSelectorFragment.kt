@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -39,15 +38,10 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.parcelize.Parcelize
 
-class VaultBlockchainsSelectorFragment(input1: Input) : BaseComposeFragment() {
+class VaultBlockchainsSelectorFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val input = navController.getInput<Input>()
-        if (input == null) {
-            navController.removeLastOrNull()
-            return
-        }
         FilterByBlockchainsScreen(
             input.allBlockchains,
             input.selected,

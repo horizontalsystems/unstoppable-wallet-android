@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsFragment
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
@@ -30,7 +29,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFr
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
 
-class WCAccountTypeNotSupportedDialog(input: Input) : BaseComposableBottomSheetFragment() {
+class WCAccountTypeNotSupportedDialog(val input: Input) : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,7 +44,7 @@ class WCAccountTypeNotSupportedDialog(input: Input) : BaseComposableBottomSheetF
 
                 ComposeAppTheme {
                     WCAccountTypeNotSupportedScreen(
-                        accountTypeDescription = navController.getInput<Input>()?.accountTypeDescription ?: "",
+                        accountTypeDescription = input.accountTypeDescription,
                         onCloseClick = {
                             navController.removeLastOrNull()
                         },

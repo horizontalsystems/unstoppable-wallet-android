@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.addFromBottom
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.settings.banners.TextWithDynamicScale
 import io.horizontalsystems.bankwallet.modules.usersubscription.PremiumFeaturesDialog
@@ -61,7 +60,7 @@ import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.parcelize.Parcelize
 
-class DefenseSystemFeatureDialog(input1: Input) : BaseComposableBottomSheetFragment() {
+class DefenseSystemFeatureDialog(val input: Input) : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,11 +72,6 @@ class DefenseSystemFeatureDialog(input1: Input) : BaseComposableBottomSheetFragm
             )
             setContent {
                 val navController = findNavController()
-                val input: Input = navController.getInput()
-                    ?: run {
-                        navController.removeLastOrNull()
-                        return@setContent
-                    }
 
                 ComposeAppTheme {
                     DefenseSystemFeatureScreen(

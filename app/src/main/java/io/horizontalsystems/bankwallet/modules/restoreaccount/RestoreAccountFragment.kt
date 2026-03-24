@@ -6,10 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation3.runtime.NavBackStack
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -24,18 +22,14 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnon
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class RestoreAccountFragment(input1: ManageAccountsModule.Input) : BaseComposeFragment(screenshotEnabled = false) {
+class RestoreAccountFragment(val input: ManageAccountsModule.Input) : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val input = navController.getInput<ManageAccountsModule.Input>()
-        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.restoreAccountFragment
-        val inclusive = input?.popOffInclusive ?: false
-
         RestoreAccountNavHost(
             navController,
-            popUpToInclusiveId,
-            inclusive
+            input.popOffOnSuccess,
+            input.popOffInclusive
         )
     }
 

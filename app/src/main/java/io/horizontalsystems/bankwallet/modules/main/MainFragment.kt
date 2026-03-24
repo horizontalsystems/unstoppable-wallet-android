@@ -272,17 +272,14 @@ private fun MainScreen(
         }
         viewModel.wcSupportStateHandled()
     }
-//    TODO("xxx nav3")
-//    uiState.deeplinkPage?.let { deepLinkPage ->
-//        LaunchedEffect(Unit) {
-//            delay(500)
-//            fragmentNavController.slideFromRight(
-//                deepLinkPage.navigationId,
-//                deepLinkPage.input
-//            )
-//            viewModel.deeplinkPageHandled()
-//        }
-//    }
+
+    uiState.deeplinkPage?.let { deepLinkPage ->
+        LaunchedEffect(Unit) {
+            delay(500)
+            fragmentNavController.slideFromRight(deepLinkPage.screen)
+            viewModel.deeplinkPageHandled()
+        }
+    }
 
     uiState.openSend?.let { openSend ->
         fragmentNavController.slideFromRight(
