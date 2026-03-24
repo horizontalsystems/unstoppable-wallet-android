@@ -107,10 +107,6 @@ abstract class BaseComposeFragment(
         }
         return ViewModelLazy(viewModelClass, storeProducer, factoryPromise, extrasProducer)
     }
-
-    fun requireArguments() : Bundle {
-        TODO()
-    }
 }
 
 abstract class BaseComposeFragmentX(
