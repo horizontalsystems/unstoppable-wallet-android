@@ -116,7 +116,7 @@ fun AmountCellTV(
         ),
         onClick = {
             navController.slideFromRight(
-                R.id.coinFragment,
+                CoinFragment(),
                 CoinFragment.Input(transactionValue.coinUid)
             )
 

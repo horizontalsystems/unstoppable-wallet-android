@@ -41,6 +41,9 @@ import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsF
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
+import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
+import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment
+import io.horizontalsystems.bankwallet.modules.info.OverallScoreInfoFragment
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -158,7 +161,7 @@ private fun AnalyticsBlock(
                     isPreview = false,
                     onInfoClick = block.info?.let { info ->
                         {
-                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
+                            navController.slideFromRight(CoinAnalyticsInfoFragment(), info)
                         }
                     }
                 )
@@ -291,7 +294,7 @@ private fun AnalyticsPreviewBlock(
                     isPreview = true,
                     onInfoClick = block.info?.let { info ->
                         {
-                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
+                            navController.slideFromRight(CoinAnalyticsInfoFragment(), info)
                         }
                     }
                 )
@@ -388,21 +391,21 @@ private fun handleActionClick(
 
         is CoinAnalyticsModule.ActionType.OpenAudits -> {
             val arguments = CoinAuditsFragment.Input(action.audits)
-            navController.slideFromRight(R.id.coinAuditsFragment, arguments)
+            navController.slideFromRight(CoinAuditsFragment(), arguments)
         }
 
         is CoinAnalyticsModule.ActionType.OpenTreasuries -> {
-            navController.slideFromRight(R.id.coinTreasuriesFragment, action.coin)
+            navController.slideFromRight(CoinTreasuriesFragment(), action.coin)
         }
 
         is CoinAnalyticsModule.ActionType.OpenReports -> {
             val arguments = CoinReportsFragment.Input(action.coinUid)
-            navController.slideFromRight(R.id.coinReportsFragment, arguments)
+            navController.slideFromRight(CoinReportsFragment(), arguments)
         }
 
         is CoinAnalyticsModule.ActionType.OpenInvestors -> {
             val arguments = CoinInvestmentsFragment.Input(action.coinUid)
-            navController.slideFromRight(R.id.coinInvestmentsFragment, arguments)
+            navController.slideFromRight(CoinInvestmentsFragment(), arguments)
         }
 
         is CoinAnalyticsModule.ActionType.OpenRank -> {
@@ -410,7 +413,7 @@ private fun handleActionClick(
         }
 
         is CoinAnalyticsModule.ActionType.OpenOverallScoreInfo -> {
-            navController.slideFromRight(R.id.overallScoreInfoFragment, action.scoreCategory)
+            navController.slideFromRight(OverallScoreInfoFragment(), action.scoreCategory)
         }
 
         CoinAnalyticsModule.ActionType.OpenTvl -> {
@@ -419,7 +422,7 @@ private fun handleActionClick(
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {
             val params = DetectorsFragment.Input(action.title, action.issues)
-            navController.slideFromRight(R.id.coinDetectorsFragment, params)
+            navController.slideFromRight(DetectorsFragment(), params)
         }
     }
 }

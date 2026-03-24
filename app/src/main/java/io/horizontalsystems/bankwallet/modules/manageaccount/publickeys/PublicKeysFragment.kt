@@ -56,7 +56,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                     description = stringResource(R.string.PublicKeys_EvmAddress_Description)
                 ) {
                     navController.slideFromRight(
-                        R.id.evmAddressFragment,
+                        EvmAddressFragment(),
                         EvmAddressFragment.Input(evmAddress)
                     )
 
@@ -69,7 +69,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                     description = stringResource(id = R.string.PublicKeys_AccountExtendedPublicKeyDescription),
                 ) {
                     navController.slideFromRight(
-                        R.id.showExtendedKeyFragment,
+                        ShowExtendedKeyFragment(),
                         ShowExtendedKeyFragment.Input(
                             publicKey.hdKey,
                             publicKey.accountPublicKey
@@ -90,7 +90,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            R.id.showMoneroKeyFragment,
+                            ShowMoneroKeyFragment(),
                             ShowMoneroKeyFragment.Input(moneroKeys)
                         )
                         stat(

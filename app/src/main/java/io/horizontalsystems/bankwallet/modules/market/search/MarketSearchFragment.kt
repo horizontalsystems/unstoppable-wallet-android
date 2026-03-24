@@ -194,7 +194,7 @@ fun MarketSearchScreen(
 
                                                         viewModel.onCoinOpened(coin)
                                                         navController.slideFromRight(
-                                                            R.id.coinFragment,
+                                                            CoinFragment(),
                                                             CoinFragment.Input(coin.uid)
                                                         )
                                                     }

@@ -58,7 +58,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            R.id.evmPrivateKeyFragment,
+                            EvmPrivateKeyFragment(),
                             EvmPrivateKeyFragment.Input(key)
                         )
 
@@ -76,7 +76,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            R.id.stellarSecretKeyFragment,
+                            StellarSecretKeyFragment(),
                             StellarSecretKeyFragment.Input(key)
                         )
 
@@ -94,7 +94,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            R.id.showExtendedKeyFragment,
+                            ShowExtendedKeyFragment(),
                             ShowExtendedKeyFragment.Input(
                                 key.hdKey,
                                 key.displayKeyType
@@ -115,7 +115,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            R.id.showExtendedKeyFragment,
+                            ShowExtendedKeyFragment(),
                             ShowExtendedKeyFragment.Input(key.hdKey, key.displayKeyType)
                         )
 
@@ -133,7 +133,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            R.id.showMoneroKeyFragment,
+                            ShowMoneroKeyFragment(),
                             ShowMoneroKeyFragment.Input(moneroKeys)
                         )
 

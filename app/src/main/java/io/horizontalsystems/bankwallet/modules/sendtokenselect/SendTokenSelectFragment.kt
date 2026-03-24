@@ -35,7 +35,7 @@ class SendTokenSelectFragment : BaseComposeFragment() {
             onClickItem = {
                 val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
                 navController.slideFromRight(
-                    R.id.enterAddressFragment,
+                    EnterAddressFragment(),
                     EnterAddressFragment.Input(
                         wallet = it.wallet,
                         title = sendTitle,

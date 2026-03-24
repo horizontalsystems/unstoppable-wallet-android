@@ -38,6 +38,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsFragment
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
@@ -130,7 +131,7 @@ fun BalanceForAccount(
                     icon = R.drawable.ic_wallet_switch_24,
                     onClick = {
                         navController.slideFromRight(
-                            R.id.manageAccountsFragment,
+                            ManageAccountsFragment(),
                             ManageAccountsModule.Mode.Switcher
                         )
 

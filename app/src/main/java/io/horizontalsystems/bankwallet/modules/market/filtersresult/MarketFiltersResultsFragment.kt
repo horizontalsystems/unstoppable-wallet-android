@@ -117,7 +117,7 @@ private fun SearchResultsScreen(
                             },
                             onCoinClick = { coinUid ->
                                 val arguments = CoinFragment.Input(coinUid)
-                                navController.slideFromRight(R.id.coinFragment, arguments)
+                                navController.slideFromRight(CoinFragment(), arguments)
 
                                 stat(
                                     page = StatPage.AdvancedSearchResults,

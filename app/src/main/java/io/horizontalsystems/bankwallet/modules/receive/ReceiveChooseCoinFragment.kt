@@ -179,7 +179,7 @@ private fun onSelectWallet(
     isTransparentAddress: Boolean = false,
 ) {
     fragmentNavController.slideFromRight(
-        R.id.receiveFragment,
+        ReceiveFragment(),
         ReceiveFragment.Input(
             wallet,
             R.id.receiveChooseCoinFragment,

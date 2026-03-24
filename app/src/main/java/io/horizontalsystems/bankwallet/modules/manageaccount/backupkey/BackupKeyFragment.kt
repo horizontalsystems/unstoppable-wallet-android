@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.manageaccount.backupconfirmkey.BackupConfirmKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.PassphraseCell
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.SeedPhraseList
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -88,7 +89,7 @@ fun RecoveryPhraseScreen(
                     title = stringResource(R.string.RecoveryPhrase_Verify),
                     onClick = {
                         navController.slideFromRight(
-                            R.id.backupConfirmationKeyFragment,
+                            BackupConfirmKeyFragment(),
                             viewModel.account
                         )
                     },

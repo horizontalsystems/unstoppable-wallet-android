@@ -37,6 +37,9 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.BackupItem
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.KeyAction
+import io.horizontalsystems.bankwallet.modules.manageaccount.privatekeys.PrivateKeysFragment
+import io.horizontalsystems.bankwallet.modules.manageaccount.publickeys.PublicKeysFragment
+import io.horizontalsystems.bankwallet.modules.manageaccount.recoveryphrase.RecoveryPhraseFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -277,7 +280,7 @@ private fun KeyActions(
                     ) {
                         navController.authorizedAction {
                             navController.slideFromRight(
-                                R.id.recoveryPhraseFragment,
+                                RecoveryPhraseFragment(),
                                 viewModel.account
                             )
 
@@ -297,7 +300,7 @@ private fun KeyActions(
                         icon = painterResource(id = R.drawable.ic_key_20)
                     ) {
                         navController.slideFromRight(
-                            R.id.privateKeysFragment,
+                            PrivateKeysFragment(),
                             viewModel.account
                         )
 
@@ -316,7 +319,7 @@ private fun KeyActions(
                         icon = painterResource(id = R.drawable.icon_binocule_20)
                     ) {
                         navController.slideFromRight(
-                            R.id.publicKeysFragment,
+                            PublicKeysFragment(),
                             viewModel.account
                         )
 

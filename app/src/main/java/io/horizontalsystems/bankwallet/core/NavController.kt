@@ -17,18 +17,7 @@ import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import java.util.UUID
 
-fun NavBackStack<HSScreen>.slideFromRight(@IdRes resId: Int, input: Parcelable) {
-    val builder = NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_from_right)
-        .setExitAnim(android.R.anim.fade_out)
-        .setPopEnterAnim(android.R.anim.fade_in)
-        .setPopExitAnim(R.anim.slide_to_right)
-
-    val navOptions = builder.build()
-
-    val args = input?.let {
-        bundleOf("input" to it)
-    }
+fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen, input: Parcelable) {
 //    TODO("xxx nav3")
 //    navigate(resId, args, navOptions)
 }

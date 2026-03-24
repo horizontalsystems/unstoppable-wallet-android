@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsFragment
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -51,7 +52,7 @@ class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
                         onSwitchClick = {
                             navController.removeLastOrNull()
                             navController.slideFromRight(
-                                R.id.manageAccountsFragment,
+                                ManageAccountsFragment(),
                                 ManageAccountsModule.Mode.Manage
                             )
                         }

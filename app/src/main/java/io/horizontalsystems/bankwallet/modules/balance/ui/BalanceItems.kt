@@ -61,6 +61,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.ReceiveAllowedState
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
+import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceFragment
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsFragment
@@ -217,7 +218,7 @@ fun BalanceItems(
     val navigateToTokenBalance: (BalanceViewItem2) -> Unit = remember {
         {
             navController.slideFromRight(
-                R.id.tokenBalanceFragment,
+                TokenBalanceFragment(),
                 it.wallet
             )
 
@@ -497,7 +498,7 @@ fun BalanceItems(
     }
     uiState.openSend?.let { openSend ->
         navController.slideFromRight(
-            R.id.sendTokenSelectFragment,
+            SendTokenSelectFragment(),
             SendTokenSelectFragment.Input(
                 openSend.blockchainTypes,
                 openSend.tokenTypes,
@@ -524,7 +525,7 @@ private fun handleContextMenuClick(
                 balanceViewItem.wallet.token.fullCoin.coin.code
             )
             navController.slideFromRight(
-                R.id.enterAddressFragment,
+                EnterAddressFragment(),
                 EnterAddressFragment.Input(
                     wallet = balanceViewItem.wallet,
                     title = sendTitle
@@ -541,7 +542,7 @@ private fun handleContextMenuClick(
 
         BalanceContextMenuItem.Swap -> {
             navController.slideFromRight(
-                R.id.multiswap,
+                SwapFragment(),
                 SwapFragment.Input(tokenIn = balanceViewItem.wallet.token)
             )
 
@@ -555,7 +556,7 @@ private fun handleContextMenuClick(
             val coinUid = balanceViewItem.wallet.coin.uid
             val arguments = CoinFragment.Input(coinUid)
 
-            navController.slideFromRight(R.id.coinFragment, arguments)
+            navController.slideFromRight(CoinFragment(), arguments)
 
             stat(
                 page = StatPage.Balance,
