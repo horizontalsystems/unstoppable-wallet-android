@@ -2,11 +2,9 @@ package io.horizontalsystems.bankwallet.core
 
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.annotation.IdRes
 import androidx.core.os.bundleOf
 import androidx.navigation.NavOptions
 import androidx.navigation3.runtime.NavBackStack
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
@@ -26,7 +24,7 @@ fun NavBackStack<HSScreen>.slideFromBottom(screen: HSScreen) {
 
 fun NavBackStack<HSScreen>.authorizedAction(action: () -> Unit) {
     if (App.pinComponent.isPinSet) {
-        slideFromBottomForResult<ConfirmPinFragment.Result>(R.id.confirmPinFragment) {
+        slideFromBottomForResult<ConfirmPinFragment.Result>(ConfirmPinFragment()) {
             if (it.success) {
                 action.invoke()
             }
@@ -71,20 +69,9 @@ fun NavBackStack<HSScreen>.ensurePinSet(descriptionResId: Int, action: () -> Uni
     }
 }
 
-fun <T: Parcelable> NavBackStack<HSScreen>.slideFromBottomForResult(
-    @IdRes resId: Int,
-    input: Parcelable? = null,
-    onResult: (T) -> Unit
-) {
-    val navOptions = NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_from_bottom)
-        .setExitAnim(android.R.anim.fade_out)
-        .setPopEnterAnim(android.R.anim.fade_in)
-        .setPopExitAnim(R.anim.slide_to_bottom)
-        .build()
+fun <T: Parcelable> NavBackStack<HSScreen>.slideFromBottomForResult(screen: HSScreen, input: Parcelable? = null, onResult: (T) -> Unit) = Unit
 
-    navigateForResult(resId, input, navOptions, onResult)
-}
+fun <T: Parcelable> NavBackStack<HSScreen>.slideFromBottomForResult(screen: HSScreen, onResult: (T) -> Unit) = Unit
 
 fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(screen: HSScreen, onResult: (T) -> Unit) {
 //    TODO("xxx nav3")

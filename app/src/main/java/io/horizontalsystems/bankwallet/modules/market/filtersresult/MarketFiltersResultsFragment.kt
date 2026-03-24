@@ -147,7 +147,7 @@ private fun SearchResultsScreen(
                                                 if (!uiState.showSignal) {
                                                     navController.paidAction(TradeSignals) {
                                                         navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
-                                                            R.id.marketSignalsFragment
+                                                            MarketSignalsFragment()
                                                         ) {
                                                             if (it.enabled) {
                                                                 viewModel.showSignals()

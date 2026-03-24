@@ -136,7 +136,7 @@ fun SendTonScreen(
                     if (riskyAddress) {
                         keyboardController?.hide()
                         navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
-                            R.id.addressRiskyBottomSheetAlert,
+                            AddressRiskyBottomSheetAlert(),
                             AddressRiskyBottomSheetAlert.Input(
                                 alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
                             )
