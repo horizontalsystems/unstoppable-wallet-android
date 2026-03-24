@@ -50,6 +50,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule.Tab
 import io.horizontalsystems.bankwallet.modules.market.earn.MarketEarnScreen
 import io.horizontalsystems.bankwallet.modules.market.etf.EtfFragment
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesScreen
+import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment
 import io.horizontalsystems.bankwallet.modules.market.topcoins.TopCoins
@@ -338,7 +339,7 @@ private fun openMetricsPage(metricsType: MetricsType, navController: NavBackStac
         }
 
         else -> {
-            navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
+            navController.slideFromBottom(MetricsPageFragment(), metricsType)
         }
     }
 

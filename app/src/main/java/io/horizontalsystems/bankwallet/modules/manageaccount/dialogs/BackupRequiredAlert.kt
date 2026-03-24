@@ -42,7 +42,7 @@ fun BackupRequiredAlert(navController: NavBackStack<HSScreen>) {
             delay(300)
             viewModel.onHandled()
             navController.slideFromBottom(
-                R.id.backupRequiredDialog,
+                BackupRequiredDialog(),
                 BackupRequiredDialog.Input(account, text)
             )
         }

@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.modules.coin.detectors.DetectorsFragment
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
+import io.horizontalsystems.bankwallet.modules.coin.ranks.CoinRankFragment
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
 import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment
@@ -311,7 +312,7 @@ private fun AnalyticsPreviewBlock(
         },
         onClick = {
             navController.slideFromBottom(
-                R.id.defenseSystemFeatureDialog,
+                DefenseSystemFeatureDialog(),
                 DefenseSystemFeatureDialog.Input(PremiumFeature.TokenInsightsFeature)
             )
             stat(
@@ -384,7 +385,7 @@ private fun handleActionClick(
     when (action) {
         is CoinAnalyticsModule.ActionType.OpenTokenHolders -> {
             navController.slideFromBottom(
-                R.id.coinMajorHoldersFragment,
+                CoinMajorHoldersFragment(),
                 CoinMajorHoldersFragment.Input(action.coin.uid, action.blockchain)
             )
         }
@@ -409,7 +410,7 @@ private fun handleActionClick(
         }
 
         is CoinAnalyticsModule.ActionType.OpenRank -> {
-            navController.slideFromBottom(R.id.coinRankFragment, action.type)
+            navController.slideFromBottom(CoinRankFragment(), action.type)
         }
 
         is CoinAnalyticsModule.ActionType.OpenOverallScoreInfo -> {

@@ -25,6 +25,8 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsFragment
+import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment
 import io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.solananetwork.SolanaNetworkFragment
@@ -99,7 +101,7 @@ private fun onClick(
     when (item.blockchainItem) {
         is BlockchainSettingsModule.BlockchainItem.Btc -> {
             navController.slideFromBottom(
-                R.id.btcBlockchainSettingsFragment,
+                BtcBlockchainSettingsFragment(),
                 item.blockchainItem.blockchain
             )
 
@@ -110,7 +112,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Evm -> {
-            navController.slideFromBottom(R.id.evmNetworkFragment, item.blockchainItem.blockchain)
+            navController.slideFromBottom(EvmNetworkFragment(), item.blockchainItem.blockchain)
 
             stat(
                 page = StatPage.BlockchainSettings,

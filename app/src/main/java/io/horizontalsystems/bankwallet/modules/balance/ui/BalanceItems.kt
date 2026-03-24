@@ -590,7 +590,7 @@ private fun showBackupRequiredDialog(
         account.name
     )
     navController.slideFromBottom(
-        R.id.backupRequiredDialog,
+        BackupRequiredDialog(),
         BackupRequiredDialog.Input(account, text)
     )
     stat(

@@ -101,7 +101,7 @@ fun Eip20ApproveConfirmScreen(navController: NavBackStack<HSScreen>) {
                             navController.setNavigationResultX(Eip20ApproveConfirmFragment.Result(true))
                             navController.removeLastOrNull()
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                            navController.slideFromBottom(ErrorBottomSheet(), ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                         }
 
                         buttonTitle = R.string.Swap_Approve

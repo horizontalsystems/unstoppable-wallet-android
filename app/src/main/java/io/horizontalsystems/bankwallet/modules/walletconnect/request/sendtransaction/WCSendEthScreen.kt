@@ -147,7 +147,7 @@ fun WCSendEthRequestScreen(
                     sections = uiState.sectionViewItems,
                     onInfoClick = {
                         navController.slideFromBottom(
-                            R.id.feeSettingsInfoDialog,
+                            FeeSettingsInfoDialog(),
                             FeeSettingsInfoDialog.Input(feeText, feeInfoText)
                         )
                     },
@@ -164,7 +164,7 @@ fun WCSendEthRequestScreen(
                     secondaryValue = uiState.networkFee?.secondary?.getFormatted(),
                     onInfoClick = {
                         navController.slideFromBottom(
-                            R.id.feeSettingsInfoDialog,
+                            FeeSettingsInfoDialog(),
                             FeeSettingsInfoDialog.Input(feeText, feeInfoText)
                         )
                     }

@@ -329,7 +329,7 @@ fun FeaturesSection(
             onItemClick = { action ->
                 val feature = PremiumFeature.getFeature(action)
                 navController.slideFromBottom(
-                    R.id.defenseSystemFeatureDialog,
+                    DefenseSystemFeatureDialog(),
                     DefenseSystemFeatureDialog.Input(feature)
                 )
             }

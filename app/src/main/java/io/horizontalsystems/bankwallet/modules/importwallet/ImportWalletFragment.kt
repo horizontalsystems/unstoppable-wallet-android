@@ -39,6 +39,7 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupFile
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreAccountFragment
 import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -90,7 +91,7 @@ private fun ImportWalletScreen(
                         navController.navigateWithTermsAccepted {
                             val fileName = context.getFileName(uriNonNull)
                             navController.slideFromBottom(
-                                R.id.restoreLocalFragment,
+                                RestoreLocalFragment(),
                                 RestoreLocalFragment.Input(
                                     popUpToInclusiveId,
                                     inclusive,
@@ -133,7 +134,7 @@ private fun ImportWalletScreen(
                 onClick = {
                     navController.navigateWithTermsAccepted {
                         navController.slideFromBottom(
-                            R.id.restoreAccountFragment,
+                            RestoreAccountFragment(),
                             ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
                         )
 

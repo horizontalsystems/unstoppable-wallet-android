@@ -216,7 +216,7 @@ private fun onScanClick(
             val text =
                 Translator.getString(R.string.WalletConnect_Error_NeedBackup)
             navController.slideFromBottom(
-                R.id.backupRequiredDialog,
+                BackupRequiredDialog(),
                 BackupRequiredDialog.Input(state.account, text)
             )
 
@@ -228,7 +228,7 @@ private fun onScanClick(
 
         is WCManager.SupportState.NotSupported -> {
             navController.slideFromBottom(
-                R.id.wcAccountTypeNotSupportedDialog,
+                WCAccountTypeNotSupportedDialog(),
                 WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
             )
         }

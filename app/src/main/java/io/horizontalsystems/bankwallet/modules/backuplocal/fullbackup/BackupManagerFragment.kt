@@ -57,7 +57,7 @@ class BackupManagerFragment : BaseComposeFragment() {
             onRestoreBackup = { jsonString, fileName ->
                 navController.navigateWithTermsAccepted {
                     navController.slideFromBottom(
-                        R.id.restoreLocalFragment,
+                        RestoreLocalFragment(),
                         RestoreLocalFragment.Input(
                             R.id.backupManagerFragment,
                             false,

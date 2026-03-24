@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment
+import io.horizontalsystems.bankwallet.modules.configuredtoken.ConfiguredTokenInfoDialog
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
@@ -182,7 +183,7 @@ private fun ManageWalletsScreen(
                                 },
                                 onInfoClick = {
                                     navController.slideFromBottom(
-                                        R.id.configuredTokenInfo,
+                                        ConfiguredTokenInfoDialog(),
                                         viewItem.item
                                     )
 

@@ -10,11 +10,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
-import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.subscriptions.core.IPaidAction
-import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import java.util.UUID
 
 fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
@@ -22,20 +19,7 @@ fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
 //    navigate(resId, args, navOptions)
 }
 
-fun NavBackStack<HSScreen>.slideFromBottom(@IdRes resId: Int, input: Parcelable) {
-    val navOptions = NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_from_bottom)
-        .setExitAnim(android.R.anim.fade_out)
-        .setPopEnterAnim(android.R.anim.fade_in)
-        .setPopExitAnim(R.anim.slide_to_bottom)
-        .build()
-
-    val args = input?.let {
-        bundleOf("input" to it)
-    }
-//    TODO("xxx nav3")
-//    navigate(resId, args, navOptions)
-}
+fun NavBackStack<HSScreen>.slideFromBottom(screen: HSScreen, input: Parcelable) = Unit
 
 fun NavBackStack<HSScreen>.authorizedAction(action: () -> Unit) {
     if (App.pinComponent.isPinSet) {
@@ -50,15 +34,16 @@ fun NavBackStack<HSScreen>.authorizedAction(action: () -> Unit) {
 }
 
 fun NavBackStack<HSScreen>.paidAction(paidAction: IPaidAction, block: () -> Unit) {
-    if (UserSubscriptionManager.isActionAllowed(paidAction)) {
-        block.invoke()
-    } else {
-        val premiumFeature = PremiumFeature.getFeature(paidAction)
-        slideFromBottom(
-            R.id.defenseSystemFeatureDialog,
-            DefenseSystemFeatureDialog.Input(premiumFeature)
-        )
-    }
+//    TODO("xxx nav3")
+//    if (UserSubscriptionManager.isActionAllowed(paidAction)) {
+//        block.invoke()
+//    } else {
+//        val premiumFeature = PremiumFeature.getFeature(paidAction)
+//        slideFromBottom(
+//            R.id.defenseSystemFeatureDialog,
+//            DefenseSystemFeatureDialog.Input(premiumFeature)
+//        )
+//    }
 }
 
 fun NavBackStack<HSScreen>.navigateWithTermsAccepted(action: () -> Unit) {
