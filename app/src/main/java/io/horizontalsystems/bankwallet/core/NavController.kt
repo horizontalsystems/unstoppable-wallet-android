@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.core
 
-import android.os.Bundle
 import android.os.Parcelable
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.subscriptions.core.IPaidAction
 
 fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
@@ -79,14 +77,6 @@ fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(screen: HSScr
 inline fun <reified T: Parcelable> NavBackStack<HSScreen>.getInput() : T? {
     TODO()
 //    return currentBackStackEntry?.arguments?.getInputX()
-}
-
-inline fun <reified T: Parcelable> Bundle.getInputX() : T? {
-    return parcelable("input")
-}
-
-inline fun <reified T: Parcelable> NavBackStack<HSScreen>.requireInput() : T {
-    return getInput()!!
 }
 
 fun <T: Parcelable> NavBackStack<HSScreen>.setNavigationResultX(result: T) {

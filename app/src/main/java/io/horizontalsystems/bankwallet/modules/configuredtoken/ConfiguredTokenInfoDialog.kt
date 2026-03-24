@@ -22,7 +22,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -41,7 +40,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
 
-class ConfiguredTokenInfoDialog(item: Token) : BaseComposableBottomSheetFragment() {
+class ConfiguredTokenInfoDialog(val token: Token) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,7 +53,7 @@ class ConfiguredTokenInfoDialog(item: Token) : BaseComposableBottomSheetFragment
             )
             setContent {
                 val navController = findNavController()
-                ConfiguredTokenInfo(navController, navController.requireInput<Token>())
+                ConfiguredTokenInfo(navController, token)
             }
         }
     }
