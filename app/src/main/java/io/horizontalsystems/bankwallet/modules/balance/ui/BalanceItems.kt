@@ -218,8 +218,7 @@ fun BalanceItems(
     val navigateToTokenBalance: (BalanceViewItem2) -> Unit = remember {
         {
             navController.slideFromRight(
-                TokenBalanceFragment(),
-                it.wallet
+                TokenBalanceFragment(it.wallet)
             )
 
             stat(page = StatPage.Balance, event = StatEvent.OpenTokenPage(it.wallet.token))
@@ -498,14 +497,13 @@ fun BalanceItems(
     }
     uiState.openSend?.let { openSend ->
         navController.slideFromRight(
-            SendTokenSelectFragment(),
-            SendTokenSelectFragment.Input(
+            SendTokenSelectFragment(SendTokenSelectFragment.Input(
                 openSend.blockchainTypes,
                 openSend.tokenTypes,
                 openSend.address,
                 openSend.amount,
                 openSend.memo,
-            )
+            ))
         )
         viewModel.onSendOpened()
     }
@@ -525,11 +523,10 @@ private fun handleContextMenuClick(
                 balanceViewItem.wallet.token.fullCoin.coin.code
             )
             navController.slideFromRight(
-                EnterAddressFragment(),
-                EnterAddressFragment.Input(
+                EnterAddressFragment(EnterAddressFragment.Input(
                     wallet = balanceViewItem.wallet,
                     title = sendTitle
-                )
+                ))
             )
 
             stat(
@@ -542,8 +539,7 @@ private fun handleContextMenuClick(
 
         BalanceContextMenuItem.Swap -> {
             navController.slideFromRight(
-                SwapFragment(),
-                SwapFragment.Input(tokenIn = balanceViewItem.wallet.token)
+                SwapFragment(SwapFragment.Input(tokenIn = balanceViewItem.wallet.token))
             )
 
             stat(
@@ -556,7 +552,7 @@ private fun handleContextMenuClick(
             val coinUid = balanceViewItem.wallet.coin.uid
             val arguments = CoinFragment.Input(coinUid)
 
-            navController.slideFromRight(CoinFragment(), arguments)
+            navController.slideFromRight(CoinFragment(arguments))
 
             stat(
                 page = StatPage.Balance,

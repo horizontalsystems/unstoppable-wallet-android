@@ -36,13 +36,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
-class BackupConfirmKeyFragment : BaseComposeFragment() {
+class BackupConfirmKeyFragment(val input: Account) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Account>(navController) { input ->
-            RecoveryPhraseVerifyScreen(navController, input)
-        }
+        RecoveryPhraseVerifyScreen(navController, input)
     }
 
 }

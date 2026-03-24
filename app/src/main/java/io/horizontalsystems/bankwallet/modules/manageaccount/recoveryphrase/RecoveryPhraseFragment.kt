@@ -40,13 +40,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 
-class RecoveryPhraseFragment : BaseComposeFragment(screenshotEnabled = false) {
+class RecoveryPhraseFragment(val input: Account) : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Account>(navController) { input ->
-            RecoveryPhraseScreen(navController, input)
-        }
+        RecoveryPhraseScreen(navController, input)
     }
 
 }

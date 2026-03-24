@@ -89,8 +89,7 @@ fun RecoveryPhraseScreen(
                     title = stringResource(R.string.RecoveryPhrase_Verify),
                     onClick = {
                         navController.slideFromRight(
-                            BackupConfirmKeyFragment(),
-                            viewModel.account
+                            BackupConfirmKeyFragment(viewModel.account)
                         )
                     },
                 )

@@ -33,24 +33,22 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.parcelize.Parcelize
 
-class CoinAuditsFragment : BaseComposeFragment() {
+class CoinAuditsFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            val viewModel = viewModel<CoinAuditsViewModel>(
-                factory = CoinAuditsModule.Factory(input.audits)
-            )
-            CoinAuditsScreen(
-                viewModel = viewModel,
-                onPressBack = {
-                    navController.removeLastOrNull()
-                },
-                onClickReportUrl = {
-                    LinkHelper.openLinkInAppBrowser(requireContext(), it)
-                }
-            )
-        }
+        val viewModel = viewModel<CoinAuditsViewModel>(
+            factory = CoinAuditsModule.Factory(input.audits)
+        )
+        CoinAuditsScreen(
+            viewModel = viewModel,
+            onPressBack = {
+                navController.removeLastOrNull()
+            },
+            onClickReportUrl = {
+                LinkHelper.openLinkInAppBrowser(requireContext(), it)
+            }
+        )
     }
 
     @Parcelize

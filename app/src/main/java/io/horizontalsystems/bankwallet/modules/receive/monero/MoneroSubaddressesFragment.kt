@@ -5,11 +5,9 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 
-class MoneroSubaddressesFragment : BaseComposeFragment() {
+class MoneroSubaddressesFragment(val input: SubaddressesParams) : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<SubaddressesParams>(navController) {
-            MoneroSubaddressesScreen(it) { navController.removeLastOrNull() }
-        }
+        MoneroSubaddressesScreen(input) { navController.removeLastOrNull() }
     }
 }

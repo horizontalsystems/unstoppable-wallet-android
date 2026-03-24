@@ -103,8 +103,7 @@ fun TopPlatforms(
                                 timeDuration = uiState.timePeriod,
                                 onItemClick = {
                                     navController.slideFromRight(
-                                        MarketPlatformFragment(),
-                                        it
+                                        MarketPlatformFragment(it)
                                     )
 
                                     stat(

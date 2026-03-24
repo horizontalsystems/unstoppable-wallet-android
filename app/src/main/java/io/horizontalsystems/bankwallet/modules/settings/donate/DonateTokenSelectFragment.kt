@@ -41,14 +41,13 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
                         viewItem.wallet.token.fullCoin.coin.code
                     )
                     navController.slideFromRight(
-                        SendFragment(),
-                        SendFragment.Input(
+                        SendFragment(SendFragment.Input(
                             wallet = viewItem.wallet,
                             title = sendTitle,
                             sendEntryPointDestId = R.id.sendTokenSelectFragment,
                             address = Address(donateAddress),
                             hideAddress = true
-                        )
+                        ))
                     )
 
                     stat(page = StatPage.Donate, event = StatEvent.OpenSend(viewItem.wallet.token))

@@ -32,19 +32,17 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline2_jacob
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import java.math.BigDecimal
 
-class OverallScoreInfoFragment : BaseComposeFragment() {
+class OverallScoreInfoFragment(val scoreCategory: ScoreCategory) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<ScoreCategory>(navController) { scoreCategory ->
-            val categoryScores = getScores(scoreCategory)
-            InfoScreen(
-                scoreCategory.title,
-                scoreCategory.description,
-                categoryScores,
-                navController
-            )
-        }
+        val categoryScores = getScores(scoreCategory)
+        InfoScreen(
+            scoreCategory.title,
+            scoreCategory.description,
+            categoryScores,
+            navController
+        )
     }
 }
 

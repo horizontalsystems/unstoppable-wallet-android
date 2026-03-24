@@ -96,8 +96,7 @@ fun SwapHistoryScreen(navController: NavBackStack<HSScreen>) {
                             item = item,
                             onClick = {
                                 navController.slideFromRight(
-                                    SwapInfoFragment(),
-                                    SwapInfoFragment.Input(item.id),
+                                    SwapInfoFragment(SwapInfoFragment.Input(item.id)),
                                 )
                             },
                         )

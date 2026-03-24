@@ -9,19 +9,17 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 
-class TokenBalanceFragment : BaseComposeFragment() {
+class TokenBalanceFragment(val wallet: Wallet) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Wallet>(navController) { wallet ->
-            val viewModel by viewModels<TokenBalanceViewModel> { TokenBalanceModule.Factory(wallet) }
-            val transactionsViewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
+        val viewModel by viewModels<TokenBalanceViewModel> { TokenBalanceModule.Factory(wallet) }
+        val transactionsViewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
-            TokenBalanceScreen(
-                viewModel,
-                transactionsViewModel,
-                navController
-            )
-        }
+        TokenBalanceScreen(
+            viewModel,
+            transactionsViewModel,
+            navController
+        )
     }
 }

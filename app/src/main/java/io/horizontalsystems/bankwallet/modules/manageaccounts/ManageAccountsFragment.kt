@@ -42,13 +42,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
-class ManageAccountsFragment : BaseComposeFragment() {
+class ManageAccountsFragment(val input: ManageAccountsModule.Mode) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<ManageAccountsModule.Mode>(navController) { input ->
-            ManageAccountsScreen(navController, input)
-        }
+        ManageAccountsScreen(navController, input)
     }
 }
 
@@ -105,7 +103,7 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
                         R.string.ManageAccounts_CreateNewWallet
                     ) {
                         navController.navigateWithTermsAccepted {
-                            navController.slideFromRight(CreateAccountFragment(), args)
+                            navController.slideFromRight(CreateAccountFragment(args))
 
                             stat(
                                 page = StatPage.ManageWallets,
@@ -117,7 +115,7 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
                         R.drawable.ic_download_20,
                         R.string.ManageAccounts_ImportWallet
                     ) {
-                        navController.slideFromRight(ImportWalletFragment(), args)
+                        navController.slideFromRight(ImportWalletFragment(args))
 
                         stat(
                             page = StatPage.ManageWallets,
@@ -128,7 +126,7 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
                         R.drawable.icon_binocule_20,
                         R.string.ManageAccounts_WatchAddress
                     ) {
-                        navController.slideFromRight(WatchAddressFragment(), args)
+                        navController.slideFromRight(WatchAddressFragment(args))
 
                         stat(
                             page = StatPage.ManageWallets,
@@ -216,8 +214,7 @@ private fun AccountsSection(
                 tint = iconTint
             ) {
                 navController.slideFromRight(
-                    ManageAccountFragment(),
-                    ManageAccountFragment.Input(accountViewItem.accountId)
+                    ManageAccountFragment(ManageAccountFragment.Input(accountViewItem.accountId))
                 )
 
                 stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.ManageWallet))

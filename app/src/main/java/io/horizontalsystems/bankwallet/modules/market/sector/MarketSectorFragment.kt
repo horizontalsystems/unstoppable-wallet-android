@@ -47,28 +47,26 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.CoinCategory
 import kotlinx.coroutines.launch
 
-class MarketSectorFragment : BaseComposeFragment() {
+class MarketSectorFragment(val input: CoinCategory) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<CoinCategory>(navController) { input ->
-            val factory = MarketSectorModule.Factory(input)
-            val chartViewModel = viewModel<ChartViewModel>(factory = factory)
-            val viewModel = viewModel<MarketSectorViewModel>(factory = factory)
+        val factory = MarketSectorModule.Factory(input)
+        val chartViewModel = viewModel<ChartViewModel>(factory = factory)
+        val viewModel = viewModel<MarketSectorViewModel>(factory = factory)
 
-            SectorScreen(
-                viewModel = viewModel,
-                chartViewModel = chartViewModel,
-                onCloseButtonClick = { navController.removeLastOrNull() },
-                onCoinClick = { coinUid -> onCoinClick(coinUid, navController) }
-            )
-        }
+        SectorScreen(
+            viewModel = viewModel,
+            chartViewModel = chartViewModel,
+            onCloseButtonClick = { navController.removeLastOrNull() },
+            onCoinClick = { coinUid -> onCoinClick(coinUid, navController) }
+        )
     }
 
     private fun onCoinClick(coinUid: String, navController: NavBackStack<HSScreen>) {
         val arguments = CoinFragment.Input(coinUid)
 
-        navController.slideFromRight(CoinFragment(), arguments)
+        navController.slideFromRight(CoinFragment(arguments))
 
         stat(page = StatPage.CoinCategory, event = StatEvent.OpenCoin(coinUid))
     }

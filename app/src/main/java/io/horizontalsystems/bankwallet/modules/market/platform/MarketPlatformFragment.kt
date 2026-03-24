@@ -69,26 +69,23 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
 
-class MarketPlatformFragment : BaseComposeFragment() {
+class MarketPlatformFragment(val platform: Platform) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val factory = MarketPlatformModule.Factory(platform)
 
-        withInput<Platform>(navController) { platform ->
-            val factory = MarketPlatformModule.Factory(platform)
+        PlatformScreen(
+            factory = factory,
+            platform = platform,
+            onCloseButtonClick = { navController.removeLastOrNull() },
+            onCoinClick = { coinUid ->
+                val arguments = CoinFragment.Input(coinUid)
+                navController.slideFromRight(CoinFragment(arguments))
 
-            PlatformScreen(
-                factory = factory,
-                platform = platform,
-                onCloseButtonClick = { navController.removeLastOrNull() },
-                onCoinClick = { coinUid ->
-                    val arguments = CoinFragment.Input(coinUid)
-                    navController.slideFromRight(CoinFragment(), arguments)
-
-                    stat(page = StatPage.TopPlatform, event = StatEvent.OpenCoin(coinUid))
-                }
-            )
-        }
+                stat(page = StatPage.TopPlatform, event = StatEvent.OpenCoin(coinUid))
+            }
+        )
     }
 }
 

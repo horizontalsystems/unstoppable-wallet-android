@@ -15,7 +15,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -39,11 +38,10 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 
-class WatchAddressFragment : BaseComposeFragment() {
+class WatchAddressFragment(val input: ManageAccountsModule.Input? = null) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val input = navController.getInput<ManageAccountsModule.Input>()
         val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.watchAddressFragment
         val inclusive = input?.popOffInclusive ?: true
         WatchAddressScreen(navController, popUpToInclusiveId, inclusive)
@@ -79,13 +77,12 @@ fun WatchAddressScreen(navController: NavBackStack<HSScreen>, popUpToInclusiveId
         viewModel.blockchainSelectionOpened()
 
         navController.slideFromRight(
-            SelectBlockchainsFragment(),
-            SelectBlockchainsFragment.Input(
+            SelectBlockchainsFragment(SelectBlockchainsFragment.Input(
                 popUpToInclusiveId,
                 inclusive,
                 accountType,
                 accountName
-            )
+            ))
         )
     }
 

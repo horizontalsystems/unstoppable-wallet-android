@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
@@ -44,7 +43,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
-class SendFragment : BaseFragment() {
+class SendFragment(val input: Input) : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,8 +55,6 @@ class SendFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             try {
-                val navController = findNavController()
-                val input = navController.requireInput<Input>()
                 val wallet = input.wallet
                 val title = input.title
                 val sendEntryPointDestId = input.sendEntryPointDestId

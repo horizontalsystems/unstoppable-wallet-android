@@ -31,25 +31,22 @@ import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
 
 
-class ZcashAddressTypeSelectFragment : BaseComposeFragment() {
+class ZcashAddressTypeSelectFragment(val input: Input) : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) {
-            val wallet = it.wallet
-            ZcashAddressTypeSelectScreen(
-                onZcashAddressTypeClick = { isTransparent ->
-                    navController.slideFromRight(
-                        ReceiveFragment(),
-                        ReceiveFragment.Input(
-                            wallet = wallet,
-                            isTransparentAddress = isTransparent
-                        )
-                    )
-                },
-                onBackPress = {
-                    navController.removeLastOrNull()
-                })
-        }
+        val wallet = input.wallet
+        ZcashAddressTypeSelectScreen(
+            onZcashAddressTypeClick = { isTransparent ->
+                navController.slideFromRight(
+                    ReceiveFragment(ReceiveFragment.Input(
+                        wallet = wallet,
+                        isTransparentAddress = isTransparent
+                    ))
+                )
+            },
+            onBackPress = {
+                navController.removeLastOrNull()
+            })
     }
 
     @Parcelize

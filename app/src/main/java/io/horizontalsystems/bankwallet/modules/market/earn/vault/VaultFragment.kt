@@ -44,22 +44,20 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.parcelize.Parcelize
 
-class VaultFragment : BaseComposeFragment() {
+class VaultFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            val factory = VaultModule.Factory(input)
-            val viewModel = viewModel<VaultViewModel>(factory = factory)
-            val chartViewModel = viewModel<ChartViewModel>(
-                factory = factory
-            )
-            VaultScreen(
-                viewModel,
-                chartViewModel,
-                navController
-            )
-        }
+        val factory = VaultModule.Factory(input)
+        val viewModel = viewModel<VaultViewModel>(factory = factory)
+        val chartViewModel = viewModel<ChartViewModel>(
+            factory = factory
+        )
+        VaultScreen(
+            viewModel,
+            chartViewModel,
+            navController
+        )
     }
 
     @Parcelize

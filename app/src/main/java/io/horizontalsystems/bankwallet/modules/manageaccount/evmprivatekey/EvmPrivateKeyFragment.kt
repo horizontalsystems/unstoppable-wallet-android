@@ -14,13 +14,11 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.SecretKeyScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.parcelize.Parcelize
 
-class EvmPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
+class EvmPrivateKeyFragment(val input: Input) : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            EvmPrivateKeyScreen(navController, input.evmPrivateKey)
-        }
+        EvmPrivateKeyScreen(navController, input.evmPrivateKey)
     }
 
     @Parcelize

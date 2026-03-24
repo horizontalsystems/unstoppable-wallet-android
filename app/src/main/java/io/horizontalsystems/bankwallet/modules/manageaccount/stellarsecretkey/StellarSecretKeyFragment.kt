@@ -14,13 +14,11 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.SecretKeyScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.parcelize.Parcelize
 
-class StellarSecretKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
+class StellarSecretKeyFragment(val input: Input) : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            StellarSecretKeyScreen(navController, input.stellarSecretKey)
-        }
+        StellarSecretKeyScreen(navController, input.stellarSecretKey)
     }
 
     @Parcelize

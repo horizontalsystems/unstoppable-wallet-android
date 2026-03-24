@@ -39,8 +39,7 @@ fun ReceiveMoneroScreen(navController: NavBackStack<HSScreen>, wallet: Wallet, r
                     modifier = Modifier.height(52.dp),
                     onClick = {
                         navController.slideFromRight(
-                            MoneroSubaddressesFragment(),
-                            SubaddressesParams(uiState.subaddresses)
+                            MoneroSubaddressesFragment(SubaddressesParams(uiState.subaddresses))
                         )
                     }
                 ) {

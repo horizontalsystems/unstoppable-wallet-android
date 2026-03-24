@@ -161,11 +161,10 @@ private fun openSendConfirm(
     sendEntryPointDestId: Int
 ) {
     navController.slideFromRight(
-        SendEvmConfirmationFragment(),
-        SendEvmConfirmationFragment.Input(
+        SendEvmConfirmationFragment(SendEvmConfirmationFragment.Input(
             sendData = sendEvmData,
             blockchainType = blockchainType,
             sendEntryPointDestId = sendEntryPointDestId
-        )
+        ))
     )
 }

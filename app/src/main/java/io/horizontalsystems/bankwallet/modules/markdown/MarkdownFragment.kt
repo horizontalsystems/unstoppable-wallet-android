@@ -17,23 +17,21 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.parcelize.Parcelize
 
-class MarkdownFragment : BaseComposeFragment() {
+class MarkdownFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            MarkdownScreen(
-                handleRelativeUrl = input.handleRelativeUrl,
-                showAsPopup = input.showAsPopup,
-                markdownUrl = input.markdownUrl,
-                onCloseClick = { navController.removeLastOrNull() },
-                onUrlClick = { url ->
-                    navController.slideFromRight(
-                        MarkdownFragment(), Input(url)
-                    )
-                }
-            )
-        }
+        MarkdownScreen(
+            handleRelativeUrl = input.handleRelativeUrl,
+            showAsPopup = input.showAsPopup,
+            markdownUrl = input.markdownUrl,
+            onCloseClick = { navController.removeLastOrNull() },
+            onUrlClick = { url ->
+                navController.slideFromRight(
+                    MarkdownFragment(Input(url))
+                )
+            }
+        )
     }
 
     @Parcelize

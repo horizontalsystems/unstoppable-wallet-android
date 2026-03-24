@@ -30,13 +30,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
-class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
+class EvmAddressFragment(val input: Input) : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            EvmAddressScreen(input.evmAddress, navController)
-        }
+        EvmAddressScreen(input.evmAddress, navController)
     }
 
     @Parcelize

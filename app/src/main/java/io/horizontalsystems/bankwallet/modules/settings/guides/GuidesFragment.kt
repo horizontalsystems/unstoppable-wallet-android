@@ -139,11 +139,10 @@ fun GuidesScreen(navController: NavBackStack<HSScreen>) {
                                                     borderTop = j != 0,
                                                     onClick = {
                                                         navController.slideFromRight(
-                                                            MarkdownFragment(),
-                                                            MarkdownFragment.Input(
+                                                            MarkdownFragment(MarkdownFragment.Input(
                                                                 guide.markdown,
                                                                 true
-                                                            )
+                                                            ))
                                                         )
 
                                                         stat(

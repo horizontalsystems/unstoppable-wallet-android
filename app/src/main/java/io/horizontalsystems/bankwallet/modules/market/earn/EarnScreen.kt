@@ -129,7 +129,7 @@ fun MarketEarnScreen(
                                     assetLogo = viewItem.assetLogo
                                 )
                                 navController.paidAction(TokenInsights) {
-                                    navController.slideFromRight(VaultFragment(), input)
+                                    navController.slideFromRight(VaultFragment(input))
                                 }
                             },
                             onGetPremiumClick = {

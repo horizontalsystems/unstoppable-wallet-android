@@ -131,8 +131,7 @@ fun BalanceForAccount(
                     icon = R.drawable.ic_wallet_switch_24,
                     onClick = {
                         navController.slideFromRight(
-                            ManageAccountsFragment(),
-                            ManageAccountsModule.Mode.Switcher
+                            ManageAccountsFragment(ManageAccountsModule.Mode.Switcher)
                         )
 
                         stat(

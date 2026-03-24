@@ -41,16 +41,14 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.Coin
 
-class CoinTreasuriesFragment : BaseComposeFragment() {
+class CoinTreasuriesFragment(val input: Coin) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Coin>(navController) { input ->
-            CoinTreasuriesScreen(
-                viewModel = viewModel(factory = CoinTreasuriesModule.Factory(input)),
-                onBackClick = { findNavController().removeLastOrNull() }
-            )
-        }
+        CoinTreasuriesScreen(
+            viewModel = viewModel(factory = CoinTreasuriesModule.Factory(input)),
+            onBackClick = { findNavController().removeLastOrNull() }
+        )
     }
 }
 

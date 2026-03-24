@@ -287,11 +287,10 @@ private fun openConfirm(
     sendEntryPointDestId: Int
 ) {
     fragmentNavController.slideFromRight(
-        SendConfirmationFragment(),
-        SendConfirmationFragment.Input(
+        SendConfirmationFragment(SendConfirmationFragment.Input(
             SendConfirmationFragment.Type.Bitcoin,
             sendEntryPointDestId
-        )
+        ))
     )
 }
 

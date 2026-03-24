@@ -120,7 +120,7 @@ fun AddressCell(
                             )
                         }
                     }
-                    navController?.slideFromRight(ContactsFragment(), args)
+                    navController?.slideFromRight(ContactsFragment(args))
                 }
             })
     }

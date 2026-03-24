@@ -179,12 +179,11 @@ private fun onSelectWallet(
     isTransparentAddress: Boolean = false,
 ) {
     fragmentNavController.slideFromRight(
-        ReceiveFragment(),
-        ReceiveFragment.Input(
+        ReceiveFragment(ReceiveFragment.Input(
             wallet,
             R.id.receiveChooseCoinFragment,
             isTransparentAddress
-        )
+        ))
     )
 
     stat(page = StatPage.ReceiveTokenList, event = StatEvent.OpenReceive(wallet.token))

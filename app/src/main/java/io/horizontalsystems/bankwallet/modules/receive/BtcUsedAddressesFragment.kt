@@ -7,11 +7,9 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressesParams
 
-class BtcUsedAddressesFragment : BaseComposeFragment() {
+class BtcUsedAddressesFragment(val input: UsedAddressesParams) : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<UsedAddressesParams>(navController) {
-            UsedAddressScreen(it) { navController.removeLastOrNull() }
-        }
+        UsedAddressScreen(input) { navController.removeLastOrNull() }
     }
 }
