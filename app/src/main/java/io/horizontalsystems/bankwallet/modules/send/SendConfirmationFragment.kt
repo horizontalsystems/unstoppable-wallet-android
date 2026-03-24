@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.send
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavBackStack
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroConfirmationScreen
@@ -28,7 +28,7 @@ class SendConfirmationFragment(val input: Input) : BaseComposeFragment() {
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         when (input.type) {
             Type.Bitcoin -> {
-                val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
+                val sendBitcoinViewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendFragment::class)
 
                 SendBitcoinConfirmationScreen(
                     navController,
@@ -38,7 +38,7 @@ class SendConfirmationFragment(val input: Input) : BaseComposeFragment() {
             }
 
             Type.ZCash -> {
-                val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment)
+                val sendZCashViewModel = navController.viewModelForScreen<SendZCashViewModel>(SendFragment::class)
 
                 SendZCashConfirmationScreen(
                     navController,
@@ -48,23 +48,17 @@ class SendConfirmationFragment(val input: Input) : BaseComposeFragment() {
             }
 
             Type.Tron -> {
-                val sendTronViewModel: SendTronViewModel? = try {
-                    navGraphViewModels<SendTronViewModel>(R.id.sendXFragment).value
-                } catch (e: Exception) {
-                    null
-                }
+                val sendTronViewModel = navController.viewModelForScreen<SendTronViewModel>(SendFragment::class)
 
-                sendTronViewModel?.let { viewModel ->
-                    SendTronConfirmationScreen(
-                        navController,
-                        viewModel,
-                        input.sendEntryPointDestId
-                    )
-                } ?: navController.removeLastOrNull()
+                SendTronConfirmationScreen(
+                    navController,
+                    sendTronViewModel,
+                    input.sendEntryPointDestId
+                )
             }
 
             Type.Solana -> {
-                val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment)
+                val sendSolanaViewModel = navController.viewModelForScreen<SendSolanaViewModel>(SendFragment::class)
 
                 SendSolanaConfirmationScreen(
                     navController,
@@ -74,7 +68,7 @@ class SendConfirmationFragment(val input: Input) : BaseComposeFragment() {
             }
 
             Type.Ton -> {
-                val sendTonViewModel by navGraphViewModels<SendTonViewModel>(R.id.sendXFragment)
+                val sendTonViewModel = navController.viewModelForScreen<SendTonViewModel>(SendFragment::class)
 
                 SendTonConfirmationScreen(
                     navController,
@@ -84,7 +78,7 @@ class SendConfirmationFragment(val input: Input) : BaseComposeFragment() {
             }
 
             Type.Stellar -> {
-                val sendStellarViewModel by navGraphViewModels<SendStellarViewModel>(R.id.sendXFragment)
+                val sendStellarViewModel = navController.viewModelForScreen<SendStellarViewModel>(SendFragment::class)
 
                 SendStellarConfirmationScreen(
                     navController,
@@ -94,7 +88,7 @@ class SendConfirmationFragment(val input: Input) : BaseComposeFragment() {
             }
 
             Type.Monero -> {
-                val sendMoneroViewModel by navGraphViewModels<SendMoneroViewModel>(R.id.sendXFragment)
+                val sendMoneroViewModel = navController.viewModelForScreen<SendMoneroViewModel>(SendFragment::class)
 
                 SendMoneroConfirmationScreen(
                     navController,

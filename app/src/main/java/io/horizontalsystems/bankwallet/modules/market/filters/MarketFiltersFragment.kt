@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -70,14 +71,10 @@ import kotlinx.coroutines.launch
 
 class MarketFiltersFragment : BaseComposeFragment() {
 
-    private val viewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment) {
-        MarketFiltersModule.Factory()
-    }
-
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         AdvancedSearchScreen(
-            viewModel,
+            viewModel(factory = MarketFiltersModule.Factory()),
             navController,
         )
     }

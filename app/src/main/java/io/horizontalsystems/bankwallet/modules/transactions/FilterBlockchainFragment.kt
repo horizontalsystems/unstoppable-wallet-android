@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -25,11 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
+import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -40,17 +39,7 @@ class FilterBlockchainFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val viewModel: TransactionsViewModel? = try {
-            navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
-        } catch (e: IllegalStateException) {
-            Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
-            null
-        }
-
-        if (viewModel == null) {
-            navController.removeLastUntil(R.id.filterBlockchainFragment, true)
-            return
-        }
+        val viewModel = navController.viewModelForScreen<TransactionsViewModel>(MainScreen::class)
 
         FilterBlockchainScreen(navController, viewModel)
     }

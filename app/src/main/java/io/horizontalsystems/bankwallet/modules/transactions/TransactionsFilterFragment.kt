@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,14 +23,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
+import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -47,17 +46,7 @@ class TransactionsFilterFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val viewModel: TransactionsViewModel? = try {
-            navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
-        } catch (e: IllegalStateException) {
-            Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
-            null
-        }
-
-        if (viewModel == null) {
-            navController.removeLastUntil(R.id.filterCoinFragment, true)
-            return
-        }
+        val viewModel = navController.viewModelForScreen<TransactionsViewModel>(MainScreen::class)
 
         FilterScreen(
             navController,

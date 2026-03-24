@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -39,12 +40,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 
 class SectorsSelectorFragment : BaseComposeFragment() {
 
-    private val viewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment) {
-        MarketFiltersModule.Factory()
-    }
-
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val viewModel = navController.viewModelForScreen<MarketFiltersViewModel>(MarketFiltersFragment::class)
+
         SectorsSelectorScreen(
             viewModel,
             navController,

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -40,19 +41,10 @@ class CoinFragment(val input: Input) : BaseComposeFragment() {
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         CoinScreen(
             input.coinUid,
-            coinViewModel(input.coinUid),
+            viewModel(factory = CoinModule.Factory(input.coinUid)),
             navController,
             childFragmentManager
         )
-    }
-
-    private fun coinViewModel(coinUid: String): CoinViewModel? = try {
-        val viewModel by navGraphViewModels<CoinViewModel>(R.id.coinFragment) {
-            CoinModule.Factory(coinUid)
-        }
-        viewModel
-    } catch (e: Exception) {
-        null
     }
 
     @Parcelize
