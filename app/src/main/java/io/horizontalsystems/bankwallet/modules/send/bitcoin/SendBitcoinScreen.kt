@@ -263,9 +263,10 @@ fun SendBitcoinScreen(
                         if (riskyAddress) {
                             keyboardController?.hide()
                             fragmentNavController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
-                                AddressRiskyBottomSheetAlert(),
-                                AddressRiskyBottomSheetAlert.Input(
-                                    alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
+                                AddressRiskyBottomSheetAlert(
+                                    AddressRiskyBottomSheetAlert.Input(
+                                        alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
+                                    )
                                 )
                             ) {
                                 openConfirm(fragmentNavController, sendEntryPointDestId)

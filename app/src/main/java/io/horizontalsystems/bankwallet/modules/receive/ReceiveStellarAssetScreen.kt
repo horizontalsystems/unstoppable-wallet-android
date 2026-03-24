@@ -51,8 +51,7 @@ fun ReceiveStellarAssetScreen(navController: NavBackStack<HSScreen>, wallet: Wal
 
     val runActivation = {
         navController.slideFromBottomForResult<ActivateTokenFragment.Result>(
-            ActivateTokenFragment(),
-            wallet
+            ActivateTokenFragment(wallet)
         ) {
             scope.launch {
                 viewModel.onActivationResult(it.activated)

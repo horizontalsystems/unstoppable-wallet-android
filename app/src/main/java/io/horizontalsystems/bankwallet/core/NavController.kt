@@ -69,9 +69,9 @@ fun NavBackStack<HSScreen>.ensurePinSet(descriptionResId: Int, action: () -> Uni
     }
 }
 
-fun <T: Parcelable> NavBackStack<HSScreen>.slideFromBottomForResult(screen: HSScreen, input: Parcelable? = null, onResult: (T) -> Unit) = Unit
-
-fun <T: Parcelable> NavBackStack<HSScreen>.slideFromBottomForResult(screen: HSScreen, onResult: (T) -> Unit) = Unit
+fun <T: Parcelable> NavBackStack<HSScreen>.slideFromBottomForResult(screen: HSScreen, onResult: (T) -> Unit) {
+//    TODO("xxx nav3")
+}
 
 fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(screen: HSScreen, onResult: (T) -> Unit) {
 //    TODO("xxx nav3")

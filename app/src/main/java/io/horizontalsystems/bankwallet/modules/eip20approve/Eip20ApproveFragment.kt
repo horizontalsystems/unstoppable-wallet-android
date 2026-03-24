@@ -34,7 +34,7 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
-class Eip20ApproveFragment : BaseComposeFragment() {
+class Eip20ApproveFragment(approveData: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
