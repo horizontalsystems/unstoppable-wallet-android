@@ -38,6 +38,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -93,8 +94,8 @@ class EtfFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val factory = EtfModule.Factory()
-        val viewModel by viewModels<EtfViewModel> { factory }
+        val factory = remember { EtfModule.Factory() }
+        val viewModel = viewModel<EtfViewModel>(factory = factory)
         EtfPage(viewModel, navController)
     }
 }

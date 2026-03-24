@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -55,12 +56,12 @@ import io.horizontalsystems.marketkit.models.Token
 
 class ManageWalletsFragment : BaseComposeFragment() {
 
-    private val vmFactory by lazy { ManageWalletsModule.Factory() }
-    private val viewModel by viewModels<ManageWalletsViewModel> { vmFactory }
-    private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
-
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val vmFactory = remember { ManageWalletsModule.Factory() }
+        val viewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory)
+        val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory)
+
         ManageWalletsScreen(
             navController,
             viewModel,

@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -70,14 +71,10 @@ import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 
 class SecuritySettingsFragment : BaseComposeFragment() {
 
-    private val securitySettingsViewModel by viewModels<SecuritySettingsViewModel> {
-        SecurityPasscodeSettingsModule.Factory()
-    }
-
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         SecurityCenterScreen(
-            securitySettingsViewModel = securitySettingsViewModel,
+            securitySettingsViewModel = viewModel(factory = SecurityPasscodeSettingsModule.Factory()),
             navController = navController,
         )
     }

@@ -8,26 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.annotation.LayoutRes
-import androidx.annotation.MainThread
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.HasDefaultViewModelProviderFactory
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelProvider.Factory
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import kotlin.reflect.KClass
 
 abstract class BaseComposeFragment(
     screenshotEnabled: Boolean = true
@@ -71,41 +64,6 @@ abstract class BaseComposeFragment(
 
     fun requireView() : View {
         TODO()
-    }
-
-    @MainThread
-    public inline fun <reified VM : ViewModel> viewModels(
-        noinline ownerProducer: () -> ViewModelStoreOwner = { TODO() },
-        noinline extrasProducer: (() -> CreationExtras)? = null,
-        noinline factoryProducer: (() -> Factory)? = null
-    ): Lazy<VM> {
-        val owner by lazy(LazyThreadSafetyMode.NONE) { ownerProducer() }
-        return createViewModelLazy(
-            VM::class,
-            { owner.viewModelStore },
-            {
-                extrasProducer?.invoke()
-                    ?: (owner as? HasDefaultViewModelProviderFactory)?.defaultViewModelCreationExtras
-                    ?: CreationExtras.Empty
-            },
-            factoryProducer ?: {
-                (owner as? HasDefaultViewModelProviderFactory)?.defaultViewModelProviderFactory
-                    ?: defaultViewModelProviderFactory
-            })
-    }
-
-    @MainThread
-    public fun <VM : ViewModel> createViewModelLazy(
-        viewModelClass: KClass<VM>,
-        storeProducer: () -> ViewModelStore,
-        extrasProducer: () -> CreationExtras = { defaultViewModelCreationExtras },
-        factoryProducer: (() -> Factory)? = null
-
-    ): Lazy<VM> {
-        val factoryPromise = factoryProducer ?: {
-            defaultViewModelProviderFactory
-        }
-        return ViewModelLazy(viewModelClass, storeProducer, factoryPromise, extrasProducer)
     }
 }
 
