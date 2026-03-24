@@ -651,7 +651,7 @@ fun TransactionInfoBtcLockCell(
                     val lockTime = DateHelper.getFullDate(lockState.date)
 
                     navController.slideFromBottom(
-                        R.id.transactionLockTimeInfoFragment,
+                        TransactionLockTimeInfoFragment(),
                         TransactionLockTimeInfoFragment.Input(lockTime)
                     )
 
@@ -696,7 +696,7 @@ fun TransactionInfoDoubleSpendCell(
             modifier = Modifier.size(20.dp),
             onClick = {
                 navController.slideFromBottom(
-                    R.id.transactionDoubleSpendInfoFragment,
+                    TransactionDoubleSpendInfoFragment(),
                     TransactionDoubleSpendInfoFragment.Input(
                         transactionHash,
                         conflictingHash

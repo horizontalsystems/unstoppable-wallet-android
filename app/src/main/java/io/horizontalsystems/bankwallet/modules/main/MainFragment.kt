@@ -223,7 +223,7 @@ private fun MainScreen(
     if (uiState.showWhatsNew) {
         LaunchedEffect(Unit) {
             fragmentNavController.slideFromBottom(
-                R.id.releaseNotesFragment,
+                ReleaseNotesFragment(),
                 ReleaseNotesFragment.Input(true)
             )
             viewModel.whatsNewShown()
@@ -257,7 +257,7 @@ private fun MainScreen(
             is SupportState.NotSupportedDueToNonBackedUpAccount -> {
                 val text = stringResource(R.string.WalletConnect_Error_NeedBackup)
                 fragmentNavController.slideFromBottom(
-                    R.id.backupRequiredDialog,
+                    BackupRequiredDialog(),
                     BackupRequiredDialog.Input(wcSupportState.account, text)
                 )
 
@@ -266,7 +266,7 @@ private fun MainScreen(
 
             is SupportState.NotSupported -> {
                 fragmentNavController.slideFromBottom(
-                    R.id.wcAccountTypeNotSupportedDialog,
+                    WCAccountTypeNotSupportedDialog(),
                     WCAccountTypeNotSupportedDialog.Input(wcSupportState.accountTypeDescription)
                 )
             }

@@ -618,7 +618,7 @@ fun PriceImpactField(
             .hs(color = getPriceImpactColor(priceImpactLevel)),
         onInfoClick = {
             navController.slideFromBottom(
-                R.id.swapInfoDialog,
+                SwapInfoDialog(),
                 SwapInfoDialog.Input(infoTitle, infoText)
             )
         }

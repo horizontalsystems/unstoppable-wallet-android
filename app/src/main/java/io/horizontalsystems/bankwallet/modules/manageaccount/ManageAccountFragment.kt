@@ -34,13 +34,16 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalFragment
 import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.BackupItem
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule.KeyAction
+import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.privatekeys.PrivateKeysFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.publickeys.PublicKeysFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.recoveryphrase.RecoveryPhraseFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -175,7 +178,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, accountId: String
                             icon = painterResource(id = R.drawable.ic_delete_20)
                         ) {
                             navController.slideFromBottom(
-                                R.id.unlinkConfirmationDialog,
+                                UnlinkAccountDialog(),
                                 viewModel.account
                             )
 
@@ -212,7 +215,7 @@ private fun BackupActions(
                     ) {
                         navController.authorizedAction {
                             navController.slideFromBottom(
-                                R.id.backupKeyFragment,
+                                BackupKeyFragment(),
                                 account
                             )
 
@@ -233,7 +236,7 @@ private fun BackupActions(
                         attention = action.showAttention
                     ) {
                         navController.authorizedAction {
-                            navController.slideFromBottom(R.id.backupLocalFragment, account)
+                            navController.slideFromBottom(BackupLocalFragment(), account)
 
                             stat(
                                 page = StatPage.ManageWallet,

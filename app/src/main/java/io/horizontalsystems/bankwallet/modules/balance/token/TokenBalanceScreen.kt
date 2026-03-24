@@ -218,7 +218,7 @@ fun TokenBalanceScreen(
                     e.coinTitle
                 )
                 navController.slideFromBottom(
-                    R.id.backupRequiredDialog,
+                    BackupRequiredDialog(),
                     BackupRequiredDialog.Input(e.account, text)
                 )
 
@@ -380,7 +380,7 @@ fun TokenBalanceScreen(
                             e.coinTitle
                         )
                         navController.slideFromBottom(
-                            R.id.backupRequiredDialog,
+                            BackupRequiredDialog(),
                             BackupRequiredDialog.Input(e.account, text)
                         )
 
@@ -405,7 +405,7 @@ private fun openSyncErrorDialog(
 
     wallet?.let {
         navController.slideFromBottom(
-            R.id.syncErrorDialog,
+            SyncErrorDialog(),
             SyncErrorDialog.Input(wallet, errorMessage)
         )
     }

@@ -33,7 +33,7 @@ data class DataFieldSlippage(val slippage: BigDecimal) : DataField {
             value = App.numberFormatter.format(slippage, 0, 2, suffix = "%").hs(color = color),
             onInfoClick = {
                 navController.slideFromBottom(
-                    R.id.swapInfoDialog,
+                    SwapInfoDialog(),
                     SwapInfoDialog.Input(infoTitle, infoText)
                 )
             }

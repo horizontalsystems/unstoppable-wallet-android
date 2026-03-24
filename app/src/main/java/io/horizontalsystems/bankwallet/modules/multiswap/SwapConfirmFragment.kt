@@ -34,6 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.R.drawable.close_e_filled_24
+import io.horizontalsystems.bankwallet.R.drawable.shield_check_filled_24
+import io.horizontalsystems.bankwallet.R.drawable.warning_filled_24
 import io.horizontalsystems.bankwallet.R.id.defenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.addFromRight
@@ -59,6 +62,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactio
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.viewModelForPrevScreen
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog.Input
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -252,7 +256,7 @@ private fun SwapConfirmInternal(
                                 navController.setNavigationResultX(SwapConfirmFragment.Result(true))
                                 navController.removeLastOrNull()
                             } catch (t: Throwable) {
-                                navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                                navController.slideFromBottom(ErrorBottomSheet(), ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                             }
 
                             swapButtonTitle = R.string.Swap
@@ -320,7 +324,7 @@ private fun SwapConfirmInternal(
                             .hs(ComposeAppTheme.colors.leah),
                         onInfoClick = {
                             navController.slideFromBottom(
-                                R.id.swapInfoDialog,
+                                SwapInfoDialog(),
                                 SwapInfoDialog.Input(infoTitle, infoText)
                             )
                         }
@@ -334,7 +338,7 @@ private fun SwapConfirmInternal(
                         value = "~${formatDuration(estimatedTime)}".hs(ComposeAppTheme.colors.leah),
                         onInfoClick = {
                             navController.slideFromBottom(
-                                R.id.swapInfoDialog,
+                                SwapInfoDialog(),
                                 SwapInfoDialog.Input(infoTitle, infoText)
                             )
                         }

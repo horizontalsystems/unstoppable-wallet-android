@@ -7,7 +7,6 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Faq
@@ -40,7 +39,7 @@ object FaqManager {
 
     fun showFaqPage(navController: NavBackStack<HSScreen>, path: String, language: String = "en") {
         navController.slideFromBottom(
-            R.id.markdownFragment,
+            MarkdownFragment(MarkdownFragment.Input(getFaqUrl(path, language), true, true)),
             MarkdownFragment.Input(getFaqUrl(path, language), true, true)
         )
     }

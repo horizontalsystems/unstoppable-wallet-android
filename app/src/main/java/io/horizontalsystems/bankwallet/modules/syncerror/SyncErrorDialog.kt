@@ -22,6 +22,8 @@ import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsFragment
+import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment
 import io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -99,14 +101,14 @@ private fun SyncErrorScreen(navController: NavBackStack<HSScreen>, wallet: Walle
                             when (blockchainWrapper) {
                                 is SyncErrorModule.BlockchainWrapper.Bitcoin -> {
                                     navController.slideFromBottom(
-                                        R.id.btcBlockchainSettingsFragment,
+                                        BtcBlockchainSettingsFragment(),
                                         blockchainWrapper.blockchain
                                     )
                                 }
 
                                 is SyncErrorModule.BlockchainWrapper.Evm -> {
                                     navController.slideFromBottom(
-                                        R.id.evmNetworkFragment,
+                                        EvmNetworkFragment(),
                                         blockchainWrapper.blockchain
                                     )
                                 }

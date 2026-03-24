@@ -97,7 +97,7 @@ class ResendBitcoinFragment(val input: Input) : BaseComposeFragment() {
             }
 
             is SendResult.Failed -> {
-                navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(uiState.sendResult.caution.getString()))
+                navController.slideFromBottom(ErrorBottomSheet(), ErrorBottomSheet.Input(uiState.sendResult.caution.getString()))
             }
 
             else -> Unit

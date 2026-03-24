@@ -103,7 +103,7 @@ fun Eip20RevokeScreen(navController: NavBackStack<HSScreen>, input: Eip20RevokeC
                             navController.setNavigationResultX(Eip20RevokeConfirmFragment.Result(true))
                             navController.removeLastOrNull()
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                            navController.slideFromBottom(ErrorBottomSheet(), ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                         }
 
                         buttonTitle = R.string.Swap_Revoke

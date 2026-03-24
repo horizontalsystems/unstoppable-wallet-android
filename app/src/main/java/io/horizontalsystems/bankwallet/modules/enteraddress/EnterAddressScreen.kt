@@ -125,7 +125,7 @@ fun EnterAddressScreen(
                             navController.addFromBottom(SecureSendConfigDialog())
                         } else {
                             navController.slideFromBottom(
-                                R.id.defenseSystemFeatureDialog,
+                                DefenseSystemFeatureDialog(),
                                 DefenseSystemFeatureDialog.Input(PremiumFeature.SecureSendFeature)
                             )
                         }

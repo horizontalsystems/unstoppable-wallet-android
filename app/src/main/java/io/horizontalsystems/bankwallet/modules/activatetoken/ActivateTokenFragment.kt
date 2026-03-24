@@ -99,7 +99,7 @@ fun ActivateTokenScreen(
                             navController.setNavigationResultX(ActivateTokenFragment.Result(true))
                             navController.removeLastOrNull()
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                            navController.slideFromBottom(ErrorBottomSheet(), ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                         }
 
                         buttonTitle = R.string.Button_Activate

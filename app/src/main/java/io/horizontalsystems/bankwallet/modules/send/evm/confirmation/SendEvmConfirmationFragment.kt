@@ -131,7 +131,7 @@ private fun SendEvmConfirmationScreen(
                             navController.removeLastUntil(input.sendEntryPointDestId, true)
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
-                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                            navController.slideFromBottom(ErrorBottomSheet(), ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
                         }
 
                         sendButtonTitle = R.string.Send_Confirmation_Send_Button
