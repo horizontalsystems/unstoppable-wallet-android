@@ -99,8 +99,9 @@ fun SendTronConfirmationScreen(
 
         is SendResult.Failed -> {
             navController.slideFromBottom(
-                ErrorBottomSheet(),
-                ErrorBottomSheet.Input(sendResult.caution.getDescription() ?: sendResult.caution.getString())
+                ErrorBottomSheet(
+                    ErrorBottomSheet.Input(sendResult.caution.getDescription() ?: sendResult.caution.getString())
+                )
             )
         }
 
@@ -255,7 +256,7 @@ private fun ResourcesConsumed(
             modifier = Modifier.size(20.dp),
             onClick = {
                 navController.slideFromBottom(
-                    FeeSettingsInfoDialog(), FeeSettingsInfoDialog.Input(title, info)
+                    FeeSettingsInfoDialog(FeeSettingsInfoDialog.Input(title, info))
                 )
             }
         ) {

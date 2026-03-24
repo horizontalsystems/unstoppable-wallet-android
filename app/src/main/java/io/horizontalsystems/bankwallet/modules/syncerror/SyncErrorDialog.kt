@@ -37,7 +37,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
 
-class SyncErrorDialog : BaseComposableBottomSheetFragment() {
+class SyncErrorDialog(input1: Input) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -101,15 +101,13 @@ private fun SyncErrorScreen(navController: NavBackStack<HSScreen>, wallet: Walle
                             when (blockchainWrapper) {
                                 is SyncErrorModule.BlockchainWrapper.Bitcoin -> {
                                     navController.slideFromBottom(
-                                        BtcBlockchainSettingsFragment(),
-                                        blockchainWrapper.blockchain
+                                        BtcBlockchainSettingsFragment(blockchainWrapper.blockchain),
                                     )
                                 }
 
                                 is SyncErrorModule.BlockchainWrapper.Evm -> {
                                     navController.slideFromBottom(
-                                        EvmNetworkFragment(),
-                                        blockchainWrapper.blockchain
+                                        EvmNetworkFragment(blockchainWrapper.blockchain)
                                     )
                                 }
 

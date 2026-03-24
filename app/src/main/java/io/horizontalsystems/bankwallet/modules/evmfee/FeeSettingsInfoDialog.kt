@@ -20,10 +20,9 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 import kotlinx.parcelize.Parcelize
 
-class FeeSettingsInfoDialog : BaseComposableBottomSheetFragment() {
+class FeeSettingsInfoDialog(input1: Input) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

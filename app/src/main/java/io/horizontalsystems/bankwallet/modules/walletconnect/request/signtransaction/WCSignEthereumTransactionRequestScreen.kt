@@ -145,8 +145,7 @@ fun WCSignEthereumTransactionRequestScreen(
                     sections = uiState.sectionViewItems,
                     onInfoClick = {
                         navController.slideFromBottom(
-                            FeeSettingsInfoDialog(),
-                            FeeSettingsInfoDialog.Input(feeText, feeInfoText)
+                            FeeSettingsInfoDialog(FeeSettingsInfoDialog.Input(feeText, feeInfoText))
                         )
                     },
                     onCopy = {
@@ -164,8 +163,7 @@ fun WCSignEthereumTransactionRequestScreen(
                         secondaryValue = fee.secondary?.getFormatted(),
                         onInfoClick = {
                             navController.slideFromBottom(
-                                FeeSettingsInfoDialog(),
-                                FeeSettingsInfoDialog.Input(feeText, feeInfoText)
+                                FeeSettingsInfoDialog(FeeSettingsInfoDialog.Input(feeText, feeInfoText))
                             )
                         }
                     )

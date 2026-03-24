@@ -110,7 +110,9 @@ private fun TransactionSpeedUpCancelScreen(
                             navController.removeLastOrNull()
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
-                            navController.slideFromBottom(ErrorBottomSheet(), ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                            navController.slideFromBottom(ErrorBottomSheet(
+                                ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName)
+                            ))
                         }
 
                         isSending = false

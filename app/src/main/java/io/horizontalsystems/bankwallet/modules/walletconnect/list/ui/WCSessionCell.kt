@@ -50,8 +50,7 @@ fun WCSessionCell(
             .background(ComposeAppTheme.colors.lawrence)
             .clickable {
                 navController.slideFromBottom(
-                    WCSessionBottomSheet(),
-                    WCSessionModule.Input(session.sessionTopic)
+                    WCSessionBottomSheet(WCSessionModule.Input(session.sessionTopic))
                 )
             },
         contentAlignment = Alignment.Center

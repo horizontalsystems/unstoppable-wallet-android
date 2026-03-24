@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.password.LocalBackupP
 import io.horizontalsystems.bankwallet.modules.backuplocal.terms.LocalBackupTermsScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 
-class BackupLocalFragment : BaseComposeFragment() {
+class BackupLocalFragment(account1: Account? = null) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

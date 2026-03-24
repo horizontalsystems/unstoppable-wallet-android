@@ -30,7 +30,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFr
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
 
-class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
+class WCAccountTypeNotSupportedDialog(input: Input) : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

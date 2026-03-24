@@ -70,7 +70,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 
-class EvmNetworkFragment : BaseComposeFragment() {
+class EvmNetworkFragment(blockchain: Blockchain) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

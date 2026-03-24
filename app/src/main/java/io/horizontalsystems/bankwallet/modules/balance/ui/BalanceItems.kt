@@ -590,8 +590,7 @@ private fun showBackupRequiredDialog(
         account.name
     )
     navController.slideFromBottom(
-        BackupRequiredDialog(),
-        BackupRequiredDialog.Input(account, text)
+        BackupRequiredDialog(BackupRequiredDialog.Input(account, text))
     )
     stat(
         page = StatPage.Balance,

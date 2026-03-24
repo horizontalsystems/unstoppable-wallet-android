@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.parcelize.Parcelize
 
-class TonConnectNewFragment : BaseComposeFragment() {
+class TonConnectNewFragment(dAppRequestEntity: DAppRequestEntity) : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         withInput<DAppRequestEntity>(navController) { input ->

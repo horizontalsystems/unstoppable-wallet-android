@@ -36,7 +36,7 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.parcelize.Parcelize
 
-class ReleaseNotesFragment : BaseComposeFragment() {
+class ReleaseNotesFragment(input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

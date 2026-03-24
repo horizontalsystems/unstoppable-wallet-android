@@ -45,7 +45,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSSelector
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
 
-class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
+class UnlinkAccountDialog(account: Account) : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

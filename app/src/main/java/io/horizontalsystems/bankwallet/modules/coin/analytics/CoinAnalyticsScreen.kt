@@ -312,8 +312,7 @@ private fun AnalyticsPreviewBlock(
         },
         onClick = {
             navController.slideFromBottom(
-                DefenseSystemFeatureDialog(),
-                DefenseSystemFeatureDialog.Input(PremiumFeature.TokenInsightsFeature)
+                DefenseSystemFeatureDialog(DefenseSystemFeatureDialog.Input(PremiumFeature.TokenInsightsFeature))
             )
             stat(
                 page = StatPage.CoinAnalytics,
@@ -385,8 +384,7 @@ private fun handleActionClick(
     when (action) {
         is CoinAnalyticsModule.ActionType.OpenTokenHolders -> {
             navController.slideFromBottom(
-                CoinMajorHoldersFragment(),
-                CoinMajorHoldersFragment.Input(action.coin.uid, action.blockchain)
+                CoinMajorHoldersFragment(CoinMajorHoldersFragment.Input(action.coin.uid, action.blockchain))
             )
         }
 
@@ -410,7 +408,7 @@ private fun handleActionClick(
         }
 
         is CoinAnalyticsModule.ActionType.OpenRank -> {
-            navController.slideFromBottom(CoinRankFragment(), action.type)
+            navController.slideFromBottom(CoinRankFragment(action.type))
         }
 
         is CoinAnalyticsModule.ActionType.OpenOverallScoreInfo -> {

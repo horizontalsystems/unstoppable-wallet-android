@@ -183,8 +183,7 @@ private fun ManageWalletsScreen(
                                 },
                                 onInfoClick = {
                                     navController.slideFromBottom(
-                                        ConfiguredTokenInfoDialog(),
-                                        viewItem.item
+                                        ConfiguredTokenInfoDialog(viewItem.item)
                                     )
 
                                     stat(

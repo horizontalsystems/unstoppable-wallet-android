@@ -226,8 +226,7 @@ private fun EvmSettingsInput(
 ) {
     HeaderText(text = title) {
         navController.slideFromBottom(
-            SwapInfoDialog(),
-            SwapInfoDialog.Input(title, info)
+            SwapInfoDialog(SwapInfoDialog.Input(title, info))
         )
     }
 
@@ -441,8 +440,7 @@ private fun FeeField(
                 iconTint = ComposeAppTheme.colors.grey,
                 onIconClick = {
                     navController.slideFromBottom(
-                        SwapInfoDialog(),
-                        SwapInfoDialog.Input(title, info)
+                        SwapInfoDialog(SwapInfoDialog.Input(title, info))
                     )
                 }
             )

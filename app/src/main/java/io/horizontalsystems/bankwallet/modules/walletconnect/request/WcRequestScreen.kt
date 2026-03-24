@@ -124,8 +124,7 @@ fun WcRequestScreen(
                     sections = uiState.contentItems,
                     onInfoClick = {
                         navController.slideFromBottom(
-                            FeeSettingsInfoDialog(),
-                            FeeSettingsInfoDialog.Input(feeText, feeInfoText)
+                            FeeSettingsInfoDialog(FeeSettingsInfoDialog.Input(feeText, feeInfoText))
                         )
                     },
                     onCopy = {

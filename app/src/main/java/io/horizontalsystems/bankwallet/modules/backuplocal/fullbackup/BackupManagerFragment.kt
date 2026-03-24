@@ -57,14 +57,15 @@ class BackupManagerFragment : BaseComposeFragment() {
             onRestoreBackup = { jsonString, fileName ->
                 navController.navigateWithTermsAccepted {
                     navController.slideFromBottom(
-                        RestoreLocalFragment(),
-                        RestoreLocalFragment.Input(
-                            R.id.backupManagerFragment,
-                            false,
-                            jsonString,
-                            fileName,
-                            StatPage.ImportFullFromFiles
-                        )
+                        RestoreLocalFragment(
+                            RestoreLocalFragment.Input(
+                                R.id.backupManagerFragment,
+                                false,
+                                jsonString,
+                                fileName,
+                                StatPage.ImportFullFromFiles
+                            )
+                        ),
                     )
 
                     stat(

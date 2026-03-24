@@ -76,7 +76,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class WCSessionBottomSheet : BaseComposableBottomSheetFragment() {
+class WCSessionBottomSheet(input1: WCSessionModule.Input) : BaseComposableBottomSheetFragment() {
 
     private val viewModel by viewModels<WCSessionViewModel> {
         val input = arguments?.getInputX<WCSessionModule.Input>()

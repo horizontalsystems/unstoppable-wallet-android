@@ -29,7 +29,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
 
-class ErrorBottomSheet() : BaseComposableBottomSheetFragment() {
+class ErrorBottomSheet(input: Input) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
