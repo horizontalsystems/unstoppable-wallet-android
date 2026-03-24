@@ -658,6 +658,10 @@
     <string name="WalletConnect_DefenseMessage_Warning">You may connect to a fake site and lose funds. Turn me on to stay protected.</string>
     <string name="WalletConnect_DefenseMessage_Danger">This dApp is not verified. Connecting may put your funds at risk.</string>
     <string name="WalletConnect_DefenseMessage_Safe">I checked it. This dApp is secure to connect.</string>
+    <string name="WalletConnect_ScamProtection">Scam Protection</string>
+    <string name="WalletConnect_DAppCheck">dApp Check</string>
+    <string name="WalletConnect_DAppCheck_Secure">Secure</string>
+    <string name="WalletConnect_DAppCheck_Risky">Risky</string>
 
 
     <!-- dApp Connection-->

@@ -7,16 +7,21 @@ import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,9 +53,14 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_lucian
+import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_remus
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
+import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
+import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
+import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
@@ -61,8 +71,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
+import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.BlockchainType
 
@@ -165,9 +174,59 @@ fun WCSessionScreen(
             )
             VSpacer(16.dp)
 
+            SectionHeader(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = stringResource(R.string.WalletConnect_ScamProtection),
+                icon = R.drawable.ic_defense_shield_20
+            )
+
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(ComposeAppTheme.colors.lawrence)
+                    .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
+                    .padding(16.dp)
+                    .clickable(enabled = !uiState.scamProtectionActionAllowed) {
+                        navController.slideFromBottom(
+                            R.id.defenseSystemFeatureDialog,
+                            DefenseSystemFeatureDialog.Input(PremiumFeature.ScamProtectionFeature)
+                        )
+                    },
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(modifier = Modifier.weight(1f)) {
+                    CellMiddleInfo(title = stringResource(R.string.WalletConnect_DAppCheck).hs)
+                }
+                Box(
+                    modifier = Modifier.widthIn(max = 200.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    if (!uiState.scamProtectionActionAllowed) {
+                        Icon(
+                            painter = painterResource(R.drawable.lock_24),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.grey,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    } else {
+                        when (uiState.whiteListState) {
+                            WCWhiteListState.InWhiteList ->
+                                subheadSB_remus(text = stringResource(R.string.WalletConnect_DAppCheck_Secure))
+                            WCWhiteListState.NotInWhiteList ->
+                                subheadSB_lucian(text = stringResource(R.string.WalletConnect_DAppCheck_Risky))
+                            else -> {}
+                        }
+                    }
+                }
+            }
+
+            VSpacer(16.dp)
+
             Column(
                 modifier = Modifier
-                    .padding(vertical = 8.dp, horizontal = 16.dp)
+                    .padding(horizontal = 16.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .border(1.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
                     .padding(vertical = 8.dp)
@@ -182,19 +241,20 @@ fun WCSessionScreen(
                 text = stringResource(R.string.WalletConnect_ConnectWarning),
             )
 
-            uiState.whiteListState?.let { whiteListState ->
+            if (uiState.scamProtectionActionAllowed &&
+                uiState.whiteListState == WCWhiteListState.NotInWhiteList
+            ) {
                 VSpacer(16.dp)
-                WCDefenseSystemMessage(
-                    activated = uiState.hasSubscription,
-                    whiteListState = whiteListState,
-                    onActivateClick = {
-                        navController.slideFromBottom(
-                            R.id.defenseSystemFeatureDialog,
-                            DefenseSystemFeatureDialog.Input(PremiumFeature.ScamProtectionFeature)
-                        )
-                    }
+                AlertCard(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    format = AlertFormat.Structured,
+                    type = AlertType.Critical,
+                    titleCustom = stringResource(R.string.WalletConnect_Danger),
+                    text = stringResource(R.string.WalletConnect_DefenseMessage_Danger),
                 )
             }
+
+            VSpacer(16.dp)
         }
         ActionButtons(
             buttonsStates = buttonsStates,
@@ -310,47 +370,3 @@ fun IconsFromUrls(
     }
 }
 
-@Composable
-private fun WCDefenseSystemMessage(
-    activated: Boolean,
-    whiteListState: WCWhiteListState,
-    onActivateClick: () -> Unit = {},
-) {
-    val state = when {
-        !activated -> DefenseAlertLevel.WARNING
-        whiteListState == WCWhiteListState.NotInWhiteList -> DefenseAlertLevel.DANGER
-        whiteListState == WCWhiteListState.InWhiteList -> DefenseAlertLevel.SAFE
-        whiteListState == WCWhiteListState.InProgress -> DefenseAlertLevel.IDLE
-        else -> DefenseAlertLevel.IDLE
-    }
-
-    val title: Int = when (state) {
-        DefenseAlertLevel.WARNING -> R.string.WalletConnect_Attention
-        DefenseAlertLevel.DANGER -> R.string.WalletConnect_Danger
-        DefenseAlertLevel.SAFE -> R.string.WalletConnect_Safe
-        DefenseAlertLevel.IDLE -> R.string.WalletConnect_Checking
-    }
-
-    val content: Int? = when (state) {
-        DefenseAlertLevel.WARNING -> R.string.WalletConnect_DefenseMessage_Warning
-        DefenseAlertLevel.DANGER -> R.string.WalletConnect_DefenseMessage_Danger
-        DefenseAlertLevel.SAFE -> R.string.WalletConnect_DefenseMessage_Safe
-        DefenseAlertLevel.IDLE -> null
-    }
-
-    val icon = when (state) {
-        DefenseAlertLevel.WARNING -> R.drawable.warning_filled_24
-        DefenseAlertLevel.DANGER -> R.drawable.warning_filled_24
-        DefenseAlertLevel.SAFE -> R.drawable.shield_check_filled_24
-        DefenseAlertLevel.IDLE -> null
-    }
-
-    DefenseSystemMessage(
-        level = state,
-        title = stringResource(title),
-        content = content?.let { stringResource(it) },
-        icon = icon,
-        actionText = if (state == DefenseAlertLevel.WARNING) stringResource(R.string.Button_Activate) else null,
-        onClick = onActivateClick
-    )
-}
