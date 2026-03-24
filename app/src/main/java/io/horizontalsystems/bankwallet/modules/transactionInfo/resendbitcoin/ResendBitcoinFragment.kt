@@ -10,12 +10,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -35,9 +37,11 @@ import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.send.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -58,19 +62,19 @@ class ResendBitcoinFragment(val input: Input) : BaseComposeFragment() {
     @Parcelize
     data class Input(val optionType: SpeedUpCancelType) : Parcelable
 
-    private val transactionInfoViewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment)
-
-    private val vmFactory by lazy {
-        ResendBitcoinModule.Factory(
-            input.optionType,
-            transactionInfoViewModel.transactionRecord as BitcoinOutgoingTransactionRecord,
-            transactionInfoViewModel.source
-        )
-    }
-
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val resendViewModel by viewModels<ResendBitcoinViewModel> { vmFactory }
+        val transactionInfoViewModel = navController.viewModelForScreen<TransactionInfoViewModel>(TransactionInfoFragment::class)
+
+        val vmFactory = remember {
+            ResendBitcoinModule.Factory(
+                input.optionType,
+                transactionInfoViewModel.transactionRecord as BitcoinOutgoingTransactionRecord,
+                transactionInfoViewModel.source
+            )
+        }
+
+        val resendViewModel = viewModel<ResendBitcoinViewModel>(factory = vmFactory)
 
         ResendBitcoinScreen(
             navController = navController,

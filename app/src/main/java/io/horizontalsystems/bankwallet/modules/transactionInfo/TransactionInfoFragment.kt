@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,9 +7,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -19,8 +18,9 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
 import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -50,24 +50,15 @@ class TransactionInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val viewModelTxs: TransactionsViewModel? = try {
-            navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
-        } catch (e: IllegalStateException) {
-            Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
-            null
-        }
+        val viewModelTxs = navController.viewModelForScreen<TransactionsViewModel>(MainScreen::class)
 
-        val transactionRecord = viewModelTxs?.tmpTransactionRecordToShow
+        val transactionRecord = viewModelTxs.tmpTransactionRecordToShow
         if (transactionRecord == null) {
             navController.removeLastUntil(R.id.transactionInfoFragment, true)
             return
         }
 
-        val viewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment) {
-            TransactionInfoModule.Factory(transactionRecord)
-        }
-
-        TransactionInfoScreen(viewModel, navController)
+        TransactionInfoScreen(viewModel(), navController)
     }
 
 }

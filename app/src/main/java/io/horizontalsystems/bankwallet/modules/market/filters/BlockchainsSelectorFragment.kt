@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -34,14 +35,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 
 class BlockchainsSelectorFragment : BaseComposeFragment() {
 
-    private val viewModel by navGraphViewModels<MarketFiltersViewModel>(R.id.marketAdvancedSearchFragment) {
-        MarketFiltersModule.Factory()
-    }
-
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         FilterByBlockchainsScreen(
-            viewModel,
+            navController.viewModelForScreen(MarketFiltersFragment::class),
             navController,
         )
     }

@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.MainThread
 import androidx.compose.runtime.Composable
@@ -21,7 +20,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelLazy
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.Factory
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
@@ -109,24 +107,6 @@ abstract class BaseComposeFragment(
         }
         return ViewModelLazy(viewModelClass, storeProducer, factoryPromise, extrasProducer)
     }
-
-    @MainThread
-    public inline fun <reified VM : ViewModel> navGraphViewModels(
-        @IdRes navGraphId: Int,
-        noinline extrasProducer: (() -> CreationExtras)? = null,
-        noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null
-    ): Lazy<VM> {
-        TODO()
-//        val backStackEntry by lazy { findNavController().getBackStackEntry(navGraphId) }
-//        val storeProducer: () -> ViewModelStore = { backStackEntry.viewModelStore }
-//        return createViewModelLazy(
-//            VM::class,
-//            storeProducer,
-//            { extrasProducer?.invoke() ?: backStackEntry.defaultViewModelCreationExtras },
-//            factoryProducer ?: { backStackEntry.defaultViewModelProviderFactory }
-//        )
-    }
-
 
     fun requireArguments() : Bundle {
         TODO()
