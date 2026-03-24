@@ -30,7 +30,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.NavController
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.TitleValueCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.DropDownCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
