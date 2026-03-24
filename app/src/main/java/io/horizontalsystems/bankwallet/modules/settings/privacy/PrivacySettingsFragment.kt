@@ -42,21 +42,21 @@ import kotlin.system.exitProcess
 
 class PrivacySettingsFragment : BaseComposeFragment() {
 
-    private val torViewModel by viewModels<SecurityTorSettingsViewModel> {
-        SecurityTorSettingsModule.Factory()
-    }
-
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val torViewModel = viewModel<SecurityTorSettingsViewModel>(
+            factory = SecurityTorSettingsModule.Factory()
+        )
+
         PrivacyScreen(
             navController = navController,
             torViewModel = torViewModel,
-            showAppRestartAlert = { showAppRestartAlert() },
+            showAppRestartAlert = { showAppRestartAlert(torViewModel) },
             restartApp = { restartApp() },
         )
     }
 
-    private fun showAppRestartAlert() {
+    private fun showAppRestartAlert(torViewModel: SecurityTorSettingsViewModel) {
         val warningTitle = if (torViewModel.torCheckEnabled) {
             getString(R.string.Tor_Connection_Enable)
         } else {

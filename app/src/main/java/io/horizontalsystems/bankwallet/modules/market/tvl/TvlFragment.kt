@@ -12,10 +12,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
@@ -63,12 +65,12 @@ import io.horizontalsystems.core.helpers.HudHelper
 
 class TvlFragment : BaseComposeFragment() {
 
-    private val vmFactory by lazy { TvlModule.Factory() }
-    private val tvlChartViewModel by viewModels<TvlChartViewModel> { vmFactory }
-    private val viewModel by viewModels<TvlViewModel> { vmFactory }
-
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val vmFactory = remember { TvlModule.Factory() }
+        val tvlChartViewModel = viewModel<TvlChartViewModel>(factory = vmFactory)
+        val viewModel = viewModel<TvlViewModel>(factory = vmFactory)
+
         TvlScreen(viewModel, tvlChartViewModel, navController) { onCoinClick(it, navController) }
     }
 

@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -51,9 +53,9 @@ class MetricsPageFragment(val metricsType: MetricsType) : BaseComposeFragment() 
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val factory = MetricsPageModule.Factory(metricsType)
-        val chartViewModel by viewModels<ChartViewModel> { factory }
-        val viewModel by viewModels<MetricsPageViewModel> { factory }
+        val factory = remember { MetricsPageModule.Factory(metricsType) }
+        val chartViewModel = viewModel<ChartViewModel>(factory = factory)
+        val viewModel = viewModel<MetricsPageViewModel>(factory = factory)
         MetricsPage(viewModel, chartViewModel, navController) {
             onCoinClick(it, navController)
 
