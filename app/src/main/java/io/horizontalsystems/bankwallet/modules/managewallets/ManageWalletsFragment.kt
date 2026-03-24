@@ -100,8 +100,7 @@ private fun ManageWalletsScreen(
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
         navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
-            screen = BirthdayHeightConfig(),
-            input = token
+            screen = BirthdayHeightConfig(token.blockchainType)
         ) {
             if (it.config != null) {
                 restoreSettingsViewModel.onEnter(it.config)

@@ -39,7 +39,7 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.parcelize.Parcelize
 
-class VaultBlockchainsSelectorFragment : BaseComposeFragment() {
+class VaultBlockchainsSelectorFragment(input1: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
