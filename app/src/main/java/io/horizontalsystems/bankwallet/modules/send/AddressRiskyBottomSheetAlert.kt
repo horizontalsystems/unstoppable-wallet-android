@@ -27,7 +27,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFr
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
 
-class AddressRiskyBottomSheetAlert : BaseComposableBottomSheetFragment() {
+class AddressRiskyBottomSheetAlert(input1: Input) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,

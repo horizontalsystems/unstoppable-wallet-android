@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 
-class SwapSelectCoinFragment : BaseComposeFragment() {
+class SwapSelectCoinFragment(input1: Input) : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         val input = navController.getInput<Input>()

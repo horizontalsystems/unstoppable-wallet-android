@@ -30,8 +30,9 @@ class ActionRevoke(
 
     override fun execute(navController: NavBackStack<HSScreen>, onActionCompleted: () -> Unit) {
         navController.slideFromBottomForResult<Eip20RevokeConfirmFragment.Result>(
-            Eip20RevokeConfirmFragment(),
-            Eip20RevokeConfirmFragment.Input(token, spenderAddress, allowance)
+            Eip20RevokeConfirmFragment(
+                Eip20RevokeConfirmFragment.Input(token, spenderAddress, allowance)
+            )
         ) {
             onActionCompleted.invoke()
         }
