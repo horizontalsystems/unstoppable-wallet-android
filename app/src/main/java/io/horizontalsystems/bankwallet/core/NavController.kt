@@ -22,7 +22,7 @@ fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
 //    navigate(resId, args, navOptions)
 }
 
-fun NavBackStack<HSScreen>.slideFromBottom(@IdRes resId: Int, input: Parcelable? = null) {
+fun NavBackStack<HSScreen>.slideFromBottom(@IdRes resId: Int, input: Parcelable) {
     val navOptions = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_bottom)
         .setExitAnim(android.R.anim.fade_out)
