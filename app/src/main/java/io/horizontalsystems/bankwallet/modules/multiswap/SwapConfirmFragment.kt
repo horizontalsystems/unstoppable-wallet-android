@@ -34,10 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.R.drawable.close_e_filled_24
-import io.horizontalsystems.bankwallet.R.drawable.shield_check_filled_24
-import io.horizontalsystems.bankwallet.R.drawable.warning_filled_24
-import io.horizontalsystems.bankwallet.R.id.defenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
@@ -401,8 +397,7 @@ private fun SwapConfirmInternal(
                         confirmChange = {
                             if (!uiState.mevProtectionActionAllowed) {
                                 navController.slideFromBottom(
-                                    defenseSystemFeatureDialog,
-                                    Input(PremiumFeature.getFeature(paidAction = SwapProtection))
+                                    DefenseSystemFeatureDialog(Input(PremiumFeature.getFeature(paidAction = SwapProtection)))
                                 )
                                 false
                             } else {

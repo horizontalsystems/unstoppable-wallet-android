@@ -69,10 +69,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class WCSessionBottomSheet(val input: WCSessionModule.Input) : BaseComposableBottomSheetFragment() {
@@ -188,8 +185,7 @@ fun WCSessionScreen(
                     .padding(16.dp)
                     .clickable(enabled = !uiState.scamProtectionActionAllowed) {
                         navController.slideFromBottom(
-                            R.id.defenseSystemFeatureDialog,
-                            DefenseSystemFeatureDialog.Input(PremiumFeature.ScamProtectionFeature)
+                            DefenseSystemFeatureDialog(DefenseSystemFeatureDialog.Input(PremiumFeature.ScamProtectionFeature))
                         )
                     },
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
