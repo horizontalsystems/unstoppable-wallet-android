@@ -16,8 +16,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider.Factory
-import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -39,11 +37,6 @@ abstract class BaseComposeFragment(
     fun requireActivity() : FragmentActivity {
         TODO()
     }
-
-    val defaultViewModelProviderFactory: Factory
-        get() = TODO()
-    val defaultViewModelCreationExtras: CreationExtras
-        get() = TODO()
 
     val childFragmentManager: FragmentManager
         get() = TODO()
