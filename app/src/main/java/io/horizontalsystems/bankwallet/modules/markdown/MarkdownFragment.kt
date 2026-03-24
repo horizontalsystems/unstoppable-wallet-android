@@ -29,7 +29,7 @@ class MarkdownFragment : BaseComposeFragment() {
                 onCloseClick = { navController.removeLastOrNull() },
                 onUrlClick = { url ->
                     navController.slideFromRight(
-                        R.id.markdownFragment, Input(url)
+                        MarkdownFragment(), Input(url)
                     )
                 }
             )

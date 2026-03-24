@@ -66,7 +66,7 @@ class MetricsPageFragment : BaseComposeFragment() {
     private fun onCoinClick(coinUid: String, navController: NavBackStack<HSScreen>) {
         val arguments = CoinFragment.Input(coinUid)
 
-        navController.slideFromRight(R.id.coinFragment, arguments)
+        navController.slideFromRight(CoinFragment(), arguments)
     }
 
     @OptIn(ExperimentalFoundationApi::class)

@@ -62,7 +62,7 @@ fun SetDuressPinSelectAccountsScreen(navController: NavBackStack<HSScreen>) {
                     title = stringResource(R.string.Button_Next),
                     onClick = {
                         navController.slideFromRight(
-                            R.id.setDuressPinFragment,
+                            SetDuressPinFragment(),
                             SetDuressPinFragment.Input(selected)
                         )
                     },

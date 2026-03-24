@@ -148,7 +148,7 @@ private fun openConfirm(
     viewModel.onNavigateToConfirmation()
 
     navController.slideFromRight(
-        R.id.sendConfirmation,
+        SendConfirmationFragment(),
         SendConfirmationFragment.Input(
             SendConfirmationFragment.Type.Tron,
             sendEntryPointDestId

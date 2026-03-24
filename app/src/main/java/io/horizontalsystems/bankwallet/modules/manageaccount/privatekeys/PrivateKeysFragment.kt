@@ -58,7 +58,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            R.id.privateKeyFragment,
+                            PrivateKeyFragment(),
                             PrivateKeyFragment.Input(key, PrivateKeyFragment.Type.Evm)
                         )
 
@@ -94,7 +94,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            R.id.stellarSecretKeyFragment,
+                            StellarSecretKeyFragment(),
                             StellarSecretKeyFragment.Input(key)
                         )
 
@@ -112,7 +112,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            R.id.showExtendedKeyFragment,
+                            ShowExtendedKeyFragment(),
                             ShowExtendedKeyFragment.Input(
                                 key.hdKey,
                                 key.displayKeyType
@@ -133,7 +133,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            R.id.showExtendedKeyFragment,
+                            ShowExtendedKeyFragment(),
                             ShowExtendedKeyFragment.Input(key.hdKey, key.displayKeyType)
                         )
 
@@ -151,7 +151,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            R.id.showMoneroKeyFragment,
+                            ShowMoneroKeyFragment(),
                             ShowMoneroKeyFragment.Input(moneroKeys)
                         )
 

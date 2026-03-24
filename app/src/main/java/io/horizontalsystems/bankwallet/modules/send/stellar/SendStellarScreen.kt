@@ -157,7 +157,7 @@ private fun openConfirm(
     sendEntryPointDestId: Int
 ) {
     navController.slideFromRight(
-        R.id.sendConfirmation,
+        SendConfirmationFragment(),
         SendConfirmationFragment.Input(
             SendConfirmationFragment.Type.Stellar,
             sendEntryPointDestId

@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.Value
+import io.horizontalsystems.bankwallet.modules.market.platform.MarketPlatformFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -102,7 +103,7 @@ fun TopPlatforms(
                                 timeDuration = uiState.timePeriod,
                                 onItemClick = {
                                     navController.slideFromRight(
-                                        R.id.marketPlatformFragment,
+                                        MarketPlatformFragment(),
                                         it
                                     )
 

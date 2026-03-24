@@ -39,7 +39,7 @@ class ZcashAddressTypeSelectFragment : BaseComposeFragment() {
             ZcashAddressTypeSelectScreen(
                 onZcashAddressTypeClick = { isTransparent ->
                     navController.slideFromRight(
-                        R.id.receiveFragment,
+                        ReceiveFragment(),
                         ReceiveFragment.Input(
                             wallet = wallet,
                             isTransparentAddress = isTransparent

@@ -79,7 +79,7 @@ fun WatchAddressScreen(navController: NavBackStack<HSScreen>, popUpToInclusiveId
         viewModel.blockchainSelectionOpened()
 
         navController.slideFromRight(
-            R.id.selectBlockchainsFragment,
+            SelectBlockchainsFragment(),
             SelectBlockchainsFragment.Input(
                 popUpToInclusiveId,
                 inclusive,

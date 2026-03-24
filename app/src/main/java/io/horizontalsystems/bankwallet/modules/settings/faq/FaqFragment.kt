@@ -44,7 +44,7 @@ class FaqListFragment : BaseComposeFragment() {
             onCloseClick = { navController.removeLastOrNull() },
             onItemClick = { faqItem ->
                 navController.slideFromRight(
-                    R.id.markdownFragment,
+                    MarkdownFragment(),
                     MarkdownFragment.Input(faqItem.markdown)
                 )
 

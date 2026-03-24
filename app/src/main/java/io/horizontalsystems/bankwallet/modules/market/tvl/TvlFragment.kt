@@ -75,7 +75,7 @@ class TvlFragment : BaseComposeFragment() {
     private fun onCoinClick(coinUid: String?, navController: NavBackStack<HSScreen>) {
         if (coinUid != null) {
             val arguments = CoinFragment.Input(coinUid)
-            navController.slideFromRight(R.id.coinFragment, arguments)
+            navController.slideFromRight(CoinFragment(), arguments)
 
             stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.OpenCoin(coinUid))
         } else {

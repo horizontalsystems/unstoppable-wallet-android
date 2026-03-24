@@ -22,11 +22,14 @@ import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment
+import io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -102,7 +105,7 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
                         R.string.ManageAccounts_CreateNewWallet
                     ) {
                         navController.navigateWithTermsAccepted {
-                            navController.slideFromRight(R.id.createAccountFragment, args)
+                            navController.slideFromRight(CreateAccountFragment(), args)
 
                             stat(
                                 page = StatPage.ManageWallets,
@@ -114,7 +117,7 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
                         R.drawable.ic_download_20,
                         R.string.ManageAccounts_ImportWallet
                     ) {
-                        navController.slideFromRight(R.id.importWalletFragment, args)
+                        navController.slideFromRight(ImportWalletFragment(), args)
 
                         stat(
                             page = StatPage.ManageWallets,
@@ -125,7 +128,7 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
                         R.drawable.icon_binocule_20,
                         R.string.ManageAccounts_WatchAddress
                     ) {
-                        navController.slideFromRight(R.id.watchAddressFragment, args)
+                        navController.slideFromRight(WatchAddressFragment(), args)
 
                         stat(
                             page = StatPage.ManageWallets,
@@ -213,7 +216,7 @@ private fun AccountsSection(
                 tint = iconTint
             ) {
                 navController.slideFromRight(
-                    R.id.manageAccountFragment,
+                    ManageAccountFragment(),
                     ManageAccountFragment.Input(accountViewItem.accountId)
                 )
 

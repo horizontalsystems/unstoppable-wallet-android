@@ -41,7 +41,7 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
                         viewItem.wallet.token.fullCoin.coin.code
                     )
                     navController.slideFromRight(
-                        R.id.sendXFragment,
+                        SendFragment(),
                         SendFragment.Input(
                             wallet = viewItem.wallet,
                             title = sendTitle,

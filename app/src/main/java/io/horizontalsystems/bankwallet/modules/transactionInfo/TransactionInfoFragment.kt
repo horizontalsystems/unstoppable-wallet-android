@@ -161,7 +161,7 @@ fun TransactionInfoSection(
                                 onClick = viewItem.coinUid?.let {
                                     {
                                         navController.slideFromRight(
-                                            R.id.coinFragment,
+                                            CoinFragment(),
                                             CoinFragment.Input(it)
                                         )
 

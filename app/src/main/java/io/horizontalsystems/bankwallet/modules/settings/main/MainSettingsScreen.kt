@@ -51,6 +51,7 @@ import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSett
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsFragment
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.settings.about.AboutFragment
@@ -163,7 +164,7 @@ private fun SettingSections(
                 showAlert = uiState.manageWalletShowAlert,
                 onClick = {
                     navController.slideFromRight(
-                        R.id.manageAccountsFragment,
+                        ManageAccountsFragment(),
                         ManageAccountsModule.Mode.Manage
                     )
 
@@ -277,7 +278,7 @@ private fun SettingSections(
                     R.drawable.user_24,
                     onClick = {
                         navController.slideFromRight(
-                            R.id.contactsFragment,
+                            ContactsFragment(),
                             ContactsFragment.Input(Mode.Full)
                         )
 

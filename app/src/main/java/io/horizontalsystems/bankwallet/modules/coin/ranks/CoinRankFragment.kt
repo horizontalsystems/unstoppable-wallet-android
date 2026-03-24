@@ -171,7 +171,7 @@ private fun LazyListScope.coinRankList(
             value = item.value,
             onClick = {
                 val arguments = CoinFragment.Input(item.coinUid)
-                navController.slideFromRight(R.id.coinFragment, arguments)
+                navController.slideFromRight(CoinFragment(), arguments)
 
                 stat(page = type.statPage, event = StatEvent.OpenCoin(item.coinUid))
             }

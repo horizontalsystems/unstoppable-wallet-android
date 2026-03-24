@@ -108,7 +108,7 @@ fun ReceiveScreen(
                     modifier = Modifier.height(52.dp),
                     onClick = {
                         navController.slideFromRight(
-                            R.id.btcUsedAddressesFragment,
+                            BtcUsedAddressesFragment(),
                             UsedAddressesParams(
                                 wallet.coin.name,
                                 uiState.usedAddresses,

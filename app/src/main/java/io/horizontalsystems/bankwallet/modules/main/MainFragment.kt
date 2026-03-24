@@ -275,21 +275,21 @@ private fun MainScreen(
         }
         viewModel.wcSupportStateHandled()
     }
-
-    uiState.deeplinkPage?.let { deepLinkPage ->
-        LaunchedEffect(Unit) {
-            delay(500)
-            fragmentNavController.slideFromRight(
-                deepLinkPage.navigationId,
-                deepLinkPage.input
-            )
-            viewModel.deeplinkPageHandled()
-        }
-    }
+//    TODO("xxx nav3")
+//    uiState.deeplinkPage?.let { deepLinkPage ->
+//        LaunchedEffect(Unit) {
+//            delay(500)
+//            fragmentNavController.slideFromRight(
+//                deepLinkPage.navigationId,
+//                deepLinkPage.input
+//            )
+//            viewModel.deeplinkPageHandled()
+//        }
+//    }
 
     uiState.openSend?.let { openSend ->
         fragmentNavController.slideFromRight(
-            R.id.sendTokenSelectFragment,
+            SendTokenSelectFragment(),
             SendTokenSelectFragment.Input(
                 openSend.blockchainTypes,
                 openSend.tokenTypes,
