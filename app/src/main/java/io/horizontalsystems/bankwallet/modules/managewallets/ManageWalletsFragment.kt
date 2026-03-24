@@ -100,7 +100,7 @@ private fun ManageWalletsScreen(
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
         navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
-            resId = R.id.zcashConfigure,
+            screen = BirthdayHeightConfig(),
             input = token
         ) {
             if (it.config != null) {

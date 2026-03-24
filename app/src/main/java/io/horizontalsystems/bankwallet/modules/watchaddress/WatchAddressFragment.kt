@@ -90,7 +90,7 @@ fun WatchAddressScreen(navController: NavBackStack<HSScreen>, popUpToInclusiveId
         viewModel.onBirthdayHeightScreenOpened()
 
         navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
-            resId = R.id.zcashConfigure,
+            screen = BirthdayHeightConfig(),
             input = BlockchainType.Monero
         ) { result ->
             if (result.config != null) {
