@@ -115,6 +115,7 @@ class PinUnlockViewModel(
             enteredCount = 0,
             showShakeAnimation = false
         )
+        updateLockoutState()
     }
 
     fun onShakeAnimationFinish() {
