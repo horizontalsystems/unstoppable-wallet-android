@@ -125,7 +125,7 @@ fun SwapConfirmScreen(navController: NavController) {
     if (uiState.error != null) {
         SwapConfirmError(navController, viewModel, uiState, uiState.error)
     } else {
-        SwapConfirmInternal(navController, viewModel, uiState, currentQuote.provider.title, currentQuote.provider.amlPrecheck)
+        SwapConfirmInternal(navController, viewModel, uiState)
     }
 }
 
@@ -185,8 +185,6 @@ private fun SwapConfirmInternal(
     navController: NavController,
     viewModel: SwapConfirmViewModel,
     uiState: SwapConfirmUiState,
-    providerName: String,
-    providerAml: Boolean
 ) {
     val coroutineScope = rememberCoroutineScope()
     val view = LocalView.current
@@ -246,7 +244,7 @@ private fun SwapConfirmInternal(
                 ButtonPrimaryYellow(
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(swapButtonTitle),
-                    enabled = buttonEnabled && !uiState.loading && !(providerAml && uiState.passedAmlCheck == false),
+                    enabled = buttonEnabled && !uiState.loading,
                     onClick = {
                         coroutineScope.launch {
                             buttonEnabled = false
@@ -310,17 +308,6 @@ private fun SwapConfirmInternal(
                 .background(ComposeAppTheme.colors.lawrence)
                 .padding(vertical = 8.dp)
         ) {
-            if (providerAml) {
-                val (riskLabel, riskColor) = when (uiState.passedAmlCheck) {
-                    true -> stringResource(R.string.Swap_ProviderRisk_NoRisk) to ComposeAppTheme.colors.remus
-                    false -> stringResource(R.string.Swap_ProviderRisk_Risky) to ComposeAppTheme.colors.lucian
-                    null -> stringResource(R.string.Swap_ProviderRisk_Unknown) to ComposeAppTheme.colors.leah
-                }
-                QuoteInfoRow(
-                    title = stringResource(R.string.Swap_ProviderRisk),
-                    value = riskLabel.hs(riskColor)
-                )
-            }
             uiState.amountOut?.let { amountOut ->
                 PriceField(
                     tokenIn = uiState.tokenIn,
@@ -370,17 +357,6 @@ private fun SwapConfirmInternal(
                 navController,
                 uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
                 uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
-            )
-        }
-
-        if (providerAml && uiState.passedAmlCheck == false) {
-            VSpacer(height = 16.dp)
-            AlertCard(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                format = AlertFormat.Structured,
-                type = AlertType.Critical,
-                titleCustom = stringResource(R.string.Swap_ProviderRisk_AlertTitle),
-                text = stringResource(R.string.Swap_ProviderRisk_AlertBody, providerName),
             )
         }
 

@@ -232,7 +232,6 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             amountIn = amountIn,
             actionRequired = actionApprove,
             estimationTime = bestRoute.estimatedTime?.total,
-            passedAmlCheck = bestRoute.passedAmlCheck,
         )
     }
 
@@ -245,7 +244,6 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         sourceAddress: String?,
         refundAddress: String?,
         dry: Boolean,
-        amlCheckAddresses: List<String>? = null,
     ): UnstoppableAPI.Response.Quote.Route {
         val assetIn = assetsMap[tokenIn]!!
         val assetOut = assetsMap[tokenOut]!!
@@ -261,7 +259,6 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                 sourceAddress = sourceAddress,
                 refundAddress = refundAddress,
                 dry = dry,
-                amlCheckAddresses = amlCheckAddresses,
             )
         )
 
@@ -276,13 +273,10 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         swapQuote: SwapQuote,
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         slippage: BigDecimal,
-        sourceAddresses: List<String>?,
     ): SwapFinalQuote {
         val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
         val sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn)
         val refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn)
-
-        val amlCheckAddresses = sourceAddresses?.ifEmpty { null }
 
         val bestRoute = quoteSwapBestRoute(
             tokenIn,
@@ -293,7 +287,6 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             sourceAddress,
             refundAddress,
             false,
-            amlCheckAddresses,
         )
 
         val amountOut = bestRoute.expectedBuyAmount ?: BigDecimal.ZERO
@@ -329,7 +322,6 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             fromAsset = assetsMap[tokenIn],
             toAsset = assetsMap[tokenOut],
             depositAddress = bestRoute.inboundAddress,
-            passedAmlCheck = bestRoute.passedAmlCheck,
         )
     }
 
@@ -522,7 +514,6 @@ interface UnstoppableAPI {
             val sourceAddress: String?,
             val refundAddress: String?,
             val dry: Boolean,
-            val amlCheckAddresses: List<String>? = null,
         )
 
         data class Track(
@@ -568,7 +559,6 @@ interface UnstoppableAPI {
                 val txExtraAttribute: Map<String, String>?,
                 val estimatedTime: EstimatedTime?,
                 val providerSwapId: String?,
-                val passedAmlCheck: Boolean?,
             ) {
                 data class EstimatedTime(
                     val total: Long

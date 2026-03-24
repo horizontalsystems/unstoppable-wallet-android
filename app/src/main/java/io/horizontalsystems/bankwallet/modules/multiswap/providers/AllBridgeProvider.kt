@@ -266,7 +266,6 @@ object AllBridgeProvider : IMultiSwapProvider {
         swapQuote: SwapQuote,
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         slippage: BigDecimal,
-        sourceAddresses: List<String>?,
     ): SwapFinalQuote {
         val amountOut = estimateAmountOut(tokenIn, tokenOut, amountIn)
 

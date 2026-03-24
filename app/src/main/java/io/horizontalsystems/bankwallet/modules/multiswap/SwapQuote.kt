@@ -11,5 +11,4 @@ data class SwapQuote(
     val amountIn: BigDecimal,
     val actionRequired: ISwapProviderAction?,
     val estimationTime: Long?,
-    val passedAmlCheck: Boolean? = null,
 )

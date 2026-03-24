@@ -52,7 +52,6 @@ interface IMultiSwapProvider {
         swapQuote: SwapQuote,
         recipient: Address?,
         slippage: BigDecimal,
-        sourceAddresses: List<String>? = null,
     ): SwapFinalQuote
 
     companion object {

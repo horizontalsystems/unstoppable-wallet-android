@@ -80,7 +80,6 @@ class SwapConfirmViewModel(
     private var fromAsset: String? = null
     private var toAsset: String? = null
     private var depositAddress: String? = null
-    private var passedAmlCheck: Boolean? = null
     private var fetchFinalQuoteJob: Job? = null
 
     init {
@@ -209,7 +208,6 @@ class SwapConfirmViewModel(
         recipient = recipient,
         slippage = slippage,
         estimatedTime = estimatedTime,
-        passedAmlCheck = passedAmlCheck,
         error = error
     )
 
@@ -235,7 +233,6 @@ class SwapConfirmViewModel(
             try {
                 error = null
 
-                val sourceAddresses = SwapHelper.getSourceAddressesForToken(tokenIn, amountIn).ifEmpty { null }
                 val finalQuote = swapProvider.fetchFinalQuote(
                     tokenIn,
                     tokenOut,
@@ -244,7 +241,6 @@ class SwapConfirmViewModel(
                     swapQuote,
                     recipient,
                     slippage ?: IMultiSwapProvider.DEFAULT_SLIPPAGE,
-                    sourceAddresses,
                 )
 
                 ensureActive()
@@ -258,7 +254,6 @@ class SwapConfirmViewModel(
                 fromAsset = finalQuote.fromAsset
                 toAsset = finalQuote.toAsset
                 depositAddress = finalQuote.depositAddress
-                passedAmlCheck = finalQuote.passedAmlCheck
                 emitState()
 
                 fiatServiceOut.setAmount(amountOut)
@@ -397,6 +392,5 @@ data class SwapConfirmUiState(
     val recipient: Address?,
     val slippage: BigDecimal?,
     val estimatedTime: Long?,
-    val passedAmlCheck: Boolean?,
     val error: Throwable?,
 )
