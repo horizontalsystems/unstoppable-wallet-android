@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.core
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -155,20 +154,6 @@ abstract class BaseComposeFragmentX(
                 }
             }
         }
-    }
-
-    @Composable
-    protected inline fun <reified T : Parcelable> withInput(
-        navController: NavBackStack<HSScreen>,
-        content: @Composable (T) -> Unit
-    ) {
-        val input = try {
-            navController.requireInput<T>()
-        } catch (e: NullPointerException) {
-            navController.removeLastOrNull()
-            return
-        }
-        content(input)
     }
 
     @Composable

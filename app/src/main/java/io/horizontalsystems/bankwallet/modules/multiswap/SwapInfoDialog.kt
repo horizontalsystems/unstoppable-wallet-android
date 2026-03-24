@@ -16,7 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -26,7 +25,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
 
-class SwapInfoDialog(input1: Input) : BaseComposableBottomSheetFragment() {
+class SwapInfoDialog(val input: Input) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,9 +37,6 @@ class SwapInfoDialog(input1: Input) : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val navController = findNavController()
-                val input = navController.requireInput<Input>()
-
                 ComposeAppTheme {
                     SwapInfoView(input.title, input.text) { dismiss() }
                 }

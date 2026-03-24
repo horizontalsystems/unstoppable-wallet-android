@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.getInputX
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -76,11 +75,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class WCSessionBottomSheet(input1: WCSessionModule.Input) : BaseComposableBottomSheetFragment() {
+class WCSessionBottomSheet(val input: WCSessionModule.Input) : BaseComposableBottomSheetFragment() {
 
     private val viewModel by viewModels<WCSessionViewModel> {
-        val input = arguments?.getInputX<WCSessionModule.Input>()
-        WCSessionModule.Factory(input?.sessionTopic)
+        WCSessionModule.Factory(input.sessionTopic)
     }
 
     override fun onCreateView(

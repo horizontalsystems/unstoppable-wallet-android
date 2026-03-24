@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -45,7 +44,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSSelector
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
 
-class UnlinkAccountDialog(account: Account) : BaseComposableBottomSheetFragment() {
+class UnlinkAccountDialog(val account: Account) : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,7 +58,7 @@ class UnlinkAccountDialog(account: Account) : BaseComposableBottomSheetFragment(
                 val navController = findNavController()
 
                 ComposeAppTheme {
-                    UnlinkAccountScreen(navController, navController.requireInput())
+                    UnlinkAccountScreen(navController, account)
                 }
             }
         }

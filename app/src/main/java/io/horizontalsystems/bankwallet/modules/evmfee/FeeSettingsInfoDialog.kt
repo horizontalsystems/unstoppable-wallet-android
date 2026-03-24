@@ -15,14 +15,13 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
 
-class FeeSettingsInfoDialog(input1: Input) : BaseComposableBottomSheetFragment() {
+class FeeSettingsInfoDialog(val input: Input) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,9 +33,6 @@ class FeeSettingsInfoDialog(input1: Input) : BaseComposableBottomSheetFragment()
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                val navController = findNavController()
-                val input = navController.requireInput<Input>()
-
                 ComposeAppTheme {
                     FeeSettingsInfoScreen(input.title, input.text) { dismiss() }
                 }
