@@ -2,15 +2,12 @@ package io.horizontalsystems.bankwallet.core
 
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.core.os.bundleOf
-import androidx.navigation.NavOptions
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.subscriptions.core.IPaidAction
-import java.util.UUID
 
 fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
 //    TODO("xxx nav3")
@@ -70,37 +67,13 @@ fun NavBackStack<HSScreen>.ensurePinSet(descriptionResId: Int, action: () -> Uni
 }
 
 fun <T: Parcelable> NavBackStack<HSScreen>.slideFromBottomForResult(screen: HSScreen, onResult: (T) -> Unit) {
+    add(screen)
 //    TODO("xxx nav3")
 }
 
 fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(screen: HSScreen, onResult: (T) -> Unit) {
+    add(screen)
 //    TODO("xxx nav3")
-}
-
-private fun <T : Parcelable> NavBackStack<HSScreen>.navigateForResult(
-    resId: Int,
-    input: Parcelable?,
-    navOptions: NavOptions,
-    onResult: (T) -> Unit,
-) {
-    val key = UUID.randomUUID().toString()
-    getNavigationResultX(key, onResult)
-    val bundle = bundleOf("resultKey" to key)
-    input?.let {
-        bundle.putParcelable("input", it)
-    }
-//    TODO("xxx nav3")
-//    navigate(resId, bundle, navOptions)
-}
-
-private fun <T: Parcelable> NavBackStack<HSScreen>.getNavigationResultX(key: String, onResult: (T) -> Unit) {
-//    currentBackStackEntry?.let { backStackEntry ->
-//        backStackEntry.savedStateHandle.getLiveData<T>(key).observe(backStackEntry) {
-//            onResult.invoke(it)
-//
-//            backStackEntry.savedStateHandle.remove<T>(key)
-//        }
-//    }
 }
 
 inline fun <reified T: Parcelable> NavBackStack<HSScreen>.getInput() : T? {
