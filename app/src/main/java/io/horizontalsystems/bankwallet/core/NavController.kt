@@ -5,6 +5,7 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.subscriptions.core.IPaidAction
 
 fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
@@ -44,7 +45,7 @@ fun NavBackStack<HSScreen>.paidAction(paidAction: IPaidAction, block: () -> Unit
 
 fun NavBackStack<HSScreen>.navigateWithTermsAccepted(action: () -> Unit) {
     if (!App.termsManager.allTermsAccepted) {
-        slideFromBottomForResult<TermsFragment.Result>(R.id.termsFragment) { result ->
+        slideFromBottomForResult<TermsFragment.Result>(TermsFragment()) { result ->
             if (result.termsAccepted) {
                 action.invoke()
             }
