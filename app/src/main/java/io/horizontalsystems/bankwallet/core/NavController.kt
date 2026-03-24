@@ -9,13 +9,13 @@ import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.subscriptions.core.IPaidAction
 
 fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
+    add(screen)
 //    TODO("xxx nav3")
-//    navigate(resId, args, navOptions)
 }
 
 fun NavBackStack<HSScreen>.slideFromBottom(screen: HSScreen) {
+    add(screen)
 //    TODO("xxx nav3")
-//    navigate(resId, args, navOptions)
 }
 
 fun NavBackStack<HSScreen>.authorizedAction(action: () -> Unit) {
