@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
@@ -29,7 +28,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
 
-class ErrorBottomSheet(input: Input) : BaseComposableBottomSheetFragment() {
+class ErrorBottomSheet(val input: Input) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,9 +41,7 @@ class ErrorBottomSheet(input: Input) : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 val navController = findNavController()
-                navController.getInput<Input>()?.let { input ->
-                    ErrorBottomSheetScreen(navController, input.error)
-                }
+                ErrorBottomSheetScreen(navController, input.error)
             }
         }
     }

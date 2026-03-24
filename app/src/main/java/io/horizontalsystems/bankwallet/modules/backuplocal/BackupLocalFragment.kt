@@ -8,7 +8,6 @@ import androidx.navigation.navArgument
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBackupItemsScreen
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupType
@@ -16,11 +15,10 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.password.LocalBackupP
 import io.horizontalsystems.bankwallet.modules.backuplocal.terms.LocalBackupTermsScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 
-class BackupLocalFragment(account1: Account? = null) : BaseComposeFragment() {
+class BackupLocalFragment(val account: Account? = null) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val account = navController.getInput<Account>()
         if (account != null) {
             SingleWalletBackupNavHost(navController, account.id)
         } else {

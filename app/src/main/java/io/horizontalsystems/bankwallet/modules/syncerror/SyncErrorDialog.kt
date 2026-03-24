@@ -19,7 +19,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.addFromBottom
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsFragment
@@ -37,7 +36,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
 
-class SyncErrorDialog(input1: Input) : BaseComposableBottomSheetFragment() {
+class SyncErrorDialog(val input: Input) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,9 +49,7 @@ class SyncErrorDialog(input1: Input) : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 val navController = findNavController()
-                navController.getInput<Input>()?.let { input ->
-                    SyncErrorScreen(navController, input.wallet)
-                }
+                SyncErrorScreen(navController, input.wallet)
             }
         }
     }

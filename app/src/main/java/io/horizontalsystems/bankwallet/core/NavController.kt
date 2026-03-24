@@ -74,11 +74,6 @@ fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(screen: HSScr
 //    TODO("xxx nav3")
 }
 
-inline fun <reified T: Parcelable> NavBackStack<HSScreen>.getInput() : T? {
-    TODO()
-//    return currentBackStackEntry?.arguments?.getInputX()
-}
-
 fun <T: Parcelable> NavBackStack<HSScreen>.setNavigationResultX(result: T) {
 //    val resultKey = currentBackStackEntry?.arguments?.getString("resultKey")
 //

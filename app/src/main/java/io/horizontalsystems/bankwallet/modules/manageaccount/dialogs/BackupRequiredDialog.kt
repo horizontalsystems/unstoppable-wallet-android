@@ -17,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -37,7 +36,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
 
-class BackupRequiredDialog(input1: Input) : BaseComposableBottomSheetFragment() {
+class BackupRequiredDialog(val input: Input) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,9 +49,7 @@ class BackupRequiredDialog(input1: Input) : BaseComposableBottomSheetFragment() 
             )
             setContent {
                 val navController = findNavController()
-                navController.getInput<Input>()?.let { input ->
-                    BackupRequiredScreen(navController, input.account, input.text)
-                }
+                BackupRequiredScreen(navController, input.account, input.text)
             }
         }
     }

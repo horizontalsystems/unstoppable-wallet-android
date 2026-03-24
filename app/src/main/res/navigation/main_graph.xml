@@ -429,17 +429,11 @@
 
     <!--Wallet Connect-->
     <fragment
-        android:id="@+id/wcNetworksFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.WCNetworksFragment" />
-    <fragment
         android:id="@+id/wcSendEvmTransactionSettings"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WCEvmTransactionSettingsFragment" />
     <fragment
         android:id="@+id/wcListFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment" />
-    <fragment
-        android:id="@+id/tcListFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectMainFragment" />
     <fragment
         android:id="@+id/tcSendRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectSendRequestFragment" />

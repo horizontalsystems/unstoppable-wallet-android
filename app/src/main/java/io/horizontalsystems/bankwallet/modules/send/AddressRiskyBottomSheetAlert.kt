@@ -16,7 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
@@ -27,7 +26,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFr
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
 
-class AddressRiskyBottomSheetAlert(input1: Input) : BaseComposableBottomSheetFragment() {
+class AddressRiskyBottomSheetAlert(val input: Input) : BaseComposableBottomSheetFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,17 +39,15 @@ class AddressRiskyBottomSheetAlert(input1: Input) : BaseComposableBottomSheetFra
             )
             setContent {
                 val navController = findNavController()
-                navController.getInput<Input>()?.let { input ->
-                    RiskyAddressAlertView(
-                        alertText = input.alertText,
-                        onCloseClick = {
-                            navController.removeLastOrNull()
-                        },
-                        onContinueClick = {
-                            navController.setNavigationResultX(Result(true))
-                        }
-                    )
-                }
+                RiskyAddressAlertView(
+                    alertText = input.alertText,
+                    onCloseClick = {
+                        navController.removeLastOrNull()
+                    },
+                    onContinueClick = {
+                        navController.setNavigationResultX(Result(true))
+                    }
+                )
             }
         }
     }
