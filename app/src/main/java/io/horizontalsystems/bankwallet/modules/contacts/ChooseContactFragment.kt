@@ -46,13 +46,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
 
-class ChooseContactFragment : BaseComposeFragment() {
+class ChooseContactFragment(val blockchainType: BlockchainType) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<BlockchainType>(navController) { blockchainType ->
-            ChooseContactScreen(blockchainType, navController)
-        }
+        ChooseContactScreen(blockchainType, navController)
     }
 
     @Parcelize

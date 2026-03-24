@@ -31,13 +31,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
-class BackupKeyFragment(account1: Account) : BaseComposeFragment(screenshotEnabled = false) {
+class BackupKeyFragment(val account: Account) : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Account>(navController) { account ->
-            RecoveryPhraseScreen(navController, account)
-        }
+        RecoveryPhraseScreen(navController, account)
     }
 }
 

@@ -31,12 +31,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
-class SwapSettingsSlippageFragment(input1: Input) : BaseComposeFragment() {
+class SwapSettingsSlippageFragment(val input: Input) : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            SwapSlippageSettingsScreen(navController, input.slippage)
-        }
+        SwapSlippageSettingsScreen(navController, input.slippage)
     }
 
     @Parcelize

@@ -55,17 +55,15 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.parcelize.Parcelize
 
-class CoinMajorHoldersFragment(input1: Input) : BaseComposeFragment() {
+class CoinMajorHoldersFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Input>(navController) { input ->
-            CoinMajorHoldersScreen(
-                input.coinUid,
-                input.blockchain,
-                navController,
-            )
-        }
+        CoinMajorHoldersScreen(
+            input.coinUid,
+            input.blockchain,
+            navController,
+        )
     }
 
     @Parcelize

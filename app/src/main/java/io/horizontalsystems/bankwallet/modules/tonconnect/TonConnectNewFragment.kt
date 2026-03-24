@@ -9,19 +9,17 @@ import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.parcelize.Parcelize
 
-class TonConnectNewFragment(dAppRequestEntity: DAppRequestEntity) : BaseComposeFragment() {
+class TonConnectNewFragment(val input: DAppRequestEntity) : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<DAppRequestEntity>(navController) { input ->
-            TonConnectNewScreen(
-                navController = navController,
-                requestEntity = input,
-                onResult = { approved ->
-                    navController.setNavigationResultX(Result(approved))
-                    navController.removeLastOrNull()
-                },
-            )
-        }
+        TonConnectNewScreen(
+            navController = navController,
+            requestEntity = input,
+            onResult = { approved ->
+                navController.setNavigationResultX(Result(approved))
+                navController.removeLastOrNull()
+            },
+        )
     }
 
     @Parcelize

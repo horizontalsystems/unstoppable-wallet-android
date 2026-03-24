@@ -50,12 +50,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-class ActivateTokenFragment(wallet: Wallet) : BaseComposeFragment() {
+class ActivateTokenFragment(val wallet: Wallet) : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        withInput<Wallet>(navController) {
-            ActivateTokenScreen(navController, it)
-        }
+        ActivateTokenScreen(navController, wallet)
     }
 
     @Parcelize

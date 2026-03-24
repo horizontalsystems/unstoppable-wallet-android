@@ -50,20 +50,6 @@ abstract class BaseComposeFragment(
         TODO()
     }
 
-    @Composable
-    protected inline fun <reified T : Parcelable> withInput(
-        navController: NavBackStack<HSScreen>,
-        content: @Composable (T) -> Unit
-    ) {
-        val input = try {
-            navController.requireInput<T>()
-        } catch (e: NullPointerException) {
-            navController.removeLastOrNull()
-            return
-        }
-        content(input)
-    }
-
     val defaultViewModelProviderFactory: Factory
         get() = TODO()
     val defaultViewModelCreationExtras: CreationExtras
