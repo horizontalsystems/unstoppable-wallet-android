@@ -32,7 +32,7 @@ class ActionApprove(
         )
 
         navController.slideFromBottomForResult<Eip20ApproveConfirmFragment.Result>(
-            R.id.eip20ApproveFragment,
+            Eip20ApproveFragment(),
             approveData
         ) {
             onActionCompleted.invoke()

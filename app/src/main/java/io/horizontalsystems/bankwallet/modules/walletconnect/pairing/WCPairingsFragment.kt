@@ -82,7 +82,7 @@ fun WCPairingsScreen(navController: NavBackStack<HSScreen>) {
                             .fillMaxWidth(),
                         onClick = {
                             navController.slideFromBottomForResult<ConfirmDeleteAllPairingsDialog.Result>(
-                                R.id.confirmDeleteAllPairingsDialog
+                                ConfirmDeleteAllPairingsDialog()
                             ) { result ->
                                 if (result.confirmed) {
                                     viewModel.deleteAll()

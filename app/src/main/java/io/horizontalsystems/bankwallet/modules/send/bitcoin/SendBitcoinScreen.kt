@@ -263,7 +263,7 @@ fun SendBitcoinScreen(
                         if (riskyAddress) {
                             keyboardController?.hide()
                             fragmentNavController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
-                                R.id.addressRiskyBottomSheetAlert,
+                                AddressRiskyBottomSheetAlert(),
                                 AddressRiskyBottomSheetAlert.Input(
                                     alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
                                 )
