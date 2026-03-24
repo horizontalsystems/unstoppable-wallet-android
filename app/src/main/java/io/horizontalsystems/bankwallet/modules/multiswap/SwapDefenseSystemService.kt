@@ -4,8 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ServiceState
 import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
+import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.SwapProtection
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.CoroutineScope
@@ -139,4 +138,19 @@ class SwapDefenseSystemService(
         val mevProtectionEnabled: Boolean,
         val mevProtectionActionAllowed: Boolean,
     )
+}
+
+data class DefenseSystemMessage(
+    val level: DefenseAlertLevel,
+    val title: TranslatableString,
+    val body: TranslatableString,
+    val actionText: TranslatableString? = null,
+    val requiredPaidAction: IPaidAction? = null
+)
+
+enum class DefenseAlertLevel {
+    WARNING,
+    IDLE,
+    DANGER,
+    SAFE
 }

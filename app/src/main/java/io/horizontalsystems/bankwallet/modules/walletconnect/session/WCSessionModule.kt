@@ -72,6 +72,7 @@ data class WCSessionUiState(
     val blockchainTypes: List<BlockchainType>?,
     val whiteListState: WCWhiteListState?,
     val hasSubscription: Boolean,
+    val scamProtectionActionAllowed: Boolean,
     val closeDialog: Boolean,
 )
 

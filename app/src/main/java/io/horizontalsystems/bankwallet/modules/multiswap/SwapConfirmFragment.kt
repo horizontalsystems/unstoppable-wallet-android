@@ -4,7 +4,6 @@ import android.icu.text.MeasureFormat
 import android.icu.util.Measure
 import android.icu.util.MeasureUnit
 import android.os.Parcelable
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -76,14 +75,13 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsSwitcher
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonConfig
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
+import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.subscriptions.core.SwapProtection
@@ -403,18 +401,10 @@ private fun SwapConfirmInternal(
 
         if (uiState.supportsMevProtection) {
             VSpacer(16.dp)
-            CellSecondary(
-                left = {
-                    Image(
-                        painter = painterResource(R.drawable.ic_defense_shield_20),
-                        contentDescription = null,
-                    )
-                },
-                middle = {
-                    CellMiddleInfo(
-                        subtitle = stringResource(R.string.SwapConfirm_SwapProtection).hs(color = ComposeAppTheme.colors.leah)
-                    )
-                },
+            SectionHeader(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = stringResource(R.string.SwapConfirm_SwapProtection),
+                icon = R.drawable.ic_defense_shield_20
             )
 
             Row(

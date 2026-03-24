@@ -67,6 +67,7 @@ class WCSessionViewModel(
     private var hasSubscription = false
     private var closeDialog = false
     private var scamProtectionEnabled = paidActionSettingsManager.isActionEnabled(ScamProtection)
+    private var scamProtectionActionAllowed = UserSubscriptionManager.isActionAllowed(ScamProtection)
 
     override fun createState() = WCSessionUiState(
         peerMeta = peerMeta,
@@ -81,6 +82,7 @@ class WCSessionViewModel(
         blockchainTypes = blockchainTypes,
         whiteListState = whiteListState,
         hasSubscription = hasSubscription,
+        scamProtectionActionAllowed = scamProtectionActionAllowed,
         closeDialog = closeDialog
     )
 
@@ -186,6 +188,7 @@ class WCSessionViewModel(
         viewModelScope.launch {
             UserSubscriptionManager.activeSubscriptionStateFlow.collect {
                 hasSubscription = it != null
+                scamProtectionActionAllowed = UserSubscriptionManager.isActionAllowed(ScamProtection)
                 emitState()
             }
         }
