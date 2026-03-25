@@ -38,7 +38,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
-import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlin.system.exitProcess
@@ -73,28 +72,29 @@ class PrivacySettingsFragment : BaseComposeFragment() {
             Translator.getString(R.string.Button_Disable)
         }
 
-        ConfirmationDialog.show(
-            icon = R.drawable.ic_tor_connection_24,
-            title = Translator.getString(R.string.Tor_Alert_Title),
-            warningTitle = warningTitle,
-            warningText = Translator.getString(R.string.SettingsSecurity_AppRestartWarning),
-            actionButtonTitle = actionButton,
-            transparentButtonTitle = Translator.getString(R.string.Alert_Cancel),
-            fragmentManager = childFragmentManager,
-            listener = object : ConfirmationDialog.Listener {
-                override fun onActionButtonClick() {
-                    torViewModel.setTorEnabled()
-                }
-
-                override fun onTransparentButtonClick() {
-                    torViewModel.resetSwitch()
-                }
-
-                override fun onCancelButtonClick() {
-                    torViewModel.resetSwitch()
-                }
-            }
-        )
+//        TODO("xxx nav3")
+//        ConfirmationDialog.show(
+//            icon = R.drawable.ic_tor_connection_24,
+//            title = Translator.getString(R.string.Tor_Alert_Title),
+//            warningTitle = warningTitle,
+//            warningText = Translator.getString(R.string.SettingsSecurity_AppRestartWarning),
+//            actionButtonTitle = actionButton,
+//            transparentButtonTitle = Translator.getString(R.string.Alert_Cancel),
+//            fragmentManager = childFragmentManager,
+//            listener = object : ConfirmationDialog.Listener {
+//                override fun onActionButtonClick() {
+//                    torViewModel.setTorEnabled()
+//                }
+//
+//                override fun onTransparentButtonClick() {
+//                    torViewModel.resetSwitch()
+//                }
+//
+//                override fun onCancelButtonClick() {
+//                    torViewModel.resetSwitch()
+//                }
+//            }
+//        )
     }
 
     private fun restartApp(activity: Activity?) {
