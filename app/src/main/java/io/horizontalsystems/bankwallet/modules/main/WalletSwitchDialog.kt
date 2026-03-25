@@ -1,14 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.main
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -22,20 +16,9 @@ import io.horizontalsystems.bankwallet.ui.extensions.WalletSwitchBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 
 class WalletSwitchDialog : BaseComposableBottomSheetFragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                WalletSwitchScreen(findNavController())
-            }
-        }
+    @Composable
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        WalletSwitchScreen(navController)
     }
 }
 

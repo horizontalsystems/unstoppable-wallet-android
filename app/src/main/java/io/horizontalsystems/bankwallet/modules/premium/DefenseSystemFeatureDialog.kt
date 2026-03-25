@@ -1,10 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.premium
 
-import android.os.Bundle
 import android.os.Parcelable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -22,9 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -61,26 +55,12 @@ import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.parcelize.Parcelize
 
 class DefenseSystemFeatureDialog(val input: Input) : BaseComposableBottomSheetFragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val navController = findNavController()
-
-                ComposeAppTheme {
-                    DefenseSystemFeatureScreen(
-                        navController,
-                        input.feature,
-                    )
-                }
-            }
-        }
+    @Composable
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        DefenseSystemFeatureScreen(
+            navController,
+            input.feature,
+        )
     }
 
     @Parcelize

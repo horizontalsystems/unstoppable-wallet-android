@@ -1,11 +1,8 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.IdRes
 import androidx.annotation.MainThread
@@ -37,9 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.Factory
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.CreationExtras
@@ -57,9 +52,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 open class BaseComposableBottomSheetFragment : HSScreen(bottomSheet = true) {
 
-    val viewLifecycleOwner: LifecycleOwner = TODO()
-    var arguments: Bundle? = TODO()
-
     fun getString(i: Int) : String {
         TODO()
     }
@@ -72,7 +64,7 @@ open class BaseComposableBottomSheetFragment : HSScreen(bottomSheet = true) {
     public inline fun <reified VM : ViewModel> navGraphViewModels(
         @IdRes navGraphId: Int,
         noinline extrasProducer: (() -> CreationExtras)? = null,
-        noinline factoryProducer: (() -> ViewModelProvider.Factory)? = null
+        noinline factoryProducer: (() -> Factory)? = null
     ): Lazy<VM> {
         TODO()
 //        val backStackEntry by lazy { findNavController().getBackStackEntry(navGraphId) }
@@ -89,10 +81,6 @@ open class BaseComposableBottomSheetFragment : HSScreen(bottomSheet = true) {
 
     }
 
-    fun requireArguments() : Bundle {
-        TODO()
-    }
-
     fun dismiss() {
 
     }
@@ -105,22 +93,7 @@ open class BaseComposableBottomSheetFragment : HSScreen(bottomSheet = true) {
         TODO()
     }
 
-    open fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        TODO()
-    }
-
-    open fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    }
-
     open fun close() {
-        TODO()
-    }
-
-    fun requireContext(): Context {
         TODO()
     }
 

@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,9 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -72,38 +67,23 @@ import kotlinx.coroutines.launch
 private val logger = AppLogger("wallet-connect request")
 
 class WCRequestFragment : BaseComposableBottomSheetFragment() {
+    @Composable
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val wcRequestRouterViewModel =
+            viewModel<WCRequestRouterViewModel>(factory = WCRequestRouterViewModel.Factory())
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val navController = findNavController()
+        val uiState = wcRequestRouterViewModel.uiState
 
-                ComposeAppTheme {
-                    val wcRequestRouterViewModel =
-                        viewModel<WCRequestRouterViewModel>(factory = WCRequestRouterViewModel.Factory())
+        val blockchainType = uiState.blockchainType
 
-                    val uiState = wcRequestRouterViewModel.uiState
-
-                    val blockchainType = uiState.blockchainType
-
-                    if (blockchainType == null) {
-                        WcRequestError { navController.removeLastOrNull() }
-                    } else if (blockchainType.isEvm) {
-                        WcRequestEvm(navController)
-                    } else if (blockchainType is BlockchainType.Stellar) {
-                        WcRequestPreScreen(navController)
-                    } else {
-                        WcRequestError { navController.removeLastOrNull() }
-                    }
-                }
-            }
+        if (blockchainType == null) {
+            WcRequestError { navController.removeLastOrNull() }
+        } else if (blockchainType.isEvm) {
+            WcRequestEvm(navController)
+        } else if (blockchainType is BlockchainType.Stellar) {
+            WcRequestPreScreen(navController)
+        } else {
+            WcRequestError { navController.removeLastOrNull() }
         }
     }
 }

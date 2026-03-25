@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.session
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,8 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -78,23 +72,9 @@ class WCSessionBottomSheet(val input: WCSessionModule.Input) : BaseComposableBot
         WCSessionModule.Factory(input.sessionTopic)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val navController = findNavController()
-
-                ComposeAppTheme {
-                    WCSessionScreen(navController, viewModel)
-                }
-            }
-        }
+    @Composable
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        WCSessionScreen(navController, viewModel)
     }
 }
 

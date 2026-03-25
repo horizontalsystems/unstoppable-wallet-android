@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.configuredtoken
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -11,10 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -42,20 +36,9 @@ import io.horizontalsystems.marketkit.models.Token
 
 class ConfiguredTokenInfoDialog(val token: Token) : BaseComposableBottomSheetFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val navController = findNavController()
-                ConfiguredTokenInfo(navController, token)
-            }
-        }
+    @Composable
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        ConfiguredTokenInfo(navController, token)
     }
 }
 

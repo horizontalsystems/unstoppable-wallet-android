@@ -1,10 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.DialogInterface
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,12 +8,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -49,21 +45,9 @@ class ConfirmationDialog(
         listener.onCancelButtonClick()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    BottomScreen()
-                }
-            }
-        }
+    @Composable
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        BottomScreen()
     }
 
     @Composable

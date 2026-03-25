@@ -1,17 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.dialogs
 
-import android.os.Bundle
 import android.os.Parcelable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,20 +32,9 @@ import kotlinx.parcelize.Parcelize
 
 class BackupRequiredDialog(val input: Input) : BaseComposableBottomSheetFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val navController = findNavController()
-                BackupRequiredScreen(navController, input.account, input.text)
-            }
-        }
+    @Composable
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        BackupRequiredScreen(navController, input.account, input.text)
     }
 
     @Parcelize

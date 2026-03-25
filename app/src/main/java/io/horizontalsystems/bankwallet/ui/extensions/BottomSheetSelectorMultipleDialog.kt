@@ -1,10 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.DialogInterface
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,13 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
@@ -53,26 +49,14 @@ class BottomSheetSelectorMultipleDialog(
         addAll(selectedIndexes)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    BottomSheetHeader(
-                        iconPainter = icon.painter(),
-                        title = title,
-                        onCloseClick = { close() }
-                    ) {
-                        BSContent()
-                    }
-                }
-            }
+    @Composable
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        BottomSheetHeader(
+            iconPainter = icon.painter(),
+            title = title,
+            onCloseClick = { close() }
+        ) {
+            BSContent()
         }
     }
 

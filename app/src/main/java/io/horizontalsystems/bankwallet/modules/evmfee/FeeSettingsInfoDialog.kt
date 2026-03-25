@@ -1,20 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.evmfee
 
-import android.os.Bundle
 import android.os.Parcelable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
@@ -23,21 +19,9 @@ import kotlinx.parcelize.Parcelize
 
 class FeeSettingsInfoDialog(val input: Input) : BaseComposableBottomSheetFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    FeeSettingsInfoScreen(input.title, input.text) { dismiss() }
-                }
-            }
-        }
+    @Composable
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        FeeSettingsInfoScreen(input.title, input.text) { dismiss() }
     }
 
     @Parcelize

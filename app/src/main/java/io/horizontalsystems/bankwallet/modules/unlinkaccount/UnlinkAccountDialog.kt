@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.unlinkaccount
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,9 +10,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -45,23 +39,9 @@ import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
 
 class UnlinkAccountDialog(val account: Account) : BaseComposableBottomSheetFragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val navController = findNavController()
-
-                ComposeAppTheme {
-                    UnlinkAccountScreen(navController, account)
-                }
-            }
-        }
+    @Composable
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        UnlinkAccountScreen(navController, account)
     }
 }
 
