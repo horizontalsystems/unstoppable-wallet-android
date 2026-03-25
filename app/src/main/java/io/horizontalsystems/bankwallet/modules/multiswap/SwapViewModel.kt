@@ -318,7 +318,7 @@ class SwapViewModel(
                 val passedAmlCheck = if (addresses.isNotEmpty()) {
                     provider.checkAmlAddresses(addresses)
                 } else {
-                    null
+                    throw IllegalStateException("No addresses found")
                 }
                 when (passedAmlCheck) {
                     true -> amlCheckEventFlow.emit(AmlCheckEvent.Proceed)
