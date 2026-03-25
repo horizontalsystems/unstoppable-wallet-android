@@ -7,7 +7,6 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -138,13 +137,11 @@ private fun SettingSections(
 
     BannerCarousel(banners = banners)
 
-    VSpacer(12.dp)
-
     CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
                 R.string.SettingsSecurity_ManageKeys,
-                R.drawable.ic_wallet_20,
+                R.drawable.wallet_24,
                 showAlert = uiState.manageWalletShowAlert,
                 onClick = {
                     navController.slideFromRight(
@@ -158,7 +155,7 @@ private fun SettingSections(
         }, {
             HsSettingCell(
                 R.string.BlockchainSettings_Title,
-                R.drawable.ic_blocks_20,
+                R.drawable.box_24,
                 onClick = {
                     navController.slideFromRight(R.id.blockchainSettingsFragment)
 
@@ -171,7 +168,7 @@ private fun SettingSections(
         }, {
             HsSettingCell(
                 R.string.Settings_SecurityCenter,
-                R.drawable.ic_security,
+                R.drawable.shield_24,
                 showAlert = uiState.securityCenterShowAlert,
                 onClick = {
                     navController.slideFromRight(R.id.securitySettingsFragment)
@@ -182,7 +179,7 @@ private fun SettingSections(
         }, {
             HsSettingCell(
                 R.string.Settings_Privacy,
-                R.drawable.ic_eye_20,
+                R.drawable.lock_24,
                 onClick = {
                     navController.slideFromRight(R.id.privacySettingsFragment)
 
@@ -192,7 +189,7 @@ private fun SettingSections(
         }, {
             HsSettingCell(
                 R.string.DAppConnection_Title,
-                R.drawable.ic_wallet_connect_20,
+                R.drawable.link_24,
                 value = (uiState.wcCounterType as? MainSettingsModule.CounterType.SessionCounter)?.number?.toString(),
                 counterBadge = (uiState.wcCounterType as? MainSettingsModule.CounterType.PendingRequestCounter)?.number?.toString(),
                 onClick = {
@@ -252,14 +249,35 @@ private fun SettingSections(
         )
     )
 
-    VSpacer(32.dp)
+    VSpacer(24.dp)
+
+    CellUniversalLawrenceSection(
+        buildList {
+            add {
+                HsSettingCell(
+                    R.string.Contacts,
+                    R.drawable.user_24,
+                    onClick = {
+                        navController.slideFromRight(
+                            R.id.contactsFragment,
+                            ContactsFragment.Input(Mode.Full)
+                        )
+
+                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Contacts))
+                    }
+                )
+            }
+        }
+    )
+
+    VSpacer(24.dp)
 
     CellUniversalLawrenceSection(
         buildList {
             add {
                 HsSettingCell(
                     R.string.Settings_AppSettings,
-                    R.drawable.ic_unstoppable_icon_20,
+                    R.drawable.uw_logo_24,
                     onClick = {
                         navController.slideFromRight(R.id.appearanceFragment)
 
@@ -271,7 +289,7 @@ private fun SettingSections(
                 add {
                     HsSettingCell(
                         R.string.Settings_Subscription,
-                        R.drawable.ic_star_24,
+                        R.drawable.premium_24,
                         value = if (uiState.hasSubscription) stringResource(R.string.SettingsSubscription_Active) else null,
                         onClick = {
                             navController.slideFromRight(R.id.subscriptionFragment)
@@ -279,24 +297,11 @@ private fun SettingSections(
                     )
                 }
             }
-            add {
-                HsSettingCell(
-                    R.string.Contacts,
-                    R.drawable.ic_user_20,
-                    onClick = {
-                        navController.slideFromRight(
-                            R.id.contactsFragment,
-                            ContactsFragment.Input(Mode.Full)
-                        )
 
-                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Contacts))
-                    }
-                )
-            }
             add {
                 HsSettingCell(
                     R.string.BackupManager_Title,
-                    R.drawable.ic_file_24,
+                    R.drawable.file_24,
                     onClick = {
                         navController.slideFromRight(R.id.backupManagerFragment)
 
@@ -310,7 +315,7 @@ private fun SettingSections(
         }
     )
 
-    VSpacer(24.dp)
+    VSpacer(4.dp)
 
     if (isFDroidBuild) {
         PremiumHeader(R.string.Premium_TitleForDroid)
@@ -356,7 +361,7 @@ private fun SettingSections(
     }
 
 
-    VSpacer(32.dp)
+    VSpacer(24.dp)
 
     CellUniversalLawrenceSection(
         listOf({
@@ -373,7 +378,7 @@ private fun SettingSections(
         }, {
             HsSettingCell(
                 R.string.Settings_RateUs,
-                R.drawable.ic_rateus_24,
+                R.drawable.star_24,
                 onClick = {
                     RateAppManager.openPlayMarket(context)
 
@@ -393,7 +398,7 @@ private fun SettingSections(
         }, {
             HsSettingCell(
                 R.string.Settings_Faq,
-                R.drawable.ic_faq_20,
+                R.drawable.message_24,
                 onClick = {
                     navController.slideFromRight(R.id.faqListFragment)
                 }
@@ -401,7 +406,7 @@ private fun SettingSections(
         }, {
             HsSettingCell(
                 R.string.Guides_Title,
-                R.drawable.ic_academy_20,
+                R.drawable.book_24,
                 onClick = {
                     navController.slideFromRight(R.id.academyFragment)
                 }
@@ -411,15 +416,6 @@ private fun SettingSections(
 
     VSpacer(24.dp)
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 32.dp)
-            .height(32.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        subhead1_grey(text = stringResource(id = R.string.Settings_JoinUnstoppables).uppercase())
-    }
     CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
@@ -437,7 +433,7 @@ private fun SettingSections(
         }, {
             HsSettingCell(
                 R.string.Settings_Twitter,
-                R.drawable.ic_twitter_24,
+                R.drawable.x_logo_24,
                 onClick = {
                     LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTwitterLink)
 
@@ -447,7 +443,7 @@ private fun SettingSections(
         })
     )
 
-    VSpacer(32.dp)
+    VSpacer(24.dp)
 
     CellUniversalLawrenceSection(
         listOf {
