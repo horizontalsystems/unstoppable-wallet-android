@@ -140,6 +140,10 @@ fun SwapScreen(
     val context = LocalContext.current
     var showAmlRiskSheet by remember { mutableStateOf(false) }
     val amlRiskSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showAmlUnknownSheet by remember { mutableStateOf(false) }
+    val amlUnknownSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showAmlErrorSheet by remember { mutableStateOf(false) }
+    val amlErrorSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val navigateToSwapConfirm = {
         navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
@@ -166,10 +170,14 @@ fun SwapScreen(
                         navigateToSwapConfirm()
                     }
                 }
-                AmlCheckEvent.RiskDetected,
-                AmlCheckEvent.RiskUnknown,
-                is AmlCheckEvent.Error -> {
+                AmlCheckEvent.RiskDetected -> {
                     showAmlRiskSheet = true
+                }
+                is AmlCheckEvent.Error -> {
+                    showAmlErrorSheet = true
+                }
+                AmlCheckEvent.RiskUnknown -> {
+                    showAmlUnknownSheet = true
                 }
             }
         }
@@ -182,6 +190,28 @@ fun SwapScreen(
             onChooseAnotherProvider = {
                 showAmlRiskSheet = false
                 navController.slideFromBottom(R.id.swapSelectProvider)
+            },
+        )
+    }
+
+    if (showAmlUnknownSheet) {
+        SwapAmlUnknownBottomSheet(
+            sheetState = amlUnknownSheetState,
+            onDismiss = { showAmlUnknownSheet = false },
+            onContinue = {
+                showAmlUnknownSheet = false
+                navigateToSwapConfirm()
+            },
+        )
+    }
+
+    if (showAmlErrorSheet) {
+        SwapAmlErrorBottomSheet(
+            sheetState = amlErrorSheetState,
+            onDismiss = { showAmlErrorSheet = false },
+            onRetry = {
+                showAmlErrorSheet = false
+                viewModel.startProceed()
             },
         )
     }
