@@ -25,20 +25,12 @@ abstract class BaseComposeFragment(
     override val lifecycle: Lifecycle
         get() = TODO("Not yet implemented")
 
-    open fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-    }
-
     val childFragmentManager: FragmentManager
         get() = TODO()
     val activity: FragmentActivity?
         get() = TODO()
 
     fun getString(i: Int) : String {
-        TODO()
-    }
-
-    fun findNavController(): NavBackStack<HSScreen> {
         TODO()
     }
 }
