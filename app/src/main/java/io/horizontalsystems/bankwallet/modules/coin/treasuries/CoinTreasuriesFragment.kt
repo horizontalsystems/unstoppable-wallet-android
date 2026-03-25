@@ -47,7 +47,7 @@ class CoinTreasuriesFragment(val input: Coin) : BaseComposeFragment() {
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         CoinTreasuriesScreen(
             viewModel = viewModel(factory = CoinTreasuriesModule.Factory(input)),
-            onBackClick = { findNavController().removeLastOrNull() }
+            onBackClick = { navController.removeLastOrNull() }
         )
     }
 }

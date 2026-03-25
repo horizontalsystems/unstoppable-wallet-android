@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.terms
 
-import android.os.Bundle
 import android.os.Parcelable
-import android.view.View
-import androidx.activity.addCallback
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,13 +34,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.parcelize.Parcelize
 
 class TermsFragment : BaseComposeFragment() {
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        activity?.onBackPressedDispatcher?.addCallback(this) {
-            findNavController().setNavigationResultX(Result(false))
-            findNavController().removeLastOrNull()
-        }
-    }
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

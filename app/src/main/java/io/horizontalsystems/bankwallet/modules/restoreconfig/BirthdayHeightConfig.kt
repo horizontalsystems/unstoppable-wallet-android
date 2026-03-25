@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.restoreconfig
 
-import android.os.Bundle
 import android.os.Parcelable
-import android.view.View
-import androidx.activity.addCallback
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -14,12 +11,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
 
 class BirthdayHeightConfig(val blockchainType: BlockchainType) : BaseComposeFragment() {
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        activity?.onBackPressedDispatcher?.addCallback(this) {
-            close(findNavController())
-        }
-    }
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
