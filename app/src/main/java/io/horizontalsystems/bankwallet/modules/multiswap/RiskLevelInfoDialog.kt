@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -47,22 +43,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 
 class RiskLevelInfoDialog : BaseComposableBottomSheetFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                val navController = findNavController()
-                RiskLevelInfoScreen(navController)
-            }
-        }
+    @Composable
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        RiskLevelInfoScreen(navController)
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

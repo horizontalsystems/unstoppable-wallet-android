@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.usersubscription
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -32,9 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -67,26 +61,13 @@ import kotlinx.coroutines.launch
 
 class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    val navController = findNavController()
-                    PremiumFeaturesScreen(
-                        navController = navController,
-                        navHostController = null,
-                        onClose = { navController.removeLastOrNull() }
-                    )
-                }
-            }
-        }
+    @Composable
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        PremiumFeaturesScreen(
+            navController = navController,
+            navHostController = null,
+            onClose = { navController.removeLastOrNull() }
+        )
     }
 }
 
