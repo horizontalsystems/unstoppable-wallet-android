@@ -12,17 +12,13 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 abstract class BaseComposeFragment(
     screenshotEnabled: Boolean = true
-) : HSScreen(screenshotEnabled = screenshotEnabled), LifecycleOwner {
-    override val lifecycle: Lifecycle
-        get() = TODO("Not yet implemented")
+) : HSScreen(screenshotEnabled = screenshotEnabled) {
 
     val childFragmentManager: FragmentManager
         get() = TODO()
