@@ -28,7 +28,7 @@ class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         ProUsersInfoScreen(
-            findNavController(),
+            navController,
             listOf(
                 stringResource(R.string.ProUsersInfo_Features_DexVolume),
                 stringResource(R.string.ProUsersInfo_Features_DesLiquidity),

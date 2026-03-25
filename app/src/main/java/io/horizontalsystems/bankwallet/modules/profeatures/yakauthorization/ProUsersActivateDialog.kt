@@ -25,7 +25,7 @@ class ProUsersActivateDialog : BaseComposableBottomSheetFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         ProUsersActivateScreen(
-            { findNavController().removeLastOrNull() },
+            { navController.removeLastOrNull() },
             { authorizationViewModel.onActivateClick() }
         )
     }

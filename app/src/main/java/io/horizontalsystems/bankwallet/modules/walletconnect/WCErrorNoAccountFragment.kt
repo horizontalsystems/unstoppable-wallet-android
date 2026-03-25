@@ -24,7 +24,7 @@ class WCErrorNoAccountFragment : BaseComposableBottomSheetFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         WalletConnectErrorNoAccount() {
-            findNavController().removeLastOrNull()
+            navController.removeLastOrNull()
         }
     }
 }
