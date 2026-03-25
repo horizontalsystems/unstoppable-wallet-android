@@ -1,9 +1,6 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
 import android.content.DialogInterface
-import android.os.Bundle
-import android.view.View
-import android.widget.FrameLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -31,9 +28,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -48,39 +42,9 @@ open class BaseComposableBottomSheetFragment : HSScreen(bottomSheet = true) {
 
     }
 
-    fun dismiss() {
-
-    }
-
     open fun close() {
         TODO()
     }
-}
-
-open class BaseComposableBottomSheetFragmentX : BottomSheetDialogFragment() {
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        dialog?.setOnShowListener { dialog ->
-            val d = dialog as BottomSheetDialog
-            val bottomSheet = d.findViewById<View>(R.id.design_bottom_sheet) as FrameLayout
-            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-            bottomSheetBehavior.apply {
-                state = BottomSheetBehavior.STATE_EXPANDED
-                isHideable = true
-                skipCollapsed = true
-            }
-        }
-    }
-
-    override fun getTheme(): Int {
-        return R.style.BottomDialog
-    }
-
-    open fun close() {
-        dismiss()
-    }
-
 }
 
 @Composable

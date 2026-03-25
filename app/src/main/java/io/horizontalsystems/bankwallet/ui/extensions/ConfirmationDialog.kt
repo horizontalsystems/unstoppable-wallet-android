@@ -47,16 +47,16 @@ class ConfirmationDialog(
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        BottomScreen()
+        BottomScreen(navController)
     }
 
     @Composable
-    private fun BottomScreen() {
+    private fun BottomScreen(navController: NavBackStack<HSScreen>) {
         BottomSheetHeader(
             iconPainter = painterResource(icon ?: R.drawable.ic_attention_24),
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
             title = title,
-            onCloseClick = { close() }
+            onCloseClick = { navController.removeLastOrNull() }
         ) {
 
             warningText?.let {
@@ -75,7 +75,7 @@ class ConfirmationDialog(
                     title = actionButtonTitle,
                     onClick = {
                         listener.onActionButtonClick()
-                        dismiss()
+                        navController.removeLastOrNull()
                     }
                 )
             }
@@ -87,7 +87,7 @@ class ConfirmationDialog(
                     title = transparentButtonTitle,
                     onClick = {
                         listener.onTransparentButtonClick()
-                        dismiss()
+                        navController.removeLastOrNull()
                     }
                 )
             }

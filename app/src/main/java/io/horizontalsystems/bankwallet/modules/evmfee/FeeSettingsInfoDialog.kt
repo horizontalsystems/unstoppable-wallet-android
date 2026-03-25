@@ -21,7 +21,7 @@ class FeeSettingsInfoDialog(val input: Input) : BaseComposableBottomSheetFragmen
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        FeeSettingsInfoScreen(input.title, input.text) { dismiss() }
+        FeeSettingsInfoScreen(input.title, input.text) { navController.removeLastOrNull() }
     }
 
     @Parcelize
