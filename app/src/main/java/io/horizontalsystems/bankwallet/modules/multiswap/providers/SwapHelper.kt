@@ -47,6 +47,8 @@ object SwapHelper {
             || blockchainType == BlockchainType.Tron
             || blockchainType == BlockchainType.Ton
             || blockchainType == BlockchainType.Stellar
+            || blockchainType == BlockchainType.Zcash
+            || blockchainType == BlockchainType.Monero
         ) {
             App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
                 return it.receiveAddress
@@ -67,11 +69,8 @@ object SwapHelper {
             null
         }
 
-        return try {
-            adapter.selectUnspentOutputs(amountIn, feeRate ?: 1).mapNotNull { it.address }.distinct()
-        } catch (_: Throwable) {
-            emptyList()
-        }
+        return adapter.selectUnspentOutputs(amountIn, feeRate ?: 1).mapNotNull { it.address }.distinct()
+
     }
 
     suspend fun getReceiveAddressForToken(token: Token): String {

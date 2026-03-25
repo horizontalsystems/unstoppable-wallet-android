@@ -21,7 +21,10 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapHelper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
@@ -59,6 +62,9 @@ class SwapViewModel(
     private var currency = currencyManager.baseCurrency
     private var requoteOnTimeout = true
     private var swapTermsAccepted = swapTermsManager.swapTermsAcceptedStateFlow.value
+    private var amlChecking = false
+
+    val amlCheckEventFlow = MutableSharedFlow<AmlCheckEvent>(extraBufferCapacity = 1)
 
     init {
         quoteService.start()
@@ -204,7 +210,8 @@ class SwapViewModel(
         fiatAmountOut = fiatAmountOut,
         currency = currency,
         fiatAmountInputEnabled = fiatAmountInputEnabled,
-        needToAcceptTerms = !swapTermsAccepted && quoteState.quote?.provider?.requireTerms == true
+        needToAcceptTerms = !swapTermsAccepted && quoteState.quote?.provider?.requireTerms == true,
+        amlChecking = amlChecking,
     )
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
@@ -293,6 +300,40 @@ class SwapViewModel(
     fun onActionStarted() = quoteService.onActionStarted()
     fun onActionCompleted() = quoteService.onActionCompleted()
 
+    fun startProceed() {
+        val provider = quoteState.quote?.provider ?: return
+        val tokenIn = quoteState.tokenIn ?: return
+        val amountIn = quoteState.amountIn ?: return
+
+        if (!provider.amlPrecheck) {
+            viewModelScope.launch { amlCheckEventFlow.emit(AmlCheckEvent.Proceed) }
+            return
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            amlChecking = true
+            emitState()
+            try {
+                val addresses = SwapHelper.getSourceAddressesForToken(tokenIn, amountIn)
+                val passedAmlCheck = if (addresses.isNotEmpty()) {
+                    provider.checkAmlAddresses(addresses)
+                } else {
+                    null
+                }
+                when (passedAmlCheck) {
+                    true -> amlCheckEventFlow.emit(AmlCheckEvent.Proceed)
+                    false -> amlCheckEventFlow.emit(AmlCheckEvent.RiskDetected)
+                    null -> amlCheckEventFlow.emit(AmlCheckEvent.RiskUnknown)
+                }
+            } catch (e: Throwable) {
+                amlCheckEventFlow.emit(AmlCheckEvent.Error(e))
+            } finally {
+                amlChecking = false
+                emitState()
+            }
+        }
+    }
+
     fun getCurrentQuote() = quoteState.quote
     fun enableRequoteOnTimeout() {
         requoteOnTimeout = true
@@ -348,7 +389,8 @@ data class SwapUiState(
     val currency: Currency,
     val fiatAmountInputEnabled: Boolean,
     val fiatPriceImpactLevel: PriceImpactLevel?,
-    val needToAcceptTerms: Boolean
+    val needToAcceptTerms: Boolean,
+    val amlChecking: Boolean,
 ) {
     val currentStep: SwapStep = when {
         quoting -> SwapStep.Quoting
@@ -356,6 +398,7 @@ data class SwapUiState(
         tokenIn == null -> SwapStep.InputRequired(InputType.TokenIn)
         tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
         amountIn == null -> SwapStep.InputRequired(InputType.Amount)
+        amlChecking -> SwapStep.AmlChecking
         quote?.actionRequired != null -> SwapStep.ActionRequired(quote.actionRequired!!)
         else -> SwapStep.Proceed
     }
@@ -364,9 +407,17 @@ data class SwapUiState(
 sealed class SwapStep {
     data class InputRequired(val inputType: InputType) : SwapStep()
     object Quoting : SwapStep()
+    object AmlChecking : SwapStep()
     data class Error(val error: Throwable) : SwapStep()
     object Proceed : SwapStep()
     data class ActionRequired(val action: ISwapProviderAction) : SwapStep()
+}
+
+sealed class AmlCheckEvent {
+    object Proceed : AmlCheckEvent()
+    object RiskDetected : AmlCheckEvent()
+    object RiskUnknown : AmlCheckEvent()
+    data class Error(val error: Throwable) : AmlCheckEvent()
 }
 
 enum class InputType {

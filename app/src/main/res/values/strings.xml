@@ -700,6 +700,9 @@
     <string name="Swap_ProviderRisk_Unknown">Unknown</string>
     <string name="Swap_ProviderRisk_AlertTitle">High Freeze Risk!</string>
     <string name="Swap_ProviderRisk_AlertBody">The provider for this specific swap (%s) alerted that this swap most likely will be rejected or may even get frozen. Go back and select a different swap provider.</string>
+    <string name="Swap_AmlRisk_Title">Risk Detected</string>
+    <string name="Swap_AmlRisk_Description">Potential risks were identified for this transaction. During processing, your funds may be rejected or restricted. Please choose another provider.</string>
+    <string name="Swap_AmlRisk_Button">Choose Another Provider</string>
     <string name="Swap_EstimatedTime">Est. Time</string>
     <string name="Swap_EstimatedTimeDescription">Approximate time to receive funds. Swap processing and transaction confirmations may take some time depending on the network and provider.</string>
     <string name="Swap_MinimumReceived">Guaranteed</string>

@@ -265,6 +265,10 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         return quote.routes.maxBy { it.expectedBuyAmount ?: BigDecimal.ZERO }
     }
 
+    override suspend fun checkAmlAddresses(addresses: List<String>): Boolean? {
+        return unstoppableAPI.checkAddresses(addresses.joinToString(",")).passedAmlCheck
+    }
+
     override suspend fun fetchFinalQuote(
         tokenIn: Token,
         tokenOut: Token,
@@ -503,6 +507,11 @@ interface UnstoppableAPI {
         @Body request: Request.Track,
     ): Response.Track
 
+    @GET("quote/check-addresses")
+    suspend fun checkAddresses(
+        @Query("addresses") addresses: String,
+    ): Response.CheckAddresses
+
     object Request {
         data class Quote(
             val sellAsset: String,
@@ -564,6 +573,18 @@ interface UnstoppableAPI {
                     val total: Long
                 )
             }
+        }
+
+        data class CheckAddresses(
+            val passedAmlCheck: Boolean?,
+            val results: List<AddressResult>,
+        ) {
+            data class AddressResult(
+                val address: String,
+                val passed: Boolean,
+                val completed: Boolean,
+                val error: String? = null,
+            )
         }
 
         data class Track(
