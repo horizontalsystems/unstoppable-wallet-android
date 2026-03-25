@@ -74,11 +74,12 @@ class ResendBitcoinViewModel(
                 sendButtonTitleResId = R.string.TransactionInfoOptions_SpeedUp_Button
             }
 
-            SpeedUpCancelType.Cancel -> {
+            // MOBILE-593
+            /*SpeedUpCancelType.Cancel -> {
                 titleResId = R.string.TransactionInfoOptions_Cancel_Title
                 addressTitleResId = R.string.Send_Confirmation_Own
                 sendButtonTitleResId = R.string.TransactionInfoOptions_Cancel_Button
-            }
+            }*/
         }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -114,7 +115,7 @@ class ResendBitcoinViewModel(
 
             val (replacementTransaction, bitcoinTransactionRecord) = when (type) {
                 SpeedUpCancelType.SpeedUp -> adapter.speedUpTransaction(transactionHash, minFee)
-                SpeedUpCancelType.Cancel -> adapter.cancelTransaction(transactionHash, minFee)
+                // SpeedUpCancelType.Cancel -> adapter.cancelTransaction(transactionHash, minFee) // MOBILE-593
             }
 
             this.replacementTransaction = replacementTransaction

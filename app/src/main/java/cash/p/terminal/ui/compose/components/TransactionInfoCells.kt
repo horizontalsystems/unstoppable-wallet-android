@@ -72,7 +72,7 @@ import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_jacob
 import cash.p.terminal.ui_compose.components.body_leah
-import cash.p.terminal.ui_compose.components.body_lucian
+// import cash.p.terminal.ui_compose.components.body_lucian // MOBILE-593
 import cash.p.terminal.ui_compose.components.caption_grey
 import cash.p.terminal.ui_compose.components.subhead1_grey
 import cash.p.terminal.ui_compose.components.subhead1_leah
@@ -480,7 +480,8 @@ fun TransactionInfoSpeedUpCell(
     }
 }
 
-@Composable
+// MOBILE-593
+/*@Composable
 fun TransactionInfoCancelCell(
     transactionHash: String,
     blockchainType: BlockchainType,
@@ -505,7 +506,7 @@ fun TransactionInfoCancelCell(
         Spacer(Modifier.width(16.dp))
         body_lucian(text = stringResource(R.string.TransactionInfoOptions_Cancel_Button))
     }
-}
+}*/
 
 @Composable
 fun TransactionInfoRbfCell(

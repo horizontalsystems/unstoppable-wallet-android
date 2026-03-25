@@ -19,7 +19,7 @@ import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.math.BigInteger
+// import java.math.BigInteger // MOBILE-593
 
 internal class TransactionSpeedUpCancelViewModel(
     val sendTransactionService: SendTransactionServiceEvm,
@@ -31,12 +31,12 @@ internal class TransactionSpeedUpCancelViewModel(
 
     val title: String = when (optionType) {
         SpeedUpCancelType.SpeedUp -> cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Title)
-        SpeedUpCancelType.Cancel -> cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfoOptions_Cancel_Title)
+        // SpeedUpCancelType.Cancel -> cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfoOptions_Cancel_Title) // MOBILE-593
     }
 
     val buttonTitle: String = when (optionType) {
         SpeedUpCancelType.SpeedUp -> cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Button)
-        SpeedUpCancelType.Cancel -> cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfoOptions_Cancel_Button)
+        // SpeedUpCancelType.Cancel -> cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfoOptions_Cancel_Button) // MOBILE-593
     }
 
     private var sendTransactionState: SendTransactionServiceState = sendTransactionService.stateFlow.value
@@ -70,13 +70,14 @@ internal class TransactionSpeedUpCancelViewModel(
                     TransactionData(transaction.to!!, transaction.value!!, transaction.input!!)
                 }
 
-                SpeedUpCancelType.Cancel -> {
+                // MOBILE-593
+                /*SpeedUpCancelType.Cancel -> {
                     TransactionData(
                         evmKitWrapper.evmKit.receiveAddress,
                         BigInteger.ZERO,
                         byteArrayOf()
                     )
-                }
+                }*/
             }
 
             sectionViewItems = sendEvmTransactionViewItemFactory.getItems(

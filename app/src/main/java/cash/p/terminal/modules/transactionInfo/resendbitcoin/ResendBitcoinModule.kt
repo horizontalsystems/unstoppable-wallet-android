@@ -26,7 +26,7 @@ object ResendBitcoinModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val replacementInfo = when (optionType) {
                 SpeedUpCancelType.SpeedUp -> adapter.speedUpTransactionInfo(transactionRecord.transactionHash)
-                SpeedUpCancelType.Cancel -> adapter.cancelTransactionInfo(transactionRecord.transactionHash)
+                // SpeedUpCancelType.Cancel -> adapter.cancelTransactionInfo(transactionRecord.transactionHash) // MOBILE-593
             }
 
             return ResendBitcoinViewModel(
