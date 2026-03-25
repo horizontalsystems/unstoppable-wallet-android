@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,13 +47,14 @@ class CoinInvestmentsFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val context = LocalContext.current
         CoinInvestmentsScreen(
             viewModel = viewModel(factory = CoinInvestmentsModule.Factory(input.coinUid)),
             onClickNavigation = {
                 navController.removeLastOrNull()
             },
             onClickFundUrl = {
-                LinkHelper.openLinkInAppBrowser(requireContext(), it)
+                LinkHelper.openLinkInAppBrowser(context, it)
             }
         )
     }

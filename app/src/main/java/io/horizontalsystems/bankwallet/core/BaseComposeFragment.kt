@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -36,10 +35,6 @@ abstract class BaseComposeFragment(
         get() = TODO()
 
     fun getString(i: Int) : String {
-        TODO()
-    }
-
-    fun requireContext(): Context {
         TODO()
     }
 
