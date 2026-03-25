@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.earn
 
-import android.os.Bundle
 import android.os.Parcelable
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -51,18 +49,6 @@ class VaultBlockchainsSelectorFragment(val input: Input) : BaseComposeFragment()
                 navController.removeLastOrNull()
             },
         )
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        requireActivity().onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().removeLastOrNull()
-                }
-            })
     }
 
     @Parcelize

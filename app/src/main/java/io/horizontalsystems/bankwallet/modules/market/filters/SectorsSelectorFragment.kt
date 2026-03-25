@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market.filters
 
-import android.os.Bundle
-import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -48,18 +46,6 @@ class SectorsSelectorFragment : BaseComposeFragment() {
             viewModel,
             navController,
         )
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        requireActivity().onBackPressedDispatcher.addCallback(
-            this,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().removeLastOrNull()
-                }
-            })
     }
 
 }

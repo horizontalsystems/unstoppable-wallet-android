@@ -26,16 +26,8 @@ abstract class BaseComposeFragment(
     override val lifecycle: Lifecycle
         get() = TODO("Not yet implemented")
 
-    open fun onCreate(savedInstanceState: Bundle?) {
-
-    }
-
     open fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-    }
-
-    fun requireActivity() : FragmentActivity {
-        TODO()
     }
 
     val childFragmentManager: FragmentManager
