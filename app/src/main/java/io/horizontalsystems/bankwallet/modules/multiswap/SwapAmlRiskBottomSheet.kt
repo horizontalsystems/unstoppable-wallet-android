@@ -18,6 +18,74 @@ import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun SwapAmlErrorBottomSheet(
+    sheetState: SheetState,
+    onDismiss: () -> Unit,
+    onRetry: () -> Unit,
+) {
+    ComposeAppTheme {
+        BottomSheetContent(
+            onDismissRequest = onDismiss,
+            sheetState = sheetState,
+            buttons = {
+                HSButton(
+                    title = stringResource(R.string.Swap_AmlError_Button),
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = ButtonVariant.Secondary,
+                    onClick = onRetry,
+                )
+            },
+            content = {
+                BottomSheetHeaderV3(
+                    image72 = painterResource(R.drawable.ic_warning_64),
+                    imageTint = ComposeAppTheme.colors.lucian,
+                    title = stringResource(R.string.Swap_AmlError_Title),
+                )
+                TextBlock(
+                    text = stringResource(R.string.Swap_AmlError_Description),
+                    textAlign = TextAlign.Center,
+                )
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SwapAmlUnknownBottomSheet(
+    sheetState: SheetState,
+    onDismiss: () -> Unit,
+    onContinue: () -> Unit,
+) {
+    ComposeAppTheme {
+        BottomSheetContent(
+            onDismissRequest = onDismiss,
+            sheetState = sheetState,
+            buttons = {
+                HSButton(
+                    title = stringResource(R.string.Swap_AmlUnknown_Button),
+                    modifier = Modifier.fillMaxWidth(),
+                    variant = ButtonVariant.Secondary,
+                    onClick = onContinue,
+                )
+            },
+            content = {
+                BottomSheetHeaderV3(
+                    image72 = painterResource(R.drawable.ic_warning_64),
+                    imageTint = ComposeAppTheme.colors.jacob,
+                    title = stringResource(R.string.Swap_AmlUnknown_Title),
+                )
+                TextBlock(
+                    text = stringResource(R.string.Swap_AmlUnknown_Description),
+                    textAlign = TextAlign.Center,
+                )
+            }
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun SwapAmlRiskBottomSheet(
     sheetState: SheetState,
     onDismiss: () -> Unit,
