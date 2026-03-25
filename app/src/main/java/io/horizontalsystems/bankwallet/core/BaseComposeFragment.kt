@@ -27,9 +27,6 @@ abstract class BaseComposeFragment(
     val childFragmentManager: FragmentManager
         get() = TODO()
 
-    fun getString(i: Int) : String {
-        TODO()
-    }
 }
 
 abstract class BaseComposeFragmentX(
