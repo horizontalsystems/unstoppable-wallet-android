@@ -44,6 +44,8 @@ interface IMultiSwapProvider {
         amountIn: BigDecimal
     ): SwapQuote
 
+    suspend fun checkAmlAddresses(addresses: List<String>): Boolean? = null
+
     suspend fun fetchFinalQuote(
         tokenIn: Token,
         tokenOut: Token,

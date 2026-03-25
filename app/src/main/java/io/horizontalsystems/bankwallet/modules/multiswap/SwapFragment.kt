@@ -22,10 +22,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -118,6 +121,7 @@ class SwapFragment : BaseComposeFragment() {
     data class Input(val tokenIn: Token? = null, val tokenOut: Token? = null) : Parcelable
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwapScreen(
     navController: NavController,
@@ -134,6 +138,53 @@ fun SwapScreen(
     )
     val uiState = viewModel.uiState
     val context = LocalContext.current
+    var showAmlRiskSheet by remember { mutableStateOf(false) }
+    val amlRiskSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    val navigateToSwapConfirm = {
+        navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
+            if (it.success) {
+                if (closeAfterSwap) {
+                    navController.popBackStack()
+                } else {
+                    viewModel.onEnterAmount(null)
+                }
+            }
+        }
+        stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.amlCheckEventFlow.collect { event ->
+            when (event) {
+                AmlCheckEvent.Proceed -> {
+                    if (viewModel.uiState.needToAcceptTerms) {
+                        navController.slideFromRightForResult<SwapTermsFragment.Result>(R.id.swapTermsFragment) {
+                            if (it.accepted) navigateToSwapConfirm()
+                        }
+                    } else {
+                        navigateToSwapConfirm()
+                    }
+                }
+                AmlCheckEvent.RiskDetected,
+                AmlCheckEvent.RiskUnknown,
+                is AmlCheckEvent.Error -> {
+                    showAmlRiskSheet = true
+                }
+            }
+        }
+    }
+
+    if (showAmlRiskSheet) {
+        SwapAmlRiskBottomSheet(
+            sheetState = amlRiskSheetState,
+            onDismiss = { showAmlRiskSheet = false },
+            onChooseAnotherProvider = {
+                showAmlRiskSheet = false
+                navController.slideFromBottom(R.id.swapSelectProvider)
+            },
+        )
+    }
 
     val onClickCoinFrom = {
         navController.slideFromBottomForResult<Token>(
@@ -172,30 +223,7 @@ fun SwapScreen(
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
-        onClickNext = {
-            val navigateToSwapConfirm = {
-                navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
-                    if (it.success) {
-                        if (closeAfterSwap) {
-                            navController.popBackStack()
-                        } else {
-                            viewModel.onEnterAmount(null)
-                        }
-                    }
-                }
-                stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
-            }
-
-            if (uiState.needToAcceptTerms) {
-                navController.slideFromRightForResult<SwapTermsFragment.Result>(R.id.swapTermsFragment) {
-                    if (it.accepted) {
-                        navigateToSwapConfirm.invoke()
-                    }
-                }
-            } else {
-                navigateToSwapConfirm.invoke()
-            }
-        },
+        onClickNext = viewModel::startProceed,
         onActionStarted = {
             viewModel.onActionStarted()
         },
@@ -336,6 +364,18 @@ private fun SwapScreenInner(
                                     .padding(horizontal = 16.dp)
                                     .fillMaxWidth(),
                                 title = stringResource(R.string.Swap_Quoting),
+                                enabled = false,
+                                loadingIndicator = true,
+                                onClick = {}
+                            )
+                        }
+
+                        SwapStep.AmlChecking -> {
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                title = stringResource(R.string.Swap_Proceed),
                                 enabled = false,
                                 loadingIndicator = true,
                                 onClick = {}
