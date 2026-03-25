@@ -21,7 +21,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -54,47 +53,8 @@ class PrivacySettingsFragment : BaseComposeFragment() {
         PrivacyScreen(
             navController = navController,
             torViewModel = torViewModel,
-            showAppRestartAlert = { showAppRestartAlert(torViewModel) },
             restartApp = { restartApp(activity) },
         )
-    }
-
-    private fun showAppRestartAlert(torViewModel: SecurityTorSettingsViewModel) {
-        val warningTitle = if (torViewModel.torCheckEnabled) {
-            Translator.getString(R.string.Tor_Connection_Enable)
-        } else {
-            Translator.getString(R.string.Tor_Connection_Disable)
-        }
-
-        val actionButton = if (torViewModel.torCheckEnabled) {
-            Translator.getString(R.string.Button_Enable)
-        } else {
-            Translator.getString(R.string.Button_Disable)
-        }
-
-//        TODO("xxx nav3")
-//        ConfirmationDialog.show(
-//            icon = R.drawable.ic_tor_connection_24,
-//            title = Translator.getString(R.string.Tor_Alert_Title),
-//            warningTitle = warningTitle,
-//            warningText = Translator.getString(R.string.SettingsSecurity_AppRestartWarning),
-//            actionButtonTitle = actionButton,
-//            transparentButtonTitle = Translator.getString(R.string.Alert_Cancel),
-//            fragmentManager = childFragmentManager,
-//            listener = object : ConfirmationDialog.Listener {
-//                override fun onActionButtonClick() {
-//                    torViewModel.setTorEnabled()
-//                }
-//
-//                override fun onTransparentButtonClick() {
-//                    torViewModel.resetSwitch()
-//                }
-//
-//                override fun onCancelButtonClick() {
-//                    torViewModel.resetSwitch()
-//                }
-//            }
-//        )
     }
 
     private fun restartApp(activity: Activity?) {
@@ -109,7 +69,6 @@ class PrivacySettingsFragment : BaseComposeFragment() {
 fun PrivacyScreen(
     navController: NavBackStack<HSScreen>,
     torViewModel: SecurityTorSettingsViewModel,
-    showAppRestartAlert: () -> Unit = {},
     restartApp: () -> Unit = {},
 ) {
     val viewModel = viewModel<PrivacyViewModel>(factory = PrivacyViewModel.Factory())
@@ -153,7 +112,7 @@ fun PrivacyScreen(
 
             VSpacer(12.dp)
             SectionUniversalLawrence {
-                TorBlock(torViewModel, showAppRestartAlert)
+                TorBlock(torViewModel)
             }
             InfoText(
                 text = stringResource(R.string.SettingsSecurity_TorConnectionDescription),

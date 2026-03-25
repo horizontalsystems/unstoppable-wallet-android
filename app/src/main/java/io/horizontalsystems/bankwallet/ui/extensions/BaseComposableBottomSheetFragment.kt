@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.ui.extensions
 
-import android.content.DialogInterface
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -36,16 +35,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
-open class BaseComposableBottomSheetFragment : HSScreen(bottomSheet = true) {
-
-    open fun onCancel(dialog: DialogInterface) {
-
-    }
-
-    open fun close() {
-        TODO()
-    }
-}
+open class BaseComposableBottomSheetFragment : HSScreen(bottomSheet = true)
 
 @Composable
 fun BottomSheetHeader(
