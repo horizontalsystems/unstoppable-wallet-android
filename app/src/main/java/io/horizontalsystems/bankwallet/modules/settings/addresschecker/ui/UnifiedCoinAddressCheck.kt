@@ -55,12 +55,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
+import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
+import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
@@ -205,12 +207,15 @@ fun UnifiedAddressCheckScreen(
 
 @Composable
 private fun ValidationError(addressValidationError: Throwable) {
-    TextImportantError(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        icon = R.drawable.ic_attention_20,
-        title = stringResource(R.string.SwapSettings_Error_InvalidAddress),
+    AlertCard(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+        format = AlertFormat.Structured,
+        type = AlertType.Critical,
+        titleCustom = stringResource(R.string.SwapSettings_Error_InvalidAddress),
         text = addressValidationError.getErrorMessage()
-            ?: stringResource(R.string.SettingsAddressChecker_InvalidAddress)
+            ?: stringResource(R.string.SettingsAddressChecker_InvalidAddress),
     )
     VSpacer(32.dp)
 }
