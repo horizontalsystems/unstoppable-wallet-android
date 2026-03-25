@@ -32,7 +32,7 @@ class ProChartFragment(val input: Input) : BaseComposableBottomSheetFragment() {
             iconPainter = painterResource(R.drawable.ic_chart_24),
             iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
             title = input.title,
-            onCloseClick = { close() }
+            onCloseClick = { navController.removeLastOrNull() }
         ) {
             Chart(chartViewModel = chartViewModel)
             VSpacer(32.dp)

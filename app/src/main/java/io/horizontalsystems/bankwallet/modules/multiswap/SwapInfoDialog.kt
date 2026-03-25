@@ -24,7 +24,7 @@ class SwapInfoDialog(val input: Input) : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        SwapInfoView(input.title, input.text) { dismiss() }
+        SwapInfoView(input.title, input.text) { navController.removeLastOrNull() }
     }
 
     @Parcelize
