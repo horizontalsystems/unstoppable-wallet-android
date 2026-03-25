@@ -124,12 +124,18 @@ fun MarketSearchScreen(
                 title = TranslatableString.ResString(R.string.Market_Filters),
                 icon = R.drawable.ic_manage_2_24,
                 onClick = {
-                    navController.slideFromRight(R.id.marketAdvancedSearchFragment)
+                    coroutineScope.launch {
+                        if (isSearchActive) {
+                            isSearchActive = false
+                            delay(500)
+                        }
+                        navController.slideFromRight(R.id.marketAdvancedSearchFragment)
 
-                    stat(
-                        page = StatPage.Markets,
-                        event = StatEvent.Open(StatPage.AdvancedSearch)
-                    )
+                        stat(
+                            page = StatPage.Markets,
+                            event = StatEvent.Open(StatPage.AdvancedSearch)
+                        )
+                    }
                 },
             )
         )
