@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -131,16 +132,14 @@ fun PremiumHeader(
     Row(
         modifier = Modifier
             .padding(horizontal = 32.dp)
-            .height(32.dp)
-            .padding(top = 1.dp),
+            .height(44.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(
+        Image(
             modifier = Modifier
                 .padding(end = 10.dp)
                 .size(16.dp),
-            painter = painterResource(R.drawable.star_filled_yellow_16),
-            tint = ComposeAppTheme.colors.jacob,
+            painter = painterResource(R.drawable.premium_filled_24_gradient),
             contentDescription = null,
         )
         subhead1_jacob(

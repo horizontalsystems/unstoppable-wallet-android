@@ -109,15 +109,15 @@ private fun SectionPremiumUniversal(
     content: @Composable() (ColumnScope.() -> Unit),
 ) {
     val brush = Brush.horizontalGradient(
-        0.0f to Color(0xFFFFD000),
-        1.0f to Color(0xFFFFA800),
+        0.0f to Color(0xFFFFAA00),
+        1.0f to Color(0xFFFE4A11),
     )
 
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(16.dp))
-            .border(0.5.dp, brush, RoundedCornerShape(16.dp))
+            .border(1.dp, brush, RoundedCornerShape(16.dp))
             .background(backgroundColor),
         content = content
     )
