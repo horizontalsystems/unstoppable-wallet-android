@@ -13,8 +13,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.FragmentManager
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
@@ -124,7 +124,7 @@ class BottomSheetSelectorMultipleDialog(
         }
         ButtonPrimaryYellow(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 32.dp),
-            title = getString(R.string.Button_Done),
+            title = stringResource(R.string.Button_Done),
             onClick = {
                 if (notifyUnchanged || !equals(selectedIndexes, selected)) {
                     onItemsSelected(selected)
@@ -147,36 +147,6 @@ class BottomSheetSelectorMultipleDialog(
     override fun close() {
         super.close()
         onCancelled?.invoke()
-    }
-
-    companion object {
-        fun show(
-            fragmentManager: FragmentManager,
-            title: String,
-            icon: ImageSource,
-            items: List<BottomSheetSelectorViewItem>,
-            selected: List<Int>,
-            onItemSelected: (List<Int>) -> Unit,
-            onCancelled: (() -> Unit)? = null,
-            warningTitle: String? = null,
-            warning: String? = null,
-            notifyUnchanged: Boolean = false,
-            allowEmpty: Boolean
-        ) {
-            BottomSheetSelectorMultipleDialog(
-                title,
-                icon,
-                items,
-                selected,
-                onItemSelected,
-                onCancelled,
-                warningTitle,
-                warning,
-                notifyUnchanged,
-                allowEmpty
-            )
-                .show(fragmentManager, "selector_dialog")
-        }
     }
 
     data class Config(

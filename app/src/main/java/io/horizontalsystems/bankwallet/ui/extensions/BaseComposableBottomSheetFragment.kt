@@ -31,7 +31,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -45,15 +44,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 open class BaseComposableBottomSheetFragment : HSScreen(bottomSheet = true) {
 
-    fun getString(i: Int) : String {
-        TODO()
-    }
-
     open fun onCancel(dialog: DialogInterface) {
-
-    }
-
-    fun show(fragmentManager: FragmentManager, string: String) {
 
     }
 

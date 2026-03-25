@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
@@ -46,17 +45,5 @@ class ProChartFragment(val input: Input) : BaseComposableBottomSheetFragment() {
         val title: String,
         val chartType: Int,
     ) : Parcelable
-
-    companion object {
-        fun show(
-            fragmentManager: FragmentManager,
-            coinUid: String,
-            title: String,
-            chartType: ProChartModule.ChartType,
-        ) {
-            val fragment = ProChartFragment(Input(coinUid, title, chartType.ordinal))
-            fragment.show(fragmentManager, "pro_chart_dialog")
-        }
-    }
 }
 
