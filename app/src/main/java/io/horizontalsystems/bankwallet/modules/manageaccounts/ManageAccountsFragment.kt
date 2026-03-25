@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -59,8 +60,10 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
     val viewItems = viewModel.viewItems
     val finish = viewModel.finish
 
-    if (finish) {
-        navController.removeLastOrNull()
+    LaunchedEffect(finish) {
+        if (finish) {
+            navController.removeLastOrNull()
+        }
     }
 
     HSScaffold(
