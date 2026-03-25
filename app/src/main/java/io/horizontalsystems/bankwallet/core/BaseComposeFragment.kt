@@ -41,10 +41,6 @@ abstract class BaseComposeFragment(
     fun findNavController(): NavBackStack<HSScreen> {
         TODO()
     }
-
-    fun requireView() : View {
-        TODO()
-    }
 }
 
 abstract class BaseComposeFragmentX(

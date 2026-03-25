@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.tvl
 
+import android.view.View
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -14,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -71,17 +73,28 @@ class TvlFragment : BaseComposeFragment() {
         val tvlChartViewModel = viewModel<TvlChartViewModel>(factory = vmFactory)
         val viewModel = viewModel<TvlViewModel>(factory = vmFactory)
 
-        TvlScreen(viewModel, tvlChartViewModel, navController) { onCoinClick(it, navController) }
+        val view = LocalView.current
+        TvlScreen(viewModel, tvlChartViewModel, navController) {
+            onCoinClick(
+                it,
+                navController,
+                view
+            )
+        }
     }
 
-    private fun onCoinClick(coinUid: String?, navController: NavBackStack<HSScreen>) {
+    private fun onCoinClick(
+        coinUid: String?,
+        navController: NavBackStack<HSScreen>,
+        view: View
+    ) {
         if (coinUid != null) {
             val arguments = CoinFragment.Input(coinUid)
             navController.slideFromRight(CoinFragment(arguments))
 
             stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.OpenCoin(coinUid))
         } else {
-            HudHelper.showWarningMessage(requireView(), R.string.MarketGlobalMetrics_NoCoin)
+            HudHelper.showWarningMessage(view, R.string.MarketGlobalMetrics_NoCoin)
         }
     }
 }
