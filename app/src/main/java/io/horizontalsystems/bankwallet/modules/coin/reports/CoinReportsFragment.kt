@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,13 +32,14 @@ class CoinReportsFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val context = LocalContext.current
         CoinReportsScreen(
             viewModel = viewModel(factory = CoinReportsModule.Factory(input.coinUid)),
             onClickNavigation = {
                 navController.removeLastOrNull()
             },
             onClickReportUrl = {
-                LinkHelper.openLinkInAppBrowser(requireContext(), it)
+                LinkHelper.openLinkInAppBrowser(context, it)
             }
         )
     }
