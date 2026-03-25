@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -84,9 +83,9 @@ fun MarketScreen(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column() {
-                Crossfade(uiState.marketGlobal, label = "") {
-                    MetricsBoard(navController, it, uiState.currency)
-                }
+//                Crossfade(uiState.marketGlobal, label = "") {
+//                    MetricsBoard(navController, it, uiState.currency)
+//                }
                 TabsSection(navController, tabs, uiState.selectedTab) { tab ->
                     viewModel.onSelect(tab)
                 }
