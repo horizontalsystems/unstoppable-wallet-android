@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
@@ -68,12 +69,11 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 class WCSessionBottomSheet(val input: WCSessionModule.Input) : BaseComposableBottomSheetFragment() {
 
-    private val viewModel by viewModels<WCSessionViewModel> {
-        WCSessionModule.Factory(input.sessionTopic)
-    }
-
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val viewModel = viewModel<WCSessionViewModel>(
+            factory = WCSessionModule.Factory(input.sessionTopic)
+        )
         WCSessionScreen(navController, viewModel)
     }
 }

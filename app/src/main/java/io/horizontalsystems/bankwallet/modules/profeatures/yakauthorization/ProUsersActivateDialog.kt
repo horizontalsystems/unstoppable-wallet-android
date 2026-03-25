@@ -12,7 +12,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
@@ -20,10 +22,9 @@ import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFr
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 
 class ProUsersActivateDialog : BaseComposableBottomSheetFragment() {
-    private val authorizationViewModel by navGraphViewModels<YakAuthorizationViewModel>(R.id.coinFragment)
-
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val authorizationViewModel  = navController.viewModelForScreen<YakAuthorizationViewModel>(CoinFragment::class)
         ProUsersActivateScreen(
             { navController.removeLastOrNull() },
             { authorizationViewModel.onActivateClick() }
