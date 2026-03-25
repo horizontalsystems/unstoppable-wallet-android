@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -61,24 +62,24 @@ class PrivacySettingsFragment : BaseComposeFragment() {
 
     private fun showAppRestartAlert(torViewModel: SecurityTorSettingsViewModel) {
         val warningTitle = if (torViewModel.torCheckEnabled) {
-            getString(R.string.Tor_Connection_Enable)
+            Translator.getString(R.string.Tor_Connection_Enable)
         } else {
-            getString(R.string.Tor_Connection_Disable)
+            Translator.getString(R.string.Tor_Connection_Disable)
         }
 
         val actionButton = if (torViewModel.torCheckEnabled) {
-            getString(R.string.Button_Enable)
+            Translator.getString(R.string.Button_Enable)
         } else {
-            getString(R.string.Button_Disable)
+            Translator.getString(R.string.Button_Disable)
         }
 
         ConfirmationDialog.show(
             icon = R.drawable.ic_tor_connection_24,
-            title = getString(R.string.Tor_Alert_Title),
+            title = Translator.getString(R.string.Tor_Alert_Title),
             warningTitle = warningTitle,
-            warningText = getString(R.string.SettingsSecurity_AppRestartWarning),
+            warningText = Translator.getString(R.string.SettingsSecurity_AppRestartWarning),
             actionButtonTitle = actionButton,
-            transparentButtonTitle = getString(R.string.Alert_Cancel),
+            transparentButtonTitle = Translator.getString(R.string.Alert_Cancel),
             fragmentManager = childFragmentManager,
             listener = object : ConfirmationDialog.Listener {
                 override fun onActionButtonClick() {
