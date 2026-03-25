@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.usersubscription
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +44,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -66,39 +64,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
-
-class PremiumFeaturesFragment : BaseFragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(
-                ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
-            )
-            setContent {
-                ComposeAppTheme {
-                    val navController = findNavController()
-//                    TODO("xxx nav3")
-//                    PremiumFeaturesScreen(
-//                        navController = navController,
-//                        navHostController = null,
-//                        onClose = { navController.popBackStack() }
-//                    )
-                }
-            }
-        }
-    }
-
-    @Parcelize
-    data class Input(val action: IPaidAction) : Parcelable
-
-    @Parcelize
-    class Result : Parcelable
-}
 
 class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
 
