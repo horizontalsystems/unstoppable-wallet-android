@@ -38,7 +38,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.Factory
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.CreationExtras
-import androidx.navigation3.runtime.NavBackStack
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -96,11 +95,6 @@ open class BaseComposableBottomSheetFragment : HSScreen(bottomSheet = true) {
     open fun close() {
         TODO()
     }
-
-    fun findNavController(): NavBackStack<HSScreen> {
-        TODO()
-    }
-
 }
 
 open class BaseComposableBottomSheetFragmentX : BottomSheetDialogFragment() {

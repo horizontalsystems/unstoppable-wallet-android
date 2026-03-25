@@ -22,7 +22,7 @@ class IndicatorsAlertDialog : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        IndicatorsAlertScreen(findNavController())
+        IndicatorsAlertScreen(navController)
     }
 
 }
