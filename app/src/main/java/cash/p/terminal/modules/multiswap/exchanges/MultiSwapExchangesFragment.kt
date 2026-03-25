@@ -7,6 +7,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -134,6 +135,10 @@ private fun ExchangeDetailContent(
         startDestination = ExchangeMainRoute,
     ) {
         composable<ExchangeMainRoute> {
+            LifecycleResumeEffect(Unit) {
+                viewModel.resumeTimer()
+                onPauseOrDispose { viewModel.pauseTimer() }
+            }
             MultiSwapExchangeScreen(
                 uiState = viewModel.uiState,
                 timeRemainingProgress = { viewModel.timeRemainingProgress },

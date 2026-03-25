@@ -410,6 +410,14 @@ class MultiSwapExchangeViewModel(
         )
     }
 
+    fun pauseTimer() {
+        timerService.stop()
+    }
+
+    fun resumeTimer() {
+        startTimerIfNeeded()
+    }
+
     fun refreshQuotes() {
         currentSwap?.let { fetchLeg2Quotes(it) }
     }
