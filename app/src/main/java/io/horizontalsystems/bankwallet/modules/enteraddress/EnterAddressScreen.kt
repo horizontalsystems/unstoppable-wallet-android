@@ -199,7 +199,9 @@ private fun AddressCardContainer(
         .clip(RoundedCornerShape(16.dp))
         .border(0.5.dp, ComposeAppTheme.colors.blade, RoundedCornerShape(16.dp))
     if (onClick != null) {
-        modifier = modifier.clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 12.dp)
+        modifier = modifier
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     }
     Column(modifier = modifier) {
         content()
@@ -216,19 +218,16 @@ fun AddressCheck(
     if (addressValidationInProgress) {
         //show nothing
     } else if (addressValidationError != null) {
-        val errorMessage = addressValidationError.getErrorMessage()
-        if (errorMessage != null) {
-            AlertCard(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-                format = AlertFormat.Structured,
-                type = AlertType.Critical,
-                titleCustom = stringResource(R.string.SwapSettings_Error_InvalidAddress),
-                text = errorMessage,
-            )
-            VSpacer(32.dp)
-        }
+        AlertCard(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+            format = AlertFormat.Structured,
+            type = AlertType.Critical,
+            titleCustom = stringResource(R.string.SwapSettings_Error_InvalidAddress),
+            text = stringResource(R.string.Send_Address_Error_InvalidAddress_Description),
+        )
+        VSpacer(32.dp)
     }
 
     if (checkResults.isNotEmpty()) {
