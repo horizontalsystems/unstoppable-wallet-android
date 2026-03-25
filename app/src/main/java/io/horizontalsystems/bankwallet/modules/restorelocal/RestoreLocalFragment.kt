@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.restorelocal
 
 import android.os.Parcelable
 import android.widget.Toast
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -76,6 +77,7 @@ class RestoreLocalFragment(val input: Input) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val activity = LocalActivity.current
         RestoreLocalNavHost(
             input.jsonFile,
             input.fileName,

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.language
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,7 @@ class LanguageSettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val activity = LocalActivity.current
         LanguageScreen(
             navController,
             { activity?.let { MainModule.startAsNewTask(it) } }

@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -26,8 +25,6 @@ abstract class BaseComposeFragment(
         get() = TODO("Not yet implemented")
 
     val childFragmentManager: FragmentManager
-        get() = TODO()
-    val activity: FragmentActivity?
         get() = TODO()
 
     fun getString(i: Int) : String {

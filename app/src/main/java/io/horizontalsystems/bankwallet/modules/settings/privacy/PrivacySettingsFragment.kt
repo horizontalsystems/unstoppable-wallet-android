@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.privacy
 
+import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -48,11 +50,12 @@ class PrivacySettingsFragment : BaseComposeFragment() {
             factory = SecurityTorSettingsModule.Factory()
         )
 
+        val activity = LocalActivity.current
         PrivacyScreen(
             navController = navController,
             torViewModel = torViewModel,
             showAppRestartAlert = { showAppRestartAlert(torViewModel) },
-            restartApp = { restartApp() },
+            restartApp = { restartApp(activity) },
         )
     }
 
@@ -93,7 +96,7 @@ class PrivacySettingsFragment : BaseComposeFragment() {
         )
     }
 
-    private fun restartApp() {
+    private fun restartApp(activity: Activity?) {
         activity?.let {
             MainModule.startAsNewTask(it)
             exitProcess(0)
