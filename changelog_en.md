@@ -1,5 +1,5 @@
 ## 🚀 Version 0.53.0 Update
-_Release date: March 23, 2026_
+_Release date: March 26, 2026_
 
 ### ✨ Improvements
 
@@ -9,10 +9,15 @@ _Release date: March 23, 2026_
 
 - **Improved the logic for displaying the remaining number of blocks after restarting the app**
 
+- **Removed the transaction cancel command from the interface**
+  This command often confused users, since a blockchain transaction cannot actually be canceled.
+
 ### 🐛 Fixes
 
 - **Fixed staking badge behavior for PIRATE**
   Pool activation is now displayed correctly starting from `100 PIRATE`.
+
+- **Fixed TRON network issues caused by HTTP 429 errors from Tron Explorer**
 
 - **Fixed ZEC synchronization getting stuck when switching between wallets**
 
