@@ -28,9 +28,9 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinListOrderable
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
@@ -195,43 +195,39 @@ fun MarketFavoritesScreen(
     }
 
     if (openSortingSelector) {
-        AlertGroup(
+        MenuGroup(
             title = stringResource(R.string.Market_Sort_PopupTitle),
-            select = Select(uiState.sortingField, viewModel.sortingOptions),
-            onSelect = { selected ->
+            items = viewModel.sortingOptions.map {
+                MenuItemX(stringResource(it.titleResId), it == uiState.sortingField, it)
+            },
+            onDismissRequest = { openSortingSelector = false },
+            onSelectItem = { selected ->
                 manualOrderEnabled = false
-                openSortingSelector = false
                 scrollToTopAfterUpdate = true
                 viewModel.onSelectSortingField(selected)
-
                 stat(
                     page = StatPage.Markets,
                     event = StatEvent.SwitchSortType(selected.statSortType),
                     section = StatSection.Watchlist
                 )
-            },
-            onDismiss = {
-                openSortingSelector = false
             }
         )
     }
     if (openPeriodSelector) {
-        AlertGroup(
+        MenuGroup(
             title = stringResource(R.string.CoinPage_Period),
-            select = Select(uiState.period, viewModel.periods),
-            onSelect = { selected ->
-                openPeriodSelector = false
+            items = viewModel.periods.map {
+                MenuItemX(stringResource(it.titleResId), it == uiState.period, it)
+            },
+            onDismissRequest = { openPeriodSelector = false },
+            onSelectItem = { selected ->
                 scrollToTopAfterUpdate = true
                 viewModel.onSelectPeriod(selected)
-
                 stat(
                     page = StatPage.Markets,
                     event = StatEvent.SwitchPeriod(selected.statPeriod),
                     section = StatSection.Watchlist
                 )
-            },
-            onDismiss = {
-                openPeriodSelector = false
             }
         )
     }

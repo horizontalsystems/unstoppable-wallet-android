@@ -29,9 +29,9 @@ import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinListSlidable
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
@@ -149,59 +149,53 @@ fun TopCoins(
     }
 
     if (openSortingSelector) {
-        AlertGroup(
+        MenuGroup(
             title = stringResource(R.string.Market_Sort_PopupTitle),
-            select = Select(uiState.sortingField, uiState.sortingFields),
-            onSelect = { selected ->
+            items = uiState.sortingFields.map {
+                MenuItemX(stringResource(it.titleResId), it == uiState.sortingField, it)
+            },
+            onDismissRequest = { openSortingSelector = false },
+            onSelectItem = { selected ->
                 viewModel.onSelectSortingField(selected)
-                openSortingSelector = false
-
                 stat(
                     page = StatPage.Markets,
                     event = StatEvent.SwitchSortType(selected.statSortType),
                     section = StatSection.Coins
                 )
-            },
-            onDismiss = {
-                openSortingSelector = false
             }
         )
     }
     if (openTopSelector) {
-        AlertGroup(
+        MenuGroup(
             title = stringResource(R.string.Market_Tab_Coins),
-            select = Select(uiState.topMarket, uiState.topMarkets),
-            onSelect = {
+            items = uiState.topMarkets.map {
+                MenuItemX(stringResource(it.titleResId), it == uiState.topMarket, it)
+            },
+            onDismissRequest = { openTopSelector = false },
+            onSelectItem = {
                 viewModel.onSelectTopMarket(it)
-                openTopSelector = false
-
                 stat(
                     page = StatPage.Markets,
                     event = StatEvent.SwitchMarketTop(it.statMarketTop),
                     section = StatSection.Coins
                 )
-            },
-            onDismiss = {
-                openTopSelector = false
             }
         )
     }
     if (openPeriodSelector) {
-        AlertGroup(
+        MenuGroup(
             title = stringResource(R.string.CoinPage_Period),
-            select = Select(uiState.period, uiState.periods),
-            onSelect = { selected ->
+            items = uiState.periods.map {
+                MenuItemX(stringResource(it.titleResId), it == uiState.period, it)
+            },
+            onDismissRequest = { openPeriodSelector = false },
+            onSelectItem = { selected ->
                 viewModel.onSelectPeriod(selected)
-                openPeriodSelector = false
-
                 stat(
                     page = StatPage.Markets,
                     event = StatEvent.SwitchPeriod(selected.statPeriod),
                     section = StatSection.Coins
                 )
-            },
-            onDismiss = {
-                openPeriodSelector = false
             }
         )
     }
