@@ -136,6 +136,12 @@ fun SwapScreen(
         viewModelStoreOwner = currentBackStackEntry!!,
         factory = SwapViewModel.Factory(tokenIn, tokenOut)
     )
+
+    LifecycleResumeEffect(Unit) {
+        viewModel.refreshDefaultTokens()
+        onPauseOrDispose { }
+    }
+
     val uiState = viewModel.uiState
     val context = LocalContext.current
     var showAmlRiskSheet by remember { mutableStateOf(false) }

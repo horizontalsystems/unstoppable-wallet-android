@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -16,14 +17,12 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapHelper
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
@@ -50,6 +49,8 @@ class SwapViewModel(
 ) : ViewModelUiState<SwapUiState>() {
 
     private val quoteLifetime = 20
+    private val hasExplicitTokens = tokenIn != null || tokenOut != null
+    private var tokensManuallySet = false
 
     private var networkState = networkAvailabilityService.stateFlow.value
     private var quoteState = quoteService.stateFlow.value
@@ -151,22 +152,29 @@ class SwapViewModel(
         networkAvailabilityService.start(viewModelScope)
 
 
-        if (tokenIn == null && tokenOut == null) {
-            viewModelScope.launch(Dispatchers.IO) {
-                val (resolvedIn, resolvedOut) = resolveDefaultTokens()
-                resolvedIn?.let {
-                    quoteService.setTokenIn(it)
-                    defaultTokenService.setTokenIn(it)
-                }
-                resolvedOut?.let { quoteService.setTokenOut(it) }
-            }
+        if (!hasExplicitTokens) {
+            refreshDefaultTokens()
         } else {
-            tokenIn?.let {
-                quoteService.setTokenIn(it)
+            applyTokens(tokenIn, tokenOut)
+        }
+    }
+
+    fun refreshDefaultTokens() {
+        if (hasExplicitTokens || tokensManuallySet) return
+        viewModelScope.launch(Dispatchers.IO) {
+            val (resolvedIn, resolvedOut) = resolveDefaultTokens()
+            applyTokens(resolvedIn, resolvedOut)
+        }
+    }
+
+    private fun applyTokens(tokenIn: Token?, tokenOut: Token?) {
+        tokenIn?.let {
+            quoteService.setTokenIn(it)
+            if (tokenOut == null) {
                 defaultTokenService.setTokenIn(it)
             }
-            tokenOut?.let { quoteService.setTokenOut(it) }
         }
+        tokenOut?.let { quoteService.setTokenOut(it) }
     }
 
     private fun resolveDefaultTokens(): Pair<Token?, Token?> {
@@ -278,12 +286,14 @@ class SwapViewModel(
     }
 
     fun onSelectTokenIn(token: Token) {
+        tokensManuallySet = true
         quoteService.setTokenIn(token)
 
         stat(page = StatPage.Swap, event = StatEvent.SwapSelectTokenIn(token))
     }
 
     fun onSelectTokenOut(token: Token) {
+        tokensManuallySet = true
         quoteService.setTokenOut(token)
 
         stat(page = StatPage.Swap, event = StatEvent.SwapSelectTokenOut(token))
