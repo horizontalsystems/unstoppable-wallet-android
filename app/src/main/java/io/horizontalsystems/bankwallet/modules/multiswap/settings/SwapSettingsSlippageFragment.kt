@@ -16,11 +16,11 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.NumberInputWithButtons
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -49,6 +49,7 @@ fun SwapSlippageSettingsScreen(
     navController: NavBackStack<HSScreen>,
     initialSlippage: BigDecimal
 ) {
+    val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<SwapTransactionSlippageViewModel>(
         initializer = SwapTransactionSlippageViewModel.init(initialSlippage)
     )
@@ -76,7 +77,7 @@ fun SwapSlippageSettingsScreen(
                     title = stringResource(id = R.string.Button_Apply),
                     enabled = uiState.applyEnabled,
                     onClick = {
-                        navController.setNavigationResultX(
+                        resultEventBus.sendResult(
                             SwapSettingsSlippageFragment.Result(uiState.slippage)
                         )
                         navController.removeLastOrNull()

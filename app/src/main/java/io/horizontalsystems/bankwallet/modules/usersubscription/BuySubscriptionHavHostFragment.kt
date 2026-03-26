@@ -8,8 +8,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePopup
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumSubscribedScreen
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.parcelize.Parcelize
@@ -34,6 +34,7 @@ fun SubscriptionNavHost(
     navController: NavBackStack<HSScreen>,
     onClose: () -> Unit
 ) {
+    val resultEventBus = LocalResultEventBus.current
     val navHostController = rememberNavController()
     NavHost(
         navController = navHostController,
@@ -50,7 +51,7 @@ fun SubscriptionNavHost(
         composablePopup("premium_subscribed_page") {
             PremiumSubscribedScreen(
                 onCloseClick = {
-                    navController.setNavigationResultX(BuySubscriptionHavHostFragment.Result())
+                    resultEventBus.sendResult(BuySubscriptionHavHostFragment.Result())
                     onClose()
                 }
             )

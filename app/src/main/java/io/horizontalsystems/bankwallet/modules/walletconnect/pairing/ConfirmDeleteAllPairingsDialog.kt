@@ -13,8 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
@@ -35,6 +35,7 @@ class ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
 
 @Composable
 fun ConfirmDeleteAllScreen(navController: NavBackStack<HSScreen>) {
+    val resultEventBus = LocalResultEventBus.current
     ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_delete_20),
@@ -55,7 +56,7 @@ fun ConfirmDeleteAllScreen(navController: NavBackStack<HSScreen>) {
                     .padding(horizontal = 24.dp),
                 title = stringResource(R.string.WalletConnect_Pairings_Delete),
                 onClick = {
-                    navController.setNavigationResultX(ConfirmDeleteAllPairingsDialog.Result(true))
+                    resultEventBus.sendResult(ConfirmDeleteAllPairingsDialog.Result(true))
                     navController.removeLastOrNull()
                 }
             )

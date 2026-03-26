@@ -18,12 +18,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.addFromBottom
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
@@ -55,6 +55,7 @@ private fun TransactionSpeedUpCancelScreen(
     navController: NavBackStack<HSScreen>,
     input: TransactionSpeedUpCancelFragment.Input
 ) {
+    val resultEventBus = LocalResultEventBus.current
     val logger = remember { AppLogger("tx-speedUp-cancel") }
     val view = LocalView.current
 
@@ -106,7 +107,7 @@ private fun TransactionSpeedUpCancelScreen(
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            navController.setNavigationResultX(TransactionSpeedUpCancelFragment.Result(true))
+                            resultEventBus.sendResult(TransactionSpeedUpCancelFragment.Result(true))
                             navController.removeLastOrNull()
                         } catch (t: Throwable) {
                             logger.warning("failed", t)

@@ -74,13 +74,3 @@ fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(screen: HSScr
     add(screen)
 //    TODO("xxx nav3")
 }
-
-fun <T: Parcelable> NavBackStack<HSScreen>.setNavigationResultX(result: T) {
-//    val resultKey = currentBackStackEntry?.arguments?.getString("resultKey")
-//
-//    if (resultKey == null) {
-//        Log.w("AAA", "No key registered to set the result")
-//    } else {
-//        previousBackStackEntry?.savedStateHandle?.set(resultKey, result)
-//    }
-}

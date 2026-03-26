@@ -13,9 +13,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -45,6 +45,7 @@ class SelectContactFragment(val input: Input) : BaseComposeFragment() {
 
 @Composable
 fun SelectContactScreen(navController: NavBackStack<HSScreen>, input: SelectContactFragment.Input?) {
+    val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<SelectContactViewModel>(
         initializer = SelectContactViewModel.init(
             input?.selected,
@@ -72,7 +73,7 @@ fun SelectContactScreen(navController: NavBackStack<HSScreen>, input: SelectCont
                 }
                 items(uiState.items) { contact ->
                     CellContact(contact, uiState.selected) {
-                        navController.setNavigationResultX(SelectContactFragment.Result(contact))
+                        resultEventBus.sendResult(SelectContactFragment.Result(contact))
                         navController.removeLastOrNull()
                     }
                 }

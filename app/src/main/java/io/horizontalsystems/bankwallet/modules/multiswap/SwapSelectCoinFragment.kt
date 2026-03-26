@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 
@@ -27,6 +27,7 @@ private fun SwapSelectCoinScreen(
     token: Token?,
     title: String?
 ) {
+    val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<SwapSelectCoinViewModel>(
         factory = SwapSelectCoinViewModel.Factory(token)
     )
@@ -38,7 +39,7 @@ private fun SwapSelectCoinScreen(
         onSearchTextChanged = viewModel::setQuery,
         onClose = navController::removeLastOrNull
     ) {
-        navController.setNavigationResultX(it.token)
+        resultEventBus.sendResult(it.token)
         navController.removeLastOrNull()
     }
 }

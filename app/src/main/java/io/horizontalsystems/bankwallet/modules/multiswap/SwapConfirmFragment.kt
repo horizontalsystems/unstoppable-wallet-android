@@ -40,7 +40,6 @@ import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -57,6 +56,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactio
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionSettingsFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.viewModelForPrevScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog.Input
@@ -180,6 +180,7 @@ private fun SwapConfirmInternal(
     viewModel: SwapConfirmViewModel,
     uiState: SwapConfirmUiState,
 ) {
+    val resultEventBus = LocalResultEventBus.current
     val coroutineScope = rememberCoroutineScope()
     val view = LocalView.current
 
@@ -247,7 +248,7 @@ private fun SwapConfirmInternal(
 
                                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                                 delay(1200)
-                                navController.setNavigationResultX(SwapConfirmFragment.Result(true))
+                                resultEventBus.sendResult(SwapConfirmFragment.Result(true))
                                 navController.removeLastOrNull()
                             } catch (t: Throwable) {
                                 navController.slideFromBottom(ErrorBottomSheet(

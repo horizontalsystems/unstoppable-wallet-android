@@ -11,8 +11,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
@@ -26,13 +26,14 @@ class AddressRiskyBottomSheetAlert(val input: Input) : BaseComposableBottomSheet
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val resultEventBus = LocalResultEventBus.current
         RiskyAddressAlertView(
             alertText = input.alertText,
             onCloseClick = {
                 navController.removeLastOrNull()
             },
             onContinueClick = {
-                navController.setNavigationResultX(Result(true))
+                resultEventBus.sendResult(Result(true))
             }
         )
     }
