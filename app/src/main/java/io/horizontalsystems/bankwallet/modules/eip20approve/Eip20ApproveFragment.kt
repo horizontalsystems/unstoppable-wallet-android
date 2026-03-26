@@ -14,11 +14,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -51,6 +51,7 @@ class Eip20ApproveFragment(val input: Input) : BaseComposeFragment() {
 
 @Composable
 fun Eip20ApproveScreen(navController: NavBackStack<HSScreen>, input: Eip20ApproveFragment.Input) {
+    val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<Eip20ApproveViewModel>(
         factory = Eip20ApproveViewModel.Factory(
             input.token,
@@ -80,7 +81,7 @@ fun Eip20ApproveScreen(navController: NavBackStack<HSScreen>, input: Eip20Approv
                     onClick = {
                         viewModel.freeze()
                         navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>(Eip20ApproveConfirmFragment()) {
-                            navController.setNavigationResultX(it)
+                            resultEventBus.sendResult(it)
                             navController.removeLastOrNull()
                         }
                     },

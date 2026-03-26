@@ -23,7 +23,6 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.addFromRight
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
@@ -32,6 +31,7 @@ import io.horizontalsystems.bankwallet.modules.eip20approve.SpenderCell
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -62,6 +62,7 @@ class Eip20RevokeConfirmFragment(val input: Input) : BaseComposeFragment() {
 
 @Composable
 fun Eip20RevokeScreen(navController: NavBackStack<HSScreen>, input: Eip20RevokeConfirmFragment.Input) {
+    val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<Eip20RevokeConfirmViewModel>(
         factory = Eip20RevokeConfirmViewModel.Factory(
             input.token,
@@ -98,7 +99,7 @@ fun Eip20RevokeScreen(navController: NavBackStack<HSScreen>, input: Eip20RevokeC
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            navController.setNavigationResultX(Eip20RevokeConfirmFragment.Result(true))
+                            resultEventBus.sendResult(Eip20RevokeConfirmFragment.Result(true))
                             navController.removeLastOrNull()
                         } catch (t: Throwable) {
                             navController.slideFromBottom(ErrorBottomSheet(

@@ -19,9 +19,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -49,10 +49,10 @@ fun TermsScreen(
     navController: NavBackStack<HSScreen>,
     viewModel: TermsViewModel = viewModel(factory = TermsModule.Factory())
 ) {
-
+    val resultEventBus = LocalResultEventBus.current
     LaunchedEffect(viewModel.closeWithTermsAgreed) {
         if (viewModel.closeWithTermsAgreed) {
-            navController.setNavigationResultX(TermsFragment.Result(true))
+            resultEventBus.sendResult(TermsFragment.Result(true))
             navController.removeLastOrNull()
             viewModel.onTermsAgreedConsumed()
         }
@@ -65,7 +65,7 @@ fun TermsScreen(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.setNavigationResultX(TermsFragment.Result(false))
+                    resultEventBus.sendResult(TermsFragment.Result(false))
                     navController.removeLastOrNull()
                 }
             )

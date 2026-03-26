@@ -27,9 +27,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -62,6 +62,7 @@ fun ChooseContactScreen(
     blockchainType: BlockchainType,
     navController: NavBackStack<HSScreen>
 ) {
+    val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<ChooseContactViewModel>(factory = ChooseContactViewModel.Factory(blockchainType))
 
     val items = viewModel.items
@@ -146,7 +147,7 @@ fun ChooseContactScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-                                        navController.setNavigationResultX(ChooseContactFragment.Result(contact.address))
+                                        resultEventBus.sendResult(ChooseContactFragment.Result(contact.address))
                                         navController.removeLastOrNull()
                                     }
                                     .padding(horizontal = 16.dp, vertical = 12.dp)

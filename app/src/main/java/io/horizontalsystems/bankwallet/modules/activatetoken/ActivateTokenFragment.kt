@@ -25,13 +25,13 @@ import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenError
 import io.horizontalsystems.bankwallet.modules.receive.ActivateTokenViewModel
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -66,6 +66,7 @@ fun ActivateTokenScreen(
     navController: NavBackStack<HSScreen>,
     wallet: Wallet,
 ) {
+    val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<ActivateTokenViewModel>(factory = ActivateTokenViewModel.Factory(wallet))
 
     val uiState = viewModel.uiState
@@ -94,7 +95,7 @@ fun ActivateTokenScreen(
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            navController.setNavigationResultX(ActivateTokenFragment.Result(true))
+                            resultEventBus.sendResult(ActivateTokenFragment.Result(true))
                             navController.removeLastOrNull()
                         } catch (t: Throwable) {
                             navController.slideFromBottom(ErrorBottomSheet(

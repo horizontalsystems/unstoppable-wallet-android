@@ -21,8 +21,8 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.paidAction
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -40,12 +40,13 @@ class VaultBlockchainsSelectorFragment(val input: Input) : BaseComposeFragment()
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val resultEventBus = LocalResultEventBus.current
         FilterByBlockchainsScreen(
             input.allBlockchains,
             input.selected,
             navController = navController,
             onDone = { selected ->
-                navController.setNavigationResultX(Result(selected))
+                resultEventBus.sendResult(Result(selected))
                 navController.removeLastOrNull()
             },
         )

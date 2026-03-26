@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.badge
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
@@ -37,6 +36,7 @@ import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.Unlimi
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -68,6 +68,7 @@ class Eip20ApproveConfirmFragment : BaseComposeFragment() {
 
 @Composable
 fun Eip20ApproveConfirmScreen(navController: NavBackStack<HSScreen>) {
+    val resultEventBus = LocalResultEventBus.current
     val viewModel = navController.viewModelForScreen<Eip20ApproveViewModel>(Eip20ApproveFragment::class)
 
     val view = LocalView.current
@@ -98,7 +99,7 @@ fun Eip20ApproveConfirmScreen(navController: NavBackStack<HSScreen>) {
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            navController.setNavigationResultX(Eip20ApproveConfirmFragment.Result(true))
+                            resultEventBus.sendResult(Eip20ApproveConfirmFragment.Result(true))
                             navController.removeLastOrNull()
                         } catch (t: Throwable) {
                             navController.slideFromBottom(ErrorBottomSheet(

@@ -59,7 +59,7 @@ class ResultEventBus {
     /**
      * Sends a result into the channel associated with the given resultKey.
      */
-    inline fun <reified T> sendResult(resultKey: String = T::class.toString(), result: T) {
+    inline fun <reified T> sendResult(result: T, resultKey: String = T::class.toString()) {
         Log.e("AAA", "sendResult, resultKey: $resultKey")
         if (!channelMap.contains(resultKey)) {
             channelMap[resultKey] = Channel(capacity = BUFFERED, onBufferOverflow = BufferOverflow.SUSPEND)
