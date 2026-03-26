@@ -28,8 +28,9 @@ class ActionRevoke(
     override fun getDescription() =
         stringResource(R.string.Approve_RevokeAndApproveInfo, CoinValue(token, allowance).getFormattedFull())
 
-    override fun execute(navController: NavBackStack<HSScreen>, onActionCompleted: () -> Unit) {
-        navController.slideFromBottomForResult<Eip20RevokeConfirmFragment.Result>(
+    @Composable
+    override fun executor(navController: NavBackStack<HSScreen>, onActionCompleted: () -> Unit): () -> Unit {
+        return navController.slideFromBottomForResult<Eip20RevokeConfirmFragment.Result>(
             Eip20RevokeConfirmFragment(
                 Eip20RevokeConfirmFragment.Input(token, spenderAddress, allowance)
             )

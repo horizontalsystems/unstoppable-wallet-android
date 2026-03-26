@@ -254,6 +254,16 @@ fun SendBitcoinScreen(
 
                 VSpacer(16.dp)
 
+                val forResult = fragmentNavController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
+                    AddressRiskyBottomSheetAlert(
+                        AddressRiskyBottomSheetAlert.Input(
+                            alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
+                        )
+                    )
+                ) {
+                    openConfirm(fragmentNavController, sendEntryPointDestId)
+                }
+
                 ButtonPrimaryYellow(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -262,15 +272,7 @@ fun SendBitcoinScreen(
                     onClick = {
                         if (riskyAddress) {
                             keyboardController?.hide()
-                            fragmentNavController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
-                                AddressRiskyBottomSheetAlert(
-                                    AddressRiskyBottomSheetAlert.Input(
-                                        alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
-                                    )
-                                )
-                            ) {
-                                openConfirm(fragmentNavController, sendEntryPointDestId)
-                            }
+                            forResult()
                         } else {
                             openConfirm(fragmentNavController, sendEntryPointDestId)
                         }

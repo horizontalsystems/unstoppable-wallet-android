@@ -33,7 +33,6 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 
 @Composable
@@ -115,6 +114,20 @@ fun SendEvmScreen(
                 rate = viewModel.coinRate
             )
 
+            val forResult = navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
+                AddressRiskyBottomSheetAlert(
+                    AddressRiskyBottomSheetAlert.Input(
+                        alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
+                    )
+                )
+            ) {
+                openSendConfirm(
+                    viewModel,
+                    navController,
+                    sendEntryPointDestId
+                )
+            }
+
             ButtonPrimaryYellow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -126,24 +139,10 @@ fun SendEvmScreen(
                         HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)
                     } else if (riskyAddress) {
                         keyboardController?.hide()
-                        navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
-                            AddressRiskyBottomSheetAlert(
-                                AddressRiskyBottomSheetAlert.Input(
-                                    alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
-                                )
-                            )
-                        ) {
-                            openSendConfirm(
-                                sendData,
-                                viewModel.wallet.token.blockchainType,
-                                navController,
-                                sendEntryPointDestId
-                            )
-                        }
+                        forResult()
                     } else {
                         openSendConfirm(
-                            sendData,
-                            viewModel.wallet.token.blockchainType,
+                            viewModel,
                             navController,
                             sendEntryPointDestId
                         )
@@ -156,16 +155,18 @@ fun SendEvmScreen(
 }
 
 private fun openSendConfirm(
-    sendEvmData: SendEvmData,
-    blockchainType: BlockchainType,
+    viewModel: SendEvmViewModel,
     navController: NavBackStack<HSScreen>,
     sendEntryPointDestId: Int
 ) {
-    navController.slideFromRight(
-        SendEvmConfirmationFragment(SendEvmConfirmationFragment.Input(
-            sendData = sendEvmData,
-            blockchainType = blockchainType,
-            sendEntryPointDestId = sendEntryPointDestId
-        ))
-    )
+    val blockchainType = viewModel.wallet.token.blockchainType
+    viewModel.getSendData()?.let {
+        navController.slideFromRight(
+            SendEvmConfirmationFragment(SendEvmConfirmationFragment.Input(
+                sendData = it,
+                blockchainType = blockchainType,
+                sendEntryPointDestId = sendEntryPointDestId
+            ))
+        )
+    }
 }

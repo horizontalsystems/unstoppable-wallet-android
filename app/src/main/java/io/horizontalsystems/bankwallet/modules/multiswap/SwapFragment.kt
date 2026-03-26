@@ -216,12 +216,10 @@ fun SwapScreen(
         )
     }
 
-    val onClickCoinFrom = {
-        navController.slideFromBottomForResult<Token>(
-            SwapSelectCoinFragment(SwapSelectCoinFragment.Input(uiState.tokenOut, context.getString(R.string.Swap_YouPay)))
-        ) {
-            viewModel.onSelectTokenIn(it)
-        }
+    val onClickCoinFrom = navController.slideFromBottomForResult<Token>(
+        SwapSelectCoinFragment(SwapSelectCoinFragment.Input(uiState.tokenOut, context.getString(R.string.Swap_YouPay)))
+    ) {
+        viewModel.onSelectTokenIn(it)
     }
 
 //    LaunchedEffect(Unit) {
@@ -235,12 +233,10 @@ fun SwapScreen(
         uiState = uiState,
         onClickClose = onClickClose,
         onClickCoinFrom = onClickCoinFrom,
-        onClickCoinTo = {
-            navController.slideFromBottomForResult<Token>(
-                SwapSelectCoinFragment(SwapSelectCoinFragment.Input(uiState.tokenIn, context.getString(R.string.Swap_YouGet))),
-            ) {
-                viewModel.onSelectTokenOut(it)
-            }
+        onClickCoinTo = navController.slideFromBottomForResult<Token>(
+            SwapSelectCoinFragment(SwapSelectCoinFragment.Input(uiState.tokenIn, context.getString(R.string.Swap_YouGet))),
+        ) {
+            viewModel.onSelectTokenOut(it)
         },
         onSwitchPairs = viewModel::onSwitchPairs,
         onEnterAmount = viewModel::onEnterAmount,
@@ -440,6 +436,8 @@ private fun SwapScreenInner(
                                 action.getTitle()
                             }
 
+                            val executor = action.executor(navController, onActionCompleted)
+
                             ButtonPrimaryDefault(
                                 modifier = Modifier
                                     .padding(horizontal = 16.dp)
@@ -448,7 +446,7 @@ private fun SwapScreenInner(
                                 enabled = !action.inProgress,
                                 onClick = {
                                     onActionStarted.invoke()
-                                    action.execute(navController, onActionCompleted)
+                                    executor()
                                 },
                                 loadingIndicator = action.inProgress
                             )
