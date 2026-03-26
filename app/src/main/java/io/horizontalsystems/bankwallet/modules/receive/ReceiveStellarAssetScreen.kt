@@ -49,14 +49,12 @@ fun ReceiveStellarAssetScreen(navController: NavBackStack<HSScreen>, wallet: Wal
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
 
-    val runActivation = {
-        navController.slideFromBottomForResult<ActivateTokenFragment.Result>(
-            ActivateTokenFragment(wallet)
-        ) {
-            scope.launch {
-                viewModel.onActivationResult(it.activated)
-                sheetState.hide()
-            }
+    val runActivation = navController.slideFromBottomForResult<ActivateTokenFragment.Result>(
+        ActivateTokenFragment(wallet)
+    ) {
+        scope.launch {
+            viewModel.onActivationResult(it.activated)
+            sheetState.hide()
         }
     }
 

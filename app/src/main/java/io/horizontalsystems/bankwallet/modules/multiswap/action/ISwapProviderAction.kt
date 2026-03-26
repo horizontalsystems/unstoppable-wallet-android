@@ -16,5 +16,6 @@ interface ISwapProviderAction {
     @Composable
     fun getDescription() : String? = null
 
-    fun execute(navController: NavBackStack<HSScreen>, onActionCompleted: () -> Unit)
+    @Composable
+    fun executor(navController: NavBackStack<HSScreen>, onActionCompleted: () -> Unit): () -> Unit
 }

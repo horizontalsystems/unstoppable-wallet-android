@@ -110,6 +110,16 @@ fun SendSolanaScreen(
                 rate = viewModel.coinRate
             )
 
+            val forResult = navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
+                AddressRiskyBottomSheetAlert(
+                    AddressRiskyBottomSheetAlert.Input(
+                        alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
+                    )
+                )
+            ) {
+                openConfirm(navController, sendEntryPointDestId)
+            }
+
             ButtonPrimaryYellow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -120,15 +130,7 @@ fun SendSolanaScreen(
                         HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)
                     } else if (riskyAddress) {
                         keyboardController?.hide()
-                        navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
-                            AddressRiskyBottomSheetAlert(
-                                AddressRiskyBottomSheetAlert.Input(
-                                    alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
-                                )
-                            )
-                        ) {
-                            openConfirm(navController, sendEntryPointDestId)
-                        }
+                        forResult()
                     } else {
                         openConfirm(navController, sendEntryPointDestId)
                     }
