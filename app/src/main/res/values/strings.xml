@@ -773,8 +773,8 @@
     <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Your transaction may be frontrun</string>
 
-    <string name="SwapSort_BestPrice">Best Price</string>
-    <string name="SwapSort_BestTime">Best Time</string>
+    <string name="SwapSort_BestRate">Best Rate</string>
+    <string name="SwapSort_BestTime">Fastest</string>
 
     <string name="RiskLevel_ProviderRiskLevel">Provider Risk Levels</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">The labels below explain different risk levels of swap providers. Choose accordingly.</string>

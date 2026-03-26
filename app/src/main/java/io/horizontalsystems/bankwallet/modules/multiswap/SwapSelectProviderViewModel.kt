@@ -121,6 +121,6 @@ data class QuoteViewItem(
 )
 
 enum class ProviderSortType(val title: Int) {
-    BestPrice(R.string.SwapSort_BestPrice),
+    BestPrice(R.string.SwapSort_BestRate),
     BestTime(R.string.SwapSort_BestTime),
 }
