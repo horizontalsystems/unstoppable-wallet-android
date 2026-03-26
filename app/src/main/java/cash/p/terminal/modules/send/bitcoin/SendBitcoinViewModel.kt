@@ -130,29 +130,35 @@ class SendBitcoinViewModel(
         addressService.setAddress(address)
     }
 
-    override fun createState() = SendBitcoinUiState(
-        availableBalance = amountState.availableBalance,
-        amount = amountState.amount,
-        feeRate = feeRateState.feeRate,
-        address = addressState.validAddress,
-        memo = memo,
-        isMemoAvailable = isMemoAvailable,
-        fee = fee,
-        lockTimeInterval = pluginState.lockTimeInterval,
-        addressError = addressState.addressError,
-        amountCaution = amountState.amountCaution,
-        feeRateCaution = feeRateState.feeRateCaution,
-        canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
-        showAddressInput = showAddressInput,
-        utxoData = if (utxoExpertModeEnabled) utxoData else null,
-        isAdvancedSettingsAvailable = isAdvancedSettingsAvailable
-    )
+    override fun createState(): SendBitcoinUiState {
+        val poison = isAddressSuspicious(addressState.validAddress?.hex)
+        return SendBitcoinUiState(
+            availableBalance = amountState.availableBalance,
+            amount = amountState.amount,
+            feeRate = feeRateState.feeRate,
+            address = addressState.validAddress,
+            memo = memo,
+            isMemoAvailable = isMemoAvailable,
+            fee = fee,
+            lockTimeInterval = pluginState.lockTimeInterval,
+            addressError = addressState.addressError,
+            amountCaution = amountState.amountCaution,
+            feeRateCaution = feeRateState.feeRateCaution,
+            canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend && (!poison || riskAccepted),
+            showAddressInput = showAddressInput,
+            utxoData = if (utxoExpertModeEnabled) utxoData else null,
+            isAdvancedSettingsAvailable = isAdvancedSettingsAvailable,
+            isPoisonAddress = poison,
+            riskAccepted = riskAccepted,
+        )
+    }
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
     }
 
     fun onEnterAddress(address: Address?) {
+        resetRiskAccepted()
         addressService.setAddress(address)
     }
 
@@ -331,6 +337,7 @@ class SendBitcoinViewModel(
             val isQueued = adapter.isTransactionInSendQueue(transactionRecord)
 
             logger.info("success, queued=$isQueued")
+            onSendSuccess(addressState.validAddress?.hex)
             sendResult = if (isQueued) {
                 SendResult.SentButQueued(transactionRecord)
             } else {
@@ -378,5 +385,7 @@ data class SendBitcoinUiState(
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
     val utxoData: SendBitcoinModule.UtxoData?,
-    val isAdvancedSettingsAvailable: Boolean
+    val isAdvancedSettingsAvailable: Boolean,
+    val isPoisonAddress: Boolean = false,
+    val riskAccepted: Boolean = false,
 )

@@ -126,6 +126,7 @@ private class FakeAppDatabase(
     override fun pendingTransactionDao() = unsupported()
     override fun zcashSingleUseAddressDao() = unsupported()
     override fun userDeletedWalletDao() = unsupported()
+    override fun poisonAddressDao() = unsupported()
 
     private fun unsupported(): Nothing = throw NotImplementedError()
     override fun createInvalidationTracker() = unsupported()

@@ -15,4 +15,6 @@ data class SendUiState(
     val cautions: List<CautionViewItem> = emptyList(),
     val fee: BigDecimal? = null,
     val feeLoading: Boolean = false,
+    val isPoisonAddress: Boolean = false,
+    val riskAccepted: Boolean = false,
 )

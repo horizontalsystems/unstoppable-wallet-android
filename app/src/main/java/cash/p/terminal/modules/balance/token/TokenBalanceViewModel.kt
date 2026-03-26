@@ -11,6 +11,7 @@ import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.managers.AmlStatusManager
+import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.core.managers.MarketFavoritesManager
@@ -103,6 +104,7 @@ class TokenBalanceViewModel(
         getKoinInstance()
     private val adapterManager: IAdapterManager = getKoinInstance()
     private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage = getKoinInstance()
+    private val poisonAddressManager: PoisonAddressManager = getKoinInstance()
 
     private val title = wallet.token.coin.name
 
@@ -112,6 +114,7 @@ class TokenBalanceViewModel(
         transactionsService.syncingFlow.value || !transactionsService.recordsLoadedFlow.value
     private var hasHiddenTransactions: Boolean = false
     private var amlPromoAlertEnabled = premiumSettings.getAmlCheckShowAlert()
+    private var lastAddressPoisoningViewMode = localStorage.addressPoisoningViewMode
 
     // Maps transaction record UID to SwapProviderTransaction for reactive updates
     private var swapStatusMap = emptyMap<String, SwapProviderTransaction>()
@@ -240,6 +243,14 @@ class TokenBalanceViewModel(
 
         viewModelScope.launch {
             contactsRepository.contactsFlow.collect {
+                transactionViewItem2Factory.clearCache()
+                refreshTransactionsFromCache()
+            }
+        }
+
+        viewModelScope.launch {
+            poisonAddressManager.poisonDbChangedFlow.collect {
+                transactionViewItem2Factory.clearCache()
                 refreshTransactionsFromCache()
             }
         }
@@ -331,6 +342,15 @@ class TokenBalanceViewModel(
         val currentItems = transactionsService.transactionItemsFlow.value
         if (currentItems.isNotEmpty()) {
             updateTransactions(currentItems)
+        }
+    }
+
+    fun refreshTransactionDisplaySettings() {
+        val current = localStorage.addressPoisoningViewMode
+        if (current != lastAddressPoisoningViewMode) {
+            lastAddressPoisoningViewMode = current
+            transactionViewItem2Factory.updateCache()
+            refreshTransactionsFromCache()
         }
     }
 

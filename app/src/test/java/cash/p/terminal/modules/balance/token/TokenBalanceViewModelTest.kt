@@ -7,6 +7,7 @@ import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.managers.StackingManager
+import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningViewMode
 import cash.p.terminal.modules.displayoptions.DisplayDiffOptionType
 import cash.p.terminal.modules.displayoptions.DisplayPricePeriod
 import cash.p.terminal.core.managers.TransactionHiddenManager
@@ -442,6 +443,90 @@ class TokenBalanceViewModelTest : KoinTest {
         advanceUntilIdle()
 
         assertEquals(TokenBalanceModule.StakingStatus.ACTIVE, viewModel.uiState.stakingStatus)
+    }
+
+    // endregion
+
+    // region Address Poisoning View Mode Tests
+
+    @Test
+    fun refreshTransactionDisplaySettings_modeNotChanged_doesNotRefresh() = runTest(dispatcher) {
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.STANDARD
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        clearMocks(transactionViewItemFactory, answers = false)
+
+        viewModel.refreshTransactionDisplaySettings()
+
+        verify(exactly = 0) { transactionViewItemFactory.updateCache() }
+    }
+
+    @Test
+    fun refreshTransactionDisplaySettings_modeChanged_refreshesCache() = runTest(dispatcher) {
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.STANDARD
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        clearMocks(transactionViewItemFactory, answers = false)
+
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.COMPACT
+
+        viewModel.refreshTransactionDisplaySettings()
+
+        verify(exactly = 1) { transactionViewItemFactory.updateCache() }
+    }
+
+    @Test
+    fun refreshTransactionDisplaySettings_modeChangedBack_refreshesTwice() = runTest(dispatcher) {
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.STANDARD
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        clearMocks(transactionViewItemFactory, answers = false)
+
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.COMPACT
+        viewModel.refreshTransactionDisplaySettings()
+
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.STANDARD
+        viewModel.refreshTransactionDisplaySettings()
+
+        verify(exactly = 2) { transactionViewItemFactory.updateCache() }
+    }
+
+    @Test
+    fun refreshTransactionDisplaySettings_calledTwiceWithoutChange_refreshesOnlyOnce() = runTest(dispatcher) {
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.STANDARD
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        clearMocks(transactionViewItemFactory, answers = false)
+
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.COMPACT
+        viewModel.refreshTransactionDisplaySettings()
+        viewModel.refreshTransactionDisplaySettings()
+
+        verify(exactly = 1) { transactionViewItemFactory.updateCache() }
+    }
+
+    @Test
+    fun refreshTransactionDisplaySettings_modeChanged_reprocessesTransactions() = runTest(dispatcher) {
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.STANDARD
+
+        transactionItemsFlow.value = listOf(
+            createTransactionItem("tx-1"),
+            createTransactionItem("tx-2")
+        )
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.COMPACT
+
+        viewModel.refreshTransactionDisplaySettings()
+
+        verify(exactly = 1) { transactionViewItemFactory.updateCache() }
+        assertEquals(2, viewModel.uiState.transactions?.values?.flatten()?.size)
     }
 
     // endregion

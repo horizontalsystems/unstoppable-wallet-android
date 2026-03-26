@@ -25,6 +25,8 @@ import cash.p.terminal.modules.transactions.AmlCheckRow
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.components.AlertGroup
 import cash.p.terminal.ui_compose.Select
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.HsSettingCell
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.VSpacer
@@ -40,6 +42,7 @@ fun AssetSettingsScreen(
     onPricePeriodChange: (DisplayPricePeriod) -> Unit,
     onDisplayDiffOptionTypeChange: (DisplayDiffOptionType) -> Unit,
     onRoundingAmountChange: (Boolean) -> Unit,
+    onAddressPoisoningViewClick: () -> Unit,
     navController: NavController,
     onBack: () -> Unit,
 ) {
@@ -91,6 +94,16 @@ fun AssetSettingsScreen(
                 },
                 onRoundingAmountToggled = onRoundingAmountChange,
             )
+            VSpacer(32.dp)
+            CellUniversalLawrenceSection(
+                listOf {
+                    HsSettingCell(
+                        title = R.string.address_poisoning_view,
+                        icon = R.drawable.ic_flask_20,
+                        onClick = onAddressPoisoningViewClick
+                    )
+                }
+            )
         }
     }
 
@@ -131,6 +144,7 @@ private fun AssetSettingsScreenPreview() {
             onPricePeriodChange = {},
             onDisplayDiffOptionTypeChange = {},
             onRoundingAmountChange = {},
+            onAddressPoisoningViewClick = {},
             navController = rememberNavController(),
             onBack = {},
         )

@@ -19,6 +19,7 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.ui_compose.components.HudHelper
 import io.horizontalsystems.core.ViewModelUiState
@@ -34,6 +35,7 @@ abstract class BaseSendViewModel<T>(
     private val _adapterManager = adapterManager
     private val marketKit: MarketKitWrapper by inject(MarketKitWrapper::class.java)
     private val balanceHiddenManager: IBalanceHiddenManager by inject(IBalanceHiddenManager::class.java)
+    private val poisonAddressManager: PoisonAddressManager by inject(PoisonAddressManager::class.java)
 
     var isSynced by mutableStateOf(true)
         private set
@@ -59,6 +61,28 @@ abstract class BaseSendViewModel<T>(
 
     var balanceHidden by mutableStateOf(balanceHiddenManager.balanceHiddenFlow.value)
         private set
+
+    var riskAccepted by mutableStateOf(false)
+        private set
+
+    fun onRiskAcceptedChange(accepted: Boolean) {
+        riskAccepted = accepted
+        emitState()
+    }
+
+    protected fun resetRiskAccepted() {
+        riskAccepted = false
+    }
+
+    protected fun isAddressSuspicious(address: String?): Boolean {
+        return poisonAddressManager.isAddressSuspicious(address, wallet.token.blockchainType)
+    }
+
+    protected fun onSendSuccess(address: String?) {
+        address?.let {
+            poisonAddressManager.saveKnownAddress(it, wallet.token.blockchainType)
+        }
+    }
 
     val displayBalance: BigDecimal?
         get() = _adapterManager.getAdjustedBalanceDataForToken(wallet.token)?.available

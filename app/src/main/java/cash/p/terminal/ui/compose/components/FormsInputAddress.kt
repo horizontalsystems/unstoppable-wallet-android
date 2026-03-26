@@ -21,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
@@ -59,7 +60,8 @@ fun FormsInputAddress(
     chooseContactEnable: Boolean,
     blockchainType: BlockchainType?,
     onQrScanClick: () -> Unit,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    isPoisonAddress: Boolean = false,
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -146,12 +148,21 @@ fun FormsInputAddress(
 
                 is DataState.Success -> {
                     if (showStateIcon) {
-                        Icon(
-                            modifier = Modifier.padding(end = 8.dp),
-                            painter = painterResource(id = R.drawable.ic_check_20),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.remus
-                        )
+                        if (isPoisonAddress) {
+                            Icon(
+                                modifier = Modifier.padding(end = 8.dp),
+                                painter = painterResource(id = R.drawable.ic_trust_suspicious_20),
+                                contentDescription = null,
+                                tint = Color.Unspecified
+                            )
+                        } else {
+                            Icon(
+                                modifier = Modifier.padding(end = 8.dp),
+                                painter = painterResource(id = R.drawable.ic_check_20),
+                                contentDescription = null,
+                                tint = ComposeAppTheme.colors.remus
+                            )
+                        }
                     } else {
                         HSpacer(28.dp)
                     }

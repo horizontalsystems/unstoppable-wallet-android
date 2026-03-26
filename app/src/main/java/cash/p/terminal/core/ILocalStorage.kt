@@ -6,6 +6,7 @@ import cash.p.terminal.entities.SyncMode
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.displayoptions.DisplayDiffOptionType
 import cash.p.terminal.modules.displayoptions.DisplayPricePeriod
+import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningViewMode
 import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.favorites.WatchlistSorting
@@ -110,6 +111,8 @@ interface ILocalStorage : ILoggingSettings, ISmsNotificationSettings {
     val displayDiffPricePeriodFlow: StateFlow<DisplayPricePeriod>
     var displayDiffOptionType: DisplayDiffOptionType
     val displayDiffOptionTypeFlow: StateFlow<DisplayDiffOptionType>
+
+    var addressPoisoningViewMode: AddressPoisoningViewMode
 
     var passphraseTermsAgreed: Boolean
     var safetyRulesAgreed: Boolean

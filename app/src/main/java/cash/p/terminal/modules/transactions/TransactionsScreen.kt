@@ -27,9 +27,10 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,7 +41,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import android.os.Build
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
@@ -60,6 +63,10 @@ import cash.p.terminal.core.premiumAction
 import cash.p.terminal.modules.balance.BalanceAccountsViewModel
 import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.BalanceScreenState
+import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningViewMode
+import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
+import cash.p.terminal.modules.transactions.poison_status.PoisonStatusBadge
+import cash.p.terminal.modules.transactions.poison_status.TransactionStatusesInfoSheet
 import cash.p.terminal.navigation.slideFromBottom
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.strings.helpers.TranslatableString
@@ -68,17 +75,19 @@ import cash.p.terminal.ui_compose.ColorName
 import cash.p.terminal.ui_compose.ColoredValue
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.ColumnUniversal
 import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
 import cash.p.terminal.ui_compose.components.HeaderStick
 import cash.p.terminal.ui_compose.components.HsImage
 import cash.p.terminal.ui_compose.components.HudHelper
 import cash.p.terminal.ui_compose.components.MenuItem
-import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.ScrollableTabs
 import cash.p.terminal.ui_compose.components.SectionUniversalItem
 import cash.p.terminal.ui_compose.components.SnackbarDuration
 import cash.p.terminal.ui_compose.components.TabItem
+import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.entities.SectionItemPosition
 import cash.p.terminal.ui_compose.entities.ViewState
@@ -388,6 +397,11 @@ fun TransactionCell(
     onValueClick: () -> Unit,
     onClick: () -> Unit
 ) {
+    var showStatusesInfo by remember { mutableStateOf(false) }
+
+    if (showStatusesInfo) {
+        TransactionStatusesInfoSheet(onDismiss = { showStatusesInfo = false })
+    }
     val divider = position == SectionItemPosition.Middle || position == SectionItemPosition.Last
     SectionUniversalItem(
         borderTop = divider,
@@ -433,181 +447,245 @@ fun TransactionCell(
                 AmlLoadingIndicator()
             }
 
-            RowUniversal(
+            val isScam = item.poisonStatus == PoisonStatus.SUSPICIOUS
+            val blurModifier = if (isScam && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                Modifier.blur(3.dp)
+            } else if (isScam) {
+                Modifier.alpha(0.15f)
+            } else {
+                Modifier
+            }
+
+            ColumnUniversal(
                 modifier = Modifier.fillMaxSize()
             ) {
+                Row {
+                    TransactionIconBox(item)
+                    TransactionContentRow(
+                        item = item,
+                        showAmount = showAmount,
+                        blurModifier = blurModifier,
+                        onValueClick = onValueClick,
+                    )
+                }
+                if (item.addressPoisoningViewMode == AddressPoisoningViewMode.STANDARD) {
+                    VSpacer(6.dp)
+                    body_leah(
+                        text = if (showAmount) item.subtitle else "*****",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .then(blurModifier)
+                            .padding(horizontal = 12.dp),
+                        maxLines = 1,
+                    )
+                    VSpacer(11.dp)
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = ComposeAppTheme.colors.steel10,
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    )
+                    PoisonStatusBadge(
+                        poisonStatus = item.poisonStatus,
+                        modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 5.dp),
+                        onInfoClick = { showStatusesInfo = true },
+                    )
+                } else {
+                    VSpacer(11.dp)
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = ComposeAppTheme.colors.steel10,
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    )
+                    VSpacer(6.dp)
+                    PoisonStatusBadge(
+                        poisonStatus = item.poisonStatus,
+                        text = if (showAmount) item.subtitle else "*****",
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        onInfoClick = { showStatusesInfo = true },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TransactionIconBox(item: TransactionViewItem) {
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .size(42.dp)
+            .alpha(if (item.spam) 0.5f else 1f),
+        contentAlignment = Alignment.Center
+    ) {
+        item.progress?.let { progress ->
+            HSCircularProgressIndicator(progress)
+        }
+        when (val icon = item.icon) {
+            TransactionViewItem.Icon.Failed -> {
+                Icon(
+                    painter = painterResource(R.drawable.ic_attention_24),
+                    tint = ComposeAppTheme.colors.lucian,
+                    contentDescription = null
+                )
+            }
+
+            is TransactionViewItem.Icon.Platform -> {
+                Icon(
+                    modifier = Modifier.size(32.dp),
+                    painter = painterResource(icon.iconRes ?: R.drawable.coin_placeholder),
+                    tint = ComposeAppTheme.colors.leah,
+                    contentDescription = null
+                )
+            }
+
+            is TransactionViewItem.Icon.Regular -> {
+                val shape =
+                    if (icon.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
+                HsImage(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(shape),
+                    url = icon.url,
+                    alternativeUrl = icon.alternativeUrl,
+                    placeholder = icon.placeholder
+                )
+            }
+
+            is TransactionViewItem.Icon.Double -> {
+                val backShape =
+                    if (icon.back.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
+                val frontShape =
+                    if (icon.front.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
+                HsImage(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(top = 4.dp, start = 6.dp)
+                        .size(24.dp)
+                        .clip(backShape),
+                    url = icon.back.url,
+                    alternativeUrl = icon.back.alternativeUrl,
+                    placeholder = icon.back.placeholder,
+                )
+
                 Box(
                     modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .size(42.dp)
-                        .alpha(if (item.spam) 0.5f else 1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    item.progress?.let { progress ->
-                        HSCircularProgressIndicator(progress)
-                    }
-                    when (val icon = item.icon) {
-                        TransactionViewItem.Icon.Failed -> {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_attention_24),
-                                tint = ComposeAppTheme.colors.lucian,
-                                contentDescription = null
-                            )
-                        }
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 4.5.dp, end = 6.5.dp)
+                        .size(24.dp)
+                        .clip(frontShape)
+                        .background(ComposeAppTheme.colors.tyler)
+                )
 
-                        is TransactionViewItem.Icon.Platform -> {
-                            Icon(
-                                modifier = Modifier.size(32.dp),
-                                painter = painterResource(icon.iconRes ?: R.drawable.coin_placeholder),
-                                tint = ComposeAppTheme.colors.leah,
-                                contentDescription = null
-                            )
-                        }
-
-                        is TransactionViewItem.Icon.Regular -> {
-                            val shape =
-                                if (icon.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
-                            HsImage(
-                                modifier = Modifier
-                                    .size(32.dp)
-                                    .clip(shape),
-                                url = icon.url,
-                                alternativeUrl = icon.alternativeUrl,
-                                placeholder = icon.placeholder
-                            )
-                        }
-
-                        is TransactionViewItem.Icon.Double -> {
-                            val backShape =
-                                if (icon.back.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
-                            val frontShape =
-                                if (icon.front.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
-                            HsImage(
-                                modifier = Modifier
-                                    .align(Alignment.TopStart)
-                                    .padding(top = 4.dp, start = 6.dp)
-                                    .size(24.dp)
-                                    .clip(backShape),
-                                url = icon.back.url,
-                                alternativeUrl = icon.back.alternativeUrl,
-                                placeholder = icon.back.placeholder,
-                            )
-
-                            Box(
-                                modifier = Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .padding(bottom = 4.5.dp, end = 6.5.dp)
-                                    .size(24.dp)
-                                    .clip(frontShape)
-                                    .background(ComposeAppTheme.colors.tyler)
-                            )
-
-                            HsImage(
-                                modifier = Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .padding(bottom = 4.dp, end = 6.dp)
-                                    .size(24.dp)
-                                    .clip(frontShape),
-                                url = icon.front.url,
-                                alternativeUrl = icon.front.alternativeUrl,
-                                placeholder = icon.front.placeholder,
-                            )
-                        }
-
-                        is TransactionViewItem.Icon.ImageResource -> {}
-                    }
-                }
-                Row(
+                HsImage(
                     modifier = Modifier
-                        .padding(end = 16.dp)
-                        .alpha(if (item.spam) 0.5f else 1f),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 8.dp),
-                        verticalArrangement = Arrangement.spacedBy(1.dp)
-                    ) {
-                        body_leah(
-                            modifier = Modifier.padding(end = 24.dp),
-                            text = item.title,
-                            maxLines = 1,
-                        )
-                        subhead2_grey(
-                            text = if (showAmount) item.subtitle else "*****",
-                            maxLines = 2,
-                        )
-                    }
-                    Column(
-                        modifier = Modifier.wrapContentWidth(),
-                        verticalArrangement = Arrangement.spacedBy(1.dp),
-                        horizontalAlignment = Alignment.End
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            item.primaryValue?.let { coloredValue ->
-                                Text(
-                                    text = if (showAmount) coloredValue.value else "*****",
-                                    style = ComposeAppTheme.typography.body,
-                                    color = coloredValue.color.compose(),
-                                    overflow = TextOverflow.Ellipsis,
-                                    maxLines = 1,
-                                    modifier = Modifier.clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        indication = null,
-                                        onClick = onValueClick,
-                                    )
-                                )
-                            }
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 4.dp, end = 6.dp)
+                        .size(24.dp)
+                        .clip(frontShape),
+                    url = icon.front.url,
+                    alternativeUrl = icon.front.alternativeUrl,
+                    placeholder = icon.front.placeholder,
+                )
+            }
 
-                            if (item.doubleSpend) {
-                                Image(
-                                    modifier = Modifier.padding(start = 6.dp),
-                                    painter = painterResource(R.drawable.ic_double_spend_20),
-                                    contentDescription = null
-                                )
-                            }
-                            item.locked?.let { locked ->
-                                Image(
-                                    modifier = Modifier.padding(start = 6.dp),
-                                    painter = painterResource(if (locked) R.drawable.ic_lock_20 else R.drawable.ic_unlock_20),
-                                    contentDescription = null
-                                )
-                            }
-                            if (item.sentToSelf) {
-                                Image(
-                                    modifier = Modifier.padding(start = 6.dp),
-                                    painter = painterResource(R.drawable.ic_arrow_return_20),
-                                    contentDescription = null
-                                )
-                            }
-                        }
-                        if (item.primaryValue != null || item.secondaryValue != null) {
-                            Text(
-                                text = if (showAmount) item.secondaryValue?.value.orEmpty() else "*****",
-                                style = ComposeAppTheme.typography.subhead2,
-                                color = item.secondaryValue?.color?.compose() ?: Color.Unspecified,
-                                maxLines = 1,
-                                modifier = Modifier.clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null,
-                                    onClick = onValueClick,
-                                )
-                            )
-                        }
-                        Text(
-                            text = if (showAmount) item.formattedTime else "*****",
-                            style = ComposeAppTheme.typography.subhead2,
-                            color = ComposeAppTheme.colors.grey50,
-                            maxLines = 1,
-                            modifier = Modifier.clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                onClick = onValueClick,
-                            )
+            is TransactionViewItem.Icon.ImageResource -> {}
+        }
+    }
+}
+
+@Composable
+private fun TransactionContentRow(
+    item: TransactionViewItem,
+    showAmount: Boolean,
+    blurModifier: Modifier,
+    onValueClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .then(blurModifier)
+            .padding(end = 16.dp)
+            .alpha(if (item.spam) 0.5f else 1f),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(1.dp)
+        ) {
+            body_leah(
+                modifier = Modifier.padding(end = 24.dp),
+                text = item.title,
+                maxLines = 1,
+            )
+            Text(
+                text = if (showAmount) item.formattedTime else "*****",
+                style = ComposeAppTheme.typography.subhead2,
+                color = ComposeAppTheme.colors.grey50,
+                maxLines = 1,
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = onValueClick,
+                )
+            )
+        }
+        Column(
+            modifier = Modifier.wrapContentWidth(),
+            verticalArrangement = Arrangement.spacedBy(1.dp),
+            horizontalAlignment = Alignment.End
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                item.primaryValue?.let { coloredValue ->
+                    Text(
+                        text = if (showAmount) coloredValue.value else "*****",
+                        style = ComposeAppTheme.typography.body,
+                        color = coloredValue.color.compose(),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        modifier = Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = onValueClick,
                         )
-                    }
+                    )
                 }
+
+                if (item.doubleSpend) {
+                    Image(
+                        modifier = Modifier.padding(start = 6.dp),
+                        painter = painterResource(R.drawable.ic_double_spend_20),
+                        contentDescription = null
+                    )
+                }
+                item.locked?.let { locked ->
+                    Image(
+                        modifier = Modifier.padding(start = 6.dp),
+                        painter = painterResource(if (locked) R.drawable.ic_lock_20 else R.drawable.ic_unlock_20),
+                        contentDescription = null
+                    )
+                }
+                if (item.sentToSelf) {
+                    Image(
+                        modifier = Modifier.padding(start = 6.dp),
+                        painter = painterResource(R.drawable.ic_arrow_return_20),
+                        contentDescription = null
+                    )
+                }
+            }
+            if (item.primaryValue != null || item.secondaryValue != null) {
+                Text(
+                    text = if (showAmount) item.secondaryValue?.value.orEmpty() else "*****",
+                    style = ComposeAppTheme.typography.subhead2,
+                    color = item.secondaryValue?.color?.compose() ?: Color.Unspecified,
+                    maxLines = 1,
+                    modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = onValueClick,
+                    )
+                )
             }
         }
     }

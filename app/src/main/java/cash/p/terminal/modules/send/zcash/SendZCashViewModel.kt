@@ -95,22 +95,28 @@ class SendZCashViewModel(
         }
     }
 
-    override fun createState() = SendZCashUiState(
-        fee = fee.value,
-        availableBalance = amountState.availableBalance,
-        addressError = addressState.addressError,
-        amountCaution = amountState.amountCaution,
-        memoIsAllowed = memoState.memoIsAllowed,
-        canBeSend = amountState.canBeSend && addressState.canBeSend,
-        showAddressInput = showAddressInput,
-        address = addressState.address
-    )
+    override fun createState(): SendZCashUiState {
+        val poison = isAddressSuspicious(addressState.address?.hex)
+        return SendZCashUiState(
+            fee = fee.value,
+            availableBalance = amountState.availableBalance,
+            addressError = addressState.addressError,
+            amountCaution = amountState.amountCaution,
+            memoIsAllowed = memoState.memoIsAllowed,
+            canBeSend = amountState.canBeSend && addressState.canBeSend && (!poison || riskAccepted),
+            showAddressInput = showAddressInput,
+            address = addressState.address,
+            isPoisonAddress = poison,
+            riskAccepted = riskAccepted,
+        )
+    }
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
     }
 
     fun onEnterAddress(address: Address?) {
+        resetRiskAccepted()
         viewModelScope.launch {
             addressService.setAddress(address)
         }
@@ -201,6 +207,7 @@ class SendZCashViewModel(
                 pendingRegistrar.updateTxId(it, txId.byteArray.toHexReversed())
             }
 
+            onSendSuccess(addressState.address?.hex)
             sendResult = SendResult.Sent(txId.byteArray.toHexReversed())
             logger.info("success")
         } catch (e: StatusRuntimeException) {
@@ -231,4 +238,6 @@ data class SendZCashUiState(
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
     val address: Address?,
+    val isPoisonAddress: Boolean = false,
+    val riskAccepted: Boolean = false,
 )

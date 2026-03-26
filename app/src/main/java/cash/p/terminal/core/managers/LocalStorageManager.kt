@@ -15,6 +15,7 @@ import cash.p.terminal.feature.miniapp.domain.storage.IUniqueCodeStorage
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.displayoptions.DisplayDiffOptionType
 import cash.p.terminal.modules.displayoptions.DisplayPricePeriod
+import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningViewMode
 import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.TimeDuration
@@ -91,6 +92,7 @@ class LocalStorageManager(
     private val TRANSACTION_AUTO_HIDE_ENABLED = "transaction_auto_hide_enabled"
     private val TRANSFER_PASSCODE_ENABLED = "transfer_passcode_enabled"
     private val TRANSACTION_DISPLAY_LEVEL = "transaction_display_level"
+    private val ADDRESS_POISONING_VIEW_MODE = "address_poisoning_view_mode"
     private val TRANSACTION_HIDE_SECRET_PIN = "transaction_hide_secret_pin"
     private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS =
         "non_recommended_account_alert_dismissed_accounts"
@@ -392,6 +394,13 @@ class LocalStorageManager(
         }
         set(value) {
             preferences.edit().putInt(TRANSACTION_DISPLAY_LEVEL, value.ordinal).apply()
+        }
+    override var addressPoisoningViewMode: AddressPoisoningViewMode
+        get() = preferences.getInt(ADDRESS_POISONING_VIEW_MODE, 0).let {
+            Enum.valueOrDefault<AddressPoisoningViewMode>(it, AddressPoisoningViewMode.STANDARD)
+        }
+        set(value) {
+            preferences.edit { putInt(ADDRESS_POISONING_VIEW_MODE, value.ordinal) }
         }
     override var transactionHideSecretPin: EncryptedString?
         get() = preferences.getString(TRANSACTION_HIDE_SECRET_PIN, null)?.let {

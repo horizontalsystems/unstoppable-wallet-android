@@ -10,7 +10,8 @@ import io.horizontalsystems.core.entities.BlockchainType
 import java.util.Date
 
 sealed class TransactionInfoViewItem {
-    class Transaction(val leftValue: String, val rightValue: String, val icon: Int?) : TransactionInfoViewItem()
+    class Transaction(val leftValue: String, val rightValue: String, val icon: Int?) :
+        TransactionInfoViewItem()
 
     class Amount(
         val coinValue: ColoredValue,
@@ -36,11 +37,19 @@ sealed class TransactionInfoViewItem {
 
     class ValueClickable(val title: String, val value: String) : TransactionInfoViewItem()
 
-    class ValueColored(val title: String, val value: String, val color: ColorName) : TransactionInfoViewItem()
+    class ValueColored(val title: String, val value: String, val color: ColorName) :
+        TransactionInfoViewItem()
 
-    class PriceWithToggle(val title: String, val valueOne: String, val valueTwo: String) : TransactionInfoViewItem()
+    class PriceWithToggle(val title: String, val valueOne: String, val valueTwo: String) :
+        TransactionInfoViewItem()
 
-    class Address(val title: String, val value: String, val showAdd: Boolean, val blockchainType: BlockchainType) : TransactionInfoViewItem()
+    class Address(
+        val title: String,
+        val value: String,
+        val showAdd: Boolean,
+        val blockchainType: BlockchainType,
+        val showCopyWarning: Boolean = false
+    ) : TransactionInfoViewItem()
 
     class ContactItem(val contact: Contact) : TransactionInfoViewItem()
 
@@ -52,15 +61,24 @@ sealed class TransactionInfoViewItem {
 
     object RawTransaction : TransactionInfoViewItem()
 
-    class LockState(val title: String, val leftIcon: Int, val date: Date, val showLockInfo: Boolean) : TransactionInfoViewItem()
+    class LockState(
+        val title: String,
+        val leftIcon: Int,
+        val date: Date,
+        val showLockInfo: Boolean
+    ) : TransactionInfoViewItem()
 
-    class DoubleSpend(val transactionHash: String, val conflictingHash: String) : TransactionInfoViewItem()
+    class DoubleSpend(val transactionHash: String, val conflictingHash: String) :
+        TransactionInfoViewItem()
 
     object SentToSelf : TransactionInfoViewItem()
 
-    class SpeedUpCancel(val transactionHash: String, val blockchainType: BlockchainType) : TransactionInfoViewItem()
+    class SpeedUpCancel(val transactionHash: String, val blockchainType: BlockchainType) :
+        TransactionInfoViewItem()
 
     class WarningMessage(val message: String) : TransactionInfoViewItem()
+
+    object PoisonWarning : TransactionInfoViewItem()
 
     class Description(val text: String) : TransactionInfoViewItem()
 
