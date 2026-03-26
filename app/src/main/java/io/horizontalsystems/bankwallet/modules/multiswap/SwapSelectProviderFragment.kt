@@ -267,12 +267,7 @@ fun RiskCell(
         RiskLevel.LIMITED -> ComposeAppTheme.colors.ocean
         RiskLevel.PRECHECK -> ComposeAppTheme.colors.leah
     }
-    val icon = when (riskLevel) {
-        RiskLevel.AUTO -> R.drawable.shield_check_filled_24
-        RiskLevel.CONTROLLED -> R.drawable.ic_warning_filled_24
-        RiskLevel.LIMITED -> R.drawable.thumbsup_24
-        RiskLevel.PRECHECK -> R.drawable.ic_warning_filled_24
-    }
+    val icon = riskLevel.icon
     Row(modifier = modifier) {
         Icon(
             painter = painterResource(icon),

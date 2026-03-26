@@ -66,9 +66,9 @@ enum class SwapProviderType(val title: String) {
     CEX("CEX")
 }
 
-enum class RiskLevel(val title: Int) {
-    AUTO(R.string.RiskLevel_Auto),
-    LIMITED(R.string.RiskLevel_Limited),
-    CONTROLLED(R.string.RiskLevel_Controlled),
-    PRECHECK(R.string.RiskLevel_Precheck)
+enum class RiskLevel(val title: Int, val icon: Int) {
+    AUTO(R.string.RiskLevel_Auto, R.drawable.shield_check_filled_24),
+    LIMITED(R.string.RiskLevel_Limited, R.drawable.thumbsup_24),
+    CONTROLLED(R.string.RiskLevel_Controlled, R.drawable.ic_warning_filled_24),
+    PRECHECK(R.string.RiskLevel_Precheck, R.drawable.radar_24)
 }

@@ -6,19 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -31,10 +39,8 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetCo
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
-import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
-import io.horizontalsystems.bankwallet.uiv3.components.controls.HSBadgeOutline
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.findNavController
@@ -115,8 +121,8 @@ fun RiskLevelList() {
     CellPrimary(
         middle = {
             RiskLevelCell(
-                RiskLevel.PRECHECK,
-                stringResource(R.string.RiskLevel_Precheck_Description)
+                RiskLevel.LIMITED,
+                stringResource(R.string.RiskLevel_Limited_Description)
             )
         }
     )
@@ -124,8 +130,8 @@ fun RiskLevelList() {
     CellPrimary(
         middle = {
             RiskLevelCell(
-                RiskLevel.LIMITED,
-                stringResource(R.string.RiskLevel_Limited_Description)
+                RiskLevel.PRECHECK,
+                stringResource(R.string.RiskLevel_Precheck_Description)
             )
         }
     )
@@ -142,27 +148,36 @@ fun RiskLevelList() {
 
 @Composable
 private fun RiskLevelCell(level: RiskLevel, description: String) {
-    val riskLevel = getRiskLevelHsString(level)
-    Column {
-        HSBadgeOutline(
-            text = riskLevel.text,
-            color = riskLevel.color ?: ComposeAppTheme.colors.grey
-        )
-        VSpacer(4.dp)
-        CellMiddleInfo(
-            subtitle = description.hs
-        )
-    }
-}
-
-@Composable
-private fun getRiskLevelHsString(riskLevel: RiskLevel): HSString {
-    val text = stringResource(riskLevel.title)
-    val color = when (riskLevel) {
+    val color = when (level) {
         RiskLevel.AUTO -> ComposeAppTheme.colors.remus
         RiskLevel.LIMITED -> ComposeAppTheme.colors.ocean
         RiskLevel.CONTROLLED -> ComposeAppTheme.colors.jacob
         RiskLevel.PRECHECK -> ComposeAppTheme.colors.leah
     }
-    return HSString(text, color, false)
+
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Icon(
+                painter = painterResource(level.icon),
+                contentDescription = null,
+                tint = color,
+                modifier = Modifier.size(16.dp)
+            )
+            Text(
+                text = stringResource(level.title),
+                style = ComposeAppTheme.typography.captionSB,
+                color = color,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        VSpacer(4.dp)
+        CellMiddleInfo(
+            subtitle = description.hs
+        )
+    }
+
 }
