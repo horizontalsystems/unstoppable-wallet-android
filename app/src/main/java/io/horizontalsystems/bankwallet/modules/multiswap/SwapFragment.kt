@@ -152,10 +152,10 @@ fun SwapScreen(
     val amlErrorSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val navigateToSwapConfirm = {
-        navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
+        navController.slideFromRightForResult<SwapConfirmFragment.Result>(SwapConfirmFragment()) {
             if (it.success) {
                 if (closeAfterSwap) {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 } else {
                     viewModel.onEnterAmount(null)
                 }
@@ -169,7 +169,7 @@ fun SwapScreen(
             when (event) {
                 AmlCheckEvent.Proceed -> {
                     if (viewModel.uiState.needToAcceptTerms) {
-                        navController.slideFromRightForResult<SwapTermsFragment.Result>(R.id.swapTermsFragment) {
+                        navController.slideFromRightForResult<SwapTermsFragment.Result>(SwapTermsFragment()) {
                             if (it.accepted) navigateToSwapConfirm()
                         }
                     } else {
@@ -195,7 +195,7 @@ fun SwapScreen(
             onDismiss = { showAmlRiskSheet = false },
             onChooseAnotherProvider = {
                 showAmlRiskSheet = false
-                navController.slideFromBottom(R.id.swapSelectProvider)
+                navController.slideFromBottom(SwapSelectProviderFragment())
             },
         )
     }
