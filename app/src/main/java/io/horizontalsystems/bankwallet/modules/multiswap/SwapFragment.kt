@@ -22,14 +22,13 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -147,10 +146,10 @@ fun SwapScreen(
     val amlErrorSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val navigateToSwapConfirm = {
-        navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
+        navController.slideFromRightForResult<SwapConfirmFragment.Result>(SwapConfirmFragment()) {
             if (it.success) {
                 if (closeAfterSwap) {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 } else {
                     viewModel.onEnterAmount(null)
                 }
@@ -164,7 +163,7 @@ fun SwapScreen(
             when (event) {
                 AmlCheckEvent.Proceed -> {
                     if (viewModel.uiState.needToAcceptTerms) {
-                        navController.slideFromRightForResult<SwapTermsFragment.Result>(R.id.swapTermsFragment) {
+                        navController.slideFromRightForResult<SwapTermsFragment.Result>(SwapTermsFragment()) {
                             if (it.accepted) navigateToSwapConfirm()
                         }
                     } else {
@@ -190,7 +189,7 @@ fun SwapScreen(
             onDismiss = { showAmlRiskSheet = false },
             onChooseAnotherProvider = {
                 showAmlRiskSheet = false
-                navController.slideFromBottom(R.id.swapSelectProvider)
+                navController.slideFromBottom(SwapSelectProviderFragment())
             },
         )
     }
