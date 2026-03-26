@@ -238,7 +238,6 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
         stringResource(R.string.SwapInfo_StatusDepositing),
         stringResource(R.string.SwapInfo_StatusSwapping),
         stringResource(R.string.SwapInfo_StatusSending),
-        stringResource(R.string.SwapInfo_StatusCompleted),
     )
     val refundedSteps = listOf(
         stringResource(R.string.SwapInfo_StatusDepositing),
@@ -247,7 +246,6 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
     )
     val singleChainNormalSteps = listOf(
         stringResource(R.string.SwapInfo_StatusSwapping),
-        stringResource(R.string.SwapInfo_StatusCompleted),
     )
     val singleChainFailedSteps = listOf(
         stringResource(R.string.SwapInfo_StatusSwapping),
@@ -339,7 +337,7 @@ private fun SwapStatusSteps(status: SwapStatus, isSingleChain: Boolean, depositi
             val stepUrl: String? = when (index) {
                 0 -> depositingTxUrl
                 1 if steps.size > 2 -> swappingTxUrl
-                2 if steps.size == 4 -> sendingTxUrl
+                2 if steps.size == 3 -> sendingTxUrl
                 else -> null
             }
             val showView = stepUrl != null && (isDone || isActive || isFailed)
