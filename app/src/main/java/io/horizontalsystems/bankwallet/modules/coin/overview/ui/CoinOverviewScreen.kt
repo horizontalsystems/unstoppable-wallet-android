@@ -113,7 +113,7 @@ fun CoinOverviewScreen(
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
+        val forResult = navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
             screen = BirthdayHeightConfig(token.blockchainType)
         ) {
             if (it.config != null) {
@@ -122,6 +122,7 @@ fun CoinOverviewScreen(
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
         }
+        forResult()
     }
 
 

@@ -73,6 +73,11 @@ fun Eip20ApproveScreen(navController: NavBackStack<HSScreen>, input: Eip20Approv
         ),
         bottomBar = {
             ButtonsGroupWithShade {
+                val forResult = navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>(Eip20ApproveConfirmFragment()) {
+                    resultEventBus.sendResult(it)
+                    navController.removeLastOrNull()
+                }
+
                 ButtonPrimaryYellow(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -80,10 +85,7 @@ fun Eip20ApproveScreen(navController: NavBackStack<HSScreen>, input: Eip20Approv
                     title = stringResource(R.string.Button_Next),
                     onClick = {
                         viewModel.freeze()
-                        navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>(Eip20ApproveConfirmFragment()) {
-                            resultEventBus.sendResult(it)
-                            navController.removeLastOrNull()
-                        }
+                        forResult()
                     },
                 )
             }

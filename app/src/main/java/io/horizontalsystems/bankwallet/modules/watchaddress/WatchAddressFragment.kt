@@ -89,7 +89,7 @@ fun WatchAddressScreen(navController: NavBackStack<HSScreen>, popUpToInclusiveId
     if (uiState.openBirthdayHeightScreen) {
         viewModel.onBirthdayHeightScreenOpened()
 
-        navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
+        val forResult = navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
             screen = BirthdayHeightConfig(BlockchainType.Monero)
         ) { result ->
             if (result.config != null) {
@@ -98,6 +98,7 @@ fun WatchAddressScreen(navController: NavBackStack<HSScreen>, popUpToInclusiveId
                 viewModel.onBirthdayHeightCancelled()
             }
         }
+        forResult()
     }
 
     HSScaffold(

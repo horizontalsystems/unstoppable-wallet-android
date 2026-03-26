@@ -168,21 +168,21 @@ fun MarketEarnScreen(
                                             },
                                         )
                                         HSpacer(width = 12.dp)
+                                        val forResult = navController.slideFromRightForResult<VaultBlockchainsSelectorFragment.Result>(
+                                            VaultBlockchainsSelectorFragment(
+                                                VaultBlockchainsSelectorFragment.Input(
+                                                    uiState.selectedBlockchains,
+                                                    uiState.blockchains
+                                                )
+                                            )
+                                        ) {
+                                            viewModel.onBlockchainsSelected(it.selected)
+                                        }
+
                                         HSDropdownButton(
                                             variant = ButtonVariant.Secondary,
                                             title = uiState.chainSelectorMenuTitle,
-                                            onClick = {
-                                                navController.slideFromRightForResult<VaultBlockchainsSelectorFragment.Result>(
-                                                    VaultBlockchainsSelectorFragment(
-                                                        VaultBlockchainsSelectorFragment.Input(
-                                                            uiState.selectedBlockchains,
-                                                            uiState.blockchains
-                                                        )
-                                                    )
-                                                ) {
-                                                    viewModel.onBlockchainsSelected(it.selected)
-                                                }
-                                            },
+                                            onClick = forResult,
                                         )
                                         HSpacer(width = 16.dp)
                                     }

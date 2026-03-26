@@ -127,6 +127,16 @@ fun FilterScreen(
                     }
                 )
                 VSpacer(32.dp)
+                val forResult = navController.slideFromRightForResult<SelectContactFragment.Result>(
+                    SelectContactFragment(
+                        SelectContactFragment.Input(
+                            filterContact,
+                            filterBlockchain?.type
+                        )
+                    )
+                ) {
+                    viewModel.onEnterContact(it.contact)
+                }
                 CellSingleLineLawrenceSection(
                     listOf {
                         FilterDropdownCell(
@@ -134,18 +144,7 @@ fun FilterScreen(
                             value = filterContact?.name
                                 ?: stringResource(id = R.string.Transactions_Filter_AllContacts),
                             valueColor = if (filterContact != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
-                            onClick = {
-                                navController.slideFromRightForResult<SelectContactFragment.Result>(
-                                    SelectContactFragment(
-                                        SelectContactFragment.Input(
-                                            filterContact,
-                                            filterBlockchain?.type
-                                        )
-                                    )
-                                ) {
-                                    viewModel.onEnterContact(it.contact)
-                                }
-                            }
+                            onClick = forResult
                         )
                     }
                 )

@@ -100,7 +100,7 @@ private fun ManageWalletsScreen(
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
+        val forResult = navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
             screen = BirthdayHeightConfig(token.blockchainType)
         ) {
             if (it.config != null) {
@@ -109,6 +109,7 @@ private fun ManageWalletsScreen(
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
         }
+        forResult()
 
         stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.BirthdayInput))
     }

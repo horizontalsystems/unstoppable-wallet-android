@@ -151,27 +151,32 @@ fun SwapScreen(
     var showAmlErrorSheet by remember { mutableStateOf(false) }
     val amlErrorSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    val navigateToSwapConfirm = {
-        navController.slideFromRightForResult<SwapConfirmFragment.Result>(SwapConfirmFragment()) {
-            if (it.success) {
-                if (closeAfterSwap) {
-                    navController.removeLastOrNull()
-                } else {
-                    viewModel.onEnterAmount(null)
-                }
+    val forResult = navController.slideFromRightForResult<SwapConfirmFragment.Result>(SwapConfirmFragment()) {
+        if (it.success) {
+            if (closeAfterSwap) {
+                navController.removeLastOrNull()
+            } else {
+                viewModel.onEnterAmount(null)
             }
         }
+    }
+
+    val navigateToSwapConfirm = {
+        forResult()
         stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
     }
 
+    val forResultSwapTerms = navController.slideFromRightForResult<SwapTermsFragment.Result>(
+        SwapTermsFragment()
+    ) {
+        if (it.accepted) navigateToSwapConfirm()
+    }
     LaunchedEffect(Unit) {
         viewModel.amlCheckEventFlow.collect { event ->
             when (event) {
                 AmlCheckEvent.Proceed -> {
                     if (viewModel.uiState.needToAcceptTerms) {
-                        navController.slideFromRightForResult<SwapTermsFragment.Result>(SwapTermsFragment()) {
-                            if (it.accepted) navigateToSwapConfirm()
-                        }
+                        forResultSwapTerms()
                     } else {
                         navigateToSwapConfirm()
                     }

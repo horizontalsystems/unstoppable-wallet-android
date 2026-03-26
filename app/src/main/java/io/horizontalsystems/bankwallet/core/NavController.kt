@@ -1,11 +1,9 @@
 package io.horizontalsystems.bankwallet.core
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
-import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
 import io.horizontalsystems.subscriptions.core.IPaidAction
 
 fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
@@ -61,9 +59,10 @@ fun NavBackStack<HSScreen>.ensurePinSet(descriptionResId: Int, action: () -> Uni
     if (App.pinComponent.isPinSet) {
         action.invoke()
     } else {
-        slideFromRightForResult<SetPinFragment.Result>(SetPinFragment(SetPinFragment.Input(descriptionResId))) {
-            action.invoke()
-        }
+//        TODO("xxx nav3")
+//        slideFromRightForResult<SetPinFragment.Result>(SetPinFragment(SetPinFragment.Input(descriptionResId))) {
+//            action.invoke()
+//        }
     }
 }
 
@@ -79,20 +78,16 @@ inline fun <reified T> NavBackStack<HSScreen>.slideFromBottomForResult(
         add(screen)
     }
 }
+
 @Composable
-inline fun <reified T> NavBackStack<HSScreen>.slideFromRightForResultX(
+inline fun <reified T> NavBackStack<HSScreen>.slideFromRightForResult(
     screen: HSScreen,
     crossinline onResult: (T) -> Unit
-): () -> Boolean {
+): () -> Unit {
     ResultEffect<T> {
         onResult.invoke(it)
     }
     return {
         add(screen)
     }
-}
-
-fun <T: Parcelable> NavBackStack<HSScreen>.slideFromRightForResult(screen: HSScreen, onResult: (T) -> Unit) {
-    add(screen)
-//    TODO("xxx nav3")
 }

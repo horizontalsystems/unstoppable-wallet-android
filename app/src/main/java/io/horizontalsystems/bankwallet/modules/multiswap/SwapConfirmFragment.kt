@@ -207,20 +207,16 @@ private fun SwapConfirmInternal(
         onClickFeeSettings = onClickSettings,
         onClickNonceSettings = onClickNonceSettings,
         onClickSlippageSettings = uiState.slippage?.let { slippage ->
-            {
-                navController.slideFromRightForResult<SwapSettingsSlippageFragment.Result>(
-                    SwapSettingsSlippageFragment(SwapSettingsSlippageFragment.Input(slippage))
-                ) {
-                    viewModel.setSlippage(it.slippage)
-                }
+            navController.slideFromRightForResult<SwapSettingsSlippageFragment.Result>(
+                SwapSettingsSlippageFragment(SwapSettingsSlippageFragment.Input(slippage))
+            ) {
+                viewModel.setSlippage(it.slippage)
             }
         },
-        onClickRecipientSettings = {
-            navController.slideFromRightForResult<SwapSettingsRecipientFragment.Result>(
-                SwapSettingsRecipientFragment(SwapSettingsRecipientFragment.Input(uiState.tokenIn, uiState.recipient))
-            ) {
-                viewModel.setRecipient(it.address)
-            }
+        onClickRecipientSettings = navController.slideFromRightForResult<SwapSettingsRecipientFragment.Result>(
+            SwapSettingsRecipientFragment(SwapSettingsRecipientFragment.Input(uiState.tokenIn, uiState.recipient))
+        ) {
+            viewModel.setRecipient(it.address)
         },
         buttonsSlot = {
             if (!uiState.validQuote) {
