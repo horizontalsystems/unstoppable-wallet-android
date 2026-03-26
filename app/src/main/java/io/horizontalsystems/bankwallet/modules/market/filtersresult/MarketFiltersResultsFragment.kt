@@ -29,8 +29,9 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketSignalsFragment
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersViewModel
-import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
@@ -177,16 +178,15 @@ private fun SearchResultsScreen(
             }
 
             if (openSortingSelector) {
-                AlertGroup(
+                MenuGroup(
                     title = stringResource(R.string.Market_Sort_PopupTitle),
-                    select = uiState.selectSortingField,
-                    onSelect = { selected ->
-                        viewModel.onSelectSortingField(selected)
-                        openSortingSelector = false
-                        scrollToTopAfterUpdate = true
+                    items = uiState.selectSortingField.options.map {
+                        MenuItemX(stringResource(it.titleResId), it == uiState.selectSortingField.selected, it)
                     },
-                    onDismiss = {
-                        openSortingSelector = false
+                    onDismissRequest = { openSortingSelector = false },
+                    onSelectItem = { selected ->
+                        viewModel.onSelectSortingField(selected)
+                        scrollToTopAfterUpdate = true
                     }
                 )
             }

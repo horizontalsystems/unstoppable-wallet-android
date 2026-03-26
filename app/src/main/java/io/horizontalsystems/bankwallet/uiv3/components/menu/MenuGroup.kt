@@ -94,7 +94,7 @@ private fun MenuHeader(title: String) {
                 .fillMaxWidth()
                 .align(Alignment.Center),
             text = title,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Start
         )
     }
 }
