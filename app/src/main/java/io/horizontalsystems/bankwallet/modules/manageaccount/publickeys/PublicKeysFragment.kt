@@ -96,8 +96,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                 KeyActionItem(
                     title = stringResource(id = R.string.PublicKeys_MoneroPublicKey),
                     description = stringResource(id = R.string.PublicKeys_MoneroPublicKeyDescription),
-                ) {
-                    navController.authorizedAction {
+                    onClick = navController.authorizedAction {
                         navController.slideFromRight(
                             ShowMoneroKeyFragment(ShowMoneroKeyFragment.Input(moneroKeys))
                         )
@@ -105,8 +104,8 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                             page = StatPage.PublicKeys,
                             event = StatEvent.Open(StatPage.MoneroPublicKey)
                         )
-                    }
-                }
+                    },
+                )
             }
         }
     }

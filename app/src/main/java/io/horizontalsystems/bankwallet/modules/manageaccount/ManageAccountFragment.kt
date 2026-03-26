@@ -210,9 +210,8 @@ private fun BackupActions(
                         title = stringResource(id = R.string.ManageAccount_RecoveryPhraseBackup),
                         icon = painterResource(id = R.drawable.ic_edit_24),
                         attention = action.showAttention,
-                        completed = action.completed
-                    ) {
-                        navController.authorizedAction {
+                        completed = action.completed,
+                        onClick = navController.authorizedAction {
                             navController.slideFromBottom(
                                 BackupKeyFragment(account)
                             )
@@ -222,7 +221,7 @@ private fun BackupActions(
                                 event = StatEvent.Open(StatPage.ManualBackup)
                             )
                         }
-                    }
+                    )
                 }
             }
 
@@ -231,9 +230,8 @@ private fun BackupActions(
                     YellowActionItem(
                         title = stringResource(id = R.string.ManageAccount_LocalBackup),
                         icon = painterResource(id = R.drawable.ic_file_24),
-                        attention = action.showAttention
-                    ) {
-                        navController.authorizedAction {
+                        attention = action.showAttention,
+                        onClick = navController.authorizedAction {
                             navController.slideFromBottom(BackupLocalFragment(account))
 
                             stat(
@@ -241,7 +239,7 @@ private fun BackupActions(
                                 event = StatEvent.Open(StatPage.FileBackup)
                             )
                         }
-                    }
+                    )
                 }
             }
 
@@ -273,21 +271,21 @@ private fun KeyActions(
         when (keyAction) {
             KeyAction.RecoveryPhrase -> {
                 actionItems.add {
+                    val authorizedAction = navController.authorizedAction {
+                        navController.slideFromRight(
+                            RecoveryPhraseFragment(viewModel.account)
+                        )
+
+                        stat(
+                            page = StatPage.ManageWallet,
+                            event = StatEvent.Open(StatPage.RecoveryPhrase)
+                        )
+                    }
                     AccountActionItem(
                         title = stringResource(id = R.string.RecoveryPhrase_Title),
-                        icon = painterResource(id = R.drawable.icon_paper_contract_20)
-                    ) {
-                        navController.authorizedAction {
-                            navController.slideFromRight(
-                                RecoveryPhraseFragment(viewModel.account)
-                            )
-
-                            stat(
-                                page = StatPage.ManageWallet,
-                                event = StatEvent.Open(StatPage.RecoveryPhrase)
-                            )
-                        }
-                    }
+                        icon = painterResource(id = R.drawable.icon_paper_contract_20),
+                        onClick = authorizedAction
+                    )
                 }
             }
 

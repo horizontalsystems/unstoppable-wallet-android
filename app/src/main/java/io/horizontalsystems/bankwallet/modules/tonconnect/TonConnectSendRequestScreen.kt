@@ -89,31 +89,29 @@ fun TonConnectSendRequestScreen(navController: NavBackStack<HSScreen>) {
                     modifier = Modifier.fillMaxWidth(),
                     title = stringResource(R.string.Button_Confirm),
                     enabled = uiState.confirmEnabled && buttonEnabled,
-                    onClick = {
-                        navController.authorizedAction {
-                            coroutineScope.launch {
-                                buttonEnabled = false
-                                HudHelper.showInProcessMessage(
-                                    view,
-                                    R.string.Send_Sending,
-                                    SnackbarDuration.INDEFINITE
-                                )
+                    onClick = navController.authorizedAction {
+                        coroutineScope.launch {
+                            buttonEnabled = false
+                            HudHelper.showInProcessMessage(
+                                view,
+                                R.string.Send_Sending,
+                                SnackbarDuration.INDEFINITE
+                            )
 
-                                try {
-                                    logger.info("click confirm button")
-                                    viewModel.confirm()
-                                    logger.info("success")
+                            try {
+                                logger.info("click confirm button")
+                                viewModel.confirm()
+                                logger.info("success")
 
-                                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
-                                    delay(1200)
-                                } catch (t: Throwable) {
-                                    logger.warning("failed", t)
-                                    HudHelper.showErrorMessage(view, t.message ?: t.javaClass.simpleName)
-                                }
-
-                                buttonEnabled = true
-                                navController.removeLastOrNull()
+                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                                delay(1200)
+                            } catch (t: Throwable) {
+                                logger.warning("failed", t)
+                                HudHelper.showErrorMessage(view, t.message ?: t.javaClass.simpleName)
                             }
+
+                            buttonEnabled = true
+                            navController.removeLastOrNull()
                         }
                     }
                 )

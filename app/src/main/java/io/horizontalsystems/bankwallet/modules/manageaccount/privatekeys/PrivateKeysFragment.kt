@@ -52,9 +52,8 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
             viewModel.viewState.evmPrivateKey?.let { key ->
                 KeyActionItem(
                     title = stringResource(id = R.string.PrivateKeys_EvmPrivateKey),
-                    description = stringResource(R.string.PrivateKeys_EvmPrivateKeyDescription)
-                ) {
-                    navController.authorizedAction {
+                    description = stringResource(R.string.PrivateKeys_EvmPrivateKeyDescription),
+                    onClick = navController.authorizedAction {
                         navController.slideFromRight(
                             PrivateKeyFragment(PrivateKeyFragment.Input(key, PrivateKeyFragment.Type.Evm))
                         )
@@ -64,7 +63,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                             event = StatEvent.Open(StatPage.EvmPrivateKey)
                         )
                     }
-                }
+                )
             }
             viewModel.viewState.tronPrivateKey?.let { key ->
                 KeyActionItem(
@@ -87,9 +86,8 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
             viewModel.viewState.stellarSecretKey?.let { key ->
                 KeyActionItem(
                     title = stringResource(id = R.string.PrivateKeys_StellarSecretKey),
-                    description = stringResource(R.string.PrivateKeys_StellarSecretKeyDescription)
-                ) {
-                    navController.authorizedAction {
+                    description = stringResource(R.string.PrivateKeys_StellarSecretKeyDescription),
+                    onClick = navController.authorizedAction {
                         navController.slideFromRight(
                             StellarSecretKeyFragment(StellarSecretKeyFragment.Input(key))
                         )
@@ -99,14 +97,13 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                             event = StatEvent.Open(StatPage.StellarSecretKey)
                         )
                     }
-                }
+                )
             }
             viewModel.viewState.bip32RootKey?.let { key ->
                 KeyActionItem(
                     title = stringResource(id = R.string.PrivateKeys_Bip32RootKey),
                     description = stringResource(id = R.string.PrivateKeys_Bip32RootKeyDescription),
-                ) {
-                    navController.authorizedAction {
+                    onClick = navController.authorizedAction {
                         navController.slideFromRight(
                             ShowExtendedKeyFragment(ShowExtendedKeyFragment.Input(
                                 key.hdKey,
@@ -118,15 +115,14 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                             page = StatPage.PrivateKeys,
                             event = StatEvent.Open(StatPage.Bip32RootKey)
                         )
-                    }
-                }
+                    },
+                )
             }
             viewModel.viewState.accountExtendedPrivateKey?.let { key ->
                 KeyActionItem(
                     title = stringResource(id = R.string.PrivateKeys_AccountExtendedPrivateKey),
                     description = stringResource(id = R.string.PrivateKeys_AccountExtendedPrivateKeyDescription),
-                ) {
-                    navController.authorizedAction {
+                    onClick = navController.authorizedAction {
                         navController.slideFromRight(
                             ShowExtendedKeyFragment(ShowExtendedKeyFragment.Input(key.hdKey, key.displayKeyType))
                         )
@@ -135,15 +131,14 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                             page = StatPage.PrivateKeys,
                             event = StatEvent.Open(StatPage.AccountExtendedPrivateKey)
                         )
-                    }
-                }
+                    },
+                )
             }
             viewModel.viewState.moneroKeys?.let { moneroKeys ->
                 KeyActionItem(
                     title = stringResource(id = R.string.PrivateKeys_MoneroPrivateKey),
                     description = stringResource(id = R.string.PrivateKeys_MoneroPrivateKeyDescription),
-                ) {
-                    navController.authorizedAction {
+                    onClick = navController.authorizedAction {
                         navController.slideFromRight(
                             ShowMoneroKeyFragment(ShowMoneroKeyFragment.Input(moneroKeys))
                         )
@@ -152,8 +147,8 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                             page = StatPage.PrivateKeys,
                             event = StatEvent.Open(StatPage.MoneroPrivateKey)
                         )
-                    }
-                }
+                    },
+                )
             }
         }
     }

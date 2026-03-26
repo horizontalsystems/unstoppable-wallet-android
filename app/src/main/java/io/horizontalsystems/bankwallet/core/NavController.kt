@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
+import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.subscriptions.core.IPaidAction
 
 fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
@@ -16,17 +17,19 @@ fun NavBackStack<HSScreen>.slideFromBottom(screen: HSScreen) {
 //    TODO("xxx nav3")
 }
 
-fun NavBackStack<HSScreen>.authorizedAction(action: () -> Unit) {
-//    TODO("xxx nav3")
-//    if (App.pinComponent.isPinSet) {
-//        slideFromBottomForResult<ConfirmPinFragment.Result>(ConfirmPinFragment()) {
-//            if (it.success) {
-//                action.invoke()
-//            }
-//        }
-//    } else {
-//        action.invoke()
-//    }
+@Composable
+fun NavBackStack<HSScreen>.authorizedAction(action: () -> Unit): () -> Unit {
+    return if (App.pinComponent.isPinSet) {
+        slideFromBottomForResult<ConfirmPinFragment.Result>(ConfirmPinFragment()) {
+            if (it.success) {
+                action.invoke()
+            }
+        }
+    } else {
+        {
+            action.invoke()
+        }
+    }
 }
 
 fun NavBackStack<HSScreen>.paidAction(paidAction: IPaidAction, block: () -> Unit) {
