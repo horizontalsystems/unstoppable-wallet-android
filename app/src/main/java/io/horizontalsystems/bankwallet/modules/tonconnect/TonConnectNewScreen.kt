@@ -86,11 +86,9 @@ fun TonConnectNewScreen(
                     ButtonPrimaryYellow(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Connect),
-                        onClick = {
-                            navController.authorizedAction {
-                                viewModel.connect()
-                                onResult.invoke(true)
-                            }
+                        onClick = navController.authorizedAction {
+                            viewModel.connect()
+                            onResult.invoke(true)
                         },
                         enabled = uiState.connectEnabled
                     )

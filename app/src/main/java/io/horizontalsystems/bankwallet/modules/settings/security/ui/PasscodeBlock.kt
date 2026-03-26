@@ -44,6 +44,9 @@ fun PasscodeBlock(
             .clip(RoundedCornerShape(16.dp))
             .background(ComposeAppTheme.colors.lawrence)
     ) {
+        val authorizedActionEditPin = navController.authorizedAction {
+            navController.addFromRight(EditPinFragment())
+        }
         CellPrimary(
             middle = {
                 val text =
@@ -61,7 +64,7 @@ fun PasscodeBlock(
             },
             onClick = {
                 if (!uiState.pinEnabled) navController.addFromRight(SetPinFragment())
-                else navController.authorizedAction { navController.addFromRight(EditPinFragment()) }
+                else authorizedActionEditPin()
             }
         )
         if (uiState.pinEnabled) {
@@ -74,7 +77,7 @@ fun PasscodeBlock(
                         )
                     )
                 },
-                onClick = { navController.authorizedAction { viewModel.disablePin() } }
+                onClick = navController.authorizedAction { viewModel.disablePin() }
             )
         }
     }

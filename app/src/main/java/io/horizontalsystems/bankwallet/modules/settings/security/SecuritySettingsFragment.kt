@@ -214,6 +214,13 @@ private fun SecurityCenterScreen(
                 }
 
                 BoxBordered(top = true) {
+                    val authorizedActionDuressPin = navController.authorizedAction {
+                        if (uiState.duressPinEnabled) {
+                            navController.addFromRight(EditDuressPinFragment())
+                        } else {
+                            navController.addFromRight(SetDuressPinIntroFragment())
+                        }
+                    }
                     CellPrimary(
                         middle = {
                             CellMiddleInfo(
@@ -225,13 +232,7 @@ private fun SecurityCenterScreen(
                             val onClick = {
                                 navController.paidAction(RobberyProtection) {
                                     if (uiState.pinEnabled) {
-                                        navController.authorizedAction {
-                                            if (uiState.duressPinEnabled) {
-                                                navController.addFromRight(EditDuressPinFragment())
-                                            } else {
-                                                navController.addFromRight(SetDuressPinIntroFragment())
-                                            }
-                                        }
+                                        authorizedActionDuressPin()
                                     } else {
                                         navController.ensurePinSet(R.string.PinSet_ForDuress) {
                                             navController.addFromRight(SetDuressPinIntroFragment())
@@ -258,12 +259,11 @@ private fun SecurityCenterScreen(
                                         variant = ButtonVariant.Secondary,
                                         style = ButtonStyle.Solid,
                                         size = ButtonSize.Small,
-                                        icon = painterResource(R.drawable.trash_24)
-                                    ) {
-                                        navController.authorizedAction {
+                                        icon = painterResource(R.drawable.trash_24),
+                                        onClick = navController.authorizedAction {
                                             securitySettingsViewModel.disableDuressPin()
                                         }
-                                    }
+                                    )
                                 }
                             } else {
                                 HSButton(

@@ -74,15 +74,13 @@ class BackupManagerFragment : BaseComposeFragment() {
                     )
                 }
             },
-            onCreateBackup = {
-                navController.authorizedAction {
-                    navController.addFromRight(BackupLocalFragment())
+            onCreateBackup = navController.authorizedAction {
+                navController.addFromRight(BackupLocalFragment())
 
-                    stat(
-                        page = StatPage.BackupManager,
-                        event = StatEvent.Open(StatPage.ExportFullToFiles)
-                    )
-                }
+                stat(
+                    page = StatPage.BackupManager,
+                    event = StatEvent.Open(StatPage.ExportFullToFiles)
+                )
             }
         )
     }
