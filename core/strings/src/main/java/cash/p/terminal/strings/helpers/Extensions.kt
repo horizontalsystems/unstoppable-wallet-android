@@ -18,14 +18,20 @@ fun String.shorten(): String {
     val middle = 4
     val tail = 10
     val minLength = head + middle + tail
+    val shortHead = 4
+    val shortTail = 4
+    val shortMinLength = shortHead + shortTail + 1
 
-    return if (withoutPrefix.length > minLength)
-        prefix + withoutPrefix.take(head) + "..." + withoutPrefix.substring(
-            withoutPrefix.length / 2 - middle / 2,
-            withoutPrefix.length / 2 + middle / 2
-        ) + "..." + withoutPrefix.takeLast(tail)
-    else
-        this
+    return when {
+        withoutPrefix.length > minLength ->
+            prefix + withoutPrefix.take(head) + "..." + withoutPrefix.substring(
+                withoutPrefix.length / 2 - middle / 2,
+                withoutPrefix.length / 2 + middle / 2
+            ) + "..." + withoutPrefix.takeLast(tail)
+        withoutPrefix.length >= shortMinLength ->
+            prefix + withoutPrefix.take(shortHead) + "..." + withoutPrefix.takeLast(shortTail)
+        else -> this
+    }
 }
 
 fun String.toMasked(): String {

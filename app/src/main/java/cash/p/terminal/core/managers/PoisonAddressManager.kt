@@ -122,14 +122,23 @@ class PoisonAddressManager(
         val standard = if (outgoing) record.to?.firstOrNull() else record.from
         if (standard != null) return standard
 
-        // For EXTERNAL_CONTRACT_CALL/events-based records, extract from events
+        // For EXTERNAL_CONTRACT_CALL/events-based records, extract from events.
+        // When outgoing, prefer outgoing events (destination); when incoming, prefer incoming events (sender).
         if (record is EvmTransactionRecord) {
-            return record.incomingEvents?.firstOrNull()?.address
-                ?: record.outgoingEvents?.firstOrNull()?.address
+            return if (outgoing)
+                record.outgoingEvents?.firstOrNull()?.address
+                    ?: record.incomingEvents?.firstOrNull()?.address
+            else
+                record.incomingEvents?.firstOrNull()?.address
+                    ?: record.outgoingEvents?.firstOrNull()?.address
         }
         if (record is TronTransactionRecord) {
-            return record.incomingEvents?.firstOrNull()?.address
-                ?: record.outgoingEvents?.firstOrNull()?.address
+            return if (outgoing)
+                record.outgoingEvents?.firstOrNull()?.address
+                    ?: record.incomingEvents?.firstOrNull()?.address
+            else
+                record.incomingEvents?.firstOrNull()?.address
+                    ?: record.outgoingEvents?.firstOrNull()?.address
         }
         return null
     }

@@ -3,6 +3,8 @@ package cash.p.terminal.modules.balance.token
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.core.managers.PoisonAddressManager
+import cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.managers.PriceManager
@@ -36,6 +38,8 @@ import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.wallet.managers.TransactionDisplayLevel
 import cash.p.terminal.wallet.managers.TransactionHiddenState
 import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.IAdapterManager
+import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.wallet.WalletFactory
 import cash.p.terminal.wallet.tokenQueryId
 import io.horizontalsystems.core.CoreApp
@@ -118,15 +122,20 @@ class TokenBalanceViewModelTest : KoinTest {
     val koinRule = KoinTestRule.create {
         modules(
             module {
-                single { mockk<cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase>(relaxed = true) }
+                single { mockk<UpdateSwapProviderTransactionsStatusUseCase>(relaxed = true) }
                 single {
-                    mockk<cash.p.terminal.wallet.IAdapterManager>(relaxed = true) {
-                        coEvery { awaitAdapterForWallet<cash.p.terminal.wallet.IReceiveAdapter>(any(), any()) } returns null
+                    mockk<IAdapterManager>(relaxed = true) {
+                        coEvery { awaitAdapterForWallet<IReceiveAdapter>(any(), any()) } returns null
                     }
                 }
                 single {
                     mockk<SwapProviderTransactionsStorage>(relaxed = true) {
                         every { observeByToken(any(), any(), any()) } returns flowOf(emptyList())
+                    }
+                }
+                single {
+                    mockk<PoisonAddressManager>(relaxed = true) {
+                        every { poisonDbChangedFlow } returns MutableSharedFlow()
                     }
                 }
             }

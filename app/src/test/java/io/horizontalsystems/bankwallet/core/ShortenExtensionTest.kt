@@ -45,15 +45,15 @@ class ShortenExtensionTest {
     }
 
     @Test
-    fun shorten_exactly24charsNoPrefix_returnsUnchanged() {
+    fun shorten_exactly24charsNoPrefix_shortFormat() {
         val address = "ABCDEFGHIJKLMNOPQRSTUVWX"
-        assertEquals(address, address.shorten())
+        assertEquals("ABCD...UVWX", address.shorten())
     }
 
     @Test
-    fun shorten_exactly24charsWithPrefix_returnsUnchanged() {
+    fun shorten_exactly24charsWithPrefix_shortFormat() {
         val address = "0x" + "A".repeat(24)
-        assertEquals(address, address.shorten())
+        assertEquals("0xAAAA...AAAA", address.shorten())
     }
 
     @Test
@@ -69,21 +69,21 @@ class ShortenExtensionTest {
     }
 
     @Test
-    fun shorten_20chars_returnsUnchanged() {
+    fun shorten_20charsBody_shortFormat() {
         val address = "0x" + "A".repeat(20)
-        assertEquals(address, address.shorten())
+        assertEquals("0xAAAA...AAAA", address.shorten())
     }
 
     @Test
-    fun shorten_14chars_returnsUnchanged() {
+    fun shorten_12charsBody_shortFormat() {
         val address = "0x123456789ABC"
-        assertEquals(address, address.shorten())
+        assertEquals("0x1234...9ABC", address.shorten())
     }
 
     @Test
-    fun shorten_13chars_returnsUnchanged() {
+    fun shorten_11charsBody_shortFormat() {
         val address = "0x12345678ABC"
-        assertEquals(address, address.shorten())
+        assertEquals("0x1234...8ABC", address.shorten())
     }
 
     @Test

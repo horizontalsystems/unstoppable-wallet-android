@@ -3,6 +3,10 @@ package cash.p.terminal.core.managers
 import cash.p.terminal.core.storage.PoisonAddressDao
 import cash.p.terminal.entities.PoisonAddress
 import cash.p.terminal.entities.PoisonAddressType
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
+import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
+import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
@@ -10,6 +14,7 @@ import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.entities.BlockchainType
 import io.mockk.every
 import io.mockk.mockk
@@ -532,5 +537,179 @@ class PoisonAddressManagerTest {
             contractAddress = null,
         )
         assertEquals(PoisonStatus.BLOCKCHAIN, result)
+    }
+
+    // --- getRelevantAddress: event-based address resolution respects direction ---
+
+    @Test
+    fun getPoisonStatus_outgoingEvmNoTo_prefersOutgoingEvents() {
+        val poisonedRecipient = "0xpoisoned_recipient_addr"
+        val senderAddr = "0xincoming_sender_address"
+        every { dao.get(poisonedRecipient.lowercase(), blockchainUid) } returns
+            PoisonAddress(poisonedRecipient.lowercase(), blockchainUid, PoisonAddressType.SCAM)
+
+        val record = createEvmRecord(
+            from = null,
+            to = null,
+            transactionRecordType = TransactionRecordType.EVM_OUTGOING,
+            incomingEvents = listOf(TransferEvent(senderAddr, null, mockk(relaxed = true))),
+            outgoingEvents = listOf(TransferEvent(poisonedRecipient, null, mockk(relaxed = true))),
+            foreignTransaction = true,
+        )
+
+        assertEquals(PoisonStatus.SUSPICIOUS, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_incomingEvmNoFrom_prefersIncomingEvents() {
+        val senderAddr = "0xincoming_sender_address"
+        val recipientAddr = "0xoutgoing_recipient_addr"
+        every { dao.get(senderAddr.lowercase(), blockchainUid) } returns
+            PoisonAddress(senderAddr.lowercase(), blockchainUid, PoisonAddressType.SCAM)
+
+        val record = createEvmRecord(
+            from = null,
+            to = null,
+            transactionRecordType = TransactionRecordType.EVM_INCOMING,
+            incomingEvents = listOf(TransferEvent(senderAddr, null, mockk(relaxed = true))),
+            outgoingEvents = listOf(TransferEvent(recipientAddr, null, mockk(relaxed = true))),
+        )
+
+        assertEquals(PoisonStatus.SUSPICIOUS, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_outgoingEvmNoTo_fallsBackToIncomingWhenNoOutgoingEvents() {
+        val senderAddr = "0xfallback_sender_address"
+        every { dao.get(senderAddr.lowercase(), blockchainUid) } returns
+            PoisonAddress(senderAddr.lowercase(), blockchainUid, PoisonAddressType.SCAM)
+
+        val record = createEvmRecord(
+            from = null,
+            to = null,
+            transactionRecordType = TransactionRecordType.EVM_OUTGOING,
+            incomingEvents = listOf(TransferEvent(senderAddr, null, mockk(relaxed = true))),
+            outgoingEvents = emptyList(),
+            foreignTransaction = true,
+        )
+
+        assertEquals(PoisonStatus.SUSPICIOUS, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_outgoingTronNoTo_prefersOutgoingEvents() {
+        val poisonedRecipient = "tpoisoned_recipient_addr"
+        val senderAddr = "tincoming_sender_address_"
+        val tronUid = BlockchainType.Tron.uid
+        every { dao.get(poisonedRecipient.lowercase(), tronUid) } returns
+            PoisonAddress(poisonedRecipient.lowercase(), tronUid, PoisonAddressType.SCAM)
+        every { contactsRepository.getContactsFiltered(BlockchainType.Tron, addressQuery = any()) } returns emptyList()
+        every { dao.getAllByType(any(), tronUid) } returns emptyList()
+
+        val record = createTronRecord(
+            from = null,
+            to = null,
+            transactionRecordType = TransactionRecordType.TRON_OUTGOING,
+            incomingEvents = listOf(TransferEvent(senderAddr, null, mockk(relaxed = true))),
+            outgoingEvents = listOf(TransferEvent(poisonedRecipient, null, mockk(relaxed = true))),
+            foreignTransaction = true,
+        )
+
+        assertEquals(PoisonStatus.SUSPICIOUS, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_evmWithStandardTo_usesStandardAddress() {
+        val standardTo = "0xstandard_to_address_aaa"
+        every { dao.get(standardTo.lowercase(), blockchainUid) } returns
+            PoisonAddress(standardTo.lowercase(), blockchainUid, PoisonAddressType.SCAM)
+
+        val record = createEvmRecord(
+            from = null,
+            to = standardTo,
+            transactionRecordType = TransactionRecordType.EVM_OUTGOING,
+            incomingEvents = listOf(TransferEvent("0xother_addr", null, mockk(relaxed = true))),
+            outgoingEvents = listOf(TransferEvent("0xother_addr", null, mockk(relaxed = true))),
+            foreignTransaction = true,
+        )
+
+        // Standard to/from takes precedence over events
+        assertEquals(PoisonStatus.SUSPICIOUS, manager.getPoisonStatus(record))
+    }
+
+    // --- Helpers ---
+
+    private fun createEvmRecord(
+        from: String? = null,
+        to: String? = null,
+        transactionRecordType: TransactionRecordType,
+        incomingEvents: List<TransferEvent>? = null,
+        outgoingEvents: List<TransferEvent>? = null,
+        foreignTransaction: Boolean = false,
+    ): EvmTransactionRecord {
+        val evmTransaction = mockk<io.horizontalsystems.ethereumkit.models.Transaction>(relaxed = true) {
+            every { hashString } returns "0xhash123"
+            every { transactionIndex } returns 0
+            every { blockNumber } returns 100L
+            every { timestamp } returns 1000L
+            every { isFailed } returns false
+        }
+        val token = mockk<Token>(relaxed = true) {
+            every { blockchainType } returns BlockchainType.Ethereum
+        }
+        val source = mockk<TransactionSource>(relaxed = true) {
+            every { blockchain } returns mockk(relaxed = true) {
+                every { type } returns BlockchainType.Ethereum
+            }
+        }
+        return EvmTransactionRecord(
+            from = from,
+            to = to,
+            transaction = evmTransaction,
+            token = token,
+            source = source,
+            protected = false,
+            transactionRecordType = transactionRecordType,
+            incomingEvents = incomingEvents,
+            outgoingEvents = outgoingEvents,
+            foreignTransaction = foreignTransaction,
+        )
+    }
+
+    private fun createTronRecord(
+        from: String? = null,
+        to: String? = null,
+        transactionRecordType: TransactionRecordType,
+        incomingEvents: List<TransferEvent>? = null,
+        outgoingEvents: List<TransferEvent>? = null,
+        foreignTransaction: Boolean = false,
+    ): TronTransactionRecord {
+        val tronTransaction = mockk<io.horizontalsystems.tronkit.models.Transaction>(relaxed = true) {
+            every { hashString } returns "tronhash123"
+            every { blockNumber } returns 200L
+            every { timestamp } returns 2000000L
+            every { isFailed } returns false
+            every { fee } returns null
+        }
+        val token = mockk<Token>(relaxed = true) {
+            every { blockchainType } returns BlockchainType.Tron
+            every { decimals } returns 6
+        }
+        val source = mockk<TransactionSource>(relaxed = true) {
+            every { blockchain } returns mockk(relaxed = true) {
+                every { type } returns BlockchainType.Tron
+            }
+        }
+        return TronTransactionRecord(
+            from = from,
+            to = to,
+            token = token,
+            source = source,
+            transactionRecordType = transactionRecordType,
+            incomingEvents = incomingEvents,
+            outgoingEvents = outgoingEvents,
+            transaction = tronTransaction,
+            foreignTransaction = foreignTransaction,
+        )
     }
 }

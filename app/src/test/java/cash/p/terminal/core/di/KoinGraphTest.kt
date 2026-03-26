@@ -6,9 +6,11 @@ import androidx.lifecycle.SavedStateHandle
 import cash.p.terminal.feature.miniapp.ui.connect.ConnectMiniAppViewModel
 import cash.p.terminal.modules.blockchainstatus.BlockchainStatusProvider
 import cash.p.terminal.modules.blockchainstatus.BlockchainStatusViewModel
+import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningViewModel
 import cash.p.terminal.modules.configuredtoken.ConfiguredTokenInfoViewModel
 import cash.p.terminal.modules.multiswap.SwapSelectCoinViewModel
 import cash.p.terminal.wallet.Account
+import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.modules.createaccount.passphraseterms.PassphraseTermsViewModel
 import cash.p.terminal.modules.manageaccount.safetyrules.SafetyRulesModule
 import cash.p.terminal.modules.manageaccount.safetyrules.SafetyRulesViewModel
@@ -61,6 +63,7 @@ class KoinGraphTest : KoinTest {
                 definition<ConnectMiniAppViewModel>(SavedStateHandle::class),
                 definition<BlockchainStatusViewModel>(BlockchainStatusProvider::class),
                 definition<SwapSelectCoinViewModel>(Token::class, Account::class),
+                definition<AddressPoisoningViewModel>(String::class, Boolean::class, BlockchainType::class),
             )
         )
     }
