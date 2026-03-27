@@ -30,6 +30,7 @@ class ReceiveAddressViewModel(
     private var address = ""
     private var usedAddresses: List<UsedAddress> = listOf()
     private var usedChangeAddresses: List<UsedAddress> = listOf()
+    private var isAddressHistorySupported = false
     private var uri = ""
     private var amount: BigDecimal? = null
     private var accountActive = true
@@ -57,6 +58,7 @@ class ReceiveAddressViewModel(
         address = address,
         usedAddresses = usedAddresses,
         usedChangeAddresses = usedChangeAddresses,
+        isAddressHistorySupported = isAddressHistorySupported,
         showTronAlert = !accountActive,
         uri = uri,
         watchAccount = watchAccount,
@@ -98,6 +100,7 @@ class ReceiveAddressViewModel(
             address = adapter.receiveAddress
             usedAddresses = adapter.usedAddresses(false)
             usedChangeAddresses = adapter.usedAddresses(true)
+            isAddressHistorySupported = adapter.isAddressHistorySupported
             uri = getUri()
             mainNet = adapter.isMainNet
             viewState = ViewState.Success

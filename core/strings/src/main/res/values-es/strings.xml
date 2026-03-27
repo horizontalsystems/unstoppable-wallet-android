@@ -331,6 +331,16 @@
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s direcciones cambian por privacidad y seguridad. A continuación, una lista de las direcciones utilizadas en esta billetera.</string>
     <string name="Balance_Receive_ReceiveAddresses">Direcciones para recibir</string>
     <string name="Balance_Receive_ChangeAddresses">Cambiar direcciones</string>
+    <string name="receive_address_badge_new">Nuevo</string>
+    <string name="receive_address_badge_used">Utilizada</string>
+    <string name="receive_address_badge_unused">No utilizada</string>
+    <string name="receive_create_new_address">Crear nueva dirección</string>
+    <string name="receive_create_another_address_title">¿Crear otra dirección?</string>
+    <string name="receive_create_another_address_warning">Ya tiene una nueva dirección que aún no ha recibido fondos. No es necesario crear una nueva dirección. ¿Desea continuar?</string>
+    <string name="receive_dont_ask_again">No volver a preguntar (guardar configuración)</string>
+    <string name="receive_create_new">Crear nueva</string>
+    <string name="receive_keep_current">Mantener actual</string>
+    <string name="receive_monero_used_addresses_description">Para mayor privacidad, se recomienda usar una nueva dirección para cada transacción.\nEn nuestra aplicación, las direcciones de Monero se crean manualmente para reducir la carga al escanear la billetera.\nA continuación se muestran las direcciones creadas anteriormente en esta billetera.</string>
     <string name="Balance_SendHint_CoinName">Nombre de moneda</string>
     <string name="Balance_ReceiveHint_Search">Buscar</string>
     <!--Send NFT-->

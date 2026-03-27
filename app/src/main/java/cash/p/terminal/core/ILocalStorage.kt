@@ -121,5 +121,7 @@ interface ILocalStorage : ILoggingSettings, ISmsNotificationSettings {
     var isSystemPinRequired: Boolean
     // Login Logging properties inherited from ILoggingSettings
 
+    var moneroSkipNewAddressConfirm: Boolean
+
     fun clear()
 }

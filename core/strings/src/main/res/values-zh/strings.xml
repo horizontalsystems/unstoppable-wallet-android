@@ -332,6 +332,16 @@
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s 地址用于隐私和安全。以下是此钱包中已使用的地址列表。</string>
     <string name="Balance_Receive_ReceiveAddresses">接收地址</string>
     <string name="Balance_Receive_ChangeAddresses">找零地址</string>
+    <string name="receive_address_badge_new">新的</string>
+    <string name="receive_address_badge_used">已使用</string>
+    <string name="receive_address_badge_unused">未使用</string>
+    <string name="receive_create_new_address">创建新地址</string>
+    <string name="receive_create_another_address_title">创建另一个地址？</string>
+    <string name="receive_create_another_address_warning">您已有一个尚未收到任何资金的新地址。无需创建新地址。是否继续？</string>
+    <string name="receive_dont_ask_again">不再询问（保存设置）</string>
+    <string name="receive_create_new">创建新的</string>
+    <string name="receive_keep_current">保留当前</string>
+    <string name="receive_monero_used_addresses_description">为增强隐私保护，建议每笔交易使用新地址。\n在我们的应用中，门罗币地址是手动创建的，以减少扫描钱包时的负载。\n以下是此钱包中之前创建的地址。</string>
     <string name="Balance_SendHint_CoinName">代币图片</string>
     <string name="Balance_ReceiveHint_Search">查询</string>
     <!--Send NFT-->

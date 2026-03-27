@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.receive.ui
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.drawable.AdaptiveIconDrawable
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.Crossfade
@@ -22,9 +23,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -55,6 +57,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -63,6 +66,9 @@ import androidx.core.graphics.drawable.toBitmap
 import cash.p.terminal.R
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.receive.ReceiveModule
+import cash.p.terminal.modules.receive.ReceiveModule.UiState
+import cash.p.terminal.modules.receive.UsedAddressesRow
+import cash.p.terminal.modules.receive.viewmodels.AddressBadge
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.HsTextButton
 import cash.p.terminal.ui.compose.components.ListErrorView
@@ -70,12 +76,14 @@ import cash.p.terminal.ui.helpers.TextHelper
 import cash.p.terminal.ui_compose.BottomSheetHeader
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
+import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.HsDivider
 import cash.p.terminal.ui_compose.components.HsIconButton
+import cash.p.terminal.ui_compose.components.HudHelper
 import cash.p.terminal.ui_compose.components.InfoText
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.RowUniversal
@@ -93,6 +101,7 @@ import cash.p.terminal.ui_compose.components.title3_leah
 import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.entities.UsedAddress
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import com.google.zxing.qrcode.encoder.Encoder
 import io.github.alexzhirkevich.qrose.options.QrBallShape
@@ -103,7 +112,6 @@ import io.github.alexzhirkevich.qrose.options.QrLogoShape
 import io.github.alexzhirkevich.qrose.options.QrPixelShape
 import io.github.alexzhirkevich.qrose.options.roundCorners
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
-import cash.p.terminal.ui_compose.components.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -116,7 +124,9 @@ fun ReceiveAddressScreen(
     uiState: ReceiveModule.AbstractUiState,
     setAmount: (BigDecimal?) -> Unit,
     onErrorClick: () -> Unit = {},
-    slot1: @Composable () -> Unit = {},
+    topContent: @Composable () -> Unit = {},
+    addressBadge: @Composable () -> Unit = {},
+    bottomContent: @Composable () -> Unit = {},
     onBackPress: () -> Unit,
     closeModule: () -> Unit,
 ) {
@@ -130,7 +140,7 @@ fun ReceiveAddressScreen(
     var isTronAlertVisible by remember { mutableStateOf(false) }
     var isTronInfoVisible by remember { mutableStateOf(false) }
 
-    if (uiState is ReceiveModule.UiState) {
+    if (uiState is UiState) {
         LaunchedEffect(uiState.showTronAlert) {
             if (uiState.showTronAlert) {
                 isTronAlertVisible = true
@@ -196,7 +206,7 @@ fun ReceiveAddressScreen(
                                     )
                                 }
 
-                                VSpacer(12.dp)
+                                VSpacer(16.dp)
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -204,6 +214,7 @@ fun ReceiveAddressScreen(
                                         .clip(RoundedCornerShape(24.dp))
                                         .background(ComposeAppTheme.colors.lawrence),
                                 ) {
+                                    topContent()
                                     Column(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -216,7 +227,7 @@ fun ReceiveAddressScreen(
                                             },
                                         horizontalAlignment = Alignment.CenterHorizontally,
                                     ) {
-                                        VSpacer(32.dp)
+                                        VSpacer(16.dp)
                                         Box(
                                             modifier = Modifier
                                                 .clip(RoundedCornerShape(8.dp))
@@ -227,6 +238,7 @@ fun ReceiveAddressScreen(
                                             QrCodeImage(uiState.uri)
                                         }
                                         VSpacer(12.dp)
+                                        addressBadge()
                                         subhead2_leah(
                                             modifier = Modifier.padding(horizontal = 32.dp),
                                             text = uiState.address,
@@ -251,7 +263,7 @@ fun ReceiveAddressScreen(
                                                 textAlign = TextAlign.Center,
                                             )
                                         }
-                                        VSpacer(24.dp)
+                                        VSpacer(16.dp)
                                     }
                                     val additionalItems = buildList {
                                         addAll(uiState.additionalItems)
@@ -272,18 +284,15 @@ fun ReceiveAddressScreen(
                                         )
                                     }
 
-                                    slot1.invoke()
+                                    ActionButtonsRow(
+                                        uri = uiState.uri,
+                                        watchAccount = uiState.watchAccount,
+                                        openAmountDialog = openAmountDialog,
+                                    )
+                                    VSpacer(16.dp)
+
+                                    bottomContent()
                                 }
-
-                                VSpacer(52.dp)
-
-                                ActionButtonsRow(
-                                    uri = uiState.uri,
-                                    watchAccount = uiState.watchAccount,
-                                    openAmountDialog = openAmountDialog,
-                                )
-
-                                VSpacer(32.dp)
                             }
                         }
                     }
@@ -400,8 +409,7 @@ private fun ActionButtonsRow(
     val context = LocalContext.current
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 48.dp),
+            .fillMaxWidth(),
         horizontalArrangement = if (watchAccount) Arrangement.Center else Arrangement.SpaceBetween,
     ) {
         val itemModifier = if (watchAccount) Modifier else Modifier.weight(1f)
@@ -694,15 +702,99 @@ private fun TronInfoBottomSheet(
     }
 }
 
+@Suppress("UnusedPrivateMember", "LongMethod")
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun ReceiveAddressScreenPreview() {
+    val addressBadge = AddressBadge.USED
+    ComposeAppTheme {
+        ReceiveAddressScreen(
+            title = "Receive BTC",
+            uiState = UiState(
+                viewState = ViewState.Success,
+                address = "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+                mainNet = true,
+                usedAddresses = listOf(
+                    UsedAddress(
+                        0,
+                        "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+                        "https:/some-url.com",
+                    )
+                ),
+                usedChangeAddresses = listOf(
+                    UsedAddress(
+                        0,
+                        "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+                        "https:/some-url.com",
+                    )
+                ),
+                isAddressHistorySupported = true,
+                showTronAlert = false,
+                uri = "bitcoin:bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+                blockchainName = "Bitcoin",
+                addressFormat = null,
+                watchAccount = false,
+                additionalItems = emptyList(),
+                amount = null,
+                alertText = null,
+            ),
+            topContent = {
+                UsedAddressesRow(
+                    enabled = true,
+                    onClick = {},
+                )
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = ComposeAppTheme.colors.steel20,
+                )
+            },
+            addressBadge = {
+                val badgeText = when (addressBadge) {
+                    AddressBadge.NEW -> stringResource(R.string.receive_address_badge_new)
+                    AddressBadge.USED -> stringResource(R.string.receive_address_badge_used)
+                    AddressBadge.UNUSED -> stringResource(R.string.receive_address_badge_unused)
+                }
+                val badgeColor = when (addressBadge) {
+                    AddressBadge.NEW -> ComposeAppTheme.colors.remus
+                    AddressBadge.USED -> ComposeAppTheme.colors.jacob
+                    AddressBadge.UNUSED -> ComposeAppTheme.colors.grey
+                }
+                VSpacer(12.dp)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp),
+                ) {
+                    AddressBadgeChip(text = badgeText, color = badgeColor)
+                }
+                VSpacer(4.dp)
+            },
+            bottomContent = {
+                ButtonPrimaryTransparent(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                    title = stringResource(R.string.receive_create_new_address),
+                    onClick = {},
+                )
+            },
+            setAmount = {},
+            onBackPress = {},
+            closeModule = {},
+        )
+    }
+}
+
 @Composable
 fun adaptiveIconPainterResource(@DrawableRes id: Int, @DrawableRes fallbackDrawable: Int): Painter {
-    val res = LocalContext.current.resources
-    val theme = LocalContext.current.theme
-
-    val adaptiveIcon = ResourcesCompat.getDrawable(res, id, theme) as? AdaptiveIconDrawable
-    return if (adaptiveIcon != null) {
-        BitmapPainter(adaptiveIcon.toBitmap().asImageBitmap())
-    } else {
-        painterResource(fallbackDrawable)
-    }
+    val context = LocalContext.current
+    return remember(id, fallbackDrawable) {
+        val adaptiveIcon = ResourcesCompat.getDrawable(context.resources, id, context.theme) as? AdaptiveIconDrawable
+        if (adaptiveIcon != null) {
+            BitmapPainter(adaptiveIcon.toBitmap().asImageBitmap())
+        } else {
+            null
+        }
+    } ?: painterResource(fallbackDrawable)
 }

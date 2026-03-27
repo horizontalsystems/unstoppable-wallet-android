@@ -251,7 +251,7 @@
     <ID>CyclomaticComplexMethod:NftAssetFragment.kt$@Composable private fun AssetContent( painter: AsyncImagePainter, viewItem: NftAssetViewModel.ViewItem?, nftUid: NftUid, navController: NavController, coroutineScope: CoroutineScope, )</ID>
     <ID>CyclomaticComplexMethod:NftCollectionEventsViewModel.kt$NftEventTypeWrapper.Companion$fun title(eventType: EventType): TranslatableString</ID>
     <ID>CyclomaticComplexMethod:QuickexProvider.kt$QuickexProvider$private fun getQuickexNetwork(token: Token): String?</ID>
-    <ID>CyclomaticComplexMethod:ReceiveAddressScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ReceiveAddressScreen( title: String, uiState: ReceiveModule.AbstractUiState, setAmount: (BigDecimal?) -&gt; Unit, onErrorClick: () -&gt; Unit = {}, slot1: @Composable () -&gt; Unit = {}, onBackPress: () -&gt; Unit, closeModule: () -&gt; Unit, )</ID>
+    <ID>CyclomaticComplexMethod:ReceiveAddressScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ReceiveAddressScreen( title: String, uiState: ReceiveModule.AbstractUiState, setAmount: (BigDecimal?) -&gt; Unit, onErrorClick: () -&gt; Unit = {}, topContent: @Composable () -&gt; Unit = {}, addressBadge: @Composable () -&gt; Unit = {}, bottomContent: @Composable () -&gt; Unit = {}, onBackPress: () -&gt; Unit, closeModule: () -&gt; Unit, )</ID>
     <ID>CyclomaticComplexMethod:ReceiveTokenSelectViewModel.kt$ReceiveTokenSelectViewModel$suspend fun getCoinForReceiveType(fullCoin: FullCoin): CoinForReceiveType?</ID>
     <ID>CyclomaticComplexMethod:RestoreBlockchains.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ManageWalletsScreen( mainViewModel: RestoreViewModel, openConfigure: (Token, TokenConfig?) -&gt; Unit, onBackClick: () -&gt; Unit, onFinish: () -&gt; Unit )</ID>
     <ID>CyclomaticComplexMethod:RestoreMnemonicViewModel.kt$RestoreMnemonicViewModel$fun onProceed()</ID>
@@ -560,7 +560,7 @@
     <ID>LongMethod:QuickexProvider.kt$QuickexProvider$override suspend fun fetchQuote( tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, settings: Map&lt;String, Any?&gt; ): ISwapQuote</ID>
     <ID>LongMethod:ReceiveAddressScreen.kt$@Composable fun AmountInputDialog( initialAmount: BigDecimal? = null, onDismissRequest: () -&gt; Unit, onAmountConfirm: (BigDecimal?) -&gt; Unit )</ID>
     <ID>LongMethod:ReceiveAddressScreen.kt$@Composable private fun AdditionalDataSection( items: List&lt;ReceiveModule.AdditionalData&gt;, onClearAmount: () -&gt; Unit, showAccountNotActiveWarningDialog: () -&gt; Unit, )</ID>
-    <ID>LongMethod:ReceiveAddressScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ReceiveAddressScreen( title: String, uiState: ReceiveModule.AbstractUiState, setAmount: (BigDecimal?) -&gt; Unit, onErrorClick: () -&gt; Unit = {}, slot1: @Composable () -&gt; Unit = {}, onBackPress: () -&gt; Unit, closeModule: () -&gt; Unit, )</ID>
+    <ID>LongMethod:ReceiveAddressScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ReceiveAddressScreen( title: String, uiState: ReceiveModule.AbstractUiState, setAmount: (BigDecimal?) -&gt; Unit, onErrorClick: () -&gt; Unit = {}, topContent: @Composable () -&gt; Unit = {}, addressBadge: @Composable () -&gt; Unit = {}, bottomContent: @Composable () -&gt; Unit = {}, onBackPress: () -&gt; Unit, closeModule: () -&gt; Unit, )</ID>
     <ID>LongMethod:ReceiveChooseCoinFragment.kt$@Composable fun ReceiveChooseCoinScreen( fragmentNavController: NavController )</ID>
     <ID>LongMethod:ReceiveStellarAssetScreen.kt$@Composable fun ReceiveStellarAssetScreen( navController: NavController, wallet: Wallet, receiveEntryPointDestId: Int )</ID>
     <ID>LongMethod:ReceiveTokenSelectScreen.kt$@OptIn(ExperimentalAnimationApi::class) @Composable fun ReceiveTokenSelectScreen( activeAccount: cash.p.terminal.wallet.Account, onMultipleAddressesClick: (String) -&gt; Unit, onMultipleDerivationsClick: (String) -&gt; Unit, onMultipleBlockchainsClick: (String) -&gt; Unit, onCoinClick: (cash.p.terminal.wallet.Wallet) -&gt; Unit, onBackPress: () -&gt; Unit, )</ID>
@@ -2151,6 +2151,7 @@
     <ID>VariableNaming:LocalStorageManager.kt$LocalStorageManager$private val TRANSACTION_DISPLAY_LEVEL = "transaction_display_level"</ID>
     <ID>VariableNaming:LocalStorageManager.kt$LocalStorageManager$private val TRANSACTION_HIDE_SECRET_PIN = "transaction_hide_secret_pin"</ID>
     <ID>VariableNaming:LocalStorageManager.kt$LocalStorageManager$private val TRANSFER_PASSCODE_ENABLED = "transfer_passcode_enabled"</ID>
+    <ID>VariableNaming:LocalStorageManager.kt$LocalStorageManager$private val MONERO_SKIP_NEW_ADDRESS_CONFIRM = "monero_skip_new_address_confirm"</ID>
     <ID>VariableNaming:LocalStorageManager.kt$LocalStorageManager$private val UTXO_EXPERT_MODE = "utxo_expert_mode"</ID>
     <ID>VariableNaming:MarketWidgetManager.kt$MarketWidgetManager$private val MAX_RETRIES = 5</ID>
     <ID>VariableNaming:RateAppManager.kt$RateAppManager$private val COUNTDOWN_TIME_INTERVAL: Long = 10 * 1000 // 10 seconds</ID>

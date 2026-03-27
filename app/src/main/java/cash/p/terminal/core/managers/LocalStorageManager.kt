@@ -107,6 +107,7 @@ class LocalStorageManager(
     private val STACKING_UPDATE_TIME = "stacking_update_time"
     private val STACKING_UNPAID = "stacking_unpaid"
     private val DASH_PEERS = "dash_peers"
+    private val MONERO_SKIP_NEW_ADDRESS_CONFIRM = "monero_skip_new_address_confirm"
 
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
     override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
@@ -627,6 +628,10 @@ class LocalStorageManager(
         set(value) {
             preferences.edit { putBoolean(SHARE_CRASH_DATA_ENABLED, value) }
         }
+
+    override var moneroSkipNewAddressConfirm: Boolean
+        get() = preferences.getBoolean(MONERO_SKIP_NEW_ADDRESS_CONFIRM, false)
+        set(value) = preferences.edit { putBoolean(MONERO_SKIP_NEW_ADDRESS_CONFIRM, value) }
 
     override var customDashPeers: String
         get() = preferences.getString(DASH_PEERS, "").orEmpty()

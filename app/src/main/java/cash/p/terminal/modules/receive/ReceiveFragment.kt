@@ -2,8 +2,8 @@ package cash.p.terminal.modules.receive
 
 import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -22,9 +22,9 @@ import cash.p.terminal.modules.receive.ui.UsedAddressesParams
 import cash.p.terminal.modules.receive.viewmodels.ReceiveAddressViewModel
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.ui_compose.components.HsDivider
 import cash.p.terminal.ui_compose.components.RowUniversal
-import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.body_grey
+import cash.p.terminal.ui_compose.components.body_grey50
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.TokenType
@@ -70,6 +70,10 @@ class ReceiveFragment : BaseComposeFragment() {
 //        is BlockchainType.Unsupported -> TODO()
 //        BlockchainType.Zcash -> TODO()
 //        BlockchainType.ZkSync -> TODO()
+                BlockchainType.Monero -> {
+                    ReceiveMoneroScreen(navController, wallet, it.receiveEntryPointDestId)
+                }
+
                 else -> {
                     ReceiveScreen(
                         navController,
@@ -97,36 +101,30 @@ fun ReceiveScreen(navController: NavController, wallet: Wallet, receiveEntryPoin
         uiState = uiState,
         setAmount = { amount -> addressViewModel.setAmount(amount) },
         onErrorClick = { addressViewModel.onErrorClick() },
-        slot1 = {
-            if (uiState.usedAddresses.isNotEmpty()) {
-                HsDivider(modifier = Modifier.fillMaxWidth())
-                RowUniversal(
-                    modifier = Modifier.height(48.dp),
-                    onClick = {
-                        navController.slideFromRight(
-                            R.id.btcUsedAddressesFragment,
-                            UsedAddressesParams(
-                                wallet.coin.name,
-                                uiState.usedAddresses,
-                                uiState.usedChangeAddresses
+        topContent = {
+            if (uiState.isAddressHistorySupported) {
+                val hasHistory =
+                    uiState.usedAddresses.isNotEmpty() || uiState.usedChangeAddresses.isNotEmpty()
+                UsedAddressesRow(
+                    enabled = hasHistory,
+                    onClick = if (hasHistory) {
+                        {
+                            navController.slideFromRight(
+                                R.id.btcUsedAddressesFragment,
+                                UsedAddressesParams(
+                                    wallet.coin.name,
+                                    uiState.usedAddresses,
+                                    uiState.usedChangeAddresses
+                                )
                             )
-                        )
-                    }
-                ) {
-                    subhead2_grey(
-                        modifier = Modifier
-                            .padding(start = 16.dp)
-                            .weight(1f),
-                        text = stringResource(R.string.Balance_Receive_UsedAddresses),
-                    )
-
-                    Icon(
-                        modifier = Modifier.padding(end = 16.dp),
-                        painter = painterResource(id = R.drawable.ic_arrow_right),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
-                    )
-                }
+                        }
+                    } else null
+                )
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = ComposeAppTheme.colors.steel20,
+                )
             }
         },
         onBackPress = { navController.popBackStack() },
@@ -138,6 +136,39 @@ fun ReceiveScreen(navController: NavController, wallet: Wallet, receiveEntryPoin
             }
         }
     )
+}
+
+@Composable
+fun UsedAddressesRow(
+    enabled: Boolean,
+    onClick: (() -> Unit)?,
+    modifier: Modifier = Modifier,
+) {
+    RowUniversal(
+        modifier = modifier
+            .padding(horizontal = 16.dp),
+        onClick = onClick
+    ) {
+        if (enabled) {
+            body_grey(
+                modifier = Modifier
+                    .weight(1f),
+                text = stringResource(R.string.Balance_Receive_UsedAddresses),
+            )
+        } else {
+            body_grey50(
+                modifier = Modifier
+                    .weight(1f),
+                text = stringResource(R.string.Balance_Receive_UsedAddresses),
+            )
+        }
+
+        Icon(
+            painter = painterResource(id = R.drawable.ic_arrow_right),
+            contentDescription = null,
+            tint = if (enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.grey50,
+        )
+    }
 }
 
 @Composable

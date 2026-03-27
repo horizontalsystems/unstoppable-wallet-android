@@ -332,6 +332,16 @@
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s addresses change for privacy and security. Below a list of used addresses in this wallet.</string>
     <string name="Balance_Receive_ReceiveAddresses">Receive Addresses</string>
     <string name="Balance_Receive_ChangeAddresses">Change Addresses</string>
+    <string name="receive_address_badge_new">Novo</string>
+    <string name="receive_address_badge_used">Utilizado</string>
+    <string name="receive_address_badge_unused">Não utilizado</string>
+    <string name="receive_create_new_address">Criar novo endereço</string>
+    <string name="receive_create_another_address_title">Criar outro endereço?</string>
+    <string name="receive_create_another_address_warning">Já tem um novo endereço que ainda não recebeu fundos. Não é necessário criar um novo endereço. Deseja continuar?</string>
+    <string name="receive_dont_ask_again">Não perguntar novamente (guardar definição)</string>
+    <string name="receive_create_new">Criar novo</string>
+    <string name="receive_keep_current">Manter atual</string>
+    <string name="receive_monero_used_addresses_description">Para maior privacidade, é recomendado usar um novo endereço para cada transação.\nNa nossa aplicação, os endereços Monero são criados manualmente para reduzir a carga ao analisar a carteira.\nAbaixo estão os endereços anteriormente criados nesta carteira.</string>
     <string name="Balance_SendHint_CoinName">Coin Name</string>
     <string name="Balance_ReceiveHint_Search">Search</string>
     <!--Send NFT-->

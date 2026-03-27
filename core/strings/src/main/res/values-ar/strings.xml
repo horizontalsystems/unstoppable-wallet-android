@@ -332,6 +332,16 @@
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s addresses change for privacy and security. Below a list of used addresses in this wallet.</string>
     <string name="Balance_Receive_ReceiveAddresses">Receive Addresses</string>
     <string name="Balance_Receive_ChangeAddresses">Change Addresses</string>
+    <string name="receive_address_badge_new">جديد</string>
+    <string name="receive_address_badge_used">مستخدم</string>
+    <string name="receive_address_badge_unused">غير مستخدم</string>
+    <string name="receive_create_new_address">إنشاء عنوان جديد</string>
+    <string name="receive_create_another_address_title">إنشاء عنوان آخر؟</string>
+    <string name="receive_create_another_address_warning">لديك بالفعل عنوان جديد لم يتلقَّ أي أموال بعد. إنشاء عنوان جديد ليس ضروريًا. هل تريد المتابعة؟</string>
+    <string name="receive_dont_ask_again">عدم السؤال مجددًا (حفظ الإعداد)</string>
+    <string name="receive_create_new">إنشاء جديد</string>
+    <string name="receive_keep_current">الإبقاء على الحالي</string>
+    <string name="receive_monero_used_addresses_description">لتعزيز الخصوصية، يُنصح باستخدام عنوان جديد لكل معاملة.\nفي تطبيقنا، يتم إنشاء عناوين مونيرو يدويًا لتقليل الحمل عند مسح المحفظة.\nفيما يلي العناوين التي تم إنشاؤها مسبقًا في هذه المحفظة.</string>
     <string name="Balance_SendHint_CoinName">Coin Name</string>
     <string name="Balance_ReceiveHint_Search">بحث</string>
     <!--Send NFT-->

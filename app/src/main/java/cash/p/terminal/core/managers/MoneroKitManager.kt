@@ -596,6 +596,29 @@ class MoneroKitWrapper(
         }
     }
 
+    suspend fun getSubaddresses(): List<MoneroSubaddressInfo> = lifecycleMutex.withLock {
+        withContext(Dispatchers.IO) {
+            val wallet = moneroWalletService.wallet ?: return@withContext emptyList()
+            val count = wallet.numSubaddresses
+            (0 until count).map { index ->
+                val subaddress = wallet.getSubaddressObject(index)
+                MoneroSubaddressInfo(
+                    index = subaddress.addressIndex,
+                    address = subaddress.address,
+                    receivedAmount = subaddress.amount
+                )
+            }
+        }
+    }
+
+    suspend fun createNewSubaddress(): String = lifecycleMutex.withLock {
+        withContext(Dispatchers.IO) {
+            val wallet = moneroWalletService.wallet
+                ?: throw IllegalStateException("Monero wallet not initialized")
+            wallet.newSubaddress
+        }
+    }
+
     fun getTransactions(): List<TransactionInfo> {
         if (!isStarted) return emptyList()
         return try {
