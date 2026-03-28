@@ -823,6 +823,7 @@
     <string name="Appearance_HideBalanceTabButtons">Schaltflächen ausblenden</string>
     <string name="Appearance_BalanceAutoHide">Auto-Ausblenden ausgleichen</string>
     <string name="show_all_transactions">Alle Transaktionen anzeigen</string>
+    <string name="hide_balance">Saldo ausblenden</string>
     <string name="Appearance_TransactionAutoHide">Transaction Auto Hide</string>
     <string name="appearance_transfer_passcode">Passcode for transfer</string>
     <string name="display">Display</string>

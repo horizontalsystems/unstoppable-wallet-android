@@ -830,6 +830,7 @@
     <string name="Appearance_HideBalanceTabButtons">숨김 버튼</string>
     <string name="Appearance_BalanceAutoHide">밸런스 자동 숨기기</string>
     <string name="show_all_transactions">모든 거래 보기</string>
+    <string name="hide_balance">잔액 숨기기</string>
     <string name="Appearance_TransactionAutoHide">Transaction Auto Hide</string>
     <string name="appearance_transfer_passcode">Passcode for transfer</string>
     <string name="display">Display</string>

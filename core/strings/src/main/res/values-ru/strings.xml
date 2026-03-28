@@ -851,6 +851,7 @@
     <string name="Appearance_HideBalanceTabButtons">Скрыть кнопки</string>
     <string name="Appearance_BalanceAutoHide">Автоскрытие баланса</string>
     <string name="show_all_transactions">Показать все транзакции</string>
+    <string name="hide_balance">Скрыть баланс</string>
     <string name="Appearance_TransactionAutoHide">Автоскрытие транзакций</string>
     <string name="appearance_transfer_passcode">Код подтверждения перевода</string>
     <string name="display">Показать</string>

@@ -830,6 +830,7 @@
     <string name="Appearance_HideBalanceTabButtons">Hide Buttons</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="show_all_transactions">Mostrar todas as transações</string>
+    <string name="hide_balance">Ocultar saldo</string>
     <string name="Appearance_TransactionAutoHide">Transaction Auto Hide</string>
     <string name="appearance_transfer_passcode">Passcode for transfer</string>
     <string name="display">Display</string>
