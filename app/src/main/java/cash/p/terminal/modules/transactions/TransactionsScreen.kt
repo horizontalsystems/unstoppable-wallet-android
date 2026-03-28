@@ -253,7 +253,7 @@ private fun TransactionListContent(
         uiState.transactionListId, accountViewItemId, saver = LazyListState.Saver
     ) { LazyListState(0, 0) }
 
-    val currentStickyDate by remember(transactionItems, showAmlPromo) {
+    val currentStickyDate by remember(listState, transactionItems, showAmlPromo) {
         derivedStateOf {
             val firstVisible = listState.firstVisibleItemIndex
             val offset = if (showAmlPromo) 1 else 0
