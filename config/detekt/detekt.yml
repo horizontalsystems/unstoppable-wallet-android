@@ -63,10 +63,6 @@ style:
     excludeGuardClauses: true
   UnusedImports:
     active: true
-
-custom-rules:
-  UnnecessaryFullyQualifiedNameRule:
-    active: true
   UnusedPrivateMember:
     active: true
     allowedNames: '(_.*|Preview.*)'
@@ -167,3 +163,7 @@ Compose:
   # Composition locals
   CompositionLocalAllowlist:
     active: false  # no allowlist configured yet
+
+custom-rules:
+  UnnecessaryFullyQualifiedNameRule:
+    active: true
