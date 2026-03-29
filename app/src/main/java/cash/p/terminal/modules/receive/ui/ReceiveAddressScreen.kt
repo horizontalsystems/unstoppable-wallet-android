@@ -240,9 +240,11 @@ fun ReceiveAddressScreen(
                                         VSpacer(12.dp)
                                         addressBadge()
                                         subhead2_leah(
-                                            modifier = Modifier.padding(horizontal = 32.dp),
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 32.dp),
                                             text = uiState.address,
-                                            textAlign = TextAlign.Center,
+                                            textAlign = TextAlign.Start,
                                         )
 
                                         val testNetBadge =
