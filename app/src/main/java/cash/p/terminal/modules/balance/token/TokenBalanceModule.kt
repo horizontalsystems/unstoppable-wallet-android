@@ -107,6 +107,12 @@ class TokenBalanceModule {
         }
     }
 
+    data class NetworkFeeWarningBannerData(
+        val title: String,
+        val body: String,
+        val formattedBalance: String,
+    )
+
     enum class StakingStatus { ACTIVE, INACTIVE }
 
     data class TokenBalanceUiState(
@@ -126,6 +132,7 @@ class TokenBalanceModule {
         val displayDiffOptionType: DisplayDiffOptionType = DisplayDiffOptionType.BOTH,
         val isRoundingAmount: Boolean = false,
         val isShowShieldFunds: Boolean = false,
+        val networkFeeWarning: NetworkFeeWarningBannerData? = null,
         val syncing: Boolean = true
     )
 }

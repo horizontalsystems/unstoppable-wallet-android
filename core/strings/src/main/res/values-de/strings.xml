@@ -438,6 +438,8 @@
 
     <!--Network Fee Warning-->
     <string name="network_fee_warning_title">%s Netzwerkgebühr</string>
+    <string name="token_balance_need_native_coin_title">Sie benötigen %1$s um %2$s zu verwenden</string>
+    <string name="token_balance_need_native_coin_body">%2$s läuft auf %3$s.\nNetzwerkgebühren werden in %1$s bezahlt.\nIhr %1$s Guthaben: %4$s</string>
     <string name="network_fee_warning_body_protocol">Das %1$s-Netzwerkprotokoll sieht vor, dass mindestens %2$s zur Zahlung der Netzwerkgebühr für diese Transaktion erforderlich ist.</string>
     <string name="network_fee_warning_body_balance">Sie haben weniger als %s in Ihrem Guthaben.</string>
     <string name="network_fee_warning_body_protocol_bold">mindestens %s</string>

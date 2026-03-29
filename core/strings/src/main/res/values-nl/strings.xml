@@ -444,6 +444,8 @@
 
     <!--Network Fee Warning-->
     <string name="network_fee_warning_title">%s Netwerkkosten</string>
+    <string name="token_balance_need_native_coin_title">Je hebt %1$s nodig om %2$s te gebruiken</string>
+    <string name="token_balance_need_native_coin_body">%2$s draait op %3$s.\nNetwerkkosten worden betaald in %1$s.\nJe %1$s saldo: %4$s</string>
     <string name="network_fee_warning_body_protocol">Het %1$s-netwerkprotocol vereist dat minimaal %2$s nodig is om de netwerkkosten voor deze transactie te betalen.</string>
     <string name="network_fee_warning_body_balance">U heeft minder dan %s op uw saldo.</string>
     <string name="network_fee_warning_body_protocol_bold">minimaal %s</string>

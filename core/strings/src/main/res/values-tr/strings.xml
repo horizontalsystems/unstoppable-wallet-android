@@ -444,6 +444,8 @@
 
     <!--Network Fee Warning-->
     <string name="network_fee_warning_title">%s Ağ Komisyonu</string>
+    <string name="token_balance_need_native_coin_title">%2$s kullanmak için %1$s gereklidir</string>
+    <string name="token_balance_need_native_coin_body">%2$s, %3$s üzerinde çalışır.\nAğ ücreti %1$s ile ödenir.\n%1$s bakiyeniz: %4$s</string>
     <string name="network_fee_warning_body_protocol">%1$s ağ protokolü, bu işlemin ağ komisyonunu ödemek için en az %2$s gerektiğini belirtmektedir.</string>
     <string name="network_fee_warning_body_balance">Bakiyenizde %s tutarından az bulunmaktadır.</string>
     <string name="network_fee_warning_body_protocol_bold">en az %s</string>

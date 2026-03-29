@@ -121,5 +121,8 @@ interface ILocalStorage : ILoggingSettings, ISmsNotificationSettings {
     var isSystemPinRequired: Boolean
     // Login Logging properties inherited from ILoggingSettings
 
+    fun isNetworkFeeWarningDismissed(blockchainTypeUid: String): Boolean
+    fun dismissNetworkFeeWarning(blockchainTypeUid: String)
+
     fun clear()
 }

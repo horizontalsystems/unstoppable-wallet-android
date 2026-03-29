@@ -444,6 +444,8 @@
 
     <!--Network Fee Warning-->
     <string name="network_fee_warning_title">رسوم شبكة %s</string>
+    <string name="token_balance_need_native_coin_title">تحتاج %1$s لاستخدام %2$s</string>
+    <string name="token_balance_need_native_coin_body">%2$s يعمل على %3$s.\nيتم دفع رسوم الشبكة بـ %1$s.\nرصيد %1$s الخاص بك: %4$s</string>
     <string name="network_fee_warning_body_protocol">ينص بروتوكول شبكة %1$s على أنه يلزم %2$s على الأقل لدفع رسوم الشبكة لهذه المعاملة.</string>
     <string name="network_fee_warning_body_balance">رصيدك أقل من %s.</string>
     <string name="network_fee_warning_body_protocol_bold">%s على الأقل</string>

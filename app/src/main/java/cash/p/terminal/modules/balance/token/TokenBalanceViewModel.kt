@@ -4,15 +4,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
-import io.horizontalsystems.core.IAppNumberFormatter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.getKoinInstance
+import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.isCustom
+import cash.p.terminal.core.isNative
+import cash.p.terminal.modules.send.fee.getWarningThreshold
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.ConnectivityManager
-import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.managers.StackingManager
@@ -31,6 +33,7 @@ import cash.p.terminal.modules.balance.TotalBalance
 import cash.p.terminal.modules.balance.TotalService
 import cash.p.terminal.modules.balance.token.TokenBalanceModule.StakingStatus
 import cash.p.terminal.modules.balance.token.TokenBalanceModule.TokenBalanceUiState
+import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.displayoptions.DisplayDiffOptionType
 import cash.p.terminal.modules.displayoptions.DisplayPricePeriod
 import cash.p.terminal.modules.send.SendResult
@@ -45,7 +48,6 @@ import cash.p.terminal.network.pirate.domain.useCase.GetChangeNowAssociatedCoinT
 import cash.p.terminal.premium.domain.PremiumSettings
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.IAccountManager
-import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.wallet.Token
@@ -54,18 +56,21 @@ import cash.p.terminal.wallet.badge
 import cash.p.terminal.wallet.balance.BalanceItem
 import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.wallet.balance.DeemedValue
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.isCosanta
 import cash.p.terminal.wallet.isPirateCash
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.wallet.managers.TransactionDisplayLevel
 import cash.p.terminal.wallet.tokenQueryId
+import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.logger.AppLogger
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.isActive
@@ -103,6 +108,7 @@ class TokenBalanceViewModel(
         getKoinInstance()
     private val adapterManager: IAdapterManager = getKoinInstance()
     private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage = getKoinInstance()
+    private val marketKit: cash.p.terminal.wallet.MarketKitWrapper = getKoinInstance()
 
     private val title = wallet.token.coin.name
 
@@ -136,6 +142,9 @@ class TokenBalanceViewModel(
     private var displayDiffOptionType = localStorage.displayDiffOptionType
     private var isRoundingAmount = localStorage.isRoundingAmountMainPage
     private var hasReachedSynced = false
+    private var networkFeeWarning: TokenBalanceModule.NetworkFeeWarningBannerData? = null
+    private var networkFeeWarningDismissed =
+        localStorage.isNetworkFeeWarningDismissed(wallet.token.blockchainType.uid)
 
     init {
         viewModelScope.launch {
@@ -154,6 +163,7 @@ class TokenBalanceViewModel(
 
             balanceService.balanceItemFlow.collect { balanceItem ->
                 balanceItem?.let {
+                    updateNetworkFeeWarning()
                     updateBalanceViewItem(
                         balanceItem = it,
                         isSwappable = isSwappable(it.wallet.token)
@@ -384,8 +394,62 @@ class TokenBalanceViewModel(
         displayDiffOptionType = displayDiffOptionType,
         isRoundingAmount = isRoundingAmount,
         isShowShieldFunds = isShowShieldFunds(),
+        networkFeeWarning = networkFeeWarning,
         syncing = syncing
     )
+
+    private fun updateNetworkFeeWarning() {
+        if (wallet.token.type.isNative || networkFeeWarningDismissed) {
+            networkFeeWarning = null
+            return
+        }
+        val blockchainType = wallet.token.blockchainType
+        val nativeToken = marketKit.token(
+            TokenQuery(blockchainType, TokenType.Native)
+        ) ?: return
+        val nativeBalance = (adapterManager.getBalanceAdapterForWallet(wallet) as? INativeBalanceProvider)
+            ?.nativeBalanceData?.total
+            ?: BigDecimal.ZERO
+        val threshold = getWarningThreshold(blockchainType)
+        val hasEnoughBalance = if (threshold != null) {
+            nativeBalance >= threshold
+        } else {
+            nativeBalance > BigDecimal.ZERO
+        }
+        if (hasEnoughBalance) {
+            networkFeeWarning = null
+            return
+        }
+        val blockchainName = marketKit.blockchain(blockchainType.uid)?.name ?: blockchainType.uid
+        val nativeCoinCode = nativeToken.coin.code
+        val tokenName = wallet.token.coin.code
+        val formattedBalance = numberFormatter.formatCoinShort(
+            nativeBalance, nativeCoinCode, nativeToken.decimals
+        )
+        val context = App.instance
+        networkFeeWarning = TokenBalanceModule.NetworkFeeWarningBannerData(
+            title = context.getString(
+                R.string.token_balance_need_native_coin_title,
+                nativeCoinCode,
+                tokenName
+            ),
+            body = context.getString(
+                R.string.token_balance_need_native_coin_body,
+                nativeCoinCode,
+                tokenName,
+                blockchainName,
+                formattedBalance
+            ),
+            formattedBalance = formattedBalance
+        )
+    }
+
+    fun dismissNetworkFeeWarning() {
+        localStorage.dismissNetworkFeeWarning(wallet.token.blockchainType.uid)
+        networkFeeWarningDismissed = true
+        networkFeeWarning = null
+        emitState()
+    }
 
     private fun isShowShieldFunds(): Boolean {
         val item = balanceService.balanceItem ?: return hasReachedSynced

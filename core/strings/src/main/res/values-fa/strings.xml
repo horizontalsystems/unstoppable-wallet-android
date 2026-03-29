@@ -444,6 +444,8 @@
 
     <!--Network Fee Warning-->
     <string name="network_fee_warning_title">کارمزد شبکه %s</string>
+    <string name="token_balance_need_native_coin_title">برای استفاده از %2$s به %1$s نیاز دارید</string>
+    <string name="token_balance_need_native_coin_body">%2$s روی %3$s اجرا می‌شود.\nکارمزد شبکه با %1$s پرداخت می‌شود.\nموجودی %1$s شما: %4$s</string>
     <string name="network_fee_warning_body_protocol">پروتکل شبکه %1$s مقرر می‌کند که حداقل %2$s برای پرداخت کارمزد شبکه این تراکنش لازم است.</string>
     <string name="network_fee_warning_body_balance">موجودی شما کمتر از %s است.</string>
     <string name="network_fee_warning_body_protocol_bold">حداقل %s</string>

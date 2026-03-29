@@ -440,6 +440,8 @@
 
     <!--Network Fee Warning-->
     <string name="network_fee_warning_title">%s 网络手续费</string>
+    <string name="token_balance_need_native_coin_title">您需要 %1$s 才能使用 %2$s</string>
+    <string name="token_balance_need_native_coin_body">%2$s 运行在 %3$s 上。\n网络费用以 %1$s 支付。\n您的 %1$s 余额：%4$s</string>
     <string name="network_fee_warning_body_protocol">%1$s 网络协议规定，支付此交易的网络手续费至少需要 %2$s。</string>
     <string name="network_fee_warning_body_balance">您的余额不足 %s。</string>
     <string name="network_fee_warning_body_protocol_bold">至少需要 %s</string>

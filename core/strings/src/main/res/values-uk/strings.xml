@@ -447,6 +447,8 @@
 
     <!--Network Fee Warning-->
     <string name="network_fee_warning_title">Комісія мережі %s</string>
+    <string name="token_balance_need_native_coin_title">Вам потрібен %1$s для використання %2$s</string>
+    <string name="token_balance_need_native_coin_body">%2$s працює на %3$s.\nКомісія мережі сплачується в %1$s.\nВаш баланс %1$s: %4$s</string>
     <string name="network_fee_warning_body_protocol">Протокол мережі %1$s передбачає, що для сплати комісії мережі за цю транзакцію необхідно щонайменше %2$s.</string>
     <string name="network_fee_warning_body_balance">На вашому балансі менше ніж %s.</string>
     <string name="network_fee_warning_body_protocol_bold">щонайменше %s</string>

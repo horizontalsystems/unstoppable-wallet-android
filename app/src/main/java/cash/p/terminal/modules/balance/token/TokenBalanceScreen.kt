@@ -19,6 +19,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -507,6 +510,27 @@ private fun TokenBalanceHeader(
                 icon = R.drawable.ic_attention_20,
                 title = it.title.getString(),
                 text = it.text.getString()
+            )
+        }
+        uiState.networkFeeWarning?.let { warningData ->
+            VSpacer(height = 8.dp)
+            val bodyText = buildAnnotatedString {
+                val balanceStart = warningData.body.indexOf(warningData.formattedBalance)
+                if (balanceStart >= 0) {
+                    append(warningData.body.substring(0, balanceStart))
+                    withStyle(SpanStyle(color = ComposeAppTheme.colors.jacob)) {
+                        append(warningData.formattedBalance)
+                    }
+                    append(warningData.body.substring(balanceStart + warningData.formattedBalance.length))
+                } else {
+                    append(warningData.body)
+                }
+            }
+            TextImportantWarning(
+                icon = R.drawable.ic_attention_20,
+                title = warningData.title,
+                text = bodyText,
+                onClose = viewModel::dismissNetworkFeeWarning
             )
         }
         VSpacer(height = 16.dp)

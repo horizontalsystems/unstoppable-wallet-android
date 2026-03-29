@@ -440,6 +440,8 @@
 
     <!--Network Fee Warning-->
     <string name="network_fee_warning_title">Frais de réseau %s</string>
+    <string name="token_balance_need_native_coin_title">Vous avez besoin de %1$s pour utiliser %2$s</string>
+    <string name="token_balance_need_native_coin_body">%2$s fonctionne sur %3$s.\nLes frais de réseau sont payés en %1$s.\nVotre solde %1$s : %4$s</string>
     <string name="network_fee_warning_body_protocol">Le protocole du réseau %1$s stipule qu\'au moins %2$s est nécessaire pour payer les frais de réseau de cette transaction.</string>
     <string name="network_fee_warning_body_balance">Vous avez moins de %s dans votre solde.</string>
     <string name="network_fee_warning_body_protocol_bold">au moins %s</string>

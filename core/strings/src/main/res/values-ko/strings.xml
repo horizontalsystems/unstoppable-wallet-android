@@ -444,6 +444,8 @@
 
     <!--Network Fee Warning-->
     <string name="network_fee_warning_title">%s 네트워크 수수료</string>
+    <string name="token_balance_need_native_coin_title">%2$s을(를) 사용하려면 %1$s이(가) 필요합니다</string>
+    <string name="token_balance_need_native_coin_body">%2$s은(는) %3$s에서 작동합니다.\n네트워크 수수료는 %1$s로 지불됩니다.\n귀하의 %1$s 잔액: %4$s</string>
     <string name="network_fee_warning_body_protocol">%1$s 네트워크 프로토콜에 따르면 이 거래의 네트워크 수수료를 지불하려면 최소 %2$s이(가) 필요합니다.</string>
     <string name="network_fee_warning_body_balance">잔액이 %s 미만입니다.</string>
     <string name="network_fee_warning_body_protocol_bold">최소 %s</string>
