@@ -57,9 +57,9 @@ class SolanaTransactionConverter(
             }
 
             if (tokenTransfer.incoming) {
-                incomingTransfers.add(SolanaTransactionRecord.Transfer(null, transactionValue))
+                incomingTransfers.add(SolanaTransactionRecord.Transfer(transaction.from, transactionValue))
             } else {
-                outgoingTransfers.add(SolanaTransactionRecord.Transfer(null, transactionValue))
+                outgoingTransfers.add(SolanaTransactionRecord.Transfer(transaction.to, transactionValue))
             }
         }
 
