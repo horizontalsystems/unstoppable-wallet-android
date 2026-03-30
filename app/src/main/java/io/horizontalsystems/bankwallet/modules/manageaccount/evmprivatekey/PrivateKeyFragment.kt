@@ -13,43 +13,64 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.SecretKeyScreen
 import kotlinx.parcelize.Parcelize
 
-class EvmPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
+class PrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
-            EvmPrivateKeyScreen(navController, input.evmPrivateKey)
+            PrivateKeyScreen(navController, input.privateKey, input.type)
         }
     }
 
     @Parcelize
-    data class Input(val evmPrivateKey: String) : Parcelable
+    data class Input(val privateKey: String, val type: Type) : Parcelable
+
+    @Parcelize
+    enum class Type : Parcelable {
+        Evm, Tron
+    }
 }
 
 @Composable
-fun EvmPrivateKeyScreen(
+fun PrivateKeyScreen(
     navController: NavController,
     evmPrivateKey: String,
+    type: PrivateKeyFragment.Type,
 ) {
+    val title = when (type) {
+        PrivateKeyFragment.Type.Evm -> stringResource(R.string.EvmPrivateKey_Title)
+        PrivateKeyFragment.Type.Tron -> stringResource(R.string.TronPrivateKey_Title)
+    }
+
+    val statPage = when (type) {
+        PrivateKeyFragment.Type.Evm -> StatPage.EvmPrivateKey
+        PrivateKeyFragment.Type.Tron -> StatPage.TronPrivateKey
+    }
+
+    val statEntity = when (type) {
+        PrivateKeyFragment.Type.Evm -> StatEntity.EvmPrivateKey
+        PrivateKeyFragment.Type.Tron -> StatEntity.TronPrivateKey
+    }
+
     SecretKeyScreen(
         navController = navController,
         secretKey = evmPrivateKey,
-        title = stringResource(R.string.EvmPrivateKey_Title),
+        title = title,
         hideScreenText = stringResource(R.string.EvmPrivateKey_ShowPrivateKey),
         onCopyKey = {
             stat(
-                page = StatPage.EvmPrivateKey,
-                event = StatEvent.Copy(StatEntity.EvmPrivateKey)
+                page = statPage,
+                event = StatEvent.Copy(statEntity)
             )
         },
         onOpenFaq = {
             stat(
-                page = StatPage.EvmPrivateKey,
+                page = statPage,
                 event = StatEvent.Open(StatPage.Info)
             )
         },
         onToggleHidden = {
-            stat(page = StatPage.EvmPrivateKey, event = StatEvent.ToggleHidden)
+            stat(page = statPage, event = StatEvent.ToggleHidden)
         }
     )
 }

@@ -243,6 +243,10 @@ val AccountType.statAccountType: String
             "evm_private_key"
         }
 
+        is AccountType.TronPrivateKey -> {
+            "tron_private_key"
+        }
+
         is AccountType.StellarSecretKey -> {
             "stellar_secret_key"
         }

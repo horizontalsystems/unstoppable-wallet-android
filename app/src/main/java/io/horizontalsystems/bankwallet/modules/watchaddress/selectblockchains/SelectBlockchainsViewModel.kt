@@ -39,6 +39,7 @@ class SelectBlockchainsViewModel(
             is AccountType.StellarAddress,
             is AccountType.Mnemonic,
             is AccountType.EvmPrivateKey,
+            is AccountType.TronPrivateKey,
             is AccountType.StellarSecretKey -> Unit // N/A
             is AccountType.EvmAddress -> {
                 title = R.string.Watch_Select_Blockchains
