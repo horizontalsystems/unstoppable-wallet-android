@@ -332,6 +332,16 @@
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s 주소는 개인 정보 보호와 보안을 위해 변경됩니다. 이 지갑에서 사용된 주소 목록은 아래와 같습니다.</string>
     <string name="Balance_Receive_ReceiveAddresses">받는 주소들</string>
     <string name="Balance_Receive_ChangeAddresses">거스름돈 주소</string>
+    <string name="receive_address_badge_new">새 주소</string>
+    <string name="receive_address_badge_used">사용됨</string>
+    <string name="receive_address_badge_unused">미사용</string>
+    <string name="receive_create_new_address">새 주소 만들기</string>
+    <string name="receive_create_another_address_title">다른 주소를 만드시겠습니까?</string>
+    <string name="receive_create_another_address_warning">아직 자금을 받지 않은 새 주소가 이미 있습니다. 새 주소를 만들 필요가 없습니다. 계속하시겠습니까?</string>
+    <string name="receive_dont_ask_again">다시 묻지 않기 (설정 저장)</string>
+    <string name="receive_create_new">새로 만들기</string>
+    <string name="receive_keep_current">현재 유지</string>
+    <string name="receive_monero_used_addresses_description">개인정보 보호를 위해 각 거래마다 새 주소를 사용하는 것이 좋습니다.\n본 앱에서는 지갑 스캔 시 부하를 줄이기 위해 모네로 주소를 수동으로 생성합니다.\n아래는 이 지갑에서 이전에 생성된 주소 목록입니다.</string>
     <string name="Balance_SendHint_CoinName">코인 이름</string>
     <string name="Balance_ReceiveHint_Search">검색</string>
     <!--Send NFT-->

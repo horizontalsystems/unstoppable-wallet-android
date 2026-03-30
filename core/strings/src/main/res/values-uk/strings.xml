@@ -337,6 +337,16 @@
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s адреси змінюються для підвищення конфіденційності та безпеки. Нижче наведено список використаних адрес у цьому гаманці.</string>
     <string name="Balance_Receive_ReceiveAddresses">Адреси для отримання</string>
     <string name="Balance_Receive_ChangeAddresses">Адреса-решта</string>
+    <string name="receive_address_badge_new">Новий</string>
+    <string name="receive_address_badge_used">Використовувався</string>
+    <string name="receive_address_badge_unused">Не використовувався</string>
+    <string name="receive_create_new_address">Створити нову адресу</string>
+    <string name="receive_create_another_address_title">Створити ще одну адресу?</string>
+    <string name="receive_create_another_address_warning">У вас вже є нова адреса, на яку ще не надходили кошти. Створення нової адреси не обов\'язкове. Бажаєте продовжити?</string>
+    <string name="receive_dont_ask_again">Більше не запитувати (зберегти налаштування)</string>
+    <string name="receive_create_new">Створити нову</string>
+    <string name="receive_keep_current">Залишити поточну</string>
+    <string name="receive_monero_used_addresses_description">Для підвищення приватності рекомендується використовувати нову адресу для кожної транзакції.\nУ нашому додатку адреси Monero створюються вручну, щоб зменшити навантаження при скануванні гаманця.\nНижче показані адреси, раніше створені у цьому гаманці.</string>
     <string name="Balance_SendHint_CoinName">Назва токена</string>
     <string name="Balance_ReceiveHint_Search">Пошук</string>
     <!--Send NFT-->

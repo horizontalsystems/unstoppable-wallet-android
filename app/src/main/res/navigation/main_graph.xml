@@ -354,6 +354,9 @@
         android:id="@+id/btcUsedAddressesFragment"
         android:name="cash.p.terminal.modules.receive.BtcUsedAddressesFragment" />
     <fragment
+        android:id="@+id/moneroUsedAddressesFragment"
+        android:name="cash.p.terminal.modules.receive.MoneroUsedAddressesFragment" />
+    <fragment
         android:id="@+id/receiveChooseCoinFragment"
         android:name="cash.p.terminal.modules.receive.ui.ReceiveChooseCoinFragment" />
     <fragment

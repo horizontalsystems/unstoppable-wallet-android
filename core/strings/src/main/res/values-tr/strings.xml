@@ -332,6 +332,16 @@
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s adresi gizlilik ve güvenlik nedeniyle değişiyor. Bu cüzdanın kullanılan adreslerinin bir listesi aşağıda verilmiştir.</string>
     <string name="Balance_Receive_ReceiveAddresses">Alıcının adresi</string>
     <string name="Balance_Receive_ChangeAddresses">Değişiklik Adresleri</string>
+    <string name="receive_address_badge_new">Yeni</string>
+    <string name="receive_address_badge_used">Kullanıldı</string>
+    <string name="receive_address_badge_unused">Kullanılmadı</string>
+    <string name="receive_create_new_address">Yeni adres oluştur</string>
+    <string name="receive_create_another_address_title">Başka bir adres oluşturulsun mu?</string>
+    <string name="receive_create_another_address_warning">Henüz fon almamış yeni bir adresiniz zaten var. Yeni bir adres oluşturmak gerekli değil. Devam etmek istiyor musunuz?</string>
+    <string name="receive_dont_ask_again">Bir daha sorma (ayarı kaydet)</string>
+    <string name="receive_create_new">Yeni oluştur</string>
+    <string name="receive_keep_current">Mevcut olanı koru</string>
+    <string name="receive_monero_used_addresses_description">Gelişmiş gizlilik için her işlemde yeni bir adres kullanmanız önerilir.\nUygulamamızda Monero adresleri, cüzdan taranırken yükü azaltmak için manuel olarak oluşturulur.\nAşağıda bu cüzdanda daha önce oluşturulan adresler listelenmiştir.</string>
     <string name="Balance_SendHint_CoinName">Kripto Para Adı</string>
     <string name="Balance_ReceiveHint_Search">Ara</string>
     <!--Send NFT-->

@@ -395,6 +395,16 @@
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s addresses change for privacy and security. Below a list of used addresses in this wallet.</string>
     <string name="Balance_Receive_ReceiveAddresses">Receive Addresses</string>
     <string name="Balance_Receive_ChangeAddresses">Change Addresses</string>
+    <string name="receive_address_badge_new">New</string>
+    <string name="receive_address_badge_used">Used</string>
+    <string name="receive_address_badge_unused">Unused</string>
+    <string name="receive_create_new_address">Create new address</string>
+    <string name="receive_create_another_address_title">Create another address?</string>
+    <string name="receive_create_another_address_warning">You already have a new address that hasn\'t received any funds yet. Creating a new address is not required. Do you want to continue?</string>
+    <string name="receive_dont_ask_again">Don\'t ask again (save setting)</string>
+    <string name="receive_create_new">Create new</string>
+    <string name="receive_keep_current">Keep current</string>
+    <string name="receive_monero_used_addresses_description">For enhanced privacy, it is recommended to use a new address for each transaction.\nIn our app, Monero addresses are created manually to reduce the load when scanning the wallet.\nBelow are the addresses previously created in this wallet.</string>
     <string name="Balance_SendHint_CoinName">Coin Name</string>
     <string name="Balance_ReceiveHint_Search">Search</string>
     <string name="Balance_Receive_Trustline">Trustline</string>
