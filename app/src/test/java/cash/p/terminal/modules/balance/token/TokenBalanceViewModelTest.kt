@@ -650,6 +650,8 @@ class TokenBalanceViewModelTest : KoinTest {
 
         every { numberFormatter.formatCoinShort(any(), any(), any()) } returns nativeBalance.toPlainString()
         every { CoreApp.instance.getString(any(), *anyVararg()) } answers { "warning text" }
+    }
+
     // region Address Poisoning View Mode Tests
 
     @Test
