@@ -27,9 +27,6 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     namespace 'io.horizontalsystems.icons'
     lint {
         targetSdk 35
@@ -39,9 +36,14 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
-    implementation(libs.android.core.ktx)
-    implementation "androidx.core:core-ktx:$core_ktx_version"
+    implementation libs.appcompat
+    implementation libs.android.core.ktx
 }

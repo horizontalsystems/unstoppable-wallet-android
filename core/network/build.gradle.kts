@@ -27,7 +27,6 @@ kotlin {
                 implementation(project.dependencies.platform(libs.koin.bom))
                 implementation(libs.koin.core)
                 implementation(libs.koin.android)
-                implementation(libs.ktor.kotlinx.serialization)
 
                 implementation(libs.room.runtime)
                 implementation(libs.room.ktx)
@@ -38,9 +37,13 @@ kotlin {
                 implementation(libs.timber)
             }
         }
-        iosMain {
-        }
         commonTest {
+            dependencies {
+                implementation(libs.junit)
+                implementation(libs.mockk)
+                implementation(libs.kotlinx.coroutines.test)
+                implementation(kotlin("test"))
+            }
         }
     }
 }
@@ -72,9 +75,4 @@ tasks.withType<KotlinJvmCompile>().configureEach {
 
 dependencies {
     add("kspAndroid", libs.room.compiler)
-
-    testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(kotlin("test"))
 }

@@ -4,13 +4,14 @@
 import com.android.tools.profgen.ArtProfileKt
 import com.android.tools.profgen.ArtProfileSerializer
 import com.android.tools.profgen.DexFile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'com.google.devtools.ksp'
-    id 'org.jetbrains.kotlin.plugin.compose' version('2.2.10')
+    id 'org.jetbrains.kotlin.plugin.compose' version('2.3.20')
     id 'com.google.firebase.crashlytics'
     id 'com.google.gms.google-services'
     id 'org.jetbrains.kotlin.plugin.serialization'
@@ -197,16 +198,12 @@ android {
 
     packagingOptions {
         resources {
-            pickFirsts += ['META-INF/atomicfu.kotlin_module']
-            excludes += ['META-INF/INDEX.LIST', 'META-INF/DEPENDENCIES', 'META-INF/LICENSE.md', 'META-INF/NOTICE.md']
+            pickFirsts += ['META-INF/atomicfu.kotlin_module', 'META-INF/io.netty.versions.properties']
+            excludes += ['META-INF/INDEX.LIST', 'META-INF/DEPENDENCIES', 'META-INF/LICENSE.md', 'META-INF/NOTICE.md', 'META-INF/FastDoubleParser-LICENSE', 'META-INF/FastDoubleParser-NOTICE']
         }
         jniLibs {
             useLegacyPackaging = true
         }
-    }
-
-    kotlinOptions {
-        jvmTarget = "17"
     }
 
     namespace 'cash.p.terminal'
@@ -216,6 +213,9 @@ android {
 
     testOptions {
         unitTests.returnDefaultValues = true
+        unitTests.all {
+            useJUnitPlatform()
+        }
     }
 
     def bcprovVersionsToRedirect = [
@@ -272,38 +272,46 @@ android {
 
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+    }
+}
+
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':core:ui-compose')
     implementation libs.appcompat
-    implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.lifecycle.extensions1
+    implementation(platform(libs.compose.bom))
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
     implementation(libs.kotlinx.serialization.json)
 
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation libs.lifecycle.viewmodel.ktx
     // use -ktx for Kotlin
     // alternatively - just LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation libs.androidx.lifecycle.livedata.ktx
     // alternatively - Lifecycles only (no ViewModel or LiveData).
     //     Support library depends on this lightweight import
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation libs.lifecycle.runtime.ktx
+    implementation libs.androidx.lifecycle.common.java8
+    implementation libs.lifecycle.viewmodel.ktx
     implementation libs.androidx.fragment.ktx
-    implementation "androidx.preference:preference-ktx:1.2.1"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation libs.androidx.preference.ktx
+    implementation libs.androidx.swiperefreshlayout
     implementation libs.bitcoinj
 
     //Splash screen
-    implementation "androidx.core:core-splashscreen:1.0.1"
+    implementation libs.androidx.core.splashscreen
 
     //Baseline Profiles
     implementation libs.profileinstaller
 
     //AppWidgets
-    implementation 'androidx.glance:glance-appwidget:1.1.1'
+    implementation libs.androidx.glance.appwidget
 
     // Room
     implementation libs.room.runtime
@@ -319,41 +327,39 @@ dependencies {
 
     testImplementation libs.junit.jupiter
     // alternately - if using Java8, use the following instead of compiler
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    implementation libs.androidx.lifecycle.common.java8
     // optional - ReactiveStreams support for LiveData
-    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
+    implementation libs.androidx.lifecycle.reactivestreams.ktx
 
     implementation libs.androidx.recyclerview
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.compose.viewmodel)
 
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation libs.rxandroid
     // Because RxAndroid releases are few and far between, it is recommended you also
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     // (see https://github.com/ReactiveX/RxJava/releases for latest 2.x.x version)
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
-    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.11.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.11.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation "androidx.biometric:biometric:$biometric_version"
+    implementation libs.rxjava
+    implementation libs.retrofit.rxjava2
+    implementation libs.retrofit.gson
+    implementation libs.retrofit.scalars
+    implementation libs.gson
+    implementation libs.androidx.biometric
 
     implementation libs.richtext.markdown
     implementation libs.richtext.ui.material3
     implementation libs.richtext.commonmark
 
     // ViewPager circle indicator
-    implementation 'me.relex:circleindicator:2.1.6'
+    implementation libs.circleindicator
 
     //Custom tabs, chrome
-    implementation "androidx.browser:browser:1.8.0"
+    implementation libs.androidx.browser
 
     // Navigation component
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_ktx_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_ktx_version"
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
 
     //Compose Navigation
     implementation libs.androidx.navigation.compose
@@ -366,13 +372,12 @@ dependencies {
     implementation libs.zxing.core
 
     // QR code generator
-    implementation("io.github.alexzhirkevich:qrose:1.0.1")
+    implementation(libs.qrose)
 
     // WorkManager Kotlin
-    def work_version = "2.10.0"
-    implementation "androidx.work:work-runtime-ktx:$work_version"
+    implementation libs.androidx.work.runtime.ktx
     // WorkManager RxJava2 support
-    implementation "androidx.work:work-rxjava2:$work_version"
+    implementation libs.androidx.work.rxjava2
 
     def leakCanary = libs.leakcanary.android
     appcenterdebugImplementation leakCanary
@@ -389,7 +394,7 @@ dependencies {
     implementation libs.monero.kit
     implementation libs.netcipher
     implementation libs.solanakt
-    implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
+    implementation libs.blockchain.fee.kit
     implementation libs.tron.kit
     // Zcash SDK
     coreLibraryDesugaring libs.desugar.jdk.libs
@@ -408,14 +413,14 @@ dependencies {
     implementation libs.reown.core
 
     // Unstoppable Domains
-    implementation 'com.github.unstoppabledomains:resolution-java:v7.1.0'
+    implementation libs.resolution.java
 
     // Ethereum Name Service
     implementation libs.web3j.core
 
-    implementation 'com.twitter.twittertext:twitter-text:3.1.0'
+    implementation libs.twitter.text
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.8.1'
+    implementation libs.kotlinx.coroutines.rx2
 
     // UI modules
 
@@ -435,36 +440,31 @@ dependencies {
 
     // Integration with activities
     implementation libs.androidx.activity.compose
-    // Compose Material Design
-    implementation "androidx.compose.material:material:$compose_version"
-    // Animations
-    implementation "androidx.compose.animation:animation:$compose_version"
-    // Tooling support (Previews, etc.)
-    implementation "androidx.compose.ui:ui-tooling:$compose_version"
-    // Integration with ViewModels
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
-    // Lifecycle utilities for Compose
-    implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
+    // Compose
+    implementation libs.compose.material
+    implementation libs.compose.animation
+    implementation libs.androidx.ui.tooling
+    implementation libs.lifecycle.viewmodel.compose
+    implementation libs.lifecycle.runtime.compose
 
-    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    implementation libs.androidx.runtime.livedata
 
     implementation libs.coil.compose
     implementation libs.coil.network.okhttp
     implementation libs.coil.svg
     implementation libs.coil.gif
-    implementation 'com.getkeepsafe.relinker:relinker:1.4.5'
+    implementation libs.relinker
 
     implementation libs.accompanist.permissions
 
     // UI Tests
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    androidTestImplementation libs.compose.ui.test.junit4
 
-    androidTestImplementation 'androidx.test:runner:1.5.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation libs.androidx.runner
 
     // optional - Test helpers for LiveData
-    testImplementation "junit:junit:$junit_version"
-    testImplementation "androidx.arch.core:core-testing:2.2.0"
+    testImplementation libs.junit
+    testImplementation libs.androidx.core.testing
     testImplementation libs.mockk
     testImplementation libs.kotlinx.coroutines.test
     testImplementation libs.powermock.api.mockito2
@@ -474,15 +474,15 @@ dependencies {
     implementation libs.ktor.client.okhttp
 
     // Spek
-    testImplementation "org.spekframework.spek2:spek-dsl-jvm:2.0.9"
-    testRuntimeOnly "org.spekframework.spek2:spek-runner-junit5:2.0.9"
-    testRuntimeOnly "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    testImplementation libs.spek.dsl.jvm
+    testRuntimeOnly libs.spek.runner.junit5
+    testRuntimeOnly libs.kotlin.reflect
 
     //Android Tor
     implementation libs.tor.android
 
-    api 'com.jaredrummler:android-shell:1.0.0'
-    api 'com.offbynull.portmapper:portmapper:2.0.5'
+    api libs.android.shell
+    api libs.portmapper
 
     implementation libs.google.play.app.update
     implementation libs.google.play.app.update.ktx
