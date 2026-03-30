@@ -9,7 +9,6 @@ import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -69,6 +68,7 @@ private fun RestoreAccountNavHost(
             AdvancedRestoreScreen(
                 restoreMenuViewModel = restoreMenuViewModel,
                 mainViewModel = mainViewModel,
+                openSelectNetworkScreen = { navController.navigate("restore_select_network") },
                 openSelectCoinsScreen = { navController.navigate("restore_select_coins") },
                 openNonStandardRestore = {
                     navController.navigate("restore_phrase_nonstandard")
@@ -78,6 +78,13 @@ private fun RestoreAccountNavHost(
                         event = StatEvent.Open(StatPage.ImportWalletNonStandard)
                     )
                 },
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+        composablePage("restore_select_network") {
+            SelectNetworkScreen(
+                mainViewModel = mainViewModel,
+                openSelectCoinsScreen = { navController.navigate("restore_select_coins") },
                 onBackClick = { navController.popBackStack() }
             )
         }

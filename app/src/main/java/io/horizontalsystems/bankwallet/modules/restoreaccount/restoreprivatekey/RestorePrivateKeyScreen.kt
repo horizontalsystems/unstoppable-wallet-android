@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 fun RestorePrivateKey(
     restoreMenuViewModel: RestoreMenuViewModel,
     mainViewModel: RestoreViewModel,
+    openSelectNetworkScreen: () -> Unit,
     openSelectCoinsScreen: () -> Unit,
     onBackClick: () -> Unit,
 ) {
@@ -43,20 +44,26 @@ fun RestorePrivateKey(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Next),
                 onClick = {
-                    viewModel.resolveAccountType()?.let { accountType ->
+                    val accountTypes = viewModel.resolveAccountTypes()
+                    if (accountTypes.isNotEmpty()) {
                         mainViewModel.setAccountData(
-                            accountType,
+                            accountTypes.singleOrNull(),
                             viewModel.accountName,
                             true,
                             false,
                             StatPage.ImportWalletFromKeyAdvanced
                         )
-                        openSelectCoinsScreen.invoke()
+                        if (accountTypes.size == 1) {
+                            openSelectCoinsScreen.invoke()
 
-                        stat(
-                            page = StatPage.ImportWalletFromKeyAdvanced,
-                            event = StatEvent.Open(StatPage.RestoreSelect)
-                        )
+                            stat(
+                                page = StatPage.ImportWalletFromKeyAdvanced,
+                                event = StatEvent.Open(StatPage.RestoreSelect)
+                            )
+                        } else {
+                            mainViewModel.accountTypes = accountTypes
+                            openSelectNetworkScreen()
+                        }
                     }
                 },
                 tint = ComposeAppTheme.colors.jacob

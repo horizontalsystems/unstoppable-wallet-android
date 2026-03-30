@@ -61,6 +61,10 @@ class TronKitManager(
                     createKitInstance(accountType, account)
                 }
 
+                is AccountType.TronPrivateKey -> {
+                    createKitInstance(accountType, account)
+                }
+
                 else -> throw UnsupportedAccountException()
             }
             start()
@@ -105,6 +109,24 @@ class TronKitManager(
         )
 
         return TronKitWrapper(kit, null)
+    }
+
+    private fun createKitInstance(
+        accountType: AccountType.TronPrivateKey,
+        account: Account
+    ): TronKitWrapper {
+        val signer = Signer(accountType.key)
+        val address = Signer.address(accountType.key, network)
+
+        val kit = TronKit.getInstance(
+            application = App.instance,
+            address = address,
+            network = network,
+            walletId = account.id,
+            tronGridApiKeys = appConfigProvider.trongridApiKeys
+        )
+
+        return TronKitWrapper(kit, signer)
     }
 
     @Synchronized

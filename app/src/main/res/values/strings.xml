@@ -128,6 +128,12 @@
     <string name="RateApp_Button_RateIt">Rate It</string>
     <string name="RateApp_Button_NotNow">Not now</string>
 
+    <string name="Restore_SelectNetwork_Title">Select Network</string>
+    <string name="Restore_SelectNetwork_EvmPrivateKey_Title">EVM Networks</string>
+    <string name="Restore_SelectNetwork_EvmPrivateKey_Subtitle">Ethereum, Arbitrum, Optimism…</string>
+    <string name="Restore_SelectNetwork_TronPrivateKey_Title">TRON</string>
+    <string name="Restore_SelectNetwork_TronPrivateKey_Subtitle">TRON network only.</string>
+
     <!--Restore-->
     <string name="Restore_Advanced_Title">Advanced</string>
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. It must be between 12 or 24 words. You entered: %d</string>
