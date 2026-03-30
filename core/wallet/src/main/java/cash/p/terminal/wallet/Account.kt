@@ -1,6 +1,7 @@
 package cash.p.terminal.wallet
 
 import android.os.Parcelable
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.wallet.data.MnemonicKind
 import cash.p.terminal.wallet.entities.TokenType
@@ -284,12 +285,12 @@ sealed class AccountType : Parcelable {
                 val count = words.size
 
                 if (passphrase.isNotBlank()) {
-                    cash.p.terminal.strings.helpers.Translator.getString(
+                    Translator.getString(
                         R.string.ManageAccount_NWordsWithPassphrase,
                         count
                     )
                 } else {
-                    cash.p.terminal.strings.helpers.Translator.getString(
+                    Translator.getString(
                         R.string.ManageAccount_NWords,
                         count
                     )
