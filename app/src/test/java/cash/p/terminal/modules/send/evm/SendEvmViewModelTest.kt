@@ -3,6 +3,7 @@ package cash.p.terminal.modules.send.evm
 import cash.p.terminal.core.ISendEthereumAdapter
 import cash.p.terminal.core.ServiceStateFlow
 import cash.p.terminal.core.managers.EvmBlockchainManager
+import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.amount.SendAmountService
@@ -98,6 +99,7 @@ class SendEvmViewModelTest : KoinTest {
                 single { mockk<ContactsRepository>(relaxed = true) }
                 single<IBalanceHiddenManager> { balanceHiddenManager }
                 single<MarketKitWrapper> { marketKit }
+                single { mockk<PoisonAddressManager>(relaxed = true) }
             }
         )
     }

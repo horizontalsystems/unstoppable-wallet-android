@@ -3,10 +3,13 @@ package cash.p.terminal.modules.balance.token
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.core.managers.PoisonAddressManager
+import cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.managers.StackingManager
+import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningViewMode
 import cash.p.terminal.modules.displayoptions.DisplayDiffOptionType
 import cash.p.terminal.modules.displayoptions.DisplayPricePeriod
 import cash.p.terminal.core.managers.TransactionHiddenManager
@@ -35,6 +38,8 @@ import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.wallet.managers.TransactionDisplayLevel
 import cash.p.terminal.wallet.managers.TransactionHiddenState
 import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.IAdapterManager
+import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.wallet.WalletFactory
 import cash.p.terminal.wallet.tokenQueryId
 import io.horizontalsystems.core.CoreApp
@@ -117,15 +122,20 @@ class TokenBalanceViewModelTest : KoinTest {
     val koinRule = KoinTestRule.create {
         modules(
             module {
-                single { mockk<cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase>(relaxed = true) }
+                single { mockk<UpdateSwapProviderTransactionsStatusUseCase>(relaxed = true) }
                 single {
-                    mockk<cash.p.terminal.wallet.IAdapterManager>(relaxed = true) {
-                        coEvery { awaitAdapterForWallet<cash.p.terminal.wallet.IReceiveAdapter>(any(), any()) } returns null
+                    mockk<IAdapterManager>(relaxed = true) {
+                        coEvery { awaitAdapterForWallet<IReceiveAdapter>(any(), any()) } returns null
                     }
                 }
                 single {
                     mockk<SwapProviderTransactionsStorage>(relaxed = true) {
                         every { observeByToken(any(), any(), any()) } returns flowOf(emptyList())
+                    }
+                }
+                single {
+                    mockk<PoisonAddressManager>(relaxed = true) {
+                        every { poisonDbChangedFlow } returns MutableSharedFlow()
                     }
                 }
             }
@@ -442,6 +452,90 @@ class TokenBalanceViewModelTest : KoinTest {
         advanceUntilIdle()
 
         assertEquals(TokenBalanceModule.StakingStatus.ACTIVE, viewModel.uiState.stakingStatus)
+    }
+
+    // endregion
+
+    // region Address Poisoning View Mode Tests
+
+    @Test
+    fun refreshTransactionDisplaySettings_modeNotChanged_doesNotRefresh() = runTest(dispatcher) {
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.STANDARD
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        clearMocks(transactionViewItemFactory, answers = false)
+
+        viewModel.refreshTransactionDisplaySettings()
+
+        verify(exactly = 0) { transactionViewItemFactory.updateCache() }
+    }
+
+    @Test
+    fun refreshTransactionDisplaySettings_modeChanged_refreshesCache() = runTest(dispatcher) {
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.STANDARD
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        clearMocks(transactionViewItemFactory, answers = false)
+
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.COMPACT
+
+        viewModel.refreshTransactionDisplaySettings()
+
+        verify(exactly = 1) { transactionViewItemFactory.updateCache() }
+    }
+
+    @Test
+    fun refreshTransactionDisplaySettings_modeChangedBack_refreshesTwice() = runTest(dispatcher) {
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.STANDARD
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        clearMocks(transactionViewItemFactory, answers = false)
+
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.COMPACT
+        viewModel.refreshTransactionDisplaySettings()
+
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.STANDARD
+        viewModel.refreshTransactionDisplaySettings()
+
+        verify(exactly = 2) { transactionViewItemFactory.updateCache() }
+    }
+
+    @Test
+    fun refreshTransactionDisplaySettings_calledTwiceWithoutChange_refreshesOnlyOnce() = runTest(dispatcher) {
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.STANDARD
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+        clearMocks(transactionViewItemFactory, answers = false)
+
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.COMPACT
+        viewModel.refreshTransactionDisplaySettings()
+        viewModel.refreshTransactionDisplaySettings()
+
+        verify(exactly = 1) { transactionViewItemFactory.updateCache() }
+    }
+
+    @Test
+    fun refreshTransactionDisplaySettings_modeChanged_reprocessesTransactions() = runTest(dispatcher) {
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.STANDARD
+
+        transactionItemsFlow.value = listOf(
+            createTransactionItem("tx-1"),
+            createTransactionItem("tx-2")
+        )
+
+        val viewModel = createViewModel()
+        advanceUntilIdle()
+
+        every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.COMPACT
+
+        viewModel.refreshTransactionDisplaySettings()
+
+        verify(exactly = 1) { transactionViewItemFactory.updateCache() }
+        assertEquals(2, viewModel.uiState.transactions?.values?.flatten()?.size)
     }
 
     // endregion

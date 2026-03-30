@@ -51,6 +51,8 @@ import cash.p.terminal.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScre
 import cash.p.terminal.modules.send.bitcoin.utxoexpert.UtxoExpertModeScreen
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui.compose.components.PoisonAddressRiskSection
+import cash.p.terminal.ui.compose.components.PoisonWarningCell
 import cash.p.terminal.ui.compose.components.SuggestionsBarHeight
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
@@ -206,6 +208,11 @@ private fun SendBitcoinScreen(
                         .verticalScroll(rememberScrollState())
                         .padding(bottom = SuggestionsBarHeight)
                 ) {
+                    if (uiState.isPoisonAddress) {
+                        PoisonWarningCell()
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+
                     if (uiState.showAddressInput) {
                         HSAddressInput(
                             modifier = Modifier.padding(horizontal = 16.dp),
@@ -214,10 +221,10 @@ private fun SendBitcoinScreen(
                             coinCode = wallet.coin.code,
                             error = uiState.addressError,
                             textPreprocessor = paymentAddressViewModel,
-                            navController = fragmentNavController
-                        ) {
-                            viewModel.onEnterAddress(it)
-                        }
+                            navController = fragmentNavController,
+                            isPoisonAddress = uiState.isPoisonAddress,
+                            onValueChange = { viewModel.onEnterAddress(it) },
+                        )
                         Spacer(modifier = Modifier.height(12.dp))
                     }
 
@@ -292,6 +299,12 @@ private fun SendBitcoinScreen(
                         navController = fragmentNavController,
                         addressCheckerControl = addressCheckerControl,
                         modifier = Modifier.padding(top = 8.dp)
+                    )
+
+                    PoisonAddressRiskSection(
+                        isPoisonAddress = uiState.isPoisonAddress,
+                        riskAccepted = uiState.riskAccepted,
+                        onRiskAcceptedChange = { viewModel.onRiskAcceptedChange(it) },
                     )
 
                     ButtonPrimaryYellow(

@@ -12,6 +12,7 @@ import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.transactions.AmlStatus
+import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
 import cash.p.terminal.modules.transactions.NftMetadataService
 import cash.p.terminal.modules.transactions.TransactionItem
 import cash.p.terminal.modules.transactions.TransactionStatus
@@ -85,7 +86,8 @@ data class TransactionInfoItem(
     val swapCoinUidIn: String? = null,
     // AML status
     val amlStatus: AmlStatus? = null,
-    val swapProvider: SwapProvider? = null
+    val swapProvider: SwapProvider? = null,
+    val poisonStatus: PoisonStatus = PoisonStatus.BLOCKCHAIN,
 )
 
 val BlockchainType.resendable: Boolean

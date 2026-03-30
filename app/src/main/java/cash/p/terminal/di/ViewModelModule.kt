@@ -1,5 +1,6 @@
 package cash.p.terminal.di
 
+import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningViewModel
 import cash.p.terminal.modules.blockchainstatus.BlockchainStatusViewModel
 import cash.p.terminal.modules.configuredtoken.ConfiguredTokenInfoViewModel
 import cash.p.terminal.modules.addtoken.AddTokenViewModel
@@ -72,6 +73,7 @@ val viewModelModule = module {
     viewModelOf(::ReleaseNotesViewModel)
     viewModelOf(::RestoreMnemonicViewModel)
     viewModelOf(::AppStatusViewModel)
+    viewModel { params -> AddressPoisoningViewModel(params[0], params[1], params[2], get(), get(), get(), get()) }
     viewModel { params -> BlockchainStatusViewModel(provider = params.get(), dispatcherProvider = get()) }
     viewModelOf(::AppCacheViewModel)
     viewModelOf(::MoneroConfigureViewModel)

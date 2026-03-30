@@ -252,6 +252,7 @@ object TransactionViewItemFactoryHelper {
         nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf(),
         blockchainType: BlockchainType,
         amlItem: TransactionInfoViewItem.AmlCheck? = null,
+        showCopyWarning: Boolean = false,
     ): List<TransactionInfoViewItem> {
         val mint = fromAddress == zeroAddress
         val title: String =
@@ -286,6 +287,7 @@ object TransactionViewItemFactoryHelper {
                     fromAddress,
                     contact == null,
                     blockchainType,
+                    showCopyWarning = showCopyWarning,
                 )
             )
             contact?.let {
@@ -333,6 +335,7 @@ object TransactionViewItemFactoryHelper {
         sentToSelf: Boolean = false,
         nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf(),
         blockchainType: BlockchainType,
+        showCopyWarning: Boolean = false,
     ): List<TransactionInfoViewItem> {
         val burn = toAddress?.size == 1 && toAddress.first() == zeroAddress
 
@@ -379,6 +382,7 @@ object TransactionViewItemFactoryHelper {
                         address,
                         contact == null,
                         blockchainType,
+                        showCopyWarning = showCopyWarning,
                     )
                 )
 
@@ -515,7 +519,7 @@ object TransactionViewItemFactoryHelper {
             TransactionInfoViewItem.Transaction(
                 Translator.getString(R.string.Transactions_ContractCreation),
                 "",
-                TransactionViewItem.Icon.Platform(transaction.blockchainType).iconRes
+                TransactionViewItem.Icon.Platform.fromBlockchainType(transaction.blockchainType).iconRes
             )
         )
 
@@ -597,7 +601,7 @@ object TransactionViewItemFactoryHelper {
             method
                 ?: Translator.getString(R.string.Transactions_ContractCall),
             evmLabelManager.mapped(contractAddress),
-            TransactionViewItem.Icon.Platform(blockchainType).iconRes
+            TransactionViewItem.Icon.Platform.fromBlockchainType(blockchainType).iconRes
         )
     )
 

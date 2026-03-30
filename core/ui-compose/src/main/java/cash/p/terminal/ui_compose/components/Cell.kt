@@ -390,6 +390,33 @@ fun CellFooterPreview() {
 }
 
 @Composable
+fun ColumnUniversal(
+    modifier: Modifier = Modifier,
+    verticalPadding: Dp = 12.dp,
+    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    onClick: (() -> Unit)? = null,
+    minHeight: Dp = 24.dp,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    val clickableModifier = when (onClick) {
+        null -> Modifier
+        else -> Modifier.clickable {
+            onClick.invoke()
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = minHeight)
+            .then(clickableModifier)
+            .then(modifier)
+            .padding(vertical = verticalPadding),
+        horizontalAlignment = horizontalAlignment,
+        content = content
+    )
+}
+@Composable
 fun RowUniversal(
     modifier: Modifier = Modifier,
     verticalPadding: Dp = 12.dp,

@@ -43,19 +43,20 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun ButtonSecondaryDefault(
-    modifier: Modifier = Modifier,
     title: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    overflow: TextOverflow = TextOverflow.Clip,
 ) {
     ButtonSecondary(
         modifier = modifier,
         onClick = onClick,
         content = {
             if (enabled) {
-                captionSB_leah(text = title, maxLines = 1)
+                captionSB_leah(text = title, maxLines = 1, overflow = overflow)
             } else {
-                captionSB_grey50(text = title, maxLines = 1)
+                captionSB_grey50(text = title, maxLines = 1, overflow = overflow)
             }
         },
         enabled = enabled

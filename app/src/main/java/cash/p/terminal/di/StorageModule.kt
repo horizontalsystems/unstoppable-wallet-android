@@ -96,6 +96,7 @@ val storageModule = module {
     single { get<AppDatabase>().moneroFileDao() }
     single { get<AppDatabase>().zcashSingleUseAddressDao() }
     single { get<AppDatabase>().spamAddressDao() }
+    single { get<AppDatabase>().poisonAddressDao() }
     single { get<AppDatabase>().pendingMultiSwapDao() }
     single { get<AppDatabase>().pendingTransactionDao() }
     single { get<AppDatabase>().swapProviderTransactionsDao() }
