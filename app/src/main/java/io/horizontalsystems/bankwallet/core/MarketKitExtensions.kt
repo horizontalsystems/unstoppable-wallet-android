@@ -408,6 +408,9 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                     || this == BlockchainType.Gnosis
                     || this == BlockchainType.Fantom
         }
+        is AccountType.TronPrivateKey -> {
+            this == BlockchainType.Tron
+        }
         is AccountType.SolanaAddress ->
             this == BlockchainType.Solana
 

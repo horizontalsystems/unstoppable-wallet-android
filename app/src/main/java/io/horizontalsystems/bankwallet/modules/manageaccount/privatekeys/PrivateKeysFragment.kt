@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey.EvmPrivateKeyFragment
+import io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey.PrivateKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.stellarsecretkey.StellarSecretKeyFragment
@@ -57,13 +57,31 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                 ) {
                     navController.authorizedAction {
                         navController.slideFromRight(
-                            R.id.evmPrivateKeyFragment,
-                            EvmPrivateKeyFragment.Input(key)
+                            R.id.privateKeyFragment,
+                            PrivateKeyFragment.Input(key, PrivateKeyFragment.Type.Evm)
                         )
 
                         stat(
                             page = StatPage.PrivateKeys,
                             event = StatEvent.Open(StatPage.EvmPrivateKey)
+                        )
+                    }
+                }
+            }
+            viewModel.viewState.tronPrivateKey?.let { key ->
+                KeyActionItem(
+                    title = stringResource(id = R.string.PrivateKeys_TronPrivateKey),
+                    description = stringResource(R.string.PrivateKeys_TronPrivateKeyDescription)
+                ) {
+                    navController.authorizedAction {
+                        navController.slideFromRight(
+                            R.id.privateKeyFragment,
+                            PrivateKeyFragment.Input(key, PrivateKeyFragment.Type.Tron)
+                        )
+
+                        stat(
+                            page = StatPage.PrivateKeys,
+                            event = StatEvent.Open(StatPage.TronPrivateKey)
                         )
                     }
                 }
