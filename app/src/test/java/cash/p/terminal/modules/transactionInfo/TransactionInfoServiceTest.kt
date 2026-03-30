@@ -4,6 +4,7 @@ import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.TestDispatcherProvider
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.PendingTransactionMatcher
+import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase
 import cash.p.terminal.entities.SwapProviderTransaction
@@ -73,6 +74,7 @@ class TransactionInfoServiceTest : KoinTest {
                 single<IBalanceHiddenManager> { balanceHiddenManager }
                 single { pendingTransactionMatcher }
                 single { amlStatusManager }
+                single { mockk<PoisonAddressManager>(relaxed = true) }
             }
         )
     }

@@ -170,7 +170,8 @@ object TonHelper {
         action: TonTransactionRecord.Action,
         rates: Map<String, CurrencyValue>,
         blockchainType: BlockchainType,
-        hideAmount: Boolean
+        hideAmount: Boolean,
+        showCopyWarning: Boolean = false,
     ): List<TransactionInfoViewItem> {
 
         val itemsForAction = mutableListOf<TransactionInfoViewItem>()
@@ -185,6 +186,7 @@ object TonHelper {
                         hideAmount = hideAmount,
                         sentToSelf = actionType.sentToSelf,
                         blockchainType = blockchainType,
+                        showCopyWarning = showCopyWarning,
                     )
                 )
                 actionType.comment?.let {
@@ -200,6 +202,7 @@ object TonHelper {
             is TonTransactionRecord.Action.Type.Receive -> {
                 itemsForAction.addAll(
                     TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                        showCopyWarning = showCopyWarning,
                         value = actionType.value,
                         fromAddress = actionType.from,
                         toAddress = actionType.to?.let(::listOf),

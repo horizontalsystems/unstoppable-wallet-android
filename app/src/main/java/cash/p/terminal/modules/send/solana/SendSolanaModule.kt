@@ -93,5 +93,7 @@ object SendSolanaModule {
         val canBeSend: Boolean,
         val showAddressInput: Boolean,
         val address: Address?,
+        val isPoisonAddress: Boolean = false,
+        val riskAccepted: Boolean = false,
     )
 }

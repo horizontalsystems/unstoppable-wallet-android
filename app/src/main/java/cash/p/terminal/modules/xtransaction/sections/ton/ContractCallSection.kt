@@ -29,7 +29,7 @@ fun ContractCallSection(
         HeaderCell(
             title = stringResource(R.string.Transactions_ContractCall),
             value = operation,
-            painter = TransactionViewItem.Icon.Platform(blockchainType).iconRes?.let {
+            painter = TransactionViewItem.Icon.Platform.fromBlockchainType(blockchainType).iconRes?.let {
                 painterResource(it)
             }
         )

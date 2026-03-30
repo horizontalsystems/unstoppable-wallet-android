@@ -3,8 +3,11 @@ package cash.p.terminal.modules.transactions
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.BalanceHiddenManager
+import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.core.managers.TransactionHiddenManager
+import cash.p.terminal.core.usecase.SyncPendingMultiSwapUseCase
+import cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase
 import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.core.TestDispatcherProvider
 import cash.p.terminal.entities.SwapProviderTransaction
@@ -52,8 +55,13 @@ class TransactionsViewModelGetTransactionItemTest : KoinTest {
     val koinRule = KoinTestRule.create {
         modules(
             module {
-                single { mockk<cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase>(relaxed = true) }
-                single { mockk<cash.p.terminal.core.usecase.SyncPendingMultiSwapUseCase>(relaxed = true) }
+                single { mockk<UpdateSwapProviderTransactionsStatusUseCase>(relaxed = true) }
+                single { mockk<SyncPendingMultiSwapUseCase>(relaxed = true) }
+                single {
+                    mockk<PoisonAddressManager>(relaxed = true) {
+                        every { poisonDbChangedFlow } returns MutableSharedFlow()
+                    }
+                }
             }
         )
     }

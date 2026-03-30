@@ -1,5 +1,6 @@
 package cash.p.terminal.di
 
+import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningViewModel
 import cash.p.terminal.modules.blockchainstatus.BlockchainStatusViewModel
 import cash.p.terminal.modules.configuredtoken.ConfiguredTokenInfoViewModel
 import cash.p.terminal.modules.addtoken.AddTokenViewModel
@@ -22,6 +23,7 @@ import cash.p.terminal.modules.moneroconfigure.MoneroConfigureViewModel
 import cash.p.terminal.modules.premium.about.AboutPremiumViewModel
 import cash.p.terminal.modules.premium.settings.PremiumSettingsViewModel
 import cash.p.terminal.modules.premium.smsnotification.SendSmsNotificationViewModel
+import cash.p.terminal.modules.receive.viewmodels.ReceiveMoneroViewModel
 import cash.p.terminal.modules.qrscanner.QRScannerViewModel
 import cash.p.terminal.modules.qrscanner.QrCodeImageDecoder
 import cash.p.terminal.modules.releasenotes.ReleaseNotesViewModel
@@ -46,6 +48,7 @@ import cash.p.terminal.modules.zcashconfigure.ZcashConfigureViewModel
 import cash.p.terminal.modules.multiswap.SwapSelectCoinViewModel
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.DefaultDispatcherProvider
 import io.horizontalsystems.core.DispatcherProvider
 import org.koin.core.module.dsl.factoryOf
@@ -72,6 +75,7 @@ val viewModelModule = module {
     viewModelOf(::ReleaseNotesViewModel)
     viewModelOf(::RestoreMnemonicViewModel)
     viewModelOf(::AppStatusViewModel)
+    viewModel { params -> AddressPoisoningViewModel(params[0], params[1], params[2], get(), get(), get(), get()) }
     viewModel { params -> BlockchainStatusViewModel(provider = params.get(), dispatcherProvider = get()) }
     viewModelOf(::AppCacheViewModel)
     viewModelOf(::MoneroConfigureViewModel)
@@ -144,6 +148,14 @@ val viewModelModule = module {
         SwapSelectCoinViewModel(
             otherSelectedToken = otherSelectedToken,
             activeAccount = activeAccount
+        )
+    }
+    viewModel { (wallet: Wallet) ->
+        ReceiveMoneroViewModel(
+            wallet = wallet,
+            adapterManager = get(),
+            localStorage = get(),
+            dispatcherProvider = get()
         )
     }
 }

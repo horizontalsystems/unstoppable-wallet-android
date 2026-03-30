@@ -2,8 +2,10 @@ package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.EvmLabelManager
+import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.core.utils.IncomingTransaction
 import cash.p.terminal.core.utils.SwapTransactionMatcher
@@ -50,22 +52,30 @@ class TransactionViewItemFactory(
     private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage,
     private val swapTransactionMatcher: SwapTransactionMatcher,
     private val numberFormatter: IAppNumberFormatter,
-    private val marketKit: MarketKitWrapper
+    private val marketKit: MarketKitWrapper,
+    private val localStorage: ILocalStorage,
+    private val poisonAddressManager: PoisonAddressManager,
 ) {
     private var showAmount = !balanceHiddenManager.balanceHidden
+    private var addressPoisoningViewMode = localStorage.addressPoisoningViewMode
     // Cache key includes swap status to avoid bypassing cache when status is unchanged
     private val cache = ConcurrentHashMap<String, Map<Pair<Long, String?>, TransactionViewItem>>()
 
     fun updateCache() {
         showAmount = !balanceHiddenManager.balanceHidden
+        addressPoisoningViewMode = localStorage.addressPoisoningViewMode
         for (uid in cache.keys) {
             cache.computeIfPresent(uid) { _, map ->
                 val perItemShowAmount = !balanceHiddenManager.isTransactionInfoHidden(uid)
                 map.mapValues { (_, viewItem) ->
-                    viewItem.copy(showAmount = perItemShowAmount)
+                    viewItem.copy(showAmount = perItemShowAmount, addressPoisoningViewMode = addressPoisoningViewMode)
                 }
             }
         }
+    }
+
+    fun clearCache() {
+        cache.clear()
     }
 
     fun convertToViewItemCached(
@@ -85,8 +95,11 @@ class TransactionViewItemFactory(
         val cacheKey = transactionItem.createdAt to matchedSwap?.status
 
         cache[transactionItem.record.uid]?.get(cacheKey)?.let { cached ->
-            return if (cached.showAmount != perItemShowAmount) {
-                cached.copy(showAmount = perItemShowAmount).also {
+            return if (cached.showAmount != perItemShowAmount || cached.addressPoisoningViewMode != addressPoisoningViewMode) {
+                cached.copy(
+                    showAmount = perItemShowAmount,
+                    addressPoisoningViewMode = addressPoisoningViewMode,
+                ).also {
                     cache[transactionItem.record.uid] = mapOf(cacheKey to it)
                 }
             } else {
@@ -94,7 +107,11 @@ class TransactionViewItemFactory(
             }
         }
 
-        val transactionViewItem = convertToViewItem(transactionItem, matchedSwap).copy(showAmount = perItemShowAmount)
+        val transactionViewItem = convertToViewItem(transactionItem, matchedSwap).copy(
+            showAmount = perItemShowAmount,
+            addressPoisoningViewMode = addressPoisoningViewMode,
+            poisonStatus = poisonAddressManager.getPoisonStatus(transactionItem.record),
+        )
         cache[transactionItem.record.uid] = mapOf(cacheKey to transactionViewItem)
 
         return transactionViewItem
@@ -234,7 +251,7 @@ class TransactionViewItemFactory(
         }
 
         else -> {
-            TransactionViewItem.Icon.Platform(blockchainType)
+            TransactionViewItem.Icon.Platform.fromBlockchainType(blockchainType)
         }
     }
 
@@ -661,7 +678,7 @@ class TransactionViewItemFactory(
                     secondaryValue = null
 
 
-                    iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+                    iconX = TransactionViewItem.Icon.Platform.fromBlockchainType(record.blockchainType)
                 }
 
                 is TonTransactionRecord.Action.Type.Burn -> {
@@ -672,14 +689,14 @@ class TransactionViewItemFactory(
                 }
 
                 is TonTransactionRecord.Action.Type.ContractCall -> {
-                    iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+                    iconX = TransactionViewItem.Icon.Platform.fromBlockchainType(record.blockchainType)
                     title = Translator.getString(R.string.Transactions_ContractCall)
                     subtitle = actionType.address.shorten()
                     primaryValue = getColoredValue(actionType.value, ColorName.Lucian)
                 }
 
                 is TonTransactionRecord.Action.Type.ContractDeploy -> {
-                    iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+                    iconX = TransactionViewItem.Icon.Platform.fromBlockchainType(record.blockchainType)
                     title = Translator.getString(R.string.Transactions_ContractDeploy)
                     subtitle = actionType.interfaces.joinToString()
                     primaryValue = null
@@ -702,7 +719,7 @@ class TransactionViewItemFactory(
                 }
             }
         } else {
-            iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+            iconX = TransactionViewItem.Icon.Platform.fromBlockchainType(record.blockchainType)
             title = Translator.getString(R.string.Transactions_TonTransaction)
             subtitle = Translator.getString(R.string.Transactions_Multiple)
             primaryValue = null
@@ -777,7 +794,7 @@ class TransactionViewItemFactory(
             }
 
             is StellarTransactionRecord.Type.Unsupported -> {
-                iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+                iconX = TransactionViewItem.Icon.Platform.fromBlockchainType(record.blockchainType)
                 title = Translator.getString(R.string.Transactions_StellarTransaction)
                 subtitle = recordType.type
                 primaryValue = null
@@ -1030,7 +1047,7 @@ class TransactionViewItemFactory(
             date = Date(timestamp * 1000),
             formattedTime = formatTime(timestamp),
             spam = spam,
-            icon = icon ?: TransactionViewItem.Icon.Platform(BlockchainType.Tron)
+            icon = icon ?: TransactionViewItem.Icon.Platform.fromBlockchainType(BlockchainType.Tron)
         )
     }
 
@@ -1052,7 +1069,7 @@ class TransactionViewItemFactory(
             date = Date(timestamp * 1000),
             formattedTime = formatTime(timestamp),
             spam = spam,
-            icon = icon ?: TransactionViewItem.Icon.Platform(blockchainType)
+            icon = icon ?: TransactionViewItem.Icon.Platform.fromBlockchainType(blockchainType)
         )
     }
 
@@ -1171,7 +1188,7 @@ class TransactionViewItemFactory(
             date = Date(record.timestamp * 1000),
             formattedTime = formatTime(record.timestamp),
             spam = record.spam,
-            icon = icon ?: TransactionViewItem.Icon.Platform(record.blockchainType)
+            icon = icon ?: TransactionViewItem.Icon.Platform.fromBlockchainType(record.blockchainType)
         )
     }
 

@@ -28,6 +28,7 @@ fun HSAddressInput(
     navController: NavController,
     onError: ((Throwable?) -> Unit)? = null,
     onValueChange: ((Address?) -> Unit)? = null,
+    isPoisonAddress: Boolean = false,
 ) {
     val viewModel = viewModel<AddressViewModel>(
         factory = AddressInputModule.FactoryToken(tokenQuery, coinCode, initial),
@@ -44,7 +45,8 @@ fun HSAddressInput(
         textPreprocessor = textPreprocessor,
         navController = navController,
         onError = onError,
-        onValueChange = onValueChange
+        onValueChange = onValueChange,
+        isPoisonAddress = isPoisonAddress,
     )
 }
 
@@ -60,6 +62,7 @@ fun HSAddressInput(
     navController: NavController,
     onError: ((Throwable?) -> Unit)? = null,
     onValueChange: ((Address?) -> Unit)? = null,
+    isPoisonAddress: Boolean = false,
 ) {
     LaunchedEffect(error) {
         viewModel.onAddressError(error)
@@ -92,6 +95,7 @@ fun HSAddressInput(
         },
         onValueChange = {
             viewModel.parseText(it)
-        }
+        },
+        isPoisonAddress = isPoisonAddress,
     )
 }

@@ -7,7 +7,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
@@ -64,10 +68,15 @@ import cash.p.terminal.ui_compose.components.ButtonSecondaryDefault
 import cash.p.terminal.ui_compose.components.HFillSpacer
 import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
 import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HsCheckbox
 import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui_compose.components.HsImage
 import cash.p.terminal.ui_compose.components.HudHelper
 import cash.p.terminal.ui_compose.components.RowUniversal
+import cash.p.terminal.ui_compose.components.SectionUniversalLawrence
+import cash.p.terminal.modules.transactions.poison_status.CopyWarningBottomSheet
+import cash.p.terminal.modules.transactions.poison_status.SuspiciousAddressAction
+import cash.p.terminal.ui_compose.components.TextImportantError
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_jacob
@@ -126,6 +135,48 @@ fun WarningMessageCell(message: String) {
             .padding(horizontal = 16.dp),
         text = message
     )
+}
+
+@Composable
+fun PoisonWarningCell(
+    modifier: Modifier = Modifier,
+    onInfoClick: (() -> Unit)? = null,
+) {
+    TextImportantError(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        title = stringResource(R.string.poison_warning_title),
+        icon = R.drawable.ic_attention_24,
+        text = stringResource(R.string.poison_warning_body),
+        onInfoClick = onInfoClick,
+    )
+}
+
+@Composable
+fun PoisonAddressRiskSection(
+    isPoisonAddress: Boolean,
+    riskAccepted: Boolean,
+    onRiskAcceptedChange: (Boolean) -> Unit,
+) {
+    if (isPoisonAddress) {
+        Spacer(modifier = Modifier.height(8.dp))
+        SectionUniversalLawrence {
+            RowUniversal(
+                modifier = Modifier.padding(horizontal = 16.dp),
+            ) {
+                HsCheckbox(
+                    checked = riskAccepted,
+                    onCheckedChange = onRiskAcceptedChange,
+                )
+                HSpacer(16.dp)
+                body_leah(
+                    text = stringResource(R.string.send_poison_accept_risk),
+                    modifier = Modifier.weight(1f),
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -286,10 +337,11 @@ fun TransactionInfoAddressCell(
     onCopy: (() -> Unit)? = null,
     onAddToExisting: (() -> Unit)? = null,
     onAddToNew: (() -> Unit)? = null,
-    onValueClick: (() -> Unit)? = null
+    onValueClick: (() -> Unit)? = null,
+    showCopyWarning: Boolean = false,
 ) {
     val view = LocalView.current
-    var showSaveAddressDialog by remember { mutableStateOf(false) }
+    var dialogState by remember { mutableStateOf<AddressDialogState>(AddressDialogState.Hidden) }
     RowUniversal(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -321,7 +373,13 @@ fun TransactionInfoAddressCell(
             HSpacer(16.dp)
             ButtonSecondaryCircle(
                 icon = R.drawable.icon_20_user_plus,
-                onClick = { showSaveAddressDialog = true }
+                onClick = {
+                    dialogState = if (showCopyWarning) {
+                        AddressDialogState.AddWarning
+                    } else {
+                        AddressDialogState.SaveAddress
+                    }
+                }
             )
         }
 
@@ -329,50 +387,86 @@ fun TransactionInfoAddressCell(
         ButtonSecondaryCircle(
             icon = R.drawable.ic_copy_20,
             onClick = {
-                TextHelper.copyText(value)
-                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-
-                onCopy?.invoke()
+                if (showCopyWarning) {
+                    dialogState = AddressDialogState.CopyWarning
+                } else {
+                    TextHelper.copyText(value)
+                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                    onCopy?.invoke()
+                }
             }
         )
     }
 
-    if (showSaveAddressDialog) {
-        SelectorDialogCompose(
-            title = stringResource(R.string.Contacts_AddAddress),
-            items = ContactsModule.AddAddressAction.values().map {
-                SelectorItem(stringResource(it.title), false, it)
-            },
-            onDismissRequest = {
-                showSaveAddressDialog = false
-            },
-            onSelectItem = { action ->
-                blockchainType?.let {
-                    val args = when (action) {
-                        ContactsModule.AddAddressAction.AddToNewContact -> {
-                            onAddToNew?.invoke()
-                            ContactsFragment.Input(
-                                Mode.AddAddressToNewContact(
-                                    blockchainType,
-                                    value
-                                )
-                            )
-                        }
+    when (dialogState) {
+        AddressDialogState.Hidden -> {}
 
-                        ContactsModule.AddAddressAction.AddToExistingContact -> {
-                            onAddToExisting?.invoke()
-                            ContactsFragment.Input(
-                                Mode.AddAddressToExistingContact(
-                                    blockchainType,
-                                    value
+        AddressDialogState.CopyWarning -> {
+            CopyWarningBottomSheet(
+                onCopyAnyway = {
+                    dialogState = AddressDialogState.Hidden
+                    TextHelper.copyText(value)
+                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                    onCopy?.invoke()
+                },
+                onDismiss = { dialogState = AddressDialogState.Hidden },
+            )
+        }
+
+        AddressDialogState.AddWarning -> {
+            CopyWarningBottomSheet(
+                action = SuspiciousAddressAction.ADD_TO_CONTACTS,
+                onCopyAnyway = {
+                    dialogState = AddressDialogState.SaveAddress
+                },
+                onDismiss = { dialogState = AddressDialogState.Hidden },
+            )
+        }
+
+        AddressDialogState.SaveAddress -> {
+            SelectorDialogCompose(
+                title = stringResource(R.string.Contacts_AddAddress),
+                items = ContactsModule.AddAddressAction.values().map {
+                    SelectorItem(stringResource(it.title), false, it)
+                },
+                onDismissRequest = {
+                    dialogState = AddressDialogState.Hidden
+                },
+                onSelectItem = { action ->
+                    blockchainType?.let {
+                        val args = when (action) {
+                            ContactsModule.AddAddressAction.AddToNewContact -> {
+                                onAddToNew?.invoke()
+                                ContactsFragment.Input(
+                                    Mode.AddAddressToNewContact(
+                                        blockchainType,
+                                        value
+                                    )
                                 )
-                            )
+                            }
+
+                            ContactsModule.AddAddressAction.AddToExistingContact -> {
+                                onAddToExisting?.invoke()
+                                ContactsFragment.Input(
+                                    Mode.AddAddressToExistingContact(
+                                        blockchainType,
+                                        value
+                                    )
+                                )
+                            }
                         }
+                        navController?.slideFromRight(R.id.contactsFragment, args)
                     }
-                    navController?.slideFromRight(R.id.contactsFragment, args)
-                }
-            })
+                })
+        }
     }
+}
+
+private sealed interface AddressDialogState {
+    data object Hidden : AddressDialogState
+    data object CopyWarning : AddressDialogState
+    data object AddWarning : AddressDialogState
+    data object SaveAddress : AddressDialogState
 }
 
 @Composable
@@ -541,26 +635,34 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
             text = stringResource(R.string.TransactionInfo_Id),
             modifier = Modifier.padding(end = 16.dp)
         )
-        Spacer(Modifier.weight(1f))
-        ButtonSecondaryDefault(
-            modifier = Modifier.height(28.dp),
-            title = transactionHash.shorten(),
-            onClick = {
-                TextHelper.copyText(transactionHash)
-                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-            }
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        ButtonSecondaryCircle(
-            icon = R.drawable.ic_share_20,
-            onClick = {
-                context.startActivity(Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, transactionHash)
-                    type = "text/plain"
-                })
-            }
-        )
+        Row(
+            modifier = Modifier.weight(1f),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            ButtonSecondaryDefault(
+                title = transactionHash.shorten(),
+                modifier = Modifier
+                    .weight(1f, fill = false)
+                    .height(28.dp),
+                overflow = TextOverflow.MiddleEllipsis,
+                onClick = {
+                    TextHelper.copyText(transactionHash)
+                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                }
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            ButtonSecondaryCircle(
+                icon = R.drawable.ic_share_20,
+                onClick = {
+                    context.startActivity(Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, transactionHash)
+                        type = "text/plain"
+                    })
+                }
+            )
+        }
     }
 }
 
@@ -873,6 +975,22 @@ private fun SubHead1ColoredValue(value: ColoredValue, modifier: Modifier = Modif
 
         ColorName.Leah -> {
             subhead2_leah(text = value.value, modifier = modifier)
+        }
+    }
+}
+
+@Suppress("UnusedPrivateMember")
+@Composable
+@Preview(showBackground = true)
+private fun TransactionInfoTransactionHashCellPreview() {
+    ComposeAppTheme {
+        Column {
+            Box(Modifier.width(200.dp)) {
+                TransactionInfoTransactionHashCell("0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef")
+            }
+            Box {
+                TransactionInfoTransactionHashCell("0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef")
+            }
         }
     }
 }

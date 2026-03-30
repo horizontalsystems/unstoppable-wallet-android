@@ -65,12 +65,15 @@ import cash.p.terminal.ui_compose.findNavController
 import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.parcelize.Parcelize
+import cash.p.terminal.core.getKoinInstance
+import cash.p.terminal.core.managers.PoisonAddressManager
 import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 
 class SendFragment : BaseComposeFragment() {
 
     private val addressCheckerControl: AddressCheckerControl by inject(AddressCheckerControl::class.java)
+    private val poisonAddressManager: PoisonAddressManager by lazy { getKoinInstance() }
     private val args: SendFragmentArgs by navArgs()
 
     @Composable
@@ -364,10 +367,16 @@ class SendFragment : BaseComposeFragment() {
             openConfirm(
                 type = data.type,
                 riskyAddress = args.input.riskyAddress,
+                poisonAddress = isAddressSuspicious(data.address),
                 keyboardController = keyboardController,
                 sendEntryPointDestId = args.input.sendEntryPointDestId
             )
         }
+    }
+
+    private fun isAddressSuspicious(address: String?): Boolean {
+        if (address == null) return false
+        return poisonAddressManager.isAddressSuspicious(address, args.input.wallet.token.blockchainType)
     }
 
     @Parcelize
@@ -392,7 +401,8 @@ internal fun NavController.openConfirm(
     type: Type,
     riskyAddress: Boolean,
     keyboardController: SoftwareKeyboardController?,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
+    poisonAddress: Boolean = false,
 ) {
     if (riskyAddress) {
         keyboardController?.hide()
@@ -400,6 +410,16 @@ internal fun NavController.openConfirm(
             R.id.addressRiskyBottomSheetAlert,
             AddressRiskyBottomSheetAlert.Input(
                 alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
+            )
+        ) {
+            openConfirm(type, sendEntryPointDestId)
+        }
+    } else if (poisonAddress) {
+        keyboardController?.hide()
+        slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
+            R.id.addressRiskyBottomSheetAlert,
+            AddressRiskyBottomSheetAlert.Input(
+                alertText = Translator.getString(R.string.send_poison_address_alert)
             )
         ) {
             openConfirm(type, sendEntryPointDestId)

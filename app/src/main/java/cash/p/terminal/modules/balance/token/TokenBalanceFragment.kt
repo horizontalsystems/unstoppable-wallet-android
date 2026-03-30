@@ -24,7 +24,11 @@ import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.HudHelper
 import cash.p.terminal.ui_compose.findNavController
 import cash.p.terminal.wallet.isPirateCash
+import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningViewScreen
+import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningViewModel
 import kotlinx.serialization.Serializable
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 private sealed class TokenBalanceRoute {
     @Serializable
@@ -32,6 +36,9 @@ private sealed class TokenBalanceRoute {
 
     @Serializable
     data object Settings : TokenBalanceRoute()
+
+    @Serializable
+    data object AddressPoisoningView : TokenBalanceRoute()
 }
 
 class TokenBalanceFragment : BaseComposeFragment() {
@@ -117,6 +124,7 @@ private fun TokenBalanceNavHost(
         startDestination = TokenBalanceRoute.Balance
     ) {
         composable<TokenBalanceRoute.Balance> {
+            viewModel.refreshTransactionDisplaySettings()
             TokenBalanceScreen(
                 viewModel = viewModel,
                 transactionsViewModel = transactionsViewModel,
@@ -154,8 +162,21 @@ private fun TokenBalanceNavHost(
                 onPricePeriodChange = viewModel::setDisplayPricePeriod,
                 onDisplayDiffOptionTypeChange = viewModel::setDisplayDiffOptionType,
                 onRoundingAmountChange = viewModel::setRoundingAmount,
+                onAddressPoisoningViewClick = {
+                    navController.navigate(TokenBalanceRoute.AddressPoisoningView)
+                },
                 navController = fragmentNavController,
                 onBack = navController::popBackStack,
+            )
+        }
+        composablePage<TokenBalanceRoute.AddressPoisoningView> {
+            val addressPoisoningViewModel: AddressPoisoningViewModel = koinViewModel {
+                parametersOf(wallet.coin.uid, wallet.isPirateCash(), wallet.token.blockchainType)
+            }
+            AddressPoisoningViewScreen(
+                uiState = addressPoisoningViewModel.uiState,
+                onSelect = addressPoisoningViewModel::onSelect,
+                onClose = navController::navigateUp,
             )
         }
     }

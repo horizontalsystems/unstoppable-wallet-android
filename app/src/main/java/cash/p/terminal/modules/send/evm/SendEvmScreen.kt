@@ -32,6 +32,8 @@ import cash.p.terminal.modules.send.SendSuggestionsBar
 import cash.p.terminal.modules.send.address.AddressCheckerControl
 import cash.p.terminal.modules.send.address.SmartContractCheckSection
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
+import cash.p.terminal.ui.compose.components.PoisonAddressRiskSection
+import cash.p.terminal.ui.compose.components.PoisonWarningCell
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.SectionUniversalLawrence
 import cash.p.terminal.ui_compose.components.SwitchWithText
@@ -102,6 +104,11 @@ internal fun SendEvmScreen(
                 )
             }
         ) {
+            if (uiState.isPoisonAddress) {
+                PoisonWarningCell()
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
             if (uiState.showAddressInput) {
                 HSAddressInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -110,10 +117,10 @@ internal fun SendEvmScreen(
                     coinCode = wallet.coin.code,
                     error = addressError,
                     textPreprocessor = paymentAddressViewModel,
-                    navController = navController
-                ) {
-                    viewModel.onEnterAddress(it)
-                }
+                    navController = navController,
+                    onValueChange = { viewModel.onEnterAddress(it) },
+                    isPoisonAddress = uiState.isPoisonAddress,
+                )
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
@@ -169,6 +176,12 @@ internal fun SendEvmScreen(
             if (uiState.cautions.isNotEmpty() && amountCaution == null && addressError == null) {
                 Cautions(uiState.cautions)
             }
+
+            PoisonAddressRiskSection(
+                isPoisonAddress = uiState.isPoisonAddress,
+                riskAccepted = uiState.riskAccepted,
+                onRiskAcceptedChange = { viewModel.onRiskAcceptedChange(it) },
+            )
 
             ButtonPrimaryYellow(
                 modifier = Modifier

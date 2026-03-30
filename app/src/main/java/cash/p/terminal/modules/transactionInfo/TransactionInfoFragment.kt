@@ -50,6 +50,8 @@ import cash.p.terminal.ui.compose.components.TransactionInfoSpeedUpCell
 import cash.p.terminal.ui.compose.components.TransactionInfoStatusCell
 import cash.p.terminal.ui.compose.components.TransactionInfoTransactionHashCell
 import cash.p.terminal.ui.compose.components.TransactionNftAmountCell
+import cash.p.terminal.modules.transactions.poison_status.AddressPoisoningInfoDialog
+import cash.p.terminal.ui.compose.components.PoisonWarningCell
 import cash.p.terminal.ui.compose.components.WarningMessageCell
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.CoinFragmentInput
@@ -215,6 +217,15 @@ fun TransactionInfoSection(
                 return
             }
 
+            is TransactionInfoViewItem.PoisonWarning -> {
+                var showPoisoningInfo by remember { mutableStateOf(false) }
+                PoisonWarningCell(onInfoClick = { showPoisoningInfo = true })
+                if (showPoisoningInfo) {
+                    AddressPoisoningInfoDialog(onDismiss = { showPoisoningInfo = false })
+                }
+                return
+            }
+
             is TransactionInfoViewItem.Description -> {
                 DescriptionCell(text = item.text)
                 return
@@ -331,6 +342,7 @@ fun TransactionInfoSection(
                                 onAddToNew = {
                                 },
                                 onValueClick = onSensitiveValueClick,
+                                showCopyWarning = viewItem.showCopyWarning,
                             )
                         }
                     }

@@ -135,6 +135,8 @@ abstract class BitcoinBaseAdapter(
 
     override val isMainNet: Boolean = true
 
+    override val isAddressHistorySupported: Boolean = true
+
     protected val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val lastBlockUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()

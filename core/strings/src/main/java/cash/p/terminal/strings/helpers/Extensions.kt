@@ -14,17 +14,30 @@ fun String.shorten(): String {
 
     val withoutPrefix = this.removePrefix(prefix)
 
-    val characters = 4
-    return if (withoutPrefix.length > characters * 2)
-        prefix + withoutPrefix.take(characters) + "..." + withoutPrefix.takeLast(characters)
-    else
-        this
+    val head = 10
+    val middle = 4
+    val tail = 10
+    val minLength = head + middle + tail
+    val shortHead = 4
+    val shortTail = 4
+    val shortMinLength = shortHead + shortTail + 1
+
+    return when {
+        withoutPrefix.length > minLength ->
+            prefix + withoutPrefix.take(head) + "..." + withoutPrefix.substring(
+                withoutPrefix.length / 2 - middle / 2,
+                withoutPrefix.length / 2 + middle / 2
+            ) + "..." + withoutPrefix.takeLast(tail)
+        withoutPrefix.length >= shortMinLength ->
+            prefix + withoutPrefix.take(shortHead) + "..." + withoutPrefix.takeLast(shortTail)
+        else -> this
+    }
 }
 
 fun String.toMasked(): String {
     return when {
         isEmpty() -> ""
-        length ==1 -> "*"
+        length == 1 -> "*"
         length < 10 -> "**"
         else -> "${first()}***${last()}"
     }

@@ -17,4 +17,6 @@ data class SendUiState(
     val address: Address?,
     val fee: BigDecimal? = null,
     val feeLoading: Boolean = false,
+    val isPoisonAddress: Boolean = false,
+    val riskAccepted: Boolean = false,
 )

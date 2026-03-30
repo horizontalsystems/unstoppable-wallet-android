@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material.Text
@@ -74,7 +75,8 @@ fun TextImportantError(
     modifier: Modifier = Modifier,
     text: String,
     title: String? = null,
-    @DrawableRes icon: Int? = null
+    @DrawableRes icon: Int? = null,
+    onInfoClick: (() -> Unit)? = null,
 ) {
     TextImportant(
         modifier = modifier,
@@ -84,7 +86,8 @@ fun TextImportantError(
         borderColor = ComposeAppTheme.colors.lucian,
         backgroundColor = ComposeAppTheme.colors.red20,
         textColor = ComposeAppTheme.colors.lucian,
-        iconColor = ComposeAppTheme.colors.lucian
+        iconColor = ComposeAppTheme.colors.lucian,
+        onInfoClick = onInfoClick,
     )
 }
 
@@ -98,7 +101,8 @@ fun TextImportant(
     backgroundColor: Color,
     textColor: Color,
     iconColor: Color,
-    onClose: (() -> Unit)? = null
+    onClose: (() -> Unit)? = null,
+    onInfoClick: (() -> Unit)? = null,
 ) {
     Column(
         modifier = modifier
@@ -109,7 +113,7 @@ fun TextImportant(
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        if (title != null || icon != null || onClose != null) {
+        if (title != null || icon != null || onInfoClick != null) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -119,7 +123,7 @@ fun TextImportant(
                         contentDescription = null,
                         tint = iconColor
                     )
-                    Spacer(modifier = Modifier.size(12.dp))
+                    Spacer(Modifier.width(12.dp))
                 }
                 title?.let {
                     Text(
@@ -129,23 +133,18 @@ fun TextImportant(
                         modifier = Modifier.weight(1f)
                     )
                 }
-                if (title == null) {
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-                onClose?.let { close ->
-                    Spacer(modifier = Modifier.size(12.dp))
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_close),
-                        contentDescription = null,
-                        tint = iconColor,
-                        modifier = Modifier
-                            .size(20.dp)
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                onClick = close
-                            )
-                    )
+                onInfoClick?.let {
+                    Spacer(Modifier.width(12.dp))
+                    HsIconButton(
+                        modifier = Modifier.size(20.dp),
+                        onClick = onInfoClick,
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_info_20),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.grey
+                        )
+                    }
                 }
             }
         }
