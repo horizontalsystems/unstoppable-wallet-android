@@ -7,6 +7,8 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.Birthd
 
 class RestoreViewModel: ViewModel() {
 
+    var accountTypes: List<AccountType> = listOf()
+
     var accountType: AccountType? = null
         private set
 
@@ -27,12 +29,16 @@ class RestoreViewModel: ViewModel() {
 
     var cancelBirthdayHeightConfig: Boolean = false
 
-    fun setAccountData(accountType: AccountType, accountName: String, manualBackup: Boolean, fileBackup: Boolean, statPage: StatPage) {
+    fun setAccountData(accountType: AccountType?, accountName: String, manualBackup: Boolean, fileBackup: Boolean, statPage: StatPage) {
         this.accountType = accountType
         this.accountName = accountName
         this.manualBackup = manualBackup
         this.fileBackup = fileBackup
         this.statPage = statPage
+    }
+
+    fun setAccountType(accountType: AccountType) {
+        this.accountType = accountType
     }
 
     fun setBirthdayHeightConfig(config: BirthdayHeightConfig?) {
