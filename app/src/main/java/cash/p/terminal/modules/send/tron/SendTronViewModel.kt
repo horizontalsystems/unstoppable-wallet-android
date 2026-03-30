@@ -108,11 +108,12 @@ class SendTronViewModel(
 
     override fun createState(): SendUiState {
         val hasSendData = amountState.amount?.let { !it.isZero() } == true && addressState.address != null
+        val poison = isAddressSuspicious(addressState.address?.hex)
         return SendUiState(
             availableBalance = amountState.availableBalance,
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
-            proceedEnabled = amountState.canBeSend && addressState.canBeSend,
+            proceedEnabled = amountState.canBeSend && addressState.canBeSend && (!poison || riskAccepted),
             sendEnabled = feeState is FeeState.Success && hasEnoughFeeBalance && cautions.isEmpty(),
             feeViewState = feeState.viewState,
             cautions = cautions,
@@ -120,6 +121,8 @@ class SendTronViewModel(
             address = addressState.address,
             fee = currentFee,
             feeLoading = hasSendData && feeLoading,
+            isPoisonAddress = poison,
+            riskAccepted = riskAccepted,
         )
     }
 
@@ -128,6 +131,7 @@ class SendTronViewModel(
     }
 
     fun onEnterAddress(address: Address?) {
+        resetRiskAccepted()
         viewModelScope.launch {
             addressService.setAddress(address)
         }
@@ -261,6 +265,7 @@ class SendTronViewModel(
             val amount = confirmationData.amount
             adapter.send(amount, addressState.tronAddress!!, feeState.feeLimit)
 
+            onSendSuccess(addressState.address?.hex)
             sendResult = SendResult.Sent()
             logger.info("success")
 

@@ -95,21 +95,27 @@ class SendMoneroViewModel(
         }
     }
 
-    override fun createState() = SendUiState(
-        availableBalance = amountState.availableBalance,
-        addressError = addressState.addressError,
-        amountCaution = amountState.amountCaution,
-        canBeSend = amountState.canBeSend && addressState.canBeSend,
-        showAddressInput = showAddressInput,
-        address = addressState.address,
-        cautions = cautions
-    )
+    override fun createState(): SendUiState {
+        val poison = isAddressSuspicious(addressState.address?.hex)
+        return SendUiState(
+            availableBalance = amountState.availableBalance,
+            addressError = addressState.addressError,
+            amountCaution = amountState.amountCaution,
+            canBeSend = amountState.canBeSend && addressState.canBeSend && (!poison || riskAccepted),
+            showAddressInput = showAddressInput,
+            address = addressState.address,
+            cautions = cautions,
+            isPoisonAddress = poison,
+            riskAccepted = riskAccepted,
+        )
+    }
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
     }
 
     fun onEnterAddress(address: Address?) {
+        resetRiskAccepted()
         addressService.setAddress(address)
     }
 
@@ -154,6 +160,7 @@ class SendMoneroViewModel(
 
             adapter.send(decimalAmount, addressState.address!!.hex, null)
 
+            onSendSuccess(addressState.address?.hex)
             sendResult = SendResult.Sent()
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))

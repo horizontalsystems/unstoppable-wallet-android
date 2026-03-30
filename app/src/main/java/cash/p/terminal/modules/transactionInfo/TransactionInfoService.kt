@@ -3,6 +3,8 @@ package cash.p.terminal.modules.transactionInfo
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.PendingTransactionMatcher
+import cash.p.terminal.core.managers.PoisonAddressManager
+import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase
@@ -58,6 +60,7 @@ class TransactionInfoService(
         PendingTransactionMatcher::class.java
     )
     private val amlStatusManager: AmlStatusManager by inject(AmlStatusManager::class.java)
+    private val poisonAddressManager: PoisonAddressManager by inject(PoisonAddressManager::class.java)
 
     private val mutex = Mutex()
 
@@ -90,7 +93,8 @@ class TransactionInfoService(
         swapAmountOutReal = null,
         swapAmountIn = null,
         swapCoinCodeOut = null,
-        swapCoinCodeIn = null
+        swapCoinCodeIn = null,
+        poisonStatus = computePoisonStatus(transactionRecord)
     )
         private set(value) {
             field = value
@@ -461,6 +465,10 @@ class TransactionInfoService(
         mutex.withLock {
             transactionInfoItem = transactionInfoItem.copy(amlStatus = status)
         }
+    }
+
+    fun computePoisonStatus(record: TransactionRecord): PoisonStatus {
+        return poisonAddressManager.getPoisonStatus(record)
     }
 
 }

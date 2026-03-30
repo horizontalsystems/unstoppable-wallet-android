@@ -1,3 +1,16 @@
+## 🚀 Version 0.54.0 Update
+_Release date: March 30, 2026_
+
+### ✨ Improvements
+
+- **Added protection against Address Poisoning**
+  Suspicious transactions are now marked with a red icon, and their details are blurred.
+  The app now classifies transactions as:
+  `created in this wallet`, `from address book contacts`, `received from the blockchain`, and `suspicious (scam)`.
+
+- **Added Monero address rotation for improved security**
+
+
 ## 🚀 Version 0.53.0 Update
 _Release date: March 26, 2026_
 

@@ -42,6 +42,7 @@ object ReceiveModule {
         override val mainNet: Boolean,
         val usedAddresses: List<UsedAddress>,
         val usedChangeAddresses: List<UsedAddress>,
+        val isAddressHistorySupported: Boolean,
         val showTronAlert: Boolean,
         override val uri: String,
         override val blockchainName: String?,

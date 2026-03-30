@@ -122,7 +122,7 @@ fun ReceiveStellarAssetScreen(
             uiState = uiState,
             setAmount = viewModel::setAmount,
             onErrorClick = viewModel::onErrorClick,
-            slot1 = {
+            bottomContent = {
                 if (uiState.trustlineEstablished == false) {
                     HsDivider(modifier = Modifier.fillMaxWidth())
                     RowUniversal(modifier = Modifier.height(48.dp)) {

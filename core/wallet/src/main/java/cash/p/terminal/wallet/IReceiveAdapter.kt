@@ -14,6 +14,8 @@ interface IReceiveAdapter {
     fun usedAddresses(change: Boolean): List<UsedAddress> {
         return listOf()
     }
+
+    val isAddressHistorySupported: Boolean get() = false
 }
 
 interface OneTimeReceiveAdapter {

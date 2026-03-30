@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.AmlStatusManager
+import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.core.managers.TransactionHiddenManager
@@ -20,8 +21,10 @@ import cash.p.terminal.entities.SwapProviderTransaction
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningViewMode
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
+import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
 import cash.p.terminal.premium.domain.PremiumSettings
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.ui_compose.ColoredValue
@@ -68,6 +71,8 @@ class TransactionsViewModel(
     private val contactsRepository: ContactsRepository,
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModelUiState<TransactionsUiState>() {
+
+    private val poisonAddressManager: PoisonAddressManager = cash.p.terminal.core.getKoinInstance()
 
     var tmpItemToShow: TransactionItem? = null
 
@@ -268,6 +273,14 @@ class TransactionsViewModel(
 
         viewModelScope.launch {
             contactsRepository.contactsFlow.collect {
+                transactionViewItem2Factory.clearCache()
+                reprocessTrigger.tryEmit(Unit)
+            }
+        }
+
+        viewModelScope.launch {
+            poisonAddressManager.poisonDbChangedFlow.collect {
+                transactionViewItem2Factory.clearCache()
                 reprocessTrigger.tryEmit(Unit)
             }
         }
@@ -558,36 +571,42 @@ data class TransactionViewItem(
     val icon: Icon,
     val changeNowTransactionId: String? = null,
     val transactionStatusUrl: Pair<String, String>? = null,
-    val amlStatus: AmlStatus? = null
+    val amlStatus: AmlStatus? = null,
+    val poisonStatus: PoisonStatus = PoisonStatus.BLOCKCHAIN,
+    val addressPoisoningViewMode: AddressPoisoningViewMode = AddressPoisoningViewMode.COMPACT
 ) {
 
     sealed class Icon {
-        class ImageResource(val resourceId: Int) : Icon()
-        class Regular(
+        data class ImageResource(val resourceId: Int) : Icon()
+        data class Regular(
             val url: String?,
             val alternativeUrl: String?,
             val placeholder: Int?,
             val rectangle: Boolean = false
         ) : Icon()
 
-        class Double(val back: Regular, val front: Regular) : Icon()
-        object Failed : Icon()
-        class Platform(blockchainType: BlockchainType) : Icon() {
-            val iconRes = when (blockchainType) {
-                BlockchainType.BinanceSmartChain -> R.drawable.logo_chain_bsc_trx_24
-                BlockchainType.Ethereum -> R.drawable.logo_chain_ethereum_trx_24
-                BlockchainType.Polygon -> R.drawable.logo_chain_polygon_trx_24
-                BlockchainType.Avalanche -> R.drawable.logo_chain_avalanche_trx_24
-                BlockchainType.Optimism -> R.drawable.logo_chain_optimism_trx_24
-                BlockchainType.Base -> R.drawable.logo_chain_base_trx_24
-                BlockchainType.ZkSync -> R.drawable.logo_chain_zksync_trx_32
-                BlockchainType.ArbitrumOne -> R.drawable.logo_chain_arbitrum_one_trx_24
-                BlockchainType.Gnosis -> R.drawable.logo_chain_gnosis_trx_32
-                BlockchainType.Fantom -> R.drawable.logo_chain_fantom_trx_32
-                BlockchainType.Tron -> R.drawable.logo_chain_tron_trx_32
-                BlockchainType.Ton -> R.drawable.logo_chain_ton_trx_32
-                BlockchainType.Stellar -> R.drawable.logo_chain_stellar_trx_32
-                else -> null
+        data class Double(val back: Regular, val front: Regular) : Icon()
+        data object Failed : Icon()
+        data class Platform(val iconRes: Int?) : Icon() {
+            companion object {
+                fun fromBlockchainType(blockchainType: BlockchainType) = Platform(
+                    iconRes = when (blockchainType) {
+                        BlockchainType.BinanceSmartChain -> R.drawable.logo_chain_bsc_trx_24
+                        BlockchainType.Ethereum -> R.drawable.logo_chain_ethereum_trx_24
+                        BlockchainType.Polygon -> R.drawable.logo_chain_polygon_trx_24
+                        BlockchainType.Avalanche -> R.drawable.logo_chain_avalanche_trx_24
+                        BlockchainType.Optimism -> R.drawable.logo_chain_optimism_trx_24
+                        BlockchainType.Base -> R.drawable.logo_chain_base_trx_24
+                        BlockchainType.ZkSync -> R.drawable.logo_chain_zksync_trx_32
+                        BlockchainType.ArbitrumOne -> R.drawable.logo_chain_arbitrum_one_trx_24
+                        BlockchainType.Gnosis -> R.drawable.logo_chain_gnosis_trx_32
+                        BlockchainType.Fantom -> R.drawable.logo_chain_fantom_trx_32
+                        BlockchainType.Tron -> R.drawable.logo_chain_tron_trx_32
+                        BlockchainType.Ton -> R.drawable.logo_chain_ton_trx_32
+                        BlockchainType.Stellar -> R.drawable.logo_chain_stellar_trx_32
+                        else -> null
+                    }
+                )
             }
         }
     }

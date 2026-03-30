@@ -2,6 +2,7 @@ package cash.p.terminal.modules.transactionInfo
 
 import cash.p.terminal.R
 import cash.p.terminal.core.managers.TonHelper
+import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.PendingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
@@ -56,12 +57,18 @@ class TransactionInfoViewItemFactory(
             )
         }
 
+        val isSuspicious = transactionItem.poisonStatus == PoisonStatus.SUSPICIOUS
+        if (isSuspicious) {
+            itemSections.add(listOf(TransactionInfoViewItem.PoisonWarning))
+        }
+
         when (transaction) {
             is StellarTransactionRecord -> {
                 when (val transactionType = transaction.type) {
                     is StellarTransactionRecord.Type.Receive -> {
                         itemSections.add(
                             TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                showCopyWarning = isSuspicious,
                                 value = transactionType.value,
                                 fromAddress = transactionType.from,
                                 toAddress = listOf(transactionType.to),
@@ -95,6 +102,7 @@ class TransactionInfoViewItemFactory(
                                 sentToSelf = transactionType.sentToSelf,
                                 nftMetadata = nftMetadata,
                                 blockchainType = blockchainType,
+                                showCopyWarning = isSuspicious,
                             )
                         )
 
@@ -149,6 +157,7 @@ class TransactionInfoViewItemFactory(
                     TransactionRecordType.EVM_INCOMING -> {
                         itemSections.add(
                             TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                showCopyWarning = isSuspicious,
                                 value = transaction.value!!,
                                 fromAddress = transaction.from,
                                 toAddress = transaction.to,
@@ -171,6 +180,7 @@ class TransactionInfoViewItemFactory(
                                 sentToSelf = transaction.sentToSelf,
                                 nftMetadata = nftMetadata,
                                 blockchainType = blockchainType,
+                                showCopyWarning = isSuspicious,
                             )
                         )
                     }
@@ -249,6 +259,7 @@ class TransactionInfoViewItemFactory(
                                     hideAmount = transactionItem.hideAmount,
                                     nftMetadata = nftMetadata,
                                     blockchainType = blockchainType,
+                                    showCopyWarning = isSuspicious,
                                 )
                             )
                         }
@@ -256,6 +267,7 @@ class TransactionInfoViewItemFactory(
                         for (event in transaction.incomingEvents!!) {
                             itemSections.add(
                                 TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                showCopyWarning = isSuspicious,
                                     value = event.value,
                                     fromAddress = event.address,
                                     toAddress = event.addressForIncomingAddress?.let(::listOf),
@@ -279,6 +291,7 @@ class TransactionInfoViewItemFactory(
                                     hideAmount = transactionItem.hideAmount,
                                     nftMetadata = nftMetadata,
                                     blockchainType = blockchainType,
+                                    showCopyWarning = isSuspicious,
                                 )
                             )
                         }
@@ -286,6 +299,7 @@ class TransactionInfoViewItemFactory(
                         for (event in transaction.incomingEvents!!) {
                             itemSections.add(
                                 TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                showCopyWarning = isSuspicious,
                                     value = event.value,
                                     fromAddress = event.address,
                                     toAddress = event.addressForIncomingAddress?.let(::listOf),
@@ -310,7 +324,8 @@ class TransactionInfoViewItemFactory(
                             action,
                             rates,
                             blockchainType,
-                            transactionItem.hideAmount
+                            transactionItem.hideAmount,
+                            showCopyWarning = isSuspicious,
                         )
                     )
                 }
@@ -323,6 +338,7 @@ class TransactionInfoViewItemFactory(
                     TransactionRecordType.TRON_INCOMING ->
                         itemSections.add(
                             TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                showCopyWarning = isSuspicious,
                                 value = transaction.value!!,
                                 fromAddress = transaction.from,
                                 toAddress = transaction.to,
@@ -344,6 +360,7 @@ class TransactionInfoViewItemFactory(
                                 sentToSelf = transaction.sentToSelf,
                                 nftMetadata = nftMetadata,
                                 blockchainType = blockchainType,
+                                showCopyWarning = isSuspicious,
                             )
                         )
                     }
@@ -377,6 +394,7 @@ class TransactionInfoViewItemFactory(
                                     hideAmount = transactionItem.hideAmount,
                                     nftMetadata = nftMetadata,
                                     blockchainType = blockchainType,
+                                    showCopyWarning = isSuspicious,
                                 )
                             )
                         }
@@ -384,6 +402,7 @@ class TransactionInfoViewItemFactory(
                         for (event in transaction.incomingEvents!!) {
                             itemSections.add(
                                 TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                showCopyWarning = isSuspicious,
                                     value = event.value,
                                     fromAddress = event.address,
                                     toAddress = event.addressForIncomingAddress?.let(::listOf),
@@ -407,6 +426,7 @@ class TransactionInfoViewItemFactory(
                                     hideAmount = transactionItem.hideAmount,
                                     nftMetadata = nftMetadata,
                                     blockchainType = blockchainType,
+                                    showCopyWarning = isSuspicious,
                                 )
                             )
                         }
@@ -414,6 +434,7 @@ class TransactionInfoViewItemFactory(
                         for (event in transaction.incomingEvents!!) {
                             itemSections.add(
                                 TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                showCopyWarning = isSuspicious,
                                     value = event.value,
                                     fromAddress = event.address,
                                     toAddress = null,
@@ -434,7 +455,7 @@ class TransactionInfoViewItemFactory(
                                     transaction.transaction.contract?.label
                                         ?: Translator.getString(R.string.Transactions_ContractCall),
                                     "",
-                                    TransactionViewItem.Icon.Platform(transaction.blockchainType).iconRes
+                                    TransactionViewItem.Icon.Platform.fromBlockchainType(transaction.blockchainType).iconRes
                                 )
                             )
                         )
@@ -448,6 +469,7 @@ class TransactionInfoViewItemFactory(
                     TransactionRecordType.BITCOIN_INCOMING -> {
                         itemSections.add(
                             TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                showCopyWarning = isSuspicious,
                                 value = transaction.mainValue,
                                 fromAddress = transaction.from,
                                 toAddress = transaction.to,
@@ -479,6 +501,7 @@ class TransactionInfoViewItemFactory(
                                 hideAmount = transactionItem.hideAmount,
                                 sentToSelf = transaction.sentToSelf,
                                 blockchainType = blockchainType,
+                                showCopyWarning = isSuspicious,
                             )
                         )
 
@@ -501,6 +524,7 @@ class TransactionInfoViewItemFactory(
                     TransactionRecordType.SOLANA_INCOMING -> {
                         itemSections.add(
                             TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                showCopyWarning = isSuspicious,
                                 value = transaction.mainValue!!,
                                 fromAddress = transaction.from,
                                 toAddress = transaction.to,
@@ -524,6 +548,7 @@ class TransactionInfoViewItemFactory(
                                 sentToSelf = transaction.sentToSelf,
                                 nftMetadata = nftMetadata,
                                 blockchainType = blockchainType,
+                                showCopyWarning = isSuspicious,
                             )
                         )
                     }
@@ -538,6 +563,7 @@ class TransactionInfoViewItemFactory(
                                     hideAmount = transactionItem.hideAmount,
                                     nftMetadata = nftMetadata,
                                     blockchainType = blockchainType,
+                                    showCopyWarning = isSuspicious,
                                 )
                             )
                         }
@@ -545,6 +571,7 @@ class TransactionInfoViewItemFactory(
                         for (transfer in transaction.incomingSolanaTransfers!!) {
                             itemSections.add(
                                 TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                showCopyWarning = isSuspicious,
                                     value = transfer.value,
                                     fromAddress = transfer.address,
                                     toAddress = transfer.addressForIncomingAddress?.let(::listOf),
@@ -567,6 +594,7 @@ class TransactionInfoViewItemFactory(
                     TransactionRecordType.MONERO_INCOMING -> {
                         itemSections.add(
                             TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                                showCopyWarning = isSuspicious,
                                 value = transaction.mainValue,
                                 fromAddress = transaction.from,
                                 toAddress = transaction.to,
@@ -589,6 +617,7 @@ class TransactionInfoViewItemFactory(
                                 sentToSelf = transaction.sentToSelf,
                                 nftMetadata = nftMetadata,
                                 blockchainType = blockchainType,
+                                showCopyWarning = isSuspicious,
                             )
                         )
                     }
@@ -607,6 +636,7 @@ class TransactionInfoViewItemFactory(
                         sentToSelf = transaction.sentToSelf,
                         nftMetadata = nftMetadata,
                         blockchainType = blockchainType,
+                        showCopyWarning = isSuspicious,
                     )
                 )
             }

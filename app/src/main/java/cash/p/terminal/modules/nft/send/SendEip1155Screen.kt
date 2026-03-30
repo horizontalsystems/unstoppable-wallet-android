@@ -119,9 +119,10 @@ fun SendEip1155Screen(
                     error = viewModel.uiState.addressError,
                     textPreprocessor = addressParserViewModel,
                     navController = navController,
-                ) { address ->
-                    viewModel.onEnterAddress(address)
-                }
+                    onValueChange = { address ->
+                        viewModel.onEnterAddress(address)
+                    },
+                )
                 Spacer(Modifier.height(24.dp))
                 ButtonPrimaryYellow(
                     modifier = Modifier

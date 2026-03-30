@@ -6,8 +6,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material.Text
@@ -19,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import cash.p.terminal.ui_compose.R
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
@@ -64,7 +68,8 @@ fun TextImportantError(
     modifier: Modifier = Modifier,
     text: String,
     title: String? = null,
-    @DrawableRes icon: Int? = null
+    @DrawableRes icon: Int? = null,
+    onInfoClick: (() -> Unit)? = null,
 ) {
     TextImportant(
         modifier = modifier,
@@ -74,7 +79,8 @@ fun TextImportantError(
         borderColor = ComposeAppTheme.colors.lucian,
         backgroundColor = ComposeAppTheme.colors.red20,
         textColor = ComposeAppTheme.colors.lucian,
-        iconColor = ComposeAppTheme.colors.lucian
+        iconColor = ComposeAppTheme.colors.lucian,
+        onInfoClick = onInfoClick,
     )
 }
 
@@ -87,7 +93,8 @@ fun TextImportant(
     borderColor: Color,
     backgroundColor: Color,
     textColor: Color,
-    iconColor: Color
+    iconColor: Color,
+    onInfoClick: (() -> Unit)? = null,
 ) {
     Column(
         modifier = modifier
@@ -98,9 +105,8 @@ fun TextImportant(
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        if (title != null || icon != null) {
+        if (title != null || icon != null || onInfoClick != null) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 icon?.let {
@@ -109,13 +115,28 @@ fun TextImportant(
                         contentDescription = null,
                         tint = iconColor
                     )
+                    Spacer(Modifier.width(12.dp))
                 }
                 title?.let {
                     Text(
                         text = it,
                         color = textColor,
-                        style = ComposeAppTheme.typography.subhead1
+                        style = ComposeAppTheme.typography.subhead1,
+                        modifier = Modifier.weight(1f)
                     )
+                }
+                onInfoClick?.let {
+                    Spacer(Modifier.width(12.dp))
+                    HsIconButton(
+                        modifier = Modifier.size(20.dp),
+                        onClick = onInfoClick,
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_info_20),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.grey
+                        )
+                    }
                 }
             }
         }

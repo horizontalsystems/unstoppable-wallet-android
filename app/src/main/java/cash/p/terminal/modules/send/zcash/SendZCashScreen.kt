@@ -33,6 +33,8 @@ import cash.p.terminal.modules.send.SendSuggestionsBar
 import cash.p.terminal.modules.send.address.AddressCheckerControl
 import cash.p.terminal.modules.send.address.SmartContractCheckSection
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
+import cash.p.terminal.ui.compose.components.PoisonAddressRiskSection
+import cash.p.terminal.ui.compose.components.PoisonWarningCell
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.SectionUniversalLawrence
 import cash.p.terminal.ui_compose.components.SwitchWithText
@@ -100,6 +102,10 @@ fun SendZCashScreen(
                 )
             }
         ) {
+            if (uiState.isPoisonAddress) {
+                PoisonWarningCell()
+                Spacer(modifier = Modifier.height(12.dp))
+            }
 
             if (uiState.showAddressInput) {
                 HSAddressInput(
@@ -109,10 +115,10 @@ fun SendZCashScreen(
                     coinCode = wallet.coin.code,
                     error = uiState.addressError,
                     textPreprocessor = paymentAddressViewModel,
-                    navController = navController
-                ) {
-                    viewModel.onEnterAddress(it)
-                }
+                    navController = navController,
+                    isPoisonAddress = uiState.isPoisonAddress,
+                    onValueChange = { viewModel.onEnterAddress(it) },
+                )
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
@@ -168,6 +174,12 @@ fun SendZCashScreen(
                 navController = navController,
                 addressCheckerControl = addressCheckerControl,
                 modifier = Modifier.padding(top = 8.dp)
+            )
+
+            PoisonAddressRiskSection(
+                isPoisonAddress = uiState.isPoisonAddress,
+                riskAccepted = uiState.riskAccepted,
+                onRiskAcceptedChange = { viewModel.onRiskAcceptedChange(it) },
             )
 
             ButtonPrimaryYellow(

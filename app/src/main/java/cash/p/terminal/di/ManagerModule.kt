@@ -34,6 +34,7 @@ import cash.p.terminal.core.managers.LocalStorageManager
 import cash.p.terminal.core.managers.MoneroKitManager
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.managers.PendingBalanceCalculator
+import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PendingTransactionRegistrar
 import cash.p.terminal.core.managers.PendingTransactionRegistrarImpl
@@ -213,6 +214,7 @@ val managerModule = module {
     singleOf(::GlanceAppWidgetManager)
 
     singleOf(::SpamManager)
+    singleOf(::PoisonAddressManager)
     singleOf(::AddressCheckManager)
     singleOf(::DeeplinkParser)
     singleOf(::CheckAmlIncomingTransactionUseCase)

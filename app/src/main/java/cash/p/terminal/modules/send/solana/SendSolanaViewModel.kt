@@ -91,20 +91,26 @@ class SendSolanaViewModel(
         addressService.setAddress(address)
     }
 
-    override fun createState() = SendSolanaModule.SendUiState(
-        availableBalance = amountState.availableBalance,
-        amountCaution = amountState.amountCaution,
-        addressError = addressState.addressError,
-        canBeSend = amountState.canBeSend && addressState.canBeSend,
-        showAddressInput = showAddressInput,
-        address = addressState.address,
-    )
+    override fun createState(): SendSolanaModule.SendUiState {
+        val poison = isAddressSuspicious(addressState.address?.hex)
+        return SendSolanaModule.SendUiState(
+            availableBalance = amountState.availableBalance,
+            amountCaution = amountState.amountCaution,
+            addressError = addressState.addressError,
+            canBeSend = amountState.canBeSend && addressState.canBeSend && (!poison || riskAccepted),
+            showAddressInput = showAddressInput,
+            address = addressState.address,
+            isPoisonAddress = poison,
+            riskAccepted = riskAccepted,
+        )
+    }
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
     }
 
     fun onEnterAddress(address: Address?) {
+        resetRiskAccepted()
         addressService.setAddress(address)
     }
 
@@ -171,6 +177,7 @@ class SendSolanaViewModel(
             val transaction = adapter.send(decimalAmount, addressState.solanaAddress!!)
             pendingTxId?.let { pendingRegistrar.updateTxId(it, transaction.transaction.hash) }
 
+            onSendSuccess(addressState.address?.hex)
             sendResult = SendResult.Sent()
 
             recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Solana)

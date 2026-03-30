@@ -103,29 +103,35 @@ class SendTonViewModel(
         addressService.setAddress(address)
     }
 
-    override fun createState() = SendTonUiState(
-        availableBalance = amountState.availableBalance,
-        amountCaution = amountState.amountCaution
-            ?: if(feeState.feeStatus is FeeStatus.NoEnoughBalance) { HSCaution(
-                TranslatableString.ResString(
-                    R.string.not_enough_ton_for_fee,
-                    amountState.availableBalance?.toPlainString() ?: "0"
-                ),
-                HSCaution.Type.Error
-            ) } else { null },
-        addressError = addressState.addressError,
-        canBeSend = (feeState.feeStatus is FeeStatus.Success) && amountState.canBeSend && addressState.canBeSend,
-        showAddressInput = showAddressInput,
-        fee = (feeState.feeStatus as? FeeStatus.Success)?.fee,
-        feeInProgress = feeState.inProgress,
-        address = addressState.address
-    )
+    override fun createState(): SendTonUiState {
+        val poison = isAddressSuspicious(addressState.address?.hex)
+        return SendTonUiState(
+            availableBalance = amountState.availableBalance,
+            amountCaution = amountState.amountCaution
+                ?: if(feeState.feeStatus is FeeStatus.NoEnoughBalance) { HSCaution(
+                    TranslatableString.ResString(
+                        R.string.not_enough_ton_for_fee,
+                        amountState.availableBalance?.toPlainString() ?: "0"
+                    ),
+                    HSCaution.Type.Error
+                ) } else { null },
+            addressError = addressState.addressError,
+            canBeSend = (feeState.feeStatus is FeeStatus.Success) && amountState.canBeSend && addressState.canBeSend && (!poison || riskAccepted),
+            showAddressInput = showAddressInput,
+            fee = (feeState.feeStatus as? FeeStatus.Success)?.fee,
+            feeInProgress = feeState.inProgress,
+            address = addressState.address,
+            isPoisonAddress = poison,
+            riskAccepted = riskAccepted,
+        )
+    }
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
     }
 
     fun onEnterAddress(address: Address?) {
+        resetRiskAccepted()
         addressService.setAddress(address)
     }
 
@@ -188,6 +194,7 @@ class SendTonViewModel(
             // 3. Broadcast transaction
             adapter.send(amountState.amount!!, addressState.tonAddress!!, memo)
 
+            onSendSuccess(addressState.address?.hex)
             sendResult = SendResult.Sent()
             logger.info("success")
 
@@ -242,4 +249,6 @@ data class SendTonUiState(
     val fee: BigDecimal?,
     val feeInProgress: Boolean,
     val address: Address?,
+    val isPoisonAddress: Boolean = false,
+    val riskAccepted: Boolean = false,
 )

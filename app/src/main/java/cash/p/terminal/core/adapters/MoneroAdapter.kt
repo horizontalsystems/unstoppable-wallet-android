@@ -2,6 +2,7 @@ package cash.p.terminal.core.adapters
 
 import cash.p.terminal.core.ISendMoneroAdapter
 import cash.p.terminal.core.managers.MoneroKitWrapper
+import cash.p.terminal.core.managers.MoneroSubaddressInfo
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.wallet.AdapterState
@@ -40,6 +41,14 @@ class MoneroAdapter(
         get() = moneroKitWrapper.getAddress()
 
     override val isMainNet: Boolean = true
+
+    override val isAddressHistorySupported: Boolean = true
+
+    suspend fun getSubaddresses(): List<MoneroSubaddressInfo> =
+        moneroKitWrapper.getSubaddresses()
+
+    suspend fun createNewSubaddress(): String =
+        moneroKitWrapper.createNewSubaddress()
 
     override val statusInfo: Map<String, Any>
         get() = moneroKitWrapper.statusInfo()

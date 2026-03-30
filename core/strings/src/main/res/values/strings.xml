@@ -395,6 +395,16 @@
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s addresses change for privacy and security. Below a list of used addresses in this wallet.</string>
     <string name="Balance_Receive_ReceiveAddresses">Receive Addresses</string>
     <string name="Balance_Receive_ChangeAddresses">Change Addresses</string>
+    <string name="receive_address_badge_new">New</string>
+    <string name="receive_address_badge_used">Used</string>
+    <string name="receive_address_badge_unused">Unused</string>
+    <string name="receive_create_new_address">Create new address</string>
+    <string name="receive_create_another_address_title">Create another address?</string>
+    <string name="receive_create_another_address_warning">You already have a new address that hasn\'t received any funds yet. Creating a new address is not required. Do you want to continue?</string>
+    <string name="receive_dont_ask_again">Don\'t ask again (save setting)</string>
+    <string name="receive_create_new">Create new</string>
+    <string name="receive_keep_current">Keep current</string>
+    <string name="receive_monero_used_addresses_description">For enhanced privacy, it is recommended to use a new address for each transaction.\nIn our app, Monero addresses are created manually to reduce the load when scanning the wallet.\nBelow are the addresses previously created in this wallet.</string>
     <string name="Balance_SendHint_CoinName">Coin Name</string>
     <string name="Balance_ReceiveHint_Search">Search</string>
     <string name="Balance_Receive_Trustline">Trustline</string>
@@ -945,6 +955,49 @@ Proceed only if you\'re sure.</string>
     <string name="TransactionInfo_SpeedUp">Speed Up</string>
     <string name="TransactionInfo_SpamWarning">This transaction is suspicious and can be a scam.\nPlease do not copy any addresses from this transaction.</string>
     <string name="TransactionInfo_SpeedUpDescription">This action will attempt to invalidate the previous transaction by resending it with a higher fee.</string>
+
+    <string name="address_poisoning_view">Address Poisoning View</string>
+    <string name="address_poisoning_view_select_style">Select the display style</string>
+    <string name="address_poisoning_view_standard">Standard</string>
+    <string name="address_poisoning_view_compact">Compact</string>
+    <string name="address_poisoning_view_created_by_wallet">created by this wallet transaction</string>
+    <string name="address_poisoning_view_suspicious">suspicious transaction</string>
+    <string name="address_poisoning_view_address_book">address is in the address book</string>
+    <string name="address_poisoning_view_blockchain">received from the blockchain</string>
+
+    <string name="Button_GotIt">Got It</string>
+    <string name="transaction_statuses_title">Transaction Statuses</string>
+    <string name="transaction_statuses_description">Each transaction in your history is assigned a status based on a risk analysis system.\nThis helps identify potentially fraudulent operations and reduce the risk of sending funds to fake addresses.</string>
+    <string name="transaction_statuses_footer">Always verify the full recipient address before sending funds, even if it appears in your history.</string>
+    <string name="transaction_status_suspicious_description">The transaction may be part of an address poisoning attack. Always verify the full address before sending funds.</string>
+    <string name="transaction_status_blockchain_description">The transaction was received from the network and may not have been created by this wallet.</string>
+    <string name="transaction_status_address_book_description">The sender or recipient is saved in your address book.</string>
+    <string name="transaction_status_created_description">The transaction was created by you and is genuine.</string>
+
+    <string name="poison_warning_title">Address Poisoning Attack</string>
+    <string name="poison_warning_body">Be careful.\nThis transaction may be part of a fraudulent address spoofing attempt.</string>
+
+    <string name="copy_warning_title">Be Careful</string>
+    <string name="copy_warning_body_1">This address may imitate an address you have previously used.</string>
+    <string name="copy_warning_body_2">If you copy it by mistake, funds may be sent to a <b>different recipient.</b></string>
+    <string name="copy_warning_body_3"><b>Verify the address before copying.</b></string>
+    <string name="copy_warning_copy_anyway">Copy Anyway</string>
+    <string name="copy_warning_dont_copy">Don\'t Copy</string>
+    <string name="poison_warning_add_body_2">If you add it by mistake, you may later send funds to a <b>different recipient.</b></string>
+    <string name="poison_warning_verify_before_adding"><b>Verify the address before adding to contacts.</b></string>
+    <string name="poison_warning_add_anyway">Add Anyway</string>
+    <string name="poison_warning_dont_add">Don\'t Add</string>
+
+    <string name="address_poisoning_info_title">What is Address Poisoning?</string>
+    <string name="address_poisoning_info_description"><b>Address Poisoning (Address Poisoning)</b> - is a type of fraud where an attacker sends you a transaction from an address that looks similar to one you have previously used.</string>
+    <string name="address_poisoning_info_goal">The goal of the attack is to get into your transaction history so that in the future you might accidentally copy the fake address instead of the real one and send funds to the attacker.</string>
+    <string name="address_poisoning_info_addresses_intro">Such addresses may:</string>
+    <string name="address_poisoning_info_bullet_1">match by the first and last characters;</string>
+    <string name="address_poisoning_info_bullet_2">look almost identical in the list of recent transactions;</string>
+    <string name="address_poisoning_info_bullet_3">masquerade as addresses you have previously used.</string>
+
+    <string name="send_poison_address_alert">This address may be associated with an address poisoning attack. It could imitate an address you have previously used. Verify the full address before sending funds.</string>
+    <string name="send_poison_accept_risk">I understand and accept the risk</string>
 
     <string name="StatusInfo_Pending">Pending</string>
     <string name="StatusInfo_Processing">Processing</string>
