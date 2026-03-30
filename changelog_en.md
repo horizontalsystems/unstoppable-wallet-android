@@ -10,6 +10,9 @@ _Release date: March 30, 2026_
 
 - **Added Monero address rotation for improved security**
 
+- **Added the ability to hide all transactions in the transactions section**
+  Works similarly to the tap-to-hide balance behavior.
+
 
 ## 🚀 Version 0.53.0 Update
 _Release date: March 26, 2026_
