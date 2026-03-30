@@ -228,7 +228,10 @@ androidx-material3-android = { group = "androidx.compose.material3", name = "mat
 twitter-text = { module = "com.twitter.twittertext:twitter-text", version.ref = "twitterText" }
 web3j-core = { module = "org.web3j:core", version.ref = "coreVersion" }
 zcash-android-sdk = { module = "cash.z.ecc.android:zcash-android-sdk", version.ref = "zcashAndroidSdk" }
+junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junitJupiter" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
+junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine" }
 google-play-app-update = { group = "com.google.android.play", name = "app-update", version.ref = "google-play-core" }
 google-play-app-update-ktx = { group = "com.google.android.play", name = "app-update-ktx", version.ref = "google-play-core" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

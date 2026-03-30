@@ -325,7 +325,10 @@ dependencies {
     implementation libs.paging.runtime
     implementation libs.paging.compose
 
+    testImplementation(platform(libs.junit.bom))
     testImplementation libs.junit.jupiter
+    testRuntimeOnly libs.junit.platform.launcher
+    testRuntimeOnly libs.junit.vintage.engine
     // alternately - if using Java8, use the following instead of compiler
     implementation libs.androidx.lifecycle.common.java8
     // optional - ReactiveStreams support for LiveData
@@ -344,6 +347,7 @@ dependencies {
     implementation libs.retrofit.rxjava2
     implementation libs.retrofit.gson
     implementation libs.retrofit.scalars
+    implementation libs.okhttp.logging.interceptor
     implementation libs.gson
     implementation libs.androidx.biometric
 
