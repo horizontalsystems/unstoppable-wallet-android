@@ -51,6 +51,7 @@ import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IReceiveAdapter
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.badge
@@ -109,7 +110,7 @@ class TokenBalanceViewModel(
         getKoinInstance()
     private val adapterManager: IAdapterManager = getKoinInstance()
     private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage = getKoinInstance()
-    private val marketKit: cash.p.terminal.wallet.MarketKitWrapper = getKoinInstance()
+    private val marketKit: MarketKitWrapper = getKoinInstance()
     private val poisonAddressManager: PoisonAddressManager = getKoinInstance()
 
     private val title = wallet.token.coin.name
@@ -188,6 +189,14 @@ class TokenBalanceViewModel(
                     transactionViewItem2Factory.updateCache()
                     transactionsService.refreshList()
                 }
+            }
+        }
+
+        viewModelScope.launch {
+            nativeBalanceProvider?.nativeBalanceUpdatedFlow?.collect {
+                if (balanceService.balanceItem == null) return@collect
+                updateNetworkFeeWarning()
+                emitState()
             }
         }
 
@@ -418,6 +427,9 @@ class TokenBalanceViewModel(
         syncing = syncing
     )
 
+    private val nativeBalanceProvider: INativeBalanceProvider?
+        get() = adapterManager.getBalanceAdapterForWallet(wallet) as? INativeBalanceProvider
+
     private fun updateNetworkFeeWarning() {
         if (wallet.token.type.isNative || networkFeeWarningDismissed) {
             networkFeeWarning = null
@@ -427,9 +439,7 @@ class TokenBalanceViewModel(
         val nativeToken = marketKit.token(
             TokenQuery(blockchainType, TokenType.Native)
         ) ?: return
-        val nativeBalance = (adapterManager.getBalanceAdapterForWallet(wallet) as? INativeBalanceProvider)
-            ?.nativeBalanceData?.total
-            ?: BigDecimal.ZERO
+        val nativeBalance = nativeBalanceProvider?.nativeBalanceData?.total ?: BigDecimal.ZERO
         val threshold = getWarningThreshold(blockchainType)
         val hasEnoughBalance = if (threshold != null) {
             nativeBalance >= threshold
