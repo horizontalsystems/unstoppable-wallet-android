@@ -16,7 +16,6 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.SwapRecord
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchException
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionResult
@@ -168,8 +167,6 @@ class SwapConfirmViewModel(
 
         sendTransactionService.start(viewModelScope)
         swapDefenseSystemService.start(viewModelScope)
-
-        fetchFinalQuote()
     }
 
     private fun handleUpdatedPriceImpactState(priceImpactState: PriceImpactService.State) {
@@ -263,10 +260,13 @@ class SwapConfirmViewModel(
                 priceImpactService.setProviderTitle(swapProvider.title)
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: OneInchException) {
-                // in this case we should keep state as loading
-                // temp solution. need find better one
             } catch (t: Throwable) {
+                // If EVM gas price hasn't loaded yet, keep loading state.
+                // The sendTransactionSettingsFlow collector will retry once gas price is available.
+                val settings = sendTransactionSettings
+                if (settings is SendTransactionSettings.Evm && settings.gasPriceInfo == null) {
+                    return@launch
+                }
                 loading = false
                 initialLoading = false
                 error = t
