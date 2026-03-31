@@ -481,6 +481,7 @@
     <string name="TonConnect_Unnamed">Unnamed</string>
     <string name="TonConnect_Wallet">Wallet</string>
     <string name="TonConnect_ChooseWallet">Choose a Wallet</string>
+    <string name="manifest_loading">Manifest wird geladen…</string>
     <string name="account_not_supported_by">Ihr aktueller Wallet-Typ %1$s unterstützt %2$s nicht</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Status</string>

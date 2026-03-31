@@ -175,16 +175,22 @@ fun TonConnectNewScreen(
             Spacer(Modifier.weight(1f))
             ButtonsGroupWithShade {
                 Column(Modifier.padding(horizontal = 24.dp)) {
+                    val manifestLoading = uiState.manifest == null && uiState.error == null
                     ButtonPrimaryYellow(
                         modifier = Modifier.fillMaxWidth(),
-                        title = stringResource(R.string.Button_Connect),
+                        title = if(manifestLoading) {
+                            stringResource(R.string.manifest_loading)
+                        } else {
+                            stringResource(R.string.Button_Connect)
+                        },
                         onClick = {
                             navController.authorizedAction {
                                 viewModel.connect()
                                 onResult.invoke(true)
                             }
                         },
-                        enabled = uiState.connectEnabled && uiState.manifest != null
+                        enabled = uiState.connectEnabled && uiState.manifest != null,
+                        loadingIndicator = manifestLoading
                     )
                     VSpacer(16.dp)
                     ButtonPrimaryDefault(

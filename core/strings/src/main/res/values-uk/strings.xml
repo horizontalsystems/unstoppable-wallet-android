@@ -490,6 +490,7 @@
     <string name="TonConnect_Unnamed">Без назви</string>
     <string name="TonConnect_Wallet">Гаманець</string>
     <string name="TonConnect_ChooseWallet">Виберіть гаманець</string>
+    <string name="manifest_loading">Завантаження маніфесту…</string>
     <string name="account_not_supported_by">Ваш поточний тип гаманця %1$s не підтримує %2$s</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Статус</string>

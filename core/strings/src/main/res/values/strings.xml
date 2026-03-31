@@ -626,6 +626,7 @@ Proceed only if you\'re sure.</string>
     <string name="TonConnect_Url" translatable="false">URL</string>
     <string name="TonConnect_Wallet">Wallet</string>
     <string name="TonConnect_ChooseWallet">Choose a Wallet</string>
+    <string name="manifest_loading">Loading manifest…</string>
     <string name="account_not_supported_by">Your current wallet type %1$s does not support %2$s</string>
 
     <!--WalletConnect-->

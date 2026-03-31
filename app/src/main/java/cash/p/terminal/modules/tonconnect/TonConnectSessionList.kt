@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.tonconnect
 
 import androidx.compose.foundation.Image
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -43,7 +46,9 @@ import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.headline2_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
+import kotlinx.coroutines.delay
 import com.tonapps.wallet.data.tonconnect.entities.DAppEntity
 
 @Composable
@@ -177,11 +182,39 @@ fun TCSessionCell(
     }
 }
 
+private const val ICON_TIMEOUT_MS = 3000L
+
 @Composable
-fun rememberDAppIconPainter(manifest: DAppManifestEntity) = rememberAsyncImagePainter(
-    model = manifest.iconUrl,
-    error = rememberAsyncImagePainter(
-        model = "https://www.google.com/s2/favicons?sz=256&domain=${manifest.host}",
-        error = painterResource(R.drawable.ic_platform_placeholder_24)
-    ),
-)
+fun rememberDAppIconPainter(manifest: DAppManifestEntity): Painter {
+    val fallbackUrl = remember(manifest.host) {
+        "https://www.google.com/s2/favicons?sz=256&domain=${manifest.host}"
+    }
+    var useFallback by remember(manifest.iconUrl, fallbackUrl) {
+        mutableStateOf(false)
+    }
+
+    val painter = rememberAsyncImagePainter(
+        model = if (useFallback) fallbackUrl else manifest.iconUrl,
+        error = painterResource(R.drawable.ic_platform_placeholder_24),
+        onError = {
+            if (!useFallback) {
+                useFallback = true
+            }
+        }
+    )
+    val state by painter.state.collectAsState()
+
+    if (!useFallback &&
+        state !is AsyncImagePainter.State.Success &&
+        state !is AsyncImagePainter.State.Error
+    ) {
+        LaunchedEffect(manifest.iconUrl, state) {
+            delay(ICON_TIMEOUT_MS)
+            if (painter.state.value !is AsyncImagePainter.State.Success) {
+                useFallback = true
+            }
+        }
+    }
+
+    return painter
+}

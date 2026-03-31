@@ -487,6 +487,7 @@
     <string name="TonConnect_Unnamed">Unnamed</string>
     <string name="TonConnect_Wallet">Wallet</string>
     <string name="TonConnect_ChooseWallet">Choose a Wallet</string>
+    <string name="manifest_loading">매니페스트 로딩 중…</string>
     <string name="account_not_supported_by">현재 지갑 유형 %1$s에서는 %2$s을(를) 지원하지 않습니다</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">상태</string>

@@ -40,7 +40,7 @@ appcompat = "1.7.0"
 timber = "5.0.1"
 
 tonKotlin = "0.5.0" # updated for ktor 3.x compatibility
-piratecash-ton = "ecc080d"
+piratecash-ton = "15ff078"
 piratecash-bitcoin = "6a0e847"
 stellar-kit = "96bbbc4"
 piratecash-ethereum = "99d3195"
