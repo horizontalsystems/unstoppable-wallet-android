@@ -15,6 +15,8 @@ import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.tronkit.network.Network
+import io.horizontalsystems.tronkit.transaction.Signer as TronSigner
 
 class PublicKeysViewModel(
     account: Account,
@@ -35,9 +37,19 @@ class PublicKeysViewModel(
                 Signer.address(accountType.key).eip55
             }
 
-            is AccountType.EvmAddress -> accountType.address
-            is AccountType.SolanaAddress -> accountType.address
-            is AccountType.TronAddress -> accountType.address
+            else -> null
+        }
+
+        val tronAddress: String? = when (val accountType = account.type) {
+            is AccountType.Mnemonic -> {
+                val privateKey = TronSigner.privateKey(accountType.seed, Network.Mainnet)
+                TronSigner.address(privateKey, Network.Mainnet).base58
+            }
+
+            is AccountType.TronPrivateKey -> {
+                TronSigner.address(accountType.key, Network.Mainnet).base58
+            }
+
             else -> null
         }
 
@@ -63,6 +75,7 @@ class PublicKeysViewModel(
 
         viewState = PublicKeysModule.ViewState(
             evmAddress = evmAddress,
+            tronAddress = tronAddress,
             extendedPublicKey = publicKey?.let { ExtendedPublicKey(it, accountPublicKey) },
             moneroKeys = moneroKeys
         )

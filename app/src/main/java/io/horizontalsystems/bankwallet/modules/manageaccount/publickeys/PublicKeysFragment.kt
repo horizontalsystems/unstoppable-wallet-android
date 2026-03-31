@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.manageaccount.evmaddress.EvmAddressFragment
+import io.horizontalsystems.bankwallet.modules.manageaccount.evmaddress.AddressFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
@@ -55,11 +55,24 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                     description = stringResource(R.string.PublicKeys_EvmAddress_Description)
                 ) {
                     navController.slideFromRight(
-                        R.id.evmAddressFragment,
-                        EvmAddressFragment.Input(evmAddress)
+                        R.id.addressFragment,
+                        AddressFragment.Input(evmAddress, AddressFragment.Type.Evm)
                     )
 
                     stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.EvmAddress))
+                }
+            }
+            viewModel.viewState.tronAddress?.let { tronAddress ->
+                KeyActionItem(
+                    title = stringResource(id = R.string.PublicKeys_TronAddress),
+                    description = stringResource(R.string.PublicKeys_TronAddress_Description)
+                ) {
+                    navController.slideFromRight(
+                        R.id.addressFragment,
+                        AddressFragment.Input(tronAddress, AddressFragment.Type.Tron)
+                    )
+
+                    stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.TronAddress))
                 }
             }
             viewModel.viewState.extendedPublicKey?.let { publicKey ->

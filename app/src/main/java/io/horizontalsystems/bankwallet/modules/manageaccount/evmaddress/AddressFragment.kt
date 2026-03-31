@@ -29,25 +29,49 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
-class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
+class AddressFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
         withInput<Input>(navController) { input ->
-            EvmAddressScreen(input.evmAddress, navController)
+            AddressScreen(navController, input.address, input.type)
         }
     }
 
     @Parcelize
-    data class Input(val evmAddress: String) : Parcelable
+    data class Input(val address: String, val type: Type) : Parcelable
 
+    @Parcelize
+    enum class Type : Parcelable {
+        Evm, Tron
+    }
 }
 
 @Composable
-private fun EvmAddressScreen(evmAddress: String, navController: NavController) {
+private fun AddressScreen(
+    navController: NavController,
+    address: String,
+    type: AddressFragment.Type
+) {
     val view = LocalView.current
+
+    val title = when (type) {
+        AddressFragment.Type.Evm -> stringResource(R.string.PublicKeys_EvmAddress)
+        AddressFragment.Type.Tron -> stringResource(R.string.PublicKeys_TronAddress)
+    }
+
+    val statPage = when (type) {
+        AddressFragment.Type.Evm -> StatPage.EvmAddress
+        AddressFragment.Type.Tron -> StatPage.TronAddress
+    }
+
+    val statEntity = when (type) {
+        AddressFragment.Type.Evm -> StatEntity.EvmAddress
+        AddressFragment.Type.Tron -> StatEntity.TronAddress
+    }
+
     HSScaffold(
-        title = stringResource(R.string.PublicKeys_EvmAddress),
+        title = title,
         onBack = { navController.popBackStack() },
         menuItems = listOf(
             MenuItem(
@@ -56,7 +80,7 @@ private fun EvmAddressScreen(evmAddress: String, navController: NavController) {
                 onClick = {
                     FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
 
-                    stat(page = StatPage.EvmAddress, event = StatEvent.Open(StatPage.Info))
+                    stat(page = statPage, event = StatEvent.Open(StatPage.Info))
                 }
             )
         )
@@ -69,14 +93,14 @@ private fun EvmAddressScreen(evmAddress: String, navController: NavController) {
                 verticalArrangement = Arrangement.Top
             ) {
                 Spacer(Modifier.height(12.dp))
-                HidableContent(evmAddress)
+                HidableContent(address)
                 Spacer(Modifier.height(24.dp))
             }
             ActionButton(R.string.Alert_Copy) {
-                TextHelper.copyText(evmAddress)
+                TextHelper.copyText(address)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
 
-                stat(page = StatPage.EvmAddress, event = StatEvent.Copy(StatEntity.EvmAddress))
+                stat(page = statPage, event = StatEvent.Copy(statEntity))
             }
         }
     }
