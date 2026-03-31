@@ -20,7 +20,7 @@ else
 fi
 
 ####################################
-DOCKER_IMAGE="horizontalsystems/android-release-build"
+DOCKER_IMAGE="hsdao/android-release-build:java-17-update"
 GIT_REPO="https://github.com/horizontalsystems/unstoppable-wallet-android"
 WORK_DIR="$PWD/app"
 TAG=$1
@@ -28,7 +28,7 @@ TAG=$1
 KEYSTORE=$2
 KEYSTORE_FILENAME="$(basename -- $KEYSTORE)"
 KEYSTORE_PASSWORD=$3
-BUILT_APK_FILE="app/app/build/outputs/apk/release/app-release-unsigned.apk"
+BUILT_APK_FILE="app/app/build/outputs/apk/base/release/app-base-release.apk"
 ####################################
 
 function init() {
@@ -47,7 +47,7 @@ function buildApk () {
     echo "Building apk file ..."
 
     docker run -it --volume $PWD/app:/mnt --workdir /mnt ${DOCKER_IMAGE} bash -x -c \
-      './gradlew clean :app:assembleRelease'
+      './gradlew clean :app:assembleBaseRelease'
 
 }
 
@@ -88,6 +88,3 @@ end
 echo "--------------------"
 echo "Successfully created apk !!! "
 echo "--------END --------"
-
-
-
