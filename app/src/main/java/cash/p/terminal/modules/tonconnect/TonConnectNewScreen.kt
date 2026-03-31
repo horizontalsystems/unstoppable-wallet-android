@@ -45,7 +45,6 @@ import cash.p.terminal.ui_compose.components.TextImportantError
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import coil3.compose.rememberAsyncImagePainter
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 
 @Composable
@@ -106,10 +105,9 @@ fun TonConnectNewScreen(
                     modifier = Modifier
                         .size(72.dp)
                         .clip(RoundedCornerShape(15.dp)),
-                    painter = rememberAsyncImagePainter(
-                        model = uiState.manifest?.iconUrl,
-                        error = painterResource(R.drawable.ic_platform_placeholder_24)
-                    ),
+                    painter = uiState.manifest?.let {
+                        rememberDAppIconPainter(it)
+                    } ?: painterResource(R.drawable.ic_platform_placeholder_24),
                     contentDescription = null,
                 )
                 Text(

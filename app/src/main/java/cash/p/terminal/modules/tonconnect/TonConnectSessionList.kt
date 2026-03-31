@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.walletconnect.list.ui.ActionsRow
+import com.tonapps.wallet.data.tonconnect.entities.DAppManifestEntity
 import cash.p.terminal.ui_compose.components.DraggableCardSimple
 import cash.p.terminal.modules.walletconnect.list.ui.getShape
 import cash.p.terminal.modules.walletconnect.list.ui.showDivider
@@ -155,10 +156,7 @@ fun TCSessionCell(
                 modifier = Modifier
                     .size(32.dp)
                     .clip(RoundedCornerShape(8.dp)),
-                painter = rememberAsyncImagePainter(
-                    model = dapp.manifest.iconUrl,
-                    error = painterResource(R.drawable.ic_platform_placeholder_24)
-                ),
+                painter = rememberDAppIconPainter(dapp.manifest),
                 contentDescription = null,
             )
             Spacer(Modifier.width(16.dp))
@@ -178,3 +176,12 @@ fun TCSessionCell(
         }
     }
 }
+
+@Composable
+fun rememberDAppIconPainter(manifest: DAppManifestEntity) = rememberAsyncImagePainter(
+    model = manifest.iconUrl,
+    error = rememberAsyncImagePainter(
+        model = "https://www.google.com/s2/favicons?sz=256&domain=${manifest.host}",
+        error = painterResource(R.drawable.ic_platform_placeholder_24)
+    ),
+)
