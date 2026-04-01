@@ -9,6 +9,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.LocalizedException
+import cash.p.terminal.core.getFeeTokenBalance
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.isNative
 import cash.p.terminal.core.managers.PendingTransactionRegistrar
@@ -32,7 +33,6 @@ import cash.p.terminal.modules.send.ton.SendTonAmountService
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.Token
-import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.getMaxSendableBalance
 import io.horizontalsystems.core.entities.CurrencyValue
 import kotlinx.coroutines.CoroutineScope
@@ -51,7 +51,6 @@ class SendTransactionServiceTonSwap(
 ) : ISendTransactionService<ISendTonAdapter>(token) {
     private val amountValidator = AmountValidator()
 
-    private var feeWallet: Wallet? = null
     private val accountManager: IAccountManager by inject(IAccountManager::class.java)
 
     private val pendingRegistrar: PendingTransactionRegistrar by inject(PendingTransactionRegistrar::class.java)
@@ -175,7 +174,7 @@ class SendTransactionServiceTonSwap(
             if (accountManager.activeAccount?.isHardwareWalletAccount == true) {
                 return@launch
             }
-            feeWallet = walletUseCase.createWalletIfNotExists(feeToken)?.also {
+            walletUseCase.createWalletIfNotExists(feeToken)?.also {
                 adapterManager.awaitAdapterForWallet<ISendTonAdapter>(it)
             }
         }
@@ -221,23 +220,20 @@ class SendTransactionServiceTonSwap(
             "SendTransactionData should be SendTransactionData.TonSwap"
         }
 
-        val feeWalletLocal = feeWallet
-        if (feeWalletLocal != null) {
-            val availableBalance = adapterManager.getAdjustedBalanceData(feeWalletLocal)?.available
-            if (availableBalance != null) {
-                val feeRequired = data.forwardGas.toBigDecimal().movePointLeft(feeToken.decimals)
-                feeCaution = if (availableBalance < feeRequired) {
-                    val formattedBalance = numberFormatter.formatCoinFull(
-                        availableBalance,
-                        null,
-                        feeToken.decimals
-                    )
-                    createCaution(LocalizedException(R.string.not_enough_ton_for_fee, formattedBalance))
-                } else {
-                    null
-                }
-                hasEnoughFeeAmount = feeCaution == null
+        val availableBalance = adapterManager.getFeeTokenBalance(feeToken, token)
+        if (availableBalance != null) {
+            val feeRequired = data.forwardGas.toBigDecimal().movePointLeft(feeToken.decimals)
+            feeCaution = if (availableBalance < feeRequired) {
+                val formattedBalance = numberFormatter.formatCoinFull(
+                    availableBalance,
+                    null,
+                    feeToken.decimals
+                )
+                createCaution(LocalizedException(R.string.not_enough_ton_for_fee, formattedBalance))
+            } else {
+                null
             }
+            hasEnoughFeeAmount = feeCaution == null
         } else {
             val neededFee =
                 data.forwardGas.toBigDecimal().movePointLeft(feeToken.decimals).stripTrailingZeros()
