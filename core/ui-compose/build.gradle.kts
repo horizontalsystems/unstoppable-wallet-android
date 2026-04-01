@@ -1,13 +1,14 @@
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
+
     id(libs.plugins.kotlin.parcelize.get().pluginId)
     alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "cash.p.terminal.ui_compose"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -27,16 +28,18 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-
     val minSdkVersion: Int = rootProject.ext.get("min_sdk_version") as Int
     defaultConfig {
         minSdk = minSdkVersion
         buildFeatures {
             compose = true
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
     }
 }
 
