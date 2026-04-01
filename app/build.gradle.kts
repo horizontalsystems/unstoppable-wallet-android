@@ -160,7 +160,7 @@ android {
             resValue("string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom")
             resValue("string", "openSeaApiKey", "bfbd6061a33e455c8581b594774fecb3")
             resValue("string", "walletConnectV2Key", "0c5ca155c2f165a7d0c88686f2113a72")
-            resValue("string", "solanaAlchemyApiKey", "PKgWxOMarrHgyMESGjIkJ,BOlzgqJUeGYe5E7K613Fm")
+            resValue("string", "solanaAlchemyApiKey", "BOlzgqJUeGYe5E7K613Fm,Vmt7ucAGIMEux_c43Qqqf,uCordWq3EOD800awDx1kb,1uAryzn6DOEVs5PIugeoR,PKgWxOMarrHgyMESGjIkJ")
             resValue("string", "solanaJupiterApiKey", "ec901a97-0375-45b1-8b7d-da1ea9934cb0")
             resValue("string", "trongridApiKeys", "8f5ae2c8-8012-42a8-b0ca-ffc2741f6a29,578aa64f-a79f-4ee8-86e9-e9860e2d050a,1e92f1fc-41f8-401f-a7f6-5b719b6f1280,d1511874-1547-48df-9536-a32cc85949ac,cec10562-8f2f-44a8-a0f6-245842bc6758,33374494-8060-447e-8367-90c5efd4ed95")
             resValue("string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz")
