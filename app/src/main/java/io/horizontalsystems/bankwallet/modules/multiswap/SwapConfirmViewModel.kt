@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.multiswap
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
@@ -44,7 +46,8 @@ class SwapConfirmViewModel(
     val sendTransactionService: AbstractSendTransactionService,
     private val timerService: TimerService,
     private val priceImpactService: PriceImpactService,
-    private val swapDefenseSystemService: SwapDefenseSystemService
+    private val swapDefenseSystemService: SwapDefenseSystemService,
+    private val backgroundManager: BackgroundManager
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
@@ -67,6 +70,7 @@ class SwapConfirmViewModel(
     private var error: Throwable? = null
     private var initialLoading = true
     private var loading = true
+    private var isInBackground = true
     private var timerState = timerService.stateFlow.value
     private var sendTransactionState = sendTransactionService.stateFlow.value
     private var priceImpactState = priceImpactService.stateFlow.value
@@ -122,7 +126,9 @@ class SwapConfirmViewModel(
             sendTransactionService.sendTransactionSettingsFlow.collect {
                 sendTransactionSettings = it
 
-                fetchFinalQuote()
+                if (!isInBackground) {
+                    fetchFinalQuote()
+                }
             }
         }
 
@@ -158,6 +164,7 @@ class SwapConfirmViewModel(
                 handleUpdatedPriceImpactState(it)
             }
         }
+
         viewModelScope.launch {
             swapDefenseSystemService.stateFlow.collect {
                 swapDefenseState = it
@@ -166,10 +173,26 @@ class SwapConfirmViewModel(
             }
         }
 
+        viewModelScope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                when (state) {
+                    BackgroundManagerState.EnterBackground -> {
+                        isInBackground = true
+                        fetchFinalQuoteJob?.cancel()
+                        timerService.stop()
+                    }
+                    BackgroundManagerState.EnterForeground -> {
+                        isInBackground = false
+                        if (sendTransactionSettings != null) {
+                            refresh(silent = true)
+                        }
+                    }
+                }
+            }
+        }
+
         sendTransactionService.start(viewModelScope)
         swapDefenseSystemService.start(viewModelScope)
-
-        fetchFinalQuote()
     }
 
     private fun handleUpdatedPriceImpactState(priceImpactState: PriceImpactService.State) {
@@ -216,6 +239,8 @@ class SwapConfirmViewModel(
     }
 
     fun refresh(silent: Boolean = false) {
+        if (isInBackground) return
+
         if (!silent) {
             loading = true
             emitState()
@@ -357,7 +382,8 @@ class SwapConfirmViewModel(
                 sendTransactionService,
                 TimerService(),
                 PriceImpactService(PriceImpactLevel.Normal),
-                SwapDefenseSystemService(sendTransactionService.supportsMevProtection, App.paidActionSettingsManager)
+                SwapDefenseSystemService(sendTransactionService.supportsMevProtection, App.paidActionSettingsManager),
+                App.backgroundManager
             )
         }
     }
