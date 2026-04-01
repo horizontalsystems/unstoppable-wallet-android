@@ -21,6 +21,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -261,6 +262,92 @@ class TonConnectNewViewModelTest {
             every { this@mockk.payload } returns payload
             every { id } returns "request-id"
         }
+    }
+
+    @Test
+    fun `manifest retries on failure and succeeds on second attempt`() = runTest(dispatcher) {
+        val tonAccount = tonAccount("ton-retry")
+        setAccounts(listOf(tonAccount), tonAccount)
+
+        val manifest = manifest()
+        coEvery {
+            tonConnectKit.getManifest(request.payload.manifestUrl)
+        } throws RuntimeException("timeout") andThen manifest
+
+        val viewModel = TonConnectNewViewModel(request, tonConnectKit)
+        advanceUntilIdle()
+
+        val state = viewModel.uiState
+        assertEquals(manifest, state.manifest)
+        assertNull(state.error)
+        assertTrue(state.connectEnabled)
+        coVerify(exactly = 2) { tonConnectKit.getManifest(any()) }
+    }
+
+    @Test
+    fun `manifest retries exhaust and shows error`() = runTest(dispatcher) {
+        val tonAccount = tonAccount("ton-exhaust")
+        setAccounts(listOf(tonAccount), tonAccount)
+
+        coEvery {
+            tonConnectKit.getManifest(request.payload.manifestUrl)
+        } throws RuntimeException("timeout")
+
+        val viewModel = TonConnectNewViewModel(request, tonConnectKit)
+        advanceUntilIdle()
+
+        val state = viewModel.uiState
+        assertNull(state.manifest)
+        assertIs<NoManifestError>(state.error)
+        coVerify(exactly = 3) { tonConnectKit.getManifest(any()) }
+    }
+
+    @Test
+    fun `noTonAccountError is preserved after manifest loads`() = runTest(dispatcher) {
+        val watchAccount = watchAccount("watch-preserve")
+        setAccounts(listOf(watchAccount), watchAccount)
+        coEvery { tonConnectKit.getManifest(request.payload.manifestUrl) } returns manifest()
+
+        val viewModel = TonConnectNewViewModel(request, tonConnectKit)
+        advanceUntilIdle()
+
+        val state = viewModel.uiState
+        assertIs<NoTonAccountError>(state.error)
+        assertFalse(state.connectEnabled)
+    }
+
+    @Test
+    fun `reject does not set finish`() = runTest(dispatcher) {
+        val tonAccount = tonAccount("ton-reject")
+        setAccounts(listOf(tonAccount), tonAccount)
+        coEvery { tonConnectKit.getManifest(request.payload.manifestUrl) } returns manifest()
+
+        val viewModel = TonConnectNewViewModel(request, tonConnectKit)
+        advanceUntilIdle()
+
+        viewModel.reject()
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.finish)
+    }
+
+    @Test
+    fun `connectEnabled is false while manifest is loading`() = runTest(dispatcher) {
+        val tonAccount = tonAccount("ton-loading")
+        setAccounts(listOf(tonAccount), tonAccount)
+
+        coEvery {
+            tonConnectKit.getManifest(request.payload.manifestUrl)
+        } coAnswers {
+            delay(5000)
+            manifest()
+        }
+
+        val viewModel = TonConnectNewViewModel(request, tonConnectKit)
+
+        val state = viewModel.uiState
+        assertNull(state.manifest)
+        assertFalse(state.connectEnabled && state.manifest != null)
     }
 
     private val mnemonicWords = listOf(

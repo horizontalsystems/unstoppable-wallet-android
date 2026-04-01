@@ -489,6 +489,7 @@
     <string name="TonConnect_Unnamed">Unnamed</string>
     <string name="TonConnect_Wallet">Wallet</string>
     <string name="TonConnect_ChooseWallet">Choose a Wallet</string>
+    <string name="manifest_loading">جارٍ تحميل البيان…</string>
     <string name="account_not_supported_by">نوع المحفظة الحالي %1$s لا يدعم %2$s</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Status</string>
