@@ -71,6 +71,9 @@ class BalanceViewModel(
     var connectionResult by mutableStateOf<WalletConnectListViewModel.ConnectionResult?>(null)
         private set
 
+    var walletConnectRequest by mutableStateOf<String?>(null)
+        private set
+
     private var refreshViewItemsJob: Job? = null
 
     init {
@@ -297,7 +300,7 @@ class BalanceViewModel(
             } else {
                 val wcUriVersion = WalletConnectListModule.getVersionFromUri(scannedText)
                 if (wcUriVersion == 2) {
-                    handleWalletConnectUri(scannedText)
+                    handleWalletConnectRequest(scannedText)
                 } else {
                     handleAddressData(scannedText)
                 }
@@ -360,8 +363,16 @@ class BalanceViewModel(
         }
     }
 
-    private fun handleWalletConnectUri(scannedText: String) {
-        WalletKit.pair(Pair(scannedText.trim()),
+    private fun handleWalletConnectRequest(scannedText: String) {
+        walletConnectRequest = scannedText
+    }
+
+    fun onWalletConnectRequestHandled() {
+        walletConnectRequest = null
+    }
+
+    fun connectWC(uri: String) {
+        WalletKit.pair(Pair(uri.trim()),
             onSuccess = {
                 connectionResult = null
             },

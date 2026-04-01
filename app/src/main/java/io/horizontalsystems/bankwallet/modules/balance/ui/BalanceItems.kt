@@ -282,14 +282,12 @@ fun BalanceItems(
             if (uiState.balanceTabButtonsEnabled && !accountViewItem.isWatchAccount) {
                 item {
                     BalanceButtonsGroup {
-                        if (accountViewItem.type.supportsWalletConnect) {
-                            BalanceActionButton(
-                                variant = ButtonVariant.Primary,
-                                icon = R.drawable.ic_scan_24,
-                                title = stringResource(R.string.Button_ScanQr),
-                                onClick = onScanClick
-                            )
-                        }
+                        BalanceActionButton(
+                            variant = ButtonVariant.Primary,
+                            icon = R.drawable.ic_scan_24,
+                            title = stringResource(R.string.Button_ScanQr),
+                            onClick = onScanClick
+                        )
                         BalanceActionButton(
                             variant = ButtonVariant.Secondary,
                             icon = R.drawable.ic_arrow_down_24,
