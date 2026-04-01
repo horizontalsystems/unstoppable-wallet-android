@@ -32,6 +32,10 @@ class Trc20Adapter(
     private val contractAddress: Address = Address.fromBase58(contractAddress)
     private val transactionConverter = TronTransactionConverter(coinManager, tronKitWrapper, wallet.transactionSource, baseToken, evmLabelManager)
 
+    init {
+        tronKit.watchTrc20(this.contractAddress)
+    }
+
     // IAdapter
 
     override fun start() {
