@@ -489,6 +489,7 @@
     <string name="TonConnect_Unnamed">Unnamed</string>
     <string name="TonConnect_Wallet">Wallet</string>
     <string name="TonConnect_ChooseWallet">Choose a Wallet</string>
+    <string name="manifest_loading">매니페스트 로딩 중…</string>
     <string name="account_not_supported_by">현재 지갑 유형 %1$s에서는 %2$s을(를) 지원하지 않습니다</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">상태</string>
@@ -881,6 +882,7 @@
     <string name="Appearance_HideBalanceTabButtons">숨김 버튼</string>
     <string name="Appearance_BalanceAutoHide">밸런스 자동 숨기기</string>
     <string name="show_all_transactions">모든 거래 보기</string>
+    <string name="hide_balance">잔액 숨기기</string>
     <string name="Appearance_TransactionAutoHide">Transaction Auto Hide</string>
     <string name="appearance_transfer_passcode">Passcode for transfer</string>
     <string name="display">Display</string>

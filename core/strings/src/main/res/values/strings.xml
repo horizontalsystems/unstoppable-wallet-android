@@ -628,6 +628,7 @@ Proceed only if you\'re sure.</string>
     <string name="TonConnect_Url" translatable="false">URL</string>
     <string name="TonConnect_Wallet">Wallet</string>
     <string name="TonConnect_ChooseWallet">Choose a Wallet</string>
+    <string name="manifest_loading">Loading manifest…</string>
     <string name="account_not_supported_by">Your current wallet type %1$s does not support %2$s</string>
 
     <!--WalletConnect-->
@@ -1200,6 +1201,7 @@ Proceed only if you\'re sure.</string>
     <string name="Appearance_HideBalanceTabButtons">Hide Buttons</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="show_all_transactions">Show All Transactions</string>
+    <string name="hide_balance">Hide Balance</string>
     <string name="Appearance_TransactionAutoHide">Transaction Auto Hide</string>
     <string name="appearance_transfer_passcode">Passcode for transfer</string>
     <string name="display">Display</string>

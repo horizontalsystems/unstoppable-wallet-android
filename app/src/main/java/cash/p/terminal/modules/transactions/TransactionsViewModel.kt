@@ -112,6 +112,8 @@ class TransactionsViewModel(
     val balanceHidden: Boolean
         get() = balanceHiddenManager.balanceHidden
 
+    fun toggleBalanceHidden() = balanceHiddenManager.toggleBalanceHidden()
+
     fun toggleTransactionInfoHidden(transactionId: String) =
         balanceHiddenManager.toggleTransactionInfoHidden(transactionId)
 
@@ -412,7 +414,8 @@ class TransactionsViewModel(
         syncing = syncing,
         hasHiddenTransactions = hasHiddenTransactions,
         showAmlPromo = shouldShowAmlPromo(),
-        amlCheckEnabled = amlStatusManager.isEnabled
+        amlCheckEnabled = amlStatusManager.isEnabled,
+        balanceHidden = balanceHiddenManager.balanceHidden
     )
 
     private fun handleUpdatedWallets(wallets: List<Wallet>) {

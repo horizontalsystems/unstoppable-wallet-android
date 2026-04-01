@@ -9,5 +9,6 @@ data class TransactionsUiState(
     val syncing: Boolean,
     val hasHiddenTransactions: Boolean,
     val showAmlPromo: Boolean = false,
-    val amlCheckEnabled: Boolean = false
+    val amlCheckEnabled: Boolean = false,
+    val balanceHidden: Boolean = false
 )

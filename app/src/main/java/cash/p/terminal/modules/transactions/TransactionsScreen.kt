@@ -32,7 +32,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -87,6 +89,7 @@ import cash.p.terminal.ui_compose.components.SnackbarDuration
 import cash.p.terminal.ui_compose.components.TabItem
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead1_grey
 import cash.p.terminal.ui_compose.components.subhead2
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.entities.SectionItemPosition
@@ -148,6 +151,7 @@ fun TransactionsScreen(
                             icon = R.drawable.ic_clock
                         )
                     }
+
                     ViewState.Success -> {
                         transactions?.let { transactionItems ->
                             if (transactionItems.isEmpty() && !uiState.hasHiddenTransactions) {
@@ -163,72 +167,49 @@ fun TransactionsScreen(
                                     )
                                 }
                             } else {
-                                val listState = rememberSaveable(
-                                    uiState.transactionListId,
-                                    (accountsViewModel.balanceScreenState as? BalanceScreenState.HasAccount)?.accountViewItem?.id,
-                                    saver = LazyListState.Saver
+                                TransactionListContent(
+                                    uiState = uiState,
+                                    accountViewItemId = (accountsViewModel.balanceScreenState as? BalanceScreenState.HasAccount)?.accountViewItem?.id,
+                                    onClickTransaction = { onTransactionClick(it, viewModel, navController) },
+                                    onClickSensitiveValue = {
+                                        HudHelper.vibrate(App.instance)
+                                        viewModel.toggleTransactionInfoHidden(it.uid)
+                                    },
+                                    onToggleBalanceVisibility = {
+                                        HudHelper.vibrate(App.instance)
+                                        viewModel.toggleBalanceHidden()
+                                    },
+                                    willShow = viewModel::willShow,
+                                    onReachBottom = viewModel::onBottomReached,
+                                    onClickShowAll = onShowAllTransactionsClicked
                                 ) {
-                                    LazyListState(0, 0)
-                                }
-
-                                val onClick: (TransactionViewItem) -> Unit = remember {
-                                    {
-                                        onTransactionClick(
-                                            it,
-                                            viewModel,
-                                            navController
-                                        )
-                                    }
-                                }
-
-                                LazyColumn(state = listState) {
-                                    if (uiState.showAmlPromo) {
-                                        item {
-                                            AmlCheckPromoBanner(
-                                                amlCheckEnabled = uiState.amlCheckEnabled,
-                                                onToggleChange = { enabled ->
-                                                    if (enabled) {
-                                                        navController.premiumAction {
-                                                            viewModel.setAmlCheckEnabled(true)
-                                                        }
-                                                    } else {
-                                                        viewModel.setAmlCheckEnabled(false)
-                                                    }
-                                                },
-                                                onInfoClick = { showAmlInfoSheet = true },
-                                                onClose = {
-                                                    viewModel.dismissAmlPromo()
-                                                    HudHelper.showPremiumMessage(
-                                                        view,
-                                                        R.string.aml_promo_dismiss_hud,
-                                                        SnackbarDuration.LONG
-                                                    )
-                                                },
-                                                modifier = Modifier.padding(vertical = 12.dp)
-                                            )
-                                        }
-                                    }
-                                    transactionList(
-                                        transactionsMap = transactionItems,
-                                        willShow = viewModel::willShow,
-                                        isItemBalanceHidden = { !it.showAmount },
-                                        onSensitiveValueClick = {
-                                            HudHelper.vibrate(App.instance)
-                                            viewModel.toggleTransactionInfoHidden(it.uid)
+                                    AmlCheckPromoBanner(
+                                        amlCheckEnabled = uiState.amlCheckEnabled,
+                                        onToggleChange = { enabled ->
+                                            if (enabled) {
+                                                navController.premiumAction {
+                                                    viewModel.setAmlCheckEnabled(true)
+                                                }
+                                            } else {
+                                                viewModel.setAmlCheckEnabled(false)
+                                            }
                                         },
-                                        onClick = onClick,
-                                        onBottomReached = viewModel::onBottomReached
+                                        onInfoClick = { showAmlInfoSheet = true },
+                                        onClose = {
+                                            viewModel.dismissAmlPromo()
+                                            HudHelper.showPremiumMessage(
+                                                view,
+                                                R.string.aml_promo_dismiss_hud,
+                                                SnackbarDuration.LONG
+                                            )
+                                        },
+                                        modifier = Modifier.padding(vertical = 12.dp)
                                     )
-                                    if (uiState.hasHiddenTransactions) {
-                                        transactionsHiddenBlock(
-                                            shortBlock = transactionItems.isNotEmpty(),
-                                            onShowAllTransactionsClicked = onShowAllTransactionsClicked
-                                        )
-                                    }
                                 }
                             }
                         }
                     }
+
                     is ViewState.Error -> {
                         // Show error state if needed
                     }
@@ -261,6 +242,60 @@ private fun onTransactionClick(
     viewModel.tmpItemToShow = transactionItem
 
     navController.slideFromBottom(R.id.transactionInfoFragment)
+}
+
+@Composable
+private fun TransactionListContent(
+    uiState: TransactionsUiState,
+    onClickTransaction: (TransactionViewItem) -> Unit,
+    onClickSensitiveValue: (TransactionViewItem) -> Unit,
+    onToggleBalanceVisibility: () -> Unit,
+    willShow: (TransactionViewItem) -> Unit,
+    onReachBottom: () -> Unit,
+    accountViewItemId: String? = null,
+    onClickShowAll: () -> Unit = {},
+    amlPromoContent: @Composable () -> Unit = {}
+) {
+    val transactionItems = uiState.transactions ?: return
+    val showAmlPromo = uiState.showAmlPromo
+    val listState = rememberSaveable(
+        uiState.transactionListId, accountViewItemId, saver = LazyListState.Saver
+    ) { LazyListState(0, 0) }
+
+    val currentStickyDate by remember(listState, transactionItems, showAmlPromo) {
+        derivedStateOf {
+            val firstVisible = listState.firstVisibleItemIndex
+            val offset = if (showAmlPromo) 1 else 0
+            if (firstVisible < offset) return@derivedStateOf null
+            var idx = offset
+            var lastDate: String? = null
+            for ((date, txs) in transactionItems) {
+                lastDate = date
+                if (firstVisible < idx + 1 + txs.size + 1) return@derivedStateOf date
+                idx += 1 + txs.size + 1
+            }
+            lastDate
+        }
+    }
+
+    Box {
+        LazyColumn(state = listState, contentPadding = PaddingValues(top = 44.dp)) {
+            if (showAmlPromo) { item { amlPromoContent() } }
+            transactionList(
+                transactionsMap = transactionItems, willShow = willShow,
+                isItemBalanceHidden = { !it.showAmount },
+                onSensitiveValueClick = onClickSensitiveValue,
+                onClick = onClickTransaction, onBottomReached = onReachBottom
+            )
+            if (uiState.hasHiddenTransactions) {
+                transactionsHiddenBlock(transactionItems.isNotEmpty(), onClickShowAll)
+            }
+        }
+        HideBalanceOverlay(
+            currentStickyDate, uiState.balanceHidden,
+            onToggleBalanceVisibility, Modifier.align(Alignment.TopStart)
+        )
+    }
 }
 
 fun LazyListScope.transactionsHiddenBlock(
@@ -378,6 +413,61 @@ fun LazyListScope.transactionList(
 
     item {
         Spacer(modifier = Modifier.height(20.dp))
+    }
+}
+
+@Composable
+private fun HideBalanceOverlay(
+    dateHeader: String?,
+    balanceHidden: Boolean,
+    onToggle: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(ComposeAppTheme.colors.tyler)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (dateHeader != null) {
+                subhead1_grey(
+                    text = dateHeader,
+                    maxLines = 1,
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Row(
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = onToggle
+                ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                subhead2_grey(
+                    text = stringResource(R.string.hide_balance),
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+                Icon(
+                    painter = painterResource(
+                        if (balanceHidden) R.drawable.ic_eye_off
+                        else R.drawable.ic_eye_20
+                    ),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = ComposeAppTheme.colors.steel20,
+        )
     }
 }
 
@@ -728,7 +818,11 @@ private fun AmlLoadingIndicator() {
 @Composable
 private fun TransactionCellPreview() {
     ComposeAppTheme {
-        Box(modifier = Modifier.wrapContentHeight().padding(horizontal = 16.dp)) {
+        Box(
+            modifier = Modifier
+                .wrapContentHeight()
+                .padding(horizontal = 16.dp)
+        ) {
             TransactionCell(
                 item = TransactionViewItem(
                     uid = "uid",

@@ -484,6 +484,7 @@
     <string name="TonConnect_Unnamed">Unnamed</string>
     <string name="TonConnect_Wallet">Wallet</string>
     <string name="TonConnect_ChooseWallet">Choose a Wallet</string>
+    <string name="manifest_loading">Cargando manifiesto…</string>
     <string name="account_not_supported_by">Tu tipo de billetera actual %1$s no admite %2$s</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Estado</string>
@@ -876,6 +877,7 @@
     <string name="Appearance_HideBalanceTabButtons">Hide Buttons</string>
     <string name="Appearance_BalanceAutoHide">Saldo Auto Ocultar</string>
     <string name="show_all_transactions">Mostrar todas las transacciones</string>
+    <string name="hide_balance">Ocultar saldo</string>
     <string name="Appearance_TransactionAutoHide">Transaction Auto Hide</string>
     <string name="appearance_transfer_passcode">Passcode for transfer</string>
     <string name="display">Display</string>

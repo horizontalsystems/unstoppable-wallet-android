@@ -9,7 +9,6 @@ object PancakeSwapV3Provider : BaseUniswapV3Provider(DexType.PancakeSwap) {
     override val id = "pancake_v3"
     override val title = "PancakeSwap V3"
     override val icon = R.drawable.pancake_v3
-    override val priority = 0
 
     override suspend fun supports(token: Token) = when (token.blockchainType) {
         BlockchainType.BinanceSmartChain,

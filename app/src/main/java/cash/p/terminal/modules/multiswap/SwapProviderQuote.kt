@@ -16,3 +16,6 @@ data class SwapProviderQuote(
 
     val createdAt = System.currentTimeMillis()
 }
+
+fun Iterable<SwapProviderQuote>.sortedByBestAmountOut(): List<SwapProviderQuote> =
+    sortedByDescending(SwapProviderQuote::amountOut)

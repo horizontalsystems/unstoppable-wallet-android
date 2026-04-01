@@ -492,6 +492,7 @@
     <string name="TonConnect_Unnamed">Без назви</string>
     <string name="TonConnect_Wallet">Гаманець</string>
     <string name="TonConnect_ChooseWallet">Виберіть гаманець</string>
+    <string name="manifest_loading">Завантаження маніфесту…</string>
     <string name="account_not_supported_by">Ваш поточний тип гаманця %1$s не підтримує %2$s</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Статус</string>
@@ -894,6 +895,7 @@
     <string name="Appearance_HideBalanceTabButtons">Приховати кнопки</string>
     <string name="Appearance_BalanceAutoHide">Автоприховування балансу</string>
     <string name="show_all_transactions">Показати всі транзакції</string>
+    <string name="hide_balance">Сховати баланс</string>
     <string name="Appearance_TransactionAutoHide">Автоприховування транзакцій</string>
     <string name="appearance_transfer_passcode">Код підтвердження переказу</string>
     <string name="display">Показати</string>

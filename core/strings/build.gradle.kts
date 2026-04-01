@@ -1,12 +1,13 @@
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
+
     alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "cash.p.terminal.strings"
-    compileSdk = 35
+    compileSdk = 36
 
     val minSdkVersion: Int = rootProject.ext.get("min_sdk_version") as Int
     defaultConfig {
@@ -28,8 +29,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
     }
 }
 

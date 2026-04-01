@@ -489,6 +489,7 @@
     <string name="TonConnect_Unnamed">Unnamed</string>
     <string name="TonConnect_Wallet">Wallet</string>
     <string name="TonConnect_ChooseWallet">Choose a Wallet</string>
+    <string name="manifest_loading">در حال بارگذاری مانیفست…</string>
     <string name="account_not_supported_by">نوع کیف پول فعلی شما %1$s از %2$s پشتیبانی نمی‌کند</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">وضعیت</string>
@@ -881,6 +882,7 @@
     <string name="Appearance_HideBalanceTabButtons">Hide Buttons</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="show_all_transactions">نمایش همه تراکنش‌ها</string>
+    <string name="hide_balance">مخفی کردن موجودی</string>
     <string name="Appearance_TransactionAutoHide">Transaction Auto Hide</string>
     <string name="appearance_transfer_passcode">Passcode for transfer</string>
     <string name="display">Display</string>

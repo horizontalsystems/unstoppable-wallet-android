@@ -14,7 +14,6 @@ interface IMultiSwapProvider {
     val id: String
     val title: String
     val icon: Int
-    val priority: Int
 
     val walletUseCase: WalletUseCase
 

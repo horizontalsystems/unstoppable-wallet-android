@@ -10,5 +10,4 @@ object MayaProvider : BaseThorChainProvider(
     override val id = "mayachain"
     override val title = "Maya Protocol"
     override val icon = R.drawable.maya
-    override val priority = 0
 }

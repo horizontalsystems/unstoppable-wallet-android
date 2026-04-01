@@ -11,8 +11,8 @@ import com.tonapps.wallet.data.tonconnect.entities.DAppManifestEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.BlockchainType
-import cash.p.terminal.core.retryWhen
 import io.horizontalsystems.tonkit.tonconnect.TonConnectKit
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
 
@@ -57,14 +57,23 @@ class TonConnectNewViewModel(
         }
 
         viewModelScope.launch(dispatchers.io) {
-            try {
-                manifest = retryWhen(times = 3, predicate = { true }) {
-                    tonConnectKit.getManifest(requestEntity.payload.manifestUrl)
+            val url = requestEntity.payload.manifestUrl
+            for (attempt in 1..MAX_MANIFEST_RETRIES) {
+                try {
+                    manifest = tonConnectKit.getManifest(url)
+                    if (error is NoManifestError) {
+                        error = null
+                    }
+                    emitState()
+                    return@launch
+                } catch (e: Throwable) {
+                    if (attempt < MAX_MANIFEST_RETRIES) {
+                        delay(MANIFEST_RETRY_DELAY_MS)
+                    } else {
+                        error = NoManifestError(e.message)
+                        emitState()
+                    }
                 }
-                emitState()
-            } catch (e: Throwable) {
-                error = NoManifestError(e.message)
-                emitState()
             }
         }
 
@@ -94,7 +103,6 @@ class TonConnectNewViewModel(
                         BlockchainType.Ton,
                     )
                 )
-                println("TonConnect connect result: $res")
                 finish = true
             } catch (e: Throwable) {
                 toast = e.message?.nullIfBlank() ?: e.javaClass.simpleName
@@ -105,8 +113,10 @@ class TonConnectNewViewModel(
     }
 
     fun reject() {
-        finish = true
-        emitState()
+        // No-op: navigation is handled by onResult callback.
+        // Do NOT set finish=true here — it would trigger a second
+        // popBackStack via LaunchedEffect(uiState.finish) on top of
+        // the one in onResult, double-popping the back stack.
     }
 
     fun onToastShow() {
@@ -114,6 +124,9 @@ class TonConnectNewViewModel(
         emitState()
     }
 }
+
+private const val MAX_MANIFEST_RETRIES = 3
+private const val MANIFEST_RETRY_DELAY_MS = 1000L
 
 sealed class TonConnectError : Error()
 class NoManifestError(override val message: String? = null) : TonConnectError()

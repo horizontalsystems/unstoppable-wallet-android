@@ -45,7 +45,6 @@ import cash.p.terminal.ui_compose.components.TextImportantError
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import coil3.compose.rememberAsyncImagePainter
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 
 @Composable
@@ -106,10 +105,9 @@ fun TonConnectNewScreen(
                     modifier = Modifier
                         .size(72.dp)
                         .clip(RoundedCornerShape(15.dp)),
-                    painter = rememberAsyncImagePainter(
-                        model = uiState.manifest?.iconUrl,
-                        error = painterResource(R.drawable.ic_platform_placeholder_24)
-                    ),
+                    painter = uiState.manifest?.let {
+                        rememberDAppIconPainter(it)
+                    } ?: painterResource(R.drawable.ic_platform_placeholder_24),
                     contentDescription = null,
                 )
                 Text(
@@ -177,16 +175,22 @@ fun TonConnectNewScreen(
             Spacer(Modifier.weight(1f))
             ButtonsGroupWithShade {
                 Column(Modifier.padding(horizontal = 24.dp)) {
+                    val manifestLoading = uiState.manifest == null && uiState.error == null
                     ButtonPrimaryYellow(
                         modifier = Modifier.fillMaxWidth(),
-                        title = stringResource(R.string.Button_Connect),
+                        title = if(manifestLoading) {
+                            stringResource(R.string.manifest_loading)
+                        } else {
+                            stringResource(R.string.Button_Connect)
+                        },
                         onClick = {
                             navController.authorizedAction {
                                 viewModel.connect()
                                 onResult.invoke(true)
                             }
                         },
-                        enabled = uiState.connectEnabled && uiState.manifest != null
+                        enabled = uiState.connectEnabled && uiState.manifest != null,
+                        loadingIndicator = manifestLoading
                     )
                     VSpacer(16.dp)
                     ButtonPrimaryDefault(

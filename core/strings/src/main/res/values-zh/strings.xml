@@ -485,6 +485,7 @@
     <string name="TonConnect_Unnamed">Unnamed</string>
     <string name="TonConnect_Wallet">Wallet</string>
     <string name="TonConnect_ChooseWallet">Choose a Wallet</string>
+    <string name="manifest_loading">正在加载清单…</string>
     <string name="account_not_supported_by">您当前的钱包类型 %1$s 不支持 %2$s</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">状态</string>
@@ -877,6 +878,7 @@
     <string name="Appearance_HideBalanceTabButtons">隐藏按钮</string>
     <string name="Appearance_BalanceAutoHide">自动隐藏余额</string>
     <string name="show_all_transactions">显示所有交易</string>
+    <string name="hide_balance">隐藏余额</string>
     <string name="Appearance_TransactionAutoHide">Transaction Auto Hide</string>
     <string name="appearance_transfer_passcode">Passcode for transfer</string>
     <string name="display">Display</string>

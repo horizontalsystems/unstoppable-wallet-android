@@ -21,6 +21,7 @@
     <string name="Button_Add">Добавить</string>
     <string name="Button_Confirm">Подтвердить</string>
     <string name="Button_Refresh">Обновить</string>
+    <string name="manifest_loading">Загрузка манифеста...</string>
     <string name="Button_Connect">Подключиться</string>
     <string name="Button_Reject">Отклонить</string>
     <string name="Button_Disconnect">Отсоединить</string>
@@ -902,6 +903,7 @@
     <string name="Appearance_HideBalanceTabButtons">Скрыть кнопки</string>
     <string name="Appearance_BalanceAutoHide">Автоскрытие баланса</string>
     <string name="show_all_transactions">Показать все транзакции</string>
+    <string name="hide_balance">Скрыть баланс</string>
     <string name="Appearance_TransactionAutoHide">Автоскрытие транзакций</string>
     <string name="appearance_transfer_passcode">Код подтверждения перевода</string>
     <string name="display">Показать</string>

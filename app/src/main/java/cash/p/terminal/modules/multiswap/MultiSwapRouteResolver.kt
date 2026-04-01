@@ -163,10 +163,7 @@ class MultiSwapRouteResolver(
             }
         }.awaitAll()
             .filterNotNull()
-            .sortedWith(
-                compareByDescending<SwapProviderQuote> { it.provider.priority }
-                    .thenByDescending { it.amountOut }
-            )
+            .sortedByBestAmountOut()
     }
 
     private fun commissionReserve(intermediate: Token): BigDecimal =

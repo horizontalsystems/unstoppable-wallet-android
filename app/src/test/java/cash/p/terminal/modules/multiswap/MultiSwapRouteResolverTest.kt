@@ -173,7 +173,6 @@ class MultiSwapRouteResolverTest {
                 coEvery { supports(pirateJetton, bnbNative) } returns false
                 coEvery { supports(bnbNative, cosaBep20) } returns false
                 coEvery { fetchQuote(pirateJetton, tonNative, any(), any()) } throws RuntimeException("no quote")
-                every { priority } returns 1
             }
 
             // Provider B: supports PIRATE→BNB and BNB→COSA with valid quotes
@@ -188,7 +187,6 @@ class MultiSwapRouteResolverTest {
                 coEvery { fetchQuote(bnbNative, cosaBep20, any(), any()) } returns mockk(relaxed = true) {
                     every { amountOut } returns BigDecimal("500")
                 }
-                every { priority } returns 1
             }
 
             val providers = listOf(providerA, providerB)
@@ -232,7 +230,6 @@ class MultiSwapRouteResolverTest {
                 coEvery { fetchQuote(tonNative, cosaBep20, any(), any()) } returns mockk(relaxed = true) {
                     every { amountOut } returns BigDecimal("200")
                 }
-                every { priority } returns 1
             }
 
             // Provider B: supports route via BNB, gives 500 COSA final output (better)
@@ -247,7 +244,6 @@ class MultiSwapRouteResolverTest {
                 coEvery { fetchQuote(bnbNative, cosaBep20, any(), any()) } returns mockk(relaxed = true) {
                     every { amountOut } returns BigDecimal("500")
                 }
-                every { priority } returns 1
             }
 
             val route = testResolver.findRoute(

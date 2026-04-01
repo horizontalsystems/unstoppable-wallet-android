@@ -1,6 +1,7 @@
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
+
     id(libs.plugins.kotlin.parcelize.get().pluginId)
     alias(libs.plugins.compose.compiler)
     kotlin("plugin.serialization")
@@ -9,20 +10,22 @@ plugins {
 android {
     namespace = "cash.p.terminal.feature.miniapp"
 
-    compileSdk = 35
+    compileSdk = 36
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-
     defaultConfig {
         minSdk = 27
         buildFeatures {
             compose = true
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     }
 }
 
