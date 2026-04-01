@@ -1,5 +1,5 @@
 ## 🚀 Version 0.54.0 Update
-_Release date: March 30, 2026_
+_Release date: April 1, 2026_
 
 ### ✨ Improvements
 
@@ -12,6 +12,15 @@ _Release date: March 30, 2026_
 
 - **Added the ability to hide all transactions in the transactions section**
   Works similarly to the tap-to-hide balance behavior.
+
+- **Added clear information when network coins are required for token operations**
+  If the user does not have enough native network coins to cover fees, the app now shows this explicitly.
+
+### 🐛 Fixes
+
+- **Fixed Jetton swap issue when using Tangem hardware cards**
+
+- **Fixed an issue with selecting the optimal swap provider**
 
 
 ## 🚀 Version 0.53.0 Update
