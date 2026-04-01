@@ -10,8 +10,9 @@ class SolanaIncomingTransactionRecord(
         baseToken: Token,
         source: TransactionSource,
         val from: String?,
-        val value: TransactionValue
-): SolanaTransactionRecord(transaction, baseToken, source) {
+        val value: TransactionValue,
+        spam: Boolean = false,
+): SolanaTransactionRecord(transaction, baseToken, source, spam) {
 
     override val mainValue = value
 

@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitWrapper
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
+import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaTransactionRecord
@@ -24,7 +26,7 @@ class SolanaTransactionConverter(
 ) {
     private val userAddress = solanaKitWrapper.solanaKit.receiveAddress
 
-    fun transactionRecord(fullTransaction: FullTransaction): SolanaTransactionRecord {
+    suspend fun transactionRecord(fullTransaction: FullTransaction): SolanaTransactionRecord {
         val transaction = fullTransaction.transaction
         val incomingTransfers = mutableListOf<SolanaTransactionRecord.Transfer>()
         val outgoingTransfers = mutableListOf<SolanaTransactionRecord.Transfer>()
@@ -66,7 +68,14 @@ class SolanaTransactionConverter(
         return when {
             (incomingTransfers.size == 1 && outgoingTransfers.isEmpty()) -> {
                 val transfer = incomingTransfers.first()
-                SolanaIncomingTransactionRecord(transaction, baseToken, source, transfer.address, transfer.value)
+                val spam = App.spamManager.isSpam(
+                    transaction.hash.toByteArray(),
+                    listOf(TransferEvent(transfer.address, transfer.value)),
+                    source,
+                    transaction.timestamp,
+                    null
+                )
+                SolanaIncomingTransactionRecord(transaction, baseToken, source, transfer.address, transfer.value, spam)
             }
 
             (incomingTransfers.isEmpty() && outgoingTransfers.size == 1) -> {
@@ -74,7 +83,22 @@ class SolanaTransactionConverter(
                 SolanaOutgoingTransactionRecord(transaction, baseToken, source, transfer.address, transfer.value, transfer.address == userAddress)
             }
 
-            else -> SolanaUnknownTransactionRecord(transaction, baseToken, source, incomingTransfers, outgoingTransfers)
+            else -> {
+                val incomingEvents = incomingTransfers.map { TransferEvent(it.address, it.value) }
+                val spam = if (incomingEvents.isNotEmpty()) {
+                    val outgoingEvents = outgoingTransfers.map { TransferEvent(it.address, it.value) }
+                    App.spamManager.isSpam(
+                        transaction.hash.toByteArray(),
+                        incomingEvents + outgoingEvents,
+                        source,
+                        transaction.timestamp,
+                        null
+                    )
+                } else {
+                    false
+                }
+                SolanaUnknownTransactionRecord(transaction, baseToken, source, incomingTransfers, outgoingTransfers, spam)
+            }
         }
     }
 
