@@ -28,7 +28,8 @@ TAG=$1
 KEYSTORE=$2
 KEYSTORE_FILENAME="$(basename -- $KEYSTORE)"
 KEYSTORE_PASSWORD=$3
-BUILT_APK_FILE="${WORK_DIR}/app/build/outputs/apk/base/release/app-base-release.apk"
+BUILT_APK_FILE="app/build/outputs/apk/base/release/app-base-release.apk"
+BUILT_APK_FILE_FDROID="app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk"
 ####################################
 
 function init() {
@@ -45,8 +46,7 @@ function buildApk () {
     echo "Building apk file ..."
 
     docker run -it --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -x -c \
-      './gradlew clean :app:assembleBaseRelease'
-
+      './gradlew :app:assembleBaseRelease :app:assembleFdroidRelease'
 }
 
 function signApk () {
@@ -58,11 +58,18 @@ function signApk () {
       "apksigner sign --ks ${KEYSTORE_FILENAME} --ks-pass pass:${KEYSTORE_PASSWORD} ${BUILT_APK_FILE}")
 
     echo $response
+
+    response2=$(docker run -it --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -x -c \
+      "apksigner sign --ks ${KEYSTORE_FILENAME} --ks-pass pass:${KEYSTORE_PASSWORD} ${BUILT_APK_FILE_FDROID}")
+
+    echo $response2
+
     rm "${WORK_DIR}/${KEYSTORE_FILENAME}"
 }
 
 function end () {
-    cp "${BUILT_APK_FILE}" "${PWD}/app-release-signed.apk"
+    cp "${WORK_DIR}/${BUILT_APK_FILE}" "${PWD}/unstoppable_wallet_google_play_${TAG}.apk"
+    cp "${WORK_DIR}/${BUILT_APK_FILE_FDROID}" "${PWD}/unstoppable_wallet_github_${TAG}.apk"
 }
 
 #############################################
