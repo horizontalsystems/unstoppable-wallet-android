@@ -590,6 +590,8 @@ Proceed only if you\'re sure.</string>
 
     <!--Network Fee Warning-->
     <string name="network_fee_warning_title">%s Network Fee</string>
+    <string name="token_balance_need_native_coin_title">You need %1$s to use %2$s</string>
+    <string name="token_balance_need_native_coin_body">%2$s runs on %3$s.\nNetwork fee is paid in %1$s.\nYour %1$s balance: %4$s</string>
     <string name="network_fee_warning_body_protocol">The %1$s network protocol states that at least %2$s is required to pay the network fee for this transaction.</string>
     <string name="network_fee_warning_body_balance">You have less than %s in your balance.</string>
     <string name="network_fee_warning_body_protocol_bold">at least %s</string>

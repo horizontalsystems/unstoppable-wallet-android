@@ -133,6 +133,7 @@ class TokenBalanceViewModelTest : KoinTest {
                         every { observeByToken(any(), any(), any()) } returns flowOf(emptyList())
                     }
                 }
+                single { mockk<cash.p.terminal.wallet.MarketKitWrapper>(relaxed = true) }
                 single {
                     mockk<PoisonAddressManager>(relaxed = true) {
                         every { poisonDbChangedFlow } returns MutableSharedFlow()
@@ -147,6 +148,7 @@ class TokenBalanceViewModelTest : KoinTest {
         Dispatchers.setMain(dispatcher)
         CoreApp.instance = mockk(relaxed = true) {
             every { isSwapEnabled } returns false
+            every { getString(any(), *anyVararg()) } returns ""
         }
 
         transactionHiddenFlow = MutableStateFlow(createHiddenState(hidden = false))
@@ -456,6 +458,200 @@ class TokenBalanceViewModelTest : KoinTest {
 
     // endregion
 
+    // region Network Fee Warning Tests (MOBILE-526)
+
+    @Test
+    fun networkFeeWarning_nativeToken_noWarning() = runTest(dispatcher) {
+        val balanceItem = createBalanceItem()
+        every { balanceService.balanceItem } returns balanceItem
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } returns createBalanceViewItem()
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(null, viewModel.uiState.networkFeeWarning)
+    }
+
+    @Test
+    fun networkFeeWarning_nonNativeTokenZeroBalance_showsWarning() = runTest(dispatcher) {
+        val bep20Wallet = createBep20Wallet()
+        testWallet = bep20Wallet
+        setupFeeWarningMocks()
+
+        val viewModel = createViewModel()
+        val balanceItem = createBalanceItem(wallet = bep20Wallet)
+        every { balanceService.balanceItem } returns balanceItem
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.networkFeeWarning != null)
+    }
+
+    @Test
+    fun networkFeeWarning_sufficientNativeBalance_noWarning() = runTest(dispatcher) {
+        val bep20Wallet = createBep20Wallet()
+        testWallet = bep20Wallet
+        setupFeeWarningMocks()
+        setupNativeBalanceMocks(nativeBalance = BigDecimal("0.1"))
+
+        val balanceItem = createBalanceItem(wallet = bep20Wallet)
+        every { balanceService.balanceItem } returns balanceItem
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } returns createBalanceViewItem()
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(null, viewModel.uiState.networkFeeWarning)
+    }
+
+    @Test
+    fun networkFeeWarning_exactlyAtThreshold_noWarning() = runTest(dispatcher) {
+        val tronWallet = createTrc20Wallet()
+        testWallet = tronWallet
+        setupNativeBalanceMocks(
+            nativeBalance = BigDecimal("50"),
+            nativeCoinCode = "TRX",
+            blockchainType = BlockchainType.Tron,
+            blockchainName = "TRON"
+        )
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } returns createBalanceViewItem()
+
+        val viewModel = createViewModel()
+        val balanceItem = createBalanceItem(wallet = tronWallet)
+        every { balanceService.balanceItem } returns balanceItem
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(null, viewModel.uiState.networkFeeWarning)
+    }
+
+    @Test
+    fun networkFeeWarning_justBelowThreshold_showsWarning() = runTest(dispatcher) {
+        val tronWallet = createTrc20Wallet()
+        testWallet = tronWallet
+        setupNativeBalanceMocks(
+            nativeBalance = BigDecimal("49.99"),
+            nativeCoinCode = "TRX",
+            blockchainType = BlockchainType.Tron,
+            blockchainName = "TRON"
+        )
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } returns createBalanceViewItem()
+
+        val viewModel = createViewModel()
+        val balanceItem = createBalanceItem(wallet = tronWallet)
+        every { balanceService.balanceItem } returns balanceItem
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.networkFeeWarning != null)
+    }
+
+    @Test
+    fun networkFeeWarning_noNativeWalletAdded_showsWarning() = runTest(dispatcher) {
+        val bep20Wallet = createBep20Wallet()
+        testWallet = bep20Wallet
+        setupFeeWarningMocks()
+
+        // getBalanceAdapterForWallet returns adapter that does NOT implement INativeBalanceProvider
+        val mockAdapterManager = getKoin().get<cash.p.terminal.wallet.IAdapterManager>()
+        every { mockAdapterManager.getBalanceAdapterForWallet(any()) } returns mockk(relaxed = true)
+
+        val balanceItem = createBalanceItem(wallet = bep20Wallet)
+        every { balanceService.balanceItem } returns balanceItem
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.networkFeeWarning != null)
+    }
+
+    @Test
+    fun networkFeeWarning_dismissed_noWarning() = runTest(dispatcher) {
+        val bep20Wallet = createBep20Wallet()
+        testWallet = bep20Wallet
+        setupFeeWarningMocks()
+        every { localStorage.isNetworkFeeWarningDismissed(any()) } returns true
+
+        val balanceItem = createBalanceItem(wallet = bep20Wallet)
+        every { balanceService.balanceItem } returns balanceItem
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(null, viewModel.uiState.networkFeeWarning)
+    }
+
+    @Test
+    fun dismissNetworkFeeWarning_persistsAndClearsWarning() = runTest(dispatcher) {
+        val bep20Wallet = createBep20Wallet()
+        testWallet = bep20Wallet
+        setupFeeWarningMocks()
+
+        val balanceItem = createBalanceItem(wallet = bep20Wallet)
+        every { balanceService.balanceItem } returns balanceItem
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.networkFeeWarning != null)
+
+        viewModel.dismissNetworkFeeWarning()
+        advanceUntilIdle()
+
+        assertEquals(null, viewModel.uiState.networkFeeWarning)
+        verify { localStorage.dismissNetworkFeeWarning(BlockchainType.BinanceSmartChain.uid) }
+    }
+
+    private fun setupFeeWarningMocks() {
+        val nativeToken = mockk<Token>(relaxed = true) {
+            every { coin } returns Coin(uid = "bnb", name = "BNB", code = "BNB")
+            every { decimals } returns 18
+        }
+        val mockMarketKit = getKoin().get<cash.p.terminal.wallet.MarketKitWrapper>()
+        every { mockMarketKit.token(any()) } returns nativeToken
+        every { mockMarketKit.blockchain(any<String>()) } returns Blockchain(
+            type = BlockchainType.BinanceSmartChain, name = "BNB Smart Chain", eip3091url = null
+        )
+        every { numberFormatter.formatCoinShort(any(), any(), any()) } returns "0"
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } returns createBalanceViewItem()
+    }
+
+    private fun setupNativeBalanceMocks(
+        nativeBalance: BigDecimal,
+        nativeCoinCode: String = "BNB",
+        blockchainType: BlockchainType = BlockchainType.BinanceSmartChain,
+        blockchainName: String = "BNB Smart Chain"
+    ) {
+        val nativeToken = mockk<Token>(relaxed = true) {
+            every { coin } returns Coin(uid = nativeCoinCode.lowercase(), name = nativeCoinCode, code = nativeCoinCode)
+            every { decimals } returns 18
+        }
+        val mockMarketKit = getKoin().get<cash.p.terminal.wallet.MarketKitWrapper>()
+        every { mockMarketKit.token(any()) } returns nativeToken
+        every { mockMarketKit.blockchain(any<String>()) } returns Blockchain(
+            type = blockchainType, name = blockchainName, eip3091url = null
+        )
+
+        val mockAdapterManager = getKoin().get<cash.p.terminal.wallet.IAdapterManager>()
+        val balanceAdapter = object : cash.p.terminal.wallet.IBalanceAdapter, cash.p.terminal.core.INativeBalanceProvider {
+            override val nativeBalanceData = BalanceData(available = nativeBalance)
+            override val nativeBalanceUpdatedFlow = kotlinx.coroutines.flow.MutableSharedFlow<Unit>()
+            override val balanceData get() = BalanceData(available = BigDecimal.ZERO)
+            override val balanceStateUpdatedFlow = kotlinx.coroutines.flow.MutableSharedFlow<Unit>()
+            override val balanceState get() = AdapterState.Synced
+            override val balanceUpdatedFlow = kotlinx.coroutines.flow.MutableSharedFlow<Unit>()
+        }
+        every { mockAdapterManager.getBalanceAdapterForWallet(any()) } returns balanceAdapter
+
+        every { numberFormatter.formatCoinShort(any(), any(), any()) } returns nativeBalance.toPlainString()
+        every { CoreApp.instance.getString(any(), *anyVararg()) } answers { "warning text" }
+    }
+
     // region Address Poisoning View Mode Tests
 
     @Test
@@ -651,6 +847,40 @@ class TokenBalanceViewModelTest : KoinTest {
         val account = mockk<Account>(relaxed = true)
         val walletFactory = WalletFactory(mockk(relaxed = true))
         return walletFactory.create(pirateToken, account, null)!!
+    }
+
+    private fun createBep20Wallet(): Wallet {
+        val coin = Coin(uid = "test-bep20", name = "TestBep20", code = "TBEP")
+        val token = Token(
+            coin = coin,
+            blockchain = Blockchain(
+                type = BlockchainType.BinanceSmartChain,
+                name = "BNB Smart Chain",
+                eip3091url = null
+            ),
+            type = TokenType.Eip20("0x1234567890abcdef1234567890abcdef12345678"),
+            decimals = 18
+        )
+        val account = mockk<Account>(relaxed = true)
+        val walletFactory = WalletFactory(mockk(relaxed = true))
+        return walletFactory.create(token, account, null)!!
+    }
+
+    private fun createTrc20Wallet(): Wallet {
+        val usdtCoin = Coin(uid = "tether", name = "Tether", code = "USDT")
+        val usdtToken = Token(
+            coin = usdtCoin,
+            blockchain = Blockchain(
+                type = BlockchainType.Tron,
+                name = "TRON",
+                eip3091url = null
+            ),
+            type = TokenType.Eip20("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"),
+            decimals = 6
+        )
+        val account = mockk<Account>(relaxed = true)
+        val walletFactory = WalletFactory(mockk(relaxed = true))
+        return walletFactory.create(usdtToken, account, null)!!
     }
 
     private fun createBalanceItem(

@@ -454,6 +454,8 @@
 
     <!--Network Fee Warning-->
     <string name="network_fee_warning_title">Taxa de rede %s</string>
+    <string name="token_balance_need_native_coin_title">Você precisa de %1$s para usar %2$s</string>
+    <string name="token_balance_need_native_coin_body">%2$s funciona na %3$s.\nA taxa de rede é paga em %1$s.\nSeu saldo de %1$s: %4$s</string>
     <string name="network_fee_warning_body_protocol">O protocolo da rede %1$s determina que pelo menos %2$s é necessário para pagar a taxa de rede desta transação.</string>
     <string name="network_fee_warning_body_balance">Você tem menos de %s no seu saldo.</string>
     <string name="network_fee_warning_body_protocol_bold">pelo menos %s</string>

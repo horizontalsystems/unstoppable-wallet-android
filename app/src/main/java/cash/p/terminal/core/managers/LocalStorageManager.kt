@@ -828,4 +828,14 @@ class LocalStorageManager(
         key = "cached_balance_mini_app",
         default = ""
     )
+
+
+    private fun networkFeeWarningKey(uid: String) = "network_fee_warning_dismissed_$uid"
+
+    override fun isNetworkFeeWarningDismissed(blockchainTypeUid: String): Boolean =
+        preferences.getBoolean(networkFeeWarningKey(blockchainTypeUid), false)
+
+    override fun dismissNetworkFeeWarning(blockchainTypeUid: String) {
+        preferences.edit { putBoolean(networkFeeWarningKey(blockchainTypeUid), true) }
+    }
 }
