@@ -58,7 +58,6 @@ class ChangeNowProvider(
     override val id = "changenow"
     override val title = "ChangeNow"
     override val icon = R.drawable.ic_change_now
-    override val priority = 0
 
     override val mevProtectionAvailable: Boolean = false
     private val marketKit: MarketKitWrapper by KoinJavaComponent.inject(MarketKitWrapper::class.java)

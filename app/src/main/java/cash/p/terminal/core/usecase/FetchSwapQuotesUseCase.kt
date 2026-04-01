@@ -1,6 +1,7 @@
 package cash.p.terminal.core.usecase
 
 import cash.p.terminal.modules.multiswap.SwapProviderQuote
+import cash.p.terminal.modules.multiswap.sortedByBestAmountOut
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.wallet.Token
 import kotlinx.coroutines.async
@@ -25,10 +26,7 @@ class FetchSwapQuotesUseCase {
         if (supported.isEmpty()) return@coroutineScope emptyList()
 
         fetchQuotes(supported, tokenIn, tokenOut, amountIn, settings, onProviderError)
-            .sortedWith(
-                compareByDescending<SwapProviderQuote> { it.provider.priority }
-                    .thenByDescending { it.amountOut }
-            )
+            .sortedByBestAmountOut()
     }
 
     private suspend fun filterSupported(

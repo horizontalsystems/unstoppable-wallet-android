@@ -56,7 +56,6 @@ class QuickexProvider(
     override val id = "quickex"
     override val title = "Quickex"
     override val icon = R.drawable.ic_quickex
-    override val priority = 0
 
     override val mevProtectionAvailable: Boolean = false
     private val marketKit: MarketKitWrapper by KoinJavaComponent.inject(MarketKitWrapper::class.java)

@@ -22,6 +22,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -38,6 +39,26 @@ class SwapQuoteServiceTest {
 
     private val tokenIn = mockk<Token>()
     private val tokenOut = mockk<Token>()
+
+    private fun mockProvider(
+        providerId: String,
+        quoteAmountOut: BigDecimal = BigDecimal.ONE,
+        supports: Boolean = true,
+    ): IMultiSwapProvider {
+        val expectedTokenIn = tokenIn
+        val expectedTokenOut = tokenOut
+
+        return mockk(relaxed = true) {
+            every { id } returns providerId
+            coEvery { supports(expectedTokenIn, expectedTokenOut) } returns supports
+            coEvery { fetchQuote(expectedTokenIn, expectedTokenOut, BigDecimal.ONE, any()) } returns mockk(relaxed = true) {
+                every { amountOut } returns quoteAmountOut
+                every { tokenIn } returns expectedTokenIn
+                every { tokenOut } returns expectedTokenOut
+                every { amountIn } returns BigDecimal.ONE
+            }
+        }
+    }
 
     @Before
     fun setUp() {
@@ -181,6 +202,22 @@ class SwapQuoteServiceTest {
 
         coVerify(exactly = 1) { failingProvider.start() }
         coVerify(exactly = 1) { healthyProvider.start() }
+    }
+
+    @Test
+    fun setAmount_quotesAvailable_autoSelectsHighestAmountOut() = runTest {
+        val lowerQuoteProvider = mockProvider(providerId = "lower", quoteAmountOut = BigDecimal("5"))
+        val higherQuoteProvider = mockProvider(providerId = "higher", quoteAmountOut = BigDecimal("10"))
+
+        val service = createService(listOf(lowerQuoteProvider, higherQuoteProvider), testScheduler)
+        service.setTokenIn(tokenIn)
+        service.setTokenOut(tokenOut)
+        service.setAmount(BigDecimal.ONE)
+        advanceUntilIdle()
+
+        val state = service.stateFlow.value
+        assertEquals(listOf("higher", "lower"), state.quotes.map { it.provider.id })
+        assertEquals("higher", state.quote?.provider?.id)
     }
 
     private fun createService(
