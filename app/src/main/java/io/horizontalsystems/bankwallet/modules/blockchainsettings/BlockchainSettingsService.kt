@@ -3,9 +3,11 @@ package io.horizontalsystems.bankwallet.modules.blockchainsettings
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsModule.BlockchainItem
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
@@ -19,7 +21,8 @@ class BlockchainSettingsService(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
-    private val moneroNodeManager: MoneroNodeManager
+    private val moneroNodeManager: MoneroNodeManager,
+    private val marketKit: MarketKitWrapper
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -81,8 +84,13 @@ class BlockchainSettingsService(
             BlockchainItem.Evm(blockchain, syncSource)
         }
 
-        val solanaBlockchainItems = mutableListOf<BlockchainItem>()
+        val tronBlockchainItems = mutableListOf<BlockchainItem>()
+        marketKit.blockchain(BlockchainType.Tron.uid)?.let { blockchain ->
+            val syncSource = evmSyncSourceManager.getSyncSource(BlockchainType.Tron)
+            tronBlockchainItems.add(BlockchainItem.Evm(blockchain, syncSource))
+        }
 
+        val solanaBlockchainItems = mutableListOf<BlockchainItem>()
         solanaRpcSourceManager.blockchain?.let {
             solanaBlockchainItems.add(BlockchainItem.Solana(it, solanaRpcSourceManager.rpcSource))
         }
@@ -92,7 +100,7 @@ class BlockchainSettingsService(
             moneroBlockchainItems.add(BlockchainItem.Monero(it, moneroNodeManager.currentNode))
         }
 
-        blockchainItems = (btcBlockchainItems +  evmBlockchainItems + solanaBlockchainItems + moneroBlockchainItems).sortedBy { it.order }
+        blockchainItems = (btcBlockchainItems + evmBlockchainItems + tronBlockchainItems + solanaBlockchainItems + moneroBlockchainItems).sortedBy { it.order }
     }
 
 }

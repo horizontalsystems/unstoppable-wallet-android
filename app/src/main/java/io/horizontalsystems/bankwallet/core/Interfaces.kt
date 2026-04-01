@@ -383,10 +383,6 @@ interface IReceiveAdapter {
         return receiveAddressTransparent
     }
 
-    suspend fun isAddressActive(address: String): Boolean {
-        return true
-    }
-
     fun usedAddresses(change: Boolean): List<UsedAddress> {
         return listOf()
     }

@@ -89,6 +89,7 @@ class WalletManager(
         btcBlockchainManager: BtcBlockchainManager,
         evmBlockchainManager: EvmBlockchainManager,
         solanaKitManager: SolanaKitManager,
+        tronKitManager: TronKitManager,
     ) {
         coroutineScope.launch {
             restoreSettingsManager.settingsUpdatedFlow.collect { blockchainType ->
@@ -116,6 +117,11 @@ class WalletManager(
         coroutineScope.launch {
             solanaKitManager.kitStoppedObservable.asFlow().collect {
                 reloadWallets(BlockchainType.Solana)
+            }
+        }
+        coroutineScope.launch {
+            tronKitManager.kitStoppedObservable.asFlow().collect {
+                reloadWallets(BlockchainType.Tron)
             }
         }
     }

@@ -32,11 +32,6 @@ abstract class BaseTronAdapter(
 
     // IReceiveAdapter
 
-    override suspend fun isAddressActive(address: String): Boolean {
-        val tronAddress = Address.fromBase58(address)
-        return tronKit.isAccountActive(tronAddress)
-    }
-
     override val receiveAddress: String
         get() = tronKit.address.base58
 

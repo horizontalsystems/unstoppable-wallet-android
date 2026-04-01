@@ -9,6 +9,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tronkit.models.Address
+import io.horizontalsystems.tronkit.models.RpcSource
 import io.horizontalsystems.tronkit.network.Network
 import io.horizontalsystems.tronkit.rpc.Trc20Provider
 
@@ -47,7 +48,7 @@ class AddTronTokenBlockchainService(
 
     companion object {
         fun getInstance(blockchain: Blockchain): AddTronTokenBlockchainService {
-            val trc20Provider = Trc20Provider.getInstance(Network.Mainnet, App.appConfigProvider.trongridApiKeys)
+            val trc20Provider = Trc20Provider.getInstance(RpcSource.tronGrid(Network.Mainnet, App.appConfigProvider.trongridApiKeys))
             return AddTronTokenBlockchainService(blockchain, trc20Provider)
         }
     }
