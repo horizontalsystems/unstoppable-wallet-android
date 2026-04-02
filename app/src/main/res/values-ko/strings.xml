@@ -2,7 +2,6 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">매개 변수가 설정되지 않았습니다</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
     <string name="Button_Show">표시</string>
@@ -110,7 +109,7 @@
     <string name="Restore_PassphraseDescription">이 연상 부호를 만들 때 사용한 암호 문구 입력.</string>
     <string name="Restore_Title">블록체인 선택</string>
     <string name="Restore_By">으로</string>
-    <string name="Restore_RestoreBy">복원 날짜</string>
+    <string name="Restore_RestoreBy">으로</string>
     <string name="Restore_RecoveryPhrase">복구 문구</string>
     <string name="Restore_PrivateKey">개인 암호</string>
     <string name="Restore_PrivateKeyHint">EVM 개인 키, BIP32 Root Key 또는 Account Extended Private Key 입력</string>
@@ -175,9 +174,8 @@
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_TotalMarketCapShort">시가 총액</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">시가 총액</string>
-    <string name="MarketGlobalMetrics_Volume">24h 거래량</string>
+    <string name="MarketGlobalMetrics_Volume">거래량</string>
     <string name="MarketGlobalMetrics_VolumeShort">24h 거래량</string>
-    <string name="MarketGlobalMetrics_TvlInDefi">디파이(DeFi)에서의 총 예치 가치</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF 유입액</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">모든 암호화폐의 총 시장 가치\" or \"모든 가상 화폐의 총 시장 가치</string>
     <string name="MarketGlobalMetrics_VolumeDescription">암호화폐 시장의 24시간 거래량\" or \"가상 화폐 시장의 24시간 거래량</string>
@@ -380,6 +378,7 @@
     <string name="Send_Address_Error_InvalidAddress">잘못된 주소</string>
     <string name="Send_Address_Error_Detected">감지됨</string>
     <string name="Send_Address_Error_Clear">안전함</string>
+    <string name="SecureSend_Config_Disabled">비활성화됨</string>
     <string name="Send_Address_ErrorMessage_PhishingDetected">피싱 주소 감지됨!</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected">블랙리스트 등록 주소 감지됨!</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected">제재 대상 주소 감지됨!</string>
@@ -421,7 +420,7 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">중고 Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">이 nonce를 사용하여 실행된 트랜잭션이 이미 존재합니다.</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">네트워크 수수료</string>
+    <string name="FeeSettings_NetworkFee">수수료</string>
     <string name="FeeSettings_NetworkFee_Info">네트워크에서 주어진 거래를 보내는 데 예상되는 비용.</string>
     <string name="FeeSettings_GasLimit_Info">거래 복잡성은 \'가스\'라고 불리는 단위로 측정됩니다. 이는 실행되는 스마트 계약에 따라 다릅니다. 가스 한도는 해당 거래를 실행하는 데 필요한 최대 가스를 예상한 값입니다. 실제로 사용된 가스는 일반적으로 더 낮을 것입니다.</string>
     <string name="FeeSettings_GasPrice_Info">네트워크 거래 수수료는 가스 단위로 측정됩니다. 가스 가격은 사용자가 가스 단위당 지출할 의향이 있는 금액입니다. 네트워크가 사용 중일 때는 가스 가격이 높고 유휴 상태일 때는 가스 가격이 낮습니다. 가스 가격이 충분하지 않아 거래가 장기간 보류 상태로 남아 있는 경우가 많습니다.</string>
@@ -510,6 +509,7 @@
     <string name="WalletConnect_Value">값</string>
     <string name="WalletConnect_TokenAllowance">토큰 허용량</string>
     <string name="WalletConnect_ConfirmTransaction">트랜잭션 확인</string>
+    <string name="WalletConnect_DAppCheck_Risky">위험</string>
     <!-- dApp Connection-->
     <string name="DAppConnection_Title">디앱 연결</string>
     <string name="DAppConnection_Requests">Solicitudes</string>
@@ -531,9 +531,11 @@
     <string name="Swap_FromAmountTitle">지불하기</string>
     <string name="Swap_ToAmountTitle">얻기</string>
     <string name="Swap_TokenSelectorTitle">선택</string>
-    <string name="Swap_Price">금액</string>
+    <string name="Swap_Price">가격</string>
     <string name="Swap_AvailableBalance">사용 가능한 잔액</string>
     <string name="Swap_PriceImpact">가격 영향</string>
+    <string name="Swap_ProviderRisk_Risky">위험</string>
+    <string name="Swap_AmlError_Button">재시도</string>
     <string name="Swap_MinimumReceived">보증 금액</string>
     <string name="Swap_Slippage">미끄러짐</string>
     <string name="Swap_Recipient">수령인</string>
@@ -572,6 +574,10 @@
     <string name="SwapSettings_Warning_UnusualSlippage">거래가 프론트런 당할 수 있습니다</string>
     <!-- Swap Confirmation -->
     <string name="Activate_InsufficientBalance_Title">잔액 부족</string>
+    <!-- Swap History -->
+    <!-- Swap Info -->
+    <string name="SwapInfo_StatusSwapping">스왑</string>
+    <string name="SwapInfo_StatusSending">전송</string>
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">%s을(를) 교환하거나 새 금액을 취소하고 승인해야 합니다.</string>
     <string name="Approve_Spender">스펜더</string>
@@ -590,14 +596,12 @@
     <string name="Transactions_WaitForSync">동기화가 끝날 때까지 기다려 주십시오.</string>
     <string name="Transactions_Pending">보류 중</string>
     <string name="Transactions_Receive">수령됨</string>
-    <string name="Transactions_Completed">완료</string>
     <string name="Transactions_Processing">처리 중</string>
     <string name="Transactions_Send">전송됨</string>
     <string name="Transactions_Burn">번</string>
     <string name="Transactions_Mint">민트</string>
     <string name="Transactions_Approve">승인됨</string>
     <string name="Transactions_Swap">스왑됨</string>
-    <string name="Transactions_Failed">실패</string>
     <string name="Transactions_Transfer">전송</string>
     <string name="Transactions_Shield">차폐(Shield)</string>
     <string name="Transactions_ContractCall">계약 콜</string>
@@ -650,7 +654,7 @@
     <string name="TransactionInfo_SentToSelfNote">이 거래는 자신의 주소로 전송됩니다</string>
     <string name="TransactionInfo_DoubleSpendNote">이중 지출 위험!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">%s에서 보기</string>
-    <string name="TransactionInfo_Price">금액</string>
+    <string name="TransactionInfo_Price">가격</string>
     <string name="TransactionInfo_YouGot">받았던 금액</string>
     <string name="TransactionInfo_YouSent">보냄</string>
     <string name="TransactionInfo_Received">수령됨</string>
@@ -662,8 +666,6 @@
     <string name="TransactionInfo_SpeedUpDescription">이 작업은 이전 거래를 무효화하고 더 높은 수수료로 다시 전송하려고 시도합니다.</string>
     <string name="StatusInfo_Pending">보류 중</string>
     <string name="StatusInfo_Processing">처리 중</string>
-    <string name="StatusInfo_Confirmed">완료</string>
-    <string name="StatusInfo_Failed">실패</string>
     <string name="StatusInfo_PendingDescription">거래는 아직 블록체인에서 확인되지 않았습니다. 권장 또는 더 높은 수수료 설정으로 전송된 거래는 일반적으로 분 이내에 처리됩니다. 낮은 수수료로 전송된 거래는 몇 시간 또는 며칠 동안 보류 상태로 남아 있을 수 있으며 거부될 수도 있습니다. 또한 Unstoppable 지갑 인터페이스에 표시되는 개별 트랜잭션의 상태는 일반적으로 짧은 지연으로 업데이트됩니다.</string>
     <string name="StatusInfo_ProcessingDescription">거래는 이미 블록체인에 포함되었지만 영구적인 완결성에 도달하지 않았습니다. 이 시점에서 소액 결제를 위해 완료된 거래로 간주하는 것이 안전합니다. 더 큰 지불의 경우 거래 상태가 완료로 변경될 때까지 기다리는 것이 좋습니다.</string>
     <string name="StatusInfo_ConfirmedDescription">거래가 완료되고 영구적이고 되돌릴 수 없는 것으로 간주됩니다.</string>
@@ -752,8 +754,6 @@
     <string name="Premium_UpgradeFeature_TradeSignals">신호 및 트렌드</string>
     <string name="Premium_UpgradeFeature_RobberyProtection">강압 모드</string>
     <string name="Premium_UpgradeFeature_SecureSend">사기 방지</string>
-    <string name="Premium_UpgradeFeature_ScamProtection">블랙리스트 확인</string>
-    <string name="Premium_UpgradeFeature_SwapProtection">손실 방지</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">주요 기준별 상위 100개 목록 접근</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">다양한 매개변수에 대한 다중 레벨 필터링</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">보유 토큰의 시장 트렌드 자동 모니터링</string>
@@ -807,7 +807,7 @@
     <string name="BackupManager_MergeDescription">이 작업을 수행하면 현지 결제 연락처가 덮어쓰여집니다.</string>
     <string name="BackupManager_BackupRequired">백업이 필요합니다</string>
     <string name="BackupManager_WatchWallets">관찰 주소</string>
-    <string name="BackupManager_Watchlist">관심목록</string>
+    <string name="BackupManager_Watchlist">관심 목록</string>
     <string name="BackupManager_CustomRpc">사용자 지정 RPC</string>
     <string name="BackupManager_AppSettingsTitle">앱 설정</string>
     <string name="BackupManager_AppSettingsDescription">언어, 통화, 외관...</string>
@@ -879,10 +879,9 @@
     <!--Setting_Contact-->
     <!--Setting_Notifications-->
     <!-- Settings Launch Screen -->
-    <string name="SettingsLaunchScreen_Auto">자동</string>
     <string name="SettingsLaunchScreen_Balance">잔액</string>
     <string name="SettingsLaunchScreen_MarketOverview">시장 개요</string>
-    <string name="SettingsLaunchScreen_Watchlist">관심목록</string>
+    <string name="SettingsLaunchScreen_Watchlist">관심 목록</string>
     <!--Settings-->
     <string name="SettingsTheme_Dark">어두운</string>
     <string name="SettingsTheme_Light">밝은</string>
@@ -1036,7 +1035,7 @@
     <string name="AddToken_CoinCode">코인 코드</string>
     <string name="AddToken_Decimals">소수점</string>
     <string name="AddToken_AddressOrSymbol">계약 주소</string>
-    <string name="AddToken_Blockchain">블록 체인</string>
+    <string name="AddToken_Blockchain">블록체인으로 필터링</string>
     <string name="AddToken_CoinAlreadyInListWarning">이 토큰은 이미 코인 매니저 리스트에 있습니다.</string>
     <string name="AddToken_InvalidContractAddress">잘못된 계약 주소</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">%s 블록체인에서 계약 주소를 찾을 수 없습니다.</string>
@@ -1057,7 +1056,7 @@
     <string name="Tor_TorIsActive">Tor 활성화</string>
     <!--Coin Page-->
     <string name="Coin_Info">코인 정보</string>
-    <string name="Coin_Tab_Overview">금액</string>
+    <string name="Coin_Tab_Overview">가격</string>
     <string name="Coin_Tab_Market">시장</string>
     <string name="Coin_Tab_Details">분석</string>
     <string name="CoinPage_TimeDuration_Day">1하루</string>
