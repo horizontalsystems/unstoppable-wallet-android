@@ -663,7 +663,7 @@
     <string name="SwapSettings_Error_InvalidAddress">Неверный адрес</string>
     <string name="SwapSettings_Error_InvalidBlockchainAddress">Неверный %s адрес</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Ваша транзакция может быть авансированной</string>
-    <string name="SwapSort_BestRate">Лучшая ставка</string>
+    <string name="SwapSort_BestRate">Лучший курс</string>
     <string name="SwapSort_BestTime">Самый быстрый</string>
     <string name="RiskLevel_ProviderRiskLevel">Уровни риска провайдера</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">Нижеприведенные метки объясняют различные уровни риска поставщиков подкачки. Выберите соответственно.</string>
@@ -850,6 +850,7 @@
     <string name="Settings_AppSettings">Настройки интерфейса</string>
     <string name="Settings_Subscription">Подписка</string>
     <string name="Settings_AutoLock">Автоблокировка</string>
+    <string name="Settings_AutoLock_Description">Автоматически блокирует приложение по истечении выбранного времени.</string>
     <string name="Settings_JoinUnstoppables">Присоединиться к Unstoppables</string>
     <string name="Settings_Support">Поддержка</string>
     <string name="Settings_VipSupport">Поддержка Premium</string>
