@@ -65,7 +65,7 @@ fun TonConnectNewScreen(
 
     LaunchedEffect(uiState.finish) {
         if (uiState.finish) {
-            navController.popBackStack()
+            onResult.invoke(true)
         }
     }
 
@@ -85,6 +85,7 @@ fun TonConnectNewScreen(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
                         icon = R.drawable.ic_close,
+                        enabled = !uiState.connecting,
                         onClick = { navController.popBackStack() }
                     )
                 )
@@ -186,16 +187,16 @@ fun TonConnectNewScreen(
                         onClick = {
                             navController.authorizedAction {
                                 viewModel.connect()
-                                onResult.invoke(true)
                             }
                         },
                         enabled = uiState.connectEnabled && uiState.manifest != null,
-                        loadingIndicator = manifestLoading
+                        loadingIndicator = manifestLoading || uiState.connecting
                     )
                     VSpacer(16.dp)
                     ButtonPrimaryDefault(
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Cancel),
+                        enabled = !uiState.connecting,
                         onClick = {
                             viewModel.reject()
                             onResult.invoke(false)
