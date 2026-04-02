@@ -166,10 +166,13 @@ class TronKitManager(
             backgroundManager.stateFlow.collect { state ->
                 if (state == BackgroundManagerState.EnterForeground) {
                     tronKitWrapper?.tronKit?.let { kit ->
+                        kit.resume()
                         Handler(Looper.getMainLooper()).postDelayed({
                             kit.refresh()
                         }, 1000)
                     }
+                } else if (state == BackgroundManagerState.EnterBackground) {
+                    tronKitWrapper?.tronKit?.pause()
                 }
             }
         }
