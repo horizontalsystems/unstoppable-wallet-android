@@ -850,7 +850,6 @@
     <string name="Settings_AppSettings">Настройки интерфейса</string>
     <string name="Settings_Subscription">Подписка</string>
     <string name="Settings_AutoLock">Автоблокировка</string>
-    <string name="Settings_AutoLock_Description">Автоматически блокирует приложение после выбранного времени.</string>
     <string name="Settings_JoinUnstoppables">Присоединиться к Unstoppables</string>
     <string name="Settings_Support">Поддержка</string>
     <string name="Settings_VipSupport">Поддержка Premium</string>
