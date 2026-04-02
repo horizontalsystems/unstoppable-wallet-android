@@ -19,6 +19,7 @@ object MultiSwapProviderRegistry {
         USwapProvider(UProvider.StealthEx),
         USwapProvider(UProvider.Exolix),
         USwapProvider(UProvider.Swapuz),
+        USwapProvider(UProvider.Barter),
     )
 
     private val providersById: Map<String, IMultiSwapProvider> by lazy {

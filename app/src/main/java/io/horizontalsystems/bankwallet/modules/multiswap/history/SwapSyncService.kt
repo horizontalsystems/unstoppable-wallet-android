@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.SwapRecord
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.AllBridgeAPI
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.AllBridgeProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.UProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UnstoppableAPI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,7 +54,7 @@ class SwapSyncService(
         }
         try {
             val request = SwapTrackRequestBuilder.build(record)
-            val response = if (record.providerId == OneInchProvider.id) {
+            val response = if (listOf(OneInchProvider.id, "u_${UProvider.Barter.id}").contains(record.providerId)) {
                 unstoppableAPI.trackEvm(request)
             } else {
                 unstoppableAPI.track(request)

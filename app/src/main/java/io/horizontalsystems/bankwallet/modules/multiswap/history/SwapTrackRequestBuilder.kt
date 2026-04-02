@@ -35,7 +35,7 @@ object SwapTrackRequestBuilder {
                 toAddress = record.recipientAddress,
             )
 
-            OneInchProvider.id -> UnstoppableAPI.Request.Track(
+            OneInchProvider.id, "u_${UProvider.Barter.id}" -> UnstoppableAPI.Request.Track(
                 provider = providerApiName,
                 hash = record.transactionHash,
                 chainId = evmChainIds[record.tokenInBlockchainTypeUid],
