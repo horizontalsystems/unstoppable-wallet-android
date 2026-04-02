@@ -73,7 +73,10 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
 //        "" to BlockchainType.ZkSync,
     )
 
+    private val chainIdByBlockchainType = blockchainTypes.entries.associate { (k, v) -> v to k }
+
     private var assetsMap = mapOf<Token, String>()
+    private var supportedBlockchainTypes = setOf<BlockchainType>()
 
     override suspend fun start() {
         assetsMap = SwapProviderCacheHelper.getOrFetch(
@@ -86,7 +89,14 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
 
     private suspend fun fetchAssetsMap(): Map<Token, String> {
         val assetsMap = mutableMapOf<Token, String>()
-        val tokens = unstoppableAPI.tokens(provider.id).tokens
+        val response = unstoppableAPI.tokens(provider.id)
+        val tokens = response.tokens
+
+        if (tokens.isEmpty()) {
+            supportedBlockchainTypes = response.supportedChainIds.mapNotNull { blockchainTypes[it] }.toSet()
+            return emptyMap()
+        }
+
         for (token in tokens) {
             val blockchainType = blockchainTypes[token.chainId] ?: continue
 
@@ -193,7 +203,18 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     }
 
     override fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
-        return assetsMap.contains(tokenFrom) && assetsMap.contains(tokenTo)
+        return if (assetsMap.isNotEmpty()) {
+            assetsMap.contains(tokenFrom) && assetsMap.contains(tokenTo)
+        } else {
+            tokenFrom.blockchainType in supportedBlockchainTypes &&
+                    tokenTo.blockchainType in supportedBlockchainTypes
+        }
+    }
+
+    private fun deriveIdentifier(token: Token): String? = when (val type = token.type) {
+        is TokenType.Eip20 -> type.address
+        TokenType.Native if token.blockchainType.isEvm -> "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+        else -> null
     }
 
     override suspend fun fetchQuote(
@@ -212,7 +233,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             true
         )
 
-        val approvalAddress = bestRoute.approvalAddress?.let { router ->
+        val approvalAddress = bestRoute.meta?.approvalAddress?.let { router ->
             try {
                 Address(router)
             } catch (_: Throwable) {
@@ -245,8 +266,10 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         refundAddress: String?,
         dry: Boolean,
     ): UnstoppableAPI.Response.Quote.Route {
-        val assetIn = assetsMap[tokenIn]!!
-        val assetOut = assetsMap[tokenOut]!!
+        val usingDerivedIdentifiers = assetsMap.isEmpty()
+        val assetIn = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn")
+        val assetOut = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut")
+        val chainId = if (usingDerivedIdentifiers) chainIdByBlockchainType[tokenIn.blockchainType] else null
 
         val quote = unstoppableAPI.quote(
             UnstoppableAPI.Request.Quote(
@@ -259,6 +282,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                 sourceAddress = sourceAddress,
                 refundAddress = refundAddress,
                 dry = dry,
+                chainId = chainId,
             )
         )
 
@@ -323,8 +347,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             estimatedTime = bestRoute.estimatedTime?.total,
             slippage = slippage,
             providerSwapId = bestRoute.providerSwapId,
-            fromAsset = assetsMap[tokenIn],
-            toAsset = assetsMap[tokenOut],
+            fromAsset = assetsMap[tokenIn] ?: deriveIdentifier(tokenIn) ?: throw IllegalStateException("No identifier for tokenIn"),
+            toAsset = assetsMap[tokenOut] ?: deriveIdentifier(tokenOut) ?: throw IllegalStateException("No identifier for tokenOut"),
             depositAddress = bestRoute.inboundAddress,
         )
     }
@@ -523,6 +547,7 @@ interface UnstoppableAPI {
             val sourceAddress: String?,
             val refundAddress: String?,
             val dry: Boolean,
+            val chainId: String? = null,
         )
 
         data class Track(
@@ -546,7 +571,8 @@ interface UnstoppableAPI {
         )
 
         data class Tokens(
-            val tokens: List<Token>
+            val tokens: List<Token>,
+            val supportedChainIds: List<String> = emptyList(),
         )
 
         data class Token(
@@ -561,17 +587,19 @@ interface UnstoppableAPI {
         ) {
             data class Route(
                 val expectedBuyAmount: BigDecimal?,
-                val approvalAddress: String?,
                 val tx: JsonElement?,
                 val inboundAddress: String,
                 val memo: String?,
                 val txExtraAttribute: Map<String, String>?,
                 val estimatedTime: EstimatedTime?,
                 val providerSwapId: String?,
+                val meta: Meta?
             ) {
                 data class EstimatedTime(
                     val total: Long
                 )
+
+                data class Meta(val approvalAddress: String)
             }
         }
 

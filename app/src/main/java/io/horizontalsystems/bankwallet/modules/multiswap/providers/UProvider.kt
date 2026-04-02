@@ -71,5 +71,15 @@ enum class UProvider(
         false,
         true,
         RiskLevel.LIMITED
+    ),
+    Barter(
+        "BARTER",
+        "Barter",
+        R.drawable.swap_provider_barter,
+        SwapProviderType.DEX,
+        true,
+        false,
+        true,
+        RiskLevel.CONTROLLED
     );
 }
