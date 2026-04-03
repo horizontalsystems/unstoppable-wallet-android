@@ -31,7 +31,7 @@ object OneInchProvider : IMultiSwapProvider {
     override val requireTerms = false
     override val riskLevel = RiskLevel.CONTROLLED
     private val oneInchKit by lazy { OneInchKit.getInstance(App.appConfigProvider.oneInchApiKey) }
-    private const val PARTNER_FEE: Float = 0.5F
+    private const val PARTNER_FEE: Float = 1F
     private val PARTNER_ADDRESS: String = App.appConfigProvider.oneInchPartnerFeeAddress
 
     // TODO take evmCoinAddress from oneInchKit
