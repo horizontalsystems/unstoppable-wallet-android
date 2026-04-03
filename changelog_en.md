@@ -1,3 +1,16 @@
+## 🚀 Version 0.54.1 Update
+_Release date: April 3, 2026_
+
+### ✨ Improvements
+
+- **Temporarily disabled suspicious transaction detection**
+  A `false positive` was identified, so this mechanism has been temporarily disabled and will be refined in future updates.
+
+### 🐛 Fixes
+
+- **Fixed WalletConnect connection issue when the app is auto-locked**
+
+
 ## 🚀 Version 0.54.0 Update
 _Release date: April 1, 2026_
 
