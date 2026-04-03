@@ -37,7 +37,6 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     override val title = provider.title
     override val icon = provider.icon
     override val type = provider.type
-    override val aml = provider.aml
     override val amlPrecheck = provider.amlPrecheck
     override val requireTerms = provider.requireTerms
     override val riskLevel = provider.riskLevel

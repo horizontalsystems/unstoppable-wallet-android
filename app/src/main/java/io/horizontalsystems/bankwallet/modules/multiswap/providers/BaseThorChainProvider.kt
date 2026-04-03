@@ -33,7 +33,6 @@ abstract class BaseThorChainProvider(
     private val affiliateBps: Int?,
 ) : IMultiSwapProvider {
     override val type = SwapProviderType.DEX
-    override val aml = false
     override val requireTerms = false
 
     protected val thornodeAPI =

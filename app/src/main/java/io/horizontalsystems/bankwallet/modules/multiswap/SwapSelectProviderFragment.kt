@@ -165,13 +165,6 @@ private fun SwapSelectProviderScreenInner(
                                 )
                             },
                             middle = {
-                                var description = provider.type.title
-
-                                if (provider.aml) {
-                                    description += ", "
-                                    description += stringResource(R.string.Swap_AML)
-                                }
-
                                 Row(
                                     horizontalArrangement = spacedBy(12.dp),
                                     verticalAlignment = Alignment.CenterVertically,
