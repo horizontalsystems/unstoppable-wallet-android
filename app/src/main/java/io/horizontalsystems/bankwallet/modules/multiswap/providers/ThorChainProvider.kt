@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.R
 object ThorChainProvider : BaseThorChainProvider(
     baseUrl = "https://thornode.ninerealms.com/thorchain/",
     affiliate = "hrz",
-    affiliateBps = 50,
+    affiliateBps = 100,
 ) {
     override val id = "thorchain"
     override val title = "THORChain"
