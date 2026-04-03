@@ -79,8 +79,14 @@ class FullCoinsProvider(
                     token.blockchainType.supports(activeAccount.type)
                 }
             }
-            .sortedByDescending { fullCoin ->
-                activeWallets.any { it.coin == fullCoin.coin }
+            .let { filtered ->
+                if (tmpQuery.isNullOrBlank()) {
+                    filtered.sortedByDescending { fullCoin ->
+                        activeWallets.any { it.coin == fullCoin.coin }
+                    }
+                } else {
+                    filtered
+                }
             }
     }
 
