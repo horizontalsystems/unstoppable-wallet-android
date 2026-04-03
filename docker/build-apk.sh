@@ -33,7 +33,12 @@ BUILT_APK_FILE_FDROID="app/build/outputs/apk/fdroid/release/app-fdroid-release-u
 ####################################
 
 function init() {
-    echo "Work dir: ${WORK_DIR}"
+    echo "DOCKER_IMAGE="${DOCKER_IMAGE}""
+    echo "GIT_REPO="${GIT_REPO}""
+    echo "WORK_DIR="${WORK_DIR}""
+    echo "TAG="${TAG}""
+    echo "BUILT_APK_FILE="${BUILT_APK_FILE}""
+    echo "BUILT_APK_FILE_FDROID="${BUILT_APK_FILE_FDROID}""
 }
 
 function gitClone () {
@@ -46,7 +51,9 @@ function buildApk () {
     echo "Building apk file ..."
 
     docker run -it --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -x -c \
-      './gradlew :app:assembleBaseRelease :app:assembleFdroidRelease'
+      './gradlew :app:assembleBaseRelease --no-daemon'
+    docker run -it --volume "${WORK_DIR}:/mnt" --workdir /mnt ${DOCKER_IMAGE} bash -x -c \
+      './gradlew :app:assembleFdroidRelease --no-daemon'
 }
 
 function signApk () {
