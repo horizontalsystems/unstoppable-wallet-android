@@ -30,6 +30,7 @@ class TonConnectNewViewModel(
     private var manifest: DAppManifestEntity? = null
     private var accounts: List<Account> = listOf()
     private var account: Account? = null
+    private var connecting = false
     private var finish = false
     private var error: Throwable? = null
     private var toast: String? = null
@@ -38,6 +39,7 @@ class TonConnectNewViewModel(
         manifest = manifest,
         accounts = accounts,
         account = account,
+        connecting = connecting,
         finish = finish,
         error = error,
         toast = toast,
@@ -89,12 +91,17 @@ class TonConnectNewViewModel(
     }
 
     fun connect() {
+        if (connecting) return
+
+        connecting = true
+        emitState()
+
         viewModelScope.launch(dispatchers.io) {
             try {
                 val manifest = manifest ?: throw NoManifestError()
                 val account = account ?: throw IllegalArgumentException("Empty account")
 
-                val res = tonConnectKit.connect(
+                tonConnectKit.connect(
                     requestEntity,
                     manifest,
                     account.id,
@@ -106,6 +113,7 @@ class TonConnectNewViewModel(
                 finish = true
             } catch (e: Throwable) {
                 toast = e.message?.nullIfBlank() ?: e.javaClass.simpleName
+                connecting = false
             }
 
             emitState()
@@ -136,9 +144,10 @@ data class TonConnectNewUiState(
     val manifest: DAppManifestEntity?,
     val accounts: List<Account>,
     val account: Account?,
+    val connecting: Boolean,
     val finish: Boolean,
     val error: Throwable?,
     val toast: String?
 ) {
-    val connectEnabled get() = error == null && account != null
+    val connectEnabled get() = error == null && account != null && !connecting
 }
