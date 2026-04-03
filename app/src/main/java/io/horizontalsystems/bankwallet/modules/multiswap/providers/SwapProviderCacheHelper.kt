@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.SwapProviderAssetRecord
 import io.horizontalsystems.marketkit.models.Token
@@ -17,6 +18,7 @@ object SwapProviderCacheHelper {
         fetch: suspend () -> Map<Token, T>
     ): Map<Token, T> {
         val cached = getCachedData(providerId, deserialize)
+        Log.e("eee", "Provider $providerId getOrFetch() cached = ${cached != null}")
         if (cached != null) {
             return cached
         }

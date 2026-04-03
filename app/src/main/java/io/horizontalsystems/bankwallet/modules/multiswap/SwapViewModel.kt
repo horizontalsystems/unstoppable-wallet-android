@@ -345,9 +345,11 @@ class SwapViewModel(
     }
 
     fun getCurrentQuote() = quoteState.quote
-    fun enableRequoteOnTimeout() {
+    fun onResume() {
         requoteOnTimeout = true
         requoteIfTimeout()
+
+        quoteService.restart()
     }
 
     fun disableRequoteOnTimeout() {

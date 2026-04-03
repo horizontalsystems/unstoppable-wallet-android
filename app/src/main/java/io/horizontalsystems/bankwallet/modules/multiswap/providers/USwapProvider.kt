@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import android.util.Base64
+import android.util.Log
 import com.google.gson.JsonElement
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.derivation
@@ -78,6 +79,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     private var supportedBlockchainTypes = setOf<BlockchainType>()
 
     override suspend fun start() {
+
+        Log.e("eee", "Provider ${provider.id} start()")
         assetsMap = SwapProviderCacheHelper.getOrFetch(
             providerId = id,
             deserialize = { it },
@@ -87,6 +90,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     }
 
     private suspend fun fetchAssetsMap(): Map<Token, String> {
+        Log.e("eee", "fetchAssetsMap() provider = ${provider.id}")
         val assetsMap = mutableMapOf<Token, String>()
         val response = unstoppableAPI.tokens(provider.id)
         val tokens = response.tokens
