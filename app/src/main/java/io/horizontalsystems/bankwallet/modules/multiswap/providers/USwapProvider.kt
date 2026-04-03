@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import android.util.Base64
-import android.util.Log
 import com.google.gson.JsonElement
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.derivation
@@ -78,28 +77,43 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     private var assetsMap = mapOf<Token, String>()
     private var supportedBlockchainTypes = setOf<BlockchainType>()
 
-    override suspend fun start() {
-
-        Log.e("eee", "Provider ${provider.id} start()")
-        assetsMap = SwapProviderCacheHelper.getOrFetch(
-            providerId = id,
-            deserialize = { it },
-            serialize = { it },
-            fetch = { fetchAssetsMap() }
-        )
+    private sealed class ProviderData {
+        data class TokenMap(val map: Map<Token, String>) : ProviderData()
+        data class ChainIds(val ids: List<String>) : ProviderData()
     }
 
-    private suspend fun fetchAssetsMap(): Map<Token, String> {
-        Log.e("eee", "fetchAssetsMap() provider = ${provider.id}")
-        val assetsMap = mutableMapOf<Token, String>()
+    override suspend fun start() {
+        SwapProviderCacheHelper.getCachedChainIds(id)?.let { chainIds ->
+            supportedBlockchainTypes = chainIds.mapNotNull { blockchainTypes[it] }.toSet()
+            return
+        }
+
+        SwapProviderCacheHelper.getCachedTokenMap(id) { it }?.let { map ->
+            assetsMap = map
+            return
+        }
+
+        when (val data = fetchProviderData()) {
+            is ProviderData.TokenMap -> {
+                assetsMap = data.map
+                SwapProviderCacheHelper.saveTokenMap(id, data.map) { it }
+            }
+            is ProviderData.ChainIds -> {
+                supportedBlockchainTypes = data.ids.mapNotNull { blockchainTypes[it] }.toSet()
+                SwapProviderCacheHelper.saveChainIds(id, data.ids)
+            }
+        }
+    }
+
+    private suspend fun fetchProviderData(): ProviderData {
         val response = unstoppableAPI.tokens(provider.id)
         val tokens = response.tokens
 
         if (tokens.isEmpty()) {
-            supportedBlockchainTypes = response.supportedChainIds.mapNotNull { blockchainTypes[it] }.toSet()
-            return emptyMap()
+            return ProviderData.ChainIds(response.supportedChainIds)
         }
 
+        val assetsMap = mutableMapOf<Token, String>()
         for (token in tokens) {
             val blockchainType = blockchainTypes[token.chainId] ?: continue
 
@@ -197,7 +211,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             }
         }
 
-        return assetsMap
+        return ProviderData.TokenMap(assetsMap)
     }
 
     override fun supports(blockchainType: BlockchainType): Boolean {

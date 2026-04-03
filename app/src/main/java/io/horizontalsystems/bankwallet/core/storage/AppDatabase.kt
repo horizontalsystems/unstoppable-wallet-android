@@ -50,6 +50,7 @@ import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_72_73
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_73_74
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_74_75
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_75_76
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_76_77
 import io.horizontalsystems.bankwallet.entities.ActiveAccount
 import io.horizontalsystems.bankwallet.entities.BlockchainSettingRecord
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
@@ -65,6 +66,7 @@ import io.horizontalsystems.bankwallet.entities.ScannedTransaction
 import io.horizontalsystems.bankwallet.entities.SpamScanState
 import io.horizontalsystems.bankwallet.entities.StatRecord
 import io.horizontalsystems.bankwallet.entities.SwapProviderAssetRecord
+import io.horizontalsystems.bankwallet.entities.SwapProviderChainRecord
 import io.horizontalsystems.bankwallet.entities.SwapRecord
 import io.horizontalsystems.bankwallet.entities.SyncerState
 import io.horizontalsystems.bankwallet.entities.TokenAutoEnabledBlockchain
@@ -81,7 +83,7 @@ import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSe
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
 
-@Database(version = 76, exportSchema = false, entities = [
+@Database(version = 77, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -109,6 +111,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConne
     RecentAddress::class,
     MoneroNodeRecord::class,
     SwapProviderAssetRecord::class,
+    SwapProviderChainRecord::class,
     SwapRecord::class,
 ])
 
@@ -137,6 +140,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun recentAddressDao(): RecentAddressDao
     abstract fun moneroNodeDao(): MoneroNodeDao
     abstract fun swapProviderAssetDao(): SwapProviderAssetDao
+    abstract fun swapProviderChainDao(): SwapProviderChainDao
     abstract fun swapRecordDao(): SwapRecordDao
 
     companion object {
@@ -200,6 +204,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_73_74,
                             Migration_74_75,
                     Migration_75_76,
+                    Migration_76_77,
                     )
                     .build()
         }
