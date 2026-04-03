@@ -22,7 +22,6 @@ import java.math.BigDecimal
 
 abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
     override val type = SwapProviderType.DEX
-    override val aml = true
     override val requireTerms = false
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
 
