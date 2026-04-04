@@ -9,11 +9,11 @@ import cash.p.terminal.entities.PoisonAddressType
 
 @Dao
 interface PoisonAddressDao {
-    @Query("SELECT * FROM PoisonAddress WHERE address = :address AND blockchainTypeUid = :blockchainTypeUid")
-    fun get(address: String, blockchainTypeUid: String): PoisonAddress?
+    @Query("SELECT * FROM PoisonAddress WHERE address = :address AND blockchainTypeUid = :blockchainTypeUid AND accountId = :accountId")
+    fun get(address: String, blockchainTypeUid: String, accountId: String): PoisonAddress?
 
-    @Query("SELECT * FROM PoisonAddress WHERE type = :type AND blockchainTypeUid = :blockchainTypeUid")
-    fun getAllByType(type: PoisonAddressType, blockchainTypeUid: String): List<PoisonAddress>
+    @Query("SELECT * FROM PoisonAddress WHERE type = :type AND blockchainTypeUid = :blockchainTypeUid AND accountId = :accountId")
+    fun getAllByType(type: PoisonAddressType, blockchainTypeUid: String, accountId: String): List<PoisonAddress>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(poisonAddress: PoisonAddress)
