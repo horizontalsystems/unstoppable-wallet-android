@@ -31,8 +31,6 @@ class PoisonAddressManager(
 
     companion object {
         private const val SIMILARITY_CHARS = 3
-        // False positives are currently worse than losing this signal entirely.
-        private const val SUSPICIOUS_DETECTION_ENABLED = false
     }
 
     @Suppress("ReturnCount", "CyclomaticComplexMethod")
@@ -54,10 +52,9 @@ class PoisonAddressManager(
 
         val existing = poisonAddressDao.get(normalized, blockchainUid)
         if (existing?.type == PoisonAddressType.KNOWN) return PoisonStatus.BLOCKCHAIN
-        if (existing?.type == PoisonAddressType.SCAM && SUSPICIOUS_DETECTION_ENABLED) return PoisonStatus.SUSPICIOUS
+        if (existing?.type == PoisonAddressType.SCAM) return PoisonStatus.SUSPICIOUS
 
-        if (isOutgoing && amount != null && amount.compareTo(BigDecimal.ZERO) == 0
-            && SUSPICIOUS_DETECTION_ENABLED) {
+        if (isOutgoing && amount != null && amount.compareTo(BigDecimal.ZERO) == 0) {
             saveScamAddress(normalized, blockchainType)
             return PoisonStatus.SUSPICIOUS
         }
@@ -66,14 +63,12 @@ class PoisonAddressManager(
             val upperCode = coinCode.uppercase()
             if (upperCode == "USDT" || upperCode == "USDC") {
                 val isEvmCompatible = blockchainType.isEvm || blockchainType == BlockchainType.Tron
-                if (contractAddress != null && !isKnownStablecoinContract(contractAddress, blockchainType)
-                    && SUSPICIOUS_DETECTION_ENABLED) {
+                if (contractAddress != null && !isKnownStablecoinContract(contractAddress, blockchainType)) {
                     // Known contract that's not in our DB — fake
                     saveScamAddress(normalized, blockchainType)
                     return PoisonStatus.SUSPICIOUS
                 }
-                if (contractAddress == null && isEvmCompatible
-                    && SUSPICIOUS_DETECTION_ENABLED) {
+                if (contractAddress == null && isEvmCompatible) {
                     // On EVM chains, a legitimate stablecoin always has a known contract.
                     // Null contract means unknown token (TokenValue/RawValue) — likely fake.
                     // On non-EVM chains (TON jettons, Stellar assets), null contract is normal.
@@ -84,8 +79,7 @@ class PoisonAddressManager(
         }
 
         val knownAddresses = poisonAddressDao.getAllByType(PoisonAddressType.KNOWN, blockchainUid)
-        if (isSimilarToKnown(normalized, knownAddresses)
-            && SUSPICIOUS_DETECTION_ENABLED) {
+        if (isSimilarToKnown(normalized, knownAddresses)) {
             saveScamAddress(normalized, blockchainType)
             return PoisonStatus.SUSPICIOUS
         }
@@ -173,7 +167,6 @@ class PoisonAddressManager(
     }
 
     fun isAddressSuspicious(address: String?, blockchainType: BlockchainType): Boolean {
-        if (!SUSPICIOUS_DETECTION_ENABLED) return false
         if (address == null) return false
         val normalized = address.lowercase()
         val blockchainUid = blockchainType.uid

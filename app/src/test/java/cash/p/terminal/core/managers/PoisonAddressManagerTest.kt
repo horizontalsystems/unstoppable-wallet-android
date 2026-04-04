@@ -23,12 +23,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import java.math.BigDecimal
-
-private const val SUSPICIOUS_DISABLED_TEST_REASON =
-    "Temporarily disabled while PoisonAddressManager.SUSPICIOUS_DETECTION_ENABLED = false"
 
 class PoisonAddressManagerTest {
 
@@ -128,7 +124,6 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun determinePoisonStatus_scamAddress_returnsSuspicious() {
         val address = "0xabc123def456"
         every { dao.get(address, blockchainUid) } returns
@@ -144,7 +139,6 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun determinePoisonStatus_similarToKnown_returnsSuspicious() {
         val knownAddress = "0xaaaa_middle_bbb"
         val similarAddress = "0xa_different_bbb"
@@ -179,7 +173,6 @@ class PoisonAddressManagerTest {
     // --- Case insensitivity ---
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun determinePoisonStatus_sameAddressDifferentCase_returnsCorrectStatus() {
         val lowerAddress = "0xabcdef123456"
         val mixedCaseAddress = "0xAbCdEf123456"
@@ -210,7 +203,6 @@ class PoisonAddressManagerTest {
     // --- Similarity edge cases ---
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun determinePoisonStatus_similarFirst3Last3Match_returnsSuspicious() {
         val knownAddress = "abc_known_xyz"
         val similarAddress = "abc_poison_xyz"
@@ -284,7 +276,6 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun isAddressSuspicious_scamAddress_returnsTrue() {
         val address = "0xabc123def456"
         every { dao.get(address, blockchainUid) } returns
@@ -294,7 +285,6 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun isAddressSuspicious_similarToKnown_returnsTrue() {
         val knownAddress = "abc_known_xyz"
         val similarAddress = "abc_poison_xyz"
@@ -325,7 +315,6 @@ class PoisonAddressManagerTest {
     // --- Zero-amount outgoing ---
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun determinePoisonStatus_zeroAmountOutgoing_returnsSuspicious() {
         val result = manager.determinePoisonStatus(
             relevantAddress = "0xabc123def456",
@@ -335,6 +324,18 @@ class PoisonAddressManagerTest {
             amount = BigDecimal.ZERO,
         )
         assertEquals(PoisonStatus.SUSPICIOUS, result)
+    }
+
+    @Test
+    fun determinePoisonStatus_not_zeroAmountOutgoing_returnsBlockchain() {
+        val result = manager.determinePoisonStatus(
+            relevantAddress = "0xabc123def456",
+            blockchainType = blockchainType,
+            isOutgoing = true,
+            isCreatedByWallet = false,
+            amount = BigDecimal("0.00000000000001"),
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, result)
     }
 
     @Test
@@ -364,7 +365,6 @@ class PoisonAddressManagerTest {
     // --- Fake stablecoin ---
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun determinePoisonStatus_fakeUsdt_returnsSuspicious() {
         val fakeContract = "0xfake_usdt_contract"
         every { marketKit.token(TokenQuery(blockchainType, TokenType.Eip20(fakeContract))) } returns null
@@ -415,7 +415,6 @@ class PoisonAddressManagerTest {
     // --- Fix: fake stablecoin with null contract (TokenValue/unknown token) ---
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun determinePoisonStatus_usdtWithNullContractOnEvm_returnsSuspicious() {
         every { contactsRepository.getContactsFiltered(any(), any()) } returns emptyList()
         every { dao.get(any(), any()) } returns null
@@ -433,7 +432,6 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun determinePoisonStatus_usdcWithNullContractOnBsc_returnsSuspicious() {
         every { contactsRepository.getContactsFiltered(any(), any()) } returns emptyList()
         every { dao.get(any(), any()) } returns null
@@ -485,7 +483,6 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun determinePoisonStatus_usdtWithNullContractOnFantom_returnsSuspicious() {
         every { contactsRepository.getContactsFiltered(any(), any()) } returns emptyList()
         every { dao.get(any(), any()) } returns null
@@ -505,7 +502,6 @@ class PoisonAddressManagerTest {
     // --- isAddressSuspicious used for showCopyWarning in send/transaction details ---
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun isAddressSuspicious_similarToKnownOnTon_returnsTrue() {
         val knownAddress = "eqaaa_middle_bbb"
         val similarAddress = "eqaaa_poison_bbb"
@@ -529,7 +525,6 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun isAddressSuspicious_scamOnTron_returnsTrue() {
         val address = "tscammer123456"
         val tronUid = BlockchainType.Tron.uid
@@ -559,7 +554,6 @@ class PoisonAddressManagerTest {
     // --- getRelevantAddress: event-based address resolution respects direction ---
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun getPoisonStatus_outgoingEvmNoTo_prefersOutgoingEvents() {
         val poisonedRecipient = "0xpoisoned_recipient_addr"
         val senderAddr = "0xincoming_sender_address"
@@ -579,7 +573,6 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun getPoisonStatus_incomingEvmNoFrom_prefersIncomingEvents() {
         val senderAddr = "0xincoming_sender_address"
         val recipientAddr = "0xoutgoing_recipient_addr"
@@ -598,7 +591,6 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun getPoisonStatus_outgoingEvmNoTo_fallsBackToIncomingWhenNoOutgoingEvents() {
         val senderAddr = "0xfallback_sender_address"
         every { dao.get(senderAddr.lowercase(), blockchainUid) } returns
@@ -617,7 +609,6 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun getPoisonStatus_outgoingTronNoTo_prefersOutgoingEvents() {
         val poisonedRecipient = "tpoisoned_recipient_addr"
         val senderAddr = "tincoming_sender_address_"
@@ -640,7 +631,6 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    @Ignore(SUSPICIOUS_DISABLED_TEST_REASON)
     fun getPoisonStatus_evmWithStandardTo_usesStandardAddress() {
         val standardTo = "0xstandard_to_address_aaa"
         every { dao.get(standardTo.lowercase(), blockchainUid) } returns
