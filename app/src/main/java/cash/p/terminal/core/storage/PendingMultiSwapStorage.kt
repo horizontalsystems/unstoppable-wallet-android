@@ -1,8 +1,11 @@
 package cash.p.terminal.core.storage
 
 import cash.p.terminal.entities.PendingMultiSwap
+import cash.p.terminal.wallet.ActiveAccountState
 import io.horizontalsystems.core.DispatcherProvider
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.util.concurrent.TimeUnit
@@ -19,11 +22,21 @@ class PendingMultiSwapStorage(
         dao.deleteOlderThan(System.currentTimeMillis() - MAX_AGE_MS)
     }
 
-    fun getAll(): Flow<List<PendingMultiSwap>> = dao.getAll()
+    fun getByAccountId(accountId: String): Flow<List<PendingMultiSwap>> =
+        dao.getByAccountId(accountId)
 
-    suspend fun getAllOnce(): List<PendingMultiSwap> = withContext(dispatcherProvider.io) {
-        dao.getAllOnce()
-    }
+    fun observeForActiveAccount(
+        activeAccountStateFlow: Flow<ActiveAccountState>
+    ): Flow<List<PendingMultiSwap>> =
+        activeAccountStateFlow.flatMapLatest { state ->
+            val accountId = (state as? ActiveAccountState.ActiveAccount)?.account?.id
+            if (accountId != null) getByAccountId(accountId) else flowOf(emptyList())
+        }
+
+    suspend fun getAllOnceByAccountId(accountId: String): List<PendingMultiSwap> =
+        withContext(dispatcherProvider.io) {
+            dao.getAllOnceByAccountId(accountId)
+        }
 
     suspend fun getById(id: String): PendingMultiSwap? = withContext(dispatcherProvider.io) {
         dao.getById(id)

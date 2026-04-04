@@ -8,6 +8,7 @@ import java.math.BigDecimal
 @Entity
 data class PendingMultiSwap(
     @PrimaryKey val id: String,
+    val accountId: String,
     val createdAt: Long,
     val coinUidIn: String,
     val blockchainTypeIn: String,
