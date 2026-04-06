@@ -6,7 +6,6 @@
     <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">Abbrechen</string>
     <string name="Alert_Copy">Kopieren</string>
-    <string name="Alert_Loading">Wird geladen ...</string>
     <string name="Button_Show">Show</string>
     <string name="Button_Hide">Hide</string>
     <string name="Button_Cancel">Abbrechen</string>
@@ -105,6 +104,11 @@
     <string name="RateApp_Description_Rate_This_App">Gefällt Ihnen Unstoppable? Teilen Sie uns Ihr Feedback und Ihre Ideen zur Weiterentwicklung mit.</string>
     <string name="RateApp_Button_RateIt">Bewerten</string>
     <string name="RateApp_Button_NotNow">Nicht jetzt</string>
+    <string name="Restore_SelectNetwork_Title">Select Network</string>
+    <string name="Restore_SelectNetwork_EvmPrivateKey_Title">EVM Networks</string>
+    <string name="Restore_SelectNetwork_EvmPrivateKey_Subtitle">Ethereum, Arbitrum, Optimism…</string>
+    <string name="Restore_SelectNetwork_TronPrivateKey_Title">TRON</string>
+    <string name="Restore_SelectNetwork_TronPrivateKey_Subtitle">TRON network only.</string>
     <!--Restore-->
     <string name="Restore_Advanced_Title">Erweitert</string>
     <string name="Restore_Error_MnemonicWordCount">Falsche Wortzahl. Sie muss zwischen 12 und 24 Wörtern liegen. Sie haben eingegeben: %d</string>
@@ -116,7 +120,7 @@
     <string name="Restore_RestoreBy">Wiederherstellen von</string>
     <string name="Restore_RecoveryPhrase">Wiederherstellungsphrase</string>
     <string name="Restore_PrivateKey">Privater Schlüssel</string>
-    <string name="Restore_PrivateKeyHint">Enter EVM Private Key, BIP32 Root Key, Stellar Secret Key or Account Extended Private Key</string>
+    <string name="Restore_PrivateKeyHint">Enter EVM Private Key, TRON Private Key, BIP32 Root Key, Stellar Secret Key or Account Extended Private Key</string>
     <string name="Restore_PhraseHint">12, 15, 18, 21 oder 24 Wörter eingeben</string>
     <string name="Restore_NonStandardRestore">Nicht standardmäßige Wiederherstellung</string>
     <string name="Restore_NonStandard_Description">Diese Seite bietet einen speziellen Wallet-Wiederherstellungsmechanismus für Unstoppable-Benutzer, die ein nicht standardmäßiges Wallet haben. Im Allgemeinen könnten solche Wallets in der Unstoppable-Version 0.27–0.28 mit einer nicht-englischen mnemonischen Wortliste und/oder einem Sonderzeichen in der Wallet-Passphrase (d. h. einem diakritischen Symbol) erstellt worden sein.
@@ -125,19 +129,12 @@
     <string name="Restore_PrivateKey_InvalidKey">Ungültiger Schlüssel</string>
     <string name="SelectContacts_All">All</string>
     <string name="Restore_BirthdayHeight">Geburtstagshöhe</string>
-    <string name="Restore_BirthdayHeight_Invalid">Invalid Birthday Height</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Geben Sie die Geburtstagshöhe das Wallet für eine schnellere Synchronisierung ein.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
     <string name="BirthdayHeight_Description">You can change the block height or select an approximate date to rescan your transaction history.</string>
     <string name="BirthdayHeight_RestoreDescription">Your wallet will be restored from a default starting point. You can change the block height or select an approximate wallet creation date.</string>
     <string name="BirthdayHeight_BlockDate">Block Date:</string>
     <string name="BirthdayHeight_Rescan">Rescan</string>
     <string name="Restore_ZCash_RestoreAsNew">Als neu wiederherstellen</string>
-    <string name="Restore_ZCash_NewWallet">Wallet Erstellen</string>
-    <string name="Restore_ZCash_NewWallet_Description">Keine Transaktionen vorhanden</string>
-    <string name="Restore_ZCash_OldWallet">Vorhandene Wallet</string>
-    <string name="Restore_ZCash_OldWallet_Description">Hat Transaktionen</string>
-    <string name="Restore_ZCash_SlowSyncWarningText">Die erste Synchronisation mit der Blockchain kann viel Internet-Verkehr verbrauchen.</string>
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">MCap</string>
@@ -327,7 +324,6 @@
     <string name="Balance_SearchingTransactions">Transaktionen werden gesucht…</string>
     <string name="Balance_Downloading">Downloading…</string>
     <string name="Balance_FoundTx">%s tx</string>
-    <string name="Balance_Syncing_WithProgress">Synchronisiere... %s%%</string>
     <string name="Balance_BlocksRemaining">Blocks Remaining - %d</string>
     <string name="Balance_Sort_Balance">Guthaben</string>
     <string name="Balance_Sort_PopupTitle">Sortieren nach</string>
@@ -360,9 +356,6 @@
     <string name="Balance_Receive_Subaddresses">Subadresses</string>
     <string name="Balance_Receive_SubaddressesInfo">Subaddresses let you use multiple unique addresses within one wallet for convenience and enhanced privacy.</string>
     <string name="Balance_Receive_SubaddressesTransactions">Transactions: %s</string>
-    <string name="Balance_Receive_HaveYouOwnedCoins">Have you previously owned any %s coins?</string>
-    <string name="Balance_Receive_YesAlreadyOwn">Yes, I already own</string>
-    <string name="Balance_Receive_IDontHave">No, I don\'t have</string>
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Detected Transparent ZEC</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent amount</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">You have a ZEC balance held in a transparent address. To use it in Unstoppable, it must be shielded for full privacy.</string>
@@ -402,6 +395,7 @@
     <string name="Send_Confirmation_Method">Methode</string>
     <string name="Send_Confirmation_Send_Button">Senden</string>
     <string name="Send_Confirmation_Action">Action</string>
+    <string name="Send_Address_Recent">Recent</string>
     <string name="Send_Address_Error_InvalidAddress">Invalid Address</string>
     <string name="Send_Address_Error_InvalidAddress_Description">Looks like this address doesn’t fit the selected network. Please double-check it.</string>
     <string name="Send_Address_Error_Detected">Detected</string>
@@ -409,16 +403,19 @@
     <string name="Send_Address_PhishingCheck">Phishing Check</string>
     <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
     <string name="Send_Address_SanctionCheck">Sanctions Check</string>
+    <string name="SecureSend_Config_Subtitle">Choose security checks.</string>
+    <string name="SecureSend_Config_PhishingCheckDescription">Detects suspicious addresses before confirming the transfer.</string>
+    <string name="SecureSend_Config_BlacklistCheckDescription">Checks the address against fraud and high-risk databases.</string>
+    <string name="SecureSend_Config_SanctionCheckDescription">Verifies whether the address is subject to sanctions restrictions.</string>
+    <string name="SecureSend_Config_Disabled">Disabled</string>
     <string name="Send_Address_ErrorMessage_PhishingDetected">Phishing Address Detected!</string>
-    <string name="Send_Address_ErrorMessage_BlacklistDetected">Blacklisted Address Detected!</string>
-    <string name="Send_Address_ErrorMessage_SanctionDetected">Sanctioned Address Detected!</string>
-    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Phishing address detected. Sending here will steal your funds.</string>
-    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">This address is blacklisted. Funds may be frozen.</string>
-    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Sanctioned address detected. Transfer may be blocked.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">Blacklisted Address</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected">Sanctioned Address</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">The address you entered may be fraudulent. Scammers often alter the first and last characters. Verify the full address carefully before proceeding to avoid loss.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">The address you entered is flagged as blacklisted. Transactions to this address could lead to loss or other risks. Please verify the recipient\'s details before proceeding.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">The address you entered is flagged as sanctioned. Transactions to this address could lead to loss or other risks. Please verify the recipient\'s details before proceeding.</string>
     <string name="AddressEnter_NeedSubscription_Title">Attention!</string>
     <string name="AddressEnter_NeedSubscription_Content">Secure Send is off. Your transfer may go to a risky address and funds can be lost.</string>
-    <string name="AddressEnter_Danger_Title">Danger!</string>
-    <string name="AddressEnter_Danger_Content">Phishing address detected. Sending here will steal your funds.</string>
     <string name="AddressEnter_Safe_Title">Safe</string>
     <string name="AddressEnter_Safe_Content">Address checked. No phishing, blacklist, or sanctions found. It’s safe to use.</string>
     <string name="Send_RiskyAddress">Risky Address!</string>
@@ -428,6 +425,9 @@
     <string name="ScanQr_PleaseGrantCameraPermission">Bitte erteilen Sie der Kamera Genehmigung</string>
     <string name="ScanQr_CameraPermissionDeniedText">Zugriff auf Ihre Kamera für diese App wurde verweigert, Sie können zu Einstellungen gehen und den Zugriff erlauben</string>
     <string name="ScanQr_GoToSettings">Zu den Einstellungen</string>
+    <string name="ScanQr_Photos">Photos</string>
+    <string name="ScanQr_NoQrFound">No QR code found</string>
+    <string name="ScanQr_QrDetected">QR code detected</string>
     <string name="Send_Error_UnsupportedAddress">Zeitsperre funktioniert nur mit P2PKH-Adressen (beginnend mit 1) </string>
     <string name="Send_Error_MinimumAmount">Minimaler Betrag %s</string>
     <string name="Send_Error_MaximumAmount">Maximaler Betrag %s</string>
@@ -459,9 +459,6 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Nonce verwendet</string>
     <string name="SendEvmSettings_Error_NonceUsed">Eine ausgeführte Transaktion mit diesem nonce existiert bereits.</string>
     <!-- Fee Settings -->
-    <string name="Fee_Total">Total Fee</string>
-    <string name="Fee_OutboundFee">Outbound Fee</string>
-    <string name="Fee_LiquidityFee">Liquidity Fee</string>
     <string name="FeeSettings_NetworkFee">Fee</string>
     <string name="FeeSettings_NetworkFee_Info">The estimated cost of sending given transaction on the network.</string>
     <string name="FeeSettings_GasLimit_Info">Die Transaktionskomplexität wird in Einheiten mit dem Namen \"Gas\" gemessen, die je nach ausgeführten intelligenten Verträgen variieren. Das Gaslimit ist das geschätzte Höchstgas, das benötigt wird, um es auszuführen. Das tatsächliche Gas wird normalerweise niedriger sein.</string>
@@ -532,7 +529,6 @@
     <string name="WalletConnect_Error_UnsupportedEvents">Unsupported events: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Anforderungsfehler nicht gefunden</string>
     <string name="WalletConnect_NoConnection">Du hast keine verbundenen Dapps</string>
-    <string name="WalletConnect_PendingRequests">Ausstehende Anfragen</string>
     <string name="WalletConnect_ActiveWallet">Wallet</string>
     <string name="WalletConnect_NotSupportedDescription">Ihr aktueller Wallet-Typ %s unterstützt WalletConnect nicht</string>
     <string name="WalletConnect_Unnamed">Unbenannt</string>
@@ -545,8 +541,6 @@
     <string name="WalletConnect_ConnectTo">Connect to %s</string>
     <string name="WalletConnect_ConnectedTo">Connected to %s</string>
     <string name="WalletConnect_Disconnect">Disconnect %s</string>
-    <string name="WalletConnect_WhiteListDeactivatedWarning">Scam Protection is deactivated. Domain verification is unavailable. Upgrade to Premium to protect against unverified or phishing websites.</string>
-    <string name="WalletConnect_NotInWhiteListAlert">This website is not verified and may lead to phishing or loss of funds. Connecting is strongly discouraged.</string>
     <string name="WalletConnect_ConnectWarning">By clicking connect, you allow this app to view your public address.</string>
     <string name="WalletConnect_Attention">Attention!</string>
     <string name="WalletConnect_Danger">Danger!</string>
@@ -564,6 +558,10 @@
     <string name="WalletConnect_DefenseMessage_Warning">You may connect to a fake site and lose funds. Turn me on to stay protected.</string>
     <string name="WalletConnect_DefenseMessage_Danger">This dApp is not verified. Connecting may put your funds at risk.</string>
     <string name="WalletConnect_DefenseMessage_Safe">I checked it. This dApp is secure to connect.</string>
+    <string name="WalletConnect_ScamProtection">Scam Protection</string>
+    <string name="WalletConnect_DAppCheck">dApp Check</string>
+    <string name="WalletConnect_DAppCheck_Secure">Secure</string>
+    <string name="WalletConnect_DAppCheck_Risky">Risky</string>
     <!-- dApp Connection-->
     <string name="DAppConnection_Title">DApp Connection</string>
     <string name="DAppConnection_Requests">Requests</string>
@@ -589,9 +587,24 @@
     <string name="Swap_Price">Preis</string>
     <string name="Swap_AvailableBalance">Available Balance</string>
     <string name="Swap_PriceImpact">Preisauswirkungen</string>
-    <string name="Swap_EstimatedTime">Estimated Time</string>
+    <string name="Swap_ProviderRisk">Provider Risk</string>
+    <string name="Swap_ProviderRisk_NoRisk">No Risk</string>
+    <string name="Swap_ProviderRisk_Risky">Risky</string>
+    <string name="Swap_ProviderRisk_Unknown">Unknown</string>
+    <string name="Swap_ProviderRisk_AlertTitle">High Freeze Risk!</string>
+    <string name="Swap_ProviderRisk_AlertBody">The provider for this specific swap (%s) alerted that this swap most likely will be rejected or may even get frozen. Go back and select a different swap provider.</string>
+    <string name="Swap_AmlRisk_Title">Risk Detected</string>
+    <string name="Swap_AmlRisk_Description">Potential risks were identified for this transaction. During processing, your funds may be rejected or restricted. Please choose another provider.</string>
+    <string name="Swap_AmlRisk_Button">Choose Another Provider</string>
+    <string name="Swap_AmlUnknown_Title">Alert!</string>
+    <string name="Swap_AmlUnknown_Description">We couldn\'t complete the risk check for this transaction. If you continue, this swap may encounter delays, rejection, or restrictions during processing.</string>
+    <string name="Swap_AmlUnknown_Button">Continue with Risk</string>
+    <string name="Swap_AmlError_Title">Connection Issue</string>
+    <string name="Swap_AmlError_Description">Unable to get a response right now. Please try again.</string>
+    <string name="Swap_AmlError_Button">Retry</string>
+    <string name="Swap_EstimatedTime">Est. Time</string>
     <string name="Swap_EstimatedTimeDescription">Approximate time to receive funds. Swap processing and transaction confirmations may take some time depending on the network and provider.</string>
-    <string name="Swap_MinimumReceived">Garantierter Betrag</string>
+    <string name="Swap_MinimumReceived">Guaranteed</string>
     <string name="Swap_MinimumReceivedDescription">This amount is in the process of validation. As soon as the transaction status is validated you will be able to use these coins. The minimum amount a user is going </string>
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Recipient</string>
@@ -628,6 +641,9 @@
     <string name="SwapDefense_Attention_Description">Protection is off. Bots may interfere with your swap and make you lose money.</string>
     <string name="SwapDefense_Safe_Title">Protected</string>
     <string name="SwapDefense_Safe_Description">I’m blocking bots from taking value in your swap.</string>
+    <string name="SwapConfirm_SwapProtection">Swap Protection</string>
+    <string name="SwapConfirm_Mev">MEV</string>
+    <string name="SwapConfirm_MevDescription">Turn on protection to secure your swap and avoid losing value to bots.</string>
     <string name="SwapError_FailedToFetchQuote">Failed to fetch quote.</string>
     <string name="SwapTerms_Title">Swap Terms</string>
     <string name="SwapTerms_TopText">Unstoppable aggregates multiple decentralized (DEX) and centralized swap providers to offer competitive rates and broad asset support.</string>
@@ -646,6 +662,14 @@
     <string name="SwapSettings_Error_InvalidAddress">Ungültige Adresse</string>
     <string name="SwapSettings_Error_InvalidBlockchainAddress">Ungültige %s Adresse</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Ihre Transaktion kann vorzeitig ausgeführt werden</string>
+    <string name="SwapSort_BestRate">Best Rate</string>
+    <string name="SwapSort_BestTime">Fastest</string>
+    <string name="RiskLevel_ProviderRiskLevel">Provider Risk Levels</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">The labels below explain different risk levels of swap providers. Choose accordingly.</string>
+    <string name="RiskLevel_Auto_Description">Automatic on-chain execution. Funds cannot be frozen or blocked after submission. If swap fails the funds are refunded automatically.</string>
+    <string name="RiskLevel_Limited_Description">Provider operates using their own liquidity. Rejections are rare. Freezes are theoretically possible but highly unlikely.</string>
+    <string name="RiskLevel_Controlled_Description">These provider operates with third party liquidity and has AML policies in place. In most cases swaps are rejected and refunded if any AML issues are detected. In some situations provider may request KYC before releasing funds.</string>
+    <string name="RiskLevel_Precheck_Description">Provider does its own address screening prior processing swap. Rejections are rare. Freezes are theoretically possible but highly unlikely.</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Activate Token</string>
     <string name="ActivationRequired_DialogDescription">To receive %1$s, you need to activate the token. The Stellar network requires a trustline to be established for each token. Without it, your wallet cannot receive %2$s — the transaction will be rejected and the funds will not be delivered.</string>
@@ -655,6 +679,21 @@
     <string name="Activate_AlreadyActive_Description">The token is already active.</string>
     <string name="Activate_InsufficientBalance_Title">Insufficient Balance</string>
     <string name="Activate_InsufficientBalance_Description">You don\’t have enough XLM balance to activate this token.</string>
+    <!-- Swap History -->
+    <string name="SwapHistory_Title">Swap History</string>
+    <string name="SwapHistory_EmptyList">No swaps yet</string>
+    <string name="SwapInfo_Title">Swap Info</string>
+    <!-- Swap Info -->
+    <string name="SwapInfo_Provider">Provider</string>
+    <string name="SwapInfo_SourceAddress">Source Address</string>
+    <string name="SwapInfo_StatusTitle">Transaction Status</string>
+    <string name="SwapInfo_StatusDepositing">Depositing</string>
+    <string name="SwapInfo_StatusSwapping">Swap</string>
+    <string name="SwapInfo_StatusSending">Send</string>
+    <string name="SwapInfo_StatusCompleted">Completed</string>
+    <string name="SwapInfo_StatusRefunded">Refunded</string>
+    <string name="SwapInfo_StatusFailed">Failed</string>
+    <string name="Button_View">View</string>
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">Sie können %s tauschen, oder Sie müssen den neuen Betrag widerrufen und genehmigen</string>
     <string name="Approve_Spender">Spender</string>
@@ -810,6 +849,7 @@
     <string name="Settings_AppSettings">Appearance</string>
     <string name="Settings_Subscription">Subscription</string>
     <string name="Settings_AutoLock">Auto-Lock</string>
+    <string name="Settings_AutoLock_Description">Automatically locks the app after a selected time.</string>
     <string name="Settings_JoinUnstoppables">Join Unstoppables</string>
     <string name="Settings_Support">Support</string>
     <string name="Settings_VipSupport">Priority Support</string>
@@ -825,9 +865,6 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hour</string>
     <!--Address Checker-->
     <string name="SettingsAddressChecker_Title">Address Checker</string>
-    <string name="SettingsAddressChecker_RecipientCheck">Recipient Check</string>
-    <string name="SettingsAddressChecker_CheckTheRecipientInfo">Scans the recipient address for security risks prior to sending.</string>
-    <string name="SettingsAddressChecker_CheckAddress">Check Address</string>
     <string name="SettingsAddressChecker_OnSubject">on %s</string>
     <string name="SettingsAddressChecker_SanctionsCheck">Sanctions Check</string>
     <string name="SettingsAddressChecker_TokenBlacklistCheck">%s Blacklist Check</string>
@@ -919,9 +956,7 @@
     <string name="Premium_SubscriptionPeriod_Annually">Annually</string>
     <string name="Premium_SubscriptionPeriod_Monthly">Monthly</string>
     <string name="Premium_SubscriptionPeriod_AnnuallySave">SAVE 33%</string>
-    <string name="Premium_SubscriptionPeriod_MonthlySave">-20%</string>
-    <string name="Premium_SubscriptionPeriod_PerYear">per year</string>
-    <string name="Premium_SubscriptionPeriod_PerMonth">per month</string>
+    <string name="Appearance_SendScreen">SEND SCREEN</string>
     <string name="Appearance_MarketsTab">MARKETS TAB</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">APP ICON</string>
@@ -938,6 +973,8 @@
     <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance every time the app is opened.</string>
     <string name="Appearance_PriceChangeInterval">Price Change %</string>
     <string name="Appearance_PriceChangeInterval_Tip">Select the time period for token price change display.</string>
+    <string name="Appearance_RecentlySent">Recently Sent</string>
+    <string name="Appearance_RecentlySent_Tip">Display the recently sent address for the token</string>
     <string name="BalanceViewType_CoinValue">Coin Value</string>
     <string name="BalanceViewType_FiatValue">Fiat Value</string>
     <string name="SettingsAboutApp_Title">Über die App</string>
@@ -1009,10 +1046,6 @@
     <string name="SettingsSecurity_EnablePin">Enable Passcode</string>
     <string name="SettingsSecurity_DisablePin">Disable Passcode</string>
     <string name="SettingsSecurity_EditPin">Code bearbeiten</string>
-    <string name="SettingsSecurity_SetDuressPin">Set Duress Mode</string>
-    <string name="SettingsSecurity_EditDuressPin">Edit Duress Passcode</string>
-    <string name="SettingsSecurity_DisableDuressPin">Disable Duress Passcode</string>
-    <string name="SettingsSecurity_DuressPinDescription">A special mode that protects selected wallets in case of coercion.</string>
     <string name="SettingsSecurity_ManageKeys">Wallets verwalten</string>
     <string name="SettingsSecurity_AppRestartWarning">Diese Aktion wird das Unstoppable Wallet neu starten.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Vollständig anonymisieren Sie Ihr Internet während Sie diese App verwenden. Beachten Sie, dass in einigen Fällen die WalletConnect-Funktion für DeFi-Apps sehr langsam oder gar nicht funktionieren kann.</string>
@@ -1026,6 +1059,8 @@
     <string name="SettingsSecurity_SyncModeHybridDescription">Fast</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Slow. Highest Privacy.</string>
+    <string name="SettingsSecurity_HideSuspiciousTxs">Hide Suspicious Txs</string>
+    <string name="SettingsSecurity_HideSuspiciousTxs_Description">Hides suspicious small transfers often used in phishing attacks.</string>
     <string name="SetDuressPin_Title">Duress Passcode</string>
     <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
     <string name="EditDuressPin_Title">Edit Duress Passcode</string>
@@ -1120,7 +1155,6 @@
     <string name="WatchWallet">Watch Wallet</string>
     <string name="Watch_Address_Hint">Paste your address (EVM, Tron, TON, Stellar, Monero, BTC, LTC, BCH, Dash) or XPUB</string>
     <string name="Watch_ViewKey">Private View Key</string>
-    <string name="Watch_BirthdayHeight">Restore Height</string>
     <string name="Watch_Select_Blockchains">Blockchain auswählen</string>
     <string name="Watch_Select_Coins">Coins auswählen</string>
     <string name="Watch_Error_InvalidAddressFormat">Address format is not supported</string>
@@ -1174,6 +1208,7 @@
     <string name="RecoveryPhrase_CopyWarning_Title">Kopierrisiko</string>
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">EVM privater Schlüssel</string>
+    <string name="TronPrivateKey_Title">TRON Private Key</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Tippen um privaten Schlüssel anzuzeigen</string>
     <!-- Stellar Secret Key -->
     <string name="StellarSecretKey_Title">Stellar Secret Key</string>
@@ -1187,6 +1222,8 @@
     <string name="PrivateKeys_Title">Private Schlüssel</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM privater Schlüssel</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Grants full control over assets on EVM-based networks (e.g., Ethereum, BNB Smart Chain, Polygon, Avalanche) within this wallet.</string>
+    <string name="PrivateKeys_TronPrivateKey">TRON Private Key</string>
+    <string name="PrivateKeys_TronPrivateKeyDescription">Grants full control over assets on TRON network within this wallet.</string>
     <string name="PrivateKeys_StellarSecretKey">Stellar Secret Key</string>
     <string name="PrivateKeys_StellarSecretKeyDescription">Grants full control over assets on the Stellar network within this wallet.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">The master private key of the wallet. Grants full control over all derived accounts and assets.</string>
@@ -1203,7 +1240,9 @@
     <!-- Public Keys -->
     <string name="PublicKeys_Title">Öffentliche Schlüssel</string>
     <string name="PublicKeys_EvmAddress">EVM-Adresse</string>
+    <string name="PublicKeys_TronAddress">TRON Address</string>
     <string name="PublicKeys_EvmAddress_Description">Ermöglicht die bloße Überwachung von Brieftaschen mit Assets auf Ethereum, Binance Smart Chain und anderen EVM-basierten Blockchains.</string>
+    <string name="PublicKeys_TronAddress_Description">Allows read-only monitoring of wallet holding assets on TRON blockchain.</string>
     <string name="PublicKeys_AccountExtendedPublicKeyDescription">Ermöglicht die schreibgeschützte Überwachung von Brieftaschen mit Bitcoin und anderen auf UTXO basierenden Verschlüsselungen (z.B. Litecoin, Bitcoin Cash, Dash, etc.).</string>
     <string name="PublicKeys_MoneroPublicKey">Monero Public Keys</string>
     <string name="PublicKeys_MoneroPublicKeyDescription">Allows read-only monitoring of wallets holding Monero (XMR) assets without granting spending access.</string>
