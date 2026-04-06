@@ -56,10 +56,14 @@ class TransactionViewItemFactory(
     private val localStorage: ILocalStorage,
     private val poisonAddressManager: PoisonAddressManager,
 ) {
+    private data class CacheKey(
+        val transactionItemVersion: Long,
+        val matchedSwapStatus: String?,
+    )
+
     private var showAmount = !balanceHiddenManager.balanceHidden
     private var addressPoisoningViewMode = localStorage.addressPoisoningViewMode
-    // Cache key includes swap status to avoid bypassing cache when status is unchanged
-    private val cache = ConcurrentHashMap<String, Map<Pair<Long, String?>, TransactionViewItem>>()
+    private val cache = ConcurrentHashMap<String, Map<CacheKey, TransactionViewItem>>()
 
     fun updateCache() {
         showAmount = !balanceHiddenManager.balanceHidden
@@ -92,7 +96,10 @@ class TransactionViewItemFactory(
             !balanceHiddenManager.isTransactionInfoHidden(transactionItem.record.uid)
         }
 
-        val cacheKey = transactionItem.createdAt to matchedSwap?.status
+        val cacheKey = CacheKey(
+            transactionItemVersion = transactionItem.cacheVersion,
+            matchedSwapStatus = matchedSwap?.status,
+        )
 
         cache[transactionItem.record.uid]?.get(cacheKey)?.let { cached ->
             return if (cached.showAmount != perItemShowAmount || cached.addressPoisoningViewMode != addressPoisoningViewMode) {

@@ -105,17 +105,25 @@ class TokenTransactionsService(
     }
 
     private fun handle(assetBriefMetadataMap: Map<NftUid, NftAssetBriefMetadata>) {
-        // Original behavior: always rebuild items and emit if list not empty
-        // (updated was set to true unconditionally in the loop)
         _transactionItems.update { currentList ->
             if (currentList.isEmpty()) return@update currentList
-            currentList.map { item ->
+
+            var updated = false
+            val newList = currentList.map { item ->
                 val updatedMetadata = item.nftMetadata.toMutableMap()
                 item.record.nftUids.forEach { nftUid ->
                     assetBriefMetadataMap[nftUid]?.let { updatedMetadata[nftUid] = it }
                 }
-                item.copy(nftMetadata = updatedMetadata)
+
+                if (updatedMetadata == item.nftMetadata) {
+                    item
+                } else {
+                    updated = true
+                    item.withUpdatedListData(nftMetadata = updatedMetadata)
+                }
             }
+
+            if (updated) newList else currentList
         }
     }
 
@@ -125,7 +133,7 @@ class TokenTransactionsService(
             val newList = currentList.map { item ->
                 if (item.record.source == source && item.record.changedBy(item.lastBlockInfo, lastBlockInfo)) {
                     updated = true
-                    item.copy(lastBlockInfo = lastBlockInfo)
+                    item.withUpdatedListData(lastBlockInfo = lastBlockInfo)
                 } else {
                     item
                 }
@@ -141,9 +149,13 @@ class TokenTransactionsService(
                 val mainValue = item.record.mainValue
                 val decimalValue = mainValue?.decimalValue
                 if (decimalValue != null && mainValue.coin?.uid == key.coinUid && item.record.timestamp == key.timestamp) {
-                    updated = true
                     val currencyValue = CurrencyValue(rate.currency, decimalValue * rate.value)
-                    item.copy(currencyValue = currencyValue)
+                    if (currencyValue == item.currencyValue) {
+                        item
+                    } else {
+                        updated = true
+                        item.withUpdatedListData(currencyValue = currencyValue)
+                    }
                 } else {
                     item
                 }
@@ -154,9 +166,18 @@ class TokenTransactionsService(
 
     private fun handleUpdatedHistoricalRates() {
         _transactionItems.update { currentList ->
-            currentList.map { item ->
-                item.copy(currencyValue = getCurrencyValue(item.record))
+            var updated = false
+            val newList = currentList.map { item ->
+                val currencyValue = getCurrencyValue(item.record)
+                if (currencyValue == item.currencyValue) {
+                    item
+                } else {
+                    updated = true
+                    item.withUpdatedListData(currencyValue = currencyValue)
+                }
             }
+
+            if (updated) newList else currentList
         }
     }
 
@@ -192,8 +213,10 @@ class TokenTransactionsService(
                     val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)
                     val currencyValue = getCurrencyValue(record)
                     TransactionItem(record, currencyValue, lastBlockInfo, nftMetadata)
+                } else if (existingItem.record === record) {
+                    existingItem
                 } else {
-                    existingItem.copy(record = record)
+                    existingItem.withUpdatedListData(record = record)
                 }
             }
         }
