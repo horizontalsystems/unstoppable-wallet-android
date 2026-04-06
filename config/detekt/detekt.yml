@@ -163,3 +163,7 @@ Compose:
   # Composition locals
   CompositionLocalAllowlist:
     active: false  # no allowlist configured yet
+
+custom-rules:
+  UnnecessaryFullyQualifiedNameRule:
+    active: true

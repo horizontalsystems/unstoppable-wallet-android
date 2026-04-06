@@ -73,7 +73,7 @@ class TransactionsViewModel(
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModelUiState<TransactionsUiState>() {
 
-    private val poisonAddressManager: PoisonAddressManager = cash.p.terminal.core.getKoinInstance()
+    private val poisonAddressManager: PoisonAddressManager = getKoinInstance()
 
     var tmpItemToShow: TransactionItem? = null
 

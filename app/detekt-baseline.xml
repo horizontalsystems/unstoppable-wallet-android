@@ -753,7 +753,6 @@
     <ID>LongParameterList:SyncPendingMultiSwapUseCase.kt$SyncPendingMultiSwapUseCase$( providerTransactionId: String?, transactionId: String?, providerId: String, coinUidOut: String, blockchainTypeOut: String, amountOut: BigDecimal?, legStartTime: Long, updateLeg: suspend (String, BigDecimal?) -&gt; Unit, )</ID>
     <ID>LongParameterList:SyncPendingMultiSwapUseCase.kt$SyncPendingMultiSwapUseCase$( transactionId: String?, coinUidIn: String, blockchainTypeIn: String, coinUidOut: String, blockchainTypeOut: String, amountOut: BigDecimal?, legStartTime: Long, updateLeg: suspend (String, BigDecimal?) -&gt; Unit, onIncomingMatch: (suspend (IncomingMatch) -&gt; Unit)? = null, )</ID>
     <ID>LongParameterList:TokenBalanceScreen.kt$( viewModel: TokenBalanceViewModel, transactionsViewModel: TransactionsViewModel, sendResult: SendResult? = viewModel.sendResult, navController: NavController, refreshing: Boolean, onStackingClicked: () -&gt; Unit, onShowAllTransactionsClicked: () -&gt; Unit, onClickSubtitle: () -&gt; Unit, onRefresh: () -&gt; Unit, onSettingsClick: () -&gt; Unit )</ID>
-    <ID>LongParameterList:TokenBalanceViewModel.kt$TokenBalanceViewModel$( private val totalBalance: TotalBalance, private val wallet: Wallet, private val balanceService: TokenBalanceService, private val balanceViewItemFactory: BalanceViewItemFactory, private val transactionsService: TokenTransactionsService, private val transactionViewItem2Factory: TransactionViewItemFactory, private val balanceHiddenManager: IBalanceHiddenManager, private val connectivityManager: ConnectivityManager, private val accountManager: IAccountManager, private val transactionHiddenManager: TransactionHiddenManager, private val getChangeNowAssociatedCoinTickerUseCase: GetChangeNowAssociatedCoinTickerUseCase, private val premiumSettings: PremiumSettings, private val amlStatusManager: AmlStatusManager, private val marketFavoritesManager: MarketFavoritesManager, private val piratePlaceRepository: PiratePlaceRepository, private val stackingManager: StackingManager, private val priceManager: PriceManager, private val localStorage: ILocalStorage, private val numberFormatter: IAppNumberFormatter, private val contactsRepository: ContactsRepository, )</ID>
     <ID>LongParameterList:TransactionInfoCells.kt$( amountType: AmountType, fiatAmount: ColoredValue?, coinAmount: ColoredValue, coinIconUrl: String?, alternativeCoinIconUrl: String?, badge: String?, coinIconPlaceholder: Int?, onValueClick: () -&gt; Unit, onClick: (() -&gt; Unit)? = null )</ID>
     <ID>LongParameterList:TransactionInfoService.kt$TransactionInfoService$( initialTransactionRecord: TransactionRecord, private val userSwapTransactionId: String?, val walletUid: String?, private val adapter: ITransactionsAdapter, private val marketKit: MarketKitWrapper, private val currencyManager: CurrencyManager, private val nftMetadataService: NftMetadataService, private val updateSwapProviderTransactionsStatusUseCase: UpdateSwapProviderTransactionsStatusUseCase, private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage, private val dispatcherProvider: DispatcherProvider, transactionStatusUrl: Pair&lt;String, String&gt;? )</ID>
     <ID>LongParameterList:TransactionViewItemFactory.kt$TransactionViewItemFactory$( transactionItem: TransactionItem, baseToken: Token?, uid: String, value: TransactionValue?, sentToSelf: Boolean, from: String?, to: String?, spender: String?, blockchainType: BlockchainType, transaction: Transaction, timestamp: Long, progress: Float?, spam: Boolean, method: String?, contractAddress: String?, incomingEvents: List&lt;TransferEvent&gt;?, outgoingEvents: List&lt;TransferEvent&gt;?, icon: TransactionViewItem.Icon?, matchedSwap: SwapProviderTransaction? = null )</ID>
@@ -1332,7 +1331,6 @@
     <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoAddressCell</ID>
     <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoAmlCheckCell</ID>
     <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoBtcLockCell</ID>
-    <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoCancelCell</ID>
     <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoCell</ID>
     <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoContactCell</ID>
     <ID>ModifierMissing:TransactionInfoCells.kt$TransactionInfoDoubleSpendCell</ID>
@@ -1887,6 +1885,226 @@
     <ID>TooManyFunctions:TokenBalanceViewModel.kt$TokenBalanceViewModel : ViewModelUiState</ID>
     <ID>TooManyFunctions:TransactionInfoCells.kt$cash.p.terminal.ui.compose.components.TransactionInfoCells.kt</ID>
     <ID>TooManyFunctions:TransactionsViewModel.kt$TransactionsViewModel : ViewModelUiState</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:ActivateSubscriptionViewModel.kt$ActivateSubscriptionViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.Hud_Text_NoInternet)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:AddRpcViewModel.kt$AddRpcViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.AddEvmSyncSource_Error_InvalidUrl)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:AddRpcViewModel.kt$AddRpcViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.AddEvmSyncSource_Warning_UrlExists)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:AddSolanaTokenBlockchainService.kt$AddSolanaTokenBlockchainService$cash.p.terminal.wallet.Token( coin = Coin( uid = tokenQuery.customCoinUid, name = tokenInfo.name, code = tokenInfo.symbol ), blockchain = blockchain, type = tokenQuery.tokenType, decimals = tokenInfo.decimals )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:AddTokenBlockchainSelector.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:AddTonTokenBlockchainService.kt$AddTonTokenBlockchainService$cash.p.terminal.wallet.Token( coin = Coin( uid = tokenQuery.customCoinUid, name = jetton.name, code = jetton.symbol, image = jetton.image ), blockchain = blockchain, type = tokenQuery.tokenType, decimals = jetton.decimals )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:AddressScreen.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:AddressScreen.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BackupLocalModuleTest.kt$BackupLocalModuleTest$cash.p.terminal.modules.backuplocal.fullbackup.FullBackup</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BackupLocalModuleTest.kt$BackupLocalModuleTest$cash.p.terminal.modules.backuplocal.fullbackup.FullBackup::class.java</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BackupManagerFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BackupManagerFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BackupProvider.kt$RestoreException.InvalidPasswordException$cash.p.terminal.strings.helpers.Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BackupProviderV3Test.kt$BackupProviderV3Test$cash.p.terminal.modules.backuplocal.fullbackup.FullBackup</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BackupProviderV3Test.kt$BackupProviderV3Test$cash.p.terminal.modules.backuplocal.fullbackup.FullBackup::class.java</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BackupViewItemFactory.kt$BackupViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.BackupManager_AppSettingsDescription)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BackupViewItemFactory.kt$BackupViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.BackupManager_AppSettingsTitle)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BackupViewItemFactory.kt$BackupViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.BackupManager_CustomRpc)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BackupViewItemFactory.kt$BackupViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.BackupManager_WatchWallets)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BackupViewItemFactory.kt$BackupViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.BackupManager_Watchlist)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BackupViewItemFactory.kt$BackupViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.Contacts)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Badge.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { Box( modifier = Modifier.padding(16.dp), contentAlignment = Alignment.Center ) { Badge(text = "#455") } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Badge.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { Box( modifier = Modifier.padding(16.dp), contentAlignment = Alignment.Center ) { BadgeText( background = ComposeAppTheme.colors.issykBlue, textColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler, text = "1" ) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Badge.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { Box( modifier = Modifier.padding(16.dp), contentAlignment = Alignment.Center ) { BadgeText( background = ComposeAppTheme.colors.red20, textColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian, text = "Sell" ) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Badge.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { Box( modifier = Modifier.padding(16.dp), contentAlignment = Alignment.Center ) { BadgeWithDiff(text = "35", diff = BigDecimal("5")) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Badge.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.bran</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Badge.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Badge.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Badge.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.white</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BalanceItems.kt$cash.p.terminal.strings.helpers.Translator.getString( R.string.Balance_Receive_BackupRequired_Description, account.name )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BalanceViewModel.kt$BalanceViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.Balance_Error_InvalidQrCode)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BiometricDisabledDialog.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { BiometricDisabledDialog({}) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BottomSheetSelectorMultipleDialog.kt$BottomSheetSelectorMultipleDialog$cash.p.terminal.ui_compose.theme.ComposeAppTheme { BottomSheetHeader( iconPainter = icon.painter(), title = title, onCloseClick = { close() } ) { BottomSheetContent() } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:BottomSheetSelectorMultipleDialog.kt$BottomSheetSelectorMultipleDialog$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel10</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CellNews.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lawrence</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CellTweet.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { CellTweet( TweetViewItem( title = "Super", subtitle = "@super", titleImageUrl = "", text = "Some special!!! Unbelievable...", attachments = listOf(), date = "Nov 12, 12:39", referencedTweet = null, entities = listOf(), url = "" ) ) { } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CellTweet.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.claude</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CellTweet.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.laguna</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CellTweet.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CellTweet.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinAnalyticsInfoFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { CoinAnalyticsInfoScreen( AnalyticInfo.CexVolumeInfo, ) {} }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinAnalyticsScreen.kt$cash.p.terminal.strings.helpers.Translator.getString(chartType.titleRes)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinAnalyticsViewModel.kt$CoinAnalyticsViewModel$cash.p.terminal.strings.helpers.Translator.getString( R.string.CoinAnalytics_CountItems, blockchainIssues.issues.size )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinAnalyticsViewModel.kt$CoinAnalyticsViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinAnalytics_PoweredByDeFi)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinAnalyticsViewModel.kt$CoinAnalyticsViewModel$cash.p.terminal.strings.helpers.Translator.getString(if (isMovement) R.string.Coin_Analytics_Current else R.string.Coin_Analytics_Last30d)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinListOrderable.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinListOrderable.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinOverviewScreen.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { Loading() }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinRankViewModel.kt$CoinRankViewModel$cash.p.terminal.strings.helpers.Translator.getString(rankType.description)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinRankViewModel.kt$CoinRankViewModel$cash.p.terminal.strings.helpers.Translator.getString(rankType.title)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinScreenTitle.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { CoinScreenTitle( coinName = "Bitcoin", marketCapRank = 1, coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/bitcoin@3x.png", alternativeCoinIconUrl = null, iconPlaceholder = null ) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinScreenTitle.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { CoinScreenTitle( coinName = "Synthetix Network Token Synthetix Network Token Synthetix Network Token Synthetix Network Token", marketCapRank = 123, coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/bitcoin@3x.png", alternativeCoinIconUrl = null, iconPlaceholder = null ) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinScreenTitle.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { CoinScreenTitle( coinName = "Synthetix Network TokenSynthetix Network Token", marketCapRank = null, coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/bitcoin@3x.png", alternativeCoinIconUrl = null, iconPlaceholder = null ) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_DilutedMarketCap)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Github)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Guide)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_LaunchDate)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_MarketCap)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Reddit)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Telegram)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_TotalSupply)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_TradingVolume)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Tvl)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Twitter)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Website)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Whitepaper)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:CoinViewFactory.kt$CoinViewFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_inCirculation)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Components.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { AnalyticsContainer( titleRow = { AnalyticsBlockHeader( title = "Defi Cap", onInfoClick = {} ) }, bottomRows = { AnalyticsFooterCell( title = BoxItem.Title(TranslatableString.PlainString("Chain 1")), value = BoxItem.Value("•••"), showRightArrow = true, cellAction = CoinAnalyticsModule.ActionType.Preview, onActionClick = {} ) AnalyticsFooterCell( title = BoxItem.Title(TranslatableString.PlainString("Chain 2")), value = BoxItem.Value("•••"), showRightArrow = true, cellAction = CoinAnalyticsModule.ActionType.Preview, onActionClick = {} ) } ) { AnalyticsContentNumber( number = "\$2.46B", period = "last 30d" ) VSpacer(12.dp) StackedBarChart(slices, modifier = Modifier.padding(horizontal = 16.dp)) VSpacer(16.dp) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Components.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { AnalyticsContainer( titleRow = { AnalyticsBlockHeader( title = "Dex Volume", onInfoClick = {} ) }, bottomRows = { AnalyticsFooterCell( title = BoxItem.Title(TranslatableString.PlainString("30-Day Rank")), value = BoxItem.Value("#19"), showRightArrow = true, cellAction = CoinAnalyticsModule.ActionType.Preview, onActionClick = {} ) } ) { AnalyticsContentNumber( number = "•••", ) AnalyticsChart( CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(true), ) VSpacer(12.dp) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Components.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { AnalyticsContainer( titleRow = { AnalyticsBlockHeader( title = "Dex Volume", onInfoClick = {} ) }, bottomRows = { AnalyticsFooterCell( title = BoxItem.Title(TranslatableString.PlainString("30-Day Rank")), value = BoxItem.Value("•••"), showRightArrow = true, cellAction = CoinAnalyticsModule.ActionType.Preview, onActionClick = {} ) } ) { AnalyticsContentNumber( number = "•••", ) AnalyticsChart( CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(false), ) VSpacer(12.dp) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Components.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { AnalyticsContainer( titleRow = { AnalyticsBlockHeader( title = "Dex Volume", onInfoClick = {} ) }, bottomRows = { AnalyticsFooterCell( title = BoxItem.TitleWithInfo( TranslatableString.PlainString("Rating Scale"), CoinAnalyticsModule.ActionType.OpenOverallScoreInfo(ScoreCategory.CexScoreCategory) ), value = BoxItem.OverallScoreValue(OverallScore.Fair), showRightArrow = false, cellAction = null, onActionClick = {} ) } ) { AnalyticsContentNumber( number = "•••", ) AnalyticsChart( CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(true), ) VSpacer(12.dp) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Components.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { AnalyticsContainer( titleRow = { AnalyticsBlockHeader( title = "Holders", onInfoClick = {} ) }, bottomRows = { AnalyticsFooterCell( title = BoxItem.Title(TranslatableString.PlainString("Blockchain 1")), value = BoxItem.Value(stringResource(R.string.CoinAnalytics_ThreeDots)), showRightArrow = true, cellAction = CoinAnalyticsModule.ActionType.Preview, onActionClick = {} ) AnalyticsFooterCell( title = BoxItem.Title(TranslatableString.PlainString("Blockchain 2")), value = BoxItem.Value(stringResource(R.string.CoinAnalytics_ThreeDots)), showRightArrow = true, cellAction = CoinAnalyticsModule.ActionType.Preview, onActionClick = {} ) AnalyticsFooterCell( title = BoxItem.Title(TranslatableString.PlainString("Blockchain 3")), value = BoxItem.Value(stringResource(R.string.CoinAnalytics_ThreeDots)), showRightArrow = true, cellAction = CoinAnalyticsModule.ActionType.Preview, onActionClick = {} ) } ) { AnalyticsContentNumber( number = "•••", ) VSpacer(12.dp) StackedBarChart(slices, modifier = Modifier.padding(horizontal = 16.dp)) VSpacer(16.dp) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:ContactsModule.kt$ContactsModule.ContactValidationException.DuplicateAddress$cash.p.terminal.strings.helpers.Translator.getString( R.string.Contacts_Error_DefinedAddress, contact.name )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:ContactsModule.kt$ContactsModule.ContactValidationException.DuplicateContactName$cash.p.terminal.strings.helpers.Translator.getString(R.string.Contacts_Error_DefinedName)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:ContactsScreen.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:ContactsScreen.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:DataFieldRecipientExtended.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { DataFieldRecipientExtended( Address("0x1234567890abcdef1234567890abcdef12345678"), BlockchainType.Bitcoin ).GetContent(navController = navController, borderTop = true) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Eip1559FeeSettingsViewModel.kt$Eip1559FeeSettingsViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.NotAvailable)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:EtfFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:EtfFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey50</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:EtfFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:EtfFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:EtfFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.remus</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:EvmNetworkViewModel.kt$EvmNetworkViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.NetworkSettings_SwithesAutomatically)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Exceptions.kt$NoDataException$cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_NoData)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Exceptions.kt$NotIntegerException$cash.p.terminal.strings.helpers.Translator.getString(R.string.Error_NotInteger)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Exceptions.kt$OutOfRangeException$cash.p.terminal.strings.helpers.Translator.getString(R.string.Error_OutOfRange, lower, upper)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:HSHodlerInput.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { HSHodler(LockTimeInterval.halfYear) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:HSHodlerInput.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { HSHodlerInput( listOf(LockTimeInterval.hour, LockTimeInterval.halfYear), LockTimeInterval.halfYear, {} ) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:IndicatorsAlertDialog.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { BottomSheetHeader( iconPainter = painterResource(R.drawable.icon_24_lock), iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey), title = stringResource(R.string.CoinPage_Indicators), onCloseClick = { navController.popBackStack() } ) { InfoText( text = stringResource(R.string.CoinPage_IndicatorsAlertText) ) ButtonPrimaryYellow( modifier = Modifier .fillMaxWidth() .padding(horizontal = 16.dp, vertical = 24.dp), title = stringResource(R.string.Button_LearnMore), onClick = { }, ) VSpacer(32.dp) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:LanguageSettingsModule.kt$cash.p.terminal.strings.helpers.LocaleType.de</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:LanguageSettingsModule.kt$cash.p.terminal.strings.helpers.LocaleType.en</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:LanguageSettingsModule.kt$cash.p.terminal.strings.helpers.LocaleType.es</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:LanguageSettingsModule.kt$cash.p.terminal.strings.helpers.LocaleType.fa</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:LanguageSettingsModule.kt$cash.p.terminal.strings.helpers.LocaleType.fr</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:LanguageSettingsModule.kt$cash.p.terminal.strings.helpers.LocaleType.ko</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:LanguageSettingsModule.kt$cash.p.terminal.strings.helpers.LocaleType.pt</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:LanguageSettingsModule.kt$cash.p.terminal.strings.helpers.LocaleType.pt_br</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:LanguageSettingsModule.kt$cash.p.terminal.strings.helpers.LocaleType.ru</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:LanguageSettingsModule.kt$cash.p.terminal.strings.helpers.LocaleType.tr</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:LanguageSettingsModule.kt$cash.p.terminal.strings.helpers.LocaleType.uk</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:LanguageSettingsModule.kt$cash.p.terminal.strings.helpers.LocaleType.zh</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:LegacyFeeSettingsViewModel.kt$LegacyFeeSettingsViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.NotAvailable)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:Links.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { val links = listOf( CoinLink( "http://q.com", LinkType.Guide, "@twitter", R.drawable.ic_academy_20 ), CoinLink( "http://q.com", LinkType.Guide, "@twitter", R.drawable.ic_globe_20 ), CoinLink( "http://q.com", LinkType.Twitter, "@twitter", R.drawable.ic_twitter_20 ), CoinLink( "http://q.com", LinkType.Telegram, "Telegram", R.drawable.ic_telegram_20 ), ) Links(links = links, onCoinLinkClick = {}) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MainSettingsScreen.kt$cash.p.terminal.strings.helpers.Translator.getString(R.string.SettingsShare_Text)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MainSettingsScreen.kt$cash.p.terminal.strings.helpers.Translator.getString(R.string.SettingsShare_Title)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MainSettingsScreen.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { Column { CellSingleLineLawrenceSection( listOf({ HsSettingCell( R.string.Settings_Faq, R.drawable.ic_faq_20, showAlert = true, onClick = { } ) }, { HsSettingCell( R.string.Guides_Title, R.drawable.ic_academy_20, onClick = { } ) }) ) Spacer(Modifier.height(32.dp)) CellSingleLineLawrenceSection( listOf { HsSettingCell( R.string.Settings_WalletConnect, R.drawable.ic_wallet_connect_20, counterBadge = "13", onClick = { } ) } ) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MainViewModel.kt$MainViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.DeeplinkScheme)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketCell.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { MarketCoin( title = "ETH", subtitle = "Ethereum With very long name for token", coinIconUrl = "eth.png", coinIconPlaceholder = R.drawable.logo_ethereum_24, value = "$2600", ) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketCell.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.bran</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketCell.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.green20</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketCell.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketCell.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jeremy</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketCell.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketCell.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.red20</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketCell.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.remus</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketCell.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketCell.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow20</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketData.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme(darkTheme = false) { MarketData(marketData) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketFiltersFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketFiltersViewModel.kt$MarketFiltersViewModel$cash.p.terminal.strings.helpers.Translator.getString(CoinList.Top250.titleResId)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketFiltersViewModel.kt$MarketFiltersViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.Market_Filter_ShowResults)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketFiltersViewModel.kt$MarketFiltersViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.Market_Filter_ShowResults_Counter, numberOfItems)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketFiltersViewModel.kt$MarketFiltersViewModel$cash.p.terminal.strings.helpers.Translator.getString(TimePeriod.TimePeriod_1D.titleResId)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketFiltersViewModel.kt$MarketFiltersViewModel$cash.p.terminal.strings.helpers.Translator.getString(it.titleResId)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketFiltersViewModel.kt$cash.p.terminal.strings.helpers.Translator.getString(it.titleResId)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketOverviewMetrics.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lawrence</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketOverviewMetrics.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketOverviewMetrics.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.remus</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketOverviewViewModel.kt$MarketOverviewViewModel$cash.p.terminal.strings.helpers.Translator.getString( R.string.MarketTopPlatforms_Protocols, item.protocols )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketPlatformFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { HeaderContent( "Solana Ecosystem", "Market cap of all protocols on the Solana chain", ImageSource.Local(R.drawable.logo_ethereum_24) ) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketPlatformViewModel.kt$MarketPlatformViewModel$cash.p.terminal.strings.helpers.Translator.getString( R.string.MarketPlatformCoins_PlatformEcosystemDescription, platform.name )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketPlatformViewModel.kt$MarketPlatformViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.MarketPlatformCoins_PlatformEcosystem, platform.name)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketPostsScreen.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { CellNews( source = postItem.source, title = postItem.title, body = postItem.body, date = postItem.timeAgo ) {} }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketSearchFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { MarketCoin( coin.code, coin.name, coin.imageUrl, null, R.drawable.coin_placeholder, {}, ) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketSearchFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketSearchFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MarketWidgetRepository.kt$MarketWidgetRepository$cash.p.terminal.strings.helpers.Translator.getString( R.string.MarketTopPlatforms_Protocols, item.protocols )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MetricsPageViewModel.kt$MetricsPageViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.Market_MarketCap)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MetricsPageViewModel.kt$MetricsPageViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.Market_Volume)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MetricsPageViewModel.kt$MetricsPageViewModel$cash.p.terminal.strings.helpers.Translator.getString(description)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:MetricsPageViewModel.kt$MetricsPageViewModel$cash.p.terminal.strings.helpers.Translator.getString(title)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:NftCollectionEventsScreen.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:NftCollectionOverviewScreen.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lawrence</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:PinTopBlock.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { Column( modifier = Modifier .background(color = ComposeAppTheme.colors.tyler) ) { PinTopBlock( title = "text", enteredCount = 3, showShakeAnimation = false, ) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:PinTopBlock.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { Column( modifier = Modifier .background(color = ComposeAppTheme.colors.tyler) ) { PinTopBlock( title = "text", enteredCount = 3, showShakeAnimation = false, inputState = InputState.Locked("12:33") ) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:PinTopBlock.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:PinTopBlock.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:ProChartFragment.kt$ProChartFragment$cash.p.terminal.ui_compose.theme.ComposeAppTheme { BottomSheetHeader( iconPainter = painterResource(R.drawable.ic_chart_24), iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob), title = input.title, onCloseClick = { close() } ) { Chart( uiState = chartViewModel.uiState, getSelectedPointCallback = chartViewModel::getSelectedPoint, onSelectChartInterval = chartViewModel::onSelectChartInterval) VSpacer(32.dp) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:QuoteInfoRow.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { QuoteInfoRow( title = { subhead2_grey(text = stringResource(R.string.Swap_Recipient)) }, value = { subhead2_leah( text = "0x7A04536a50d12952f69E071e4c92693939db86b5", textAlign = TextAlign.End ) } ) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:RateAppDialog.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { RateApp({}, {}) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:RestoreMnemonicNonStandardViewModel.kt$RestoreMnemonicNonStandardViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.Restore_Error_EmptyPassphrase)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:RestoreMnemonicNonStandardViewModel.kt$RestoreMnemonicNonStandardViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.Restore_Error_MnemonicWordCount, wordItems.size)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:RestoreMnemonicNonStandardViewModel.kt$RestoreMnemonicNonStandardViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.Restore_InvalidChecksum)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:RestoreSettingsManager.kt$RestoreSettingsManager$cash.p.terminal.strings.helpers.Translator.getString(R.string.ManageAccount_BirthdayHeight, token.coin.code)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SelectBackupItemsScreen.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SemiCircleChart.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { Column(modifier = Modifier.padding(top = 24.dp)) { SemiCircleChart( Modifier.padding(horizontal = 32.dp), listOf(33f, 33f, 34f), "38.95%" ) subhead1_grey( modifier = Modifier .fillMaxWidth() .padding(start = 32.dp, end = 32.dp, top = 12.dp), textAlign = TextAlign.Center, overflow = TextOverflow.Ellipsis, text = "Топ-10 кошельков Ethereum", ) subhead1_grey( modifier = Modifier .fillMaxWidth() .padding(start = 24.dp, end = 24.dp, top = 38.dp), textAlign = TextAlign.Start, overflow = TextOverflow.Ellipsis, text = "Chart above shows the % of all tokens in circulation held by top 10 wallets. The lower the % the more distributed the coin is.", ) } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SemiCircleChart.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellowD</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SendBtcAdvancedSettingsViewModel.kt$SendBtcAdvancedSettingsViewModel$cash.p.terminal.strings.helpers.Translator.getString(sortMode.titleShort)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SendEvmTransactionViewItemFactory.kt$SendEvmTransactionViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.Send_Confirmation_To)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SendEvmTransactionViewItemFactory.kt$SendEvmTransactionViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.Send_Confirmation_YouSend)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SendEvmTransactionViewItemFactory.kt$SendEvmTransactionViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_RecipientAddressTitle)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SendEvmTransactionViewItemFactory.kt$SendEvmTransactionViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.Swap_FromAmountTitle)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SendEvmTransactionViewItemFactory.kt$SendEvmTransactionViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.Swap_ToAmountTitle)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SendSolanaAddressService.kt$SendSolanaAddressService$cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidAddress)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SendTonAddressService.kt$SendTonAddressService$cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidAddress)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SendTronAddressService.kt$SendTronAddressService$cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidAddress)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SendTronAddressService.kt$SendTronAddressService$cash.p.terminal.strings.helpers.Translator.getString(R.string.Tron_SelfSendTrxNotAllowed)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:ShowExtendedKeyFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SolanaWalletManager.kt$SolanaWalletManager$cash.p.terminal.wallet.entities.EnabledWallet( tokenQueryId = token.tokenQuery.id, accountId = account.id, coinName = token.coin.name, coinCode = token.coin.code, coinDecimals = token.decimals, coinImage = token.coin.image )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:StackedBarChart.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { StackedBarChart( slices, Modifier.padding(horizontal = 16.dp, vertical = 12.dp) ) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SwapDeadlineViewModel.kt$SwapDeadlineViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_DeadlineMinute, lowerMinutes)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SwapDeadlineViewModel.kt$SwapDeadlineViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_DeadlineMinute, upperMinutes)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:SwapSlippageViewModel.kt$SwapSlippageViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Warning_UnusualSlippage)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString( R.string.TechnicalAdvice_OverAdvice, direction )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString( R.string.TechnicalAdvice_StableRsi, it, rsiLine )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString( R.string.TechnicalAdvice_StrongRsi, it, overtype )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString( if (macd &gt;= BigDecimal.ZERO) R.string.TechnicalAdvice_MacdPositive else R.string.TechnicalAdvice_MacdNegative )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString( if (price &gt;= ema) R.string.TechnicalAdvice_EmaAbove else R.string.TechnicalAdvice_EmaBelow )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString( if (price &gt;= ema) R.string.TechnicalAdvice_EmaGrowth else R.string.TechnicalAdvice_EmaDecrease )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_Down)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_EmaAdvice, direction, emaValue, action)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_MacdAdvice, direction, macdValue, action)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_NeutralAdvice)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_NeutralIndicators, overtype)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_OtherTitle)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_OverBought)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_OverIndicators, overtype)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_OverIndicators_SignalDate, date)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_OverMain)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_OverRsi, value, overtype)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_OverSold)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_StableRsi, it)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_StrongAdvice, direction)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_StrongIndicators, overtype)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_Up)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$TechnicalAdviceViewItemFactory$cash.p.terminal.strings.helpers.Translator.getString(if (macd &gt;= BigDecimal.ZERO) R.string.TechnicalAdvice_Up else R.string.TechnicalAdvice_Down)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_Indicators_Buy)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_Indicators_Neutral)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_Indicators_RiskyToTrade)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_Indicators_Sell)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_Indicators_StrongBuy)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TechnicalAdviceViewItemFactory.kt$cash.p.terminal.strings.helpers.Translator.getString(R.string.TechnicalAdvice_Indicators_StrongSell)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TokenBalanceViewModelTest.kt$TokenBalanceViewModelTest$cash.p.terminal.wallet.BuildConfig.PIRATE_CONTRACT</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TonKitManager.kt$TonHelper$cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_Memo)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TopNftCollectionsViewModel.kt$TopNftCollectionsViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.Nft_TopCollections)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TopNftCollectionsViewModel.kt$TopNftCollectionsViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.Nft_TopCollections_Description)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TopPlatformsViewModel.kt$TopPlatformsViewModel$cash.p.terminal.strings.helpers.Translator.getString( R.string.MarketTopPlatforms_Protocols, item.protocols )</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TransactionDoubleSpendInfoFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { InfoScreen( "jh2rnj23rnk2b3k42b2k4jb", "nb3k4brk34bk34bk34bk3g" ) { } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TransactionInputSortModeInfoSceen.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { Surface(color = ComposeAppTheme.colors.tyler) { Column { AppBar( menuItems = listOf( MenuItem( title = TranslatableString.ResString(R.string.Button_Close), icon = R.drawable.ic_close, onClick = onCloseClick ) ) ) Column( modifier = Modifier .fillMaxWidth() .verticalScroll(rememberScrollState()) ) { InfoHeader(R.string.BtcBlockchainSettings_TransactionInputsOutputs) InfoBody(R.string.BtcBlockchainSettings_TransactionInputsOutputsDescription) Spacer(Modifier.height(20.dp)) } } } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TransactionSpeedUpCancelViewModel.kt$TransactionSpeedUpCancelViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Button)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TransactionSpeedUpCancelViewModel.kt$TransactionSpeedUpCancelViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Title)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TvlViewModel.kt$TvlViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.MarketGlobalMetrics_TvlInDefi)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:TvlViewModel.kt$TvlViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.MarketGlobalMetrics_TvlInDefiDescription)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:ViewItemWrapper.kt$ViewItemWrapper.Companion$cash.p.terminal.strings.helpers.Translator.getString(R.string.Any)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:WCErrorNoAccountFragment.kt$WCErrorNoAccountFragment$cash.p.terminal.ui_compose.theme.ComposeAppTheme { WalletConnectErrorNoAccount() { findNavController().popBackStack() } }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:WCErrorNoAccountFragment.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { WalletConnectErrorNoAccount({}) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:WCSessionError.kt$cash.p.terminal.ui_compose.theme.ComposeAppTheme { WCSessionError("Error text", NavController(context)) }</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:WCSignEthereumTransactionRequestViewModel.kt$WCSignEthereumTransactionRequestViewModel$cash.p.terminal.strings.helpers.Translator.getString(R.string.WalletConnect_SignMessageRequest_dApp)</ID>
+    <ID>UnnecessaryFullyQualifiedNameRule:WatchAddressViewModel.kt$UnsupportedAddress$cash.p.terminal.strings.helpers.Translator.getString(R.string.Watch_Error_InvalidAddressFormat)</ID>
     <ID>UnusedImports:BackupConfirmKeyViewModel.kt$import cash.p.terminal.feature.miniapp.domain.usecase.CreateRequiredTokensUseCase</ID>
     <ID>UnusedImports:BalanceCard.kt$import cash.p.terminal.ui_compose.components.captionSB_leah</ID>
     <ID>UnusedImports:BtcBlockchainSettingsScreen.kt$import coil3.compose.rememberAsyncImagePainter</ID>
@@ -1955,19 +2173,32 @@
     <ID>UnusedPrivateMember:BottomSheetSelectorMultiple.kt$@Preview(showBackground = true) @Composable private fun BottomSheetSelectorMultiplePreview()</ID>
     <ID>UnusedPrivateMember:BottomSheetWalletSelect.kt$@Preview @Composable private fun WalletSwitchContentPreview()</ID>
     <ID>UnusedPrivateMember:BtcBlockchainSettingsScreen.kt$@Composable @Preview(showBackground = true) private fun BtcBlockchainSettingsScreenPreview()</ID>
+    <ID>UnusedPrivateMember:CoinAnalyticsInfoFragment.kt$@Preview @Composable private fun Preview_CoinAnalyticsInfoScreen()</ID>
     <ID>UnusedPrivateMember:CoinImage.kt$@Preview @Composable private fun SyncProgressTextPreview()</ID>
+    <ID>UnusedPrivateMember:Components.kt$@Preview @Composable private fun Preview_AnalyticsBarChartDisabled()</ID>
+    <ID>UnusedPrivateMember:Components.kt$@Preview @Composable private fun Preview_AnalyticsLineChartDisabled()</ID>
+    <ID>UnusedPrivateMember:Components.kt$@Preview @Composable private fun Preview_AnalyticsRatingScale()</ID>
+    <ID>UnusedPrivateMember:Components.kt$@Preview @Composable private fun Preview_HoldersBlock()</ID>
+    <ID>UnusedPrivateMember:Components.kt$@Preview @Composable private fun Preview_HoldersBlockLocked()</ID>
     <ID>UnusedPrivateMember:CrossSlide.kt$@Composable private fun CrossSlideExample()</ID>
     <ID>UnusedPrivateMember:DisplayOptionsScreen.kt$@Preview(showBackground = true) @Composable private fun DisplayOptionsScreenPreview()</ID>
     <ID>UnusedPrivateMember:DonateTokenSelectFragment.kt$@Preview @Composable private fun DonateHeaderPreview()</ID>
     <ID>UnusedPrivateMember:DuplicateWalletInfoDialog.kt$@Preview(showBackground = true) @Composable private fun DuplicateWalletInfoScreenPreview()</ID>
     <ID>UnusedPrivateMember:DuplicateWalletScreen.kt$@Preview @Composable private fun DuplicateWalletScreenPreview()</ID>
     <ID>UnusedPrivateMember:Forms.kt$@Preview(showBackground = true) @Composable private fun FormsInputPreview()</ID>
+    <ID>UnusedPrivateMember:GeneralTermsScreen.kt$@Preview(showBackground = true) @Composable private fun Preview_GeneralTermsDialog()</ID>
+    <ID>UnusedPrivateMember:HSHodlerInput.kt$@Preview(showBackground = true) @Composable private fun Preview_HSHodler()</ID>
+    <ID>UnusedPrivateMember:HSHodlerInput.kt$@Preview(showBackground = true) @Composable private fun Preview_HSHodlerInput()</ID>
     <ID>UnusedPrivateMember:HiddenWalletTermsScreen.kt$@Preview(showBackground = true) @Composable private fun HiddenWalletTermsScreenPreview()</ID>
+    <ID>UnusedPrivateMember:IndicatorsFragment.kt$@Preview @Composable private fun Preview_Indicators()</ID>
+    <ID>UnusedPrivateMember:KeyStoreActivity.kt$@Preview @Composable private fun Preview_NoSystemWarning()</ID>
+    <ID>UnusedPrivateMember:KeyStoreActivity.kt$@Preview(showBackground = true) @Composable private fun Preview_KeysInvalidatedDialog()</ID>
     <ID>UnusedPrivateMember:MainSettingsScreen.kt$@Preview @Composable private fun previewSettingsScreen()</ID>
     <ID>UnusedPrivateMember:ManageAccountScreen.kt$@Preview(showBackground = true) @Composable private fun ManageAccountScreenPreview()</ID>
     <ID>UnusedPrivateMember:ManageWalletsScreen.kt$@Preview(showBackground = true) @Composable private fun ManageWalletsScreenPreview()</ID>
     <ID>UnusedPrivateMember:MarketOverviewViewModel.kt$MarketOverviewViewModel$private fun getSectionIcon(type: ListType): Int</ID>
     <ID>UnusedPrivateMember:MarketOverviewViewModel.kt$MarketOverviewViewModel$private fun getSectionTitle(type: ListType): Int</ID>
+    <ID>UnusedPrivateMember:MoneroConfigureFragment.kt$@Preview @Composable private fun Preview_MoneroConfigure()</ID>
     <ID>UnusedPrivateMember:MoneroKitManager.kt$MoneroKitWrapper$private suspend fun fixCorruptedWalletFile( walletKeysFileName: String, walletPassword: String )</ID>
     <ID>UnusedPrivateMember:MultiSwapExchangeScreen.kt$@Preview @Composable private fun Leg1HeaderPreview()</ID>
     <ID>UnusedPrivateMember:MultiSwapExchangeScreen.kt$@Preview @Composable private fun MultiSwapExchangeScreenCompletedPreview()</ID>
@@ -1983,12 +2214,18 @@
     <ID>UnusedPrivateMember:PremiumSettingsFragment.kt$@Preview @Composable private fun PremiumSettingsScreenPreview()</ID>
     <ID>UnusedPrivateMember:QRScannerScreen.kt$@ComposePreview @Composable private fun PermissionNeededDialogPreview()</ID>
     <ID>UnusedPrivateMember:QRScannerScreen.kt$@ComposePreview @Composable private fun ScannerOverlayPreview()</ID>
+    <ID>UnusedPrivateMember:RateAppDialog.kt$@Preview @Composable private fun Preview_RateApp()</ID>
     <ID>UnusedPrivateMember:ResetToFactorySettingsFragment.kt$@Preview(showBackground = true) @Composable private fun ResetToFactorySettingsScreenPreview()</ID>
     <ID>UnusedPrivateMember:SafetyRulesScreen.kt$@Preview @Composable private fun SafetyRulesScreenAgreePreview()</ID>
     <ID>UnusedPrivateMember:SafetyRulesScreen.kt$@Preview @Composable private fun SafetyRulesScreenCopyConfirmPreview()</ID>
     <ID>UnusedPrivateMember:SecureResetTermsScreen.kt$@Preview(showBackground = true) @Composable private fun SecureResetTermsScreenPreview()</ID>
     <ID>UnusedPrivateMember:SelectorDialogCompose.kt$@Preview(showBackground = true) @Composable private fun SelectorDialogPreview()</ID>
     <ID>UnusedPrivateMember:SendEvmTransactionView.kt$@Composable private fun NonceView(nonceViewModel: SendEvmNonceViewModel)</ID>
+    <ID>UnusedPrivateMember:SendEvmTransactionView.kt$@Preview @Composable private fun Preview_Amount()</ID>
+    <ID>UnusedPrivateMember:SendEvmTransactionView.kt$@Preview @Composable private fun Preview_AmountMulti()</ID>
+    <ID>UnusedPrivateMember:SendEvmTransactionView.kt$@Preview @Composable private fun Preview_Subhead()</ID>
+    <ID>UnusedPrivateMember:SendEvmTransactionView.kt$@Preview @Composable private fun Preview_TitleValue()</ID>
+    <ID>UnusedPrivateMember:SendEvmTransactionView.kt$@Preview @Composable private fun Preview_TitleValueHex()</ID>
     <ID>UnusedPrivateMember:SendSmsNotificationScreen.kt$@Preview(showBackground = true) @Composable private fun SendSmsNotificationScreenEmptyPreview()</ID>
     <ID>UnusedPrivateMember:SendSmsNotificationScreen.kt$@Preview(showBackground = true) @Composable private fun SendSmsNotificationScreenWithAddressPreview()</ID>
     <ID>UnusedPrivateMember:SendSmsNotificationScreen.kt$@Preview(showBackground = true) @Composable private fun SendSmsNotificationScreenWithErrorPreview()</ID>
@@ -2004,11 +2241,13 @@
     <ID>UnusedPrivateMember:SwapSelectProviderScreen.kt$@Preview @Composable private fun SwapSelectProviderScreenPreview()</ID>
     <ID>UnusedPrivateMember:SystemPinBlock.kt$@Preview(showBackground = true) @Composable private fun SystemPinBlockPreview()</ID>
     <ID>UnusedPrivateMember:TransactionAutoHideBlock.kt$@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES) @Composable private fun TransactionAutoHideBlockPreview()</ID>
+    <ID>UnusedPrivateMember:TransactionDoubleSpendInfoFragment.kt$@Preview @Composable private fun Preview_InfoScreen()</ID>
     <ID>UnusedPrivateMember:TransactionsFilterFragment.kt$@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL) @Composable private fun FilterScreenPreview()</ID>
     <ID>UnusedPrivateMember:TransactionsScreen.kt$@Preview(showBackground = true) @Composable private fun TransactionCellPreview()</ID>
     <ID>UnusedPrivateMember:TransferPasscodeBlock.kt$@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES) @Composable private fun TransferPasscodeBlockPreview()</ID>
     <ID>UnusedPrivateMember:WCErrorNoAccountFragment.kt$@Preview @Composable private fun WalletConnectErrorNoAccountPreview()</ID>
     <ID>UnusedPrivateMember:WCSessionCells.kt$@Preview(showBackground = true) @Composable private fun DropDownCellPreview()</ID>
+    <ID>UnusedPrivateMember:ZcashConfigureFragment.kt$@Preview @Composable private fun Preview_ZcashConfigure()</ID>
     <ID>UnusedPrivateMember:ZcashTransaction.kt$ZcashTransaction$private fun ByteArray?.toUtf8Memo(): String</ID>
     <ID>UnusedPrivateProperty:BalanceSorterTest.kt$BalanceSorterTest$private val sorter = BalanceSorter()</ID>
     <ID>UnusedPrivateProperty:EvmAddressParserTest.kt$EvmAddressParserTest$private lateinit var addressParser: AddressUriParser</ID>
@@ -2278,7 +2517,6 @@
     <ID>ViewModelInjection:SwapFragment.kt$manageWalletsViewModel</ID>
     <ID>ViewModelInjection:SwapFragment.kt$restoreSettingsViewModel</ID>
     <ID>ViewModelInjection:SwapFragment.kt$viewModel</ID>
-    <ID>ViewModelInjection:SwapSelectCoinScreen.kt$viewModel</ID>
     <ID>ViewModelInjection:SwapSettingsScreen.kt$viewModel</ID>
     <ID>ViewModelInjection:SwapTransactionSettingsScreen.kt$viewModel</ID>
     <ID>ViewModelInjection:SyncErrorDialog.kt$viewModel</ID>
@@ -2296,5 +2534,60 @@
     <ID>ViewModelInjection:WatchAddressFragment.kt$viewModel</ID>
     <ID>ViewModelInjection:WcRequestPreScreen.kt$viewModelPre</ID>
     <ID>ViewModelInjection:WcRequestScreen.kt$viewModel</ID>
+    <ID>WildcardImport:AccountsDao.kt$import androidx.room.*</ID>
+    <ID>WildcardImport:Alert.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:BiometricDisabledDialog.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:BottomSheetWalletSelect.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:BottomSheetWalletSelect.kt$import cash.p.terminal.ui.compose.components.*</ID>
+    <ID>WildcardImport:BottomSheetsElements.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:BottomSheetsElements.kt$import androidx.compose.runtime.*</ID>
+    <ID>WildcardImport:CardTabs.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:CardTabs.kt$import androidx.compose.runtime.*</ID>
+    <ID>WildcardImport:CellNews.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:CellNews.kt$import androidx.compose.runtime.*</ID>
+    <ID>WildcardImport:CellTweet.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:ChartIndicatorSetting.kt$import androidx.room.*</ID>
+    <ID>WildcardImport:CoinTweetsScreen.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:CoinTweetsScreen.kt$import cash.p.terminal.ui.compose.components.*</ID>
+    <ID>WildcardImport:Contracts.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:CrossSlide.kt$import androidx.compose.animation.core.*</ID>
+    <ID>WildcardImport:CrossSlide.kt$import androidx.compose.runtime.*</ID>
+    <ID>WildcardImport:EnabledWalletsDao.kt$import androidx.room.*</ID>
+    <ID>WildcardImport:EvmAddressLabelDao.kt$import androidx.room.*</ID>
+    <ID>WildcardImport:EvmMethodLabelDao.kt$import androidx.room.*</ID>
+    <ID>WildcardImport:ExampleUnitTest.kt$import org.junit.Assert.*</ID>
+    <ID>WildcardImport:GuidesManager.kt$import com.google.gson.*</ID>
+    <ID>WildcardImport:HardwareWalletFragment.kt$import cash.p.terminal.tangem.ui.HardwareWalletOnboardingFragment.*</ID>
+    <ID>WildcardImport:HsBottomNavigation.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:HsBottomNavigation.kt$import androidx.compose.ui.layout.*</ID>
+    <ID>WildcardImport:INftProvider.kt$import cash.p.terminal.entities.nft.*</ID>
+    <ID>WildcardImport:InfoBlocks.kt$import cash.p.terminal.ui.compose.components.*</ID>
+    <ID>WildcardImport:IntroActivity.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:Keyboard.kt$import androidx.compose.runtime.*</ID>
+    <ID>WildcardImport:MarketFavoritesDao.kt$import androidx.room.*</ID>
+    <ID>WildcardImport:MarketFiltersFragment.kt$import cash.p.terminal.modules.market.filters.MarketFiltersModule.FilterDropdown.*</ID>
+    <ID>WildcardImport:MarketOverviewTopNft.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:NetworkManager.kt$import retrofit2.http.*</ID>
+    <ID>WildcardImport:NftCollectionAssetsService.kt$import kotlinx.coroutines.*</ID>
+    <ID>WildcardImport:NftCollectionEventsScreen.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:NftCollectionEventsScreen.kt$import androidx.compose.material.*</ID>
+    <ID>WildcardImport:NftCollectionEventsScreen.kt$import androidx.compose.runtime.*</ID>
+    <ID>WildcardImport:NftCollectionEventsScreen.kt$import cash.p.terminal.ui.compose.components.*</ID>
+    <ID>WildcardImport:NftCollectionEventsService.kt$import kotlinx.coroutines.*</ID>
+    <ID>WildcardImport:NftDao.kt$import androidx.room.*</ID>
+    <ID>WildcardImport:NftDao.kt$import cash.p.terminal.entities.nft.*</ID>
+    <ID>WildcardImport:NftHoldingsService.kt$import cash.p.terminal.entities.nft.*</ID>
+    <ID>WildcardImport:NftHoldingsService.kt$import kotlinx.coroutines.*</ID>
+    <ID>WildcardImport:NftStorage.kt$import cash.p.terminal.entities.nft.*</ID>
+    <ID>WildcardImport:PreferencesExtensions.kt$import java.lang.Enum.*</ID>
+    <ID>WildcardImport:RateAppDialog.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:Roi.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:SemiCircleChart.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:Shake.kt$import androidx.compose.animation.core.*</ID>
+    <ID>WildcardImport:StackedBarChart.kt$import androidx.compose.foundation.layout.*</ID>
+    <ID>WildcardImport:TopNftCollectionsService.kt$import kotlinx.coroutines.*</ID>
+    <ID>WildcardImport:TorConnectionStatusUseCase.kt$import cash.p.terminal.manager.ITorConnectionStatusUseCase.*</ID>
+    <ID>WildcardImport:TorControl.kt$import java.io.*</ID>
+    <ID>WildcardImport:TorResourceManager.kt$import java.io.*</ID>
   </CurrentIssues>
 </SmellBaseline>

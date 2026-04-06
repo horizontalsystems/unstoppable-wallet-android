@@ -26,10 +26,8 @@ class FetchSwapQuotesUseCaseTest {
         id: String,
         supports: Boolean = true,
         amountOut: BigDecimal = BigDecimal.ONE,
-        priority: Int = 0,
     ): IMultiSwapProvider = mockk(relaxed = true) {
         every { this@mockk.id } returns id
-        every { this@mockk.priority } returns priority
         coEvery { supports(tokenIn, tokenOut) } returns supports
         coEvery { fetchQuote(tokenIn, tokenOut, amountIn, any()) } returns mockk<ISwapQuote> {
             every { this@mockk.amountOut } returns amountOut
@@ -37,26 +35,16 @@ class FetchSwapQuotesUseCaseTest {
     }
 
     @Test
-    fun happyPath_returnsSortedByPriorityThenAmount() = runTest {
-        val lowPriority = mockProvider("low", amountOut = BigDecimal("10"), priority = 1)
-        val highPriority = mockProvider("high", amountOut = BigDecimal("5"), priority = 2)
+    fun sortedByAmountOut_bestRateFirst() = runTest {
+        val small = mockProvider("small", amountOut = BigDecimal("1"))
+        val large = mockProvider("large", amountOut = BigDecimal("10"))
+        val medium = mockProvider("medium", amountOut = BigDecimal("5"))
 
-        val result = useCase(listOf(lowPriority, highPriority), tokenIn, tokenOut, amountIn)
-
-        assertEquals(2, result.size)
-        assertEquals("high", result[0].provider.id)
-        assertEquals("low", result[1].provider.id)
-    }
-
-    @Test
-    fun samePriority_sortedByAmountDescending() = runTest {
-        val small = mockProvider("small", amountOut = BigDecimal("1"), priority = 1)
-        val large = mockProvider("large", amountOut = BigDecimal("10"), priority = 1)
-
-        val result = useCase(listOf(small, large), tokenIn, tokenOut, amountIn)
+        val result = useCase(listOf(small, large, medium), tokenIn, tokenOut, amountIn)
 
         assertEquals("large", result[0].provider.id)
-        assertEquals("small", result[1].provider.id)
+        assertEquals("medium", result[1].provider.id)
+        assertEquals("small", result[2].provider.id)
     }
 
     @Test
@@ -97,7 +85,6 @@ class FetchSwapQuotesUseCaseTest {
     fun providerFetchQuoteThrows_excluded() = runTest {
         val failing = mockk<IMultiSwapProvider>(relaxed = true) {
             every { id } returns "fail"
-            every { priority } returns 0
             coEvery { supports(tokenIn, tokenOut) } returns true
             coEvery { fetchQuote(tokenIn, tokenOut, amountIn, any()) } throws RuntimeException("error")
         }

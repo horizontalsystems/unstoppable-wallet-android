@@ -448,6 +448,8 @@
 
     <!--Network Fee Warning-->
     <string name="network_fee_warning_title">%s Netzwerkgebühr</string>
+    <string name="token_balance_need_native_coin_title">Sie benötigen %1$s um %2$s zu verwenden</string>
+    <string name="token_balance_need_native_coin_body">%2$s läuft auf %3$s.\nNetzwerkgebühren werden in %1$s bezahlt.\nIhr %1$s Guthaben: %4$s</string>
     <string name="network_fee_warning_body_protocol">Das %1$s-Netzwerkprotokoll sieht vor, dass mindestens %2$s zur Zahlung der Netzwerkgebühr für diese Transaktion erforderlich ist.</string>
     <string name="network_fee_warning_body_balance">Sie haben weniger als %s in Ihrem Guthaben.</string>
     <string name="network_fee_warning_body_protocol_bold">mindestens %s</string>
@@ -476,15 +478,16 @@
     <string name="Tron_TokenPage_AddressNotActive_Title">Konto nicht aktiv</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">Neue TRON-Wallets erfordern eine Einzahlung von mindestens 1 TRX, um aktiv zu werden. Inaktive Wallets können Token halten und empfangen, korrigieren jedoch keine Guthaben, bis sie aktiviert sind.</string>
     <!--TonConnect-->
-    <string name="TonConnect_NewConnect">New Connection</string>
-    <string name="TonConnect_Error_InvalidUrl">Invalid URL Address</string>
-    <string name="TonConnect_Unnamed">Unnamed</string>
+    <string name="TonConnect_NewConnect">Neue Verbindung</string>
+    <string name="TonConnect_Error_InvalidUrl">Ungültige URL-Adresse</string>
+    <string name="TonConnect_Unnamed">Unbenannt</string>
     <string name="TonConnect_Wallet">Wallet</string>
-    <string name="TonConnect_ChooseWallet">Choose a Wallet</string>
+    <string name="TonConnect_ChooseWallet">Wallet auswählen</string>
+    <string name="manifest_loading">Manifest wird geladen…</string>
     <string name="account_not_supported_by">Ihr aktueller Wallet-Typ %1$s unterstützt %2$s nicht</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Status</string>
-    <string name="WalletConnect_Approve_Hint">Indem Sie auf \"Genehmigen\" klicken, erlauben Sie dieser App, Ihre öffentliche Adresse anzuzeigen. Dies ist ein wichtiger Sicherheitsschritt, um Ihre Daten vor potenziellen Phishing-Risiken zu schützen.</string>
+    <string name="WalletConnect_Approve_Hint">Indem Sie auf Verbinden klicken, erlauben Sie dieser App, Ihre öffentliche Adresse anzuzeigen. Dies ist ein wichtiger Sicherheitsschritt, um Ihre Daten vor potenziellen Phishing-Risiken zu schützen.</string>
     <string name="WalletConnect_Reconnect_Hint">Verbindung konnte nicht hergestellt werden. Versuchen Sie, die Verbindung erneut herzustellen.</string>
     <string name="WalletConnect_Error_InvalidUrl">Ungültige URL-Adresse</string>
     <string name="WalletConnect_Status_Offline">Offline</string>
@@ -496,25 +499,25 @@
     <string name="WalletConnect_SignMessageRequest_Title">Signaturanfrage</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Zu unterzeichnende Nachricht</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Signieren</string>
-    <string name="WalletConnect_Error_NoWallet">Sie müssen eine Wallet erstellen oder importieren bevor Sie WalletConnect verwenden können</string>
-    <string name="WalletConnect_Error_NeedBackup">Sichern Sie diese Brieftasche durch Erstellen einer Kopie ihrer Wiederherstellungs-Phrase. Es wird benötigt, um auf die Brieftasche zuzugreifen, wenn Ihr Telefon verloren geht, gestohlen, kaputt usw.</string>
+    <string name="WalletConnect_Error_NoWallet">Sie müssen eine Wallet erstellen oder importieren, bevor Sie WalletConnect verwenden können</string>
+    <string name="WalletConnect_Error_NeedBackup">Erstellen Sie eine Sicherungskopie der Wiederherstellungsphrase und des zugehörigen Passworts, damit Sie Ihre Wallet wiederherstellen können, falls Ihr Telefon verloren geht, gestohlen oder beschädigt wird.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Nicht unterstützte Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Kein passendes Konto</string>
-    <string name="WalletConnect_Error_NoSuitableEvmKit">Kein passendes evm Kit</string>
-    <string name="WalletConnect_Error_UnsupportedChains">Unsupported chains: %s</string>
-    <string name="WalletConnect_Error_UnsupportedMethods">Unsupported methods: %s</string>
-    <string name="WalletConnect_Error_UnsupportedEvents">Unsupported events: %s</string>
-    <string name="WalletConnect_Error_RequestNotFoundError">Anforderungsfehler nicht gefunden</string>
-    <string name="WalletConnect_NoConnection">Du hast keine verbundenen Dapps</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">Kein passendes EVM-Kit</string>
+    <string name="WalletConnect_Error_UnsupportedChains">Nicht unterstützte Netzwerke: %s</string>
+    <string name="WalletConnect_Error_UnsupportedMethods">Nicht unterstützte Methoden: %s</string>
+    <string name="WalletConnect_Error_UnsupportedEvents">Nicht unterstützte Ereignisse: %s</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">Fehler: Anfrage nicht gefunden</string>
+    <string name="WalletConnect_NoConnection">Sie haben keine verbundenen dApps</string>
     <string name="WalletConnect_PendingRequests">Ausstehende Anfragen</string>
     <string name="WalletConnect_ActiveWallet">Aktive Wallet</string>
     <string name="WalletConnect_Unnamed">Unbenannt</string>
-    <string name="WalletConnect_Pairings">Währungspaare</string>
-    <string name="WalletConnect_PairedDApps">Paired dApps</string>
+    <string name="WalletConnect_Pairings">Kopplungen</string>
+    <string name="WalletConnect_PairedDApps">Gekoppelte dApps</string>
     <string name="delete_all">Alle löschen</string>
-    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Möchten Sie alle gepaart dApss löschen?</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Möchten Sie alle gekoppelten dApps löschen?</string>
     <string name="WalletConnect_Pairings_Delete">Löschen</string>
-    <string name="WalletConnect_DeleteAllPairs">Alle Paare löschen</string>
+    <string name="WalletConnect_DeleteAllPairs">Alle Kopplungen löschen</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warnung</string>
     <string name="EthereumTransaction_Error_Title">Fehler</string>

@@ -68,10 +68,10 @@ data class NetworkFeeWarningData(
     val feeCoinCode: String,
 )
 
-private val TRX_WARNING_THRESHOLD = BigDecimal("50")
-private val TON_WARNING_THRESHOLD = BigDecimal("0.5")
+internal val TRX_WARNING_THRESHOLD = BigDecimal("50")
+internal val TON_WARNING_THRESHOLD = BigDecimal("0.5")
 
-private fun getWarningThreshold(blockchainType: BlockchainType): BigDecimal? {
+internal fun getWarningThreshold(blockchainType: BlockchainType): BigDecimal? {
     return when (blockchainType) {
         BlockchainType.Tron -> TRX_WARNING_THRESHOLD
         BlockchainType.Ton -> TON_WARNING_THRESHOLD

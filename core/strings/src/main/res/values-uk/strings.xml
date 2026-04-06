@@ -457,6 +457,8 @@
 
     <!--Network Fee Warning-->
     <string name="network_fee_warning_title">Комісія мережі %s</string>
+    <string name="token_balance_need_native_coin_title">Вам потрібен %1$s для використання %2$s</string>
+    <string name="token_balance_need_native_coin_body">%2$s працює на %3$s.\nКомісія мережі сплачується в %1$s.\nВаш баланс %1$s: %4$s</string>
     <string name="network_fee_warning_body_protocol">Протокол мережі %1$s передбачає, що для сплати комісії мережі за цю транзакцію необхідно щонайменше %2$s.</string>
     <string name="network_fee_warning_body_balance">На вашому балансі менше ніж %s.</string>
     <string name="network_fee_warning_body_protocol_bold">щонайменше %s</string>
@@ -490,26 +492,27 @@
     <string name="TonConnect_Unnamed">Без назви</string>
     <string name="TonConnect_Wallet">Гаманець</string>
     <string name="TonConnect_ChooseWallet">Виберіть гаманець</string>
+    <string name="manifest_loading">Завантаження маніфесту…</string>
     <string name="account_not_supported_by">Ваш поточний тип гаманця %1$s не підтримує %2$s</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Статус</string>
-    <string name="WalletConnect_Approve_Hint">Натиснувши на з\'єднання, ви дозволяєте цьому додатку переглядати вашу публічну адресу. Це важливий крок безпеки, щоб захистити ваші дані від потенційних ризиків, пов\'язаних з фішингом.</string>
-    <string name="WalletConnect_Reconnect_Hint">Не вдалося встановити з\'єднання. Спробуйте перепідключитися знову.</string>
+    <string name="WalletConnect_Approve_Hint">Натиснувши Підключити, ви дозволяєте цьому застосунку переглядати вашу публічну адресу. Це важливий крок безпеки, щоб захистити ваші дані від потенційних ризиків фішингу.</string>
+    <string name="WalletConnect_Reconnect_Hint">Не вдалося встановити з\'єднання. Спробуйте підключитися ще раз.</string>
     <string name="WalletConnect_Error_InvalidUrl">Невірна URL-адреса</string>
-    <string name="WalletConnect_Status_Offline">Не доступний</string>
-    <string name="WalletConnect_Status_Online">Доступний</string>
+    <string name="WalletConnect_Status_Offline">Офлайн</string>
+    <string name="WalletConnect_Status_Online">Онлайн</string>
     <string name="WalletConnect_Status_Connecting">Підключення…</string>
-    <string name="WalletConnect_NewConnect">Нове з\'єднання</string>
+    <string name="WalletConnect_NewConnect">Нове підключення</string>
     <string name="WalletConnect_SendTransactionRequest_Title">Надіслати транзакцію</string>
     <string name="WalletConnect_SendTransactionRequest_ButtonSend">Надіслати</string>
     <string name="WalletConnect_SignMessageRequest_Title">Запит на підпис</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Повідомлення для підпису</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Підписати</string>
-    <string name="WalletConnect_Error_NoWallet">Вам потрібно створити або імпортувати гаманець перед використанням WalletConnect</string>
-    <string name="WalletConnect_Error_NeedBackup">Зробіть резервну копію цього гаманця, створивши копію його фрази відновлення. Це буде необхідно для доступу до гаманця, якщо ваш телефон загублений, вкрадений, пошкоджений і т.д.</string>
+    <string name="WalletConnect_Error_NoWallet">Вам потрібно створити або імпортувати гаманець, перш ніж використовувати WalletConnect</string>
+    <string name="WalletConnect_Error_NeedBackup">Створіть резервну копію фрази відновлення та пов\'язаного пароля, щоб ви могли відновити гаманець, якщо ваш телефон буде загублено, вкрадено, пошкоджено тощо.</string>
     <string name="WalletConnect_Error_UnsupportedChainId">Непідтримуваний блокчейн</string>
     <string name="WalletConnect_Error_NoSuitableAccount">Немає відповідного облікового запису</string>
-    <string name="WalletConnect_Error_NoSuitableEvmKit">Немає відповідного evm kit</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">Немає відповідного EVM-кита</string>
     <string name="WalletConnect_Error_UnsupportedChains">Непідтримувані мережі: %s</string>
     <string name="WalletConnect_Error_UnsupportedMethods">Непідтримувані методи: %s</string>
     <string name="WalletConnect_Error_UnsupportedEvents">Непідтримувані події: %s</string>
@@ -518,12 +521,12 @@
     <string name="WalletConnect_PendingRequests">Очікуючі запити</string>
     <string name="WalletConnect_ActiveWallet">Активний гаманець</string>
     <string name="WalletConnect_Unnamed">Без назви</string>
-    <string name="WalletConnect_Pairings">З\'єднання</string>
-    <string name="WalletConnect_PairedDApps">З\'єднані dApp</string>
+    <string name="WalletConnect_Pairings">Підключення</string>
+    <string name="WalletConnect_PairedDApps">Підключені dApps</string>
     <string name="delete_all">Видалити все</string>
-    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Ви хочете видалити всі з\'єднані dApps?</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Ви хочете видалити всі підключені dApps?</string>
     <string name="WalletConnect_Pairings_Delete">Видалити</string>
-    <string name="WalletConnect_DeleteAllPairs">Видалити всі пари</string>
+    <string name="WalletConnect_DeleteAllPairs">Видалити всі підключення</string>
     <!--EthereumTransaction-->
     <string name="save">Зберегти</string>
     <string name="EthereumTransaction_Warning_Title">Увага</string>

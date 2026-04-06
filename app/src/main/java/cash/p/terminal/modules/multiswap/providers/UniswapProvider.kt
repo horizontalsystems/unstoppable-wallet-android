@@ -8,7 +8,6 @@ object UniswapProvider : BaseUniswapProvider() {
     override val id = "uniswap"
     override val title = "Uniswap"
     override val icon = R.drawable.uniswap
-    override val priority = 0
 
     override suspend fun supports(token: Token): Boolean {
         return token.blockchainType == BlockchainType.Ethereum

@@ -40,7 +40,6 @@ object AllBridgeProvider : IMultiSwapProvider {
     override val id = "allbridge"
     override val title = "AllBridge"
     override val icon = R.drawable.allbridge
-    override val priority = 0
     private val feePaymentMethod = FeePaymentMethod.StableCoin
 
     override val mevProtectionAvailable: Boolean = false

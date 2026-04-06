@@ -35,7 +35,6 @@ class StonFiProvider(
     override val id = "stonfi"
     override val title = "STON.fi"
     override val icon = R.drawable.ic_ston_fi
-    override val priority = 0
 
     override val mevProtectionAvailable: Boolean = false
     // TON native token address

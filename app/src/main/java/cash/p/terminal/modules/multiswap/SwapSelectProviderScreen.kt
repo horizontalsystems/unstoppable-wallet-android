@@ -201,7 +201,7 @@ private fun SwapSelectProviderScreenPreview() {
         override val id = "preview"
         override val title = "Uniswap V3"
         override val icon = R.drawable.uniswap_v3
-        override val priority = 0
+
         override val walletUseCase get() = throw NotImplementedError()
         override val mevProtectionAvailable = false
         override suspend fun supports(token: Token) = true

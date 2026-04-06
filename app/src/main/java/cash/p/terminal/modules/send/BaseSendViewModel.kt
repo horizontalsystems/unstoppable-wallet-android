@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import cash.p.terminal.core.INativeBalanceProvider
+import cash.p.terminal.core.getFeeTokenBalance
 import cash.p.terminal.core.isNative
 import cash.p.terminal.entities.CoinValue
 import io.horizontalsystems.core.entities.CurrencyValue
@@ -133,9 +134,7 @@ abstract class BaseSendViewModel<T>(
     }
 
     private fun resolveFeeCoinBalance(ft: Token): BigDecimal? {
-        return _adapterManager.getAdjustedBalanceDataForToken(ft)?.available
-            ?: (_adapterManager.getBalanceAdapterForWallet(wallet) as? INativeBalanceProvider)
-                ?.nativeBalanceData?.total
+        return _adapterManager.getFeeTokenBalance(ft, wallet.token)
     }
 
     fun isInsufficientFeeBalance(fee: BigDecimal?): Boolean {
