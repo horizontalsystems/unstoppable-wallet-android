@@ -352,7 +352,7 @@ class SwapViewModel(
         quoteService.restart()
     }
 
-    fun disableRequoteOnTimeout() {
+    fun onPause() {
         requoteOnTimeout = false
     }
 
