@@ -18,6 +18,8 @@ import kotlinx.coroutines.withTimeout
 import java.math.BigDecimal
 
 class SwapQuoteService {
+    private val tag = "SwapQuoteService"
+
     private val allProviders = MultiSwapProviderRegistry.allProviders
 
     private var amountIn: BigDecimal? = null
@@ -45,6 +47,7 @@ class SwapQuoteService {
 
     private var coroutineScope = CoroutineScope(Dispatchers.Default)
     private var quotingJob: Job? = null
+    private var startProvidersJob: Job? = null
 
     fun start() {
         coroutineScope.launch {
@@ -54,8 +57,11 @@ class SwapQuoteService {
     }
 
     fun restart() {
-        coroutineScope.launch {
+        quotingJob?.cancel()
+        startProvidersJob?.cancel()
+        startProvidersJob = coroutineScope.launch {
             startProviders()
+            runQuotation(silent = true)
         }
     }
 
@@ -65,7 +71,7 @@ class SwapQuoteService {
                 try {
                     provider.start()
                 } catch (e: Throwable) {
-                    Log.d("AAA", "error on starting ${provider.id}, $e", e)
+                    Log.e(tag, "error on starting ${provider.id}", e)
                 }
             }
         }.awaitAll()
@@ -150,7 +156,7 @@ class SwapQuoteService {
                             SwapProviderQuote(provider = provider, swapQuote = quote)
                         }
                     } catch (e: Throwable) {
-                        Log.d("AAA", "fetchQuoteError: ${provider.id}", e)
+                        Log.e(tag, "fetchQuoteError: ${provider.id}", e)
                         null
                     }
                 }
