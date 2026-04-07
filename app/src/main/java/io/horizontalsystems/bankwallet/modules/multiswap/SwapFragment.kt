@@ -267,7 +267,7 @@ fun SwapScreen(
         },
         navController = navController,
         onResume = viewModel::onResume,
-        onPause = viewModel::disableRequoteOnTimeout,
+        onPause = viewModel::onPause,
         bottomPadding = bottomPadding,
     )
 }
