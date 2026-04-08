@@ -26,14 +26,22 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Integration-level tests for TransactionMonitor + NotificationDeduplicator,
@@ -93,7 +101,9 @@ class TransactionMonitorDeduplicationTest {
         every { checkPremiumUseCase.getPremiumType() } returns PremiumType.PIRATE
     }
 
-    private fun createMonitor() = TransactionMonitor(
+    private fun createMonitor(
+        deduplicator: NotificationDeduplicator = this.deduplicator,
+    ) = TransactionMonitor(
         context = context,
         transactionAdapterManager = transactionAdapterManager,
         walletManager = walletManager,
@@ -276,5 +286,66 @@ class TransactionMonitorDeduplicationTest {
             }
 
             monitor.stop()
+        }
+
+    @Test
+    fun start_realtimeConcurrentDuplicateRecord_notifiesOnlyOnce() =
+        runTest(StandardTestDispatcher()) {
+            every { localStorage.pushEnabledBlockchainUids } returns setOf("bitcoin", "ethereum")
+            every { walletManager.activeWallets } returns listOf(
+                mockWallet(BlockchainType.Bitcoin),
+                mockWallet(BlockchainType.Ethereum),
+            )
+
+            val (btcAdapter, btcFlow) = mockAdapter()
+            val (ethAdapter, ethFlow) = mockAdapter()
+            val adaptersFlow = MutableStateFlow(
+                mapOf(
+                    bitcoinSource to btcAdapter,
+                    ethereumSource to ethAdapter,
+                )
+            )
+            every { transactionAdapterManager.adaptersReadyFlow } returns adaptersFlow
+
+            val enteredIsNew = CountDownLatch(2)
+            val marked = AtomicBoolean(false)
+            val racingDeduplicator = mockk<NotificationDeduplicator>()
+            every { racingDeduplicator.updateLastCheckTime(any(), any()) } just Runs
+            every { racingDeduplicator.reset() } just Runs
+            every { racingDeduplicator.markNotified(any()) } answers {
+                marked.set(true)
+            }
+            every { racingDeduplicator.isNew(any(), any(), any()) } answers {
+                enteredIsNew.countDown()
+                enteredIsNew.await(200, TimeUnit.MILLISECONDS)
+                !marked.get()
+            }
+
+            val monitor = createMonitor(racingDeduplicator)
+            val monitorScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+            monitor.start(monitorScope)
+            runCurrent()
+
+            val futureTime = System.currentTimeMillis() / 1000 + 500
+            val duplicateRecord = mockRecord("shared-tx-1", futureTime, bitcoinSource)
+
+            launch(Dispatchers.Default) { btcFlow.emit(listOf(duplicateRecord)) }
+            launch(Dispatchers.Default) { ethFlow.emit(listOf(duplicateRecord)) }
+
+            try {
+                enteredIsNew.await(1, TimeUnit.SECONDS)
+                kotlinx.coroutines.delay(300)
+
+                verify(exactly = 1) {
+                    notificationManager.showTransactionNotification(
+                        recordUid = "shared-tx-1",
+                        title = any(),
+                        text = any(),
+                    )
+                }
+            } finally {
+                monitor.stop()
+                monitorScope.cancel()
+            }
         }
 }

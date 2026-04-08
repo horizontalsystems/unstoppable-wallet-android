@@ -24,6 +24,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 
 
@@ -45,6 +47,7 @@ class TransactionMonitor(
     private var monitoringJob: Job? = null
     private var monitoredTypes: Set<BlockchainType> = emptySet()
     private var activeWallets: List<Wallet> = emptyList()
+    private val recordsProcessingMutex = Mutex()
     var onPremiumExpired: (() -> Unit)? = null
 
     fun start(scope: CoroutineScope) {
@@ -130,7 +133,7 @@ class TransactionMonitor(
         }
     }
 
-    private fun processRecords(records: List<TransactionRecord>) {
+    private suspend fun processRecords(records: List<TransactionRecord>) = recordsProcessingMutex.withLock {
         Timber.tag("TxMonitor").d("processRecords: %d records from %s",
             records.size,
             records.map { it.blockchainType.uid }.distinct().joinToString()
