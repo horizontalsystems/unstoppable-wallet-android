@@ -68,8 +68,7 @@ class TransactionNotificationCoordinator(
         }
 
         Timber.d("Starting transaction notification service")
-        TransactionNotificationService.start(application)
-        serviceRunning = true
+        serviceRunning = TransactionNotificationService.start(application)
     }
 
     private fun stopService() {

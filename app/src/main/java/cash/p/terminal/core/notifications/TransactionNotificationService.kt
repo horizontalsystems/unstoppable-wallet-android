@@ -63,12 +63,14 @@ class TransactionNotificationService : Service() {
         private const val ACTION_STOP = "cash.p.terminal.STOP_MONITORING"
         private const val ACTION_UPDATE = "cash.p.terminal.UPDATE_MONITORING"
 
-        fun start(context: Context) {
+        fun start(context: Context): Boolean {
             try {
                 val intent = Intent(context, TransactionNotificationService::class.java)
                 context.startForegroundService(intent)
+                return true
             } catch (e: Exception) {
                 Timber.e(e, "Failed to start TransactionNotificationService")
+                return false
             }
         }
 

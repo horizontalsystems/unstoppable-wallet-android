@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -211,5 +212,19 @@ class TransactionNotificationCoordinatorTest {
         simulateEnterBackground()
 
         verify { keepAliveManager.setKeepAlive(emptySet()) }
+    }
+
+    @Test
+    fun startService_failedOnEnterBackground_enterForeground_doesNotStopService() {
+        setupAllConditionsMet()
+        every { application.startForegroundService(any()) } throws RuntimeException("start failed")
+
+        createCoordinator()
+        simulateEnterBackground()
+
+        backgroundStateFlow.value = BackgroundManagerState.EnterForeground
+        dispatcher.scheduler.advanceUntilIdle()
+
+        verify(exactly = 0) { application.startService(any()) }
     }
 }
