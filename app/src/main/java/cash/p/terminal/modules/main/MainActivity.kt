@@ -19,6 +19,7 @@ import cash.p.terminal.MainGraphDirections
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseActivity
+import cash.p.terminal.core.notifications.TransactionNotificationManager
 import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.modules.createaccount.CreateAccountFragment
 import cash.p.terminal.modules.intro.IntroActivity
@@ -131,9 +132,13 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        // Handle deeplink on cold start (only on fresh launch, not on recreation)
-        if (savedInstanceState == null && intent.data != null && intent.action == Intent.ACTION_VIEW) {
-            viewModel.setIntent(intent)
+        // Handle deeplink or notification tap on cold start (only on fresh launch, not on recreation)
+        if (savedInstanceState == null) {
+            val isDeepLink = intent.data != null && intent.action == Intent.ACTION_VIEW
+            val isNotificationTap = intent.hasExtra(TransactionNotificationManager.EXTRA_RECORD_UID)
+            if (isDeepLink || isNotificationTap) {
+                viewModel.setIntent(intent)
+            }
         }
 
         pinLockComposeView = findViewById(R.id.pinLockComposeView)

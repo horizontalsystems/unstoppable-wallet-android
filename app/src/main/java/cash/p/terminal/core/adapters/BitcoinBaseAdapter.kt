@@ -5,6 +5,7 @@ import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.UnsupportedFilterException
 import cash.p.terminal.core.hexToByteArray
+import cash.p.terminal.core.managers.BackgroundKeepAliveManager
 import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionDataSortMode
@@ -74,6 +75,9 @@ abstract class BitcoinBaseAdapter(
     protected val decimal: Int = 8,
     protected val feeRateProvider: IFeeRateProvider? = null
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBitcoinAdapter {
+
+    private val backgroundKeepAliveManager: BackgroundKeepAliveManager
+            by inject(BackgroundKeepAliveManager::class.java)
 
     protected val scope = CoroutineScope(Dispatchers.Default)
 
@@ -280,7 +284,9 @@ abstract class BitcoinBaseAdapter(
                     }
 
                     BackgroundManagerState.EnterBackground -> {
-                        kit.onEnterBackground()
+                        if (!backgroundKeepAliveManager.isKeepAlive(wallet.token.blockchainType)) {
+                            kit.onEnterBackground()
+                        }
                     }
 
                     BackgroundManagerState.Unknown,

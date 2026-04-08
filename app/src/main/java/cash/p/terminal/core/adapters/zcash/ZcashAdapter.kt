@@ -8,6 +8,7 @@ import cash.p.terminal.core.ISendZcashAdapter
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.tryOrNull
+import cash.p.terminal.core.managers.BackgroundKeepAliveManager
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.domain.usecase.ClearZCashWalletDataUseCase
@@ -114,6 +115,9 @@ class ZcashAdapter(
     private var transactionsProvider: ZcashTransactionsProvider
     private val clearZCashWalletDataUseCase: ClearZCashWalletDataUseCase by inject(
         ClearZCashWalletDataUseCase::class.java
+    )
+    private val backgroundKeepAliveManager: BackgroundKeepAliveManager by inject(
+        BackgroundKeepAliveManager::class.java
     )
 
     private val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
@@ -274,7 +278,11 @@ class ZcashAdapter(
             backgroundManager.stateFlow.collect { state ->
                 when (state) {
                     BackgroundManagerState.EnterForeground -> start()
-                    BackgroundManagerState.EnterBackground -> pauseSynchronizer()
+                    BackgroundManagerState.EnterBackground -> {
+                        if (!backgroundKeepAliveManager.isKeepAlive(BlockchainType.Zcash)) {
+                            pauseSynchronizer()
+                        }
+                    }
                     BackgroundManagerState.Unknown,
                     BackgroundManagerState.AllActivitiesDestroyed -> {}
                 }

@@ -493,7 +493,7 @@
     <string name="account_not_supported_by">Je huidige wallettype %1$s ondersteunt %2$s niet</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Status</string>
-    <string name="WalletConnect_Approve_Hint">Door op verbinden te tikken, geeft u deze app toestemming om uw openbare adres te bekijken. Dit is een belangrijke beveiligingsstap om uw gegevens te beschermen tegen mogelijke phishingrisico\'s.</string>
+    <string name="WalletConnect_Approve_Hint">Door op verbinden te tikken, geeft u deze app toestemming om uw openbare adres te bekijken. Dit is een belangrijke beveiligingsstap om uw gegevens te beschermen tegen mogelijke phishingrisico\’s.</string>
     <string name="WalletConnect_Reconnect_Hint">Er kon geen verbinding worden gemaakt. Probeer opnieuw te verbinden.</string>
     <string name="WalletConnect_Error_InvalidUrl">Ongeldig URL-adres</string>
     <string name="WalletConnect_Status_Offline">Offline</string>
@@ -1533,6 +1533,32 @@ De app stelt u in staat een back-up te maken met een eenvoudig wachtwoord voor u
     <string name="login_logging_delete_data_confirmation">Weet u zeker dat u alle logboeken wilt verwijderen?</string>
     <string name="login_logging_delete_record_confirmation">Weet u zeker dat u dit record wilt verwijderen?</string>
     <string name="login_logging_info_description">Als loggen is ingeschakeld, kunt u de inloggeschiedenis bekijken in Geavanceerde Beveiliging.</string>
+    <!-- Push Notifications -->
+    <string name="push_notification">Pushmeldingen</string>
+    <string name="premium_push_notifications_show">Meldingen tonen</string>
+    <string name="premium_push_notifications_warning">Om transactiemeldingen te ontvangen, kan de app voor geselecteerde blockchains actief blijven op de achtergrond. Dit kan het batterijverbruik verhogen, ook wanneer u de app niet gebruikt.</string>
+    <string name="push_notification_polling_interval">Controle-interval</string>
+    <string name="push_notification_interval_realtime">Realtime</string>
+    <string name="push_notification_interval_5min">Elke 5 minuten</string>
+    <string name="push_notification_interval_10min">Elke 10 minuten</string>
+    <string name="push_notification_interval_15min">Elke 15 minuten</string>
+    <string name="push_notification_content">Inhoud melding</string>
+    <string name="push_notification_show_blockchain">Blockchain-naam</string>
+    <string name="push_notification_show_coin_amount">Coin-bedrag</string>
+    <string name="push_notification_show_fiat_amount">Fiat-bedrag</string>
+    <string name="push_notification_channel_transactions">Transactiemeldingen</string>
+    <string name="push_notification_channel_transactions_desc">Meldingen over nieuwe transacties</string>
+    <string name="push_notification_channel_service">Transactiebewaking</string>
+    <string name="push_notification_channel_service_desc">Achtergrondcontrole op nieuwe transacties</string>
+    <string name="push_notification_service_title">Transacties bewaken</string>
+    <string name="push_notification_service_text">Op de achtergrond zoeken naar nieuwe transacties</string>
+    <string name="push_notification_new_transaction">Nieuwe transactie</string>
+    <string name="notification_permission_rationale_title">Meldingstoestemming</string>
+    <string name="notification_permission_rationale_message">Toestemming is vereist om transactiemeldingen te tonen. Sta het toe om meldingen over nieuwe transacties te ontvangen.</string>
+    <string name="notification_permission_denied_title">Toestemming vereist</string>
+    <string name="notification_permission_denied_message">Meldingstoestemming is permanent geweigerd. Schakel deze in via de app-instellingen.</string>
+    <string name="notification_permission_revoked_title">Meldingen niet beschikbaar</string>
+    <string name="notification_permission_revoked_message">Meldingstoestemming is niet verleend. Tik om instellingen te openen.</string>
 
     <string name="Nfts_PriceType_Days_7">7D avg.</string>
     <string name="Nfts_PriceType_Days_30">30D avg.</string>

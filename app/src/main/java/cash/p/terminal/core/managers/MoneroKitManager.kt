@@ -60,7 +60,8 @@ import java.math.BigDecimal
 class MoneroKitManager(
     private val moneroWalletService: MoneroWalletService,
     private val backgroundManager: BackgroundManager,
-    private val restoreSettingsManager: RestoreSettingsManager
+    private val restoreSettingsManager: RestoreSettingsManager,
+    private val backgroundKeepAliveManager: BackgroundKeepAliveManager
 ) {
     private val connectivityManager = App.connectivityManager
     private val coroutineScope =
@@ -152,7 +153,9 @@ class MoneroKitManager(
                 if (state == BackgroundManagerState.EnterForeground) {
                     resumeOrStartKit()
                 } else if (state == BackgroundManagerState.EnterBackground) {
-                    pauseKit()
+                    if (!backgroundKeepAliveManager.isKeepAlive(BlockchainType.Monero)) {
+                        pauseKit()
+                    }
                 }
             }
         }

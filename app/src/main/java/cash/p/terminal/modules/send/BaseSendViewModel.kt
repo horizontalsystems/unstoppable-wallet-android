@@ -76,12 +76,12 @@ abstract class BaseSendViewModel<T>(
     }
 
     protected fun isAddressSuspicious(address: String?): Boolean {
-        return poisonAddressManager.isAddressSuspicious(address, wallet.token.blockchainType)
+        return poisonAddressManager.isAddressSuspicious(address, wallet.token.blockchainType, wallet.account.id)
     }
 
     protected fun onSendSuccess(address: String?) {
         address?.let {
-            poisonAddressManager.saveKnownAddress(it, wallet.token.blockchainType)
+            poisonAddressManager.saveKnownAddress(it, wallet.token.blockchainType, wallet.account.id)
         }
     }
 

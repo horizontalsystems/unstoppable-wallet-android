@@ -15,6 +15,7 @@ class EvmBlockchainManager(
     private val syncSourceManager: EvmSyncSourceManager,
     private val marketKit: MarketKitWrapper,
     private val accountManagerFactory: EvmAccountManagerFactory,
+    private val backgroundKeepAliveManager: BackgroundKeepAliveManager,
 ) {
     private val evmKitManagersMap = mutableMapOf<BlockchainType, Pair<EvmKitManager, EvmAccountManager>>()
 
@@ -31,7 +32,7 @@ class EvmBlockchainManager(
             return it
         }
 
-        val evmKitManager = EvmKitManager(getChain(blockchainType), backgroundManager, syncSourceManager)
+        val evmKitManager = EvmKitManager(getChain(blockchainType), backgroundManager, syncSourceManager, backgroundKeepAliveManager)
         val evmAccountManager = accountManagerFactory.evmAccountManager(blockchainType, evmKitManager)
 
         val pair = Pair(evmKitManager, evmAccountManager)

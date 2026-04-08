@@ -45,7 +45,8 @@ import org.ton.kotlin.crypto.PublicKeyEd25519
 
 class TonKitManager(
     private val backgroundManager: BackgroundManager,
-    private val hardwarePublicKeyStorage: HardwarePublicKeyStorage
+    private val hardwarePublicKeyStorage: HardwarePublicKeyStorage,
+    private val backgroundKeepAliveManager: BackgroundKeepAliveManager
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
@@ -157,8 +158,10 @@ class TonKitManager(
                         kit.refresh()
                     }
                 } else if (state == BackgroundManagerState.EnterBackground) {
-                    Log.d("TonKitManager", "EnterBackground")
-                    tonKitWrapper?.tonKit?.stop()
+                    if (!backgroundKeepAliveManager.isKeepAlive(BlockchainType.Ton)) {
+                        Log.d("TonKitManager", "EnterBackground")
+                        tonKitWrapper?.tonKit?.stop()
+                    }
                 }
             }
         }

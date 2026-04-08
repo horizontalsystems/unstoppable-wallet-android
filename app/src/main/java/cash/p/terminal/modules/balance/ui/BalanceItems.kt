@@ -165,7 +165,7 @@ fun Note(
                     onClick = onClose
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_close),
+                        painter = painterResource(id = R.drawable.ic_close_24),
                         tint = iconColor,
                         contentDescription = null,
                     )

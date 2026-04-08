@@ -1518,6 +1518,32 @@ Die App ermöglicht es Ihnen, aus Bequemlichkeit ein Backup mit einem einfachen 
     <string name="login_logging_delete_data_confirmation">Sind Sie sicher, dass Sie alle Protokolle löschen möchten?</string>
     <string name="login_logging_delete_record_confirmation">Sind Sie sicher, dass Sie diesen Eintrag löschen möchten?</string>
     <string name="login_logging_info_description">Wenn die Protokollierung aktiviert ist, können Sie den Anmeldeverlauf in der Erweiterten Sicherheit anzeigen.</string>
+    <!-- Push Notifications -->
+    <string name="push_notification">Push-Benachrichtigungen</string>
+    <string name="premium_push_notifications_show">Benachrichtigungen anzeigen</string>
+    <string name="premium_push_notifications_warning">Um Transaktionsbenachrichtigungen zu erhalten, kann die App für ausgewählte Blockchains im Hintergrund aktiv bleiben. Dadurch kann sich der Akkuverbrauch erhöhen, auch wenn Sie die App nicht verwenden.</string>
+    <string name="push_notification_polling_interval">Prüfintervall</string>
+    <string name="push_notification_interval_realtime">Echtzeit</string>
+    <string name="push_notification_interval_5min">Alle 5 Minuten</string>
+    <string name="push_notification_interval_10min">Alle 10 Minuten</string>
+    <string name="push_notification_interval_15min">Alle 15 Minuten</string>
+    <string name="push_notification_content">Benachrichtigungsinhalt</string>
+    <string name="push_notification_show_blockchain">Blockchain-Name</string>
+    <string name="push_notification_show_coin_amount">Coin-Betrag</string>
+    <string name="push_notification_show_fiat_amount">Fiat-Betrag</string>
+    <string name="push_notification_channel_transactions">Transaktionsbenachrichtigungen</string>
+    <string name="push_notification_channel_transactions_desc">Benachrichtigungen über neue Transaktionen</string>
+    <string name="push_notification_channel_service">Transaktionsüberwachung</string>
+    <string name="push_notification_channel_service_desc">Hintergrundüberwachung neuer Transaktionen</string>
+    <string name="push_notification_service_title">Transaktionen überwachen</string>
+    <string name="push_notification_service_text">Neue Transaktionen im Hintergrund überwachen</string>
+    <string name="push_notification_new_transaction">Neue Transaktion</string>
+    <string name="notification_permission_rationale_title">Benachrichtigungsberechtigung</string>
+    <string name="notification_permission_rationale_message">Berechtigung ist erforderlich, um Transaktionsbenachrichtigungen anzuzeigen. Erlauben Sie es, um Benachrichtigungen über neue Transaktionen zu erhalten.</string>
+    <string name="notification_permission_denied_title">Berechtigung erforderlich</string>
+    <string name="notification_permission_denied_message">Benachrichtigungsberechtigung wurde dauerhaft verweigert. Bitte aktivieren Sie sie in den App-Einstellungen.</string>
+    <string name="notification_permission_revoked_title">Benachrichtigungen nicht verfügbar</string>
+    <string name="notification_permission_revoked_message">Benachrichtigungsberechtigung nicht erteilt. Tippen, um Einstellungen zu öffnen.</string>
 
     <string name="Nfts_PriceType_Days_7">Durchschnitt 7D</string>
     <string name="Nfts_PriceType_Days_30">Durchschnitt 30D</string>

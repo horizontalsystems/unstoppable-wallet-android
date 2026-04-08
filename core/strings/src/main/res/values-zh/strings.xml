@@ -1518,6 +1518,32 @@
     <string name="login_logging_delete_data_confirmation">您确定要删除所有日志吗？</string>
     <string name="login_logging_delete_record_confirmation">您确定要删除此记录吗？</string>
     <string name="login_logging_info_description">如果启用了日志记录，您可以在高级安全中查看登录历史记录。</string>
+    <!-- Push Notifications -->
+    <string name="push_notification">推送通知</string>
+    <string name="premium_push_notifications_show">显示通知</string>
+    <string name="premium_push_notifications_warning">为了接收交易通知，应用可能会针对所选区块链在后台保持活跃。即使您不使用应用，这也可能增加电池消耗。</string>
+    <string name="push_notification_polling_interval">检查间隔</string>
+    <string name="push_notification_interval_realtime">实时</string>
+    <string name="push_notification_interval_5min">每5分钟</string>
+    <string name="push_notification_interval_10min">每10分钟</string>
+    <string name="push_notification_interval_15min">每15分钟</string>
+    <string name="push_notification_content">通知内容</string>
+    <string name="push_notification_show_blockchain">区块链名称</string>
+    <string name="push_notification_show_coin_amount">币种金额</string>
+    <string name="push_notification_show_fiat_amount">法币金额</string>
+    <string name="push_notification_channel_transactions">交易通知</string>
+    <string name="push_notification_channel_transactions_desc">关于新交易的通知</string>
+    <string name="push_notification_channel_service">交易监控</string>
+    <string name="push_notification_channel_service_desc">后台监控新交易</string>
+    <string name="push_notification_service_title">正在监控交易</string>
+    <string name="push_notification_service_text">正在后台监控新交易</string>
+    <string name="push_notification_new_transaction">新交易</string>
+    <string name="notification_permission_rationale_title">通知权限</string>
+    <string name="notification_permission_rationale_message">显示交易通知需要权限。请允许以接收新交易提醒。</string>
+    <string name="notification_permission_denied_title">需要权限</string>
+    <string name="notification_permission_denied_message">通知权限已被永久拒绝。请在应用设置中启用。</string>
+    <string name="notification_permission_revoked_title">通知不可用</string>
+    <string name="notification_permission_revoked_message">未授予通知权限。点击打开设置。</string>
 
     <string name="Nfts_PriceType_Days_7">平均7天</string>
     <string name="Nfts_PriceType_Days_30">平均30天</string>

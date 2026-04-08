@@ -1910,6 +1910,32 @@
     <string name="login_logging_delete_data_confirmation">Вы уверены, что хотите удалить все логи?</string>
     <string name="login_logging_delete_record_confirmation">Вы уверены, что хотите удалить эту запись?</string>
     <string name="login_logging_info_description">Если журналирование включено, вы можете просмотреть историю входов в Расширенной безопасности.</string>
+    <!-- Push Notifications -->
+    <string name="push_notification">Push-уведомления</string>
+    <string name="premium_push_notifications_show">Показывать уведомления</string>
+    <string name="premium_push_notifications_warning">Чтобы получать уведомления о транзакциях, приложение может оставаться активным в фоне для выбранных блокчейнов. Это может увеличить расход батареи, даже когда вы не пользуетесь приложением.</string>
+    <string name="push_notification_polling_interval">Интервал проверки</string>
+    <string name="push_notification_interval_realtime">В реальном времени</string>
+    <string name="push_notification_interval_5min">Каждые 5 минут</string>
+    <string name="push_notification_interval_10min">Каждые 10 минут</string>
+    <string name="push_notification_interval_15min">Каждые 15 минут</string>
+    <string name="push_notification_content">Содержимое уведомления</string>
+    <string name="push_notification_show_blockchain">Название блокчейна</string>
+    <string name="push_notification_show_coin_amount">Сумма в монетах</string>
+    <string name="push_notification_show_fiat_amount">Сумма в фиате</string>
+    <string name="push_notification_channel_transactions">Уведомления о транзакциях</string>
+    <string name="push_notification_channel_transactions_desc">Уведомления о новых транзакциях</string>
+    <string name="push_notification_channel_service">Мониторинг транзакций</string>
+    <string name="push_notification_channel_service_desc">Фоновый мониторинг новых транзакций</string>
+    <string name="push_notification_service_title">Мониторинг транзакций</string>
+    <string name="push_notification_service_text">Отслеживание новых транзакций в фоновом режиме</string>
+    <string name="push_notification_new_transaction">Новая транзакция</string>
+    <string name="notification_permission_rationale_title">Разрешение на уведомления</string>
+    <string name="notification_permission_rationale_message">Для показа уведомлений о транзакциях необходимо разрешение. Разрешите его, чтобы получать оповещения о новых транзакциях.</string>
+    <string name="notification_permission_denied_title">Требуется разрешение</string>
+    <string name="notification_permission_denied_message">Разрешение на уведомления было отклонено. Включите его в настройках приложения для получения уведомлений о транзакциях.</string>
+    <string name="notification_permission_revoked_title">Уведомления недоступны</string>
+    <string name="notification_permission_revoked_message">Разрешение на уведомления не предоставлено. Нажмите, чтобы открыть настройки.</string>
 
     <!-- SMS Notification via ZEC -->
     <string name="send_sms_via_zec_title">Отправить SMS через ZEC</string>

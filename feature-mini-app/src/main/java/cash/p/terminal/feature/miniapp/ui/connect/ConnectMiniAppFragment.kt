@@ -90,7 +90,7 @@ private fun ConnectMiniAppNavHost(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.PlainString(""),
-                        icon = R.drawable.ic_close,
+                        icon = R.drawable.ic_close_24,
                         onClick = { fragmentNavController.popBackStack() }
                     )
                 )

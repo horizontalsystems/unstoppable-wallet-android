@@ -280,6 +280,7 @@ kotlin {
 
 
 dependencies {
+    lintChecks project(':config:lint:checks')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':core:ui-compose')
     implementation libs.appcompat

@@ -47,7 +47,8 @@ import java.net.URI
 class EvmKitManager(
     val chain: Chain,
     private val backgroundManager: BackgroundManager,
-    private val syncSourceManager: EvmSyncSourceManager
+    private val syncSourceManager: EvmSyncSourceManager,
+    private val backgroundKeepAliveManager: BackgroundKeepAliveManager
 ) {
     private val hardwarePublicKeyStorage: IHardwarePublicKeyStorage
             by inject(IHardwarePublicKeyStorage::class.java)
@@ -252,7 +253,10 @@ class EvmKitManager(
                         }, 1000)
                     }
                 } else if (state == BackgroundManagerState.EnterBackground) {
-                    evmKitWrapper?.evmKit?.stop()
+                    val wrapper = evmKitWrapper ?: return@collect
+                    if (!backgroundKeepAliveManager.isKeepAlive(wrapper.blockchainType)) {
+                        wrapper.evmKit.stop()
+                    }
                 }
             }
         }

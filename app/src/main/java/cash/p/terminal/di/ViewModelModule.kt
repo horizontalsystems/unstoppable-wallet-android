@@ -21,6 +21,7 @@ import cash.p.terminal.modules.main.MainViewModel
 import cash.p.terminal.modules.pin.unlock.PinUnlockViewModel
 import cash.p.terminal.modules.moneroconfigure.MoneroConfigureViewModel
 import cash.p.terminal.modules.premium.about.AboutPremiumViewModel
+import cash.p.terminal.modules.premium.settings.PushNotificationsViewModel
 import cash.p.terminal.modules.premium.settings.PremiumSettingsViewModel
 import cash.p.terminal.modules.premium.smsnotification.SendSmsNotificationViewModel
 import cash.p.terminal.modules.receive.viewmodels.ReceiveMoneroViewModel
@@ -81,6 +82,7 @@ val viewModelModule = module {
     viewModelOf(::MoneroConfigureViewModel)
     viewModelOf(::AboutPremiumViewModel)
     viewModelOf(::PremiumSettingsViewModel)
+    viewModelOf(::PushNotificationsViewModel)
     viewModelOf(::SendSmsNotificationViewModel)
     viewModelOf(::DisplayOptionsViewModel)
     viewModelOf(::TonConnectListViewModel)

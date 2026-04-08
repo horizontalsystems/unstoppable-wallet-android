@@ -2208,6 +2208,34 @@ Proceed only if you\'re sure.</string>
     <string name="login_logging_delete_record_confirmation">Are you sure you want to delete this record?</string>
     <string name="login_logging_info_description">If logging is enabled, you can view the login history in Advanced Security.</string>
 
+
+    <!-- Push Notifications -->
+    <string name="push_notification">Push Notifications</string>
+    <string name="premium_push_notifications_show">Show Notifications</string>
+    <string name="premium_push_notifications_warning">To receive transaction notifications, the app may stay active in the background for selected blockchains. This can increase battery usage even when you\'re not using the app.</string>
+    <string name="push_notification_polling_interval">Check Interval</string>
+    <string name="push_notification_interval_realtime">Real-time</string>
+    <string name="push_notification_interval_5min">Every 5 minutes</string>
+    <string name="push_notification_interval_10min">Every 10 minutes</string>
+    <string name="push_notification_interval_15min">Every 15 minutes</string>
+    <string name="push_notification_content">Notification Content</string>
+    <string name="push_notification_show_blockchain">Blockchain Name</string>
+    <string name="push_notification_show_coin_amount">Coin Amount</string>
+    <string name="push_notification_show_fiat_amount">Fiat Amount</string>
+    <string name="push_notification_channel_transactions">Transaction Notifications</string>
+    <string name="push_notification_channel_transactions_desc">Notifications about new transactions</string>
+    <string name="push_notification_channel_service">Transaction Monitoring</string>
+    <string name="push_notification_channel_service_desc">Background monitoring for new transactions</string>
+    <string name="push_notification_service_title">Monitoring Transactions</string>
+    <string name="push_notification_service_text">Watching for new transactions in the background</string>
+    <string name="push_notification_new_transaction">New transaction</string>
+    <string name="notification_permission_rationale_title">Notification Permission</string>
+    <string name="notification_permission_rationale_message">Permission is required to show transaction notifications. Allow it to receive alerts about new transactions.</string>
+    <string name="notification_permission_denied_title">Permission Required</string>
+    <string name="notification_permission_denied_message">Notification permission was permanently denied. Please enable it in app settings to receive transaction notifications.</string>
+    <string name="notification_permission_revoked_title">Notifications Unavailable</string>
+    <string name="notification_permission_revoked_message">Notification permission is not granted. Tap to open settings.</string>
+
     <!-- SMS Notification via ZEC -->
     <string name="send_sms_via_zec_title">Send SMS via ZEC</string>
     <string name="send_sms_via_zec_info">This mode allows you to notify your close friends or lawyer that you have been forced to open the app. This mode works if you have ZEC in your wallet. If you don\'t, the app will add it.</string>

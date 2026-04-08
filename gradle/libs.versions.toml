@@ -96,6 +96,7 @@ camerax = "1.6.0"
 zxing = "3.5.4"
 accompanist = "0.36.0"
 accompanist-permissions = "0.37.3"
+lint = "32.1.0"
 
 tor-android = "0.4.9.5.1"
 
@@ -252,6 +253,12 @@ zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" 
 # Accompanist
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist-permissions" }
 accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist" }
+
+# Lint
+lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = "lint" }
+lint-checks = { group = "com.android.tools.lint", name = "lint-checks", version.ref = "lint" }
+lint-lint = { group = "com.android.tools.lint", name = "lint", version.ref = "lint" }
+lint-tests = { group = "com.android.tools.lint", name = "lint-tests", version.ref = "lint" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }

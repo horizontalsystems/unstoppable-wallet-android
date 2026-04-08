@@ -1527,6 +1527,32 @@
     <string name="login_logging_delete_data_confirmation">Tem a certeza que pretende eliminar todos os registos?</string>
     <string name="login_logging_delete_record_confirmation">Tem a certeza que pretende eliminar este registo?</string>
     <string name="login_logging_info_description">Se o registo estiver ativado, pode ver o histórico de início de sessão em Segurança Avançada.</string>
+    <!-- Push Notifications -->
+    <string name="push_notification">Notificações push</string>
+    <string name="premium_push_notifications_show">Mostrar notificações</string>
+    <string name="premium_push_notifications_warning">Para receber notificações de transações, a app pode permanecer ativa em segundo plano para as blockchains selecionadas. Isso pode aumentar o consumo de bateria, mesmo quando não estiver a usar a app.</string>
+    <string name="push_notification_polling_interval">Intervalo de verificação</string>
+    <string name="push_notification_interval_realtime">Tempo real</string>
+    <string name="push_notification_interval_5min">A cada 5 minutos</string>
+    <string name="push_notification_interval_10min">A cada 10 minutos</string>
+    <string name="push_notification_interval_15min">A cada 15 minutos</string>
+    <string name="push_notification_content">Conteúdo da notificação</string>
+    <string name="push_notification_show_blockchain">Nome da blockchain</string>
+    <string name="push_notification_show_coin_amount">Quantia em moedas</string>
+    <string name="push_notification_show_fiat_amount">Quantia em fiat</string>
+    <string name="push_notification_channel_transactions">Notificações de transações</string>
+    <string name="push_notification_channel_transactions_desc">Notificações sobre novas transações</string>
+    <string name="push_notification_channel_service">Monitorização de transações</string>
+    <string name="push_notification_channel_service_desc">Monitorização em segundo plano de novas transações</string>
+    <string name="push_notification_service_title">A monitorizar transações</string>
+    <string name="push_notification_service_text">A procurar novas transações em segundo plano</string>
+    <string name="push_notification_new_transaction">Nova transação</string>
+    <string name="notification_permission_rationale_title">Permissão de notificações</string>
+    <string name="notification_permission_rationale_message">A permissão é necessária para mostrar notificações de transações. Permita-a para receber alertas sobre novas transações.</string>
+    <string name="notification_permission_denied_title">Permissão necessária</string>
+    <string name="notification_permission_denied_message">A permissão de notificações foi negada permanentemente. Ative-a nas definições da aplicação.</string>
+    <string name="notification_permission_revoked_title">Notificações indisponíveis</string>
+    <string name="notification_permission_revoked_message">Permissão de notificações não concedida. Toque para abrir as definições.</string>
 
     <string name="Nfts_PriceType_Days_7">média de 7D.</string>
     <string name="Nfts_PriceType_Days_30">média de 30.</string>

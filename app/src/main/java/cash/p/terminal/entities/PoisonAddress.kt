@@ -7,9 +7,10 @@ enum class PoisonAddressType {
     SCAM,
 }
 
-@Entity(primaryKeys = ["address", "blockchainTypeUid"])
+@Entity(primaryKeys = ["address", "blockchainTypeUid", "accountId"])
 data class PoisonAddress(
     val address: String,
     val blockchainTypeUid: String,
+    val accountId: String,
     val type: PoisonAddressType,
 )

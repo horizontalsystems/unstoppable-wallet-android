@@ -1531,6 +1531,32 @@
     <string name="login_logging_delete_data_confirmation">آیا مطمئن هستید که می‌خواهید همه گزارش‌ها را حذف کنید؟</string>
     <string name="login_logging_delete_record_confirmation">آیا مطمئن هستید که می‌خواهید این رکورد را حذف کنید؟</string>
     <string name="login_logging_info_description">اگر گزارش‌گیری فعال باشد، می‌توانید تاریخچه ورود را در امنیت پیشرفته مشاهده کنید.</string>
+    <!-- Push Notifications -->
+    <string name="push_notification">اعلان‌های پوش</string>
+    <string name="premium_push_notifications_show">نمایش اعلان‌ها</string>
+    <string name="premium_push_notifications_warning">برای دریافت اعلان‌های تراکنش، برنامه ممکن است برای بلاک‌چین‌های انتخاب‌شده در پس‌زمینه فعال بماند. این کار می‌تواند مصرف باتری را افزایش دهد، حتی وقتی از برنامه استفاده نمی‌کنید.</string>
+    <string name="push_notification_polling_interval">فاصله بررسی</string>
+    <string name="push_notification_interval_realtime">بلادرنگ</string>
+    <string name="push_notification_interval_5min">هر ۵ دقیقه</string>
+    <string name="push_notification_interval_10min">هر ۱۰ دقیقه</string>
+    <string name="push_notification_interval_15min">هر ۱۵ دقیقه</string>
+    <string name="push_notification_content">محتوای اعلان</string>
+    <string name="push_notification_show_blockchain">نام بلاک‌چین</string>
+    <string name="push_notification_show_coin_amount">مقدار سکه</string>
+    <string name="push_notification_show_fiat_amount">مقدار فیات</string>
+    <string name="push_notification_channel_transactions">اعلان‌های تراکنش</string>
+    <string name="push_notification_channel_transactions_desc">اعلان‌ها درباره تراکنش‌های جدید</string>
+    <string name="push_notification_channel_service">نظارت بر تراکنش‌ها</string>
+    <string name="push_notification_channel_service_desc">نظارت پس‌زمینه بر تراکنش‌های جدید</string>
+    <string name="push_notification_service_title">نظارت بر تراکنش‌ها</string>
+    <string name="push_notification_service_text">جستجوی تراکنش‌های جدید در پس‌زمینه</string>
+    <string name="push_notification_new_transaction">تراکنش جدید</string>
+    <string name="notification_permission_rationale_title">مجوز اعلان</string>
+    <string name="notification_permission_rationale_message">برای نمایش اعلان‌های تراکنش به مجوز نیاز است. آن را اجازه دهید تا هشدارهای مربوط به تراکنش‌های جدید را دریافت کنید.</string>
+    <string name="notification_permission_denied_title">مجوز لازم است</string>
+    <string name="notification_permission_denied_message">مجوز اعلان به طور دائم رد شده است. لطفاً آن را در تنظیمات برنامه فعال کنید.</string>
+    <string name="notification_permission_revoked_title">اعلان‌ها در دسترس نیست</string>
+    <string name="notification_permission_revoked_message">مجوز اعلان داده نشده است. برای باز کردن تنظیمات ضربه بزنید.</string>
 
     <string name="Nfts_PriceType_Days_7">7 دی اوت</string>
     <string name="Nfts_PriceType_Days_30">30 دی اوت</string>

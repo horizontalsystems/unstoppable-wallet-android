@@ -1532,6 +1532,32 @@
     <string name="login_logging_delete_data_confirmation">هل أنت متأكد أنك تريد حذف جميع السجلات؟</string>
     <string name="login_logging_delete_record_confirmation">هل أنت متأكد أنك تريد حذف هذا السجل؟</string>
     <string name="login_logging_info_description">إذا تم تمكين التسجيل، يمكنك عرض سجل تسجيل الدخول في الأمان المتقدم.</string>
+    <!-- Push Notifications -->
+    <string name="push_notification">إشعارات الدفع</string>
+    <string name="premium_push_notifications_show">إظهار الإشعارات</string>
+    <string name="premium_push_notifications_warning">لتلقي إشعارات المعاملات، قد يظل التطبيق نشطًا في الخلفية لسلاسل الكتل المحددة. قد يؤدي ذلك إلى زيادة استهلاك البطارية حتى عندما لا تستخدم التطبيق.</string>
+    <string name="push_notification_polling_interval">فاصل الفحص</string>
+    <string name="push_notification_interval_realtime">فوري</string>
+    <string name="push_notification_interval_5min">كل 5 دقائق</string>
+    <string name="push_notification_interval_10min">كل 10 دقائق</string>
+    <string name="push_notification_interval_15min">كل 15 دقيقة</string>
+    <string name="push_notification_content">محتوى الإشعار</string>
+    <string name="push_notification_show_blockchain">اسم البلوكتشين</string>
+    <string name="push_notification_show_coin_amount">مبلغ العملة</string>
+    <string name="push_notification_show_fiat_amount">المبلغ بالعملة النقدية</string>
+    <string name="push_notification_channel_transactions">إشعارات المعاملات</string>
+    <string name="push_notification_channel_transactions_desc">إشعارات حول المعاملات الجديدة</string>
+    <string name="push_notification_channel_service">مراقبة المعاملات</string>
+    <string name="push_notification_channel_service_desc">مراقبة المعاملات الجديدة في الخلفية</string>
+    <string name="push_notification_service_title">مراقبة المعاملات</string>
+    <string name="push_notification_service_text">البحث عن معاملات جديدة في الخلفية</string>
+    <string name="push_notification_new_transaction">معاملة جديدة</string>
+    <string name="notification_permission_rationale_title">إذن الإشعارات</string>
+    <string name="notification_permission_rationale_message">الإذن مطلوب لعرض إشعارات المعاملات. اسمح به لتلقي تنبيهات حول المعاملات الجديدة.</string>
+    <string name="notification_permission_denied_title">الإذن مطلوب</string>
+    <string name="notification_permission_denied_message">تم رفض إذن الإشعارات بشكل دائم. يرجى تفعيله من إعدادات التطبيق.</string>
+    <string name="notification_permission_revoked_title">الإشعارات غير متاحة</string>
+    <string name="notification_permission_revoked_message">لم يتم منح إذن الإشعارات. اضغط لفتح الإعدادات.</string>
 
     <string name="Nfts_PriceType_Days_7">7D avg.</string>
     <string name="Nfts_PriceType_Days_30">30D avg.</string>

@@ -31,14 +31,13 @@ class PoisonAddressManager(
 
     companion object {
         private const val SIMILARITY_CHARS = 3
-        // False positives are currently worse than losing this signal entirely.
-        private const val SUSPICIOUS_DETECTION_ENABLED = false
     }
 
     @Suppress("ReturnCount", "CyclomaticComplexMethod")
     fun determinePoisonStatus(
         relevantAddress: String?,
         blockchainType: BlockchainType,
+        accountId: String,
         isOutgoing: Boolean,
         isCreatedByWallet: Boolean,
         amount: BigDecimal? = null,
@@ -52,13 +51,12 @@ class PoisonAddressManager(
         if (isInAddressBook(normalized, blockchainType)) return PoisonStatus.ADDRESS_BOOK
         if (isOutgoing && isCreatedByWallet) return PoisonStatus.CREATED
 
-        val existing = poisonAddressDao.get(normalized, blockchainUid)
+        val existing = poisonAddressDao.get(normalized, blockchainUid, accountId)
         if (existing?.type == PoisonAddressType.KNOWN) return PoisonStatus.BLOCKCHAIN
-        if (existing?.type == PoisonAddressType.SCAM && SUSPICIOUS_DETECTION_ENABLED) return PoisonStatus.SUSPICIOUS
+        if (existing?.type == PoisonAddressType.SCAM) return PoisonStatus.SUSPICIOUS
 
-        if (isOutgoing && amount != null && amount.compareTo(BigDecimal.ZERO) == 0
-            && SUSPICIOUS_DETECTION_ENABLED) {
-            saveScamAddress(normalized, blockchainType)
+        if (isOutgoing && amount != null && amount.compareTo(BigDecimal.ZERO) == 0) {
+            saveScamAddress(normalized, blockchainType, accountId)
             return PoisonStatus.SUSPICIOUS
         }
 
@@ -66,27 +64,24 @@ class PoisonAddressManager(
             val upperCode = coinCode.uppercase()
             if (upperCode == "USDT" || upperCode == "USDC") {
                 val isEvmCompatible = blockchainType.isEvm || blockchainType == BlockchainType.Tron
-                if (contractAddress != null && !isKnownStablecoinContract(contractAddress, blockchainType)
-                    && SUSPICIOUS_DETECTION_ENABLED) {
+                if (contractAddress != null && !isKnownStablecoinContract(contractAddress, blockchainType)) {
                     // Known contract that's not in our DB — fake
-                    saveScamAddress(normalized, blockchainType)
+                    saveScamAddress(normalized, blockchainType, accountId)
                     return PoisonStatus.SUSPICIOUS
                 }
-                if (contractAddress == null && isEvmCompatible
-                    && SUSPICIOUS_DETECTION_ENABLED) {
+                if (contractAddress == null && isEvmCompatible) {
                     // On EVM chains, a legitimate stablecoin always has a known contract.
                     // Null contract means unknown token (TokenValue/RawValue) — likely fake.
                     // On non-EVM chains (TON jettons, Stellar assets), null contract is normal.
-                    saveScamAddress(normalized, blockchainType)
+                    saveScamAddress(normalized, blockchainType, accountId)
                     return PoisonStatus.SUSPICIOUS
                 }
             }
         }
 
-        val knownAddresses = poisonAddressDao.getAllByType(PoisonAddressType.KNOWN, blockchainUid)
-        if (isSimilarToKnown(normalized, knownAddresses)
-            && SUSPICIOUS_DETECTION_ENABLED) {
-            saveScamAddress(normalized, blockchainType)
+        val knownAddresses = poisonAddressDao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId)
+        if (isSimilarToKnown(normalized, knownAddresses)) {
+            saveScamAddress(normalized, blockchainType, accountId)
             return PoisonStatus.SUSPICIOUS
         }
 
@@ -95,6 +90,7 @@ class PoisonAddressManager(
 
     fun getPoisonStatus(record: TransactionRecord): PoisonStatus {
         val blockchainType = record.source.blockchain.type
+        val accountId = record.source.account.id
         val outgoing = isOutgoing(record)
 
         // For EXTERNAL_CONTRACT_CALL, addresses are in events, not on record.from/to
@@ -115,6 +111,7 @@ class PoisonAddressManager(
         return determinePoisonStatus(
             relevantAddress = relevantAddress,
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = outgoing,
             isCreatedByWallet = isCreatedByWallet,
             amount = amount,
@@ -168,31 +165,30 @@ class PoisonAddressManager(
         return null
     }
 
-    fun isAddressSuspicious(address: String?, blockchainType: BlockchainType): Boolean {
-        if (!SUSPICIOUS_DETECTION_ENABLED) return false
+    fun isAddressSuspicious(address: String?, blockchainType: BlockchainType, accountId: String): Boolean {
         if (address == null) return false
         val normalized = address.lowercase()
         val blockchainUid = blockchainType.uid
 
-        val existing = poisonAddressDao.get(normalized, blockchainUid)
+        val existing = poisonAddressDao.get(normalized, blockchainUid, accountId)
         if (existing?.type == PoisonAddressType.SCAM) return true
         if (existing?.type == PoisonAddressType.KNOWN) return false
         if (isInAddressBook(normalized, blockchainType)) return false
 
-        val knownAddresses = poisonAddressDao.getAllByType(PoisonAddressType.KNOWN, blockchainUid)
+        val knownAddresses = poisonAddressDao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId)
         return isSimilarToKnown(normalized, knownAddresses)
     }
 
-    fun saveKnownAddress(address: String, blockchainType: BlockchainType) {
+    fun saveKnownAddress(address: String, blockchainType: BlockchainType, accountId: String) {
         poisonAddressDao.insert(
-            PoisonAddress(address.lowercase(), blockchainType.uid, PoisonAddressType.KNOWN)
+            PoisonAddress(address.lowercase(), blockchainType.uid, accountId, PoisonAddressType.KNOWN)
         )
         _poisonDbChangedFlow.tryEmit(Unit)
     }
 
-    private fun saveScamAddress(normalizedAddress: String, blockchainType: BlockchainType) {
+    private fun saveScamAddress(normalizedAddress: String, blockchainType: BlockchainType, accountId: String) {
         poisonAddressDao.insertIgnore(
-            PoisonAddress(normalizedAddress, blockchainType.uid, PoisonAddressType.SCAM)
+            PoisonAddress(normalizedAddress, blockchainType.uid, accountId, PoisonAddressType.SCAM)
         )
         _poisonDbChangedFlow.tryEmit(Unit)
     }

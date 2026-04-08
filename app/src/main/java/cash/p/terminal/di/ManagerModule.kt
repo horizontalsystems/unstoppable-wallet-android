@@ -16,10 +16,16 @@ import cash.p.terminal.core.factories.AccountFactory
 import cash.p.terminal.core.managers.AdapterManager
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.AppHeadersProviderImpl
+import cash.p.terminal.core.managers.BackgroundKeepAliveManager
 import cash.p.terminal.core.managers.BackupManager
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
+import android.content.Context
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.core.notifications.NotificationDeduplicator
+import cash.p.terminal.core.notifications.TransactionMonitor
+import cash.p.terminal.core.notifications.TransactionNotificationCoordinator
+import cash.p.terminal.core.notifications.TransactionNotificationManager
 import cash.p.terminal.core.managers.CreateRequiredTokensUseCaseImpl
 import cash.p.terminal.core.managers.DefaultCurrencyManager
 import cash.p.terminal.core.managers.DefaultUserManager
@@ -155,6 +161,15 @@ val managerModule = module {
     }
     single { PreferenceManager.getDefaultSharedPreferences(get()) }
     singleOf(::BackgroundManager)
+    singleOf(::BackgroundKeepAliveManager)
+    singleOf(::TransactionNotificationManager)
+    single {
+        val prefs = get<Context>()
+            .getSharedPreferences("notification_dedup", Context.MODE_PRIVATE)
+        NotificationDeduplicator(prefs)
+    }
+    singleOf(::TransactionMonitor)
+    singleOf(::TransactionNotificationCoordinator)
     singleOf(::ConnectivityManager) bind IConnectivityManager::class
     singleOf(::EvmSyncSourceManager)
     singleOf(::TokenAutoEnableManager)

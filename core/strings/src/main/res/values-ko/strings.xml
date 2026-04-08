@@ -1527,6 +1527,32 @@
     <string name="login_logging_delete_data_confirmation">모든 로그를 삭제하시겠습니까?</string>
     <string name="login_logging_delete_record_confirmation">이 기록을 삭제하시겠습니까?</string>
     <string name="login_logging_info_description">로깅이 활성화된 경우 고급 보안에서 로그인 기록을 볼 수 있습니다.</string>
+    <!-- Push Notifications -->
+    <string name="push_notification">푸시 알림</string>
+    <string name="premium_push_notifications_show">알림 표시</string>
+    <string name="premium_push_notifications_warning">거래 알림을 받으려면 선택한 블록체인에 대해 앱이 백그라운드에서 계속 활성 상태로 유지될 수 있습니다. 이로 인해 앱을 사용하지 않을 때도 배터리 사용량이 늘어날 수 있습니다.</string>
+    <string name="push_notification_polling_interval">확인 간격</string>
+    <string name="push_notification_interval_realtime">실시간</string>
+    <string name="push_notification_interval_5min">5분마다</string>
+    <string name="push_notification_interval_10min">10분마다</string>
+    <string name="push_notification_interval_15min">15분마다</string>
+    <string name="push_notification_content">알림 내용</string>
+    <string name="push_notification_show_blockchain">블록체인 이름</string>
+    <string name="push_notification_show_coin_amount">코인 금액</string>
+    <string name="push_notification_show_fiat_amount">법정화폐 금액</string>
+    <string name="push_notification_channel_transactions">거래 알림</string>
+    <string name="push_notification_channel_transactions_desc">새 거래에 대한 알림</string>
+    <string name="push_notification_channel_service">거래 모니터링</string>
+    <string name="push_notification_channel_service_desc">백그라운드에서 새 거래 모니터링</string>
+    <string name="push_notification_service_title">거래 모니터링 중</string>
+    <string name="push_notification_service_text">백그라운드에서 새 거래를 감시하고 있습니다</string>
+    <string name="push_notification_new_transaction">새 거래</string>
+    <string name="notification_permission_rationale_title">알림 권한</string>
+    <string name="notification_permission_rationale_message">거래 알림을 표시하려면 권한이 필요합니다. 새 거래에 대한 알림을 받으려면 허용하세요.</string>
+    <string name="notification_permission_denied_title">권한 필요</string>
+    <string name="notification_permission_denied_message">알림 권한이 영구적으로 거부되었습니다. 앱 설정에서 활성화하세요.</string>
+    <string name="notification_permission_revoked_title">알림 사용 불가</string>
+    <string name="notification_permission_revoked_message">알림 권한이 부여되지 않았습니다. 설정을 열려면 탭하세요.</string>
 
     <string name="Nfts_PriceType_Days_7">평균 7일</string>
     <string name="Nfts_PriceType_Days_30">평균 30일</string>

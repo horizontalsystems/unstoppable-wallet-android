@@ -201,7 +201,7 @@ fun TextImportant(
                 onClose?.let { close ->
                     Spacer(modifier = Modifier.size(12.dp))
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_close),
+                        painter = painterResource(id = R.drawable.ic_close_24),
                         contentDescription = null,
                         tint = ComposeAppTheme.colors.grey,
                         modifier = Modifier

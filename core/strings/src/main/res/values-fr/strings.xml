@@ -1525,6 +1525,32 @@ La aplicación permite crear una copia de seguridad con una contraseña sencilla
     <string name="login_logging_delete_data_confirmation">Êtes-vous sûr de vouloir supprimer tous les journaux ?</string>
     <string name="login_logging_delete_record_confirmation">Êtes-vous sûr de vouloir supprimer cet enregistrement ?</string>
     <string name="login_logging_info_description">Si la journalisation est activée, vous pouvez consulter l\'historique des connexions dans la Sécurité Avancée.</string>
+    <!-- Push Notifications -->
+    <string name="push_notification">Notifications push</string>
+    <string name="premium_push_notifications_show">Afficher les notifications</string>
+    <string name="premium_push_notifications_warning">Pour recevoir des notifications de transaction, l\'application peut rester active en arrière-plan pour les blockchains sélectionnées. Cela peut augmenter la consommation de batterie, même lorsque vous n\'utilisez pas l\'application.</string>
+    <string name="push_notification_polling_interval">Intervalle de vérification</string>
+    <string name="push_notification_interval_realtime">Temps réel</string>
+    <string name="push_notification_interval_5min">Toutes les 5 minutes</string>
+    <string name="push_notification_interval_10min">Toutes les 10 minutes</string>
+    <string name="push_notification_interval_15min">Toutes les 15 minutes</string>
+    <string name="push_notification_content">Contenu de la notification</string>
+    <string name="push_notification_show_blockchain">Nom de la blockchain</string>
+    <string name="push_notification_show_coin_amount">Montant en crypto</string>
+    <string name="push_notification_show_fiat_amount">Montant en fiat</string>
+    <string name="push_notification_channel_transactions">Notifications de transactions</string>
+    <string name="push_notification_channel_transactions_desc">Notifications concernant les nouvelles transactions</string>
+    <string name="push_notification_channel_service">Surveillance des transactions</string>
+    <string name="push_notification_channel_service_desc">Surveillance en arrière-plan des nouvelles transactions</string>
+    <string name="push_notification_service_title">Surveillance des transactions</string>
+    <string name="push_notification_service_text">Recherche de nouvelles transactions en arrière-plan</string>
+    <string name="push_notification_new_transaction">Nouvelle transaction</string>
+    <string name="notification_permission_rationale_title">Autorisation de notification</string>
+    <string name="notification_permission_rationale_message">L\'autorisation est nécessaire pour afficher les notifications de transactions. Autorisez-la pour recevoir des alertes sur les nouvelles transactions.</string>
+    <string name="notification_permission_denied_title">Autorisation requise</string>
+    <string name="notification_permission_denied_message">L\'autorisation de notification a été refusée définitivement. Veuillez l\'activer dans les paramètres de l\'application.</string>
+    <string name="notification_permission_revoked_title">Notifications indisponibles</string>
+    <string name="notification_permission_revoked_message">L\'autorisation de notification n\'est pas accordée. Appuyez pour ouvrir les paramètres.</string>
 
     <string name="Nfts_PriceType_Days_7">Moy. 7D</string>
     <string name="Nfts_PriceType_Days_30">Moy. 30D</string>
