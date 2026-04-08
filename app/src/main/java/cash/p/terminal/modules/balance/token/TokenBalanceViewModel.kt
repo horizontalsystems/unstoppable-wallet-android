@@ -7,16 +7,15 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.getKoinInstance
-import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.isNative
-import cash.p.terminal.modules.send.fee.getWarningThreshold
 import cash.p.terminal.core.managers.AmlStatusManager
-import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.managers.MarketFavoritesManager
+import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.managers.StackingManager
 import cash.p.terminal.core.managers.TransactionHiddenManager
@@ -38,6 +37,7 @@ import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.displayoptions.DisplayDiffOptionType
 import cash.p.terminal.modules.displayoptions.DisplayPricePeriod
 import cash.p.terminal.modules.send.SendResult
+import cash.p.terminal.modules.send.fee.getWarningThreshold
 import cash.p.terminal.modules.send.zcash.SendZCashViewModel
 import cash.p.terminal.modules.transactions.AmlStatus
 import cash.p.terminal.modules.transactions.TransactionItem
@@ -431,7 +431,11 @@ class TokenBalanceViewModel(
         get() = adapterManager.getBalanceAdapterForWallet(wallet) as? INativeBalanceProvider
 
     private fun updateNetworkFeeWarning() {
-        if (wallet.token.type.isNative || networkFeeWarningDismissed) {
+        if (
+            wallet.token.type.isNative ||
+            networkFeeWarningDismissed ||
+            !hasReachedSyncedState()
+        ) {
             networkFeeWarning = null
             return
         }
@@ -481,16 +485,21 @@ class TokenBalanceViewModel(
         emitState()
     }
 
+    private fun hasReachedSyncedState(): Boolean {
+        val item = balanceService.balanceItem ?: return hasReachedSynced
+        if (item.state is AdapterState.Synced) {
+            hasReachedSynced = true
+        }
+        return hasReachedSynced
+    }
+
     private fun isShowShieldFunds(): Boolean {
         val item = balanceService.balanceItem ?: return hasReachedSynced
         val isTransparent =
             (item.wallet.token.type as? TokenType.AddressSpecTyped)?.type == TokenType.AddressSpecType.Transparent
         if (!isTransparent || item.balanceData.total <= ZcashAdapter.MINERS_FEE) return false
 
-        if (item.state is AdapterState.Synced) {
-            hasReachedSynced = true
-        }
-        return hasReachedSynced
+        return hasReachedSyncedState()
     }
 
     private fun updateTransactions(items: List<TransactionItem>) {
