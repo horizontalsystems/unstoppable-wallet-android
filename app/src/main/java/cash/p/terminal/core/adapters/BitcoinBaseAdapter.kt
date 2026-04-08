@@ -3,6 +3,8 @@ package cash.p.terminal.core.adapters
 import cash.p.terminal.core.IFeeRateProvider
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.ITransactionsAdapter
+import cash.p.terminal.core.onPollingStarted
+import cash.p.terminal.core.onPollingStopped
 import cash.p.terminal.core.UnsupportedFilterException
 import cash.p.terminal.core.hexToByteArray
 import cash.p.terminal.core.managers.BackgroundKeepAliveManager
@@ -63,8 +65,10 @@ import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.rx2.await
 import org.koin.java.KoinJavaComponent.inject
+import timber.log.Timber
 import java.math.BigDecimal
 import java.util.Date
+import java.util.concurrent.atomic.AtomicInteger
 
 abstract class BitcoinBaseAdapter(
     open val kit: AbstractKit,
@@ -78,6 +82,8 @@ abstract class BitcoinBaseAdapter(
 
     private val backgroundKeepAliveManager: BackgroundKeepAliveManager
             by inject(BackgroundKeepAliveManager::class.java)
+
+    private val pollingSessionCount = AtomicInteger(0)
 
     protected val scope = CoroutineScope(Dispatchers.Default)
 
@@ -242,6 +248,18 @@ abstract class BitcoinBaseAdapter(
         kit.refresh()
     }
 
+    fun startForPolling() {
+        pollingSessionCount.onPollingStarted {
+            kit.onEnterForeground()
+        }
+    }
+
+    fun stopForPolling() {
+        pollingSessionCount.onPollingStopped(backgroundManager) {
+            kit.onEnterBackground()
+        }
+    }
+
     override suspend fun getTransactions(
         from: TransactionRecord?,
         token: Token?,
@@ -284,8 +302,11 @@ abstract class BitcoinBaseAdapter(
                     }
 
                     BackgroundManagerState.EnterBackground -> {
-                        if (!backgroundKeepAliveManager.isKeepAlive(wallet.token.blockchainType)) {
+                        if (pollingSessionCount.get() == 0 &&
+                            !backgroundKeepAliveManager.isKeepAlive(wallet.token.blockchainType)) {
                             kit.onEnterBackground()
+                        } else {
+                            Timber.tag("TxPoller").d("BitcoinKit(%s) staying alive", wallet.token.blockchainType.uid)
                         }
                     }
 

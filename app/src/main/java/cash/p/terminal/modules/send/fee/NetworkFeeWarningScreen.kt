@@ -3,7 +3,6 @@ package cash.p.terminal.modules.send.fee
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -214,7 +213,7 @@ private fun NetworkFeeWarningContent(
                 onClick = onCancel
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_close),
+                    painter = painterResource(R.drawable.ic_close_24),
                     tint = ComposeAppTheme.colors.jacob,
                     contentDescription = null,
                 )

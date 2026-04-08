@@ -109,15 +109,15 @@ internal fun PushNotificationsScreen(
                 enabled = uiState.showNotifications,
                 onPollingIntervalChange = onPollingIntervalChange,
             )
-            BlockchainsSection(
-                uiState = uiState,
-                onBlockchainNotificationsToggle = onBlockchainNotificationsToggle,
-            )
             NotificationContentSection(
                 uiState = uiState,
                 onShowBlockchainNameToggle = onShowBlockchainNameToggle,
                 onShowCoinAmountToggle = onShowCoinAmountToggle,
                 onShowFiatAmountToggle = onShowFiatAmountToggle,
+            )
+            BlockchainsSection(
+                uiState = uiState,
+                onBlockchainNotificationsToggle = onBlockchainNotificationsToggle,
             )
             VSpacer(32.dp)
         }

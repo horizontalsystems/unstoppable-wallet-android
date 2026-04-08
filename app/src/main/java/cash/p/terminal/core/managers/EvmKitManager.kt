@@ -2,9 +2,9 @@ package cash.p.terminal.core.managers
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import androidx.room.concurrent.AtomicInt
 import cash.p.terminal.core.App
+import cash.p.terminal.core.onPollingStarted
+import cash.p.terminal.core.onPollingStopped
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.tangem.common.CustomXPubKeyAddressParser
@@ -41,8 +41,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import timber.log.Timber
 import org.koin.java.KoinJavaComponent.inject
 import java.net.URI
+import java.util.concurrent.atomic.AtomicInteger
 
 class EvmKitManager(
     val chain: Chain,
@@ -53,6 +57,8 @@ class EvmKitManager(
     private val hardwarePublicKeyStorage: IHardwarePublicKeyStorage
             by inject(IHardwarePublicKeyStorage::class.java)
 
+    private val lifecycleMutex = Mutex()
+    private val pollingSessionCount = AtomicInteger(0)
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
 
@@ -82,7 +88,7 @@ class EvmKitManager(
             kitStartedSubject.onNext(value != null)
         }
 
-    private var useCount = AtomicInt(0)
+    private var useCount = AtomicInteger(0)
     var currentAccount: Account? = null
         private set
     private val evmKitUpdatedSubject = PublishSubject.create<Unit>()
@@ -93,11 +99,10 @@ class EvmKitManager(
     val statusInfo: Map<String, Any>?
         get() = evmKitWrapper?.evmKit?.statusInfo()
 
-    @Synchronized
-    fun getEvmKitWrapper(
+    suspend fun getEvmKitWrapper(
         account: Account,
         blockchainType: BlockchainType
-    ): EvmKitWrapper {
+    ): EvmKitWrapper = lifecycleMutex.withLock {
         if (evmKitWrapper != null && currentAccount != account) {
             stopEvmKit()
         }
@@ -114,7 +119,7 @@ class EvmKitManager(
             subscribeToEvents()
         }
         useCount.incrementAndGet()
-        return this.evmKitWrapper!!
+        requireNotNull(this.evmKitWrapper)
     }
 
     private fun createKitInstance(
@@ -230,15 +235,28 @@ class EvmKitManager(
         )
     }
 
-    @Synchronized
-    fun unlink(account: Account) {
+    suspend fun unlink(account: Account) = lifecycleMutex.withLock {
         if (account == currentAccount) {
             useCount.decrementAndGet()
 
             if (useCount.get() < 1) {
-                Log.d("AAA", "stopEvmKit()")
                 stopEvmKit()
             }
+        }
+    }
+
+    suspend fun startForPolling() = lifecycleMutex.withLock {
+        pollingSessionCount.onPollingStarted {
+            evmKitWrapper?.evmKit?.let { kit ->
+                kit.start()
+                kit.refresh()
+            }
+        }
+    }
+
+    suspend fun stopForPolling() = lifecycleMutex.withLock {
+        pollingSessionCount.onPollingStopped(backgroundManager) {
+            evmKitWrapper?.evmKit?.stop()
         }
     }
 
@@ -254,8 +272,10 @@ class EvmKitManager(
                     }
                 } else if (state == BackgroundManagerState.EnterBackground) {
                     val wrapper = evmKitWrapper ?: return@collect
-                    if (!backgroundKeepAliveManager.isKeepAlive(wrapper.blockchainType)) {
+                    if (pollingSessionCount.get() == 0 && !backgroundKeepAliveManager.isKeepAlive(wrapper.blockchainType)) {
                         wrapper.evmKit.stop()
+                    } else {
+                        Timber.tag("TxPoller").d("EvmKit(%s) staying alive", wrapper.blockchainType.uid)
                     }
                 }
             }

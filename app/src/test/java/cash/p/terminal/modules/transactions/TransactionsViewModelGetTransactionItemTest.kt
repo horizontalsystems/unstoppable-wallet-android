@@ -28,6 +28,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -237,6 +238,48 @@ class TransactionsViewModelGetTransactionItemTest : KoinTest {
         every { service.getTransactionItem("missing-uid") } returns null
 
         val result = viewModel.getTransactionItem("missing-uid")
+
+        assertNull(result)
+    }
+
+    @Test
+    fun awaitTransactionItem_immediatelyAvailable_returnsWithoutWaiting() = runTest(dispatcher) {
+        val item = transactionItem("tx-immediate")
+        every { service.getTransactionItem("tx-immediate") } returns item
+
+        val result = viewModel.awaitTransactionItem("tx-immediate")
+
+        assertNotNull(result)
+        assertEquals("tx-immediate", result?.record?.uid)
+    }
+
+    @Test
+    fun awaitTransactionItem_availableAfterFlowEmission_returnsItem() = runTest(dispatcher) {
+        val itemsFlow = MutableStateFlow<List<TransactionItem>>(emptyList())
+        every { service.transactionItemsFlow } returns itemsFlow
+        every { service.getTransactionItem("tx-delayed") } returns null
+
+        val vm = viewModel
+
+        var result: TransactionItem? = null
+        val job = testScope.launch {
+            result = vm.awaitTransactionItem("tx-delayed", timeoutMs = 5_000)
+        }
+
+        val item = transactionItem("tx-delayed")
+        every { service.getTransactionItem("tx-delayed") } returns item
+        itemsFlow.value = listOf(item)
+
+        job.join()
+        assertNotNull(result)
+        assertEquals("tx-delayed", result?.record?.uid)
+    }
+
+    @Test
+    fun awaitTransactionItem_timeout_returnsNull() = runTest(dispatcher) {
+        every { service.getTransactionItem("tx-never") } returns null
+
+        val result = viewModel.awaitTransactionItem("tx-never", timeoutMs = 100)
 
         assertNull(result)
     }

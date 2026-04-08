@@ -49,7 +49,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -490,6 +494,18 @@ class TransactionsViewModel(
             transactionStatusUrl = viewItem.transactionStatusUrl,
             changeNowTransactionId = viewItem.changeNowTransactionId
         )
+
+    suspend fun awaitTransactionItem(recordUid: String, timeoutMs: Long = 5_000): TransactionItem? {
+        getTransactionItem(recordUid)?.let { return it }
+
+        return withTimeoutOrNull(timeoutMs) {
+            merge(
+                service.transactionItemsFlow.map { },
+                transactionAdapterManager.adaptersReadyFlow.map { },
+            ).first { getTransactionItem(recordUid) != null }
+            getTransactionItem(recordUid)
+        }
+    }
 
     suspend fun getTransactionItem(recordUid: String): TransactionItem? {
         val item = service.getTransactionItem(recordUid)

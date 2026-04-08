@@ -26,6 +26,15 @@ import cash.p.terminal.core.notifications.NotificationDeduplicator
 import cash.p.terminal.core.notifications.TransactionMonitor
 import cash.p.terminal.core.notifications.TransactionNotificationCoordinator
 import cash.p.terminal.core.notifications.TransactionNotificationManager
+import cash.p.terminal.core.notifications.polling.BtcLikeTransactionsPoller
+import cash.p.terminal.core.notifications.polling.EvmTransactionsPoller
+import cash.p.terminal.core.notifications.polling.MoneroTransactionsPoller
+import cash.p.terminal.core.notifications.polling.SolanaTransactionsPoller
+import cash.p.terminal.core.notifications.polling.StellarTransactionsPoller
+import cash.p.terminal.core.notifications.polling.TonTransactionsPoller
+import cash.p.terminal.core.notifications.polling.TransactionPollingManager
+import cash.p.terminal.core.notifications.polling.TronTransactionsPoller
+import cash.p.terminal.core.notifications.polling.ZcashTransactionsPoller
 import cash.p.terminal.core.managers.CreateRequiredTokensUseCaseImpl
 import cash.p.terminal.core.managers.DefaultCurrencyManager
 import cash.p.terminal.core.managers.DefaultUserManager
@@ -167,6 +176,29 @@ val managerModule = module {
         val prefs = get<Context>()
             .getSharedPreferences("notification_dedup", Context.MODE_PRIVATE)
         NotificationDeduplicator(prefs)
+    }
+    singleOf(::EvmTransactionsPoller)
+    singleOf(::TonTransactionsPoller)
+    singleOf(::TronTransactionsPoller)
+    singleOf(::SolanaTransactionsPoller)
+    singleOf(::StellarTransactionsPoller)
+    singleOf(::BtcLikeTransactionsPoller)
+    singleOf(::ZcashTransactionsPoller)
+    singleOf(::MoneroTransactionsPoller)
+    single {
+        TransactionPollingManager(
+            listOf(
+                get<EvmTransactionsPoller>(),
+                get<TonTransactionsPoller>(),
+                get<TronTransactionsPoller>(),
+                get<SolanaTransactionsPoller>(),
+                get<StellarTransactionsPoller>(),
+                get<BtcLikeTransactionsPoller>(),
+                get<ZcashTransactionsPoller>(),
+                get<MoneroTransactionsPoller>(),
+            ),
+            get()
+        )
     }
     singleOf(::TransactionMonitor)
     singleOf(::TransactionNotificationCoordinator)

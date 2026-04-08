@@ -19,6 +19,8 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
     val stateFlow: StateFlow<BackgroundManagerState>
         get() = _stateFlow
 
+    var onBeforeEnterBackground: (() -> Unit)? = null
+
     init {
         application.registerActivityLifecycleCallbacks(this)
     }
@@ -52,6 +54,7 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         if (foregroundActivityCount == 0) {
             //App is in background
             scope.launch {
+                onBeforeEnterBackground?.invoke()
                 _stateFlow.emit(BackgroundManagerState.EnterBackground)
             }
         }

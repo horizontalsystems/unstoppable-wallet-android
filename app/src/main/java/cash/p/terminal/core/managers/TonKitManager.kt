@@ -1,8 +1,9 @@
 package cash.p.terminal.core.managers
 
-import android.util.Log
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.onPollingStarted
+import cash.p.terminal.core.onPollingStopped
 import cash.p.terminal.core.UnsupportedException
 import cash.p.terminal.core.toFixedSize
 import cash.p.terminal.core.storage.HardwarePublicKeyStorage
@@ -40,14 +41,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.io.bytestring.ByteString
 import org.ton.kotlin.crypto.PublicKeyEd25519
+import timber.log.Timber
+import java.util.concurrent.atomic.AtomicInteger
 
 class TonKitManager(
     private val backgroundManager: BackgroundManager,
     private val hardwarePublicKeyStorage: HardwarePublicKeyStorage,
     private val backgroundKeepAliveManager: BackgroundKeepAliveManager
 ) {
+    private val lifecycleMutex = Mutex()
+    private val pollingSessionCount = AtomicInteger(0)
     private val scope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
     private val _kitStartedFlow = MutableStateFlow(false)
@@ -67,11 +74,10 @@ class TonKitManager(
     val statusInfo: Map<String, Any>?
         get() = tonKitWrapper?.tonKit?.statusInfo()
 
-    @Synchronized
-    fun getTonKitWrapper(
+    suspend fun getTonKitWrapper(
         account: Account,
         blockchainType: BlockchainType?,
-    ): TonKitWrapper {
+    ): TonKitWrapper = lifecycleMutex.withLock {
         if (this.tonKitWrapper != null && currentAccount != account) {
             stop()
         }
@@ -92,7 +98,7 @@ class TonKitManager(
         }
 
         useCount++
-        return this.tonKitWrapper!!
+        requireNotNull(this.tonKitWrapper)
     }
 
     fun getTonWallet(
@@ -128,14 +134,28 @@ class TonKitManager(
         )
     }
 
-    @Synchronized
-    fun unlink(account: Account) {
+    suspend fun unlink(account: Account) = lifecycleMutex.withLock {
         if (account == currentAccount) {
             useCount -= 1
 
             if (useCount < 1) {
                 stop()
             }
+        }
+    }
+
+    suspend fun startForPolling() = lifecycleMutex.withLock {
+        pollingSessionCount.onPollingStarted {
+            tonKitWrapper?.tonKit?.let { kit ->
+                kit.start()
+                kit.refresh()
+            }
+        }
+    }
+
+    suspend fun stopForPolling() = lifecycleMutex.withLock {
+        pollingSessionCount.onPollingStopped(backgroundManager) {
+            tonKitWrapper?.tonKit?.stop()
         }
     }
 
@@ -147,20 +167,21 @@ class TonKitManager(
     }
 
     private suspend fun start() {
-        Log.d("TonKitManager", "start")
+        Timber.d("TonKitManager start")
         tonKitWrapper?.tonKit?.start()
         job = scope.launch {
             backgroundManager.stateFlow.collect { state ->
                 if (state == BackgroundManagerState.EnterForeground) {
-                    Log.d("TonKitManager", "EnterForeground")
+                    Timber.d("TonKitManager EnterForeground")
                     tonKitWrapper?.tonKit?.let { kit ->
                         delay(1000)
                         kit.refresh()
                     }
                 } else if (state == BackgroundManagerState.EnterBackground) {
-                    if (!backgroundKeepAliveManager.isKeepAlive(BlockchainType.Ton)) {
-                        Log.d("TonKitManager", "EnterBackground")
+                    if (pollingSessionCount.get() == 0 && !backgroundKeepAliveManager.isKeepAlive(BlockchainType.Ton)) {
                         tonKitWrapper?.tonKit?.stop()
+                    } else {
+                        Timber.tag("TxPoller").d("TonKit staying alive")
                     }
                 }
             }

@@ -1,8 +1,6 @@
 package cash.p.terminal.modules.premium.settings
 
-import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
@@ -18,11 +16,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -222,8 +221,11 @@ private fun PremiumSettingsNavHost(fragmentNavController: NavController) {
             var showRevokedDialog by rememberSaveable { mutableStateOf(false) }
             var wasPermissionRequested by rememberSaveable { mutableStateOf(false) }
 
-            val hasPermission = txNotificationManager.hasNotificationPermission()
-                    && txNotificationManager.isTransactionChannelEnabled()
+            var hasPermission by remember { mutableStateOf(txNotificationManager.checkAllPermissions()) }
+
+            LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+                hasPermission = txNotificationManager.checkAllPermissions()
+            }
 
             val permissionLauncher = rememberLauncherForActivityResult(
                 ActivityResultContracts.RequestPermission()

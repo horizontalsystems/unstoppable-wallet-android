@@ -4,6 +4,8 @@ import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.UnsupportedException
+import cash.p.terminal.core.onPollingStartedSuspend
+import cash.p.terminal.core.onPollingStoppedSuspend
 import cash.p.terminal.core.storage.HardwarePublicKeyStorage
 import cash.p.terminal.tangem.signer.HardwareWalletSolanaAccountSigner
 import cash.p.terminal.wallet.Account
@@ -14,6 +16,7 @@ import com.solana.core.PublicKey
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.entities.BlockchainType
+import timber.log.Timber
 import io.horizontalsystems.hdwalletkit.Base58
 import io.horizontalsystems.solanakit.Signer
 import io.horizontalsystems.solanakit.SolanaKit
@@ -23,23 +26,32 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.dropWhile
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withTimeoutOrNull
+import java.util.concurrent.atomic.AtomicInteger
 
 class SolanaKitManager(
     private val rpcSourceManager: SolanaRpcSourceManager,
     private val walletManager: SolanaWalletManager,
     private val backgroundManager: BackgroundManager,
-    private val hardwarePublicKeyStorage: HardwarePublicKeyStorage
+    private val hardwarePublicKeyStorage: HardwarePublicKeyStorage,
+    private val backgroundKeepAliveManager: BackgroundKeepAliveManager,
 ) {
 
     private companion object {
         // Temporary limits to avoid too many requests problem in solan sdk
         const val limitFirstTimeTransactionCount: Int = 2
         const val limitTimeTransactionCount: Int = 2
+        const val FRESH_SYNC_TIMEOUT_MS = 20_000L
     }
+
+    private val pollingSessionCount = AtomicInteger(0)
 
     private val coroutineScope =
         CoroutineScope(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
@@ -199,6 +211,40 @@ class SolanaKitManager(
         }
     }
 
+    suspend fun startForPolling() = mutex.withLock {
+        pollingSessionCount.onPollingStartedSuspend {
+            solanaKitWrapper?.solanaKit?.let { kit ->
+                kit.resume()
+                kit.refresh()
+            }
+        }
+    }
+
+    suspend fun stopForPolling() = mutex.withLock {
+        pollingSessionCount.onPollingStoppedSuspend(backgroundManager) {
+            solanaKitWrapper?.solanaKit?.pause()
+        }
+    }
+
+    /**
+     * Waits for a fresh Syncing → Synced cycle. Drops the current (possibly
+     * stale) Synced value, then waits for the next Synced emission that
+     * arrives after a Syncing transition.
+     *
+     * Callers must subscribe (e.g. via `async(CoroutineStart.UNDISPATCHED)`)
+     * BEFORE triggering [startForPolling], otherwise the refresh can complete
+     * before the observer is active and the wait will hit timeout.
+     */
+    suspend fun awaitFreshSync(timeoutMs: Long = FRESH_SYNC_TIMEOUT_MS): Boolean {
+        val kit = solanaKitWrapper?.solanaKit ?: return false
+        return withTimeoutOrNull(timeoutMs) {
+            kit.transactionsSyncStateFlow
+                .dropWhile { it is SolanaKit.SyncState.Synced }
+                .first { it is SolanaKit.SyncState.Synced }
+            true
+        } ?: false
+    }
+
     private fun stopKit() {
         solanaKitWrapper?.solanaKit?.stop()
         solanaKitWrapper = null
@@ -223,9 +269,19 @@ class SolanaKitManager(
         backgroundEventListenerJob = coroutineScope.launch {
             backgroundManager.stateFlow.collect { state ->
                 if (state == BackgroundManagerState.EnterForeground) {
-                    startKit()
+                    solanaKitWrapper?.solanaKit?.let { kit ->
+                        kit.resume()
+                        delay(1000)
+                        kit.refresh()
+                    }
                 } else if (state == BackgroundManagerState.EnterBackground) {
-                    stopKit()
+                    if (pollingSessionCount.get() == 0 &&
+                        !backgroundKeepAliveManager.isKeepAlive(BlockchainType.Solana)
+                    ) {
+                        solanaKitWrapper?.solanaKit?.pause()
+                    } else {
+                        Timber.tag("TxPoller").d("SolanaKit staying alive")
+                    }
                 }
             }
         }

@@ -57,8 +57,8 @@ import cash.p.terminal.modules.rooteddevice.RootedDeviceViewModel
 import cash.p.terminal.modules.sendtokenselect.SendTokenSelectFragment
 import cash.p.terminal.modules.settings.main.SettingsScreen
 import cash.p.terminal.modules.transactions.TransactionsModule
-import cash.p.terminal.modules.transactions.TransactionsScreen
 import cash.p.terminal.modules.transactions.TransactionsViewModel
+import cash.p.terminal.modules.transactions.TransactionsScreen
 import cash.p.terminal.modules.walletconnect.AccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.WCManager.SupportState
 import cash.p.terminal.navigation.safeGetBackStackEntry
@@ -182,10 +182,10 @@ private fun MainScreen(
         if (!uiState.contentHidden) {
             val recordUid = intentLiveData?.getStringExtra(TransactionNotificationManager.EXTRA_RECORD_UID)
             if (recordUid != null) {
-                intentHandled()
                 viewModel.onSelect(MainNavigation.Transactions)
                 transactionAdapterManager.initializationFlow.first { it }
-                val item = transactionsViewModel.getTransactionItem(recordUid)
+                val item = transactionsViewModel.awaitTransactionItem(recordUid)
+                intentHandled()
                 if (item != null) {
                     transactionsViewModel.tmpItemToShow = item
                     fragmentNavController.slideFromBottom(R.id.transactionInfoFragment)

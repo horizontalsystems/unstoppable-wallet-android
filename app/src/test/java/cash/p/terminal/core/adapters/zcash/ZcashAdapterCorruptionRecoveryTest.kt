@@ -3,6 +3,7 @@ package cash.p.terminal.core.adapters.zcash
 import android.content.Context
 import android.database.sqlite.SQLiteDatabaseCorruptException
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.managers.BackgroundKeepAliveManager
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.domain.usecase.ClearZCashWalletDataUseCase
 import cash.p.terminal.wallet.Account
@@ -95,7 +96,10 @@ class ZcashAdapterCorruptionRecoveryTest {
         CoreApp.instance = mockk(relaxed = true)
 
         startKoin {
-            modules(module { single { clearZCashWalletDataUseCase } })
+            modules(module {
+                single { clearZCashWalletDataUseCase }
+                single { mockk<BackgroundKeepAliveManager>(relaxed = true) }
+            })
         }
 
         val testSeed = ByteArray(64) { it.toByte() }

@@ -8,6 +8,8 @@ import cash.p.terminal.core.ISendZcashAdapter
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.tryOrNull
+import cash.p.terminal.core.onPollingStarted
+import cash.p.terminal.core.onPollingStopped
 import cash.p.terminal.core.managers.BackgroundKeepAliveManager
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.providers.AppConfigProvider
@@ -87,6 +89,7 @@ import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 import java.math.BigDecimal
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 import java.util.regex.Pattern
 import kotlin.math.max
 
@@ -109,6 +112,7 @@ class ZcashAdapter(
 
     private val recovering = AtomicBoolean(false)
     private val corruptionRecovery = AtomicBoolean(false)
+    private val pollingSessionCount = AtomicInteger(0)
 
     @Volatile
     private var synchronizer: CloseableSynchronizer
@@ -279,8 +283,10 @@ class ZcashAdapter(
                 when (state) {
                     BackgroundManagerState.EnterForeground -> start()
                     BackgroundManagerState.EnterBackground -> {
-                        if (!backgroundKeepAliveManager.isKeepAlive(BlockchainType.Zcash)) {
+                        if (pollingSessionCount.get() == 0 && !backgroundKeepAliveManager.isKeepAlive(BlockchainType.Zcash)) {
                             pauseSynchronizer()
+                        } else {
+                            Timber.tag("TxPoller").d("ZcashAdapter staying alive")
                         }
                     }
                     BackgroundManagerState.Unknown,
@@ -447,6 +453,18 @@ class ZcashAdapter(
         with(synchronizer as SdkSynchronizer) {
             refreshAllBalances()
             refreshTransactions()
+        }
+    }
+
+    fun startForPolling() {
+        pollingSessionCount.onPollingStarted {
+            start()
+        }
+    }
+
+    fun stopForPolling() {
+        pollingSessionCount.onPollingStopped(backgroundManager) {
+            pauseSynchronizer()
         }
     }
 

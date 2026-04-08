@@ -14,6 +14,7 @@ import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.stellarkit.StellarKit
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +24,7 @@ import java.math.BigDecimal
 class SendTransactionServiceStellar(account: Account, token: Token) :
     ISendTransactionService<ISendStellarAdapter>(token) {
     private val stellarKitManager: StellarKitManager by inject(StellarKitManager::class.java)
-    private val stellarKit: StellarKit = stellarKitManager.getStellarKitWrapper(account).stellarKit
+    private val stellarKit: StellarKit = runBlocking { stellarKitManager.getStellarKitWrapper(account) }.stellarKit
 
     private var fee: BigDecimal? = stellarKit.sendFee
 

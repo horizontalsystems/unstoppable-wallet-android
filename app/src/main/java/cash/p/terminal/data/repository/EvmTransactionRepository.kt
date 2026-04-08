@@ -78,7 +78,7 @@ internal class EvmTransactionRepository(
 
     fun statusInfo(): Map<String, Any> = evmKit.statusInfo()
 
-    fun setup(
+    suspend fun setup(
         account: Account,
         blockchainType: BlockchainType
     ): EvmKitWrapper {

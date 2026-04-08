@@ -44,7 +44,6 @@ import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import coil3.compose.rememberAsyncImagePainter
 import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 
 @Composable
@@ -81,7 +80,7 @@ internal fun BtcBlockchainSettingsScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
+                        icon = R.drawable.ic_close_24,
                         onClick = fragmentNavController::navigateUp
                     )
                 )

@@ -44,8 +44,7 @@ class NftAdapterManager(
         }
     }
 
-    @Synchronized
-    private fun initAdapters(wallets: List<cash.p.terminal.wallet.Wallet>) {
+    private suspend fun initAdapters(wallets: List<cash.p.terminal.wallet.Wallet>) {
         val currentAdapters = adaptersMap.toMutableMap()
         adaptersMap.clear()
 
