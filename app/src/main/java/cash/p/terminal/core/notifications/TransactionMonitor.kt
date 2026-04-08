@@ -174,7 +174,10 @@ class TransactionMonitor(
 
         records.groupBy { it.blockchainType.uid }.forEach { (blockchainUid, blockchainRecords) ->
             val maxTimestamp = blockchainRecords.maxOf { it.timestamp }
-            deduplicator.updateLastCheckTime(blockchainUid, maxTimestamp)
+            val maxTimestampUids = blockchainRecords
+                .filter { it.timestamp == maxTimestamp }
+                .mapTo(mutableSetOf()) { it.uid }
+            deduplicator.updateLastCheckTime(blockchainUid, maxTimestamp, maxTimestampUids)
         }
     }
 

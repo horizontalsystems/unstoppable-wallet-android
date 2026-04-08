@@ -84,6 +84,14 @@ class TransactionMonitorDeduplicationTest {
             store[firstArg()] = secondArg<Long>()
             editor
         }
+        every { editor.putStringSet(any(), any()) } answers {
+            store[firstArg()] = secondArg<Set<String>?>()?.toSet()
+            editor
+        }
+        every { editor.remove(any()) } answers {
+            store.remove(firstArg())
+            editor
+        }
         every { editor.apply() } just Runs
 
         prefs = mockk(relaxed = true)
@@ -310,7 +318,7 @@ class TransactionMonitorDeduplicationTest {
             val enteredIsNew = CountDownLatch(2)
             val marked = AtomicBoolean(false)
             val racingDeduplicator = mockk<NotificationDeduplicator>()
-            every { racingDeduplicator.updateLastCheckTime(any(), any()) } just Runs
+            every { racingDeduplicator.updateLastCheckTime(any(), any(), any()) } just Runs
             every { racingDeduplicator.reset() } just Runs
             every { racingDeduplicator.markNotified(any()) } answers {
                 marked.set(true)

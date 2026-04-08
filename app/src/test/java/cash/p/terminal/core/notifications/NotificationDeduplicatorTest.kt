@@ -26,6 +26,14 @@ class NotificationDeduplicatorTest {
             store[firstArg()] = secondArg<Long>()
             editor
         }
+        every { editor.putStringSet(any(), any()) } answers {
+            store[firstArg()] = secondArg<Set<String>?>()?.toSet()
+            editor
+        }
+        every { editor.remove(any()) } answers {
+            store.remove(firstArg())
+            editor
+        }
         every { editor.apply() } just Runs
 
         prefs = mockk(relaxed = true)
@@ -78,12 +86,35 @@ class NotificationDeduplicatorTest {
     }
 
     @Test
+    fun isNew_sameTimestampDifferentUidAfterUpdateWithRecordedUids_returnsTrue() {
+        store["push_last_check_bitcoin"] = 99L
+        val deduplicator = NotificationDeduplicator(prefs)
+
+        assertTrue(deduplicator.isNew("uid-1", "bitcoin", 100L))
+        deduplicator.markNotified("uid-1")
+        deduplicator.updateLastCheckTime("bitcoin", 100L, setOf("uid-1"))
+
+        assertTrue(deduplicator.isNew("uid-2", "bitcoin", 100L))
+    }
+
+    @Test
+    fun isNew_sameTimestampDifferentUidAfterRestore_returnsTrue() {
+        store["push_last_check_bitcoin"] = 100L
+        store["push_last_check_uids_bitcoin"] = setOf("uid-1")
+        val deduplicator = NotificationDeduplicator(prefs)
+
+        assertFalse(deduplicator.isNew("uid-1", "bitcoin", 100L))
+        assertTrue(deduplicator.isNew("uid-2", "bitcoin", 100L))
+    }
+
+    @Test
     fun updateLastCheckTime_persistsToPreferences() {
         val deduplicator = NotificationDeduplicator(prefs)
 
-        deduplicator.updateLastCheckTime("bitcoin", 123L)
+        deduplicator.updateLastCheckTime("bitcoin", 123L, setOf("uid-1"))
 
         verify { editor.putLong("push_last_check_bitcoin", 123L) }
+        verify { editor.putStringSet("push_last_check_uids_bitcoin", setOf("uid-1")) }
         verify { editor.apply() }
     }
 

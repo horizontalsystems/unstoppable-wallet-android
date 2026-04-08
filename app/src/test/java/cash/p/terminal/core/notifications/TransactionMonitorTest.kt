@@ -77,6 +77,14 @@ class TransactionMonitorTest {
             store[firstArg()] = secondArg<Long>()
             editor
         }
+        every { editor.putStringSet(any(), any()) } answers {
+            store[firstArg()] = secondArg<Set<String>?>()?.toSet()
+            editor
+        }
+        every { editor.remove(any()) } answers {
+            store.remove(firstArg())
+            editor
+        }
         every { editor.apply() } just Runs
 
         prefs = mockk(relaxed = true)
