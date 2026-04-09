@@ -68,12 +68,10 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
             viewModel.viewState.tronPrivateKey?.let { key ->
                 KeyActionItem(
                     title = stringResource(id = R.string.PrivateKeys_TronPrivateKey),
-                    description = stringResource(R.string.PrivateKeys_TronPrivateKeyDescription)
-                ) {
-                    navController.authorizedAction {
+                    description = stringResource(R.string.PrivateKeys_TronPrivateKeyDescription),
+                    onClick = navController.authorizedAction {
                         navController.slideFromRight(
-                            R.id.privateKeyFragment,
-                            PrivateKeyFragment.Input(key, PrivateKeyFragment.Type.Tron)
+                            PrivateKeyFragment(PrivateKeyFragment.Input(key, PrivateKeyFragment.Type.Tron))
                         )
 
                         stat(
@@ -81,7 +79,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                             event = StatEvent.Open(StatPage.TronPrivateKey)
                         )
                     }
-                }
+                )
             }
             viewModel.viewState.stellarSecretKey?.let { key ->
                 KeyActionItem(

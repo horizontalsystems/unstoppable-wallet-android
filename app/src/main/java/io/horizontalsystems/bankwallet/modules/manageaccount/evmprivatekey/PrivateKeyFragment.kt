@@ -18,7 +18,7 @@ class PrivateKeyFragment(val input: Input) : BaseComposeFragment(screenshotEnabl
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        PrivateKeyScreen(navController, input.evmPrivateKey, input.type)
+        PrivateKeyScreen(navController, input.privateKey, input.type)
     }
 
     @Parcelize

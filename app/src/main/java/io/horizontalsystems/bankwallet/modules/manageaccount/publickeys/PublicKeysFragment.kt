@@ -66,8 +66,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, account: Account)
                     description = stringResource(R.string.PublicKeys_TronAddress_Description)
                 ) {
                     navController.slideFromRight(
-                        R.id.addressFragment,
-                        AddressFragment.Input(tronAddress, AddressFragment.Type.Tron)
+                        AddressFragment(AddressFragment.Input(tronAddress, AddressFragment.Type.Tron))
                     )
 
                     stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.TronAddress))

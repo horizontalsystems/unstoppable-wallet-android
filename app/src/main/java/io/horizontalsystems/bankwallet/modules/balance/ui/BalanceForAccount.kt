@@ -24,7 +24,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -107,15 +106,14 @@ fun BalanceForAccount(
                 }
 
                 WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-                    navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                    navController.slideFromBottom(WCErrorNoAccountFragment())
                 }
 
                 is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
                     val text =
                         Translator.getString(R.string.WalletConnect_Error_NeedBackup)
                     navController.slideFromBottom(
-                        R.id.backupRequiredDialog,
-                        BackupRequiredDialog.Input(state.account, text)
+                        BackupRequiredDialog(BackupRequiredDialog.Input(state.account, text))
                     )
 
                     stat(
@@ -126,8 +124,7 @@ fun BalanceForAccount(
 
                 is WCManager.SupportState.NotSupported -> {
                     navController.slideFromBottom(
-                        R.id.wcAccountTypeNotSupportedDialog,
-                        WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
+                        WCAccountTypeNotSupportedDialog(WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription))
                     )
                 }
             }
