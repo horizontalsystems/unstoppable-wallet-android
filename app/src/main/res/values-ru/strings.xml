@@ -290,7 +290,7 @@
     <string name="Market_Sorting_Manual">Вручную</string>
     <string name="Market_Sorting_Gainers">Показывают рост</string>
     <string name="Market_Sorting_Losers">Теряют в цене</string>
-    <string name="Market_Sorting_HighestCap">Наивысшийй кап.</string>
+    <string name="Market_Sorting_HighestCap">Наивысший кап.</string>
     <string name="Market_Sorting_LowestCap">Наименьший кап.</string>
     <string name="Market_Filters_Select">Выбрать %d</string>
     <!--Vaults-->
@@ -325,9 +325,9 @@
     <string name="Balance_Downloading">Загрузка…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_BlocksRemaining">Осталось блоков - %d</string>
-    <string name="Balance_Sort_Balance">По балансу</string>
+    <string name="Balance_Sort_Balance">по балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировка</string>
-    <string name="Balance_Sort_Az">По названию</string>
+    <string name="Balance_Sort_Az">по названию</string>
     <string name="Balance_Sort_24hPriceChange">по изменению цены(%)</string>
     <string name="Balance_NoCoinsAlert">Вы еще не добавили токены в этот кошелек.</string>
     <string name="Balance_NoAssetsToSend">У вас нет активов для отправки.</string>
@@ -1209,7 +1209,7 @@
     <string name="RecoveryPhrase_CopyWarning_Title">Риск копирования</string>
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">Приватный ключ EVM</string>
-    <string name="TronPrivateKey_Title">Закрытый ключ TRON</string>
+    <string name="TronPrivateKey_Title">Приватный ключ TRON</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
     <!-- Stellar Secret Key -->
     <string name="StellarSecretKey_Title">Звёздный Секретный Ключ</string>
@@ -1223,12 +1223,12 @@
     <string name="PrivateKeys_Title">Приватные ключи</string>
     <string name="PrivateKeys_EvmPrivateKey">Приватный ключ EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Предоставляет полный контроль над активами на базе EVM сетей (например, Ethereum, BNB Smart Chain, Polygon, Avalanche) в этом кошельке.</string>
-    <string name="PrivateKeys_TronPrivateKey">Закрытый ключ TRON</string>
+    <string name="PrivateKeys_TronPrivateKey">Приватный ключ TRON</string>
     <string name="PrivateKeys_TronPrivateKeyDescription">Даёт полный контроль над активами в сети TRON в этом кошельке.</string>
-    <string name="PrivateKeys_StellarSecretKey">Звёздный Секретный Ключ</string>
+    <string name="PrivateKeys_StellarSecretKey">Секретный ключ Stellar</string>
     <string name="PrivateKeys_StellarSecretKeyDescription">Даёт полный контроль над активами в сети Stellar внутри этого кошелька.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Мастер приватный ключ кошелька. Даёт полный контроль над всеми производными счетами и активами.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Расширенный приватный ключ клиента</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Даёт полный контроль над биткойнами и другими UTXO активами (например, Litecoin, Bitcoin Cash, Dash) в этом кошельке.</string>
     <string name="PrivateKeys_NeverShareWarning">Никогда ни с кем не делитесь вашей фразой восстановления. Команда Unstoppable никогда не запросит вашу фразу восстановления.</string>
     <string name="PrivateKeys_MoneroPrivateKey">Приватные ключи Monero</string>
