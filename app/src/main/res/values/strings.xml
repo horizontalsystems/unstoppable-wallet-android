@@ -1375,7 +1375,7 @@
     <string name="ManageAccounts_Title">Manage Wallets</string>
     <string name="ManageAccounts_CreateNewWallet">New Wallet</string>
     <string name="ManageAccounts_ImportWallet">Import Wallet</string>
-    <string name="ManageAccounts_WatchAddress">Watch Address</string>
+    <string name="ManageAccounts_WatchAddress">Watch Wallet</string>
 
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">from File</string>
