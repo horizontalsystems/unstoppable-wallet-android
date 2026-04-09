@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.core.helpers.HudHelper
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 @Composable
 fun SendSolanaScreen(
@@ -39,7 +40,7 @@ fun SendSolanaScreen(
     navController: NavBackStack<HSScreen>,
     viewModel: SendSolanaViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int,
+    sendEntryPointDestId: KClass<out HSScreen>,
     amount: BigDecimal?,
     riskyAddress: Boolean
 ) {
@@ -144,7 +145,7 @@ fun SendSolanaScreen(
 
 private fun openConfirm(
     navController: NavBackStack<HSScreen>,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: KClass<out HSScreen>
 ) {
     navController.slideFromRight(
         SendConfirmationFragment(SendConfirmationFragment.Input(

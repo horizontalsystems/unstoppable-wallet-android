@@ -101,9 +101,6 @@ fun NavBackStack<HSScreen>.navigateWithTermsAccepted(screen: HSScreen) {
     }
 }
 
-fun NavBackStack<HSScreen>.removeLastUntil(i: Int, inclusive: Boolean) {
-}
-
 fun NavBackStack<HSScreen>.removeLastUntil(klass: KClass<out HSScreen>, inclusive: Boolean) {
     val index = indexOfLast { it::class == klass }
     if (index != -1) {

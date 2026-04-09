@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
+import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -44,7 +45,7 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
                         SendFragment(SendFragment.Input(
                             wallet = viewItem.wallet,
                             title = sendTitle,
-                            sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                            sendEntryPointDestId = SendTokenSelectFragment::class,
                             address = Address(donateAddress),
                             hideAddress = true
                         ))

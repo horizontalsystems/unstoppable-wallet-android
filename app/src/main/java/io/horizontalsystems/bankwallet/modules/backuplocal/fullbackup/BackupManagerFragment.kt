@@ -59,7 +59,7 @@ class BackupManagerFragment : BaseComposeFragment() {
                     navController.slideFromBottom(
                         RestoreLocalFragment(
                             RestoreLocalFragment.Input(
-                                R.id.backupManagerFragment,
+                                BackupManagerFragment::class,
                                 false,
                                 jsonString,
                                 fileName,

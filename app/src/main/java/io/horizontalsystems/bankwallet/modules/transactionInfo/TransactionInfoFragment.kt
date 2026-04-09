@@ -54,7 +54,7 @@ class TransactionInfoFragment : BaseComposeFragment() {
 
         val transactionRecord = viewModelTxs.tmpTransactionRecordToShow
         if (transactionRecord == null) {
-            navController.removeLastUntil(R.id.transactionInfoFragment, true)
+            navController.removeLastUntil(TransactionInfoFragment::class, true)
             return
         }
 

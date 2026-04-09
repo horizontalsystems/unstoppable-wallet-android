@@ -28,7 +28,7 @@ class SetDuressPinFragment(val input: Input? = null) : BaseComposeFragment(scree
             dismissWithSuccess = {
                 viewModel.onDuressPinSet()
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Created)
-                navController.removeLastUntil(R.id.setDuressPinIntroFragment, true)
+                navController.removeLastUntil(SetDuressPinIntroFragment::class, true)
             },
             onBackPress = { navController.removeLastOrNull() },
             forDuress = true

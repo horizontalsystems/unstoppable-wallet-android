@@ -61,6 +61,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 
 const val SendBtcPage = "send_btc"
@@ -74,7 +75,7 @@ fun SendBitcoinNavHost(
     fragmentNavController: NavBackStack<HSScreen>,
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int,
+    sendEntryPointDestId: KClass<out HSScreen>,
     amount: BigDecimal?,
     riskyAddress: Boolean
 ) {
@@ -127,7 +128,7 @@ fun SendBitcoinScreen(
     composeNavController: NavHostController,
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int,
+    sendEntryPointDestId: KClass<out HSScreen>,
     amount: BigDecimal?,
     riskyAddress: Boolean,
 ) {
@@ -287,7 +288,7 @@ fun SendBitcoinScreen(
 
 private fun openConfirm(
     fragmentNavController: NavBackStack<HSScreen>,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: KClass<out HSScreen>
 ) {
     fragmentNavController.slideFromRight(
         SendConfirmationFragment(SendConfirmationFragment.Input(

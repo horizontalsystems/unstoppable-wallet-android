@@ -15,12 +15,13 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import kotlin.reflect.KClass
 
 @Composable
 fun SendBitcoinConfirmationScreen(
     navController: NavBackStack<HSScreen>,
     sendViewModel: SendBitcoinViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: KClass<out HSScreen>
 ) {
     var confirmationData by remember { mutableStateOf(sendViewModel.getConfirmationData()) }
     var refresh by remember { mutableStateOf(false) }

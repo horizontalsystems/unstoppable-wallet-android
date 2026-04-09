@@ -40,9 +40,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 @Composable
-fun ReceiveStellarAssetScreen(navController: NavBackStack<HSScreen>, wallet: Wallet, receiveEntryPointDestId: Int) {
+fun ReceiveStellarAssetScreen(navController: NavBackStack<HSScreen>, wallet: Wallet, receiveEntryPointDestId: KClass<out HSScreen>?) {
     val viewModel = viewModel<ReceiveStellarAssetViewModel>(factory = ReceiveStellarAssetViewModel.Factory(wallet))
     val uiState = viewModel.uiState
 
@@ -148,7 +149,7 @@ fun ReceiveStellarAssetScreen(navController: NavBackStack<HSScreen>, wallet: Wal
             },
             onBackPress = { navController.removeLastOrNull() },
             closeModule = {
-                if (receiveEntryPointDestId == 0) {
+                if (receiveEntryPointDestId == null) {
                     navController.removeLastOrNull()
                 } else {
                     navController.removeLastUntil(receiveEntryPointDestId, true)

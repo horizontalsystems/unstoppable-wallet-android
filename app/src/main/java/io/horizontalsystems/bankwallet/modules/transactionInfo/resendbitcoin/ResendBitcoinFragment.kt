@@ -87,7 +87,7 @@ class ResendBitcoinFragment(val input: Input) : BaseComposeFragment() {
         navController: NavBackStack<HSScreen>,
         resendViewModel: ResendBitcoinViewModel
     ) {
-        val closeUntilDestId = R.id.transactionInfoFragment
+        val closeUntilDestId = TransactionInfoFragment::class
         val uiState = resendViewModel.uiState
 
         val view = LocalView.current

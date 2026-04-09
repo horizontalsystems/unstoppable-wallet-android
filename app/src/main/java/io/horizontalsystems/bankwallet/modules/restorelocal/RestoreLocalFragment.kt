@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.restorelocal
 
-import android.os.Parcelable
 import android.widget.Toast
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Column
@@ -71,7 +70,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
+import kotlin.reflect.KClass
 
 class RestoreLocalFragment(val input: Input) : BaseComposeFragment() {
 
@@ -88,14 +87,13 @@ class RestoreLocalFragment(val input: Input) : BaseComposeFragment() {
         ) { activity?.let { MainModule.startAsNewTask(it) } }
     }
 
-    @Parcelize
     data class Input(
-        val popOffOnSuccess: Int,
+        val popOffOnSuccess: KClass<out HSScreen>,
         val popOffInclusive: Boolean,
         val jsonFile: String,
         val fileName: String?,
         val statPage: StatPage
-    ) : Parcelable
+    )
 }
 
 @Composable
@@ -104,7 +102,7 @@ private fun RestoreLocalNavHost(
     fileName: String?,
     statPage: StatPage,
     fragmentNavController: NavBackStack<HSScreen>,
-    popUpToInclusiveId: Int,
+    popUpToInclusiveId: KClass<out HSScreen>,
     popUpInclusive: Boolean,
     reloadApp: () -> Unit,
 ) {

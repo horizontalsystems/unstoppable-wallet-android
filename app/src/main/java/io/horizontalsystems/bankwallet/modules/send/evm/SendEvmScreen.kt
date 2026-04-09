@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.core.helpers.HudHelper
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 @Composable
 fun SendEvmScreen(
@@ -46,7 +47,7 @@ fun SendEvmScreen(
     amount: BigDecimal?,
     hideAddress: Boolean,
     riskyAddress: Boolean,
-    sendEntryPointDestId: Int,
+    sendEntryPointDestId: KClass<out HSScreen>,
 ) {
     val uiState = viewModel.uiState
 
@@ -157,7 +158,7 @@ fun SendEvmScreen(
 private fun openSendConfirm(
     viewModel: SendEvmViewModel,
     navController: NavBackStack<HSScreen>,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: KClass<out HSScreen>
 ) {
     val blockchainType = viewModel.wallet.token.blockchainType
     viewModel.getSendData()?.let {

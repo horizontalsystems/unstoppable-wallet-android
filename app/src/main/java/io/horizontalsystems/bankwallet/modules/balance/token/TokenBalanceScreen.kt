@@ -325,7 +325,7 @@ fun TokenBalanceScreen(
                             bottomSheetState.hide()
                             bottomSheetContent = null
                             navController.slideFromRight(
-                                ShieldZcashFragment(ShieldZcashFragment.Input(wallet, R.id.tokenBalanceFragment))
+                                ShieldZcashFragment(ShieldZcashFragment.Input(wallet, TokenBalanceFragment::class))
                             )
                         }
                     },

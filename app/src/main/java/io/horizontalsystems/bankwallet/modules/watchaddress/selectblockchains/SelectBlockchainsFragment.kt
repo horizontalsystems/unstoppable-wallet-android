@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains
 
-import android.os.Parcelable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,7 +38,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
-import kotlinx.parcelize.Parcelize
+import kotlin.reflect.KClass
 
 class SelectBlockchainsFragment(val input: Input) : BaseComposeFragment() {
 
@@ -54,13 +53,12 @@ class SelectBlockchainsFragment(val input: Input) : BaseComposeFragment() {
         )
     }
 
-    @Parcelize
     data class Input(
-        val popOffOnSuccess: Int,
+        val popOffOnSuccess: KClass<out HSScreen>,
         val popOffInclusive: Boolean,
         val accountType: AccountType,
         val accountName: String?,
-    ) : Parcelable
+    )
 
 }
 
@@ -69,7 +67,7 @@ private fun SelectBlockchainsScreen(
     accountType: AccountType,
     accountName: String?,
     navController: NavBackStack<HSScreen>,
-    popUpToInclusiveId: Int,
+    popUpToInclusiveId: KClass<out HSScreen>,
     inclusive: Boolean
 ) {
     val viewModel = viewModel<SelectBlockchainsViewModel>(

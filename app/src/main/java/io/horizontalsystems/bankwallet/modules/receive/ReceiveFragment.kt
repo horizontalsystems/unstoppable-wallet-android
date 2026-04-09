@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,7 +27,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
-import kotlinx.parcelize.Parcelize
+import kotlin.reflect.KClass
 
 class ReceiveFragment(val input: Input) : BaseComposeFragment() {
 
@@ -74,20 +73,18 @@ class ReceiveFragment(val input: Input) : BaseComposeFragment() {
             }
     }
 
-    @Parcelize
     data class Input(
         val wallet: Wallet,
-        val receiveEntryPointDestId: Int = 0,
+        val receiveEntryPointDestId: KClass<out HSScreen>? = null,
         val isTransparentAddress: Boolean = false
-    ) : Parcelable
-
+    )
 }
 
 @Composable
 fun ReceiveScreen(
     navController: NavBackStack<HSScreen>,
     wallet: Wallet,
-    receiveEntryPointDestId: Int,
+    receiveEntryPointDestId: KClass<out HSScreen>?,
     isTransparentAddress: Boolean,
 ) {
     val addressViewModel =
@@ -131,7 +128,7 @@ fun ReceiveScreen(
             }
         },
         onBackPress = { navController.removeLastOrNull() },
-        closeModule = if (receiveEntryPointDestId == 0) {
+        closeModule = if (receiveEntryPointDestId == null) {
             null
         } else {
             { navController.removeLastUntil(receiveEntryPointDestId, true) }

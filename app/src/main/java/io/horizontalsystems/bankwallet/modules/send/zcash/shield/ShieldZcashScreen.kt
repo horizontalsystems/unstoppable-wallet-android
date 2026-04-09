@@ -11,12 +11,13 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
+import kotlin.reflect.KClass
 
 @Composable
 fun ShieldZcashScreen(
     navController: NavBackStack<HSScreen>,
     viewModel: ShieldZcashViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: KClass<out HSScreen>
 ) {
     var confirmationData by remember { mutableStateOf(viewModel.getConfirmationData()) }
     var refresh by remember { mutableStateOf(false) }

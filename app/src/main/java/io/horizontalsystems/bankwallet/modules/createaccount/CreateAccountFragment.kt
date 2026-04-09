@@ -42,12 +42,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
+import kotlin.reflect.KClass
 
 class CreateAccountFragment(val input: ManageAccountsModule.Input? = null) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.createAccountFragment
+        val popUpToInclusiveId = input?.popOffOnSuccess ?: CreateAccountFragment::class
         val inclusive = input?.popOffInclusive ?: true
         CreateAccountNavHost(navController, popUpToInclusiveId, inclusive)
     }
@@ -57,7 +58,7 @@ class CreateAccountFragment(val input: ManageAccountsModule.Input? = null) : Bas
 @Composable
 private fun CreateAccountNavHost(
     fragmentNavController: NavBackStack<HSScreen>,
-    popUpToInclusiveId: Int,
+    popUpToInclusiveId: KClass<out HSScreen>,
     inclusive: Boolean
 ) {
     val navController = rememberNavController()

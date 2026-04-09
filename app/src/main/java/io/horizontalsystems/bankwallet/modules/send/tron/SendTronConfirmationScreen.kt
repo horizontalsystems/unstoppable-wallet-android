@@ -41,6 +41,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.send.ConfirmationBottomSection
 import io.horizontalsystems.bankwallet.modules.send.ConfirmationTopSection
+import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.send.getFormattedFee
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -54,18 +55,15 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
+import kotlin.reflect.KClass
 
 @Composable
 fun SendTronConfirmationScreen(
     navController: NavBackStack<HSScreen>,
     sendViewModel: SendTronViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: KClass<out HSScreen>?
 ) {
-    val closeUntilDestId = if (sendEntryPointDestId == 0) {
-        R.id.sendXFragment
-    } else {
-        sendEntryPointDestId
-    }
+    val closeUntilDestId = sendEntryPointDestId ?: SendFragment::class
     val confirmationData = sendViewModel.confirmationData ?: return
 
     val uiState = sendViewModel.uiState

@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
 import kotlinx.parcelize.Parcelize
+import kotlin.reflect.KClass
 
 class SendConfirmationFragment(val input: Input) : BaseComposeFragment() {
 
@@ -104,6 +105,5 @@ class SendConfirmationFragment(val input: Input) : BaseComposeFragment() {
         Bitcoin, ZCash, Solana, Tron, Ton, Stellar, Monero
     }
 
-    @Parcelize
-    data class Input(val type: Type, val sendEntryPointDestId: Int) : Parcelable
+    data class Input(val type: Type, val sendEntryPointDestId: KClass<out HSScreen>)
 }

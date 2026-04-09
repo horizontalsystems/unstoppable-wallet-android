@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.send.evm.confirmation
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -40,7 +39,7 @@ import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
+import kotlin.reflect.KClass
 
 class SendEvmConfirmationFragment(val input: Input) : BaseComposeFragment() {
 
@@ -49,13 +48,12 @@ class SendEvmConfirmationFragment(val input: Input) : BaseComposeFragment() {
         SendEvmConfirmationScreen(navController, input)
     }
 
-    @Parcelize
     data class Input(
         val transactionDataParcelable: SendEvmModule.TransactionDataParcelable,
         val additionalInfo: SendEvmData.AdditionalInfo?,
         val blockchainType: BlockchainType,
-        val sendEntryPointDestId: Int
-    ) : Parcelable {
+        val sendEntryPointDestId: KClass<out HSScreen>
+    ) {
         val transactionData: TransactionData
             get() = TransactionData(
                 Address(transactionDataParcelable.toAddress),
@@ -66,7 +64,7 @@ class SendEvmConfirmationFragment(val input: Input) : BaseComposeFragment() {
         constructor(
             sendData: SendEvmData,
             blockchainType: BlockchainType,
-            sendEntryPointDestId: Int
+            sendEntryPointDestId: KClass<out HSScreen>
         ) : this(
             SendEvmModule.TransactionDataParcelable(sendData.transactionData),
             sendData.additionalInfo,

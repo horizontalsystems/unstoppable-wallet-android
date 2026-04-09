@@ -181,7 +181,7 @@ private fun onSelectWallet(
     fragmentNavController.slideFromRight(
         ReceiveFragment(ReceiveFragment.Input(
             wallet,
-            R.id.receiveChooseCoinFragment,
+            ReceiveChooseCoinFragment::class,
             isTransparentAddress
         ))
     )

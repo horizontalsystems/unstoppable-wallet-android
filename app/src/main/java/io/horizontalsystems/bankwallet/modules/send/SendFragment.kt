@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
@@ -37,8 +36,8 @@ import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
 import io.horizontalsystems.marketkit.models.BlockchainType
-import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 class SendFragment(val input: Input) : BaseFragment() {
 
@@ -195,15 +194,14 @@ class SendFragment(val input: Input) : BaseFragment() {
         }
     }
 
-    @Parcelize
     data class Input(
         val wallet: Wallet,
         val title: String,
-        val sendEntryPointDestId: Int,
+        val sendEntryPointDestId: KClass<out HSScreen>,
         val address: Address,
         val riskyAddress: Boolean = false,
         val amount: BigDecimal? = null,
         val hideAddress: Boolean = false,
         val memo: String? = null,
-    ) : Parcelable
+    )
 }

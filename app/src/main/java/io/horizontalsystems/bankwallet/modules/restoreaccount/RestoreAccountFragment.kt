@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeig
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
+import kotlin.reflect.KClass
 
 class RestoreAccountFragment(val input: ManageAccountsModule.Input) : BaseComposeFragment(screenshotEnabled = false) {
 
@@ -43,7 +44,7 @@ class RestoreAccountFragment(val input: ManageAccountsModule.Input) : BaseCompos
 @Composable
 private fun RestoreAccountNavHost(
     fragmentNavController: NavBackStack<HSScreen>,
-    popUpToInclusiveId: Int,
+    popUpToInclusiveId: KClass<out HSScreen>,
     inclusive: Boolean
 ) {
     val navController = rememberNavController()

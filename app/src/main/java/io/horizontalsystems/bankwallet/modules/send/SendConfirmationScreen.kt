@@ -69,6 +69,7 @@ import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 @Composable
 fun SendConfirmationScreen(
@@ -86,16 +87,12 @@ fun SendConfirmationScreen(
     fee: BigDecimal?,
     memo: String?,
     onClickSend: () -> Unit,
-    sendEntryPointDestId: Int,
+    sendEntryPointDestId: KClass<out HSScreen>?,
     title: String? = null,
     error: Throwable? = null,
     additionalFields: (@Composable ColumnScope.() -> Unit)? = null,
 ) {
-    val closeUntilDestId = if (sendEntryPointDestId == 0) {
-        R.id.sendXFragment
-    } else {
-        sendEntryPointDestId
-    }
+    val closeUntilDestId = sendEntryPointDestId ?: SendFragment::class
     val view = LocalView.current
     when (sendResult) {
         is SendResult.Sent -> {

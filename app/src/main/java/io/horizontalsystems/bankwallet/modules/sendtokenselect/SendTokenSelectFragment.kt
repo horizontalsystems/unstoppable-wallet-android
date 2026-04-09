@@ -35,7 +35,7 @@ class SendTokenSelectFragment(val input: Input? = null) : BaseComposeFragment() 
                     EnterAddressFragment(EnterAddressFragment.Input(
                         wallet = it.wallet,
                         title = sendTitle,
-                        sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                        sendEntryPointDestId = SendTokenSelectFragment::class,
                         address = input?.address,
                         amount = input?.amount,
                         memo = input?.memo,

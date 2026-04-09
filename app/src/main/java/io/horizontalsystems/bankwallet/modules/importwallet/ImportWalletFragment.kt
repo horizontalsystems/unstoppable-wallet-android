@@ -53,13 +53,14 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetCo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
+import kotlin.reflect.KClass
 
 
 class ImportWalletFragment(val input: ManageAccountsModule.Input? = null) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.importWalletFragment
+        val popUpToInclusiveId = input?.popOffOnSuccess ?: ImportWalletFragment::class
         val inclusive = input?.popOffInclusive ?: true
 
         ImportWalletScreen(navController, popUpToInclusiveId, inclusive)
@@ -71,7 +72,7 @@ class ImportWalletFragment(val input: ManageAccountsModule.Input? = null) : Base
 @Composable
 private fun ImportWalletScreen(
     navController: NavBackStack<HSScreen>,
-    popUpToInclusiveId: Int,
+    popUpToInclusiveId: KClass<out HSScreen>,
     inclusive: Boolean
 ) {
     val context = LocalContext.current

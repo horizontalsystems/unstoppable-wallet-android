@@ -37,12 +37,13 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
+import kotlin.reflect.KClass
 
 class WatchAddressFragment(val input: ManageAccountsModule.Input? = null) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.watchAddressFragment
+        val popUpToInclusiveId = input?.popOffOnSuccess ?: WatchAddressFragment::class
         val inclusive = input?.popOffInclusive ?: true
         WatchAddressScreen(navController, popUpToInclusiveId, inclusive)
     }
@@ -50,7 +51,7 @@ class WatchAddressFragment(val input: ManageAccountsModule.Input? = null) : Base
 }
 
 @Composable
-fun WatchAddressScreen(navController: NavBackStack<HSScreen>, popUpToInclusiveId: Int, inclusive: Boolean) {
+fun WatchAddressScreen(navController: NavBackStack<HSScreen>, popUpToInclusiveId: KClass<out HSScreen>, inclusive: Boolean) {
     val view = LocalView.current
 
     val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())

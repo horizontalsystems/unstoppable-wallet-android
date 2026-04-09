@@ -21,9 +21,10 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import kotlin.reflect.KClass
 
 @Composable
-fun ReceiveMoneroScreen(navController: NavBackStack<HSScreen>, wallet: Wallet, receiveEntryPointDestId: Int) {
+fun ReceiveMoneroScreen(navController: NavBackStack<HSScreen>, wallet: Wallet, receiveEntryPointDestId: KClass<out HSScreen>?) {
     val addressViewModel = viewModel<ReceiveMoneroAddressViewModel>(factory = ReceiveMoneroAddressViewModel.Factory(wallet))
 
     val uiState = addressViewModel.uiState
@@ -61,7 +62,7 @@ fun ReceiveMoneroScreen(navController: NavBackStack<HSScreen>, wallet: Wallet, r
         },
         onBackPress = { navController.removeLastOrNull() },
         closeModule = {
-            if (receiveEntryPointDestId == 0) {
+            if (receiveEntryPointDestId == null) {
                 navController.removeLastOrNull()
             } else {
                 navController.removeLastUntil(receiveEntryPointDestId, true)
