@@ -11,6 +11,7 @@ enum class UProvider(
     val amlPrecheck: Boolean,
     val requireTerms: Boolean,
     val riskLevel: RiskLevel,
+    val isEvm: Boolean,
 ) {
     Near(
         "NEAR",
@@ -20,7 +21,8 @@ enum class UProvider(
         false,
         false,
         true,
-        RiskLevel.CONTROLLED
+        RiskLevel.CONTROLLED,
+        false
     ),
     QuickEx(
         "QUICKEX",
@@ -30,7 +32,8 @@ enum class UProvider(
         true,
         true,
         true,
-        RiskLevel.PRECHECK
+        RiskLevel.PRECHECK,
+        false
     ),
     LetsExchange(
         "LETSEXCHANGE",
@@ -40,7 +43,8 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.CONTROLLED
+        RiskLevel.CONTROLLED,
+        false
     ),
     StealthEx(
         "STEALTHEX",
@@ -50,7 +54,8 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.CONTROLLED
+        RiskLevel.CONTROLLED,
+        false
     ),
     Exolix(
         "EXOLIX",
@@ -60,7 +65,8 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.CONTROLLED
+        RiskLevel.CONTROLLED,
+        false
     ),
     Swapuz(
         "SWAPUZ",
@@ -70,7 +76,8 @@ enum class UProvider(
         false,
         false,
         true,
-        RiskLevel.LIMITED
+        RiskLevel.LIMITED,
+        false
     ),
     Barter(
         "BARTER",
@@ -80,6 +87,7 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.CONTROLLED
+        RiskLevel.CONTROLLED,
+        true
     );
 }

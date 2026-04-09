@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import io.horizontalsystems.bankwallet.core.blockTime
+import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.getEthereumKitAddress
 import io.horizontalsystems.bankwallet.modules.multiswap.EvmBlockchainHelper
@@ -23,6 +24,7 @@ import java.math.BigDecimal
 abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
     override val type = SwapProviderType.DEX
     override val requireTerms = false
+    override val isEvm = true
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
 
     override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = true
@@ -94,8 +96,16 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             bestTrade.tradeDataV3.priceImpact,
             fields,
             tokenIn.blockchainType.blockTime,
-            slippage
+            slippage,
+            fromAsset = deriveIdentifier(tokenIn),
+            toAsset = deriveIdentifier(tokenOut),
         )
+    }
+
+    private fun deriveIdentifier(token: Token): String? = when (val type = token.type) {
+        is TokenType.Eip20 -> type.address
+        TokenType.Native if token.blockchainType.isEvm -> "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+        else -> null
     }
 
     private suspend fun fetchBestTrade(
@@ -138,12 +148,16 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             BlockchainType.Base,
             BlockchainType.ZkSync,
             BlockchainType.ArbitrumOne -> uniswapV3Kit.etherToken(chain)
+
             else -> throw Exception("Invalid coin for swap: $token")
         }
+
         is TokenType.Eip20 -> uniswapV3Kit.token(
             io.horizontalsystems.ethereumkit.models.Address(
                 tokenType.address
-            ), token.decimals)
+            ), token.decimals
+        )
+
         else -> throw Exception("Invalid coin for swap: $token")
     }
 }

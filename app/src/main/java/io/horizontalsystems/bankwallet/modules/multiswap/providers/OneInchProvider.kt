@@ -27,6 +27,7 @@ object OneInchProvider : IMultiSwapProvider {
     override val title = "1inch"
     override val icon = R.drawable.swap_provider_1inch
     override val type = SwapProviderType.DEX
+    override val isEvm = true
     override val requireTerms = false
     override val riskLevel = RiskLevel.CONTROLLED
     private val oneInchKit by lazy { OneInchKit.getInstance(App.appConfigProvider.oneInchApiKey) }
