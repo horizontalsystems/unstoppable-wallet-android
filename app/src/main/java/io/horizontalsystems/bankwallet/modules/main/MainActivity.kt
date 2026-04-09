@@ -2,31 +2,24 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.fragment.NavHostFragment
-import com.reown.walletkit.client.Wallet
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
-import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
+import io.horizontalsystems.bankwallet.modules.nav3.Nav3
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.hideKeyboard
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 
 class MainActivity : BaseActivity() {
 
@@ -59,57 +52,62 @@ class MainActivity : BaseActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
-
-        pinLockComposeView = findViewById(R.id.pinLockComposeView)
-
-        val navHost =
-            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-        val navController = navHost.navController
-
-        navController.setGraph(R.navigation.main_graph, intent.extras)
-        navController.addOnDestinationChangedListener { _, _, _ ->
-            currentFocus?.hideKeyboard(this)
-        }
-
-        viewModel.navigateToMainLiveData.observe(this) {
-            if (it) {
-                navController.popBackStack(navController.graph.startDestinationId, false)
-                viewModel.onNavigatedToMain()
+        setContent {
+            ComposeAppTheme {
+                Nav3(viewModel)
             }
         }
 
-        viewModel.wcEvent.observe(this) { wcEvent ->
-            if (wcEvent != null) {
-                when (wcEvent) {
-                    is Wallet.Model.SessionRequest -> {
-//                        TODO("xxx nav3")
-//                        navController.slideFromBottom(R.id.wcRequestFragment)
-                    }
-
-                    is Wallet.Model.SessionProposal -> {
-//                        TODO("xxx nav3")
-//                        navController.slideFromBottom(R.id.wcSessionBottomSheetDialog)
-                    }
-
-                    is Wallet.Model.Error -> {
-                        navHost.view?.let {
-                            HudHelper.showErrorMessage(it, wcEvent.throwable.message ?: "Error")
-                        }
-                    }
-
-                    is Wallet.Model.SettledSessionResponse.Result -> {
-                        navHost.view?.let {
-                            HudHelper.showSuccessMessage(it, getString(R.string.Hud_Text_Connected))
-                        }
-                    }
-
-                    else -> {}
-                }
-
-                viewModel.onWcEventHandled()
-            }
-        }
+//        TODO("xxx nav3")
+//        pinLockComposeView = findViewById(R.id.pinLockComposeView)
+//
+//        val navHost =
+//            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+//        val navController = navHost.navController
+//
+//        navController.setGraph(R.navigation.main_graph, intent.extras)
+//        navController.addOnDestinationChangedListener { _, _, _ ->
+//            currentFocus?.hideKeyboard(this)
+//        }
+//
+//        viewModel.navigateToMainLiveData.observe(this) {
+//            if (it) {
+//                navController.popBackStack(navController.graph.startDestinationId, false)
+//                viewModel.onNavigatedToMain()
+//            }
+//        }
+//
+//        viewModel.wcEvent.observe(this) { wcEvent ->
+//            if (wcEvent != null) {
+//                when (wcEvent) {
+//                    is Wallet.Model.SessionRequest -> {
+////                        TODO("xxx nav3")
+////                        navController.slideFromBottom(R.id.wcRequestFragment)
+//                    }
+//
+//                    is Wallet.Model.SessionProposal -> {
+////                        TODO("xxx nav3")
+////                        navController.slideFromBottom(R.id.wcSessionBottomSheetDialog)
+//                    }
+//
+//                    is Wallet.Model.Error -> {
+//                        navHost.view?.let {
+//                            HudHelper.showErrorMessage(it, wcEvent.throwable.message ?: "Error")
+//                        }
+//                    }
+//
+//                    is Wallet.Model.SettledSessionResponse.Result -> {
+//                        navHost.view?.let {
+//                            HudHelper.showSuccessMessage(it, getString(R.string.Hud_Text_Connected))
+//                        }
+//                    }
+//
+//                    else -> {}
+//                }
+//
+//                viewModel.onWcEventHandled()
+//            }
+//        }
 
         viewModel.tcSendRequest.observe(this) { request ->
             if (request != null) {
@@ -140,27 +138,29 @@ class MainActivity : BaseActivity() {
 
         viewModel.setIntent(intent)
 
-        pinLockComposeView.setContent {
-            ComposeAppTheme {
-                PinUnlock(
-                    showPinLockScreen = showPinLockScreen,
-                    onSuccess = {
-                        showPinLockScreen = false
-                    }
-                )
-            }
-        }
+//        TODO("xxx nav3")
+//        pinLockComposeView.setContent {
+//            ComposeAppTheme {
+//                PinUnlock(
+//                    showPinLockScreen = showPinLockScreen,
+//                    onSuccess = {
+//                        showPinLockScreen = false
+//                    }
+//                )
+//            }
+//        }
 
         observeLockState()
     }
 
     private fun observeLockState() {
-        scope.launch {
-            App.pinComponent.isLockedFlow.collect { isLocked ->
-                showPinLockScreen = isLocked
-                pinLockComposeView.visibility = if (isLocked) { VISIBLE } else { GONE }
-            }
-        }
+//        TODO("xxx nav3")
+//        scope.launch {
+//            App.pinComponent.isLockedFlow.collect { isLocked ->
+//                showPinLockScreen = isLocked
+//                pinLockComposeView.visibility = if (isLocked) { VISIBLE } else { GONE }
+//            }
+//        }
     }
 
     private fun closeAfterDelay() {
