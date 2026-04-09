@@ -5,7 +5,10 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.subscriptions.core.IPaidAction
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 
 fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
     add(screen)
@@ -33,16 +36,14 @@ fun NavBackStack<HSScreen>.authorizedAction(action: () -> Unit): () -> Unit {
 }
 
 fun NavBackStack<HSScreen>.paidAction(paidAction: IPaidAction, block: () -> Unit) {
-//    TODO("xxx nav3")
-//    if (UserSubscriptionManager.isActionAllowed(paidAction)) {
-//        block.invoke()
-//    } else {
-//        val premiumFeature = PremiumFeature.getFeature(paidAction)
-//        slideFromBottom(
-//            R.id.defenseSystemFeatureDialog,
-//            DefenseSystemFeatureDialog.Input(premiumFeature)
-//        )
-//    }
+    if (UserSubscriptionManager.isActionAllowed(paidAction)) {
+        block.invoke()
+    } else {
+        val premiumFeature = PremiumFeature.getFeature(paidAction)
+        slideFromBottom(
+            DefenseSystemFeatureDialog(DefenseSystemFeatureDialog.Input(premiumFeature))
+        )
+    }
 }
 
 fun NavBackStack<HSScreen>.navigateWithTermsAccepted(action: () -> Unit) {
