@@ -5,9 +5,9 @@ object MultiSwapProviderRegistry {
         // Single-chain DEX providers
         OneInchProvider,
 //        UniswapProvider,
-//        UniswapV3Provider,
+        UniswapV3Provider,
 //        PancakeSwapProvider,
-//        PancakeSwapV3Provider,
+        PancakeSwapV3Provider,
 //        QuickSwapProvider,
         // Cross-chain providers
         ThorChainProvider,
@@ -28,4 +28,8 @@ object MultiSwapProviderRegistry {
 
     fun isSingleChainSwap(providerId: String, tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String): Boolean =
         providersById[providerId]?.isSingleChainSwap(tokenInBlockchainTypeUid, tokenOutBlockchainTypeUid) ?: false
+
+    fun isEvm(providerId: String): Boolean {
+        return providersById[providerId]?.isEvm ?: false
+    }
 }

@@ -2,9 +2,12 @@ package io.horizontalsystems.bankwallet.modules.multiswap.history
 
 import io.horizontalsystems.bankwallet.entities.SwapRecord
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.MayaProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.MultiSwapProviderRegistry
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.PancakeSwapV3Provider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.ThorChainProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UProvider
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.UniswapV3Provider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.UnstoppableAPI
 
 object SwapTrackRequestBuilder {
@@ -24,8 +27,8 @@ object SwapTrackRequestBuilder {
     fun build(record: SwapRecord): UnstoppableAPI.Request.Track {
         val providerApiName = apiProviderName(record.providerId)
 
-        return when (record.providerId) {
-            ThorChainProvider.id, MayaProvider.id -> UnstoppableAPI.Request.Track(
+        return when {
+            record.providerId == ThorChainProvider.id || record.providerId == MayaProvider.id -> UnstoppableAPI.Request.Track(
                 provider = providerApiName,
                 // Use hash when available; fall back to depositAddress for memoless swaps
                 hash = record.transactionHash,
@@ -35,7 +38,7 @@ object SwapTrackRequestBuilder {
                 toAddress = record.recipientAddress,
             )
 
-            OneInchProvider.id, "u_${UProvider.Barter.id}" -> UnstoppableAPI.Request.Track(
+            MultiSwapProviderRegistry.isEvm(record.providerId) -> UnstoppableAPI.Request.Track(
                 provider = providerApiName,
                 hash = record.transactionHash,
                 chainId = evmChainIds[record.tokenInBlockchainTypeUid],
@@ -44,17 +47,17 @@ object SwapTrackRequestBuilder {
                 toAddress = record.recipientAddress,
             )
 
-            "u_${UProvider.Near.id}" -> UnstoppableAPI.Request.Track(
+            record.providerId == "u_${UProvider.Near.id}" -> UnstoppableAPI.Request.Track(
                 provider = providerApiName,
                 depositAddress = record.depositAddress,
                 fromAddress = record.sourceAddress,
             )
 
-            "u_${UProvider.QuickEx.id}",
-            "u_${UProvider.LetsExchange.id}",
-            "u_${UProvider.StealthEx.id}",
-            "u_${UProvider.Exolix.id}",
-            "u_${UProvider.Swapuz.id}" -> UnstoppableAPI.Request.Track(
+            record.providerId == "u_${UProvider.QuickEx.id}" ||
+            record.providerId == "u_${UProvider.LetsExchange.id}" ||
+            record.providerId == "u_${UProvider.StealthEx.id}" ||
+            record.providerId == "u_${UProvider.Exolix.id}" ||
+            record.providerId == "u_${UProvider.Swapuz.id}" -> UnstoppableAPI.Request.Track(
                 provider = providerApiName,
                 providerSwapId = record.providerSwapId,
                 fromAddress = record.sourceAddress,
@@ -68,6 +71,8 @@ object SwapTrackRequestBuilder {
         ThorChainProvider.id -> "THORCHAIN"
         MayaProvider.id -> "MAYACHAIN"
         OneInchProvider.id -> "ONEINCH"
+        PancakeSwapV3Provider.id -> "PANCAKESWAP"
+        UniswapV3Provider.id -> "UNISWAP_V3"
         else -> if (providerId.startsWith("u_")) providerId.removePrefix("u_") else providerId.uppercase()
     }
 }
