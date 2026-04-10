@@ -21,9 +21,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -356,8 +356,19 @@ private fun SwapScreenInner(
                             AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
                         }
 
+                        var showRegularPrice by remember(uiState.initialShowRegularPrice, uiState.tokenIn, uiState.tokenOut) {
+                            mutableStateOf(uiState.initialShowRegularPrice)
+                        }
+
                         if (quote != null) {
-                            ProviderCellInfo(quote, onClickProvider)
+                            ProviderCellInfo(
+                                quote = quote,
+                                showRegularPrice = showRegularPrice,
+                                onClickPrice = {
+                                    showRegularPrice = !showRegularPrice
+                                },
+                                onClickProvider = onClickProvider
+                            )
                         }
 
                         if (uiState.currentStep is SwapStep.ActionRequired) {
@@ -498,6 +509,8 @@ private fun SwapScreenInner(
 @Composable
 private fun ProviderCellInfo(
     quote: SwapProviderQuote,
+    showRegularPrice: Boolean,
+    onClickPrice: () -> Unit,
     onClickProvider: () -> Unit
 ) {
     Row(
@@ -532,7 +545,6 @@ private fun ProviderCellInfo(
                 contentDescription = null,
             )
         }
-        var showRegularPrice by remember { mutableStateOf(true) }
         val swapPriceUIHelper = SwapPriceUIHelper(
             quote.tokenIn,
             quote.tokenOut,
@@ -553,9 +565,7 @@ private fun ProviderCellInfo(
         ) {
             CellRightControlsButtonText(
                 subhead = priceStr.hs(color = ComposeAppTheme.colors.leah),
-                onClick = {
-                    showRegularPrice = !showRegularPrice
-                }
+                onClick = onClickPrice
             )
             Row(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
