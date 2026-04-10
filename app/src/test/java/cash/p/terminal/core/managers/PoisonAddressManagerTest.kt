@@ -659,6 +659,28 @@ class PoisonAddressManagerTest {
         assertEquals(PoisonStatus.SUSPICIOUS, manager.getPoisonStatus(record))
     }
 
+    @Test
+    fun getPoisonStatus_userCreatedEvmSwap_usesExchangeAddressAndReturnsCreated() {
+        val record = createEvmRecord(
+            transactionRecordType = TransactionRecordType.EVM_SWAP,
+            exchangeAddress = "0xpancakeswap_router",
+            foreignTransaction = false,
+        )
+
+        assertEquals(PoisonStatus.CREATED, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_userCreatedEvmUnknownSwap_usesExchangeAddressAndReturnsCreated() {
+        val record = createEvmRecord(
+            transactionRecordType = TransactionRecordType.EVM_UNKNOWN_SWAP,
+            exchangeAddress = "0xpancakeswap_router",
+            foreignTransaction = false,
+        )
+
+        assertEquals(PoisonStatus.CREATED, manager.getPoisonStatus(record))
+    }
+
     // --- Helpers ---
 
     private fun createEvmRecord(
@@ -667,6 +689,7 @@ class PoisonAddressManagerTest {
         transactionRecordType: TransactionRecordType,
         incomingEvents: List<TransferEvent>? = null,
         outgoingEvents: List<TransferEvent>? = null,
+        exchangeAddress: String? = null,
         foreignTransaction: Boolean = false,
     ): EvmTransactionRecord {
         val evmTransaction = mockk<io.horizontalsystems.ethereumkit.models.Transaction>(relaxed = true) {
@@ -694,6 +717,7 @@ class PoisonAddressManagerTest {
             transactionRecordType = transactionRecordType,
             incomingEvents = incomingEvents,
             outgoingEvents = outgoingEvents,
+            exchangeAddress = exchangeAddress,
             foreignTransaction = foreignTransaction,
         )
     }

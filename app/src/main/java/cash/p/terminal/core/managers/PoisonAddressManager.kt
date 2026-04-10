@@ -1,5 +1,6 @@
 package cash.p.terminal.core.managers
 
+import cash.p.terminal.core.isEvm
 import cash.p.terminal.core.storage.PoisonAddressDao
 import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.entities.PoisonAddress
@@ -9,7 +10,6 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
-import cash.p.terminal.core.isEvm
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
 import cash.p.terminal.wallet.MarketKitWrapper
@@ -132,8 +132,9 @@ class PoisonAddressManager(
         // When outgoing, prefer outgoing events (destination); when incoming, prefer incoming events (sender).
         if (record is EvmTransactionRecord) {
             return if (outgoing)
+                record.exchangeAddress ?:
                 record.outgoingEvents?.firstOrNull()?.address
-                    ?: record.incomingEvents?.firstOrNull()?.address
+                ?: record.incomingEvents?.firstOrNull()?.address
             else
                 record.incomingEvents?.firstOrNull()?.address
                     ?: record.outgoingEvents?.firstOrNull()?.address
@@ -149,7 +150,10 @@ class PoisonAddressManager(
         return null
     }
 
-    private fun extractContractAddress(mainValue: TransactionValue?, record: TransactionRecord): String? {
+    private fun extractContractAddress(
+        mainValue: TransactionValue?,
+        record: TransactionRecord
+    ): String? {
         // Try CoinValue path first (known tokens)
         (mainValue as? TransactionValue.CoinValue)
             ?.token?.type
@@ -205,7 +209,10 @@ class PoisonAddressManager(
         return tryOrNull { marketKit.token(query) } != null
     }
 
-    private fun isInAddressBook(normalizedAddress: String, blockchainType: BlockchainType): Boolean {
+    private fun isInAddressBook(
+        normalizedAddress: String,
+        blockchainType: BlockchainType
+    ): Boolean {
         return contactsRepository.getContactsFiltered(
             blockchainType = blockchainType,
             addressQuery = normalizedAddress
@@ -216,23 +223,29 @@ class PoisonAddressManager(
         return when (record.transactionRecordType) {
             TransactionRecordType.BITCOIN_OUTGOING,
             TransactionRecordType.EVM_OUTGOING,
+            TransactionRecordType.EVM_SWAP,
+            TransactionRecordType.EVM_UNKNOWN_SWAP,
             TransactionRecordType.TRON_OUTGOING,
             TransactionRecordType.SOLANA_OUTGOING,
             TransactionRecordType.MONERO_OUTGOING,
             TransactionRecordType.STELLAR_OUTGOING -> true
+
             TransactionRecordType.TON -> record.to != null && record.from == null
             else -> false
         }
     }
 
-    private fun isSimilarToKnown(normalizedAddress: String, knownAddresses: List<PoisonAddress>): Boolean {
+    private fun isSimilarToKnown(
+        normalizedAddress: String,
+        knownAddresses: List<PoisonAddress>
+    ): Boolean {
         if (normalizedAddress.length < SIMILARITY_CHARS * 2) return false
         val prefix = normalizedAddress.take(SIMILARITY_CHARS)
         val suffix = normalizedAddress.takeLast(SIMILARITY_CHARS)
         return knownAddresses.any { known ->
             known.address != normalizedAddress &&
-                known.address.take(SIMILARITY_CHARS) == prefix &&
-                known.address.takeLast(SIMILARITY_CHARS) == suffix
+                    known.address.take(SIMILARITY_CHARS) == prefix &&
+                    known.address.takeLast(SIMILARITY_CHARS) == suffix
         }
     }
 }
