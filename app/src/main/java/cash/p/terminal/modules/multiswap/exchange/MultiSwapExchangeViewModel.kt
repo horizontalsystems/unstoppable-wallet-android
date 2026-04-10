@@ -20,6 +20,7 @@ import cash.p.terminal.modules.multiswap.providers.ChangeNowProvider
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.modules.multiswap.providers.QuickexProvider
 import cash.p.terminal.modules.multiswap.action.ActionCreate
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.MarketKitWrapper
@@ -55,6 +56,7 @@ class MultiSwapExchangeViewModel(
     private val balanceHiddenManager: IBalanceHiddenManager,
     private val walletManager: IWalletManager,
     private val walletUseCase: WalletUseCase,
+    private val accountManager: IAccountManager,
 ) : ViewModel() {
 
     var uiState by mutableStateOf<MultiSwapExchangeUiState?>(null)
@@ -124,7 +126,9 @@ class MultiSwapExchangeViewModel(
 
     private fun observeSwap() {
         viewModelScope.launch {
-            pendingMultiSwapStorage.getAll().collect { swaps ->
+            pendingMultiSwapStorage
+                .observeForActiveAccount(accountManager.activeAccountStateFlow)
+                .collect { swaps ->
                 val swap = swaps.firstOrNull { it.id == pendingMultiSwapId }
                 if (swap == null) {
                     if (currentSwap != null) {

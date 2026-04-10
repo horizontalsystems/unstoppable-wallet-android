@@ -144,6 +144,7 @@ val viewModelModule = module {
             balanceHiddenManager = get(),
             walletManager = get(),
             walletUseCase = get(),
+            accountManager = get(),
         )
     }
     viewModel { (otherSelectedToken: Token?, activeAccount: Account) ->

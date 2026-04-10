@@ -59,6 +59,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.Date
+import java.util.concurrent.atomic.AtomicLong
 
 class TransactionsViewModel(
     private val service: TransactionsService,
@@ -564,9 +565,27 @@ data class TransactionItem(
     val nftMetadata: Map<NftUid, NftAssetBriefMetadata>,
     val changeNowTransactionId: String? = null,
     val transactionStatusUrl: Pair<String, String>? = null,
-    val walletUid: String? = null
+    val walletUid: String? = null,
+    val cacheVersion: Long = nextVersion(),
 ) {
-    val createdAt = System.currentTimeMillis()
+    fun withUpdatedListData(
+        record: TransactionRecord = this.record,
+        currencyValue: CurrencyValue? = this.currencyValue,
+        lastBlockInfo: LastBlockInfo? = this.lastBlockInfo,
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata> = this.nftMetadata,
+    ): TransactionItem = copy(
+        record = record,
+        currencyValue = currencyValue,
+        lastBlockInfo = lastBlockInfo,
+        nftMetadata = nftMetadata,
+        cacheVersion = nextVersion(),
+    )
+
+    companion object {
+        private val cacheVersionCounter = AtomicLong()
+
+        private fun nextVersion(): Long = cacheVersionCounter.incrementAndGet()
+    }
 }
 
 @Immutable

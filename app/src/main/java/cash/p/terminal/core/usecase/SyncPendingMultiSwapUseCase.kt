@@ -11,6 +11,7 @@ import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.TransactionStatus
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.Wallet
@@ -28,9 +29,11 @@ class SyncPendingMultiSwapUseCase(
     private val transactionAdapterManager: TransactionAdapterManager,
     private val adapterManager: IAdapterManager,
     private val updateSwapProviderTransactionsStatusUseCase: UpdateSwapProviderTransactionsStatusUseCase,
+    private val accountManager: IAccountManager,
 ) {
     suspend operator fun invoke() = withContext(dispatcherProvider.io) {
-        val swaps = pendingMultiSwapStorage.getAllOnce()
+        val accountId = accountManager.activeAccount?.id ?: return@withContext
+        val swaps = pendingMultiSwapStorage.getAllOnceByAccountId(accountId)
         val hasExecutingOffChain = swaps.any { swap ->
             (swap.leg1Status == PendingMultiSwap.STATUS_EXECUTING && swap.leg1IsOffChain)
             || (swap.leg2Status == PendingMultiSwap.STATUS_EXECUTING && swap.leg2IsOffChain == true)
@@ -371,7 +374,8 @@ class SyncPendingMultiSwapUseCase(
     // --- terminal state & cleanup ---
 
     private suspend fun deleteCompleted() {
-        val swaps = pendingMultiSwapStorage.getAllOnce()
+        val accountId = accountManager.activeAccount?.id ?: return
+        val swaps = pendingMultiSwapStorage.getAllOnceByAccountId(accountId)
         swaps.forEach { swap ->
             if (swap.isTerminal()) {
                 pendingMultiSwapStorage.delete(swap.id)
