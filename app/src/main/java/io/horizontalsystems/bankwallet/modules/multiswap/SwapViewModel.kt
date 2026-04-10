@@ -64,6 +64,7 @@ class SwapViewModel(
     private var requoteOnTimeout = true
     private var swapTermsAccepted = swapTermsManager.swapTermsAcceptedStateFlow.value
     private var amlChecking = false
+    private var initialShowRegularPrice = true
 
     val amlCheckEventFlow = MutableSharedFlow<AmlCheckEvent>(extraBufferCapacity = 1)
 
@@ -220,6 +221,7 @@ class SwapViewModel(
         fiatAmountInputEnabled = fiatAmountInputEnabled,
         needToAcceptTerms = !swapTermsAccepted && quoteState.quote?.provider?.requireTerms == true,
         amlChecking = amlChecking,
+        initialShowRegularPrice = initialShowRegularPrice
     )
 
     private fun handleUpdatedNetworkState(networkState: NetworkAvailabilityService.State) {
@@ -250,6 +252,10 @@ class SwapViewModel(
         fiatServiceIn.setAmount(quoteState.amountIn)
         fiatServiceOut.setToken(quoteState.tokenOut)
         fiatServiceOut.setAmount(quoteState.quote?.amountOut)
+
+        quoteState.quote?.let {
+            initialShowRegularPrice = it.amountIn <= it.amountOut
+        }
 
         emitState()
 
@@ -401,6 +407,7 @@ data class SwapUiState(
     val fiatPriceImpactLevel: PriceImpactLevel?,
     val needToAcceptTerms: Boolean,
     val amlChecking: Boolean,
+    val initialShowRegularPrice: Boolean,
 ) {
     val currentStep: SwapStep = when {
         quoting -> SwapStep.Quoting
