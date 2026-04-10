@@ -639,6 +639,168 @@ class PoisonAddressManagerTest {
         assertEquals(PoisonStatus.BLOCKCHAIN, result)
     }
 
+    // --- Address poisoning reversal scenario ---
+    // Two incoming addresses share the same first 3 / last 3 chars.
+    // Whichever address is KNOWN gets BLOCKCHAIN; the other gets SUSPICIOUS.
+
+    @Test
+    fun determinePoisonStatus_poisonAddressIsKnown_originalGetsFlagged() {
+        // Scenario: user sent to the poison address (attack succeeded).
+        // Poison address B is KNOWN, original sender A is similar → A is SUSPICIOUS.
+        val originalAddress = "0x5bc24606e3abcdef000000000000000065e7a473c2"
+        val poisonAddress = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+        // poison address is KNOWN (user sent to it)
+        every { dao.get(poisonAddress, blockchainUid, accountId) } returns
+            PoisonAddress(poisonAddress, blockchainUid, accountId, PoisonAddressType.KNOWN)
+        every { dao.get(originalAddress, blockchainUid, accountId) } returns null
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(poisonAddress, blockchainUid, accountId, PoisonAddressType.KNOWN))
+
+        // Poison address itself → BLOCKCHAIN (trusted)
+        val poisonResult = manager.determinePoisonStatus(
+            relevantAddress = poisonAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, poisonResult)
+
+        // Original address → SUSPICIOUS (similar to KNOWN poison address)
+        val originalResult = manager.determinePoisonStatus(
+            relevantAddress = originalAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, originalResult)
+    }
+
+    @Test
+    fun determinePoisonStatus_originalAddressIsKnown_poisonGetsFlagged() {
+        // Correct scenario: user sent to the original address.
+        // Original address A is KNOWN, poison address B is similar → B is SUSPICIOUS.
+        val originalAddress = "0x5bc24606e3abcdef000000000000000065e7a473c2"
+        val poisonAddress = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+        // original address is KNOWN (user sent to it)
+        every { dao.get(originalAddress, blockchainUid, accountId) } returns
+            PoisonAddress(originalAddress, blockchainUid, accountId, PoisonAddressType.KNOWN)
+        every { dao.get(poisonAddress, blockchainUid, accountId) } returns null
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(originalAddress, blockchainUid, accountId, PoisonAddressType.KNOWN))
+
+        // Original address → BLOCKCHAIN (it IS KNOWN)
+        val originalResult = manager.determinePoisonStatus(
+            relevantAddress = originalAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, originalResult)
+
+        // Poison address → SUSPICIOUS (similar to KNOWN original)
+        val poisonResult = manager.determinePoisonStatus(
+            relevantAddress = poisonAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, poisonResult)
+    }
+
+    @Test
+    fun determinePoisonStatus_neitherAddressKnown_noMatchingKnown_bothBlockchain() {
+        // Neither address is KNOWN, no KNOWN address with matching prefix/suffix.
+        // Both should be BLOCKCHAIN (no basis for comparison).
+        val addressA = "0x5bc24606e3abcdef000000000000000065e7a473c2"
+        val addressB = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+
+        val resultA = manager.determinePoisonStatus(
+            relevantAddress = addressA,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, resultA)
+
+        val resultB = manager.determinePoisonStatus(
+            relevantAddress = addressB,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, resultB)
+    }
+
+    @Test
+    fun determinePoisonStatus_neitherKnown_thirdKnownMatches_bothSuspicious() {
+        // Neither A nor B is KNOWN, but a third KNOWN address C shares the same
+        // prefix/suffix. Both A and B should be SUSPICIOUS.
+        val addressA = "0x5bc24606e3abcdef000000000000000065e7a473c2"
+        val addressB = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+        val knownAddressC = "0x5bc00000000000000000000000000000000000003c2"
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(knownAddressC, blockchainUid, accountId, PoisonAddressType.KNOWN))
+
+        val resultA = manager.determinePoisonStatus(
+            relevantAddress = addressA,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, resultA)
+
+        val resultB = manager.determinePoisonStatus(
+            relevantAddress = addressB,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, resultB)
+    }
+
+    @Test
+    fun saveKnownAddress_overwritesScamEntry_makesPoisonTrusted() {
+        // Simulates attack success: address was first saved as SCAM,
+        // then user sends to it → overwritten to KNOWN via REPLACE strategy.
+        val poisonAddress = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+
+        // Initially SCAM
+        every { dao.get(poisonAddress, blockchainUid, accountId) } returns
+            PoisonAddress(poisonAddress, blockchainUid, accountId, PoisonAddressType.SCAM)
+        val resultBefore = manager.determinePoisonStatus(
+            relevantAddress = poisonAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, resultBefore)
+
+        // User sends to poison address → saveKnownAddress (REPLACE overwrites SCAM)
+        manager.saveKnownAddress(poisonAddress, blockchainType, accountId)
+        verify { dao.insert(PoisonAddress(poisonAddress, blockchainUid, accountId, PoisonAddressType.KNOWN)) }
+
+        // After overwrite, the address is KNOWN → BLOCKCHAIN
+        every { dao.get(poisonAddress, blockchainUid, accountId) } returns
+            PoisonAddress(poisonAddress, blockchainUid, accountId, PoisonAddressType.KNOWN)
+        val resultAfter = manager.determinePoisonStatus(
+            relevantAddress = poisonAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, resultAfter)
+    }
+
     // --- getRelevantAddress: event-based address resolution respects direction ---
 
     @Test
