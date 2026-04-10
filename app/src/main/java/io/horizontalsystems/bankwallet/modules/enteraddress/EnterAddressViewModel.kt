@@ -107,7 +107,7 @@ class EnterAddressViewModel(
     private fun observeSubscription() {
         viewModelScope.launch {
             UserSubscriptionManager.activeSubscriptionStateFlow.collect { subscription ->
-                hasPremium = subscription != null
+                hasPremium = UserSubscriptionManager.isActionAllowed(SecureSend)
                 if (value.isNotEmpty()) {
                     cancelAllJobs()
                     checkResults = buildInitialCheckResults()
