@@ -496,6 +496,75 @@ class TokenBalanceViewModelTest : KoinTest {
     }
 
     @Test
+    fun networkFeeWarning_balanceSyncing_doesNotShowWarning() = runTest(dispatcher) {
+        val bep20Wallet = createBep20Wallet()
+        testWallet = bep20Wallet
+        setupFeeWarningMocks()
+
+        val balanceItem = createBalanceItem(
+            wallet = bep20Wallet,
+            state = AdapterState.Syncing()
+        )
+        every { balanceService.balanceItem } returns balanceItem
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(null, viewModel.uiState.networkFeeWarning)
+    }
+
+    @Test
+    fun networkFeeWarning_balanceBecomesSyncedWithZeroNativeBalance_showsWarning() = runTest(dispatcher) {
+        val bep20Wallet = createBep20Wallet()
+        testWallet = bep20Wallet
+        setupFeeWarningMocks()
+
+        var balanceItem = createBalanceItem(
+            wallet = bep20Wallet,
+            state = AdapterState.Syncing()
+        )
+        every { balanceService.balanceItem } answers { balanceItem }
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(null, viewModel.uiState.networkFeeWarning)
+
+        balanceItem = balanceItem.copy(state = AdapterState.Synced)
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.networkFeeWarning != null)
+    }
+
+    @Test
+    fun networkFeeWarning_resyncAfterFirstSynced_keepsWarningVisible() = runTest(dispatcher) {
+        val bep20Wallet = createBep20Wallet()
+        testWallet = bep20Wallet
+        setupFeeWarningMocks()
+
+        var balanceItem = createBalanceItem(
+            wallet = bep20Wallet,
+            state = AdapterState.Synced
+        )
+        every { balanceService.balanceItem } answers { balanceItem }
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.networkFeeWarning != null)
+
+        balanceItem = balanceItem.copy(state = AdapterState.Syncing())
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.networkFeeWarning != null)
+    }
+
+    @Test
     fun networkFeeWarning_sufficientNativeBalance_noWarning() = runTest(dispatcher) {
         val bep20Wallet = createBep20Wallet()
         testWallet = bep20Wallet
@@ -922,11 +991,12 @@ class TokenBalanceViewModelTest : KoinTest {
 
     private fun createBalanceItem(
         balance: BigDecimal = BigDecimal("1.5"),
-        wallet: Wallet = testWallet
+        wallet: Wallet = testWallet,
+        state: AdapterState = AdapterState.Synced
     ) = BalanceItem(
         wallet = wallet,
         balanceData = BalanceData(available = balance),
-        state = AdapterState.Synced,
+        state = state,
         sendAllowed = true,
         coinPrice = null
     )
