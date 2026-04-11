@@ -19,6 +19,7 @@ import cash.p.terminal.modules.pin.hiddenwallet.HiddenWalletPinPolicy
 import cash.p.terminal.modules.settings.advancedsecurity.AdvancedSecurityViewModel
 import cash.p.terminal.modules.settings.advancedsecurity.securereset.SecureResetTermsViewModel
 import cash.p.terminal.modules.settings.advancedsecurity.terms.HiddenWalletTermsViewModel
+import cash.p.terminal.core.notifications.polling.TransactionPollingManager
 import cash.p.terminal.modules.walletconnect.AccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.AccountTypeNotSupportedViewModel
 import cash.p.terminal.wallet.Token
@@ -64,6 +65,7 @@ class KoinGraphTest : KoinTest {
                 definition<BlockchainStatusViewModel>(BlockchainStatusProvider::class),
                 definition<SwapSelectCoinViewModel>(Token::class, Account::class),
                 definition<AddressPoisoningViewModel>(String::class, Boolean::class, BlockchainType::class),
+                definition<TransactionPollingManager>(List::class),
             )
         )
     }

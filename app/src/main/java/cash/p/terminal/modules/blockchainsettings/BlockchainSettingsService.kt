@@ -64,25 +64,30 @@ class BlockchainSettingsService(
     }
 
     private fun syncBlockchainItems() {
-        val btcBlockchainItems = btcBlockchainManager.allBlockchains.map { blockchain ->
+        val supportedBlockchains = SupportedBlockchainsFactory.create(
+            btcBlockchainManager = btcBlockchainManager,
+            evmBlockchainManager = evmBlockchainManager,
+            solanaRpcSourceManager = solanaRpcSourceManager,
+            marketKit = marketKit,
+        )
+
+        val btcBlockchainItems = supportedBlockchains.btcBlockchains.map { blockchain ->
             val restoreMode = btcBlockchainManager.restoreMode(blockchain.type)
             BlockchainItem.Btc(blockchain, restoreMode)
         }
 
-        val evmBlockchainItems = evmBlockchainManager.allBlockchains.map { blockchain ->
+        val evmBlockchainItems = supportedBlockchains.evmBlockchains.map { blockchain ->
             val syncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
             BlockchainItem.Evm(blockchain, syncSource)
         }
 
-        val solanaBlockchainItems = mutableListOf<BlockchainItem>()
-
-        solanaRpcSourceManager.blockchain?.let {
-            solanaBlockchainItems.add(BlockchainItem.Solana(it, solanaRpcSourceManager.rpcSource))
+        val solanaBlockchainItems = supportedBlockchains.solanaBlockchains.map { blockchain ->
+            BlockchainItem.Solana(blockchain, solanaRpcSourceManager.rpcSource)
         }
 
-        val statusOnlyItems = marketKit
-            .blockchains(BlockchainSettingsModule.statusOnlyBlockchainTypes.map { it.uid })
-            .map { BlockchainItem.StatusOnly(it) }
+        val statusOnlyItems = supportedBlockchains.statusOnlyBlockchains.map {
+            BlockchainItem.StatusOnly(it)
+        }
 
         blockchainItems = (btcBlockchainItems + evmBlockchainItems + solanaBlockchainItems + statusOnlyItems).sortedBy { it.order }
     }

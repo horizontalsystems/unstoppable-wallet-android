@@ -181,6 +181,59 @@ class TonConnectNewViewModelTest {
     }
 
     @Test
+    fun connect_alreadyConnecting_ignoredSecondCall() = runTest(dispatcher) {
+        val tonAccount = tonAccount("ton-double")
+        setAccounts(listOf(tonAccount), tonAccount)
+
+        val manifest = manifest()
+        mockkStatic("cash.p.terminal.core.managers.TonKitManagerKt")
+        every {
+            any<Account>().toTonWalletFullAccess(any(), any())
+        } returns mockk(relaxed = true)
+        coEvery { tonConnectKit.getManifest(request.payload.manifestUrl) } returns manifest
+        coEvery { tonConnectKit.connect(any(), any(), any(), any()) } coAnswers {
+            delay(1000)
+            mockk(relaxed = true)
+        }
+
+        val viewModel = TonConnectNewViewModel(request, tonConnectKit)
+        advanceUntilIdle()
+
+        viewModel.connect()
+        viewModel.connect()
+        advanceUntilIdle()
+
+        coVerify(exactly = 1) {
+            tonConnectKit.connect(any(), any(), any(), any())
+        }
+    }
+
+    @Test
+    fun connect_failure_resetsConnecting() = runTest(dispatcher) {
+        val tonAccount = tonAccount("ton-reset")
+        setAccounts(listOf(tonAccount), tonAccount)
+
+        val manifest = manifest()
+        mockkStatic("cash.p.terminal.core.managers.TonKitManagerKt")
+        every {
+            any<Account>().toTonWalletFullAccess(any(), any())
+        } returns mockk(relaxed = true)
+        coEvery { tonConnectKit.getManifest(request.payload.manifestUrl) } returns manifest
+        coEvery {
+            tonConnectKit.connect(any(), any(), any(), any())
+        } throws IllegalStateException("fail")
+
+        val viewModel = TonConnectNewViewModel(request, tonConnectKit)
+        advanceUntilIdle()
+
+        viewModel.connect()
+        advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.connecting)
+        assertTrue(viewModel.uiState.connectEnabled)
+    }
+
+    @Test
     fun `connect surfaces toast on failure`() = runTest(dispatcher) {
         val tonAccount = tonAccount("ton-fail")
         setAccounts(listOf(tonAccount), tonAccount)

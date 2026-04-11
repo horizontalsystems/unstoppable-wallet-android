@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastMap
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -107,7 +108,7 @@ fun TabBox(
             // style property.
             CompositionLocalProvider(LocalContentAlpha provides contentColor.alpha) {
                 ProvideTextStyle(
-                    value = cash.p.terminal.ui_compose.theme.ComposeAppTheme.typography.captionSB
+                    value = ComposeAppTheme.typography.captionSB
                 ) {
                     Row(
                         Modifier
@@ -453,11 +454,11 @@ object TabDefaults {
 
     @Composable
     fun textButtonColors(
-        backgroundColor: Color = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
-        contentColor: Color = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah,
-        selectedBackgroundColor: Color = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellowD,
-        selectedContentColor: Color = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.dark,
-        disabledContentColor: Color = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey50,
+        backgroundColor: Color = ComposeAppTheme.colors.transparent,
+        contentColor: Color = ComposeAppTheme.colors.leah,
+        selectedBackgroundColor: Color = ComposeAppTheme.colors.yellowD,
+        selectedContentColor: Color = ComposeAppTheme.colors.dark,
+        disabledContentColor: Color = ComposeAppTheme.colors.grey50,
     ): DefaultTabColors = DefaultTabColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,

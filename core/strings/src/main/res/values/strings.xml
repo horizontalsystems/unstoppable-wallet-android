@@ -635,9 +635,9 @@ Proceed only if you\'re sure.</string>
     <string name="WalletConnect_Title" translatable="false">WalletConnect</string>
     <string name="WalletConnect_Url" translatable="false">URL</string>
     <string name="WalletConnect_Status">Status</string>
-    <string name="WalletConnect_Approve_Hint">By clicking connect, you allow this app to view your public address. This is important security step to protect your data from potential phishing risks.</string>
+    <string name="WalletConnect_Approve_Hint">By clicking Connect, you allow this app to view your public address. This is an important security step to protect your data from potential phishing risks.</string>
     <string name="WalletConnect_Reconnect_Hint">Failed to establish connection. Try reconnecting again.</string>
-    <string name="WalletConnect_Error_InvalidUrl">Invalid URL Address</string>
+    <string name="WalletConnect_Error_InvalidUrl">Invalid URL address</string>
     <string name="WalletConnect_Status_Offline">Offline</string>
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Connecting…</string>
@@ -650,21 +650,21 @@ Proceed only if you\'re sure.</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
     <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
     <string name="WalletConnect_Error_NeedBackup">Create a backup copy of the recovery phrase and the associated password that will allow you to recover your wallet if your phone is lost, stolen, broken, etc.</string>
-    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>
+    <string name="WalletConnect_Error_UnsupportedChainId">Unsupported blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">No suitable account</string>
-    <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable evm kit</string>
+    <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable EVM kit</string>
     <string name="WalletConnect_Error_UnsupportedChains">Unsupported chains: %s</string>
     <string name="WalletConnect_Error_UnsupportedMethods">Unsupported methods: %s</string>
     <string name="WalletConnect_Error_UnsupportedEvents">Unsupported events: %s</string>
-    <string name="WalletConnect_Error_RequestNotFoundError">Request not found error</string>
-    <string name="WalletConnect_NoConnection">You don\’t have any connected dapps</string>
+    <string name="WalletConnect_Error_RequestNotFoundError">Request not found</string>
+    <string name="WalletConnect_NoConnection">You don\'t have any connected dApps</string>
     <string name="WalletConnect_PendingRequests">Pending Requests</string>
     <string name="WalletConnect_ActiveWallet">Active Wallet</string>
     <string name="WalletConnect_Unnamed">Unnamed</string>
     <string name="WalletConnect_Pairings">Pairings</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="delete_all">Delete All</string>
-    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
+    <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApps?</string>
     <string name="WalletConnect_Pairings_Delete">Delete</string>
     <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
     <string name="WalletConnect_info"># What are the risks when using WalletConnect?\n\nIt should be noted that WalletConnect merely acts as a bridge between the DeFi service website and the user\'s wallet (for example P.CASH).\n\nWhen a user initiates any action on the DeFi service website requiring a transfer of funds, P.CASH wallet presents a user with the confirmation window to approve/deny the respective transaction. The P.CASH wallet has little means to know the context of the transaction and merely acts as an instrument to allow/deny the transaction.\n\nIt\'s important to use a DeFi website provided by reliable entities. If a bad actor overtakes the website of the service, it\'s potentially possible for a user to be presented with a confirmation window going beyond the intents of the user without realising it. Therefore, only use well-regarded and widely used DeFi services.</string>
@@ -2207,6 +2207,34 @@ Proceed only if you\'re sure.</string>
     <string name="login_logging_delete_data_confirmation">Are you sure you want to delete all logs?</string>
     <string name="login_logging_delete_record_confirmation">Are you sure you want to delete this record?</string>
     <string name="login_logging_info_description">If logging is enabled, you can view the login history in Advanced Security.</string>
+
+
+    <!-- Push Notifications -->
+    <string name="push_notification">Push Notifications</string>
+    <string name="premium_push_notifications_show">Show Notifications</string>
+    <string name="premium_push_notifications_warning">To receive transaction notifications, the app may stay active in the background for selected blockchains. This can increase battery usage even when you\'re not using the app.</string>
+    <string name="push_notification_polling_interval">Check Interval</string>
+    <string name="push_notification_interval_realtime">Real-time</string>
+    <string name="push_notification_interval_5min">Every 5 minutes</string>
+    <string name="push_notification_interval_10min">Every 10 minutes</string>
+    <string name="push_notification_interval_15min">Every 15 minutes</string>
+    <string name="push_notification_content">Notification Content</string>
+    <string name="push_notification_show_blockchain">Blockchain Name</string>
+    <string name="push_notification_show_coin_amount">Coin Amount</string>
+    <string name="push_notification_show_fiat_amount">Fiat Amount</string>
+    <string name="push_notification_channel_transactions">Transaction Notifications</string>
+    <string name="push_notification_channel_transactions_desc">Notifications about new transactions</string>
+    <string name="push_notification_channel_service">Transaction Monitoring</string>
+    <string name="push_notification_channel_service_desc">Background monitoring for new transactions</string>
+    <string name="push_notification_service_title">Monitoring Transactions</string>
+    <string name="push_notification_service_text">Watching for new transactions in the background</string>
+    <string name="push_notification_new_transaction">New transaction</string>
+    <string name="notification_permission_rationale_title">Notification Permission</string>
+    <string name="notification_permission_rationale_message">Permission is required to show transaction notifications. Allow it to receive alerts about new transactions.</string>
+    <string name="notification_permission_denied_title">Permission Required</string>
+    <string name="notification_permission_denied_message">Notification permission was permanently denied. Please enable it in app settings to receive transaction notifications.</string>
+    <string name="notification_permission_revoked_title">Notifications Unavailable</string>
+    <string name="notification_permission_revoked_message">Notification permission is not granted. Tap to open settings.</string>
 
     <!-- SMS Notification via ZEC -->
     <string name="send_sms_via_zec_title">Send SMS via ZEC</string>

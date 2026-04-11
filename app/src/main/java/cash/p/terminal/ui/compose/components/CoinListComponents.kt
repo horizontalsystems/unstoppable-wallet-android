@@ -296,7 +296,7 @@ fun TopCloseButton(
             }
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_close),
+                painter = painterResource(id = R.drawable.ic_close_24),
                 contentDescription = "close icon",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)

@@ -16,6 +16,7 @@ import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
+import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -118,7 +119,7 @@ class WCRequestEvmViewModel(
         val account = accountManager.activeAccount ?: return null
         val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
 
-        return evmKitManager.getEvmKitWrapper(account, blockchainType)
+        return runBlocking { evmKitManager.getEvmKitWrapper(account, blockchainType) }
     }
 
     suspend fun allow() {

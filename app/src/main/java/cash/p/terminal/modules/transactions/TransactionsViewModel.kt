@@ -49,12 +49,17 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.Date
+import java.util.concurrent.atomic.AtomicLong
 
 class TransactionsViewModel(
     private val service: TransactionsService,
@@ -72,7 +77,7 @@ class TransactionsViewModel(
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModelUiState<TransactionsUiState>() {
 
-    private val poisonAddressManager: PoisonAddressManager = cash.p.terminal.core.getKoinInstance()
+    private val poisonAddressManager: PoisonAddressManager = getKoinInstance()
 
     var tmpItemToShow: TransactionItem? = null
 
@@ -491,6 +496,18 @@ class TransactionsViewModel(
             changeNowTransactionId = viewItem.changeNowTransactionId
         )
 
+    suspend fun awaitTransactionItem(recordUid: String, timeoutMs: Long = 5_000): TransactionItem? {
+        getTransactionItem(recordUid)?.let { return it }
+
+        return withTimeoutOrNull(timeoutMs) {
+            merge(
+                service.transactionItemsFlow.map { },
+                transactionAdapterManager.adaptersReadyFlow.map { },
+            ).first { getTransactionItem(recordUid) != null }
+            getTransactionItem(recordUid)
+        }
+    }
+
     suspend fun getTransactionItem(recordUid: String): TransactionItem? {
         val item = service.getTransactionItem(recordUid)
             ?: findTransactionRecordInAdapters(recordUid)?.let {
@@ -548,9 +565,27 @@ data class TransactionItem(
     val nftMetadata: Map<NftUid, NftAssetBriefMetadata>,
     val changeNowTransactionId: String? = null,
     val transactionStatusUrl: Pair<String, String>? = null,
-    val walletUid: String? = null
+    val walletUid: String? = null,
+    val cacheVersion: Long = nextVersion(),
 ) {
-    val createdAt = System.currentTimeMillis()
+    fun withUpdatedListData(
+        record: TransactionRecord = this.record,
+        currencyValue: CurrencyValue? = this.currencyValue,
+        lastBlockInfo: LastBlockInfo? = this.lastBlockInfo,
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata> = this.nftMetadata,
+    ): TransactionItem = copy(
+        record = record,
+        currencyValue = currencyValue,
+        lastBlockInfo = lastBlockInfo,
+        nftMetadata = nftMetadata,
+        cacheVersion = nextVersion(),
+    )
+
+    companion object {
+        private val cacheVersionCounter = AtomicLong()
+
+        private fun nextVersion(): Long = cacheVersionCounter.incrementAndGet()
+    }
 }
 
 @Immutable

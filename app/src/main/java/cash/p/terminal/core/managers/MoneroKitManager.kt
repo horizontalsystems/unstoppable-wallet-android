@@ -1,8 +1,8 @@
 package cash.p.terminal.core.managers
 
-import android.util.Log
-import androidx.room.concurrent.AtomicInt
 import cash.p.terminal.core.App
+import cash.p.terminal.core.onPollingStartedSuspend
+import cash.p.terminal.core.onPollingStoppedSuspend
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.adapters.MoneroAdapter
 import cash.p.terminal.core.storage.MoneroFileDao
@@ -56,21 +56,24 @@ import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 import java.io.File
 import java.math.BigDecimal
+import java.util.concurrent.atomic.AtomicInteger
 
 class MoneroKitManager(
     private val moneroWalletService: MoneroWalletService,
     private val backgroundManager: BackgroundManager,
-    private val restoreSettingsManager: RestoreSettingsManager
+    private val restoreSettingsManager: RestoreSettingsManager,
+    private val backgroundKeepAliveManager: BackgroundKeepAliveManager
 ) {
     private val connectivityManager = App.connectivityManager
+    private val pollingSessionCount = AtomicInteger(0)
     private val coroutineScope =
         CoroutineScope(Dispatchers.IO + CoroutineExceptionHandler { _, throwable ->
-            Log.d("MoneroKitManager", "Coroutine error", throwable)
+            Timber.e(throwable, "Coroutine error")
         })
     var moneroKitWrapper: MoneroKitWrapper? = null
     private val lifecycleJobs = mutableListOf<Job>()
 
-    private var useCount = AtomicInt(0)
+    private var useCount = AtomicInteger(0)
     var currentAccount: Account? = null
         private set
     private val moneroKitStoppedSubject = PublishSubject.create<Unit>()
@@ -121,6 +124,18 @@ class MoneroKitManager(
         }
     }
 
+    suspend fun startForPolling() {
+        pollingSessionCount.onPollingStartedSuspend {
+            moneroKitWrapper?.resume()
+        }
+    }
+
+    suspend fun stopForPolling() {
+        pollingSessionCount.onPollingStoppedSuspend(backgroundManager) {
+            moneroKitWrapper?.pause()
+        }
+    }
+
     private suspend fun stopKit() {
         lifecycleJobs.forEach { it.cancel() }
         lifecycleJobs.clear()
@@ -152,7 +167,11 @@ class MoneroKitManager(
                 if (state == BackgroundManagerState.EnterForeground) {
                     resumeOrStartKit()
                 } else if (state == BackgroundManagerState.EnterBackground) {
-                    pauseKit()
+                    if (pollingSessionCount.get() == 0 && !backgroundKeepAliveManager.isKeepAlive(BlockchainType.Monero)) {
+                        pauseKit()
+                    } else {
+                        Timber.tag("TxPoller").d("MoneroKit staying alive")
+                    }
                 }
             }
         }
@@ -511,7 +530,7 @@ class MoneroKitWrapper(
             startInternal()
         } catch (e: Exception) {
             logger.warning("refresh: failed to restart wallet", e)
-            Log.e("MoneroKitWrapper", "Failed to refresh Monero wallet", e)
+            Timber.e(e, "Failed to refresh Monero wallet")
         }
     }
 
@@ -588,7 +607,7 @@ class MoneroKitWrapper(
 
     fun getAddress(): String {
         return try {
-            moneroWalletService.wallet!!.address
+            requireNotNull(moneroWalletService.wallet).address
         } catch (e: Exception) {
             logger.warning("getAddress: failed to fetch address", e)
             Timber.d("getAddress: Failed to get address $e")

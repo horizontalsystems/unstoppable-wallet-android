@@ -24,7 +24,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 class ConnectivityManager(
     backgroundManager: BackgroundManager,
-    private val localStorage: ILocalStorage
+    private val localStorage: ILocalStorage,
+    private val backgroundKeepAliveManager: BackgroundKeepAliveManager
 ) : IConnectivityManager {
 
     private val systemConnectivityManager: ConnectivityManager by lazy {
@@ -159,7 +160,9 @@ class ConnectivityManager(
     }
 
     private fun didEnterBackground() {
-        unregisterCallbackSafely()
+        if (backgroundKeepAliveManager.keepAliveBlockchains.value.isEmpty()) {
+            unregisterCallbackSafely()
+        }
     }
 
     private fun cleanup() {

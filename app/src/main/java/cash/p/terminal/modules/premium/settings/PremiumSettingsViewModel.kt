@@ -36,6 +36,7 @@ internal class PremiumSettingsViewModel(
 
     override fun createState() = PremiumSettingsUiState(
         checkEnabled = checkEnabled && checkPremiumUseCase.getPremiumType().isPremium(),
+        notificationNotAvailable = !checkPremiumUseCase.getPremiumType().isPremium(),
         amlCheckReceivedEnabled = amlStatusManager.isEnabled && checkPremiumUseCase.getPremiumType()
             .isPremium(),
         showAlertIcon = showLoggingAlert
@@ -55,6 +56,7 @@ internal class PremiumSettingsViewModel(
 
 internal data class PremiumSettingsUiState(
     val checkEnabled: Boolean,
+    val notificationNotAvailable: Boolean,
     val amlCheckReceivedEnabled: Boolean = false,
-    val showAlertIcon: Boolean = false
+    val showAlertIcon: Boolean = false,
 )

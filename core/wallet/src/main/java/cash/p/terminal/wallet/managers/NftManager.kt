@@ -1,6 +1,8 @@
 package cash.p.terminal.wallet.managers
 
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.models.HsTimePeriod
 import cash.p.terminal.wallet.models.NftPrice
 import cash.p.terminal.wallet.models.NftTopCollection
@@ -34,10 +36,7 @@ class NftManager(
     private fun baseTokenMap(blockchainTypes: List<BlockchainType>): Map<BlockchainType, Token> {
         val map = mutableMapOf<BlockchainType, Token>()
         val tokens = coinManager.tokens(blockchainTypes.map {
-            cash.p.terminal.wallet.entities.TokenQuery(
-                it,
-                cash.p.terminal.wallet.entities.TokenType.Native
-            )
+            TokenQuery(it, TokenType.Native)
         })
         tokens.forEach { token ->
             map[token.blockchainType] = token

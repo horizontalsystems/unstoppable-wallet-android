@@ -136,7 +136,7 @@ fun SearchBar(
                                 showClearButton = false
                             }) {
                                 Icon(
-                                    painter = painterResource(R.drawable.ic_close),
+                                    painter = painterResource(R.drawable.ic_close_24),
                                     contentDescription = stringResource(R.string.Button_Cancel),
                                     tint = ComposeAppTheme.colors.jacob
                                 )

@@ -19,6 +19,7 @@ import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningVi
 import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.TimeDuration
+import cash.p.terminal.modules.premium.settings.PollingInterval
 import cash.p.terminal.modules.market.favorites.WatchlistSorting
 import cash.p.terminal.modules.settings.appearance.AppIcon
 import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
@@ -829,6 +830,41 @@ class LocalStorageManager(
         default = ""
     )
 
+
+    override var pushNotificationsEnabled by preferences.delegate(
+        key = "push_notifications_enabled",
+        default = false
+    )
+
+    override var pushPollingInterval by preferences.delegate(
+        key = "push_polling_interval",
+        default = PollingInterval.REALTIME
+    )
+
+    override var pushEnabledBlockchainUids by preferences.delegate(
+        key = "push_enabled_blockchain_uids",
+        default = emptySet<String>()
+    )
+
+    override var pushBlockchainsConfigured by preferences.delegate(
+        key = "push_blockchains_configured",
+        default = false
+    )
+
+    override var pushShowBlockchainName by preferences.delegate(
+        key = "push_show_blockchain_name",
+        default = true
+    )
+
+    override var pushShowCoinAmount by preferences.delegate(
+        key = "push_show_coin_amount",
+        default = true
+    )
+
+    override var pushShowFiatAmount by preferences.delegate(
+        key = "push_show_fiat_amount",
+        default = true
+    )
 
     private fun networkFeeWarningKey(uid: String) = "network_fee_warning_dismissed_$uid"
 

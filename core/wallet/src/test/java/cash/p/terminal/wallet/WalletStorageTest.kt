@@ -1,5 +1,6 @@
 package cash.p.terminal.wallet
 
+import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.wallet.entities.EnabledWallet
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.policy.HardwareWalletTokenPolicy
@@ -30,7 +31,7 @@ class WalletStorageTest {
     )
 
     private val token = Token(
-        coin = cash.p.terminal.wallet.entities.Coin(
+        coin = Coin(
             uid = "coin-uid",
             name = "Coin",
             code = "COIN"

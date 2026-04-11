@@ -32,10 +32,6 @@ internal abstract class BaseEvmAdapter(
         return amount.movePointLeft(decimals).stripTrailingZeros()
     }
 
-    protected fun scaleUp(amount: BigDecimal, decimals: Int = decimal): BigInteger {
-        return amount.movePointRight(decimals).toBigInteger()
-    }
-
     // IReceiveAdapter
 
     override val receiveAddress: String

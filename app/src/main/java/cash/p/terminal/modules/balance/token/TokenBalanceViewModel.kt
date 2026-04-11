@@ -7,16 +7,15 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.getKoinInstance
-import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.isNative
-import cash.p.terminal.modules.send.fee.getWarningThreshold
 import cash.p.terminal.core.managers.AmlStatusManager
-import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.managers.MarketFavoritesManager
+import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.managers.StackingManager
 import cash.p.terminal.core.managers.TransactionHiddenManager
@@ -38,6 +37,7 @@ import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.displayoptions.DisplayDiffOptionType
 import cash.p.terminal.modules.displayoptions.DisplayPricePeriod
 import cash.p.terminal.modules.send.SendResult
+import cash.p.terminal.modules.send.fee.getWarningThreshold
 import cash.p.terminal.modules.send.zcash.SendZCashViewModel
 import cash.p.terminal.modules.transactions.AmlStatus
 import cash.p.terminal.modules.transactions.TransactionItem
@@ -51,6 +51,7 @@ import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IReceiveAdapter
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.badge
@@ -109,7 +110,7 @@ class TokenBalanceViewModel(
         getKoinInstance()
     private val adapterManager: IAdapterManager = getKoinInstance()
     private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage = getKoinInstance()
-    private val marketKit: cash.p.terminal.wallet.MarketKitWrapper = getKoinInstance()
+    private val marketKit: MarketKitWrapper = getKoinInstance()
     private val poisonAddressManager: PoisonAddressManager = getKoinInstance()
 
     private val title = wallet.token.coin.name
@@ -188,6 +189,14 @@ class TokenBalanceViewModel(
                     transactionViewItem2Factory.updateCache()
                     transactionsService.refreshList()
                 }
+            }
+        }
+
+        viewModelScope.launch {
+            nativeBalanceProvider?.nativeBalanceUpdatedFlow?.collect {
+                if (balanceService.balanceItem == null) return@collect
+                updateNetworkFeeWarning()
+                emitState()
             }
         }
 
@@ -418,8 +427,15 @@ class TokenBalanceViewModel(
         syncing = syncing
     )
 
+    private val nativeBalanceProvider: INativeBalanceProvider?
+        get() = adapterManager.getBalanceAdapterForWallet(wallet) as? INativeBalanceProvider
+
     private fun updateNetworkFeeWarning() {
-        if (wallet.token.type.isNative || networkFeeWarningDismissed) {
+        if (
+            wallet.token.type.isNative ||
+            networkFeeWarningDismissed ||
+            !hasReachedSyncedState()
+        ) {
             networkFeeWarning = null
             return
         }
@@ -427,9 +443,7 @@ class TokenBalanceViewModel(
         val nativeToken = marketKit.token(
             TokenQuery(blockchainType, TokenType.Native)
         ) ?: return
-        val nativeBalance = (adapterManager.getBalanceAdapterForWallet(wallet) as? INativeBalanceProvider)
-            ?.nativeBalanceData?.total
-            ?: BigDecimal.ZERO
+        val nativeBalance = nativeBalanceProvider?.nativeBalanceData?.total ?: BigDecimal.ZERO
         val threshold = getWarningThreshold(blockchainType)
         val hasEnoughBalance = if (threshold != null) {
             nativeBalance >= threshold
@@ -471,16 +485,21 @@ class TokenBalanceViewModel(
         emitState()
     }
 
+    private fun hasReachedSyncedState(): Boolean {
+        val item = balanceService.balanceItem ?: return hasReachedSynced
+        if (item.state is AdapterState.Synced) {
+            hasReachedSynced = true
+        }
+        return hasReachedSynced
+    }
+
     private fun isShowShieldFunds(): Boolean {
         val item = balanceService.balanceItem ?: return hasReachedSynced
         val isTransparent =
             (item.wallet.token.type as? TokenType.AddressSpecTyped)?.type == TokenType.AddressSpecType.Transparent
         if (!isTransparent || item.balanceData.total <= ZcashAdapter.MINERS_FEE) return false
 
-        if (item.state is AdapterState.Synced) {
-            hasReachedSynced = true
-        }
-        return hasReachedSynced
+        return hasReachedSyncedState()
     }
 
     private fun updateTransactions(items: List<TransactionItem>) {

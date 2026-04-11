@@ -96,7 +96,7 @@ class AdapterFactory(
 ) {
     private val logger = AppLogger("adapter-factory")
 
-    private fun getEvmAdapter(wallet: Wallet): IAdapter? {
+    private suspend fun getEvmAdapter(wallet: Wallet): IAdapter? {
         val blockchainType = evmBlockchainManager.getBlockchain(wallet.token)?.type ?: return null
 
         val evmTransactionRepository: EvmTransactionRepository by inject(
@@ -110,7 +110,7 @@ class AdapterFactory(
         return EvmAdapter(evmTransactionRepository, coinManager)
     }
 
-    private fun getEip20Adapter(wallet: Wallet, address: String): IAdapter? {
+    private suspend fun getEip20Adapter(wallet: Wallet, address: String): IAdapter? {
         val blockchainType = evmBlockchainManager.getBlockchain(wallet.token)?.type ?: return null
         val baseToken = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
         val stackingManager = getKoinInstance<StackingManager>()
@@ -141,7 +141,7 @@ class AdapterFactory(
         return SplAdapter(solanaKitWrapper, wallet, address)
     }
 
-    private fun getTrc20Adapter(wallet: Wallet, address: String): IAdapter? {
+    private suspend fun getTrc20Adapter(wallet: Wallet, address: String): IAdapter? {
         val tronKitWrapper = tronKitManager.getTronKitWrapper(wallet.account)
 
         val baseToken =
@@ -149,7 +149,7 @@ class AdapterFactory(
         return Trc20Adapter(tronKitWrapper, address, wallet, baseToken)
     }
 
-    private fun getJettonAdapter(wallet: Wallet, address: String): IAdapter {
+    private suspend fun getJettonAdapter(wallet: Wallet, address: String): IAdapter {
         val tonKitWrapper = tonKitManager.getTonKitWrapper(
             account = wallet.account,
             blockchainType = wallet.token.blockchainType,
@@ -163,7 +163,7 @@ class AdapterFactory(
         )
     }
 
-    private fun getStellarAssetAdapter(wallet: Wallet, code: String, issuer: String): IAdapter {
+    private suspend fun getStellarAssetAdapter(wallet: Wallet, code: String, issuer: String): IAdapter {
         val stellarKitWrapper = stellarKitManager.getStellarKitWrapper(wallet.account)
 
         return StellarAssetAdapter(stellarKitWrapper, code, issuer)
@@ -409,7 +409,7 @@ class AdapterFactory(
             is TokenType.Unsupported -> null
         }
 
-    fun evmTransactionsAdapter(
+    suspend fun evmTransactionsAdapter(
         source: TransactionSource,
         blockchainType: BlockchainType
     ): ITransactionsAdapter? {
@@ -450,7 +450,7 @@ class AdapterFactory(
         return SolanaTransactionsAdapter(solanaKitWrapper, solanaTransactionConverter)
     }
 
-    fun tronTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
+    suspend fun tronTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         val tronKitWrapper = tronKitManager.getTronKitWrapper(source.account)
         val baseToken =
             coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: return null
@@ -465,7 +465,7 @@ class AdapterFactory(
         return TronTransactionsAdapter(tronKitWrapper, tronTransactionConverter)
     }
 
-    fun tonTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
+    suspend fun tonTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         val tonKitWrapper = tonKitManager.getTonKitWrapper(
             account = source.account,
             blockchainType = source.blockchain.type,
@@ -477,7 +477,7 @@ class AdapterFactory(
         return TonTransactionsAdapter(tonKitWrapper, tonTransactionConverter)
     }
 
-    fun stellarTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
+    suspend fun stellarTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         val stellarKitWrapper = stellarKitManager.getStellarKitWrapper(source.account)
 
         val tokenQuery = TokenQuery(BlockchainType.Stellar, TokenType.Native)

@@ -9,6 +9,7 @@ import cash.p.terminal.modules.displayoptions.DisplayPricePeriod
 import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningViewMode
 import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.market.TimeDuration
+import cash.p.terminal.modules.premium.settings.PollingInterval
 import cash.p.terminal.modules.market.favorites.WatchlistSorting
 import cash.p.terminal.modules.settings.appearance.AppIcon
 import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
@@ -127,6 +128,14 @@ interface ILocalStorage : ILoggingSettings, ISmsNotificationSettings {
     fun isNetworkFeeWarningDismissed(blockchainTypeUid: String): Boolean
     fun dismissNetworkFeeWarning(blockchainTypeUid: String)
     var moneroSkipNewAddressConfirm: Boolean
+
+    var pushNotificationsEnabled: Boolean
+    var pushPollingInterval: PollingInterval
+    var pushEnabledBlockchainUids: Set<String>
+    var pushBlockchainsConfigured: Boolean
+    var pushShowBlockchainName: Boolean
+    var pushShowCoinAmount: Boolean
+    var pushShowFiatAmount: Boolean
 
     fun clear()
 }

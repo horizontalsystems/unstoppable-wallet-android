@@ -26,6 +26,7 @@ import org.junit.Before
 import org.junit.Test
 import java.math.BigDecimal
 
+@Suppress("LargeClass")
 class PoisonAddressManagerTest {
 
     private val dao = mockk<PoisonAddressDao>(relaxed = true)
@@ -33,14 +34,15 @@ class PoisonAddressManagerTest {
     private val marketKit = mockk<MarketKitWrapper>()
     private val blockchainType = BlockchainType.Ethereum
     private val blockchainUid = blockchainType.uid
+    private val accountId = "test-account-id"
 
     private lateinit var manager: PoisonAddressManager
 
     @Before
     fun setup() {
         every { contactsRepository.getContactsFiltered(any(), any(), any()) } returns emptyList()
-        every { dao.get(any(), any()) } returns null
-        every { dao.getAllByType(any(), any()) } returns emptyList()
+        every { dao.get(any(), any(), any()) } returns null
+        every { dao.getAllByType(any(), any(), any()) } returns emptyList()
         every { marketKit.token(any<TokenQuery>()) } returns null
 
         manager = PoisonAddressManager(dao, contactsRepository, marketKit)
@@ -53,6 +55,7 @@ class PoisonAddressManagerTest {
         val result = manager.determinePoisonStatus(
             relevantAddress = null,
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
         )
@@ -72,6 +75,7 @@ class PoisonAddressManagerTest {
         val result = manager.determinePoisonStatus(
             relevantAddress = address,
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
         )
@@ -91,6 +95,7 @@ class PoisonAddressManagerTest {
         val result = manager.determinePoisonStatus(
             relevantAddress = address,
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = true,
             isCreatedByWallet = true,
         )
@@ -102,6 +107,7 @@ class PoisonAddressManagerTest {
         val result = manager.determinePoisonStatus(
             relevantAddress = "0xabc123def456",
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = true,
             isCreatedByWallet = true,
         )
@@ -111,12 +117,13 @@ class PoisonAddressManagerTest {
     @Test
     fun determinePoisonStatus_knownAddress_returnsBlockchain() {
         val address = "0xabc123def456"
-        every { dao.get(address, blockchainUid) } returns
-            PoisonAddress(address, blockchainUid, PoisonAddressType.KNOWN)
+        every { dao.get(address, blockchainUid, accountId) } returns
+            PoisonAddress(address, blockchainUid, accountId, PoisonAddressType.KNOWN)
 
         val result = manager.determinePoisonStatus(
             relevantAddress = address,
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
         )
@@ -126,12 +133,13 @@ class PoisonAddressManagerTest {
     @Test
     fun determinePoisonStatus_scamAddress_returnsSuspicious() {
         val address = "0xabc123def456"
-        every { dao.get(address, blockchainUid) } returns
-            PoisonAddress(address, blockchainUid, PoisonAddressType.SCAM)
+        every { dao.get(address, blockchainUid, accountId) } returns
+            PoisonAddress(address, blockchainUid, accountId, PoisonAddressType.SCAM)
 
         val result = manager.determinePoisonStatus(
             relevantAddress = address,
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
         )
@@ -142,12 +150,13 @@ class PoisonAddressManagerTest {
     fun determinePoisonStatus_similarToKnown_returnsSuspicious() {
         val knownAddress = "0xaaaa_middle_bbb"
         val similarAddress = "0xa_different_bbb"
-        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid) } returns
-            listOf(PoisonAddress(knownAddress, blockchainUid, PoisonAddressType.KNOWN))
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(knownAddress, blockchainUid, accountId, PoisonAddressType.KNOWN))
 
         val result = manager.determinePoisonStatus(
             relevantAddress = similarAddress,
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
         )
@@ -158,12 +167,13 @@ class PoisonAddressManagerTest {
     fun determinePoisonStatus_notSimilarToKnown_returnsBlockchain() {
         val knownAddress = "0xaaaa_middle_bbb"
         val differentAddress = "0xz_different_zzz"
-        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid) } returns
-            listOf(PoisonAddress(knownAddress, blockchainUid, PoisonAddressType.KNOWN))
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(knownAddress, blockchainUid, accountId, PoisonAddressType.KNOWN))
 
         val result = manager.determinePoisonStatus(
             relevantAddress = differentAddress,
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
         )
@@ -176,12 +186,13 @@ class PoisonAddressManagerTest {
     fun determinePoisonStatus_sameAddressDifferentCase_returnsCorrectStatus() {
         val lowerAddress = "0xabcdef123456"
         val mixedCaseAddress = "0xAbCdEf123456"
-        every { dao.get(lowerAddress, blockchainUid) } returns
-            PoisonAddress(lowerAddress, blockchainUid, PoisonAddressType.SCAM)
+        every { dao.get(lowerAddress, blockchainUid, accountId) } returns
+            PoisonAddress(lowerAddress, blockchainUid, accountId, PoisonAddressType.SCAM)
 
         val result = manager.determinePoisonStatus(
             relevantAddress = mixedCaseAddress,
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
         )
@@ -191,12 +202,72 @@ class PoisonAddressManagerTest {
     @Test
     fun saveKnownAddress_storesLowercased() {
         val mixedCase = "0xAbCdEf123456"
-        manager.saveKnownAddress(mixedCase, blockchainType)
+        manager.saveKnownAddress(mixedCase, blockchainType, accountId)
 
         verify {
             dao.insert(
-                PoisonAddress("0xabcdef123456", blockchainUid, PoisonAddressType.KNOWN)
+                PoisonAddress("0xabcdef123456", blockchainUid, accountId, PoisonAddressType.KNOWN)
             )
+        }
+    }
+
+    // --- Account scoping ---
+
+    @Test
+    fun determinePoisonStatus_knownForDifferentAccount_notTreatedAsKnown() {
+        val address = "0xabc123def456"
+        val otherAccountId = "other-account-id"
+        every { dao.get(address, blockchainUid, accountId) } returns
+            PoisonAddress(address, blockchainUid, accountId, PoisonAddressType.KNOWN)
+        every { dao.get(address, blockchainUid, otherAccountId) } returns null
+
+        val result = manager.determinePoisonStatus(
+            relevantAddress = address,
+            blockchainType = blockchainType,
+            accountId = otherAccountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, result)
+    }
+
+    @Test
+    fun determinePoisonStatus_similarToKnownOfDifferentAccount_notFlagged() {
+        val knownAddress = "abc_known_xyz"
+        val similarAddress = "abc_poison_xyz"
+        val otherAccountId = "other-account-id"
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(knownAddress, blockchainUid, accountId, PoisonAddressType.KNOWN))
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, otherAccountId) } returns emptyList()
+
+        val result = manager.determinePoisonStatus(
+            relevantAddress = similarAddress,
+            blockchainType = blockchainType,
+            accountId = otherAccountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, result)
+    }
+
+    @Test
+    fun isAddressSuspicious_knownForDifferentAccount_notTreatedAsKnown() {
+        val address = "0xabc123def456"
+        val otherAccountId = "other-account-id"
+        every { dao.get(address, blockchainUid, accountId) } returns
+            PoisonAddress(address, blockchainUid, accountId, PoisonAddressType.KNOWN)
+        every { dao.get(address, blockchainUid, otherAccountId) } returns null
+
+        assertFalse(manager.isAddressSuspicious(address, blockchainType, otherAccountId))
+    }
+
+    @Test
+    fun saveKnownAddress_scopedToAccount() {
+        val address = "0xabc123def456"
+        manager.saveKnownAddress(address, blockchainType, accountId)
+
+        verify {
+            dao.insert(PoisonAddress(address, blockchainUid, accountId, PoisonAddressType.KNOWN))
         }
     }
 
@@ -206,12 +277,13 @@ class PoisonAddressManagerTest {
     fun determinePoisonStatus_similarFirst3Last3Match_returnsSuspicious() {
         val knownAddress = "abc_known_xyz"
         val similarAddress = "abc_poison_xyz"
-        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid) } returns
-            listOf(PoisonAddress(knownAddress, blockchainUid, PoisonAddressType.KNOWN))
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(knownAddress, blockchainUid, accountId, PoisonAddressType.KNOWN))
 
         val result = manager.determinePoisonStatus(
             relevantAddress = similarAddress,
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
         )
@@ -222,12 +294,13 @@ class PoisonAddressManagerTest {
     fun determinePoisonStatus_onlyFirst3Match_returnsBlockchain() {
         val knownAddress = "abc_known_xyz"
         val partialMatch = "abc_poison_qqq"
-        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid) } returns
-            listOf(PoisonAddress(knownAddress, blockchainUid, PoisonAddressType.KNOWN))
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(knownAddress, blockchainUid, accountId, PoisonAddressType.KNOWN))
 
         val result = manager.determinePoisonStatus(
             relevantAddress = partialMatch,
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
         )
@@ -237,12 +310,13 @@ class PoisonAddressManagerTest {
     @Test
     fun determinePoisonStatus_sameAddressAsKnown_returnsBlockchain() {
         val address = "abc_same_xyz"
-        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid) } returns
-            listOf(PoisonAddress(address, blockchainUid, PoisonAddressType.KNOWN))
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(address, blockchainUid, accountId, PoisonAddressType.KNOWN))
 
         val result = manager.determinePoisonStatus(
             relevantAddress = address,
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
         )
@@ -252,12 +326,13 @@ class PoisonAddressManagerTest {
     @Test
     fun determinePoisonStatus_shortAddress_returnsBlockchain() {
         val shortAddress = "abcde"  // length 5 < SIMILARITY_CHARS * 2 = 6
-        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid) } returns
-            listOf(PoisonAddress("abcxe", blockchainUid, PoisonAddressType.KNOWN))
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress("abcxe", blockchainUid, accountId, PoisonAddressType.KNOWN))
 
         val result = manager.determinePoisonStatus(
             relevantAddress = shortAddress,
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
         )
@@ -269,29 +344,29 @@ class PoisonAddressManagerTest {
     @Test
     fun isAddressSuspicious_knownAddress_returnsFalse() {
         val address = "0xabc123def456"
-        every { dao.get(address, blockchainUid) } returns
-            PoisonAddress(address, blockchainUid, PoisonAddressType.KNOWN)
+        every { dao.get(address, blockchainUid, accountId) } returns
+            PoisonAddress(address, blockchainUid, accountId, PoisonAddressType.KNOWN)
 
-        assertFalse(manager.isAddressSuspicious(address, blockchainType))
+        assertFalse(manager.isAddressSuspicious(address, blockchainType, accountId))
     }
 
     @Test
     fun isAddressSuspicious_scamAddress_returnsTrue() {
         val address = "0xabc123def456"
-        every { dao.get(address, blockchainUid) } returns
-            PoisonAddress(address, blockchainUid, PoisonAddressType.SCAM)
+        every { dao.get(address, blockchainUid, accountId) } returns
+            PoisonAddress(address, blockchainUid, accountId, PoisonAddressType.SCAM)
 
-        assertTrue(manager.isAddressSuspicious(address, blockchainType))
+        assertTrue(manager.isAddressSuspicious(address, blockchainType, accountId))
     }
 
     @Test
     fun isAddressSuspicious_similarToKnown_returnsTrue() {
         val knownAddress = "abc_known_xyz"
         val similarAddress = "abc_poison_xyz"
-        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid) } returns
-            listOf(PoisonAddress(knownAddress, blockchainUid, PoisonAddressType.KNOWN))
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(knownAddress, blockchainUid, accountId, PoisonAddressType.KNOWN))
 
-        assertTrue(manager.isAddressSuspicious(similarAddress, blockchainType))
+        assertTrue(manager.isAddressSuspicious(similarAddress, blockchainType, accountId))
     }
 
     @Test
@@ -304,12 +379,12 @@ class PoisonAddressManagerTest {
             )
         } returns listOf(mockk<Contact>())
 
-        assertFalse(manager.isAddressSuspicious(address, blockchainType))
+        assertFalse(manager.isAddressSuspicious(address, blockchainType, accountId))
     }
 
     @Test
     fun isAddressSuspicious_nullAddress_returnsFalse() {
-        assertFalse(manager.isAddressSuspicious(null, blockchainType))
+        assertFalse(manager.isAddressSuspicious(null, blockchainType, accountId))
     }
 
     // --- Zero-amount outgoing ---
@@ -319,6 +394,7 @@ class PoisonAddressManagerTest {
         val result = manager.determinePoisonStatus(
             relevantAddress = "0xabc123def456",
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = true,
             isCreatedByWallet = false,
             amount = BigDecimal.ZERO,
@@ -327,10 +403,24 @@ class PoisonAddressManagerTest {
     }
 
     @Test
+    fun determinePoisonStatus_not_zeroAmountOutgoing_returnsBlockchain() {
+        val result = manager.determinePoisonStatus(
+            relevantAddress = "0xabc123def456",
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = true,
+            isCreatedByWallet = false,
+            amount = BigDecimal("0.00000000000001"),
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, result)
+    }
+
+    @Test
     fun determinePoisonStatus_nonZeroAmountOutgoing_notSuspiciousByAmount() {
         val result = manager.determinePoisonStatus(
             relevantAddress = "0xzzz999qqq111",
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = true,
             isCreatedByWallet = false,
             amount = BigDecimal.ONE,
@@ -343,6 +433,7 @@ class PoisonAddressManagerTest {
         val result = manager.determinePoisonStatus(
             relevantAddress = "0xzzz999qqq111",
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
             amount = BigDecimal.ZERO,
@@ -360,6 +451,7 @@ class PoisonAddressManagerTest {
         val result = manager.determinePoisonStatus(
             relevantAddress = "0xzzz999qqq111",
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
             coinCode = "USDT",
@@ -376,6 +468,7 @@ class PoisonAddressManagerTest {
         val result = manager.determinePoisonStatus(
             relevantAddress = "0xzzz999qqq111",
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
             coinCode = "USDC",
@@ -392,6 +485,7 @@ class PoisonAddressManagerTest {
         val result = manager.determinePoisonStatus(
             relevantAddress = "0xzzz999qqq111",
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
             coinCode = "DAI",
@@ -405,12 +499,13 @@ class PoisonAddressManagerTest {
     @Test
     fun determinePoisonStatus_usdtWithNullContractOnEvm_returnsSuspicious() {
         every { contactsRepository.getContactsFiltered(any(), any()) } returns emptyList()
-        every { dao.get(any(), any()) } returns null
-        every { dao.getAllByType(any(), any()) } returns emptyList()
+        every { dao.get(any(), any(), any()) } returns null
+        every { dao.getAllByType(any(), any(), any()) } returns emptyList()
 
         val result = manager.determinePoisonStatus(
             relevantAddress = "0xscammer123456789abcdef",
             blockchainType = BlockchainType.Ethereum,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
             coinCode = "USDT",
@@ -422,12 +517,13 @@ class PoisonAddressManagerTest {
     @Test
     fun determinePoisonStatus_usdcWithNullContractOnBsc_returnsSuspicious() {
         every { contactsRepository.getContactsFiltered(any(), any()) } returns emptyList()
-        every { dao.get(any(), any()) } returns null
-        every { dao.getAllByType(any(), any()) } returns emptyList()
+        every { dao.get(any(), any(), any()) } returns null
+        every { dao.getAllByType(any(), any(), any()) } returns emptyList()
 
         val result = manager.determinePoisonStatus(
             relevantAddress = "0xscammer123456789abcdef",
             blockchainType = BlockchainType.BinanceSmartChain,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
             coinCode = "usdc",
@@ -439,12 +535,13 @@ class PoisonAddressManagerTest {
     @Test
     fun determinePoisonStatus_usdtWithNullContractOnTon_returnsBlockchain() {
         every { contactsRepository.getContactsFiltered(any(), any()) } returns emptyList()
-        every { dao.get(any(), any()) } returns null
-        every { dao.getAllByType(any(), any()) } returns emptyList()
+        every { dao.get(any(), any(), any()) } returns null
+        every { dao.getAllByType(any(), any(), any()) } returns emptyList()
 
         val result = manager.determinePoisonStatus(
             relevantAddress = "EQsometonaddress1234567",
             blockchainType = BlockchainType.Ton,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
             coinCode = "USDT",
@@ -456,12 +553,13 @@ class PoisonAddressManagerTest {
     @Test
     fun determinePoisonStatus_usdcWithNullContractOnStellar_returnsBlockchain() {
         every { contactsRepository.getContactsFiltered(any(), any()) } returns emptyList()
-        every { dao.get(any(), any()) } returns null
-        every { dao.getAllByType(any(), any()) } returns emptyList()
+        every { dao.get(any(), any(), any()) } returns null
+        every { dao.getAllByType(any(), any(), any()) } returns emptyList()
 
         val result = manager.determinePoisonStatus(
             relevantAddress = "GBstellaraddress12345678",
             blockchainType = BlockchainType.Stellar,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
             coinCode = "USDC",
@@ -473,12 +571,13 @@ class PoisonAddressManagerTest {
     @Test
     fun determinePoisonStatus_usdtWithNullContractOnFantom_returnsSuspicious() {
         every { contactsRepository.getContactsFiltered(any(), any()) } returns emptyList()
-        every { dao.get(any(), any()) } returns null
-        every { dao.getAllByType(any(), any()) } returns emptyList()
+        every { dao.get(any(), any(), any()) } returns null
+        every { dao.getAllByType(any(), any(), any()) } returns emptyList()
 
         val result = manager.determinePoisonStatus(
             relevantAddress = "0xfantomscammer123456789",
             blockchainType = BlockchainType.Fantom,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
             coinCode = "USDT",
@@ -494,43 +593,44 @@ class PoisonAddressManagerTest {
         val knownAddress = "eqaaa_middle_bbb"
         val similarAddress = "eqaaa_poison_bbb"
         val tonUid = BlockchainType.Ton.uid
-        every { dao.get(any(), tonUid) } returns null
+        every { dao.get(any(), tonUid, accountId) } returns null
         every { contactsRepository.getContactsFiltered(BlockchainType.Ton, addressQuery = similarAddress) } returns emptyList()
-        every { dao.getAllByType(PoisonAddressType.KNOWN, tonUid) } returns
-            listOf(PoisonAddress(knownAddress, tonUid, PoisonAddressType.KNOWN))
+        every { dao.getAllByType(PoisonAddressType.KNOWN, tonUid, accountId) } returns
+            listOf(PoisonAddress(knownAddress, tonUid, accountId, PoisonAddressType.KNOWN))
 
-        assertTrue(manager.isAddressSuspicious(similarAddress, BlockchainType.Ton))
+        assertTrue(manager.isAddressSuspicious(similarAddress, BlockchainType.Ton, accountId))
     }
 
     @Test
     fun isAddressSuspicious_unknownAddressNotSimilar_returnsFalse() {
         val knownAddress = "0xaaa_middle_bbb"
         val differentAddress = "0xzzz_middle_qqq"
-        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid) } returns
-            listOf(PoisonAddress(knownAddress, blockchainUid, PoisonAddressType.KNOWN))
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(knownAddress, blockchainUid, accountId, PoisonAddressType.KNOWN))
 
-        assertFalse(manager.isAddressSuspicious(differentAddress, blockchainType))
+        assertFalse(manager.isAddressSuspicious(differentAddress, blockchainType, accountId))
     }
 
     @Test
     fun isAddressSuspicious_scamOnTron_returnsTrue() {
         val address = "tscammer123456"
         val tronUid = BlockchainType.Tron.uid
-        every { dao.get(address, tronUid) } returns
-            PoisonAddress(address, tronUid, PoisonAddressType.SCAM)
+        every { dao.get(address, tronUid, accountId) } returns
+            PoisonAddress(address, tronUid, accountId, PoisonAddressType.SCAM)
 
-        assertTrue(manager.isAddressSuspicious(address, BlockchainType.Tron))
+        assertTrue(manager.isAddressSuspicious(address, BlockchainType.Tron, accountId))
     }
 
     @Test
     fun determinePoisonStatus_nonStablecoinWithNullContract_returnsBlockchain() {
         every { contactsRepository.getContactsFiltered(any(), any()) } returns emptyList()
-        every { dao.get(any(), any()) } returns null
-        every { dao.getAllByType(any(), any()) } returns emptyList()
+        every { dao.get(any(), any(), any()) } returns null
+        every { dao.getAllByType(any(), any(), any()) } returns emptyList()
 
         val result = manager.determinePoisonStatus(
             relevantAddress = "0xsomeaddress123456789ab",
             blockchainType = blockchainType,
+            accountId = accountId,
             isOutgoing = false,
             isCreatedByWallet = false,
             coinCode = "WETH",
@@ -539,14 +639,176 @@ class PoisonAddressManagerTest {
         assertEquals(PoisonStatus.BLOCKCHAIN, result)
     }
 
+    // --- Address poisoning reversal scenario ---
+    // Two incoming addresses share the same first 3 / last 3 chars.
+    // Whichever address is KNOWN gets BLOCKCHAIN; the other gets SUSPICIOUS.
+
+    @Test
+    fun determinePoisonStatus_poisonAddressIsKnown_originalGetsFlagged() {
+        // Scenario: user sent to the poison address (attack succeeded).
+        // Poison address B is KNOWN, original sender A is similar → A is SUSPICIOUS.
+        val originalAddress = "0x5bc24606e3abcdef000000000000000065e7a473c2"
+        val poisonAddress = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+        // poison address is KNOWN (user sent to it)
+        every { dao.get(poisonAddress, blockchainUid, accountId) } returns
+            PoisonAddress(poisonAddress, blockchainUid, accountId, PoisonAddressType.KNOWN)
+        every { dao.get(originalAddress, blockchainUid, accountId) } returns null
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(poisonAddress, blockchainUid, accountId, PoisonAddressType.KNOWN))
+
+        // Poison address itself → BLOCKCHAIN (trusted)
+        val poisonResult = manager.determinePoisonStatus(
+            relevantAddress = poisonAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, poisonResult)
+
+        // Original address → SUSPICIOUS (similar to KNOWN poison address)
+        val originalResult = manager.determinePoisonStatus(
+            relevantAddress = originalAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, originalResult)
+    }
+
+    @Test
+    fun determinePoisonStatus_originalAddressIsKnown_poisonGetsFlagged() {
+        // Correct scenario: user sent to the original address.
+        // Original address A is KNOWN, poison address B is similar → B is SUSPICIOUS.
+        val originalAddress = "0x5bc24606e3abcdef000000000000000065e7a473c2"
+        val poisonAddress = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+        // original address is KNOWN (user sent to it)
+        every { dao.get(originalAddress, blockchainUid, accountId) } returns
+            PoisonAddress(originalAddress, blockchainUid, accountId, PoisonAddressType.KNOWN)
+        every { dao.get(poisonAddress, blockchainUid, accountId) } returns null
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(originalAddress, blockchainUid, accountId, PoisonAddressType.KNOWN))
+
+        // Original address → BLOCKCHAIN (it IS KNOWN)
+        val originalResult = manager.determinePoisonStatus(
+            relevantAddress = originalAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, originalResult)
+
+        // Poison address → SUSPICIOUS (similar to KNOWN original)
+        val poisonResult = manager.determinePoisonStatus(
+            relevantAddress = poisonAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, poisonResult)
+    }
+
+    @Test
+    fun determinePoisonStatus_neitherAddressKnown_noMatchingKnown_bothBlockchain() {
+        // Neither address is KNOWN, no KNOWN address with matching prefix/suffix.
+        // Both should be BLOCKCHAIN (no basis for comparison).
+        val addressA = "0x5bc24606e3abcdef000000000000000065e7a473c2"
+        val addressB = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+
+        val resultA = manager.determinePoisonStatus(
+            relevantAddress = addressA,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, resultA)
+
+        val resultB = manager.determinePoisonStatus(
+            relevantAddress = addressB,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, resultB)
+    }
+
+    @Test
+    fun determinePoisonStatus_neitherKnown_thirdKnownMatches_bothSuspicious() {
+        // Neither A nor B is KNOWN, but a third KNOWN address C shares the same
+        // prefix/suffix. Both A and B should be SUSPICIOUS.
+        val addressA = "0x5bc24606e3abcdef000000000000000065e7a473c2"
+        val addressB = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+        val knownAddressC = "0x5bc00000000000000000000000000000000000003c2"
+        every { dao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId) } returns
+            listOf(PoisonAddress(knownAddressC, blockchainUid, accountId, PoisonAddressType.KNOWN))
+
+        val resultA = manager.determinePoisonStatus(
+            relevantAddress = addressA,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, resultA)
+
+        val resultB = manager.determinePoisonStatus(
+            relevantAddress = addressB,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, resultB)
+    }
+
+    @Test
+    fun saveKnownAddress_overwritesScamEntry_makesPoisonTrusted() {
+        // Simulates attack success: address was first saved as SCAM,
+        // then user sends to it → overwritten to KNOWN via REPLACE strategy.
+        val poisonAddress = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+
+        // Initially SCAM
+        every { dao.get(poisonAddress, blockchainUid, accountId) } returns
+            PoisonAddress(poisonAddress, blockchainUid, accountId, PoisonAddressType.SCAM)
+        val resultBefore = manager.determinePoisonStatus(
+            relevantAddress = poisonAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, resultBefore)
+
+        // User sends to poison address → saveKnownAddress (REPLACE overwrites SCAM)
+        manager.saveKnownAddress(poisonAddress, blockchainType, accountId)
+        verify { dao.insert(PoisonAddress(poisonAddress, blockchainUid, accountId, PoisonAddressType.KNOWN)) }
+
+        // After overwrite, the address is KNOWN → BLOCKCHAIN
+        every { dao.get(poisonAddress, blockchainUid, accountId) } returns
+            PoisonAddress(poisonAddress, blockchainUid, accountId, PoisonAddressType.KNOWN)
+        val resultAfter = manager.determinePoisonStatus(
+            relevantAddress = poisonAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, resultAfter)
+    }
+
     // --- getRelevantAddress: event-based address resolution respects direction ---
 
     @Test
     fun getPoisonStatus_outgoingEvmNoTo_prefersOutgoingEvents() {
         val poisonedRecipient = "0xpoisoned_recipient_addr"
         val senderAddr = "0xincoming_sender_address"
-        every { dao.get(poisonedRecipient.lowercase(), blockchainUid) } returns
-            PoisonAddress(poisonedRecipient.lowercase(), blockchainUid, PoisonAddressType.SCAM)
+        every { dao.get(poisonedRecipient.lowercase(), blockchainUid, accountId) } returns
+            PoisonAddress(poisonedRecipient.lowercase(), blockchainUid, accountId, PoisonAddressType.SCAM)
 
         val record = createEvmRecord(
             from = null,
@@ -564,8 +826,8 @@ class PoisonAddressManagerTest {
     fun getPoisonStatus_incomingEvmNoFrom_prefersIncomingEvents() {
         val senderAddr = "0xincoming_sender_address"
         val recipientAddr = "0xoutgoing_recipient_addr"
-        every { dao.get(senderAddr.lowercase(), blockchainUid) } returns
-            PoisonAddress(senderAddr.lowercase(), blockchainUid, PoisonAddressType.SCAM)
+        every { dao.get(senderAddr.lowercase(), blockchainUid, accountId) } returns
+            PoisonAddress(senderAddr.lowercase(), blockchainUid, accountId, PoisonAddressType.SCAM)
 
         val record = createEvmRecord(
             from = null,
@@ -581,8 +843,8 @@ class PoisonAddressManagerTest {
     @Test
     fun getPoisonStatus_outgoingEvmNoTo_fallsBackToIncomingWhenNoOutgoingEvents() {
         val senderAddr = "0xfallback_sender_address"
-        every { dao.get(senderAddr.lowercase(), blockchainUid) } returns
-            PoisonAddress(senderAddr.lowercase(), blockchainUid, PoisonAddressType.SCAM)
+        every { dao.get(senderAddr.lowercase(), blockchainUid, accountId) } returns
+            PoisonAddress(senderAddr.lowercase(), blockchainUid, accountId, PoisonAddressType.SCAM)
 
         val record = createEvmRecord(
             from = null,
@@ -601,10 +863,10 @@ class PoisonAddressManagerTest {
         val poisonedRecipient = "tpoisoned_recipient_addr"
         val senderAddr = "tincoming_sender_address_"
         val tronUid = BlockchainType.Tron.uid
-        every { dao.get(poisonedRecipient.lowercase(), tronUid) } returns
-            PoisonAddress(poisonedRecipient.lowercase(), tronUid, PoisonAddressType.SCAM)
+        every { dao.get(poisonedRecipient.lowercase(), tronUid, accountId) } returns
+            PoisonAddress(poisonedRecipient.lowercase(), tronUid, accountId, PoisonAddressType.SCAM)
         every { contactsRepository.getContactsFiltered(BlockchainType.Tron, addressQuery = any()) } returns emptyList()
-        every { dao.getAllByType(any(), tronUid) } returns emptyList()
+        every { dao.getAllByType(any(), tronUid, accountId) } returns emptyList()
 
         val record = createTronRecord(
             from = null,
@@ -621,8 +883,8 @@ class PoisonAddressManagerTest {
     @Test
     fun getPoisonStatus_evmWithStandardTo_usesStandardAddress() {
         val standardTo = "0xstandard_to_address_aaa"
-        every { dao.get(standardTo.lowercase(), blockchainUid) } returns
-            PoisonAddress(standardTo.lowercase(), blockchainUid, PoisonAddressType.SCAM)
+        every { dao.get(standardTo.lowercase(), blockchainUid, accountId) } returns
+            PoisonAddress(standardTo.lowercase(), blockchainUid, accountId, PoisonAddressType.SCAM)
 
         val record = createEvmRecord(
             from = null,
@@ -637,6 +899,28 @@ class PoisonAddressManagerTest {
         assertEquals(PoisonStatus.SUSPICIOUS, manager.getPoisonStatus(record))
     }
 
+    @Test
+    fun getPoisonStatus_userCreatedEvmSwap_usesExchangeAddressAndReturnsCreated() {
+        val record = createEvmRecord(
+            transactionRecordType = TransactionRecordType.EVM_SWAP,
+            exchangeAddress = "0xpancakeswap_router",
+            foreignTransaction = false,
+        )
+
+        assertEquals(PoisonStatus.CREATED, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_userCreatedEvmUnknownSwap_usesExchangeAddressAndReturnsCreated() {
+        val record = createEvmRecord(
+            transactionRecordType = TransactionRecordType.EVM_UNKNOWN_SWAP,
+            exchangeAddress = "0xpancakeswap_router",
+            foreignTransaction = false,
+        )
+
+        assertEquals(PoisonStatus.CREATED, manager.getPoisonStatus(record))
+    }
+
     // --- Helpers ---
 
     private fun createEvmRecord(
@@ -645,6 +929,7 @@ class PoisonAddressManagerTest {
         transactionRecordType: TransactionRecordType,
         incomingEvents: List<TransferEvent>? = null,
         outgoingEvents: List<TransferEvent>? = null,
+        exchangeAddress: String? = null,
         foreignTransaction: Boolean = false,
     ): EvmTransactionRecord {
         val evmTransaction = mockk<io.horizontalsystems.ethereumkit.models.Transaction>(relaxed = true) {
@@ -661,6 +946,9 @@ class PoisonAddressManagerTest {
             every { blockchain } returns mockk(relaxed = true) {
                 every { type } returns BlockchainType.Ethereum
             }
+            every { account } returns mockk(relaxed = true) {
+                every { id } returns accountId
+            }
         }
         return EvmTransactionRecord(
             from = from,
@@ -672,6 +960,7 @@ class PoisonAddressManagerTest {
             transactionRecordType = transactionRecordType,
             incomingEvents = incomingEvents,
             outgoingEvents = outgoingEvents,
+            exchangeAddress = exchangeAddress,
             foreignTransaction = foreignTransaction,
         )
     }
@@ -698,6 +987,9 @@ class PoisonAddressManagerTest {
         val source = mockk<TransactionSource>(relaxed = true) {
             every { blockchain } returns mockk(relaxed = true) {
                 every { type } returns BlockchainType.Tron
+            }
+            every { account } returns mockk(relaxed = true) {
+                every { id } returns accountId
             }
         }
         return TronTransactionRecord(

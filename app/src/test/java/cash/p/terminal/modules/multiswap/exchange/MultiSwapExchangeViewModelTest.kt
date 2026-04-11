@@ -25,6 +25,7 @@ import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.FullCoin
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.wallet.useCases.WalletUseCase
 import io.horizontalsystems.core.CurrencyManager
@@ -65,7 +66,7 @@ class MultiSwapExchangeViewModelTest {
     private val swapsFlow = MutableStateFlow<List<PendingMultiSwap>>(emptyList())
 
     private val pendingMultiSwapStorage = mockk<PendingMultiSwapStorage>(relaxed = true) {
-        every { getAll() } returns swapsFlow
+        every { observeForActiveAccount(any()) } returns swapsFlow
     }
     private val swapQuoteService = mockk<SwapQuoteService>(relaxed = true)
     private val fetchSwapQuotesUseCase = mockk<FetchSwapQuotesUseCase>(relaxed = true)
@@ -79,6 +80,7 @@ class MultiSwapExchangeViewModelTest {
     }
     private val walletManager = mockk<IWalletManager>(relaxed = true)
     private val walletUseCase = mockk<WalletUseCase>(relaxed = true)
+    private val accountManager = mockk<IAccountManager>(relaxed = true)
     private val activeWalletsFlow = MutableStateFlow<List<Wallet>>(emptyList())
     private val currencyManager = mockk<CurrencyManager> {
         every { baseCurrency } returns Currency("USD", "$", 2, 0)
@@ -578,6 +580,22 @@ class MultiSwapExchangeViewModelTest {
         assertTrue(vm.closeScreen)
     }
 
+    @Test
+    fun accountSwitch_swapDisappears_closesScreen() = runTest(dispatcher) {
+        swapsFlow.value = listOf(completedLeg1Swap())
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        assertNotNull(vm.uiState)
+        assertFalse(vm.closeScreen)
+
+        // Simulate account switch: filtered flow no longer contains this swap
+        swapsFlow.value = emptyList()
+        advanceUntilIdle()
+
+        assertTrue(vm.closeScreen)
+    }
+
     // --- leg2 balance state tests ---
 
     @Test
@@ -850,6 +868,7 @@ class MultiSwapExchangeViewModelTest {
         balanceHiddenManager = balanceHiddenManager,
         walletManager = walletManager,
         walletUseCase = walletUseCase,
+        accountManager = accountManager,
     )
         viewModelStore.put("test-vm", vm)
         return vm
@@ -857,6 +876,7 @@ class MultiSwapExchangeViewModelTest {
 
     private fun completedLeg1Swap() = PendingMultiSwap(
         id = "test-swap",
+        accountId = "test-account",
         createdAt = System.currentTimeMillis(),
         coinUidIn = "bitcoin",
         blockchainTypeIn = "bitcoin",

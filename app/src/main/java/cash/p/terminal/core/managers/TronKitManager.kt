@@ -3,6 +3,8 @@ package cash.p.terminal.core.managers
 import android.os.Handler
 import android.os.Looper
 import cash.p.terminal.core.App
+import cash.p.terminal.core.onPollingStarted
+import cash.p.terminal.core.onPollingStopped
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.UnsupportedException
 import cash.p.terminal.core.providers.AppConfigProvider
@@ -26,11 +28,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import timber.log.Timber
+import java.util.concurrent.atomic.AtomicInteger
 
 class TronKitManager(
     private val backgroundManager: BackgroundManager,
-    private val hardwarePublicKeyStorage: HardwarePublicKeyStorage
+    private val hardwarePublicKeyStorage: HardwarePublicKeyStorage,
+    private val backgroundKeepAliveManager: BackgroundKeepAliveManager,
 ) {
+    private val lifecycleMutex = Mutex()
+    private val pollingSessionCount = AtomicInteger(0)
     private val scope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
     private val network = Network.Mainnet
@@ -51,8 +60,7 @@ class TronKitManager(
     val statusInfo: Map<String, Any>?
         get() = tronKitWrapper?.tronKit?.statusInfo()
 
-    @Synchronized
-    fun getTronKitWrapper(account: Account): TronKitWrapper {
+    suspend fun getTronKitWrapper(account: Account): TronKitWrapper = lifecycleMutex.withLock {
         if (this.tronKitWrapper != null && currentAccount != account) {
             stop()
         }
@@ -79,7 +87,7 @@ class TronKitManager(
         }
 
         useCount++
-        return this.tronKitWrapper!!
+        requireNotNull(this.tronKitWrapper)
     }
 
     private fun createKitInstance(
@@ -141,13 +149,29 @@ class TronKitManager(
         return TronKitWrapper(kit, signer)
     }
 
-    @Synchronized
-    fun unlink(account: Account) {
+    suspend fun unlink(account: Account) = lifecycleMutex.withLock {
         if (account == currentAccount) {
             useCount -= 1
 
             if (useCount < 1) {
                 stop()
+            }
+        }
+    }
+
+    suspend fun startForPolling() = lifecycleMutex.withLock {
+        pollingSessionCount.onPollingStarted {
+            tronKitWrapper?.tronKit?.let { kit ->
+                kit.resume()
+                kit.refresh()
+            }
+        }
+    }
+
+    suspend fun stopForPolling() = lifecycleMutex.withLock {
+        pollingSessionCount.onPollingStopped(backgroundManager) {
+            if (!backgroundKeepAliveManager.isKeepAlive(BlockchainType.Tron)) {
+                tronKitWrapper?.tronKit?.pause()
             }
         }
     }
@@ -172,7 +196,11 @@ class TronKitManager(
                         }, 1000)
                     }
                 } else if (state == BackgroundManagerState.EnterBackground) {
-                    tronKitWrapper?.tronKit?.pause()
+                    if (pollingSessionCount.get() == 0 && !backgroundKeepAliveManager.isKeepAlive(BlockchainType.Tron)) {
+                        tronKitWrapper?.tronKit?.pause()
+                    } else {
+                        Timber.tag("TxPoller").d("TronKit staying alive")
+                    }
                 }
             }
         }

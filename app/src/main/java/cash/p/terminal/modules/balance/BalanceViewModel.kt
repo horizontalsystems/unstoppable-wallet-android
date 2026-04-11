@@ -182,11 +182,13 @@ class BalanceViewModel(
         }
 
         viewModelScope.launch {
-            pendingMultiSwapStorage.getAll().collect { swaps ->
-                pendingSwapCount = swaps.size
-                singlePendingSwapId = swaps.singleOrNull()?.id
-                emitState()
-            }
+            pendingMultiSwapStorage
+                .observeForActiveAccount(accountManager.activeAccountStateFlow)
+                .collect { swaps ->
+                    pendingSwapCount = swaps.size
+                    singlePendingSwapId = swaps.singleOrNull()?.id
+                    emitState()
+                }
         }
 
         service.start()

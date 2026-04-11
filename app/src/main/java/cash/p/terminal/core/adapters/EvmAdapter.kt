@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
@@ -66,7 +68,10 @@ internal class EvmAdapter(evmTransactionRepository: EvmTransactionRepository, co
         get() = getCombinedSyncState()
 
     override val balanceStateUpdatedFlow: Flow<Unit>
-        get() = evmTransactionRepository.combinedSyncStateFlow
+        get() = merge(
+            evmTransactionRepository.syncStateFlowable.map {}.asFlow(),
+            evmTransactionRepository.transactionsSyncStateFlowable.map {}.asFlow(),
+        )
 
     override val balanceData: BalanceData
         get() = BalanceData(balanceInBigDecimal(evmTransactionRepository.accountState?.balance, decimal))
@@ -96,10 +101,8 @@ internal class EvmAdapter(evmTransactionRepository: EvmTransactionRepository, co
                 txSyncState.error !is EthereumKit.SyncError.NotStarted ->
                     AdapterState.NotSynced(txSyncState.error)
 
-            // Fully synced or historical/forward scan in progress
-            else -> historicalSyncAdapterState()
-                ?: forwardSyncAdapterState()
-                ?: AdapterState.Synced
+            // Fully synced: native balance does not depend on ERC20 discovery sync
+            else -> AdapterState.Synced
         }
     }
 

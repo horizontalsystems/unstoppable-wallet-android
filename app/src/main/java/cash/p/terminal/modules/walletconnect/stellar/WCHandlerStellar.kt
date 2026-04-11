@@ -10,6 +10,7 @@ import cash.p.terminal.wallet.Account
 import com.reown.android.Core
 import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.stellarkit.StellarKit
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHandler {
@@ -44,7 +45,7 @@ class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHa
     }
 
     private fun getStellarKit(account: Account): StellarKit {
-        return stellarKitManager.getStellarKitWrapper(account).stellarKit
+        return runBlocking { stellarKitManager.getStellarKitWrapper(account) }.stellarKit
     }
 
     override fun getAccountAddresses(account: Account): List<String> {

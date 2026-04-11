@@ -39,6 +39,8 @@ import cash.p.terminal.MainGraphDirections
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.managers.RateAppManager
+import cash.p.terminal.core.managers.TransactionAdapterManager
+import cash.p.terminal.core.notifications.TransactionNotificationManager
 import cash.p.terminal.core.restartMain
 import cash.p.terminal.navigation.popBackStackOrExecute
 import cash.p.terminal.modules.balance.ui.BalanceScreen
@@ -55,8 +57,8 @@ import cash.p.terminal.modules.rooteddevice.RootedDeviceViewModel
 import cash.p.terminal.modules.sendtokenselect.SendTokenSelectFragment
 import cash.p.terminal.modules.settings.main.SettingsScreen
 import cash.p.terminal.modules.transactions.TransactionsModule
-import cash.p.terminal.modules.transactions.TransactionsScreen
 import cash.p.terminal.modules.transactions.TransactionsViewModel
+import cash.p.terminal.modules.transactions.TransactionsScreen
 import cash.p.terminal.modules.walletconnect.AccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.WCManager.SupportState
 import cash.p.terminal.navigation.safeGetBackStackEntry
@@ -71,6 +73,8 @@ import cash.p.terminal.ui_compose.findNavController
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.navigation.slideFromBottom
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import java.lang.ref.WeakReference
 
@@ -165,7 +169,8 @@ private fun MainScreen(
     fragmentNavController: NavController,
     intentLiveData: Intent?,
     intentHandled: () -> Unit,
-    viewModel: MainViewModel = koinViewModel()
+    viewModel: MainViewModel = koinViewModel(),
+    transactionAdapterManager: TransactionAdapterManager = koinInject()
 ) {
     val windowInfo = LocalWindowInfo.current
     val uiState = viewModel.uiState
@@ -175,9 +180,21 @@ private fun MainScreen(
     var showWalletSheet by remember { mutableStateOf(false) }
     LaunchedEffect(intentLiveData, uiState.contentHidden) {
         if (!uiState.contentHidden) {
-            intentLiveData?.data?.let {
+            val recordUid = intentLiveData?.getStringExtra(TransactionNotificationManager.EXTRA_RECORD_UID)
+            if (recordUid != null) {
+                viewModel.onSelect(MainNavigation.Transactions)
+                transactionAdapterManager.initializationFlow.first { it }
+                val item = transactionsViewModel.awaitTransactionItem(recordUid)
                 intentHandled()
-                viewModel.handleDeepLink(it)
+                if (item != null) {
+                    transactionsViewModel.tmpItemToShow = item
+                    fragmentNavController.slideFromBottom(R.id.transactionInfoFragment)
+                }
+            } else {
+                intentLiveData?.data?.let {
+                    intentHandled()
+                    viewModel.handleDeepLink(it)
+                }
             }
         }
     }

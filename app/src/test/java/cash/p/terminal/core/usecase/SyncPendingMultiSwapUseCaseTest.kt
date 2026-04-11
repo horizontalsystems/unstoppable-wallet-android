@@ -15,6 +15,10 @@ import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.network.swaprepository.SwapProvider
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountOrigin
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.Wallet
@@ -51,6 +55,15 @@ class SyncPendingMultiSwapUseCaseTest {
 
     private val updateSwapProviderTransactionsStatusUseCase =
         mockk<UpdateSwapProviderTransactionsStatusUseCase>(relaxed = true)
+    private val accountManager = mockk<IAccountManager>(relaxed = true) {
+        every { activeAccount } returns Account(
+            id = "test-account",
+            name = "Test",
+            type = AccountType.EvmAddress("0x1"),
+            origin = AccountOrigin.Created,
+            level = 0,
+        )
+    }
 
     private val useCase = SyncPendingMultiSwapUseCase(
         pendingMultiSwapStorage,
@@ -60,6 +73,7 @@ class SyncPendingMultiSwapUseCaseTest {
         transactionAdapterManager,
         adapterManager,
         updateSwapProviderTransactionsStatusUseCase,
+        accountManager,
     )
 
     @Before
@@ -88,6 +102,7 @@ class SyncPendingMultiSwapUseCaseTest {
         leg2ProviderTransactionId: String? = null,
     ) = PendingMultiSwap(
         id = id,
+        accountId = "test-account",
         createdAt = createdAt,
         coinUidIn = "binancecoin",
         blockchainTypeIn = "binance-smart-chain",
@@ -138,7 +153,7 @@ class SyncPendingMultiSwapUseCaseTest {
         val swap = swap()
         val providerTx = swapProviderTx()
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         every { swapProviderTransactionsStorage.getByOutgoingRecordUid("0xabc") } returns providerTx
 
         useCase()
@@ -158,7 +173,7 @@ class SyncPendingMultiSwapUseCaseTest {
         val swap = swap()
         val providerTx = swapProviderTx(status = "exchanging")
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         every { swapProviderTransactionsStorage.getByOutgoingRecordUid("0xabc") } returns providerTx
 
         useCase()
@@ -172,7 +187,7 @@ class SyncPendingMultiSwapUseCaseTest {
     fun leg1OnChain_noWallet_doesNotUpdate() = runTest(dispatcher) {
         val swap = swap(leg1IsOffChain = false)
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         every { walletManager.activeWallets } returns listOf()
 
         useCase()
@@ -214,7 +229,7 @@ class SyncPendingMultiSwapUseCaseTest {
                 any()
             )
         } returns listOf(failedRecord)
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg1Status = PendingMultiSwap.STATUS_FAILED)
 
         useCase()
@@ -260,7 +275,7 @@ class SyncPendingMultiSwapUseCaseTest {
         coEvery {
             txAdapter.getTransactions(any(), any(), any(), eq(FilterTransactionType.All), any())
         } returns listOf(incomingRecord)
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg1Status = PendingMultiSwap.STATUS_COMPLETED)
 
         useCase()
@@ -279,7 +294,7 @@ class SyncPendingMultiSwapUseCaseTest {
     fun leg1AlreadyCompleted_doesNotUpdateStatus() = runTest(dispatcher) {
         val swap = swap(leg1Status = PendingMultiSwap.STATUS_COMPLETED)
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
 
         useCase()
 
@@ -292,7 +307,7 @@ class SyncPendingMultiSwapUseCaseTest {
     fun leg1NoTransactionId_doesNotSync() = runTest(dispatcher) {
         val swap = swap(leg1TransactionId = null)
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
 
         useCase()
 
@@ -305,7 +320,7 @@ class SyncPendingMultiSwapUseCaseTest {
     fun leg1NoSwapProviderTransaction_doesNotSync() = runTest(dispatcher) {
         val swap = swap()
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         every { swapProviderTransactionsStorage.getByOutgoingRecordUid("0xabc") } returns null
 
         useCase()
@@ -320,7 +335,7 @@ class SyncPendingMultiSwapUseCaseTest {
         val swap = swap(leg1AmountOut = BigDecimal("2.0"))
         val providerTx = swapProviderTx(amountOutReal = null)
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         every { swapProviderTransactionsStorage.getByOutgoingRecordUid("0xabc") } returns providerTx
 
         useCase()
@@ -346,7 +361,7 @@ class SyncPendingMultiSwapUseCaseTest {
         val providerTx =
             swapProviderTx(outgoingRecordUid = "0xdef", amountOutReal = BigDecimal("99"))
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         every { swapProviderTransactionsStorage.getByOutgoingRecordUid("0xdef") } returns providerTx
 
         useCase()
@@ -370,7 +385,7 @@ class SyncPendingMultiSwapUseCaseTest {
             leg2TransactionId = "0xdef",
         )
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         every { walletManager.activeWallets } returns listOf()
 
         useCase()
@@ -388,7 +403,7 @@ class SyncPendingMultiSwapUseCaseTest {
             leg2IsOffChain = true,
         )
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
 
         useCase()
 
@@ -412,7 +427,7 @@ class SyncPendingMultiSwapUseCaseTest {
         val providerTx2 =
             swapProviderTx(outgoingRecordUid = "0xbbb", amountOutReal = BigDecimal("50"))
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap1, swap2)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap1, swap2)
         every { swapProviderTransactionsStorage.getByOutgoingRecordUid("0xaaa") } returns providerTx1
         every { swapProviderTransactionsStorage.getByOutgoingRecordUid("0xbbb") } returns providerTx2
 
@@ -437,8 +452,22 @@ class SyncPendingMultiSwapUseCaseTest {
     }
 
     @Test
+    fun noActiveAccount_skipsSync() = runTest(dispatcher) {
+        every { accountManager.activeAccount } returns null
+
+        useCase()
+
+        coVerify(exactly = 0) {
+            pendingMultiSwapStorage.getAllOnceByAccountId(any())
+            pendingMultiSwapStorage.updateLeg1(any(), any(), any(), any())
+            pendingMultiSwapStorage.updateLeg2(any(), any(), any(), any())
+            pendingMultiSwapStorage.delete(any())
+        }
+    }
+
+    @Test
     fun noSwaps_doesNothing() = runTest(dispatcher) {
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns emptyList()
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns emptyList()
 
         useCase()
 
@@ -456,7 +485,7 @@ class SyncPendingMultiSwapUseCaseTest {
             leg2Status = PendingMultiSwap.STATUS_COMPLETED,
         )
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
 
         useCase()
 
@@ -471,7 +500,7 @@ class SyncPendingMultiSwapUseCaseTest {
             leg1Status = PendingMultiSwap.STATUS_FAILED,
         )
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
 
         useCase()
 
@@ -488,7 +517,7 @@ class SyncPendingMultiSwapUseCaseTest {
             leg2IsOffChain = false,
         )
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
 
         useCase()
 
@@ -529,7 +558,7 @@ class SyncPendingMultiSwapUseCaseTest {
                 any()
             )
         } returns listOf(failedRecord)
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg2Status = PendingMultiSwap.STATUS_FAILED)
 
         useCase()
@@ -588,7 +617,7 @@ class SyncPendingMultiSwapUseCaseTest {
                 any()
             )
         } returns listOf(failedRecord)
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg1Status = PendingMultiSwap.STATUS_FAILED)
 
         useCase()
@@ -651,7 +680,7 @@ class SyncPendingMultiSwapUseCaseTest {
                 any()
             )
         } returns listOf(failedRecord)
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg2Status = PendingMultiSwap.STATUS_FAILED)
 
         useCase()
@@ -707,7 +736,7 @@ class SyncPendingMultiSwapUseCaseTest {
 
         every { walletManager.activeWallets } returns listOf(outputWallet)
         every { transactionAdapterManager.getAdapter(outputSource) } returns txAdapter
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg2Status = PendingMultiSwap.STATUS_COMPLETED)
 
         useCase()
@@ -755,7 +784,7 @@ class SyncPendingMultiSwapUseCaseTest {
             coEvery {
                 txAdapter.getTransactions(any(), any(), any(), eq(FilterTransactionType.All), any())
             } returns listOf(singleRecord)
-            coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+            coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
             coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg2Status = PendingMultiSwap.STATUS_COMPLETED)
 
             useCase()
@@ -812,7 +841,7 @@ class SyncPendingMultiSwapUseCaseTest {
             coEvery {
                 txAdapter.getTransactions(any(), any(), any(), eq(FilterTransactionType.All), any())
             } returns listOf(record1, record2)
-            coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+            coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
 
             useCase()
 
@@ -849,7 +878,7 @@ class SyncPendingMultiSwapUseCaseTest {
             )
         } returns providerTx
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg1Status = PendingMultiSwap.STATUS_COMPLETED)
 
         useCase()
@@ -869,7 +898,7 @@ class SyncPendingMultiSwapUseCaseTest {
         val swap = swap(leg1ProviderTransactionId = "cn-123", leg1TransactionId = null)
         val providerTx = swapProviderTx()
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         coEvery { swapProviderTransactionsStorage.getTransaction("cn-123") } returns providerTx
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg1Status = PendingMultiSwap.STATUS_COMPLETED)
 
@@ -890,7 +919,7 @@ class SyncPendingMultiSwapUseCaseTest {
         val swap = swap()
         val providerTx = swapProviderTx(status = "failed")
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         every { swapProviderTransactionsStorage.getByOutgoingRecordUid("0xabc") } returns providerTx
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg1Status = PendingMultiSwap.STATUS_FAILED)
 
@@ -911,7 +940,7 @@ class SyncPendingMultiSwapUseCaseTest {
         val swap = swap()
         val providerTx = swapProviderTx(status = "refunded")
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         every { swapProviderTransactionsStorage.getByOutgoingRecordUid("0xabc") } returns providerTx
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg1Status = PendingMultiSwap.STATUS_FAILED)
 
@@ -941,7 +970,7 @@ class SyncPendingMultiSwapUseCaseTest {
         val providerTx =
             swapProviderTx(outgoingRecordUid = "0xdef", amountOutReal = BigDecimal("99"))
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returnsMany listOf(
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returnsMany listOf(
             listOf(swap),
             listOf(completedSwap)
         )
@@ -968,7 +997,7 @@ class SyncPendingMultiSwapUseCaseTest {
         val failedSwap = swap.copy(leg1Status = PendingMultiSwap.STATUS_FAILED)
         val providerTx = swapProviderTx(status = "failed")
 
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returnsMany listOf(
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returnsMany listOf(
             listOf(swap),
             listOf(failedSwap)
         )
@@ -1005,7 +1034,7 @@ class SyncPendingMultiSwapUseCaseTest {
                 amountOutReal = BigDecimal("1.5"),
             ).copy(incomingRecordUid = "incoming-uid-456")
 
-            coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+            coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
             coEvery { swapProviderTransactionsStorage.getTransaction("cn-123") } returns providerTx
 
             useCase()
@@ -1029,7 +1058,7 @@ class SyncPendingMultiSwapUseCaseTest {
                 amountOutReal = BigDecimal("1.5"),
             ) // incomingRecordUid is null by default
 
-            coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+            coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
             coEvery { swapProviderTransactionsStorage.getTransaction("cn-123") } returns providerTx
 
             useCase()
@@ -1070,7 +1099,7 @@ class SyncPendingMultiSwapUseCaseTest {
             coEvery {
                 txAdapter.getTransactions(any(), any(), any(), eq(FilterTransactionType.All), any())
             } returns listOf(incomingRecord)
-            coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+            coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
 
             useCase()
 
@@ -1111,7 +1140,7 @@ class SyncPendingMultiSwapUseCaseTest {
         coEvery {
             txAdapter.getTransactions(any(), any(), any(), eq(FilterTransactionType.All), any())
         } returns listOf(record)
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg1Status = PendingMultiSwap.STATUS_COMPLETED)
 
         useCase()
@@ -1161,7 +1190,7 @@ class SyncPendingMultiSwapUseCaseTest {
         coEvery {
             txAdapter.getTransactions(any(), any(), any(), eq(FilterTransactionType.All), any())
         } returns listOf(pendingRecord)
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
 
         useCase()
 
@@ -1203,7 +1232,7 @@ class SyncPendingMultiSwapUseCaseTest {
         coEvery {
             txAdapter.getTransactions(any(), any(), any(), eq(FilterTransactionType.All), any())
         } returns listOf(processingRecord)
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
 
         useCase()
 
@@ -1245,7 +1274,7 @@ class SyncPendingMultiSwapUseCaseTest {
         coEvery {
             txAdapter.getTransactions(any(), any(), any(), eq(FilterTransactionType.All), any())
         } returns listOf(completedRecord)
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg1Status = PendingMultiSwap.STATUS_COMPLETED)
 
         useCase()
@@ -1306,7 +1335,7 @@ class SyncPendingMultiSwapUseCaseTest {
         coEvery {
             txAdapter.getTransactions(any(), any(), any(), eq(FilterTransactionType.All), any())
         } returns listOf(tonRecord)
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg1Status = PendingMultiSwap.STATUS_COMPLETED)
 
         useCase()
@@ -1366,7 +1395,7 @@ class SyncPendingMultiSwapUseCaseTest {
         coEvery {
             txAdapter.getTransactions(any(), any(), any(), eq(FilterTransactionType.All), any())
         } returns listOf(tonRecord)
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg1Status = PendingMultiSwap.STATUS_COMPLETED)
 
         useCase()
@@ -1417,7 +1446,7 @@ class SyncPendingMultiSwapUseCaseTest {
         coEvery {
             txAdapter.getTransactions(any(), any(), any(), eq(FilterTransactionType.All), any())
         } returns listOf(evmRecord)
-        coEvery { pendingMultiSwapStorage.getAllOnce() } returns listOf(swap)
+        coEvery { pendingMultiSwapStorage.getAllOnceByAccountId("test-account") } returns listOf(swap)
         coEvery { pendingMultiSwapStorage.getById("swap-1") } returns swap.copy(leg1Status = PendingMultiSwap.STATUS_COMPLETED)
 
         useCase()

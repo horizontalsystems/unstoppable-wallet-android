@@ -1,5 +1,12 @@
 package cash.p.terminal.modules.premium.settings
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
+import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -7,6 +14,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,8 +57,11 @@ import cash.p.terminal.ui_compose.components.RowWithArrow
 import cash.p.terminal.ui_compose.components.SectionUniversalLawrence
 import cash.p.terminal.ui_compose.components.SwitchWithText
 import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.core.notifications.TransactionNotificationManager
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.ui.dialogs.ConfirmationDialogBottomSheet
 import kotlinx.serialization.Serializable
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -68,6 +85,9 @@ private sealed class PremiumSettingsRoute {
 
     @Serializable
     data object AuthorizationInfo : PremiumSettingsRoute()
+
+    @Serializable
+    data object PushNotifications : PremiumSettingsRoute()
 
     @Serializable
     data class AuthorizationDetail(val initialRecordId: Long) : PremiumSettingsRoute()
@@ -103,6 +123,11 @@ private fun PremiumSettingsNavHost(fragmentNavController: NavController) {
                 onAuthorizationInfoClick = {
                     fragmentNavController.authorizedLoggingAction {
                         navController.navigate(PremiumSettingsRoute.AuthorizationInfo)
+                    }
+                },
+                onPushNotificationsClick = {
+                    fragmentNavController.premiumAction {
+                        navController.navigate(PremiumSettingsRoute.PushNotifications)
                     }
                 },
                 onClose = fragmentNavController::popBackStack
@@ -186,6 +211,133 @@ private fun PremiumSettingsNavHost(fragmentNavController: NavController) {
                 onClose = navController::navigateUp
             )
         }
+        composablePage<PremiumSettingsRoute.PushNotifications> {
+            val pushNotificationsViewModel: PushNotificationsViewModel = koinViewModel()
+            val txNotificationManager: TransactionNotificationManager = koinInject()
+            val activity = LocalActivity.current
+
+            var showRationaleDialog by rememberSaveable { mutableStateOf(false) }
+            var showSettingsDialog by rememberSaveable { mutableStateOf(false) }
+            var showRevokedDialog by rememberSaveable { mutableStateOf(false) }
+            var wasPermissionRequested by rememberSaveable { mutableStateOf(false) }
+
+            var hasPermission by remember { mutableStateOf(txNotificationManager.checkAllPermissions()) }
+
+            LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+                hasPermission = txNotificationManager.checkAllPermissions()
+            }
+
+            val permissionLauncher = rememberLauncherForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { granted ->
+                wasPermissionRequested = true
+                pushNotificationsViewModel.setShowNotifications(granted)
+                if (!granted) {
+                    val shouldShowRationale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        activity?.shouldShowRequestPermissionRationale(
+                            android.Manifest.permission.POST_NOTIFICATIONS
+                        ) ?: false
+                    } else {
+                        false
+                    }
+                    if (!shouldShowRationale) {
+                        showSettingsDialog = true
+                    }
+                }
+            }
+
+            PushNotificationsScreen(
+                uiState = pushNotificationsViewModel.uiState,
+                noNotificationPermission = !hasPermission,
+                onShowNotificationsToggle = { enabled ->
+                    if (!enabled) {
+                        pushNotificationsViewModel.setShowNotifications(false)
+                        return@PushNotificationsScreen
+                    }
+                    if (hasPermission) {
+                        pushNotificationsViewModel.setShowNotifications(true)
+                        return@PushNotificationsScreen
+                    }
+                    val hasRuntimePermission = txNotificationManager.hasNotificationPermission()
+                    if (!hasRuntimePermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        val shouldShowRationale = activity?.shouldShowRequestPermissionRationale(
+                            android.Manifest.permission.POST_NOTIFICATIONS
+                        ) ?: false
+                        when {
+                            shouldShowRationale -> showRationaleDialog = true
+                            wasPermissionRequested -> showSettingsDialog = true
+                            else -> permissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                        }
+                    } else {
+                        showRevokedDialog = true
+                    }
+                },
+                onPermissionWarningClick = { showRevokedDialog = true },
+                onBlockchainNotificationsToggle = pushNotificationsViewModel::setBlockchainNotifications,
+                onPollingIntervalChange = pushNotificationsViewModel::setPollingInterval,
+                onShowBlockchainNameToggle = pushNotificationsViewModel::setShowBlockchainName,
+                onShowCoinAmountToggle = pushNotificationsViewModel::setShowCoinAmount,
+                onShowFiatAmountToggle = pushNotificationsViewModel::setShowFiatAmount,
+                onClose = navController::navigateUp
+            )
+
+            if (showRationaleDialog) {
+                ConfirmationDialogBottomSheet(
+                    title = stringResource(R.string.notification_permission_rationale_title),
+                    icon = R.drawable.icon_24_warning_2,
+                    warningTitle = null,
+                    warningText = stringResource(R.string.notification_permission_rationale_message),
+                    actionButtonTitle = stringResource(R.string.Button_Ok),
+                    transparentButtonTitle = stringResource(R.string.Button_Cancel),
+                    onCloseClick = { showRationaleDialog = false },
+                    onActionButtonClick = {
+                        showRationaleDialog = false
+                        permissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+                    },
+                    onTransparentButtonClick = { showRationaleDialog = false }
+                )
+            }
+
+            if (showSettingsDialog) {
+                ConfirmationDialogBottomSheet(
+                    title = stringResource(R.string.notification_permission_denied_title),
+                    icon = R.drawable.icon_24_warning_2,
+                    warningTitle = null,
+                    warningText = stringResource(R.string.notification_permission_denied_message),
+                    actionButtonTitle = stringResource(R.string.button_open_settings),
+                    transparentButtonTitle = stringResource(R.string.Button_Cancel),
+                    onCloseClick = { showSettingsDialog = false },
+                    onActionButtonClick = {
+                        showSettingsDialog = false
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", activity?.packageName ?: "", null)
+                        }
+                        activity?.startActivity(intent)
+                    },
+                    onTransparentButtonClick = { showSettingsDialog = false }
+                )
+            }
+
+            if (showRevokedDialog) {
+                ConfirmationDialogBottomSheet(
+                    title = stringResource(R.string.notification_permission_revoked_title),
+                    icon = R.drawable.icon_24_warning_2,
+                    warningTitle = null,
+                    warningText = stringResource(R.string.notification_permission_revoked_message),
+                    actionButtonTitle = stringResource(R.string.button_open_settings),
+                    transparentButtonTitle = stringResource(R.string.Button_Cancel),
+                    onCloseClick = { showRevokedDialog = false },
+                    onActionButtonClick = {
+                        showRevokedDialog = false
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", activity?.packageName ?: "", null)
+                        }
+                        activity?.startActivity(intent)
+                    },
+                    onTransparentButtonClick = { showRevokedDialog = false }
+                )
+            }
+        }
         composablePage<PremiumSettingsRoute.AuthorizationInfo> {
             val authInfoViewModel: LoggingListViewModel = koinViewModel()
 
@@ -220,6 +372,7 @@ internal fun PremiumSettingsScreen(
     onAmlCheckReceivedClick: (Boolean) -> Unit,
     onLoginLoggingClick: () -> Unit,
     onAuthorizationInfoClick: () -> Unit,
+    onPushNotificationsClick: () -> Unit,
     onClose: () -> Unit
 ) {
     Scaffold(
@@ -275,6 +428,18 @@ internal fun PremiumSettingsScreen(
                     }
                 )
             )
+            VSpacer(12.dp)
+            CellUniversalLawrenceSection(
+                listOf(
+                    {
+                        RowWithArrow(
+                            text = stringResource(R.string.push_notification),
+                            showAlert = uiState.notificationNotAvailable,
+                            onClick = onPushNotificationsClick
+                        )
+                    }
+                )
+            )
         }
     }
 }
@@ -286,12 +451,14 @@ private fun PremiumSettingsScreenPreview() {
         PremiumSettingsScreen(
             uiState = PremiumSettingsUiState(
                 checkEnabled = true,
-                amlCheckReceivedEnabled = false
+                amlCheckReceivedEnabled = false,
+                notificationNotAvailable = true
             ),
             onCheckAddressContractClick = {},
             onAmlCheckReceivedClick = {},
             onLoginLoggingClick = {},
             onAuthorizationInfoClick = {},
+            onPushNotificationsClick = {},
             onClose = {}
         )
     }

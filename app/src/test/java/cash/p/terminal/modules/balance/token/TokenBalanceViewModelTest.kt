@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.balance.token
 
+import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.ConnectivityManager
@@ -26,6 +27,7 @@ import cash.p.terminal.modules.transactions.TransactionViewItemFactory
 import cash.p.terminal.network.pirate.domain.useCase.GetChangeNowAssociatedCoinTickerUseCase
 import cash.p.terminal.premium.domain.PremiumSettings
 import cash.p.terminal.wallet.IAccountManager
+import cash.p.terminal.wallet.IBalanceAdapter
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.AdapterState
@@ -40,6 +42,7 @@ import cash.p.terminal.wallet.managers.TransactionHiddenState
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IReceiveAdapter
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.WalletFactory
 import cash.p.terminal.wallet.tokenQueryId
 import io.horizontalsystems.core.CoreApp
@@ -115,6 +118,8 @@ class TokenBalanceViewModelTest : KoinTest {
     private lateinit var amlEnabledStateFlow: MutableStateFlow<Boolean>
     private lateinit var syncingFlow: MutableStateFlow<Boolean>
     private lateinit var recordsLoadedFlow: MutableStateFlow<Boolean>
+    private lateinit var nativeBalanceUpdatedFlow: MutableSharedFlow<Unit>
+    private var nativeBalanceData = BalanceData(available = BigDecimal.ZERO)
 
     private lateinit var testWallet: Wallet
 
@@ -158,6 +163,8 @@ class TokenBalanceViewModelTest : KoinTest {
         anyTransactionVisibilityChangedFlow = MutableSharedFlow()
         amlStatusUpdates = MutableSharedFlow()
         amlEnabledStateFlow = MutableStateFlow(false)
+        nativeBalanceUpdatedFlow = MutableSharedFlow()
+        nativeBalanceData = BalanceData(available = BigDecimal.ZERO)
 
         testWallet = createTestWallet()
 
@@ -489,6 +496,75 @@ class TokenBalanceViewModelTest : KoinTest {
     }
 
     @Test
+    fun networkFeeWarning_balanceSyncing_doesNotShowWarning() = runTest(dispatcher) {
+        val bep20Wallet = createBep20Wallet()
+        testWallet = bep20Wallet
+        setupFeeWarningMocks()
+
+        val balanceItem = createBalanceItem(
+            wallet = bep20Wallet,
+            state = AdapterState.Syncing()
+        )
+        every { balanceService.balanceItem } returns balanceItem
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(null, viewModel.uiState.networkFeeWarning)
+    }
+
+    @Test
+    fun networkFeeWarning_balanceBecomesSyncedWithZeroNativeBalance_showsWarning() = runTest(dispatcher) {
+        val bep20Wallet = createBep20Wallet()
+        testWallet = bep20Wallet
+        setupFeeWarningMocks()
+
+        var balanceItem = createBalanceItem(
+            wallet = bep20Wallet,
+            state = AdapterState.Syncing()
+        )
+        every { balanceService.balanceItem } answers { balanceItem }
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(null, viewModel.uiState.networkFeeWarning)
+
+        balanceItem = balanceItem.copy(state = AdapterState.Synced)
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.networkFeeWarning != null)
+    }
+
+    @Test
+    fun networkFeeWarning_resyncAfterFirstSynced_keepsWarningVisible() = runTest(dispatcher) {
+        val bep20Wallet = createBep20Wallet()
+        testWallet = bep20Wallet
+        setupFeeWarningMocks()
+
+        var balanceItem = createBalanceItem(
+            wallet = bep20Wallet,
+            state = AdapterState.Synced
+        )
+        every { balanceService.balanceItem } answers { balanceItem }
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.networkFeeWarning != null)
+
+        balanceItem = balanceItem.copy(state = AdapterState.Syncing())
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.networkFeeWarning != null)
+    }
+
+    @Test
     fun networkFeeWarning_sufficientNativeBalance_noWarning() = runTest(dispatcher) {
         val bep20Wallet = createBep20Wallet()
         testWallet = bep20Wallet
@@ -501,6 +577,28 @@ class TokenBalanceViewModelTest : KoinTest {
 
         val viewModel = createViewModel()
         balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(null, viewModel.uiState.networkFeeWarning)
+    }
+
+    @Test
+    fun networkFeeWarning_nativeBalanceBecomesSufficient_clearsWarning() = runTest(dispatcher) {
+        val bep20Wallet = createBep20Wallet()
+        testWallet = bep20Wallet
+        setupFeeWarningMocks()
+        setupNativeBalanceMocks(nativeBalance = BigDecimal.ZERO)
+
+        val balanceItem = createBalanceItem(wallet = bep20Wallet)
+        every { balanceService.balanceItem } returns balanceItem
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.networkFeeWarning != null)
+
+        updateNativeBalance(BigDecimal("0.1"))
         advanceUntilIdle()
 
         assertEquals(null, viewModel.uiState.networkFeeWarning)
@@ -612,7 +710,7 @@ class TokenBalanceViewModelTest : KoinTest {
             every { coin } returns Coin(uid = "bnb", name = "BNB", code = "BNB")
             every { decimals } returns 18
         }
-        val mockMarketKit = getKoin().get<cash.p.terminal.wallet.MarketKitWrapper>()
+        val mockMarketKit = getKoin().get<MarketKitWrapper>()
         every { mockMarketKit.token(any()) } returns nativeToken
         every { mockMarketKit.blockchain(any<String>()) } returns Blockchain(
             type = BlockchainType.BinanceSmartChain, name = "BNB Smart Chain", eip3091url = null
@@ -631,25 +729,33 @@ class TokenBalanceViewModelTest : KoinTest {
             every { coin } returns Coin(uid = nativeCoinCode.lowercase(), name = nativeCoinCode, code = nativeCoinCode)
             every { decimals } returns 18
         }
-        val mockMarketKit = getKoin().get<cash.p.terminal.wallet.MarketKitWrapper>()
+        val mockMarketKit = getKoin().get<MarketKitWrapper>()
         every { mockMarketKit.token(any()) } returns nativeToken
         every { mockMarketKit.blockchain(any<String>()) } returns Blockchain(
             type = blockchainType, name = blockchainName, eip3091url = null
         )
+        nativeBalanceData = BalanceData(available = nativeBalance)
 
-        val mockAdapterManager = getKoin().get<cash.p.terminal.wallet.IAdapterManager>()
-        val balanceAdapter = object : cash.p.terminal.wallet.IBalanceAdapter, cash.p.terminal.core.INativeBalanceProvider {
-            override val nativeBalanceData = BalanceData(available = nativeBalance)
-            override val nativeBalanceUpdatedFlow = kotlinx.coroutines.flow.MutableSharedFlow<Unit>()
+        val mockAdapterManager = getKoin().get<IAdapterManager>()
+        val balanceAdapter = object : IBalanceAdapter, INativeBalanceProvider {
+            override val nativeBalanceData get() = this@TokenBalanceViewModelTest.nativeBalanceData
+            override val nativeBalanceUpdatedFlow get() = this@TokenBalanceViewModelTest.nativeBalanceUpdatedFlow
             override val balanceData get() = BalanceData(available = BigDecimal.ZERO)
-            override val balanceStateUpdatedFlow = kotlinx.coroutines.flow.MutableSharedFlow<Unit>()
+            override val balanceStateUpdatedFlow = MutableSharedFlow<Unit>()
             override val balanceState get() = AdapterState.Synced
-            override val balanceUpdatedFlow = kotlinx.coroutines.flow.MutableSharedFlow<Unit>()
+            override val balanceUpdatedFlow = MutableSharedFlow<Unit>()
         }
         every { mockAdapterManager.getBalanceAdapterForWallet(any()) } returns balanceAdapter
 
-        every { numberFormatter.formatCoinShort(any(), any(), any()) } returns nativeBalance.toPlainString()
+        every { numberFormatter.formatCoinShort(any(), any(), any()) } answers {
+            nativeBalanceData.total.toPlainString()
+        }
         every { CoreApp.instance.getString(any(), *anyVararg()) } answers { "warning text" }
+    }
+
+    private suspend fun updateNativeBalance(nativeBalance: BigDecimal) {
+        nativeBalanceData = BalanceData(available = nativeBalance)
+        nativeBalanceUpdatedFlow.emit(Unit)
     }
 
     // region Address Poisoning View Mode Tests
@@ -885,11 +991,12 @@ class TokenBalanceViewModelTest : KoinTest {
 
     private fun createBalanceItem(
         balance: BigDecimal = BigDecimal("1.5"),
-        wallet: Wallet = testWallet
+        wallet: Wallet = testWallet,
+        state: AdapterState = AdapterState.Synced
     ) = BalanceItem(
         wallet = wallet,
         balanceData = BalanceData(available = balance),
-        state = AdapterState.Synced,
+        state = state,
         sendAllowed = true,
         coinPrice = null
     )

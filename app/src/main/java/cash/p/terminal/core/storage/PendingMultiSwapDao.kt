@@ -10,11 +10,11 @@ import java.math.BigDecimal
 
 @Dao
 interface PendingMultiSwapDao {
-    @Query("SELECT * FROM PendingMultiSwap ORDER BY createdAt DESC")
-    fun getAll(): Flow<List<PendingMultiSwap>>
+    @Query("SELECT * FROM PendingMultiSwap WHERE accountId = :accountId OR accountId = '' ORDER BY createdAt DESC")
+    fun getByAccountId(accountId: String): Flow<List<PendingMultiSwap>>
 
-    @Query("SELECT * FROM PendingMultiSwap ORDER BY createdAt DESC")
-    suspend fun getAllOnce(): List<PendingMultiSwap>
+    @Query("SELECT * FROM PendingMultiSwap WHERE accountId = :accountId OR accountId = '' ORDER BY createdAt DESC")
+    suspend fun getAllOnceByAccountId(accountId: String): List<PendingMultiSwap>
 
     @Query("SELECT * FROM PendingMultiSwap WHERE id = :id")
     suspend fun getById(id: String): PendingMultiSwap?

@@ -14,6 +14,7 @@ import cash.p.terminal.modules.multiswap.exchange.MultiSwapExchangeViewModel.Com
 import cash.p.terminal.network.changenow.domain.entity.TransactionStatusEnum
 import cash.p.terminal.network.changenow.domain.entity.toStatus
 import cash.p.terminal.strings.helpers.Translator
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.coinImageUrl
 import io.horizontalsystems.core.IAppNumberFormatter
@@ -25,6 +26,7 @@ class MultiSwapExchangesViewModel(
     private val marketKit: MarketKitWrapper,
     private val numberFormatter: IAppNumberFormatter,
     private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage,
+    private val accountManager: IAccountManager,
 ) : ViewModel() {
 
     var uiState by mutableStateOf(MultiSwapExchangesUiState())
@@ -37,7 +39,7 @@ class MultiSwapExchangesViewModel(
     private fun observeSwaps() {
         viewModelScope.launch {
             combine(
-                pendingMultiSwapStorage.getAll(),
+                pendingMultiSwapStorage.observeForActiveAccount(accountManager.activeAccountStateFlow),
                 swapProviderTransactionsStorage.observeAll(),
             ) { swaps, _ -> swaps }
                 .collect { swaps ->

@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import java.math.BigDecimal
-import java.math.BigInteger
 
 class SolanaAdapter(private val kitWrapper: SolanaKitWrapper) :
     BaseSolanaAdapter(kitWrapper, decimal) {
@@ -72,10 +71,6 @@ class SolanaAdapter(private val kitWrapper: SolanaKitWrapper) :
 
         private fun scaleDown(amount: BigDecimal, decimals: Int = decimal): BigDecimal {
             return amount.movePointLeft(decimals).stripTrailingZeros()
-        }
-
-        private fun scaleUp(amount: BigDecimal, decimals: Int = decimal): BigInteger {
-            return amount.movePointRight(decimals).toBigInteger()
         }
 
         fun balanceInBigDecimal(balance: Long?, decimal: Int): BigDecimal {

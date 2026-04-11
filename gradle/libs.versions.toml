@@ -65,12 +65,12 @@ tonKotlin = "0.5.0" # updated for ktor 3.x compatibility
 piratecash-ton = "15ff078"
 piratecash-bitcoin = "6a0e847"
 stellar-kit = "96bbbc4"
-piratecash-ethereum = "99d3195"
+piratecash-ethereum = "633b922"
 horizontalsystems-blockchain-fee = "393cc14"
-piratecash-solana = "593719c"
+piratecash-solana = "1b59a9c"
 monero-kit-android = "07fdaf1"
 netcipher = "2.1.0"
-solanakt = "0f6072a"
+solanakt = "b35be52"
 piratecash-tron = "cdae838"
 tangem-sdk = "1f51595"
 gson = "2.13.2"
@@ -96,6 +96,7 @@ camerax = "1.6.0"
 zxing = "3.5.4"
 accompanist = "0.36.0"
 accompanist-permissions = "0.37.3"
+lint = "32.1.0"
 
 tor-android = "0.4.9.5.1"
 
@@ -252,6 +253,12 @@ zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" 
 # Accompanist
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist-permissions" }
 accompanist-navigation-animation = { group = "com.google.accompanist", name = "accompanist-navigation-animation", version.ref = "accompanist" }
+
+# Lint
+lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = "lint" }
+lint-checks = { group = "com.android.tools.lint", name = "lint-checks", version.ref = "lint" }
+lint-lint = { group = "com.android.tools.lint", name = "lint", version.ref = "lint" }
+lint-tests = { group = "com.android.tools.lint", name = "lint-tests", version.ref = "lint" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }

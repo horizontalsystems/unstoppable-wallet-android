@@ -705,9 +705,9 @@ private fun TransactionContentRow(
             verticalArrangement = Arrangement.spacedBy(1.dp)
         ) {
             body_leah(
-                modifier = Modifier.padding(end = 24.dp),
                 text = item.title,
                 maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = if (showAmount) item.formattedTime else "*****",
@@ -814,9 +814,8 @@ private fun AmlLoadingIndicator() {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun TransactionCellPreview() {
+private fun TransactionCellPreviewContent(item: TransactionViewItem) {
     ComposeAppTheme {
         Box(
             modifier = Modifier
@@ -824,27 +823,54 @@ private fun TransactionCellPreview() {
                 .padding(horizontal = 16.dp)
         ) {
             TransactionCell(
-                item = TransactionViewItem(
-                    uid = "uid",
-                    progress = null,
-                    title = "Received Bitcoin",
-                    subtitle = "From Alice to My Bitcoin Wallet",
-                    icon = TransactionViewItem.Icon.Failed,
-                    doubleSpend = true,
-                    locked = true,
-                    sentToSelf = true,
-                    primaryValue = ColoredValue("0.00123 BTC", ColorName.Leah),
-                    secondaryValue = ColoredValue("$45.67", ColorName.Leah),
-                    date = Date(),
-                    formattedTime = "12:00",
-                    amlStatus = AmlStatus.Low
-                ),
+                item = item,
                 position = SectionItemPosition.Middle,
                 onValueClick = {},
                 onClick = {}
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun TransactionCellPreview() {
+    TransactionCellPreviewContent(
+        item = TransactionViewItem(
+            uid = "uid",
+            progress = null,
+            title = "Received Bitcoin",
+            subtitle = "From Alice to My Bitcoin Wallet",
+            icon = TransactionViewItem.Icon.Failed,
+            doubleSpend = true,
+            locked = true,
+            sentToSelf = true,
+            primaryValue = ColoredValue("0.00123 BTC", ColorName.Leah),
+            secondaryValue = ColoredValue("$45.67", ColorName.Leah),
+            date = Date(),
+            formattedTime = "12:00",
+            amlStatus = AmlStatus.Low
+        )
+    )
+}
+
+@Preview(name = "Failed Swap Cropped", widthDp = 300, showBackground = true)
+@Composable
+private fun FailedSwapTransactionCellPreview() {
+    TransactionCellPreviewContent(
+        item = TransactionViewItem(
+            uid = "swap-failed",
+            progress = null,
+            title = "Обмен не выполнен",
+            subtitle = "PancakeSwap",
+            icon = TransactionViewItem.Icon.Failed,
+            primaryValue = ColoredValue("-125.45 USDT", ColorName.Lucian),
+            secondaryValue = ColoredValue("+0.0523 BNB", ColorName.Remus),
+            date = Date(),
+            formattedTime = "17:49",
+            poisonStatus = PoisonStatus.BLOCKCHAIN
+        )
+    )
 }
 
 @Composable

@@ -9,6 +9,8 @@ import cash.p.terminal.BuildConfig
 import cash.p.terminal.core.di.appModule
 import cash.p.terminal.core.factories.AccountFactory
 import cash.p.terminal.core.managers.AdapterManager
+import cash.p.terminal.core.notifications.TransactionNotificationCoordinator
+import cash.p.terminal.core.notifications.TransactionNotificationManager
 import cash.p.terminal.core.managers.AppVersionManager
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.BaseTokenManager
@@ -292,6 +294,13 @@ class App : CoreApp(), WorkConfiguration.Provider, SingletonImageLoader.Factory 
 
         baseTokenManager = BaseTokenManager(coinManager, localStorage)
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
+
+        get<TransactionNotificationManager>().apply {
+            createNotificationChannel()
+            createServiceNotificationChannel()
+        }
+
+        get<TransactionNotificationCoordinator>().start()
 
         startTasks()
 
