@@ -3,6 +3,7 @@
     <!--Common-->
     <string name="Error_ParameterNotSet">Не задан параметр</string>
     <string name="error_account_not_found">Аккаунт не найден</string>
+    <string name="send_error_adapter_not_found">Адаптер для кошелька %1$s не найден</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Отменить</string>
     <string name="Alert_Copy">Скопировать</string>

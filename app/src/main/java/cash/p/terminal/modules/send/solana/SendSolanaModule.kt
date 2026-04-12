@@ -28,11 +28,10 @@ object SendSolanaModule {
         private val wallet: Wallet,
         private val address: Address?,
         private val hideAddress: Boolean,
+        private val adapter: ISendSolanaAdapter
     ) : ViewModelProvider.Factory {
         private val adapterManager: IAdapterManager by inject(IAdapterManager::class.java)
         private val pendingRegistrar: PendingTransactionRegistrar by inject(PendingTransactionRegistrar::class.java)
-        val adapter = (adapterManager.getAdapterForWalletOld(wallet) as? ISendSolanaAdapter)
-            ?: throw IllegalStateException("SendSolanaAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

@@ -3,6 +3,7 @@
     <!--Common-->
     <string name="Error_ParameterNotSet">매개 변수가 설정되지 않았습니다</string>
     <string name="error_account_not_found">계정을 찾을 수 없습니다</string>
+    <string name="send_error_adapter_not_found">%1$s 지갑용 어댑터를 찾을 수 없습니다</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>

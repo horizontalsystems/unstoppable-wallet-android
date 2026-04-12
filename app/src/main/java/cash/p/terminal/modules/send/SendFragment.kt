@@ -6,12 +6,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -21,6 +23,11 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.ISendEthereumAdapter
 import cash.p.terminal.core.ISendTonAdapter
+import cash.p.terminal.core.ISendZcashAdapter
+import cash.p.terminal.core.ISendSolanaAdapter
+import cash.p.terminal.core.ISendMoneroAdapter
+import cash.p.terminal.core.ISendStellarAdapter
+import cash.p.terminal.core.ISendTronAdapter
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.amount.AmountInputModeModule
@@ -68,6 +75,7 @@ import kotlinx.parcelize.Parcelize
 import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.PoisonAddressManager
 import org.koin.java.KoinJavaComponent.inject
+import timber.log.Timber
 import java.math.BigDecimal
 
 class SendFragment : BaseComposeFragment() {
@@ -114,11 +122,11 @@ class SendFragment : BaseComposeFragment() {
             BlockchainType.Dash -> {
                 val adapter: ISendBitcoinAdapter? = App.adapterManager.getAdapterForWallet(wallet)
                 if (adapter == null) {
-                    HudHelper.showErrorMessage(
-                        LocalView.current,
-                        "No adapter for wallet $wallet"
+                    MissingWalletAdapterEffect(
+                        navController = navController,
+                        coinUid = wallet.coin.uid,
+                        coinCode = wallet.coin.code,
                     )
-                    navController.navigateUp()
                     return
                 }
                 val factory = SendBitcoinModule.Factory(wallet, address, hideAddress, adapter)
@@ -146,7 +154,16 @@ class SendFragment : BaseComposeFragment() {
             }
 
             BlockchainType.Zcash -> {
-                val factory = SendZCashModule.Factory(wallet, address, hideAddress)
+                val adapter: ISendZcashAdapter? = App.adapterManager.getAdapterForWallet(wallet)
+                if (adapter == null) {
+                    MissingWalletAdapterEffect(
+                        navController = navController,
+                        coinUid = wallet.coin.uid,
+                        coinCode = wallet.coin.code,
+                    )
+                    return
+                }
+                val factory = SendZCashModule.Factory(wallet, address, hideAddress, adapter)
                 val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment) {
                     factory
                 }
@@ -181,11 +198,11 @@ class SendFragment : BaseComposeFragment() {
             BlockchainType.ArbitrumOne -> {
                 val adapter: ISendEthereumAdapter? = App.adapterManager.getAdapterForWallet(wallet)
                 if (adapter == null) {
-                    HudHelper.showErrorMessage(
-                        LocalView.current,
-                        "No adapter for wallet $wallet"
+                    MissingWalletAdapterEffect(
+                        navController = navController,
+                        coinUid = wallet.coin.uid,
+                        coinCode = wallet.coin.code,
                     )
-                    navController.navigateUp()
                     return
                 }
                 val factory = SendEvmModule.Factory(wallet, address, hideAddress, adapter)
@@ -213,7 +230,16 @@ class SendFragment : BaseComposeFragment() {
             }
 
             BlockchainType.Solana -> {
-                val factory = SendSolanaModule.Factory(wallet, address, hideAddress)
+                val adapter: ISendSolanaAdapter? = App.adapterManager.getAdapterForWallet(wallet)
+                if (adapter == null) {
+                    MissingWalletAdapterEffect(
+                        navController = navController,
+                        coinUid = wallet.coin.uid,
+                        coinCode = wallet.coin.code,
+                    )
+                    return
+                }
+                val factory = SendSolanaModule.Factory(wallet, address, hideAddress, adapter)
                 val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment) { factory }
                 Box(
                     modifier = Modifier
@@ -237,11 +263,11 @@ class SendFragment : BaseComposeFragment() {
             BlockchainType.Ton -> {
                 val adapter: ISendTonAdapter? = App.adapterManager.getAdapterForWallet(wallet)
                 if (adapter == null) {
-                    HudHelper.showErrorMessage(
-                        LocalView.current,
-                        "No adapter for wallet $wallet"
+                    MissingWalletAdapterEffect(
+                        navController = navController,
+                        coinUid = wallet.coin.uid,
+                        coinCode = wallet.coin.code,
                     )
-                    navController.navigateUp()
                     return
                 }
                 val factory = SendTonModule.Factory(wallet, address, hideAddress, adapter)
@@ -266,7 +292,16 @@ class SendFragment : BaseComposeFragment() {
             }
 
             BlockchainType.Tron -> {
-                val factory = SendTronModule.Factory(wallet, address, hideAddress)
+                val adapter: ISendTronAdapter? = App.adapterManager.getAdapterForWallet(wallet)
+                if (adapter == null) {
+                    MissingWalletAdapterEffect(
+                        navController = navController,
+                        coinUid = wallet.coin.uid,
+                        coinCode = wallet.coin.code,
+                    )
+                    return
+                }
+                val factory = SendTronModule.Factory(wallet, address, hideAddress, adapter)
                 val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment) { factory }
                 Box(
                     modifier = Modifier
@@ -288,7 +323,16 @@ class SendFragment : BaseComposeFragment() {
             }
 
             BlockchainType.Monero -> {
-                val factory = SendMoneroModule.Factory(wallet, address, hideAddress)
+                val adapter: ISendMoneroAdapter? = App.adapterManager.getAdapterForWallet(wallet)
+                if (adapter == null) {
+                    MissingWalletAdapterEffect(
+                        navController = navController,
+                        coinUid = wallet.coin.uid,
+                        coinCode = wallet.coin.code,
+                    )
+                    return
+                }
+                val factory = SendMoneroModule.Factory(wallet, address, hideAddress, adapter)
                 val sendMoneroViewModel by navGraphViewModels<SendMoneroViewModel>(R.id.sendXFragment) { factory }
                 Box(
                     modifier = Modifier
@@ -310,7 +354,16 @@ class SendFragment : BaseComposeFragment() {
             }
 
             BlockchainType.Stellar -> {
-                val factory = SendStellarModule.Factory(wallet, address, hideAddress)
+                val adapter: ISendStellarAdapter? = App.adapterManager.getAdapterForWallet(wallet)
+                if (adapter == null) {
+                    MissingWalletAdapterEffect(
+                        navController = navController,
+                        coinUid = wallet.coin.uid,
+                        coinCode = wallet.coin.code,
+                    )
+                    return
+                }
+                val factory = SendStellarModule.Factory(wallet, address, hideAddress, adapter)
                 val sendStellarViewModel by navGraphViewModels<SendStellarViewModel>(R.id.sendXFragment) { factory }
                 SendStellarScreen(
                     title = title,
@@ -337,6 +390,21 @@ class SendFragment : BaseComposeFragment() {
                     )
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun MissingWalletAdapterEffect(
+        navController: NavController,
+        coinUid: String,
+        coinCode: String,
+    ) {
+        val view = LocalView.current
+        val message = stringResource(R.string.send_error_adapter_not_found, coinCode)
+        LaunchedEffect(coinUid) {
+            Timber.w("No adapter for wallet %s", coinUid)
+            HudHelper.showErrorMessage(view, message)
+            navController.navigateUp()
         }
     }
 
