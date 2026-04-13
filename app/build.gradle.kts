@@ -245,6 +245,8 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.biometric)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
 
     // Lifecycle
     implementation(libs.androidx.lifecycle.extensions)

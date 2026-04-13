@@ -1,10 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.createaccount
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,6 +22,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.delay
 
 class CreateAccountPasskeyFragment : BaseComposeFragment() {
     @Composable
@@ -31,6 +36,25 @@ class CreateAccountPasskeyFragment : BaseComposeFragment() {
 fun CreateAccountPasskeyScreen(navController: NavController) {
     val viewModel = viewModel<CreateAccountPasskeyViewModel>(factory = CreateAccountPasskeyViewModel.Factory())
     val uiState = viewModel.uiState
+    val context = LocalContext.current
+    val view = LocalView.current
+
+    LaunchedEffect(uiState.success) {
+        if (uiState.success != null) {
+            HudHelper.showSuccessMessage(
+                contenView = view,
+                resId = R.string.Hud_Text_Created,
+            )
+            delay(300)
+            navController.popBackStack()
+        }
+    }
+
+    LaunchedEffect(uiState.error) {
+        val error = uiState.error ?: return@LaunchedEffect
+        HudHelper.showErrorMessage(view, error)
+        viewModel.onErrorDisplayed()
+    }
 
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_CreateNewWallet),
@@ -38,7 +62,7 @@ fun CreateAccountPasskeyScreen(navController: NavController) {
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Create),
-                onClick = viewModel::createAccount,
+                onClick = { viewModel.createAccount(context as Activity) },
                 tint = ComposeAppTheme.colors.jacob
             )
         ),
