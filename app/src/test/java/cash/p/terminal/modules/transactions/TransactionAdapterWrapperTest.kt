@@ -2,16 +2,21 @@ package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.converters.PendingTransactionConverter
+import cash.p.terminal.core.managers.CoinManager
 import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PendingTransactionRepository
 import cash.p.terminal.entities.PendingTransactionEntity
+import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.PendingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
+import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountOrigin
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.entities.Blockchain
@@ -19,15 +24,24 @@ import io.horizontalsystems.core.entities.BlockchainType
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import java.math.BigDecimal
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import java.math.BigDecimal
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TransactionAdapterWrapperTest {
+
+    @After
+    fun tearDown() {
+        stopKoin()
+    }
 
     @Test
     fun get_realBitcoinRecordMatchesPendingWithoutHash_pendingIsFilteredOut() = runTest {
@@ -107,13 +121,377 @@ class TransactionAdapterWrapperTest {
         assertEquals(listOf(realRecord.uid, pendingRecord.uid), records.map { it.uid })
     }
 
+    @Test
+    fun get_realIncomingRecordMatchesPendingByTime_pendingRemainsVisible() = runTest {
+        val token = createToken()
+        val source = createSource(blockchain = token.blockchain)
+        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
+        val realRecord = createBitcoinRecord(
+            token = token,
+            source = source,
+            uid = "real-incoming",
+            transactionHash = "hash-incoming",
+            timestamp = 1_715_000_005,
+            amount = BigDecimal("0.00000563"),
+            toAddress = "bc1-wallet-address",
+            transactionRecordType = TransactionRecordType.BITCOIN_INCOMING,
+        )
+        val pendingRecord = createPendingRecord(
+            token = token,
+            source = source,
+            uid = "pending-1",
+            transactionHash = "",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("0.00000563"),
+            toAddress = "bc1-recipient-address",
+        )
+
+        val wrapper = createWrapper(
+            transactionWallet = transactionWallet,
+            realRecords = listOf(realRecord),
+            pendingRecords = listOf(pendingRecord),
+        )
+
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(realRecord.uid, pendingRecord.uid), records.map { it.uid })
+    }
+
+    @Test
+    fun get_realOutgoingSameAddressSameAmountButOld_pendingRemainsVisible() = runTest {
+        val token = createToken()
+        val source = createSource(blockchain = token.blockchain)
+        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
+        val realRecord = createBitcoinOutgoingRecord(
+            token = token,
+            source = source,
+            uid = "real-old",
+            transactionHash = "hash-old",
+            timestamp = 1_700_000_000,
+            amount = BigDecimal("-0.00000563"),
+            toAddress = "bc1same-address",
+        )
+        val pendingRecord = createPendingRecord(
+            token = token,
+            source = source,
+            uid = "pending-new",
+            transactionHash = "",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("0.00000563"),
+            toAddress = "bc1same-address",
+        )
+
+        val wrapper = createWrapper(
+            transactionWallet = transactionWallet,
+            realRecords = listOf(realRecord),
+            pendingRecords = listOf(pendingRecord),
+        )
+
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(pendingRecord.uid, realRecord.uid), records.map { it.uid })
+    }
+
+    @Test
+    fun get_groupedWalletRealOutgoingDifferentToken_pendingRemainsVisible() = runTest {
+        val blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null)
+        val source = createSource(blockchain = blockchain)
+        val transactionWallet = TransactionWallet(token = null, source = source, badge = null)
+        val baseToken = createEvmToken(
+            coinUid = "ethereum",
+            coinName = "Ethereum",
+            coinCode = "ETH",
+            blockchain = blockchain,
+            type = TokenType.Native,
+            decimals = 18,
+        )
+        val pendingToken = createEvmToken(
+            coinUid = "usdc",
+            coinName = "USD Coin",
+            coinCode = "USDC",
+            blockchain = blockchain,
+            type = TokenType.Eip20("0xusdc"),
+            decimals = 6,
+        )
+        val realToken = createEvmToken(
+            coinUid = "usdt",
+            coinName = "Tether USD",
+            coinCode = "USDT",
+            blockchain = blockchain,
+            type = TokenType.Eip20("0xusdt"),
+            decimals = 6,
+        )
+        startCoinManagerKoin(pendingToken)
+
+        val realRecord = createMockRecord(
+            recordUid = "real-tx",
+            recordHash = "hash-real",
+            txSource = source,
+            recordToken = baseToken,
+            txTimestamp = 1_715_000_005,
+            mainValue = TransactionValue.CoinValue(realToken, BigDecimal("-12.34")),
+            txToAddress = "0xrecipient",
+            txType = TransactionRecordType.EVM_OUTGOING,
+        )
+        val pendingRecord = createPendingRecord(
+            token = pendingToken,
+            source = source,
+            uid = "pending-1",
+            transactionHash = "",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("12.34"),
+            toAddress = "0xrecipient",
+        )
+
+        val wrapper = createWrapper(
+            transactionWallet = transactionWallet,
+            realRecords = listOf(realRecord),
+            pendingRecords = listOf(pendingRecord),
+        )
+
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(realRecord.uid, pendingRecord.uid), records.map { it.uid })
+    }
+
+    @Test
+    fun get_groupedWalletRealOutgoingSameTokenWithBaseAsset_pendingIsFilteredOut() = runTest {
+        val blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null)
+        val source = createSource(blockchain = blockchain)
+        val transactionWallet = TransactionWallet(token = null, source = source, badge = null)
+        val baseToken = createEvmToken(
+            coinUid = "ethereum",
+            coinName = "Ethereum",
+            coinCode = "ETH",
+            blockchain = blockchain,
+            type = TokenType.Native,
+            decimals = 18,
+        )
+        val pendingToken = createEvmToken(
+            coinUid = "usdc",
+            coinName = "USD Coin",
+            coinCode = "USDC",
+            blockchain = blockchain,
+            type = TokenType.Eip20("0xusdc"),
+            decimals = 6,
+        )
+        startCoinManagerKoin(pendingToken)
+
+        val realRecord = createMockRecord(
+            recordUid = "real-tx",
+            recordHash = "hash-real",
+            txSource = source,
+            recordToken = baseToken,
+            txTimestamp = 1_715_000_005,
+            mainValue = TransactionValue.CoinValue(pendingToken, BigDecimal("-12.34")),
+            txToAddress = "0xrecipient",
+            txType = TransactionRecordType.EVM_OUTGOING,
+        )
+        val pendingRecord = createPendingRecord(
+            token = pendingToken,
+            source = source,
+            uid = "pending-1",
+            transactionHash = "",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("12.34"),
+            toAddress = "0xrecipient",
+        )
+
+        val wrapper = createWrapper(
+            transactionWallet = transactionWallet,
+            realRecords = listOf(realRecord),
+            pendingRecords = listOf(pendingRecord),
+        )
+
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(realRecord.uid), records.map { it.uid })
+    }
+
+    @Test
+    fun get_groupedWalletRealSwapSameTokenWithBaseAsset_pendingIsFilteredOut() = runTest {
+        val blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null)
+        val source = createSource(blockchain = blockchain)
+        val transactionWallet = TransactionWallet(token = null, source = source, badge = null)
+        val baseToken = createEvmToken(
+            coinUid = "ethereum",
+            coinName = "Ethereum",
+            coinCode = "ETH",
+            blockchain = blockchain,
+            type = TokenType.Native,
+            decimals = 18,
+        )
+        val pendingToken = createEvmToken(
+            coinUid = "usdc",
+            coinName = "USD Coin",
+            coinCode = "USDC",
+            blockchain = blockchain,
+            type = TokenType.Eip20("0xusdc"),
+            decimals = 6,
+        )
+        startCoinManagerKoin(pendingToken)
+
+        val realRecord = createMockEvmSwapRecord(
+            recordUid = "real-swap",
+            recordHash = "hash-swap",
+            txSource = source,
+            recordToken = baseToken,
+            txTimestamp = 1_715_000_005,
+            valueIn = TransactionValue.CoinValue(pendingToken, BigDecimal("-12.34")),
+            txToAddress = "0xrecipient",
+        )
+        val pendingRecord = createPendingRecord(
+            token = pendingToken,
+            source = source,
+            uid = "pending-1",
+            transactionHash = "",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("12.34"),
+            toAddress = "0xrecipient",
+        )
+
+        val wrapper = createWrapper(
+            transactionWallet = transactionWallet,
+            realRecords = listOf(realRecord),
+            pendingRecords = listOf(pendingRecord),
+        )
+
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(realRecord.uid), records.map { it.uid })
+    }
+
+    @Test
+    fun get_secondPageLoad_doesNotDuplicatePendingRecord() = runTest {
+        val token = createToken()
+        val source = createSource(blockchain = token.blockchain)
+        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
+        val realRecord = createBitcoinRecord(
+            token = token,
+            source = source,
+            uid = "real-tx",
+            transactionHash = "real-hash",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("-0.00000703"),
+            toAddress = "bc1-another-address",
+            transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+        )
+        val pendingRecord = createPendingRecord(
+            token = token,
+            source = source,
+            uid = "pending-1",
+            transactionHash = "",
+            timestamp = 1_715_000_010,
+            amount = BigDecimal("0.00000563"),
+            toAddress = "bc1p050tvc3q...nry6...vuvsv5t5mx",
+        )
+
+        val wrapper = createWrapper(
+            transactionWallet = transactionWallet,
+            realRecords = listOf(realRecord),
+            pendingRecords = listOf(pendingRecord),
+            realRecordPages = listOf(
+                listOf(realRecord),
+                emptyList(),
+            ),
+        )
+
+        wrapper.get(
+            limit = 1,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(pendingRecord.uid, realRecord.uid), records.map { it.uid })
+    }
+
+    @Test
+    fun get_twoMatchingPendingRecordsOnlyClosestOneIsFilteredOut() = runTest {
+        val token = createToken()
+        val source = createSource(blockchain = token.blockchain)
+        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
+        val realRecord = createBitcoinOutgoingRecord(
+            token = token,
+            source = source,
+            uid = "real-tx",
+            transactionHash = "real-hash",
+            timestamp = 1_715_000_001,
+            amount = BigDecimal("-0.00000563"),
+            toAddress = "bc1same-address",
+        )
+        val matchedPending = createPendingRecord(
+            token = token,
+            source = source,
+            uid = "pending-closest",
+            transactionHash = "",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("0.00000563"),
+            toAddress = "bc1same-address",
+        )
+        val unmatchedPending = createPendingRecord(
+            token = token,
+            source = source,
+            uid = "pending-second",
+            transactionHash = "",
+            timestamp = 1_715_000_009,
+            amount = BigDecimal("0.00000563"),
+            toAddress = "bc1same-address",
+        )
+
+        val wrapper = createWrapper(
+            transactionWallet = transactionWallet,
+            realRecords = listOf(realRecord),
+            pendingRecords = listOf(matchedPending, unmatchedPending),
+        )
+
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(unmatchedPending.uid, realRecord.uid), records.map { it.uid })
+    }
+
     private fun createWrapper(
         transactionWallet: TransactionWallet,
-        realRecords: List<BitcoinTransactionRecord>,
+        realRecords: List<TransactionRecord>,
         pendingRecords: List<PendingTransactionRecord>,
+        realRecordPages: List<List<TransactionRecord>> = listOf(realRecords),
     ): TransactionAdapterWrapper {
+        val adapterPages = realRecordPages.ifEmpty { listOf(realRecords) }
+        var requestIndex = 0
         val transactionsAdapter = mockk<ITransactionsAdapter> {
-            coEvery { getTransactions(any(), any(), any(), any(), any()) } returns realRecords
+            coEvery { getTransactions(any(), any(), any(), any(), any()) } coAnswers {
+                val responseIndex = requestIndex.coerceAtMost(adapterPages.lastIndex)
+                requestIndex++
+                adapterPages[responseIndex]
+            }
             every { getTransactionRecordsFlow(any(), any(), any()) } returns emptyFlow()
         }
         val pendingRepository = mockk<PendingTransactionRepository> {
@@ -122,7 +500,7 @@ class TransactionAdapterWrapperTest {
         }
         val pendingConverter = mockk<PendingTransactionConverter> {
             pendingRecords.forEach { pending ->
-                every { convert(match { it.id == pending.uid }, transactionWallet.token!!) } returns pending
+                every { convert(match { it.id == pending.uid }, pending.token) } returns pending
             }
         }
 
@@ -180,7 +558,7 @@ class TransactionAdapterWrapperTest {
         memo = null,
     )
 
-    private fun createBitcoinOutgoingRecord(
+    private fun createBitcoinRecord(
         token: Token,
         source: TransactionSource,
         uid: String,
@@ -188,6 +566,7 @@ class TransactionAdapterWrapperTest {
         timestamp: Long,
         amount: BigDecimal,
         toAddress: String,
+        transactionRecordType: TransactionRecordType,
     ) = BitcoinTransactionRecord(
         token = token,
         amount = amount,
@@ -204,12 +583,31 @@ class TransactionAdapterWrapperTest {
         memo = null,
         source = source,
         sentToSelf = false,
-        transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+        transactionRecordType = transactionRecordType,
         fee = null,
         lockInfo = null,
         conflictingHash = null,
         showRawTransaction = true,
         replaceable = false,
+    )
+
+    private fun createBitcoinOutgoingRecord(
+        token: Token,
+        source: TransactionSource,
+        uid: String,
+        transactionHash: String,
+        timestamp: Long,
+        amount: BigDecimal,
+        toAddress: String,
+    ) = createBitcoinRecord(
+        token = token,
+        source = source,
+        uid = uid,
+        transactionHash = transactionHash,
+        timestamp = timestamp,
+        amount = amount,
+        toAddress = toAddress,
+        transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
     )
 
     private fun createToken(): Token {
@@ -221,6 +619,78 @@ class TransactionAdapterWrapperTest {
             type = TokenType.Derived(TokenType.Derivation.Bip86),
             decimals = 8,
         )
+    }
+
+    private fun createEvmToken(
+        coinUid: String,
+        coinName: String,
+        coinCode: String,
+        blockchain: Blockchain,
+        type: TokenType,
+        decimals: Int,
+    ) = Token(
+        coin = Coin(uid = coinUid, name = coinName, code = coinCode),
+        blockchain = blockchain,
+        type = type,
+        decimals = decimals,
+    )
+
+    private fun createMockRecord(
+        recordUid: String,
+        recordHash: String,
+        txSource: TransactionSource,
+        recordToken: Token,
+        txTimestamp: Long,
+        mainValue: TransactionValue?,
+        txToAddress: String,
+        txType: TransactionRecordType,
+    ): TransactionRecord = mockk {
+        every { uid } returns recordUid
+        every { transactionHash } returns recordHash
+        every { source } returns txSource
+        every { blockchainType } returns txSource.blockchain.type
+        every { timestamp } returns txTimestamp
+        every { token } returns recordToken
+        every { to } returns listOf(txToAddress)
+        every { from } returns null
+        every { transactionRecordType } returns txType
+        every { this@mockk.mainValue } returns mainValue
+    }
+
+    private fun createMockEvmSwapRecord(
+        recordUid: String,
+        recordHash: String,
+        txSource: TransactionSource,
+        recordToken: Token,
+        txTimestamp: Long,
+        valueIn: TransactionValue,
+        txToAddress: String,
+    ): TransactionRecord = mockk<EvmTransactionRecord> {
+        every { uid } returns recordUid
+        every { transactionHash } returns recordHash
+        every { source } returns txSource
+        every { blockchainType } returns txSource.blockchain.type
+        every { timestamp } returns txTimestamp
+        every { token } returns recordToken
+        every { to } returns listOf(txToAddress)
+        every { from } returns null
+        every { transactionRecordType } returns TransactionRecordType.EVM_SWAP
+        every { mainValue } returns null
+        every { this@mockk.valueIn } returns valueIn
+    }
+
+    private fun startCoinManagerKoin(vararg tokens: Token) {
+        val coinManager = mockk<CoinManager> {
+            tokens.forEach { token ->
+                every { getToken(TokenQuery(token.blockchainType, token.type)) } returns token
+            }
+        }
+
+        startKoin {
+            modules(module {
+                single { coinManager }
+            })
+        }
     }
 
     private fun createSource(blockchain: Blockchain): TransactionSource {
