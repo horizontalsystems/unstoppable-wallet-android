@@ -5,6 +5,9 @@ import android.util.Base64
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.CreatePublicKeyCredentialResponse
 import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetPublicKeyCredentialOption
+import androidx.credentials.PublicKeyCredential
 import androidx.credentials.exceptions.publickeycredential.CreatePublicKeyCredentialException
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -83,19 +86,36 @@ class CreateAccountPasskeyViewModel(
 
     private suspend fun registerPasskeyWithPrf(activity: Activity): ByteArray {
         val credentialManager = CredentialManager.create(activity)
-
-        val challenge = ByteArray(32).also { SecureRandom().nextBytes(it) }
-        val userId = ByteArray(32).also { SecureRandom().nextBytes(it) }
-        // Fixed app-level salt — deterministic: same passkey + same salt = same entropy every time
+        // Fixed app-level salt — same passkey + same salt always produces the same entropy
         val prfSalt = "unstoppable-wallet-v1".toByteArray(Charsets.UTF_8)
 
-        val requestJson = buildRegisterJson(challenge, userId, prfSalt)
-        val response = credentialManager.createCredential(
+        // Step 1: register the passkey (PRF is enabled but output is not returned on create)
+        val registerChallenge = ByteArray(32).also { SecureRandom().nextBytes(it) }
+        val userId = ByteArray(32).also { SecureRandom().nextBytes(it) }
+        val registerResponse = credentialManager.createCredential(
             context = activity,
-            request = CreatePublicKeyCredentialRequest(requestJson = requestJson),
+            request = CreatePublicKeyCredentialRequest(
+                requestJson = buildRegisterJson(registerChallenge, userId, prfSalt)
+            ),
         ) as CreatePublicKeyCredentialResponse
 
-        return parsePrfOutput(response.registrationResponseJson)
+        val credentialId = JSONObject(registerResponse.registrationResponseJson).getString("id")
+
+        // Step 2: assert immediately with PRF eval to get the deterministic entropy
+        val assertChallenge = ByteArray(32).also { SecureRandom().nextBytes(it) }
+        val assertResult = credentialManager.getCredential(
+            context = activity,
+            request = GetCredentialRequest(
+                listOf(
+                    GetPublicKeyCredentialOption(
+                        requestJson = buildAssertJson(assertChallenge, credentialId, prfSalt)
+                    )
+                )
+            ),
+        )
+        val assertionJson = (assertResult.credential as PublicKeyCredential).authenticationResponseJson
+
+        return parsePrfOutput(assertionJson)
     }
 
     private fun buildRegisterJson(
@@ -142,8 +162,36 @@ class CreateAccountPasskeyViewModel(
         """.trimIndent()
     }
 
-    private fun parsePrfOutput(registrationResponseJson: String): ByteArray {
-        val root = JSONObject(registrationResponseJson)
+    private fun buildAssertJson(
+        challenge: ByteArray,
+        credentialId: String,
+        prfSalt: ByteArray,
+    ): String {
+        val b64 = Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP
+        val challengeB64 = Base64.encodeToString(challenge, b64)
+        val prfSaltB64 = Base64.encodeToString(prfSalt, b64)
+
+        return """
+            {
+              "challenge": "$challengeB64",
+              "rpId": "unstoppable.wallet",
+              "allowCredentials": [
+                {"type": "public-key", "id": "$credentialId"}
+              ],
+              "userVerification": "required",
+              "extensions": {
+                "prf": {
+                  "eval": {
+                    "first": "$prfSaltB64"
+                  }
+                }
+              }
+            }
+        """.trimIndent()
+    }
+
+    private fun parsePrfOutput(assertionResponseJson: String): ByteArray {
+        val root = JSONObject(assertionResponseJson)
         val prfResults = root
             .getJSONObject("clientExtensionResults")
             .getJSONObject("prf")
