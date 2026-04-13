@@ -3,9 +3,11 @@ package cash.p.terminal.modules.transactions
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.converters.PendingTransactionConverter
 import cash.p.terminal.core.managers.CoinManager
+import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PendingTransactionRepository
 import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.entities.PendingTransactionEntity
+import cash.p.terminal.entities.transactionrecords.PendingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.wallet.Clearable
@@ -36,7 +38,8 @@ class TransactionAdapterWrapper(
     @Volatile
     private var contact: Contact?,
     private val pendingRepository: PendingTransactionRepository,
-    private val pendingConverter: PendingTransactionConverter
+    private val pendingConverter: PendingTransactionConverter,
+    private val pendingTransactionMatcher: PendingTransactionMatcher,
 ) : Clearable {
     // Use MutableSharedFlow for updates
     private val _updatedFlow = MutableSharedFlow<Unit>(replay = 0)
@@ -215,18 +218,39 @@ class TransactionAdapterWrapper(
         return try {
             val pendingEntities = pendingRepository.getPendingForWallet(walletId)
             val pendingRecords = getPending(pendingEntities)
-
-            val realHashes = realRecords.mapNotNullTo(HashSet()) {
-                it.transactionHash.takeIf { hash -> hash.isNotEmpty() }
-            }
-            val filteredPending = pendingRecords.filter { pending ->
-                pending.transactionHash.isEmpty() || pending.transactionHash !in realHashes
-            }
+            val filteredPending = filterDuplicatedPending(pendingRecords, realRecords)
 
             (realRecords + filteredPending).sortedByDescending { it.timestamp }
         } catch (e: Exception) {
             // If something fails, return real records only
             realRecords
+        }
+    }
+
+    private fun filterDuplicatedPending(
+        pendingRecords: List<TransactionRecord>,
+        realRecords: List<TransactionRecord>,
+    ): List<TransactionRecord> {
+        val realHashes = realRecords.mapNotNullTo(HashSet()) { record ->
+            record.transactionHash.takeIf(String::isNotEmpty)
+        }
+
+        return pendingRecords.filter { pending ->
+            pending !is PendingTransactionRecord || !hasMatchingRealRecord(pending, realRecords, realHashes)
+        }
+    }
+
+    private fun hasMatchingRealRecord(
+        pending: PendingTransactionRecord,
+        realRecords: List<TransactionRecord>,
+        realHashes: Set<String>,
+    ): Boolean {
+        if (pending.transactionHash.isNotEmpty() && pending.transactionHash in realHashes) {
+            return true
+        }
+
+        return realRecords.any { real ->
+            pendingTransactionMatcher.calculateMatchScore(pending, real).isMatch
         }
     }
 

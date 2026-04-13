@@ -106,7 +106,7 @@ class PendingTransactionMatcher {
     private fun getRealAmount(
         real: TransactionRecord
     ): BigDecimal? {
-        val value = if(real is TonTransactionRecord) {
+        val tonValue = if (real is TonTransactionRecord) {
             real.actions.firstOrNull { it.type is TonTransactionRecord.Action.Type.Swap }
                 ?.let { action ->
                     (action.type as? TonTransactionRecord.Action.Type.Swap)?.valueIn?.decimalValue
@@ -118,14 +118,13 @@ class PendingTransactionMatcher {
         } else {
             null
         }
-        if (value == null && real.mainValue != null) {
-            real.mainValue?.let {
-                when (it) {
-                    is TransactionValue.CoinValue -> it.value
-                    else -> null
-                }
-            }
+        if (tonValue != null) {
+            return tonValue
         }
-        return value
+
+        return when (val mainValue = real.mainValue) {
+            is TransactionValue.CoinValue -> mainValue.value
+            else -> null
+        }
     }
 }
