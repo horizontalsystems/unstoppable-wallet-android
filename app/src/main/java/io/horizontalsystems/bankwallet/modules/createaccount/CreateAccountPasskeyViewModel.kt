@@ -53,11 +53,11 @@ class CreateAccountPasskeyViewModel(
                     .map { it.normalizeNFKD() }
                 val accountType = AccountType.Mnemonic(words, "")
                 val account = accountFactory.account(
-                    accountName,
-                    accountType,
-                    AccountOrigin.Created,
-                    false,
-                    false,
+                    name = accountName,
+                    type = accountType,
+                    origin = AccountOrigin.Created,
+                    backedUp = true,
+                    fileBackedUp = false,
                 )
                 accountManager.save(account)
                 activateDefaultWallets(account)
