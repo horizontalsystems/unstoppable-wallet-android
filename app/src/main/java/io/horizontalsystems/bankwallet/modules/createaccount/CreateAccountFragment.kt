@@ -10,7 +10,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
@@ -26,13 +28,14 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 class CreateAccountFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        CreateAccountScreen(navController)
+        val input = navController.getInput<ManageAccountsModule.Input>()
+        CreateAccountScreen(navController, input)
     }
 }
 
 
 @Composable
-fun CreateAccountScreen(navController: NavController) {
+fun CreateAccountScreen(navController: NavController, input: ManageAccountsModule.Input?) {
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_CreateNewWallet),
         onBack = navController::popBackStack
@@ -59,7 +62,7 @@ fun CreateAccountScreen(navController: NavController) {
                         CellRightNavigation()
                     },
                     onClick = {
-                        navController.slideFromRight(R.id.createAccountStandardFragment)
+                        navController.slideFromRight(R.id.createAccountStandardFragment, input)
                     }
                 )
                 BoxBordered(top = true) {
@@ -81,7 +84,7 @@ fun CreateAccountScreen(navController: NavController) {
                             CellRightNavigation()
                         },
                         onClick = {
-                            navController.slideFromRight(R.id.createAccountPasskeyFragment)
+                            navController.slideFromRight(R.id.createAccountPasskeyFragment, input)
                         }
                     )
                 }
@@ -95,6 +98,6 @@ fun CreateAccountScreen(navController: NavController) {
 @Preview
 fun Preview_CreateAccountScreen() {
     ComposeAppTheme {
-        CreateAccountScreen(NavController(LocalContext.current))
+        CreateAccountScreen(NavController(LocalContext.current), null)
     }
 }

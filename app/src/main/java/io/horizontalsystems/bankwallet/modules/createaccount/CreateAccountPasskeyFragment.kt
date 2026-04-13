@@ -15,6 +15,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
@@ -28,12 +30,19 @@ import kotlinx.coroutines.delay
 class CreateAccountPasskeyFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        CreateAccountPasskeyScreen(navController)
+        val input = navController.getInput<ManageAccountsModule.Input>()
+        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.createAccountFragment
+        val inclusive = input?.popOffInclusive ?: true
+        CreateAccountPasskeyScreen(navController, popUpToInclusiveId, inclusive)
     }
 }
 
 @Composable
-fun CreateAccountPasskeyScreen(navController: NavController) {
+fun CreateAccountPasskeyScreen(
+    navController: NavController,
+    popUpToInclusiveId: Int,
+    inclusive: Boolean
+) {
     val viewModel = viewModel<CreateAccountPasskeyViewModel>(factory = CreateAccountPasskeyViewModel.Factory())
     val uiState = viewModel.uiState
     val context = LocalContext.current
@@ -46,7 +55,7 @@ fun CreateAccountPasskeyScreen(navController: NavController) {
                 resId = R.string.Hud_Text_Created,
             )
             delay(300)
-            navController.popBackStack()
+            navController.popBackStack(popUpToInclusiveId, inclusive)
         }
     }
 
@@ -88,6 +97,10 @@ fun CreateAccountPasskeyScreen(navController: NavController) {
 @Preview
 fun Preview_CreateAccountPasskeyScreen() {
     ComposeAppTheme {
-        CreateAccountPasskeyScreen(NavController(LocalContext.current))
+        CreateAccountPasskeyScreen(
+            NavController(LocalContext.current),
+            0,
+            false
+        )
     }
 }
