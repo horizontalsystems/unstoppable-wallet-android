@@ -1377,6 +1377,11 @@
     <string name="ManageAccounts_ImportWallet">Import Wallet</string>
     <string name="ManageAccounts_WatchAddress">Watch Wallet</string>
 
+    <string name="CreateNewWallet_Standard">Standard</string>
+    <string name="CreateNewWallet_Standard_Description">Create a wallet with a recovery phrase for full control and flexibility.</string>
+    <string name="CreateNewWallet_Passkey">Passkey</string>
+    <string name="CreateNewWallet_Passkey_Description">Create a wallet secured by your device for easy access.</string>
+
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">from File</string>
     <string name="ImportWallet_BackupFile_Description">Import a backup file from your local folder.</string>
