@@ -81,7 +81,7 @@ fun CreateAccountScreen(navController: NavController) {
                             CellRightNavigation()
                         },
                         onClick = {
-                            TODO()
+                            navController.slideFromRight(R.id.createAccountPasskeyFragment)
                         }
                     )
                 }
