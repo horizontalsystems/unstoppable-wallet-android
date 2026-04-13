@@ -133,7 +133,7 @@ class CreateAccountPasskeyViewModel(
             {
               "challenge": "$challengeB64",
               "rp": {
-                "id": "unstoppable.wallet",
+                "id": "unstoppable.money",
                 "name": "Unstoppable Wallet"
               },
               "user": {
@@ -174,7 +174,7 @@ class CreateAccountPasskeyViewModel(
         return """
             {
               "challenge": "$challengeB64",
-              "rpId": "unstoppable.wallet",
+              "rpId": "unstoppable.money",
               "allowCredentials": [
                 {"type": "public-key", "id": "$credentialId"}
               ],
