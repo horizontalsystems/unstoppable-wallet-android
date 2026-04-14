@@ -1,0 +1,93 @@
+package com.quantum.wallet.bankwallet.modules.multiswap.sendtransaction
+
+import cash.z.ecc.android.sdk.ext.convertZatoshiToZec
+import cash.z.ecc.android.sdk.model.Proposal
+import com.quantum.wallet.bankwallet.core.App
+import com.quantum.wallet.bankwallet.core.InsufficientBalance
+import com.quantum.wallet.bankwallet.core.adapters.zcash.ZcashAdapter
+import com.quantum.wallet.bankwallet.core.ethereum.CautionViewItem
+import com.quantum.wallet.bankwallet.entities.CoinValue
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import java.math.BigDecimal
+
+class SendTransactionServiceZcash(
+    private val adapter: ZcashAdapter
+) : AbstractSendTransactionService(false, false) {
+    override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Zcash())
+
+    private val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Zcash, TokenType.Native))
+        ?: throw IllegalArgumentException()
+
+    private var proposal: Proposal? = null
+    private var error: Throwable? = null
+    private var fee: BigDecimal? = null
+
+    override fun start(coroutineScope: CoroutineScope) = Unit
+
+    override suspend fun setSendTransactionData(data: SendTransactionData) {
+        check(data is SendTransactionData.Zcash)
+
+        val outputs = when (data) {
+            is SendTransactionData.Zcash.Regular -> {
+                listOf(
+                    ZcashAdapter.TransferOutput(
+                        amount = data.amount,
+                        address = data.address,
+                        memo = data.memo
+                    )
+                )
+            }
+
+            is SendTransactionData.Zcash.ShieldedMemo -> {
+                listOf(
+                    ZcashAdapter.TransferOutput(
+                        amount = data.amount,
+                        address = data.address,
+                        memo = ""
+                    ),
+                    ZcashAdapter.TransferOutput(
+                        amount = BigDecimal.ZERO,
+                        address = data.memoShieldedAddress,
+                        memo = data.memo
+                    )
+                )
+            }
+        }
+
+        error = null
+        try {
+            proposal = adapter.createProposal(outputs)
+            fee = proposal?.totalFeeRequired()?.convertZatoshiToZec()
+        } catch (e: Throwable) {
+            val message = e.message
+            error = if (message != null && message.contains("Insufficient balance", ignoreCase = true)) {
+                InsufficientBalance(feeToken.coin.code)
+            } else {
+                e
+            }
+        }
+
+        emitState()
+    }
+
+    override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult {
+        val transactionHash = adapter.sendProposal(proposal!!)
+        return SendTransactionResult.Zcash(transactionHash)
+    }
+
+    override fun createState() = SendTransactionServiceState(
+        uuid = uuid,
+        networkFee = fee?.let {
+            getAmountData(CoinValue(feeToken, it))
+        },
+        cautions = listOfNotNull(error?.let { CautionViewItem.fromThrowable(it) }),
+        sendable = proposal != null && error == null,
+        loading = proposal == null && error == null,
+        fields = listOf(),
+    )
+
+}

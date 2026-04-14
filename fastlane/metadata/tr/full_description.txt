@@ -1,8 +1,8 @@
-Unstoppable cüzdan, kripto para birimleri için merkezi olmayan bir yönetim aracı olarak tasarlanmıştır.
+Quantum Wallet, kripto para birimleri için merkezi olmayan bir yönetim aracı olarak tasarlanmıştır.
 
 Kripto para birimlerini egemen ve profesyonel bir şekilde yönetmek ve yatırım yapmak isteyen gizlilik bilincine sahip bireylere hizmet etmek için tasarlanmıştır.
 
-Unstoppable, aşağıdakiler göz önünde bulundurularak oluşturulmuştur:
+Quantum Wallet, aşağıdakiler göz önünde bulundurularak oluşturulmuştur:
 
 - Sermaye Özgür Olmalı >> Kullanıcılara sermayeleri üzerinde gerçekten bağımsız kontrol sağlamak için inşa edilmiştir.
 
@@ -10,13 +10,13 @@ Unstoppable, aşağıdakiler göz önünde bulundurularak oluşturulmuştur:
 
 - Capital Özel Olmalı >> Özel verileri sızdırmaz, kullanıcıları izlemek için hiçbir aracı yoktur ve birden fazla katmanda gizliliği sağlamak için ekstra önlemler alır.
 
-If the above rhymes well with you then Unstoppable is for you! Biz de sizin benzersiz ihtiyaçlarınıza odaklanmak ve size mümkün olan en iyi şekilde hizmet etmek için buradayız.
+If the above rhymes well with you then Quantum Wallet is for you! Biz de sizin benzersiz ihtiyaçlarınıza odaklanmak ve size mümkün olan en iyi şekilde hizmet etmek için buradayız.
 
 CÜZDAN ÖZELLIKLERI:
 
 - Gözetimsiz Çoklu Cüzdan >> Birden fazla portföy tarzı cüzdanda istediğiniz sayıda kripto parayı gözetimsiz bir şekilde yönetin. Bu cüzdan, tek müşterinin ve tek yetkilinin siz olduğu kendi bankanız gibidir. Telefon çalınsa ve kurcalansa bile varlıkları güvende tutmak ve geri yüklemeyi kolaylaştırmak için tasarlanmıştır.
 
-- Yatırım Odaklı Cüzdan >> Unstoppable, cihazınıza benzersiz kripto para piyasası analizleri getiriyor: gelişmiş sıralama, seçilmiş kategorizasyon, kapsamlı arama filtreleme ve olay tabanlı uyarı özellikleri.
+- Yatırım Odaklı Cüzdan >> Quantum Wallet, cihazınıza benzersiz kripto para piyasası analizleri getiriyor: gelişmiş sıralama, seçilmiş kategorizasyon, kapsamlı arama filtreleme ve olay tabanlı uyarı özellikleri.
 
 - Evrensel Cüzdan >> Tüm ana akım blok zincirlerini destekler ve kullanıcıların tüm kriptolar için tek bir cüzdan uygulaması kullanmasını sağlayan standartlara uygun bir şekilde oluşturulmuştur.
 

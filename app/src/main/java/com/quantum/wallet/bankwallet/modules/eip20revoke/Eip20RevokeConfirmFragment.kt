@@ -1,0 +1,156 @@
+package com.quantum.wallet.bankwallet.modules.eip20revoke
+
+import android.os.Parcelable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.quantum.wallet.bankwallet.R
+import com.quantum.wallet.bankwallet.core.BaseComposeFragment
+import com.quantum.wallet.bankwallet.core.setNavigationResultX
+import com.quantum.wallet.bankwallet.core.slideFromBottom
+import com.quantum.wallet.bankwallet.core.slideFromRight
+import com.quantum.wallet.bankwallet.modules.confirm.ConfirmTransactionScreen
+import com.quantum.wallet.bankwallet.modules.confirm.ErrorBottomSheet
+import com.quantum.wallet.bankwallet.modules.eip20approve.ConfirmTokenSection
+import com.quantum.wallet.bankwallet.modules.eip20approve.SpenderCell
+import com.quantum.wallet.bankwallet.modules.evmfee.Cautions
+import com.quantum.wallet.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
+import com.quantum.wallet.bankwallet.ui.compose.ComposeAppTheme
+import com.quantum.wallet.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import com.quantum.wallet.bankwallet.ui.compose.components.VSpacer
+import com.quantum.wallet.bankwallet.ui.helpers.TextHelper
+import com.quantum.wallet.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
+
+class Eip20RevokeConfirmFragment : BaseComposeFragment() {
+    @Composable
+    override fun GetContent(navController: NavController) {
+        withInput<Input>(navController) { input ->
+            Eip20RevokeScreen(navController, input)
+        }
+    }
+
+    @Parcelize
+    data class Input(
+        val token: Token,
+        val spenderAddress: String,
+        val allowance: BigDecimal,
+    ) : Parcelable
+
+    @Parcelize
+    data class Result(val revoked: Boolean) : Parcelable
+}
+
+@Composable
+fun Eip20RevokeScreen(navController: NavController, input: Eip20RevokeConfirmFragment.Input) {
+    val currentBackStackEntry = remember(navController.currentBackStackEntry) {
+        navController.getBackStackEntry(R.id.eip20RevokeConfirmFragment)
+    }
+    val viewModel = viewModel<Eip20RevokeConfirmViewModel>(
+        viewModelStoreOwner = currentBackStackEntry,
+        factory = Eip20RevokeConfirmViewModel.Factory(
+            input.token,
+            input.spenderAddress,
+            input.allowance
+        )
+    )
+
+    val uiState = viewModel.uiState
+    val view = LocalView.current
+
+    ConfirmTransactionScreen(
+        title = stringResource(R.string.Swap_ConfirmRevoke_Title),
+        initialLoading = uiState.initialLoading,
+        onClickBack = navController::popBackStack,
+        onClickFeeSettings = {
+            navController.slideFromRight(R.id.eip20RevokeTransactionSettingsFragment)
+        },
+        buttonsSlot = {
+            val coroutineScope = rememberCoroutineScope()
+            var buttonEnabled by remember { mutableStateOf(true) }
+            var buttonTitle by remember { mutableIntStateOf(R.string.Swap_Revoke) }
+
+            ButtonPrimaryYellow(
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(buttonTitle),
+                onClick = {
+                    coroutineScope.launch {
+                        buttonEnabled = false
+                        buttonTitle = R.string.Swap_Revoking
+
+                        try {
+                            viewModel.revoke()
+
+                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                            delay(1200)
+                            navController.setNavigationResultX(Eip20RevokeConfirmFragment.Result(true))
+                            navController.popBackStack()
+                        } catch (t: Throwable) {
+                            navController.slideFromBottom(R.id.errorBottomSheet, ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName))
+                        }
+
+                        buttonTitle = R.string.Swap_Revoke
+                        buttonEnabled = true
+                    }
+                },
+                enabled = uiState.revokeEnabled && buttonEnabled
+            )
+        }
+    ) {
+        ConfirmTokenSection(
+            token = uiState.token,
+            amount = uiState.allowance,
+            fiatAmount = uiState.fiatAmount,
+            currency = uiState.currency,
+        )
+        VSpacer(16.dp)
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(ComposeAppTheme.colors.lawrence)
+                .padding(vertical = 8.dp)
+        ) {
+            SpenderCell(
+                address = uiState.spenderAddress,
+                contact = uiState.contact?.name,
+                onCopyClick = {
+                    TextHelper.copyText(uiState.spenderAddress)
+                    HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                }
+            )
+
+            DataFieldFeeTemplate(
+                navController = navController,
+                primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
+                secondary = uiState.networkFee?.secondary?.getFormattedPlain(),
+                title = stringResource(id = R.string.FeeSettings_NetworkFee),
+                infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+            )
+        }
+
+        if (uiState.cautions.isNotEmpty()) {
+            Cautions(cautions = uiState.cautions)
+        }
+    }
+}

@@ -1,0 +1,112 @@
+package com.quantum.wallet.bankwallet.core.managers
+
+import com.quantum.wallet.bankwallet.core.IAdapter
+import com.quantum.wallet.bankwallet.core.IAdapterManager
+import com.quantum.wallet.bankwallet.core.IBalanceAdapter
+import com.quantum.wallet.bankwallet.core.IReceiveAdapter
+import com.quantum.wallet.bankwallet.core.factories.AdapterFactory
+import com.quantum.wallet.bankwallet.entities.Wallet
+import io.horizontalsystems.marketkit.models.Token
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
+import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
+import java.util.concurrent.ConcurrentHashMap
+
+class AdapterManager(
+    private val walletManager: WalletManager,
+    private val adapterFactory: AdapterFactory,
+    private val evmBlockchainManager: EvmBlockchainManager,
+    private val solanaKitManager: SolanaKitManager,
+    private val tronKitManager: TronKitManager,
+    private val tonKitManager: TonKitManager,
+    private val stellarKitManager: StellarKitManager,
+) : IAdapterManager {
+
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val adaptersReadySubject = PublishSubject.create<Map<Wallet, IAdapter>>()
+    private val adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
+
+    override val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>> =
+        adaptersReadySubject.toFlowable(BackpressureStrategy.BUFFER)
+
+    override fun startAdapterManager() {
+        coroutineScope.launch {
+            walletManager.activeWalletsUpdatedObservable.asFlow().collect { wallets ->
+                initAdapters(wallets)
+            }
+        }
+    }
+
+    override suspend fun refresh() {
+        adaptersMap.values.forEach { it.refresh() }
+
+        for (blockchain in evmBlockchainManager.allBlockchains) {
+            evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitWrapper?.evmKit?.refresh()
+        }
+
+        solanaKitManager.solanaKitWrapper?.solanaKit?.refresh()
+        tronKitManager.tronKitWrapper?.tronKit?.refresh()
+        tonKitManager.tonKitWrapper?.tonKit?.refresh()
+        stellarKitManager.stellarKitWrapper?.stellarKit?.refresh()
+    }
+
+    @Synchronized
+    private fun initAdapters(wallets: List<Wallet>) {
+        val currentAdapters = adaptersMap.toMutableMap()
+        adaptersMap.clear()
+
+        wallets.forEach { wallet ->
+            var adapter = currentAdapters.remove(wallet)
+            if (adapter == null) {
+                adapterFactory.getAdapterOrNull(wallet)?.let {
+                    it.start()
+
+                    adapter = it
+                }
+            }
+
+            adapter?.let {
+                adaptersMap[wallet] = it
+            }
+        }
+
+        adaptersReadySubject.onNext(adaptersMap)
+
+        currentAdapters.forEach { (wallet, adapter) ->
+            adapter.stop()
+            adapterFactory.unlinkAdapter(wallet)
+        }
+    }
+
+    override fun refreshByWallet(wallet: Wallet) {
+        val blockchain = evmBlockchainManager.getBlockchain(wallet.token)
+
+        if (blockchain != null) {
+            evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitWrapper?.evmKit?.refresh()
+        } else {
+            adaptersMap[wallet]?.refresh()
+        }
+    }
+
+    override fun <T> getAdapterForToken(token: Token): T? {
+        return walletManager.activeWallets.firstOrNull { it.token == token }
+            ?.let { getAdapterForWallet(it) }
+    }
+
+    override fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter? {
+        return adaptersMap[wallet]?.let { it as? IBalanceAdapter }
+    }
+
+    override fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter? {
+        return adaptersMap[wallet]?.let { it as? IReceiveAdapter }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T> getAdapterForWallet(wallet: Wallet): T? {
+        return adaptersMap[wallet] as? T
+    }
+}

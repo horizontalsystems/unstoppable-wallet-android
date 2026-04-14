@@ -6,7 +6,7 @@
             android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
             tools:node="merge">
-            <meta-data  android:name="io.horizontalsystems.subscriptions.dev.SubscriptionServiceInitializer"
+            <meta-data  android:name="com.quantum.wallet.subscriptions.dev.SubscriptionServiceInitializer"
                 android:value="androidx.startup" />
         </provider>
     </application>

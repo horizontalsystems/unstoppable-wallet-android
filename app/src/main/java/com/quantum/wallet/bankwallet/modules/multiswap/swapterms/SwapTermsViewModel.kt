@@ -1,0 +1,52 @@
+package com.quantum.wallet.bankwallet.modules.multiswap.swapterms
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.quantum.wallet.bankwallet.core.App
+import com.quantum.wallet.bankwallet.core.ViewModelUiState
+import com.quantum.wallet.bankwallet.core.managers.SwapTermType
+import com.quantum.wallet.bankwallet.core.managers.SwapTermsManager
+
+class SwapTermsViewModel(private val swapTermsManager: SwapTermsManager) :
+    ViewModelUiState<UiState>() {
+
+    private val terms = swapTermsManager.terms
+    private val checkboxStates = mutableListOf<Boolean>().apply {
+        addAll(List(terms.size) { false })
+    }
+
+    private var buttonEnabled = false
+
+    override fun createState(): UiState {
+        return UiState(
+            terms,
+            checkboxStates.toList(),
+            buttonEnabled
+        )
+    }
+
+    fun toggleTerm(index: Int) {
+        checkboxStates[index] = !checkboxStates[index]
+        buttonEnabled = checkboxStates.all { it }
+        emitState()
+    }
+
+    fun onConfirm() {
+        swapTermsManager.acceptTerms()
+    }
+}
+
+data class UiState(
+    val terms: List<SwapTermType>,
+    val checkboxStates: List<Boolean>,
+    val buttonEnabled: Boolean
+)
+
+object SwapTermsModule {
+    class Factory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return SwapTermsViewModel(App.swapTermsManager) as T
+        }
+    }
+}

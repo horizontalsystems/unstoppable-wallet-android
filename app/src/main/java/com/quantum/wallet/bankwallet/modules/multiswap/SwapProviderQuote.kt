@@ -1,0 +1,16 @@
+package com.quantum.wallet.bankwallet.modules.multiswap
+
+import com.quantum.wallet.bankwallet.modules.multiswap.providers.IMultiSwapProvider
+
+data class SwapProviderQuote(
+    val provider: IMultiSwapProvider,
+    val swapQuote: SwapQuote,
+    val createdAt: Long = System.currentTimeMillis()
+) {
+    val tokenIn by swapQuote::tokenIn
+    val tokenOut by swapQuote::tokenOut
+    val amountIn by swapQuote::amountIn
+    val amountOut by swapQuote::amountOut
+    val actionRequired by swapQuote::actionRequired
+    val estimationTime by swapQuote::estimationTime
+}

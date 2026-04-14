@@ -1,0 +1,386 @@
+package com.quantum.wallet.bankwallet.modules.qrscanner
+
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.setContent
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.RGBLuminanceSource
+import com.google.zxing.client.android.Intents
+import com.google.zxing.common.HybridBinarizer
+import com.google.zxing.qrcode.QRCodeReader
+import com.journeyapps.barcodescanner.CompoundBarcodeView
+import com.journeyapps.barcodescanner.ScanOptions
+import com.quantum.wallet.bankwallet.R
+import com.quantum.wallet.bankwallet.core.BaseActivity
+import com.quantum.wallet.bankwallet.core.utils.ModuleField
+import com.quantum.wallet.bankwallet.ui.compose.Bright
+import com.quantum.wallet.bankwallet.ui.compose.ComposeAppTheme
+import com.quantum.wallet.bankwallet.ui.compose.components.AppBar
+import com.quantum.wallet.bankwallet.ui.compose.components.ButtonPrimaryDefaults
+import com.quantum.wallet.bankwallet.ui.compose.components.ButtonPrimaryTransparent
+import com.quantum.wallet.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import com.quantum.wallet.bankwallet.ui.compose.components.HsIconButton
+import com.quantum.wallet.bankwallet.ui.compose.components.body_leah
+import com.quantum.wallet.bankwallet.ui.compose.components.subhead2_grey
+import com.quantum.wallet.bankwallet.ui.compose.components.title3_leah
+import com.quantum.wallet.bankwallet.ui.helpers.TextHelper
+import com.quantum.wallet.bankwallet.uiv3.components.controls.ButtonVariant
+import com.quantum.wallet.bankwallet.uiv3.components.controls.HSButton
+import com.quantum.wallet.core.helpers.HudHelper
+
+class QRScannerActivity : BaseActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            QRScannerScreen(
+                showPasteButton = intent.getBooleanExtra(SHOW_PASTE_BUTTON, false),
+                onScan = { onScan(it) },
+                onCloseClick = { finish() },
+                onCameraPermissionSettingsClick = { openCameraPermissionSettings() }
+            )
+        }
+    }
+
+    private fun onScan(address: String?) {
+        setResult(RESULT_OK, Intent().apply {
+            putExtra(ModuleField.SCAN_ADDRESS, address)
+        })
+        //slow down fast transition to new window
+        Handler(Looper.getMainLooper()).postDelayed({
+            finish()
+        }, 1000)
+    }
+
+    private fun openCameraPermissionSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        val uri: Uri = Uri.fromParts("package", packageName, null)
+        intent.data = uri
+        startActivity(intent)
+    }
+
+    companion object {
+        private const val SHOW_PASTE_BUTTON = "show_paste_button_key"
+
+        fun getScanQrIntent(context: Context, showPasteButton: Boolean = false): Intent {
+            val options = ScanOptions()
+            options.captureActivity = QRScannerActivity::class.java
+            options.setOrientationLocked(true)
+            options.setPrompt("")
+            options.setBeepEnabled(false)
+            options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+            val intent = options.createScanIntent(context)
+            intent.putExtra(SHOW_PASTE_BUTTON, showPasteButton)
+            intent.putExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN)
+            return intent
+        }
+    }
+
+}
+
+private fun decodeQrFromUri(context: Context, uri: Uri): String? {
+    val bitmap = context.contentResolver.openInputStream(uri)
+        ?.use { BitmapFactory.decodeStream(it) } ?: return null
+    val intArray = IntArray(bitmap.width * bitmap.height)
+    bitmap.getPixels(intArray, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+    val source = RGBLuminanceSource(bitmap.width, bitmap.height, intArray)
+    return try {
+        QRCodeReader().decode(BinaryBitmap(HybridBinarizer(source))).text
+    } catch (e: Exception) {
+        null
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun QRScannerScreen(
+    showPasteButton: Boolean,
+    onScan: (String) -> Unit,
+    onCloseClick: () -> Unit,
+    onCameraPermissionSettingsClick: () -> Unit
+) {
+    val context = LocalContext.current
+    val view = androidx.compose.ui.platform.LocalView.current
+    val galleryLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        uri ?: return@rememberLauncherForActivityResult
+        val result = decodeQrFromUri(context, uri)
+        if (result != null) {
+            HudHelper.showSuccessMessage(view, R.string.ScanQr_QrDetected)
+            onScan(result)
+        } else {
+            HudHelper.showErrorMessage(view, R.string.ScanQr_NoQrFound)
+        }
+    }
+    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
+    var showPermissionNeededDialog by remember { mutableStateOf(cameraPermissionState.status != PermissionStatus.Granted) }
+
+    if (showPermissionNeededDialog) {
+        PermissionNeededDialog(
+            onOkClick = {
+                cameraPermissionState.launchPermissionRequest()
+                showPermissionNeededDialog = false
+            },
+            onCancelClick = {
+                showPermissionNeededDialog = false
+            }
+        )
+    }
+
+    ComposeAppTheme {
+        Box(
+            Modifier
+                .fillMaxSize()
+                .background(color = ComposeAppTheme.colors.tyler),
+            contentAlignment = Alignment.Center
+        ) {
+            if (cameraPermissionState.status == PermissionStatus.Granted) {
+                ScannerView(onScan)
+            } else {
+                Spacer(
+                    Modifier
+                        .fillMaxSize()
+                        .background(color = ComposeAppTheme.colors.dark)
+                )
+                GoToSettingsBox(onCameraPermissionSettingsClick)
+            }
+
+            Box(Modifier.align(Alignment.TopCenter).fillMaxWidth()) {
+                AppBar(
+                    navigationIcon = {
+                        HsIconButton(onClick = onCloseClick) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_arrow_left_24),
+                                contentDescription = stringResource(R.string.Button_Back),
+                                tint = ComposeAppTheme.colors.white
+                            )
+                        }
+                    },
+                    backgroundColor = Color.Transparent
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .align(Alignment.BottomCenter),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(Modifier.height(24.dp))
+                if (showPasteButton) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        HSButton(
+                            modifier = Modifier.weight(1f),
+                            variant = ButtonVariant.Secondary,
+                            title = stringResource(R.string.ScanQr_Photos),
+                            icon = painterResource(R.drawable.ic_gallery_24),
+                            onClick = {
+                                galleryLauncher.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                )
+                            }
+                        )
+                        HSButton(
+                            modifier = Modifier.weight(1f),
+                            title = stringResource(R.string.Send_Button_Paste),
+                            icon = painterResource(R.drawable.ic_copy_24),
+                            onClick = { onScan(TextHelper.getCopiedText() ?: "") }
+                        )
+                    }
+                } else {
+                    HSButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = ButtonVariant.Secondary,
+                        title = stringResource(R.string.ScanQr_Photos),
+                        icon = painterResource(R.drawable.ic_gallery_24),
+                        onClick = {
+                            galleryLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        }
+                    )
+                }
+                Spacer(Modifier.height(48.dp))
+            }
+        }
+    }
+}
+
+@Composable
+private fun ScannerView(onScan: (String) -> Unit) {
+    val context = LocalContext.current
+    val barcodeView = remember {
+        CompoundBarcodeView(context).apply {
+            this.initializeFromIntent((context as Activity).intent)
+            this.setStatusText("")
+            this.decodeSingle { result ->
+                result.text?.let { barCodeOrQr ->
+                    onScan.invoke(barCodeOrQr)
+                }
+            }
+        }
+    }
+    AndroidView(factory = { barcodeView })
+    LifecycleResumeEffect(Unit) {
+        barcodeView.resume()
+
+        onPauseOrDispose {
+            barcodeView.pause()
+        }
+    }
+}
+
+@Composable
+private fun GoToSettingsBox(onCameraPermissionSettingsClick: () -> Unit) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        subhead2_grey(
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 40.dp),
+            text = stringResource(R.string.ScanQr_CameraPermissionDeniedText)
+        )
+        Spacer(Modifier.height(24.dp))
+        TextPrimaryButton(
+            onClick = onCameraPermissionSettingsClick,
+            title = stringResource(R.string.ScanQr_GoToSettings)
+        )
+    }
+}
+
+@Composable
+private fun TextPrimaryButton(
+    title: String,
+    onClick: () -> Unit
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Surface(
+        color = ComposeAppTheme.colors.transparent,
+        contentColor = Bright,
+    ) {
+        Row(
+            Modifier
+                .defaultMinSize(
+                    minWidth = ButtonPrimaryDefaults.MinWidth,
+                    minHeight = ButtonPrimaryDefaults.MinHeight
+                )
+                .padding(ButtonPrimaryDefaults.ContentPadding)
+                .clickable(
+                    onClick = onClick,
+                    interactionSource = interactionSource,
+                    indication = null
+                ),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            content = {
+                Text(
+                    text = title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = ComposeAppTheme.typography.headline2
+                )
+            }
+        )
+    }
+}
+
+@Composable
+private fun PermissionNeededDialog(
+    onOkClick: () -> Unit,
+    onCancelClick: () -> Unit,
+) {
+    ComposeAppTheme {
+        Dialog(onDismissRequest = onCancelClick) {
+            Column(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(color = ComposeAppTheme.colors.lawrence)
+                    .padding(horizontal = 24.dp, vertical = 20.dp)
+            ) {
+                title3_leah(text = stringResource(R.string.ScanQr_CameraPermission_Title))
+                Spacer(Modifier.height(12.dp))
+                body_leah(text = stringResource(R.string.ScanQr_PleaseGrantCameraPermission))
+                Spacer(Modifier.height(32.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    ButtonPrimaryTransparent(
+                        onClick = onCancelClick,
+                        title = stringResource(R.string.Button_Cancel)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    ButtonPrimaryYellow(
+                        onClick = onOkClick,
+                        title = stringResource(R.string.Button_Ok)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun Preview_PermissionNeededDialog() {
+    ComposeAppTheme {
+        PermissionNeededDialog({}, {})
+    }
+}

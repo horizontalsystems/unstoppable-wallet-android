@@ -1,0 +1,85 @@
+package com.quantum.wallet.bankwallet.modules.multiswap.sendtransaction
+
+import io.horizontalsystems.bitcoincore.storage.UtxoFilters
+import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.tronkit.models.Contract
+import io.horizontalsystems.tronkit.network.CreatedTransaction
+import org.json.JSONObject
+import java.math.BigDecimal
+
+sealed class SendTransactionData {
+    data class Evm(
+        val transactionData: TransactionData,
+        val gasLimit: Long?,
+    ): SendTransactionData()
+
+    data class Btc(
+        val address: String,
+        val memo: String?,
+        val amount: BigDecimal,
+        val recommendedGasRate: Int?,
+        val minimumSendAmount: Int?,
+        val changeToFirstInput: Boolean,
+        val utxoFilters: UtxoFilters,
+    ) : SendTransactionData()
+
+    sealed class Tron : SendTransactionData() {
+        data class WithContract(val contract: Contract) : Tron()
+        data class WithCreateTransaction(val transaction: CreatedTransaction) : Tron()
+    }
+
+    sealed class Solana : SendTransactionData() {
+        data class WithRawTransaction(val rawTransaction: ByteArray) : Solana() {
+            override fun equals(other: Any?): Boolean {
+                if (this === other) return true
+                if (other !is WithRawTransaction) return false
+
+                return rawTransaction.contentEquals(other.rawTransaction)
+            }
+
+            override fun hashCode() = rawTransaction.contentHashCode()
+        }
+    }
+
+    sealed class Stellar : SendTransactionData() {
+        data class Regular(
+            val address: String,
+            val memo: String,
+            val amount: BigDecimal
+        ) : Stellar()
+
+        data class WithTransactionEnvelope(val transactionEnvelope: String) : Stellar()
+    }
+
+    sealed class Ton : SendTransactionData() {
+        data class Regular(
+            val address: String,
+            val amount: BigDecimal,
+            val memo: String?
+        ) : Ton()
+
+        data class SendRequest(val requestJson: JSONObject) : Ton()
+    }
+
+    sealed class Zcash : SendTransactionData() {
+        data class Regular(
+            val address: String,
+            val amount: BigDecimal,
+            val memo: String,
+        ) : Zcash()
+
+        data class ShieldedMemo(
+            val address: String,
+            val amount: BigDecimal,
+            val memo: String,
+            val memoShieldedAddress: String,
+        ) : Zcash()
+    }
+
+    data class Monero(
+        val address: String,
+        val amount: BigDecimal,
+        val memo: String?,
+    ) : SendTransactionData()
+
+}

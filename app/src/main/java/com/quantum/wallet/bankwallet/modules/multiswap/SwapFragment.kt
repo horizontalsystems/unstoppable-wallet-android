@@ -1,0 +1,994 @@
+package com.quantum.wallet.bankwallet.modules.multiswap
+
+import android.os.Parcelable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.quantum.wallet.bankwallet.R
+import com.quantum.wallet.bankwallet.core.BaseComposeFragment
+import com.quantum.wallet.bankwallet.core.badge
+import com.quantum.wallet.bankwallet.core.getInput
+import com.quantum.wallet.bankwallet.core.slideFromBottom
+import com.quantum.wallet.bankwallet.core.slideFromBottomForResult
+import com.quantum.wallet.bankwallet.core.slideFromRight
+import com.quantum.wallet.bankwallet.core.slideFromRightForResult
+import com.quantum.wallet.bankwallet.core.stats.StatEvent
+import com.quantum.wallet.bankwallet.core.stats.StatPage
+import com.quantum.wallet.bankwallet.core.stats.stat
+import com.quantum.wallet.bankwallet.entities.CoinValue
+import com.quantum.wallet.bankwallet.entities.Currency
+import com.quantum.wallet.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
+import com.quantum.wallet.bankwallet.ui.compose.ColoredTextStyle
+import com.quantum.wallet.bankwallet.ui.compose.ComposeAppTheme
+import com.quantum.wallet.bankwallet.ui.compose.Keyboard
+import com.quantum.wallet.bankwallet.ui.compose.TranslatableString
+import com.quantum.wallet.bankwallet.ui.compose.components.BadgeText
+import com.quantum.wallet.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import com.quantum.wallet.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import com.quantum.wallet.bankwallet.ui.compose.components.CoinImage
+import com.quantum.wallet.bankwallet.ui.compose.components.HSpacer
+import com.quantum.wallet.bankwallet.ui.compose.components.HsDivider
+import com.quantum.wallet.bankwallet.ui.compose.components.MenuItem
+import com.quantum.wallet.bankwallet.ui.compose.components.VSpacer
+import com.quantum.wallet.bankwallet.ui.compose.components.body_grey
+import com.quantum.wallet.bankwallet.ui.compose.components.captionSB_grey
+import com.quantum.wallet.bankwallet.ui.compose.components.headline1_grey
+import com.quantum.wallet.bankwallet.ui.compose.components.headline1_leah
+import com.quantum.wallet.bankwallet.ui.compose.components.headline2_jacob
+import com.quantum.wallet.bankwallet.ui.compose.components.headline2_leah
+import com.quantum.wallet.bankwallet.ui.compose.components.subhead_leah
+import com.quantum.wallet.bankwallet.ui.compose.observeKeyboardState
+import com.quantum.wallet.bankwallet.uiv3.components.AlertCard
+import com.quantum.wallet.bankwallet.uiv3.components.AlertFormat
+import com.quantum.wallet.bankwallet.uiv3.components.AlertType
+import com.quantum.wallet.bankwallet.uiv3.components.HSScaffold
+import com.quantum.wallet.bankwallet.uiv3.components.cell.CellLeftImage
+import com.quantum.wallet.bankwallet.uiv3.components.cell.CellMiddleInfo
+import com.quantum.wallet.bankwallet.uiv3.components.cell.CellRightControlsButtonText
+import com.quantum.wallet.bankwallet.uiv3.components.cell.CellRightInfo
+import com.quantum.wallet.bankwallet.uiv3.components.cell.ImageType
+import com.quantum.wallet.bankwallet.uiv3.components.cell.hs
+import com.quantum.wallet.bankwallet.uiv3.components.controls.ButtonSize
+import com.quantum.wallet.bankwallet.uiv3.components.controls.ButtonStyle
+import com.quantum.wallet.bankwallet.uiv3.components.controls.ButtonVariant
+import com.quantum.wallet.bankwallet.uiv3.components.controls.HSIconButton
+import io.horizontalsystems.marketkit.models.Token
+import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
+import java.net.UnknownHostException
+
+class SwapFragment : BaseComposeFragment() {
+    @Composable
+    override fun GetContent(navController: NavController) {
+        val input = navController.getInput<Input>()
+        SwapScreen(navController, input?.tokenIn, input?.tokenOut, navController::popBackStack)
+    }
+
+    @Parcelize
+    data class Input(val tokenIn: Token? = null, val tokenOut: Token? = null) : Parcelable
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SwapScreen(
+    navController: NavController,
+    tokenIn: Token? = null,
+    tokenOut: Token? = null,
+    onClickClose: (() -> Unit)? = null,
+    bottomPadding: Dp = 0.dp,
+    closeAfterSwap: Boolean = true
+) {
+    val currentBackStackEntry = remember { navController.currentBackStackEntry }
+    val viewModel = viewModel<SwapViewModel>(
+        viewModelStoreOwner = currentBackStackEntry!!,
+        factory = SwapViewModel.Factory(tokenIn, tokenOut)
+    )
+
+    LifecycleResumeEffect(Unit) {
+        viewModel.refreshDefaultTokens()
+        onPauseOrDispose { }
+    }
+
+    val uiState = viewModel.uiState
+    val context = LocalContext.current
+    var showAmlRiskSheet by remember { mutableStateOf(false) }
+    val amlRiskSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showAmlUnknownSheet by remember { mutableStateOf(false) }
+    val amlUnknownSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showAmlErrorSheet by remember { mutableStateOf(false) }
+    val amlErrorSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    val navigateToSwapConfirm = {
+        navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
+            if (it.success) {
+                if (closeAfterSwap) {
+                    navController.popBackStack()
+                } else {
+                    viewModel.onEnterAmount(null)
+                }
+            }
+        }
+        stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.amlCheckEventFlow.collect { event ->
+            when (event) {
+                AmlCheckEvent.Proceed -> {
+                    if (viewModel.uiState.needToAcceptTerms) {
+                        navController.slideFromRightForResult<SwapTermsFragment.Result>(R.id.swapTermsFragment) {
+                            if (it.accepted) navigateToSwapConfirm()
+                        }
+                    } else {
+                        navigateToSwapConfirm()
+                    }
+                }
+                AmlCheckEvent.RiskDetected -> {
+                    showAmlRiskSheet = true
+                }
+                is AmlCheckEvent.Error -> {
+                    showAmlErrorSheet = true
+                }
+                AmlCheckEvent.RiskUnknown -> {
+                    showAmlUnknownSheet = true
+                }
+            }
+        }
+    }
+
+    if (showAmlRiskSheet) {
+        SwapAmlRiskBottomSheet(
+            sheetState = amlRiskSheetState,
+            onDismiss = { showAmlRiskSheet = false },
+            onChooseAnotherProvider = {
+                showAmlRiskSheet = false
+                navController.slideFromBottom(R.id.swapSelectProvider)
+            },
+        )
+    }
+
+    if (showAmlUnknownSheet) {
+        SwapAmlUnknownBottomSheet(
+            sheetState = amlUnknownSheetState,
+            onDismiss = { showAmlUnknownSheet = false },
+            onContinue = {
+                showAmlUnknownSheet = false
+                navigateToSwapConfirm()
+            },
+        )
+    }
+
+    if (showAmlErrorSheet) {
+        SwapAmlErrorBottomSheet(
+            sheetState = amlErrorSheetState,
+            onDismiss = { showAmlErrorSheet = false },
+            onRetry = {
+                showAmlErrorSheet = false
+                viewModel.startProceed()
+            },
+        )
+    }
+
+    val onClickCoinFrom = {
+        navController.slideFromBottomForResult<Token>(
+            R.id.swapSelectCoinFragment,
+            SwapSelectCoinFragment.Input(uiState.tokenOut, context.getString(R.string.Swap_YouPay))
+        ) {
+            viewModel.onSelectTokenIn(it)
+        }
+    }
+
+//    LaunchedEffect(Unit) {
+//        if (tokenIn == null) {
+//            delay(300)
+//            onClickCoinFrom.invoke()
+//        }
+//    }
+
+    SwapScreenInner(
+        uiState = uiState,
+        onClickClose = onClickClose,
+        onClickCoinFrom = onClickCoinFrom,
+        onClickCoinTo = {
+            navController.slideFromBottomForResult<Token>(
+                R.id.swapSelectCoinFragment,
+                SwapSelectCoinFragment.Input(uiState.tokenIn, context.getString(R.string.Swap_YouGet))
+            ) {
+                viewModel.onSelectTokenOut(it)
+            }
+        },
+        onSwitchPairs = viewModel::onSwitchPairs,
+        onEnterAmount = viewModel::onEnterAmount,
+        onEnterAmountPercentage = viewModel::onEnterAmountPercentage,
+        onEnterFiatAmount = viewModel::onEnterFiatAmount,
+        onClickProvider = {
+            navController.slideFromBottom(R.id.swapSelectProvider)
+
+            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
+        },
+        onClickNext = viewModel::startProceed,
+        onActionStarted = {
+            viewModel.onActionStarted()
+        },
+        onActionCompleted = {
+            viewModel.onActionCompleted()
+        },
+        navController = navController,
+        onResume = viewModel::enableRequoteOnTimeout,
+        onPause = viewModel::disableRequoteOnTimeout,
+        bottomPadding = bottomPadding,
+    )
+}
+
+@Composable
+private fun SwapScreenInner(
+    uiState: SwapUiState,
+    onClickClose: (() -> Unit)?,
+    onClickCoinFrom: () -> Unit,
+    onClickCoinTo: () -> Unit,
+    onSwitchPairs: () -> Unit,
+    onEnterAmount: (BigDecimal?) -> Unit,
+    onEnterFiatAmount: (BigDecimal?) -> Unit,
+    onEnterAmountPercentage: (Int) -> Unit,
+    onClickProvider: () -> Unit,
+    onClickNext: () -> Unit,
+    onActionStarted: () -> Unit,
+    onActionCompleted: () -> Unit,
+    navController: NavController,
+    onResume: () -> Unit,
+    onPause: () -> Unit,
+    bottomPadding: Dp = 0.dp,
+) {
+    LifecycleResumeEffect(Unit) {
+        onResume.invoke()
+        onPauseOrDispose {
+            onPause.invoke()
+        }
+    }
+
+    val quote = uiState.quote
+
+    HSScaffold(
+        title = stringResource(R.string.Swap),
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.SwapHistory_Title),
+                icon = R.drawable.ic_circle_clock_24,
+                onClick = {
+                    navController.slideFromRight(R.id.swapHistoryFragment)
+                }
+            )),
+        onBack = onClickClose,
+    ) {
+        val focusManager = LocalFocusManager.current
+        val keyboardState by observeKeyboardState()
+        var amountInputHasFocus by remember { mutableStateOf(false) }
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                SwapInput(
+                    amountIn = uiState.amountIn,
+                    fiatAmountIn = uiState.fiatAmountIn,
+                    fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
+                    onSwitchPairs = onSwitchPairs,
+                    amountOut = quote?.amountOut,
+                    fiatAmountOut = uiState.fiatAmountOut,
+                    fiatPriceImpact = uiState.fiatPriceImpact,
+                    fiatPriceImpactLevel = uiState.fiatPriceImpactLevel,
+                    onValueChange = onEnterAmount,
+                    onFiatValueChange = onEnterFiatAmount,
+                    onClickCoinFrom = onClickCoinFrom,
+                    onClickCoinTo = onClickCoinTo,
+                    tokenIn = uiState.tokenIn,
+                    tokenOut = uiState.tokenOut,
+                    currency = uiState.currency,
+                    onFocusChanged = {
+                        amountInputHasFocus = it.hasFocus
+                    },
+                )
+                VSpacer(height = 8.dp)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .background(ComposeAppTheme.colors.lawrence)
+                        .imePadding()
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        if (quote == null) {
+                            AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
+                        }
+
+                        if (quote != null) {
+                            ProviderCellInfo(quote, onClickProvider)
+                        }
+
+                        if (uiState.currentStep is SwapStep.ActionRequired) {
+                            uiState.currentStep.action.getDescription()?.let { actionDescription ->
+                                VSpacer(height = 16.dp)
+                                AlertCard(
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                    format = AlertFormat.Structured,
+                                    type = AlertType.Caution,
+                                    text = actionDescription
+                                )
+                            }
+                        }
+
+                        VSpacer(height = 32.dp)
+                    }
+
+                    when (val currentStep = uiState.currentStep) {
+                        is SwapStep.InputRequired -> {
+                            val title = when (currentStep.inputType) {
+                                InputType.TokenIn -> stringResource(R.string.Swap_SelectTokenIn)
+                                InputType.TokenOut -> stringResource(R.string.Swap_SelectTokenOut)
+                                InputType.Amount -> stringResource(R.string.Swap_EnterAmount)
+                            }
+
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                title = title,
+                                enabled = false,
+                                onClick = {}
+                            )
+                        }
+
+                        SwapStep.Quoting -> {
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                title = stringResource(R.string.Swap_Quoting),
+                                enabled = false,
+                                loadingIndicator = true,
+                                onClick = {}
+                            )
+                        }
+
+                        SwapStep.AmlChecking -> {
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                title = stringResource(R.string.Swap_Proceed),
+                                enabled = false,
+                                loadingIndicator = true,
+                                onClick = {}
+                            )
+                        }
+
+                        is SwapStep.Error -> {
+                            val errorText = when (val error = currentStep.error) {
+                                SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
+                                is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
+                                is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
+                                is UnknownHostException -> stringResource(id = R.string.Hud_Text_NoInternet)
+                                is TokenNotEnabled -> stringResource(id = R.string.Swap_ErrorTokenNotEnabled)
+                                is WalletSyncing -> stringResource(id = R.string.Swap_ErrorWalletSyncing)
+                                is WalletNotSynced -> stringResource(id = R.string.Swap_ErrorWalletNotSynced)
+                                else -> error.message ?: error.javaClass.simpleName
+                            }
+
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                title = errorText,
+                                enabled = false,
+                                onClick = {}
+                            )
+                        }
+
+                        is SwapStep.ActionRequired -> {
+                            val action = currentStep.action
+                            val title = if (action.inProgress) {
+                                action.getTitleInProgress()
+                            } else {
+                                action.getTitle()
+                            }
+
+                            ButtonPrimaryDefault(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                title = title,
+                                enabled = !action.inProgress,
+                                onClick = {
+                                    onActionStarted.invoke()
+                                    action.execute(navController, onActionCompleted)
+                                },
+                                loadingIndicator = action.inProgress
+                            )
+                        }
+
+                        SwapStep.Proceed -> {
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                title = stringResource(R.string.Swap_Proceed),
+                                onClick = onClickNext
+                            )
+                        }
+                    }
+                    if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
+                        val hasNonZeroBalance =
+                            uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
+                        VSpacer(height = 16.dp)
+                        SuggestionsBar(
+                            onDelete = {
+                                onEnterAmount.invoke(null)
+                            },
+                            onSelect = {
+                                focusManager.clearFocus()
+                                onEnterAmountPercentage.invoke(it)
+                            },
+                            selectEnabled = hasNonZeroBalance,
+                            deleteEnabled = uiState.amountIn != null,
+                        )
+                    } else {
+                        VSpacer(height = 16.dp + bottomPadding)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProviderCellInfo(
+    quote: SwapProviderQuote,
+    onClickProvider: () -> Unit
+) {
+    Row(
+        modifier = Modifier.padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        CellLeftImage(
+            painter = painterResource(quote.provider.icon),
+            type = ImageType.Rectangle,
+            size = 24,
+        )
+        Row(
+            modifier = Modifier.clickable(
+                onClick = onClickProvider,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                subhead_leah(quote.provider.titleShort)
+                RiskCell(riskLevel = quote.provider.riskLevel)
+            }
+            HSpacer(8.dp)
+            Icon(
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(R.drawable.arrow_s_down_20),
+                tint = ComposeAppTheme.colors.grey,
+                contentDescription = null,
+            )
+        }
+        var showRegularPrice by remember { mutableStateOf(true) }
+        val swapPriceUIHelper = SwapPriceUIHelper(
+            quote.tokenIn,
+            quote.tokenOut,
+            quote.amountIn,
+            quote.amountOut
+        )
+
+        val priceStr = if (showRegularPrice) {
+            swapPriceUIHelper.priceStr
+        } else {
+            swapPriceUIHelper.priceInvStr
+        }
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            CellRightControlsButtonText(
+                subhead = priceStr.hs(color = ComposeAppTheme.colors.leah),
+                onClick = {
+                    showRegularPrice = !showRegularPrice
+                }
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.clock_filled_24),
+                    modifier = Modifier.size(16.dp),
+                    tint = ComposeAppTheme.colors.grey,
+                    contentDescription = null
+                )
+                captionSB_grey(
+                    text = quote.swapQuote.estimationTime?.let { formatDurationShort(it) }
+                        ?: stringResource(R.string.NotAvailable)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?) {
+    Row(modifier = Modifier.padding(16.dp)) {
+        CellMiddleInfo(eyebrow = stringResource(R.string.Swap_AvailableBalance).hs)
+        val text = if (tokenIn != null && availableBalance != null) {
+            CoinValue(tokenIn, availableBalance).getFormattedFull()
+        } else {
+            "---"
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        CellRightInfo(titleSubheadSb = text.hs)
+    }
+}
+
+@Composable
+fun PriceImpactField(
+    priceImpact: BigDecimal?,
+    priceImpactLevel: PriceImpactLevel?,
+    navController: NavController
+) {
+    if (priceImpact == null || priceImpactLevel == null) return
+
+    val infoTitle = stringResource(id = R.string.SwapInfo_PriceImpactTitle)
+    val infoText = stringResource(id = R.string.SwapInfo_PriceImpactDescription)
+
+    QuoteInfoRow(
+        title = stringResource(R.string.Swap_PriceImpact),
+        value = stringResource(R.string.Swap_Percent, priceImpact.toPlainString())
+            .hs(color = getPriceImpactColor(priceImpactLevel)),
+        onInfoClick = {
+            navController.slideFromBottom(
+                R.id.swapInfoDialog,
+                SwapInfoDialog.Input(infoTitle, infoText)
+            )
+        }
+    )
+}
+
+@Composable
+fun PriceField(
+    tokenIn: Token,
+    tokenOut: Token,
+    amountIn: BigDecimal,
+    amountOut: BigDecimal,
+    statPage: StatPage,
+) {
+    if (amountIn <= BigDecimal.ZERO || amountOut <= BigDecimal.ZERO) return
+
+    var showRegularPrice by remember { mutableStateOf(true) }
+    val swapPriceUIHelper = SwapPriceUIHelper(tokenIn, tokenOut, amountIn, amountOut)
+
+    QuoteInfoRow(
+        title = stringResource(R.string.Swap_Price),
+        value = if (showRegularPrice) {
+            swapPriceUIHelper.priceStr.hs(color = ComposeAppTheme.colors.leah)
+        } else {
+            swapPriceUIHelper.priceInvStr.hs(color = ComposeAppTheme.colors.leah)
+        },
+        onCellClick = {
+            showRegularPrice = !showRegularPrice
+
+            stat(page = statPage, event = StatEvent.TogglePrice)
+        },
+    )
+}
+
+@Composable
+private fun SwapInput(
+    amountIn: BigDecimal?,
+    fiatAmountIn: BigDecimal?,
+    fiatAmountInputEnabled: Boolean,
+    onSwitchPairs: () -> Unit,
+    amountOut: BigDecimal?,
+    fiatAmountOut: BigDecimal?,
+    fiatPriceImpact: BigDecimal?,
+    fiatPriceImpactLevel: PriceImpactLevel?,
+    onValueChange: (BigDecimal?) -> Unit,
+    onFiatValueChange: (BigDecimal?) -> Unit,
+    onClickCoinFrom: () -> Unit,
+    onClickCoinTo: () -> Unit,
+    tokenIn: Token?,
+    tokenOut: Token?,
+    currency: Currency,
+    onFocusChanged: (FocusState) -> Unit,
+) {
+    Box {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            SwapCoinInputIn(
+                coinAmount = amountIn,
+                fiatAmount = fiatAmountIn,
+                currency = currency,
+                onValueChange = onValueChange,
+                onFiatValueChange = onFiatValueChange,
+                fiatAmountInputEnabled = fiatAmountInputEnabled,
+                token = tokenIn,
+                onClickCoin = onClickCoinFrom,
+                onFocusChanged = onFocusChanged
+            )
+            SwapCoinInputTo(
+                coinAmount = amountOut,
+                fiatAmount = fiatAmountOut,
+                fiatPriceImpact = fiatPriceImpact,
+                fiatPriceImpactLevel = fiatPriceImpactLevel,
+                currency = currency,
+                token = tokenOut,
+                onClickCoin = onClickCoinTo
+            )
+        }
+        HsDivider(modifier = Modifier.align(Alignment.Center))
+        Box(Modifier.align(Alignment.Center)) {
+            HSIconButton(
+                variant = ButtonVariant.Secondary,
+                style = ButtonStyle.Solid,
+                size = ButtonSize.Small,
+                icon = painterResource(id = R.drawable.ic_arrow_down_20),
+                onClick = onSwitchPairs
+            )
+        }
+    }
+}
+
+@Composable
+private fun SwapCoinInputIn(
+    coinAmount: BigDecimal?,
+    fiatAmount: BigDecimal?,
+    currency: Currency,
+    onValueChange: (BigDecimal?) -> Unit,
+    onFiatValueChange: (BigDecimal?) -> Unit,
+    fiatAmountInputEnabled: Boolean,
+    token: Token?,
+    onClickCoin: () -> Unit,
+    onFocusChanged: (FocusState) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .onFocusChanged(onFocusChanged)
+            .padding(horizontal = 16.dp, vertical = 20.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CoinSelector(token, onClickCoin)
+        HSpacer(width = 16.dp)
+        Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
+            AmountInput(
+                value = coinAmount,
+                onValueChange = onValueChange
+            )
+            VSpacer(height = 3.dp)
+            FiatAmountInput(
+                value = fiatAmount,
+                currency = currency,
+                onValueChange = onFiatValueChange,
+                enabled = fiatAmountInputEnabled
+            )
+        }
+    }
+}
+
+@Composable
+private fun SwapCoinInputTo(
+    coinAmount: BigDecimal?,
+    fiatAmount: BigDecimal?,
+    fiatPriceImpact: BigDecimal?,
+    fiatPriceImpactLevel: PriceImpactLevel?,
+    currency: Currency,
+    token: Token?,
+    onClickCoin: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 20.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CoinSelector(token, onClickCoin)
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.End
+        ) {
+            if (coinAmount == null) {
+                headline1_grey(text = "0")
+            } else {
+                headline1_leah(
+                    text = coinAmount.toPlainString(),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            VSpacer(height = 3.dp)
+            if (fiatAmount == null) {
+                body_grey(text = "${currency.symbol}0")
+            } else {
+                Row {
+                    body_grey(text = "${currency.symbol}${fiatAmount.toPlainString()}")
+                    fiatPriceImpact?.let { diff ->
+                        HSpacer(width = 4.dp)
+                        Text(
+                            text = stringResource(R.string.Swap_FiatPriceImpact, diff.toPlainString()),
+                            style = ComposeAppTheme.typography.body,
+                            color = getPriceImpactColor(fiatPriceImpactLevel),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CoinSelector(
+    token: Token?,
+    onClickCoin: () -> Unit,
+) {
+    Selector(
+        icon = {
+            CoinImage(
+                token = token,
+                modifier = Modifier.size(32.dp)
+            )
+        },
+        text = {
+            if (token != null) {
+                Column {
+                    headline2_leah(text = token.coin.code)
+                    VSpacer(height = 5.dp)
+                    BadgeText(
+                        text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native),
+                        background = ComposeAppTheme.colors.blade,
+                        textColor = ComposeAppTheme.colors.leah,
+                    )
+                }
+            } else {
+                headline2_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
+            }
+        },
+        onClickSelect = onClickCoin
+    )
+}
+
+@Composable
+fun FiatAmountInput(
+    value: BigDecimal?,
+    currency: Currency,
+    onValueChange: (BigDecimal?) -> Unit,
+    enabled: Boolean,
+) {
+    var text by remember(value) {
+        mutableStateOf(value?.toPlainString() ?: "")
+    }
+    val displayTransformation = remember(currency.symbol) {
+        VisualTransformation { originalText ->
+            val prefixLen = currency.symbol.length
+            val isEmpty = originalText.text.isEmpty()
+            val visual = AnnotatedString(currency.symbol + originalText.text + if (isEmpty) "0" else "")
+            TransformedText(
+                text = visual,
+                offsetMapping = object : OffsetMapping {
+                    override fun originalToTransformed(offset: Int) =
+                        if (isEmpty) prefixLen + 1 else offset + prefixLen
+                    override fun transformedToOriginal(offset: Int) =
+                        (offset - prefixLen).coerceIn(0, originalText.text.length)
+                }
+            )
+        }
+    }
+    BasicTextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = text,
+        onValueChange = {
+            try {
+                val amount = if (it.isBlank()) {
+                    null
+                } else {
+                    it.toBigDecimal()
+                }
+                text = it
+                onValueChange.invoke(amount)
+            } catch (e: Exception) {
+
+            }
+        },
+        enabled = enabled,
+        textStyle = ColoredTextStyle(
+            color = ComposeAppTheme.colors.grey,
+            textStyle = ComposeAppTheme.typography.body,
+            textAlign = TextAlign.End
+        ),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Decimal
+        ),
+        cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
+        visualTransformation = displayTransformation,
+    )
+}
+
+@Composable
+private fun Selector(
+    icon: @Composable() (RowScope.() -> Unit),
+    text: @Composable() (RowScope.() -> Unit),
+    onClickSelect: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = onClickSelect,
+        ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        icon.invoke(this)
+        HSpacer(width = 16.dp)
+        text.invoke(this)
+        HSpacer(width = 8.dp)
+        Icon(
+            painter = painterResource(R.drawable.arrow_s_down_20),
+            contentDescription = "",
+            tint = ComposeAppTheme.colors.grey
+        )
+    }
+}
+
+@Composable
+fun AmountInput(
+    value: BigDecimal?,
+    onValueChange: (BigDecimal?) -> Unit,
+    focusRequester: FocusRequester = FocusRequester()
+) {
+    var amount by rememberSaveable {
+        mutableStateOf(value)
+    }
+
+    var textFieldValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue(text = amount?.toPlainString() ?: ""))
+    }
+
+    LaunchedEffect(value) {
+        if (value?.stripTrailingZeros() != amount?.stripTrailingZeros()) {
+            amount = value
+
+            textFieldValue = TextFieldValue(text = amount?.toPlainString() ?: "")
+        }
+    }
+
+    var setCursorToEndOnFocused by remember {
+        mutableStateOf(false)
+    }
+
+    BasicTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester)
+            .onFocusChanged {
+                setCursorToEndOnFocused = it.isFocused
+
+                if (!it.isFocused) {
+                    textFieldValue = textFieldValue.copy(selection = TextRange.Zero)
+                }
+            },
+        value = textFieldValue,
+        onValueChange = { newValue ->
+            try {
+                val text = newValue.text
+                amount = if (text.isBlank()) {
+                    null
+                } else {
+                    text.toBigDecimal()
+                }
+
+                if (!setCursorToEndOnFocused) {
+                    textFieldValue = newValue
+                } else {
+                    textFieldValue = newValue.copy(selection = TextRange(text.length))
+                    setCursorToEndOnFocused = false
+                }
+
+                onValueChange.invoke(amount)
+            } catch (e: Exception) {
+
+            }
+        },
+        textStyle = ColoredTextStyle(
+            color = ComposeAppTheme.colors.leah,
+            textStyle = ComposeAppTheme.typography.headline1,
+            textAlign = TextAlign.End
+        ),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Decimal
+        ),
+        cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
+        decorationBox = { innerTextField ->
+            if (textFieldValue.text.isEmpty()) {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+                    headline1_grey(text = "0")
+                }
+            }
+            innerTextField()
+        },
+    )
+}
+
+@Composable
+fun getPriceImpactColor(priceImpactLevel: PriceImpactLevel?): Color {
+    return when (priceImpactLevel) {
+        PriceImpactLevel.Normal -> ComposeAppTheme.colors.leah
+        PriceImpactLevel.Warning -> ComposeAppTheme.colors.jacob
+        PriceImpactLevel.High -> ComposeAppTheme.colors.lucian
+        PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
+
+        else -> ComposeAppTheme.colors.leah
+    }
+}

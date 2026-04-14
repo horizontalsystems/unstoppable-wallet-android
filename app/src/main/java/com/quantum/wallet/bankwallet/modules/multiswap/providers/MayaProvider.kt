@@ -1,0 +1,63 @@
+package com.quantum.wallet.bankwallet.modules.multiswap.providers
+
+import com.quantum.wallet.bankwallet.R
+import com.quantum.wallet.bankwallet.core.App
+import com.quantum.wallet.bankwallet.core.adapters.zcash.ZcashAdapter
+import com.quantum.wallet.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
+import java.math.BigDecimal
+
+object MayaProvider : BaseThorChainProvider(
+    baseUrl = "https://mayanode.mayachain.info/mayachain/",
+    affiliate = "hrz_android",
+    affiliateBps = 100,
+) {
+    override val id = "mayachain"
+    override val title = "Maya Protocol"
+    override val icon = R.drawable.swap_provider_maya
+    override val riskLevel = RiskLevel.AUTO
+
+    override fun getRefundAddress(tokenIn: Token): String? {
+        return if (tokenIn.blockchainType == BlockchainType.Zcash) {
+            App.adapterManager.getAdapterForToken<ZcashAdapter>(tokenIn)?.receiveAddressTransparent
+        } else {
+            null
+        }
+    }
+
+    override fun getFromAddress(tokenIn: Token): String? {
+        return if (tokenIn.blockchainType == BlockchainType.Zcash) {
+            App.adapterManager.getAdapterForToken<ZcashAdapter>(tokenIn)?.receiveAddress
+        } else {
+            null
+        }
+    }
+
+    override suspend fun getSendTransactionData(
+        tokenIn: Token,
+        amountIn: BigDecimal,
+        quoteSwap: ThornodeAPI.Response.QuoteSwap,
+        tokenOut: Token,
+    ): SendTransactionData {
+        if (tokenIn.blockchainType == BlockchainType.Zcash) {
+            val inboundAddresses = thornodeAPI.inboundAddresses()
+            val shieldedMemoConfig = inboundAddresses
+                .find { it.chain == "ZEC" }
+                ?.shielded_memo_config
+
+            if (shieldedMemoConfig == null || !shieldedMemoConfig.enabled) {
+                throw IllegalStateException("Zcash shielded memo is not available or disabled")
+            }
+
+            return SendTransactionData.Zcash.ShieldedMemo(
+                address = quoteSwap.inbound_address,
+                amount = amountIn,
+                memo = quoteSwap.memo,
+                memoShieldedAddress = shieldedMemoConfig.unified_address
+            )
+        }
+
+        return super.getSendTransactionData(tokenIn, amountIn, quoteSwap, tokenOut)
+    }
+}

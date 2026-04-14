@@ -16,7 +16,7 @@ FUNCIONES DE WALLEJ:
 
 - Monedero múltiple no Custodial >> Gestiona cualquier número de criptomonedas a través de múltiples carteras al estilo portugués de forma no custodial. Esta cartera es como su propio banco donde usted es el único cliente y el único a cargo. Está diseñado para mantener activos seguros y fáciles de restaurar incluso si el teléfono es robado y manipulado.
 
-- Cartera Orientada a la Inversión >> Unstoppable ofrece análisis inigualables del mercado de criptomonedas a su dispositivo: clasificación avanzada, categorización supervisada, filtrado de búsquedas extensas y características de alertas basadas en eventos.
+- Cartera Orientada a la Inversión >> Quantum Wallet ofrece análisis inigualables del mercado de criptomonedas a su dispositivo: clasificación avanzada, categorización supervisada, filtrado de búsquedas extensas y características de alertas basadas en eventos.
 
 - Universal Wallet >> Soporta todos los blockchains de la cadena de bloques y está construido de una manera compatible con los estándares permitiendo a los usuarios usar sólo una aplicación de cartera para todo cripto.
 

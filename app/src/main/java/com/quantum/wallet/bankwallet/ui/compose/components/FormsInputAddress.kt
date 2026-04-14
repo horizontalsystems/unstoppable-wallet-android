@@ -1,0 +1,206 @@
+package com.quantum.wallet.bankwallet.ui.compose.components
+
+import android.app.Activity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import com.quantum.wallet.bankwallet.R
+import com.quantum.wallet.bankwallet.core.utils.ModuleField
+import com.quantum.wallet.bankwallet.entities.Address
+import com.quantum.wallet.bankwallet.entities.DataState
+import com.quantum.wallet.bankwallet.modules.qrscanner.QRScannerActivity
+import com.quantum.wallet.bankwallet.ui.compose.ColoredTextStyle
+import com.quantum.wallet.bankwallet.ui.compose.ComposeAppTheme
+import com.quantum.wallet.bankwallet.ui.helpers.TextHelper
+
+@Composable
+fun FormsInputAddress(
+    modifier: Modifier = Modifier,
+    value: String,
+    hint: String,
+    state: DataState<Address>? = null,
+    showStateIcon: Boolean = true,
+    textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
+    onValueChange: (String) -> Unit,
+) {
+    val focusRequester = remember { FocusRequester() }
+    val context = LocalContext.current
+
+    val borderColor = if (state is DataState.Error && state.error is FormsInputStateWarning) {
+        ComposeAppTheme.colors.yellow50
+    } else {
+        ComposeAppTheme.colors.blade
+    }
+
+    val textColor = when (state) {
+        is DataState.Error -> ComposeAppTheme.colors.lucian
+        else -> ComposeAppTheme.colors.leah
+    }
+
+    val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
+        ComposeAppTheme.colors.jacob
+    } else {
+        ComposeAppTheme.colors.lucian
+    }
+
+    Column(modifier) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .defaultMinSize(minHeight = 44.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .border(0.5.dp, borderColor, RoundedCornerShape(16.dp))
+                .background(ComposeAppTheme.colors.lawrence),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            BasicTextField(
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .weight(1f),
+                enabled = true,
+                value = value,
+                onValueChange = { textFieldValue ->
+                    val text = textPreprocessor.process(textFieldValue)
+                    onValueChange.invoke(text)
+                },
+                textStyle = ColoredTextStyle(
+                    color = textColor,
+                    textStyle = ComposeAppTheme.typography.body
+                ),
+                singleLine = false,
+                cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
+                decorationBox = { innerTextField ->
+                    if (value.isEmpty()) {
+                        Text(
+                            hint,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1,
+                            color = ComposeAppTheme.colors.andy,
+                            style = ComposeAppTheme.typography.body
+                        )
+                    }
+                    innerTextField()
+                },
+                visualTransformation = VisualTransformation.None,
+                keyboardOptions = KeyboardOptions.Default,
+            )
+
+            when (state) {
+                is DataState.Loading -> {
+                    HSCircularProgressIndicator()
+                }
+                is DataState.Error -> {
+                    if(showStateIcon) {
+                        Icon(
+                            modifier = Modifier.padding(end = 8.dp),
+                            painter = painterResource(id = R.drawable.ic_attention_20),
+                            contentDescription = null,
+                            tint = cautionColor
+                        )
+                    } else {
+                        HSpacer(28.dp)
+                    }
+                }
+                is DataState.Success -> {
+                    if(showStateIcon) {
+                        Icon(
+                            modifier = Modifier.padding(end = 8.dp),
+                            painter = painterResource(id = R.drawable.ic_check_20),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.remus
+                        )
+                    } else {
+                        HSpacer(28.dp)
+                    }
+                }
+                else -> {
+                    Spacer(modifier = Modifier.width(28.dp))
+                }
+            }
+
+            if (value.isNotEmpty()) {
+                ButtonSecondaryCircle(
+                    modifier = Modifier.padding(end = 16.dp),
+                    icon = R.drawable.ic_delete_20,
+                    onClick = {
+                        val text = textPreprocessor.process("")
+                        onValueChange.invoke(text)
+                        focusRequester.requestFocus()
+                    }
+                )
+            } else {
+                val qrScannerLauncher =
+                    rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                        if (result.resultCode == Activity.RESULT_OK) {
+                            val scannedText =
+                                result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+
+                            val textProcessed = textPreprocessor.process(scannedText)
+                            onValueChange.invoke(textProcessed)
+                        }
+                    }
+
+                ButtonSecondaryCircle(
+                    modifier = Modifier.padding(end = 8.dp),
+                    icon = R.drawable.ic_qr_scan_20,
+                    onClick = {
+                        qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context))
+                    }
+                )
+
+                ButtonSecondaryDefault(
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .height(28.dp),
+                    title = stringResource(id = R.string.Send_Button_Paste),
+                    onClick = {
+                        TextHelper.getCopiedText()?.let { textInClipboard ->
+                            val textProcessed = textPreprocessor.process(textInClipboard)
+                            onValueChange.invoke(textProcessed)
+                        }
+                    },
+                )
+            }
+        }
+
+        state?.errorOrNull?.localizedMessage?.let {
+            Text(
+                modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp),
+                text = it,
+                color = cautionColor,
+                style = ComposeAppTheme.typography.caption
+            )
+        }
+    }
+}

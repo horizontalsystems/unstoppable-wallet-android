@@ -1,0 +1,89 @@
+package com.quantum.wallet.bankwallet.core.adapters
+
+import com.quantum.wallet.bankwallet.core.IAdapter
+import com.quantum.wallet.bankwallet.core.IBalanceAdapter
+import com.quantum.wallet.bankwallet.core.IReceiveAdapter
+import com.quantum.wallet.bankwallet.core.ISendTronAdapter
+import com.quantum.wallet.bankwallet.core.managers.TronKitWrapper
+import io.horizontalsystems.tronkit.models.Address
+import io.horizontalsystems.tronkit.models.Contract
+import io.horizontalsystems.tronkit.network.CreatedTransaction
+import io.horizontalsystems.tronkit.network.Network
+import io.horizontalsystems.tronkit.transaction.Fee
+import io.horizontalsystems.tronkit.transaction.Signer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.math.BigDecimal
+import java.math.BigInteger
+
+abstract class BaseTronAdapter(
+    tronKitWrapper: TronKitWrapper,
+    val decimal: Int
+) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendTronAdapter {
+
+    val tronKit = tronKitWrapper.tronKit
+    protected val signer: Signer? = tronKitWrapper.signer
+
+    override val debugInfo: String
+        get() = ""
+
+    val statusInfo: Map<String, Any>
+        get() = tronKit.statusInfo()
+
+    // IReceiveAdapter
+
+    override val receiveAddress: String
+        get() = tronKit.address.base58
+
+    override val isMainNet: Boolean
+        get() = tronKit.network == Network.Mainnet
+
+    // ISendTronAdapter
+
+    override suspend fun estimateFee(contract: Contract): List<Fee> {
+        return tronKit.estimateFee(contract)
+    }
+
+    override suspend fun estimateFee(transaction: CreatedTransaction): List<Fee> {
+        return tronKit.estimateFee(transaction)
+    }
+
+    override suspend fun send(contract: Contract, feeLimit: Long?) {
+        if (signer == null) throw Exception()
+
+        tronKit.send(contract, signer, feeLimit)
+    }
+
+    override suspend fun send(createdTransaction: CreatedTransaction) {
+        if (signer == null) throw Exception()
+
+        tronKit.send(createdTransaction, signer)
+    }
+
+    override suspend fun isAddressActive(address: Address): Boolean = withContext(Dispatchers.IO) {
+        tronKit.isAccountActive(address)
+    }
+
+    override fun isOwnAddress(address: Address): Boolean {
+        return address == tronKit.address
+    }
+
+    protected fun balanceInBigDecimal(balance: BigInteger?, decimal: Int): BigDecimal {
+        balance?.toBigDecimal()?.let {
+            return scaleDown(it, decimal)
+        } ?: return BigDecimal.ZERO
+    }
+
+    protected fun scaleDown(amount: BigDecimal, decimals: Int = decimal): BigDecimal {
+        return amount.movePointLeft(decimals).stripTrailingZeros()
+    }
+
+    protected fun scaleUp(amount: BigDecimal, decimals: Int = decimal): BigInteger {
+        return amount.movePointRight(decimals).toBigInteger()
+    }
+
+    companion object {
+        const val confirmationsThreshold: Int = 19
+    }
+
+}

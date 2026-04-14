@@ -1,8 +1,8 @@
-Wallet Unstoppable, le portefeuille de finance décentralisée intentionnellement conçu pour la gestion des crypto-monnaies.
+Quantum Wallet, le portefeuille de finance décentralisée intentionnellement conçu pour la gestion des crypto-monnaies.
 
 Il a été élaboré pour permettre de venir en aide aux personnes conscientes de leurs droits au respect de leur vie privée, souhaitant gérer des crypto-devises tout en investissant de manière optimale et professionnelle dans la crypto-monnaie.
 
-Unstoppable est construit avec les éléments suivants en tête :
+Quantum Wallet est construit avec les éléments suivants en tête :
 
 - la Gestion Libre de son Capital >> Il a été élaboré dans le but de fournir aux utilisateurs une véritable solution de gestion du capital, leur permettant de choisir la gestion libre.
 
@@ -10,13 +10,13 @@ Unstoppable est construit avec les éléments suivants en tête :
 
 - Capital Devrait être privé >> Il ne fuit pas de données privées, il n'a aucun moyen de suivre les utilisateurs, et prend des mesures supplémentaires pour garantir la confidentialité sur plusieurs couches.
 
-Si ce qui précède rime bien avec vous, alors Unstoppable est pour vous! Et nous sommes là pour nous concentrer sur vos besoins uniques et vous servir de la meilleure manière possible.
+Si ce qui précède rime bien avec vous, alors Quantum Wallet est pour vous! Et nous sommes là pour nous concentrer sur vos besoins uniques et vous servir de la meilleure manière possible.
 
 CARACTÉRISTIQUES DU WALLET :
 
 - Multi-portefeuille non-Custodial >> Gérez un nombre quelconque de cryptomonnaies à travers plusieurs portefeuilles de style portefeuille de manière non dépositaire. Ce portefeuille est comme votre propre banque où vous êtes le seul client et le seul responsable. Il est conçu pour garder les actifs en sécurité et facile à restaurer même si le téléphone est volé et falsifié.
 
-- Portefeuille orienté Investissement >> Unstoppable apporte une analyse inégalée du marché des cryptomonnaies à votre appareil : triage avancé, catégorisation organisée, filtrage des recherches approfondi et fonctionnalités d'alerte basées sur des événements.
+- Portefeuille orienté Investissement >> Quantum Wallet apporte une analyse inégalée du marché des cryptomonnaies à votre appareil : triage avancé, catégorisation organisée, filtrage des recherches approfondi et fonctionnalités d'alerte basées sur des événements.
 
 - Portefeuille Universal >> Il prend en charge toutes les chaînes de blocs et est construit d'une manière conforme aux standards permettant aux utilisateurs d'utiliser une seule application de portefeuille pour tout crypto-monnaie.
 

@@ -1,0 +1,56 @@
+package com.quantum.wallet.bankwallet.modules.walletconnect.session.ui
+
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import com.quantum.wallet.bankwallet.R
+import com.quantum.wallet.bankwallet.ui.compose.ComposeAppTheme
+import com.quantum.wallet.bankwallet.ui.compose.components.HSpacer
+import com.quantum.wallet.bankwallet.ui.compose.components.RowUniversal
+import com.quantum.wallet.bankwallet.ui.compose.components.subhead1_leah
+import com.quantum.wallet.bankwallet.ui.compose.components.subhead2_grey
+
+@Composable
+fun DropDownCell(
+    title: String,
+    value: String,
+    enabled: Boolean,
+    onSelect: () -> Unit,
+) {
+    RowUniversal(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clickable(enabled = enabled, onClick = onSelect),
+        onClick = if (enabled) onSelect else null
+    ) {
+        subhead2_grey(
+            text = title,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(Modifier.weight(1f))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            subhead1_leah(
+                text = value,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+            if (enabled) {
+                HSpacer(8.dp)
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_down_arrow_20),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
+        }
+    }
+}

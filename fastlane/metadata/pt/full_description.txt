@@ -1,8 +1,8 @@
-Carteira Unstoppable é construída propositalmente como uma ferramenta de gerenciamento descentralizada para criptomoedas.
+Quantum Wallet é construída propositalmente como uma ferramenta de gerenciamento descentralizada para criptomoedas.
 
 Ele é projetado para servir indivíduos conscientes de privacidade, buscando gerenciar e investir em criptomoedas de forma soberana e profissional.
 
-Unstoppable construída com o seguinte em mente:
+Quantum Wallet construída com o seguinte em mente:
 
 — O capital deve ser gratuito >> Criado para fornecer aos usuários um controle genuinamente independente sobre o seu capital.
 
@@ -10,7 +10,7 @@ Unstoppable construída com o seguinte em mente:
 
 - O capital deve ser privado >> Não vaza dados privados, não tem meios de rastrear os usuários e tomar medidas adicionais para garantir a privacidade em várias camadas.
 
-Se as frases acima combinam com você, a Unstoppable será para você! E estamos aqui para nos concentrar em suas necessidades exclusivas e atendê-lo da melhor maneira possível.
+Se as frases acima combinam com você, a Quantum Wallet será para você! E estamos aqui para nos concentrar em suas necessidades exclusivas e atendê-lo da melhor maneira possível.
 
 Se você está procurando uma maneira simples de armazenar Bitcoin ou alguma cripto que esse aplicativo pode não ser para você.
 
@@ -18,7 +18,7 @@ CARACTERÍSTICAS DA CARTEIRA:
 
 — Multi-carteira sem custódia>> Gerencie qualquer número de criptomoedas através de múltiplas carteiras de portifólio de forma sem custódia. Esta carteira é como o seu próprio banco onde você é o único cliente e o único responsável. Ela é projetada para manter os ativos seguros e fáceis de restaurar, mesmo se o telefone for roubado e adulterado.
 
-- Carteira orientada para o investimento >> Unstoppable traz análises de mercado de criptomoedas inigualáveis para o seu dispositivo: classificação avançada, categorização com curadoria, filtragem de pesquisa abrangente e recursos de alerta baseados em eventos.
+- Carteira orientada para o investimento >> Quantum Wallet traz análises de mercado de criptomoedas inigualáveis para o seu dispositivo: classificação avançada, categorização com curadoria, filtragem de pesquisa abrangente e recursos de alerta baseados em eventos.
 
 - Universal Wallet >> Ele suporta todos os blockchains convencionais e é construído de maneira compatível com o padrão, permitindo que os usuários usem apenas um aplicativo de carteira para todas as criptomoedas.
 
@@ -46,4 +46,4 @@ CARACTERÍSTICAS DA CARTEIRA:
 
 — Totalmente Open Source >> Talvez o aplicativo de carteira mais transparente construído até agora. O processo de produção de 4 anos do aplicativo está abertamente acessível on-line, com 100% do código para qualquer pessoa avaliar ou reutilizar em outros projetos. Verificado e auditado por terceiros.
 
-Seja Unstoppable!  😎
+Quantum Wallet!  😎
