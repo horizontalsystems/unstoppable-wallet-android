@@ -9,7 +9,7 @@ kotlin {
 }
 
 android {
-    namespace = "io.horizontalsystems.icons"
+    namespace = "com.quantum.wallet.icons"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {

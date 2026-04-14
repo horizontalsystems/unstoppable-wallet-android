@@ -16,7 +16,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Unstoppable"
+rootProject.name = "Quantum Wallet"
 
 include(":app")
 include(":core")

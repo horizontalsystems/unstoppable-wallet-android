@@ -1,8 +1,18 @@
+import java.util.Properties
+import java.io.FileInputStream
+import java.util.concurrent.TimeUnit
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.compose)
+}
+
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
 ksp {
@@ -16,11 +26,11 @@ kotlin {
 }
 
 android {
-    namespace = "io.horizontalsystems.bankwallet"
+    namespace = "com.quantum.wallet.bankwallet"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "io.horizontalsystems.bankwallet"
+        applicationId = "com.quantum.wallet.bankwallet"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.compileSdk.get().toInt()
         versionCode = 164
@@ -31,18 +41,18 @@ android {
 
         vectorDrawables.useSupportLibrary = true
 
-        resValue("string", "companyWebPageLink", "https://horizontalsystems.io")
-        resValue("string", "appWebPageLink", "https://unstoppable.money")
-        resValue("string", "analyticsLink", "https://unstoppable.money/analytics")
-        resValue("string", "appGithubLink", "https://github.com/horizontalsystems/unstoppable-wallet-android")
-        resValue("string", "appTwitterLink", "https://twitter.com/UnstoppableByHS")
-        resValue("string", "appTelegramLink", "https://t.me/unstoppable_announcements")
-        resValue("string", "reportEmail", "support.unstoppable@protonmail.com")
-        resValue("string", "releaseNotesUrl", "https://api.github.com/repos/horizontalsystems/unstoppable-wallet-android/releases/tags/")
-        resValue("string", "walletConnectAppMetaDataName", "Unstoppable")
-        resValue("string", "walletConnectAppMetaDataUrl", "unstoppable.money")
-        resValue("string", "walletConnectAppMetaDataIcon", "https://raw.githubusercontent.com/horizontalsystems/HS-Design/master/PressKit/UW-AppIcon-on-light.png")
-        resValue("string", "accountsBackupFileSalt", "unstoppable")
+        resValue("string", "companyWebPageLink", "https://www.quantumcha.in/")
+        resValue("string", "appWebPageLink", "https://www.quantumcha.in/")
+        resValue("string", "analyticsLink", "https://quantumcha.in/analytics")
+        resValue("string", "appGithubLink", "")
+        resValue("string", "appTwitterLink", "https://x.com/qntmchain")
+        resValue("string", "appTelegramLink", "https://t.me/+XF1OapBYfu1iMzg0")
+        resValue("string", "reportEmail", "contact@quantumcha.in")
+        resValue("string", "releaseNotesUrl", "TODO(Replace with Quantum Wallet release notes URL)")
+        resValue("string", "walletConnectAppMetaDataName", "QuantumWallet")
+        resValue("string", "walletConnectAppMetaDataUrl", "quantumcha.in")
+        resValue("string", "walletConnectAppMetaDataIcon", "TODO(Replace with Quantum Wallet icon URL)")
+        resValue("string", "accountsBackupFileSalt", "quantumwallet")
 
         buildConfigField("boolean", "FDROID_BUILD", "false")
 
@@ -63,6 +73,12 @@ android {
             storePassword = "testKeystore123"
             keyAlias = "testKeystore"
             keyPassword = "testKeystore123"
+        }
+        create("release") {
+            storeFile = file(keystoreProperties.getProperty("storeFile", ""))
+            storePassword = keystoreProperties.getProperty("storePassword", "")
+            keyAlias = keystoreProperties.getProperty("keyAlias", "")
+            keyPassword = keystoreProperties.getProperty("keyPassword", "")
         }
     }
 
@@ -118,13 +134,16 @@ android {
             resValue("string", "bscscanKey", "R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN")
             resValue("string", "otherScanKey", "FU7CYEXQEUSMXJJF8MZR6BNRMP9XT8S9CP")
             resValue("string", "is_release", "false")
-            resValue("string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json")
-            resValue("string", "eduUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json")
-            resValue("string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/master/src/faq.json")
-            resValue("string", "coinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/coins.json")
-            resValue("string", "providerCoinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/master/provider.coins.json")
+            resValue("string", "guidesUrl", "TODO(Replace with Quantum Wallet guides URL)")
+            resValue("string", "eduUrl", "TODO(Replace with Quantum Wallet edu URL)")
+            resValue("string", "faqUrl", "TODO(Replace with Quantum Wallet FAQ URL)")
+            resValue("string", "coinsJsonUrl", "TODO(Replace with Quantum Wallet coins JSON URL)")
+            resValue("string", "providerCoinsJsonUrl", "TODO(Replace with Quantum Wallet provider coins JSON URL)")
             resValue("string", "marketApiBaseUrl", "https://api-dev.blocksdecoded.com")
             resValue("string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom")
+            resValue("string", "quantumChainApiBaseUrl", "https://api.quantumapi.io")
+            resValue("integer", "quantumChainApiVersion", "1")
+            resValue("string", "quantumChainApiKey", "IQf1uAjkthZp1i2pYzkXFDom")
             resValue("string", "openSeaApiKey", "bfbd6061a33e455c8581b594774fecb3")
             resValue("string", "walletConnectV2Key", "8b4f41c60880a3e3ad57d82fddb30568")
             resValue("string", "solanaAlchemyApiKey", "PKgWxOMarrHgyMESGjIkJ,BOlzgqJUeGYe5E7K613Fm")
@@ -138,25 +157,29 @@ android {
             resValue("string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4")
             resValue("string", "hashDitBaseUrl", "https://service.hashdit.io/v2/hashdit/")
             resValue("string", "hashDitApiKey", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
-            resValue("string", "uswapApiBaseUrl", "https://swap-dev.unstoppable.money/api/v1/")
+            resValue("string", "uswapApiBaseUrl", "TODO(Replace with Quantum Wallet swap dev API URL)")
         }
 
         release {
             isDebuggable = false
             isMinifyEnabled = false
             isShrinkResources = false
+            signingConfig = signingConfigs.getByName("release")
             resValue("string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB")
             resValue("string", "etherscanKey", "IEXTB9RE7MUV2UQ9X238RP146IEJB1J5HS,27S4V3GYJGMCPWQZ2T4SF9355QBQYQ3FI7,YK4KEA3TANM8KZ5J6E2Q1ZIM6YDM8TEABM,FU7CYEXQEUSMXJJF8MZR6BNRMP9XT8S9CP")
             resValue("string", "bscscanKey", "FQ2HSNNEHVG71U96P1TF3WF9RTF6AF5MRA,G6K8VZDWYSJHTCRURRITFZ2ZWV48GRGTZQ,R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN,8QW2JNMPHPUPAACFGXZ3A5PVQY6PBCJPEG")
             resValue("string", "otherScanKey", "Y855XHV4XKUC9DTRM2ZQG8XAQ96EJV221Q,43DEJEEMA1P81YAU555A1TECRY5FPIWCFH")
             resValue("string", "is_release", "true")
-            resValue("string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json")
-            resValue("string", "eduUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json")
-            resValue("string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/v1.3/src/faq.json")
-            resValue("string", "coinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/coins.json")
-            resValue("string", "providerCoinsJsonUrl", "https://raw.githubusercontent.com/horizontalsystems/cryptocurrencies/v0.21/provider.coins.json")
+            resValue("string", "guidesUrl", "TODO(Replace with Quantum Wallet guides URL)")
+            resValue("string", "eduUrl", "TODO(Replace with Quantum Wallet edu URL)")
+            resValue("string", "faqUrl", "TODO(Replace with Quantum Wallet FAQ URL)")
+            resValue("string", "coinsJsonUrl", "TODO(Replace with Quantum Wallet coins JSON URL)")
+            resValue("string", "providerCoinsJsonUrl", "TODO(Replace with Quantum Wallet provider coins JSON URL)")
             resValue("string", "marketApiBaseUrl", "https://api.blocksdecoded.com")
             resValue("string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom")
+            resValue("string", "quantumChainApiBaseUrl", "https://api.quantumapi.io")
+            resValue("integer", "quantumChainApiVersion", "1")
+            resValue("string", "quantumChainApiKey", "IQf1uAjkthZp1i2pYzkXFDom")
             resValue("string", "openSeaApiKey", "bfbd6061a33e455c8581b594774fecb3")
             resValue("string", "walletConnectV2Key", "0c5ca155c2f165a7d0c88686f2113a72")
             resValue("string", "solanaAlchemyApiKey", "BOlzgqJUeGYe5E7K613Fm,Vmt7ucAGIMEux_c43Qqqf,uCordWq3EOD800awDx1kb,1uAryzn6DOEVs5PIugeoR,PKgWxOMarrHgyMESGjIkJ")
@@ -170,7 +193,7 @@ android {
             resValue("string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4")
             resValue("string", "hashDitBaseUrl", "https://service.hashdit.io/v2/hashdit/")
             resValue("string", "hashDitApiKey", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
-            resValue("string", "uswapApiBaseUrl", "https://swap-api.unstoppable.money/v1/")
+            resValue("string", "uswapApiBaseUrl", "TODO(Replace with Quantum Wallet swap API URL)")
         }
     }
 

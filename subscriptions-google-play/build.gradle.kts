@@ -9,7 +9,7 @@ kotlin {
 }
 
 android {
-    namespace = "io.horizontalsystems.subscriptions.googleplay"
+    namespace = "com.quantum.wallet.subscriptions.googleplay"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {

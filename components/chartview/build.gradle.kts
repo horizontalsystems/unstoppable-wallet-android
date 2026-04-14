@@ -9,7 +9,7 @@ kotlin {
 }
 
 android {
-    namespace = "io.horizontalsystems.chartview"
+    namespace = "com.quantum.wallet.chartview"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
