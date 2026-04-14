@@ -171,7 +171,7 @@ class EvmKitManager(
             context = App.instance,
             walletId = account.id,
             transactionManager = evmKit.transactionManager,
-            sourceTag = "unstoppable-wallet-android"
+            sourceTag = "quantum-wallet-android"
         )
 
         merkleTransactionAdapter?.registerInKit(evmKit)

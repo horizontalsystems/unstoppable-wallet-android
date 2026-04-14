@@ -139,14 +139,14 @@ object ServiceChangeLogs {
 }
 
 object MiniAppRegisterService {
-    private val apiUrl = "https://be.unstoppable.money/"
+    private val apiUrl = "https://be.quantum.money/"
 
-    fun service(): UnstoppableApi {
+    fun service(): QuantumApi {
         return APIClient.retrofit(apiUrl, 60)
-            .create(UnstoppableApi::class.java)
+            .create(QuantumApi::class.java)
     }
 
-    interface UnstoppableApi {
+    interface QuantumApi {
         @GET("api/v1/tasks/registerApp")
         suspend fun registerApp(
             @Query("userId") userId: String,

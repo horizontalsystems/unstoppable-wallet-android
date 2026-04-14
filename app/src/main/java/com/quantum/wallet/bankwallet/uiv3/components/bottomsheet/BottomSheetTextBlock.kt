@@ -26,6 +26,6 @@ fun BottomSheetTextBlock(text: String) {
 @Composable
 fun Preview_BottomSheetTextBlock() {
     ComposeAppTheme {
-        BottomSheetTextBlock("This action will change your receive address format for Bitcoin in Unstoppable app. After that, the app will resync itself with Bitcoin blockchain.")
+        BottomSheetTextBlock("This action will change your receive address format for Bitcoin in Quantum Wallet app. After that, the app will resync itself with Bitcoin blockchain.")
     }
 }

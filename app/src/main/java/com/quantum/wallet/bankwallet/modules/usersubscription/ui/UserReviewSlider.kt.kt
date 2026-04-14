@@ -110,19 +110,19 @@ data class Review(
 fun ReviewSliderBlock() {
     val reviews = listOf(
         Review(
-            content = "Unstoppable is the first multi-coin wallet that supports Bitcoin, Ethereum, and fully shielded Zcash, as well as other coins, and it has a strong, user-centric architecture in which the users own their own keys and their own privacy.",
+            content = "Quantum Wallet is the first multi-coin wallet that supports Bitcoin, Ethereum, and fully shielded Zcash, as well as other coins, and it has a strong, user-centric architecture in which the users own their own keys and their own privacy.",
             authorName = "Zooko Wilcox-O'Hearn",
             authorTitle = "CEO of the ECC",
             authorImageRes = R.drawable.zoko_avatar
         ),
         Review(
-            content = "Unstoppable is the first multi-coin wallet that supports Bitcoin, Ethereum, and fully shielded Zcash, as well as other coins, and it has a strong, user-centric architecture in which the users own their own keys and their own privacy.",
+            content = "Quantum Wallet is the first multi-coin wallet that supports Bitcoin, Ethereum, and fully shielded Zcash, as well as other coins, and it has a strong, user-centric architecture in which the users own their own keys and their own privacy.",
             authorName = "Zooko 2 Wilcox-O'Hearn",
             authorTitle = "CEO of the ECC",
             authorImageRes = R.drawable.zoko_avatar
         ),
         Review(
-            content = "Unstoppable is the first multi-coin wallet that supports Bitcoin, Ethereum, and fully shielded Zcash, as well as other coins, and it has a strong, user-centric architecture in which the users own their own keys and their own privacy.",
+            content = "Quantum Wallet is the first multi-coin wallet that supports Bitcoin, Ethereum, and fully shielded Zcash, as well as other coins, and it has a strong, user-centric architecture in which the users own their own keys and their own privacy.",
             authorName = "Zooko 3 Wilcox-O'Hearn",
             authorTitle = "CEO of the ECC",
             authorImageRes = R.drawable.zoko_avatar

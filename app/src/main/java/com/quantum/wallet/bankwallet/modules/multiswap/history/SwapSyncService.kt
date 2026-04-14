@@ -8,7 +8,7 @@ import com.quantum.wallet.bankwallet.entities.SwapRecord
 import com.quantum.wallet.bankwallet.modules.multiswap.providers.AllBridgeAPI
 import com.quantum.wallet.bankwallet.modules.multiswap.providers.AllBridgeProvider
 import com.quantum.wallet.bankwallet.modules.multiswap.providers.OneInchProvider
-import com.quantum.wallet.bankwallet.modules.multiswap.providers.UnstoppableAPI
+import com.quantum.wallet.bankwallet.modules.multiswap.providers.QuantumAPI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -23,10 +23,10 @@ class SwapSyncService(
     appConfigProvider: AppConfigProvider,
 ) : Clearable {
 
-    private val unstoppableAPI = APIClient.build(
+    private val quantumAPI = APIClient.build(
         appConfigProvider.uswapApiBaseUrl,
         mapOf("x-api-key" to appConfigProvider.uswapApiKey)
-    ).create(UnstoppableAPI::class.java)
+    ).create(QuantumAPI::class.java)
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
@@ -54,9 +54,9 @@ class SwapSyncService(
         try {
             val request = SwapTrackRequestBuilder.build(record)
             val response = if (record.providerId == OneInchProvider.id) {
-                unstoppableAPI.trackEvm(request)
+                quantumAPI.trackEvm(request)
             } else {
-                unstoppableAPI.track(request)
+                quantumAPI.track(request)
             }
             if (record.transactionHash == null && response.hash != null) {
                 swapRecordManager.updateTransactionHash(record.id, response.hash)
@@ -126,7 +126,7 @@ class SwapSyncService(
         return if (receive.blockTime != null) SwapStatus.Completed else SwapStatus.Sending
     }
 
-    private fun mapStatus(response: UnstoppableAPI.Response.Track): SwapStatus? = when (response.status) {
+    private fun mapStatus(response: QuantumAPI.Response.Track): SwapStatus? = when (response.status) {
         "not_started" -> SwapStatus.Depositing
         "pending", "swapping" -> {
             val activeLeg = response.legs?.firstOrNull { it.status != "completed" }

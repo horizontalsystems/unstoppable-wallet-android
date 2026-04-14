@@ -495,7 +495,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         tonConnectManager = TonConnectManager(
             context = this,
             adapterFactory = adapterFactory,
-            appName = "unstoppable",
+            appName = "quantum",
             appVersion = appConfigProvider.appVersion
         )
         tonConnectManager.start()

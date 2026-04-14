@@ -76,7 +76,7 @@ fun BottomSheet(
                 .padding(bottom = 16.dp),
             textAlign = TextAlign.Center
         )
-        BottomSheetTextBlock("This action will change your receive address format for Bitcoin in Unstoppable app. After that, the app will resync itself with Bitcoin blockchain.")
+        BottomSheetTextBlock("This action will change your receive address format for Bitcoin in Quantum Wallet app. After that, the app will resync itself with Bitcoin blockchain.")
         warningFrameSlot?.let {
             Box(modifier = Modifier.padding(16.dp)) {
                 warningFrameSlot()

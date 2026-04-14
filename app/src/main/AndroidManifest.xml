@@ -87,7 +87,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="tc" />
-                <data android:scheme="unstoppable.money" />
+                <data android:scheme="quantum.money" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />
@@ -113,7 +113,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="unstoppable.money" />
+                <data android:host="quantum.money" />
                 <data android:pathPrefix="/referral" />
             </intent-filter>
         </activity>

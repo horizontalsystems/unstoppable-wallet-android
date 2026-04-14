@@ -355,7 +355,7 @@ class MainViewModel(
                 }
             }
 
-            deeplinkString.startsWith("https://unstoppable.money/referral") -> {
+            deeplinkString.startsWith("https://quantum.money/referral") -> {
                 val userId: String? = deepLink.getQueryParameter("userId")
                 val referralCode: String? = deepLink.getQueryParameter("referralCode")
                 if (userId != null && referralCode != null) {
@@ -437,7 +437,7 @@ class MainViewModel(
 
     fun handleDeepLink(uri: Uri) {
         val deeplinkString = uri.toString()
-        if (deeplinkString.startsWith("unstoppable.money:") || deeplinkString.startsWith("tc:")) {
+        if (deeplinkString.startsWith("quantum.money:") || deeplinkString.startsWith("tc:")) {
             val returnParam = uri.getQueryParameter("ret")
             // when app is opened from camera app, it returns "none" as ret param
             // so we don't need closing app in this case

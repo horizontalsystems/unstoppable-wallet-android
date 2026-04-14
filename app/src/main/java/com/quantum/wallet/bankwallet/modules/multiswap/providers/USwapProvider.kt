@@ -44,10 +44,10 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
 
     override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = false
 
-    private val unstoppableAPI = APIClient.build(
+    private val quantumAPI = APIClient.build(
         App.appConfigProvider.uswapApiBaseUrl,
         mapOf("x-api-key" to App.appConfigProvider.uswapApiKey)
-    ).create(UnstoppableAPI::class.java)
+    ).create(QuantumAPI::class.java)
 
     private val blockchainTypes = mapOf(
         "43114" to BlockchainType.Avalanche,
@@ -86,7 +86,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
 
     private suspend fun fetchAssetsMap(): Map<Token, String> {
         val assetsMap = mutableMapOf<Token, String>()
-        val tokens = unstoppableAPI.tokens(provider.id).tokens
+        val tokens = quantumAPI.tokens(provider.id).tokens
         for (token in tokens) {
             val blockchainType = blockchainTypes[token.chainId] ?: continue
 
@@ -244,12 +244,12 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         sourceAddress: String?,
         refundAddress: String?,
         dry: Boolean,
-    ): UnstoppableAPI.Response.Quote.Route {
+    ): QuantumAPI.Response.Quote.Route {
         val assetIn = assetsMap[tokenIn]!!
         val assetOut = assetsMap[tokenOut]!!
 
-        val quote = unstoppableAPI.quote(
-            UnstoppableAPI.Request.Quote(
+        val quote = quantumAPI.quote(
+            QuantumAPI.Request.Quote(
                 sellAsset = assetIn,
                 buyAsset = assetOut,
                 sellAmount = amountIn.toPlainString(),
@@ -266,7 +266,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     }
 
     override suspend fun checkAmlAddresses(addresses: List<String>): Boolean? {
-        return unstoppableAPI.checkAddresses(addresses.joinToString(",")).passedAmlCheck
+        return quantumAPI.checkAddresses(addresses.joinToString(",")).passedAmlCheck
     }
 
     override suspend fun fetchFinalQuote(
@@ -332,7 +332,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     private fun getSendTransactionData(
         tokenIn: Token,
         amountIn: BigDecimal,
-        bestRoute: UnstoppableAPI.Response.Quote.Route,
+        bestRoute: QuantumAPI.Response.Quote.Route,
         tokenOut: Token
     ): SendTransactionData {
         val blockchainType = tokenIn.blockchainType
@@ -483,7 +483,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     }
 }
 
-interface UnstoppableAPI {
+interface QuantumAPI {
     @GET("providers")
     suspend fun providers(): List<Response.Provider>
 

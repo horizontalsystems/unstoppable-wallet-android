@@ -5,7 +5,7 @@ import com.quantum.wallet.bankwallet.modules.multiswap.providers.MayaProvider
 import com.quantum.wallet.bankwallet.modules.multiswap.providers.OneInchProvider
 import com.quantum.wallet.bankwallet.modules.multiswap.providers.ThorChainProvider
 import com.quantum.wallet.bankwallet.modules.multiswap.providers.UProvider
-import com.quantum.wallet.bankwallet.modules.multiswap.providers.UnstoppableAPI
+import com.quantum.wallet.bankwallet.modules.multiswap.providers.QuantumAPI
 
 object SwapTrackRequestBuilder {
 
@@ -21,11 +21,11 @@ object SwapTrackRequestBuilder {
         "gnosis" to "100",
     )
 
-    fun build(record: SwapRecord): UnstoppableAPI.Request.Track {
+    fun build(record: SwapRecord): QuantumAPI.Request.Track {
         val providerApiName = apiProviderName(record.providerId)
 
         return when (record.providerId) {
-            ThorChainProvider.id, MayaProvider.id -> UnstoppableAPI.Request.Track(
+            ThorChainProvider.id, MayaProvider.id -> QuantumAPI.Request.Track(
                 provider = providerApiName,
                 // Use hash when available; fall back to depositAddress for memoless swaps
                 hash = record.transactionHash,
@@ -35,7 +35,7 @@ object SwapTrackRequestBuilder {
                 toAddress = record.recipientAddress,
             )
 
-            OneInchProvider.id -> UnstoppableAPI.Request.Track(
+            OneInchProvider.id -> QuantumAPI.Request.Track(
                 provider = providerApiName,
                 hash = record.transactionHash,
                 chainId = evmChainIds[record.tokenInBlockchainTypeUid],
@@ -44,7 +44,7 @@ object SwapTrackRequestBuilder {
                 toAddress = record.recipientAddress,
             )
 
-            "u_${UProvider.Near.id}" -> UnstoppableAPI.Request.Track(
+            "u_${UProvider.Near.id}" -> QuantumAPI.Request.Track(
                 provider = providerApiName,
                 depositAddress = record.depositAddress,
                 fromAddress = record.sourceAddress,
@@ -54,7 +54,7 @@ object SwapTrackRequestBuilder {
             "u_${UProvider.LetsExchange.id}",
             "u_${UProvider.StealthEx.id}",
             "u_${UProvider.Exolix.id}",
-            "u_${UProvider.Swapuz.id}" -> UnstoppableAPI.Request.Track(
+            "u_${UProvider.Swapuz.id}" -> QuantumAPI.Request.Track(
                 provider = providerApiName,
                 providerSwapId = record.providerSwapId,
                 fromAddress = record.sourceAddress,
