@@ -1,0 +1,8 @@
+chore(app): rebrand remaining Unstoppable references in source code
+
+- Renamed appName from "unstoppable" to "quantum" in TonConnect config
+- Renamed sourceTag from "unstoppable-wallet-android" to "quantum-wallet-android"
+- Added TODO comments to unstoppable.money URLs in code
+- Renamed UnstoppableAPI/UnstoppableApi interfaces to QuantumWalletAPI/QuantumWalletApi
+- Updated hardcoded "Unstoppable" brand strings in preview composables
+- Updated "Horizontal Systems" to "Quantum Chain" in CONTRIBUTE.md and XML layout
