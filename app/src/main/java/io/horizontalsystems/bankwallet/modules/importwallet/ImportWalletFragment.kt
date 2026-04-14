@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.importwallet
 
+import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
@@ -15,6 +16,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,9 +25,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -33,11 +37,13 @@ import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupFileValidator
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
+import io.horizontalsystems.bankwallet.modules.createaccount.WalletType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -48,7 +54,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.Section
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
@@ -75,6 +84,7 @@ private fun ImportWalletScreen(
     inclusive: Boolean
 ) {
     val context = LocalContext.current
+    val view = LocalView.current
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -119,6 +129,26 @@ private fun ImportWalletScreen(
         }
     }
 
+    val viewModel = viewModel<ImportWalletViewModel>(factory = ImportWalletViewModel.Factory())
+    val uiState = viewModel.uiState
+
+    LaunchedEffect(uiState.success) {
+        if (uiState.success != null) {
+            HudHelper.showSuccessMessage(
+                contenView = view,
+                resId = R.string.Hud_Text_Restored,
+            )
+            delay(300)
+            navController.popBackStack(popUpToInclusiveId, inclusive)
+        }
+    }
+
+    LaunchedEffect(uiState.error) {
+        val error = uiState.error ?: return@LaunchedEffect
+        HudHelper.showErrorMessage(view, error)
+        viewModel.onErrorDisplayed()
+    }
+
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_ImportWallet),
         onBack = navController::popBackStack,
@@ -126,14 +156,17 @@ private fun ImportWalletScreen(
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
-            VSpacer(12.dp)
-            ImportOption(
-                title = stringResource(R.string.ImportWallet_RecoveryPhrase),
-                description = stringResource(R.string.ImportWallet_RecoveryPhrase_Description),
-                icon = R.drawable.ic_edit_24,
-                onClick = {
+            VSpacer(16.dp)
+
+            Section {
+                WalletType(
+                    icon = painterResource(R.drawable.ic_edit_24),
+                    title = stringResource(R.string.ImportWallet_RecoveryPhrase).hs,
+                    subtitle = stringResource(R.string.ImportWallet_RecoveryPhrase_Description).hs,
+                    borderTop = false
+                ) {
                     navController.navigateWithTermsAccepted {
-                        navController.slideFromBottom(
+                        navController.slideFromRight(
                             R.id.restoreAccountFragment,
                             ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
                         )
@@ -144,17 +177,23 @@ private fun ImportWalletScreen(
                         )
                     }
                 }
-            )
-            VSpacer(12.dp)
-            ImportOption(
-                title = stringResource(R.string.ImportWallet_BackupFile),
-                description = stringResource(R.string.ImportWallet_BackupFile_Description),
-                icon = R.drawable.ic_download_24,
-                onClick = {
+                WalletType(
+                    icon = painterResource(R.drawable.touchid_24),
+                    title = stringResource(R.string.ImportWallet_Passkey).hs,
+                    subtitle = stringResource(R.string.ImportWallet_Passkey_Description).hs,
+                    borderTop = true
+                ) {
+                    viewModel.restoreFromPasskey(context as Activity)
+                }
+                WalletType(
+                    icon = painterResource(R.drawable.ic_download_24),
+                    title = stringResource(R.string.ImportWallet_BackupFile).hs,
+                    subtitle = stringResource(R.string.ImportWallet_BackupFile_Description).hs,
+                    borderTop = true
+                ) {
                     restoreLauncher.launch(arrayOf("application/json"))
                 }
-            )
-            VSpacer(12.dp)
+            }
         }
         if (showBottomSheet) {
             BottomSheetContent(

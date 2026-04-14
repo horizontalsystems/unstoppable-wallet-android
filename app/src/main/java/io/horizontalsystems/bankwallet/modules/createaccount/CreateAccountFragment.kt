@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.createaccount
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -22,6 +23,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
+import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
@@ -44,53 +46,56 @@ fun CreateAccountScreen(navController: NavController, input: ManageAccountsModul
             VSpacer(16.dp)
 
             Section {
-                CellPrimary(
-                    left = {
-                        CellLeftImage(
-                            painter = painterResource(R.drawable.list_24),
-                            type = ImageType.Rectangle,
-                            size = 24
-                        )
-                    },
-                    middle = {
-                        CellMiddleInfo(
-                            title = stringResource(R.string.CreateNewWallet_Standard).hs,
-                            subtitle = stringResource(R.string.CreateNewWallet_Standard_Description).hs,
-                        )
-                    },
-                    right = {
-                        CellRightNavigation()
-                    },
-                    onClick = {
-                        navController.slideFromRight(R.id.createAccountStandardFragment, input)
-                    }
-                )
-                BoxBordered(top = true) {
-                    CellPrimary(
-                        left = {
-                            CellLeftImage(
-                                painter = painterResource(R.drawable.touchid_24),
-                                type = ImageType.Rectangle,
-                                size = 24
-                            )
-                        },
-                        middle = {
-                            CellMiddleInfo(
-                                title = stringResource(R.string.CreateNewWallet_Passkey).hs,
-                                subtitle = stringResource(R.string.CreateNewWallet_Passkey_Description).hs,
-                            )
-                        },
-                        right = {
-                            CellRightNavigation()
-                        },
-                        onClick = {
-                            navController.slideFromRight(R.id.createAccountPasskeyFragment, input)
-                        }
-                    )
+                WalletType(
+                    icon = painterResource(R.drawable.list_24),
+                    title = stringResource(R.string.CreateNewWallet_Standard).hs,
+                    subtitle = stringResource(R.string.CreateNewWallet_Standard_Description).hs,
+                    borderTop = false
+                ) {
+                    navController.slideFromRight(R.id.createAccountStandardFragment, input)
+                }
+                WalletType(
+                    icon = painterResource(R.drawable.touchid_24),
+                    title = stringResource(R.string.CreateNewWallet_Passkey).hs,
+                    subtitle = stringResource(R.string.CreateNewWallet_Passkey_Description).hs,
+                    borderTop = true
+                ) {
+                    navController.slideFromRight(R.id.createAccountPasskeyFragment, input)
                 }
             }
 
         }
+    }
+}
+
+@Composable
+fun WalletType(
+    icon: Painter,
+    title: HSString,
+    subtitle: HSString,
+    borderTop: Boolean,
+    onClick: () -> Unit
+) {
+    BoxBordered(top = borderTop) {
+        CellPrimary(
+            left = {
+                CellLeftImage(
+                    painter = icon,
+                    type = ImageType.Rectangle,
+                    size = 24
+                )
+            },
+            middle = {
+                CellMiddleInfo(
+                    title = title,
+                    subtitle = subtitle,
+                )
+            },
+            right = {
+                CellRightNavigation()
+            },
+            onClick = onClick
+        )
     }
 }
 
