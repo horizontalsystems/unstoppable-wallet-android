@@ -1014,6 +1014,7 @@
     <string name="SettingsTheme_System">시스템</string>
     <!--Errors-->
     <string name="transaction_error_need_to_check">The transaction may not have been completed due to unexpected issues. We recommend checking the status before attempting to resend to avoid double payment</string>
+    <string name="transaction_error_invalid_derivation_path">잘못된 파생 경로</string>
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">인터넷에 연결되지 않음</string>
     <string name="Hud_Text_Copied">복사됨</string>

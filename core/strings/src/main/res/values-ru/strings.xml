@@ -1044,6 +1044,7 @@
     <string name="SettingsTheme_System">Системная</string>
     <!--Errors-->
     <string name="transaction_error_need_to_check">Транзакция, возможно, не была завершена из-за непредвиденных проблем. Рекомендуем проверить статус перед повторной отправкой, чтобы избежать двойной оплаты.</string>
+    <string name="transaction_error_invalid_derivation_path">Неверный путь деривации</string>
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">Нет интернета</string>
     <string name="Hud_Text_Copied">Скопировано</string>

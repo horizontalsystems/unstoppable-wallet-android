@@ -1,6 +1,7 @@
 package cash.p.terminal.core
 
 import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.AccountType.MnemonicMonero
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.wallet.entities.TokenType
@@ -29,6 +30,13 @@ class BlockchainTypeSupportTest {
             every { this@mockk.hdExtendedKey } returns hdExtendedKey
         }
     }
+
+    private fun moneroMnemonicAccount() = MnemonicMonero(
+        words = List(25) { "abandon" },
+        password = "",
+        height = 0,
+        walletInnerName = "wallet"
+    )
 
     // --- Dash: BlockchainType.supports() ---
 
@@ -166,6 +174,16 @@ class BlockchainTypeSupportTest {
         assertFalse(BlockchainType.Ethereum.supports(account))
     }
 
+    @Test
+    fun supports_moneroWithMoneroMnemonic_returnsTrue() {
+        assertTrue(BlockchainType.Monero.supports(moneroMnemonicAccount()))
+    }
+
+    @Test
+    fun supports_ethereumWithMoneroMnemonic_returnsFalse() {
+        assertFalse(BlockchainType.Ethereum.supports(moneroMnemonicAccount()))
+    }
+
     // --- Token.supports() tests ---
 
     private fun token(blockchainType: BlockchainType, tokenType: TokenType = TokenType.Native): Token {
@@ -250,5 +268,24 @@ class BlockchainTypeSupportTest {
         )
         val derivedToken = token(BlockchainType.Dogecoin, TokenType.Derived(TokenType.Derivation.Bip44))
         assertFalse(derivedToken.supports(account))
+    }
+
+    @Test
+    fun tokenSupports_moneroNativeWithMoneroMnemonic_returnsTrue() {
+        assertTrue(token(BlockchainType.Monero).supports(moneroMnemonicAccount()))
+    }
+
+    @Test
+    fun tokenSupports_ethereumNativeWithMoneroMnemonic_returnsFalse() {
+        assertFalse(token(BlockchainType.Ethereum).supports(moneroMnemonicAccount()))
+    }
+
+    @Test
+    fun tokenSupports_polygonEip20WithMoneroMnemonic_returnsFalse() {
+        val usdt = token(
+            BlockchainType.Polygon,
+            TokenType.Eip20("0xc2132d05d31c914a87c6611c10748aeb04b58e8f")
+        )
+        assertFalse(usdt.supports(moneroMnemonicAccount()))
     }
 }

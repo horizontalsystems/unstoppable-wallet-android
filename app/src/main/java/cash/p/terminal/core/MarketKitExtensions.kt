@@ -12,6 +12,7 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.accountTypeDerivation
 import cash.p.terminal.wallet.bitcoinCashCoinType
 import cash.p.terminal.wallet.customCoinUid
+import cash.p.terminal.wallet.isCompatibleWith
 import cash.p.terminal.wallet.entities.BitcoinCashCoinType
 import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.entities.TokenQuery
@@ -308,8 +309,10 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
         is AccountType.ZCashUfvKey ->
             this == BlockchainType.Zcash
 
+        is AccountType.MnemonicMonero ->
+            this == BlockchainType.Monero
+
         is AccountType.HardwareCard,
-        is AccountType.MnemonicMonero,
         is AccountType.Mnemonic -> true
 
         is AccountType.HdExtendedKey -> {
@@ -471,6 +474,10 @@ fun Token.supports(accountType: AccountType): Boolean {
 
                 else -> false
             }
+        }
+
+        is AccountType.MnemonicMonero -> {
+            accountType.isCompatibleWith(blockchainType, type)
         }
 
         else -> true
