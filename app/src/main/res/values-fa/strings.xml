@@ -305,7 +305,7 @@
     <string name="SettingsCurrency_Title">ارز مرجع</string>
     <string name="SettingsCurrency_Other">غیره</string>
     <string name="SettingsCurrency_DisclaimerTitle">سلب مسئولیت</string>
-    <string name="SettingsCurrency_DisclaimerText">The exchange rate data provided by a third party service Coingecko.com\n\nUnstoppable wallet app doesn\'t guarantee these values are always correct and match market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
+    <string name="SettingsCurrency_DisclaimerText">The exchange rate data provided by a third party service Coingecko.com\n\nQuantum Wallet app doesn\'t guarantee these values are always correct and match market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
     <!--Settings-->
     <string name="Settings_Title">تنظيمات</string>
     <string name="Settings_BaseCurrency">ارز مرجع</string>

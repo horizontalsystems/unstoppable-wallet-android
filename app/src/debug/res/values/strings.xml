@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="App_Name">Unstoppable Dev</string>
-    <string name="DeeplinkScheme" translatable="false">unstoppable-dev</string>
+    <string name="App_Name">Quantum Wallet Dev</string>
+    <string name="DeeplinkScheme" translatable="false">quantum-dev</string>
 </resources>

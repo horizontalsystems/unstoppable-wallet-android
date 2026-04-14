@@ -101,7 +101,7 @@
     <string name="Language_Portuguese">Português</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>
-    <string name="RateApp_Description_Rate_This_App">Gostou da Unstoppable? Compartilhe seus comentários e ideias para que ela possa ir mais longe.</string>
+    <string name="RateApp_Description_Rate_This_App">Gostou da QUANTUM? Compartilhe seus comentários e ideias para que ela possa ir mais longe.</string>
     <string name="RateApp_Button_RateIt">Avaliar</string>
     <string name="RateApp_Button_NotNow">Agora não</string>
     <string name="Restore_SelectNetwork_Title">Selecione a rede</string>
@@ -123,7 +123,7 @@
     <string name="Restore_PrivateKeyHint">Insira a Chave Privada EVM, a Chave Raiz BIP32 ou a Chave Privada Estendida de Conta</string>
     <string name="Restore_PhraseHint">Insira 12, 15, 18, 21 ou 24 palavras</string>
     <string name="Restore_NonStandardRestore">Restauração Não-Padrão</string>
-    <string name="Restore_NonStandard_Description">Esta página fornece um mecanismo especial de restauração de carteira para usuários do Unstoppable que possuem uma carteira fora do padrão. Essas carteiras podem ter sido criadas na versão Unstoppable 0.27 - 0.28 usando uma frase de recuperação diferente do inglês e/ou um caractere especial na senha da carteira (ou seja, símbolo diacrítico).\n\nSe você for um usuário afetado, o saldo da sua carteira será ser mostrado 0 após restaurar tal carteira na versão 0.29 ou superior. Esta página permitirá que você restaure o acesso à sua carteira não padrão. Uma vez restaurado, é recomendável criar uma nova carteira (que será compatível com o padrão) e mover fundos para lá.</string>
+    <string name="Restore_NonStandard_Description">Esta página fornece um mecanismo especial de restauração de carteira para usuários do QUANTUM que possuem uma carteira fora do padrão. Essas carteiras podem ter sido criadas na versão QUANTUM 0.27 - 0.28 usando uma frase de recuperação diferente do inglês e/ou um caractere especial na senha da carteira (ou seja, símbolo diacrítico).\n\nSe você for um usuário afetado, o saldo da sua carteira será ser mostrado 0 após restaurar tal carteira na versão 0.29 ou superior. Esta página permitirá que você restaure o acesso à sua carteira não padrão. Uma vez restaurado, é recomendável criar uma nova carteira (que será compatível com o padrão) e mover fundos para lá.</string>
     <string name="Restore_Bip_Recommended">(recomendado)</string>
     <string name="Restore_PrivateKey_InvalidKey">Chave Inválida</string>
     <string name="SelectContacts_All">Todas</string>
@@ -645,7 +645,7 @@
     <string name="SwapConfirm_MevDescription">Ative a proteção para proteger sua troca e evitar perder valor para bots.</string>
     <string name="SwapError_FailedToFetchQuote">Falha ao obter citação.</string>
     <string name="SwapTerms_Title">Trocar Termos</string>
-    <string name="SwapTerms_TopText">Unstoppable aggregates multiple descentralizado (DEX) e provedores de swap centralizados para oferecer taxas competitivas e suporte amplo a ativos.</string>
+    <string name="SwapTerms_TopText">QUANTUM aggregates multiple descentralizado (DEX) e provedores de swap centralizados para oferecer taxas competitivas e suporte amplo a ativos.</string>
     <string name="SwapTerms_BottomText">Escolha sempre um provedor de swap que se alinhe com suas exigências.</string>
     <string name="SwapTerms_RiskRestrictions">Risco de restrições</string>
     <string name="SwapTerms_RiskRestrictions_Info">Entendo que alguns provedores de swap não-DEX aplicam o screening de transações (AML). Esses fornecedores podem rejeitar (e reembolso) swaps ou, em raros casos, (CSAM e terrorismo), congelar fundos e solicitar dados da KYC.</string>
@@ -794,10 +794,10 @@
     <string name="StatusInfo_Processing">Processando</string>
     <string name="StatusInfo_Confirmed">Concluído</string>
     <string name="StatusInfo_Failed">Falhou</string>
-    <string name="StatusInfo_PendingDescription">A transação ainda não foi confirmada na blockchain. As transações enviadas com uma configuração de taxas recomendada ou maior são geralmente processadas dentro de alguns minutos. Transações enviadas com uma taxa baixa podem permanecer pendentes por algumas horas ou até mesmo dias, e podem até mesmo ser rejeitadas. Observe que o status de uma transação individual em interface da carteira Unstoppable normalmente é atualizado com um curto atraso.</string>
+    <string name="StatusInfo_PendingDescription">A transação ainda não foi confirmada na blockchain. As transações enviadas com uma configuração de taxas recomendada ou maior são geralmente processadas dentro de alguns minutos. Transações enviadas com uma taxa baixa podem permanecer pendentes por algumas horas ou até mesmo dias, e podem até mesmo ser rejeitadas. Observe que o status de uma transação individual em interface da carteira QUANTUM normalmente é atualizado com um curto atraso.</string>
     <string name="StatusInfo_ProcessingDescription">A transação já foi incluída na blockchain, mas ainda não atingiu a finalidade permanente. Neste ponto, é seguro considerar a transação como concluída para pagamentos menores. Para pagamentos maiores, é recomendado esperar até que o status da transação seja alterado.</string>
     <string name="StatusInfo_ConfirmedDescription">A transação está concluída e considerada permanente e irreversível.</string>
-    <string name="StatusInfo_FailedDescription">A transação não foi processada e nenhuma transferência de valor ocorreu. Dependendo do motivo, algumas transações com falha podem consumir taxas de transação. As transações que foram substituídas ou canceladas por outra transação não consomem taxas de transação e também aparecerão com falha. O aplicativo Unstoppable não consegue mostrar o motivo das transações com falha, mas os usuários podem procurá-lo em um explorador de blocos público, como o etherscan.io.</string>
+    <string name="StatusInfo_FailedDescription">A transação não foi processada e nenhuma transferência de valor ocorreu. Dependendo do motivo, algumas transações com falha podem consumir taxas de transação. As transações que foram substituídas ou canceladas por outra transação não consomem taxas de transação e também aparecerão com falha. O aplicativo QUANTUM não consegue mostrar o motivo das transações com falha, mas os usuários podem procurá-lo em um explorador de blocos público, como o etherscan.io.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">Acelerar</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">Enviar novamente</string>
@@ -831,7 +831,7 @@
     <string name="SettingsCurrency_Title">Moeda base</string>
     <string name="SettingsCurrency_Other">OUTRA</string>
     <string name="SettingsCurrency_DisclaimerTitle">Aviso Legal</string>
-    <string name="SettingsCurrency_DisclaimerText">Os dados da taxa de câmbio são fornecidos por um serviço de terceiros - Coingecko.com. \n\nO aplicativo de carteira Unstoppable não garante que esses valores sejam sempre corretos e que correspondam aos dados do mercado. A chance de inconsistência é maior se você selecionar qualquer moeda base que não seja %s.</string>
+    <string name="SettingsCurrency_DisclaimerText">Os dados da taxa de câmbio são fornecidos por um serviço de terceiros - Coingecko.com. \n\nO aplicativo de carteira QUANTUM não garante que esses valores sejam sempre corretos e que correspondam aos dados do mercado. A chance de inconsistência é maior se você selecionar qualquer moeda base que não seja %s.</string>
     <!--Settings-->
     <string name="Settings_Title">Configurações</string>
     <string name="Settings_SecurityCenter">Segurança</string>
@@ -849,7 +849,7 @@
     <string name="Settings_Subscription">Assinatura</string>
     <string name="Settings_AutoLock">Auto-Bloqueio</string>
     <string name="Settings_AutoLock_Description">Bloqueia automaticamente o aplicativo após um tempo selecionado.</string>
-    <string name="Settings_JoinUnstoppables">Seja Unstoppable</string>
+    <string name="Settings_JoinUnstoppables">Seja QUANTUM</string>
     <string name="Settings_Support">SUPORTE</string>
     <string name="Settings_VipSupport">Suporte VIP</string>
     <string name="Settings_Donate">Doar</string>
@@ -938,12 +938,12 @@
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Acesso à equipe da carteira para suporte técnico rápido.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_Description">Impede que bots roubem fundos durante swaps.</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Mostra dados do token - volume, liquidez e tendências, ajudando você a investir melhor.</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Dá acesso direto ao suporte prioritário. Receba ajuda rápida e personalizada da equipe Unstoppable.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Dá acesso direto ao suporte prioritário. Receba ajuda rápida e personalizada da equipe Unstoppable.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Dá acesso direto ao suporte prioritário. Receba ajuda rápida e personalizada da equipe QUANTUM.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Dá acesso direto ao suporte prioritário. Receba ajuda rápida e personalizada da equipe QUANTUM.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Permite criar uma carteira-isca com PIN separado, mantendo seus ativos reais ocultos em situações de risco.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Verifica carteiras de destino para detectar phishing ou fraude. Avisa você antes de enviar para endereços de risco.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Detecta aplicativos falsos ou maliciosos antes de se conectar. Impede o phishing e mantém seus ativos seguros.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Dá acesso direto ao suporte prioritário. Receba ajuda rápida e personalizada da equipe Unstoppable.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Dá acesso direto ao suporte prioritário. Receba ajuda rápida e personalizada da equipe QUANTUM.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Bloqueia bots e ataques de front-running durante swaps. Mantém suas transações justas e seguras.</string>
     <string name="Premium_DefenseSystem">Sistema de defesa</string>
     <string name="Premium_MarketInsights">Insights de mercado</string>
@@ -1033,7 +1033,7 @@
     <string name="BtcBlockchainSettings_TransactionSettings">Configurações de transação</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Entradas / Saídas de Transação</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">Torne suas transações BTC, LTC e BCH mais difíceis de rastrear, alterando como as transações são estruturadas.</string>
-    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">A maioria das transações do Bitcoin, bem como as transações em criptomoedas, incluindo Bitcoin Cash, Dash, e Litecoin, geram duas saídas. Uma saída é a quantidade que vai para o destinatário e a outra é a mudança de saída que é retornada ao remetente. A maneira como a maioria das carteiras constrói as transações torna mais fácil para um terceiro entender qual das saídas foi para a parte receptora e qual foi a quantia alterada retornada ao remetente. Como a saída retornada ao remetente será usada mais tarde em transações futuras, uma conexão entre essas duas transações se torna evidente.\n\nA carteira Unstoppable implementa medidas para tornar mais difícil para alguém descobrir qual saída vai para onde.\n\nExistem duas opções disponíveis para usuários Unstoppable:\n\n1. Embaralhamento: A ordem de saídas da transação é randomizada em cada transação. Às vezes a mudança pode ser a primeira saída, às vezes pode ser a segunda. Se um usuário confia no desenvolvedor do aplicativo, considere esta opção recomendada.\n\n2. Determinístico: Há um padrão comumente acordado para encomendar saídas de transação (conhecido como BIP69). Nas carteiras de código aberto, que o padrão garante que os usuários de carteira não precisam confiar em como desenvolvedores do aplicativo implementam a ordenação das saídas. Como este padrão é novo, muitas carteiras ainda não o implementaram. Como resultado, é um pouco possível ver no blockchain se uma transação foi enviada de uma carteira que usa esse padrão ou não.</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">A maioria das transações do Bitcoin, bem como as transações em criptomoedas, incluindo Bitcoin Cash, Dash, e Litecoin, geram duas saídas. Uma saída é a quantidade que vai para o destinatário e a outra é a mudança de saída que é retornada ao remetente. A maneira como a maioria das carteiras constrói as transações torna mais fácil para um terceiro entender qual das saídas foi para a parte receptora e qual foi a quantia alterada retornada ao remetente. Como a saída retornada ao remetente será usada mais tarde em transações futuras, uma conexão entre essas duas transações se torna evidente.\n\nA carteira QUANTUM implementa medidas para tornar mais difícil para alguém descobrir qual saída vai para onde.\n\nExistem duas opções disponíveis para usuários QUANTUM:\n\n1. Embaralhamento: A ordem de saídas da transação é randomizada em cada transação. Às vezes a mudança pode ser a primeira saída, às vezes pode ser a segunda. Se um usuário confia no desenvolvedor do aplicativo, considere esta opção recomendada.\n\n2. Determinístico: Há um padrão comumente acordado para encomendar saídas de transação (conhecido como BIP69). Nas carteiras de código aberto, que o padrão garante que os usuários de carteira não precisam confiar em como desenvolvedores do aplicativo implementam a ordenação das saídas. Como este padrão é novo, muitas carteiras ainda não o implementaram. Como resultado, é um pouco possível ver no blockchain se uma transação foi enviada de uma carteira que usa esse padrão ou não.</string>
     <!--Info screen-->
     <string name="Info_Title">Informação</string>
     <!--Setting_Security-->
@@ -1042,7 +1042,7 @@
     <string name="SettingsSecurity_DisablePin">Desativar Senha</string>
     <string name="SettingsSecurity_EditPin">Editar senha</string>
     <string name="SettingsSecurity_ManageKeys">Gerenciar carteiras</string>
-    <string name="SettingsSecurity_AppRestartWarning">Esta ação reiniciará Carteira Unstoppable.</string>
+    <string name="SettingsSecurity_AppRestartWarning">Esta ação reiniciará Carteira QUANTUM.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonimize sua internet completamente enquanto estiver usando este aplicativo. Nota: em alguns casos, o recurso WalletConnect para apps DeFi pode ser muito lento ou nem funcionar.</string>
     <string name="SettingsSecurity_SortingShuffle">Embaralhar</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Indexação aleatória</string>
@@ -1085,7 +1085,7 @@
     <string name="SettingsTerms_UserResponsibility">Ao prosseguir, você reconhece que a segurança dos seus fundos e a conformidade jurídica são, em última análise, sua responsabilidade.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Partilhar</string>
-    <string name="SettingsShare_Text">Seja Unstoppable</string>
+    <string name="SettingsShare_Text">Seja QUANTUM</string>
     <!--Setting_Contact-->
     <!--Setting_Notifications-->
     <!-- Settings Launch Screen -->
@@ -1128,7 +1128,7 @@
 \n- TYPE0 (antigo)
 \n- TYPE145 (mais recente)
 \n
-\nEmbora a carteira Unstoppable suporte ambos, recomenda-se usar uma carteira Bitcoin Cash operando no formato TYPE145.</string>
+\nEmbora a carteira Quantum Wallet suporte ambos, recomenda-se usar uma carteira Bitcoin Cash operando no formato TYPE145.</string>
     <string name="ManageCoins_ContractAddress">ENDEREÇO DE CONTRACT</string>
     <!-- Experimental Feature -->
     <!-- Bitcoin Hodling -->
@@ -1228,7 +1228,7 @@
     <string name="PrivateKeys_Bip32RootKeyDescription">A chave mestra privada da carteira. Concede controle total sobre todas as contas derivadas e ativos.</string>
     <string name="PrivateKeys_AccountExtendedPrivateKey">Chave Privada Estendida da Conta</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Concede controle total sobre Bitcoin e outros ativos UTX (por exemplo, Litecoin, Bitcoin Cash, Dash) dentro desta carteira.</string>
-    <string name="PrivateKeys_NeverShareWarning">Nunca compartilhe sua frase de recuperação com ninguém. A equipe Unstoppable nunca pedirá a sua frase de recuperação.</string>
+    <string name="PrivateKeys_NeverShareWarning">Nunca compartilhe sua frase de recuperação com ninguém. A equipe QUANTUM nunca pedirá a sua frase de recuperação.</string>
     <string name="PrivateKeys_MoneroPrivateKey">Monero Chaves Privadas</string>
     <string name="PrivateKeys_MoneroPrivateKeyDescription">Concede controle total sobre os ativos Monero (XMR) nesta carteira, incluindo a capacidade de gastar fundos.</string>
     <string name="MoneroKeyType">tipo</string>
@@ -1362,7 +1362,7 @@
     <string name="CoinPage_FastLength">Comprimento Rápido</string>
     <string name="CoinPage_SlowLength">Comprimento Lento</string>
     <string name="CoinPage_SignalSmoothing">Suavização de sinal</string>
-    <string name="CoinPage_IndicatorsAlertText">Indicadores disponíveis apenas para usuários Premium Unstoppable.</string>
+    <string name="CoinPage_IndicatorsAlertText">Indicadores disponíveis apenas para usuários Premium QUANTUM.</string>
     <string name="CoinPage_AiGeneratedText">Esta é uma descrição gerada por IA com base no material de referência fornecido para a criptomoeda em questão. Pode conter erros.</string>
     <string name="CoinPage_MarketsLabel_Verified">VERIFICADO</string>
     <string name="CoinPage_MarketsVerifiedMenu_Verified">Confirmado</string>
@@ -1526,7 +1526,7 @@
     <string name="BalanceSyncError_ErrorText">Falha ao buscar dados da fonte atual. Tente novamente mais tarde.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">JUNTE-SE EM REPARÁVEIS</string>
-    <string name="ProUsersInfo_UnstoppablePass">Senha Unstoppable</string>
+    <string name="ProUsersInfo_UnstoppablePass">Senha QUANTUM</string>
     <string name="ProUsersInfo_Description">Para ativar estes dados, você deve obter o nível bronze de UW NFT \"Coin Info+\"\n\nTambém você terá acesso aos dados abaixo:</string>
     <string name="ProUsersInfo_Features_DexVolume">Volume e Rank DEX</string>
     <string name="ProUsersInfo_Features_DesLiquidity">Liquidez e Rank DEX</string>
@@ -1544,8 +1544,8 @@
     <string name="Alert_KeysInvalidatedTitle">Erro de Keystore do Android</string>
     <string name="Alert_KeysInvalidatedDescription">Os dados criptografados que continham sua carteira foram invalidados recentemente porque a tela de bloqueio do iOS foi alterada</string>
     <string name="Alert_TitleWarning">Aviso</string>
-    <string name="Alert_CustomKeyboardIsUsed">Parece que o seu dispositivo usa um teclado que não é padrão. A Unstoppable recomenda a seleção de teclado padrão no seu dispositivo, já que teclados de terceiros podem potencialmente coletar e expor os dados de entrada dos usuários. \n\nClique no botão \'Avançar\' se você quiser continuar usando seu teclado preferido.</string>
-    <string name="Alert_DeviceIsRootedWarning">A equipe Unstoppable recomenda a execução do aplicativo apenas em telefones sem root (sem jailbreak).\n\nObserve que quando você usa um dispositivo com root, o aplicativo não pode mais garantir a segurança de sua criptomoeda contra software malicioso.</string>
+    <string name="Alert_CustomKeyboardIsUsed">Parece que o seu dispositivo usa um teclado que não é padrão. A QUANTUM recomenda a seleção de teclado padrão no seu dispositivo, já que teclados de terceiros podem potencialmente coletar e expor os dados de entrada dos usuários. \n\nClique no botão \'Avançar\' se você quiser continuar usando seu teclado preferido.</string>
+    <string name="Alert_DeviceIsRootedWarning">A equipe QUANTUM recomenda a execução do aplicativo apenas em telefones sem root (sem jailbreak).\n\nObserve que quando você usa um dispositivo com root, o aplicativo não pode mais garantir a segurança de sua criptomoeda contra software malicioso.</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN do telefone</string>
     <string name="OSPin_Confirm_Desciption">Este aplicativo requer que o telefone tenha a senha (bloqueio de tela) ativada.\n\nVocê pode ativá-lo nas configurações do Android.\n\nObserve que quando você desativa o PIN no nível do sistema operacional, as medidas de segurança no armazenamento seguro do seu telefone tornou os dados armazenados anteriormente inválidos. Você precisará Restaurar as chaves da carteira para voltar à sua carteira.</string>

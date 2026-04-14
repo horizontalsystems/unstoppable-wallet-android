@@ -102,7 +102,7 @@
     <string name="Language_Portuguese">Португальский</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">ДД!</string>
-    <string name="RateApp_Description_Rate_This_App">Вам нравится Unstoppable? Поделитесь обратной связью и идеями, чтобы продолжить работу.</string>
+    <string name="RateApp_Description_Rate_This_App">Вам нравится QUANTUM? Поделитесь обратной связью и идеями, чтобы продолжить работу.</string>
     <string name="RateApp_Button_RateIt">Оценить</string>
     <string name="RateApp_Button_NotNow">Не сейчас</string>
     <string name="Restore_SelectNetwork_Title">Выберите сеть</string>
@@ -124,7 +124,7 @@
     <string name="Restore_PrivateKeyHint">Введите приватный ключ EVM, BIP32 Root Key или Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Введите фразу восстановления</string>
     <string name="Restore_NonStandardRestore">Нестандартный импорт</string>
-    <string name="Restore_NonStandard_Description">Эта страница предоставляет специальный механизм восстановления кошелька для пользователей Unstoppable, у которых используется нестандартный кошелёк. Такие кошельки могли быть созданы в версии Unstoppable 0.27–0.28 с использованием неанглийской фразы восстановления и/или специального символа в пароле кошелька (например, диакритического знака).\n\nЕсли вы относитесь к числу затронутых пользователей, то после восстановления такого кошелька в версии 0.29 или выше его баланс будет отображаться как 0. Эта страница позволит вам восстановить доступ к нестандартному кошельку. После восстановления рекомендуется создать новый кошелёк (соответствующий стандартам) и перевести на него средства.</string>
+    <string name="Restore_NonStandard_Description">Эта страница предоставляет специальный механизм восстановления кошелька для пользователей QUANTUM, у которых используется нестандартный кошелёк. Такие кошельки могли быть созданы в версии QUANTUM 0.27–0.28 с использованием неанглийской фразы восстановления и/или специального символа в пароле кошелька (например, диакритического знака).\n\nЕсли вы относитесь к числу затронутых пользователей, то после восстановления такого кошелька в версии 0.29 или выше его баланс будет отображаться как 0. Эта страница позволит вам восстановить доступ к нестандартному кошельку. После восстановления рекомендуется создать новый кошелёк (соответствующий стандартам) и перевести на него средства.</string>
     <string name="Restore_Bip_Recommended">(рекомендовано)</string>
     <string name="Restore_PrivateKey_InvalidKey">Неверный ключ</string>
     <string name="SelectContacts_All">Все</string>
@@ -358,7 +358,7 @@
     <string name="Balance_Receive_SubaddressesTransactions">Транзакции: %s</string>
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Обнаружен Transparent ZEC</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent сумма</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">У вас есть ZEC, находящийся на transparent адресе. Чтобы использовать его в Unstoppable, необходимо выполнить shielding для полной приватности.</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">У вас есть ZEC, находящийся на transparent адресе. Чтобы использовать его в QUANTUM, необходимо выполнить shielding для полной приватности.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Щит</string>
     <string name="Balance_Zcash_Unified">Единый</string>
     <string name="Balance_Zcash_UnifiedDescription">Используйте для личных и частных переводов между кошельками.</string>
@@ -647,7 +647,7 @@
     <string name="SwapConfirm_MevDescription">Включите защиту, чтобы защитить подкачку и избежать потери значения для ботов.</string>
     <string name="SwapError_FailedToFetchQuote">Не удалось получить данные.</string>
     <string name="SwapTerms_Title">Условия обмена</string>
-    <string name="SwapTerms_TopText">Unstoppable агрегирует несколько децентрализованных (DEX) и централизованных swap-провайдеров, чтобы предлагать конкурентные курсы и широкий выбор поддерживаемых активов.</string>
+    <string name="SwapTerms_TopText">QUANTUM агрегирует несколько децентрализованных (DEX) и централизованных swap-провайдеров, чтобы предлагать конкурентные курсы и широкий выбор поддерживаемых активов.</string>
     <string name="SwapTerms_BottomText">Всегда выбирайте поставщика подкачки, который соответствует вашим требованиям.</string>
     <string name="SwapTerms_RiskRestrictions">Риск ограничений</string>
     <string name="SwapTerms_RiskRestrictions_Info">Я понимаю, что некоторые провайдеры не-DEX используют прокси-транзакции (AML). Такие провайдеры могут отказаться от обменов (рефератов) или, в редких случаях, (CSAM и терроризм), замораживать средства и запрашивать данные KYC.</string>
@@ -796,10 +796,10 @@
     <string name="StatusInfo_Processing">В процессе</string>
     <string name="StatusInfo_Confirmed">Выполнено</string>
     <string name="StatusInfo_Failed">Неудачный</string>
-    <string name="StatusInfo_PendingDescription">Транзакция еще не подтверждена в блокчейне. Транзакции, отправленные с рекомендованной или более высокой комиссией, обычно обрабатываются в течение  минут. Транзакции, отправленные с низкой комиссией, могут обрабатываться в течение нескольких часов или дней и даже отклоняться. Учтите, что обновление статуса каждой транзакции, отображаемого в интерфейсе кошелька Unstoppable, обычно происходит с небольшой задержкой. </string>
+    <string name="StatusInfo_PendingDescription">Транзакция еще не подтверждена в блокчейне. Транзакции, отправленные с рекомендованной или более высокой комиссией, обычно обрабатываются в течение  минут. Транзакции, отправленные с низкой комиссией, могут обрабатываться в течение нескольких часов или дней и даже отклоняться. Учтите, что обновление статуса каждой транзакции, отображаемого в интерфейсе кошелька QUANTUM, обычно происходит с небольшой задержкой. </string>
     <string name="StatusInfo_ProcessingDescription">Транзакция уже включена в блокчейн, но пока не обработана. На данном этапе транзакции считаются завершенными для небольших платежей. Что касается завершения обработки более крупных транзакций, стоит дождаться смены статуса.</string>
     <string name="StatusInfo_ConfirmedDescription">Транзакция завершена и считается постоянной и необратимой.</string>
-    <string name="StatusInfo_FailedDescription">Транзакция не была обработана и передача средств не произошла. В зависимости от причины неудачи, некоторые неудачные транзакции могут использовать комиссию за транзакцию. Транзакции, которые были заменены или отменены другой транзакцией, не потребляют транзакционные сборы и также будут показаны как \"не удалось\". Приложение Unstoppable не может показать причину неудачных транзакций, но пользователи могут посмотреть это в etherscan.io.</string>
+    <string name="StatusInfo_FailedDescription">Транзакция не была обработана и передача средств не произошла. В зависимости от причины неудачи, некоторые неудачные транзакции могут использовать комиссию за транзакцию. Транзакции, которые были заменены или отменены другой транзакцией, не потребляют транзакционные сборы и также будут показаны как \"не удалось\". Приложение QUANTUM не может показать причину неудачных транзакций, но пользователи могут посмотреть это в etherscan.io.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">Ускорение</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">Отправить повторно</string>
@@ -833,7 +833,7 @@
     <string name="SettingsCurrency_Title">Базовая валюта</string>
     <string name="SettingsCurrency_Other">ДРУГИЕ</string>
     <string name="SettingsCurrency_DisclaimerTitle">Отказ от ответственности</string>
-    <string name="SettingsCurrency_DisclaimerText">Данные об обменном курсе предоставлены третьим лицом Coingecko.сom\n\n Приложение Unstoppable Wallet не гарантирует, что эти данные всегда верны и соответствуют рыночным. Шанс на несоответствие повышается при выборе базовой валюты, отличающейся от %s.</string>
+    <string name="SettingsCurrency_DisclaimerText">Данные об обменном курсе предоставлены третьим лицом Coingecko.сom\n\n Приложение Quantum Wallet не гарантирует, что эти данные всегда верны и соответствуют рыночным. Шанс на несоответствие повышается при выборе базовой валюты, отличающейся от %s.</string>
     <!--Settings-->
     <string name="Settings_Title">Настройки</string>
     <string name="Settings_SecurityCenter">Безопасность</string>
@@ -851,7 +851,7 @@
     <string name="Settings_Subscription">Подписка</string>
     <string name="Settings_AutoLock">Автоблокировка</string>
     <string name="Settings_AutoLock_Description">Автоматически блокирует приложение по истечении выбранного времени.</string>
-    <string name="Settings_JoinUnstoppables">Присоединиться к Unstoppables</string>
+    <string name="Settings_JoinUnstoppables">Присоединиться к QUANTUMs</string>
     <string name="Settings_Support">Поддержка</string>
     <string name="Settings_VipSupport">Поддержка Premium</string>
     <string name="Settings_Donate">Поддержи нас</string>
@@ -887,13 +887,13 @@
     <!--Why Donate Page-->
     <string name="SettingsBanner_DonateTitle">Поддержите движение за конфиденциальность</string>
     <string name="SettingsBanner_DonateSubtitle">Поддержите настоящую финансовую приватность</string>
-    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">“Unstoppable кошелек остаётся бесплатным, без рекламы и с открытым исходным кодом - независимым от слежки со стороны Big Tech.”</string>
+    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">“QUANTUM кошелек остаётся бесплатным, без рекламы и с открытым исходным кодом - независимым от слежки со стороны Big Tech.”</string>
     <string name="SettingsBanner_DonateByJoiningMovement">Поддерживая нас, вы защищаете открытые и свободные от слежки финансы:</string>
     <string name="SettingsBanner_DonateUnstoppableWalletTeam">Команда, ориентированная на конфиденциальность</string>
     <string name="SettingsBanner_DonateYourSupportIsCommitment">Ваша поддержка - это не просто доступ к функциям, это сопротивление финансовому мониторингу и контролю</string>
     <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">Это помогает нам оставаться независимыми, защищая тысячи людей, которые отказываются идти на компромиссы в вопросах конфиденциальности</string>
     <string name="SettingsBanner_DonateExclusivelyOnFDroid">Доступно только на F-Droid</string>
-    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Unstoppable кошелек предоставляет дополнительные возможности — без каких-либо ограничений:</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">QUANTUM кошелек предоставляет дополнительные возможности — без каких-либо ограничений:</string>
     <string name="SettingsBanner_DonateFeatureFullAnalytics">Полная аналитика и данные о токенах</string>
     <string name="SettingsBanner_DonateFeaturePrivacy">Режим конфиденциальности &amp; режим Duress</string>
     <string name="SettingsBanner_DonateFeatureSignals">Продвинутая защита от фишинга</string>
@@ -901,7 +901,7 @@
     <string name="SettingsBanner_DonateFeatureAdvanced">Расширенный поиск токенов и фильтры</string>
     <string name="SettingsBanner_DonateFeaturePriority">Приоритетный доступ к тех.поддержке</string>
     <string name="SettingsBanner_DonateEveryBitOfSupportMatters">Каждый вклад имеет значение</string>
-    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Поддерживая Unstoppable кошелёк, вы помогаете нам расти, улучшать и оставаться независимыми.</string>
+    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Поддерживая QUANTUM кошелёк, вы помогаете нам расти, улучшать и оставаться независимыми.</string>
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Активно</string>
     <string name="SettingsSubscription_GetPremium">Получите премиум</string>
@@ -945,7 +945,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Позволяет создать ложный кошелёк с отдельным PIN. Скрывает реальные активы в рискованных ситуациях.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Проверяет адрес получателя и предупреждает о риске перед отправкой средств.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Обнаруживает поддельные dApp до подключения. Предотвращает фишинг и защищает активы.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Прямой доступ к приоритетной поддержке от команды Unstoppable.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Прямой доступ к приоритетной поддержке от команды QUANTUM.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Защищает от ботов и front-running атак при обмене.</string>
     <string name="Premium_DefenseSystem">Система защиты</string>
     <string name="Premium_MarketInsights">Аналитика рынка</string>
@@ -1002,7 +1002,7 @@
     <string name="BackupManager_AppSettingsTitle">Настройки приложения</string>
     <string name="BackupManager_AppSettingsDescription">Язык, валюта, внешний вид</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable не собирает персональные данные, такие как балансы или адреса кошельков. Мы используем анонимные данные только для улучшения приложения.</string>
+    <string name="Privacy_Information">QUANTUM не собирает персональные данные, такие как балансы или адреса кошельков. Мы используем анонимные данные только для улучшения приложения.</string>
     <string name="ShareUiData">Поделиться данными UI</string>
     <string name="ShareUiDataDescription">Эта настройка позволяет отключить аналитику UI/UX и обеспечить полную конфиденциальность.</string>
     <!-- Security Center -->
@@ -1035,7 +1035,7 @@
     <string name="BtcBlockchainSettings_TransactionSettings">Настройки транзакций</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Вводы / выводы транзакций</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">Поменяйте способ структурирования транзакций, чтобы затруднить отслеживание ваших операций с BTC, LTC, BCH.</string>
-    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Многие биткойн-транзакции, а также транзакции, осуществляемые в похожих криптовалютах, включая Bitcoin Cash, Dash и Litecoin, генерируют два типа выходных данных. Первый тип выходных данных - это сумма, отправляемая получателю, а второй - сдача, возвращаемая отправителю. Руководствуясь принципом обработки транзакций большинства кошельков, третья сторона может легко понять, какие из выходных данных были отправлены принимающей стороне, а также узнать сумму сдачи, возвращенную отправителю. Поскольку сдача, возвращаемая отправителю, позже используется для осуществлениях других транзакций, связь между этими двумя типами выходных данных становится очевидной.\n\nКошелек Unstoppable применяет специальные меры для сокрытия направлений отправки двух типов выходных данных.\n\nПользователям Unstoppable доступны два варианта устранения этой проблемы:\n\n1. Микширование: Порядок вывода транзакций рандомизируется для каждой транзакции. Сдача может быть первым типом выходных данных,  а иногда, наоборот, вторым. Если пользователь доверяет разработчику приложения, то рекомендуется использовать этот вариант.\n\n2. Детерминирование: существует общепринятый стандарт для упорядочения выходных данных транзакций под названием BIP69. В кошельках с открытым исходным кодом применение этого стандарта гарантирует, что пользователям кошелька не нужно будет полагаться на принцип реализации порядка выходных данных разработчиками приложения. Поскольку этот стандарт является новым, многие кошельки его пока еще не внедрили. Поэтому в блокчейне видно, была ли транзакция отправлена ​​из кошелька с таким стандартом или нет.</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Многие биткойн-транзакции, а также транзакции, осуществляемые в похожих криптовалютах, включая Bitcoin Cash, Dash и Litecoin, генерируют два типа выходных данных. Первый тип выходных данных - это сумма, отправляемая получателю, а второй - сдача, возвращаемая отправителю. Руководствуясь принципом обработки транзакций большинства кошельков, третья сторона может легко понять, какие из выходных данных были отправлены принимающей стороне, а также узнать сумму сдачи, возвращенную отправителю. Поскольку сдача, возвращаемая отправителю, позже используется для осуществлениях других транзакций, связь между этими двумя типами выходных данных становится очевидной.\n\nКошелек QUANTUM применяет специальные меры для сокрытия направлений отправки двух типов выходных данных.\n\nПользователям QUANTUM доступны два варианта устранения этой проблемы:\n\n1. Микширование: Порядок вывода транзакций рандомизируется для каждой транзакции. Сдача может быть первым типом выходных данных,  а иногда, наоборот, вторым. Если пользователь доверяет разработчику приложения, то рекомендуется использовать этот вариант.\n\n2. Детерминирование: существует общепринятый стандарт для упорядочения выходных данных транзакций под названием BIP69. В кошельках с открытым исходным кодом применение этого стандарта гарантирует, что пользователям кошелька не нужно будет полагаться на принцип реализации порядка выходных данных разработчиками приложения. Поскольку этот стандарт является новым, многие кошельки его пока еще не внедрили. Поэтому в блокчейне видно, была ли транзакция отправлена ​​из кошелька с таким стандартом или нет.</string>
     <!--Info screen-->
     <string name="Info_Title">Информация</string>
     <!--Setting_Security-->
@@ -1044,7 +1044,7 @@
     <string name="SettingsSecurity_DisablePin">Отключить код доступа</string>
     <string name="SettingsSecurity_EditPin">Изменить код</string>
     <string name="SettingsSecurity_ManageKeys">Кошельки</string>
-    <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable кошелек.</string>
+    <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит QUANTUM кошелек.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Во время использования этого приложения полностью анонимизировать ваш интернет. Обратите внимание, что в некоторых случаях функция WalletConnect для DeFi приложений может быть очень медленной или вообще не работать.</string>
     <string name="SettingsSecurity_SortingShuffle">Перемешать</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Случайное индексирование</string>
@@ -1124,7 +1124,7 @@
 \n- BIP-84 (рекомендованный)
 \n- BIP-86 (самый новый)
 \n
-\nХотя кошелек Unstoppable поддерживает все три формата, рекомендуется использовать %2$s кошелек, работающий в формате BIP84. Кошельки, работающие в этом формате, платят наименьшую комиссию при отправке %3$s транзакций.</string>
+\nХотя кошелек Quantum Wallet поддерживает все три формата, рекомендуется использовать %2$s кошелек, работающий в формате BIP84. Кошельки, работающие в этом формате, платят наименьшую комиссию при отправке %3$s транзакций.</string>
     <string name="ManageCoins_BchTypeDescription">Существует 2 формата адресов Bitcoin Cash кошельки могут использовать для приема входящих платежей:
 \n
 \n- TYPE0 (старый)
@@ -1230,7 +1230,7 @@
     <string name="PrivateKeys_Bip32RootKeyDescription">Мастер приватный ключ кошелька. Даёт полный контроль над всеми производными счетами и активами.</string>
     <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Даёт полный контроль над биткойнами и другими UTXO активами (например, Litecoin, Bitcoin Cash, Dash) в этом кошельке.</string>
-    <string name="PrivateKeys_NeverShareWarning">Никогда ни с кем не делитесь вашей фразой восстановления. Команда Unstoppable никогда не запросит вашу фразу восстановления.</string>
+    <string name="PrivateKeys_NeverShareWarning">Никогда ни с кем не делитесь вашей фразой восстановления. Команда QUANTUM никогда не запросит вашу фразу восстановления.</string>
     <string name="PrivateKeys_MoneroPrivateKey">Приватные ключи Monero</string>
     <string name="PrivateKeys_MoneroPrivateKeyDescription">Даёт полный контроль над активами Monero (XMR) в пределах этого кошелька, включая возможность тратить средства.</string>
     <string name="MoneroKeyType">Тип</string>
@@ -1528,7 +1528,7 @@
     <string name="BalanceSyncError_ErrorText">Не удалось получить данные из текущего источника. Пожалуйста, повторите попытку позже.</string>
     <!--Release notes-->
     <string name="ReleaseNotes_JoinUnstoppables">ПРИСОЕДИНЯЙТЕСЬ</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable пропуск</string>
+    <string name="ProUsersInfo_UnstoppablePass">QUANTUM пропуск</string>
     <string name="ProUsersInfo_Description">Для включения этих данных необходимо получить бронзовый уровень UW NFTs “Coin Info+”\n\nтакже получить доступ к данным ниже:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX объем и рейтинг</string>
     <string name="ProUsersInfo_Features_DesLiquidity">DEX ликвидность и рейтинг</string>
@@ -1547,7 +1547,7 @@
     <string name="Alert_KeysInvalidatedDescription">Зашифрованные данные, держащие ваш кошелек недавно были аннулированы, потому что ваш экран блокировки Android был изменен</string>
     <string name="Alert_TitleWarning">Внимание</string>
     <string name="Alert_CustomKeyboardIsUsed">Кажется, ваше устройство использует клавиатуру, не являющуюся по умолчанию. Неостановимый рекомендует выбрать на вашем устройстве клавиатуру по умолчанию, поскольку сторонние клавиатуры потенциально могут собирать и раскрывать информацию о пользователях. \n\nнажмите кнопку \'Пропустить\', если вы хотите продолжать использовать предпочитаемую вами клавиатуру.</string>
-    <string name="Alert_DeviceIsRootedWarning">Команда Unstoppable рекомендует запускать приложение только на телефонах, не имеющих рут (не выпущенных на jailbroken).\n\nПожалуйста, обратите внимание, когда вы используете устройство root, приложение больше не может гарантировать безопасность вашего криптовалюты от вредоносного программного обеспечения.</string>
+    <string name="Alert_DeviceIsRootedWarning">Команда QUANTUM рекомендует запускать приложение только на телефонах, не имеющих рут (не выпущенных на jailbroken).\n\nПожалуйста, обратите внимание, когда вы используете устройство root, приложение больше не может гарантировать безопасность вашего криптовалюты от вредоносного программного обеспечения.</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN-код телефона</string>
     <string name="OSPin_Confirm_Desciption">Это приложение требует, чтобы на телефоне был включен пароль (экран блокировки).\n\nВы можете включить его в настройках Android.\n\nПожалуйста, обратите внимание, что после того, как вы отключили PIN-код на уровне ОС,  в безопасном хранилище вашего телефона ранее сохраненные данные стали недействительными. Поэтому Вам нужно восстановить ключи, чтобы вернуться к вашему кошельку.</string>

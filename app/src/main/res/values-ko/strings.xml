@@ -98,7 +98,7 @@
     <string name="Language_Portuguese">포르투갈어</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">안녕</string>
-    <string name="RateApp_Description_Rate_This_App">Unstoppable을 즐기고 계십니까? 더 발전하기 위해 피드백과 아이디어를 공유해 주세요.</string>
+    <string name="RateApp_Description_Rate_This_App">QUANTUM을 즐기고 계십니까? 더 발전하기 위해 피드백과 아이디어를 공유해 주세요.</string>
     <string name="RateApp_Button_RateIt">평가 하기</string>
     <string name="RateApp_Button_NotNow">다음에 확인</string>
     <!--Restore-->
@@ -115,7 +115,7 @@
     <string name="Restore_PrivateKeyHint">EVM 개인 키, BIP32 Root Key 또는 Account Extended Private Key 입력</string>
     <string name="Restore_PhraseHint">12, 15, 18, 21 또는 24단어 입력</string>
     <string name="Restore_NonStandardRestore">비표준 복원</string>
-    <string name="Restore_NonStandard_Description">이 페이지는 비표준 지갑을 가지고 있는 Unstoppable 사용자를 위한 특별한 지갑 복원 메커니즘을 제공합니다. 일반적으로 이러한 지갑은 Unstoppable 버전 0.27 - 0.28에서 영어가 아닌 니모닉 단어 목록 및/또는 지갑 암호의 특수 문자(예: 분음 부호)를 사용하여 생성되었을 수 있습니다.\n\n영향을 받는 사용자인 경우 버전 0.29로 업데이트하면 지갑 잔액이 0으로 표시됩니다. 이 페이지에서는 비표준 지갑에 대한 액세스를 복원할 수 있습니다. 복원되면 새 지갑(표준 준수)을 만들고 그곳으로 자금을 옮기는 것이 좋습니다.</string>
+    <string name="Restore_NonStandard_Description">이 페이지는 비표준 지갑을 가지고 있는 QUANTUM 사용자를 위한 특별한 지갑 복원 메커니즘을 제공합니다. 일반적으로 이러한 지갑은 QUANTUM 버전 0.27 - 0.28에서 영어가 아닌 니모닉 단어 목록 및/또는 지갑 암호의 특수 문자(예: 분음 부호)를 사용하여 생성되었을 수 있습니다.\n\n영향을 받는 사용자인 경우 버전 0.29로 업데이트하면 지갑 잔액이 0으로 표시됩니다. 이 페이지에서는 비표준 지갑에 대한 액세스를 복원할 수 있습니다. 복원되면 새 지갑(표준 준수)을 만들고 그곳으로 자금을 옮기는 것이 좋습니다.</string>
     <string name="Restore_Bip_Recommended">(평균)</string>
     <string name="Restore_PrivateKey_InvalidKey">잘못된 암호입니다</string>
     <string name="SelectContacts_All">모든</string>
@@ -338,7 +338,7 @@
     <string name="Balance_Receive_SubaddressesTransactions">트랜잭션: %s</string>
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">투명 ZEC 감지됨</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">투명 주소에 보유 중인 ZEC 잔액이 있습니다. Unstoppable에서 사용하려면 완전한 프라이버시 보호를 위해 보호(Shield) 처리해야 합니다.</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">투명 주소에 보유 중인 ZEC 잔액이 있습니다. QUANTUM에서 사용하려면 완전한 프라이버시 보호를 위해 보호(Shield) 처리해야 합니다.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">차폐(Shield)</string>
     <string name="Balance_Zcash_Unified">통합 주소</string>
     <string name="Balance_Zcash_UnifiedDescription">지갑 간 개인적이고 프라이빗한 전송에 사용하세요.</string>
@@ -666,10 +666,10 @@
     <string name="TransactionInfo_SpeedUpDescription">이 작업은 이전 거래를 무효화하고 더 높은 수수료로 다시 전송하려고 시도합니다.</string>
     <string name="StatusInfo_Pending">보류 중</string>
     <string name="StatusInfo_Processing">처리 중</string>
-    <string name="StatusInfo_PendingDescription">거래는 아직 블록체인에서 확인되지 않았습니다. 권장 또는 더 높은 수수료 설정으로 전송된 거래는 일반적으로 분 이내에 처리됩니다. 낮은 수수료로 전송된 거래는 몇 시간 또는 며칠 동안 보류 상태로 남아 있을 수 있으며 거부될 수도 있습니다. 또한 Unstoppable 지갑 인터페이스에 표시되는 개별 트랜잭션의 상태는 일반적으로 짧은 지연으로 업데이트됩니다.</string>
+    <string name="StatusInfo_PendingDescription">거래는 아직 블록체인에서 확인되지 않았습니다. 권장 또는 더 높은 수수료 설정으로 전송된 거래는 일반적으로 분 이내에 처리됩니다. 낮은 수수료로 전송된 거래는 몇 시간 또는 며칠 동안 보류 상태로 남아 있을 수 있으며 거부될 수도 있습니다. 또한 QUANTUM 지갑 인터페이스에 표시되는 개별 트랜잭션의 상태는 일반적으로 짧은 지연으로 업데이트됩니다.</string>
     <string name="StatusInfo_ProcessingDescription">거래는 이미 블록체인에 포함되었지만 영구적인 완결성에 도달하지 않았습니다. 이 시점에서 소액 결제를 위해 완료된 거래로 간주하는 것이 안전합니다. 더 큰 지불의 경우 거래 상태가 완료로 변경될 때까지 기다리는 것이 좋습니다.</string>
     <string name="StatusInfo_ConfirmedDescription">거래가 완료되고 영구적이고 되돌릴 수 없는 것으로 간주됩니다.</string>
-    <string name="StatusInfo_FailedDescription">거래가 처리되지 않았으며 가치 이전이 발생하지 않았습니다. 실패 원인에 따라 일부 실패한 거래는 거래 수수료를 소모할 수 있습니다. 다른 거래로 대체되거나 취소된 거래는 거래 수수료를 소비하지 않으며 실패한 것으로 표시됩니다. Unstoppable 앱은 거래 실패의 원인을 표시할 수 없지만 사용자는 etherscan.io와 같은 공개 블록 탐색기에서 직접 찾을 수 있습니다.</string>
+    <string name="StatusInfo_FailedDescription">거래가 처리되지 않았으며 가치 이전이 발생하지 않았습니다. 실패 원인에 따라 일부 실패한 거래는 거래 수수료를 소모할 수 있습니다. 다른 거래로 대체되거나 취소된 거래는 거래 수수료를 소비하지 않으며 실패한 것으로 표시됩니다. QUANTUM 앱은 거래 실패의 원인을 표시할 수 없지만 사용자는 etherscan.io와 같은 공개 블록 탐색기에서 직접 찾을 수 있습니다.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">가속</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">재전송</string>
@@ -699,7 +699,7 @@
     <string name="SettingsCurrency_Title">기초 통화</string>
     <string name="SettingsCurrency_Other">기타</string>
     <string name="SettingsCurrency_DisclaimerTitle">면책</string>
-    <string name="SettingsCurrency_DisclaimerText">제3자 서비스 Coingecko.com\n\nUnstoppable 지갑 앱에서 제공하는 환율 데이터는 이러한 가치가 항상 올바르고 시장 데이터와 일치함을 보장하지는 않습니다. %s 이외의 기준 통화를 선택할 경우 불일치가 발생할 가능성이 더 높습니다.</string>
+    <string name="SettingsCurrency_DisclaimerText">제3자 서비스 Coingecko.com\n\nQUANTUM 지갑 앱에서 제공하는 환율 데이터는 이러한 가치가 항상 올바르고 시장 데이터와 일치함을 보장하지는 않습니다. %s 이외의 기준 통화를 선택할 경우 불일치가 발생할 가능성이 더 높습니다.</string>
     <!--Settings-->
     <string name="Settings_Title">설정</string>
     <string name="Settings_SecurityCenter">보안 센터</string>
@@ -715,7 +715,7 @@
     <string name="Settings_AppSettings">디자인</string>
     <string name="Settings_Subscription">구독</string>
     <string name="Settings_AutoLock">자동 잠금</string>
-    <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_JoinUnstoppables">Be QUANTUM</string>
     <string name="Settings_Donate">후원하기</string>
     <string name="Settings_DonateToken">기부하기 %s</string>
     <string name="Settings_Donate_Addresses">구애</string>
@@ -768,7 +768,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">별도의 PIN으로 미끼용 지갑을 생성할 수 있습니다. 위험한 상황에서도 실제 자산을 숨겨 보호합니다.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">수신 지갑을 피싱 또는 사기 위험이 있는지 검사하고, 위험한 주소로 전송하기 전에 경고합니다.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">연결 전에 위조되거나 악성 dApp을 감지하여 피싱을 방지하고 자산을 보호합니다.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">우선 지원 팀에 직접 연결되어 신속하고 개인화된 도움을 받을 수 있습니다. Unstoppable 팀이 빠르게 지원합니다.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">우선 지원 팀에 직접 연결되어 신속하고 개인화된 도움을 받을 수 있습니다. QUANTUM 팀이 빠르게 지원합니다.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">스왑 중 봇이나 프런트러닝 공격을 차단하여 거래를 공정하고 안전하게 유지합니다.</string>
     <string name="Premium_DefenseSystem">방어 시스템</string>
     <string name="Premium_MarketInsights">시장 인사이트</string>
@@ -832,7 +832,7 @@
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">트랜잭션 입력/출력</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">거래 구조를 변경하여 BTC, LTC, BCH 거래를 추적하기 어렵게 만드십시오.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">대부분의 비트코인 ​​거래는 물론 비트코인 ​​캐시, 대시 및 라이트코인을 포함한 유사한 암호화폐의 거래는 두 가지 출력을 생성합니다. 하나의 출력은 수신자에게 가는 금액이고 다른 하나는 발신자에게 반환되는 변경 출력입니다. 대부분의 지갑이 트랜잭션을 구성하는 방식을 통해 제3자는 출력 중 어느 것이 수신 당사자에게 갔고 어느 것이 발신자에게 반환된 변경 금액인지 쉽게 이해할 수 있습니다. 발신자에게 반환된 출력은 나중에 미래의 거래에 사용되기 때문에 이 두 거래 사이의 연결이 분명해집니다.
-\n\nUnstoppable 지갑은 누군가가 어떤 출력이 어디로 가는지 알아내기 어렵게 하는 조치를 구현합니다.
+\n\nQuantum Wallet 지갑은 누군가가 어떤 출력이 어디로 가는지 알아내기 어렵게 하는 조치를 구현합니다.
 \n\n 멈출 수 없는 사용자가 사용할 수 있는 두 가지 옵션:
 \n\n1. 셔플: 트랜잭션 출력 순서는 모든 트랜잭션에서 무작위로 지정됩니다. 때로는 변화가 첫 번째 출력이 될 수도 있고 때로는 두 번째 출력이 될 수도 있습니다. 사용자가 앱 개발자를 신뢰한다면 이것을 권장 옵션으로 고려하십시오.
 \n\n2. 결정적: 트랜잭션 출력 주문에 대해 일반적으로 합의된 표준이 있습니다(BIP69로 알려짐). 오픈 소스 지갑에서 이 표준은 지갑 사용자가 앱 개발자가 출력 순서를 구현하는 방법을 신뢰할 필요가 없도록 합니다. 이 표준은 새롭기 때문에 아직 많은 지갑에서 구현하지 않았습니다. 결과적으로 해당 표준을 사용하는 지갑에서 트랜잭션이 전송되었는지 여부를 블록체인에서 확인할 수 있습니다.</string>
@@ -844,7 +844,7 @@
     <string name="SettingsSecurity_DisablePin">비밀번호 비활성화</string>
     <string name="SettingsSecurity_EditPin">비밀번호 변경</string>
     <string name="SettingsSecurity_ManageKeys">지갑 관리하기</string>
-    <string name="SettingsSecurity_AppRestartWarning">이 작업을 수행하면 Unstoppable Wallet 이 다시 시작됩니다.</string>
+    <string name="SettingsSecurity_AppRestartWarning">이 작업을 수행하면 Quantum Wallet 이 다시 시작됩니다.</string>
     <string name="SettingsSecurity_TorConnectionDescription">이 앱을 사용하는 동안 인터넷을 완전히 익명화하십시오. 경우에 따라 DeFi 앱용 WalletConnect 기능이 매우 느리거나 전혀 작동하지 않을 수 있습니다.</string>
     <string name="SettingsSecurity_SortingShuffle">셔플</string>
     <string name="SettingsSecurity_SortingShuffleDescription">랜덤 인덱싱</string>
@@ -911,8 +911,8 @@
 \n- BIP84 (추천)
 \n- BIP 86 (최신)
 \n
-\nUnstoppable 지갑은 4가지 모두를 지원하지만 BIP-84 형식으로 작동하는 %2$s 지갑을 사용하는 것이 좋습니다. 이 형식으로 작동하는 지갑은 %3$s 거래를 보낼 때 가장 낮은 수수료를 지불합니다.</string>
-    <string name="ManageCoins_BchTypeDescription">비트코인 캐시 지갑이 수신 지불을 받는 데 사용할 수 있는 2가지 주소 형식이 있습니다.\n\n- 유형 0(이전)\n- 유형 145(최신)\n\nUnstoppable 지갑은 두 가지를 모두 지원하지만 비트코인 캐시를 사용하는 것이 좋습니다. TYPE 145 형식으로 작동하는 지갑.</string>
+\nQuantum Wallet 지갑은 4가지 모두를 지원하지만 BIP-84 형식으로 작동하는 %2$s 지갑을 사용하는 것이 좋습니다. 이 형식으로 작동하는 지갑은 %3$s 거래를 보낼 때 가장 낮은 수수료를 지불합니다.</string>
+    <string name="ManageCoins_BchTypeDescription">비트코인 캐시 지갑이 수신 지불을 받는 데 사용할 수 있는 2가지 주소 형식이 있습니다.\n\n- 유형 0(이전)\n- 유형 145(최신)\n\nQUANTUM 지갑은 두 가지를 모두 지원하지만 비트코인 캐시를 사용하는 것이 좋습니다. TYPE 145 형식으로 작동하는 지갑.</string>
     <string name="ManageCoins_ContractAddress">계약 주소</string>
     <!-- Experimental Feature -->
     <!-- Bitcoin Hodling -->
@@ -1003,7 +1003,7 @@
     <string name="PrivateKeys_StellarSecretKeyDescription">이 지갑은 Stellar 네트워크 자산에 대한 완전한 제어 권한을 부여합니다.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">지갑의 마스터 개인 키. 파생된 모든 계정과 자산에 대한 완전한 제어 권한을 부여합니다.</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">이 지갑은 Bitcoin 및 기타 UTXO 기반 자산(예: Litecoin, Bitcoin Cash, Dash)에 대한 완전한 제어 권한을 부여합니다.</string>
-    <string name="PrivateKeys_NeverShareWarning">복구 문구를 누구와도 공유하지 마십시오. Unstoppable 팀은 복구 문구를 요구하지 않습니다.</string>
+    <string name="PrivateKeys_NeverShareWarning">복구 문구를 누구와도 공유하지 마십시오. QUANTUM 팀은 복구 문구를 요구하지 않습니다.</string>
     <string name="PrivateKeys_MoneroPrivateKey">Monero 개인 키</string>
     <string name="PrivateKeys_MoneroPrivateKeyDescription">이 지갑은 Monero(XMR) 자산에 대한 완전한 제어 권한을 부여하며, 자금 사용 권한도 포함됩니다.</string>
     <string name="MoneroKeyType">유형</string>
@@ -1126,7 +1126,7 @@
     <string name="CoinPage_FastLength">빠른 길이</string>
     <string name="CoinPage_SlowLength">느린 길이</string>
     <string name="CoinPage_SignalSmoothing">신호 평활화</string>
-    <string name="CoinPage_IndicatorsAlertText">지표는 Unstoppable Wallet 프리미엄 사용자만 이용할 수 있습니다.</string>
+    <string name="CoinPage_IndicatorsAlertText">지표는 Quantum Wallet 프리미엄 사용자만 이용할 수 있습니다.</string>
     <string name="CoinPage_AiGeneratedText">이것은 주어진 암호화폐에 대한 참고 자료를 기반으로 한 AI 생성된 설명입니다. 오류가 포함될 수 있습니다.</string>
     <string name="CoinPage_MarketsLabel_Verified">검증됨</string>
     <string name="CoinPage_MarketsVerifiedMenu_Verified">확인</string>
@@ -1283,7 +1283,7 @@
     <string name="BalanceSyncError_ChangableSourceErrorText">현재 소스에서 데이터를 가져오지 못했습니다. 다시 시도하거나 다른 동기화 소스로 변경할 수 있습니다.</string>
     <string name="BalanceSyncError_ErrorText">현재 소스에서 데이터를 가져오지 못했습니다. 나중에 다시 시도하세요.</string>
     <!--Release notes-->
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable 패스</string>
+    <string name="ProUsersInfo_UnstoppablePass">QUANTUM 패스</string>
     <string name="ProUsersInfo_Description">이 데이터를 활성화하려면 브론즈 레벨 UW NFTs \'Coin Info+\'를 획득해야 합니다.
 \n\n또한 아래의 데이터에 액세스할 수 있습니다:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX 거래량 및 순위</string>
@@ -1302,8 +1302,8 @@
     <string name="Alert_KeysInvalidatedTitle">안드로이드 키 저장소 에러</string>
     <string name="Alert_KeysInvalidatedDescription">안드로이드 잠금 화면이 변경 되어 지갑을 보유한 암호화된 데이터가 최근에 무효화되었습니다.</string>
     <string name="Alert_TitleWarning">경고</string>
-    <string name="Alert_CustomKeyboardIsUsed">It looks like your device uses a non-default keyboard. Unstoppable recommends selecting the default keyboard on your device as third-party keyboards can potentially collect and expose users\' input data. \n\nClick \'Skip\' button if you would like to keep using your preferred keyboard.</string>
-    <string name="Alert_DeviceIsRootedWarning">Unstoppable 팀은 루트 없는 (탈옥 없는) 전화에서만 앱을 실행할 것을 권장드립니다./n/n루트 장치를 사용할 때 앱은 더 이상 악성 소프트웨어로부터 암호 화폐의 안전을 보장할 수 없습니다.</string>
+    <string name="Alert_CustomKeyboardIsUsed">It looks like your device uses a non-default keyboard. QUANTUM recommends selecting the default keyboard on your device as third-party keyboards can potentially collect and expose users\' input data. \n\nClick \'Skip\' button if you would like to keep using your preferred keyboard.</string>
+    <string name="Alert_DeviceIsRootedWarning">QUANTUM 팀은 루트 없는 (탈옥 없는) 전화에서만 앱을 실행할 것을 권장드립니다./n/n루트 장치를 사용할 때 앱은 더 이상 악성 소프트웨어로부터 암호 화폐의 안전을 보장할 수 없습니다.</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">휴대폰 PIN 번호</string>
     <string name="OSPin_Confirm_Desciption">이 앱을 사용하시려면 휴대 전화에 비밀번호 (잠금 화면) 이 활성화 되어야 합니다. \n\n안드로이드 설정에서 활성화 하도록 설정 할 수 있습니다.\n\nOS 수준에서 PIN 번호를 비활성화 하시게 되면 안전한 저장에 대한 보안 조치로 인해 이전에 저장된 데이터가 유효하지 않게 되는 것을 명심하세요. 귀하께서는 지갑으로 돌아가시려면 지갑 암호를 복원해야 합니다.</string>

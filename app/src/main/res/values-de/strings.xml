@@ -477,7 +477,7 @@
     <string name="FeeSettings_FeeRate">Gebühr (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Hier ist der empfohlene Wert, um die nächsten 2 Blöcke zu treffen</string>
     <string name="FeeSettings_FeeRate_Info">Wenn Sie eine Transaktion versenden, zahlen Sie eine Netzwerkgebühr. Je stärker das Netzwerk ist, desto höher die Gebühr.
-        \n\nUnstoppable Wallet schlägt eine optimale Gebühr vor, um Ihre Transaktion in einer angemessenen Zeit zu bestätigen. Sie können diesen Wert erhöhen oder verringern.
+        \n\nQuantum Wallet schlägt eine optimale Gebühr vor, um Ihre Transaktion in einer angemessenen Zeit zu bestätigen. Sie können diesen Wert erhöhen oder verringern.
         \n\nSetzen der Gebühr zu niedrig kann dazu führen, dass Ihre Transaktion lange ausbleibt oder sogar abgelehnt wird. Benutzen Sie für eine schnellere Bestätigung eine höhere Gebühr.</string>
     <!--Fee Info -->
     <string name="FeeInfo_Title">Transaktionsgeschwindigkeit</string>
@@ -939,11 +939,11 @@
     <string name="Premium_UpgradeFeature_SwapProtection_Description">Verhindert, dass Bots bei Swaps Gelder stehlen.</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Zeigt detaillierte Token-Daten - Volumen, Liquidität, Trends – und unterstützt smartere Anlageentscheidungen.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Finden Sie Tokens per Volumen-, Chain- oder Sektorfilter – inklusive CEX/DEX-Aktivität und Listings.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Direkter Zugang zum Prioritäts-Support — schnelle, persönliche Hilfe vom Unstoppable-Team.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Direkter Zugang zum Prioritäts-Support — schnelle, persönliche Hilfe vom QUANTUM-Team.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Erstellt eine Tarn-Wallet mit eigener PIN - hält echte Werte in Risikosituationen verborgen.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Prüft Empfänger-Wallets auf Phishing oder Betrug und warnt Sie, bevor Sie an riskante Adressen senden.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Erkennt gefälschte oder schädliche dApps vor der Verbindung – verhindert Phishing und schützt Ihre Assets.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Direkter Zugang zum Prioritäts-Support - schnelle, persönliche Hilfe vom Unstoppable-Team.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Direkter Zugang zum Prioritäts-Support - schnelle, persönliche Hilfe vom QUANTUM-Team.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Stoppt Bots und Front-Running bei Swaps - hält Ihre Transaktionen fair und sicher.</string>
     <string name="Premium_DefenseSystem">Abwehrsystem</string>
     <string name="Premium_MarketInsights">Markteinsichten</string>
@@ -1529,7 +1529,7 @@
     <string name="BalanceSyncError_ChangableSourceErrorText">Fehler beim Abrufen der Daten aus der aktuellen Quelle. Sie können erneut versuchen oder zu einer anderen Sync-Quelle wechseln.</string>
     <string name="BalanceSyncError_ErrorText">Fehler beim Abrufen der Daten aus der aktuellen Quelle. Bitte versuchen Sie es später erneut.</string>
     <!--Release notes-->
-    <string name="ReleaseNotes_JoinUnstoppables">UNSTOPPABLEN JOIN</string>
+    <string name="ReleaseNotes_JoinUnstoppables">QUANTUMN JOIN</string>
     <string name="ProUsersInfo_UnstoppablePass">Unaufhaltsamer Pass</string>
     <string name="ProUsersInfo_Description">Um diese Daten zu aktivieren, solltest du Bronze-Level UW NFTs “Coin Info+”\n\nerwerben:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX-Volume und Rang</string>

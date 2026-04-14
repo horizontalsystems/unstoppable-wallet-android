@@ -1,6 +1,6 @@
 <resources>
-    <string name="App_Name" translatable="false">Unstoppable</string>
-    <string name="DeeplinkScheme" translatable="false">unstoppable</string>
+    <string name="App_Name" translatable="false">Quantum Wallet</string>
+    <string name="DeeplinkScheme" translatable="false">Quantum Wallet</string>
 
     <!--Common-->
 
@@ -124,7 +124,7 @@
 
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>
-    <string name="RateApp_Description_Rate_This_App">Enjoying Unstoppable? Share feedback and ideas to take it further.</string>
+    <string name="RateApp_Description_Rate_This_App">Enjoying Quantum Wallet? Share feedback and ideas to take it further.</string>
     <string name="RateApp_Button_RateIt">Rate It</string>
     <string name="RateApp_Button_NotNow">Not now</string>
 
@@ -148,7 +148,7 @@
     <string name="Restore_PrivateKeyHint">Enter EVM Private Key, TRON Private Key, BIP32 Root Key, Stellar Secret Key or Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Enter Recovery Phrase</string>
     <string name="Restore_NonStandardRestore">Non-Standard Import</string>
-    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to Unstoppable users who have a non-standard wallet. Such wallets might have been created in Unstoppable version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
+    <string name="Restore_NonStandard_Description">This page provides a special wallet restore mechanism to Quantum Wallet users who have a non-standard wallet. Such wallets might have been created in Quantum Wallet version 0.27 - 0.28 using a non-English recovery phrase and/or a special character in the wallet passphrase (i.e. diacritic symbol).\n\nIf you\'re an affected user then your wallet balance will be shown 0 after restoring such wallet in version 0.29 or above. This page will enable you to restore access to your non-standard wallet. Once restored you\'re recommended to create a new wallet (which will be standard compliant) and move funds there.</string>
 
     <string name="Restore_Bip_Recommended">(recommended)</string>
 
@@ -431,7 +431,7 @@
 
     <string name="Balance_Zcash_UnshieldedBalanceDetected_Info_Title">Detected Transparent ZEC</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent amount</string>
-    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">You have a ZEC balance held in a transparent address. To use it in Unstoppable, it must be shielded for full privacy.</string>
+    <string name="Balance_Zcash_UnshieldedBalance_Info_Description">You have a ZEC balance held in a transparent address. To use it in Quantum Wallet, it must be shielded for full privacy.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Shield</string>
     <string name="Balance_Zcash_Unified">Unified</string>
     <string name="Balance_Zcash_UnifiedDescription">Use for personal and private transfers between wallets.</string>
@@ -575,7 +575,7 @@
     <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Here is the recommended value for hitting the next 2 blocks</string>
     <string name="FeeSettings_FeeRate_Info">When sending a transaction, you must pay a network fee. The busier the network, the higher the fee.
-        \n\nUnstoppable Wallet suggests an optimal fee to help your transaction confirm in a reasonable time. You can increase or decrease this value.
+        \n\nQuantum Wallet suggests an optimal fee to help your transaction confirm in a reasonable time. You can increase or decrease this value.
         \n\nSetting the fee too low may cause your transaction to stay pending for a long time or even be rejected. For faster confirmation, use a higher fee.</string>
 
 
@@ -760,12 +760,12 @@
     <string name="SwapError_FailedToFetchQuote">Failed to fetch quote.</string>
 
     <string name="SwapTerms_Title">Swap Terms</string>
-    <string name="SwapTerms_TopText">Unstoppable aggregates multiple decentralized (DEX) and centralized swap providers to offer competitive rates and broad asset support.</string>
+    <string name="SwapTerms_TopText">Quantum Wallet aggregates multiple decentralized (DEX) and centralized swap providers to offer competitive rates and broad asset support.</string>
     <string name="SwapTerms_BottomText">Always choose a swap provider that aligns with your requirements.</string>
     <string name="SwapTerms_RiskRestrictions">Risk of restrictions</string>
     <string name="SwapTerms_RiskRestrictions_Info">I understand that some non-DEX swap providers apply transaction screening (AML). Such providers may reject (and refund) swaps, or, in rare cases (CSAM and terrorism), freeze funds and request KYC data.</string>
     <string name="SwapTerms_UserResponsibility">User responsibility</string>
-    <string name="SwapTerms_UserResponsibility_Info">I understand that using non-DEX providers introduces additional risks and that these risks are my responsibility. Unstoppable can not guarantee provider behavior.</string>
+    <string name="SwapTerms_UserResponsibility_Info">I understand that using non-DEX providers introduces additional risks and that these risks are my responsibility. Quantum Wallet cannot guarantee provider behavior.</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>
@@ -937,10 +937,10 @@
     <string name="StatusInfo_Processing">Processing</string>
     <string name="StatusInfo_Confirmed">Completed</string>
     <string name="StatusInfo_Failed">Failed</string>
-    <string name="StatusInfo_PendingDescription">The transaction has not been confirmed on the blockchain yet. Transactions sent with a recommended or higher fee setting are generally processed within a few minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected. Note that status of an individual transaction in Unstoppable wallet interface typically updated with a short delay.</string>
+    <string name="StatusInfo_PendingDescription">The transaction has not been confirmed on the blockchain yet. Transactions sent with a recommended or higher fee setting are generally processed within a few minutes. Transactions sent with a low fee may remain pending for a few hours or even days, and can even be rejected. Note that status of an individual transaction in Quantum Wallet interface typically updated with a short delay.</string>
     <string name="StatusInfo_ProcessingDescription">The transaction has been already included in the blockchain but has not reached permanent finality. At this point, it\'s safe to consider the transaction as completed for smaller payments. For larger payments, it\'s recommended to wait until the transaction status changes to completed.</string>
     <string name="StatusInfo_ConfirmedDescription">Transaction is completed and considered permanent and irreversible.</string>
-    <string name="StatusInfo_FailedDescription">The transaction did not get processed and no value transfer took place. Depending on the fail reason, some failed transactions may consume transaction fees. Transactions that were replaced or cancelled by another transaction do not consume transaction fees and will also appear sa failed. The Unstoppable app is unable to show the reason for failed transactions, but users are able to look it up themselves on a public block explorer i.e. etherscan.io.</string>
+    <string name="StatusInfo_FailedDescription">The transaction did not get processed and no value transfer took place. Depending on the fail reason, some failed transactions may consume transaction fees. Transactions that were replaced or cancelled by another transaction do not consume transaction fees and will also appear sa failed. The Quantum Wallet app is unable to show the reason for failed transactions, but users are able to look it up themselves on a public block explorer i.e. etherscan.io.</string>
 
     <!-- Transaction Info Options -->
 
@@ -990,7 +990,7 @@
     <string name="SettingsCurrency_Title">Base Currency</string>
     <string name="SettingsCurrency_Other">OTHER</string>
     <string name="SettingsCurrency_DisclaimerTitle">Disclaimer</string>
-    <string name="SettingsCurrency_DisclaimerText">The exchange rate data is provided by a third party service - Coingecko.com.\n\nThe Unstoppable wallet app doesn\'t guarantee these values are always correct and matches market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
+    <string name="SettingsCurrency_DisclaimerText">The exchange rate data is provided by a third party service - Coingecko.com.\n\nThe Quantum Wallet app doesn\'t guarantee these values are always correct and matches market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
 
     <!--Settings-->
 
@@ -1002,7 +1002,7 @@
     <string name="Settings_Terms">Security Terms</string>
     <string name="Settings_Privacy">Privacy</string>
     <string name="Settings_ShareThisWallet">Tell Friends</string>
-    <string name="Settings_InfoTitleWithVersion" translatable="false">Unstoppable %s</string>
+    <string name="Settings_InfoTitleWithVersion" translatable="false">Quantum Wallet %s</string>
     <string name="Settings_InfoSubtitle" translatable="false">decentralized app</string>
     <string name="Settings_CompanyName" translatable="false">horizontal systems</string>
     <string name="Settings_Faq" translatable="false">FAQ</string>
@@ -1017,7 +1017,7 @@
     <string name="Settings_AutoLock_Description">Automatically locks the app after a selected time.</string>
     <string name="Settings_Telegram" translatable="false">Telegram</string>
     <string name="Settings_Twitter" translatable="false">Twitter</string>
-    <string name="Settings_JoinUnstoppables">Join Unstoppables</string>
+    <string name="Settings_JoinUnstoppables">JOIN QUANTUM</string>
     <string name="Settings_Support">Support</string>
     <string name="Settings_VipSupport">Priority Support</string>
 
@@ -1057,15 +1057,15 @@
     <string name="SettingsBanner_SupportTheProject">Support the Project!</string>
 
     <!--Why Donate Page-->
-    <string name="SettingsBanner_DonateTitle">Support the Unstoppable Movement</string>
+    <string name="SettingsBanner_DonateTitle">Support the Quantum movement</string>
     <string name="SettingsBanner_DonateSubtitle">Be part of the future of private finance</string>
-    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">“Unstoppable Wallet has been free, ad-free, and open-source from day one — and it will stay that way.”</string>
-    <string name="SettingsBanner_DonateByJoiningMovement">By joining the Unstoppable movement, you stand for open and private finance:</string>
-    <string name="SettingsBanner_DonateUnstoppableWalletTeam">The Unstoppable Wallet Team</string>
+    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">“Quantum Wallet has been free, ad-free, and open-source from day one — and it will stay that way.”</string>
+    <string name="SettingsBanner_DonateByJoiningMovement">By joining the Quantum movement, you stand for open and private finance:</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletTeam">The Quantum Wallet Team</string>
     <string name="SettingsBanner_DonateYourSupportIsCommitment">Your support isn’t just about unlocking features — it’s a commitment to privacy, freedom, and open access for all.</string>
     <string name="SettingsBanner_DonateItHelpsWalletToBeAdFree">It helps keep the wallet ad-free, secure, and truly independent — for you and for hundreds of thousands who rely on it worldwide.</string>
     <string name="SettingsBanner_DonateExclusivelyOnFDroid">Exclusively on F-Droid</string>
-    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Unstoppable Wallet gives you advanced features — with no subscription, no limits:</string>
+    <string name="SettingsBanner_DonateUnstoppableWalletGivesYouAdvancedFeatures">Quantum Wallet gives you advanced features — with no subscription, no limits:</string>
     <string name="SettingsBanner_DonateFeatureFullAnalytics">Full analytics and data about tokens</string>
     <string name="SettingsBanner_DonateFeaturePrivacy">Privacy Mode &amp; Duress Mode</string>
     <string name="SettingsBanner_DonateFeatureSignals">Signals for confident trading</string>
@@ -1073,7 +1073,7 @@
     <string name="SettingsBanner_DonateFeatureAdvanced">Advanced asset search and filters</string>
     <string name="SettingsBanner_DonateFeaturePriority">Priority access to support</string>
     <string name="SettingsBanner_DonateEveryBitOfSupportMatters">Every bit of support matters.</string>
-    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">By supporting Unstoppable Wallet, you help us grow, improve, and stay independent.</string>
+    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">By supporting Quantum Wallet, you help us grow, improve, and stay independent.</string>
 
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Active</string>
@@ -1124,7 +1124,7 @@
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Lets you create a decoy wallet with a separate PIN. Keeps real assets hidden in high-risk situations.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Checks recipient wallets for phishing or fraud. Alerts you before sending to risky addresses.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Detects fake or malicious dApps before connection. Prevents phishing and keeps your assets safe.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Gives you direct access to priority support. Get fast, personal help from the Unstoppable team.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Gives you direct access to priority support. Get fast, personal help from The Quantum Wallet team.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Stops bots and front-running attacks during swaps. Keeps your transactions fair and secure.</string>
 
     <string name="Premium_DefenseSystem">Defense System</string>
@@ -1197,7 +1197,7 @@
 
     <!-- Privacy  -->
 
-    <string name="Privacy_Information">Unstoppable doesn\’t collect personal data like your balances or wallet addresses. We only use anonymous data to improve the app.</string>
+    <string name="Privacy_Information">Quantum Wallet doesn\’t collect personal data like your balances or wallet addresses. We only use anonymous data to improve the app.</string>
     <string name="ShareUiData">Share UI data</string>
     <string name="ShareUiDataDescription">This setting lets you turn off analytics and keep your activity fully private.</string>
 
@@ -1229,17 +1229,17 @@
         \n\nOn → transactions instantly appear as Pending when broadcast (faster sync, but lower privacy and reliance on the node).
         \n\nOff → transactions are shown only after confirmations from the network (slower, but safer and more private).</string>
     <string name="MoneroNodeSettings_Trusted">Trusted</string>
-    <string name="MoneroNodeSettings_Description">Choose the node Unstoppable app should use for synchronizing wallet(s).</string>
+    <string name="MoneroNodeSettings_Description">Choose the node Quantum Wallet app should use for synchronizing wallet(s).</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">After changing source the wallet will have to resync itself.</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source Unstoppable app should use for synchronizing wallet(s).</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source Quantum Wallet app should use for synchronizing wallet(s).</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Transaction Inputs / Outputs</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">Make your %s transaction harder to trace by changing the way transaction is structured.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.
-\n\nThe Unstoppable wallet implements measures to make it harder for someone to figure out which output goes where.
-\n\nThere are two options available to Unstoppable users:
+\n\nThe Quantum Wallet implements measures to make it harder for someone to figure out which output goes where.
+\n\nThere are two options available to Quantum Wallet users:
 \n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.
 \n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
 
@@ -1254,7 +1254,7 @@
     <string name="SettingsSecurity_DisablePin">Disable Passcode</string>
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
-    <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
+    <string name="SettingsSecurity_AppRestartWarning">This action will restart Quantum Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet while using this app. Note, in some cases WalletConnect feature for DeFi apps may be very slow or not work at all.</string>
     <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Random Indexing</string>
@@ -1306,7 +1306,7 @@
     <!--Setting_Tell Friends-->
 
     <string name="SettingsShare_Title">Share</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
+    <string name="SettingsShare_Text">Be Quantum</string>
 
     <!--Setting_Contact-->
 
@@ -1356,13 +1356,13 @@
 \n- BIP-84 (recommended)
 \n- BIP-86 (newest)
 \n
-\nWhile Unstoppable wallet supports all 4 of them it recommends to use a %2$s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %3$s transactions.</string>
+\nWhile Quantum Wallet supports all 4 of them it recommends to use a %2$s wallet operating in BIP-84 format. The wallets operating in this format get to pay lowest fees when sending %3$s transactions.</string>
     <string name="ManageCoins_BchTypeDescription">There are 2 address formats Bitcoin Cash wallets can use to receive incoming payments:
 \n
 \n- TYPE0 (older)
 \n- TYPE145 (newer)
 \n
-\nWhile Unstoppable wallet supports both of them it recommends to use a Bitcoin Cash wallet operating in TYPE145 format.</string>
+\nWhile Quantum Wallet supports both of them it recommends to use a Bitcoin Cash wallet operating in TYPE145 format.</string>
     <string name="ManageCoins_ContractAddress">CONTRACT ADDRESS</string>
 
     <!-- Experimental Feature -->
@@ -1490,7 +1490,7 @@
     <string name="PrivateKeys_Bip32RootKeyDescription">The master private key of the wallet. Grants full control over all derived accounts and assets.</string>
     <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Grants full control over Bitcoin and other UTXO-based assets (e.g., Litecoin, Bitcoin Cash, Dash) within this wallet.</string>
-    <string name="PrivateKeys_NeverShareWarning">Never share this key with anyone. Unstoppable Wallet support team will never ask for it.</string>
+    <string name="PrivateKeys_NeverShareWarning">Never share this key with anyone. Quantum Wallet support team will never ask for it.</string>
     <string name="PrivateKeys_MoneroPrivateKey">Monero Private Keys</string>
     <string name="PrivateKeys_MoneroPrivateKeyDescription">Grants full control over Monero (XMR) assets within this wallet, including the ability to spend funds.</string>
     <string name="MoneroKeyType">Type</string>
@@ -1560,7 +1560,7 @@
     <!-- Nym VPN -->
 
     <string name="NymVpn_GetNymVpn" translatable="false">Get Nym VPN</string>
-    <string name="NymVpn_Description" translatable="false">Unstoppable recommends NYM VPN for increased privacy.</string>
+    <string name="NymVpn_Description" translatable="false">Quantum Wallet recommends NYM VPN for increased privacy.</string>
 
     <!-- Tor -->
 
@@ -1659,7 +1659,7 @@
     <string name="CoinPage_FastLength">Fast Length</string>
     <string name="CoinPage_SlowLength">Slow Length</string>
     <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
-    <string name="CoinPage_IndicatorsAlertText">Indicators available only for Unstoppable Wallet premium users.</string>
+    <string name="CoinPage_IndicatorsAlertText">Indicators available only for Quantum Wallet premium users.</string>
     <string name="CoinPage_AiGeneratedText">This is an AI-generated description based on the provided reference material for the given cryptocurrency. It may contain errors.</string>
     <string name="CoinPage_MarketsLabel_Verified">VERIFIED</string>
     <string name="CoinPage_MarketsVerifiedMenu_Verified">Verified</string>
@@ -1853,8 +1853,8 @@
 
     <!--Release notes-->
 
-    <string name="ReleaseNotes_JoinUnstoppables">JOIN UNSTOPPABLES</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
+    <string name="ReleaseNotes_JoinUnstoppables">JOIN QUANTUM</string>
+    <string name="ProUsersInfo_UnstoppablePass">Quantum Pass</string>
     <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>
     <string name="ProUsersInfo_Features_DesLiquidity">DEX Liquidity and Rank</string>
@@ -1876,8 +1876,8 @@
     <string name="Alert_KeysInvalidatedTitle">Android Keystore Error</string>
     <string name="Alert_KeysInvalidatedDescription">The encrypted data holding your wallet was recently invalidated because your Android lock screen was changed</string>
     <string name="Alert_TitleWarning">Warning</string>
-    <string name="Alert_CustomKeyboardIsUsed">It looks like your device uses a non-default keyboard. Unstoppable recommends selecting default keyboard on your device as third party keyboards can potentially collect and expose users\' input data. \n\nClick \'Skip\' button if you would like to keep using your preferred keyboard.</string>
-    <string name="Alert_DeviceIsRootedWarning">The Unstoppable team recommends running app only on non-rooted (not jailbroken) phones.\n\nPlease note when you use a rooted device the app can no longer guarantee the safety of your cryptocurrency from malicious software.</string>
+    <string name="Alert_CustomKeyboardIsUsed">It looks like your device uses a non-default keyboard. Quantum Wallet recommends selecting default keyboard on your device as third party keyboards can potentially collect and expose users\' input data. \n\nClick \'Skip\' button if you would like to keep using your preferred keyboard.</string>
+    <string name="Alert_DeviceIsRootedWarning">The Quantum Wallet team recommends running app only on non-rooted (not jailbroken) phones.\n\nPlease note when you use a rooted device the app can no longer guarantee the safety of your cryptocurrency from malicious software.</string>
 
     <!--OS Pin-->
 

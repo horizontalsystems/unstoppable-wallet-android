@@ -101,7 +101,7 @@
     <string name="Language_Portuguese">Portugués</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">¡GM!</string>
-    <string name="RateApp_Description_Rate_This_App">¿Disfrutas de Unstoppable? Comparte comentarios e ideas para mejorarlo.</string>
+    <string name="RateApp_Description_Rate_This_App">¿Disfrutas de QUANTUM? Comparte comentarios e ideas para mejorarlo.</string>
     <string name="RateApp_Button_RateIt">Valóralo</string>
     <string name="RateApp_Button_NotNow">No ahora</string>
     <string name="Restore_SelectNetwork_Title">Seleccionar red</string>
@@ -123,7 +123,7 @@
     <string name="Restore_PrivateKeyHint">Introduzca la clave privada EVM, BIP32 Root Key o Account Extended Private Key</string>
     <string name="Restore_PhraseHint">Introduzca 12, 15, 18, 21 o 24 palabras</string>
     <string name="Restore_NonStandardRestore">Restauración no estándar</string>
-    <string name="Restore_NonStandard_Description">Esta página proporciona un mecanismo especial de restauración de monedero para usuarios de Unstoppable que tienen un monedero no estándar. Por lo general, dichos monederos se podrían haber creado en la versión 0.27 - 0.28 de Unstoppable utilizando una lista de palabras mnemotécnicas que no están en inglés y/o un carácter especial en la frase de contraseña del monedero (es decir, un símbolo diacrítico).\n\nSi es un usuario afectado, el saldo de su billetera se mostrará en 0 después de restaurar dicha billetera en la versión 0.29 o superior. Esta página te permitirá restaurar el acceso a tu monedero no estándar. Una vez restaurado, se recomienda crear un nuevo monedero (que cumplirá con los estándares) y mover todos los fondos allí.</string>
+    <string name="Restore_NonStandard_Description">Esta página proporciona un mecanismo especial de restauración de monedero para usuarios de QUANTUM que tienen un monedero no estándar. Por lo general, dichos monederos se podrían haber creado en la versión 0.27 - 0.28 de QUANTUM utilizando una lista de palabras mnemotécnicas que no están en inglés y/o un carácter especial en la frase de contraseña del monedero (es decir, un símbolo diacrítico).\n\nSi es un usuario afectado, el saldo de su billetera se mostrará en 0 después de restaurar dicha billetera en la versión 0.29 o superior. Esta página te permitirá restaurar el acceso a tu monedero no estándar. Una vez restaurado, se recomienda crear un nuevo monedero (que cumplirá con los estándares) y mover todos los fondos allí.</string>
     <string name="Restore_Bip_Recommended">(promedio)</string>
     <string name="Restore_PrivateKey_InvalidKey">Clave no válida</string>
     <string name="SelectContacts_All">Todo</string>
@@ -645,7 +645,7 @@
     <string name="SwapConfirm_MevDescription">Activa la protección para asegurar tu intercambio y evitar perder valor a los bots.</string>
     <string name="SwapError_FailedToFetchQuote">No se pudo obtener la cita.</string>
     <string name="SwapTerms_Title">Términos de intercambio</string>
-    <string name="SwapTerms_TopText">Unstoppable aggregates múltiples proveedores descentralizados (DEX) y centralizados de swap para ofrecer tasas competitivas y un amplio apoyo a los activos.</string>
+    <string name="SwapTerms_TopText">QUANTUM aggregates múltiples proveedores descentralizados (DEX) y centralizados de swap para ofrecer tasas competitivas y un amplio apoyo a los activos.</string>
     <string name="SwapTerms_BottomText">Elija siempre un proveedor de intercambio que se ajuste a sus necesidades.</string>
     <string name="SwapTerms_RiskRestrictions">Riesgo de restricciones</string>
     <string name="SwapTerms_RiskRestrictions_Info">Entiendo que algunos proveedores de swap no DEX aplican la detección de transacciones (AML). Tales proveedores pueden rechazar (y reembolsar) los swaps, o, en raras ocasiones, la AM y el terrorismo), congelar fondos y solicitar datos de KYC.</string>
@@ -831,7 +831,7 @@
     <string name="SettingsCurrency_Title">Moneda base</string>
     <string name="SettingsCurrency_Other">OTROS</string>
     <string name="SettingsCurrency_DisclaimerTitle">Descargo de responsabilidad</string>
-    <string name="SettingsCurrency_DisclaimerText">Los datos del tipo de cambio proporcionados por un servicio de terceros Coingecko. om\n\nLa aplicación Unstoppable Walleta no garantiza que estos valores sean siempre correctos y coincidan con los datos del mercado. La probabilidad de una inconsistencia es mayor si usted selecciona cualquier moneda base que no sea %s.</string>
+    <string name="SettingsCurrency_DisclaimerText">Los datos del tipo de cambio proporcionados por un servicio de terceros Coingecko. om\n\nLa aplicación Quantum Walleta no garantiza que estos valores sean siempre correctos y coincidan con los datos del mercado. La probabilidad de una inconsistencia es mayor si usted selecciona cualquier moneda base que no sea %s.</string>
     <!--Settings-->
     <string name="Settings_Title">Ajustes</string>
     <string name="Settings_SecurityCenter">Seguridad</string>
@@ -885,7 +885,7 @@
     <!--Why Donate Page-->
     <string name="SettingsBanner_DonateTitle">Apoya el movimiento por la privacidad</string>
     <string name="SettingsBanner_DonateSubtitle">Defiende las finanzas realmente privadas</string>
-    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">“Unstoppable Wallet sigue siendo gratuito, sin anuncios y de código abierto, independiente de la vigilancia de Big Tech.”</string>
+    <string name="SettingsBanner_DonateUnstoppableHasBeenFreeFromDayOne">“Quantum Wallet sigue siendo gratuito, sin anuncios y de código abierto, independiente de la vigilancia de Big Tech.”</string>
     <string name="SettingsBanner_DonateByJoiningMovement">Al apoyarnos, defiendes las finanzas abiertas y libres de vigilancia:</string>
     <string name="SettingsBanner_DonateUnstoppableWalletTeam">El equipo enfocado en la privacidad</string>
     <string name="SettingsBanner_DonateYourSupportIsCommitment">“Tu apoyo no solo se trata de funciones, es una resistencia contra la vigilancia financiera y el control”</string>
@@ -899,7 +899,7 @@
     <string name="SettingsBanner_DonateFeatureAdvanced">Búsqueda avanzada de tokens y filtros</string>
     <string name="SettingsBanner_DonateFeaturePriority">Acceso prioritario al soporte</string>
     <string name="SettingsBanner_DonateEveryBitOfSupportMatters">Cada contribución cuenta</string>
-    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Al apoyar Unstoppable Wallet, nos ayudas a mantenernos independientes y defender la privacidad financiera.</string>
+    <string name="SettingsBanner_DonateBySupportingUnstoppableWalletYouHelpGrow">Al apoyar Quantum Wallet, nos ayudas a mantenernos independientes y defender la privacidad financiera.</string>
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Activo</string>
     <string name="SettingsSubscription_GetPremium">Hazte usuario Premium</string>
@@ -938,12 +938,12 @@
     <string name="Premium_UpgradeFeature_PrioritySupport_Description">Acceso al equipo de la cartera para soporte técnico rápido.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_Description">Evita que los bots roben durante los intercambios (swaps).</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Muestra datos detallados: volumen, liquidez y tendencias - para tomar decisiones de inversión más inteligentes.</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Te da acceso directo al soporte prioritario: ayuda rápida y personalizada del equipo de Unstoppable.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Te da acceso directo al soporte prioritario: ayuda rápida y personalizada del equipo de Unstoppable.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Te da acceso directo al soporte prioritario: ayuda rápida y personalizada del equipo de QUANTUM.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Te da acceso directo al soporte prioritario: ayuda rápida y personalizada del equipo de QUANTUM.</string>
     <string name="Premium_UpgradeFeature_RobberyProtection_BigDescription">Te permite crear una wallet señuelo con un PIN distinto, manteniendo tus activos reales ocultos en situaciones de riesgo.</string>
     <string name="Premium_UpgradeFeature_SecureSend_BigDescription">Verifica las wallets del destinatario en busca de phishing o fraude. Te alerta antes de enviar a direcciones de alto riesgo.</string>
     <string name="Premium_UpgradeFeature_ScamProtection_BigDescription">Detecta dApps falsas o maliciosas antes de la conexión. Previene el phishing y mantiene tus activos seguros.</string>
-    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Te da acceso directo al soporte prioritario: ayuda rápida y personalizada del equipo de Unstoppable.</string>
+    <string name="Premium_UpgradeFeature_PrioritySupport_BigDescription">Te da acceso directo al soporte prioritario: ayuda rápida y personalizada del equipo de QUANTUM.</string>
     <string name="Premium_UpgradeFeature_SwapProtection_BigDescription">Detiene los bots y los ataques de front-running durante los intercambios (swaps). Mantiene tus transacciones justas y seguras.</string>
     <string name="Premium_DefenseSystem">Sistema de Defensa</string>
     <string name="Premium_MarketInsights">Itinerarios del mercado</string>
@@ -1028,12 +1028,12 @@
     <string name="MoneroNodeSettings_Description">Seleccione la aplicación inparable de nodo que debe usar para sincronizar cartera(s).</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Después de cambiar la fuente, el monedero tendrá que resinc sí mismo.</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Elige la fuente que la aplicación Unstoppable debería usar para sincronizar la(s) cartera(s).</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Elige la fuente que la aplicación QUANTUM debería usar para sincronizar la(s) cartera(s).</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entradas/Salidas</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Ajustes de la transacción</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Entradas / salidas de transacciones</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">Haga que sus transacciones BTC, LTC, BCH sean más difíciles de rastrear cambiando la forma en que las transacciones están estructuradas.</string>
-    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.\n\nThe Unstoppable wallet implements measures to make it harder for someone to figure out which output goes where.\n\nThere are two options available to Unstoppable users:\n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.\n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">Most Bitcoin transactions, as well as transactions in alike cryptocurrencies including Bitcoin Cash, Dash, and Litecoin, generate two outputs. One output is the amount that goes to the receiver and the other is the change output that is returned to the sender. The way most wallets construct transactions makes it easy for a third party to understand which of the outputs went to the receiving party and which one was the change amount returned to the sender. As the output returned to the sender is later used in future transactions, a connection between these two transactions becomes apparent.\n\nThe Quantum Wallet implements measures to make it harder for someone to figure out which output goes where.\n\nThere are two options available to QUANTUM users:\n\n1. Shuffle: The order of transaction outputs is randomized on every transaction. Sometimes change can be the first output, sometimes it can be the second. If a user trusts the developer of the app, then consider this a recommended option.\n\n2. Deterministic: There is a commonly agreed standard for ordering transaction outputs (known as BIP69). In open-source wallets, that standard ensures wallet users do not need to trust how developers of the app implement the ordering of the outputs. As this standard is new, not many wallets have implemented it yet. As a result, it\'s somewhat possible to see on the blockchain whether a transaction was sent from a wallet that uses that standard or not.</string>
     <!--Info screen-->
     <string name="Info_Title">Información</string>
     <!--Setting_Security-->
@@ -1042,7 +1042,7 @@
     <string name="SettingsSecurity_DisablePin">Desactivar bloqueo con código</string>
     <string name="SettingsSecurity_EditPin">Editar el código </string>
     <string name="SettingsSecurity_ManageKeys">Gestionar monederos</string>
-    <string name="SettingsSecurity_AppRestartWarning">Esta acción reiniciará el monedero Unstoppable.</string>
+    <string name="SettingsSecurity_AppRestartWarning">Esta acción reiniciará el monedero QUANTUM.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonimiza completamente tu internet mientras usas esta aplicación. Tenga en cuenta que en algunos casos la función WalletConnect para aplicaciones DeFi puede ser muy lenta o no funcionar.</string>
     <string name="SettingsSecurity_SortingShuffle">Aleatoriamente</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Indexación aleatoria</string>
@@ -1520,7 +1520,7 @@
     <string name="BalanceSyncError_ChangableSourceErrorText">Error al recuperar los datos de la fuente actual. Puede volver a intentar o cambiar a una fuente de sincronización diferente.</string>
     <string name="BalanceSyncError_ErrorText">Error al obtener los datos de la fuente actual. Inténtalo de nuevo más tarde.</string>
     <!--Release notes-->
-    <string name="ReleaseNotes_JoinUnstoppables">ÚNETE A UNSTOPPABLES</string>
+    <string name="ReleaseNotes_JoinUnstoppables">ÚNETE A QUANTUMS</string>
     <string name="ProUsersInfo_UnstoppablePass">Pase imparable</string>
     <string name="ProUsersInfo_Description">Para activar estos datos, debes obtener NFT de bronce de nivel \"Coin Info+\"\n\nTambién obtendrás acceso a los datos a continuación:</string>
     <string name="ProUsersInfo_Features_DexVolume">Volumen y Rango DEX</string>
@@ -1539,8 +1539,8 @@
     <string name="Alert_KeysInvalidatedTitle">Error de almacén de claves Android</string>
     <string name="Alert_KeysInvalidatedDescription">El cifrado de datos que almacenan su cartera fue invalidado recientemente porque su pantalla de bloqueo Android fue cambiada</string>
     <string name="Alert_TitleWarning">Aviso</string>
-    <string name="Alert_CustomKeyboardIsUsed">Parece que su dispositivo utiliza un teclado no predeterminado. Unstoppable recomienda seleccionar el teclado por defecto en su dispositivo ya que los teclados de terceros potencialmente pueden recopilar y exponer los datos de entrada de los usuarios. \n\nHaga clic en el botón \'Saltar\' si desea seguir usando su teclado preferido.</string>
-    <string name="Alert_DeviceIsRootedWarning">El equipo de Unstoppable recomienda ejecutar la aplicación sólo en teléfonos no rooteados (no jailbrokes).\n\nTenga en cuenta que cuando utilice un dispositivo con root, la aplicación ya no puede garantizar la seguridad de su criptomoneda con el software malicioso.</string>
+    <string name="Alert_CustomKeyboardIsUsed">Parece que su dispositivo utiliza un teclado no predeterminado. QUANTUM recomienda seleccionar el teclado por defecto en su dispositivo ya que los teclados de terceros potencialmente pueden recopilar y exponer los datos de entrada de los usuarios. \n\nHaga clic en el botón \'Saltar\' si desea seguir usando su teclado preferido.</string>
+    <string name="Alert_DeviceIsRootedWarning">El equipo de QUANTUM recomienda ejecutar la aplicación sólo en teléfonos no rooteados (no jailbrokes).\n\nTenga en cuenta que cuando utilice un dispositivo con root, la aplicación ya no puede garantizar la seguridad de su criptomoneda con el software malicioso.</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">PIN de teléfono</string>
     <string name="OSPin_Confirm_Desciption">Esta aplicación require que el teléfono tenga el código de acceso (bloqueo de pantalla) habilitado.\n\nLo puedes habilitar en los ajustes de Android.\n\nTome en cuenta que cuando desahabilita el PIN en el nivel OS, las medidas de seguridad en el alacenamiento seguro de su teléfono hace que la información previamente almacenada no sea válida. Usted necesita restaurar las claves de sus monederos para poder volver a su monedero.</string>
