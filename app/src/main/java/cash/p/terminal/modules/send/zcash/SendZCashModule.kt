@@ -20,10 +20,9 @@ object SendZCashModule {
         private val wallet: Wallet,
         private val address: Address?,
         private val hideAddress: Boolean,
+        private val adapter: ISendZcashAdapter
     ) : ViewModelProvider.Factory {
         private val adapterManager: IAdapterManager by inject(IAdapterManager::class.java)
-        val adapter =
-            (adapterManager.getAdapterForWalletOld(wallet) as? ISendZcashAdapter) ?: throw IllegalStateException("SendZcashAdapter is null")
         private val pendingRegistrar: PendingTransactionRegistrar by inject(PendingTransactionRegistrar::class.java)
 
         @Suppress("UNCHECKED_CAST")

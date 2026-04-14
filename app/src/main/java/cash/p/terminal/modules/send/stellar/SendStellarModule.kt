@@ -21,9 +21,9 @@ object SendStellarModule {
         private val wallet: Wallet,
         private val address: Address?,
         private val hideAddress: Boolean,
+        private val adapter: ISendStellarAdapter
     ) : ViewModelProvider.Factory {
         private val adapterManager: IAdapterManager by inject(IAdapterManager::class.java)
-        val adapter = adapterManager.getAdapterForWallet<ISendStellarAdapter>(wallet) ?: throw IllegalStateException("ISendStellarAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

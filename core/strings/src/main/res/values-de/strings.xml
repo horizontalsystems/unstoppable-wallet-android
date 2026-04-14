@@ -3,6 +3,7 @@
     <!--Common-->
     <string name="Error_ParameterNotSet">Parameter ist nicht festgelegt</string>
     <string name="error_account_not_found">Konto nicht gefunden</string>
+    <string name="send_error_adapter_not_found">Adapter für Wallet %1$s nicht gefunden</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Abbrechen</string>
     <string name="Alert_Copy">Kopieren</string>

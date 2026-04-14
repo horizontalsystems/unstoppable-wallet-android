@@ -24,9 +24,9 @@ object SendTronModule {
         private val wallet: Wallet,
         private val address: Address?,
         private val hideAddress: Boolean,
+        private val adapter: ISendTronAdapter
     ) : ViewModelProvider.Factory {
         private val adapterManager: IAdapterManager by inject(IAdapterManager::class.java)
-        val adapter = (adapterManager.getAdapterForWalletOld(wallet) as? ISendTronAdapter) ?: throw IllegalStateException("SendTronAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

@@ -3,6 +3,7 @@
     <!--Common-->
     <string name="Error_ParameterNotSet">Parámetro no establecido</string>
     <string name="error_account_not_found">Cuenta no encontrada</string>
+    <string name="send_error_adapter_not_found">No se encontró el adaptador para la billetera %1$s</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>

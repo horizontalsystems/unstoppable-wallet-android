@@ -21,9 +21,9 @@ object SendMoneroModule {
         private val wallet: Wallet,
         private val address: Address?,
         private val hideAddress: Boolean,
+        private val adapter: ISendMoneroAdapter
     ) : ViewModelProvider.Factory {
         private val adapterManager: IAdapterManager by inject(IAdapterManager::class.java)
-        val adapter = (adapterManager.getAdapterForWalletOld(wallet) as? ISendMoneroAdapter) ?: throw IllegalStateException("SendMoneroAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
