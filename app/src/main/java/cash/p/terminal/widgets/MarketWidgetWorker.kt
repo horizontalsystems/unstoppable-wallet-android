@@ -9,6 +9,10 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import cash.p.terminal.core.App
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import java.time.Duration
 
 class MarketWidgetWorker(
@@ -54,15 +58,15 @@ class MarketWidgetWorker(
         }
     }
 
-    override suspend fun doWork(): Result {
+    override suspend fun doWork(): Result = coroutineScope {
         val manager = GlanceAppWidgetManager(context)
         val glanceIds = manager.getGlanceIds(MarketWidget::class.java)
-        val marketWidgetManager = MarketWidgetManager()
 
-        for (glanceId in glanceIds) {
-            marketWidgetManager.refresh(glanceId)
-        }
-        return Result.success()
+        glanceIds.map { glanceId ->
+            async { App.marketWidgetManager.refreshSync(glanceId) }
+        }.awaitAll()
+
+        Result.success()
     }
 
 }
