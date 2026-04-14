@@ -1387,6 +1387,8 @@
     <string name="ImportWallet_BackupFile_Description">Import a backup file from your local folder.</string>
     <string name="ImportWallet_RecoveryPhrase">from Recovery Phrase</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Import a wallet using a recovery phrase or a private key.</string>
+    <string name="ImportWallet_Passkey">from Passkey</string>
+    <string name="ImportWallet_Passkey_Description">Restore your wallet using your device.</string>
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">This file is not a valid backup of the wallet, or the file has been corrupted and cannot be restored.</string>
     <string name="ImportWallet_SelectAnotherFile">Select Another File</string>
