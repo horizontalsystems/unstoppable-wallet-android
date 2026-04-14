@@ -148,14 +148,6 @@ class ReceiveAddressViewModel(
             items.add(AdditionalData.AccountNotActive)
         }
 
-        amount?.let {
-            items.add(
-                AdditionalData.Amount(
-                    value = it.toString()
-                )
-            )
-        }
-
         return items
     }
 
