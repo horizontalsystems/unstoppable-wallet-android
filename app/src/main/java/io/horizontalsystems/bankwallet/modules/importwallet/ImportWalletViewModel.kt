@@ -1,11 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.importwallet
 
-import android.app.Activity
-import android.util.Base64
-import androidx.credentials.CredentialManager
-import androidx.credentials.GetCredentialRequest
-import androidx.credentials.GetPublicKeyCredentialOption
-import androidx.credentials.PublicKeyCredential
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -24,8 +18,6 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import java.security.SecureRandom
 
 class ImportWalletViewModel(
     private val accountFactory: IAccountFactory,
@@ -41,15 +33,22 @@ class ImportWalletViewModel(
         error = error,
     )
 
-    fun restoreFromPasskey(activity: Activity) {
+    /**
+     * Called by the Fragment after PasskeyManager.authenticate() succeeds.
+     *
+     * @param entropy     PRF output bytes to derive the mnemonic from
+     * @param accountName optional name embedded in the passkey credential;
+     *                    falls back to the next auto-generated account name
+     */
+    fun restoreFromPasskey(entropy: ByteArray, accountName: String?) {
         viewModelScope.launch {
             try {
-                val (entropy, accountName) = authenticatePasskeyWithPrf(activity)
+                val resolvedName = accountName ?: accountFactory.getNextAccountName()
                 val words = Mnemonic().toMnemonic(entropy, Language.English)
                     .map { it.normalizeNFKD() }
                 val accountType = AccountType.Mnemonic(words, "")
                 val account = accountFactory.account(
-                    name = accountName,
+                    name = resolvedName,
                     type = accountType,
                     origin = AccountOrigin.Restored,
                     backedUp = true,
@@ -67,72 +66,16 @@ class ImportWalletViewModel(
         }
     }
 
-    fun onErrorDisplayed() {
-        error = null
+    /** Called by the Fragment when PasskeyManager.authenticate() throws. */
+    fun onError(e: Throwable) {
+        error = e.message
+        success = null
         emitState()
     }
 
-    private suspend fun authenticatePasskeyWithPrf(activity: Activity): Pair<ByteArray, String> {
-        val credentialManager = CredentialManager.create(activity)
-        val prfSalt = "unstoppable-wallet-v1".toByteArray(Charsets.UTF_8)
-        val challenge = ByteArray(32).also { SecureRandom().nextBytes(it) }
-
-        val result = credentialManager.getCredential(
-            context = activity,
-            request = GetCredentialRequest(
-                listOf(
-                    GetPublicKeyCredentialOption(
-                        requestJson = buildAssertJson(challenge, prfSalt)
-                    )
-                )
-            ),
-        )
-        val assertionJson = (result.credential as PublicKeyCredential).authenticationResponseJson
-        val entropy = parsePrfOutput(assertionJson)
-        val accountName = parseAccountName(assertionJson) ?: accountFactory.getNextAccountName()
-        return Pair(entropy, accountName)
-    }
-
-    private fun buildAssertJson(challenge: ByteArray, prfSalt: ByteArray): String {
-        val b64 = Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP
-        val challengeB64 = Base64.encodeToString(challenge, b64)
-        val prfSaltB64 = Base64.encodeToString(prfSalt, b64)
-
-        return """
-            {
-              "challenge": "$challengeB64",
-              "rpId": "unstoppable.money",
-              "userVerification": "required",
-              "extensions": {
-                "prf": {
-                  "eval": {
-                    "first": "$prfSaltB64"
-                  }
-                }
-              }
-            }
-        """.trimIndent()
-    }
-
-    private fun parsePrfOutput(assertionResponseJson: String): ByteArray {
-        val root = JSONObject(assertionResponseJson)
-        val prfResults = root
-            .getJSONObject("clientExtensionResults")
-            .getJSONObject("prf")
-            .getJSONObject("results")
-            .getString("first")
-        return Base64.decode(prfResults, Base64.URL_SAFE or Base64.NO_PADDING)
-    }
-
-    private fun parseAccountName(assertionResponseJson: String): String? {
-        return try {
-            JSONObject(assertionResponseJson)
-                .optJSONObject("user")
-                ?.optString("name")
-                ?.takeIf { it.isNotBlank() }
-        } catch (e: Exception) {
-            null
-        }
+    fun onErrorDisplayed() {
+        error = null
+        emitState()
     }
 
     private fun activateDefaultWallets(account: Account) {

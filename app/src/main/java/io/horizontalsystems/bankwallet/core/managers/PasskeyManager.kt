@@ -1,0 +1,196 @@
+package io.horizontalsystems.bankwallet.core.managers
+
+import android.app.Activity
+import android.util.Base64
+import androidx.credentials.CreatePublicKeyCredentialRequest
+import androidx.credentials.CreatePublicKeyCredentialResponse
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetPublicKeyCredentialOption
+import androidx.credentials.PublicKeyCredential
+import org.json.JSONObject
+import java.security.SecureRandom
+
+class PasskeyManager {
+
+    companion object {
+        private const val RP_ID = "unstoppable.money"
+        private const val RP_NAME = "Unstoppable Wallet"
+        private const val PRF_SALT = "unstoppable-wallet-v1"
+        private val B64_FLAGS = Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP
+    }
+
+    /**
+     * Registers a new passkey bound to [accountName], then immediately asserts it
+     * to obtain the deterministic PRF entropy.
+     *
+     * @return entropy bytes to derive a mnemonic from
+     */
+    suspend fun register(activity: Activity, accountName: String): ByteArray {
+        val credentialManager = CredentialManager.create(activity)
+        val prfSalt = PRF_SALT.toByteArray(Charsets.UTF_8)
+
+        // Step 1: register the passkey. PRF output is not returned on create — only on assertion.
+        val registerChallenge = ByteArray(32).also { SecureRandom().nextBytes(it) }
+        val userId = ByteArray(32).also { SecureRandom().nextBytes(it) }
+        val registerResponse = credentialManager.createCredential(
+            context = activity,
+            request = CreatePublicKeyCredentialRequest(
+                requestJson = buildRegisterJson(registerChallenge, userId, prfSalt, accountName)
+            ),
+        ) as CreatePublicKeyCredentialResponse
+
+        val credentialId = JSONObject(registerResponse.registrationResponseJson).getString("id")
+
+        // Step 2: assert immediately with PRF eval to get the deterministic entropy.
+        val assertChallenge = ByteArray(32).also { SecureRandom().nextBytes(it) }
+        val assertResult = credentialManager.getCredential(
+            context = activity,
+            request = GetCredentialRequest(
+                listOf(
+                    GetPublicKeyCredentialOption(
+                        requestJson = buildAssertJson(assertChallenge, prfSalt, credentialId)
+                    )
+                )
+            ),
+        )
+        val assertionJson = (assertResult.credential as PublicKeyCredential).authenticationResponseJson
+        return parsePrfOutput(assertionJson)
+    }
+
+    /**
+     * Asserts an existing passkey (no allowCredentials filter — user picks from resident keys).
+     *
+     * @return Pair of (entropy bytes, optional account name embedded in the credential's user.name)
+     */
+    suspend fun authenticate(activity: Activity): Pair<ByteArray, String?> {
+        val credentialManager = CredentialManager.create(activity)
+        val prfSalt = PRF_SALT.toByteArray(Charsets.UTF_8)
+        val challenge = ByteArray(32).also { SecureRandom().nextBytes(it) }
+
+        val result = credentialManager.getCredential(
+            context = activity,
+            request = GetCredentialRequest(
+                listOf(
+                    GetPublicKeyCredentialOption(
+                        requestJson = buildAssertJson(challenge, prfSalt, credentialId = null)
+                    )
+                )
+            ),
+        )
+        val assertionJson = (result.credential as PublicKeyCredential).authenticationResponseJson
+        val entropy = parsePrfOutput(assertionJson)
+        val accountName = parseAccountName(assertionJson)
+        return Pair(entropy, accountName)
+    }
+
+    // -------------------------------------------------------------------------
+    // JSON builders
+    // -------------------------------------------------------------------------
+
+    private fun buildRegisterJson(
+        challenge: ByteArray,
+        userId: ByteArray,
+        prfSalt: ByteArray,
+        accountName: String,
+    ): String {
+        val challengeB64 = Base64.encodeToString(challenge, B64_FLAGS)
+        val userIdB64 = Base64.encodeToString(userId, B64_FLAGS)
+        val prfSaltB64 = Base64.encodeToString(prfSalt, B64_FLAGS)
+        val nameJson = JSONObject.quote(accountName)
+
+        return """
+            {
+              "challenge": "$challengeB64",
+              "rp": {
+                "id": "$RP_ID",
+                "name": "$RP_NAME"
+              },
+              "user": {
+                "id": "$userIdB64",
+                "name": $nameJson,
+                "displayName": $nameJson
+              },
+              "pubKeyCredParams": [
+                {"type": "public-key", "alg": -7},
+                {"type": "public-key", "alg": -257}
+              ],
+              "authenticatorSelection": {
+                "authenticatorAttachment": "platform",
+                "requireResidentKey": true,
+                "residentKey": "required",
+                "userVerification": "required"
+              },
+              "extensions": {
+                "prf": {
+                  "eval": {
+                    "first": "$prfSaltB64"
+                  }
+                }
+              }
+            }
+        """.trimIndent()
+    }
+
+    /**
+     * Builds assertion JSON.
+     * When [credentialId] is non-null the request targets a specific credential
+     * (used immediately after registration). When null, allowCredentials is omitted,
+     * letting the authenticator surface all resident keys (used during restore flow).
+     */
+    private fun buildAssertJson(
+        challenge: ByteArray,
+        prfSalt: ByteArray,
+        credentialId: String?,
+    ): String {
+        val challengeB64 = Base64.encodeToString(challenge, B64_FLAGS)
+        val prfSaltB64 = Base64.encodeToString(prfSalt, B64_FLAGS)
+
+        val allowCredentials = if (credentialId != null) {
+            """"allowCredentials": [{"type": "public-key", "id": "$credentialId"}],"""
+        } else {
+            ""
+        }
+
+        return """
+            {
+              "challenge": "$challengeB64",
+              "rpId": "$RP_ID",
+              $allowCredentials
+              "userVerification": "required",
+              "extensions": {
+                "prf": {
+                  "eval": {
+                    "first": "$prfSaltB64"
+                  }
+                }
+              }
+            }
+        """.trimIndent()
+    }
+
+    // -------------------------------------------------------------------------
+    // Response parsers
+    // -------------------------------------------------------------------------
+
+    private fun parsePrfOutput(assertionResponseJson: String): ByteArray {
+        val root = JSONObject(assertionResponseJson)
+        val prfResults = root
+            .getJSONObject("clientExtensionResults")
+            .getJSONObject("prf")
+            .getJSONObject("results")
+            .getString("first")
+        return Base64.decode(prfResults, Base64.URL_SAFE or Base64.NO_PADDING)
+    }
+
+    private fun parseAccountName(assertionResponseJson: String): String? {
+        return try {
+            JSONObject(assertionResponseJson)
+                .optJSONObject("user")
+                ?.optString("name")
+                ?.takeIf { it.isNotBlank() }
+        } catch (e: Exception) {
+            null
+        }
+    }
+}

@@ -5,6 +5,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -14,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
@@ -26,6 +32,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class CreateAccountPasskeyFragment : BaseComposeFragment() {
     @Composable
@@ -47,6 +54,11 @@ fun CreateAccountPasskeyScreen(
     val uiState = viewModel.uiState
     val context = LocalContext.current
     val view = LocalView.current
+    val scope = rememberCoroutineScope()
+
+    // Local state — disables the Create button immediately on click to prevent double-submission
+    // while the system passkey UI is open (per CLAUDE.md double-click prevention pattern).
+    var createButtonEnabled by remember { mutableStateOf(true) }
 
     LaunchedEffect(uiState.success) {
         if (uiState.success != null) {
@@ -71,7 +83,24 @@ fun CreateAccountPasskeyScreen(
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Create),
-                onClick = { viewModel.createAccount(context as Activity) },
+                enabled = createButtonEnabled,
+                onClick = {
+                    val accountName = uiState.accountName
+                    createButtonEnabled = false
+                    scope.launch {
+                        try {
+                            val entropy = App.passkeyManager.register(
+                                activity = context as Activity,
+                                accountName = accountName,
+                            )
+                            viewModel.createAccount(entropy)
+                        } catch (e: Exception) {
+                            viewModel.onError(e)
+                        } finally {
+                            createButtonEnabled = true
+                        }
+                    }
+                },
                 tint = ComposeAppTheme.colors.jacob
             )
         ),
