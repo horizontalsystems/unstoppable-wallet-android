@@ -12,6 +12,8 @@ import java.math.RoundingMode
 class PriceImpactService {
     private val warningPriceImpact = BigDecimal(5)
     private val forbiddenPriceImpact = BigDecimal(20)
+    private val percentMultiplier = BigDecimal("100")
+    private val fiatPriceImpactScale = 2
 
     private var fiatAmountIn: BigDecimal? = null
     private var fiatAmountOut: BigDecimal? = null
@@ -111,10 +113,9 @@ class PriceImpactService {
     private fun calculateDiff(amountOut: BigDecimal?, amountIn: BigDecimal?): BigDecimal? {
         if (amountOut == null || amountIn == null || amountIn.compareTo(BigDecimal.ZERO) == 0) return null
 
-        return (amountOut - amountIn)
-            .divide(amountIn, RoundingMode.DOWN)
-            .times(BigDecimal("100"))
-            .setScale(2, RoundingMode.DOWN)
+        return amountOut.subtract(amountIn)
+            .multiply(percentMultiplier)
+            .divide(amountIn, fiatPriceImpactScale, RoundingMode.DOWN)
             .stripTrailingZeros()
     }
 
