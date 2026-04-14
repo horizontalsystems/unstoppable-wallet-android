@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-Unstoppable Wallet - A multi-currency crypto wallet Android app supporting Bitcoin, Ethereum, and many other blockchains.
+Quantum Wallet - A multi-currency crypto wallet Android app supporting Bitcoin, Ethereum, and many other blockchains.
 
-- **Package**: `io.horizontalsystems.bankwallet`
+- **Package**: `com.quantum.wallet.bankwallet`
 - **Min SDK**: See `build.gradle` for `min_sdk_version`
 - **Language**: Kotlin
 - **UI**: Jetpack Compose (migrating from XML, see `ui/` vs `uiv3/`)
@@ -28,7 +28,7 @@ Unstoppable Wallet - A multi-currency crypto wallet Android app supporting Bitco
 ## Project Structure
 
 ```
-app/src/main/java/io/horizontalsystems/bankwallet/
+app/src/main/java/com/quantum/wallet/bankwallet/
 ├── core/                    # Core infrastructure
 │   ├── managers/           # Business logic managers (singletons via App)
 │   ├── adapters/           # Blockchain adapters

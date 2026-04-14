@@ -133,8 +133,8 @@ meld $fromPlayUnpacked $fromBuildUnpacked
 for more details."
 }
 
-testUnstoppable() {
-  repo=https://github.com/horizontalsystems/unstoppable-wallet-android
+testQuantumWallet() {
+  repo=https://github.com/Quantum-Chain-PTE-LTD/quantum-wallet-android
   tag=$versionName
   builtApk=$workDir/app/app/build/outputs/apk/release/app-release-unsigned.apk
 
@@ -149,8 +149,8 @@ testUnstoppable() {
 }
 
 case "$appId" in
-  "io.horizontalsystems.bankwallet")
-    testUnstoppable
+  "com.quantum.wallet.bankwallet")
+    testQuantumWallet
     ;;
   *)
     echo "Unknown appId $appId"

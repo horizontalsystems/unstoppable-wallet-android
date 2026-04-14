@@ -1,12 +1,12 @@
-With Unstoppable we aim to create a mainstream-friendly multi-blockchain wallet implementation on iOS and Android platforms. 
+With Quantum Wallet we aim to create a mainstream-friendly multi-blockchain wallet implementation on iOS and Android platforms. 
 
-We invite you to review, improve and reuse our codebase. If you are looking to contribute please familiarize yourself with the goals of the Unstoppable Wallet project. 
+We invite you to review, improve and reuse our codebase. If you are looking to contribute please familiarize yourself with the goals of the Quantum Wallet project. 
 
 We are sailing towards an open-source wallet that:
 
 - is actively maintained and improved by interested developers worldwide. The wallet should ultimately support all widely adopted blockchain standards (i.e essential Bitcoin BIPs) and move in parallel with blockchain protocol updates.
 
-- can unconditionally be reused for other blockchain projects. For instance, the wallet implementation in the Unstoppable app can be used as under the hood authentication/identity component with inherent account backup/restore mechanisms for any decentralized app.
+- can unconditionally be reused for other blockchain projects. For instance, the wallet implementation in the Quantum Wallet app can be used as under the hood authentication/identity component with inherent account backup/restore mechanisms for any decentralized app.
 
 - always operates in a trustless manner, given that underlying blockchain protocols provide such capability in practical terms. The wallet should not rely on any data returned from a 3rd party server and to the extent that’s possible verify that data independently.
 
@@ -20,7 +20,7 @@ We are sailing towards an open-source wallet that:
 
 Keeping above in mind we are looking forward for your input. For the sake of keeping the process technically objective our willingness to merge (or not to) some contributions is going to be purely based on our technical assessment of the submitted code and its impact on the existing codebase. While it’s in our best interests to make the contribution process as straightforward as possible it’s of paramount importance for us to keep  the project complexity at a level we are comfortable with so we can move fast.
 
-If you’re a submitting a PR with the intent to extend wallet support to additional blockchains or tokens the Horizontal Systems team is going to primarily look at how the added code interacts with the existing components and potential technical and usability issues that may arise as a result. If the PR merge is likely to increase chances of app crashes or inconsistent user behavior in the user interface we are likely to reject it. Therefore, before you jump on PR it’s important for your to get familiar with the integration of currently supported blockchains. It goes without saying that you can always fork the wallet and proceed as you wish.
+If you're a submitting a PR with the intent to extend wallet support to additional blockchains or tokens the Quantum Chain team is going to primarily look at how the added code interacts with the existing components and potential technical and usability issues that may arise as a result. If the PR merge is likely to increase chances of app crashes or inconsistent user behavior in the user interface we are likely to reject it. Therefore, before you jump on PR it's important for your to get familiar with the integration of currently supported blockchains. It goes without saying that you can always fork the wallet and proceed as you wish.
 
 ## Code Contribution
 
