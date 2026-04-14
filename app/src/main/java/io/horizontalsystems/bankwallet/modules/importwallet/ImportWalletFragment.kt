@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.getInput
@@ -177,13 +178,25 @@ private fun ImportWalletScreen(
                         )
                     }
                 }
+                var passkeyEnabled by remember { mutableStateOf(true) }
                 WalletType(
                     icon = painterResource(R.drawable.touchid_24),
                     title = stringResource(R.string.ImportWallet_Passkey).hs,
                     subtitle = stringResource(R.string.ImportWallet_Passkey_Description).hs,
                     borderTop = true
                 ) {
-                    viewModel.restoreFromPasskey(context as Activity)
+                    if (!passkeyEnabled) return@WalletType
+                    passkeyEnabled = false
+                    scope.launch {
+                        try {
+                            val (entropy, accountName) = App.passkeyManager.authenticate(context as Activity)
+                            viewModel.restoreFromPasskey(entropy, accountName)
+                        } catch (e: Exception) {
+                            viewModel.onError(e)
+                        } finally {
+                            passkeyEnabled = true
+                        }
+                    }
                 }
                 WalletType(
                     icon = painterResource(R.drawable.ic_download_24),
