@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 import io.horizontalsystems.bankwallet.R
 
 object ThorChainProvider : BaseThorChainProvider(
-    baseUrl = "https://thornode.ninerealms.com/thorchain/",
+    baseUrl = "https://gateway.liquify.com/chain/thorchain_api/thorchain/",
     affiliate = "hrz",
     affiliateBps = 100,
 ) {
