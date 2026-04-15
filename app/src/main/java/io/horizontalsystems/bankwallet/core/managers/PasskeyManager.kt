@@ -32,7 +32,16 @@ class PasskeyManager {
 
         // Step 1: register the passkey. PRF output is not returned on create — only on assertion.
         val registerChallenge = ByteArray(32).also { SecureRandom().nextBytes(it) }
-        val userId = ByteArray(32).also { SecureRandom().nextBytes(it) }
+        // Encode account name into userId so it can be recovered from userHandle in future assertions.
+        // Format: [nameLen (1 byte)][name bytes (≤55)][random nonce (8 bytes)] = 64 bytes max.
+        // The nonce ensures uniqueness so two wallets with the same name don't overwrite each other.
+        val userId = run {
+            val nameBytes = accountName.toByteArray(Charsets.UTF_8).let {
+                if (it.size <= 55) it else it.copyOf(55)
+            }
+            val nonce = ByteArray(8).also { SecureRandom().nextBytes(it) }
+            byteArrayOf(nameBytes.size.toByte()) + nameBytes + nonce
+        }
         val registerResponse = credentialManager.createCredential(
             context = activity,
             request = CreatePublicKeyCredentialRequest(
@@ -185,11 +194,17 @@ class PasskeyManager {
 
     private fun parseAccountName(assertionResponseJson: String): String? {
         return try {
-            JSONObject(assertionResponseJson)
-                .optJSONObject("user")
-                ?.optString("name")
+            val userHandle = JSONObject(assertionResponseJson)
+                .optJSONObject("response")
+                ?.optString("userHandle")
                 ?.takeIf { it.isNotBlank() }
-        } catch (e: Exception) {
+                ?: return null
+            val bytes = Base64.decode(userHandle, B64_FLAGS)
+            // Format written during registration: [nameLen][name bytes][nonce]
+            val nameLen = bytes[0].toInt() and 0xFF
+            String(bytes, 1, nameLen, Charsets.UTF_8)
+                .takeIf { it.isNotBlank() }
+        } catch (_: Exception) {
             null
         }
     }
