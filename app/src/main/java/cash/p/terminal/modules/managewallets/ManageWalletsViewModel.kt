@@ -151,13 +151,13 @@ class ManageWalletsViewModel(
         val viewItems = items.map { viewItem(it) }
 
         val groups = viewItems.groupBy { it.item.coin.uid }
-            .map { (coinCode, groupItems) ->
+            .map { (coinUid, groupItems) ->
                 val coinName = groupItems.first().item.coin.name
                 CoinGroup(
                     coinName = coinName,
-                    coinCode = coinCode,
+                    coinUid = coinUid,
                     items = groupItems,
-                    isExpanded = expandedGroups.contains(coinCode)
+                    isExpanded = expandedGroups.contains(coinUid)
                 )
             }
         _groupsList.tryEmit(groups)
@@ -210,11 +210,11 @@ class ManageWalletsViewModel(
         service.setFilter(text)
     }
 
-    override fun toggleGroupExpansion(coinCode: String) {
-        if (expandedGroups.contains(coinCode)) {
-            expandedGroups.remove(coinCode)
+    override fun toggleGroupExpansion(coinUid: String) {
+        if (expandedGroups.contains(coinUid)) {
+            expandedGroups.remove(coinUid)
         } else {
-            expandedGroups.add(coinCode)
+            expandedGroups.add(coinUid)
         }
         sync(service.itemsFlow.value)
     }
@@ -235,10 +235,13 @@ class ManageWalletsViewModel(
 
 data class CoinGroup(
     val coinName: String,
-    val coinCode: String,
+    val coinUid: String,
     val items: List<CoinViewItem<Token>>,
     val isExpanded: Boolean = false
-)
+) {
+    val isSingleOption: Boolean
+        get() = items.size == 1
+}
 
 interface ManageWalletsCallback {
     val groupsList: StateFlow<List<CoinGroup>>
@@ -250,5 +253,5 @@ interface ManageWalletsCallback {
     fun updateFilter(text: String)
     fun enable(token: Token)
     fun disable(token: Token)
-    fun toggleGroupExpansion(coinCode: String)
+    fun toggleGroupExpansion(coinUid: String)
 }

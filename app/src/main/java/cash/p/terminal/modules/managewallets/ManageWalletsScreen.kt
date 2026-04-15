@@ -49,6 +49,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -167,11 +168,14 @@ internal fun ManageWalletsScreen(
                     color = ComposeAppTheme.colors.steel10,
                 )
                 LazyColumn(Modifier.weight(1f)) {
-                    items(groupsList) { group ->
+                    items(
+                        items = groupsList,
+                        key = { it.coinUid }
+                    ) { group ->
                         CoinGroupItem(
                             group = group,
                             onGroupClick = {
-                                manageWalletsCallback.toggleGroupExpansion(group.coinCode)
+                                manageWalletsCallback.toggleGroupExpansion(group.coinUid)
                             },
                             onItemClick = { token ->
                                 if (group.items.find { it.item == token }?.enabled == true) {
@@ -274,28 +278,45 @@ private fun CoinGroupItem(
     onItemClick: (Token) -> Unit,
     onInfoClick: (Token) -> Unit
 ) {
-    Column {
-        GroupHeader(
-            group = group,
-            onClick = onGroupClick
+    if (group.isSingleOption) {
+        val item = group.items.first()
+        TokenRow(
+            viewItem = item,
+            startPadding = 16.dp,
+            iconSize = 32.dp,
+            onItemClick = {
+                onItemClick(item.item)
+            },
+            onInfoClick = {
+                onInfoClick(item.item)
+            }
         )
+    } else {
+        Column {
+            GroupHeader(
+                group = group,
+                onClick = onGroupClick
+            )
 
-        AnimatedVisibility(
-            visible = group.isExpanded,
-            enter = expandVertically() + fadeIn(),
-            exit = shrinkVertically() + fadeOut()
-        ) {
-            Column {
-                group.items.forEach { viewItem ->
-                    CoinCell(
-                        viewItem = viewItem,
-                        onItemClick = {
-                            onItemClick(viewItem.item)
-                        },
-                        onInfoClick = {
-                            onInfoClick(viewItem.item)
-                        }
-                    )
+            AnimatedVisibility(
+                visible = group.isExpanded,
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut()
+            ) {
+                Column {
+                    group.items.forEach { viewItem ->
+                        TokenRow(
+                            viewItem = viewItem,
+                            startPadding = 32.dp,
+                            iconSize = 24.dp,
+                            onItemClick = {
+                                onItemClick(viewItem.item)
+                            },
+                            onInfoClick = {
+                                onInfoClick(viewItem.item)
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -387,14 +408,16 @@ private fun ScanToAddBlock(requestScan: () -> Unit) {
 }
 
 @Composable
-private fun CoinCell(
+private fun TokenRow(
     viewItem: CoinViewItem<Token>,
+    startPadding: Dp,
+    iconSize: Dp,
     onItemClick: () -> Unit,
     onInfoClick: () -> Unit
 ) {
     RowUniversal(
         onClick = onItemClick,
-        modifier = Modifier.padding(start = 32.dp, end = 16.dp),
+        modifier = Modifier.padding(start = startPadding, end = 16.dp),
         verticalPadding = 0.dp
     ) {
         Image(
@@ -402,7 +425,7 @@ private fun CoinCell(
             contentDescription = null,
             modifier = Modifier
                 .padding(end = 16.dp, top = 12.dp, bottom = 12.dp)
-                .size(24.dp)
+                .size(iconSize)
                 .clip(CircleShape)
         )
         Column(
@@ -488,6 +511,21 @@ private fun ManageWalletsScreenPreview() {
                 title = "ETH",
                 subtitle = "Ethereum",
                 enabled = false,
+                label = "ERC20",
+                hasInfo = true
+            ),
+            CoinViewItem(
+                item = Token(
+                    coin = Coin("Ethereum", "Ethereum", "ETH"),
+                    blockchain = Blockchain(BlockchainType.Base, "Base", null),
+                    type = TokenType.Native,
+                    decimals = 18
+                ),
+                imageSource = ImageSource.Local(R.drawable.ic_placeholder),
+                title = "ETH",
+                subtitle = "Ethereum",
+                enabled = true,
+                label = "BASE",
                 hasInfo = true
             )
         )
@@ -495,14 +533,14 @@ private fun ManageWalletsScreenPreview() {
         val groups = listOf(
             CoinGroup(
                 coinName = "Bitcoin",
-                coinCode = "BTC",
+                coinUid = "bitcoin",
                 items = listOf(items[0]),
                 isExpanded = false
             ),
             CoinGroup(
                 coinName = "Ethereum",
-                coinCode = "ETH",
-                items = listOf(items[1]),
+                coinUid = "ethereum",
+                items = listOf(items[1], items[2]),
                 isExpanded = true
             )
         )
@@ -518,7 +556,7 @@ private fun ManageWalletsScreenPreview() {
                 override fun updateFilter(text: String) = Unit
                 override fun enable(token: Token) = Unit
                 override fun disable(token: Token) = Unit
-                override fun toggleGroupExpansion(coinCode: String) = Unit
+                override fun toggleGroupExpansion(coinUid: String) = Unit
             },
             onBackPressed = {},
             requestScan = {},
