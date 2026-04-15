@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -46,6 +45,7 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupFile
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.createaccount.WalletType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreFromPasskeyFragment
 import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -130,24 +130,12 @@ private fun ImportWalletScreen(
         }
     }
 
-    val viewModel = viewModel<ImportWalletViewModel>(factory = ImportWalletViewModel.Factory())
-    val uiState = viewModel.uiState
-
-    LaunchedEffect(uiState.success) {
-        if (uiState.success != null) {
-            HudHelper.showSuccessMessage(
-                contenView = view,
-                resId = R.string.Hud_Text_Restored,
-            )
-            delay(300)
-            navController.popBackStack(popUpToInclusiveId, inclusive)
+    var error: String? by remember { mutableStateOf(null) }
+    LaunchedEffect(error) {
+        error?.let {
+            HudHelper.showErrorMessage(view, it)
+            error = null
         }
-    }
-
-    LaunchedEffect(uiState.error) {
-        val error = uiState.error ?: return@LaunchedEffect
-        HudHelper.showErrorMessage(view, error)
-        viewModel.onErrorDisplayed()
     }
 
     HSScaffold(
@@ -190,9 +178,21 @@ private fun ImportWalletScreen(
                     scope.launch {
                         try {
                             val (entropy, accountName) = App.passkeyManager.authenticate(context as Activity)
-                            viewModel.restoreFromPasskey(entropy, accountName)
-                        } catch (e: Exception) {
-                            viewModel.onError(e)
+                            navController.slideFromRight(
+                                R.id.restoreFromPasskeyFragment,
+                                RestoreFromPasskeyFragment.Input(
+                                    popUpToInclusiveId,
+                                    inclusive,
+                                    entropy,
+                                    accountName,
+                                )
+                            )
+                            stat(
+                                page = StatPage.ImportWallet,
+                                event = StatEvent.Open(StatPage.ImportWalletFromPasskey)
+                            )
+                        } catch (e: Throwable) {
+                            error = e.message
                         } finally {
                             passkeyEnabled = true
                         }
