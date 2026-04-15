@@ -694,7 +694,6 @@
     <string name="TransactionInfo_Date">날짜</string>
     <string name="transaction_info_sync_source">동기화 소스</string>
     <string name="TransactionInfo_Id">거래 ID</string>
-    <string name="TransactionInfo_Service">서비스</string>
     <string name="TransactionInfo_RawTransaction">로우 트랜잭션</string>
     <string name="TransactionInfo_ContactName">담당자 이름</string>
     <string name="TransactionInfo_To">에게</string>

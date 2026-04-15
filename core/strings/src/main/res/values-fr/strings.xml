@@ -690,7 +690,6 @@
     <string name="TransactionInfo_Date">Date du Virement</string>
     <string name="transaction_info_sync_source">Source de synchronisation</string>
     <string name="TransactionInfo_Id">Identifiant</string>
-    <string name="TransactionInfo_Service">Service</string>
     <string name="TransactionInfo_RawTransaction">Transaction brute</string>
     <string name="TransactionInfo_ContactName">Nom du contact</string>
     <string name="TransactionInfo_To">À</string>
