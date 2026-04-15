@@ -24,7 +24,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -60,6 +59,7 @@ import cash.p.terminal.ui.compose.components.FormsInput
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.ui_compose.BottomSheetHeader
+import cash.p.terminal.ui_compose.TransparentModalBottomSheet
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
@@ -149,10 +149,8 @@ fun ZcashConfigureScreen(
     }
 
     if (showSlowSyncWarning) {
-        ModalBottomSheet(
+        TransparentModalBottomSheet(
             sheetState = sheetState,
-            dragHandle = null,
-            containerColor = ComposeAppTheme.colors.transparent,
             onDismissRequest = {
                 showSlowSyncWarning = false
             }
