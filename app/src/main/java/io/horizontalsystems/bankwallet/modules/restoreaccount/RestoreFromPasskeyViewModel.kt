@@ -27,9 +27,3 @@ class RestoreFromPasskeyViewModel(private val accountFactory: IAccountFactory) :
         }
     }
 }
-
-data class RestoreFromPasskeyUiState(
-    val accountName: String,
-    val accountType: AccountType?,
-    val error: Throwable?
-)
