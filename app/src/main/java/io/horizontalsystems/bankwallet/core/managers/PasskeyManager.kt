@@ -20,12 +20,6 @@ class PasskeyManager {
         private val B64_FLAGS = Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP
     }
 
-    /**
-     * Registers a new passkey bound to [accountName], then immediately asserts it
-     * to obtain the deterministic PRF entropy.
-     *
-     * @return entropy bytes to derive a mnemonic from
-     */
     suspend fun register(context: Context, accountName: String): ByteArray {
         val credentialManager = CredentialManager.create(context)
         val prfSalt = PRF_SALT.toByteArray(Charsets.UTF_8)
@@ -67,11 +61,6 @@ class PasskeyManager {
         return parsePrfOutput(assertionJson)
     }
 
-    /**
-     * Asserts an existing passkey (no allowCredentials filter — user picks from resident keys).
-     *
-     * @return Pair of (entropy bytes, optional account name embedded in the credential's user.name)
-     */
     suspend fun authenticate(context: Context): Pair<ByteArray, String?> {
         val credentialManager = CredentialManager.create(context)
         val prfSalt = PRF_SALT.toByteArray(Charsets.UTF_8)
@@ -141,12 +130,6 @@ class PasskeyManager {
         """.trimIndent()
     }
 
-    /**
-     * Builds assertion JSON.
-     * When [credentialId] is non-null the request targets a specific credential
-     * (used immediately after registration). When null, allowCredentials is omitted,
-     * letting the authenticator surface all resident keys (used during restore flow).
-     */
     private fun buildAssertJson(
         challenge: ByteArray,
         prfSalt: ByteArray,
