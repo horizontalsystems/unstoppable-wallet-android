@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.WalletActivator
+import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -23,6 +24,7 @@ class CreateAccountPasskeyViewModel(
     private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,
     private val walletActivator: WalletActivator,
+    private val predefinedBlockchainSettingsProvider: PredefinedBlockchainSettingsProvider,
 ) : ViewModelUiState<CreateAccountPasskeyUiState>() {
 
     private val defaultAccountName = accountFactory.getNextAccountName()
@@ -56,6 +58,8 @@ class CreateAccountPasskeyViewModel(
                 )
                 accountManager.save(account)
                 activateDefaultWallets(account)
+                predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zcash)
+                predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Monero)
                 success = accountType
                 error = null
             } catch (e: Exception) {
@@ -103,6 +107,11 @@ class CreateAccountPasskeyViewModel(
                 App.accountFactory,
                 App.accountManager,
                 App.walletActivator,
+                PredefinedBlockchainSettingsProvider(
+                    App.restoreSettingsManager,
+                    App.zcashBirthdayProvider,
+                    App.moneroBirthdayProvider
+                )
             ) as T
         }
     }
