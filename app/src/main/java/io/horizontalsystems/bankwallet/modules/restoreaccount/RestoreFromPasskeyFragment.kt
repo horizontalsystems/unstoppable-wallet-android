@@ -70,7 +70,7 @@ private fun RestoreFromPasskeyNavHost(
                         else -> Unit
                     }
                 },
-                onBackClick = { navController.popBackStack() },
+                onBackClick = { fragmentNavController.popBackStack() },
                 onFinish = {
                     fragmentNavController.popBackStack(popUpToInclusiveId, inclusive)
                 }
