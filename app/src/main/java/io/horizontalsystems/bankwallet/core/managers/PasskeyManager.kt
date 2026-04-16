@@ -11,6 +11,7 @@ import androidx.credentials.PublicKeyCredential
 import org.json.JSONArray
 import org.json.JSONObject
 import java.security.SecureRandom
+import java.util.UUID
 
 class PasskeyManager {
 
@@ -155,13 +156,15 @@ class PasskeyManager {
         return Base64.decode(first, B64_FLAGS)
     }
 
-    // userId format: [nameLen (1 byte)][name bytes (≤55)][random nonce (8 bytes)]
-    // The nonce ensures uniqueness so two wallets with the same name don't overwrite each other.
+    // userId format: "$accountName::$uuid" as UTF-8 bytes
+    // The UUID ensures uniqueness so two wallets with the same name don't overwrite each other.
+    // WebAuthn requires user.id ≤ 64 bytes; "::$uuid" occupies 38 bytes, leaving 26 for the name.
     private fun encodeUserId(accountName: String): ByteArray {
         val nameBytes = accountName.toByteArray(Charsets.UTF_8).let {
-            if (it.size <= 55) it else it.copyOf(55)
+            if (it.size <= 26) it else it.copyOf(26)
         }
-        return byteArrayOf(nameBytes.size.toByte()) + nameBytes + randomBytes(8)
+        val suffix = "::${UUID.randomUUID()}".toByteArray(Charsets.UTF_8)
+        return nameBytes + suffix
     }
 
     private fun decodeAccountName(assertionResponseJson: String): String? {
@@ -171,9 +174,8 @@ class PasskeyManager {
                 ?.optString("userHandle")
                 ?.takeIf { it.isNotBlank() }
                 ?: return null
-            val bytes = Base64.decode(userHandle, B64_FLAGS)
-            val nameLen = bytes[0].toInt() and 0xFF
-            String(bytes, 1, nameLen, Charsets.UTF_8).takeIf { it.isNotBlank() }
+            val userId = String(Base64.decode(userHandle, B64_FLAGS), Charsets.UTF_8)
+            userId.substringBefore("::").takeIf { it.isNotBlank() }
         } catch (_: Exception) {
             null
         }
