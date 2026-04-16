@@ -18,6 +18,7 @@ import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
 class CreateAccountPasskeyViewModel(
@@ -62,6 +63,8 @@ class CreateAccountPasskeyViewModel(
                 predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Monero)
                 success = accountType
                 error = null
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 error = e.message
                 success = null
