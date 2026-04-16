@@ -105,6 +105,7 @@ enum class StatPage(val key: String) {
     MarketOverview("market_overview"),
     MarketSearch("market_search"),
     NewWallet("new_wallet"),
+    NewWalletPasskey("new_wallet_passkey"),
     NewWalletAdvanced("new_wallet_advanced"),
     PrivateKeys("private_keys"),
     Privacy("privacy"),

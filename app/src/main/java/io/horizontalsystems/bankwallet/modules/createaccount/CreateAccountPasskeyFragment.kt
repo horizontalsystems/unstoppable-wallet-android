@@ -21,6 +21,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statAccountType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -67,6 +71,10 @@ fun CreateAccountPasskeyScreen(
             )
             delay(300)
             navController.popBackStack(popUpToInclusiveId, inclusive)
+            stat(
+                page = StatPage.NewWalletPasskey,
+                event = StatEvent.CreateWallet(uiState.success.statAccountType)
+            )
         }
     }
 
