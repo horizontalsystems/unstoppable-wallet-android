@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.createaccount
 
-import android.app.Activity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -90,7 +89,7 @@ fun CreateAccountPasskeyScreen(
                     scope.launch {
                         try {
                             val entropy = App.passkeyManager.register(
-                                activity = context as Activity,
+                                context = context,
                                 accountName = accountName,
                             )
                             viewModel.createAccount(entropy)

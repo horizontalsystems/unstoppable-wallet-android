@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.app.Activity
+import android.content.Context
 import android.util.Base64
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.CreatePublicKeyCredentialResponse
@@ -26,8 +26,8 @@ class PasskeyManager {
      *
      * @return entropy bytes to derive a mnemonic from
      */
-    suspend fun register(activity: Activity, accountName: String): ByteArray {
-        val credentialManager = CredentialManager.create(activity)
+    suspend fun register(context: Context, accountName: String): ByteArray {
+        val credentialManager = CredentialManager.create(context)
         val prfSalt = PRF_SALT.toByteArray(Charsets.UTF_8)
 
         // Step 1: register the passkey. PRF output is not returned on create — only on assertion.
@@ -43,7 +43,7 @@ class PasskeyManager {
             byteArrayOf(nameBytes.size.toByte()) + nameBytes + nonce
         }
         val registerResponse = credentialManager.createCredential(
-            context = activity,
+            context = context,
             request = CreatePublicKeyCredentialRequest(
                 requestJson = buildRegisterJson(registerChallenge, userId, prfSalt, accountName)
             ),
@@ -54,7 +54,7 @@ class PasskeyManager {
         // Step 2: assert immediately with PRF eval to get the deterministic entropy.
         val assertChallenge = ByteArray(32).also { SecureRandom().nextBytes(it) }
         val assertResult = credentialManager.getCredential(
-            context = activity,
+            context = context,
             request = GetCredentialRequest(
                 listOf(
                     GetPublicKeyCredentialOption(
@@ -72,13 +72,13 @@ class PasskeyManager {
      *
      * @return Pair of (entropy bytes, optional account name embedded in the credential's user.name)
      */
-    suspend fun authenticate(activity: Activity): Pair<ByteArray, String?> {
-        val credentialManager = CredentialManager.create(activity)
+    suspend fun authenticate(context: Context): Pair<ByteArray, String?> {
+        val credentialManager = CredentialManager.create(context)
         val prfSalt = PRF_SALT.toByteArray(Charsets.UTF_8)
         val challenge = ByteArray(32).also { SecureRandom().nextBytes(it) }
 
         val result = credentialManager.getCredential(
-            context = activity,
+            context = context,
             request = GetCredentialRequest(
                 listOf(
                     GetPublicKeyCredentialOption(

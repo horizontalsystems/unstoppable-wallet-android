@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.importwallet
 
-import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
@@ -177,7 +176,7 @@ private fun ImportWalletScreen(
                     passkeyEnabled = false
                     scope.launch {
                         try {
-                            val (entropy, accountName) = App.passkeyManager.authenticate(context as Activity)
+                            val (entropy, accountName) = App.passkeyManager.authenticate(context)
                             navController.slideFromRight(
                                 R.id.restoreFromPasskeyFragment,
                                 RestoreFromPasskeyFragment.Input(
