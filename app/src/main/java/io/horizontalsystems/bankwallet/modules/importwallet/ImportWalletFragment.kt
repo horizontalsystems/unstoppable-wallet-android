@@ -191,7 +191,7 @@ private fun ImportWalletScreen(
                                 event = StatEvent.Open(StatPage.ImportWalletFromPasskey)
                             )
                         } catch (e: Throwable) {
-                            error = e.message
+                            error = e.message ?: e.javaClass.simpleName
                         } finally {
                             passkeyEnabled = true
                         }

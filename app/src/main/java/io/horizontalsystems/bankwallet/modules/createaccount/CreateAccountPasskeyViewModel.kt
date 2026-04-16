@@ -77,7 +77,7 @@ class CreateAccountPasskeyViewModel(
 
     /** Called by the Fragment when PasskeyManager.register() throws. */
     fun onError(e: Throwable) {
-        error = e.message
+        error = e.message ?: e.javaClass.simpleName
         success = null
         emitState()
     }
