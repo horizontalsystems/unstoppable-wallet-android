@@ -8,10 +8,8 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -47,12 +45,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreFromPasskeyFragment
 import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.Section
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -236,33 +229,6 @@ private fun ImportWalletScreen(
                         }
                     }
                 )
-            }
-        }
-    }
-}
-
-@Composable
-private fun ImportOption(
-    title: String,
-    description: String,
-    icon: Int,
-    onClick: () -> Unit
-) {
-    CellUniversalLawrenceSection {
-        RowUniversal(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            verticalPadding = 24.dp,
-            onClick = onClick,
-        ) {
-            Icon(
-                painterResource(icon),
-                contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
-            )
-            HSpacer(16.dp)
-            Column {
-                headline2_leah(title)
-                subhead2_grey(description)
             }
         }
     }
