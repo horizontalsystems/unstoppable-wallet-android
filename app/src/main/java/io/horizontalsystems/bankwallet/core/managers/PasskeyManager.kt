@@ -43,9 +43,16 @@ class PasskeyManager {
             ),
         ) as CreatePublicKeyCredentialResponse
 
-        val credentialId = JSONObject(registerResponse.registrationResponseJson).getString("id")
+        val registrationJson = registerResponse.registrationResponseJson
+
+        // Some authenticators (e.g. Google Password Manager) return PRF results on create.
+        // Use them directly to avoid a second getCredential call, which would fail because
+        // the newly created passkey may not yet be locally available for assertion.
+        parsePrfOutputOrNull(registrationJson)?.let { return it }
 
         // Step 2: assert immediately with PRF eval to get the deterministic entropy.
+        // Used by authenticators (e.g. Samsung Pass) that only return PRF on assertion.
+        val credentialId = JSONObject(registrationJson).getString("id")
         val assertChallenge = ByteArray(32).also { SecureRandom().nextBytes(it) }
         val assertResult = credentialManager.getCredential(
             context = context,
@@ -165,14 +172,29 @@ class PasskeyManager {
     // Response parsers
     // -------------------------------------------------------------------------
 
-    private fun parsePrfOutput(assertionResponseJson: String): ByteArray {
-        val root = JSONObject(assertionResponseJson)
+    private fun parsePrfOutput(responseJson: String): ByteArray {
+        val root = JSONObject(responseJson)
         val prfResults = root
             .getJSONObject("clientExtensionResults")
             .getJSONObject("prf")
             .getJSONObject("results")
             .getString("first")
         return Base64.decode(prfResults, Base64.URL_SAFE or Base64.NO_PADDING)
+    }
+
+    private fun parsePrfOutputOrNull(responseJson: String): ByteArray? {
+        return try {
+            val first = JSONObject(responseJson)
+                .optJSONObject("clientExtensionResults")
+                ?.optJSONObject("prf")
+                ?.optJSONObject("results")
+                ?.optString("first")
+                ?.takeIf { it.isNotBlank() }
+                ?: return null
+            Base64.decode(first, Base64.URL_SAFE or Base64.NO_PADDING)
+        } catch (_: Exception) {
+            null
+        }
     }
 
     private fun parseAccountName(assertionResponseJson: String): String? {
