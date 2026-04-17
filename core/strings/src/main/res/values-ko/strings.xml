@@ -1453,6 +1453,11 @@
     <string name="SubscriptionInfo_HavePremium">I already have Premium</string>
     <string name="premium_title">프리미엄</string>
     <string name="about_premium">프리미엄 소개</string>
+    <string name="delete_all_contacts_terms_agreement"><![CDATA[암호화폐 주소록 삭제용 PIN 코드 설정에 관한 사용자 동의서<br/><br/>PIN 코드를 설정하면, 귀하는 그 목적이 개인정보 보호를 위한 메커니즘임을 이해하고 있음을 확인하게 됩니다.<br/><b>1. PIN 코드의 보호 기능</b><br/>이 PIN 코드는 제3자에 의한 금융 연관 정보 및 저장된 주소의 노출 가능성을 방지하기 위해 기기에서 암호화폐 주소록을 긴급 삭제하도록 설계되었습니다.<br/><b>2. 작동 방식</b><br/>설정된 PIN 코드를 입력하면 이 기기에 저장된 암호화폐 주소록이 즉시 삭제됩니다.<br/><b>3. 삭제의 불가역성</b><br/>PIN 코드를 입력한 후 주소록 삭제는 최종적이며 되돌릴 수 없습니다.<br/><b>4. 복구 불가</b><br/>주소록이 삭제되면, 사전에 백업을 만들어 두지 않았다면 데이터를 복구할 수 없습니다.<br/><b>5. 로컬 저장</b><br/>주소록은 오직 기기 내에 로컬로 저장되며 개발자나 외부 서버로 전송되지 않습니다.]]></string>
+    <string-array name="delete_all_contacts_terms_checkboxes">
+        <item>PIN 코드가 암호화폐 주소록을 즉시 삭제하는 데 사용된다는 것을 이해합니다.</item>
+        <item>PIN 코드를 입력하면 백업이 없는 경우 복구할 수 없이 주소록이 삭제된다는 것을 이해합니다.</item>
+    </string-array>
     <string name="premium_settings">프리미엄 설정</string>
     <string name="advanced_security">고급 보안</string>
     <string name="AdvancedSecurity_CreateHiddenWallet">Create Hidden Wallet</string>
@@ -1666,6 +1671,9 @@
     <string name="pin_set_for_login_logging">Set a passcode to enable login logging</string>
     <string name="pin_set_for_login_logging_passcode">로그인 로깅 보호를 위한 비밀번호 설정</string>
     <string name="confirm_pin_to_disable_login_logging_passcode">로그인 로깅 비활성화를 위해 비밀번호 입력</string>
+    <string name="pin_set_for_delete_all_contacts">모든 연락처를 삭제하려면 비밀번호를 설정하세요</string>
+    <string name="confirm_pin_to_disable_delete_all_contacts_passcode">모든 연락처 삭제를 비활성화하려면 비밀번호를 입력하세요</string>
+    <string name="disable_delete_contacts_passcode_warning">보안을 위해 이 값에 대해 복사 기능을 사용하지 않는 것을 권장합니다.</string>
     <string name="confirm_pin_to_access_login_logging">로그인 로깅 접근을 위해 비밀번호 입력</string>
     <string name="PinSet_ErrorPinInUse">이 비밀번호는 이미 사용 중입니다.</string>
     <!--Edit Pin-->
@@ -1696,6 +1704,7 @@
     <string name="Contacts_KeepEditing">편집 계속하기</string>
     <string name="Contacts_DiscardChanges_Warning">변경 사항을 취소하시겠습니까?</string>
     <string name="Contacts_NoContacts">추가된 연락처가 없습니다</string>
+    <string name="delete_all_contacts">모든 연락처 삭제</string>
     <string name="Contacts_ActionMore">보다</string>
     <string name="Contacts_Error_DefinedAddress">이 주소는 이미 %s에 사용되었습니다</string>
     <string name="Contacts_Error_DefinedName">해당 이름은 이미 존재합니다</string>

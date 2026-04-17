@@ -1455,6 +1455,11 @@ Uygulama, kolaylık sağlaması için basit bir şifreyle yedek oluşturmanıza 
     <string name="SubscriptionInfo_HavePremium">I already have Premium</string>
     <string name="premium_title">Premium</string>
     <string name="about_premium">Premium Hakkında</string>
+    <string name="delete_all_contacts_terms_agreement"><![CDATA[Kripto adres defterini silmek için PIN kodu oluşturulmasına ilişkin kullanıcı sözleşmesi<br/><br/>Bir PIN kodu oluşturarak, onun amacını gizliliğinizi koruyan bir mekanizma olarak anladığınızı onaylarsınız.<br/><b>1. PIN kodunun koruyucu işlevi</b><br/>Bu PIN kodu, mali bağlantılarınızın ve kayıtlı adreslerinizin üçüncü taraflarca olası şekilde ele geçirilmesini önlemek amacıyla cihazdaki kripto adres defterinin acil olarak silinmesi için tasarlanmıştır.<br/><b>2. Çalışma mekanizması</b><br/>Ayarlanan PIN kodunun girilmesi, bu cihazda saklanan kripto adres defterinizin derhal silinmesine yol açar.<br/><b>3. Silmenin geri döndürülemezliği</b><br/>PIN kodu girildikten sonra adres defterinin silinmesi kesin ve geri döndürülemez bir işlemdir.<br/><b>4. Geri yükleme yok</b><br/>Adres defteri silinirse, önceden bir yedek oluşturulmadıysa veriler geri yüklenemez.<br/><b>5. Yerel saklama</b><br/>Adres defteri yalnızca cihazınızda yerel olarak saklanır ve geliştiricilere veya harici sunuculara aktarılmaz.]]></string>
+    <string-array name="delete_all_contacts_terms_checkboxes">
+        <item>PIN kodunun kripto adres defterini hemen silmek için kullanıldığını anlıyorum.</item>
+        <item>PIN kodunu girdikten sonra adres defterinin, yedek olmadan geri yükleme imkânı olmaksızın silineceğini anlıyorum.</item>
+    </string-array>
     <string name="premium_settings">Premium ayarları</string>
     <string name="advanced_security">Gelişmiş Güvenlik</string>
     <string name="AdvancedSecurity_CreateHiddenWallet">Create Hidden Wallet</string>
@@ -1667,6 +1672,9 @@ Uygulama, kolaylık sağlaması için basit bir şifreyle yedek oluşturmanıza 
     <string name="pin_set_for_login_logging">Set a passcode to enable login logging</string>
     <string name="pin_set_for_login_logging_passcode">Giriş günlüğünü korumak için şifre belirleyin</string>
     <string name="confirm_pin_to_disable_login_logging_passcode">Giriş günlüğünü devre dışı bırakmak için şifreyi girin</string>
+    <string name="pin_set_for_delete_all_contacts">Tüm kişileri silmek için bir kod belirleyin</string>
+    <string name="confirm_pin_to_disable_delete_all_contacts_passcode">Tüm kişileri sil özelliğini kapatmak için kodu girin</string>
+    <string name="disable_delete_contacts_passcode_warning">Güvenlik önlemi olarak, bu değer için kopyalama işlemini kullanmamanızı öneririz.</string>
     <string name="confirm_pin_to_access_login_logging">Giriş günlüğüne erişmek için şifreyi girin</string>
     <string name="PinSet_ErrorPinInUse">Bu şifre zaten kullanılıyor.</string>
     <!--Edit Pin-->
@@ -1697,6 +1705,7 @@ Uygulama, kolaylık sağlaması için basit bir şifreyle yedek oluşturmanıza 
     <string name="Contacts_KeepEditing">Düzenlemeyi sürdür</string>
     <string name="Contacts_DiscardChanges_Warning">Değişiklikleri silmek istediğinizden emin misiniz?</string>
     <string name="Contacts_NoContacts">Eklenmiş bir kişiniz yok</string>
+    <string name="delete_all_contacts">Tüm kişileri sil</string>
     <string name="Contacts_ActionMore">Daha fazla</string>
     <string name="Contacts_Error_DefinedAddress">Bu adres %s için zaten kullanılıyor</string>
     <string name="Contacts_Error_DefinedName">Bu isim zaten mevcut</string>

@@ -1458,6 +1458,11 @@
     <string name="SubscriptionInfo_HavePremium">I already have Premium</string>
     <string name="premium_title">بريميوم</string>
     <string name="about_premium">حول بريميوم</string>
+    <string name="delete_all_contacts_terms_agreement"><![CDATA[اتفاقية المستخدم بشأن إعداد رمز PIN لحذف دفتر عناوين العملات المشفرة<br/><br/>عند إعداد رمز PIN، فإنك تؤكد أنك تفهم الغرض منه كآلية لحماية خصوصيتك.<br/><b>1. الوظيفة الوقائية لرمز PIN</b><br/>هذا الرمز مخصص للحذف الطارئ لدفتر عناوين العملات المشفرة من الجهاز بهدف منع أي كشف محتمل لعلاقاتك المالية والعناوين المحفوظة من قبل أطراف ثالثة.<br/><b>2. آلية العمل</b><br/>سيؤدي إدخال رمز PIN المُعد إلى حذف دفتر عناوين العملات المشفرة المخزن على هذا الجهاز فوراً.<br/><b>3. عدم قابلية الحذف للتراجع</b><br/>يُعد حذف دفتر العناوين بعد إدخال رمز PIN إجراءً نهائياً وغير قابل للتراجع.<br/><b>4. عدم وجود استعادة</b><br/>إذا تم حذف دفتر العناوين، فلن يكون من الممكن استعادة البيانات ما لم يتم إنشاء نسخة احتياطية مسبقاً.<br/><b>5. التخزين المحلي</b><br/>يُخزن دفتر العناوين محلياً على جهازك فقط ولا يتم نقله إلى المطورين أو إلى خوادم خارجية.]]></string>
+    <string-array name="delete_all_contacts_terms_checkboxes">
+        <item>أفهم أن رمز PIN يُستخدم لحذف دفتر عناوين العملات المشفرة فوراً.</item>
+        <item>أفهم أنه بعد إدخال رمز PIN سيتم حذف دفتر العناوين من دون إمكانية الاستعادة من دون نسخة احتياطية.</item>
+    </string-array>
     <string name="premium_settings">إعدادات المميزات المدفوعة</string>
     <string name="advanced_security">أمان متقدم</string>
     <string name="AdvancedSecurity_CreateHiddenWallet">Create Hidden Wallet</string>
@@ -1671,6 +1676,9 @@
     <string name="pin_set_for_login_logging">Set a passcode to enable login logging</string>
     <string name="pin_set_for_login_logging_passcode">تعيين رمز مرور لحماية سجل تسجيل الدخول</string>
     <string name="confirm_pin_to_disable_login_logging_passcode">أدخل رمز المرور لتعطيل سجل تسجيل الدخول</string>
+    <string name="pin_set_for_delete_all_contacts">قم بتعيين رمز مرور لحذف جميع جهات الاتصال</string>
+    <string name="confirm_pin_to_disable_delete_all_contacts_passcode">أدخل رمز المرور لتعطيل حذف جميع جهات الاتصال</string>
+    <string name="disable_delete_contacts_passcode_warning">كإجراء أمني، نوصي بعدم استخدام إجراء النسخ لهذه القيمة.</string>
     <string name="confirm_pin_to_access_login_logging">أدخل رمز المرور للوصول إلى سجل تسجيل الدخول</string>
     <string name="PinSet_ErrorPinInUse">This passcode is already being used.</string>
     <!--Edit Pin-->
@@ -1701,6 +1709,7 @@
     <string name="Contacts_KeepEditing">Keep Editing</string>
     <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard these new changes?</string>
     <string name="Contacts_NoContacts">You do not have an added contact</string>
+    <string name="delete_all_contacts">حذف جميع جهات الاتصال</string>
     <string name="Contacts_ActionMore">More</string>
     <string name="Contacts_Error_DefinedAddress">This address is already used for %s</string>
     <string name="Contacts_Error_DefinedName">The name already exists</string>

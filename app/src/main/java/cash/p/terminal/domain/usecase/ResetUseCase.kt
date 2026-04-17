@@ -94,7 +94,7 @@ class ResetUseCase(
 
     private suspend fun purgeFilesAndCaches() {
         runCatching {
-            contactsRepository.restore(emptyList())
+            contactsRepository.clear()
             File(context.filesDir, CONTACTS_FILE_NAME).delete()
         }.onFailure { Timber.w(it, "Failed clearing contacts") }
 

@@ -1459,6 +1459,11 @@ De app stelt u in staat een back-up te maken met een eenvoudig wachtwoord voor u
     <string name="SubscriptionInfo_HavePremium">I already have Premium</string>
     <string name="premium_title">Premium</string>
     <string name="about_premium">Over Premium</string>
+    <string name="delete_all_contacts_terms_agreement"><![CDATA[Gebruikersovereenkomst voor het instellen van een pincode om het adresboek met crypto-adressen te verwijderen<br/><br/>Door een pincode in te stellen bevestigt u dat u het doel ervan begrijpt als mechanisme ter bescherming van uw privacy.<br/><b>1. Beschermende functie van de pincode</b><br/>Deze pincode is bedoeld voor het noodwissen van het adresboek met crypto-adressen van het apparaat om mogelijke compromittering van uw financiële relaties en opgeslagen adressen door derden te voorkomen.<br/><b>2. Werking</b><br/>Het invoeren van de ingestelde pincode leidt tot onmiddellijke verwijdering van uw adresboek met crypto-adressen dat op dit apparaat is opgeslagen.<br/><b>3. Onomkeerbaarheid van verwijdering</b><br/>Het verwijderen van het adresboek na invoer van de pincode is definitief en onomkeerbaar.<br/><b>4. Geen herstel</b><br/>Als het adresboek is verwijderd, kunnen de gegevens niet worden hersteld tenzij vooraf een back-up is gemaakt.<br/><b>5. Lokale opslag</b><br/>Het adresboek wordt uitsluitend lokaal op uw apparaat opgeslagen en niet doorgegeven aan ontwikkelaars of externe servers.]]></string>
+    <string-array name="delete_all_contacts_terms_checkboxes">
+        <item>Ik begrijp dat de pincode wordt gebruikt om het adresboek met crypto-adressen onmiddellijk te verwijderen.</item>
+        <item>Ik begrijp dat na het invoeren van de pincode het adresboek wordt verwijderd zonder mogelijkheid tot herstel zonder back-up.</item>
+    </string-array>
     <string name="premium_settings">Premium-instellingen</string>
     <string name="advanced_security">Geavanceerde beveiliging</string>
     <string name="AdvancedSecurity_CreateHiddenWallet">Create Hidden Wallet</string>
@@ -1672,6 +1677,9 @@ De app stelt u in staat een back-up te maken met een eenvoudig wachtwoord voor u
     <string name="pin_set_for_login_logging">Set a passcode to enable login logging</string>
     <string name="pin_set_for_login_logging_passcode">Stel een code in om inlogregistratie te beschermen</string>
     <string name="confirm_pin_to_disable_login_logging_passcode">Voer code in om inlogregistratie uit te schakelen</string>
+    <string name="pin_set_for_delete_all_contacts">Stel een toegangscode in om alle contacten te verwijderen</string>
+    <string name="confirm_pin_to_disable_delete_all_contacts_passcode">Voer de toegangscode in om Alle contacten verwijderen uit te schakelen</string>
+    <string name="disable_delete_contacts_passcode_warning">Als veiligheidsmaatregel raden wij aan de kopieerfunctie voor deze waarde niet te gebruiken.</string>
     <string name="confirm_pin_to_access_login_logging">Voer code in voor toegang tot inlogregistratie</string>
     <string name="PinSet_ErrorPinInUse">This passcode is already being used.</string>
     <!--Edit Pin-->
@@ -1702,6 +1710,7 @@ De app stelt u in staat een back-up te maken met een eenvoudig wachtwoord voor u
     <string name="Contacts_KeepEditing">Keep Editing</string>
     <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard these new changes?</string>
     <string name="Contacts_NoContacts">You do not have an added contact</string>
+    <string name="delete_all_contacts">Alle contacten verwijderen</string>
     <string name="Contacts_ActionMore">More</string>
     <string name="Contacts_Error_DefinedAddress">This address is already used for %s</string>
     <string name="Contacts_Error_DefinedName">The name already exists</string>

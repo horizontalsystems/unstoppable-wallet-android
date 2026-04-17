@@ -8,6 +8,7 @@ import cash.p.terminal.modules.pin.PinType
 import cash.p.terminal.modules.pin.SetPinFragment
 import cash.p.terminal.modules.settings.terms.TermsFragment
 import cash.p.terminal.navigation.slideFromBottomForResult
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.navigation.slideFromRightForResult
 
 fun NavController.authorizedAction(
@@ -18,6 +19,7 @@ fun NavController.authorizedAction(
         PinType.REGULAR, PinType.DURESS, PinType.HIDDEN_WALLET, PinType.SECURE_RESET, null -> App.pinComponent.isPinSet
         PinType.TRANSFER -> getKoinInstance<ILocalStorage>().transferPasscodeEnabled
         PinType.TRANSACTIONS_HIDE -> App.pinComponent.isPinSet || getKoinInstance<TransactionHiddenManager>().transactionHiddenFlow.value.transactionAutoHidePinExists
+        PinType.DELETE_CONTACTS -> App.pinComponent.isDeleteContactsPinSet() || App.pinComponent.isPinSet
         PinType.LOG_LOGGING -> App.pinComponent.isLogLoggingPinSet() || App.pinComponent.isPinSet
     }
     if (needEnterPin) {
@@ -53,6 +55,7 @@ fun NavController.ensurePinSet(
 ) {
     val pinSetAlready = when (pinType) {
         PinType.REGULAR -> App.pinComponent.isPinSet
+        PinType.DELETE_CONTACTS -> App.pinComponent.isDeleteContactsPinSet()
         PinType.LOG_LOGGING -> App.pinComponent.isLogLoggingPinSet()
         else -> throw IllegalStateException("Unsupported pin type for ensurePinSet: $pinType")
     }
@@ -99,6 +102,20 @@ fun NavController.authorizedLoggingAction(action: () -> Unit) {
         input = pinType?.let {
             ConfirmPinFragment.InputConfirm(R.string.confirm_pin_to_access_login_logging, it)
         },
+        action = action
+    )
+}
+
+fun NavController.slideToDeleteContactsTerms() {
+    slideFromRight(R.id.deleteContactsTermsFragment)
+}
+
+fun NavController.authorizedDeleteContactsPasscodeAction(action: () -> Unit) {
+    authorizedAction(
+        input = ConfirmPinFragment.InputConfirm(
+            R.string.confirm_pin_to_disable_delete_all_contacts_passcode,
+            PinType.DELETE_CONTACTS
+        ),
         action = action
     )
 }

@@ -18,6 +18,7 @@ import cash.p.terminal.modules.pin.core.LockoutUntilDateFactory
 import cash.p.terminal.modules.pin.core.OneTimeTimer
 import cash.p.terminal.modules.pin.core.OneTimerDelegate
 import cash.p.terminal.modules.pin.core.UptimeProvider
+import cash.p.terminal.modules.pin.core.PinLevels
 import io.horizontalsystems.core.CurrentDateProvider
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.helpers.DateHelper
@@ -136,6 +137,13 @@ class PinConfirmViewModel(
             // Accept LOG_LOGGING PIN, or fallback to REGULAR PIN if not set
             if (pinComponent.isLogLoggingPinSet()) {
                 pinComponent.validateLogLoggingPin(pin)
+            } else {
+                pinComponent.validateCurrentLevel(pin)
+            }
+        }
+        PinType.DELETE_CONTACTS -> {
+            if (pinComponent.isDeleteContactsPinSet()) {
+                pinComponent.getPinLevel(pin) == PinLevels.DELETE_CONTACTS
             } else {
                 pinComponent.validateCurrentLevel(pin)
             }

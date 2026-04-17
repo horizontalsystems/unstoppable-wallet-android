@@ -1445,6 +1445,11 @@ La aplicación le permite crear una copia de seguridad con una contraseña senci
     <string name="SubscriptionInfo_HavePremium">Ya tengo Premium</string>
     <string name="premium_title">Premium</string>
     <string name="about_premium">Acerca de Premium</string>
+    <string name="delete_all_contacts_terms_agreement"><![CDATA[Acuerdo del usuario para establecer un código PIN para eliminar la libreta de direcciones de cripto-direcciones<br/><br/>Al establecer un código PIN, confirma que comprende su propósito como mecanismo para proteger su privacidad.<br/><b>1. Función protectora del código PIN</b><br/>Este código PIN está diseñado para la eliminación de emergencia de la libreta de direcciones de cripto-direcciones del dispositivo con el fin de prevenir una posible exposición de sus vínculos financieros y direcciones guardadas a terceros.<br/><b>2. Mecanismo de funcionamiento</b><br/>Introducir el código PIN configurado provocará la eliminación inmediata de su libreta de direcciones de cripto-direcciones almacenada en este dispositivo.<br/><b>3. Irreversibilidad de la eliminación</b><br/>La eliminación de la libreta de direcciones tras introducir el código PIN es definitiva e irreversible.<br/><b>4. Ausencia de recuperación</b><br/>Si la libreta de direcciones se elimina, los datos no podrán recuperarse, a menos que se haya creado previamente una copia de seguridad.<br/><b>5. Almacenamiento local</b><br/>La libreta de direcciones se almacena exclusivamente de forma local en su dispositivo y no se transfiere a desarrolladores ni a servidores externos.]]></string>
+    <string-array name="delete_all_contacts_terms_checkboxes">
+        <item>Entiendo que el código PIN se utiliza para eliminar de inmediato la libreta de direcciones de cripto-direcciones.</item>
+        <item>Entiendo que, tras introducir el código PIN, la libreta de direcciones se eliminará sin posibilidad de recuperación sin una copia de seguridad.</item>
+    </string-array>
     <string name="premium_settings">Configuración Premium</string>
     <string name="advanced_security">Seguridad avanzada</string>
     <string name="AdvancedSecurity_CreateHiddenWallet">Crear billetera oculta</string>
@@ -1658,6 +1663,9 @@ La aplicación le permite crear una copia de seguridad con una contraseña senci
     <string name="pin_set_for_login_logging">Set a passcode to enable login logging</string>
     <string name="pin_set_for_login_logging_passcode">Establecer código para proteger el registro de inicio de sesión</string>
     <string name="confirm_pin_to_disable_login_logging_passcode">Ingrese el código para desactivar el registro de inicio de sesión</string>
+    <string name="pin_set_for_delete_all_contacts">Establece un código para eliminar todos los contactos</string>
+    <string name="confirm_pin_to_disable_delete_all_contacts_passcode">Introduce el código para desactivar Eliminar todos los contactos</string>
+    <string name="disable_delete_contacts_passcode_warning">Como medida de seguridad, recomendamos no utilizar la acción de copiar para este valor.</string>
     <string name="confirm_pin_to_access_login_logging">Ingrese el código para acceder al registro de inicio de sesión</string>
     <string name="PinSet_ErrorPinInUse">Este código de acceso ya está siendo usado.</string>
     <!--Edit Pin-->
@@ -1688,6 +1696,7 @@ La aplicación le permite crear una copia de seguridad con una contraseña senci
     <string name="Contacts_KeepEditing">Sigue editando</string>
     <string name="Contacts_DiscardChanges_Warning">¿Estás seguro de que quieres descartar estos nuevos cambios?</string>
     <string name="Contacts_NoContacts">No tienes un contacto añadido</string>
+    <string name="delete_all_contacts">Eliminar todos los contactos</string>
     <string name="Contacts_ActionMore">Más</string>
     <string name="Contacts_Error_DefinedAddress">Esta dirección ya está en uso para %s</string>
     <string name="Contacts_Error_DefinedName">El nombre ya existe</string>

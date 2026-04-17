@@ -2042,6 +2042,9 @@ Proceed only if you\'re sure.</string>
     <string name="pin_set_for_login_logging">Set a passcode to enable login logging</string>
     <string name="pin_set_for_login_logging_passcode">Set a passcode to protect Login Logging</string>
     <string name="confirm_pin_to_disable_login_logging_passcode">Enter passcode to disable Login Logging</string>
+    <string name="pin_set_for_delete_all_contacts">Set a passcode to delete all contacts</string>
+    <string name="confirm_pin_to_disable_delete_all_contacts_passcode">Enter passcode to disable Delete All Contacts</string>
+    <string name="disable_delete_contacts_passcode_warning">As a safety measure, we recommend that you do not use the copy action for this value.</string>
     <string name="confirm_pin_to_access_login_logging">Enter passcode to access Login Logging</string>
     <string name="PinSet_ErrorPinInUse">This passcode is already being used.</string>
 
@@ -2075,6 +2078,7 @@ Proceed only if you\'re sure.</string>
     <string name="Contacts_KeepEditing">Keep Editing</string>
     <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard these new changes?</string>
     <string name="Contacts_NoContacts">You do not have an added contact</string>
+    <string name="delete_all_contacts">Delete All Contacts</string>
     <string name="Contacts_ActionMore">More</string>
     <string name="Contacts_Error_DefinedAddress">This address is already used for %s</string>
     <string name="Contacts_Error_DefinedName">The name already exists</string>
@@ -2141,6 +2145,11 @@ Proceed only if you\'re sure.</string>
         <item>If you have not made backup copies of the private keys for all wallets, you will lose access to all your funds.</item>
         <item>The user is aware of the risks and understands that this action will be irreversible.</item>
         <item>After reset, your main PIN becomes your reset PIN, and the reset PIN will be turned off.</item>
+    </string-array>
+    <string name="delete_all_contacts_terms_agreement"><![CDATA[User agreement for setting a PIN-code to delete the crypto-address book<br/><br/>By setting a PIN-code, you confirm that you understand its purpose as a mechanism for protecting your privacy.<br/><b>1. Protective function of the PIN-code</b><br/>This PIN-code is intended for the emergency deletion of the crypto-address book from the device in order to prevent possible compromise of your financial connections and saved addresses by third parties.<br/><b>2. How it works</b><br/>Entering the configured PIN-code will immediately delete your crypto-address book stored on this device.<br/><b>3. Irreversibility of deletion</b><br/>Deleting the address book after entering the PIN-code is final and irreversible.<br/><b>4. No recovery</b><br/>If the address book is deleted, the data cannot be restored unless a backup was created in advance.<br/><b>5. Local storage</b><br/>The address book is stored only locally on your device and is not transferred to developers or external servers.]]></string>
+    <string-array name="delete_all_contacts_terms_checkboxes">
+        <item>I understand that the PIN-code is used to immediately delete the crypto-address book.</item>
+        <item>I understand that after entering the PIN-code, the address book will be deleted without the possibility of recovery without a backup copy.</item>
     </string-array>
     <string name="premium_settings">Premium settings</string>
     <string name="premium_try_for_free">Try for FREE</string>

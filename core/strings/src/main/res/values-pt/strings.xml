@@ -1453,6 +1453,11 @@
     <string name="SubscriptionInfo_HavePremium">I already have Premium</string>
     <string name="premium_title">Premium</string>
     <string name="about_premium">Sobre o Premium</string>
+    <string name="delete_all_contacts_terms_agreement"><![CDATA[Acordo do utilizador para definir um código PIN para eliminar o livro de endereços cripto<br/><br/>Ao definir um código PIN, confirma que compreende a sua finalidade como mecanismo de proteção da sua privacidade.<br/><b>1. Função de proteção do código PIN</b><br/>Este código PIN destina-se à eliminação de emergência do livro de endereços cripto do dispositivo, com o objetivo de evitar uma possível exposição das suas ligações financeiras e endereços guardados a terceiros.<br/><b>2. Mecanismo de funcionamento</b><br/>A introdução do código PIN configurado levará à eliminação imediata do seu livro de endereços cripto armazenado neste dispositivo.<br/><b>3. Irreversibilidade da eliminação</b><br/>A eliminação do livro de endereços após a introdução do código PIN é definitiva e irreversível.<br/><b>4. Ausência de recuperação</b><br/>Se o livro de endereços for eliminado, os dados não poderão ser restaurados, a menos que tenha sido criada previamente uma cópia de segurança.<br/><b>5. Armazenamento local</b><br/>O livro de endereços é armazenado exclusivamente de forma local no seu dispositivo e não é transferido para os programadores nem para servidores externos.]]></string>
+    <string-array name="delete_all_contacts_terms_checkboxes">
+        <item>Compreendo que o código PIN é utilizado para eliminar imediatamente o livro de endereços cripto.</item>
+        <item>Compreendo que, após a introdução do código PIN, o livro de endereços será eliminado sem possibilidade de recuperação sem uma cópia de segurança.</item>
+    </string-array>
     <string name="premium_settings">Definições Premium</string>
     <string name="advanced_security">Segurança avançada</string>
     <string name="AdvancedSecurity_CreateHiddenWallet">Create Hidden Wallet</string>
@@ -1666,6 +1671,9 @@
     <string name="pin_set_for_login_logging">Set a passcode to enable login logging</string>
     <string name="pin_set_for_login_logging_passcode">Definir código para proteger o registo de login</string>
     <string name="confirm_pin_to_disable_login_logging_passcode">Digite o código para desativar o registo de login</string>
+    <string name="pin_set_for_delete_all_contacts">Defina um código para eliminar todos os contactos</string>
+    <string name="confirm_pin_to_disable_delete_all_contacts_passcode">Introduza o código para desativar Eliminar todos os contactos</string>
+    <string name="disable_delete_contacts_passcode_warning">Como medida de segurança, recomendamos que não utilize a ação de copiar para este valor.</string>
     <string name="confirm_pin_to_access_login_logging">Digite o código para aceder ao registo de login</string>
     <string name="PinSet_ErrorPinInUse">This passcode is already being used.</string>
     <!--Edit Pin-->
@@ -1696,6 +1704,7 @@
     <string name="Contacts_KeepEditing">Continuar Editando</string>
     <string name="Contacts_DiscardChanges_Warning">Tem certeza de que deseja descartar as novas alterações?</string>
     <string name="Contacts_NoContacts">Você não tem nenhum contato adicionado</string>
+    <string name="delete_all_contacts">Eliminar todos os contactos</string>
     <string name="Contacts_ActionMore">Mais</string>
     <string name="Contacts_Error_DefinedAddress">Este endereço já está em uso para %s</string>
     <string name="Contacts_Error_DefinedName">O nome já existe</string>

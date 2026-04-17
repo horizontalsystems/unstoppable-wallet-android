@@ -14,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
@@ -42,7 +43,7 @@ class ContactsRepository(
         get() = gson.toJson(contacts.map { ContactJson(it) })
 
     private val _contactsFlow = MutableStateFlow(contacts)
-    val contactsFlow: StateFlow<List<Contact>> = _contactsFlow
+    val contactsFlow: StateFlow<List<Contact>> = _contactsFlow.asStateFlow()
 
     fun getContactsFiltered(
         blockchainType: BlockchainType? = null,
@@ -111,20 +112,16 @@ class ContactsRepository(
 
     fun save(contact: Contact) {
         contactsMap[contact.uid] = contact
-        _contactsFlow.update { contacts }
-
-        coroutineScope.launch {
-            writeToFile()
-        }
+        publishContacts()
     }
 
-    fun restore(contacts: List<Contact>) {
+    fun restore(contacts: List<Contact>, writeSynchronously: Boolean = false) {
         contactsMap = contacts.associateBy { it.uid }.toMutableMap()
-        _contactsFlow.update { contacts }
+        publishContacts(writeSynchronously)
+    }
 
-        coroutineScope.launch {
-            writeToFile()
-        }
+    fun clear(writeSynchronously: Boolean = false) {
+        restore(emptyList(), writeSynchronously)
     }
 
     fun get(id: String): Contact? {
@@ -133,11 +130,7 @@ class ContactsRepository(
 
     fun delete(id: String) {
         contactsMap.remove(id)
-        _contactsFlow.update { contacts }
-
-        coroutineScope.launch {
-            writeToFile()
-        }
+        publishContacts()
     }
 
     private fun parseAndRestore(json: String) {
@@ -149,10 +142,7 @@ class ContactsRepository(
 
     fun restore(json: String) {
         parseAndRestore(json)
-
-        coroutineScope.launch {
-            writeToFile()
-        }
+        publishContacts()
     }
 
     private fun readFromFile() {
@@ -194,6 +184,18 @@ class ContactsRepository(
             }
         } catch (e: Throwable) {
             logger.warning("writeToFile() error", e)
+        }
+    }
+
+    private fun publishContacts(writeSynchronously: Boolean = false) {
+        _contactsFlow.update { contacts }
+
+        if (writeSynchronously) {
+            writeToFile()
+        } else {
+            coroutineScope.launch {
+                writeToFile()
+            }
         }
     }
 

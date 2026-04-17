@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.modules.address.AddressHandlerFactory
 import cash.p.terminal.modules.contacts.model.Contact
@@ -12,13 +13,18 @@ import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.modules.contacts.viewmodel.AddressViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactsViewModel
+import io.horizontalsystems.core.IPinComponent
 
 object ContactsModule {
 
     class ContactsViewModelFactory(private val mode: Mode) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ContactsViewModel(App.contactsRepository, mode) as T
+            return ContactsViewModel(
+                repository = getKoinInstance<ContactsRepository>(),
+                mode = mode,
+                pinComponent = getKoinInstance<IPinComponent>()
+            ) as T
         }
     }
 
@@ -28,7 +34,7 @@ object ContactsModule {
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ContactViewModel(App.contactsRepository, contact, newAddress) as T
+            return ContactViewModel(getKoinInstance<ContactsRepository>(), contact, newAddress) as T
         }
     }
 
@@ -41,18 +47,13 @@ object ContactsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return AddressViewModel(
                 contactUid,
-                App.contactsRepository,
+                getKoinInstance<ContactsRepository>(),
                 AddressHandlerFactory(AppConfigProvider.udnApiKey),
                 App.marketKit,
                 contactAddress,
                 definedAddresses
             ) as T
         }
-    }
-
-    enum class ContactsAction(@StringRes val title: Int) {
-        Restore(R.string.Contacts_Restore),
-        Backup(R.string.Contacts_Backup)
     }
 
     enum class AddAddressAction(@StringRes val title: Int) {

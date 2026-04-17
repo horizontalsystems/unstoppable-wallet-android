@@ -1596,6 +1596,9 @@
     <string name="pin_set_for_login_logging">Set a passcode to enable login logging</string>
     <string name="pin_set_for_login_logging_passcode">Встановіть код для захисту журналу входу</string>
     <string name="confirm_pin_to_disable_login_logging_passcode">Введіть код для вимкнення журналу входу</string>
+    <string name="pin_set_for_delete_all_contacts">Встановіть код для видалення всіх контактів</string>
+    <string name="confirm_pin_to_disable_delete_all_contacts_passcode">Введіть код, щоб вимкнути Видалити всі контакти</string>
+    <string name="disable_delete_contacts_passcode_warning">З міркувань безпеки ми рекомендуємо не використовувати функцію копіювання для цього значення.</string>
     <string name="confirm_pin_to_access_login_logging">Введіть код для доступу до журналу входу</string>
     <string name="PinSet_ErrorPinInUse">Цей пароль вже використовується.</string>
     <!--Edit Pin-->
@@ -1626,6 +1629,7 @@
     <string name="Contacts_KeepEditing">Продовжити редагування</string>
     <string name="Contacts_DiscardChanges_Warning">Ви справді хочете скасувати ці зміни?</string>
     <string name="Contacts_NoContacts">У вас немає доданих контактів</string>
+    <string name="delete_all_contacts">Видалити всі контакти</string>
     <string name="Contacts_ActionMore">Ще</string>
     <string name="Contacts_Error_DefinedAddress">Ця адреса вже використовується для %s</string>
     <string name="Contacts_Error_DefinedName">Таке ім\'я вже існує</string>
@@ -1847,6 +1851,11 @@
         <item>Якщо ви не зробили резервні копії приватних ключів для всіх гаманців, ви втратите доступ до всіх своїх коштів.</item>
         <item>Користувач усвідомлює ризики та розуміє, що ця дія буде незворотною.</item>
         <item>Після скидання ваш основний PIN-код стане вашим PIN-кодом скидання, а PIN-код скидання буде вимкнено.</item>
+    </string-array>
+    <string name="delete_all_contacts_terms_agreement"><![CDATA[Користувацька угода щодо встановлення PIN-коду для видалення адресної книги криптоадрес<br/><br/>Установлюючи PIN-код, ви підтверджуєте, що розумієте його призначення як механізм захисту вашої конфіденційності.<br/><b>1. Захисна функція PIN-коду</b><br/>Цей PIN-код призначений для екстреного видалення адресної книги криптоадрес з пристрою з метою запобігання можливій компрометації ваших фінансових зв’язків і збережених адрес третіми особами.<br/><b>2. Механізм дії</b><br/>Введення встановленого PIN-коду призведе до негайного видалення вашої адресної книги криптоадрес, збереженої на цьому пристрої.<br/><b>3. Незворотність видалення</b><br/>Видалення адресної книги після введення PIN-коду є остаточною та незворотною дією.<br/><b>4. Відсутність відновлення</b><br/>У разі видалення адресної книги відновлення даних неможливе, якщо заздалегідь не було створено резервну копію.<br/><b>5. Локальне зберігання</b><br/>Адресна книга зберігається виключно локально на вашому пристрої та не передається розробникам або на зовнішні сервери.]]></string>
+    <string-array name="delete_all_contacts_terms_checkboxes">
+        <item>Я розумію, що PIN-код використовується для екстреного видалення адресної книги криптоадрес.</item>
+        <item>Я розумію, що після введення PIN-коду адресну книгу буде видалено без можливості відновлення без резервної копії.</item>
     </string-array>
     <string name="premium_settings">Налаштування Преміум</string>
     <string name="premium_try_for_free">Спробувати БЕЗКОШТОВНО</string>

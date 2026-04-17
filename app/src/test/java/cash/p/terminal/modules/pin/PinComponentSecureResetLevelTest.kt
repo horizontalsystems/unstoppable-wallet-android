@@ -1,18 +1,19 @@
 package cash.p.terminal.modules.pin
 
 import cash.p.terminal.core.App
-import cash.p.terminal.modules.pin.core.PinLevels
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.TestDispatcherProvider
 import cash.p.terminal.core.managers.DefaultUserManager
+import cash.p.terminal.domain.usecase.DeleteAllContactsUseCase
 import cash.p.terminal.modules.pin.core.Pin
 import cash.p.terminal.modules.pin.core.PinDao
 import cash.p.terminal.modules.pin.core.PinDbStorage
-import cash.p.terminal.modules.pin.core.PinManager
 import cash.p.terminal.domain.usecase.ResetUseCase
+import cash.p.terminal.modules.pin.core.PinLevels
+import cash.p.terminal.modules.pin.core.PinManager
 import io.horizontalsystems.core.BackgroundManager
-import io.horizontalsystems.core.IPinSettingsStorage
 import io.horizontalsystems.core.CoreApp
+import io.horizontalsystems.core.IPinSettingsStorage
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.every
@@ -39,7 +40,9 @@ class PinComponentSecureResetLevelTest {
     private val pinSettingsStorage = mockk<IPinSettingsStorage>(relaxed = true)
     private val backgroundManager = mockk<BackgroundManager>(relaxed = true)
     private val resetUseCase = mockk<ResetUseCase>(relaxed = true)
+    private val deleteAllContactsUseCase = mockk<DeleteAllContactsUseCase>(relaxed = true)
     private var secureResetCalled = false
+    private var deleteContactsCalled = false
     private lateinit var pinComponent: PinComponent
     private var currentUserLevel = 0
 
@@ -62,8 +65,12 @@ class PinComponentSecureResetLevelTest {
 
         clearMocks(resetUseCase)
         secureResetCalled = false
+        deleteContactsCalled = false
         coEvery { resetUseCase.invoke() } answers {
             secureResetCalled = true
+        }
+        every { deleteAllContactsUseCase.invoke() } answers {
+            deleteContactsCalled = true
         }
 
         pinComponent = PinComponent(
@@ -72,6 +79,7 @@ class PinComponentSecureResetLevelTest {
             pinDbStorage = pinDbStorage,
             backgroundManager = backgroundManager,
             resetUseCase = resetUseCase,
+            deleteAllContactsUseCase = deleteAllContactsUseCase,
             dispatcherProvider = TestDispatcherProvider(dispatcher, testScope),
             scope = testScope
         )
@@ -144,6 +152,16 @@ class PinComponentSecureResetLevelTest {
     }
 
     @Test
+    fun `delete contacts PIN uses reserved level`() {
+        setUserLevel(0)
+
+        pinComponent.setDeleteContactsPin("2222")
+
+        assertTrue(pinComponent.isDeleteContactsPinSet())
+        assertEquals(PinLevels.DELETE_CONTACTS, pinManager.getPinLevel("2222"))
+    }
+
+    @Test
     fun `disableDuressPin removes PIN from correct level`() {
         setUserLevel(0)
 
@@ -174,6 +192,37 @@ class PinComponentSecureResetLevelTest {
         assertFalse(pinComponent.isSecureResetPinSet())
         assertEquals(0, currentUserLevel)
         assertTrue(secureResetCalled)
+    }
+
+    @Test
+    fun `delete contacts pin clears contacts without unlocking`() = runTest(dispatcher) {
+        setUserLevel(0)
+        pinComponent.setPin("3333")
+        pinComponent.setDeleteContactsPin("4444")
+
+        val unlocked = pinComponent.unlock("4444", pinComponent.getPinLevel("4444"))
+
+        assertFalse(unlocked)
+        assertTrue(deleteContactsCalled)
+        assertTrue(pinComponent.isDeleteContactsPinSet())
+        assertEquals(PinLevels.DELETE_CONTACTS, pinManager.getPinLevel("4444"))
+        assertEquals(0, currentUserLevel)
+    }
+
+    @Test
+    fun `disablePin at duress level keeps delete contacts pin`() {
+        setUserLevel(0)
+        pinComponent.setPin("3333")
+        pinComponent.setDeleteContactsPin("4444")
+        pinComponent.setDuressPin("5555")
+
+        setUserLevel(1)
+        pinComponent.disablePin()
+
+        assertEquals(0, pinManager.getPinLevel("3333"))
+        assertEquals(null, pinManager.getPinLevel("5555"))
+        assertTrue(pinComponent.isDeleteContactsPinSet())
+        assertEquals(PinLevels.DELETE_CONTACTS, pinManager.getPinLevel("4444"))
     }
 
     @Test
@@ -224,6 +273,18 @@ class PinComponentSecureResetLevelTest {
 
         // Secure reset PIN should also be removed (level 10000 > level 0)
         assertFalse(pinComponent.isSecureResetPinSet())
+        assertEquals(null, pinManager.getPinLevel("6666"))
+    }
+
+    @Test
+    fun `disablePin removes delete contacts PIN when exists`() {
+        setUserLevel(0)
+        pinComponent.setPin("5555")
+        pinComponent.setDeleteContactsPin("6666")
+
+        pinComponent.disablePin()
+
+        assertFalse(pinComponent.isDeleteContactsPinSet())
         assertEquals(null, pinManager.getPinLevel("6666"))
     }
 
@@ -323,7 +384,7 @@ private class InMemoryPinDao : PinDao {
     override fun getAll(): List<Pin> = pins.values.toList()
 
     override fun getLastLevelPin(): Pin? = pins.values
-        .filter { it.level != PinLevels.SECURE_RESET && !PinLevels.isLogLoggingLevel(it.level) }
+        .filter { PinLevels.isUserLevel(it.level) }
         .maxByOrNull { it.level }
 
     override fun deleteAllFromLevel(level: Int) {
@@ -353,7 +414,7 @@ private class InMemoryPinDao : PinDao {
         val iterator = pins.iterator()
         while (iterator.hasNext()) {
             val key = iterator.next().key
-            if (key >= logLoggingLevel) {
+            if (key >= logLoggingLevel && key < PinLevels.DELETE_CONTACTS) {
                 iterator.remove()
             }
         }
