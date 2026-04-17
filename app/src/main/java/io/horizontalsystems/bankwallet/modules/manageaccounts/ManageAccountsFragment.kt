@@ -1,22 +1,25 @@
 package io.horizontalsystems.bankwallet.modules.manageaccounts
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -25,18 +28,20 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
-import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsRadioButton
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
-import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
+import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftSelectors
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsIconButton
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderAndy
 
 class ManageAccountsFragment : BaseComposeFragment() {
 
@@ -53,6 +58,8 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
     BackupRequiredAlert(navController)
 
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
+    var searchQuery by remember { mutableStateOf("") }
+    var isSearchActive by remember { mutableStateOf(false) }
 
     val viewItems = viewModel.viewItems
     val finish = viewModel.finish
@@ -61,163 +68,177 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
         navController.popBackStack()
     }
 
+    val args = when (mode) {
+        ManageAccountsModule.Mode.Manage -> ManageAccountsModule.Input(
+            R.id.manageAccountsFragment,
+            false
+        )
+
+        ManageAccountsModule.Mode.Switcher -> ManageAccountsModule.Input(
+            R.id.manageAccountsFragment,
+            true
+        )
+    }
+
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_Title),
         onBack = navController::popBackStack,
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Add),
+                icon = R.drawable.wallet_add_sharp_24,
+                onClick = {
+                    navController.slideFromRight(R.id.addWalletFragment, args)
+                },
+                tint = ComposeAppTheme.colors.grey
+            )
+        )
     ) {
-        LazyColumn(
-            modifier = Modifier.navigationBarsPadding()
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            item {
-                VSpacer(12.dp)
-
-                viewItems?.let { (regularAccounts, watchAccounts) ->
+            if (viewItems == null || (viewItems.first.isEmpty() && viewItems.second.isEmpty())) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(ComposeAppTheme.colors.lawrence),
+                ) {
+                    ListEmptyView(
+                        text = stringResource(R.string.ManageAccounts_NoActiveWallets),
+                        icon = R.drawable.wallet_remove_24
+                    )
+                }
+            } else {
+                val (regularAccounts, watchAccounts) = viewItems
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .imePadding()
+                        .background(ComposeAppTheme.colors.lawrence)
+                        .navigationBarsPadding(),
+                ) {
                     if (regularAccounts.isNotEmpty()) {
-                        AccountsSection(regularAccounts, viewModel, navController)
-                        VSpacer(32.dp)
-                    }
-
-                    if (watchAccounts.isNotEmpty()) {
-                        AccountsSection(watchAccounts, viewModel, navController)
-                        VSpacer(32.dp)
-                    }
-                }
-
-                val args = when (mode) {
-                    ManageAccountsModule.Mode.Manage -> ManageAccountsModule.Input(
-                        R.id.manageAccountsFragment,
-                        false
-                    )
-
-                    ManageAccountsModule.Mode.Switcher -> ManageAccountsModule.Input(
-                        R.id.manageAccountsFragment,
-                        true
-                    )
-                }
-
-                val actions = listOf(
-                    ActionViewItem(
-                        R.drawable.ic_plus,
-                        R.string.ManageAccounts_CreateNewWallet
-                    ) {
-                        navController.navigateWithTermsAccepted {
-                            navController.slideFromRight(R.id.createAccountFragment, args)
-
-                            stat(
-                                page = StatPage.ManageWallets,
-                                event = StatEvent.Open(StatPage.NewWallet)
-                            )
+                        item {
+                            BoxBordered(bottom = true) {
+                                SectionHeaderAndy(title = stringResource(R.string.ManageAccount_Wallets))
+                            }
                         }
-                    },
-                    ActionViewItem(
-                        R.drawable.ic_download_20,
-                        R.string.ManageAccounts_ImportWallet
-                    ) {
-                        navController.slideFromRight(R.id.importWalletFragment, args)
-
-                        stat(
-                            page = StatPage.ManageWallets,
-                            event = StatEvent.Open(StatPage.ImportWallet)
-                        )
-                    },
-                    ActionViewItem(
-                        R.drawable.icon_binocule_20,
-                        R.string.ManageAccounts_WatchAddress
-                    ) {
-                        navController.slideFromRight(R.id.watchAddressFragment, args)
-
-                        stat(
-                            page = StatPage.ManageWallets,
-                            event = StatEvent.Open(StatPage.WatchWallet)
-                        )
+                        regularAccounts.forEach { account ->
+                            item {
+                                AccountCellWrapper(account, viewModel, navController)
+                            }
+                        }
                     }
-                )
-                CellUniversalLawrenceSection(actions) {
-                    RowUniversal(
-                        onClick = it.callback
-                    ) {
-                        Icon(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            painter = painterResource(id = it.icon),
-                            contentDescription = null,
-                            tint = ComposeAppTheme.colors.jacob
-                        )
-                        body_jacob(text = stringResource(id = it.title))
+                    if (watchAccounts.isNotEmpty()) {
+                        item {
+                            BoxBordered(bottom = true) {
+                                SectionHeaderAndy(title = stringResource(R.string.ManageAccount_WatchAddresses))
+                            }
+                        }
+                        watchAccounts.forEach { account ->
+                            item {
+                                AccountCellWrapper(account, viewModel, navController)
+                            }
+                        }
+                    }
+                    item {
+                        VSpacer(32.dp)
                     }
                 }
-
-                VSpacer(32.dp)
             }
+
+            BottomSearchBar(
+                searchQuery = searchQuery,
+                isSearchActive = isSearchActive,
+                onActiveChange = { isSearchActive = it },
+                onSearchQueryChange = { query ->
+                    searchQuery = query
+                    viewModel.updateFilter(query)
+                },
+            )
         }
     }
 }
 
 @Composable
-private fun AccountsSection(
-    accounts: List<AccountViewItem>,
+fun AccountCellWrapper(
+    account: AccountViewItem,
     viewModel: ManageAccountsViewModel,
     navController: NavController
 ) {
-    CellUniversalLawrenceSection(items = accounts) { accountViewItem ->
-        RowUniversal(
-            onClick = {
-                viewModel.onSelect(accountViewItem)
+    AccountCell(
+        accountViewItem = account,
+        onSelect = {
+            viewModel.onSelect(account)
 
-                stat(page = StatPage.ManageWallets, event = StatEvent.Select(StatEntity.Wallet))
-            }
-        ) {
-            HsRadioButton(
-                modifier = Modifier.padding(horizontal = 4.dp),
-                selected = accountViewItem.selected,
-                onClick = {
-                    viewModel.onSelect(accountViewItem)
-                    stat(page = StatPage.ManageWallets, event = StatEvent.Select(StatEntity.Wallet))
-                }
+            stat(
+                page = StatPage.ManageWallets,
+                event = StatEvent.Select(StatEntity.Wallet)
             )
-            Column(modifier = Modifier.weight(1f)) {
-                headline2_leah(text = accountViewItem.title)
-                if (accountViewItem.backupRequired) {
-                    subhead2_lucian(text = stringResource(id = R.string.ManageAccount_BackupRequired_Title))
-                } else if (accountViewItem.migrationRequired) {
-                    subhead2_lucian(text = stringResource(id = R.string.ManageAccount_MigrationRequired_Title))
-                } else {
-                    subhead2_grey(
-                        text = accountViewItem.subtitle,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
-                    )
-                }
-            }
-            if (accountViewItem.isWatchAccount) {
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_binocule_20),
-                    contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
-                )
-            }
+        },
+        onOptionIconClick = {
+            navController.slideFromRight(
+                R.id.manageAccountFragment,
+                ManageAccountFragment.Input(account.accountId)
+            )
 
-            val icon: Int
-            val iconTint: Color
-            if (accountViewItem.showAlertIcon) {
-                icon = R.drawable.icon_warning_2_20
-                iconTint = ComposeAppTheme.colors.lucian
-            } else {
-                icon = R.drawable.ic_more2_20
-                iconTint = ComposeAppTheme.colors.leah
-            }
-
-            ButtonSecondaryCircle(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                icon = icon,
-                tint = iconTint
-            ) {
-                navController.slideFromRight(
-                    R.id.manageAccountFragment,
-                    ManageAccountFragment.Input(accountViewItem.accountId)
-                )
-
-                stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.ManageWallet))
-            }
+            stat(
+                page = StatPage.ManageWallets,
+                event = StatEvent.Open(StatPage.ManageWallet)
+            )
         }
+    )
+}
+
+@Composable
+fun AccountCell(
+    accountViewItem: AccountViewItem,
+    onSelect: (AccountViewItem) -> Unit,
+    onOptionIconClick: (AccountViewItem) -> Unit
+) {
+    val icon: Int
+    val iconTint: Color
+    if (accountViewItem.showAlertIcon) {
+        icon = R.drawable.warning_outline_24
+        iconTint = ComposeAppTheme.colors.lucian
+    } else {
+        icon = R.drawable.threedots_24
+        iconTint = ComposeAppTheme.colors.leah
+    }
+    val subtitle = if (accountViewItem.backupRequired) {
+        stringResource(id = R.string.ManageAccount_BackupRequired_Title)
+            .hs(ComposeAppTheme.colors.lucian)
+    } else if (accountViewItem.migrationRequired) {
+        stringResource(id = R.string.ManageAccount_MigrationRequired_Title)
+            .hs(ComposeAppTheme.colors.lucian)
+    } else {
+        accountViewItem.subtitle.hs
+    }
+
+    BoxBordered(bottom = true) {
+        CellPrimary(
+            left = {
+                CellLeftSelectors(accountViewItem.selected)
+            },
+            middle = {
+                CellMiddleInfo(
+                    title = accountViewItem.title.hs,
+                    subtitle = subtitle
+                )
+            },
+            right = {
+                CellRightControlsIconButton(
+                    icon = icon,
+                    iconTint = iconTint,
+                    onClick = {
+                        onOptionIconClick.invoke(accountViewItem)
+                    }
+                )
+            },
+            onClick = {
+                onSelect.invoke(accountViewItem)
+            }
+        )
     }
 }
+

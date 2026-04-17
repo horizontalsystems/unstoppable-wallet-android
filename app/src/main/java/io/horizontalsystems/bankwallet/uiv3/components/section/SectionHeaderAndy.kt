@@ -24,7 +24,7 @@ fun SectionHeaderAndy(
         modifier = Modifier
             .fillMaxWidth()
             .height(54.dp)
-            .padding(top = 24.dp, start = 16.dp, end = 16.dp),
+            .padding(top = 24.dp, start = 16.dp, end = 16.dp, bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         icon?.let {

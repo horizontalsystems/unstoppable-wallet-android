@@ -27,7 +27,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 @Composable
 fun AddWalletView(
     modifier: Modifier = Modifier,
-    icon: Painter,
+    icon: Painter? = null,
     iconTint: Color = LocalContentColor.current,
     onNewWalletClick: () -> Unit,
     onWalletRestoreClick: () -> Unit,
@@ -37,15 +37,18 @@ fun AddWalletView(
         modifier = modifier.verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Icon(
-            modifier = Modifier
-                .padding(16.dp)
-                .size(72.dp),
-            painter = icon,
-            contentDescription = null,
-            tint = iconTint
-        )
-        VSpacer(24.dp)
+        icon?.let {
+            Icon(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(72.dp),
+                painter = it,
+                contentDescription = null,
+                tint = iconTint
+            )
+            VSpacer(8.dp)
+        }
+        VSpacer(16.dp)
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Section {
                 WalletType(
