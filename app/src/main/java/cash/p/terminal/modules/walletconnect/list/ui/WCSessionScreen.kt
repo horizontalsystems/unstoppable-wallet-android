@@ -127,7 +127,7 @@ fun WCSessionsScreen(
                             title = TranslatableString.ResString(R.string.Info_Title),
                             icon = R.drawable.ic_info_24,
                             onClick = {
-                                FaqManager.showFaqPage(navController, R.string.WalletConnect_info)
+                                FaqManager.showFaqPage(R.string.WalletConnect_info)
                             }
                         )
                     )
