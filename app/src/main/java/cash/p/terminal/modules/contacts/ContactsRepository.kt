@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -191,7 +192,9 @@ class ContactsRepository(
         _contactsFlow.update { contacts }
 
         if (writeSynchronously) {
-            writeToFile()
+            runBlocking(singleDispatcher) {
+                writeToFile()
+            }
         } else {
             coroutineScope.launch {
                 writeToFile()
