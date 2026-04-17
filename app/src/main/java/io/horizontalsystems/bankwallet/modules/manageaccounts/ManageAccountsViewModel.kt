@@ -19,12 +19,18 @@ class ManageAccountsViewModel(
 
     var viewItems by mutableStateOf<Pair<List<AccountViewItem>, List<AccountViewItem>>?>(null)
     var finish by mutableStateOf(false)
+    private var query: String? = null
+    private var accounts: List<Account> = emptyList()
+    private var activeAccount: Account? = null
+
 
     init {
         viewModelScope.launch {
             accountManager.accountsFlowable.asFlow()
                 .collect {
-                    updateViewItems(accountManager.activeAccount, it)
+                    activeAccount = accountManager.activeAccount
+                    accounts = it
+                    updateViewItems()
                 }
         }
 
@@ -32,16 +38,25 @@ class ManageAccountsViewModel(
             accountManager.activeAccountStateFlow
                 .collect { activeAccountState ->
                     if (activeAccountState is ActiveAccountState.ActiveAccount) {
-                        updateViewItems(activeAccountState.account, accountManager.accounts)
+                        activeAccount = activeAccountState.account
+                        accounts = accountManager.accounts
+                        updateViewItems()
                     }
                 }
         }
 
-        updateViewItems(accountManager.activeAccount, accountManager.accounts)
+        activeAccount = accountManager.activeAccount
+        accounts = accountManager.accounts
+        updateViewItems()
     }
 
-    private fun updateViewItems(activeAccount: Account?, accounts: List<Account>) {
+    private fun updateViewItems() {
+        val currentQuery = query
+
         viewItems = accounts
+            .filter {
+                currentQuery.isNullOrEmpty() || it.name.contains(currentQuery, ignoreCase = true)
+            }
             .sortedBy { it.name.lowercase() }
             .map { getViewItem(it, activeAccount) }
             .partition { !it.isWatchAccount }
@@ -64,6 +79,13 @@ class ManageAccountsViewModel(
 
         if (mode == ManageAccountsModule.Mode.Switcher) {
             finish = true
+        }
+    }
+
+    fun updateFilter(q: String) {
+        query = q
+        viewModelScope.launch {
+            updateViewItems()
         }
     }
 }
