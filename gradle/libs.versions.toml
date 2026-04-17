@@ -63,7 +63,7 @@ timber = "5.0.1"
 
 tonKotlin = "0.5.0" # updated for ktor 3.x compatibility
 piratecash-ton = "15ff078"
-piratecash-bitcoin = "6a0e847"
+piratecash-bitcoin = "1c68398"
 stellar-kit = "96bbbc4"
 piratecash-ethereum = "633b922"
 horizontalsystems-blockchain-fee = "393cc14"
