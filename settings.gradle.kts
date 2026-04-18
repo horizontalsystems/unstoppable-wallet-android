@@ -28,3 +28,8 @@ if (file("subscriptions-google-play").exists()) {
 }
 include(":subscriptions-dev")
 include(":subscriptions-fdroid")
+
+include(":dapp-core")
+if (file("dapp-wallet-connect").exists()) {
+    include(":dapp-wallet-connect")
+}
