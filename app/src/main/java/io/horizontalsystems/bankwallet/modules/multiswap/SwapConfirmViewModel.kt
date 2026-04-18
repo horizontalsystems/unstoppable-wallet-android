@@ -3,22 +3,29 @@ package io.horizontalsystems.bankwallet.modules.multiswap
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.entities.SwapRecord
+import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapStatus
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.OneInchException
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.SwapHelper
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.AbstractSendTransactionService
+import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionResult
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -39,7 +46,8 @@ class SwapConfirmViewModel(
     val sendTransactionService: AbstractSendTransactionService,
     private val timerService: TimerService,
     private val priceImpactService: PriceImpactService,
-    private val swapDefenseSystemService: SwapDefenseSystemService
+    private val swapDefenseSystemService: SwapDefenseSystemService,
+    private val backgroundManager: BackgroundManager
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
@@ -62,6 +70,7 @@ class SwapConfirmViewModel(
     private var error: Throwable? = null
     private var initialLoading = true
     private var loading = true
+    private var isInBackground = true
     private var timerState = timerService.stateFlow.value
     private var sendTransactionState = sendTransactionService.stateFlow.value
     private var priceImpactState = priceImpactService.stateFlow.value
@@ -71,6 +80,10 @@ class SwapConfirmViewModel(
     private var amountOutMin: BigDecimal? = null
     private var estimatedTime: Long? = null
     private var quoteFields: List<DataField> = listOf()
+    private var providerSwapId: String? = null
+    private var fromAsset: String? = null
+    private var toAsset: String? = null
+    private var depositAddress: String? = null
     private var fetchFinalQuoteJob: Job? = null
 
     init {
@@ -113,7 +126,9 @@ class SwapConfirmViewModel(
             sendTransactionService.sendTransactionSettingsFlow.collect {
                 sendTransactionSettings = it
 
-                fetchFinalQuote()
+                if (!isInBackground) {
+                    fetchFinalQuote()
+                }
             }
         }
 
@@ -149,6 +164,7 @@ class SwapConfirmViewModel(
                 handleUpdatedPriceImpactState(it)
             }
         }
+
         viewModelScope.launch {
             swapDefenseSystemService.stateFlow.collect {
                 swapDefenseState = it
@@ -157,10 +173,26 @@ class SwapConfirmViewModel(
             }
         }
 
+        viewModelScope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                when (state) {
+                    BackgroundManagerState.EnterBackground -> {
+                        isInBackground = true
+                        fetchFinalQuoteJob?.cancel()
+                        timerService.stop()
+                    }
+                    BackgroundManagerState.EnterForeground -> {
+                        isInBackground = false
+                        if (sendTransactionSettings != null) {
+                            refresh(silent = true)
+                        }
+                    }
+                }
+            }
+        }
+
         sendTransactionService.start(viewModelScope)
         swapDefenseSystemService.start(viewModelScope)
-
-        fetchFinalQuote()
     }
 
     private fun handleUpdatedPriceImpactState(priceImpactState: PriceImpactService.State) {
@@ -193,6 +225,9 @@ class SwapConfirmViewModel(
         hasSettings = sendTransactionService.hasSettings,
         hasNonceSettings = sendTransactionService.hasNonceSettings,
         swapDefenseSystemMessage = swapDefenseState.systemMessage,
+        mevProtectionEnabled = swapDefenseState.mevProtectionEnabled,
+        supportsMevProtection = sendTransactionService.supportsMevProtection,
+        mevProtectionActionAllowed = swapDefenseState.mevProtectionActionAllowed,
         recipient = recipient,
         slippage = slippage,
         estimatedTime = estimatedTime,
@@ -204,6 +239,8 @@ class SwapConfirmViewModel(
     }
 
     fun refresh(silent: Boolean = false) {
+        if (isInBackground) return
+
         if (!silent) {
             loading = true
             emitState()
@@ -228,7 +265,7 @@ class SwapConfirmViewModel(
                     sendTransactionSettings,
                     swapQuote,
                     recipient,
-                    slippage ?: IMultiSwapProvider.DEFAULT_SLIPPAGE
+                    slippage ?: IMultiSwapProvider.DEFAULT_SLIPPAGE,
                 )
 
                 ensureActive()
@@ -238,6 +275,10 @@ class SwapConfirmViewModel(
                 estimatedTime = finalQuote.estimatedTime
                 quoteFields = finalQuote.fields
                 slippage = finalQuote.slippage
+                providerSwapId = finalQuote.providerSwapId
+                fromAsset = finalQuote.fromAsset
+                toAsset = finalQuote.toAsset
+                depositAddress = finalQuote.depositAddress
                 emitState()
 
                 fiatServiceOut.setAmount(amountOut)
@@ -265,7 +306,48 @@ class SwapConfirmViewModel(
 
         stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
 
-        sendTransactionService.sendTransaction(swapDefenseState.mevProtectionEnabled)
+        val result = sendTransactionService.sendTransaction(swapDefenseState.mevProtectionEnabled)
+        saveSwapRecord(result)
+        result
+    }
+
+    private suspend fun saveSwapRecord(result: SendTransactionResult) {
+        val transactionHash = when (result) {
+            is SendTransactionResult.Evm -> result.fullTransaction.transaction.hash.toHexString()
+            is SendTransactionResult.Btc -> result.transactionRecord?.transactionHash
+            is SendTransactionResult.Zcash -> result.transactionHash
+            else -> null
+        }
+
+        val record = SwapRecord(
+            accountId = App.accountManager.activeAccount?.id ?: "",
+            timestamp = System.currentTimeMillis(),
+            providerId = swapProvider.id,
+            providerName = swapProvider.title,
+            tokenInUid = tokenIn.tokenQuery.id,
+            tokenInCoinCode = tokenIn.coin.code,
+            tokenInCoinUid = tokenIn.coin.uid,
+            tokenInBadge = tokenIn.badge,
+            tokenInBlockchainTypeUid = tokenIn.blockchainType.uid,
+            tokenOutUid = tokenOut.tokenQuery.id,
+            tokenOutCoinCode = tokenOut.coin.code,
+            tokenOutCoinUid = tokenOut.coin.uid,
+            tokenOutBadge = tokenOut.badge,
+            tokenOutBlockchainTypeUid = tokenOut.blockchainType.uid,
+            amountIn = amountIn.toPlainString(),
+            amountOut = amountOut?.toPlainString(),
+            amountOutMin = amountOutMin?.toPlainString(),
+            recipientAddress = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut),
+            customRecipientAddress = recipient != null,
+            sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn),
+            transactionHash = transactionHash,
+            providerSwapId = providerSwapId,
+            fromAsset = fromAsset,
+            toAsset = toAsset,
+            depositAddress = depositAddress,
+            status = SwapStatus.Depositing.name,
+        )
+        App.swapRecordManager.save(record)
     }
 
     fun setRecipient(recipient: Address?) {
@@ -282,6 +364,10 @@ class SwapConfirmViewModel(
         refresh()
     }
 
+    fun setMevProtectionEnabled(enabled: Boolean) {
+        swapDefenseSystemService.setSwapProtectionEnabled(enabled)
+    }
+
     companion object {
         fun init(quote: SwapProviderQuote): CreationExtras.() -> SwapConfirmViewModel = {
             val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
@@ -296,7 +382,8 @@ class SwapConfirmViewModel(
                 sendTransactionService,
                 TimerService(),
                 PriceImpactService(PriceImpactLevel.Normal),
-                SwapDefenseSystemService(sendTransactionService.supportsMevProtection, App.paidActionSettingsManager)
+                SwapDefenseSystemService(sendTransactionService.supportsMevProtection, App.paidActionSettingsManager),
+                App.backgroundManager
             )
         }
     }
@@ -325,6 +412,9 @@ data class SwapConfirmUiState(
     val hasSettings: Boolean,
     val hasNonceSettings: Boolean,
     val swapDefenseSystemMessage: DefenseSystemMessage?,
+    val mevProtectionEnabled: Boolean,
+    val supportsMevProtection: Boolean,
+    val mevProtectionActionAllowed: Boolean,
     val recipient: Address?,
     val slippage: BigDecimal?,
     val estimatedTime: Long?,

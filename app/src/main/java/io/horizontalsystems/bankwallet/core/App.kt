@@ -13,11 +13,11 @@ import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
-import com.walletconnect.android.Core
-import com.walletconnect.android.CoreClient
-import com.walletconnect.android.relay.ConnectionType
-import com.walletconnect.web3.wallet.client.Wallet
-import com.walletconnect.web3.wallet.client.Web3Wallet
+import com.reown.android.Core
+import com.reown.android.CoreClient
+import com.reown.android.relay.ConnectionType
+import com.reown.walletkit.client.Wallet
+import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
@@ -100,6 +100,8 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesMenuService
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
+import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
+import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapSyncService
 import io.horizontalsystems.bankwallet.modules.pin.PinComponent
 import io.horizontalsystems.bankwallet.modules.pin.core.PinDbStorage
 import io.horizontalsystems.bankwallet.modules.profeatures.ProFeaturesAuthorizationManager
@@ -218,6 +220,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var roiManager: RoiManager
         lateinit var appIconService: AppIconService
         lateinit var paidActionSettingsManager: PaidActionSettingsManager
+        lateinit var swapRecordManager: SwapRecordManager
+        lateinit var swapSyncService: SwapSyncService
         var trialExpired: Boolean = false
     }
 
@@ -257,6 +261,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             context = this,
             hsApiBaseUrl = appConfig.marketApiBaseUrl,
             hsApiKey = appConfig.marketApiKey,
+            newsApiKey = appConfig.newsApiKey,
         )
 
         priceManager = PriceManager(localStorage)
@@ -301,7 +306,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val solanaWalletManager = SolanaWalletManager(walletManager, accountManager, marketKit)
         solanaKitManager = SolanaKitManager(appConfigProvider, solanaRpcSourceManager, solanaWalletManager, backgroundManager)
 
-        tronKitManager = TronKitManager(appConfigProvider, backgroundManager)
+        tronKitManager = TronKitManager(evmSyncSourceManager, backgroundManager)
         tonKitManager = TonKitManager(backgroundManager)
         stellarKitManager = StellarKitManager(backgroundManager)
 
@@ -328,6 +333,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         scannedTransactionStorage = ScannedTransactionStorage(appDatabase.scannedTransactionDao())
         contactsRepository = ContactsRepository(marketKit)
         recentAddressManager = RecentAddressManager(accountManager, appDatabase.recentAddressDao(), ActionCompletedDelegate)
+        swapRecordManager = SwapRecordManager(accountManager, appDatabase.swapRecordDao())
+        swapSyncService = SwapSyncService(swapRecordManager, appConfigProvider)
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
             walletManager,
@@ -495,7 +502,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         roiManager = RoiManager(localStorage)
 
-        Timber.plant(Timber.DebugTree())
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
         startTasks()
     }
 
@@ -539,11 +548,11 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             connectionType = connectionType,
             application = this,
             onError = { error ->
-                Log.w("AAA", "error", error.throwable)
+                Timber.w(error.throwable)
             },
         )
-        Web3Wallet.initialize(Wallet.Params.Init(core = CoreClient)) { error ->
-            Log.e("AAA", "error", error.throwable)
+        WalletKit.initialize(Wallet.Params.Init(core = CoreClient)) { error ->
+            Timber.e(error.throwable)
         }
     }
 
@@ -614,7 +623,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     private fun startTasks() {
         coroutineScope.launch {
             EthereumKit.init()
-            walletManager.start(restoreSettingsManager, moneroNodeManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager)
+            walletManager.start(restoreSettingsManager, moneroNodeManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager, tronKitManager)
             adapterManager.startAdapterManager()
             marketKit.sync()
             rateAppManager.onAppLaunch()
@@ -622,6 +631,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             pinComponent.initDefaultPinLevel()
             accountManager.clearAccounts()
             wcSessionManager.start()
+            swapSyncService.start()
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 

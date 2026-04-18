@@ -11,4 +11,5 @@ sealed class SendTransactionSettings {
     class Ton : SendTransactionSettings()
     class Zcash : SendTransactionSettings()
     class Monero : SendTransactionSettings()
+    class Solana : SendTransactionSettings()
 }

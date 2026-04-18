@@ -21,7 +21,7 @@ class MarketViewModel(
     localStorage: ILocalStorage
 ) : ViewModelUiState<MarketModule.UiState>() {
 
-    val tabs = Tab.entries.toTypedArray()
+    val tabs = arrayOf(Tab.Coins, Tab.Watchlist)//Tab.entries.toTypedArray()
     private var currency = currencyManager.baseCurrency
 
     private var marketGlobal: MarketGlobal? = null
@@ -59,6 +59,13 @@ class MarketViewModel(
 
     private fun getInitialTab(launchPage: LaunchPage?) = when (launchPage) {
         LaunchPage.Watchlist -> Tab.Watchlist
-        else -> marketStorage.currentMarketTab ?: Tab.Coins
+        else -> {
+            val lastTab = marketStorage.currentMarketTab
+            if (lastTab == Tab.Watchlist || lastTab == Tab.Coins) {
+                lastTab
+            } else {
+                Tab.Coins
+            }
+        }
     }
 }

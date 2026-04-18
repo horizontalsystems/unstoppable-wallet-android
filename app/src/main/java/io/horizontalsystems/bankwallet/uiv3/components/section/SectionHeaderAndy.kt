@@ -41,11 +41,12 @@ fun SectionHeaderAndy(
 
 @Composable
 fun SectionHeader(
+    modifier: Modifier = Modifier,
     title: String,
     icon: Int? = null,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(50.dp)
             .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 12.dp),

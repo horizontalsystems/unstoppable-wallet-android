@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.core.managers.APIClient
+import io.horizontalsystems.bankwallet.core.blockTime
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
@@ -115,6 +116,8 @@ abstract class BaseThorChainProvider(
         return assetsMap
     }
 
+    override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = false
+
     override fun supports(blockchainType: BlockchainType): Boolean {
         // overriding fun supports(tokenFrom: Token, tokenTo: Token) makes this method redundant
         return true
@@ -149,7 +152,8 @@ abstract class BaseThorChainProvider(
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            actionRequired = actionApprove
+            actionRequired = actionApprove,
+            estimationTime = estimatedTime(quoteSwap, tokenOut)
         )
     }
 
@@ -158,19 +162,18 @@ abstract class BaseThorChainProvider(
         tokenOut: Token,
         amountIn: BigDecimal,
         slippage: BigDecimal?,
-        recipient: io.horizontalsystems.bankwallet.entities.Address?,
+        destinationAddress: String?,
         refundAddress: String?,
         fromAddress: String?
     ): Response.QuoteSwap {
         val assetIn = assetsMap[tokenIn]!!
         val assetOut = assetsMap[tokenOut]!!
-        val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
 
         return thornodeAPI.quoteSwap(
             fromAsset = assetIn,
             toAsset = assetOut,
             amount = amountIn.movePointRight(8).toLong(),
-            destination = destination,
+            destination = destinationAddress,
             affiliate = affiliate,
             affiliateBps = affiliateBps,
             streamingInterval = 1,
@@ -184,6 +187,13 @@ abstract class BaseThorChainProvider(
     protected open fun getRefundAddress(tokenIn: Token): String? = null
     protected open fun getFromAddress(tokenIn: Token): String? = null
 
+    private fun estimatedTime(quoteSwap: Response.QuoteSwap, tokenOut: Token): Long {
+        val inbound = quoteSwap.inbound_confirmation_seconds ?: 0L
+        val swap = quoteSwap.streaming_swap_seconds ?: 6L
+        val outbound = (quoteSwap.outbound_delay_seconds ?: 6L) + (tokenOut.blockchainType.blockTime ?: 6L)
+        return inbound + swap + outbound
+    }
+
     override suspend fun fetchFinalQuote(
         tokenIn: Token,
         tokenOut: Token,
@@ -193,7 +203,8 @@ abstract class BaseThorChainProvider(
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         slippage: BigDecimal,
     ): SwapFinalQuote {
-        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, recipient, getRefundAddress(tokenIn), getFromAddress(tokenIn))
+        val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
+        val quoteSwap = quoteSwap(tokenIn, tokenOut, amountIn, slippage, destination, getRefundAddress(tokenIn), getFromAddress(tokenIn))
 
         val amountOut = quoteSwap.expected_amount_out.movePointLeft(8)
 
@@ -222,8 +233,11 @@ abstract class BaseThorChainProvider(
             ),
             priceImpact = null,
             fields = fields,
-            estimatedTime = quoteSwap.total_swap_seconds,
-            slippage = slippage
+            estimatedTime = estimatedTime(quoteSwap, tokenOut),
+            slippage = slippage,
+            fromAsset = assetsMap[tokenIn],
+            toAsset = assetsMap[tokenOut],
+            depositAddress = quoteSwap.inbound_address,
         )
     }
 
@@ -319,7 +333,7 @@ interface ThornodeAPI {
         @Query("from_asset") fromAsset: String,
         @Query("to_asset") toAsset: String,
         @Query("amount") amount: Long,
-        @Query("destination") destination: String,
+        @Query("destination") destination: String?,
         @Query("affiliate") affiliate: String?,
         @Query("affiliate_bps") affiliateBps: Int?,
         @Query("streaming_interval") streamingInterval: Long,
@@ -334,9 +348,9 @@ interface ThornodeAPI {
         data class QuoteSwap(
             val inbound_address: String,
 //  "inbound_confirmation_blocks": 1,
-//  "inbound_confirmation_seconds": 600,
+            val inbound_confirmation_seconds: Long?,
 //  "outbound_delay_blocks": 179,
-//  "outbound_delay_seconds": 1074,
+            val outbound_delay_seconds: Long?,
             val fees: Fees,
 //  "fees": {
 //    "asset": "ETH.ETH",
@@ -362,7 +376,7 @@ interface ThornodeAPI {
 //  "expected_amount_out_streaming": "2035299208",
 //  "max_streaming_quantity": 8,
 //  "streaming_swap_blocks": 7,
-//  "streaming_swap_seconds": 42,
+            val streaming_swap_seconds: Long?,
             val total_swap_seconds: Long?,
         ) {
             data class Fees(

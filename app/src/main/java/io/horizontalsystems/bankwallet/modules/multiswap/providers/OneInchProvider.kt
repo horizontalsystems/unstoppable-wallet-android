@@ -29,12 +29,15 @@ object OneInchProvider : IMultiSwapProvider {
     override val type = SwapProviderType.DEX
     override val aml = true
     override val requireTerms = false
+    override val riskLevel = RiskLevel.CONTROLLED
     private val oneInchKit by lazy { OneInchKit.getInstance(App.appConfigProvider.oneInchApiKey) }
-    private const val PARTNER_FEE: Float = 0.5F
-    private const val PARTNER_ADDRESS: String = "0xe42BBeE8389548fAe35C09072065b7fEc582b590"
+    private const val PARTNER_FEE: Float = 1F
+    private val PARTNER_ADDRESS: String = App.appConfigProvider.oneInchPartnerFeeAddress
 
     // TODO take evmCoinAddress from oneInchKit
     private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+
+    override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = true
 
     override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
         BlockchainType.Ethereum,
@@ -46,7 +49,7 @@ object OneInchProvider : IMultiSwapProvider {
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
         BlockchainType.ArbitrumOne
-        -> true
+            -> true
 
         else -> false
     }
@@ -78,7 +81,8 @@ object OneInchProvider : IMultiSwapProvider {
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, routerAddress, tokenIn)
+            actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, routerAddress, tokenIn),
+            estimationTime = tokenIn.blockchainType.blockTime
         )
     }
 
@@ -143,8 +147,15 @@ object OneInchProvider : IMultiSwapProvider {
             null,
             fields,
             tokenIn.blockchainType.blockTime,
-            slippage
+            slippage,
+            fromAsset = assetId(tokenIn),
+            toAsset = assetId(tokenOut),
         )
+    }
+
+    private fun assetId(token: Token): String = when (val type = token.type) {
+        is TokenType.Eip20 -> type.address
+        else -> evmCoinAddress.hex
     }
 }
 

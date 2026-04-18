@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NoValidKey
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NonPrivateKey
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NotSupportedDerivedType
-import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.stellarkit.StellarKit
 import java.math.BigInteger
@@ -42,33 +41,35 @@ class RestorePrivateKeyViewModel(
         text = input
     }
 
-    fun resolveAccountType(): AccountType? {
+    fun resolveAccountTypes(): List<AccountType> {
         inputState = null
         return try {
-            accountType(text)
+            accountTypes(text)
         } catch (e: Exception) {
             inputState = DataState.Error(
                 Exception(Translator.getString(R.string.Restore_PrivateKey_InvalidKey))
             )
-            null
+            listOf()
         }
     }
 
     @Throws(Exception::class)
-    private fun accountType(text: String): AccountType {
+    private fun accountTypes(text: String): List<AccountType> {
         val textCleaned = text.trim()
 
         if (textCleaned.isEmpty()) {
             throw EmptyText
         }
 
-        if (isValidEthereumPrivateKey(textCleaned)) {
-            val privateKey = Signer.privateKey(textCleaned)
-            return AccountType.EvmPrivateKey(privateKey)
+        getValidPrivateKey(textCleaned)?.let { privateKey ->
+            return listOf(
+                AccountType.EvmPrivateKey(privateKey),
+                AccountType.TronPrivateKey(privateKey),
+            )
         }
 
         if (StellarKit.isValidSecretKey(textCleaned)) {
-            return AccountType.StellarSecretKey(textCleaned)
+            return listOf(AccountType.StellarSecretKey(textCleaned))
         }
 
         try {
@@ -79,7 +80,7 @@ class RestorePrivateKeyViewModel(
             when (extendedKey.derivedType) {
                 HDExtendedKey.DerivedType.Master,
                 HDExtendedKey.DerivedType.Account -> {
-                    return AccountType.HdExtendedKey(extendedKey.serializePrivate())
+                    return listOf(AccountType.HdExtendedKey(extendedKey.serializePrivate()))
                 }
 
                 else -> throw NotSupportedDerivedType
@@ -89,12 +90,12 @@ class RestorePrivateKeyViewModel(
         }
     }
 
-    private fun isValidEthereumPrivateKey(privateKeyHex: String): Boolean {
+    private fun getValidPrivateKey(privateKeyHex: String): BigInteger? {
         try {
             //key should be 32 bytes long
             privateKeyHex.hexToByteArray().let {
                 if (it.size != 32) {
-                    return false
+                    return null
                 }
             }
 
@@ -108,9 +109,13 @@ class RestorePrivateKeyViewModel(
             )
 
             // Check if the private key is greater than zero and less than the order
-            return privateKeyBigInt > BigInteger.ZERO && privateKeyBigInt < secp256k1Order
+            return if (privateKeyBigInt > BigInteger.ZERO && privateKeyBigInt < secp256k1Order) {
+                privateKeyBigInt
+            } else {
+                null
+            }
         } catch (e: NumberFormatException) {
-            return false
+            return null
         }
     }
 }

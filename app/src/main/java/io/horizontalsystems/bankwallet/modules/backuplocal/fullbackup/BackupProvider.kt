@@ -461,7 +461,17 @@ class BackupProvider(
             }
         }.flatten()
 
-        val evmSyncSources = EvmSyncSources(selected = selectedEvmSyncSources, custom = customEvmSyncSources)
+        val tronSyncSource = evmSyncSourceManager.getSyncSource(BlockchainType.Tron)
+        val selectedTronSyncSource = EvmSyncSourceBackup(BlockchainType.Tron.uid, tronSyncSource.uri.toString(), null)
+        val customTronSyncSources = evmSyncSourceManager.customSyncSources(BlockchainType.Tron).map { syncSource ->
+            val auth = syncSource.auth?.let { encrypted(it, passphrase) }
+            EvmSyncSourceBackup(BlockchainType.Tron.uid, syncSource.uri.toString(), auth)
+        }
+
+        val evmSyncSources = EvmSyncSources(
+            selected = selectedEvmSyncSources + selectedTronSyncSource,
+            custom = customEvmSyncSources + customTronSyncSources
+        )
 
         val solanaSyncSource = SolanaSyncSource(BlockchainType.Solana.uid, solanaRpcSourceManager.rpcSource.name)
 

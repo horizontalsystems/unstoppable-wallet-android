@@ -45,6 +45,11 @@ import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_67_68
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_68_69
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_69_70
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_70_71
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_71_72
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_72_73
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_73_74
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_74_75
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_75_76
 import io.horizontalsystems.bankwallet.entities.ActiveAccount
 import io.horizontalsystems.bankwallet.entities.BlockchainSettingRecord
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
@@ -60,6 +65,7 @@ import io.horizontalsystems.bankwallet.entities.ScannedTransaction
 import io.horizontalsystems.bankwallet.entities.SpamScanState
 import io.horizontalsystems.bankwallet.entities.StatRecord
 import io.horizontalsystems.bankwallet.entities.SwapProviderAssetRecord
+import io.horizontalsystems.bankwallet.entities.SwapRecord
 import io.horizontalsystems.bankwallet.entities.SyncerState
 import io.horizontalsystems.bankwallet.entities.TokenAutoEnabledBlockchain
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadataRecord
@@ -75,7 +81,7 @@ import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSe
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
 
-@Database(version = 71, exportSchema = false, entities = [
+@Database(version = 76, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -102,7 +108,8 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConne
     SpamScanState::class,
     RecentAddress::class,
     MoneroNodeRecord::class,
-    SwapProviderAssetRecord::class
+    SwapProviderAssetRecord::class,
+    SwapRecord::class,
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -130,6 +137,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun recentAddressDao(): RecentAddressDao
     abstract fun moneroNodeDao(): MoneroNodeDao
     abstract fun swapProviderAssetDao(): SwapProviderAssetDao
+    abstract fun swapRecordDao(): SwapRecordDao
 
     companion object {
 
@@ -187,6 +195,11 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_68_69,
                             Migration_69_70,
                             Migration_70_71,
+                            Migration_71_72,
+                            Migration_72_73,
+                            Migration_73_74,
+                            Migration_74_75,
+                    Migration_75_76,
                     )
                     .build()
         }

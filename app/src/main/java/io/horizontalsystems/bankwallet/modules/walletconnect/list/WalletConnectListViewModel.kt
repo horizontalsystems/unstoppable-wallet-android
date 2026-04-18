@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.walletconnect.android.CoreClient
-import com.walletconnect.web3.wallet.client.Wallet
-import com.walletconnect.web3.wallet.client.Web3Wallet
+import com.reown.android.CoreClient
+import com.reown.walletkit.client.Wallet
+import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
@@ -88,7 +88,7 @@ class WalletConnectListViewModel(
         }
         connectionResult = when (WalletConnectListModule.getVersionFromUri(uri)) {
             2 -> {
-                Web3Wallet.pair(
+                WalletKit.pair(
                     Wallet.Params.Pair(uri.trim()),
                     onSuccess = {
                         connectionResult = null
@@ -158,7 +158,7 @@ class WalletConnectListViewModel(
     private fun syncPendingRequestsCountMap() {
         viewModelScope.launch(Dispatchers.IO) {
             wcSessionManager.sessions.forEach { session ->
-                val requests = Web3Wallet.getPendingListOfSessionRequests(session.topic)
+                val requests = WalletKit.getPendingListOfSessionRequests(session.topic)
                 pendingRequestCountMap[session.topic] = requests.size
                 pendingRequests = getPendingRequestViewItems(session.topic)
             }
@@ -171,7 +171,7 @@ class WalletConnectListViewModel(
     }
 
     private fun getPendingRequestViewItems(topic: String): List<WCRequestViewItem> {
-        return Web3Wallet.getPendingListOfSessionRequests(topic).map { request ->
+        return WalletKit.getPendingListOfSessionRequests(topic).map { request ->
             val methodData = wcManager.getMethodData(request)
 
             WCRequestViewItem(

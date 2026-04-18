@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
-import com.walletconnect.web3.wallet.client.Wallet
-import com.walletconnect.web3.wallet.client.Web3Wallet
+import com.reown.walletkit.client.Wallet
+import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionStorage
@@ -99,7 +99,7 @@ class WCSessionManager(
     }
 
     private fun getSessions(accountId: String): List<Wallet.Model.Session> {
-        val sessions = Web3Wallet.getListOfActiveSessions()
+        val sessions = WalletKit.getListOfActiveSessions()
         val dbSessions = storage.getSessionsByAccountId(accountId)
 
         val accountSessions = sessions.filter { session ->
@@ -118,7 +118,7 @@ class WCSessionManager(
         val sessions = getSessions(accountId)
         val pendingRequests = mutableListOf<Wallet.Model.SessionRequest>()
         sessions.forEach { session ->
-            pendingRequests.addAll(Web3Wallet.getPendingListOfSessionRequests(session.topic))
+            pendingRequests.addAll(WalletKit.getPendingListOfSessionRequests(session.topic))
         }
         return pendingRequests
     }

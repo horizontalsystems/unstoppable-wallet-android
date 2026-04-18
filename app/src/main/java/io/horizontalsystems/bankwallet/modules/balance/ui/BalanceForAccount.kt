@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,7 +60,7 @@ fun BalanceForAccount(
     val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
 
     val context = LocalContext.current
-    val sheetState = androidx.compose.material3.rememberModalBottomSheetState(
+    val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
     var isWCInvalidUrlBottomSheetVisible by remember { mutableStateOf(false) }
@@ -94,6 +95,42 @@ fun BalanceForAccount(
         else -> Unit
     }
 
+    LaunchedEffect(viewModel.walletConnectRequest) {
+        viewModel.walletConnectRequest?.let { request ->
+            when (val state = viewModel.getWalletConnectSupportState()) {
+                WCManager.SupportState.Supported -> {
+                    viewModel.connectWC(request)
+                }
+
+                WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
+                    navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                }
+
+                is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                    val text =
+                        Translator.getString(R.string.WalletConnect_Error_NeedBackup)
+                    navController.slideFromBottom(
+                        R.id.backupRequiredDialog,
+                        BackupRequiredDialog.Input(state.account, text)
+                    )
+
+                    stat(
+                        page = StatPage.Balance,
+                        event = StatEvent.Open(StatPage.BackupRequired)
+                    )
+                }
+
+                is WCManager.SupportState.NotSupported -> {
+                    navController.slideFromBottom(
+                        R.id.wcAccountTypeNotSupportedDialog,
+                        WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
+                    )
+                }
+            }
+        }
+        viewModel.onWalletConnectRequestHandled()
+    }
+
     BackupRequiredAlert(navController)
     val uiState = viewModel.uiState
 
@@ -110,12 +147,7 @@ fun BalanceForAccount(
                         title = TranslatableString.ResString(R.string.WalletConnect_NewConnect),
                         icon = R.drawable.ic_scan_24,
                         onClick = {
-                            onScanClick(
-                                viewModel,
-                                qrScannerLauncher,
-                                context,
-                                navController
-                            )
+                            onScanClick(qrScannerLauncher, context)
                         }
                     )
                 )
@@ -154,7 +186,7 @@ fun BalanceForAccount(
                         navController,
                         uiState,
                     ) {
-                        onScanClick(viewModel, qrScannerLauncher, context, navController)
+                        onScanClick(qrScannerLauncher, context)
                     }
                 }
 
@@ -186,47 +218,15 @@ fun BalanceForAccount(
 }
 
 private fun onScanClick(
-    viewModel: BalanceViewModel,
     qrScannerLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>,
-    context: Context,
-    navController: NavController
+    context: Context
 ) {
-    when (val state =
-        viewModel.getWalletConnectSupportState()) {
-        WCManager.SupportState.Supported -> {
-            qrScannerLauncher.launch(
-                QRScannerActivity.getScanQrIntent(context, true)
-            )
+    qrScannerLauncher.launch(
+        QRScannerActivity.getScanQrIntent(context, true)
+    )
 
-            stat(
-                page = StatPage.Balance,
-                event = StatEvent.Open(StatPage.ScanQrCode)
-            )
-        }
-
-        WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-            navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
-        }
-
-        is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
-            val text =
-                Translator.getString(R.string.WalletConnect_Error_NeedBackup)
-            navController.slideFromBottom(
-                R.id.backupRequiredDialog,
-                BackupRequiredDialog.Input(state.account, text)
-            )
-
-            stat(
-                page = StatPage.Balance,
-                event = StatEvent.Open(StatPage.BackupRequired)
-            )
-        }
-
-        is WCManager.SupportState.NotSupported -> {
-            navController.slideFromBottom(
-                R.id.wcAccountTypeNotSupportedDialog,
-                WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
-            )
-        }
-    }
+    stat(
+        page = StatPage.Balance,
+        event = StatEvent.Open(StatPage.ScanQrCode)
+    )
 }

@@ -11,11 +11,12 @@ import java.math.BigDecimal
 object MayaProvider : BaseThorChainProvider(
     baseUrl = "https://mayanode.mayachain.info/mayachain/",
     affiliate = "hrz_android",
-    affiliateBps = 50,
+    affiliateBps = 100,
 ) {
     override val id = "mayachain"
     override val title = "Maya Protocol"
     override val icon = R.drawable.swap_provider_maya
+    override val riskLevel = RiskLevel.AUTO
 
     override fun getRefundAddress(tokenIn: Token): String? {
         return if (tokenIn.blockchainType == BlockchainType.Zcash) {

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.uiv3.components.bottomsheet
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,7 +14,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 fun BottomSheetTextBlock(text: String) {
     body_grey(
         text = text,
-        modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp, vertical = 12.dp),
         textAlign = TextAlign.Center
     )
 }

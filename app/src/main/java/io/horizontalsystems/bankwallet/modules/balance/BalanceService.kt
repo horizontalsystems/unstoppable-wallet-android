@@ -130,6 +130,7 @@ class BalanceService(
             allBalanceItems[indexOfFirst] = itemToUpdate.copy(
                 balanceData = adapterRepository.balanceData(wallet),
                 state = adapterRepository.state(wallet),
+                warning = adapterRepository.warning(wallet)
             )
 
             this.allBalanceItems = allBalanceItems

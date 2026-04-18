@@ -72,22 +72,13 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="bitcoin" />
-            </intent-filter>
-            <intent-filter android:label="@string/App_Name">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="ethereum" />
-            </intent-filter>
-            <intent-filter android:label="@string/App_Name">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="toncoin" />
+                <data android:scheme="monero" />
+                <data android:scheme="tron" />
+                <data android:scheme="solana" />
+                <data android:scheme="zcash" />
+                <data android:scheme="litecoin" />
             </intent-filter>
             <intent-filter android:label="@string/App_Name">
                 <action android:name="android.intent.action.VIEW" />

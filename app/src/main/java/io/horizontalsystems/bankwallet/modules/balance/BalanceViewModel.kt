@@ -4,8 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.walletconnect.web3.wallet.client.Wallet.Params.Pair
-import com.walletconnect.web3.wallet.client.Web3Wallet
+import com.reown.walletkit.client.Wallet.Params.Pair
+import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
@@ -69,6 +69,9 @@ class BalanceViewModel(
     private var sortType = service.sortType
 
     var connectionResult by mutableStateOf<WalletConnectListViewModel.ConnectionResult?>(null)
+        private set
+
+    var walletConnectRequest by mutableStateOf<String?>(null)
         private set
 
     private var refreshViewItemsJob: Job? = null
@@ -297,7 +300,7 @@ class BalanceViewModel(
             } else {
                 val wcUriVersion = WalletConnectListModule.getVersionFromUri(scannedText)
                 if (wcUriVersion == 2) {
-                    handleWalletConnectUri(scannedText)
+                    handleWalletConnectRequest(scannedText)
                 } else {
                     handleAddressData(scannedText)
                 }
@@ -308,7 +311,11 @@ class BalanceViewModel(
     private fun handleAddressData(text: String) {
         if (text.contains("//")) {
             //handle this type of uri ton://transfer/<address>
-            val toncoinAddress = ToncoinUriParser.getAddress(text) ?: return
+            val toncoinAddress = ToncoinUriParser.getAddress(text) ?: run {
+                errorMessage = Translator.getString(R.string.Balance_Error_InvalidQrCode)
+                return
+            }
+
             openSendTokenSelect = OpenSendTokenSelect(
                 blockchainTypes = listOf(BlockchainType.Ton),
                 tokenTypes = null,
@@ -356,8 +363,16 @@ class BalanceViewModel(
         }
     }
 
-    private fun handleWalletConnectUri(scannedText: String) {
-        Web3Wallet.pair(Pair(scannedText.trim()),
+    private fun handleWalletConnectRequest(scannedText: String) {
+        walletConnectRequest = scannedText
+    }
+
+    fun onWalletConnectRequestHandled() {
+        walletConnectRequest = null
+    }
+
+    fun connectWC(uri: String) {
+        WalletKit.pair(Pair(uri.trim()),
             onSuccess = {
                 connectionResult = null
             },

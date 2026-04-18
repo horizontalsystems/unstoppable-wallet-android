@@ -47,8 +47,9 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
@@ -267,6 +268,25 @@ fun AppearanceScreen(navController: NavController) {
                 )
             )
 
+            HeaderText(text = stringResource(id = R.string.Appearance_SendScreen))
+            CellUniversalLawrenceSection(
+                listOf(
+                    {
+                        SettingUniversalCell(
+                            title = R.string.Appearance_RecentlySent,
+                            subtitle = R.string.Appearance_RecentlySent_Tip,
+                        ) {
+                            HsSwitch(
+                                checked = uiState.recentlySentEnabled,
+                                onCheckedChange = {
+                                    viewModel.enableRecentlySent(it)
+                                }
+                            )
+                        }
+                    }
+                )
+            )
+
             VSpacer(24.dp)
             HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
             AppIconSection(uiState.appIconOptions) {
@@ -280,47 +300,43 @@ fun AppearanceScreen(navController: NavController) {
         }
         //Dialogs
         if (openThemeSelector) {
-            AlertGroup(
-                stringResource(R.string.Settings_Theme),
-                uiState.themeOptions,
-                { selected ->
-                    viewModel.onEnterTheme(selected)
-                    openThemeSelector = false
+            MenuGroup(
+                title = stringResource(R.string.Settings_Theme),
+                items = uiState.themeOptions.options.map {
+                    MenuItemX(it.title.getString(), it == uiState.themeOptions.selected, it)
                 },
-                { openThemeSelector = false }
+                onDismissRequest = { openThemeSelector = false },
+                onSelectItem = { viewModel.onEnterTheme(it) }
             )
         }
         if (openLaunchPageSelector) {
-            AlertGroup(
-                stringResource(R.string.Settings_LaunchScreen),
-                uiState.launchScreenOptions,
-                { selected ->
-                    viewModel.onEnterLaunchPage(selected)
-                    openLaunchPageSelector = false
+            MenuGroup(
+                title = stringResource(R.string.Settings_LaunchScreen),
+                items = uiState.launchScreenOptions.options.map {
+                    MenuItemX(it.title.getString(), it == uiState.launchScreenOptions.selected, it)
                 },
-                { openLaunchPageSelector = false }
+                onDismissRequest = { openLaunchPageSelector = false },
+                onSelectItem = { viewModel.onEnterLaunchPage(it) }
             )
         }
         if (openBalanceValueSelector) {
-            AlertGroup(
-                stringResource(R.string.Appearance_BalanceValue),
-                uiState.balanceViewTypeOptions,
-                { selected ->
-                    viewModel.onEnterBalanceViewType(selected)
-                    openBalanceValueSelector = false
+            MenuGroup(
+                title = stringResource(R.string.Appearance_BalanceValue),
+                items = uiState.balanceViewTypeOptions.options.map {
+                    MenuItemX(it.title.getString(), it == uiState.balanceViewTypeOptions.selected, it)
                 },
-                { openBalanceValueSelector = false }
+                onDismissRequest = { openBalanceValueSelector = false },
+                onSelectItem = { viewModel.onEnterBalanceViewType(it) }
             )
         }
         if (openPriceChangeIntervalSelector) {
-            AlertGroup(
-                stringResource(R.string.Appearance_PriceChangeInterval),
-                uiState.priceChangeIntervalOptions,
-                { selected ->
-                    viewModel.onSetPriceChangeInterval(selected)
-                    openPriceChangeIntervalSelector = false
+            MenuGroup(
+                title = stringResource(R.string.Appearance_PriceChangeInterval),
+                items = uiState.priceChangeIntervalOptions.options.map {
+                    MenuItemX(it.title.getString(), it == uiState.priceChangeIntervalOptions.selected, it)
                 },
-                { openPriceChangeIntervalSelector = false }
+                onDismissRequest = { openPriceChangeIntervalSelector = false },
+                onSelectItem = { viewModel.onSetPriceChangeInterval(it) }
             )
         }
 

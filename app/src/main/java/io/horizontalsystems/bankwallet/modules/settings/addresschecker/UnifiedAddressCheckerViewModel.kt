@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.addresschecker
 
-import HashDitAddressValidator
 import android.util.Log
+import io.horizontalsystems.bankwallet.core.address.HashDitAddressValidator
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope

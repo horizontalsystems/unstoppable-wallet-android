@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IMarketStorage
+import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.AppVersion
 import io.horizontalsystems.bankwallet.entities.LaunchPage
@@ -97,7 +98,7 @@ class LocalStorageManager(
     private val PRICE_CHANGE_INTERVAL = "price_change_interval"
     private val UI_STATS_ENABLED = "ui_stats_enabled"
     private val LAST_MIGRATION_VERSION = "last_migration_version"
-    private val DISABLED_PAID_ACTIONS = "disabled_paid_actions"
+    private val ENABLED_PAID_ACTIONS = "enabled_paid_actions"
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
@@ -528,6 +529,12 @@ class LocalStorageManager(
             }
         }
 
+    override var recentlySentEnabled: Boolean
+        get() = preferences.getBoolean("recentlySentEnabled", false)
+        set(value) {
+            preferences.edit(commit = true) { putBoolean("recentlySentEnabled", value) }
+        }
+
     override var balanceTabButtonsEnabled: Boolean
         get() = preferences.getBoolean("balanceTabButtonsEnabled", true)
         set(value) {
@@ -651,15 +658,37 @@ class LocalStorageManager(
             }
         }
 
-    private val _disabledPaidActionsFlow = MutableStateFlow(
-        preferences.getStringSet(DISABLED_PAID_ACTIONS, emptySet()) ?: emptySet()
-    )
-    override val disabledPaidActionsFlow = _disabledPaidActionsFlow.asStateFlow()
+    private val defaultEnabledPaidActions = setOf("ScamProtection", "SwapProtection", "Phishing")
 
-    override var disabledPaidActions: Set<String>
-        get() = preferences.getStringSet(DISABLED_PAID_ACTIONS, null) ?: setOf("SecureSend")
+    private val _enabledPaidActionsFlow = MutableStateFlow(
+        preferences.getStringSet(ENABLED_PAID_ACTIONS, null) ?: defaultEnabledPaidActions
+    )
+    override val enabledPaidActionsFlow = _enabledPaidActionsFlow.asStateFlow()
+
+    override var enabledPaidActions: Set<String>
+        get() = preferences.getStringSet(ENABLED_PAID_ACTIONS, null) ?: defaultEnabledPaidActions
         set(value) {
-            preferences.edit().putStringSet(DISABLED_PAID_ACTIONS, value).apply()
-            _disabledPaidActionsFlow.update { value }
+            preferences.edit { putStringSet(ENABLED_PAID_ACTIONS, value) }
+            _enabledPaidActionsFlow.update { value }
         }
+
+    override fun migrateEnabledPaidActionsFromDisabled() {
+        if (!preferences.contains("disabled_paid_actions")) return
+        if (preferences.contains(ENABLED_PAID_ACTIONS)) return
+        val disabled = preferences.getStringSet("disabled_paid_actions", emptySet()) ?: emptySet()
+        val enabled = mutableSetOf<String>()
+        if ("ScamProtection" !in disabled) enabled.add("ScamProtection")
+        if ("SwapProtection" !in disabled) enabled.add("SwapProtection")
+        if ("SecureSend" in disabled) {
+            // User explicitly disabled Secure Send: all checkers OFF
+        } else {
+            // User explicitly enabled Secure Send: all checkers ON
+            enabled.addAll(listOf(
+                AddressCheckType.Phishing.name,
+                AddressCheckType.Blacklist.name,
+                AddressCheckType.Sanction.name,
+            ))
+        }
+        enabledPaidActions = enabled
+    }
 }

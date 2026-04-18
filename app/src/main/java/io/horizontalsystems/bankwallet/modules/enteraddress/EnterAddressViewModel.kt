@@ -4,13 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.address.AddressCheckManager
 import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.core.factories.AddressValidatorFactory
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
-import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.entities.Address
@@ -30,7 +30,9 @@ import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 
 class EnterAddressViewModel(
@@ -43,8 +45,9 @@ class EnterAddressViewModel(
     private val addressValidator: EnterAddressValidator,
     private val addressCheckManager: AddressCheckManager,
     private val allowNull: Boolean,
-    paidActionSettingsManager: PaidActionSettingsManager,
+    private val localStorage: ILocalStorage
 ) : ViewModelUiState<EnterAddressUiState>() {
+    private val recentEnabled = localStorage.recentlySentEnabled
     private var address: Address? = null
     private val canBeSendToAddress: Boolean
         get() = (allowNull || address != null) && !addressValidationInProgress && addressValidationError == null
@@ -59,27 +62,127 @@ class EnterAddressViewModel(
     private var value = ""
     private var inputState: DataState<Address>? = null
     private var parseAddressJob: Job? = null
+    private val checkJobs: MutableMap<AddressCheckType, Job> = mutableMapOf()
+    private var hasPremium = UserSubscriptionManager.isActionAllowed(SecureSend)
 
     private val addressExtractor = AddressExtractor(token.blockchainType, addressUriParser)
-    private val addressCheckEnabled = paidActionSettingsManager.isActionEnabled(SecureSend)
+    private val addressCheckEnabled: Boolean
+        get() = hasPremium && AddressCheckType.entries.any { it.name in localStorage.enabledPaidActions }
+
+    private val recentlySentAddress = if (recentEnabled) recentAddress else null
+
+    private val recentlySentContact: SContact? = if (recentEnabled) {
+        recentAddress?.let { recent ->
+            contactNameAddresses.find { it.contactAddress.address == recentAddress }
+                ?.let { SContact(it.name, recent) }
+        }
+    } else {
+        null
+    }
 
     init {
-        initialAddress?.let {
-            onEnterAddress(initialAddress)
+        initialAddress?.let { onEnterAddress(it) }
+        observeSubscription()
+        observeCheckSettings()
+    }
+
+    private fun cancelAllJobs() {
+        parseAddressJob?.cancel()
+        checkJobs.values.forEach { it.cancel() }
+        checkJobs.clear()
+    }
+
+    private fun buildInitialCheckResults(): Map<AddressCheckType, AddressCheckData> =
+        if (UserSubscriptionManager.isActionAllowed(ScamProtection)) {
+            availableCheckTypes.associateWith { type ->
+                if (isCheckEnabled(type)) AddressCheckData(inProgress = true, disabled = false)
+                else AddressCheckData(inProgress = false, disabled = true)
+            }
+        } else {
+            availableCheckTypes.associateWith {
+                AddressCheckData(inProgress = false, disabled = false, checkResult = AddressCheckResult.NotAllowed)
+            }
         }
 
+    private fun observeSubscription() {
         viewModelScope.launch {
-            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
+            UserSubscriptionManager.activeSubscriptionStateFlow.collect { subscription ->
+                hasPremium = UserSubscriptionManager.isActionAllowed(SecureSend)
                 if (value.isNotEmpty()) {
-                    parseAddressJob?.cancel()
+                    cancelAllJobs()
+                    checkResults = buildInitialCheckResults()
+                    addressValidationInProgress = true
+                    emitState()
                     processAddress(value)
                 }
             }
         }
     }
 
+    private fun observeCheckSettings() {
+        viewModelScope.launch {
+            var previous = localStorage.enabledPaidActions
+            localStorage.enabledPaidActionsFlow.drop(1).collect { enabledActions ->
+                for (type in availableCheckTypes) {
+                    val key = type.name
+                    val wasEnabled = key in previous
+                    val isEnabled = key in enabledActions
+                    if (wasEnabled == isEnabled) continue
+                    val currentAddress = address ?: continue
+                    if (value.isEmpty() || addressValidationError != null) continue
+                    if (!isEnabled) {
+                        checkJobs[type]?.cancel()
+                        checkResults += mapOf(type to AddressCheckData(inProgress = false, disabled = true))
+                        inputState = if (checkResults.none { it.value.checkResult == AddressCheckResult.Detected })
+                            DataState.Success(currentAddress)
+                        else DataState.Error(Exception())
+                        emitState()
+                    } else {
+                        checkResults += mapOf(type to AddressCheckData(inProgress = true, disabled = false))
+                        addressValidationInProgress = true
+                        emitState()
+                        startCheckJob(type, currentAddress)
+                    }
+                }
+                previous = enabledActions
+            }
+        }
+    }
+
+    private fun isCheckEnabled(type: AddressCheckType) = type.name in localStorage.enabledPaidActions
+
+    private fun startCheckJob(type: AddressCheckType, address: Address) {
+        checkJobs[type]?.cancel()
+        checkJobs[type] = viewModelScope.launch(Dispatchers.Default) {
+            val result = try {
+                if (addressCheckManager.isClear(type, address, token)) AddressCheckResult.Clear
+                else AddressCheckResult.Detected
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                AddressCheckResult.NotAvailable
+            }
+            checkResults += mapOf(type to AddressCheckData(inProgress = false, disabled = false, checkResult = result))
+            tryFinalizeProcessing()
+        }
+    }
+
+    private fun tryFinalizeProcessing() {
+        if (!addressValidationInProgress) return
+        if (checkResults.any { it.value.inProgress }) return
+        addressValidationInProgress = false
+        inputState = if (
+            addressValidationError == null &&
+            checkResults.none { it.value.checkResult == AddressCheckResult.Detected }
+        ) DataState.Success(address!!)
+        else DataState.Error(Exception())
+        emitState()
+    }
+
     override fun createState() = EnterAddressUiState(
         canBeSendToAddress = canBeSendToAddress,
+        recentAddress = recentlySentAddress,
+        recentContact = recentlySentContact,
         contacts = contactNameAddresses.map { SContact(it.name, it.contactAddress.address) },
         value = value,
         inputState = inputState,
@@ -87,11 +190,11 @@ class EnterAddressViewModel(
         addressValidationInProgress = addressValidationInProgress,
         addressValidationError = addressValidationError,
         checkResults = checkResults,
-        addressCheckEnabled = addressCheckEnabled,
+        hasPremium = hasPremium
     )
 
     fun onEnterAddress(value: String) {
-        parseAddressJob?.cancel()
+        cancelAllJobs()
 
         address = null
         inputState = null
@@ -107,6 +210,7 @@ class EnterAddressViewModel(
             try {
                 val addressString = addressExtractor.extractAddressFromUri(value.trim())
                 this.value = addressString
+                checkResults = buildInitialCheckResults()
                 emitState()
 
                 processAddress(addressString)
@@ -120,87 +224,65 @@ class EnterAddressViewModel(
     private fun processAddress(addressText: String) {
         parseAddressJob = viewModelScope.launch(Dispatchers.Default) {
             try {
-                val address = parseDomain(addressText)
-                try {
-                    addressValidator.validate(address)
-                    ensureActive()
-
-                    this@EnterAddressViewModel.address = address
-                    addressValidationError = null
-
-                    emitState()
-                } catch (cancellation: CancellationException) {
-                    throw cancellation
-                } catch (e: Throwable) {
-                    ensureActive()
-
-                    this@EnterAddressViewModel.address = null
-                    addressValidationInProgress = false
-                    addressValidationError = e
-
-                    emitState()
-                }
-
-                if (addressValidationError != null) {
-                    checkResults = mapOf()
-                    emitState()
-                } else if (addressCheckEnabled) {
-                    if (UserSubscriptionManager.isActionAllowed(ScamProtection)) {
-                        checkResults = availableCheckTypes.associateWith { AddressCheckData(true) }
-                        emitState()
-
-                        for (type in availableCheckTypes) {
-                            val checkResult = try {
-                                if (addressCheckManager.isClear(type, address, token)) {
-                                    AddressCheckResult.Clear
-                                } else {
-                                    AddressCheckResult.Detected
-                                }
-                            } catch (e: CancellationException) {
-                                throw e
-                            } catch (e: Exception) {
-                                AddressCheckResult.NotAvailable
-                            }
-
-                            ensureActive()
-                            checkResults += mapOf(type to AddressCheckData(false, checkResult))
-                            emitState()
-
-                            if (type == AddressCheckType.Phishing && checkResult == AddressCheckResult.Detected) {
-                                break
-                            }
-                        }
-                    } else {
-                        checkResults = availableCheckTypes.associateWith { AddressCheckData(false, AddressCheckResult.NotAllowed) }
-                        emitState()
-                    }
-                }
-
-                addressValidationInProgress = false
-
-                inputState = if (
-                    addressValidationError == null &&
-                    checkResults.none { it.value.checkResult == AddressCheckResult.Detected }
-                )
-                    DataState.Success(address)
-                else
-                    DataState.Error(Exception())
-
-                emitState()
+                val address = validateAddress(addressText) ?: return@launch
+                dispatchChecks(address)
             } catch (_: CancellationException) {
             } catch (e: Throwable) {
                 inputState = DataState.Error(e)
-
                 ensureActive()
                 emitState()
             }
         }
     }
 
-    private fun parseDomain(addressText: String): Address {
-        return domainParser.supportedHandler(addressText)?.parseAddress(addressText) ?: Address(
-            addressText
-        )
+    private suspend fun validateAddress(addressText: String): Address? {
+        val address = domainParser.supportedHandler(addressText)
+            ?.parseAddress(addressText) ?: Address(addressText)
+        return try {
+            addressValidator.validate(address)
+            currentCoroutineContext().ensureActive()
+            this.address = address
+            addressValidationError = null
+            emitState()
+            address
+        } catch (_: CancellationException) {
+            throw CancellationException()
+        } catch (e: Throwable) {
+            currentCoroutineContext().ensureActive()
+            this.address = null
+            addressValidationInProgress = false
+            addressValidationError = e
+            checkResults = mapOf()
+            inputState = DataState.Error(Exception())
+            emitState()
+            null
+        }
+    }
+
+    private fun dispatchChecks(address: Address) {
+        if (!addressCheckEnabled) {
+            addressValidationInProgress = false
+            inputState = DataState.Success(address)
+            emitState()
+            return
+        }
+        if (!UserSubscriptionManager.isActionAllowed(ScamProtection)) {
+            checkResults = availableCheckTypes.associateWith {
+                AddressCheckData(inProgress = false, disabled = false, checkResult = AddressCheckResult.NotAllowed)
+            }
+            addressValidationInProgress = false
+            inputState = DataState.Success(address)
+            emitState()
+            return
+        }
+        for (type in availableCheckTypes) {
+            if (isCheckEnabled(type)) startCheckJob(type, address)
+            else {
+                checkResults += mapOf(type to AddressCheckData(inProgress = false, disabled = true))
+                emitState()
+            }
+        }
+        tryFinalizeProcessing()
     }
 
     class Factory(
@@ -242,7 +324,7 @@ class EnterAddressViewModel(
                 addressValidator,
                 addressCheckManager,
                 allowNull,
-                App.paidActionSettingsManager
+                App.localStorage
             ) as T
         }
     }
@@ -250,6 +332,8 @@ class EnterAddressViewModel(
 
 data class EnterAddressUiState(
     val canBeSendToAddress: Boolean,
+    val recentAddress: String?,
+    val recentContact: SContact?,
     val contacts: List<SContact>,
     val value: String,
     val inputState: DataState<Address>?,
@@ -257,12 +341,13 @@ data class EnterAddressUiState(
     val addressValidationInProgress: Boolean,
     val addressValidationError: Throwable?,
     val checkResults: Map<AddressCheckType, AddressCheckData>,
-    val addressCheckEnabled: Boolean,
+    val hasPremium: Boolean,
 ) {
     val risky = checkResults.any { result -> result.value.checkResult == AddressCheckResult.Detected }
 }
 
 data class AddressCheckData(
     val inProgress: Boolean,
+    val disabled: Boolean,
     val checkResult: AddressCheckResult = AddressCheckResult.NotAvailable
 )

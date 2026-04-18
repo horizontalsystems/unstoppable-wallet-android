@@ -23,8 +23,8 @@ android {
         applicationId = "io.horizontalsystems.bankwallet"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.compileSdk.get().toInt()
-        versionCode = 161
-        versionName = "0.47.3"
+        versionCode = 165
+        versionName = "0.48.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         resourceConfigurations += listOf("de", "es", "en", "fa", "fr", "ko", "pt", "pt-rBR", "ru", "tr", "zh")
@@ -67,15 +67,25 @@ android {
     }
 
     flavorDimensions += "distribution"
+
+    val uswapApiKeyAndroid = "a32d6d05ef80c878c49eb7692aa6e2b36c4c0c7777b89e2c3c4d8e512a7cea61"
+    val uswapApiKeyFdroid = "6e928d1db31e481ae57d42f34a9b7d58a64d7e2380f7ea696e652bd9a0ee516e"
+    val oneInchFeeAddressAndroid = "0xe42BBeE8389548fAe35C09072065b7fEc582b590"
+    val oneInchFeeAddressFdroid = "0x8009267B9929196f74720F2f1496bbD7B79945F1"
+
     productFlavors {
         create("base") {
             dimension = "distribution"
             signingConfig = signingConfigs.getByName("debug")
+            resValue("string", "uswapApiKey", uswapApiKeyAndroid)
+            resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressAndroid)
         }
 
         create("fdroid") {
             dimension = "distribution"
             buildConfigField("boolean", "FDROID_BUILD", "true")
+            resValue("string", "uswapApiKey", uswapApiKeyFdroid)
+            resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressFdroid)
         }
 
         create("fdroidCi") {
@@ -83,6 +93,8 @@ android {
             applicationIdSuffix = ".fdroidci"
             buildConfigField("boolean", "FDROID_BUILD", "true")
             signingConfig = signingConfigs.getByName("appCenter")
+            resValue("string", "uswapApiKey", uswapApiKeyFdroid)
+            resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressFdroid)
         }
 
         create("ci") {
@@ -90,6 +102,8 @@ android {
             applicationIdSuffix = ".appcenter"
             versionCode = System.getenv("BUILD_NUMBER")?.toIntOrNull() ?: defaultConfig.versionCode
             signingConfig = signingConfigs.getByName("appCenter")
+            resValue("string", "uswapApiKey", uswapApiKeyAndroid)
+            resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressAndroid)
         }
     }
 
@@ -113,27 +127,27 @@ android {
             resValue("string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom")
             resValue("string", "openSeaApiKey", "bfbd6061a33e455c8581b594774fecb3")
             resValue("string", "walletConnectV2Key", "8b4f41c60880a3e3ad57d82fddb30568")
-            resValue("string", "solanaAlchemyApiKey", "PKgWxOMarrHgyMESGjIkJ")
+            resValue("string", "solanaAlchemyApiKey", "PKgWxOMarrHgyMESGjIkJ,BOlzgqJUeGYe5E7K613Fm")
             resValue("string", "solanaJupiterApiKey", "ec901a97-0375-45b1-8b7d-da1ea9934cb0")
             resValue("string", "trongridApiKeys", "33374494-8060-447e-8367-90c5efd4ed95")
             resValue("string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz")
             resValue("string", "oneInchApiKey", "3EttyCzgWb2GLFIRoPIUYM0M4uKAVEcq")
+            resValue("string", "cryptoCompareApiKey", "c8de383886270c3aef172dc56db0fb6cf8dcfc75d415eaf8ed37341b862ea3c2")
             resValue("string", "blocksDecodedEthereumRpc", "https://api-dev.blocksdecoded.com/v1/ethereum-rpc/mainnet")
             resValue("string", "chainalysisBaseUrl", "https://public.chainalysis.com/api/v1/")
             resValue("string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4")
-            resValue("string", "hashDitBaseUrl", "https://api.diting.pro/v2/hashdit/")
-            resValue("string", "hashDitApiKey", "KuyxZfvJXFrpAcztshhYqeWaRusxyGRDDhFYkeIw")
+            resValue("string", "hashDitBaseUrl", "https://service.hashdit.io/v2/hashdit/")
+            resValue("string", "hashDitApiKey", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
             resValue("string", "uswapApiBaseUrl", "https://swap-dev.unstoppable.money/api/v1/")
-            resValue("string", "uswapApiKey", "44fc76602e17e0c8259b6ce3bae3ca90804c6fd8f42ca00e6943a6b1ba7fe242")
         }
 
         release {
             isDebuggable = false
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isShrinkResources = false
             resValue("string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB")
-            resValue("string", "etherscanKey", "IEXTB9RE7MUV2UQ9X238RP146IEJB1J5HS,27S4V3GYJGMCPWQZ2T4SF9355QBQYQ3FI7,YK4KEA3TANM8KZ5J6E2Q1ZIM6YDM8TEABM")
-            resValue("string", "bscscanKey", "FQ2HSNNEHVG71U96P1TF3WF9RTF6AF5MRA,G6K8VZDWYSJHTCRURRITFZ2ZWV48GRGTZQ,R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN,")
+            resValue("string", "etherscanKey", "IEXTB9RE7MUV2UQ9X238RP146IEJB1J5HS,27S4V3GYJGMCPWQZ2T4SF9355QBQYQ3FI7,YK4KEA3TANM8KZ5J6E2Q1ZIM6YDM8TEABM,FU7CYEXQEUSMXJJF8MZR6BNRMP9XT8S9CP")
+            resValue("string", "bscscanKey", "FQ2HSNNEHVG71U96P1TF3WF9RTF6AF5MRA,G6K8VZDWYSJHTCRURRITFZ2ZWV48GRGTZQ,R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN,8QW2JNMPHPUPAACFGXZ3A5PVQY6PBCJPEG")
             resValue("string", "otherScanKey", "Y855XHV4XKUC9DTRM2ZQG8XAQ96EJV221Q,43DEJEEMA1P81YAU555A1TECRY5FPIWCFH")
             resValue("string", "is_release", "true")
             resValue("string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json")
@@ -145,18 +159,18 @@ android {
             resValue("string", "marketApiKey", "IQf1uAjkthZp1i2pYzkXFDom")
             resValue("string", "openSeaApiKey", "bfbd6061a33e455c8581b594774fecb3")
             resValue("string", "walletConnectV2Key", "0c5ca155c2f165a7d0c88686f2113a72")
-            resValue("string", "solanaAlchemyApiKey", "PKgWxOMarrHgyMESGjIkJ")
+            resValue("string", "solanaAlchemyApiKey", "BOlzgqJUeGYe5E7K613Fm,Vmt7ucAGIMEux_c43Qqqf,uCordWq3EOD800awDx1kb,1uAryzn6DOEVs5PIugeoR,PKgWxOMarrHgyMESGjIkJ")
             resValue("string", "solanaJupiterApiKey", "ec901a97-0375-45b1-8b7d-da1ea9934cb0")
-            resValue("string", "trongridApiKeys", "8f5ae2c8-8012-42a8-b0ca-ffc2741f6a29,578aa64f-a79f-4ee8-86e9-e9860e2d050a,1e92f1fc-41f8-401f-a7f6-5b719b6f1280")
+            resValue("string", "trongridApiKeys", "8f5ae2c8-8012-42a8-b0ca-ffc2741f6a29,578aa64f-a79f-4ee8-86e9-e9860e2d050a,1e92f1fc-41f8-401f-a7f6-5b719b6f1280,d1511874-1547-48df-9536-a32cc85949ac")
             resValue("string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz")
             resValue("string", "oneInchApiKey", "3EttyCzgWb2GLFIRoPIUYM0M4uKAVEcq")
+            resValue("string", "cryptoCompareApiKey", "c8de383886270c3aef172dc56db0fb6cf8dcfc75d415eaf8ed37341b862ea3c2")
             resValue("string", "blocksDecodedEthereumRpc", "https://api.blocksdecoded.com/v1/ethereum-rpc/mainnet")
             resValue("string", "chainalysisBaseUrl", "https://public.chainalysis.com/api/v1/")
             resValue("string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4")
             resValue("string", "hashDitBaseUrl", "https://service.hashdit.io/v2/hashdit/")
             resValue("string", "hashDitApiKey", "aGMkgODYiUFtTYrSRcEZsIfPHeASOlGYXClJZNWF")
             resValue("string", "uswapApiBaseUrl", "https://swap-api.unstoppable.money/v1/")
-            resValue("string", "uswapApiKey", "44fc76602e17e0c8259b6ce3bae3ca90804c6fd8f42ca00e6943a6b1ba7fe242")
         }
     }
 
@@ -196,11 +210,16 @@ android {
             substitute(module("com.google.protobuf:protobuf-java:3.6.1")).using(module("com.google.protobuf:protobuf-javalite:3.21.1"))
             substitute(module("net.jcip:jcip-annotations:1.0")).using(module("com.github.stephenc.jcip:jcip-annotations:1.0-1"))
 
-            substitute(module("com.tinder.scarlet:scarlet:0.1.12")).using(module("com.github.WalletConnect.Scarlet:scarlet:1.0.0"))
-            substitute(module("com.tinder.scarlet:websocket-okhttp:0.1.12")).using(module("com.github.WalletConnect.Scarlet:websocket-okhttp:1.0.0"))
-            substitute(module("com.tinder.scarlet:stream-adapter-rxjava2:0.1.12")).using(module("com.github.WalletConnect.Scarlet:stream-adapter-rxjava2:1.0.0"))
-            substitute(module("com.tinder.scarlet:message-adapter-gson:0.1.12")).using(module("com.github.WalletConnect.Scarlet:message-adapter-gson:1.0.0"))
-            substitute(module("com.tinder.scarlet:lifecycle-android:0.1.12")).using(module("com.github.WalletConnect.Scarlet:lifecycle-android:1.0.0"))
+            substitute(module("com.tinder.scarlet:scarlet:0.1.12")).using(module("com.walletconnect.Scarlet:scarlet:1.0.2"))
+            substitute(module("com.tinder.scarlet:websocket-okhttp:0.1.12")).using(module("com.walletconnect.Scarlet:websocket-okhttp:1.0.2"))
+            substitute(module("com.tinder.scarlet:stream-adapter-rxjava2:0.1.12")).using(module("com.walletconnect.Scarlet:stream-adapter-rxjava2:1.0.2"))
+            substitute(module("com.tinder.scarlet:message-adapter-gson:0.1.12")).using(module("com.walletconnect.Scarlet:message-adapter-gson:1.0.2"))
+            substitute(module("com.tinder.scarlet:lifecycle-android:0.1.12")).using(module("com.walletconnect.Scarlet:lifecycle-android:1.0.2"))
+            substitute(module("com.github.WalletConnect.Scarlet:scarlet:1.0.0")).using(module("com.walletconnect.Scarlet:scarlet:1.0.2"))
+            substitute(module("com.github.WalletConnect.Scarlet:websocket-okhttp:1.0.0")).using(module("com.walletconnect.Scarlet:websocket-okhttp:1.0.2"))
+            substitute(module("com.github.WalletConnect.Scarlet:stream-adapter-rxjava2:1.0.0")).using(module("com.walletconnect.Scarlet:stream-adapter-rxjava2:1.0.2"))
+            substitute(module("com.github.WalletConnect.Scarlet:message-adapter-gson:1.0.0")).using(module("com.walletconnect.Scarlet:message-adapter-gson:1.0.2"))
+            substitute(module("com.github.WalletConnect.Scarlet:lifecycle-android:1.0.0")).using(module("com.walletconnect.Scarlet:lifecycle-android:1.0.2"))
         }
 
         resolutionStrategy.eachDependency {
@@ -302,10 +321,14 @@ dependencies {
     api(libs.zxing)
     implementation(libs.qrose)
 
-    // WalletConnect
-    implementation(platform(libs.walletconnect.bom))
-    implementation(libs.walletconnect.web3wallet)
-    implementation(libs.walletconnect.android.core)
+    // Reown (WalletConnect)
+    implementation(platform(libs.reown.bom))
+    implementation(libs.reown.walletkit) {
+        exclude(group = "com.google.firebase")
+    }
+    implementation(libs.reown.android.core) {
+        exclude(group = "com.google.firebase")
+    }
 
     // Web3
     implementation(libs.web3j)
@@ -388,6 +411,8 @@ afterEvaluate {
 configurations.all {
     resolutionStrategy {
         cacheChangingModulesFor(0, TimeUnit.SECONDS)
+        // PowerMock forces junit:4.12 which conflicts with androidTest deps requiring 4.13.2
+        force("junit:junit:4.13.2")
 
         // Force Ktor version for TonKit
         force("io.ktor:ktor-utils:2.3.7")

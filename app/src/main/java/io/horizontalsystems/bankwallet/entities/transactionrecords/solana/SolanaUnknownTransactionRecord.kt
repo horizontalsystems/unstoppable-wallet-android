@@ -9,5 +9,6 @@ class SolanaUnknownTransactionRecord(
         baseToken: Token,
         source: TransactionSource,
         val incomingTransfers: List<Transfer>,
-        val outgoingTransfers: List<Transfer>
-): SolanaTransactionRecord(transaction, baseToken, source)
+        val outgoingTransfers: List<Transfer>,
+        spam: Boolean = false,
+): SolanaTransactionRecord(transaction, baseToken, source, spam)

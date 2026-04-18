@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.session
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.walletconnect.web3.wallet.client.Wallet
+import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -72,6 +72,7 @@ data class WCSessionUiState(
     val blockchainTypes: List<BlockchainType>?,
     val whiteListState: WCWhiteListState?,
     val hasSubscription: Boolean,
+    val scamProtectionActionAllowed: Boolean,
     val closeDialog: Boolean,
 )
 

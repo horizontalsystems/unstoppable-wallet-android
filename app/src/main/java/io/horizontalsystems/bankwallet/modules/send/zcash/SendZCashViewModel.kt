@@ -22,7 +22,9 @@ import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -175,17 +177,25 @@ class SendZCashViewModel(
         try {
             sendResult = SendResult.Sending
 
-            adapter.send(
+            val proposal = adapter.proposeTransfer(
                 amountState.amount!!,
                 addressState.address!!.hex,
-                memoState.memo,
-                logger
+                memoState.memo
             )
 
-            logger.info("success")
+            logger.info("send proposal ready")
             sendResult = SendResult.Sent()
 
-            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Zcash)
+            val address = addressState.address!!
+            CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
+                try {
+                    adapter.sendProposal(proposal)
+                    logger.info("submitted")
+                    recentAddressManager.setRecentAddress(address, BlockchainType.Zcash)
+                } catch (e: Throwable) {
+                    logger.warning("submission failed", e)
+                }
+            }
         } catch (e: Throwable) {
             logger.warning("failed", e)
             sendResult = SendResult.Failed(createCaution(e))

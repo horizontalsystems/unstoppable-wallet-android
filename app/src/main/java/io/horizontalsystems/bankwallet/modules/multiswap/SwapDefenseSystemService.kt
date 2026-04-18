@@ -4,8 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ServiceState
 import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseAlertLevel
-import io.horizontalsystems.bankwallet.uiv3.components.message.DefenseSystemMessage
+import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.SwapProtection
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +35,7 @@ class SwapDefenseSystemService(
         }
 
         coroutineScope.launch(Dispatchers.Default) {
-            paidActionSettingsManager.disabledActionsFlow.collect {
+            paidActionSettingsManager.enabledActionsFlow.collect {
                 refreshMevProtectionEnabled()
                 refreshSystemMessage()
 
@@ -50,9 +49,14 @@ class SwapDefenseSystemService(
         actionEnabled = paidActionSettingsManager.isActionEnabled(SwapProtection)
     }
 
+    fun setSwapProtectionEnabled(enabled: Boolean) {
+        paidActionSettingsManager.setActionEnabled(SwapProtection, enabled)
+    }
+
     override fun createState() = State(
         systemMessage = systemMessage,
-        mevProtectionEnabled = actionAllowed && actionEnabled,
+        mevProtectionEnabled = supportsMevProtection && actionAllowed && actionEnabled,
+        mevProtectionActionAllowed = actionAllowed,
     )
 
     fun setPriceImpact(fiatPriceImpact: BigDecimal?, fiatPriceImpactLevel: PriceImpactLevel?) {
@@ -131,6 +135,22 @@ class SwapDefenseSystemService(
 
     data class State(
         val systemMessage: DefenseSystemMessage?,
-        val mevProtectionEnabled: Boolean
+        val mevProtectionEnabled: Boolean,
+        val mevProtectionActionAllowed: Boolean,
     )
+}
+
+data class DefenseSystemMessage(
+    val level: DefenseAlertLevel,
+    val title: TranslatableString,
+    val body: TranslatableString,
+    val actionText: TranslatableString? = null,
+    val requiredPaidAction: IPaidAction? = null
+)
+
+enum class DefenseAlertLevel {
+    WARNING,
+    IDLE,
+    DANGER,
+    SAFE
 }

@@ -104,6 +104,11 @@ class ManageAccountViewModel(
                 KeyAction.PublicKeys,
             )
 
+            is AccountType.TronPrivateKey -> listOf(
+                KeyAction.PrivateKeys,
+                KeyAction.PublicKeys,
+            )
+
             is AccountType.StellarSecretKey -> listOf(
                 KeyAction.PrivateKeys
             )

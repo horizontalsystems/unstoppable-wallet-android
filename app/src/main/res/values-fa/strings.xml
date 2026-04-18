@@ -3,9 +3,8 @@
     <!--Common-->
     <string name="Alert_Cancel">انصراف</string>
     <string name="Alert_Copy">رونوشت</string>
-    <string name="Alert_Loading">درحال بارگذاری...</string>
     <string name="Button_Show">نمایش</string>
-    <string name="Button_Cancel">کنسل</string>
+    <string name="Button_Cancel">انصراف</string>
     <string name="Button_Next">بعدي</string>
     <string name="Button_Enable">فعال کردن</string>
     <string name="Button_Disable">غیرفعال</string>
@@ -73,11 +72,10 @@
     <string name="Restore_InvalidChecksum">Checksum نامعتبر است</string>
     <string name="Restore_Title">انتخاب زنجیره های بلوکی</string>
     <string name="Restore_By">By</string>
-    <string name="Restore_RestoreBy">Restore By</string>
+    <string name="Restore_RestoreBy">By</string>
     <string name="Restore_PhraseHint">Enter 12, 15, 18, 21 or 24 words</string>
     <string name="Restore_NonStandardRestore">Non-Standard Restore</string>
     <string name="Restore_BirthdayHeight">قد تولد</string>
-    <string name="Restore_ZCash_NewWallet">کیف پول جدید</string>
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_PriceDiff">قیمت</string>
@@ -108,11 +106,9 @@
     <string name="Balance_SyncedUntil">تا %s</string>
     <string name="Balance_Syncing">همزمانی…</string>
     <string name="Balance_SearchingTransactions">در جستجوی تراکنش ها…</string>
-    <string name="Balance_Syncing_WithProgress">همزمانی... %%%s</string>
-    <string name="Balance_Sort_Balance">مانده حساب</string>
+    <string name="Balance_Sort_Balance">بالانس</string>
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Balance_Sort_Az">نام</string>
-    <string name="Balance_Sort_24hPriceChange">تغییر قیمت</string>
     <!--Send NFT-->
     <string name="SendNft_Title">ارسال</string>
     <!--Send-->
@@ -182,7 +178,7 @@
     <string name="WalletConnect_Error_NoSuitableEvmKit">بدون کیت evm مناسب</string>
     <string name="WalletConnect_Error_RequestNotFoundError">خطای درخواست یافت نشد</string>
     <string name="WalletConnect_NoConnection">شما هیچ برنامه متصل ندارید</string>
-    <string name="WalletConnect_PendingRequests">درخواست های معلق</string>
+    <string name="WalletConnect_DAppCheck_Risky">پرمخاطره</string>
     <!-- dApp Connection-->
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">هشدار</string>
@@ -204,12 +200,13 @@
     <string name="Swap_Price">قیمت</string>
     <string name="Swap_AvailableBalance">موجودی در دسترس</string>
     <string name="Swap_PriceImpact">تأثیر قیمت</string>
+    <string name="Swap_ProviderRisk_Risky">پرمخاطره</string>
+    <string name="Swap_AmlError_Button">دوباره امتحان کنید</string>
     <string name="Swap_MinimumReceived">مقدار تضمین شده</string>
     <string name="Swap_Recipient">گیرنده</string>
     <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
     <string name="Swap_Proceed">بعدي</string>
     <string name="Swap_Revoke">ابطال</string>
-    <string name="Swap_Approve">تایید</string>
     <string name="Swap_Swapping">در حال جابجایی</string>
     <string name="Swap_AmountMin">(دقیقه)</string>
     <string name="Swap_AmountMax">(حداکثر)</string>
@@ -227,10 +224,13 @@
     <string name="SwapSettings_Warning_UnusualSlippage">معامله شما می تواند پیشرو باشد</string>
     <!-- Swap Confirmation -->
     <string name="Activate_InsufficientBalance_Title">موجودی ناکافی</string>
+    <!-- Swap History -->
+    <!-- Swap Info -->
+    <string name="SwapInfo_StatusSwapping">جایگزینی</string>
+    <string name="SwapInfo_StatusSending">ارسال</string>
     <!--Approve-->
     <string name="Approve_Spender">خرج کننده</string>
     <!--Swap Unlock Access-->
-    <string name="Swap_Approve_PageTitle">تایید</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_PriceImpactTitle">تأثیر قیمت</string>
     <!--Deposit-->
@@ -240,16 +240,13 @@
     <string name="Transactions_WaitForSync">لطفا منتظر بمانید تا همگام سازی تمام شود.</string>
     <string name="Transactions_Pending">در حالت معلق</string>
     <string name="Transactions_Receive">دريافت شد</string>
-    <string name="Transactions_Completed">انجام شد</string>
     <string name="Transactions_Processing">پردازش</string>
     <string name="Transactions_Send">ارسال شد</string>
-    <string name="Transactions_Failed">ناموفق</string>
     <string name="Transactions_Transfer">انتقال</string>
     <string name="Transactions_ContractCall">تماس قرارداد</string>
     <string name="Transactions_ContractCreation">ایجاد قرارداد</string>
     <string name="Transactions_To">به %s</string>
     <string name="Transactions_From">از %s</string>
-    <string name="Transactions_All">همه</string>
     <string name="Transactions_Filter_ChooseCoin">سکه را انتخاب کنید</string>
     <string name="Transactions_Filter_ChooseBlockchain">انتخاب زنجیره بلوکی</string>
     <string name="Transactions_Incoming">دريافت شد</string>
@@ -272,7 +269,7 @@
     <string name="TransactionInfo_UnlockedAt">باز شده در %s</string>
     <string name="TransactionInfo_RecipientHash">گیرنده</string>
     <string name="TransactionInfo_HistoricalRate">نرخ تاريخي</string>
-    <string name="TransactionInfo_Fee">قیمت</string>
+    <string name="TransactionInfo_Fee">هزينه</string>
     <string name="TransactionInfo_FeeEstimated">قیمت (تخمینی)</string>
     <string name="TransactionInfo_SentToSelfNote">تراکنش ارسال شده به آدرس خود</string>
     <string name="TransactionInfo_DoubleSpendNote">خطر دو برابر هزینه کردن!</string>
@@ -282,10 +279,8 @@
     <string name="TransactionInfo_Received">دريافت شد</string>
     <string name="TransactionInfo_Sent">ارسال شد</string>
     <string name="TransactionInfo_SpeedUp">افزایش سرعت</string>
-    <string name="StatusInfo_Pending">در حالت انتظار</string>
+    <string name="StatusInfo_Pending">در حالت معلق</string>
     <string name="StatusInfo_Processing">پردازش</string>
-    <string name="StatusInfo_Confirmed">انجام شد</string>
-    <string name="StatusInfo_Failed">ناموفق</string>
     <string name="StatusInfo_PendingDescription">این تراکنش هنوز در بلاک چین تایید نشده است. تراکنش هایی که با تنظیم کارمزد توصیه شده یا بالاتر ارسال می شوند، معمولاً ظرف چند دقیقه پردازش می شوند. تراکنش هایی که با کارمزد پایین ارسال می شوند ممکن است به مدت چند ساعت یا حتی چند روز معلق بمانند و حتی رد شوند. به خاطر داشته باشید که وضعیت تراکنش فردی در رابطه با کیف پول غیرقابل توقف معمولاً با تاخیر کوتاهی به روز رسانی می شود.</string>
     <string name="StatusInfo_ProcessingDescription">این تراکنش قبلاً در بلاک چین گنجانده شده است اما نهایی نشده است. در این مرحله، برای پرداخت‌های کوچک‌تر می‌توان تراکنش را کامل‌تر در نظر گرفت. برای پرداخت‌های بزرگ‌تر، توصیه می‌شود منتظر بمانید تا وضعیت تراکنش تکمیل شود.</string>
     <string name="StatusInfo_ConfirmedDescription">تراکنش تکمیل شده و دائمی و غیرقابل برگشت تلقی می شود.</string>
@@ -359,14 +354,11 @@
     <string name="DuressPin_Notes_Biometrics_Title">احراز هویت بیومتریک</string>
     <!--Setting_Terms-->
     <!--Setting_Tell Friends-->
-    <string name="SettingsShare_Title">به اشتراك گذاشتن</string>
     <!--Setting_Contact-->
     <!--Setting_Notifications-->
     <!-- Settings Launch Screen -->
-    <string name="SettingsLaunchScreen_Auto">خودکار</string>
     <string name="SettingsLaunchScreen_Balance">بالانس</string>
     <string name="SettingsLaunchScreen_MarketOverview">بررسی اجمالی بازار</string>
-    <string name="SettingsLaunchScreen_Watchlist">فهرست تماشا</string>
     <!--Settings-->
     <string name="SettingsTheme_Dark">تیره</string>
     <string name="SettingsTheme_Light">روشن</string>
@@ -408,7 +400,6 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s کلمه با عبارت عبور</string>
     <string name="ManageAccount_SwitchWallet_Title">کیف پول را تغییر دهید</string>
     <string name="ManageAccount_Wallets">کیف پول ها</string>
-    <string name="ManageAccount_WatchAddresses">مشاهده آدرس</string>
     <!--Network Settings-->
     <!-- Show Key -->
     <string name="ShowKey_Passphrase">عبارت عبور</string>
@@ -418,7 +409,6 @@
     <string name="BackupRecoveryPhrase_Later">بعداً</string>
     <!-- Local Backup -->
     <!-- Recovery Phrase -->
-    <string name="RecoveryPhrase_Title">عبارت بازیابی</string>
     <string name="RecoveryPhrase_Verify">تایید</string>
     <!-- Evm Private Key -->
     <!-- Stellar Secret Key -->
@@ -478,7 +468,7 @@
     <string name="Market_MinutesAgo">%d؜دقيقه پيش</string>
     <!-- Balance Sync Error -->
     <string name="BalanceSyncError_Title">خطا ی همگام سازی</string>
-    <string name="BalanceSyncError_ButtonRetry">دوباره تلاش کنید</string>
+    <string name="BalanceSyncError_ButtonRetry">دوباره امتحان کنید</string>
     <string name="BalanceSyncError_ButtonChangeSource">تغییر منبع</string>
     <!--Release notes-->
     <string name="ProUsersInfo_UnstoppablePass">غیرقابل توقف %s</string>

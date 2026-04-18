@@ -19,6 +19,7 @@ object PrivateKeysModule {
 
     data class ViewState(
         val evmPrivateKey: String? = null,
+        val tronPrivateKey: String? = null,
         val bip32RootKey: ExtendedKey? = null,
         val accountExtendedPrivateKey: ExtendedKey? = null,
         val stellarSecretKey: String? = null,

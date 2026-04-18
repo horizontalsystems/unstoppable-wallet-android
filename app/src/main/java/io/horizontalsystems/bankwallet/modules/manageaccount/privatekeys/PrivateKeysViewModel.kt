@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.adapters.toMoneroSeed
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.toStellarWallet
 import io.horizontalsystems.bankwallet.core.toRawHexString
@@ -17,9 +16,10 @@ import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.monerokit.MoneroKit
 import io.horizontalsystems.stellarkit.StellarKit
+import io.horizontalsystems.tronkit.network.Network
 import java.math.BigInteger
+import io.horizontalsystems.tronkit.transaction.Signer as TronSigner
 
 class PrivateKeysViewModel(
     account: Account,
@@ -38,6 +38,19 @@ class PrivateKeysViewModel(
             }
 
             is AccountType.EvmPrivateKey -> toHexString(accountType.key)
+            else -> null
+        }
+
+        val tronPrivateKey = when (val accountType = account.type) {
+            is AccountType.Mnemonic -> {
+                val privateKey = TronSigner.privateKey(
+                    accountType.seed,
+                    Network.Mainnet
+                )
+                toHexString(privateKey)
+            }
+
+            is AccountType.TronPrivateKey -> toHexString(accountType.key)
             else -> null
         }
 
@@ -72,6 +85,7 @@ class PrivateKeysViewModel(
 
         viewState = PrivateKeysModule.ViewState(
             evmPrivateKey = ethereumPrivateKey,
+            tronPrivateKey = tronPrivateKey,
             bip32RootKey = bip32RootKey?.let {
                 PrivateKeysModule.ExtendedKey(it, ShowExtendedKeyModule.DisplayKeyType.Bip32RootKey)
             },

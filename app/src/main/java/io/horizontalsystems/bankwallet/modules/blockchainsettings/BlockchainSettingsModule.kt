@@ -21,7 +21,8 @@ object BlockchainSettingsModule {
                     App.evmBlockchainManager,
                     App.evmSyncSourceManager,
                     App.solanaRpcSourceManager,
-                    App.moneroNodeManager
+                    App.moneroNodeManager,
+                    App.marketKit
                 )
             return BlockchainSettingsViewModel(service) as T
         }

@@ -60,6 +60,12 @@ class TokenBalanceService(
         }
     }
 
+    fun refresh() {
+        refreshAvailableBalance()
+        validate()
+        emitState()
+    }
+
     private fun refreshAvailableBalance() {
         adapter = token?.let { adapterManager.getAdapterForToken<IBalanceAdapter>(it) }
         balance = adapter?.balanceData?.available

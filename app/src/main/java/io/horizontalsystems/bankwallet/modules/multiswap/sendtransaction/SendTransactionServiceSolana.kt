@@ -21,7 +21,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 class SendTransactionServiceSolana(private val token: Token) : AbstractSendTransactionService(false, false) {
-    override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Tron())
+    override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Solana())
 
     private val adapter = App.adapterManager.getAdapterForToken<ISendSolanaAdapter>(token)!!
 
@@ -108,7 +108,7 @@ class SendTransactionServiceSolana(private val token: Token) : AbstractSendTrans
         networkFee = getAmountData(CoinValue(solToken, fee)),
         cautions = listOf(),
         sendable = rawTransaction != null || (amountState.canBeSend && addressState.canBeSend),
-        loading = false,
+        loading = rawTransaction == null,
         fields = listOf(),
     )
 }

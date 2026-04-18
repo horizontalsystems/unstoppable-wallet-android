@@ -26,8 +26,8 @@ import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewModel() {
-    private val activeAccount = App.accountManager.activeAccount!!
-    private val coinsProvider = FullCoinsProvider(App.marketKit, activeAccount)
+    private val activeAccount = App.accountManager.activeAccount
+    private val coinsProvider = activeAccount?.let { FullCoinsProvider(App.marketKit, it) }
     private val adapterManager = App.adapterManager
     private val currencyManager = App.currencyManager
     private val marketKit = App.marketKit
@@ -42,7 +42,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
     )
 
     init {
-        coinsProvider.setActiveWallets(App.walletManager.activeWallets)
+        coinsProvider?.setActiveWallets(App.walletManager.activeWallets)
         viewModelScope.launch {
             reloadItems()
             emitState()
@@ -51,7 +51,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
 
     fun setQuery(q: String) {
         query = q
-        coinsProvider.setQuery(q)
+        coinsProvider?.setQuery(q)
         viewModelScope.launch {
             reloadItems()
             emitState()
@@ -92,7 +92,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
                     }
                         .flatten()
                 val suggestedTokens = tokens.filter { tokenToFilter ->
-                    tokenToFilter.blockchainType.supports(activeAccount.type) && resultTokens.none { tokenToFilter == it.token }
+                    (activeAccount == null || tokenToFilter.blockchainType.supports(activeAccount.type)) && resultTokens.none { tokenToFilter == it.token }
                 }
 
                 suggestedTokens
@@ -108,7 +108,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
             }
 
             // Featured Tokens
-            val tokenQueries: List<TokenQuery> = when (activeAccount.type) {
+            val tokenQueries: List<TokenQuery> = when (activeAccount?.type) {
                 is AccountType.HdExtendedKey -> {
                     BlockchainType.supported.map { it.nativeTokenQueries }.flatten()
                 }
@@ -120,7 +120,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
 
             val supportedNativeTokens = marketKit.tokens(tokenQueries)
             supportedNativeTokens.filter { token ->
-                token.blockchainType.supports(activeAccount.type) && resultTokens.none { it.token == token }
+                (activeAccount == null || token.blockchainType.supports(activeAccount.type)) && resultTokens.none { it.token == token }
             }
                 .sortedWith(
                     compareBy<Token> { it.blockchainType.order }
@@ -135,18 +135,25 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
             return@withContext
         }
 
-        coinBalanceItems = coinsProvider.getItems()
-            .map { it.eligibleTokens(activeAccount.type) }
-            .flatten()
-            .map { token ->
-                val wallet = activeWallets.firstOrNull { it.token == token }
-                val balance = wallet?.let {
-                    adapterManager.getBalanceAdapterForWallet(it)?.balanceData?.available
-                }
+        coinBalanceItems = if (coinsProvider != null && activeAccount != null) {
+            coinsProvider.getItems()
+                .map { it.eligibleTokens(activeAccount.type) }
+                .flatten()
+                .map { token ->
+                    val wallet = activeWallets.firstOrNull { it.token == token }
+                    val balance = wallet?.let {
+                        adapterManager.getBalanceAdapterForWallet(it)?.balanceData?.available
+                    }
 
-                CoinBalanceItem(token, balance, getFiatValue(token, balance))
-            }
-            .sortedWith(compareByDescending { it.balance })
+                    CoinBalanceItem(token, balance, getFiatValue(token, balance))
+                }
+                .sortedWith(compareByDescending { it.balance })
+        } else {
+            marketKit.fullCoins(query, 100)
+                .flatMap { fullCoin -> fullCoin.tokens }
+                .filter { it.blockchainType in BlockchainType.supported }
+                .map { token -> CoinBalanceItem(token, null, null) }
+        }
     }
 
     private fun emitState() {

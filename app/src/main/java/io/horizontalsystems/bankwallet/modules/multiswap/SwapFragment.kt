@@ -1,39 +1,38 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
+import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.focusRequester
@@ -44,10 +43,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -58,6 +63,7 @@ import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -68,53 +74,153 @@ import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFrag
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead_leah
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
 import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
 import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellGroup
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsButtonText
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.Token
-import kotlinx.coroutines.delay
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class SwapFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapScreen(navController, navController.getInput())
+        val input = navController.getInput<Input>()
+        SwapScreen(navController, input?.tokenIn, input?.tokenOut, navController::popBackStack)
     }
+
+    @Parcelize
+    data class Input(val tokenIn: Token? = null, val tokenOut: Token? = null) : Parcelable
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SwapScreen(navController: NavController, tokenIn: Token?) {
+fun SwapScreen(
+    navController: NavController,
+    tokenIn: Token? = null,
+    tokenOut: Token? = null,
+    onClickClose: (() -> Unit)? = null,
+    bottomPadding: Dp = 0.dp,
+    closeAfterSwap: Boolean = true
+) {
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = currentBackStackEntry!!,
-        factory = SwapViewModel.Factory(tokenIn)
+        factory = SwapViewModel.Factory(tokenIn, tokenOut)
     )
+
+    LifecycleResumeEffect(Unit) {
+        viewModel.refreshDefaultTokens()
+        onPauseOrDispose { }
+    }
+
     val uiState = viewModel.uiState
     val context = LocalContext.current
+    var showAmlRiskSheet by remember { mutableStateOf(false) }
+    val amlRiskSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showAmlUnknownSheet by remember { mutableStateOf(false) }
+    val amlUnknownSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showAmlErrorSheet by remember { mutableStateOf(false) }
+    val amlErrorSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    val navigateToSwapConfirm = {
+        navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
+            if (it.success) {
+                if (closeAfterSwap) {
+                    navController.popBackStack()
+                } else {
+                    viewModel.onEnterAmount(null)
+                }
+            }
+        }
+        stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.amlCheckEventFlow.collect { event ->
+            when (event) {
+                AmlCheckEvent.Proceed -> {
+                    if (viewModel.uiState.needToAcceptTerms) {
+                        navController.slideFromRightForResult<SwapTermsFragment.Result>(R.id.swapTermsFragment) {
+                            if (it.accepted) navigateToSwapConfirm()
+                        }
+                    } else {
+                        navigateToSwapConfirm()
+                    }
+                }
+                AmlCheckEvent.RiskDetected -> {
+                    showAmlRiskSheet = true
+                }
+                is AmlCheckEvent.Error -> {
+                    showAmlErrorSheet = true
+                }
+                AmlCheckEvent.RiskUnknown -> {
+                    showAmlUnknownSheet = true
+                }
+            }
+        }
+    }
+
+    if (showAmlRiskSheet) {
+        SwapAmlRiskBottomSheet(
+            sheetState = amlRiskSheetState,
+            onDismiss = { showAmlRiskSheet = false },
+            onChooseAnotherProvider = {
+                showAmlRiskSheet = false
+                navController.slideFromBottom(R.id.swapSelectProvider)
+            },
+        )
+    }
+
+    if (showAmlUnknownSheet) {
+        SwapAmlUnknownBottomSheet(
+            sheetState = amlUnknownSheetState,
+            onDismiss = { showAmlUnknownSheet = false },
+            onContinue = {
+                showAmlUnknownSheet = false
+                navigateToSwapConfirm()
+            },
+        )
+    }
+
+    if (showAmlErrorSheet) {
+        SwapAmlErrorBottomSheet(
+            sheetState = amlErrorSheetState,
+            onDismiss = { showAmlErrorSheet = false },
+            onRetry = {
+                showAmlErrorSheet = false
+                viewModel.startProceed()
+            },
+        )
+    }
 
     val onClickCoinFrom = {
         navController.slideFromBottomForResult<Token>(
@@ -125,16 +231,16 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         }
     }
 
-    LaunchedEffect(Unit) {
-        if (tokenIn == null) {
-            delay(300)
-            onClickCoinFrom.invoke()
-        }
-    }
+//    LaunchedEffect(Unit) {
+//        if (tokenIn == null) {
+//            delay(300)
+//            onClickCoinFrom.invoke()
+//        }
+//    }
 
     SwapScreenInner(
         uiState = uiState,
-        onClickClose = navController::popBackStack,
+        onClickClose = onClickClose,
         onClickCoinFrom = onClickCoinFrom,
         onClickCoinTo = {
             navController.slideFromBottomForResult<Token>(
@@ -153,26 +259,7 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
-        onClickNext = {
-            val navigateToSwapConfirm = {
-                navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
-                    if (it.success) {
-                        navController.popBackStack()
-                    }
-                }
-                stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
-            }
-
-            if (uiState.needToAcceptTerms) {
-                navController.slideFromRightForResult<SwapTermsFragment.Result>(R.id.swapTermsFragment) {
-                    if (it.accepted) {
-                        navigateToSwapConfirm.invoke()
-                    }
-                }
-            } else {
-                navigateToSwapConfirm.invoke()
-            }
-        },
+        onClickNext = viewModel::startProceed,
         onActionStarted = {
             viewModel.onActionStarted()
         },
@@ -182,13 +269,14 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         navController = navController,
         onResume = viewModel::enableRequoteOnTimeout,
         onPause = viewModel::disableRequoteOnTimeout,
+        bottomPadding = bottomPadding,
     )
 }
 
 @Composable
 private fun SwapScreenInner(
     uiState: SwapUiState,
-    onClickClose: () -> Unit,
+    onClickClose: (() -> Unit)?,
     onClickCoinFrom: () -> Unit,
     onClickCoinTo: () -> Unit,
     onSwitchPairs: () -> Unit,
@@ -202,6 +290,7 @@ private fun SwapScreenInner(
     navController: NavController,
     onResume: () -> Unit,
     onPause: () -> Unit,
+    bottomPadding: Dp = 0.dp,
 ) {
     LifecycleResumeEffect(Unit) {
         onResume.invoke()
@@ -214,6 +303,14 @@ private fun SwapScreenInner(
 
     HSScaffold(
         title = stringResource(R.string.Swap),
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.SwapHistory_Title),
+                icon = R.drawable.ic_circle_clock_24,
+                onClick = {
+                    navController.slideFromRight(R.id.swapHistoryFragment)
+                }
+            )),
         onBack = onClickClose,
     ) {
         val focusManager = LocalFocusManager.current
@@ -221,10 +318,7 @@ private fun SwapScreenInner(
         var amountInputHasFocus by remember { mutableStateOf(false) }
 
         Box(modifier = Modifier.fillMaxSize()) {
-            Column(
-                modifier = Modifier.verticalScroll(rememberScrollState())
-            ) {
-                VSpacer(height = 16.dp)
+            Column(modifier = Modifier.fillMaxSize()) {
                 SwapInput(
                     amountIn = uiState.amountIn,
                     fiatAmountIn = uiState.fiatAmountIn,
@@ -246,183 +340,156 @@ private fun SwapScreenInner(
                     },
                 )
                 VSpacer(height = 8.dp)
-                AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
-
-                VSpacer(height = 16.dp)
-
-                when (val currentStep = uiState.currentStep) {
-                    is SwapStep.InputRequired -> {
-                        val title = when (currentStep.inputType) {
-                            InputType.TokenIn -> stringResource(R.string.Swap_SelectTokenIn)
-                            InputType.TokenOut -> stringResource(R.string.Swap_SelectTokenOut)
-                            InputType.Amount -> stringResource(R.string.Swap_EnterAmount)
-                        }
-
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
-                            title = title,
-                            enabled = false,
-                            onClick = {}
-                        )
-                    }
-
-                    SwapStep.Quoting -> {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
-                            title = stringResource(R.string.Swap_Quoting),
-                            enabled = false,
-                            loadingIndicator = true,
-                            onClick = {}
-                        )
-                    }
-
-                    is SwapStep.Error -> {
-                        val errorText = when (val error = currentStep.error) {
-                            SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
-                            is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
-                            is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
-                            is UnknownHostException -> stringResource(id = R.string.Hud_Text_NoInternet)
-                            is TokenNotEnabled -> stringResource(id = R.string.Swap_ErrorTokenNotEnabled)
-                            is WalletSyncing -> stringResource(id = R.string.Swap_ErrorWalletSyncing)
-                            is WalletNotSynced -> stringResource(id = R.string.Swap_ErrorWalletNotSynced)
-                            else -> error.message ?: error.javaClass.simpleName
-                        }
-
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
-                            title = errorText,
-                            enabled = false,
-                            onClick = {}
-                        )
-                    }
-
-                    is SwapStep.ActionRequired -> {
-                        val action = currentStep.action
-                        val title = if (action.inProgress) {
-                            action.getTitleInProgress()
-                        } else {
-                            action.getTitle()
-                        }
-
-                        ButtonPrimaryDefault(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
-                            title = title,
-                            enabled = !action.inProgress,
-                            onClick = {
-                                onActionStarted.invoke()
-                                action.execute(navController, onActionCompleted)
-                            },
-                            loadingIndicator = action.inProgress
-                        )
-                    }
-
-                    SwapStep.Proceed -> {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
-                            title = stringResource(R.string.Swap_Proceed),
-                            onClick = onClickNext
-                        )
-                    }
-                }
-
-                VSpacer(height = 16.dp)
-                if (quote != null) {
-                    CellGroup(
-                        paddingValues = PaddingValues(horizontal = 16.dp)
-                    ) {
-                        CellSecondary(
-                            left = {
-                                CellLeftImage(
-                                    painter = painterResource(quote.provider.icon),
-                                    type = ImageType.Rectangle,
-                                    size = 24,
-                                )
-                            },
-                            middle = {
-                                CellMiddleInfoTextIcon(
-                                    text = quote.provider.titleShort.hs,
-                                    icon = painterResource(R.drawable.arrow_s_down_24),
-                                    iconTint = ComposeAppTheme.colors.grey,
-                                    onIconClick = onClickProvider
-                                )
-                            },
-                            right = {
-                                var showRegularPrice by remember { mutableStateOf(true) }
-                                val swapPriceUIHelper = SwapPriceUIHelper(
-                                    quote.tokenIn,
-                                    quote.tokenOut,
-                                    quote.amountIn,
-                                    quote.amountOut
-                                )
-
-                                val priceStr = if (showRegularPrice) {
-                                    swapPriceUIHelper.priceStr
-                                } else {
-                                    swapPriceUIHelper.priceInvStr
-                                }
-
-                                CellRightControlsButtonText(
-                                    description = priceStr.hs(color = ComposeAppTheme.colors.leah),
-                                    onClick = {
-                                        showRegularPrice = !showRegularPrice
-                                    }
-                                )
-                            },
-                            onClick = onClickProvider
-                        )
-                    }
-                }
-
-                if (uiState.currentStep is SwapStep.ActionRequired) {
-                    uiState.currentStep.action.getDescription()?.let { actionDescription ->
-                        VSpacer(height = 16.dp)
-                        AlertCard(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            format = AlertFormat.Structured,
-                            type = AlertType.Caution,
-                            text = actionDescription
-                        )
-                    }
-                }
-
-                VSpacer(height = 32.dp)
-            }
-
-
-            if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
-                val hasNonZeroBalance =
-                    uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
-                Box(
+                Column(
                     modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        // Add IME (keyboard) padding to push content above keyboard
-                        .windowInsetsPadding(
-                            WindowInsets.ime
-                        )
-                        .systemBarsPadding()
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .background(ComposeAppTheme.colors.lawrence)
+                        .imePadding()
                 ) {
-                    SuggestionsBar(
-                        modifier = Modifier.align(Alignment.BottomCenter),
-                        onDelete = {
-                            onEnterAmount.invoke(null)
-                        },
-                        onSelect = {
-                            focusManager.clearFocus()
-                            onEnterAmountPercentage.invoke(it)
-                        },
-                        selectEnabled = hasNonZeroBalance,
-                        deleteEnabled = uiState.amountIn != null,
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState())
+                    ) {
+                        if (quote == null) {
+                            AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
+                        }
+
+                        if (quote != null) {
+                            ProviderCellInfo(quote, onClickProvider)
+                        }
+
+                        if (uiState.currentStep is SwapStep.ActionRequired) {
+                            uiState.currentStep.action.getDescription()?.let { actionDescription ->
+                                VSpacer(height = 16.dp)
+                                AlertCard(
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                    format = AlertFormat.Structured,
+                                    type = AlertType.Caution,
+                                    text = actionDescription
+                                )
+                            }
+                        }
+
+                        VSpacer(height = 32.dp)
+                    }
+
+                    when (val currentStep = uiState.currentStep) {
+                        is SwapStep.InputRequired -> {
+                            val title = when (currentStep.inputType) {
+                                InputType.TokenIn -> stringResource(R.string.Swap_SelectTokenIn)
+                                InputType.TokenOut -> stringResource(R.string.Swap_SelectTokenOut)
+                                InputType.Amount -> stringResource(R.string.Swap_EnterAmount)
+                            }
+
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                title = title,
+                                enabled = false,
+                                onClick = {}
+                            )
+                        }
+
+                        SwapStep.Quoting -> {
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                title = stringResource(R.string.Swap_Quoting),
+                                enabled = false,
+                                loadingIndicator = true,
+                                onClick = {}
+                            )
+                        }
+
+                        SwapStep.AmlChecking -> {
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                title = stringResource(R.string.Swap_Proceed),
+                                enabled = false,
+                                loadingIndicator = true,
+                                onClick = {}
+                            )
+                        }
+
+                        is SwapStep.Error -> {
+                            val errorText = when (val error = currentStep.error) {
+                                SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
+                                is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
+                                is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
+                                is UnknownHostException -> stringResource(id = R.string.Hud_Text_NoInternet)
+                                is TokenNotEnabled -> stringResource(id = R.string.Swap_ErrorTokenNotEnabled)
+                                is WalletSyncing -> stringResource(id = R.string.Swap_ErrorWalletSyncing)
+                                is WalletNotSynced -> stringResource(id = R.string.Swap_ErrorWalletNotSynced)
+                                else -> error.message ?: error.javaClass.simpleName
+                            }
+
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                title = errorText,
+                                enabled = false,
+                                onClick = {}
+                            )
+                        }
+
+                        is SwapStep.ActionRequired -> {
+                            val action = currentStep.action
+                            val title = if (action.inProgress) {
+                                action.getTitleInProgress()
+                            } else {
+                                action.getTitle()
+                            }
+
+                            ButtonPrimaryDefault(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                title = title,
+                                enabled = !action.inProgress,
+                                onClick = {
+                                    onActionStarted.invoke()
+                                    action.execute(navController, onActionCompleted)
+                                },
+                                loadingIndicator = action.inProgress
+                            )
+                        }
+
+                        SwapStep.Proceed -> {
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .fillMaxWidth(),
+                                title = stringResource(R.string.Swap_Proceed),
+                                onClick = onClickNext
+                            )
+                        }
+                    }
+                    if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
+                        val hasNonZeroBalance =
+                            uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
+                        VSpacer(height = 16.dp)
+                        SuggestionsBar(
+                            onDelete = {
+                                onEnterAmount.invoke(null)
+                            },
+                            onSelect = {
+                                focusManager.clearFocus()
+                                onEnterAmountPercentage.invoke(it)
+                            },
+                            selectEnabled = hasNonZeroBalance,
+                            deleteEnabled = uiState.amountIn != null,
+                        )
+                    } else {
+                        VSpacer(height = 16.dp + bottomPadding)
+                    }
                 }
             }
         }
@@ -430,16 +497,97 @@ private fun SwapScreenInner(
 }
 
 @Composable
+private fun ProviderCellInfo(
+    quote: SwapProviderQuote,
+    onClickProvider: () -> Unit
+) {
+    Row(
+        modifier = Modifier.padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        CellLeftImage(
+            painter = painterResource(quote.provider.icon),
+            type = ImageType.Rectangle,
+            size = 24,
+        )
+        Row(
+            modifier = Modifier.clickable(
+                onClick = onClickProvider,
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                subhead_leah(quote.provider.titleShort)
+                RiskCell(riskLevel = quote.provider.riskLevel)
+            }
+            HSpacer(8.dp)
+            Icon(
+                modifier = Modifier.size(20.dp),
+                painter = painterResource(R.drawable.arrow_s_down_20),
+                tint = ComposeAppTheme.colors.grey,
+                contentDescription = null,
+            )
+        }
+        var showRegularPrice by remember { mutableStateOf(true) }
+        val swapPriceUIHelper = SwapPriceUIHelper(
+            quote.tokenIn,
+            quote.tokenOut,
+            quote.amountIn,
+            quote.amountOut
+        )
+
+        val priceStr = if (showRegularPrice) {
+            swapPriceUIHelper.priceStr
+        } else {
+            swapPriceUIHelper.priceInvStr
+        }
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            CellRightControlsButtonText(
+                subhead = priceStr.hs(color = ComposeAppTheme.colors.leah),
+                onClick = {
+                    showRegularPrice = !showRegularPrice
+                }
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.clock_filled_24),
+                    modifier = Modifier.size(16.dp),
+                    tint = ComposeAppTheme.colors.grey,
+                    contentDescription = null
+                )
+                captionSB_grey(
+                    text = quote.swapQuote.estimationTime?.let { formatDurationShort(it) }
+                        ?: stringResource(R.string.NotAvailable)
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?) {
-    Row(modifier = Modifier.padding(horizontal = 32.dp)) {
-        caption_grey(text = stringResource(R.string.Swap_AvailableBalance))
+    Row(modifier = Modifier.padding(16.dp)) {
+        CellMiddleInfo(eyebrow = stringResource(R.string.Swap_AvailableBalance).hs)
         val text = if (tokenIn != null && availableBalance != null) {
             CoinValue(tokenIn, availableBalance).getFormattedFull()
         } else {
             "---"
         }
         Spacer(modifier = Modifier.weight(1f))
-        caption_grey(text = text)
+        CellRightInfo(titleSubheadSb = text.hs)
     }
 }
 
@@ -514,14 +662,9 @@ private fun SwapInput(
     currency: Currency,
     onFocusChanged: (FocusState) -> Unit,
 ) {
-    Box(
-        modifier = Modifier.padding(horizontal = 16.dp)
-    ) {
+    Box {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(18.dp))
-                .background(ComposeAppTheme.colors.lawrence)
+            modifier = Modifier.fillMaxWidth()
         ) {
             SwapCoinInputIn(
                 coinAmount = amountIn,
@@ -545,11 +688,15 @@ private fun SwapInput(
             )
         }
         HsDivider(modifier = Modifier.align(Alignment.Center))
-        ButtonSecondaryCircle(
-            modifier = Modifier.align(Alignment.Center),
-            icon = R.drawable.ic_arrow_down_20,
-            onClick = onSwitchPairs
-        )
+        Box(Modifier.align(Alignment.Center)) {
+            HSIconButton(
+                variant = ButtonVariant.Secondary,
+                style = ButtonStyle.Solid,
+                size = ButtonSize.Small,
+                icon = painterResource(id = R.drawable.ic_arrow_down_20),
+                onClick = onSwitchPairs
+            )
+        }
     }
 }
 
@@ -571,7 +718,9 @@ private fun SwapCoinInputIn(
             .padding(horizontal = 16.dp, vertical = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(modifier = Modifier.weight(1f)) {
+        CoinSelector(token, onClickCoin)
+        HSpacer(width = 16.dp)
+        Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.End) {
             AmountInput(
                 value = coinAmount,
                 onValueChange = onValueChange
@@ -584,8 +733,6 @@ private fun SwapCoinInputIn(
                 enabled = fiatAmountInputEnabled
             )
         }
-        HSpacer(width = 8.dp)
-        CoinSelector(token, onClickCoin)
     }
 }
 
@@ -604,7 +751,11 @@ private fun SwapCoinInputTo(
             .padding(horizontal = 16.dp, vertical = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(modifier = Modifier.weight(1f)) {
+        CoinSelector(token, onClickCoin)
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.End
+        ) {
             if (coinAmount == null) {
                 headline1_grey(text = "0")
             } else {
@@ -633,8 +784,6 @@ private fun SwapCoinInputTo(
                 }
             }
         }
-        HSpacer(width = 8.dp)
-        CoinSelector(token, onClickCoin)
     }
 }
 
@@ -654,8 +803,12 @@ private fun CoinSelector(
             if (token != null) {
                 Column {
                     headline2_leah(text = token.coin.code)
-                    VSpacer(height = 1.dp)
-                    subhead_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
+                    VSpacer(height = 5.dp)
+                    BadgeText(
+                        text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native),
+                        background = ComposeAppTheme.colors.blade,
+                        textColor = ComposeAppTheme.colors.leah,
+                    )
                 }
             } else {
                 headline2_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
@@ -675,41 +828,51 @@ fun FiatAmountInput(
     var text by remember(value) {
         mutableStateOf(value?.toPlainString() ?: "")
     }
-    Row {
-        body_grey(text = currency.symbol)
-        BasicTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = text,
-            onValueChange = {
-                try {
-                    val amount = if (it.isBlank()) {
-                        null
-                    } else {
-                        it.toBigDecimal()
-                    }
-                    text = it
-                    onValueChange.invoke(amount)
-                } catch (e: Exception) {
-
+    val displayTransformation = remember(currency.symbol) {
+        VisualTransformation { originalText ->
+            val prefixLen = currency.symbol.length
+            val isEmpty = originalText.text.isEmpty()
+            val visual = AnnotatedString(currency.symbol + originalText.text + if (isEmpty) "0" else "")
+            TransformedText(
+                text = visual,
+                offsetMapping = object : OffsetMapping {
+                    override fun originalToTransformed(offset: Int) =
+                        if (isEmpty) prefixLen + 1 else offset + prefixLen
+                    override fun transformedToOriginal(offset: Int) =
+                        (offset - prefixLen).coerceIn(0, originalText.text.length)
                 }
-            },
-            enabled = enabled,
-            textStyle = ColoredTextStyle(
-                color = ComposeAppTheme.colors.grey, textStyle = ComposeAppTheme.typography.body
-            ),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Decimal
-            ),
-            cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
-            decorationBox = { innerTextField ->
-                if (text.isEmpty()) {
-                    body_grey(text = "0")
-                }
-                innerTextField()
-            },
-        )
+            )
+        }
     }
+    BasicTextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = text,
+        onValueChange = {
+            try {
+                val amount = if (it.isBlank()) {
+                    null
+                } else {
+                    it.toBigDecimal()
+                }
+                text = it
+                onValueChange.invoke(amount)
+            } catch (e: Exception) {
+
+            }
+        },
+        enabled = enabled,
+        textStyle = ColoredTextStyle(
+            color = ComposeAppTheme.colors.grey,
+            textStyle = ComposeAppTheme.typography.body,
+            textAlign = TextAlign.End
+        ),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Decimal
+        ),
+        cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
+        visualTransformation = displayTransformation,
+    )
 }
 
 @Composable
@@ -727,11 +890,11 @@ private fun Selector(
         verticalAlignment = Alignment.CenterVertically
     ) {
         icon.invoke(this)
-        HSpacer(width = 8.dp)
+        HSpacer(width = 16.dp)
         text.invoke(this)
         HSpacer(width = 8.dp)
         Icon(
-            painter = painterResource(R.drawable.ic_arrow_big_down_20),
+            painter = painterResource(R.drawable.arrow_s_down_20),
             contentDescription = "",
             tint = ComposeAppTheme.colors.grey
         )
@@ -798,7 +961,9 @@ fun AmountInput(
             }
         },
         textStyle = ColoredTextStyle(
-            color = ComposeAppTheme.colors.leah, textStyle = ComposeAppTheme.typography.headline1
+            color = ComposeAppTheme.colors.leah,
+            textStyle = ComposeAppTheme.typography.headline1,
+            textAlign = TextAlign.End
         ),
         singleLine = true,
         keyboardOptions = KeyboardOptions(
@@ -807,7 +972,9 @@ fun AmountInput(
         cursorBrush = SolidColor(ComposeAppTheme.colors.leah),
         decorationBox = { innerTextField ->
             if (textFieldValue.text.isEmpty()) {
-                headline1_grey(text = "0")
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+                    headline1_grey(text = "0")
+                }
             }
             innerTextField()
         },

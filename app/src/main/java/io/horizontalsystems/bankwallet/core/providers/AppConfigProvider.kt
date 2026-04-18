@@ -72,6 +72,10 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         Translator.getString(R.string.marketApiKey)
     }
 
+    val newsApiKey by lazy {
+        Translator.getString(R.string.cryptoCompareApiKey)
+    }
+
     val openSeaApiKey by lazy {
         Translator.getString(R.string.openSeaApiKey)
     }
@@ -186,6 +190,7 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         "ETH" to BigDecimal("0.0005"),
         "POL" to BigDecimal("1"),
         "BNB" to BigDecimal("0.0002"),
+        "SOL" to BigDecimal("0.000001"),
     )
 
     val chainalysisBaseUrl by lazy {
@@ -210,6 +215,10 @@ class AppConfigProvider(localStorage: ILocalStorage) {
 
     val uswapApiKey by lazy {
         Translator.getString(R.string.uswapApiKey)
+    }
+
+    val oneInchPartnerFeeAddress by lazy {
+        Translator.getString(R.string.oneInchPartnerFeeAddress)
     }
 
 }

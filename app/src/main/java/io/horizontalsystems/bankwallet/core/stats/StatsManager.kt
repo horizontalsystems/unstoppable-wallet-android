@@ -243,6 +243,10 @@ val AccountType.statAccountType: String
             "evm_private_key"
         }
 
+        is AccountType.TronPrivateKey -> {
+            "tron_private_key"
+        }
+
         is AccountType.StellarSecretKey -> {
             "stellar_secret_key"
         }
@@ -293,7 +297,8 @@ val MainModule.MainNavigation.statTab: StatTab
     get() = when (this) {
         MainModule.MainNavigation.Market -> StatTab.Markets
         MainModule.MainNavigation.Balance -> StatTab.Balance
-        MainModule.MainNavigation.Transactions -> StatTab.Transactions
+        MainModule.MainNavigation.Swap -> StatTab.Swap
+//        MainModule.MainNavigation.Transactions -> StatTab.Transactions
         MainModule.MainNavigation.Settings -> StatTab.Settings
     }
 

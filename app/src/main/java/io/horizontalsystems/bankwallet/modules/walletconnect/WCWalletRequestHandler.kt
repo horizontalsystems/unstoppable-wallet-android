@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.walletconnect
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonParser
-import com.walletconnect.web3.wallet.client.Wallet
-import com.walletconnect.web3.wallet.client.Web3Wallet
+import com.reown.walletkit.client.Wallet
+import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.ethereumkit.core.hexStringToIntOrNull
 
@@ -31,7 +31,7 @@ class WCWalletRequestHandler(
                                 result = "null"
                             )
                         )
-                        Web3Wallet.respondSessionRequest(
+                        WalletKit.respondSessionRequest(
                             params = response,
                             onSuccess = {},
                             onError = { error ->
@@ -47,7 +47,7 @@ class WCWalletRequestHandler(
                                 message = "Unrecognized chain ID"
                             )
                         )
-                        Web3Wallet.respondSessionRequest(result,
+                        WalletKit.respondSessionRequest(result,
                             onSuccess = {},
                             onError = { error ->
                                 Log.e("WCWalletHandler", "${request.method} response error: $error")

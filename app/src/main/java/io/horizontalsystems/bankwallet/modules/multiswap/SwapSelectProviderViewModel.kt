@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -23,6 +24,7 @@ class SwapSelectProviderViewModel(
     private var tokenOut = quotes.first().tokenOut
     private var rateTokenIn: BigDecimal? = marketKit.coinPrice(tokenIn.coin.uid, currency.code)?.value
     private var rateTokenOut: BigDecimal? = marketKit.coinPrice(tokenOut.coin.uid, currency.code)?.value
+    private var sortType = ProviderSortType.BestPrice
     private var quoteViewItems = getViewItems(quotes.sorted())
 
     init {
@@ -47,7 +49,10 @@ class SwapSelectProviderViewModel(
     }
 
     private fun List<SwapProviderQuote>.sorted(): List<SwapProviderQuote> {
-        return this.sortedByDescending { it.amountOut }
+        return when (sortType) {
+            ProviderSortType.BestPrice -> sortedByDescending { it.amountOut }
+            ProviderSortType.BestTime -> sortedBy { it.estimationTime ?: Long.MAX_VALUE }
+        }
     }
 
     private fun getViewItems(quotes: List<SwapProviderQuote>): List<QuoteViewItem> {
@@ -69,20 +74,28 @@ class SwapSelectProviderViewModel(
                 quote = quote,
                 fiatAmount = fiatAmountOut?.getFormattedFull(),
                 tokenAmount = tokenAmount,
-                priceImpactData = priceImpactData
+                priceImpactData = priceImpactData,
+                estimationTime = quote.estimationTime
             )
         }
     }
 
     override fun createState() = SwapSelectProviderUiState(
         quoteViewItems = quoteViewItems,
-        selectedQuote = quote
+        selectedQuote = quote,
+        sortType = sortType,
     )
 
     private fun getFiatValue(amount: BigDecimal?, rate: BigDecimal?): CurrencyValue? {
         if (amount == null || rate == null) return null
 
         return CurrencyValue(currency, amount.multiply(rate))
+    }
+
+    fun setSortType(sortType: ProviderSortType) {
+        this.sortType = sortType
+        quoteViewItems = getViewItems(quotes.sorted())
+        emitState()
     }
 
     class Factory(private val quotes: List<SwapProviderQuote>, private val quote: SwapProviderQuote?) : ViewModelProvider.Factory {
@@ -95,12 +108,19 @@ class SwapSelectProviderViewModel(
 
 data class SwapSelectProviderUiState(
     val quoteViewItems: List<QuoteViewItem>,
-    val selectedQuote: SwapProviderQuote?
+    val selectedQuote: SwapProviderQuote?,
+    val sortType: ProviderSortType,
 )
 
 data class QuoteViewItem(
     val quote: SwapProviderQuote,
     val fiatAmount: String?,
     val tokenAmount: String,
-    val priceImpactData: PriceImpactData?
+    val priceImpactData: PriceImpactData?,
+    val estimationTime: Long?,
 )
+
+enum class ProviderSortType(val title: Int) {
+    BestPrice(R.string.SwapSort_BestRate),
+    BestTime(R.string.SwapSort_BestTime),
+}

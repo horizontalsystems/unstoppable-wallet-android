@@ -5,10 +5,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
+import io.horizontalsystems.bankwallet.modules.multiswap.FeeRow
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialog
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 
 @Composable
 fun DataFieldFee(
@@ -33,10 +31,10 @@ fun DataFieldFeeTemplate(
     title: String,
     infoText: String?,
 ) {
-    QuoteInfoRow(
+    FeeRow(
         title = title,
-        value = primary.hs(ComposeAppTheme.colors.leah),
-        valueSecondary = secondary?.hs,
+        valueFiat = secondary,
+        valueToken = primary,
         onInfoClick = infoText?.let {
             {
                 navController.slideFromBottom(

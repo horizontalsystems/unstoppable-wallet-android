@@ -38,7 +38,11 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     override val icon = provider.icon
     override val type = provider.type
     override val aml = provider.aml
+    override val amlPrecheck = provider.amlPrecheck
     override val requireTerms = provider.requireTerms
+    override val riskLevel = provider.riskLevel
+
+    override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = false
 
     private val unstoppableAPI = APIClient.build(
         App.appConfigProvider.uswapApiBaseUrl,
@@ -203,6 +207,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             amountIn,
             BigDecimal("1"),
             null,
+            null,
+            null,
             true
         )
 
@@ -224,7 +230,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            actionRequired = actionApprove
+            actionRequired = actionApprove,
+            estimationTime = bestRoute.estimatedTime?.total,
         )
     }
 
@@ -233,12 +240,13 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         tokenOut: Token,
         amountIn: BigDecimal,
         slippage: BigDecimal,
-        recipient: io.horizontalsystems.bankwallet.entities.Address?,
-        dry: Boolean
+        destinationAddress: String?,
+        sourceAddress: String?,
+        refundAddress: String?,
+        dry: Boolean,
     ): UnstoppableAPI.Response.Quote.Route {
         val assetIn = assetsMap[tokenIn]!!
         val assetOut = assetsMap[tokenOut]!!
-        val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
 
         val quote = unstoppableAPI.quote(
             UnstoppableAPI.Request.Quote(
@@ -246,15 +254,19 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                 buyAsset = assetOut,
                 sellAmount = amountIn.toPlainString(),
                 providers = setOf(provider.id),
-                slippage = slippage.toInt(),
-                destinationAddress = destination,
-                sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn),
-                refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn),
-                dry = dry
+                slippage = slippage,
+                destinationAddress = destinationAddress,
+                sourceAddress = sourceAddress,
+                refundAddress = refundAddress,
+                dry = dry,
             )
         )
 
         return quote.routes.maxBy { it.expectedBuyAmount ?: BigDecimal.ZERO }
+    }
+
+    override suspend fun checkAmlAddresses(addresses: List<String>): Boolean? {
+        return unstoppableAPI.checkAddresses(addresses.joinToString(",")).passedAmlCheck
     }
 
     override suspend fun fetchFinalQuote(
@@ -266,13 +278,19 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         recipient: io.horizontalsystems.bankwallet.entities.Address?,
         slippage: BigDecimal,
     ): SwapFinalQuote {
+        val destination = recipient?.hex ?: SwapHelper.getReceiveAddressForToken(tokenOut)
+        val sourceAddress = SwapHelper.getSendingAddressForToken(tokenIn)
+        val refundAddress = SwapHelper.getReceiveAddressForToken(tokenIn)
+
         val bestRoute = quoteSwapBestRoute(
             tokenIn,
             tokenOut,
             amountIn,
             slippage,
-            recipient,
-            false
+            destination,
+            sourceAddress,
+            refundAddress,
+            false,
         )
 
         val amountOut = bestRoute.expectedBuyAmount ?: BigDecimal.ZERO
@@ -303,7 +321,11 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             priceImpact = null,
             fields = fields,
             estimatedTime = bestRoute.estimatedTime?.total,
-            slippage = slippage
+            slippage = slippage,
+            providerSwapId = bestRoute.providerSwapId,
+            fromAsset = assetsMap[tokenIn],
+            toAsset = assetsMap[tokenOut],
+            depositAddress = bestRoute.inboundAddress,
         )
     }
 
@@ -339,7 +361,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
             BlockchainType.Litecoin,
             BlockchainType.Dash,
             BlockchainType.ECash,
-                 -> {
+                -> {
                 // supported only providers that accepts any type of outputs
                 // providers with specific requirements like thorchain is not supported
                 // if thorchain support needed then it should be handled separately
@@ -348,6 +370,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     UProvider.QuickEx,
                     UProvider.LetsExchange,
                     UProvider.StealthEx,
+                    UProvider.Exolix,
                     UProvider.Swapuz
                 )
 
@@ -417,6 +440,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     UProvider.QuickEx,
                     UProvider.LetsExchange,
                     UProvider.StealthEx,
+                    UProvider.Exolix,
                     UProvider.Swapuz
                 )
 
@@ -437,6 +461,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     UProvider.QuickEx,
                     UProvider.LetsExchange,
                     UProvider.StealthEx,
+                    UProvider.Exolix,
                     UProvider.Swapuz
                 )
 
@@ -472,17 +497,46 @@ interface UnstoppableAPI {
         @Body quote: Request.Quote,
     ): Response.Quote
 
+    @POST("track")
+    suspend fun track(
+        @Body request: Request.Track,
+    ): Response.Track
+
+    @POST("track/evm")
+    suspend fun trackEvm(
+        @Body request: Request.Track,
+    ): Response.Track
+
+    @GET("quote/check-addresses")
+    suspend fun checkAddresses(
+        @Query("addresses") addresses: String,
+    ): Response.CheckAddresses
+
     object Request {
         data class Quote(
             val sellAsset: String,
             val buyAsset: String,
             val sellAmount: String,
             val providers: Set<String>,
-            val slippage: Int,
-            val destinationAddress: String,
+            val slippage: BigDecimal,
+            val destinationAddress: String?,
             val sourceAddress: String?,
-            val refundAddress: String,
+            val refundAddress: String?,
             val dry: Boolean,
+        )
+
+        data class Track(
+            val provider: String,
+            val hash: String? = null,
+            val chainId: String? = null,
+            val fromAsset: String? = null,
+            val fromAddress: String? = null,
+            val fromAmount: String? = null,
+            val toAsset: String? = null,
+            val toAddress: String? = null,
+            val toAmount: String? = null,
+            val depositAddress: String? = null,
+            val providerSwapId: String? = null,
         )
     }
 
@@ -513,11 +567,51 @@ interface UnstoppableAPI {
                 val memo: String?,
                 val txExtraAttribute: Map<String, String>?,
                 val estimatedTime: EstimatedTime?,
+                val providerSwapId: String?,
             ) {
                 data class EstimatedTime(
                     val total: Long
                 )
             }
+        }
+
+        data class CheckAddresses(
+            val passedAmlCheck: Boolean?,
+            val results: List<AddressResult>,
+        ) {
+            data class AddressResult(
+                val address: String,
+                val passed: Boolean,
+                val completed: Boolean,
+                val error: String? = null,
+            )
+        }
+
+        data class Track(
+            val status: String, // not_started, pending, swapping, completed, refunded, unknown, failed
+            val type: String?,
+            val hash: String?,
+            val chainId: String?,
+            val fromAsset: String?,
+            val fromAmount: String?,
+            val fromAddress: String?,
+            val toAsset: String?,
+            val toAmount: String?,
+            val toAddress: String?,
+            val legs: List<Leg>?,
+        ) {
+            data class Leg(
+                val type: String,   // "swap" | "native_send"
+                val status: String,
+                val hash: String?,
+                val chainId: String?,
+                val fromAsset: String?,
+                val fromAmount: String?,
+                val fromAddress: String?,
+                val toAsset: String?,
+                val toAmount: String?,
+                val toAddress: String?,
+            )
         }
     }
 }

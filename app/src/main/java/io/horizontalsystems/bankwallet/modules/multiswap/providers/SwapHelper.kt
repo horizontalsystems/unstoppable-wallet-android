@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
+import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinCashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.DashAdapter
@@ -10,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
 import io.horizontalsystems.bankwallet.core.adapters.toMoneroSeed
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
+import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.NoActiveAccount
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronApproveTransactionRecord
@@ -44,6 +46,9 @@ object SwapHelper {
             || blockchainType == BlockchainType.Solana
             || blockchainType == BlockchainType.Tron
             || blockchainType == BlockchainType.Ton
+            || blockchainType == BlockchainType.Stellar
+            || blockchainType == BlockchainType.Zcash
+            || blockchainType == BlockchainType.Monero
         ) {
             App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
                 return it.receiveAddress
@@ -51,6 +56,21 @@ object SwapHelper {
         }
 
         return null
+    }
+
+    suspend fun getSourceAddressesForToken(token: Token, amountIn: BigDecimal): List<String> {
+        getSendingAddressForToken(token)?.let { return listOf(it) }
+
+        // UTXO chains: select the UTXOs that will actually cover amountIn
+        val adapter = App.adapterManager.getAdapterForToken<ISendBitcoinAdapter>(token) ?: return emptyList()
+        val feeRate = try {
+            FeeRateProviderFactory.provider(token.blockchainType)?.getFeeRates()?.recommended
+        } catch (_: Throwable) {
+            null
+        }
+
+        return adapter.selectUnspentOutputs(amountIn, feeRate ?: 1).mapNotNull { it.address }.distinct()
+
     }
 
     suspend fun getReceiveAddressForToken(token: Token): String {

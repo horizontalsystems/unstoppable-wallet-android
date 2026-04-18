@@ -56,6 +56,7 @@ import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceContextMenuItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceUiState
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapFragment
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.ReceiveAllowedState
@@ -281,14 +282,12 @@ fun BalanceItems(
             if (uiState.balanceTabButtonsEnabled && !accountViewItem.isWatchAccount) {
                 item {
                     BalanceButtonsGroup {
-                        if (accountViewItem.type.supportsWalletConnect) {
-                            BalanceActionButton(
-                                variant = ButtonVariant.Primary,
-                                icon = R.drawable.ic_scan_24,
-                                title = stringResource(R.string.Button_ScanQr),
-                                onClick = onScanClick
-                            )
-                        }
+                        BalanceActionButton(
+                            variant = ButtonVariant.Primary,
+                            icon = R.drawable.ic_scan_24,
+                            title = stringResource(R.string.Button_ScanQr),
+                            onClick = onScanClick
+                        )
                         BalanceActionButton(
                             variant = ButtonVariant.Secondary,
                             icon = R.drawable.ic_arrow_down_24,
@@ -537,7 +536,7 @@ private fun handleContextMenuClick(
         BalanceContextMenuItem.Swap -> {
             navController.slideFromRight(
                 R.id.multiswap,
-                balanceViewItem.wallet.token
+                SwapFragment.Input(tokenIn = balanceViewItem.wallet.token)
             )
 
             stat(

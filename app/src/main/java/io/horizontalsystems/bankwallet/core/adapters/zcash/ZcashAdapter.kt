@@ -27,7 +27,6 @@ import cash.z.ecc.android.sdk.type.AddressType
 import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
@@ -289,10 +288,8 @@ class ZcashAdapter(
         memo = ""
     )
 
-    override suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger) {
-        logger.info("call sendTransferProposal")
-        val transferProposal = transferProposal(amount, address, memo)
-        send(transferProposal)
+    override suspend fun proposeTransfer(amount: BigDecimal, address: String, memo: String): Proposal {
+        return transferProposal(amount, address, memo)
     }
 
     override suspend fun fee(amount: BigDecimal, address: String, memo: String): BigDecimal {
@@ -310,14 +307,17 @@ class ZcashAdapter(
         memo = memo
     )
 
-    private suspend fun send(proposal: Proposal) {
+    private suspend fun send(proposal: Proposal): String? {
         val spendingKey = DerivationTool.getInstance().deriveUnifiedSpendingKey(seed, network, Zip32AccountIndex.new(0))
 
         try {
             val results = synchronizer.createProposedTransactions(proposal, spendingKey).toList()
+            var firstTxHash: String? = null
             results.forEach { result ->
                 when (result) {
-                    is TransactionSubmitResult.Success -> {}
+                    is TransactionSubmitResult.Success -> {
+                        if (firstTxHash == null) firstTxHash = result.txIdString()
+                    }
 
                     is TransactionSubmitResult.Failure -> {
                         val errorMsg = buildString {
@@ -335,6 +335,7 @@ class ZcashAdapter(
                     }
                 }
             }
+            return firstTxHash
         } catch (e: IllegalArgumentException) {
             throw IllegalArgumentException("Invalid proposal: ${e.message}", e)
         } catch (e: Exception) {
@@ -350,8 +351,8 @@ class ZcashAdapter(
         )
     }
 
-    suspend fun sendProposal(proposal: Proposal) {
-        send(proposal)
+    override suspend fun sendProposal(proposal: Proposal): String? {
+        return send(proposal)
     }
 
     private fun createPaymentUri(outputs: List<TransferOutput>): String {

@@ -4,7 +4,6 @@
     <string name="Error_ParameterNotSet">Parametre ayarlanmadı</string>
     <string name="Alert_Cancel">İptal</string>
     <string name="Alert_Copy">Kopyala</string>
-    <string name="Alert_Loading">Yükleniyor...</string>
     <string name="Button_Show">Göster</string>
     <string name="Button_Hide">Gizle</string>
     <string name="Button_Cancel">İptal</string>
@@ -101,7 +100,7 @@
     <string name="Restore_PassphraseDescription">Bu anımsatıcı ifadeyi oluştururken kullandığınız parolayı girin. Mevcut bir cüzdanı yeni bir parolayla geri yüklemek, yepyeni bir cüzdan oluşturur.</string>
     <string name="Restore_Title">Blok Zincirleri Seç</string>
     <string name="Restore_By">İçerik</string>
-    <string name="Restore_RestoreBy">Geri Yükle</string>
+    <string name="Restore_RestoreBy">İçerik</string>
     <string name="Restore_RecoveryPhrase">Kurtarma cümlesi</string>
     <string name="Restore_PrivateKey">Gizli Anahtar</string>
     <string name="Restore_PrivateKeyHint">EVM Özel Anahtarını, BIP32 Root Key veya Account Extended Private Key girin</string>
@@ -112,14 +111,8 @@
     <string name="Restore_PrivateKey_InvalidKey">Geçersiz Anahtar</string>
     <string name="SelectContacts_All">Hepsi</string>
     <string name="Restore_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
-    <string name="Restore_ZCash_BirthdayHeight_Hint">Daha hızlı senkronizasyon için cüzdanın doğum günü yüksekliğini girin.</string>
     <string name="Restore_ZCash_Birthday_Hint">00000000 (isteğe bağlı)</string>
     <string name="Restore_ZCash_RestoreAsNew">Yeni olarak geri yükle</string>
-    <string name="Restore_ZCash_NewWallet">Yeni Cüzdan</string>
-    <string name="Restore_ZCash_NewWallet_Description">Herhangi bir para işlemi yok</string>
-    <string name="Restore_ZCash_OldWallet">Mevcut Cuzdan</string>
-    <string name="Restore_ZCash_OldWallet_Description">Işlemler Mevcut</string>
-    <string name="Restore_ZCash_SlowSyncWarningText">Blok zinciri ile ilk senkronizasyon, çok fazla internet trafiği tüketebilir.</string>
     <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">P. Değeri</string>
@@ -165,9 +158,8 @@
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_TotalMarketCapShort">Toplam Piyasa Değeri</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Toplam Piyasa Değeri</string>
-    <string name="MarketGlobalMetrics_Volume">24s Hacim</string>
+    <string name="MarketGlobalMetrics_Volume">Hacim</string>
     <string name="MarketGlobalMetrics_VolumeShort">24s Hacim</string>
-    <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF Girişi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Tüm kripto paraların toplam piyasa değeri</string>
     <string name="MarketGlobalMetrics_VolumeDescription">Kripto piyasa 24 saatlik işlem hacmi</string>
@@ -243,7 +235,6 @@
     <string name="Balance_SyncedUntil">%s kadar</string>
     <string name="Balance_Syncing">Eşitleniyor…</string>
     <string name="Balance_SearchingTransactions">İşlemler aranıyor ...</string>
-    <string name="Balance_Syncing_WithProgress">Eşitleniyor...%s%%</string>
     <string name="Balance_Sort_Balance">Bakiye</string>
     <string name="Balance_Sort_PopupTitle">Sıralama şekli</string>
     <string name="Balance_Sort_Az">İsim</string>
@@ -297,13 +288,13 @@
     <string name="Send_Address_Error_InvalidAddress">Geçersiz adres</string>
     <string name="Send_Address_Error_Detected">Tespit Edildi</string>
     <string name="Send_Address_Error_Clear">Temizle</string>
+    <string name="SecureSend_Config_Disabled">Etkisizleştirildi</string>
     <string name="Send_Address_ErrorMessage_PhishingDetected">Oltalama Adresi Tespit Edildi!</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected">Kara Listeye Alınmış Adres Tespit Edildi!</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected">Yaptırım Uygulanan Adres Tespit Edildi!</string>
     <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Girdiğiniz adres sahte olabilir. Dolandırıcılar genellikle ilk ve son karakterleri değiştirirler. Kayıpları önlemek için devam etmeden önce tam adresi dikkatlice doğrulayın.</string>
     <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">Girdiğiniz adres kara listeye alınmış olarak işaretlenmiştir. Bu adrese yapılan işlemler kayıplara veya diğer risklere yol açabilir. Lütfen devam etmeden önce alıcının bilgilerini doğrulayın.</string>
     <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Girdiğiniz adres yaptırım altında olarak işaretlenmiştir. Bu adrese yapılan işlemler kayıplara veya diğer risklere yol açabilir. Lütfen devam etmeden önce alıcının bilgilerini doğrulayın.</string>
-    <string name="AddressEnter_Danger_Content">Girdiğiniz adres sahte olabilir. Dolandırıcılar genellikle ilk ve son karakterleri değiştirirler. Kayıpları önlemek için devam etmeden önce tam adresi dikkatlice doğrulayın.</string>
     <string name="Send_RiskyAddress">Riskli Adres!</string>
     <string name="Send_RiskyAddress_AlertText">Yüksek riskli bir adrese fon göndermek üzeresiniz. Devam etmek, para kaybına veya diğer güvenlik risklerine yol açabilir. Devam ederek potansiyel tehlikeleri kabul etmiş olursunuz. Devam etmek istediğinizden emin misiniz?</string>
     <string name="Send_Success">\u2713 Gönderilen</string>
@@ -337,7 +328,7 @@
     <string name="SendEvmSettings_Error_NonceUsed_Title">Kullanılmış Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Bu nonce ile gerçekleştirilen bir işlem zaten var.</string>
     <!-- Fee Settings -->
-    <string name="FeeSettings_NetworkFee">Ağ Ücreti</string>
+    <string name="FeeSettings_NetworkFee">Masraf</string>
     <string name="FeeSettings_NetworkFee_Info">Ağda belirli bir işlemi göndermenin tahmini maliyeti.</string>
     <string name="FeeSettings_GasLimit_Info">İşlem karmaşıklığı \"gaz\" adı verilen birimlerle ölçülür. Yürütülen akıllı sözleşmeye bağlı olarak değişir. Gaz Limiti, onu yürütmek için gereken tahmini maksimum gazdır. Kullanılan gerçek gaz normalde daha düşük olacaktır.</string>
     <string name="FeeSettings_GasPrice_Info">Ağ üzerinde işlem yapmanın ücreti gaz birimleri cinsinden ölçülür. Gaz Fiyatı, bir kullanıcının bir işlemi gerçekleştirmek için ödemeye razı olduğu tutardır. Ağ yoğun olduğunda gaz fiyatları yüksek ve boşta olduğunda düşüktür. Gaz fiyatının yetersiz olması, genellikle bir işlemin uzun süre beklemede kalmasının bir nedenidir.</string>
@@ -400,7 +391,6 @@
     <string name="WalletConnect_Error_UnsupportedEvents">Desteklenmeyen olaylar: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">İstek bulunamadı hatası</string>
     <string name="WalletConnect_NoConnection">Bağlı dapp\'niz yok</string>
-    <string name="WalletConnect_PendingRequests">bekleyen istekler</string>
     <string name="WalletConnect_ActiveWallet">Cüzdanı</string>
     <string name="WalletConnect_NotSupportedDescription">Mevcut cüzdan türünüz %s WalletConnect\'i desteklemiyor</string>
     <string name="WalletConnect_Unnamed">İsimsiz</string>
@@ -409,6 +399,7 @@
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Eşleştirilmiş tüm dAps\'leri silmek istiyor musunuz?</string>
     <string name="WalletConnect_Pairings_Delete">Sil</string>
     <string name="WalletConnect_DeleteAllPairs">Hepsini sil</string>
+    <string name="WalletConnect_DAppCheck_Risky">Riskli</string>
     <!-- dApp Connection-->
     <string name="DAppConnection_Title">DApp Bağlantısı</string>
     <string name="DAppConnection_Requests">Talepler</string>
@@ -433,6 +424,8 @@
     <string name="Swap_Price">Fiyat</string>
     <string name="Swap_AvailableBalance">Mevcut Bakiye</string>
     <string name="Swap_PriceImpact">Fiyat Etkisi</string>
+    <string name="Swap_ProviderRisk_Risky">Riskli</string>
+    <string name="Swap_AmlError_Button">Yeniden Dene</string>
     <string name="Swap_MinimumReceived">Garantili Tutar</string>
     <string name="Swap_Slippage">Kayma</string>
     <string name="Swap_Recipient">Alıcı</string>
@@ -448,7 +441,6 @@
     <string name="Swap_EnterAmount">Miktar Girin</string>
     <string name="Swap_Revoke">İptal et</string>
     <string name="Swap_Revoking">İptal ediliyor...</string>
-    <string name="Swap_Approve">Onayla</string>
     <string name="Swap_Approving">Onaylanıyor</string>
     <string name="Swap_Swapping">Takas</string>
     <string name="Swap_Quoting">Alıntı</string>
@@ -470,12 +462,15 @@
     <string name="SwapSettings_Warning_UnusualSlippage">İşleminiz varlık fiyatını etkileyebilir</string>
     <!-- Swap Confirmation -->
     <string name="Activate_InsufficientBalance_Title">Yetersiz Bakiye</string>
+    <!-- Swap History -->
+    <!-- Swap Info -->
+    <string name="SwapInfo_StatusSwapping">Takas</string>
+    <string name="SwapInfo_StatusSending">Gönder</string>
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">%s alışverişi yapabilir veya yeni tutarı iptal edip onaylamanız gerekir</string>
     <string name="Approve_Spender">Harcayan</string>
     <string name="Approve_YouRevoke">Sen iptal et</string>
     <!--Swap Unlock Access-->
-    <string name="Swap_Approve_PageTitle">Onayla</string>
     <string name="Swap_Approve_Info">Akıllı bir sözleşmeye, adınıza token ticareti yapabilmesi için izin verin ve izin verilen miktarı belirtin. Bakiyenize herhangi bir etkisi olmaz, ancak onay için küçük bir ücret alınır.\n\nGelecekteki işlemler için daha yüksek bir miktarın önceden onaylanması, talep üzerine onaylara göre maliyet açısından daha avantajlıdır.</string>
     <string name="Swap_Approve_Unlimited">Sınırsız</string>
     <!--Uniswap Info -->
@@ -488,12 +483,10 @@
     <string name="Transactions_WaitForSync">Lütfen güncellemenin bitmesini bekleyin.</string>
     <string name="Transactions_Pending">Devam ediyor</string>
     <string name="Transactions_Receive">Alındı</string>
-    <string name="Transactions_Completed">Tamamlandı</string>
     <string name="Transactions_Processing">İşleniyor</string>
     <string name="Transactions_Send">Gönderildi</string>
     <string name="Transactions_Approve">Onayla</string>
     <string name="Transactions_Swap">Takas Edildi</string>
-    <string name="Transactions_Failed">Başarısız</string>
     <string name="Transactions_Transfer">Aktar</string>
     <string name="Transactions_ContractCall">Sözleşme Çağrısı</string>
     <string name="Transactions_ExternalContractCall">Harici Çağrı</string>
@@ -555,8 +548,6 @@
     <string name="TransactionInfo_SpeedUpDescription">Bu işlem, önceki işlemi geçersiz kılmak için onu daha yüksek bir ücretle yeniden göndermeye çalışacaktır.</string>
     <string name="StatusInfo_Pending">Devam ediyor</string>
     <string name="StatusInfo_Processing">İşleniyor</string>
-    <string name="StatusInfo_Confirmed">Tamamlandı</string>
-    <string name="StatusInfo_Failed">Başarısız</string>
     <string name="StatusInfo_PendingDescription">İşlem henüz blok zincirinde onaylanmadı. Tavsiye edilen veya daha yüksek ücret ayarı ile gönderilen işlemler genellikle birkaç dakika içerisinde işlenir. Düşük bir ücretle gönderilen işlemler birkaç saat, hatta günlerce beklemede kalabilir ve hatta reddedilebilir. Unstoppable cüzdan arayüzündeki bir işlemin durumunun genellikle kısa bir gecikmeyle güncellendiğini de unutmayın.</string>
     <string name="StatusInfo_ProcessingDescription">İşlem blok zincirine dahil edildi ama kalıcı bir sonuca ulaşmadı. Bu noktada, küçük ödemeler için işlemin tamamlandığını düşünebilirsiniz. Daha büyük ödemeler için ise, işlem durumu tamamlandı olarak değişene kadar beklemeniz önerilir.</string>
     <string name="StatusInfo_ConfirmedDescription">İşlem tamamlandı ve bunun kalıcı ve tersine çevrilemez olduğu kabul edilir.</string>
@@ -643,7 +634,6 @@
     <string name="Premium_UpgradeFeature_TradeSignals">Sinyaller ve Trendler</string>
     <string name="Premium_UpgradeFeature_RobberyProtection">Tehdit Modu</string>
     <string name="Premium_UpgradeFeature_SecureSend">Dolandırıcılık Koruması</string>
-    <string name="Premium_UpgradeFeature_ScamProtection">Kara Liste Kontrolü</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Önemli kriterlere göre ilk 100 listelerine erişim</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Çoklu parametreler üzerinden çok seviyeli filtreleme</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Tokenleriniz için piyasa trendlerinin otomatik takibi</string>
@@ -722,9 +712,6 @@
     <string name="SettingsSecurity_EnablePin">Kod</string>
     <string name="SettingsSecurity_DisablePin">Şifre Kodunu Devre Dışı Bırak</string>
     <string name="SettingsSecurity_EditPin">Kod Değiştir</string>
-    <string name="SettingsSecurity_SetDuressPin">Baskı Modunu Ayarla</string>
-    <string name="SettingsSecurity_EditDuressPin">Duress Şifresini Düzenle</string>
-    <string name="SettingsSecurity_DisableDuressPin">Zorlama Şifresini Devre Dışı Bırak</string>
     <string name="SettingsSecurity_ManageKeys">Cüzdanları yönet</string>
     <string name="SettingsSecurity_AppRestartWarning">Bu eylem, Unstoppable Cüzdan\'ı yeniden başlatacak.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Bu uygulamayı kullanırken internetinizi tamamen anonimleştirin. Bazı durumlarda DeFi uygulamaları için WalletConnect özelliğinin çok yavaş olabileceğini veya hiç çalışmayabileceğini unutmayın.</string>
@@ -761,7 +748,6 @@
     <!--Setting_Contact-->
     <!--Setting_Notifications-->
     <!-- Settings Launch Screen -->
-    <string name="SettingsLaunchScreen_Auto">Oto</string>
     <string name="SettingsLaunchScreen_Balance">Bakiye</string>
     <string name="SettingsLaunchScreen_MarketOverview">Piyasaya Genel Bakış</string>
     <string name="SettingsLaunchScreen_Watchlist">İzleme Listesi</string>
@@ -841,7 +827,7 @@
     <string name="ManageAccount_NWordsWithPassphrase">%s parolalı kelime</string>
     <string name="ManageAccount_SwitchWallet_Title">Cüzdan Değiştir</string>
     <string name="ManageAccount_Wallets">Cüzdanlar</string>
-    <string name="ManageAccount_WatchAddresses">Adresi İzle</string>
+    <string name="ManageAccount_WatchAddresses">Cüzdan İzle</string>
     <string name="ManageAccount_DeleteWarning">Bu cüzdan adresini izlemeyi bırakmak istiyor musunuz?</string>
     <string name="Balance_Receive_BackupRequired_Description">%1$s yedeğini almanız gerekiyor</string>
     <!--Network Settings-->
@@ -906,7 +892,7 @@
     <string name="AddToken_CoinCode">Coin Kodu</string>
     <string name="AddToken_Decimals">Ondalıklar</string>
     <string name="AddToken_AddressOrSymbol">Sözleşme Adresi</string>
-    <string name="AddToken_Blockchain">Blockchains</string>
+    <string name="AddToken_Blockchain">Blok zincirine göre filtrele</string>
     <string name="AddToken_CoinAlreadyInListWarning">Bu token zaten kripto para yöneticisi listesindedir</string>
     <string name="AddToken_InvalidContractAddress">Geçersiz sözleşme adresi</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Sözleşme adresi %s blockchain\'de bulunamadı</string>
@@ -979,7 +965,6 @@
     <string name="CoinPage_EmaSettingsDescription">EMA, SMA ve WMA, teknik analizde kullanılan hareketli ortalamalardır:\n\nEMA, daha hızlı tepkiler için yakın dönem fiyatlarına vurgu yapar.\nSMA, genel bir trend görünümü için fiyat verilerini ortalayır.\nWMA, yakın dönem verilerini lineer olarak ağırlıklandırarak hassasiyeti ve gürültü azaltmayı dengelemektedir.</string>
     <string name="CoinPage_RsiSettingsDescription">Göreceli Güç Endeksi (RSI), fiyat hızını ve değişimini ölçen, aşırı alım (70 üzeri) veya aşırı satım (30 altı) piyasa koşullarını tanımlayan bir momentum osilatörüdür. Ayrıca fiyat ters dönüşlerini değişimler yoluyla tespit edebilir.</string>
     <string name="CoinPage_MacdSettingsDescription">Hareketli Ortalama Yakınsama Iraksama (MACD), bir güvenliğin fiyatının iki EMA\'sı arasındaki ilişkiyi izleyen bir momentum göstergesidir. MACD çizgisi (12 dönemlik EMA eksi 26 dönemlik EMA), sinyal çizgisi olarak bilinen 9 dönemlik EMA\'yı kestiğinde, alım veya satım fırsatlarını sinyalize eder.</string>
-    <string name="CoinPage_Type">Tür</string>
     <string name="CoinPage_Period">Periyot</string>
     <string name="CoinPage_RsiLength">RSI Uzunluğu</string>
     <string name="CoinPage_FastLength">Hızlı Uzunluk</string>

@@ -10,6 +10,6 @@ sealed class SendTransactionResult {
     object Stellar : SendTransactionResult()
     object Solana : SendTransactionResult()
     object Ton : SendTransactionResult()
-    object Zcash : SendTransactionResult()
+    data class Zcash(val transactionHash: String?) : SendTransactionResult()
     object Monero : SendTransactionResult()
 }

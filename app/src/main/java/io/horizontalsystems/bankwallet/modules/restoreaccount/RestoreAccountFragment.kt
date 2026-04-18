@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.restoreaccount
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -9,7 +11,6 @@ import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -21,7 +22,9 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.Restor
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestorePhrase
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard.RestorePhraseNonStandard
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.delay
 
 class RestoreAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
 
@@ -50,6 +53,34 @@ private fun RestoreAccountNavHost(
     val restoreMenuViewModel: RestoreMenuViewModel =
         viewModel(factory = RestoreMenuModule.Factory())
     val mainViewModel: RestoreViewModel = viewModel()
+
+    val view = LocalView.current
+    val onFinish: () -> Unit = {
+        fragmentNavController.popBackStack(popUpToInclusiveId, inclusive)
+    }
+
+    val uiState = mainViewModel.uiState
+
+    LaunchedEffect(uiState.openSelectCoinsScreen) {
+        if (uiState.openSelectCoinsScreen) {
+            mainViewModel.openSelectCoinsScreenHandled()
+            navController.navigate("restore_select_coins")
+        }
+    }
+
+    LaunchedEffect(uiState.restored) {
+        if (uiState.restored) {
+            HudHelper.showSuccessMessage(
+                contenView = view,
+                resId = R.string.Hud_Text_Restored,
+                icon = R.drawable.icon_add_to_wallet_2_24,
+                iconTint = R.color.white
+            )
+            delay(300)
+            onFinish.invoke()
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = "restore_phrase",
@@ -60,7 +91,7 @@ private fun RestoreAccountNavHost(
                 restoreMenuViewModel = restoreMenuViewModel,
                 mainViewModel = mainViewModel,
                 openRestoreAdvanced = { navController.navigate("restore_phrase_advanced") },
-                openSelectCoins = { navController.navigate("restore_select_coins") },
+                openSelectCoins = { mainViewModel.requestOpenSelectCoinsScreen() },
                 openNonStandardRestore = { navController.navigate("restore_phrase_nonstandard") },
                 onBackClick = { fragmentNavController.popBackStack() },
             )
@@ -69,7 +100,8 @@ private fun RestoreAccountNavHost(
             AdvancedRestoreScreen(
                 restoreMenuViewModel = restoreMenuViewModel,
                 mainViewModel = mainViewModel,
-                openSelectCoinsScreen = { navController.navigate("restore_select_coins") },
+                openSelectNetworkScreen = { navController.navigate("restore_select_network") },
+                openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
                 openNonStandardRestore = {
                     navController.navigate("restore_phrase_nonstandard")
 
@@ -78,6 +110,13 @@ private fun RestoreAccountNavHost(
                         event = StatEvent.Open(StatPage.ImportWalletNonStandard)
                     )
                 },
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+        composablePage("restore_select_network") {
+            SelectNetworkScreen(
+                mainViewModel = mainViewModel,
+                openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
                 onBackClick = { navController.popBackStack() }
             )
         }
@@ -91,13 +130,14 @@ private fun RestoreAccountNavHost(
                         else -> Unit
                     }
                 },
-                onBackClick = { navController.popBackStack() }
-            ) { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) }
+                onBackClick = { navController.popBackStack() },
+                onFinish = onFinish
+            )
         }
         composablePage("restore_phrase_nonstandard") {
             RestorePhraseNonStandard(
                 mainViewModel = mainViewModel,
-                openSelectCoinsScreen = { navController.navigate("restore_select_coins") },
+                openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
                 onBackClick = { navController.popBackStack() }
             )
         }

@@ -26,6 +26,8 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
     override val requireTerms = false
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
 
+    override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = true
+
     final override suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
@@ -41,7 +43,8 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
-            actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, routerAddress, tokenIn)
+            actionRequired = EvmSwapHelper.actionApprove(allowance, amountIn, routerAddress, tokenIn),
+            estimationTime = tokenIn.blockchainType.blockTime
         )
     }
 

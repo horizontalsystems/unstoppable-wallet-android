@@ -19,6 +19,7 @@ object PublicKeysModule {
 
     data class ViewState(
         val evmAddress: String? = null,
+        val tronAddress: String? = null,
         val extendedPublicKey: ExtendedPublicKey? = null,
         val moneroKeys: MoneroKeys? = null
     )

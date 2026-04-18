@@ -4,13 +4,17 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
-import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.tronkit.TronKit
 import io.horizontalsystems.tronkit.models.Address
+import io.horizontalsystems.tronkit.models.RpcSource
+import io.horizontalsystems.tronkit.models.TransactionSource
 import io.horizontalsystems.tronkit.network.Network
 import io.horizontalsystems.tronkit.transaction.Signer
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -19,9 +23,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
+import java.net.URL
 
 class TronKitManager(
-    private val appConfigProvider: AppConfigProvider,
+    private val evmSyncSourceManager: EvmSyncSourceManager,
     private val backgroundManager: BackgroundManager
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
@@ -30,10 +36,13 @@ class TronKitManager(
     private val _kitStartedFlow = MutableStateFlow(false)
     val kitStartedFlow: StateFlow<Boolean> = _kitStartedFlow
 
+    private val tronKitStoppedSubject = PublishSubject.create<Unit>()
+    val kitStoppedObservable: Observable<Unit>
+        get() = tronKitStoppedSubject
+
     var tronKitWrapper: TronKitWrapper? = null
         private set(value) {
             field = value
-
             _kitStartedFlow.update { value != null }
         }
 
@@ -44,6 +53,35 @@ class TronKitManager(
     val statusInfo: Map<String, Any>?
         get() = tronKitWrapper?.tronKit?.statusInfo()
 
+    init {
+        scope.launch {
+            evmSyncSourceManager.syncSourceObservable.asFlow().collect { blockchainType ->
+                if (blockchainType == BlockchainType.Tron) {
+                    handleUpdateNetwork()
+                }
+            }
+        }
+    }
+
+    private fun handleUpdateNetwork() {
+        stop()
+        tronKitStoppedSubject.onNext(Unit)
+    }
+
+    private fun tronRpcSource(): RpcSource {
+        val syncSource = evmSyncSourceManager.getSyncSource(BlockchainType.Tron)
+        val tronGridUrl = URL("https://api.trongrid.io/")
+        return if (syncSource.uri.toString() == tronGridUrl.toString()) {
+            RpcSource.tronGrid(network = network, apiKeys = App.appConfigProvider.trongridApiKeys)
+        } else {
+            RpcSource(urls = listOf(URL(syncSource.uri.toString())), auth = syncSource.auth)
+        }
+    }
+
+    private fun tronTransactionSource(): TransactionSource {
+        return TransactionSource.tronGrid(network = network, apiKeys = App.appConfigProvider.trongridApiKeys)
+    }
+
     @Synchronized
     fun getTronKitWrapper(account: Account): TronKitWrapper {
         if (this.tronKitWrapper != null && currentAccount != account) {
@@ -53,14 +91,9 @@ class TronKitManager(
         if (this.tronKitWrapper == null) {
             val accountType = account.type
             this.tronKitWrapper = when (accountType) {
-                is AccountType.Mnemonic -> {
-                    createKitInstance(accountType, account)
-                }
-
-                is AccountType.TronAddress -> {
-                    createKitInstance(accountType, account)
-                }
-
+                is AccountType.Mnemonic -> createKitInstance(accountType, account)
+                is AccountType.TronAddress -> createKitInstance(accountType, account)
+                is AccountType.TronPrivateKey -> createKitInstance(accountType, account)
                 else -> throw UnsupportedAccountException()
             }
             start()
@@ -81,10 +114,11 @@ class TronKitManager(
 
         val kit = TronKit.getInstance(
             application = App.instance,
-            walletId = account.id,
             seed = seed,
             network = network,
-            tronGridApiKeys = appConfigProvider.trongridApiKeys
+            rpcSource = tronRpcSource(),
+            transactionSource = tronTransactionSource(),
+            walletId = account.id
         )
 
         return TronKitWrapper(kit, signer)
@@ -94,17 +128,35 @@ class TronKitManager(
         accountType: AccountType.TronAddress,
         account: Account
     ): TronKitWrapper {
-        val address = accountType.address
-
         val kit = TronKit.getInstance(
             application = App.instance,
-            address = Address.fromBase58(address),
+            address = Address.fromBase58(accountType.address),
             network = network,
-            walletId = account.id,
-            tronGridApiKeys = appConfigProvider.trongridApiKeys
+            rpcSource = tronRpcSource(),
+            transactionSource = tronTransactionSource(),
+            walletId = account.id
         )
 
         return TronKitWrapper(kit, null)
+    }
+
+    private fun createKitInstance(
+        accountType: AccountType.TronPrivateKey,
+        account: Account
+    ): TronKitWrapper {
+        val signer = Signer(accountType.key)
+        val address = Signer.address(accountType.key, network)
+
+        val kit = TronKit.getInstance(
+            application = App.instance,
+            address = address,
+            network = network,
+            rpcSource = tronRpcSource(),
+            transactionSource = tronTransactionSource(),
+            walletId = account.id
+        )
+
+        return TronKitWrapper(kit, signer)
     }
 
     @Synchronized

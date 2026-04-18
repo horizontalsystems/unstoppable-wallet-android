@@ -60,23 +60,23 @@ markwon = "4.6.2"
 zxing = "4.3.0"
 qrose = "1.0.1"
 
-# WalletConnect
-walletconnectBom = "1.15.0"
+# Reown (WalletConnect)
+reownBom = "1.6.5"
 
 # Web3
 web3j = "4.9.0"
 unstoppableDomains = "v7.1.0"
 
 # Wallet Kits
-moneroKit = "f2736d8"
+moneroKit = "667a41d"
 stellarKit = "519533b"
 tonKit = "4dcc84a"
-bitcoinKit = "3fe0989"
-ethereumKit = "c478a9d"
+bitcoinKit = "f565276"
+ethereumKit = "25180be3"
 feeRateKit = "393cc14"
-marketKit = "b3eb77c"
-solanaKit = "c3a8586"
-tronKit = "1f1a794"
+marketKit = "b2aea45"
+solanaKit = "82c5ef4"
+tronKit = "2f07e86"
 zcashSdk = "0eca3b9"
 
 # Binance
@@ -116,7 +116,7 @@ espresso = "3.5.1"
 testRunner = "1.5.2"
 
 # AGP
-agp = "9.0.1"
+agp = "9.1.0"
 
 [libraries]
 # AndroidX Core
@@ -208,10 +208,10 @@ markwon = { module = "io.noties.markwon:core", version.ref = "markwon" }
 zxing = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxing" }
 qrose = { module = "io.github.alexzhirkevich:qrose", version.ref = "qrose" }
 
-# WalletConnect
-walletconnect-bom = { module = "com.walletconnect:android-bom", version.ref = "walletconnectBom" }
-walletconnect-web3wallet = { module = "com.walletconnect:web3wallet" }
-walletconnect-android-core = { module = "com.walletconnect:android-core" }
+# Reown (WalletConnect)
+reown-bom = { module = "com.reown:android-bom", version.ref = "reownBom" }
+reown-walletkit = { module = "com.reown:walletkit" }
+reown-android-core = { module = "com.reown:android-core" }
 
 # Web3
 web3j = { module = "org.web3j:core", version.ref = "web3j" }

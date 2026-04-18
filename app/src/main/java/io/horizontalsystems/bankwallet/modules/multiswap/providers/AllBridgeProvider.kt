@@ -34,6 +34,7 @@ object AllBridgeProvider : IMultiSwapProvider {
     override val type = SwapProviderType.DEX
     override val aml = true
     override val requireTerms = false
+    override val riskLevel = RiskLevel.AUTO
     private val feePaymentMethod = FeePaymentMethod.StableCoin
 
     private val proxies = mapOf(
@@ -79,6 +80,15 @@ object AllBridgeProvider : IMultiSwapProvider {
         "SRB" to BlockchainType.Stellar,
         "TRX" to BlockchainType.Tron,
     )
+
+    private val chainSymbolByBlockchainTypeUid: Map<String, String> by lazy {
+        blockchainTypes.entries.associate { (symbol, type) -> type.uid to symbol }
+    }
+
+    fun chainSymbol(blockchainTypeUid: String): String? = chainSymbolByBlockchainTypeUid[blockchainTypeUid]
+
+    suspend fun fetchTransferStatus(chain: String, txId: String): Response.TransferStatus =
+        allBridgeAPI.transferStatus(chain, txId)
 
     private var tokensMap = mapOf<Token, ABToken>()
 
@@ -141,6 +151,9 @@ object AllBridgeProvider : IMultiSwapProvider {
         return tokensMap
     }
 
+    override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) =
+        tokenInBlockchainTypeUid == tokenOutBlockchainTypeUid
+
     override fun supports(blockchainType: BlockchainType): Boolean {
         // overriding fun supports(tokenFrom: Token, tokenTo: Token) makes this method redundant
         return true
@@ -148,6 +161,13 @@ object AllBridgeProvider : IMultiSwapProvider {
 
     override fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
         return tokensMap.contains(tokenFrom) && tokensMap.contains(tokenTo)
+    }
+
+    private fun estimationTime(tokenIn: Token, tokenOut: Token, crosschain: Boolean): Long? {
+        if (!crosschain) return tokenIn.blockchainType.blockTime
+        val inTime = tokenIn.blockchainType.blockTime ?: return null
+        val outTime = tokenOut.blockchainType.blockTime ?: return null
+        return inTime + outTime
     }
 
     override suspend fun fetchQuote(
@@ -175,12 +195,14 @@ object AllBridgeProvider : IMultiSwapProvider {
             actionRequired = null
         }
 
+        val crosschain = tokenIn.blockchainType != tokenOut.blockchainType
         return SwapQuote(
             amountOut = amountOut,
             tokenIn = tokenIn,
             tokenOut = tokenOut,
             amountIn = amountIn,
             actionRequired = actionRequired,
+            estimationTime = estimationTime(tokenIn, tokenOut, crosschain),
         )
     }
 
@@ -280,7 +302,7 @@ object AllBridgeProvider : IMultiSwapProvider {
             sendTransactionData = sendTransactionData,
             priceImpact = null,
             fields = fields,
-            estimatedTime = if (crosschain) null else tokenIn.blockchainType.blockTime,
+            estimatedTime = estimationTime(tokenIn, tokenOut, crosschain),
             slippage = if (crosschain) null else slippage
         )
     }
@@ -382,6 +404,12 @@ object AllBridgeProvider : IMultiSwapProvider {
 
 
 interface AllBridgeAPI {
+    @GET("/transfer/status")
+    suspend fun transferStatus(
+        @Query("chain") chain: String,
+        @Query("txId") txId: String,
+    ): Response.TransferStatus
+
     @GET("/tokens")
     suspend fun tokens(): List<Response.Token>
 
@@ -433,6 +461,21 @@ interface AllBridgeAPI {
     ): Response.GasFeeOptions
 
     object Response {
+        data class TransferStatus(
+            val send: BridgeTransaction,
+            val receive: BridgeTransaction?,
+            val isSuspended: Boolean,
+        )
+
+        data class BridgeTransaction(
+            val txId: String,
+            val amount: String,
+            val amountFormatted: BigDecimal,
+            val confirmations: Int,
+            val confirmationsNeeded: Int,
+            val blockTime: Long?,
+        )
+
         data class PendingInfo(
             val pendingTxs: Long,
             val estimatedAmount: EstimatedAmount

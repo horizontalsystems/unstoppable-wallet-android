@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core
 
 import android.os.Parcelable
+import cash.z.ecc.android.sdk.model.Proposal
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.tonapps.wallet.data.core.entity.SendRequestEntity
@@ -57,7 +58,6 @@ import io.horizontalsystems.tronkit.models.Contract
 import io.horizontalsystems.tronkit.network.CreatedTransaction
 import io.horizontalsystems.tronkit.transaction.Fee
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
@@ -128,6 +128,7 @@ interface ILocalStorage {
     var marketFavoritesPeriod: TimeDuration?
     var relaunchBySettingChange: Boolean
     var marketsTabEnabled: Boolean
+    var recentlySentEnabled: Boolean
     val marketsTabEnabledFlow: StateFlow<Boolean>
     var balanceTabButtonsEnabled: Boolean
     val balanceTabButtonsEnabledFlow: StateFlow<Boolean>
@@ -141,7 +142,6 @@ interface ILocalStorage {
     var statsLastSyncTime: Long
     var uiStatsEnabled: Boolean?
     var recipientAddressCheckEnabled: Boolean
-
     val utxoExpertModeEnabledFlow: StateFlow<Boolean>
     val marketSignalsStateChangedFlow: SharedFlow<Boolean>
 
@@ -150,8 +150,10 @@ interface ILocalStorage {
     var donateUsLastShownDate: Long?
     var lastMigrationVersion: Int?
 
-    var disabledPaidActions: Set<String>
-    val disabledPaidActionsFlow: StateFlow<Set<String>>
+    var enabledPaidActions: Set<String>
+    val enabledPaidActionsFlow: StateFlow<Set<String>>
+
+    fun migrateEnabledPaidActionsFromDisabled()
 
     fun clear()
 }
@@ -381,10 +383,6 @@ interface IReceiveAdapter {
         return receiveAddressTransparent
     }
 
-    suspend fun isAddressActive(address: String): Boolean {
-        return true
-    }
-
     fun usedAddresses(change: Boolean): List<UsedAddress> {
         return listOf()
     }
@@ -401,6 +399,7 @@ interface ISendBitcoinAdapter {
     val unspentOutputs: List<UnspentOutputInfo>
     val balanceData: BalanceData
     val blockchainType: BlockchainType
+    fun selectUnspentOutputs(value: BigDecimal, feeRate: Int): List<UnspentOutputInfo>
     fun availableBalance(
         feeRate: Int,
         address: String?,
@@ -451,8 +450,9 @@ interface ISendZcashAdapter {
     val availableBalance: BigDecimal
 
     suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
-    suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger)
     suspend fun fee(amount: BigDecimal, address: String, memo: String): BigDecimal
+    suspend fun proposeTransfer(amount: BigDecimal, address: String, memo: String): Proposal
+    suspend fun sendProposal(proposal: Proposal): String?
 }
 
 interface IAdapter {

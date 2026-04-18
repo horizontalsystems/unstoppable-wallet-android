@@ -42,10 +42,10 @@ class TronTransactionsAdapter(
         get() = tronKit.lastBlockHeightFlow.asFlowable().map { }
 
     override val transactionsState: AdapterState
-        get() = convertToAdapterState(tronKit.syncState)
+        get() = convertToAdapterState(tronKit.transactionsSyncState)
 
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
-        get() = tronKit.syncStateFlow.asFlowable().map {}
+        get() = (tronKit.transactionsSyncStateFlow ?: tronKit.syncStateFlow).asFlowable().map {}
 
     override suspend fun getTransactions(
         from: TransactionRecord?,

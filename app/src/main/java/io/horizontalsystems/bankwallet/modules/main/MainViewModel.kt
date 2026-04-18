@@ -77,13 +77,15 @@ class MainViewModel(
             listOf(
                 MainNavigation.Market,
                 MainNavigation.Balance,
-                MainNavigation.Transactions,
+                MainNavigation.Swap,
+//                MainNavigation.Transactions,
                 MainNavigation.Settings,
             )
         } else {
             listOf(
                 MainNavigation.Balance,
-                MainNavigation.Transactions,
+                MainNavigation.Swap,
+//                MainNavigation.Transactions,
                 MainNavigation.Settings,
             )
         }
@@ -252,13 +254,13 @@ class MainViewModel(
             )
         }
 
-        MainNavigation.Transactions -> {
-            MainModule.NavigationViewItem(
-                mainNavItem = item,
-                selected = selected,
-                enabled = transactionsEnabled,
-            )
-        }
+//        MainNavigation.Transactions -> {
+//            MainModule.NavigationViewItem(
+//                mainNavItem = item,
+//                selected = selected,
+//                enabled = transactionsEnabled,
+//            )
+//        }
 
         MainNavigation.Settings -> {
             MainModule.NavigationViewItem(
@@ -270,6 +272,14 @@ class MainViewModel(
         }
 
         MainNavigation.Balance -> {
+            MainModule.NavigationViewItem(
+                mainNavItem = item,
+                selected = selected,
+                enabled = true,
+            )
+        }
+
+        MainNavigation.Swap -> {
             MainModule.NavigationViewItem(
                 mainNavItem = item,
                 selected = selected,
@@ -442,6 +452,11 @@ class MainViewModel(
             deeplinkString.startsWith("bitcoin:")
             || deeplinkString.startsWith("ethereum:")
             || deeplinkString.startsWith("toncoin:")
+            || deeplinkString.startsWith("monero:")
+            || deeplinkString.startsWith("tron:")
+            || deeplinkString.startsWith("solana:")
+            || deeplinkString.startsWith("zcash:")
+            || deeplinkString.startsWith("litecoin:")
         ) {
             AddressUriParser.addressUri(deeplinkString)?.let { addressUri ->
                 val allowedBlockchainTypes = addressUri.allowedBlockchainTypes
@@ -466,8 +481,11 @@ class MainViewModel(
         val (tab, deeplinkPageData) = getNavigationDataForDeeplink(uri)
         deeplinkPage = deeplinkPageData
         currentMainTab = tab
-        selectedTabIndex = items.indexOf(tab)
+        val newTabIndex = items.indexOf(tab)
+        updateSelectedTab(selectedTabIndex, newTabIndex)
+        selectedTabIndex = newTabIndex
         syncNavigation()
+        emitState()
     }
 
     fun onSendOpened() {
