@@ -1,11 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
-import com.reown.walletkit.client.Wallet
-import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionStorage
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
+import io.horizontalsystems.dapp.core.DAppManager
+import io.horizontalsystems.dapp.core.HSDAppRequest
+import io.horizontalsystems.dapp.core.HSDAppSession
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,24 +19,23 @@ class WCSessionManager(
     private val accountManager: IAccountManager,
     private val storage: WCSessionStorage,
 ) {
-
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    private val _sessionsFlow = MutableStateFlow<List<Wallet.Model.Session>>(emptyList())
-    val sessionsFlow: StateFlow<List<Wallet.Model.Session>>
+    private val _sessionsFlow = MutableStateFlow<List<HSDAppSession>>(emptyList())
+    val sessionsFlow: StateFlow<List<HSDAppSession>>
         get() = _sessionsFlow
 
     private val _pendingRequestCountFlow = MutableStateFlow(0)
     val pendingRequestCountFlow: StateFlow<Int>
         get() = _pendingRequestCountFlow
 
-    val sessions: List<Wallet.Model.Session>
+    val sessions: List<HSDAppSession>
         get() {
             val accountId = accountManager.activeAccount?.id ?: return emptyList()
             return getSessions(accountId)
         }
 
-    private var requestsQueue = listOf<Wallet.Model.SessionRequest>()
+    private var requestsQueue = listOf<HSDAppRequest>()
 
     fun start() {
         syncSessions()
@@ -67,7 +67,7 @@ class WCSessionManager(
         }
     }
 
-    private fun getCurrentSessionRequests(): List<Wallet.Model.SessionRequest> {
+    private fun getCurrentSessionRequests(): List<HSDAppRequest> {
         val accountId = accountManager.activeAccount?.id ?: return emptyList()
         return requests(accountId)
     }
@@ -75,7 +75,7 @@ class WCSessionManager(
     private fun syncSessions() {
         val accountId = accountManager.activeAccount?.id ?: return
 
-        val currentSessions = WCDelegate.getActiveSessions()
+        val currentSessions = DAppManager.getActiveSessions()
 
         val allDbSessions = storage.getAllSessions()
         val allDbTopics = allDbSessions.map { it.topic }
@@ -90,7 +90,6 @@ class WCSessionManager(
 
         _sessionsFlow.update { getSessions(accountId) }
         syncPendingRequest()
-
         syncRequests()
     }
 
@@ -98,15 +97,13 @@ class WCSessionManager(
         requestsQueue = getCurrentSessionRequests()
     }
 
-    private fun getSessions(accountId: String): List<Wallet.Model.Session> {
-        val sessions = WalletKit.getListOfActiveSessions()
+    private fun getSessions(accountId: String): List<HSDAppSession> {
+        val sessions = DAppManager.getActiveSessions()
         val dbSessions = storage.getSessionsByAccountId(accountId)
 
-        val accountSessions = sessions.filter { session ->
+        return sessions.filter { session ->
             dbSessions.any { it.topic == session.topic }
         }
-
-        return accountSessions
     }
 
     private fun syncPendingRequest() {
@@ -114,27 +111,23 @@ class WCSessionManager(
         _pendingRequestCountFlow.update { requestsCount }
     }
 
-    private fun requests(accountId: String): List<Wallet.Model.SessionRequest> {
+    private fun requests(accountId: String): List<HSDAppRequest> {
         val sessions = getSessions(accountId)
-        val pendingRequests = mutableListOf<Wallet.Model.SessionRequest>()
-        sessions.forEach { session ->
-            pendingRequests.addAll(WalletKit.getPendingListOfSessionRequests(session.topic))
+        return sessions.flatMap { session ->
+            DAppManager.getPendingRequests(session.topic)
         }
-        return pendingRequests
     }
 
     private fun handleDeletedAccount() {
         val existingAccountIds = accountManager.accounts.map { it.id }
         storage.deleteSessionsExcept(accountIds = existingAccountIds)
-
         syncSessions()
     }
 
-    fun getNewSessionRequest(): Wallet.Model.SessionRequest? {
+    fun getNewSessionRequest(): HSDAppRequest? {
         val updatedQueue = getCurrentSessionRequests()
         val newRequests = updatedQueue - requestsQueue
         syncRequests()
-
         return newRequests.firstOrNull()
     }
 
@@ -144,8 +137,7 @@ class WCSessionManager(
         object NoSuitableEvmKit : RequestDataError()
         object NoSigner : RequestDataError()
         object RequestNotFoundError : RequestDataError()
-        object InvalidGasPrice: RequestDataError()
-        object InvalidNonce: RequestDataError()
+        object InvalidGasPrice : RequestDataError()
+        object InvalidNonce : RequestDataError()
     }
-
 }

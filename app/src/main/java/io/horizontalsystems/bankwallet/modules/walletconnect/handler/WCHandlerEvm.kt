@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.handler
 
-import com.reown.android.Core
-import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.AbstractWCAction
+import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
@@ -21,11 +21,6 @@ class WCHandlerEvm(
     override val supportedMethods = listOf(
         "eth_sendTransaction",
         "personal_sign",
-//        "eth_accounts",
-//        "eth_requestAccounts",
-//        "eth_call",
-//        "eth_getBalance",
-//        "eth_sendRawTransaction",
         "eth_sign",
         "eth_signTransaction",
         "eth_signTypedData",
@@ -39,7 +34,6 @@ class WCHandlerEvm(
     override fun getAccountAddresses(account: Account): List<String> {
         return supportedEvmChains.map { evmChain ->
             val address = getEvmAddress(account, evmChain)
-
             "${chainNamespace}:${evmChain.id}:${address.eip55}"
         }
     }
@@ -68,12 +62,8 @@ class WCHandlerEvm(
         return MethodData(title, shortTitle, evmChain?.name ?: "")
     }
 
-    override fun getAction(
-        request: Wallet.Model.SessionRequest.JSONRPCRequest,
-        peerMetaData: Core.Model.AppMetaData?,
-        chainInternalId: String?,
-    ) = when (request.method) {
-        else -> throw UnsupportedMethodException(request.method)
+    override fun getAction(request: HSDAppRequest, chainInternalId: String?): AbstractWCAction {
+        throw UnsupportedMethodException(request.method)
     }
 
     private fun getEvmAddress(account: Account, chain: Chain) =
@@ -96,8 +86,6 @@ class WCHandlerEvm(
 
     override fun getChainName(chainInternalId: String): String? {
         val evmChainId = chainInternalId.toInt()
-
         return supportedEvmChains.find { it.id == evmChainId }?.name
     }
-
 }

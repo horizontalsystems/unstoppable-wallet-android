@@ -1,10 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
-import com.reown.android.Core
-import com.reown.android.CoreClient
-import com.reown.walletkit.client.Wallet
-import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.dapp.core.DAppManager
+import io.horizontalsystems.dapp.core.DAppServiceCallback
+import io.horizontalsystems.dapp.core.HSDAppEvent
+import io.horizontalsystems.dapp.core.HSDAppProposal
+import io.horizontalsystems.dapp.core.HSDAppRequest
+import io.horizontalsystems.dapp.core.HSDAppSession
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -16,178 +18,102 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-object WCDelegate : WalletKit.WalletDelegate, CoreClient.CoreDelegate {
+object WCDelegate : DAppServiceCallback {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-    private val _coreEvents: MutableSharedFlow<Core.Model> = MutableSharedFlow()
-    val coreEvents: SharedFlow<Core.Model> = _coreEvents.asSharedFlow()
 
-    private val _pairingEvents: MutableSharedFlow<Unit> = MutableSharedFlow()
+    private val _walletEvents = MutableSharedFlow<HSDAppEvent>()
+    val walletEvents: SharedFlow<HSDAppEvent> = _walletEvents.asSharedFlow()
+
+    private val _pairingEvents = MutableSharedFlow<Unit>()
     val pairingEvents: SharedFlow<Unit> = _pairingEvents.asSharedFlow()
 
-    private val _walletEvents: MutableSharedFlow<Wallet.Model> = MutableSharedFlow()
-    val walletEvents: SharedFlow<Wallet.Model> = _walletEvents.asSharedFlow()
-
-    private val _pendingRequestEvents: MutableSharedFlow<Unit> = MutableSharedFlow()
+    private val _pendingRequestEvents = MutableSharedFlow<Unit>()
     val pendingRequestEvents: SharedFlow<Unit> = _pendingRequestEvents.asSharedFlow()
 
-    private val _connectionAvailableEvent: MutableStateFlow<Boolean?> = MutableStateFlow(null)
+    private val _connectionAvailableEvent = MutableStateFlow<Boolean?>(null)
     val connectionAvailableEvent: StateFlow<Boolean?> = _connectionAvailableEvent.asStateFlow()
 
-    var sessionProposalEvent: Pair<Wallet.Model.SessionProposal, Wallet.Model.VerifyContext>? = null
-    var sessionRequestEvent: Wallet.Model.SessionRequest? = null
+    var sessionProposalEvent: HSDAppProposal? = null
+    var sessionRequestEvent: HSDAppRequest? = null
 
-    init {
-        CoreClient.setDelegate(this)
-        WalletKit.setWalletDelegate(this)
+    // region DAppServiceCallback
+
+    override fun onConnectionStateChange(isAvailable: Boolean) {
+        _connectionAvailableEvent.tryEmit(isAvailable)
+        scope.launch { _walletEvents.emit(HSDAppEvent.ConnectionState(isAvailable)) }
     }
 
-    override fun onConnectionStateChange(state: Wallet.Model.ConnectionState) {
-        scope.launch {
-            _connectionAvailableEvent.emit(state.isAvailable)
-        }
-        scope.launch {
-            _walletEvents.emit(state)
-        }
+    override fun onError(throwable: Throwable) {
+        scope.launch { _walletEvents.emit(HSDAppEvent.Error(throwable)) }
     }
 
-
-    override fun onError(error: Wallet.Model.Error) {
-        scope.launch {
-            _walletEvents.emit(error)
-        }
+    override fun onSessionDelete(topic: String) {
+        scope.launch { _walletEvents.emit(HSDAppEvent.SessionDelete(topic)) }
     }
 
-    override fun onSessionDelete(sessionDelete: Wallet.Model.SessionDelete) {
-        scope.launch {
-            _walletEvents.emit(sessionDelete)
-        }
+    override fun onSessionProposal(proposal: HSDAppProposal) {
+        sessionProposalEvent = proposal
+        scope.launch { _walletEvents.emit(HSDAppEvent.SessionProposal(proposal)) }
     }
 
-    override fun onSessionExtend(session: Wallet.Model.Session) {
-        // no-op
-    }
-
-    override fun onSessionProposal(
-        sessionProposal: Wallet.Model.SessionProposal,
-        verifyContext: Wallet.Model.VerifyContext
-    ) {
-        sessionProposalEvent = Pair(sessionProposal, verifyContext)
-
-        scope.launch {
-            _walletEvents.emit(sessionProposal)
-        }
-    }
-
-    override fun onSessionRequest(
-        sessionRequest: Wallet.Model.SessionRequest,
-        verifyContext: Wallet.Model.VerifyContext
-    ) {
+    override fun onSessionRequest(request: HSDAppRequest) {
         sessionRequestEvent = null
+        val newRequest = App.wcSessionManager.getNewSessionRequest() ?: return
+        if (App.wcWalletRequestHandler.handle(newRequest)) return
 
-        val newSessionRequest = App.wcSessionManager.getNewSessionRequest() ?: return
-        if (App.wcWalletRequestHandler.handle(newSessionRequest)) return
-
-        sessionRequestEvent = newSessionRequest
-
+        sessionRequestEvent = newRequest
         scope.launch {
-            _walletEvents.emit(newSessionRequest)
+            _walletEvents.emit(HSDAppEvent.SessionRequest(newRequest))
             _pendingRequestEvents.emit(Unit)
         }
     }
 
-    override fun onSessionSettleResponse(settleSessionResponse: Wallet.Model.SettledSessionResponse) {
+    override fun onSessionSettled(session: HSDAppSession) {
+        scope.launch { _walletEvents.emit(HSDAppEvent.SessionSettled(session)) }
+    }
+
+    override fun onSessionSettleError(errorMessage: String) {
+        scope.launch { _walletEvents.emit(HSDAppEvent.SessionSettleError(errorMessage)) }
+    }
+
+    override fun onSessionUpdate() {
+        scope.launch { _walletEvents.emit(HSDAppEvent.SessionUpdate) }
+    }
+
+    override fun onPairingDelete(topic: String) {
         scope.launch {
-            _walletEvents.emit(settleSessionResponse)
-        }
-    }
-
-    override fun onSessionUpdateResponse(sessionUpdateResponse: Wallet.Model.SessionUpdateResponse) {
-        scope.launch {
-            _walletEvents.emit(sessionUpdateResponse)
-        }
-    }
-
-    override fun onPairingDelete(deletedPairing: Core.Model.DeletedPairing) {
-        // not working during pairing delete
-        scope.launch {
-            _coreEvents.emit(deletedPairing)
-        }
-    }
-
-//    override fun onProposalExpired(proposal: Wallet.Model.ExpiredProposal) {
-//        Log.e("TAG", "onProposalExpired: ", )
-//    }
-//
-//    override fun onRequestExpired(request: Wallet.Model.ExpiredRequest) {
-//        Log.e("TAG", "onRequestExpired: ", )
-//    }
-//
-//    override fun onSessionExtend(session: Wallet.Model.Session) {
-//        Log.e("TAG", "onSessionExtend: ", )
-//    }
-//
-//    override fun onPairingExpired(expiredPairing: Core.Model.ExpiredPairing) {
-//        Log.e("TAG", "onPairingExpired: ", )
-//    }
-//
-//    override fun onPairingState(pairingState: Core.Model.PairingState) {
-//        Log.e("TAG", "onPairingState: $pairingState", )
-//    }
-
-//    fun deleteAccountAllPairings(currentAccountTopics: List<String>) {
-//        WalletKit.getListOfActiveSessions()
-//            .filter { currentAccountTopics.contains(it.topic) }
-//            .forEach {
-//                deletePairing(it.topic)
-//            }
-//    }
-
-    fun getPairings(): List<Core.Model.Pairing> {
-        return CoreClient.Pairing.getPairings()
-    }
-
-    fun getActiveSessions(): List<Wallet.Model.Session> {
-        return WalletKit.getListOfActiveSessions()
-    }
-
-    fun deletePairing(topic: String, onError: (Throwable) -> Unit = {}) {
-        val params = Core.Params.Disconnect(topic)
-        CoreClient.Pairing.disconnect(params, onError = {
-            onError.invoke(it.throwable)
-        })
-        scope.launch {
+            _walletEvents.emit(HSDAppEvent.PairingDelete(topic))
             _pairingEvents.emit(Unit)
         }
+    }
+
+    // endregion
+
+    // region Actions (delegated to DAppManager)
+
+    fun getPairings() = DAppManager.getPairings()
+
+    fun getActiveSessions() = DAppManager.getActiveSessions()
+
+    fun deletePairing(topic: String, onError: (Throwable) -> Unit = {}) {
+        DAppManager.disconnectPairing(topic, onError)
+        scope.launch { _pairingEvents.emit(Unit) }
     }
 
     fun deleteAllPairings(onError: (Throwable) -> Unit = {}) {
-        try {
-            CoreClient.Pairing.getPairings().forEach {
-                deletePairing(it.topic)
-            }
-        } catch (e: Exception) {
-            onError.invoke(e)
-        }
-        scope.launch {
-            _pairingEvents.emit(Unit)
-        }
+        DAppManager.disconnectAllPairings(onError)
+        scope.launch { _pairingEvents.emit(Unit) }
     }
 
-    fun deleteSession(
-        topic: String,
-        onSuccess: () -> Unit = {},
-        onError: (Throwable) -> Unit = {}
-    ) {
-        WalletKit.disconnectSession(Wallet.Params.SessionDisconnect(topic),
+    fun deleteSession(topic: String, onSuccess: () -> Unit = {}, onError: (Throwable) -> Unit = {}) {
+        DAppManager.disconnectSession(
+            topic = topic,
             onSuccess = {
-                scope.launch {
-                    _walletEvents.emit(Wallet.Model.SessionDelete.Success(it.sessionTopic, ""))
-                }
-                onSuccess.invoke()
+                scope.launch { _walletEvents.emit(HSDAppEvent.SessionDelete(topic)) }
+                onSuccess()
             },
-            onError = {
-                onError.invoke(it.throwable)
-            })
+            onError = onError
+        )
     }
 
     fun respondPendingRequest(
@@ -197,9 +123,23 @@ object WCDelegate : WalletKit.WalletDelegate, CoreClient.CoreDelegate {
         onSuccessResult: () -> Unit = {},
         onErrorResult: (Throwable) -> Unit = {},
     ) {
-        val jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcResult(requestId, data)
-
-        respondSessionRequest(topic, jsonRpcResponse, onSuccessResult, onErrorResult)
+        DAppManager.respondRequest(
+            topic = topic,
+            requestId = requestId,
+            result = data,
+            onSuccess = {
+                onSuccessResult()
+                scope.launch {
+                    sessionRequestEvent = null
+                    _pendingRequestEvents.emit(Unit)
+                }
+            },
+            onError = { error ->
+                sessionRequestEvent = null
+                onErrorResult(error)
+                scope.launch { _walletEvents.emit(HSDAppEvent.Error(error)) }
+            }
+        )
     }
 
     fun rejectRequest(
@@ -208,30 +148,11 @@ object WCDelegate : WalletKit.WalletDelegate, CoreClient.CoreDelegate {
         onSuccessResult: () -> Unit = {},
         onErrorResult: (Throwable) -> Unit = {},
     ) {
-        val jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcError(
-            id = requestId,
-            code = 500,
-            message = "Rejected by user"
-        )
-
-        respondSessionRequest(topic, jsonRpcResponse, onSuccessResult, onErrorResult)
-    }
-
-    private fun respondSessionRequest(
-        topic: String,
-        jsonRpcResponse: Wallet.Model.JsonRpcResponse,
-        onSuccessResult: () -> Unit,
-        onErrorResult: (Throwable) -> Unit,
-    ) {
-        val response = Wallet.Params.SessionRequestResponse(
-            sessionTopic = topic,
-            jsonRpcResponse = jsonRpcResponse
-        )
-
-        WalletKit.respondSessionRequest(
-            response,
+        DAppManager.rejectRequest(
+            topic = topic,
+            requestId = requestId,
             onSuccess = {
-                onSuccessResult.invoke()
+                onSuccessResult()
                 scope.launch {
                     sessionRequestEvent = null
                     _pendingRequestEvents.emit(Unit)
@@ -239,9 +160,11 @@ object WCDelegate : WalletKit.WalletDelegate, CoreClient.CoreDelegate {
             },
             onError = { error ->
                 sessionRequestEvent = null
-                onErrorResult.invoke(error.throwable)
-                onError(error)
-            })
+                onErrorResult(error)
+                scope.launch { _walletEvents.emit(HSDAppEvent.Error(error)) }
+            }
+        )
     }
 
+    // endregion
 }

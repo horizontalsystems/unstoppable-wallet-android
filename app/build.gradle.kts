@@ -321,15 +321,6 @@ dependencies {
     api(libs.zxing)
     implementation(libs.qrose)
 
-    // Reown (WalletConnect)
-    implementation(platform(libs.reown.bom))
-    implementation(libs.reown.walletkit) {
-        exclude(group = "com.google.firebase")
-    }
-    implementation(libs.reown.android.core) {
-        exclude(group = "com.google.firebase")
-    }
-
     // Web3
     implementation(libs.web3j)
     implementation(libs.unstoppable.domains)
@@ -376,6 +367,7 @@ dependencies {
     implementation(project(":components:chartview"))
 
     implementation(project(":subscriptions-core"))
+    implementation(project(":dapp-core"))
 
     // UI Tests
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
@@ -405,6 +397,12 @@ afterEvaluate {
         "fdroidImplementation"(project(":subscriptions-fdroid"))
         "fdroidCiImplementation"(project(":subscriptions-fdroid"))
         "ciImplementation"(project(":subscriptions-dev"))
+
+        findProject(":dapp-wallet-connect")?.let {
+            "baseDebugImplementation"(it)
+            "baseReleaseImplementation"(it)
+            "ciImplementation"(it)
+        }
     }
 }
 

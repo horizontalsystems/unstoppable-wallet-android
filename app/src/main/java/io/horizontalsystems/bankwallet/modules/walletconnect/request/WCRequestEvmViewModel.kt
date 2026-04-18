@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonParser
-import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
@@ -13,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
+import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
@@ -64,9 +64,9 @@ class WCRequestEvmViewModel(
                     peerDescription = sessionRequest.peerMetaData?.description ?: "",
                 ),
                 topic = sessionRequest.topic,
-                requestId = sessionRequest.request.id,
+                requestId = sessionRequest.requestId,
                 param = getParam(sessionRequest),
-                method = sessionRequest.request.method,
+                method = sessionRequest.method,
                 chainName = chainName,
                 chainAddress = chainAddress,
                 walletName = accountManager.activeAccount?.name ?: ""
@@ -74,14 +74,14 @@ class WCRequestEvmViewModel(
         } ?: SessionRequestUI.Initial
     }
 
-    private fun getParam(sessionRequest: Wallet.Model.SessionRequest) =
-        when (sessionRequest.request.method) {
+    private fun getParam(sessionRequest: HSDAppRequest) =
+        when (sessionRequest.method) {
             PERSONAL_SIGN_METHOD -> {
-                extractMessageParamFromPersonalSign(sessionRequest.request.params)
+                extractMessageParamFromPersonalSign(sessionRequest.params)
             }
 
             ETH_SIGN_METHOD -> {
-                val params = JsonParser.parseString(sessionRequest.request.params).asJsonArray
+                val params = JsonParser.parseString(sessionRequest.params).asJsonArray
                 if (params.size() >= 2) {
                     params.get(1).asString
                 } else {
@@ -90,13 +90,13 @@ class WCRequestEvmViewModel(
             }
 
             TYPED_DATA_METHOD, TYPED_DATA_METHOD_V4, SEND_TRANSACTION_METHOD, SIGN_TRANSACTION_METHOD -> {
-                val params = JsonParser.parseString(sessionRequest.request.params).asJsonArray
+                val params = JsonParser.parseString(sessionRequest.params).asJsonArray
                 params.firstOrNull { it.isJsonObject }?.asJsonObject?.toString()
                     ?: throw Exception("Invalid Data")
             }
 
             else -> {
-                sessionRequest.request.params
+                sessionRequest.params
             }
         }
 
