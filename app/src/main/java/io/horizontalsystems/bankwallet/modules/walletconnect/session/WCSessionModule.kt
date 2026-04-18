@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.session
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
 
@@ -49,7 +49,7 @@ data class WCSessionButtonStates(
 data class WCRequestViewItem(
     val title: String,
     val subtitle: String,
-    val request: Wallet.Model.SessionRequest
+    val request: HSDAppRequest
 )
 
 enum class WCWhiteListState {

@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.pairing
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.reown.android.Core
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
+import io.horizontalsystems.dapp.core.HSDAppPairing
 
 class WCPairingsViewModel : ViewModelUiState<WCPairingsUiState>() {
 
@@ -16,7 +16,7 @@ class WCPairingsViewModel : ViewModelUiState<WCPairingsUiState>() {
         closeScreen = pairings.isEmpty(),
     )
 
-    private fun getPairingViewItem(pairing: Core.Model.Pairing): PairingViewItem {
+    private fun getPairingViewItem(pairing: HSDAppPairing): PairingViewItem {
         val metaData = pairing.peerAppMetaData
 
         return PairingViewItem(

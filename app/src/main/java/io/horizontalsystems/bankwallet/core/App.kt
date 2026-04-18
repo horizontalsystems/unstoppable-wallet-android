@@ -13,11 +13,6 @@ import coil.ImageLoaderFactory
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.decode.SvgDecoder
-import com.reown.android.Core
-import com.reown.android.CoreClient
-import com.reown.android.relay.ConnectionType
-import com.reown.walletkit.client.Wallet
-import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
@@ -111,6 +106,7 @@ import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconServic
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCWalletRequestHandler
@@ -124,6 +120,8 @@ import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
+import io.horizontalsystems.dapp.core.DAppInitParams
+import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
@@ -450,7 +448,17 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         nftAdapterManager = NftAdapterManager(walletManager, evmBlockchainManager)
         nftMetadataSyncer = NftMetadataSyncer(nftAdapterManager, nftMetadataManager, nftStorage)
 
-        initializeWalletConnectV2(appConfig)
+        DAppManager.initialize(
+            params = DAppInitParams(
+                application = this,
+                projectId = appConfig.walletConnectProjectId,
+                relayServerUrl = "wss://${appConfig.walletConnectUrl}?projectId=${appConfig.walletConnectProjectId}",
+                appName = appConfig.walletConnectAppMetaDataName,
+                appUrl = appConfig.walletConnectAppMetaDataUrl,
+                appIcon = appConfig.walletConnectAppMetaDataIcon,
+            ),
+            callback = WCDelegate,
+        )
 
         wcSessionManager = WCSessionManager(accountManager, WCSessionStorage(appDatabase))
 
@@ -528,32 +536,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                 }
             }
             .build()
-    }
-
-    private fun initializeWalletConnectV2(appConfig: AppConfigProvider) {
-        val projectId = appConfig.walletConnectProjectId
-        val serverUrl = "wss://${appConfig.walletConnectUrl}?projectId=$projectId"
-        val connectionType = ConnectionType.AUTOMATIC
-        val appMetaData = Core.Model.AppMetaData(
-            name = appConfig.walletConnectAppMetaDataName,
-            description = "",
-            url = appConfig.walletConnectAppMetaDataUrl,
-            icons = listOf(appConfig.walletConnectAppMetaDataIcon),
-            redirect = null,
-        )
-
-        CoreClient.initialize(
-            metaData = appMetaData,
-            relayServerUrl = serverUrl,
-            connectionType = connectionType,
-            application = this,
-            onError = { error ->
-                Timber.w(error.throwable)
-            },
-        )
-        WalletKit.initialize(Wallet.Params.Init(core = CoreClient)) { error ->
-            Timber.e(error.throwable)
-        }
     }
 
     private fun setAppTheme() {

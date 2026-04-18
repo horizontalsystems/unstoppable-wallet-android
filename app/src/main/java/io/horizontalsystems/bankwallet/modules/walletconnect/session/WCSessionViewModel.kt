@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.session
 
 import androidx.lifecycle.viewModelScope
-import com.reown.walletkit.client.Wallet
-import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.INetworkManager
@@ -25,6 +23,11 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionSe
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Ready
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.WaitingForApproveSession
 import io.horizontalsystems.core.SingleLiveEvent
+import io.horizontalsystems.dapp.core.DAppManager
+import io.horizontalsystems.dapp.core.HSDAppEvent
+import io.horizontalsystems.dapp.core.HSDAppProposal
+import io.horizontalsystems.dapp.core.HSDAppRequest
+import io.horizontalsystems.dapp.core.HSDAppSession
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.subscriptions.core.ScamProtection
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
@@ -89,12 +92,11 @@ class WCSessionViewModel(
     private var sessionServiceState: WCSessionServiceState = WCSessionServiceState.Idle
         set(value) {
             field = value
-
             sync(state = value, connection = WCDelegate.connectionAvailableEvent.value)
         }
 
-    private var proposal: Wallet.Model.SessionProposal? = null
-    private var session: Wallet.Model.Session? = null
+    private var proposal: HSDAppProposal? = null
+    private var session: HSDAppSession? = null
 
     init {
         viewModelScope.launch {
@@ -115,55 +117,38 @@ class WCSessionViewModel(
         viewModelScope.launch {
             WCDelegate.walletEvents.collect { event ->
                 when (event) {
-                    is Wallet.Model.SessionDelete -> {
-                        when (event) {
-                            is Wallet.Model.SessionDelete.Success -> {
-                                session?.topic?.let { topic ->
-                                    if (topic == event.topic) {
-                                        sessionServiceState = Killed
-                                    }
-                                }
-                            }
-
-                            is Wallet.Model.SessionDelete.Error -> {
-                                sessionServiceState = Invalid(event.error)
+                    is HSDAppEvent.SessionDelete -> {
+                        session?.topic?.let { topic ->
+                            if (topic == event.topic) {
+                                sessionServiceState = Killed
                             }
                         }
-
-                        sessionServiceState = Killed
                     }
 
-                    is Wallet.Model.Error -> {
+                    is HSDAppEvent.Error -> {
                         sessionServiceState = Invalid(event.throwable)
                     }
 
-                    is Wallet.Model.SettledSessionResponse -> {
-                        when (event) {
-                            is Wallet.Model.SettledSessionResponse.Result -> {
-                                val session = event.session
-                                peerMeta = session.metaData?.let {
-                                    PeerMetaItem(
-                                        it.name,
-                                        it.url,
-                                        it.description,
-                                        it.icons.lastOrNull()?.toString(),
-                                        account?.name,
-                                    )
-                                }
-
-                                this@WCSessionViewModel.session = session
-                                sessionServiceState = Ready
-                            }
-
-                            is Wallet.Model.SettledSessionResponse.Error -> {
-                                sessionServiceState = Invalid(Throwable(event.errorMessage))
-                            }
+                    is HSDAppEvent.SessionSettled -> {
+                        val settledSession = event.session
+                        peerMeta = settledSession.metaData?.let {
+                            PeerMetaItem(
+                                it.name,
+                                it.url,
+                                it.description,
+                                it.icons.lastOrNull(),
+                                account?.name,
+                            )
                         }
+                        this@WCSessionViewModel.session = settledSession
+                        sessionServiceState = Ready
                     }
 
-                    else -> {
-
+                    is HSDAppEvent.SessionSettleError -> {
+                        sessionServiceState = Invalid(Throwable(event.errorMessage))
                     }
+
+                    else -> Unit
                 }
             }
         }
@@ -211,7 +196,7 @@ class WCSessionViewModel(
                         it.name,
                         it.url,
                         it.description,
-                        it.icons.lastOrNull()?.toString(),
+                        it.icons.lastOrNull(),
                         account?.name,
                     )
                 }
@@ -225,12 +210,12 @@ class WCSessionViewModel(
                 }
             }
         } else {
-            WCDelegate.sessionProposalEvent?.let { (sessionProposal, _) ->
+            WCDelegate.sessionProposalEvent?.let { sessionProposal ->
                 peerMeta = PeerMetaItem(
                     sessionProposal.name,
                     sessionProposal.url,
                     sessionProposal.description,
-                    sessionProposal.icons.lastOrNull()?.toString(),
+                    sessionProposal.icons.lastOrNull(),
                     account?.name,
                 )
 
@@ -244,7 +229,6 @@ class WCSessionViewModel(
 
                 sessionServiceState = try {
                     wcManager.validate(sessionProposal.requiredNamespaces)
-
                     WaitingForApproveSession
                 } catch (e: Throwable) {
                     Invalid(e)
@@ -260,7 +244,7 @@ class WCSessionViewModel(
     }
 
     private fun getPendingRequestViewItems(topic: String): List<WCRequestViewItem> {
-        return WalletKit.getPendingListOfSessionRequests(topic).map { request ->
+        return DAppManager.getPendingRequests(topic).map { request ->
             val methodData = wcManager.getMethodData(request)
 
             WCRequestViewItem(
@@ -294,11 +278,8 @@ class WCSessionViewModel(
 
     private fun getCurrentUrl(): String? {
         return when {
-            // For new proposals
             proposal != null -> proposal?.url
-            // For existing sessions
             session != null -> session?.metaData?.url
-            // Fallback to peerMeta
             peerMeta != null -> peerMeta?.url
             else -> null
         }
@@ -313,12 +294,9 @@ class WCSessionViewModel(
         return whiteList.any { whiteListItem ->
             val normalizedWhiteListUrl = normalizeUrl(whiteListItem.url)
 
-            // Exact match
             normalizedUrl == normalizedWhiteListUrl ||
-                    // Domain match (handles subdomains)
                     normalizedUrl.endsWith(".$normalizedWhiteListUrl") ||
                     normalizedUrl.endsWith(normalizedWhiteListUrl) ||
-                    // Reverse check for subdomain cases
                     normalizedWhiteListUrl.endsWith(".$normalizedUrl") ||
                     normalizedWhiteListUrl.endsWith(normalizedUrl)
         }
@@ -333,10 +311,7 @@ class WCSessionViewModel(
             .trim()
     }
 
-    private fun sync(
-        state: WCSessionServiceState,
-        connection: Boolean?
-    ) {
+    private fun sync(state: WCSessionServiceState, connection: Boolean?) {
         if (state == Killed) {
             closeLiveEvent.postValue(Unit)
             return
@@ -424,63 +399,41 @@ class WCSessionViewModel(
     suspend fun approve(proposalPublicKey: String) {
         val accountNonNull = account ?: return
         return suspendCoroutine { continuation ->
-            if (WalletKit.getSessionProposals().isNotEmpty()) {
+            if (DAppManager.getSessionProposals().isNotEmpty()) {
                 val namespaces = wcManager.getSupportedNamespaces(accountNonNull)
-                val sessionProposal: Wallet.Model.SessionProposal = try {
-                    requireNotNull(
-                        WalletKit.getSessionProposals()
-                            .find { it.proposerPublicKey == proposalPublicKey })
-                } catch (e: Exception) {
-                    continuation.resumeWithException(e)
-                    WCDelegate.sessionProposalEvent = null
-                    return@suspendCoroutine
-                }
-                val sessionNamespaces = WalletKit.generateApprovedNamespaces(
-                    sessionProposal = sessionProposal,
-                    supportedNamespaces = namespaces
-                )
-                val approveProposal = Wallet.Params.SessionApprove(
-                    proposerPublicKey = sessionProposal.proposerPublicKey,
-                    namespaces = sessionNamespaces
-                )
+                val sessionNamespaces = DAppManager.generateApprovedNamespaces(proposalPublicKey, namespaces)
 
-                WalletKit.approveSession(
-                    approveProposal,
-                    onError = { error ->
-                        continuation.resumeWithException(error.throwable)
-                        WCDelegate.sessionProposalEvent = null
-                    },
+                DAppManager.approveSession(
+                    proposerPublicKey = proposalPublicKey,
+                    namespaces = sessionNamespaces,
                     onSuccess = {
                         continuation.resume(Unit)
                         WCDelegate.sessionProposalEvent = null
-                    })
+                    },
+                    onError = { error ->
+                        continuation.resumeWithException(error)
+                        WCDelegate.sessionProposalEvent = null
+                    }
+                )
             }
         }
     }
 
     suspend fun reject(proposalPublicKey: String, onSuccess: () -> Unit) {
         return suspendCoroutine { continuation ->
-            if (WalletKit.getSessionProposals().isNotEmpty()) {
-                val sessionProposal: Wallet.Model.SessionProposal = requireNotNull(
-                    WalletKit.getSessionProposals()
-                        .find { it.proposerPublicKey == proposalPublicKey })
-                val rejectionReason = "Reject Session"
-                val reject = Wallet.Params.SessionReject(
-                    proposerPublicKey = sessionProposal.proposerPublicKey,
-                    reason = rejectionReason
-                )
-
-                WalletKit.rejectSession(
-                    reject,
+            if (DAppManager.getSessionProposals().isNotEmpty()) {
+                DAppManager.rejectSession(
+                    proposerPublicKey = proposalPublicKey,
                     onSuccess = {
                         continuation.resume(Unit)
                         WCDelegate.sessionProposalEvent = null
                         onSuccess.invoke()
                     },
                     onError = { error ->
-                        continuation.resumeWithException(error.throwable)
+                        continuation.resumeWithException(error)
                         WCDelegate.sessionProposalEvent = null
-                    })
+                    }
+                )
             }
         }
     }
@@ -493,10 +446,7 @@ class WCSessionViewModel(
         }
     }
 
-    private fun setButtons(
-        state: WCSessionServiceState,
-        connection: Boolean?
-    ) {
+    private fun setButtons(state: WCSessionServiceState, connection: Boolean?) {
         buttonStates = WCSessionButtonStates(
             connect = getConnectButtonState(state),
             disconnect = getDisconnectButtonState(state, connection),
@@ -506,26 +456,17 @@ class WCSessionViewModel(
     }
 
     private fun getCancelButtonState(state: WCSessionServiceState): WCButtonState {
-        return if (state != Ready) {
-            WCButtonState.Enabled
-        } else {
-            WCButtonState.Hidden
-        }
+        return if (state != Ready) WCButtonState.Enabled else WCButtonState.Hidden
     }
 
-    private fun getConnectButtonState(
-        state: WCSessionServiceState,
-    ): WCButtonState {
+    private fun getConnectButtonState(state: WCSessionServiceState): WCButtonState {
         return when {
             state == WaitingForApproveSession -> WCButtonState.Enabled
             else -> WCButtonState.Hidden
         }
     }
 
-    private fun getDisconnectButtonState(
-        state: WCSessionServiceState,
-        connectionState: Boolean?
-    ): WCButtonState {
+    private fun getDisconnectButtonState(state: WCSessionServiceState, connectionState: Boolean?): WCButtonState {
         return when {
             state == Ready && connectionState == true -> WCButtonState.Enabled
             else -> WCButtonState.Hidden
@@ -545,22 +486,14 @@ class WCSessionViewModel(
             }
 
             "stellar" -> {
-                val s = chainParts[1]
-                if (s == "pubnet") {
-                    BlockchainType.Stellar
-                } else {
-                    null
-                }
+                if (chainParts[1] == "pubnet") BlockchainType.Stellar else null
             }
 
             else -> null
         }
     }
 
-    private fun getRemoveButtonState(
-        state: WCSessionServiceState,
-        connectionState: Boolean?
-    ): WCButtonState {
+    private fun getRemoveButtonState(state: WCSessionServiceState, connectionState: Boolean?): WCButtonState {
         return when {
             state is Invalid -> WCButtonState.Hidden
             connectionState == false && state is Ready -> WCButtonState.Enabled
@@ -568,30 +501,22 @@ class WCSessionViewModel(
         }
     }
 
-    private fun setError(
-        state: WCSessionServiceState
-    ) {
-        val error: String? = when {
-            state is Invalid && (state.error !is ValidationError) -> state.error.message
-                ?: state.error::class.java.simpleName
-
+    private fun setError(state: WCSessionServiceState) {
+        showError = when {
+            state is Invalid && (state.error !is ValidationError) ->
+                state.error.message ?: state.error::class.java.simpleName
             else -> null
         }
-
-        showError = error
     }
 
     private fun getHint(connection: Boolean?, state: WCSessionServiceState): String? {
-        when {
-            connection == false
-                    && (state == WaitingForApproveSession || state is Ready) -> {
-                return Translator.getString(R.string.WalletConnect_Reconnect_Hint)
-            }
-
-            connection == null -> return null
-            state is Invalid -> return getErrorMessage(state.error)
+        return when {
+            connection == false && (state == WaitingForApproveSession || state is Ready) ->
+                Translator.getString(R.string.WalletConnect_Reconnect_Hint)
+            connection == null -> null
+            state is Invalid -> getErrorMessage(state.error)
+            else -> null
         }
-        return null
     }
 
     private fun getErrorMessage(error: Throwable): String? {
@@ -604,27 +529,23 @@ class WCSessionViewModel(
                 R.string.WalletConnect_Error_UnsupportedChains,
                 error.chainNamespace
             )
-
             is ValidationError.UnsupportedChains -> Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedChains,
                 error.chains.joinToString()
             )
-
             is ValidationError.UnsupportedMethods -> Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedMethods,
                 error.methods.joinToString()
             )
-
             is ValidationError.UnsupportedEvents -> Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedEvents,
                 error.events.joinToString()
             )
-
             else -> null
         }
     }
 
-    fun setRequestToOpen(request: Wallet.Model.SessionRequest) {
+    fun setRequestToOpen(request: HSDAppRequest) {
         WCDelegate.sessionRequestEvent = request
     }
 
@@ -632,7 +553,6 @@ class WCSessionViewModel(
         showError = null
         emitState()
     }
-
 }
 
 sealed class ValidationError : Throwable() {
@@ -641,4 +561,3 @@ sealed class ValidationError : Throwable() {
     class UnsupportedMethods(val methods: List<String>) : ValidationError()
     class UnsupportedEvents(val events: List<String>) : ValidationError()
 }
-

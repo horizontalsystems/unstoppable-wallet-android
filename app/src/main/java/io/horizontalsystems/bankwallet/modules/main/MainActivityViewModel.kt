@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -16,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.security.KeyStoreValidationError
+import io.horizontalsystems.dapp.core.HSDAppEvent
 import io.horizontalsystems.tonkit.models.SignTransaction
 import kotlinx.coroutines.launch
 
@@ -29,7 +29,7 @@ class MainActivityViewModel(
 ) : ViewModel() {
 
     val navigateToMainLiveData = MutableLiveData(false)
-    val wcEvent = MutableLiveData<Wallet.Model?>()
+    val wcEvent = MutableLiveData<HSDAppEvent?>()
     val tcSendRequest = MutableLiveData<SignTransaction?>()
     val tcDappRequest = MutableLiveData<DAppRequestEntityWrapper?>()
     val intentLiveData = MutableLiveData<Intent?>()
@@ -63,7 +63,7 @@ class MainActivityViewModel(
 
     fun reEmitPendingWcProposalIfNeeded() {
         if (wcEvent.value == null && WCDelegate.sessionProposalEvent != null) {
-            wcEvent.postValue(WCDelegate.sessionProposalEvent!!.first)
+            wcEvent.postValue(HSDAppEvent.SessionProposal(WCDelegate.sessionProposalEvent!!))
         }
     }
 

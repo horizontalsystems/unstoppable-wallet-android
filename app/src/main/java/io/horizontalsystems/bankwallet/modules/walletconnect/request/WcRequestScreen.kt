@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
@@ -40,12 +39,13 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetCo
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.dapp.core.HSDAppRequest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WcRequestScreen(
     navController: NavController,
-    sessionRequest: Wallet.Model.SessionRequest,
+    sessionRequest: HSDAppRequest,
     wcAction: AbstractWCAction
 ) {
     val viewModel = viewModel<WCRequestViewModel>(

@@ -5,15 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.reown.android.CoreClient
-import com.reown.walletkit.client.Wallet
-import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCRequestViewItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
-import kotlinx.coroutines.Dispatchers
+import io.horizontalsystems.dapp.core.DAppManager
+import io.horizontalsystems.dapp.core.HSDAppRequest
+import io.horizontalsystems.dapp.core.HSDAppSession
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -64,7 +63,6 @@ class WalletConnectListViewModel(
                 syncPairingCount()
             }
         }
-
         viewModelScope.launch {
             WCDelegate.walletEvents.collect {
                 syncPairingCount()
@@ -76,26 +74,20 @@ class WalletConnectListViewModel(
         _refreshFlow.tryEmit(Unit)
     }
 
-    fun setRequestToOpen(request: Wallet.Model.SessionRequest) {
+    fun setRequestToOpen(request: HSDAppRequest) {
         WCDelegate.sessionRequestEvent = request
     }
 
     fun setConnectionUri(uri: String) {
         if (uri.contains("requestId")) {
-            //wc also creates deeplinks for Pending Request
-            //we should ignore these deeplinks
             return
         }
         connectionResult = when (WalletConnectListModule.getVersionFromUri(uri)) {
             2 -> {
-                WalletKit.pair(
-                    Wallet.Params.Pair(uri.trim()),
-                    onSuccess = {
-                        connectionResult = null
-                    },
-                    onError = {
-                        connectionResult = ConnectionResult.Error
-                    }
+                DAppManager.pair(
+                    uri = uri.trim(),
+                    onSuccess = { connectionResult = null },
+                    onError = { connectionResult = ConnectionResult.Error },
                 )
                 null
             }
@@ -107,9 +99,7 @@ class WalletConnectListViewModel(
     fun onDelete(topic: String) {
         WCDelegate.deleteSession(
             topic = topic,
-            onSuccess = {
-                _refreshFlow.tryEmit(Unit)
-            },
+            onSuccess = { _refreshFlow.tryEmit(Unit) },
             onError = {
                 showError = it.message
                 _refreshFlow.tryEmit(Unit)
@@ -133,8 +123,8 @@ class WalletConnectListViewModel(
         )
     }
 
-    private fun getSessions(sessions: List<Wallet.Model.Session>): List<WalletConnectListModule.SessionViewItem> {
-        val sessionItems = sessions.map { session ->
+    private fun getSessions(sessions: List<HSDAppSession>): List<WalletConnectListModule.SessionViewItem> {
+        return sessions.map { session ->
             WalletConnectListModule.SessionViewItem(
                 sessionTopic = session.topic,
                 title = session.metaData?.name ?: "",
@@ -145,20 +135,19 @@ class WalletConnectListViewModel(
                 requests = getPendingRequestViewItems(session.topic)
             )
         }
-        return sessionItems
     }
 
     private fun syncPairingCount() {
-        viewModelScope.launch(Dispatchers.IO) {
-            pairingsNumber = getPairingCount()
+        viewModelScope.launch {
+            pairingsNumber = DAppManager.getPairings().size
             _refreshFlow.tryEmit(Unit)
         }
     }
 
     private fun syncPendingRequestsCountMap() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             wcSessionManager.sessions.forEach { session ->
-                val requests = WalletKit.getPendingListOfSessionRequests(session.topic)
+                val requests = DAppManager.getPendingRequests(session.topic)
                 pendingRequestCountMap[session.topic] = requests.size
                 pendingRequests = getPendingRequestViewItems(session.topic)
             }
@@ -166,12 +155,8 @@ class WalletConnectListViewModel(
         }
     }
 
-    private fun getPairingCount(): Int {
-        return CoreClient.Pairing.getPairings().size
-    }
-
     private fun getPendingRequestViewItems(topic: String): List<WCRequestViewItem> {
-        return WalletKit.getPendingListOfSessionRequests(topic).map { request ->
+        return DAppManager.getPendingRequests(topic).map { request ->
             val methodData = wcManager.getMethodData(request)
 
             WCRequestViewItem(

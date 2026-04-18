@@ -98,13 +98,13 @@ class WCSignEthereumTransactionRequestViewModel(
         )
 
         WCDelegate.sessionRequestEvent?.let { sessionRequest ->
-            WCDelegate.respondPendingRequest(sessionRequest.request.id, sessionRequest.topic, signature.toHexString())
+            WCDelegate.respondPendingRequest(sessionRequest.requestId, sessionRequest.topic, signature.toHexString())
         }
     }
 
     fun reject() {
         WCDelegate.sessionRequestEvent?.let { sessionRequest ->
-            WCDelegate.rejectRequest(sessionRequest.topic, sessionRequest.request.id)
+            WCDelegate.rejectRequest(sessionRequest.topic, sessionRequest.requestId)
         }
     }
 
