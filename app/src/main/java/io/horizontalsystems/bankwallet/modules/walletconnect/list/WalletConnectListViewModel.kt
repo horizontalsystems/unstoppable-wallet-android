@@ -84,12 +84,16 @@ class WalletConnectListViewModel(
         }
         connectionResult = when (WalletConnectListModule.getVersionFromUri(uri)) {
             2 -> {
-                DAppManager.pair(
-                    uri = uri.trim(),
-                    onSuccess = { connectionResult = null },
-                    onError = { connectionResult = ConnectionResult.Error },
-                )
-                null
+                if (DAppManager.isAvailable) {
+                    DAppManager.pair(
+                        uri = uri.trim(),
+                        onSuccess = { connectionResult = null },
+                        onError = { connectionResult = ConnectionResult.Error },
+                    )
+                    null
+                } else {
+                    ConnectionResult.Error
+                }
             }
 
             else -> ConnectionResult.Error

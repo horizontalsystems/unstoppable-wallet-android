@@ -299,7 +299,12 @@ class BalanceViewModel(
             } else {
                 val wcUriVersion = WalletConnectListModule.getVersionFromUri(scannedText)
                 if (wcUriVersion == 2) {
-                    handleWalletConnectRequest(scannedText)
+                    if (DAppManager.isAvailable) {
+                        handleWalletConnectRequest(scannedText)
+                    } else {
+                        errorMessage = Translator.getString(R.string.Balance_Error_InvalidQrCode)
+                        emitState()
+                    }
                 } else {
                     handleAddressData(scannedText)
                 }
