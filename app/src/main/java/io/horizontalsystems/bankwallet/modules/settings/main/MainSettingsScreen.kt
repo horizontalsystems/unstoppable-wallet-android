@@ -67,6 +67,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.subscriptions.core.SecureSend
 
@@ -138,7 +139,7 @@ private fun SettingSections(
     BannerCarousel(banners = banners)
 
     CellUniversalLawrenceSection(
-        listOf({
+        listOfNotNull({
             HsSettingCell(
                 R.string.SettingsSecurity_ManageKeys,
                 R.drawable.wallet_24,
@@ -186,50 +187,52 @@ private fun SettingSections(
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
                 }
             )
-        }, {
-            HsSettingCell(
-                R.string.DAppConnection_Title,
-                R.drawable.link_24,
-                value = (uiState.wcCounterType as? MainSettingsModule.CounterType.SessionCounter)?.number?.toString(),
-                counterBadge = (uiState.wcCounterType as? MainSettingsModule.CounterType.PendingRequestCounter)?.number?.toString(),
-                onClick = {
-                    when (val state = viewModel.walletConnectSupportState) {
-                        WCManager.SupportState.Supported -> {
-                            navController.slideFromRight(R.id.wcListFragment)
+        }, if (DAppManager.isAvailable) { {
+                HsSettingCell(
+                    R.string.DAppConnection_Title,
+                    R.drawable.link_24,
+                    value = (uiState.wcCounterType as? MainSettingsModule.CounterType.SessionCounter)?.number?.toString(),
+                    counterBadge = (uiState.wcCounterType as? MainSettingsModule.CounterType.PendingRequestCounter)?.number?.toString(),
+                    onClick = {
+                        when (val state = viewModel.walletConnectSupportState) {
+                            WCManager.SupportState.Supported -> {
+                                navController.slideFromRight(R.id.wcListFragment)
 
-                            stat(
-                                page = StatPage.Settings,
-                                event = StatEvent.Open(StatPage.WalletConnect)
-                            )
-                        }
+                                stat(
+                                    page = StatPage.Settings,
+                                    event = StatEvent.Open(StatPage.WalletConnect)
+                                )
+                            }
 
-                        WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-                            navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
-                        }
+                            WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
+                                navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
+                            }
 
-                        is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
-                            val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
-                            navController.slideFromBottom(
-                                R.id.backupRequiredDialog,
-                                BackupRequiredDialog.Input(state.account, text)
-                            )
+                            is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                                val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
+                                navController.slideFromBottom(
+                                    R.id.backupRequiredDialog,
+                                    BackupRequiredDialog.Input(state.account, text)
+                                )
 
-                            stat(
-                                page = StatPage.Settings,
-                                event = StatEvent.Open(StatPage.BackupRequired)
-                            )
-                        }
+                                stat(
+                                    page = StatPage.Settings,
+                                    event = StatEvent.Open(StatPage.BackupRequired)
+                                )
+                            }
 
-                        is WCManager.SupportState.NotSupported -> {
-                            navController.slideFromBottom(
-                                R.id.wcAccountTypeNotSupportedDialog,
-                                WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
-                            )
+                            is WCManager.SupportState.NotSupported -> {
+                                navController.slideFromBottom(
+                                    R.id.wcAccountTypeNotSupportedDialog,
+                                    WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
+                                )
+                            }
                         }
                     }
-                }
-            )
-        },
+                )
+            } } else {
+                null
+            },
 //            {
 //            HsSettingCell(
 //                title = R.string.Settings_TonConnect,
