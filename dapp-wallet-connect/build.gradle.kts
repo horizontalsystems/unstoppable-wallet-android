@@ -38,12 +38,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
 
     implementation(platform(libs.reown.bom))
-    implementation(libs.reown.walletkit) {
-        exclude(group = "com.google.firebase")
-    }
-    implementation(libs.reown.android.core) {
-        exclude(group = "com.google.firebase")
-    }
+    implementation(libs.reown.walletkit)
+    implementation(libs.reown.android.core)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.ext)
