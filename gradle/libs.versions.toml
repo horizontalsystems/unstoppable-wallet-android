@@ -1,7 +1,7 @@
 [versions]
 # SDK versions
 compileSdk = "36"
-minSdk = "27"
+minSdk = "28"
 
 # Kotlin & Compose
 kotlin = "2.3.10"
