@@ -243,7 +243,6 @@ dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.androidx.biometric)
     implementation(libs.androidx.credentials)
-    implementation(libs.androidx.credentials.play.services.auth)
 
     // Lifecycle
     implementation(libs.androidx.lifecycle.extensions)
@@ -402,6 +401,10 @@ afterEvaluate {
             "baseReleaseImplementation"(it)
             "ciImplementation"(it)
         }
+
+        "baseDebugImplementation"(libs.androidx.credentials.play.services.auth)
+        "baseReleaseImplementation"(libs.androidx.credentials.play.services.auth)
+        "ciImplementation"(libs.androidx.credentials.play.services.auth)
     }
 }
 
