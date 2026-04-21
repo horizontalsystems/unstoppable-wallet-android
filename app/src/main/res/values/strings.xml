@@ -42,7 +42,7 @@
     <string name="Button_Save">Save</string>
     <string name="Button_IAgree">I Agree</string>
     <string name="Button_Continue">Continue</string>
-    <string name="Button_UnderstandedContinue">I Understand and Continue</string>
+    <string name="Button_UnderstandAndContinue">I Understand and Continue</string>
     <string name="Button_Search">Search</string>
     <string name="Button_Back">Back</string>
     <string name="Button_Copy">Copy</string>

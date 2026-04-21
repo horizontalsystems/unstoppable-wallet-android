@@ -19,6 +19,7 @@ class ManageAccountsViewModel(
 
     var viewItems by mutableStateOf<Pair<List<AccountViewItem>, List<AccountViewItem>>?>(null)
     var finish by mutableStateOf(false)
+    var searchQuery by mutableStateOf("")
     private var query: String? = null
     private var accounts: List<Account> = emptyList()
     private var activeAccount: Account? = null
@@ -83,6 +84,7 @@ class ManageAccountsViewModel(
     }
 
     fun updateFilter(q: String) {
+        searchQuery = q
         query = q
         viewModelScope.launch {
             updateViewItems()

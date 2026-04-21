@@ -92,7 +92,7 @@ fun PasskeyTermsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
-                    title = stringResource(R.string.Button_UnderstandedContinue),
+                    title = stringResource(R.string.Button_UnderstandAndContinue),
                     onClick = { viewModel.onContinueClick() },
                     enabled = viewModel.uiState.buttonEnabled
                 )

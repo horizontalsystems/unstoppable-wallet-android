@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -87,7 +85,7 @@ fun HSIconButtonTinted(
         Icon(
             modifier = Modifier.size(buttonProps.iconSize),
             painter = icon,
-            tint= iconTint,
+            tint = iconTint,
             contentDescription = contentDescription,
         )
     }
