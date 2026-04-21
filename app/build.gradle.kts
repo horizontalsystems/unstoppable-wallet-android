@@ -58,7 +58,7 @@ android {
     }
 
     signingConfigs {
-        create("appCenter") {
+        create("test") {
             storeFile = file("./test.keystore")
             storePassword = "testKeystore123"
             keyAlias = "testKeystore"
@@ -76,7 +76,6 @@ android {
     productFlavors {
         create("base") {
             dimension = "distribution"
-            signingConfig = signingConfigs.getByName("debug")
             resValue("string", "uswapApiKey", uswapApiKeyAndroid)
             resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressAndroid)
         }
@@ -92,7 +91,7 @@ android {
             dimension = "distribution"
             applicationIdSuffix = ".fdroidci"
             buildConfigField("boolean", "FDROID_BUILD", "true")
-            signingConfig = signingConfigs.getByName("appCenter")
+            signingConfig = signingConfigs.getByName("test")
             resValue("string", "uswapApiKey", uswapApiKeyFdroid)
             resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressFdroid)
         }
@@ -101,7 +100,7 @@ android {
             dimension = "distribution"
             applicationIdSuffix = ".appcenter"
             versionCode = System.getenv("BUILD_NUMBER")?.toIntOrNull() ?: defaultConfig.versionCode
-            signingConfig = signingConfigs.getByName("appCenter")
+            signingConfig = signingConfigs.getByName("test")
             resValue("string", "uswapApiKey", uswapApiKeyAndroid)
             resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressAndroid)
         }
@@ -109,7 +108,7 @@ android {
 
     buildTypes {
         debug {
-            signingConfig = null
+            signingConfig = signingConfigs.getByName("test")
             isDebuggable = true
             isMinifyEnabled = false
             applicationIdSuffix = ".dev"
