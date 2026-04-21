@@ -11,8 +11,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.slideFromRightForResult
+import io.horizontalsystems.bankwallet.modules.manageaccounts.PassKeyTermsFragment
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -60,7 +63,15 @@ fun CreateAccountScreen(navController: NavController, input: ManageAccountsModul
                     subtitle = stringResource(R.string.CreateNewWallet_Passkey_Description).hs,
                     borderTop = true
                 ) {
-                    navController.slideFromRight(R.id.createAccountPasskeyFragment, input)
+                    if (!App.localStorage.passkeyTermsAccepted) {
+                        navController.slideFromRightForResult<PassKeyTermsFragment.Result>(R.id.passkeyTermsFragment) { result ->
+                            if (result.termsAccepted) {
+                                navController.slideFromRight(R.id.createAccountPasskeyFragment, input)
+                            }
+                        }
+                    } else {
+                        navController.slideFromRight(R.id.createAccountPasskeyFragment, input)
+                    }
                 }
             }
 

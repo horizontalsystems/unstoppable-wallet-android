@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -32,6 +33,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemDropdown
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -84,13 +86,36 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
         title = stringResource(R.string.ManageAccounts_Title),
         onBack = navController::popBackStack,
         menuItems = listOf(
-            MenuItem(
+            MenuItemDropdown(
                 title = TranslatableString.ResString(R.string.Button_Add),
                 icon = R.drawable.wallet_add_sharp_24,
-                onClick = {
-                    navController.slideFromRight(R.id.addWalletFragment, args)
-                },
-                tint = ComposeAppTheme.colors.grey
+                items = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.ManageAccounts_CreateNewWallet),
+                        onClick = {
+                            navController.navigateWithTermsAccepted {
+                                navController.slideFromRight(R.id.createAccountFragment, args)
+                                stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.NewWallet))
+                            }
+                        }
+                    ),
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.ManageAccounts_ExistingWallet),
+                        onClick = {
+                            navController.navigateWithTermsAccepted {
+                                navController.slideFromRight(R.id.importWalletFragment, args)
+                                stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.ImportWallet))
+                            }
+                        }
+                    ),
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.ManageAccounts_ViewOnlyWallet),
+                        onClick = {
+                            navController.slideFromRight(R.id.watchAddressFragment, args)
+                            stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.WatchWallet))
+                        }
+                    ),
+                )
             )
         )
     ) {

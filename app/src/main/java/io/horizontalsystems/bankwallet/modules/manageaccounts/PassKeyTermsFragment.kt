@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -15,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -42,8 +44,17 @@ class PassKeyTermsFragment : BaseComposeFragment() {
 @Composable
 fun PasskeyTermsScreen(
     navController: NavController,
-    viewModel: PasskeyTermsViewModel = viewModel()
+    viewModel: PasskeyTermsViewModel = viewModel(factory = PasskeyTermsModule.Factory())
 ) {
+
+    val uiState = viewModel.uiState
+
+    LaunchedEffect(uiState.closeScreen) {
+        if (uiState.closeScreen) {
+            navController.setNavigationResultX(PassKeyTermsFragment.Result(true))
+            navController.popBackStack()
+        }
+    }
 
     HSScaffold(
         title = stringResource(R.string.CreateNewWallet_PasskeyTerms),
