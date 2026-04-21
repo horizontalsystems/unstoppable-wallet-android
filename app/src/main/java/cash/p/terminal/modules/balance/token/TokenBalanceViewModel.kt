@@ -21,7 +21,6 @@ import cash.p.terminal.core.managers.StackingManager
 import cash.p.terminal.core.managers.TransactionHiddenManager
 import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.core.storage.toRecordUidMap
-import cash.p.terminal.core.swappable
 import cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase
 import cash.p.terminal.entities.SwapProviderTransaction
 import cash.p.terminal.featureStacking.ui.staking.StackingType
@@ -45,21 +44,21 @@ import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionViewItemFactory
 import cash.p.terminal.modules.transactions.withClearedAmlStatus
 import cash.p.terminal.modules.transactions.withUpdatedAmlStatus
-import cash.p.terminal.network.pirate.domain.useCase.GetChangeNowAssociatedCoinTickerUseCase
 import cash.p.terminal.premium.domain.PremiumSettings
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.wallet.MarketKitWrapper
-import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.badge
 import cash.p.terminal.wallet.balance.BalanceItem
 import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.wallet.balance.DeemedValue
+import cash.p.terminal.wallet.canSwap
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.isBackedUpOrNotRequired
 import cash.p.terminal.wallet.isCosanta
 import cash.p.terminal.wallet.isPirateCash
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
@@ -93,7 +92,6 @@ class TokenBalanceViewModel(
     private val connectivityManager: ConnectivityManager,
     private val accountManager: IAccountManager,
     private val transactionHiddenManager: TransactionHiddenManager,
-    private val getChangeNowAssociatedCoinTickerUseCase: GetChangeNowAssociatedCoinTickerUseCase,
     private val premiumSettings: PremiumSettings,
     private val amlStatusManager: AmlStatusManager,
     private val marketFavoritesManager: MarketFavoritesManager,
@@ -170,7 +168,7 @@ class TokenBalanceViewModel(
                     updateNetworkFeeWarning()
                     updateBalanceViewItem(
                         balanceItem = it,
-                        isSwappable = isSwappable(it.wallet.token)
+                        isSwappable = isSwappable()
                     )
                     if (isStakingCoin) {
                         checkStakingStatus(it)
@@ -184,7 +182,7 @@ class TokenBalanceViewModel(
                 balanceService.balanceItem?.let {
                     updateBalanceViewItem(
                         balanceItem = it,
-                        isSwappable = isSwappable(it.wallet.token)
+                        isSwappable = isSwappable()
                     )
                     transactionViewItem2Factory.updateCache()
                     transactionsService.refreshList()
@@ -213,7 +211,7 @@ class TokenBalanceViewModel(
                 balanceService.balanceItem?.let {
                     updateBalanceViewItem(
                         balanceItem = it,
-                        isSwappable = isSwappable(it.wallet.token)
+                        isSwappable = isSwappable()
                     )
                 }
             }
@@ -347,13 +345,8 @@ class TokenBalanceViewModel(
         secondaryValue = oldBalanceViewItem.secondaryValue.copy(value = updatedValue)
     }
 
-    private suspend fun isSwappable(token: Token) =
-        App.instance.isSwapEnabled && (
-                token.swappable ||
-                        getChangeNowAssociatedCoinTickerUseCase(
-                            token.coin.uid,
-                            token.blockchainType.uid
-                        ) != null)
+    private fun isSwappable() =
+        App.instance.isSwapEnabled && wallet.account.canSwap()
 
     fun showAllTransactions(show: Boolean) = transactionHiddenManager.showAllTransactions(show)
 
@@ -566,7 +559,7 @@ class TokenBalanceViewModel(
         val account =
             accountManager.activeAccount ?: throw IllegalStateException("Active account is not set")
         when {
-            account.hasAnyBackup || !wallet.account.supportsBackup -> return wallet
+            account.isBackedUpOrNotRequired() -> return wallet
             else -> throw BackupRequiredError(account, wallet.coin.name)
         }
     }

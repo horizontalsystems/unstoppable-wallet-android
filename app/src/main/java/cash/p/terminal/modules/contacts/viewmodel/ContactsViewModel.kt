@@ -7,17 +7,20 @@ import cash.p.terminal.modules.contacts.Mode
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.strings.helpers.TranslatableString
+import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ViewModelUiState
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 
 class ContactsViewModel(
     private val repository: ContactsRepository,
-    private val mode: Mode
+    private val mode: Mode,
+    private val pinComponent: IPinComponent
 ) : ViewModelUiState<ContactsViewModel.UiState>() {
 
     private val readOnly = mode != Mode.Full
     private val showAddContact = !readOnly
-    private val showMoreOptions = !readOnly
+    private val showSettings = !readOnly
 
     private var nameQuery: String = ""
     private val contacts: List<Contact>
@@ -35,6 +38,11 @@ class ContactsViewModel(
                 emitState()
             }
         }
+        viewModelScope.launch {
+            pinComponent.pinSetFlowable.asFlow().collect {
+                emitState()
+            }
+        }
     }
 
     override fun createState() = UiState(
@@ -42,7 +50,8 @@ class ContactsViewModel(
         nameQuery = nameQuery,
         searchMode = nameQuery.isNotEmpty(),
         showAddContact = showAddContact,
-        showMoreOptions = showMoreOptions
+        showSettings = showSettings,
+        deleteContactsPinEnabled = pinComponent.isDeleteContactsPinSet()
     )
 
     fun onEnterQuery(query: String) {
@@ -54,6 +63,15 @@ class ContactsViewModel(
         repository.restore(json)
     }
 
+    fun disableDeleteContactsPin() {
+        pinComponent.disableDeleteContactsPin()
+        emitState()
+    }
+
+    fun prepareForBackup() {
+        pinComponent.keepUnlocked()
+    }
+
     fun shouldShowReplaceWarning(contact: Contact): Boolean {
         return mode is Mode.AddAddressToExistingContact && contact.addresses.any { it.blockchain.type == mode.blockchainType }
     }
@@ -63,9 +81,9 @@ class ContactsViewModel(
     }
 
     fun replaceWarningMessage(contact: Contact): TranslatableString? {
-        val blockchainType =
-            (mode as? Mode.AddAddressToExistingContact)?.blockchainType ?: return null
-        val address = (mode as? Mode.AddAddressToExistingContact)?.address ?: return null
+        val addAddressMode = mode as? Mode.AddAddressToExistingContact ?: return null
+        val blockchainType = addAddressMode.blockchainType
+        val address = addAddressMode.address
         val oldAddress =
             contact.addresses.find { it.blockchain.type == blockchainType } ?: return null
 
@@ -82,7 +100,8 @@ class ContactsViewModel(
         val nameQuery: String?,
         val searchMode: Boolean,
         val showAddContact: Boolean,
-        val showMoreOptions: Boolean
+        val showSettings: Boolean,
+        val deleteContactsPinEnabled: Boolean
     )
 
 }

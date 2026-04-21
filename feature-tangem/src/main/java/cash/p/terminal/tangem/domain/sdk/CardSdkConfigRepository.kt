@@ -63,4 +63,8 @@ class CardSdkConfigRepository(
     fun setAttestationMode(mode: AttestationTask.Mode) {
         sdk.config.attestationMode = mode
     }
+
+    fun cancelSession() {
+        cardSdkProvider.cancelSession()
+    }
 }

@@ -255,6 +255,9 @@
         android:id="@+id/setSecureResetPinFragment"
         android:name="cash.p.terminal.modules.settings.advancedsecurity.securereset.SetSecureResetPinFragment" />
     <fragment
+        android:id="@+id/deleteContactsTermsFragment"
+        android:name="cash.p.terminal.modules.settings.advancedsecurity.terms.DeleteContactsTermsFragment" />
+    <fragment
         android:id="@+id/setDuressPinSelectAccounts"
         android:name="cash.p.terminal.modules.pin.SetDuressPinSelectAccountsFragment" />
     <fragment

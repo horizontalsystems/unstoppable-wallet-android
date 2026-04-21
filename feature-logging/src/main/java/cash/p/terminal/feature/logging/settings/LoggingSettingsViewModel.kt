@@ -12,6 +12,7 @@ import io.horizontalsystems.core.ILoggingSettings
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.entities.AutoDeletePeriod
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 
 class LoggingSettingsViewModel(
     private val loggingSettings: ILoggingSettings,
@@ -31,6 +32,7 @@ class LoggingSettingsViewModel(
             logUnsuccessfulLoginsEnabled = loggingSettings.getLogUnsuccessfulLoginsEnabled(currentLevel),
             selfieOnUnsuccessfulLoginEnabled = loggingSettings.getSelfieOnUnsuccessfulLoginEnabled(currentLevel),
             passcodeEnabled = pinComponent.isLogLoggingPinSet(),
+            deleteContactsPasscodeEnabled = pinComponent.isDeleteContactsPinSet(),
             logIntoDuressModeEnabled = loggingSettings.getLogIntoDuressModeEnabled(currentLevel),
             selfieOnDuressLoginEnabled = loggingSettings.getSelfieOnDuressLoginEnabled(currentLevel),
             deleteAllAuthDataOnDuressEnabled = loggingSettings.getDeleteAllAuthDataOnDuressEnabled(currentLevel),
@@ -47,6 +49,11 @@ class LoggingSettingsViewModel(
                 .collect { hasRecords ->
                     uiState = uiState.copy(deleteButtonEnabled = hasRecords)
                 }
+        }
+        viewModelScope.launch {
+            pinComponent.pinSetFlowable.asFlow().collect {
+                updatePasscodeLoggingState()
+            }
         }
     }
 
@@ -101,14 +108,24 @@ class LoggingSettingsViewModel(
         updatePasscodeLoggingState()
     }
 
+    fun disableDeleteContactsPin() {
+        pinComponent.disableDeleteContactsPin()
+        updatePasscodeLoggingState()
+    }
+
     fun updatePasscodeLoggingState() {
-        uiState = uiState.copy(passcodeEnabled = pinComponent.isLogLoggingPinSet())
+        uiState = uiState.copy(
+            passcodeEnabled = pinComponent.isLogLoggingPinSet(),
+            deleteContactsPasscodeEnabled = pinComponent.isDeleteContactsPinSet()
+        )
     }
 }
 
 data class LoggingSettingsUiState(
-    val passcodeEnabled: Boolean = false,
     val logSuccessfulLoginsEnabled: Boolean,
+    val isPremiumActive: Boolean,
+    val passcodeEnabled: Boolean = false,
+    val deleteContactsPasscodeEnabled: Boolean = false,
     val selfieOnSuccessfulLoginEnabled: Boolean = false,
     val logUnsuccessfulLoginsEnabled: Boolean = false,
     val selfieOnUnsuccessfulLoginEnabled: Boolean = false,
@@ -118,5 +135,4 @@ data class LoggingSettingsUiState(
     val autoDeletePeriod: AutoDeletePeriod = AutoDeletePeriod.YEAR,
     val deleteButtonEnabled: Boolean = false,
     val noCameraPermissions: Boolean = false,
-    val isPremiumActive: Boolean
 )

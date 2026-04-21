@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.core.converters.PendingTransactionConverter
+import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PendingTransactionRepository
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
@@ -29,6 +30,7 @@ class TransactionRecordRepository(
     private val swapProviderTransactionsStorage: SwapProviderTransactionsStorage,
     private val pendingRepository: PendingTransactionRepository,
     private val pendingConverter: PendingTransactionConverter,
+    private val pendingTransactionMatcher: PendingTransactionMatcher,
     private val dispatcherProvider: DispatcherProvider
 ) : ITransactionRecordRepository {
 
@@ -177,7 +179,8 @@ class TransactionRecordRepository(
                             transactionType = selectedFilterTransactionType,
                             contact = contact,
                             pendingRepository = pendingRepository,
-                            pendingConverter = pendingConverter
+                            pendingConverter = pendingConverter,
+                            pendingTransactionMatcher = pendingTransactionMatcher,
                         )
                     }
                 }
@@ -215,9 +218,7 @@ class TransactionRecordRepository(
 
         if (this.contact != contact) {
             this.contact = contact
-            adaptersMap.forEach { (_, transactionAdapterWrapper) ->
-                transactionAdapterWrapper.setContact(contact)
-            }
+            updateContact(contact)
             reload = true
         }
 
@@ -248,7 +249,8 @@ class TransactionRecordRepository(
                         transactionType = FilterTransactionType.Outgoing,
                         contact = contact,
                         pendingRepository = pendingRepository,
-                        pendingConverter = pendingConverter
+                        pendingConverter = pendingConverter,
+                        pendingTransactionMatcher = pendingTransactionMatcher,
                     )
                 }
             }
@@ -259,12 +261,14 @@ class TransactionRecordRepository(
         }
         currentAdapters.values.forEach(TransactionAdapterWrapper::clear)
         currentAdapters.clear()
+    }
 
-
-        if (this.contact != contact) {
-            extraSwapAdaptersMap.forEach { (_, transactionAdapterWrapper) ->
-                transactionAdapterWrapper.setContact(contact)
-            }
+    private fun updateContact(contact: Contact?) {
+        adaptersMap.values.forEach { transactionAdapterWrapper ->
+            transactionAdapterWrapper.setContact(contact)
+        }
+        extraSwapAdaptersMap.values.forEach { transactionAdapterWrapper ->
+            transactionAdapterWrapper.setContact(contact)
         }
     }
 

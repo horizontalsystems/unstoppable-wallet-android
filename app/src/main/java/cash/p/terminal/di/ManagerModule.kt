@@ -229,6 +229,7 @@ val managerModule = module {
             pinDbStorage = get(),
             backgroundManager = get(),
             resetUseCase = get(),
+            deleteAllContactsUseCase = get(),
             dispatcherProvider = get()
         )
     }

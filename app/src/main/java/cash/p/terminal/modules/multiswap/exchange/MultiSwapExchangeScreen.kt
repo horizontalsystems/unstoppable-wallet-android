@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -53,6 +52,7 @@ import cash.p.terminal.modules.multiswap.PriceField
 import cash.p.terminal.modules.multiswap.PriceImpactField
 import cash.p.terminal.ui.compose.components.HSRow
 import cash.p.terminal.ui_compose.BottomSheetHeader
+import cash.p.terminal.ui_compose.TransparentModalBottomSheet
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryRed
@@ -552,11 +552,9 @@ internal fun CancelSwapBottomSheet(
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    ModalBottomSheet(
+    TransparentModalBottomSheet(
         onDismissRequest = onDismiss,
-        dragHandle = null,
         sheetState = sheetState,
-        containerColor = ComposeAppTheme.colors.transparent,
     ) {
         val buttonModifier = Modifier
             .fillMaxWidth()

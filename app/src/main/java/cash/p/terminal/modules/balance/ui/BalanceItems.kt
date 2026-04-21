@@ -389,10 +389,7 @@ fun BalanceItems(
                             ),
                             text = stringResource(R.string.AccountRecovery_MigrationRequired),
                             onClick = {
-                                FaqManager.showFaqPage(
-                                    navController,
-                                    FaqManager.faqPathMigrationRequired
-                                )
+                                FaqManager.showFaqPage(FaqManager.faqPathMigrationRequired)
                             }
                         )
                     }
@@ -407,10 +404,7 @@ fun BalanceItems(
                             ),
                             text = stringResource(R.string.AccountRecovery_MigrationRecommended),
                             onClick = {
-                                FaqManager.showFaqPage(
-                                    navController,
-                                    FaqManager.faqPathMigrationRecommended
-                                )
+                                FaqManager.showFaqPage(FaqManager.faqPathMigrationRecommended)
                             },
                             onClose = {
                                 viewModel.onCloseHeaderNote(HeaderNote.NonRecommendedAccount)

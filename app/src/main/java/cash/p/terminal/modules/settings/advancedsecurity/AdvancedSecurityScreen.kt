@@ -30,6 +30,7 @@ internal fun AdvancedSecurityScreen(
     uiState: AdvancedSecurityUiState,
     onCreateHiddenWalletClick: () -> Unit,
     onSecureResetToggle: (Boolean) -> Unit,
+    onDeleteContactsToggle: (Boolean) -> Unit,
     onClose: () -> Unit
 ) {
     Scaffold(
@@ -71,21 +72,38 @@ internal fun AdvancedSecurityScreen(
             )
             VSpacer(16.dp)
             CellUniversalLawrenceSection(
-                listOf({
-                    RowUniversal(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                    ) {
-                        body_leah(
-                            text = stringResource(R.string.AdvancedSecurity_SecureReset),
-                            maxLines = 1,
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        HsSwitch(
-                            checked = uiState.isSecureResetPinSet,
-                            onCheckedChange = onSecureResetToggle
-                        )
+                listOf(
+                    {
+                        RowUniversal(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        ) {
+                            body_leah(
+                                text = stringResource(R.string.AdvancedSecurity_SecureReset),
+                                maxLines = 1,
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            HsSwitch(
+                                checked = uiState.isSecureResetPinSet,
+                                onCheckedChange = onSecureResetToggle
+                            )
+                        }
+                    },
+                    {
+                        RowUniversal(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        ) {
+                            body_leah(
+                                text = stringResource(R.string.delete_all_contacts),
+                                maxLines = 1,
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            HsSwitch(
+                                checked = uiState.isDeleteContactsPinSet,
+                                onCheckedChange = onDeleteContactsToggle
+                            )
+                        }
                     }
-                })
+                )
             )
         }
     }
@@ -96,9 +114,13 @@ internal fun AdvancedSecurityScreen(
 private fun AdvancedSecurityScreenPreview() {
     ComposeAppTheme {
         AdvancedSecurityScreen(
-            uiState = AdvancedSecurityUiState(isSecureResetPinSet = false),
+            uiState = AdvancedSecurityUiState(
+                isSecureResetPinSet = false,
+                isDeleteContactsPinSet = false
+            ),
             onCreateHiddenWalletClick = {},
             onSecureResetToggle = {},
+            onDeleteContactsToggle = {},
             onClose = {}
         )
     }

@@ -61,7 +61,7 @@ class PinDbStorage(private val pinDao: PinDao) {
 
     fun getAllLevels(): List<Int> {
         return pinDao.getAll()
-            .filter { it.passcode != null && it.level < PinLevels.SECURE_RESET }
+            .filter { it.passcode != null && PinLevels.isUserLevel(it.level) }
             .map { it.level }
     }
 }
@@ -92,8 +92,8 @@ interface PinDao {
     @Query("DELETE FROM Pin WHERE level >= :level AND level < ${PinLevels.SECURE_RESET}")
     fun deleteUserLevelsFromLevel(level: Int)
 
-    /** Delete log logging PINs at logLoggingLevel and above */
-    @Query("DELETE FROM Pin WHERE level >= :logLoggingLevel")
+    /** Delete log logging PINs in [logLoggingLevel, DELETE_CONTACTS) */
+    @Query("DELETE FROM Pin WHERE level >= :logLoggingLevel AND level < ${PinLevels.DELETE_CONTACTS}")
     fun deleteLogLoggingPinsFromLevel(logLoggingLevel: Int)
 
     @Query("SELECT MIN(level) FROM Pin")
@@ -103,6 +103,11 @@ interface PinDao {
 object PinLevels {
     const val SECURE_RESET = 10000
     const val LOG_LOGGING_BASE = 10001
+    const val DELETE_CONTACTS = 20001
+
+    fun isUserLevel(pinLevel: Int): Boolean {
+        return pinLevel < SECURE_RESET
+    }
 
     fun logLoggingLevelFor(userLevel: Int): Int {
         require(userLevel >= 0) { "Log logging PIN not supported for hidden wallets" }
@@ -110,7 +115,20 @@ object PinLevels {
     }
 
     fun isLogLoggingLevel(pinLevel: Int): Boolean {
-        return pinLevel >= LOG_LOGGING_BASE
+        return pinLevel in LOG_LOGGING_BASE until DELETE_CONTACTS
+    }
+
+    fun isDeleteContactsLevel(pinLevel: Int): Boolean {
+        return pinLevel == DELETE_CONTACTS
+    }
+
+    fun resolvedUserLevelAfterUnlock(pinLevel: Int?): Int? {
+        return when {
+            pinLevel == null -> null
+            pinLevel == SECURE_RESET -> 0
+            isUserLevel(pinLevel) -> pinLevel
+            else -> null
+        }
     }
 }
 

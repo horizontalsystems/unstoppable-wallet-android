@@ -687,7 +687,6 @@
     <string name="TransactionInfo_Date">Datum</string>
     <string name="transaction_info_sync_source">Sync-Quelle</string>
     <string name="TransactionInfo_Id">Transaktion ID</string>
-    <string name="TransactionInfo_Service">Dienst</string>
     <string name="TransactionInfo_RawTransaction">Rohdaten der Transaktion</string>
     <string name="TransactionInfo_ContactName">Kontaktname</string>
     <string name="TransactionInfo_To">An</string>
@@ -1008,6 +1007,7 @@
     <string name="SettingsTheme_System">System</string>
     <!--Errors-->
     <string name="transaction_error_need_to_check">The transaction may not have been completed due to unexpected issues. We recommend checking the status before attempting to resend to avoid double payment</string>
+    <string name="transaction_error_invalid_derivation_path">Ungültiger Ableitungspfad</string>
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">Kein Internet</string>
     <string name="Hud_Text_Copied">Kopiert</string>
@@ -1444,6 +1444,11 @@ Die App ermöglicht es Ihnen, aus Bequemlichkeit ein Backup mit einem einfachen 
     <string name="SubscriptionInfo_HavePremium">Ich habe bereits Premium</string>
     <string name="premium_title">Premium</string>
     <string name="about_premium">Über Premium</string>
+    <string name="delete_all_contacts_terms_agreement"><![CDATA[Benutzervereinbarung zur Einrichtung eines PIN-Codes zum Löschen des Adressbuchs für Krypto-Adressen<br/><br/>Durch das Festlegen eines PIN-Codes bestätigen Sie, dass Sie seinen Zweck als Mechanismus zum Schutz Ihrer Privatsphäre verstehen.<br/><b>1. Schutzfunktion des PIN-Codes</b><br/>Dieser PIN-Code ist für die Notfall-Löschung des Adressbuchs mit Krypto-Adressen von diesem Gerät bestimmt, um eine mögliche Kompromittierung Ihrer finanziellen Verbindungen und gespeicherten Adressen durch Dritte zu verhindern.<br/><b>2. Funktionsweise</b><br/>Die Eingabe des eingerichteten PIN-Codes führt zur sofortigen Löschung Ihres auf diesem Gerät gespeicherten Adressbuchs mit Krypto-Adressen.<br/><b>3. Unumkehrbarkeit der Löschung</b><br/>Das Löschen des Adressbuchs nach Eingabe des PIN-Codes ist endgültig und unumkehrbar.<br/><b>4. Keine Wiederherstellung</b><br/>Wenn das Adressbuch gelöscht wurde, können die Daten nicht wiederhergestellt werden, sofern nicht zuvor eine Sicherungskopie erstellt wurde.<br/><b>5. Lokale Speicherung</b><br/>Das Adressbuch wird ausschließlich lokal auf Ihrem Gerät gespeichert und nicht an Entwickler oder externe Server übertragen.]]></string>
+    <string-array name="delete_all_contacts_terms_checkboxes">
+        <item>Ich verstehe, dass der PIN-Code zur sofortigen Löschung des Adressbuchs mit Krypto-Adressen verwendet wird.</item>
+        <item>Ich verstehe, dass das Adressbuch nach Eingabe des PIN-Codes ohne die Möglichkeit einer Wiederherstellung ohne Sicherungskopie gelöscht wird.</item>
+    </string-array>
     <string name="premium_settings">Premium-Einstellungen</string>
     <string name="advanced_security">Erweiterte Sicherheit</string>
     <string name="AdvancedSecurity_CreateHiddenWallet">Versteckte Wallet erstellen</string>
@@ -1659,6 +1664,9 @@ Die App ermöglicht es Ihnen, aus Bequemlichkeit ein Backup mit einem einfachen 
     <string name="pin_set_for_login_logging">Set a passcode to enable login logging</string>
     <string name="pin_set_for_login_logging_passcode">Code festlegen zum Schutz des Login-Protokolls</string>
     <string name="confirm_pin_to_disable_login_logging_passcode">Code eingeben zum Deaktivieren des Login-Protokolls</string>
+    <string name="pin_set_for_delete_all_contacts">Code festlegen, um alle Kontakte zu löschen</string>
+    <string name="confirm_pin_to_disable_delete_all_contacts_passcode">Code eingeben, um Alle Kontakte löschen zu deaktivieren</string>
+    <string name="disable_delete_contacts_passcode_warning">Als Sicherheitsmaßnahme empfehlen wir, die Kopierfunktion für diesen Wert nicht zu verwenden.</string>
     <string name="confirm_pin_to_access_login_logging">Code eingeben für Zugriff auf Login-Protokoll</string>
     <string name="PinSet_ErrorPinInUse">Dieser Code wird bereits verwendet.</string>
     <!--Edit Pin-->
@@ -1689,6 +1697,7 @@ Die App ermöglicht es Ihnen, aus Bequemlichkeit ein Backup mit einem einfachen 
     <string name="Contacts_KeepEditing">Weiter bearbeiten</string>
     <string name="Contacts_DiscardChanges_Warning">Sind Sie sicher, dass Sie diese neuen Änderungen verwerfen möchten?</string>
     <string name="Contacts_NoContacts">Sie haben keinen neuen Kontakt</string>
+    <string name="delete_all_contacts">Alle Kontakte löschen</string>
     <string name="Contacts_ActionMore">Mehr</string>
     <string name="Contacts_Error_DefinedAddress">Diese Adresse wird bereits für %s verwendet</string>
     <string name="Contacts_Error_DefinedName">Dieser Name existiert bereits</string>

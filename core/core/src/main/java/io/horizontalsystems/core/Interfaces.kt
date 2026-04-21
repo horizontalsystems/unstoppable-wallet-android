@@ -65,6 +65,10 @@ interface IPinComponent {
     fun disableSecureResetPin()
     fun getAllPinLevels(): List<Int>
 
+    fun setDeleteContactsPin(pin: String)
+    fun isDeleteContactsPinSet(): Boolean
+    fun disableDeleteContactsPin()
+
     fun setLogLoggingPin(pin: String)
     fun isLogLoggingPinSet(): Boolean
     fun disableLogLoggingPinForDuress()

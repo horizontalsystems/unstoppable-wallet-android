@@ -10,6 +10,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -55,6 +58,22 @@ open class BaseComposableBottomSheetFragment : BottomSheetDialogFragment() {
         dismiss()
     }
 
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TransparentModalBottomSheet(
+    onDismissRequest: () -> Unit,
+    sheetState: SheetState,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismissRequest,
+        dragHandle = null,
+        sheetState = sheetState,
+        containerColor = ComposeAppTheme.colors.transparent,
+        content = content,
+    )
 }
 
 @Composable

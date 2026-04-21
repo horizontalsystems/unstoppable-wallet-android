@@ -45,6 +45,7 @@ import com.tangem.operations.sign.SignResponse
 import com.tangem.operations.usersetttings.SetUserCodeRecoveryAllowedTask
 import io.horizontalsystems.core.CoreApp
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -159,6 +160,7 @@ class TangemSdkManager(
         derivationPath: DerivationPath?,
         message: Message? = null
     ): CompletionResult<SignHashResponse> = suspendCancellableCoroutine { continuation ->
+        continuation.cancelTangemSessionOnCancellation()
         tangemSdk.sign(
             hash = hash,
             walletPublicKey = walletPublicKey,
@@ -188,6 +190,7 @@ class TangemSdkManager(
         derivationPath: DerivationPath?,
         message: Message? = null
     ): CompletionResult<SignResponse> = suspendCancellableCoroutine { continuation ->
+        continuation.cancelTangemSessionOnCancellation()
         tangemSdk.sign(
             hashes = hashes,
             walletPublicKey = walletPublicKey,
@@ -348,6 +351,7 @@ class TangemSdkManager(
 
     suspend fun restoreAccessCode(cardId: String) =
         suspendCancellableCoroutine { continuation ->
+            continuation.cancelTangemSessionOnCancellation()
             tangemSdk.restoreAccessCode(cardId) { result ->
                 if (continuation.isActive) continuation.resume(result)
             }
@@ -383,6 +387,7 @@ class TangemSdkManager(
         @DrawableRes iconScanRes: Int? = null,
     ): CompletionResult<T> = withContext(Dispatchers.Main) {
         suspendCancellableCoroutine { continuation ->
+            continuation.cancelTangemSessionOnCancellation()
             tangemSdk.startSessionWithRunnable(
                 runnable = runnable,
                 cardId = cardId,
@@ -441,6 +446,12 @@ class TangemSdkManager(
             } while (true)
 
             tangemSdk.authenticationManager
+        }
+    }
+
+    private fun <T> CancellableContinuation<T>.cancelTangemSessionOnCancellation() {
+        invokeOnCancellation {
+            cardSdkConfigRepository.cancelSession()
         }
     }
 

@@ -13,13 +13,19 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
+import java.util.concurrent.ConcurrentHashMap
+
 object MarketWidgetStateDefinition : GlanceStateDefinition<MarketWidgetState> {
+
+    private val dataStores = ConcurrentHashMap<String, DataStore<MarketWidgetState>>()
 
     private fun Context.marketWidgetDataStoreFile(name: String): File = dataStoreFile("$name.uw")
 
     override suspend fun getDataStore(context: Context, fileKey: String): DataStore<MarketWidgetState> {
-        return DataStoreFactory.create(serializer = MarketWidgetStateSerializer) {
-            context.marketWidgetDataStoreFile(fileKey)
+        return dataStores.computeIfAbsent(fileKey) {
+            DataStoreFactory.create(serializer = MarketWidgetStateSerializer) {
+                context.marketWidgetDataStoreFile(fileKey)
+            }
         }
     }
 

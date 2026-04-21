@@ -8,19 +8,32 @@ import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase
 import cash.p.terminal.entities.SwapProviderTransaction
+import cash.p.terminal.entities.TransactionValue
+import cash.p.terminal.entities.transactionrecords.PendingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
+import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.modules.transactions.NftMetadataService
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.network.changenow.domain.entity.TransactionStatusEnum
 import cash.p.terminal.network.swaprepository.SwapProvider
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountOrigin
 import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.transaction.TransactionSource
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.CurrencyManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.unmockkAll
 import io.reactivex.subjects.PublishSubject
 import junit.framework.TestCase.assertEquals
@@ -61,7 +74,7 @@ class TransactionInfoServiceTest : KoinTest {
         mockk<SwapProviderTransactionsStorage>(relaxed = true)
     private val transactionRecord = mockk<TransactionRecord>(relaxed = true)
     private val balanceHiddenManager = mockk<IBalanceHiddenManager>(relaxUnitFun = true)
-    private val pendingTransactionMatcher = mockk<PendingTransactionMatcher>(relaxed = true)
+    private val pendingTransactionMatcher = spyk(PendingTransactionMatcher())
     private val amlStatusManager = mockk<AmlStatusManager>(relaxed = true)
     private lateinit var dispatcherProvider: DispatcherProvider
 
@@ -133,9 +146,10 @@ class TransactionInfoServiceTest : KoinTest {
         )
 
     private fun createService(
+        initialTransactionRecord: TransactionRecord = transactionRecord,
         userSwapTransactionId: String? = null
     ) = TransactionInfoService(
-        initialTransactionRecord = transactionRecord,
+        initialTransactionRecord = initialTransactionRecord,
         userSwapTransactionId = userSwapTransactionId,
         walletUid = "wallet-1",
         adapter = adapter,
@@ -279,5 +293,269 @@ class TransactionInfoServiceTest : KoinTest {
         coVerify(exactly = 2) {
             updateSwapProviderTransactionsStatusUseCase.updateTransactionStatus("cn-tx-1")
         }
+    }
+
+    @Test
+    fun start_pendingIncomingLikeRecord_doesNotReplacePendingRecord() = runTest(dispatcher) {
+        val token = createToken()
+        val source = createSource(blockchain = token.blockchain)
+        val pendingRecord = createPendingRecord(
+            token = token,
+            source = source,
+            uid = "pending-1",
+            transactionHash = "",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("0.00000563"),
+            toAddress = "bc1-recipient-address",
+        )
+        val incomingRecord = createMockRecord(
+            recordUid = "incoming-real",
+            recordHash = "incoming-hash",
+            source = source,
+            recordToken = token,
+            mainValue = TransactionValue.CoinValue(token, BigDecimal("0.00000563")),
+            timestamp = 1_715_000_005,
+            toAddress = "bc1-wallet-address",
+            type = TransactionRecordType.BITCOIN_INCOMING,
+        )
+        every { adapter.getTransactionRecordsFlow(null, cash.p.terminal.modules.transactions.FilterTransactionType.All, null) } returns
+            MutableStateFlow(listOf(incomingRecord))
+
+        val service = createService(initialTransactionRecord = pendingRecord)
+        backgroundScope.launch { service.start() }
+        advanceUntilIdle()
+
+        assertEquals(pendingRecord.uid, service.transactionRecord.uid)
+    }
+
+    @Test
+    fun start_pendingSameAddressSameAmountButOldReal_doesNotReplacePendingRecord() = runTest(dispatcher) {
+        val token = createToken()
+        val source = createSource(blockchain = token.blockchain)
+        val pendingRecord = createPendingRecord(
+            token = token,
+            source = source,
+            uid = "pending-1",
+            transactionHash = "",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("0.00000563"),
+            toAddress = "bc1same-address",
+        )
+        val oldRealRecord = createMockRecord(
+            recordUid = "old-real",
+            recordHash = "old-real-hash",
+            source = source,
+            recordToken = token,
+            mainValue = TransactionValue.CoinValue(token, BigDecimal("-0.00000563")),
+            timestamp = 1_700_000_000,
+            toAddress = "bc1same-address",
+            type = TransactionRecordType.BITCOIN_OUTGOING,
+        )
+        every { adapter.getTransactionRecordsFlow(null, cash.p.terminal.modules.transactions.FilterTransactionType.All, null) } returns
+            MutableStateFlow(listOf(oldRealRecord))
+
+        val service = createService(initialTransactionRecord = pendingRecord)
+        backgroundScope.launch { service.start() }
+        advanceUntilIdle()
+
+        assertEquals(pendingRecord.uid, service.transactionRecord.uid)
+    }
+
+    @Test
+    fun start_pendingTokenTransfer_realOutgoingWithBaseToken_replacesPendingRecord() = runTest(dispatcher) {
+        val blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null)
+        val source = createSource(blockchain = blockchain)
+        val baseToken = createEvmToken(
+            coinUid = "ethereum",
+            coinName = "Ethereum",
+            coinCode = "ETH",
+            blockchain = blockchain,
+            type = TokenType.Native,
+            decimals = 18,
+        )
+        val assetToken = createEvmToken(
+            coinUid = "usdc",
+            coinName = "USD Coin",
+            coinCode = "USDC",
+            blockchain = blockchain,
+            type = TokenType.Eip20("0xusdc"),
+            decimals = 6,
+        )
+        val pendingRecord = createPendingRecord(
+            token = assetToken,
+            source = source,
+            uid = "pending-1",
+            transactionHash = "",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("12.34"),
+            toAddress = "0xrecipient",
+        )
+        val realRecord = createMockRecord(
+            recordUid = "real-outgoing",
+            recordHash = "real-hash",
+            source = source,
+            recordToken = baseToken,
+            mainValue = TransactionValue.CoinValue(assetToken, BigDecimal("-12.34")),
+            timestamp = 1_715_000_005,
+            toAddress = "0xrecipient",
+            type = TransactionRecordType.EVM_OUTGOING,
+        )
+        every { adapter.getTransactionRecordsFlow(null, cash.p.terminal.modules.transactions.FilterTransactionType.All, null) } returns
+            MutableStateFlow(listOf(realRecord))
+
+        val service = createService(initialTransactionRecord = pendingRecord)
+        backgroundScope.launch { service.start() }
+        advanceUntilIdle()
+
+        assertEquals(realRecord.uid, service.transactionRecord.uid)
+    }
+
+    @Test
+    fun start_pendingSwap_realEvmSwapWithBaseToken_replacesPendingRecord() = runTest(dispatcher) {
+        val blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null)
+        val source = createSource(blockchain = blockchain)
+        val baseToken = createEvmToken(
+            coinUid = "ethereum",
+            coinName = "Ethereum",
+            coinCode = "ETH",
+            blockchain = blockchain,
+            type = TokenType.Native,
+            decimals = 18,
+        )
+        val assetToken = createEvmToken(
+            coinUid = "usdc",
+            coinName = "USD Coin",
+            coinCode = "USDC",
+            blockchain = blockchain,
+            type = TokenType.Eip20("0xusdc"),
+            decimals = 6,
+        )
+        val pendingRecord = createPendingRecord(
+            token = assetToken,
+            source = source,
+            uid = "pending-swap",
+            transactionHash = "",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("12.34"),
+            toAddress = "0xrouter",
+        )
+        val realRecord = createMockEvmSwapRecord(
+            recordUid = "real-swap",
+            recordHash = "real-swap-hash",
+            source = source,
+            recordToken = baseToken,
+            valueIn = TransactionValue.CoinValue(assetToken, BigDecimal("-12.34")),
+            timestamp = 1_715_000_005,
+            toAddress = "0xrouter",
+        )
+        every { adapter.getTransactionRecordsFlow(null, cash.p.terminal.modules.transactions.FilterTransactionType.All, null) } returns
+            MutableStateFlow(listOf(realRecord))
+
+        val service = createService(initialTransactionRecord = pendingRecord)
+        backgroundScope.launch { service.start() }
+        advanceUntilIdle()
+
+        assertEquals(realRecord.uid, service.transactionRecord.uid)
+    }
+
+    private fun createPendingRecord(
+        token: Token,
+        source: TransactionSource,
+        uid: String,
+        transactionHash: String,
+        timestamp: Long,
+        amount: BigDecimal,
+        toAddress: String,
+    ) = PendingTransactionRecord(
+        uid = uid,
+        transactionHash = transactionHash,
+        timestamp = timestamp,
+        source = source,
+        token = token,
+        amount = amount,
+        toAddress = toAddress,
+        fromAddress = "",
+        expiresAt = Long.MAX_VALUE,
+        memo = null,
+    )
+
+    private fun createMockRecord(
+        recordUid: String,
+        recordHash: String,
+        source: TransactionSource,
+        recordToken: Token,
+        mainValue: TransactionValue,
+        timestamp: Long,
+        toAddress: String,
+        type: TransactionRecordType,
+    ): TransactionRecord = mockk {
+        every { uid } returns recordUid
+        every { transactionHash } returns recordHash
+        every { this@mockk.source } returns source
+        every { blockchainType } returns source.blockchain.type
+        every { token } returns recordToken
+        every { this@mockk.mainValue } returns mainValue
+        every { this@mockk.timestamp } returns timestamp
+        every { to } returns listOf(toAddress)
+        every { from } returns null
+        every { transactionRecordType } returns type
+    }
+
+    private fun createMockEvmSwapRecord(
+        recordUid: String,
+        recordHash: String,
+        source: TransactionSource,
+        recordToken: Token,
+        valueIn: TransactionValue,
+        timestamp: Long,
+        toAddress: String,
+    ): TransactionRecord = mockk<EvmTransactionRecord> {
+        every { uid } returns recordUid
+        every { transactionHash } returns recordHash
+        every { this@mockk.source } returns source
+        every { blockchainType } returns source.blockchain.type
+        every { token } returns recordToken
+        every { this@mockk.mainValue } returns null
+        every { this@mockk.valueIn } returns valueIn
+        every { this@mockk.timestamp } returns timestamp
+        every { to } returns listOf(toAddress)
+        every { from } returns null
+        every { transactionRecordType } returns TransactionRecordType.EVM_SWAP
+    }
+
+    private fun createToken(): Token {
+        val coin = Coin(uid = "bitcoin", name = "Bitcoin", code = "BTC")
+        val blockchain = Blockchain(BlockchainType.Bitcoin, "Bitcoin", null)
+        return Token(
+            coin = coin,
+            blockchain = blockchain,
+            type = TokenType.Derived(TokenType.Derivation.Bip86),
+            decimals = 8,
+        )
+    }
+
+    private fun createEvmToken(
+        coinUid: String,
+        coinName: String,
+        coinCode: String,
+        blockchain: Blockchain,
+        type: TokenType,
+        decimals: Int,
+    ) = Token(
+        coin = Coin(uid = coinUid, name = coinName, code = coinCode),
+        blockchain = blockchain,
+        type = type,
+        decimals = decimals,
+    )
+
+    private fun createSource(blockchain: Blockchain): TransactionSource {
+        val account = Account(
+            id = "account-1",
+            name = "Main",
+            type = mockk(relaxed = true),
+            origin = AccountOrigin.Created,
+            level = 0,
+        )
+        return TransactionSource(blockchain = blockchain, account = account, meta = null)
     }
 }

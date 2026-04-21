@@ -32,6 +32,7 @@ import cash.p.terminal.modules.resettofactorysettings.ResetToFactorySettingsView
 import cash.p.terminal.modules.restoreaccount.duplicatewallet.DuplicateWalletViewModel
 import cash.p.terminal.modules.restoreaccount.restoremnemonic.RestoreMnemonicViewModel
 import cash.p.terminal.modules.settings.advancedsecurity.AdvancedSecurityViewModel
+import cash.p.terminal.modules.settings.advancedsecurity.terms.DeleteContactsTermsViewModel
 import cash.p.terminal.modules.settings.advancedsecurity.securereset.SecureResetTermsViewModel
 import cash.p.terminal.modules.settings.advancedsecurity.terms.HiddenWalletTermsViewModel
 import cash.p.terminal.modules.settings.appcache.AppCacheViewModel
@@ -118,6 +119,7 @@ val viewModelModule = module {
         BackupKeyViewModel(accountId = accountId, accountManager = get())
     }
     viewModelOf(::AdvancedSecurityViewModel)
+    viewModelOf(::DeleteContactsTermsViewModel)
     viewModelOf(::HiddenWalletTermsViewModel)
     viewModelOf(::SecureResetTermsViewModel)
     viewModelOf(::CreateAdvancedAccountViewModel)

@@ -3,6 +3,9 @@ package cash.p.terminal.modules.amount
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,7 +33,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
@@ -90,6 +95,12 @@ fun HSAmountInput(
     }
 
     val hint = viewModel.hint
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    val requestInputFocus = {
+        focusRequester.requestFocus()
+        keyboardController?.show()
+    }
 
     val borderColor = when (caution?.type) {
         HSCaution.Type.Error -> ComposeAppTheme.colors.red50
@@ -169,6 +180,13 @@ fun HSAmountInput(
                         .padding(start = 16.dp)
                         .weight(1f)
                         .focusRequester(focusRequester)
+                        .pointerInput(keyboardController) {
+                            awaitEachGesture {
+                                awaitFirstDown(requireUnconsumed = false)
+                                requestInputFocus()
+                                waitForUpOrCancellation()
+                            }
+                        }
                         .shake(
                             enabled = playShakeAnimation,
                             onAnimationFinish = { playShakeAnimation = false }
@@ -283,7 +301,10 @@ fun HSAmountInput(
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null,
-                        onClick = onClickHint
+                        onClick = {
+                            onClickHint()
+                            requestInputFocus()
+                        }
                     ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
