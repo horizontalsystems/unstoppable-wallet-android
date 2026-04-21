@@ -74,9 +74,11 @@ class TransactionAdapterWrapper(
     }
 
     fun reload() {
-        _transactionRecords.update { emptyList() }
-        _allLoaded.value = false
-        subscribeForUpdates()
+        coroutineScope.launch {
+            _transactionRecords.update { emptyList() }
+            _allLoaded.value = false
+            subscribeForUpdates()
+        }
     }
 
     fun setTransactionType(transactionType: FilterTransactionType) {
@@ -88,9 +90,11 @@ class TransactionAdapterWrapper(
 
     fun setContact(contact: Contact?) {
         this.contact = contact
-        _transactionRecords.update { emptyList() }
-        _allLoaded.value = false
-        subscribeForUpdates()
+        coroutineScope.launch {
+            _transactionRecords.update { emptyList() }
+            _allLoaded.value = false
+            subscribeForUpdates()
+        }
     }
 
     private fun subscribeForUpdates() {
