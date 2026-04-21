@@ -82,4 +82,6 @@ dependencies {
     implementation(project(":core:navigation"))
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

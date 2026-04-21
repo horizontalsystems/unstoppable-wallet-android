@@ -1,6 +1,7 @@
 package cash.p.terminal.ui_compose.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
@@ -501,6 +502,10 @@ fun CellUniversalLawrenceSectionAnimated(
     animatedVisible: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val visibleState = remember { MutableTransitionState(animatedVisible) }
+    visibleState.targetState = animatedVisible
+    val isAnimating = visibleState.currentState != visibleState.targetState
+
     Column(
         modifier = modifier
             .padding(horizontal = 16.dp)
@@ -508,22 +513,22 @@ fun CellUniversalLawrenceSectionAnimated(
             .background(ComposeAppTheme.colors.lawrence)
     ) {
         SectionUniversalItem(
-            borderBottom = true
+            borderBottom = isAnimating
         ) {
             primaryContent()
         }
         AnimatedVisibility(
-            visible = animatedVisible,
+            visibleState = visibleState,
             enter = expandVertically(),
             exit = shrinkVertically()
         ) {
-            SectionUniversalItem(borderBottom = true) {
+            SectionUniversalItem {
                 animatedContent()
             }
         }
         afterAnimatedContent?.let {
             SectionUniversalItem(
-                borderTop = true,
+                borderBottom = !animatedVisible && isAnimating
             ) {
                 it()
             }

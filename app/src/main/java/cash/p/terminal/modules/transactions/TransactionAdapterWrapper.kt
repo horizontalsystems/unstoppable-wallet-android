@@ -3,9 +3,11 @@ package cash.p.terminal.modules.transactions
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.converters.PendingTransactionConverter
 import cash.p.terminal.core.managers.CoinManager
+import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PendingTransactionRepository
 import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.entities.PendingTransactionEntity
+import cash.p.terminal.entities.transactionrecords.PendingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.wallet.Clearable
@@ -27,6 +29,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
+import kotlin.math.abs
 
 class TransactionAdapterWrapper(
     private val transactionsAdapter: ITransactionsAdapter,
@@ -36,8 +39,15 @@ class TransactionAdapterWrapper(
     @Volatile
     private var contact: Contact?,
     private val pendingRepository: PendingTransactionRepository,
-    private val pendingConverter: PendingTransactionConverter
+    private val pendingConverter: PendingTransactionConverter,
+    private val pendingTransactionMatcher: PendingTransactionMatcher,
 ) : Clearable {
+    private data class PendingRealMatchCandidate(
+        val realIndex: Int,
+        val confidence: Double,
+        val timestampDifference: Long,
+    )
+
     // Use MutableSharedFlow for updates
     private val _updatedFlow = MutableSharedFlow<Unit>(replay = 0)
     val updatedFlow: SharedFlow<Unit> get() = _updatedFlow.asSharedFlow()
@@ -194,7 +204,12 @@ class TransactionAdapterWrapper(
                 .mapNotNull {
                     val tokenType = TokenType.fromId(it.tokenTypeId)
                     val token = tryOrNull {
-                        coinManager.getToken(TokenQuery(BlockchainType.fromUid(it.blockchainTypeUid), tokenType))
+                        coinManager.getToken(
+                            TokenQuery(
+                                BlockchainType.fromUid(it.blockchainTypeUid),
+                                tokenType
+                            )
+                        )
                     } ?: return@mapNotNull null
                     pendingConverter.convert(it, token)
                 }
@@ -215,19 +230,110 @@ class TransactionAdapterWrapper(
         return try {
             val pendingEntities = pendingRepository.getPendingForWallet(walletId)
             val pendingRecords = getPending(pendingEntities)
-
-            val realHashes = realRecords.mapNotNullTo(HashSet()) {
-                it.transactionHash.takeIf { hash -> hash.isNotEmpty() }
-            }
-            val filteredPending = pendingRecords.filter { pending ->
-                pending.transactionHash.isEmpty() || pending.transactionHash !in realHashes
-            }
+            val filteredPending = filterDuplicatedPending(pendingRecords, realRecords)
 
             (realRecords + filteredPending).sortedByDescending { it.timestamp }
         } catch (e: Exception) {
             // If something fails, return real records only
             realRecords
         }
+    }
+
+    private fun filterDuplicatedPending(
+        pendingRecords: List<TransactionRecord>,
+        realRecords: List<TransactionRecord>,
+    ): List<TransactionRecord> {
+        val duplicatePendingUids = realRecords
+            .filterIsInstance<PendingTransactionRecord>()
+            .mapTo(HashSet()) { it.uid }
+        val matchedPendingIndexes = matchedPendingIndexes(pendingRecords, realRecords)
+
+        return pendingRecords.filterIndexed { index, pending ->
+            pending !is PendingTransactionRecord ||
+                (pending.uid !in duplicatePendingUids && index !in matchedPendingIndexes)
+        }
+    }
+
+    private fun matchedPendingIndexes(
+        pendingRecords: List<TransactionRecord>,
+        realRecords: List<TransactionRecord>,
+    ): Set<Int> {
+        val realCandidates = realRecords.withIndex()
+            .filterNot { it.value is PendingTransactionRecord }
+
+        val pendingCandidateMap = pendingRecords.mapIndexedNotNull { pendingIndex, record ->
+            val pending = record as? PendingTransactionRecord ?: return@mapIndexedNotNull null
+            val candidates = realCandidates.mapNotNull { (realIndex, real) ->
+                val matchScore = pendingTransactionMatcher.matchScoreForRealRecord(pending, real)
+                if (!matchScore.isMatch) {
+                    return@mapNotNull null
+                }
+
+                PendingRealMatchCandidate(
+                    realIndex = realIndex,
+                    confidence = matchScore.confidence,
+                    timestampDifference = abs(pending.timestamp - real.timestamp)
+                )
+            }.sortedWith(
+                compareByDescending<PendingRealMatchCandidate> { it.confidence }
+                    .thenBy { it.timestampDifference }
+                    .thenBy { it.realIndex }
+            )
+
+            if (candidates.isEmpty()) {
+                null
+            } else {
+                pendingIndex to candidates
+            }
+        }.toMap()
+
+        val pendingIndexes = pendingCandidateMap.keys.sortedWith(
+            compareBy<Int> { pendingCandidateMap.getValue(it).size }
+                .thenByDescending { pendingCandidateMap.getValue(it).first().confidence }
+                .thenBy { pendingCandidateMap.getValue(it).first().timestampDifference }
+                .thenBy { it }
+        )
+
+        val matchedPendingByReal = mutableMapOf<Int, Int>()
+        pendingIndexes.forEach { pendingIndex ->
+            assignRealRecord(
+                pendingIndex = pendingIndex,
+                pendingCandidateMap = pendingCandidateMap,
+                visitedRealIndexes = mutableSetOf(),
+                matchedPendingByReal = matchedPendingByReal
+            )
+        }
+
+        return matchedPendingByReal.values.toSet()
+    }
+
+    private fun assignRealRecord(
+        pendingIndex: Int,
+        pendingCandidateMap: Map<Int, List<PendingRealMatchCandidate>>,
+        visitedRealIndexes: MutableSet<Int>,
+        matchedPendingByReal: MutableMap<Int, Int>,
+    ): Boolean {
+        val candidates = pendingCandidateMap[pendingIndex] ?: return false
+
+        for (candidate in candidates) {
+            if (!visitedRealIndexes.add(candidate.realIndex)) {
+                continue
+            }
+
+            val assignedPendingIndex = matchedPendingByReal[candidate.realIndex]
+            if (assignedPendingIndex == null || assignRealRecord(
+                    pendingIndex = assignedPendingIndex,
+                    pendingCandidateMap = pendingCandidateMap,
+                    visitedRealIndexes = visitedRealIndexes,
+                    matchedPendingByReal = matchedPendingByReal
+                )
+            ) {
+                matchedPendingByReal[candidate.realIndex] = pendingIndex
+                return true
+            }
+        }
+
+        return false
     }
 
     override fun clear() {

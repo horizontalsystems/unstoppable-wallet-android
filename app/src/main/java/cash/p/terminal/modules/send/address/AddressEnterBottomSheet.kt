@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.core.address.AddressCheckType
 import cash.p.terminal.ui_compose.BottomSheetHeader
+import cash.p.terminal.ui_compose.TransparentModalBottomSheet
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.highlightText
@@ -37,10 +37,9 @@ fun AddressEnterInfoBottomSheet(
         AddressCheckType.Sanction -> R.string.Send_Address_SanctionCheck
     }
 
-    ModalBottomSheet(
+    TransparentModalBottomSheet(
         onDismissRequest = hideBottomSheet,
         sheetState = bottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
     ) {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_info_24),

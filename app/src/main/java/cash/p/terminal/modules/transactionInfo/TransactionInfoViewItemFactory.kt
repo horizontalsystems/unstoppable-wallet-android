@@ -202,7 +202,7 @@ class TransactionInfoViewItemFactory(
                                 rates = rates,
                                 exchangeAddress = transaction.exchangeAddress!!,
                                 valueOut = transaction.valueOut,
-                                valueIn = transaction.valueIn
+                                valueIn = transaction.valueIn,
                             )
                         )
                     }
@@ -686,7 +686,7 @@ class TransactionInfoViewItemFactory(
                         exchangeAddress = provider.title,
                         valueOut = valueOut,
                         valueIn = valueIn,
-                        serviceName = provider.title,
+                        providerName = provider.title,
                     )
                 )
             }

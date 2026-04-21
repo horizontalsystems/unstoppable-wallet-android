@@ -93,7 +93,6 @@ class TokenBalanceModule {
                 connectivityManager = App.connectivityManager,
                 accountManager = App.accountManager,
                 transactionHiddenManager = getKoinInstance(),
-                getChangeNowAssociatedCoinTickerUseCase = getKoinInstance(),
                 balanceHiddenManager = getKoinInstance<IBalanceHiddenManager>(),
                 premiumSettings = getKoinInstance(),
                 amlStatusManager = getKoinInstance(),

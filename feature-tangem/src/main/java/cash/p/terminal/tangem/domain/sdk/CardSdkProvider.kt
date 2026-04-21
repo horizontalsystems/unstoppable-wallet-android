@@ -54,6 +54,10 @@ class CardSdkProvider(
         Log.info { "Tangem SDK owner registered" }
     }
 
+    fun cancelSession() {
+        holder?.nfcManager?.reader?.stopSession(cancelled = true)
+    }
+
     private fun tryToRegisterWithForegroundActivity(): TangemSdk =
         runBlocking(Dispatchers.Main.immediate) {
             val warning =

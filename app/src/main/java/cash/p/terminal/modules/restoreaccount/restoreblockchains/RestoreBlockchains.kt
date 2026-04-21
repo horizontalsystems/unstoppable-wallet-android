@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -40,6 +39,7 @@ import cash.p.terminal.modules.enablecoin.restoresettings.TokenConfig
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.extensions.BottomSheetSelectorMultiple
+import cash.p.terminal.ui_compose.TransparentModalBottomSheet
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.CellMultilineClear
 import cash.p.terminal.ui_compose.components.HSpacer
@@ -142,10 +142,8 @@ fun ManageWalletsScreen(
     }
 
     if (showBottomSheet) {
-        ModalBottomSheet(
+        TransparentModalBottomSheet(
             sheetState = bottomSheetState,
-            dragHandle = null,
-            containerColor = ComposeAppTheme.colors.transparent,
             onDismissRequest = { showBottomSheet = false }
         ) {
             blockchainTokensViewModel.config?.let { config ->

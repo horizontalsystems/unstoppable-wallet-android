@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +27,7 @@ import cash.p.terminal.modules.transactions.riskColor
 import cash.p.terminal.modules.transactions.riskTextRes
 import cash.p.terminal.ui_compose.components.HsRadioButton
 import cash.p.terminal.ui_compose.BottomSheetHeader
+import cash.p.terminal.ui_compose.TransparentModalBottomSheet
 import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
@@ -51,11 +51,9 @@ fun AmlAddressSelectionBottomSheet(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var selectedAddress by remember { mutableStateOf<String?>(null) }
 
-    ModalBottomSheet(
+    TransparentModalBottomSheet(
         onDismissRequest = onDismiss,
-        dragHandle = null,
         sheetState = sheetState,
-        containerColor = ComposeAppTheme.colors.transparent
     ) {
         AmlAddressSelectionContent(
             addresses = addresses,

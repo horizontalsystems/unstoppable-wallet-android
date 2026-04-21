@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.settings.security.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -16,15 +15,13 @@ import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.ensurePinSet
 import cash.p.terminal.navigation.slideFromRight
-import cash.p.terminal.modules.settings.main.HsSettingCell
 import cash.p.terminal.modules.settings.security.SecurityCenterCell
 import cash.p.terminal.modules.settings.security.passcode.SecuritySettingsViewModel
+import cash.p.terminal.modules.settings.main.HsSettingCell
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HsSwitch
 import cash.p.terminal.ui_compose.components.VSpacer
-import cash.p.terminal.ui_compose.components.body_jacob
 import cash.p.terminal.ui_compose.components.body_leah
-import cash.p.terminal.ui_compose.components.body_lucian
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
@@ -35,76 +32,26 @@ fun PasscodeBlock(
     val uiState = viewModel.uiState
 
     VSpacer(height = 8.dp)
-    CellUniversalLawrenceSection(buildList<@Composable () -> Unit> {
-        add {
-            SecurityCenterCell(
-                start = {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_passcode),
-                        tint = ComposeAppTheme.colors.jacob,
-                        modifier = Modifier.size(24.dp),
-                        contentDescription = null,
-                    )
-                },
-                center = {
-                    val text = if (uiState.pinEnabled) {
-                        R.string.SettingsSecurity_EditPin
-                    } else {
-                        R.string.SettingsSecurity_EnablePin
-                    }
-                    body_jacob(
-                        text = stringResource(text),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                },
-                end = {
-                    if (!uiState.pinEnabled) {
-                        Image(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_attention_red_20),
-                            contentDescription = null,
-                        )
-                    }
-                },
-                onClick = {
-                    if (!uiState.pinEnabled) {
-                        navController.slideFromRight(R.id.setPinFragment)
-                    } else {
-                        navController.authorizedAction {
-                            navController.slideFromRight(R.id.editPinFragment)
-                        }
-                    }
+    ManagePasscodeSection(
+        iconRes = R.drawable.ic_passcode,
+        enabled = uiState.pinEnabled,
+        editTextRes = R.string.SettingsSecurity_EditPin,
+        showWarningWhenDisabled = true,
+        onManageClick = {
+            if (!uiState.pinEnabled) {
+                navController.slideFromRight(R.id.setPinFragment)
+            } else {
+                navController.authorizedAction {
+                    navController.slideFromRight(R.id.editPinFragment)
                 }
-            )
-        }
-        if (uiState.pinEnabled) {
-            add {
-                SecurityCenterCell(
-                    start = {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_delete_20),
-                            tint = ComposeAppTheme.colors.lucian,
-                            modifier = Modifier.size(24.dp),
-                            contentDescription = null,
-                        )
-                    },
-                    center = {
-                        body_lucian(
-                            text = stringResource(R.string.SettingsSecurity_DisablePin),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    },
-                    onClick = {
-                        navController.authorizedAction {
-                            viewModel.disablePin()
-                        }
-                    }
-                )
+            }
+        },
+        onDisableClick = {
+            navController.authorizedAction {
+                viewModel.disablePin()
             }
         }
-    })
+    )
 
     if (uiState.pinEnabled) {
         VSpacer(32.dp)

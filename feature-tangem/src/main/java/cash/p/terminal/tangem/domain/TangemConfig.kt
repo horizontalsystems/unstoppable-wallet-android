@@ -1,6 +1,5 @@
 package cash.p.terminal.tangem.domain
 
-import cash.p.terminal.wallet.BuildConfig
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType

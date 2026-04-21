@@ -6,13 +6,16 @@ import cash.p.terminal.feature.logging.domain.usecase.LogLoginAttemptUseCase
 import cash.p.terminal.modules.pin.core.ILockoutManager
 import cash.p.terminal.modules.pin.core.LockoutState
 import cash.p.terminal.modules.pin.core.OneTimeTimer
+import cash.p.terminal.modules.pin.core.PinLevels
 import cash.p.terminal.modules.pin.unlock.PinUnlockModule
 import cash.p.terminal.modules.pin.unlock.PinUnlockViewModel
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -20,6 +23,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
@@ -96,5 +100,29 @@ class PinUnlockViewModelTest {
             "attemptsLeft should be null after successful unlock and re-lock",
             (inputState as PinUnlockModule.InputState.Enabled).attemptsLeft
         )
+    }
+
+    @Test
+    fun deleteContactsPin_logsAsUnsuccessfulAttempt() = runTest(dispatcher) {
+        val viewModel = createViewModel(LockoutState.Unlocked(attemptsLeft = 4))
+
+        every { pinComponent.getPinLevel("654321") } returns PinLevels.DELETE_CONTACTS
+        coEvery { pinComponent.unlock("654321", PinLevels.DELETE_CONTACTS) } returns false
+        coEvery { logLoginAttemptUseCase.captureLoginPhoto(null) } returns null
+        coEvery { logLoginAttemptUseCase.logLoginAttempt(null, null) } returns Unit
+        every { lockoutManager.currentState } returns LockoutState.Unlocked(attemptsLeft = 3)
+
+        for (digit in "654321".map { it.digitToInt() }) {
+            viewModel.onKeyClick(digit)
+        }
+
+        coVerify(exactly = 1) { logLoginAttemptUseCase.captureLoginPhoto(null) }
+        coVerify(exactly = 1) { pinComponent.unlock("654321", PinLevels.DELETE_CONTACTS) }
+        coVerify(exactly = 1) { logLoginAttemptUseCase.logLoginAttempt(null, null) }
+        verify(exactly = 1) { lockoutManager.didFailUnlock() }
+        verify(exactly = 0) { lockoutManager.dropFailedAttempts() }
+
+        val inputState = viewModel.uiState.inputState as PinUnlockModule.InputState.Enabled
+        assertEquals(3, inputState.attemptsLeft)
     }
 }

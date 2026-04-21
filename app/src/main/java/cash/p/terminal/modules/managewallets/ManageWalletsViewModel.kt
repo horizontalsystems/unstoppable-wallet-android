@@ -180,13 +180,13 @@ class ManageWalletsViewModel(
     )
 
     override fun enable(token: Token) {
+        if (isHardwareCard() && TangemConfig.isExcludedForHardwareCard(token)) {
+            showError(App.instance.getString(R.string.error_hardware_wallet_not_supported))
+            return
+        }
         if (!isHardwareCard() || tangemBlockchainTypeExistUseCase(token)) {
             service.enable(token)
         } else {
-            if (TangemConfig.isExcludedForHardwareCard(token)) {
-                showError(App.instance.getString(R.string.error_hardware_wallet_not_supported))
-                return
-            }
             awaitingEnabledTokens.add(token)
             updateNeedToShowScanToAddButton()
 

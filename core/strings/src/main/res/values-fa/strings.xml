@@ -694,7 +694,6 @@
     <string name="TransactionInfo_Date">تاریخ</string>
     <string name="transaction_info_sync_source">منبع همگام‌سازی</string>
     <string name="TransactionInfo_Id">شناسه</string>
-    <string name="TransactionInfo_Service">خدمات</string>
     <string name="TransactionInfo_RawTransaction">تراکنش خام</string>
     <string name="TransactionInfo_ContactName">Contact Name</string>
     <string name="TransactionInfo_To">به</string>
@@ -1015,6 +1014,7 @@
     <string name="SettingsTheme_System">سیستم</string>
     <!--Errors-->
     <string name="transaction_error_need_to_check">The transaction may not have been completed due to unexpected issues. We recommend checking the status before attempting to resend to avoid double payment</string>
+    <string name="transaction_error_invalid_derivation_path">مسیر مشتق‌سازی نامعتبر</string>
     <!--Hud texts-->
     <string name="Hud_Text_NoInternet">اینترنت ندارید</string>
     <string name="Hud_Text_Copied">کپی شد</string>
@@ -1457,6 +1457,11 @@
     <string name="SubscriptionInfo_HavePremium">I already have Premium</string>
     <string name="premium_title">پریمیوم</string>
     <string name="about_premium">درباره پریمیوم</string>
+    <string name="delete_all_contacts_terms_agreement"><![CDATA[توافق‌نامه کاربر برای تنظیم رمز PIN جهت حذف دفترچه آدرس رمزارز<br/><br/>با تنظیم رمز PIN، شما تأیید می‌کنید که هدف آن را به‌عنوان سازوکاری برای محافظت از حریم خصوصی خود درک می‌کنید.<br/><b>1. کارکرد حفاظتی رمز PIN</b><br/>این رمز PIN برای حذف اضطراری دفترچه آدرس رمزارز از دستگاه در نظر گرفته شده است تا از افشای احتمالی ارتباطات مالی و آدرس‌های ذخیره‌شده شما به اشخاص ثالث جلوگیری شود.<br/><b>2. سازوکار عملکرد</b><br/>وارد کردن رمز PIN تنظیم‌شده باعث حذف فوری دفترچه آدرس رمزارز ذخیره‌شده در این دستگاه می‌شود.<br/><b>3. غیرقابل‌برگشت بودن حذف</b><br/>حذف دفترچه آدرس پس از وارد کردن رمز PIN نهایی و غیرقابل بازگشت است.<br/><b>4. نبود امکان بازیابی</b><br/>در صورت حذف دفترچه آدرس، داده‌ها قابل بازیابی نخواهند بود مگر اینکه از قبل نسخه پشتیبان ایجاد شده باشد.<br/><b>5. ذخیره‌سازی محلی</b><br/>دفترچه آدرس فقط به‌صورت محلی در دستگاه شما ذخیره می‌شود و به توسعه‌دهندگان یا سرورهای خارجی منتقل نمی‌شود.]]></string>
+    <string-array name="delete_all_contacts_terms_checkboxes">
+        <item>می‌دانم که رمز PIN برای حذف فوری دفترچه آدرس رمزارز استفاده می‌شود.</item>
+        <item>می‌دانم که پس از وارد کردن رمز PIN، دفترچه آدرس بدون امکان بازیابی و بدون نسخه پشتیبان حذف خواهد شد.</item>
+    </string-array>
     <string name="premium_settings">تنظیمات پریمیوم</string>
     <string name="advanced_security">امنیت پیشرفته</string>
     <string name="AdvancedSecurity_CreateHiddenWallet">Create Hidden Wallet</string>
@@ -1670,6 +1675,9 @@
     <string name="pin_set_for_login_logging">Set a passcode to enable login logging</string>
     <string name="pin_set_for_login_logging_passcode">رمز عبور برای محافظت از ثبت ورود تعیین کنید</string>
     <string name="confirm_pin_to_disable_login_logging_passcode">رمز عبور را برای غیرفعال کردن ثبت ورود وارد کنید</string>
+    <string name="pin_set_for_delete_all_contacts">برای حذف همه مخاطبین یک رمز عبور تنظیم کنید</string>
+    <string name="confirm_pin_to_disable_delete_all_contacts_passcode">برای غیرفعال کردن «حذف همه مخاطبین» رمز عبور را وارد کنید</string>
+    <string name="disable_delete_contacts_passcode_warning">به عنوان یک اقدام امنیتی، توصیه می‌کنیم از عملکرد کپی برای این مقدار استفاده نکنید.</string>
     <string name="confirm_pin_to_access_login_logging">رمز عبور را برای دسترسی به ثبت ورود وارد کنید</string>
     <string name="PinSet_ErrorPinInUse">This passcode is already being used.</string>
     <!--Edit Pin-->
@@ -1700,6 +1708,7 @@
     <string name="Contacts_KeepEditing">Keep Editing</string>
     <string name="Contacts_DiscardChanges_Warning">Are you sure you want to discard these new changes?</string>
     <string name="Contacts_NoContacts">You do not have an added contact</string>
+    <string name="delete_all_contacts">حذف همه مخاطبین</string>
     <string name="Contacts_ActionMore">More</string>
     <string name="Contacts_Error_DefinedAddress">This address is already used for %s</string>
     <string name="Contacts_Error_DefinedName">The name already exists</string>

@@ -12,16 +12,18 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.UnknownHostException
 
 class MarketWidgetManager {
 
-    private var coroutineScope: CoroutineScope? = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     fun updateWatchListWidgets() {
-        coroutineScope?.launch {
+        coroutineScope.launch {
             val context = App.instance
             val manager = GlanceAppWidgetManager(context)
             val glanceIds = manager.getGlanceIds(MarketWidget::class.java)
@@ -29,31 +31,35 @@ class MarketWidgetManager {
             for (glanceId in glanceIds) {
                 val state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
                 if (state.type == MarketWidgetType.Watchlist) {
-                    refresh(glanceId)
+                    launch { refreshSync(glanceId) }
                 }
             }
         }
     }
 
     fun refresh(glanceId: GlanceId) {
-        coroutineScope?.launch {
-            val context = App.instance
-            try {
-                executeWithRetry {
-                    updateData(glanceId)
-                }
-            } catch (exception: Exception) {
-                var state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
+        coroutineScope.launch {
+            refreshSync(glanceId)
+        }
+    }
 
-                val errorText = if (exception is UnknownHostException)
-                    context.getString(R.string.Hud_Text_NoInternet)
-                else {
-                    context.getString(R.string.SyncError) + "\n\n\n" + "[ ${state.error} ]"
-                }
-
-                state = state.copy(loading = false, error = errorText)
-                setWidgetState(context, glanceId, state)
+    suspend fun refreshSync(glanceId: GlanceId) = withContext(Dispatchers.IO) {
+        val context = App.instance
+        try {
+            executeWithRetry {
+                updateData(glanceId)
             }
+        } catch (exception: Exception) {
+            var state = getAppWidgetState(context, MarketWidgetStateDefinition, glanceId)
+
+            val errorText = if (exception is UnknownHostException)
+                context.getString(R.string.Hud_Text_NoInternet)
+            else {
+                context.getString(R.string.SyncError) + "\n\n\n" + "[ ${exception.message ?: state.error} ]"
+            }
+
+            state = state.copy(loading = false, error = errorText)
+            setWidgetState(context, glanceId, state)
         }
     }
 
@@ -130,7 +136,7 @@ class MarketWidgetManager {
 
     private val MAX_RETRIES = 5
 
-    private suspend inline fun executeWithRetry(call: () -> Unit) {
+    private suspend inline fun executeWithRetry(crossinline call: suspend () -> Unit) {
         for (i in 0..MAX_RETRIES) {
             try {
                 call.invoke()

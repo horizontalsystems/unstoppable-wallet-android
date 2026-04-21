@@ -376,8 +376,7 @@ class TransactionInfoService(
         allRecords: List<TransactionRecord>
     ): TransactionRecord? {
         return allRecords.firstOrNull { real ->
-            real !is PendingTransactionRecord &&
-                    pendingTransactionMatcher.calculateMatchScore(pending, real).isMatch
+            pendingTransactionMatcher.isMatchingRealRecord(pending, real)
         }
     }
 

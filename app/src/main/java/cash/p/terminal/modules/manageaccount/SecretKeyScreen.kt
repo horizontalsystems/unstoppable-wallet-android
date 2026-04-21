@@ -78,7 +78,7 @@ fun SecretKeyScreen(
                             title = TranslatableString.ResString(R.string.Info_Title),
                             icon = R.drawable.ic_info_24,
                             onClick = {
-                                FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                                FaqManager.showFaqPage(FaqManager.faqPathPrivateKeys)
                             }
                         )
                     )

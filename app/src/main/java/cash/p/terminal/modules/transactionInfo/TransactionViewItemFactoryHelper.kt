@@ -447,12 +447,12 @@ object TransactionViewItemFactoryHelper {
         exchangeAddress: String,
         valueOut: TransactionValue?,
         valueIn: TransactionValue?,
-        serviceName: String? = null,
+        providerName: String? = null,
     ): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
             TransactionInfoViewItem.Value(
-                Translator.getString(R.string.TransactionInfo_Service),
-                serviceName ?: evmLabelManager.mapped(exchangeAddress)
+                Translator.getString(R.string.Swap_SwapProvider_Title),
+                providerName ?: evmLabelManager.mapped(exchangeAddress)
             )
         )
 

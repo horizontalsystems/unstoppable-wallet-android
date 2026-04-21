@@ -12,6 +12,7 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.accountTypeDerivation
 import cash.p.terminal.wallet.bitcoinCashCoinType
 import cash.p.terminal.wallet.customCoinUid
+import cash.p.terminal.wallet.isCompatibleWith
 import cash.p.terminal.wallet.entities.BitcoinCashCoinType
 import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.entities.TokenQuery
@@ -39,27 +40,6 @@ val Token.iconPlaceholder: Int
     get() = when (type) {
         is TokenType.Eip20 -> blockchainType.tokenIconPlaceholder
         else -> R.drawable.coin_placeholder
-    }
-
-val Token.swappable: Boolean
-    get() = when (blockchainType) {
-        BlockchainType.Ton,
-        BlockchainType.Ethereum,
-        BlockchainType.BinanceSmartChain,
-        BlockchainType.Polygon,
-        BlockchainType.Avalanche,
-        BlockchainType.Optimism,
-        BlockchainType.Base,
-        BlockchainType.ZkSync,
-        BlockchainType.Gnosis,
-        BlockchainType.Fantom,
-        BlockchainType.ArbitrumOne,
-        BlockchainType.Bitcoin,
-        BlockchainType.BitcoinCash,
-        BlockchainType.Dash,
-        BlockchainType.Litecoin -> true
-
-        else -> false
     }
 
 val TokenQuery.isSupported: Boolean
@@ -308,8 +288,10 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
         is AccountType.ZCashUfvKey ->
             this == BlockchainType.Zcash
 
+        is AccountType.MnemonicMonero ->
+            this == BlockchainType.Monero
+
         is AccountType.HardwareCard,
-        is AccountType.MnemonicMonero,
         is AccountType.Mnemonic -> true
 
         is AccountType.HdExtendedKey -> {
@@ -471,6 +453,10 @@ fun Token.supports(accountType: AccountType): Boolean {
 
                 else -> false
             }
+        }
+
+        is AccountType.MnemonicMonero -> {
+            accountType.isCompatibleWith(blockchainType, type)
         }
 
         else -> true

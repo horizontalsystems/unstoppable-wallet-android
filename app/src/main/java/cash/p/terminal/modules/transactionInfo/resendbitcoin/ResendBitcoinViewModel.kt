@@ -3,16 +3,13 @@ package cash.p.terminal.modules.transactionInfo.resendbitcoin
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import io.horizontalsystems.core.logger.AppLogger
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.IFeeRateProvider
 import cash.p.terminal.core.LocalizedException
-import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.adapters.BitcoinBaseAdapter
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
-import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.send.SendResult
@@ -20,12 +17,16 @@ import cash.p.terminal.modules.send.SendWarningRiskOfGettingStuck
 import cash.p.terminal.modules.transactionInfo.options.SpeedUpCancelType
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.wallet.entities.Coin
+import io.horizontalsystems.bitcoincore.managers.AccountPublicKeyManager
 import io.horizontalsystems.bitcoincore.rbf.ReplacementTransaction
 import io.horizontalsystems.bitcoincore.rbf.ReplacementTransactionBuilder.BuildError
 import io.horizontalsystems.bitcoincore.rbf.ReplacementTransactionInfo
-import io.horizontalsystems.hodler.LockTimeInterval
+import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.BlockchainType
-import cash.p.terminal.wallet.entities.Coin
+import io.horizontalsystems.core.entities.CurrencyValue
+import io.horizontalsystems.core.logger.AppLogger
+import io.horizontalsystems.hodler.LockTimeInterval
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -135,6 +136,7 @@ class ResendBitcoinViewModel(
         is BuildError.InvalidTransaction,
         BuildError.UnableToReplace,
         BuildError.NoPreviousOutput -> HSCaution(TranslatableString.ResString(R.string.TransactionInfoOptions_Rbf_UnableToReplace))
+        AccountPublicKeyManager.Error.InvalidPath -> HSCaution(TranslatableString.ResString(R.string.transaction_error_invalid_derivation_path))
 
         is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
         is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
@@ -143,7 +145,10 @@ class ResendBitcoinViewModel(
 
     override fun createState(): ResendBitcoinUiState {
         val address = Address(hex = record.to?.firstOrNull()!!)
-        val contact = contactsRepo.getContactsFiltered(blockchainType = blockchainType, addressQuery = address.hex).firstOrNull()
+        val contact = contactsRepo.getContactsFiltered(
+            blockchainType = blockchainType,
+            addressQuery = address.hex
+        ).firstOrNull()
 
         return ResendBitcoinUiState(
             titleResId = titleResId,
@@ -167,7 +172,9 @@ class ResendBitcoinViewModel(
             feeCaution = feeCaution,
 
             minFee = minFee,
-            replacedTransactionHashes = replacementTransaction?.replacedTransactionHashes ?: listOf(transactionRecord.transactionHash)
+            replacedTransactionHashes = replacementTransaction?.replacedTransactionHashes ?: listOf(
+                transactionRecord.transactionHash
+            )
         )
     }
 

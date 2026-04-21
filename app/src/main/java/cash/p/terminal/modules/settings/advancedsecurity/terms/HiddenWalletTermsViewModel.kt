@@ -7,29 +7,19 @@ class HiddenWalletTermsViewModel(
     termTitles: Array<String>
 ) : ViewModelUiState<HiddenWalletTermsUiState>() {
 
-    private var terms = termTitles.mapIndexed { index, title ->
-        TermItem(
-            id = index,
-            title = title,
-            checked = false
-        )
-    }.toMutableList()
+    private val checklist = TermsChecklist(termTitles)
 
-    override fun createState() = HiddenWalletTermsUiState(
-        terms = terms.toList(),
-        agreeEnabled = terms.all { it.checked }
-    )
+    override fun createState(): HiddenWalletTermsUiState {
+        val state = checklist.state()
+        return HiddenWalletTermsUiState(
+            terms = state.terms,
+            agreeEnabled = state.agreeEnabled
+        )
+    }
 
     fun toggleCheckbox(id: Int) {
-
-        val index = terms.indexOfFirst { it.id == id }
-        if (index != -1) {
-            val term = terms[index]
-            val newChecked = !term.checked
-            terms[index] = term.copy(checked = newChecked)
-
-            emitState()
-        }
+        checklist.toggle(id)
+        emitState()
     }
 }
 

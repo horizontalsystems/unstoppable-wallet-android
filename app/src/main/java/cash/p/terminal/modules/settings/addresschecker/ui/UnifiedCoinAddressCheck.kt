@@ -22,7 +22,6 @@ import androidx.compose.material.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
@@ -53,6 +52,7 @@ import cash.p.terminal.modules.settings.addresschecker.IssueType
 import cash.p.terminal.modules.settings.addresschecker.UnifiedAddressCheckerViewModel
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.BottomSheetHeader
+import cash.p.terminal.ui_compose.TransparentModalBottomSheet
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.HsBackButton
@@ -432,10 +432,9 @@ fun CheckInfoBottomSheet(
     bottomSheetState: SheetState
 ) {
 
-    ModalBottomSheet(
+    TransparentModalBottomSheet(
         onDismissRequest = hideBottomSheet,
         sheetState = bottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
     ) {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_info_24),

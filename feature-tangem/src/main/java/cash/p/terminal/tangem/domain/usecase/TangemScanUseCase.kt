@@ -32,9 +32,8 @@ class TangemScanUseCase(
         cardId: String,
         accountId: String
     ): Boolean {
-        val filtered = blockchainsToDerive.filter {
-            !TangemConfig.isExcludedForHardwareCard(it)
-        }
+        val filtered = blockchainsToDerive.filterNot(TangemConfig::isExcludedForHardwareCard)
+        if (filtered.isEmpty()) return false
         val scanResponse = scanProduct(
             blockchainsToDerive = filtered,
             cardId = cardId

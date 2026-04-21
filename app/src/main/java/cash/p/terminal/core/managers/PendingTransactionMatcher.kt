@@ -3,7 +3,10 @@ package cash.p.terminal.core.managers
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.PendingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
+import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
+import cash.p.terminal.wallet.Token
 import java.math.BigDecimal
 import kotlin.math.abs
 
@@ -14,32 +17,57 @@ data class MatchScore(
 
 class PendingTransactionMatcher {
 
-    private fun calculateMatchScoreInternal(
-        txHash: String,
+    fun matchScoreForRealRecord(
+        pending: PendingTransactionRecord,
+        real: TransactionRecord
+    ): MatchScore {
+        if (pending.transactionHash.isNotEmpty() && pending.transactionHash == real.transactionHash) {
+            return MatchScore(isMatch = true, confidence = 1.0)
+        }
+
+        if (real is PendingTransactionRecord || !real.isOutgoingForPendingMatch()) {
+            return MatchScore(isMatch = false, confidence = 0.0)
+        }
+
+        if (real.assetTokenForPendingMatch() != pending.token) {
+            return MatchScore(isMatch = false, confidence = 0.0)
+        }
+
+        return calculateFuzzyMatchScore(
+            timestampPending = pending.timestamp,
+            blockchainTypeUid = pending.blockchainType.uid,
+            amountAtomic = pending.amount.movePointRight(pending.token.decimals).toBigInteger()
+                .toString(),
+            toAddress = pending.to?.firstOrNull() ?: "",
+            real = real
+        )
+    }
+
+    fun isMatchingRealRecord(
+        pending: PendingTransactionRecord,
+        real: TransactionRecord
+    ): Boolean = matchScoreForRealRecord(pending, real).isMatch
+
+    private fun calculateFuzzyMatchScore(
         timestampPending: Long,
         blockchainTypeUid: String,
         amountAtomic: String,
         toAddress: String,
         real: TransactionRecord
     ): MatchScore {
-        // Priority 1: Hash Match (confidence = 1.0)
-        if (txHash.isNotEmpty() && txHash == real.transactionHash) {
-            return MatchScore(isMatch = true, confidence = 1.0)
-        }
-
-        // Priority 2: Fuzzy Match (confidence = 0.9)
         val blockchainMatches = blockchainTypeUid == real.blockchainType.uid
         val amountMatches = compareAmounts(amountAtomic, real)
+        val timestampMatches = compareTimestamps(timestampPending, real.timestamp)
         val realTo = real.to?.firstOrNull()
 
-        if (blockchainMatches && amountMatches) {
+        if (blockchainMatches && amountMatches && timestampMatches) {
             val addressMatches = realTo != null && toAddress.isNotEmpty() &&
-                    toAddress.equals(realTo, ignoreCase = true)
-            if (addressMatches) {
-                return MatchScore(isMatch = true, confidence = 0.9)
-            } else if (compareTimestamps(timestampPending, real.timestamp)) {
-                return MatchScore(isMatch = true, confidence = 0.8)
-            }
+                toAddress.equals(realTo, ignoreCase = true)
+
+            return MatchScore(
+                isMatch = true,
+                confidence = if (addressMatches) 0.9 else 0.8
+            )
         }
 
         return MatchScore(isMatch = false, confidence = 0.0)
@@ -48,15 +76,28 @@ class PendingTransactionMatcher {
     fun calculateMatchScore(
         pending: PendingTransactionRecord,
         real: TransactionRecord
-    ): MatchScore = calculateMatchScoreInternal(
-        txHash = pending.transactionHash,
-        timestampPending = pending.timestamp,
-        blockchainTypeUid = pending.blockchainType.uid,
-        amountAtomic = pending.amount.movePointRight(pending.token.decimals).toBigInteger()
-            .toString(),
-        toAddress = pending.to?.firstOrNull() ?: "",
-        real = real
-    )
+    ): MatchScore = matchScoreForRealRecord(pending, real)
+
+    private fun TransactionRecord.isOutgoingForPendingMatch(): Boolean {
+        return when (transactionRecordType) {
+            TransactionRecordType.BITCOIN_OUTGOING,
+            TransactionRecordType.EVM_OUTGOING,
+            TransactionRecordType.EVM_SWAP,
+            TransactionRecordType.EVM_UNKNOWN_SWAP,
+            TransactionRecordType.TRON_OUTGOING,
+            TransactionRecordType.SOLANA_OUTGOING,
+            TransactionRecordType.MONERO_OUTGOING,
+            TransactionRecordType.STELLAR_OUTGOING -> true
+
+            TransactionRecordType.TON -> to != null && from == null
+            else -> false
+        }
+    }
+
+    private fun TransactionRecord.assetTokenForPendingMatch(): Token? {
+        return (getRealValue(this) as? TransactionValue.CoinValue)?.token
+            ?: token
+    }
 
     private fun compareAmounts(
         pendingAmountAtomic: String,
@@ -80,19 +121,7 @@ class PendingTransactionMatcher {
     }
 
     private fun getRealDecimal(real: TransactionRecord): Int {
-        val value = if(real is TonTransactionRecord) {
-            real.actions.firstOrNull { it.type is TonTransactionRecord.Action.Type.Swap }
-                ?.let { action ->
-                    (action.type as? TonTransactionRecord.Action.Type.Swap)?.valueIn?.decimals
-                }
-                ?: real.actions.firstOrNull { it.type is TonTransactionRecord.Action.Type.Send }
-                    ?.let { action ->
-                        (action.type as? TonTransactionRecord.Action.Type.Send)?.value?.decimals
-                    }
-        } else {
-            null
-        }
-        return value ?: real.token.decimals
+        return getRealValue(real)?.decimals ?: real.token.decimals
     }
 
     private fun compareTimestamps(
@@ -106,26 +135,25 @@ class PendingTransactionMatcher {
     private fun getRealAmount(
         real: TransactionRecord
     ): BigDecimal? {
-        val value = if(real is TonTransactionRecord) {
-            real.actions.firstOrNull { it.type is TonTransactionRecord.Action.Type.Swap }
+        return getRealValue(real)?.decimalValue
+    }
+
+    private fun getRealValue(real: TransactionRecord): TransactionValue? {
+        if (real is TonTransactionRecord) {
+            return real.actions.firstOrNull { it.type is TonTransactionRecord.Action.Type.Swap }
                 ?.let { action ->
-                    (action.type as? TonTransactionRecord.Action.Type.Swap)?.valueIn?.decimalValue
+                    (action.type as? TonTransactionRecord.Action.Type.Swap)?.valueIn
                 }
                 ?: real.actions.firstOrNull { it.type is TonTransactionRecord.Action.Type.Send }
                     ?.let { action ->
-                        (action.type as? TonTransactionRecord.Action.Type.Send)?.value?.decimalValue
+                        (action.type as? TonTransactionRecord.Action.Type.Send)?.value
                     }
-        } else {
-            null
         }
-        if (value == null && real.mainValue != null) {
-            real.mainValue?.let {
-                when (it) {
-                    is TransactionValue.CoinValue -> it.value
-                    else -> null
-                }
-            }
+
+        if (real is EvmTransactionRecord) {
+            return real.valueIn ?: real.mainValue
         }
-        return value
+
+        return real.mainValue
     }
 }

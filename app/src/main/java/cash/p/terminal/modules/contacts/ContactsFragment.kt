@@ -1,29 +1,36 @@
 package cash.p.terminal.modules.contacts
 
+import android.os.Bundle
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.authorizedDeleteContactsPasscodeAction
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.composablePage
+import cash.p.terminal.core.premiumAction
+import cash.p.terminal.core.slideToDeleteContactsTerms
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.modules.contacts.screen.AddressScreen
 import cash.p.terminal.modules.contacts.screen.BlockchainSelectorScreen
 import cash.p.terminal.modules.contacts.screen.ContactScreen
 import cash.p.terminal.modules.contacts.screen.ContactsScreen
+import cash.p.terminal.modules.contacts.screen.ContactsSettingsScreen
+import cash.p.terminal.modules.pin.PinType
+import cash.p.terminal.modules.pin.SetPinFragment
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.modules.contacts.viewmodel.AddressViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactsViewModel
 import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.ui_compose.parcelable
 import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
 import kotlinx.parcelize.Parcelize
 
@@ -78,12 +85,48 @@ fun ContactsNavHost(navController: NavController, mode: Mode) {
                 viewModel = viewModel,
                 onNavigateToBack = { navController.popBackStack() },
                 onNavigateToCreateContact = { navHostController.navigate("contact") },
+                onNavigateToSettings = { navHostController.navigate("settings") },
                 onNavigateToContact = { contact ->
                     backStackEntry.savedStateHandle["contact"] = contact
                     backStackEntry.savedStateHandle["new_address"] = addAddress
 
                     navHostController.navigate("contact")
                 }
+            )
+        }
+        composablePage(route = "settings") {
+            val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(mode))
+            val uiState = viewModel.uiState
+            ContactsSettingsScreen(
+                deleteContactsPinEnabled = uiState.deleteContactsPinEnabled,
+                hasContacts = viewModel.shouldShowRestoreWarning(),
+                backupJson = viewModel.backupJson,
+                backupFileName = viewModel.backupFileName,
+                onRestore = viewModel::restore,
+                onPrepareForBackup = viewModel::prepareForBackup,
+                onManageDeleteContactsPasscode = {
+                    if (uiState.deleteContactsPinEnabled) {
+                        navController.authorizedDeleteContactsPasscodeAction {
+                            navController.slideFromRight(
+                                R.id.editPinFragment,
+                                SetPinFragment.Input(
+                                    descriptionResId = R.string.pin_set_for_delete_all_contacts,
+                                    pinType = PinType.DELETE_CONTACTS
+                                )
+                            )
+                        }
+                    } else {
+                        navController.premiumAction {
+                            navController.slideToDeleteContactsTerms()
+                        }
+                    }
+                },
+                onDisableDeleteContactsPasscode = {
+                    navController.authorizedDeleteContactsPasscodeAction {
+                        viewModel.disableDeleteContactsPin()
+                    }
+                },
+                onClose = navHostController::navigateUp
             )
         }
         composablePage(route = "contact") { backStackEntry ->
@@ -142,13 +185,17 @@ fun ContactsNavHost(navController: NavController, mode: Mode) {
                 onAddAddress = { contactAddress ->
                     navHostController.setNavigationResult(
                         "contacts_address_result",
-                        bundleOf("added_address" to contactAddress)
+                        Bundle().apply {
+                            putParcelable("added_address", contactAddress)
+                        }
                     )
                 },
                 onDeleteAddress = { contactAddress ->
                     navHostController.setNavigationResult(
                         "contacts_address_result",
-                        bundleOf("deleted_address" to contactAddress)
+                        Bundle().apply {
+                            putParcelable("deleted_address", contactAddress)
+                        }
                     )
                 },
                 onCloseNavHost = { navHostController.popBackStack() }

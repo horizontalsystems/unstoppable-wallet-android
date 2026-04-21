@@ -25,7 +25,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -74,6 +73,7 @@ import cash.p.terminal.ui.compose.components.HsTextButton
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.helpers.TextHelper
 import cash.p.terminal.ui_compose.BottomSheetHeader
+import cash.p.terminal.ui_compose.TransparentModalBottomSheet
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
@@ -649,10 +649,9 @@ private fun TronAlertBottomSheet(
     hideBottomSheet: () -> Unit,
     bottomSheetState: SheetState,
 ) {
-    ModalBottomSheet(
+    TransparentModalBottomSheet(
         onDismissRequest = hideBottomSheet,
         sheetState = bottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
     ) {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_attention_24),
@@ -686,10 +685,9 @@ private fun TronInfoBottomSheet(
     hideBottomSheet: () -> Unit,
     bottomSheetState: SheetState,
 ) {
-    ModalBottomSheet(
+    TransparentModalBottomSheet(
         onDismissRequest = hideBottomSheet,
         sheetState = bottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
     ) {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_info_24),

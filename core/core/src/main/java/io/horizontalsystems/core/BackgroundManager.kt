@@ -9,7 +9,7 @@ import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.WeakHashMap
+import java.lang.ref.WeakReference
 import java.util.concurrent.Executors
 
 class BackgroundManager(application: Application) : Application.ActivityLifecycleCallbacks {
@@ -25,11 +25,11 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         application.registerActivityLifecycleCallbacks(this)
     }
 
-    private val activities = WeakHashMap<Activity, AppCompatActivity>()
+    @Volatile
+    private var lastResumedActivity: WeakReference<AppCompatActivity>? = null
 
     val currentActivity: AppCompatActivity?
-        get() = activities.values
-            .firstOrNull { it?.isDestroyed == false }
+        get() = lastResumedActivity?.get()?.takeIf { !it.isDestroyed }
 
     private var foregroundActivityCount: Int = 0
 
@@ -75,13 +75,15 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
             }
         }
 
-        activities.remove(activity)
+        if (lastResumedActivity?.get() === activity) {
+            lastResumedActivity = null
+        }
     }
 
     override fun onActivityPaused(p0: Activity) = Unit
 
     override fun onActivityResumed(activity: Activity) {
-        activities[activity] = activity as? AppCompatActivity
+        lastResumedActivity = (activity as? AppCompatActivity)?.let { WeakReference(it) }
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit

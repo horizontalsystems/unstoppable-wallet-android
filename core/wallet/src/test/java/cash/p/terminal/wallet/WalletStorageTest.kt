@@ -10,6 +10,8 @@ import io.horizontalsystems.core.entities.BlockchainType
 import io.mockk.mockk
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 class WalletStorageTest {
 
@@ -114,6 +116,37 @@ class WalletStorageTest {
         walletStorage.save(listOf(wallet))
 
         assertSingleWalletStored(enabledWalletStorage, wallet)
+    }
+
+    @Test
+    fun `walletFactory skips unsupported token for monero mnemonic account`() {
+        val moneroAccount = Account(
+            id = "monero-account-id",
+            name = "Monero",
+            type = AccountType.MnemonicMonero(
+                words = List(25) { "abandon" },
+                password = "",
+                height = 0,
+                walletInnerName = "wallet"
+            ),
+            origin = AccountOrigin.Created,
+            level = 0
+        )
+        val evmToken = Token(
+            coin = Coin(uid = "eth", name = "Ethereum", code = "ETH"),
+            blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null),
+            type = TokenType.Native,
+            decimals = 18
+        )
+        val moneroToken = Token(
+            coin = Coin(uid = "monero", name = "Monero", code = "XMR"),
+            blockchain = Blockchain(BlockchainType.Monero, "Monero", null),
+            type = TokenType.Native,
+            decimals = 12
+        )
+
+        assertNull(walletFactory.create(evmToken, moneroAccount, null))
+        assertNotNull(walletFactory.create(moneroToken, moneroAccount, null))
     }
 
     private fun assertSingleWalletStored(

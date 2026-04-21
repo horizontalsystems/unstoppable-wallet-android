@@ -9,9 +9,11 @@ import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.authorizedAction
+import cash.p.terminal.core.authorizedDeleteContactsPasscodeAction
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.ensurePinSet
 import cash.p.terminal.core.premiumAction
+import cash.p.terminal.core.slideToDeleteContactsTerms
 import cash.p.terminal.modules.settings.advancedsecurity.securereset.SecureResetTermsScreen
 import cash.p.terminal.modules.settings.advancedsecurity.securereset.SecureResetTermsViewModel
 import cash.p.terminal.modules.settings.advancedsecurity.terms.HiddenWalletTermsScreen
@@ -54,6 +56,17 @@ private fun AdvancedSecurityNavHost(fragmentNavController: NavController) {
                     } else {
                         fragmentNavController.authorizedAction {
                             viewModel.onSecureResetDisabled()
+                        }
+                    }
+                },
+                onDeleteContactsToggle = { enabled ->
+                    if (enabled) {
+                        fragmentNavController.premiumAction {
+                            fragmentNavController.slideToDeleteContactsTerms()
+                        }
+                    } else {
+                        fragmentNavController.authorizedDeleteContactsPasscodeAction {
+                            viewModel.onDeleteContactsDisabled()
                         }
                     }
                 },
