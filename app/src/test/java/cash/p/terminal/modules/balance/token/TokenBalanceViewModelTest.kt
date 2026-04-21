@@ -24,7 +24,6 @@ import cash.p.terminal.modules.balance.TotalService
 import cash.p.terminal.modules.transactions.TransactionItem
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionViewItemFactory
-import cash.p.terminal.network.pirate.domain.useCase.GetChangeNowAssociatedCoinTickerUseCase
 import cash.p.terminal.premium.domain.PremiumSettings
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IBalanceAdapter
@@ -98,7 +97,6 @@ class TokenBalanceViewModelTest : KoinTest {
     private val connectivityManager = mockk<ConnectivityManager>(relaxed = true)
     private val accountManager = mockk<IAccountManager>(relaxed = true)
     private val transactionHiddenManager = mockk<TransactionHiddenManager>()
-    private val getChangeNowAssociatedCoinTickerUseCase = mockk<GetChangeNowAssociatedCoinTickerUseCase>()
     private val premiumSettings = mockk<PremiumSettings>()
     private val amlStatusManager = mockk<AmlStatusManager>()
     private val marketFavoritesManager = mockk<MarketFavoritesManager>(relaxed = true)
@@ -194,7 +192,6 @@ class TokenBalanceViewModelTest : KoinTest {
         every { localStorage.displayDiffPricePeriod } returns DisplayPricePeriod.ONE_DAY
         every { localStorage.displayDiffOptionType } returns DisplayDiffOptionType.BOTH
         every { localStorage.isRoundingAmountMainPage } returns false
-        coEvery { getChangeNowAssociatedCoinTickerUseCase(any(), any()) } returns null
         every { transactionViewItemFactory.convertToViewItemCached(any(), any(), any()) } answers {
             createMockTransactionViewItem(firstArg<TransactionItem>().record.uid)
         }
@@ -350,6 +347,83 @@ class TokenBalanceViewModelTest : KoinTest {
 
         viewModel.showAllTransactions(false)
         verify(exactly = 1) { transactionHiddenManager.showAllTransactions(false) }
+    }
+
+    @Test
+    fun balanceItemFlowEmits_swapEnabledAndRegularAccount_showsSwap() = runTest(dispatcher) {
+        every { CoreApp.instance.isSwapEnabled } returns true
+        testWallet = createTestWallet(account = createAccount())
+
+        val balanceItem = createBalanceItem(wallet = testWallet)
+        every { balanceService.balanceItem } returns balanceItem
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } answers {
+            createBalanceViewItem(swapVisible = args[5] as Boolean)
+        }
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.balanceViewItem?.swapVisible)
+    }
+
+    @Test
+    fun balanceItemFlowEmits_watchAccount_hidesSwap() = runTest(dispatcher) {
+        every { CoreApp.instance.isSwapEnabled } returns true
+        testWallet = createTestWallet(account = createAccount(isWatchAccount = true))
+
+        val balanceItem = createBalanceItem(wallet = testWallet)
+        every { balanceService.balanceItem } returns balanceItem
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } answers {
+            createBalanceViewItem(swapVisible = args[5] as Boolean)
+        }
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(false, viewModel.uiState.balanceViewItem?.swapVisible)
+    }
+
+    @Test
+    fun balanceItemFlowEmits_nonBackedUpAccount_hidesSwap() = runTest(dispatcher) {
+        every { CoreApp.instance.isSwapEnabled } returns true
+        testWallet = createTestWallet(account = createAccount(hasAnyBackup = false))
+
+        val balanceItem = createBalanceItem(wallet = testWallet)
+        every { balanceService.balanceItem } returns balanceItem
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } answers {
+            createBalanceViewItem(swapVisible = args[5] as Boolean)
+        }
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(false, viewModel.uiState.balanceViewItem?.swapVisible)
+    }
+
+    @Test
+    fun balanceItemFlowEmits_backupNotRequiredAccount_showsSwap() = runTest(dispatcher) {
+        every { CoreApp.instance.isSwapEnabled } returns true
+        testWallet = createTestWallet(
+            account = createAccount(
+                supportsBackup = false,
+                hasAnyBackup = false
+            )
+        )
+
+        val balanceItem = createBalanceItem(wallet = testWallet)
+        every { balanceService.balanceItem } returns balanceItem
+        every { balanceViewItemFactory.viewItem(any(), any(), any(), any(), any(), any(), any()) } answers {
+            createBalanceViewItem(swapVisible = args[5] as Boolean)
+        }
+
+        val viewModel = createViewModel()
+        balanceItemFlow.value = balanceItem
+        advanceUntilIdle()
+
+        assertEquals(true, viewModel.uiState.balanceViewItem?.swapVisible)
     }
 
     // endregion
@@ -855,7 +929,6 @@ class TokenBalanceViewModelTest : KoinTest {
         connectivityManager = connectivityManager,
         accountManager = accountManager,
         transactionHiddenManager = transactionHiddenManager,
-        getChangeNowAssociatedCoinTickerUseCase = getChangeNowAssociatedCoinTickerUseCase,
         premiumSettings = premiumSettings,
         amlStatusManager = amlStatusManager,
         marketFavoritesManager = marketFavoritesManager,
@@ -876,7 +949,7 @@ class TokenBalanceViewModelTest : KoinTest {
         transactionAutoHidePinExists = false
     )
 
-    private fun createTestWallet(): Wallet {
+    private fun createTestWallet(account: Account = createAccount()): Wallet {
         val testCoin = Coin(uid = "test-coin", name = "Test Coin", code = "TEST")
         val testToken = Token(
             coin = testCoin,
@@ -891,8 +964,19 @@ class TokenBalanceViewModelTest : KoinTest {
         return mockk<Wallet>(relaxed = true) {
             every { token } returns testToken
             every { coin } returns testCoin
+            every { this@mockk.account } returns account
             every { tokenQueryId } returns testToken.tokenQuery.id
         }
+    }
+
+    private fun createAccount(
+        isWatchAccount: Boolean = false,
+        supportsBackup: Boolean = true,
+        hasAnyBackup: Boolean = true,
+    ) = mockk<Account>(relaxed = true) {
+        every { this@mockk.isWatchAccount } returns isWatchAccount
+        every { this@mockk.supportsBackup } returns supportsBackup
+        every { this@mockk.hasAnyBackup } returns hasAnyBackup
     }
 
     private fun createTransactionItem(uid: String): TransactionItem {
@@ -915,7 +999,8 @@ class TokenBalanceViewModelTest : KoinTest {
     }
 
     private fun createBalanceViewItem(
-        secondaryValue: DeemedValue<String> = DeemedValue("", dimmed = false, visible = true)
+        secondaryValue: DeemedValue<String> = DeemedValue("", dimmed = false, visible = true),
+        swapVisible: Boolean = false,
     ) = BalanceViewItem(
         wallet = testWallet,
         primaryValue = DeemedValue("1.5 TEST", dimmed = false, visible = true),
@@ -929,7 +1014,7 @@ class TokenBalanceViewModelTest : KoinTest {
         failedIconVisible = false,
         coinIconVisible = true,
         badge = null,
-        swapVisible = false,
+        swapVisible = swapVisible,
         swapEnabled = false,
         errorMessage = null,
         isWatchAccount = false,

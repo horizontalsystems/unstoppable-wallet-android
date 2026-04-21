@@ -40,6 +40,8 @@ import cash.p.terminal.wallet.balance.BalanceItem
 import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.canSwap
+import cash.p.terminal.wallet.isBackedUpOrNotRequired
 import cash.p.terminal.wallet.entities.TokenType.AddressSpecType
 import cash.p.terminal.wallet.isCosanta
 import cash.p.terminal.wallet.isOldZCash
@@ -197,9 +199,10 @@ class BalanceViewModel(
     }
 
     private fun setupUI() {
-        val isMoneroAccount = accountManager.activeAccount?.type is AccountType.MnemonicMonero
+        val activeAccount = accountManager.activeAccount
+        val isMoneroAccount = activeAccount?.type is AccountType.MnemonicMonero
         isStackingEnabled = !isMoneroAccount
-        isSwapEnabled = !isMoneroAccount && App.instance.isSwapEnabled
+        isSwapEnabled = !isMoneroAccount && App.instance.isSwapEnabled && (activeAccount?.canSwap() == true)
     }
 
     override fun createState() = BalanceUiState(
@@ -376,7 +379,7 @@ class BalanceViewModel(
     fun getReceiveAllowedState(): ReceiveAllowedState? {
         val tmpAccount = service.account ?: return null
         return when {
-            tmpAccount.hasAnyBackup -> ReceiveAllowedState.Allowed
+            tmpAccount.isBackedUpOrNotRequired() -> ReceiveAllowedState.Allowed
             else -> ReceiveAllowedState.BackupRequired(tmpAccount)
         }
     }
