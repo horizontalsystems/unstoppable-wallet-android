@@ -60,7 +60,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
     BackupRequiredAlert(navController)
 
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
-    var searchQuery by remember { mutableStateOf("") }
+    var searchQuery by remember { mutableStateOf(viewModel.searchQuery) }
     var isSearchActive by remember { mutableStateOf(false) }
 
     val viewItems = viewModel.viewItems
@@ -128,10 +128,17 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                         .fillMaxSize()
                         .background(ComposeAppTheme.colors.lawrence),
                 ) {
-                    ListEmptyView(
-                        text = stringResource(R.string.ManageAccounts_NoActiveWallets),
-                        icon = R.drawable.wallet_remove_24
-                    )
+                    if (searchQuery.isNotEmpty()) {
+                        ListEmptyView(
+                            text = stringResource(R.string.EmptyResults),
+                            icon = R.drawable.ic_not_found
+                        )
+                    } else {
+                        ListEmptyView(
+                            text = stringResource(R.string.ManageAccounts_NoActiveWallets),
+                            icon = R.drawable.wallet_remove_24
+                        )
+                    }
                 }
             } else {
                 val (regularAccounts, watchAccounts) = viewItems
