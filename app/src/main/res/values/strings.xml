@@ -42,6 +42,7 @@
     <string name="Button_Save">Save</string>
     <string name="Button_IAgree">I Agree</string>
     <string name="Button_Continue">Continue</string>
+    <string name="Button_UnderstandedContinue">I Understand and Continue</string>
     <string name="Button_Search">Search</string>
     <string name="Button_Back">Back</string>
     <string name="Button_Copy">Copy</string>
@@ -793,6 +794,14 @@
     <string name="RiskLevel_Controlled" translatable="false">Controlled</string>
     <string name="RiskLevel_Precheck" translatable="false">PreCheck</string>
 
+
+    <string name="PasskeyTerms_DeviceDependency">Device Dependency</string>
+    <string name="PasskeyTerms_DeviceDependency_Description">Access requires your device. Losing access may result in loss of funds.</string>
+    <string name="PasskeyTerms_LimitedAccess">Limited cross-platform access</string>
+    <string name="PasskeyTerms_LimitedAccess_Description">May not work on all devices or platforms.</string>
+    <string name="PasskeyTerms_Responsibility">Responsibility</string>
+    <string name="PasskeyTerms_Responsibility_Description">You are responsible for access to your device. Unstoppable cannot recover this wallet if access is lost.</string>
+
     <!-- Swap Confirmation -->
 
     <string name="ActivationRequired_DialogTitle">Activate Token</string>
@@ -1388,6 +1397,7 @@
     <string name="CreateNewWallet_Standard_Description">Create a wallet with a recovery phrase for full control and flexibility.</string>
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_Passkey_Description">Create a wallet secured by your device for easy access.</string>
+    <string name="CreateNewWallet_PasskeyTerms">Passkey Wallet Terms</string>
 
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">from File</string>
