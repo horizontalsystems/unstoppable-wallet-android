@@ -1,3 +1,58 @@
+## 🚀 Version 0.54.2 Update
+_Release date: April 21, 2026_
+
+### ✨ Improvements
+
+- **Added an extra security option for Duress Mode**
+  You can now automatically clear the address book when entering `duress mode`.
+
+- **Added support for multiple providers on the TRON network**
+
+- **Added background notifications for new transactions**
+  The wallet can now notify you about new transactions even while the app is running in the background.
+
+- **Improved the token tree view**
+
+- **Improved swap loss display**
+
+- **Improved the fee balance warning logic**
+  The app now shows the warning about missing native coins for network fees only after blockchain synchronization is complete and only if the actual balance is truly zero.
+
+### 🐛 Fixes
+
+- **Improved stability for Monero, Bitcoin, and Tangem wallet flows**
+  Accounts created or restored from a Monero seed phrase are now correctly handled as Monero-only accounts.
+  The Bitcoin resend screen now shows a proper error message instead of an empty red block.
+  Overall stability has also been improved for Tangem-related flows.
+
+- **Fixed issues with incomplete swap status and messaging**
+  The `Swap not completed` message is now displayed in full, and the transaction status is detected correctly.
+
+- **Unfinished two-step swaps now appear only in the wallet where they were started**
+  The `Unfinished swap` banner and the unfinished swaps list are no longer shown in unrelated wallets.
+
+- **Improved UX on the send screen when the wallet adapter is temporarily unavailable**
+  The screen now handles cases more gracefully when the wallet adapter has not yet been restored after returning from the background or reinitializing the app.
+
+- **Fixed duplicated receive amount field on the transaction screen**
+
+- **Fixed a crash when opening the help screen from the info icon**
+
+- **Fixed keyboard behavior when focusing the alternative amount input on the send screen**
+
+- **Unified the provider field name in swap history**
+
+- **Fixed a visual artifact in the confirmation dialog for creating a new Monero address**
+
+- **Restored the swap button for XEC on the asset page**
+
+- **Fixed a false `No internet` error after manually refreshing market widgets**
+
+- **Fixed temporary duplicate outgoing transactions in history**
+  Outgoing transactions no longer appear twice for a short time because of `pending transaction` state handling.
+
+- **Removed an extra separator in the Blockchain API request**
+
 ## 🚀 Version 0.54.1 Update
 _Release date: April 3, 2026_
 
