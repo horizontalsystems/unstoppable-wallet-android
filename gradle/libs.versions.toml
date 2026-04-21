@@ -4,30 +4,30 @@ compileSdk = "36"
 minSdk = "28"
 
 # Kotlin & Compose
-kotlin = "2.3.10"
-ksp = "2.3.2"
-compose = "1.10.2"
+kotlin = "2.3.20"
+ksp = "2.3.5"
+compose = "1.10.6"
 composeMaterial3 = "1.4.0"
 composeCompiler = "1.5.12"
 
 # AndroidX
-lifecycle = "2.9.1"
+lifecycle = "2.10.0"
 appcompat = "1.7.1"
 constraintlayout = "2.2.1"
-coreKtx = "1.17.0"
+coreKtx = "1.18.0"
 fragmentKtx = "1.8.9"
-navigation = "2.9.5"
-room = "2.8.1"
-work = "2.10.5"
+navigation = "2.9.7"
+room = "2.8.4"
+work = "2.11.2"
 biometric = "1.1.0"
-credentials = "1.3.0"
+credentials = "1.6.0"
 preference = "1.2.1"
-swiperefreshlayout = "1.1.0"
+swiperefreshlayout = "1.2.0"
 splashscreen = "1.2.0"
 glance = "1.1.1"
 recyclerview = "1.4.0"
-browser = "1.9.0"
-activityCompose = "1.11.0"
+browser = "1.10.0"
+activityCompose = "1.13.0"
 
 # Google
 material = "1.13.0"
@@ -37,10 +37,10 @@ gson = "2.13.2"
 
 # Networking
 retrofit = "3.0.0"
-okhttp = "5.1.0"
+okhttp = "5.3.2"
 
 # Rx
-rxjava = "2.2.19"
+rxjava = "2.2.21"
 rxandroid = "2.1.1"
 
 # Coroutines
@@ -59,13 +59,13 @@ markwon = "4.6.2"
 
 # QR
 zxing = "4.3.0"
-qrose = "1.0.1"
+qrose = "1.1.2"
 
 # Reown (WalletConnect)
-reownBom = "1.6.5"
+reownBom = "1.6.12"
 
 # Web3
-web3j = "4.9.0"
+web3j = "5.0.2"
 unstoppableDomains = "v7.1.0"
 
 # Wallet Kits
@@ -83,6 +83,9 @@ zcashSdk = "29a99b3"
 # Binance
 binanceConnector = "3.4.1"
 
+# BouncyCastle
+bouncycastle = "1.70"
+
 # Ktor (for TonKit)
 ktor = "2.3.7"
 
@@ -90,7 +93,7 @@ ktor = "2.3.7"
 desugar = "2.1.5"
 
 # Tor
-torAndroid = "0.4.8.17.2"
+torAndroid = "0.4.9.6"
 jtorctl = "0.4.5.7"
 
 # Utils
@@ -103,21 +106,21 @@ portmapper = "2.0.6"
 startup = "1.2.0"
 
 # Billing
-billing = "8.0.0"
+billing = "8.3.0"
 
 # Testing
 junit = "4.13.2"
-junitExt = "1.2.1"
+junitExt = "1.3.0"
 archCoreTesting = "2.2.0"
-mockito = "3.3.3"
+mockito = "5.23.0"
 mockitoKotlin = "1.6.0"
-powermock = "2.0.7"
-spek = "2.0.9"
-espresso = "3.5.1"
-testRunner = "1.5.2"
+powermock = "2.0.9"
+spek = "2.0.19"
+espresso = "3.7.0"
+testRunner = "1.7.0"
 
 # AGP
-agp = "9.1.0"
+agp = "9.1.1"
 
 [libraries]
 # AndroidX Core
@@ -234,6 +237,9 @@ kit-zcash = { module = "com.github.horizontalsystems:zcash-android-wallet-sdk", 
 
 # Binance
 binance-connector = { module = "io.github.binance:binance-connector-java", version.ref = "binanceConnector" }
+
+# BouncyCastle
+bouncycastle = { module = "org.bouncycastle:bcprov-jdk15on", version.ref = "bouncycastle" }
 
 # Desugar
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar" }
