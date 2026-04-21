@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
-import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.Account
@@ -9,8 +8,9 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.handler.MethodData
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.AbstractWCAction
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCChainData
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ValidationError
+import io.horizontalsystems.dapp.core.HSDAppNamespaceSession
+import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.marketkit.models.BlockchainType
-
 
 class WCManager(
     private val accountManager: IAccountManager,
@@ -28,8 +28,8 @@ class WCManager(
         handlersMap[wcHandler.chainNamespace] = wcHandler
     }
 
-    fun getMethodData(sessionRequest: Wallet.Model.SessionRequest): MethodData? {
-        val chainId = sessionRequest.chainId ?: return null
+    fun getMethodData(request: HSDAppRequest): MethodData? {
+        val chainId = request.chainId ?: return null
         val chainParts = chainId.split(":")
 
         val chainNamespace = chainParts.getOrNull(0)
@@ -37,12 +37,12 @@ class WCManager(
 
         val handler = handlersMap[chainNamespace] ?: return null
 
-        return handler.getMethodData(sessionRequest.request.method, chainInternalId)
+        return handler.getMethodData(request.method, chainInternalId)
     }
 
-    fun getActionForRequest(sessionRequest: Wallet.Model.SessionRequest?): AbstractWCAction? {
-        if (sessionRequest == null) return null
-        val chainId = sessionRequest.chainId ?: return null
+    fun getActionForRequest(request: HSDAppRequest?): AbstractWCAction? {
+        if (request == null) return null
+        val chainId = request.chainId ?: return null
         val chainParts = chainId.split(":")
 
         val chainNamespace = chainParts.getOrNull(0)
@@ -50,16 +50,14 @@ class WCManager(
 
         val handler = handlersMap[chainNamespace] ?: return null
 
-        return handler.getAction(sessionRequest.request, sessionRequest.peerMetaData, chainInternalId)
+        return handler.getAction(request, chainInternalId)
     }
 
     fun getWalletConnectSupportState(): SupportState {
         val tmpAccount = accountManager.activeAccount
         return when {
             tmpAccount == null -> SupportState.NotSupportedDueToNoActiveAccount
-            !tmpAccount.isBackedUp && !tmpAccount.isFileBackedUp -> SupportState.NotSupportedDueToNonBackedUpAccount(
-                tmpAccount
-            )
+            !tmpAccount.isBackedUp && !tmpAccount.isFileBackedUp -> SupportState.NotSupportedDueToNonBackedUpAccount(tmpAccount)
             tmpAccount.type.supportsWalletConnect -> SupportState.Supported
             else -> SupportState.NotSupported(tmpAccount.type.description)
         }
@@ -74,33 +72,33 @@ class WCManager(
         return WCUtils.getChainData(chainId ?: return null)
     }
 
-    fun validate(requiredNamespaces: Map<String, Wallet.Model.Namespace.Proposal>) {
+    fun validate(requiredNamespaces: Map<String, io.horizontalsystems.dapp.core.HSDAppNamespaceProposal>) {
         requiredNamespaces.forEach { (chainNamespace, proposal) ->
             val handler = handlersMap[chainNamespace]
                 ?: throw ValidationError.UnsupportedChainNamespace(chainNamespace)
 
             proposal.chains?.let { requiredChains ->
-                val unsupportedChains = requiredChains - handler.supportedChains
+                val unsupportedChains = requiredChains - handler.supportedChains.toSet()
                 if (unsupportedChains.isNotEmpty()) {
                     throw ValidationError.UnsupportedChains(unsupportedChains)
                 }
             }
 
-            val unsupportedMethods = proposal.methods - handler.supportedMethods
+            val unsupportedMethods = proposal.methods - handler.supportedMethods.toSet()
             if (unsupportedMethods.isNotEmpty()) {
                 throw ValidationError.UnsupportedMethods(unsupportedMethods)
             }
 
-            val unsupportedEvents = proposal.events - handler.supportedEvents
+            val unsupportedEvents = proposal.events - handler.supportedEvents.toSet()
             if (unsupportedEvents.isNotEmpty()) {
                 throw ValidationError.UnsupportedEvents(unsupportedEvents)
             }
         }
     }
 
-    fun getSupportedNamespaces(account: Account) =
+    fun getSupportedNamespaces(account: Account): Map<String, HSDAppNamespaceSession> =
         handlersMap.map { (chainNamespace, handler) ->
-            chainNamespace to Wallet.Model.Namespace.Session(
+            chainNamespace to HSDAppNamespaceSession(
                 chains = handler.supportedChains,
                 methods = handler.supportedMethods,
                 events = handler.supportedEvents,
@@ -108,7 +106,7 @@ class WCManager(
             )
         }.toMap()
 
-    fun getChainNames(namespaces: Map<String, Wallet.Model.Namespace.Session>): List<String> {
+    fun getChainNames(namespaces: Map<String, HSDAppNamespaceSession>): List<String> {
         val res = mutableListOf<String>()
 
         for ((chainNamespace, session) in namespaces) {

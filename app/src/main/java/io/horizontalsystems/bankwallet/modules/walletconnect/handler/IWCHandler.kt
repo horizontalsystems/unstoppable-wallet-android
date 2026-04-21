@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.handler
 
-import com.reown.android.Core
-import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.AbstractWCAction
+import io.horizontalsystems.dapp.core.HSDAppRequest
 
 interface IWCHandler {
     val chainNamespace: String
@@ -12,11 +11,7 @@ interface IWCHandler {
     val supportedMethods: List<String>
     val supportedEvents: List<String>
 
-    fun getAction(
-        request: Wallet.Model.SessionRequest.JSONRPCRequest,
-        peerMetaData: Core.Model.AppMetaData?,
-        chainInternalId: String?
-    ): AbstractWCAction
+    fun getAction(request: HSDAppRequest, chainInternalId: String?): AbstractWCAction
 
     fun getAccountAddresses(account: Account): List<String>
 
