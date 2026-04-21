@@ -2,17 +2,27 @@ package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.TestDispatcherProvider
+import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PendingTransactionRepository
 import cash.p.terminal.core.managers.TransactionAdapterManager
+import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
+import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
+import cash.p.terminal.modules.contacts.model.Contact
+import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountOrigin
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import java.math.BigDecimal
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.emptyFlow
@@ -21,6 +31,7 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.koin.core.context.startKoin
@@ -114,6 +125,7 @@ class TransactionRecordRepositoryWalletSwitchTest {
             swapProviderTransactionsStorage = mockk(relaxed = true),
             pendingRepository = pendingRepository,
             pendingConverter = mockk(relaxed = true),
+            pendingTransactionMatcher = PendingTransactionMatcher(),
             dispatcherProvider = TestDispatcherProvider(testDispatcher, this)
         )
 
@@ -163,4 +175,167 @@ class TransactionRecordRepositoryWalletSwitchTest {
         collectorJob.cancel()
         repository.clear()
     }
+
+    @Test
+    fun switchContactInSwapFilter_extraSwapAdaptersUseNewContact() = runTest {
+        val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+
+        startKoin {
+            modules(module {
+                single { mockk<cash.p.terminal.core.managers.CoinManager>(relaxed = true) }
+            })
+        }
+
+        val token = createToken()
+        val source = createSource(accountId = "account-1", blockchain = token.blockchain)
+        val wallet = TransactionWallet(token = token, source = source, badge = null)
+        val contactA = createContact(uid = "contact-A", blockchain = token.blockchain, address = "bc1-contact-a")
+        val contactB = createContact(uid = "contact-B", blockchain = token.blockchain, address = "bc1-contact-b")
+        val recordA = createBitcoinOutgoingRecord(
+            token = token,
+            source = source,
+            uid = "record-A",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("-0.00000563"),
+            toAddress = contactA.addresses.first().address,
+        )
+        val recordB = createBitcoinOutgoingRecord(
+            token = token,
+            source = source,
+            uid = "record-B",
+            timestamp = 1_715_000_010,
+            amount = BigDecimal("-0.00000703"),
+            toAddress = contactB.addresses.first().address,
+        )
+
+        val adapter = mockk<ITransactionsAdapter>(relaxed = true) {
+            coEvery {
+                getTransactions(any(), token, any(), FilterTransactionType.Swap, any())
+            } returns emptyList()
+            coEvery {
+                getTransactions(any(), token, any(), FilterTransactionType.Outgoing, contactA.addresses.first().address)
+            } returns listOf(recordA)
+            coEvery {
+                getTransactions(any(), token, any(), FilterTransactionType.Outgoing, contactB.addresses.first().address)
+            } returns listOf(recordB)
+            every { getTransactionRecordsFlow(any(), any(), any()) } returns emptyFlow()
+            every { getTransactionUrl(any()) } returns ""
+        }
+
+        val adapterManager = mockk<TransactionAdapterManager>(relaxed = true) {
+            every { getAdapter(source) } returns adapter
+        }
+
+        val pendingRepository = mockk<PendingTransactionRepository>(relaxed = true) {
+            every { getActivePendingFlow(any()) } returns emptyFlow()
+            coEvery { getPendingForWallet(any()) } returns emptyList()
+        }
+
+        val swapProviderTransactionsStorage = mockk<SwapProviderTransactionsStorage>(relaxed = true) {
+            every { getByOutgoingRecordUid("record-A") } returns mockk(relaxed = true)
+            every { getByOutgoingRecordUid("record-B") } returns mockk(relaxed = true)
+        }
+
+        val repository = TransactionRecordRepository(
+            adapterManager = adapterManager,
+            swapProviderTransactionsStorage = swapProviderTransactionsStorage,
+            pendingRepository = pendingRepository,
+            pendingConverter = mockk(relaxed = true),
+            pendingTransactionMatcher = PendingTransactionMatcher(),
+            dispatcherProvider = TestDispatcherProvider(testDispatcher, this)
+        )
+
+        val emissions = mutableListOf<List<String>>()
+        val collectorJob = launch(testDispatcher) {
+            repository.itemsFlow.collect { records ->
+                emissions.add(records.map { it.uid })
+            }
+        }
+
+        repository.set(
+            transactionWallets = listOf(wallet),
+            wallet = null,
+            transactionType = FilterTransactionType.Swap,
+            blockchain = null,
+            contact = contactA
+        )
+        advanceUntilIdle()
+
+        repository.set(
+            transactionWallets = listOf(wallet),
+            wallet = null,
+            transactionType = FilterTransactionType.Swap,
+            blockchain = null,
+            contact = contactB
+        )
+        advanceUntilIdle()
+
+        assertTrue(
+            "record-A should appear for the first contact, but got: $emissions",
+            emissions.any { it == listOf("record-A") }
+        )
+        assertEquals(listOf("record-B"), emissions.last())
+
+        collectorJob.cancel()
+        repository.clear()
+    }
+
+    private fun createToken(): Token {
+        val coin = Coin(uid = "bitcoin", name = "Bitcoin", code = "BTC")
+        val blockchain = Blockchain(BlockchainType.Bitcoin, "Bitcoin", null)
+        return Token(
+            coin = coin,
+            blockchain = blockchain,
+            type = TokenType.Derived(TokenType.Derivation.Bip86),
+            decimals = 8
+        )
+    }
+
+    private fun createSource(accountId: String, blockchain: Blockchain): TransactionSource {
+        val account = Account(
+            id = accountId,
+            name = accountId,
+            type = mockk(relaxed = true),
+            origin = AccountOrigin.Created,
+            level = 0
+        )
+        return TransactionSource(blockchain = blockchain, account = account, meta = null)
+    }
+
+    private fun createContact(uid: String, blockchain: Blockchain, address: String) = Contact(
+        uid = uid,
+        name = uid,
+        addresses = listOf(ContactAddress(blockchain = blockchain, address = address))
+    )
+
+    private fun createBitcoinOutgoingRecord(
+        token: Token,
+        source: TransactionSource,
+        uid: String,
+        timestamp: Long,
+        amount: BigDecimal,
+        toAddress: String,
+    ) = BitcoinTransactionRecord(
+        token = token,
+        amount = amount,
+        to = listOf(toAddress),
+        from = null,
+        changeAddresses = emptyList(),
+        uid = uid,
+        transactionHash = uid,
+        transactionIndex = 0,
+        blockHeight = null,
+        confirmationsThreshold = 1,
+        timestamp = timestamp,
+        failed = false,
+        memo = null,
+        source = source,
+        sentToSelf = false,
+        transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+        fee = null,
+        lockInfo = null,
+        conflictingHash = null,
+        showRawTransaction = true,
+        replaceable = false,
+    )
 }
