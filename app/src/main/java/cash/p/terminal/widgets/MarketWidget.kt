@@ -333,7 +333,7 @@ class UpdateMarketAction : ActionCallback {
         }
         MarketWidget().update(context, glanceId)
 
-        MarketWidgetManager().refresh(glanceId)
+        App.marketWidgetManager.refresh(glanceId)
     }
 }
 

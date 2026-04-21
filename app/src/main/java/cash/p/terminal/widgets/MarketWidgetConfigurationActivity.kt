@@ -144,7 +144,7 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
                     it.copy(widgetId = appWidgetId, type = selectedType)
                 }
                 MarketWidget().update(context, glanceId)
-                MarketWidgetManager().refresh(glanceId)
+                App.marketWidgetManager.refresh(glanceId)
                 MarketWidgetWorker.enqueueWork(App.instance)
             }
 
