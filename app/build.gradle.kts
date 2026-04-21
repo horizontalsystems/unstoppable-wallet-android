@@ -203,7 +203,7 @@ android {
 
     configurations.all {
         resolutionStrategy.dependencySubstitution {
-            substitute(module("org.bouncycastle:bcprov-jdk15to18:1.68")).using(module("org.bouncycastle:bcprov-jdk15on:1.65"))
+            substitute(module("org.bouncycastle:bcprov-jdk15to18:1.68")).using(module("org.bouncycastle:bcprov-jdk15on:1.70"))
             substitute(module("com.google.protobuf:protobuf-java:3.6.1")).using(module("com.google.protobuf:protobuf-javalite:3.21.1"))
             substitute(module("net.jcip:jcip-annotations:1.0")).using(module("com.github.stephenc.jcip:jcip-annotations:1.0-1"))
 
@@ -334,6 +334,9 @@ dependencies {
     implementation(libs.kit.solana)
     implementation(libs.kit.tron)
     implementation(libs.kit.zcash)
+
+    // BouncyCastle
+    implementation(libs.bouncycastle)
 
     // Binance
     implementation(libs.binance.connector) {
