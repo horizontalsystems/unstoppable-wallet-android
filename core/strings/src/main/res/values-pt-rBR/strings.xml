@@ -693,7 +693,6 @@
     <string name="TransactionInfo_Date">Data</string>
     <string name="transaction_info_sync_source">Fonte de sincronização</string>
     <string name="TransactionInfo_Id">ID</string>
-    <string name="TransactionInfo_Service">Serviço</string>
     <string name="TransactionInfo_RawTransaction">Transação bruta</string>
     <string name="TransactionInfo_ContactName">Nome do Contato</string>
     <string name="TransactionInfo_To">Para</string>

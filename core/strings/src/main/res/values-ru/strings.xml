@@ -713,7 +713,6 @@
     <string name="TransactionInfo_Date">Дата</string>
     <string name="transaction_info_sync_source">Источник синхронизации</string>
     <string name="TransactionInfo_Id">ID Транзакции</string>
-    <string name="TransactionInfo_Service">Сервис</string>
     <string name="TransactionInfo_RawTransaction">Неподтвержденная транзакция</string>
     <string name="TransactionInfo_ContactName">Имя контакта</string>
     <string name="TransactionInfo_To">Кому</string>

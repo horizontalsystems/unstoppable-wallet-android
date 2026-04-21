@@ -694,7 +694,6 @@
     <string name="TransactionInfo_Date">Tarih</string>
     <string name="transaction_info_sync_source">Senkronizasyon kaynağı</string>
     <string name="TransactionInfo_Id">Kimlik</string>
-    <string name="TransactionInfo_Service">Hizmet</string>
     <string name="TransactionInfo_RawTransaction">Ham işlem</string>
     <string name="TransactionInfo_ContactName">Kişi Adı</string>
     <string name="TransactionInfo_To">Alan</string>
