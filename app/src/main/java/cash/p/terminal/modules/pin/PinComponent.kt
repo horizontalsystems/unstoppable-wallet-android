@@ -5,6 +5,7 @@ import io.horizontalsystems.core.DispatcherProvider
 import cash.p.terminal.core.managers.DefaultUserManager
 import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.domain.usecase.ResetUseCase
+import cash.p.terminal.domain.usecase.DeleteAllContactsUseCase
 import cash.p.terminal.modules.pin.core.LockManager
 import cash.p.terminal.modules.pin.core.PinDbStorage
 import cash.p.terminal.modules.pin.core.PinLevels
@@ -28,8 +29,9 @@ class PinComponent(
     private val pinDbStorage: PinDbStorage,
     private val backgroundManager: BackgroundManager,
     private val resetUseCase: ResetUseCase,
+    private val deleteAllContactsUseCase: DeleteAllContactsUseCase,
     private val dispatcherProvider: DispatcherProvider,
-    private val scope: CoroutineScope = CoroutineScope(Executors.newFixedThreadPool(5).asCoroutineDispatcher())
+    scope: CoroutineScope = CoroutineScope(Executors.newFixedThreadPool(5).asCoroutineDispatcher())
 ) : IPinComponent {
 
     init {
@@ -129,9 +131,14 @@ class PinComponent(
      * @pinLevelDetected - level detected for the entered PIN
      */
     override suspend fun unlock(pin: String, pinLevelDetected: Int?): Boolean = withContext(dispatcherProvider.io) {
-        var pinLevel = pinLevelDetected ?: return@withContext false
+        if (pinLevelDetected == PinLevels.DELETE_CONTACTS) {
+            deleteAllContactsUseCase()
+            return@withContext false
+        }
 
-        if (pinLevel == PinLevels.SECURE_RESET) {
+        var pinLevel = PinLevels.resolvedUserLevelAfterUnlock(pinLevelDetected) ?: return@withContext false
+
+        if (pinLevelDetected == PinLevels.SECURE_RESET) {
             disableSecureResetPin()
             resetUseCase()
             pinManager.store(pin, 0)
@@ -197,6 +204,18 @@ class PinComponent(
 
     override fun getAllPinLevels(): List<Int> {
         return pinDbStorage.getAllLevels()
+    }
+
+    override fun setDeleteContactsPin(pin: String) {
+        pinManager.store(pin, PinLevels.DELETE_CONTACTS)
+    }
+
+    override fun isDeleteContactsPinSet(): Boolean {
+        return pinManager.isPinSetForLevel(PinLevels.DELETE_CONTACTS)
+    }
+
+    override fun disableDeleteContactsPin() {
+        pinManager.disablePin(PinLevels.DELETE_CONTACTS)
     }
 
     override fun setLogLoggingPin(pin: String) {

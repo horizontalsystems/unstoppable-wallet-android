@@ -1,8 +1,5 @@
 package cash.p.terminal.modules.contacts.screen
 
-import android.content.ActivityNotFoundException
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -17,8 +14,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material3.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,38 +24,29 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.core.App
 import cash.p.terminal.core.Caution
-import cash.p.terminal.core.openInputStreamSafe
-import cash.p.terminal.modules.contacts.ContactsModule
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.contacts.viewmodel.ContactsViewModel
-import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.strings.helpers.TranslatableString
-import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.ListEmptyView
-import cash.p.terminal.ui_compose.components.MenuItem
-import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import cash.p.terminal.ui.compose.components.SearchBar
-import cash.p.terminal.ui.compose.components.SelectorDialogCompose
-import cash.p.terminal.ui.compose.components.SelectorItem
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
-import cash.p.terminal.ui_compose.components.SnackbarDuration
-import cash.p.terminal.ui_compose.components.HudHelper
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.launch
 
 enum class ContactsScreenBottomSheetType {
-    ReplaceAddressConfirmation, RestoreContactsConfirmation
+    ReplaceAddressConfirmation
 }
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
@@ -67,45 +55,10 @@ fun ContactsScreen(
     viewModel: ContactsViewModel,
     onNavigateToBack: () -> Unit,
     onNavigateToCreateContact: () -> Unit,
-    onNavigateToContact: (Contact) -> Unit
+    onNavigateToContact: (Contact) -> Unit,
+    onNavigateToSettings: () -> Unit
 ) {
     val uiState = viewModel.uiState
-    var showMoreSelectorDialog by remember { mutableStateOf(false) }
-    val context = LocalContext.current
-    val view = LocalView.current
-
-    val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-        uri?.let {
-            context.contentResolver.openInputStreamSafe(it)?.use { inputStream ->
-                try {
-                    inputStream.bufferedReader().use { br ->
-                        viewModel.restore(br.readText())
-
-                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done, SnackbarDuration.SHORT)
-                    }
-                } catch (e: Throwable) {
-                    HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
-                }
-            }
-        }
-    }
-
-    val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
-        uri?.let {
-            context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                try {
-                    outputStream.bufferedWriter().use { bw ->
-                        bw.write(viewModel.backupJson)
-                        bw.flush()
-
-                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done, SnackbarDuration.SHORT)
-                    }
-                } catch (e: Throwable) {
-                    HudHelper.showErrorMessage(view, e.message ?: e.javaClass.simpleName)
-                }
-            }
-        }
-    }
 
     var bottomSheetType: ContactsScreenBottomSheetType? by remember { mutableStateOf(null) }
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -122,7 +75,8 @@ fun ContactsScreen(
                 }
 
                 ContactsScreenBottomSheetType.ReplaceAddressConfirmation -> {
-                    val warningMessage = selectedContact?.let { viewModel.replaceWarningMessage(it)?.getString() }
+                    val warningMessage =
+                        selectedContact?.let { viewModel.replaceWarningMessage(it)?.getString() }
                     ConfirmationBottomSheet(
                         title = stringResource(R.string.Alert_TitleWarning),
                         text = warningMessage ?: "",
@@ -145,26 +99,6 @@ fun ContactsScreen(
                     )
                 }
 
-                ContactsScreenBottomSheetType.RestoreContactsConfirmation -> {
-                    ConfirmationBottomSheet(
-                        title = stringResource(R.string.Alert_TitleWarning),
-                        text = stringResource(R.string.Contacts_Restore_Warning),
-                        iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
-                        confirmText = stringResource(R.string.Contacts_AddAddress_Replace),
-                        cautionType = Caution.Type.Error,
-                        cancelText = stringResource(R.string.Button_Cancel),
-                        onConfirm = {
-                            coroutineScope.launch {
-                                bottomSheetState.hide()
-                                restoreLauncher.launch(arrayOf("application/json"))
-                            }
-                        },
-                        onClose = {
-                            coroutineScope.launch { bottomSheetState.hide() }
-                        }
-                    )
-                }
             }
 
         }
@@ -186,16 +120,14 @@ fun ContactsScreen(
                                 )
                             )
                         }
-                        if (uiState.showMoreOptions) {
+                        if (uiState.showSettings) {
                             add(
                                 MenuItem(
-                                    title = TranslatableString.ResString(R.string.Contacts_ActionMore),
-                                    icon = R.drawable.ic_more2_20,
+                                    title = TranslatableString.ResString(R.string.Settings_Title),
+                                    icon = R.drawable.ic_manage_2,
                                     tint = ComposeAppTheme.colors.jacob,
                                     enabled = true,
-                                    onClick = {
-                                        showMoreSelectorDialog = true
-                                    }
+                                    onClick = onNavigateToSettings
                                 )
                             )
                         }
@@ -253,40 +185,6 @@ fun ContactsScreen(
                     }
                 }
 
-                if (showMoreSelectorDialog) {
-                    SelectorDialogCompose(
-                        title = stringResource(R.string.Contacts_ActionMore),
-                        items = ContactsModule.ContactsAction.values().map {
-                            (SelectorItem(stringResource(it.title), false, it))
-                        },
-                        onDismissRequest = {
-                            showMoreSelectorDialog = false
-                        },
-                        onSelectItem = { action ->
-                            when (action) {
-                                ContactsModule.ContactsAction.Restore -> {
-                                    if (viewModel.shouldShowRestoreWarning()) {
-                                        coroutineScope.launch {
-                                            bottomSheetType =
-                                                ContactsScreenBottomSheetType.RestoreContactsConfirmation
-                                            bottomSheetState.show()
-                                        }
-                                    } else {
-                                        restoreLauncher.launch(arrayOf("application/json"))
-                                    }
-                                }
-
-                                ContactsModule.ContactsAction.Backup -> {
-                                    App.pinComponent.keepUnlocked()
-                                    try {
-                                        backupLauncher.launch(viewModel.backupFileName)
-                                    } catch (_: ActivityNotFoundException) {
-                                        HudHelper.showErrorMessage(view, R.string.error_no_file_manager)
-                                    }
-                                }
-                            }
-                        })
-                }
             }
         }
     }

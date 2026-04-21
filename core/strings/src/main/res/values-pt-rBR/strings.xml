@@ -1454,6 +1454,11 @@ O aplicativo permite que você crie um backup com uma senha simples para sua con
     <string name="SubscriptionInfo_HavePremium">Eu já tenho Premium</string>
     <string name="premium_title">Premium</string>
     <string name="about_premium">Sobre o Premium</string>
+    <string name="delete_all_contacts_terms_agreement"><![CDATA[Acordo do usuário para definir uma senha PIN para excluir o livro de endereços cripto<br/><br/>Ao definir uma senha PIN, você confirma que entende sua finalidade como mecanismo de proteção da sua privacidade.<br/><b>1. Função de proteção da senha PIN</b><br/>Esta senha PIN destina-se à exclusão de emergência do livro de endereços cripto do dispositivo, com o objetivo de evitar uma possível exposição das suas conexões financeiras e endereços salvos a terceiros.<br/><b>2. Mecanismo de funcionamento</b><br/>A inserção da senha PIN configurada levará à exclusão imediata do seu livro de endereços cripto armazenado neste dispositivo.<br/><b>3. Irreversibilidade da exclusão</b><br/>A exclusão do livro de endereços após a inserção da senha PIN é definitiva e irreversível.<br/><b>4. Ausência de recuperação</b><br/>Se o livro de endereços for excluído, os dados não poderão ser restaurados, a menos que uma cópia de segurança tenha sido criada previamente.<br/><b>5. Armazenamento local</b><br/>O livro de endereços é armazenado exclusivamente de forma local no seu dispositivo e não é transferido para desenvolvedores nem para servidores externos.]]></string>
+    <string-array name="delete_all_contacts_terms_checkboxes">
+        <item>Entendo que a senha PIN é usada para excluir imediatamente o livro de endereços cripto.</item>
+        <item>Entendo que, após inserir a senha PIN, o livro de endereços será excluído sem possibilidade de recuperação sem uma cópia de segurança.</item>
+    </string-array>
     <string name="premium_settings">Configurações Premium</string>
     <string name="advanced_security">Segurança avançada</string>
     <string name="AdvancedSecurity_CreateHiddenWallet">Create Hidden Wallet</string>
@@ -1667,6 +1672,9 @@ O aplicativo permite que você crie um backup com uma senha simples para sua con
     <string name="pin_set_for_login_logging">Set a passcode to enable login logging</string>
     <string name="pin_set_for_login_logging_passcode">Definir senha para proteger o registro de login</string>
     <string name="confirm_pin_to_disable_login_logging_passcode">Digite a senha para desativar o registro de login</string>
+    <string name="pin_set_for_delete_all_contacts">Defina uma senha para excluir todos os contatos</string>
+    <string name="confirm_pin_to_disable_delete_all_contacts_passcode">Digite a senha para desativar Excluir todos os contatos</string>
+    <string name="disable_delete_contacts_passcode_warning">Como medida de segurança, recomendamos que você não use a ação de copiar para este valor.</string>
     <string name="confirm_pin_to_access_login_logging">Digite a senha para acessar o registro de login</string>
     <string name="PinSet_ErrorPinInUse">Esta senha já está sendo usada.</string>
     <!--Edit Pin-->
@@ -1697,6 +1705,7 @@ O aplicativo permite que você crie um backup com uma senha simples para sua con
     <string name="Contacts_KeepEditing">Continuar Editando</string>
     <string name="Contacts_DiscardChanges_Warning">Tem certeza de que deseja descartar as novas alterações?</string>
     <string name="Contacts_NoContacts">Você não tem nenhum contato adicionado</string>
+    <string name="delete_all_contacts">Excluir todos os contatos</string>
     <string name="Contacts_ActionMore">Mais</string>
     <string name="Contacts_Error_DefinedAddress">Este endereço já está em uso para %s</string>
     <string name="Contacts_Error_DefinedName">O nome já existe</string>

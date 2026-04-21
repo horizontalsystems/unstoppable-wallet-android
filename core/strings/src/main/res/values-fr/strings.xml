@@ -1452,6 +1452,11 @@ La aplicación permite crear una copia de seguridad con una contraseña sencilla
     <string name="SubscriptionInfo_HavePremium">J\'ai déjà Premium</string>
     <string name="premium_title">Premium</string>
     <string name="about_premium">À propos de Premium</string>
+    <string name="delete_all_contacts_terms_agreement"><![CDATA[Accord d’utilisation pour configurer un code PIN permettant de supprimer le carnet d’adresses crypto<br/><br/>En configurant un code PIN, vous confirmez comprendre sa finalité en tant que mécanisme de protection de votre confidentialité.<br/><b>1. Fonction de protection du code PIN</b><br/>Ce code PIN est destiné à la suppression d’urgence du carnet d’adresses crypto de l’appareil afin d’éviter une possible compromission de vos liens financiers et des adresses enregistrées par des tiers.<br/><b>2. Mécanisme de fonctionnement</b><br/>La saisie du code PIN configuré entraînera la suppression immédiate de votre carnet d’adresses crypto stocké sur cet appareil.<br/><b>3. Caractère irréversible de la suppression</b><br/>La suppression du carnet d’adresses après la saisie du code PIN est définitive et irréversible.<br/><b>4. Absence de restauration</b><br/>En cas de suppression du carnet d’adresses, les données ne peuvent pas être restaurées, sauf si une sauvegarde a été créée au préalable.<br/><b>5. Stockage local</b><br/>Le carnet d’adresses est stocké exclusivement localement sur votre appareil et n’est transmis ni aux développeurs ni à des serveurs externes.]]></string>
+    <string-array name="delete_all_contacts_terms_checkboxes">
+        <item>Je comprends que le code PIN est utilisé pour supprimer immédiatement le carnet d\'adresses crypto.</item>
+        <item>Je comprends qu\'après la saisie du code PIN, le carnet d\'adresses sera supprimé sans possibilité de restauration sans sauvegarde.</item>
+    </string-array>
     <string name="premium_settings">Paramètres Premium</string>
     <string name="advanced_security">Sécurité avancée</string>
     <string name="AdvancedSecurity_CreateHiddenWallet">Créer un portefeuille caché</string>
@@ -1665,6 +1670,9 @@ La aplicación permite crear una copia de seguridad con una contraseña sencilla
     <string name="pin_set_for_login_logging">Set a passcode to enable login logging</string>
     <string name="pin_set_for_login_logging_passcode">Définir un code pour protéger le journal de connexion</string>
     <string name="confirm_pin_to_disable_login_logging_passcode">Entrer le code pour désactiver le journal de connexion</string>
+    <string name="pin_set_for_delete_all_contacts">Définir un code pour supprimer tous les contacts</string>
+    <string name="confirm_pin_to_disable_delete_all_contacts_passcode">Entrez le code pour désactiver Supprimer tous les contacts</string>
+    <string name="disable_delete_contacts_passcode_warning">Par mesure de sécurité, nous vous recommandons de ne pas utiliser l\'action de copie pour cette valeur.</string>
     <string name="confirm_pin_to_access_login_logging">Entrer le code pour accéder au journal de connexion</string>
     <string name="PinSet_ErrorPinInUse">Ce mot de passe est déjà utilisé.</string>
     <!--Edit Pin-->
@@ -1695,6 +1703,7 @@ La aplicación permite crear una copia de seguridad con una contraseña sencilla
     <string name="Contacts_KeepEditing">Poursuivre les modifications</string>
     <string name="Contacts_DiscardChanges_Warning">Êtes-vous sûr de vouloir annuler ces modifications ?</string>
     <string name="Contacts_NoContacts">Vous n\'avez pas ajouté de contact</string>
+    <string name="delete_all_contacts">Supprimer tous les contacts</string>
     <string name="Contacts_ActionMore">Plus</string>
     <string name="Contacts_Error_DefinedAddress">Cette adresse est déjà utilisée pour %s</string>
     <string name="Contacts_Error_DefinedName">Le nom a été utilisé</string>

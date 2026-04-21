@@ -58,7 +58,7 @@ class PinSetViewModel(
                 pinComponent.isUnique(pin, pinType == PinType.DURESS)
             }
             PinType.HIDDEN_WALLET -> hiddenWalletPinPolicy.canUse(pin)
-            PinType.SECURE_RESET, PinType.LOG_LOGGING -> pinComponent.getPinLevel(pin) == null
+            PinType.SECURE_RESET, PinType.DELETE_CONTACTS, PinType.LOG_LOGGING -> pinComponent.getPinLevel(pin) == null
             else -> pinComponent.isUnique(pin, true) && pinComponent.isUnique(pin, false)
         }
     }
@@ -104,6 +104,7 @@ class PinSetViewModel(
                                 userManager.setUserLevel(pinLevel)
                             }
                             PinType.SECURE_RESET -> pinComponent.setSecureResetPin(submittedPin)
+                            PinType.DELETE_CONTACTS -> pinComponent.setDeleteContactsPin(submittedPin)
                             PinType.LOG_LOGGING -> pinComponent.setLogLoggingPin(submittedPin)
                             else -> {
                                 transactionHiddenManager.setSeparatePin(submittedPin)

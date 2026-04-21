@@ -18,6 +18,7 @@ import cash.p.terminal.modules.multiswap.TimerService
 import cash.p.terminal.modules.pin.hiddenwallet.HiddenWalletPinPolicy
 import cash.p.terminal.modules.settings.advancedsecurity.AdvancedSecurityViewModel
 import cash.p.terminal.modules.settings.advancedsecurity.securereset.SecureResetTermsViewModel
+import cash.p.terminal.modules.settings.advancedsecurity.terms.DeleteContactsTermsViewModel
 import cash.p.terminal.modules.settings.advancedsecurity.terms.HiddenWalletTermsViewModel
 import cash.p.terminal.core.notifications.polling.TransactionPollingManager
 import cash.p.terminal.modules.walletconnect.AccountTypeNotSupportedDialog
@@ -57,6 +58,7 @@ class KoinGraphTest : KoinTest {
                 definition<HiddenWalletPinPolicy >(IPinComponent::class),
                 definition<AdvancedSecurityViewModel>(IPinComponent::class),
                 definition<SecureResetTermsViewModel>(Array<String>::class),
+                definition<DeleteContactsTermsViewModel>(Array<String>::class),
                 definition<HiddenWalletTermsViewModel>(Array<String>::class),
                 definition<PassphraseTermsViewModel>(Array<String>::class),
                 definition<ConfiguredTokenInfoViewModel>(Token::class),

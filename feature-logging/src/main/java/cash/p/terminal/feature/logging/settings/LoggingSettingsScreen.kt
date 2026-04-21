@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -70,6 +72,7 @@ fun LoggingSettingsScreen(
     onLogIntoDuressModeToggle: (Boolean) -> Unit,
     onSelfieOnDuressLoginToggle: (Boolean) -> Unit,
     onPasscodeToggle: (Boolean) -> Unit,
+    onDeleteAllContactsPasscodeToggle: (Boolean) -> Unit,
     onSendLoginNotificationClick: () -> Unit,
     onDeleteAllAuthDataOnDuressToggle: (Boolean) -> Unit,
     onAutoDeletePeriodChanged: (AutoDeletePeriod) -> Unit,
@@ -270,11 +273,22 @@ fun LoggingSettingsScreen(
                     )
                 },
                 afterAnimatedContent = {
-                    RowWithArrow(
-                        text = stringResource(R.string.login_logging_send_notification),
-                        showAlert = !uiState.isPremiumActive,
-                        onClick = onSendLoginNotificationClick
-                    )
+                    Column {
+                        SwitchWithText(
+                            text = stringResource(R.string.delete_all_contacts),
+                            checked = uiState.deleteContactsPasscodeEnabled,
+                            onCheckedChange = onDeleteAllContactsPasscodeToggle
+                        )
+                        HorizontalDivider(
+                            thickness = 1.dp,
+                            color = ComposeAppTheme.colors.steel10,
+                        )
+                        RowWithArrow(
+                            text = stringResource(R.string.login_logging_send_notification),
+                            showAlert = !uiState.isPremiumActive,
+                            onClick = onSendLoginNotificationClick
+                        )
+                    }
                 },
                 animatedVisible = uiState.logIntoDuressModeEnabled
             )
@@ -412,6 +426,7 @@ private fun LoggingSettingsScreenPreview() {
         LoggingSettingsScreen(
             uiState = LoggingSettingsUiState(
                 passcodeEnabled = false,
+                deleteContactsPasscodeEnabled = false,
                 logSuccessfulLoginsEnabled = true,
                 selfieOnSuccessfulLoginEnabled = false,
                 logUnsuccessfulLoginsEnabled = false,
@@ -427,6 +442,7 @@ private fun LoggingSettingsScreenPreview() {
             onLogUnsuccessfulLoginsToggle = {},
             onSelfieOnUnsuccessfulLoginToggle = {},
             onPasscodeToggle = {},
+            onDeleteAllContactsPasscodeToggle = {},
             onLogIntoDuressModeToggle = {},
             onSelfieOnDuressLoginToggle = {},
             onSendLoginNotificationClick = {},

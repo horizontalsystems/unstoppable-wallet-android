@@ -14,6 +14,7 @@ import cash.p.terminal.modules.pin.core.ILockoutManager
 import cash.p.terminal.modules.pin.core.LockoutState
 import cash.p.terminal.modules.pin.core.OneTimeTimer
 import cash.p.terminal.modules.pin.core.OneTimerDelegate
+import cash.p.terminal.modules.pin.core.PinLevels
 import cash.p.terminal.modules.pin.unlock.PinUnlockModule.PinUnlockViewState
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
@@ -141,26 +142,27 @@ class PinUnlockViewModel(
     }
 
     private suspend fun unlock(pin: String): Boolean {
-        val pinLevel = pinComponent.getPinLevel(pin)
+        val detectedPinLevel = pinComponent.getPinLevel(pin)
+        val userLevel = PinLevels.resolvedUserLevelAfterUnlock(detectedPinLevel)
 
         // 1. Capture selfie BEFORE validation (to capture whoever is trying)
-        val photoPath = logLoginAttemptUseCase.captureLoginPhoto(pinLevel)
+        val photoPath = logLoginAttemptUseCase.captureLoginPhoto(userLevel)
 
         // 2. Validate
-        pinComponent.unlock(pin, pinLevel)
+        val unlocked = pinComponent.unlock(pin, detectedPinLevel)
 
         // 3. Log the attempt with photo
         logLoginAttemptUseCase.logLoginAttempt(
-            userLevel = pinLevel,
+            userLevel = userLevel.takeIf { unlocked },
             photoPath = photoPath
         )
 
-        if (pinLevel != null) {
+        if (unlocked && userLevel != null) {
             lockoutManager.dropFailedAttempts()
             // Delete logging data for lower levels if duress mode with deletion enabled
-            deleteLoggingOnDuressUseCase.deleteLoggingForLowerLevelsIfEnabled(pinLevel)
+            deleteLoggingOnDuressUseCase.deleteLoggingForLowerLevelsIfEnabled(userLevel)
             // Send ZEC SMS notification if enabled for duress mode
-            sendZecOnDuressUseCase.sendIfEnabled(pinLevel)
+            sendZecOnDuressUseCase.sendIfEnabled(userLevel)
             return true
         } else {
             lockoutManager.didFailUnlock()

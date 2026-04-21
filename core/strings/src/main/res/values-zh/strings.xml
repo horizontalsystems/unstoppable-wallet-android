@@ -415,7 +415,7 @@
     <!-- Fee Settings -->
     <string name="FeeSettings_NetworkFee">网络费</string>
     <string name="FeeSettings_NetworkFee_Info">在网络上发送给定交易的估计费用。</string>
-    <string name="FeeSettings_GasLimit_Info">交易复杂度以被称为“gas”（燃料）的单位度量。它将根据被执行的智能合同而变化。Gas Limit（燃料限制）是执行它所需要的估计最大燃料。使用的实际燃料通常会较低。</string>
+    <string name="FeeSettings_GasLimit_Info">交易复杂度以被称为"gas"（燃料）的单位度量。它将根据被执行的智能合同而变化。Gas Limit（燃料限制）是执行它所需要的估计最大燃料。使用的实际燃料通常会较低。</string>
     <string name="FeeSettings_GasPrice_Info">网上交易费用将按燃料单位计量。燃料价格是用户愿意按单位消费的金额。 当网络忙碌时，燃料价格就高，空闲时价格就低。 燃料价格不足常常是交易被长期搁置的一个原因。</string>
     <string name="FeeSettings_BaseFee">基础费用</string>
     <string name="FeeSettings_BaseFee_Info">网络协议将决定每一个区块的每一燃料（gas）的基础价格，称为基础费率。它根据不同区块的网络利用水平而变化。它可能会在下一个区块中增加或减少不多于12.5%，使得费用更具有可预测性。这里显示的值为当前区块的基础费率。</string>
@@ -1445,6 +1445,11 @@
     <string name="SubscriptionInfo_HavePremium">我已经有高级版</string>
     <string name="premium_title">高级版</string>
     <string name="about_premium">关于高级版</string>
+    <string name="delete_all_contacts_terms_agreement"><![CDATA[关于设置用于删除加密地址簿的 PIN 码的用户协议<br/><br/>设置 PIN 码即表示您确认理解其用途，即作为保护您隐私的机制。<br/><b>1. PIN 码的保护功能</b><br/>该 PIN 码用于在紧急情况下从设备中删除加密地址簿，以防止第三方可能获取您的金融关联信息和已保存地址。<br/><b>2. 作用机制</b><br/>输入已设置的 PIN 码后，保存在本设备中的加密地址簿将被立即删除。<br/><b>3. 删除不可逆</b><br/>输入 PIN 码后删除地址簿是最终且不可逆的操作。<br/><b>4. 无法恢复</b><br/>如果地址簿被删除，除非事先创建了备份，否则数据无法恢复。<br/><b>5. 本地存储</b><br/>地址簿仅保存在您的设备本地，不会传输给开发者或外部服务器。]]></string>
+    <string-array name="delete_all_contacts_terms_checkboxes">
+        <item>我理解该 PIN 码用于立即删除加密地址簿。</item>
+        <item>我理解输入 PIN 码后，地址簿将在没有备份副本的情况下被删除且无法恢复。</item>
+    </string-array>
     <string name="premium_settings">高级设置</string>
     <string name="advanced_security">高级安全</string>
     <string name="AdvancedSecurity_CreateHiddenWallet">创建隐藏钱包</string>
@@ -1628,7 +1633,7 @@
     <string name="alert_keys_invalidated_title">Android密钥库错误</string>
     <string name="alert_keys_invalidated_description">您的钱包加密密钥已被Android安全系统作废。这可能在指纹或锁屏设置更改时发生。\n\n要恢复访问权限，请使用您的备份短语重新导入钱包。\n\n如果此问题频繁发生，请尝试在设备设置中禁用Google Smart Lock并重启手机。</string>
     <string name="Alert_TitleWarning">警告</string>
-    <string name="Alert_CustomKeyboardIsUsed">您的设备似乎使用了非默认键盘。P.CASH建议选择设备上的默认键盘，因为第三方键盘可能会收集和暴露用户输入的数据。\n\n如果您要继续使用您的首选键盘，请单击“跳过”（Skip）按钮。</string>
+    <string name="Alert_CustomKeyboardIsUsed">您的设备似乎使用了非默认键盘。P.CASH建议选择设备上的默认键盘，因为第三方键盘可能会收集和暴露用户输入的数据。\n\n如果您要继续使用您的首选键盘，请单击"跳过"（Skip）按钮。</string>
     <string name="Alert_DeviceIsRootedWarning">P.CASH团队建议仅在未获取根权限（未越狱）的手机上使用应用。\n\n请注意，使用已获取根权限的设备，应用将难以保证您的加密货币免受来自恶意软件的安全威胁。</string>
     <!--OS Pin-->
     <string name="OSPin_Confirm_Title">电话PIN码</string>
@@ -1649,7 +1654,7 @@
     <!--Set Pin-->
     <string name="PinSet_Title">设置密码</string>
     <string name="PinSet_Info">您的密码将用于解锁钱包和发送资金</string>
-    <string name="PinSet_Transactions_Hide">Set Passcode for \“Transactions Auto Hide\” mode</string>
+    <string name="PinSet_Transactions_Hide">Set Passcode for \"Transactions Auto Hide\" mode</string>
     <string name="PinSet_ConfirmInfo">确认</string>
     <string name="PinSet_ErrorPinsDontMatch">密码不匹配。请重试。</string>
     <string name="PinSet_ErrorFailedToSavePin">保存密码时出错。请重试。</string>
@@ -1658,6 +1663,9 @@
     <string name="pin_set_for_login_logging">Set a passcode to enable login logging</string>
     <string name="pin_set_for_login_logging_passcode">设置密码以保护登录日志</string>
     <string name="confirm_pin_to_disable_login_logging_passcode">输入密码以禁用登录日志</string>
+    <string name="pin_set_for_delete_all_contacts">设置一个密码以删除所有联系人</string>
+    <string name="confirm_pin_to_disable_delete_all_contacts_passcode">输入密码以禁用\"删除所有联系人\"</string>
+    <string name="disable_delete_contacts_passcode_warning">出于安全考虑，我们建议您不要对此值使用复制操作。</string>
     <string name="confirm_pin_to_access_login_logging">输入密码以访问登录日志</string>
     <string name="PinSet_ErrorPinInUse">此密码已被使用.</string>
     <!--Edit Pin-->
@@ -1688,6 +1696,7 @@
     <string name="Contacts_KeepEditing">继续编辑</string>
     <string name="Contacts_DiscardChanges_Warning">您确定要放弃此新更改吗？</string>
     <string name="Contacts_NoContacts">您没有已添加的联系人</string>
+    <string name="delete_all_contacts">删除所有联系人</string>
     <string name="Contacts_ActionMore">更多</string>
     <string name="Contacts_Error_DefinedAddress">此地址已用于 %s</string>
     <string name="Contacts_Error_DefinedName">该名称已存在</string>

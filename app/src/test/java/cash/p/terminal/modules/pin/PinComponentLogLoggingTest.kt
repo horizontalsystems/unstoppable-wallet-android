@@ -4,6 +4,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.TestDispatcherProvider
 import cash.p.terminal.core.managers.DefaultUserManager
+import cash.p.terminal.domain.usecase.DeleteAllContactsUseCase
 import cash.p.terminal.domain.usecase.ResetUseCase
 import cash.p.terminal.modules.pin.core.Pin
 import cash.p.terminal.modules.pin.core.PinDao
@@ -36,6 +37,7 @@ class PinComponentLogLoggingTest {
     private val pinSettingsStorage = mockk<IPinSettingsStorage>(relaxed = true)
     private val backgroundManager = mockk<BackgroundManager>(relaxed = true)
     private val resetUseCase = mockk<ResetUseCase>(relaxed = true)
+    private val deleteAllContactsUseCase = mockk<DeleteAllContactsUseCase>(relaxed = true)
     private lateinit var pinComponent: PinComponent
     private var currentUserLevel = 0
 
@@ -61,6 +63,7 @@ class PinComponentLogLoggingTest {
             pinDbStorage = pinDbStorage,
             backgroundManager = backgroundManager,
             resetUseCase = resetUseCase,
+            deleteAllContactsUseCase = deleteAllContactsUseCase,
             dispatcherProvider = TestDispatcherProvider(dispatcher, testScope),
             scope = testScope
         )
@@ -349,6 +352,23 @@ class PinComponentLogLoggingTest {
         assertTrue(pinComponent.validateLogLoggingPin("1111"))
         assertFalse(pinComponent.validateLogLoggingPin("0000"))
     }
+
+    @Test
+    fun `disableDuressPin keeps delete contacts PIN`() {
+        setUserLevel(0)
+        pinComponent.setPin("1234")
+        pinComponent.setDeleteContactsPin("2222")
+        pinComponent.setDuressPin("5678")
+
+        setUserLevel(1)
+        pinComponent.setLogLoggingPin("1111")
+
+        setUserLevel(0)
+        pinComponent.disableDuressPin()
+
+        assertTrue(pinComponent.isDeleteContactsPinSet())
+        assertEquals(PinLevels.DELETE_CONTACTS, pinManager.getPinLevel("2222"))
+    }
 }
 
 private class LogLoggingTestPinDao : PinDao {
@@ -365,7 +385,7 @@ private class LogLoggingTestPinDao : PinDao {
     override fun getAll(): List<Pin> = pins.values.toList()
 
     override fun getLastLevelPin(): Pin? = pins.values
-        .filter { it.level != PinLevels.SECURE_RESET && !PinLevels.isLogLoggingLevel(it.level) }
+        .filter { PinLevels.isUserLevel(it.level) }
         .maxByOrNull { it.level }
 
     override fun deleteAllFromLevel(level: Int) {
@@ -395,7 +415,7 @@ private class LogLoggingTestPinDao : PinDao {
         val iterator = pins.iterator()
         while (iterator.hasNext()) {
             val key = iterator.next().key
-            if (key >= logLoggingLevel) {
+            if (key >= logLoggingLevel && key < PinLevels.DELETE_CONTACTS) {
                 iterator.remove()
             }
         }

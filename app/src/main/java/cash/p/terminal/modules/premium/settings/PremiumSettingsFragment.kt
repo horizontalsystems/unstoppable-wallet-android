@@ -33,11 +33,13 @@ import androidx.navigation.toRoute
 import androidx.paging.compose.collectAsLazyPagingItems
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
+import cash.p.terminal.core.authorizedDeleteContactsPasscodeAction
 import cash.p.terminal.core.authorizedLoggingAction
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.ensurePinSet
 import cash.p.terminal.core.ensurePinSetPremiumAction
 import cash.p.terminal.core.premiumAction
+import cash.p.terminal.core.slideToDeleteContactsTerms
 import cash.p.terminal.feature.logging.detail.LoggingDetailScreen
 import cash.p.terminal.feature.logging.detail.LoggingDetailViewModel
 import cash.p.terminal.feature.logging.history.LoggingListScreen
@@ -177,6 +179,17 @@ private fun PremiumSettingsNavHost(fragmentNavController: NavController) {
                         }
                     }
                     loggingSettingsViewModel.updatePasscodeLoggingState()
+                },
+                onDeleteAllContactsPasscodeToggle = { enabled ->
+                    if (enabled) {
+                        fragmentNavController.premiumAction {
+                            fragmentNavController.slideToDeleteContactsTerms()
+                        }
+                    } else {
+                        fragmentNavController.authorizedDeleteContactsPasscodeAction {
+                            loggingSettingsViewModel.disableDeleteContactsPin()
+                        }
+                    }
                 },
                 onSendLoginNotificationClick = {
                     fragmentNavController.premiumAction {
