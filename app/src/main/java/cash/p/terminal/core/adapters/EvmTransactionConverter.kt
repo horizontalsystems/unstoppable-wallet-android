@@ -12,7 +12,6 @@ import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.TokenQuery
-import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.erc20kit.decorations.ApproveEip20Decoration
 import io.horizontalsystems.erc20kit.decorations.OutgoingEip20Decoration
@@ -297,6 +296,15 @@ internal class EvmTransactionConverter(
                         TransactionRecordType.EVM_EXTERNAL_CONTRACT_CALL
                     }
 
+                    // Tx known only from token events (Erc20TransactionSyncer sets
+                    // Transaction.to = null and copies the Transfer event's `from`,
+                    // which may incorrectly equal the user for phantom/batch transfers).
+                    // Without a real contract address we can't show it as a user-initiated
+                    // call; treat it as an external contract call so events still render.
+                    transaction.to == null -> {
+                        TransactionRecordType.EVM_EXTERNAL_CONTRACT_CALL
+                    }
+
                     else -> null
                 }
 
@@ -317,9 +325,12 @@ internal class EvmTransactionConverter(
                         method = null
                     } else {
                         outgoingEvents = getTransactionValueEvents(transaction) + outgoingEvents
-                        isSpam = false
                         contractAddressEip55 = contractAddress?.eip55
                         method = transaction.input?.let { evmLabelManager.methodLabel(it) }
+                        // Unknown-method contract calls that only emit zero/dust Transfer
+                        // events are the address-poisoning pattern — mark as spam so
+                        // Hide Suspicious filters them out. Recognised methods stay visible.
+                        isSpam = method == null && SpamManager.isSpam(incomingEvents + outgoingEvents)
                     }
                     EvmTransactionRecord(
                         transaction = transaction,
