@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -183,6 +184,7 @@ private fun ImportWalletScreen(
                                 page = StatPage.ImportWallet,
                                 event = StatEvent.Open(StatPage.ImportWalletFromPasskey)
                             )
+                        } catch (e: GetCredentialCancellationException) {
                         } catch (e: Throwable) {
                             error = e.message ?: e.javaClass.simpleName
                         } finally {
