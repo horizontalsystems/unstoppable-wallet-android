@@ -73,8 +73,6 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.createaccount.MnemonicLanguageCell
-import io.horizontalsystems.bankwallet.modules.createaccount.PassphraseCell
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreByMenu
@@ -83,6 +81,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.B2
 import io.horizontalsystems.bankwallet.ui.compose.components.BoxTyler44
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -93,19 +92,23 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CustomKeyboardWarni
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputPassword
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
+import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_lucian
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.hdwalletkit.Language
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -590,5 +593,62 @@ fun SuggestionsBar(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun MnemonicLanguageCell(
+    language: Language,
+    showLanguageSelectorDialog: () -> Unit
+) {
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = showLanguageSelectorDialog
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_globe_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
+        )
+        B2(
+            text = stringResource(R.string.CreateWallet_Wordlist),
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+        Spacer(Modifier.weight(1f))
+        subhead1_grey(
+            text = stringResource(language.displayNameStringRes),
+        )
+        Icon(
+            modifier = Modifier.padding(start = 4.dp),
+            painter = painterResource(id = R.drawable.ic_down_arrow_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
+        )
+    }
+}
+
+@Composable
+fun PassphraseCell(enabled: Boolean, onCheckedChange: (Boolean) -> Unit) {
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = { onCheckedChange(!enabled) },
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_key_phrase_20),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.grey
+        )
+        body_leah(
+            text = stringResource(R.string.Passphrase),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 16.dp, end = 8.dp)
+        )
+        HsSwitch(
+            checked = enabled,
+            onCheckedChange = onCheckedChange
+        )
     }
 }
