@@ -193,7 +193,7 @@ class TransactionsService(
             currentItems.none { it.record == record }
         }
 
-        if (newRecords.isNotEmpty() && newRecords.all { it.spam }) {
+        if (newRecords.isNotEmpty() && newRecords.all { spamManager.shouldHide(it) }) {
             loadNext()
             return
         }
@@ -206,7 +206,7 @@ class TransactionsService(
             transactionRecords.mapNotNull { record ->
                 val existingItem = latestItems.find { it.record == record }
 
-                if (record.spam && spamManager.hideSuspiciousTx) return@mapNotNull null
+                if (spamManager.shouldHide(record)) return@mapNotNull null
 
                 if (existingItem == null) {
                     val lastBlockInfo = transactionSyncStateRepository.getLastBlockInfo(record.source)

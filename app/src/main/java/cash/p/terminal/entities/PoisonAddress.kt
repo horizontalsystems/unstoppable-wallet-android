@@ -13,4 +13,5 @@ data class PoisonAddress(
     val blockchainTypeUid: String,
     val accountId: String,
     val type: PoisonAddressType,
+    val sendCount: Int = 1,
 )

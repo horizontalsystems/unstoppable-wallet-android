@@ -9,7 +9,9 @@ import cash.p.terminal.entities.SpamAddress
 import cash.p.terminal.entities.SpamScanState
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
+import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.DispatcherProvider
@@ -88,11 +90,52 @@ class SpamManager(
         return spamAddressStorage.findByAddress(address)
     }
 
+    fun shouldHide(record: TransactionRecord): Boolean {
+        if (!hideSuspiciousTx) return false
+        return record.spam || isZeroAmountTransfer(record)
+    }
+
     fun close() {
         coroutineScope.cancel()
     }
 
     companion object {
+
+        fun isZeroAmountTransfer(record: TransactionRecord): Boolean {
+            val isTransferType = when (record.transactionRecordType) {
+                TransactionRecordType.BITCOIN_INCOMING,
+                TransactionRecordType.BITCOIN_OUTGOING,
+                TransactionRecordType.EVM_INCOMING,
+                TransactionRecordType.EVM_OUTGOING,
+                TransactionRecordType.TRON_INCOMING,
+                TransactionRecordType.TRON_OUTGOING,
+                TransactionRecordType.SOLANA_INCOMING,
+                TransactionRecordType.SOLANA_OUTGOING,
+                TransactionRecordType.MONERO_INCOMING,
+                TransactionRecordType.MONERO_OUTGOING,
+                TransactionRecordType.STELLAR_INCOMING,
+                TransactionRecordType.STELLAR_OUTGOING -> true
+                TransactionRecordType.TON -> isTonTransferLikeAction(record)
+                else -> false
+            }
+            if (!isTransferType) return false
+            return record.mainValue?.decimalValue?.signum() == 0
+        }
+
+        private fun isTonTransferLikeAction(record: TransactionRecord): Boolean {
+            if (record !is TonTransactionRecord) return false
+            val action = record.actions.singleOrNull() ?: return false
+            return when (action.type) {
+                is TonTransactionRecord.Action.Type.Send,
+                is TonTransactionRecord.Action.Type.Receive,
+                is TonTransactionRecord.Action.Type.Burn,
+                is TonTransactionRecord.Action.Type.Mint -> true
+                is TonTransactionRecord.Action.Type.ContractCall,
+                is TonTransactionRecord.Action.Type.ContractDeploy,
+                is TonTransactionRecord.Action.Type.Swap,
+                is TonTransactionRecord.Action.Type.Unsupported -> false
+            }
+        }
 
         private fun handleSpamAddresses(events: List<TransferEvent>): List<String> {
             val spamTokenSenders = mutableListOf<String>()
@@ -129,10 +172,12 @@ class SpamManager(
             var limit: BigDecimal = BigDecimal.ZERO
             when (transactionValue) {
                 is TransactionValue.CoinValue -> {
+                    if (value?.signum() == 0) return true
                     limit = spamCoinLimits[transactionValue.coinCode] ?: BigDecimal.ZERO
                 }
 
                 is TransactionValue.JettonValue -> {
+                    if (value?.signum() == 0) return true
                     limit = spamCoinLimits[transactionValue.coinCode] ?: BigDecimal.ZERO
                 }
 

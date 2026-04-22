@@ -1,48 +1,38 @@
 package cash.p.terminal.core.managers
 
-import cash.p.terminal.core.isEvm
 import cash.p.terminal.core.storage.PoisonAddressDao
-import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.entities.PoisonAddress
 import cash.p.terminal.entities.PoisonAddressType
-import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
-import cash.p.terminal.wallet.MarketKitWrapper
-import cash.p.terminal.wallet.entities.TokenQuery
-import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import java.math.BigDecimal
 
 class PoisonAddressManager(
     private val poisonAddressDao: PoisonAddressDao,
     private val contactsRepository: ContactsRepository,
-    private val marketKit: MarketKitWrapper,
 ) {
     private val _poisonDbChangedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val poisonDbChangedFlow: SharedFlow<Unit> = _poisonDbChangedFlow.asSharedFlow()
 
     companion object {
         private const val SIMILARITY_CHARS = 3
+        private const val WHITELIST_MIN_SEND_COUNT = 3
     }
 
-    @Suppress("ReturnCount", "CyclomaticComplexMethod")
+    @Suppress("ReturnCount")
     fun determinePoisonStatus(
         relevantAddress: String?,
         blockchainType: BlockchainType,
         accountId: String,
         isOutgoing: Boolean,
         isCreatedByWallet: Boolean,
-        amount: BigDecimal? = null,
-        coinCode: String? = null,
-        contractAddress: String? = null,
     ): PoisonStatus {
         if (relevantAddress == null) return PoisonStatus.BLOCKCHAIN
         val normalized = relevantAddress.lowercase()
@@ -52,35 +42,11 @@ class PoisonAddressManager(
         if (isOutgoing && isCreatedByWallet) return PoisonStatus.CREATED
 
         val existing = poisonAddressDao.get(normalized, blockchainUid, accountId)
-        if (existing?.type == PoisonAddressType.KNOWN) return PoisonStatus.BLOCKCHAIN
+        if (isWhitelisted(existing)) return PoisonStatus.BLOCKCHAIN
         if (existing?.type == PoisonAddressType.SCAM) return PoisonStatus.SUSPICIOUS
 
-        if (isOutgoing && amount != null && amount.compareTo(BigDecimal.ZERO) == 0) {
-            saveScamAddress(normalized, blockchainType, accountId)
-            return PoisonStatus.SUSPICIOUS
-        }
-
-        if (coinCode != null) {
-            val upperCode = coinCode.uppercase()
-            if (upperCode == "USDT" || upperCode == "USDC") {
-                val isEvmCompatible = blockchainType.isEvm || blockchainType == BlockchainType.Tron
-                if (contractAddress != null && !isKnownStablecoinContract(contractAddress, blockchainType)) {
-                    // Known contract that's not in our DB — fake
-                    saveScamAddress(normalized, blockchainType, accountId)
-                    return PoisonStatus.SUSPICIOUS
-                }
-                if (contractAddress == null && isEvmCompatible) {
-                    // On EVM chains, a legitimate stablecoin always has a known contract.
-                    // Null contract means unknown token (TokenValue/RawValue) — likely fake.
-                    // On non-EVM chains (TON jettons, Stellar assets), null contract is normal.
-                    saveScamAddress(normalized, blockchainType, accountId)
-                    return PoisonStatus.SUSPICIOUS
-                }
-            }
-        }
-
-        val knownAddresses = poisonAddressDao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId)
-        if (isSimilarToKnown(normalized, knownAddresses)) {
+        val whitelisted = poisonAddressDao.getWhitelisted(blockchainUid, accountId, WHITELIST_MIN_SEND_COUNT)
+        if (isSimilarToKnown(normalized, whitelisted)) {
             saveScamAddress(normalized, blockchainType, accountId)
             return PoisonStatus.SUSPICIOUS
         }
@@ -93,7 +59,6 @@ class PoisonAddressManager(
         val accountId = record.source.account.id
         val outgoing = isOutgoing(record)
 
-        // For EXTERNAL_CONTRACT_CALL, addresses are in events, not on record.from/to
         val relevantAddress = getRelevantAddress(record, outgoing)
 
         val isCreatedByWallet = when (record) {
@@ -102,21 +67,12 @@ class PoisonAddressManager(
             else -> false
         }
 
-        val mainValue = record.mainValue
-        val amount = mainValue?.decimalValue
-        val coinCode = mainValue?.coinCode
-        // Extract contract address from CoinValue or infer from events for unknown tokens
-        val contractAddress = extractContractAddress(mainValue, record)
-
         return determinePoisonStatus(
             relevantAddress = relevantAddress,
             blockchainType = blockchainType,
             accountId = accountId,
             isOutgoing = outgoing,
             isCreatedByWallet = isCreatedByWallet,
-            amount = amount,
-            coinCode = coinCode,
-            contractAddress = contractAddress,
         )
     }
 
@@ -147,28 +103,6 @@ class PoisonAddressManager(
         return null
     }
 
-    private fun extractContractAddress(
-        mainValue: TransactionValue?,
-        record: TransactionRecord
-    ): String? {
-        // Try CoinValue path first (known tokens)
-        (mainValue as? TransactionValue.CoinValue)
-            ?.token?.type
-            ?.let { it as? TokenType.Eip20 }
-            ?.address
-            ?.let { return it }
-
-        // For unknown tokens (TokenValue/RawValue), try to get contract from events
-        if (record is EvmTransactionRecord) {
-            val event = record.incomingEvents?.firstOrNull() ?: record.outgoingEvents?.firstOrNull()
-            val eventValue = event?.value
-            if (eventValue is TransactionValue.CoinValue) {
-                (eventValue.token.type as? TokenType.Eip20)?.address?.let { return it }
-            }
-        }
-        return null
-    }
-
     fun isAddressSuspicious(address: String?, blockchainType: BlockchainType, accountId: String): Boolean {
         if (address == null) return false
         val normalized = address.lowercase()
@@ -176,16 +110,18 @@ class PoisonAddressManager(
 
         val existing = poisonAddressDao.get(normalized, blockchainUid, accountId)
         if (existing?.type == PoisonAddressType.SCAM) return true
-        if (existing?.type == PoisonAddressType.KNOWN) return false
+        if (isWhitelisted(existing)) return false
         if (isInAddressBook(normalized, blockchainType)) return false
 
-        val knownAddresses = poisonAddressDao.getAllByType(PoisonAddressType.KNOWN, blockchainUid, accountId)
-        return isSimilarToKnown(normalized, knownAddresses)
+        val whitelisted = poisonAddressDao.getWhitelisted(blockchainUid, accountId, WHITELIST_MIN_SEND_COUNT)
+        return isSimilarToKnown(normalized, whitelisted)
     }
 
     fun saveKnownAddress(address: String, blockchainType: BlockchainType, accountId: String) {
-        poisonAddressDao.insert(
-            PoisonAddress(address.lowercase(), blockchainType.uid, accountId, PoisonAddressType.KNOWN)
+        poisonAddressDao.upsertKnownIncrementingCount(
+            address = address.lowercase(),
+            blockchainTypeUid = blockchainType.uid,
+            accountId = accountId,
         )
         _poisonDbChangedFlow.tryEmit(Unit)
     }
@@ -197,13 +133,8 @@ class PoisonAddressManager(
         _poisonDbChangedFlow.tryEmit(Unit)
     }
 
-    private fun isKnownStablecoinContract(
-        contractAddress: String,
-        blockchainType: BlockchainType,
-    ): Boolean {
-        val query = TokenQuery(blockchainType, TokenType.Eip20(contractAddress))
-        return tryOrNull { marketKit.token(query) } != null
-    }
+    private fun isWhitelisted(entry: PoisonAddress?): Boolean =
+        entry?.type == PoisonAddressType.KNOWN && entry.sendCount >= WHITELIST_MIN_SEND_COUNT
 
     private fun isInAddressBook(
         normalizedAddress: String,
