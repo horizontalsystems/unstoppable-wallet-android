@@ -23,11 +23,6 @@ abstract class BaseFragment(
         }
     }
 
-    override fun onPause() {
-        disallowScreenshot()
-        super.onPause()
-    }
-
     protected fun hideKeyboard() {
         activity?.getSystemService(InputMethodManager::class.java)?.hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
     }

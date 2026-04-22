@@ -66,11 +66,6 @@ abstract class BaseComposeFragment(
         }
     }
 
-    override fun onPause() {
-        disallowScreenshot()
-        super.onPause()
-    }
-
     private fun allowScreenshot() {
         requireActivity().window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
     }
