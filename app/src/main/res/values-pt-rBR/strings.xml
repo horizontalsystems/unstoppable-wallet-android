@@ -1176,6 +1176,110 @@
     <string name="ManageAccount_Wallets">Carteiras</string>
     <string name="ManageAccount_WatchAddresses">Carteiras de Relógio</string>
     <string name="ManageAccount_DeleteWarning">Você quer parar de acompanhar este endereço da carteira?</string>
+
+    <string-array name="wallet_names">
+        <item>😰 Cofre Suado</item>
+        <item>🧂 Livro Razão Salgado</item>
+        <item>💧 Definitivamente Líquido</item>
+        <item>⏳ Transação Pendente</item>
+        <item>🌈 Lucros Imaginários</item>
+        <item>🤡 Âncora Instável</item>
+        <item>😤 Cope Máximo</item>
+        <item>☠️ Rekted Certificado</item>
+        <item>👑 Coroa Insolvente</item>
+        <item>📉 Retornos Mediocres</item>
+        <item>🕸️ Carteira Empoeirada</item>
+        <item>🧳 Bolsa Vintage</item>
+        <item>👻 Ganhos Fantasma</item>
+        <item>🐂 Touro Ilusório</item>
+        <item>🛒 Comprador Compulsivo</item>
+        <item>💼 Bagholder Premium</item>
+        <item>🤨 Rendimento Suspeito</item>
+        <item>♾️ Queda Eterna</item>
+        <item>💭 Convicção Emprestada</item>
+        <item>🦍 Macaco Quântico</item>
+        <item>🔍 Nó Paranoico</item>
+        <item>🛋️ Staker Preguiçoso</item>
+        <item>☕ Validador Cafeínado</item>
+        <item>🔮 Oráculo Quebrado</item>
+        <item>😴 Validador Sonolento</item>
+        <item>🎲 Gênio Acidental</item>
+        <item>🔐 Hodler Relutante</item>
+        <item>🤑 Oráculo Ganancioso</item>
+        <item>😵 Arbitragem Confusa</item>
+        <item>🏃 Exchange Frenética</item>
+        <item>🪢 Fundação Enganada</item>
+        <item>🌉 Ponte Suspeita</item>
+        <item>⛽ Taxas Absurdas</item>
+        <item>🌶️ Colateral Picante</item>
+        <item>🚌 Mempool Lotado</item>
+        <item>💨 Gênesis Fumegante</item>
+        <item>🕯️ Carteira Assombrada</item>
+        <item>⌛ Paciência Infinita</item>
+        <item>🥶 Cope Congelado</item>
+        <item>💊 Coragem Sintética</item>
+        <item>🎖️ Camponês Nobre</item>
+        <item>⚡ Milionário Temporário</item>
+        <item>🗺️ Pobreza Estratégica</item>
+        <item>😊 Rekted Alegre</item>
+        <item>🏰 Cidadela Imprudente</item>
+        <item>🎰 Paraíso Degen</item>
+        <item>🙏 Ruína Humilde</item>
+        <item>💎 Mãos de Diamante</item>
+        <item>🃏 Mãos de Papel</item>
+        <item>🌙 Ilusão Lunar</item>
+        <item>🚿 Trader Lavado</item>
+        <item>🤏 Alocação Minúscula</item>
+        <item>🎯 Chute Sortudo</item>
+        <item>🌊 Posição Submersa</item>
+        <item>💤 Gigante Adormecido</item>
+        <item>🎪 Circo Itinerante</item>
+        <item>🧸 Hedge Emocional</item>
+        <item>🐯 Tigre de Papel</item>
+        <item>🔁 Ganhos Recursivos</item>
+        <item>🥴 Retornos Tontos</item>
+        <item>🏚️ Fazenda Penhorada</item>
+        <item>🤫 Baleia Silenciosa</item>
+        <item>🌅 Falso Amanhecer</item>
+        <item>📊 Caminhada Aleatória</item>
+        <item>🌋 Montanha Volátil</item>
+        <item>🎁 Liquidação Surpresa</item>
+        <item>🏄 Passeio Arriscado</item>
+        <item>🧲 Perda Magnética</item>
+        <item>🏋️ Bolsa Pesada</item>
+        <item>🎈 Retornos Inflados</item>
+        <item>🧪 Fundo Experimental</item>
+        <item>🌸 Posição Frágil</item>
+        <item>🧋 Token Borbulhante</item>
+        <item>🏆 Troféu de Participação</item>
+        <item>🌝 Fundo Lua Cheia</item>
+        <item>🐸 Pepe Raro</item>
+        <item>🧟 Token Zumbi</item>
+        <item>🦄 Ganhos Míticos</item>
+        <item>🥊 Chance de Luta</item>
+        <item>🌟 Ignorância Feliz</item>
+        <item>🦆 Pato de Borracha</item>
+        <item>🎋 Protocolo Bambu</item>
+        <item>🏴‍☠️ Tesouro Pirata</item>
+        <item>🪄 Liquidez Mágica</item>
+        <item>🏊 Cofre Submerso</item>
+        <item>🎊 Liquidação Sortuda</item>
+        <item>🦋 Efeito Borboleta</item>
+        <item>🎸 Cofre Desligado</item>
+        <item>💥 Retornos Explosivos</item>
+        <item>🧠 Cérebro Liso</item>
+        <item>🪦 Pool Morto</item>
+        <item>🎡 Economia Circular</item>
+        <item>🧘 Liquidação Zen</item>
+        <item>📌 Fundo Perdido</item>
+        <item>🏴 Floresta Escura</item>
+        <item>😎 Perdedor Confiante</item>
+        <item>🌪️ Rendimento Caótico</item>
+        <item>🧬 Protocolo Mutante</item>
+        <item>🍕 Carteira Faminta</item>
+        <item>🎭 Lua Emprestada</item>
+    </string-array>
+
     <string name="Balance_Receive_BackupRequired_Description">Você precisa fazer backup de %1$s</string>
     <!--Network Settings-->
     <!-- Show Key -->

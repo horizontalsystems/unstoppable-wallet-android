@@ -957,6 +957,110 @@
     <string name="ManageAccount_Wallets">지갑</string>
     <string name="ManageAccount_WatchAddresses">관찰 주소</string>
     <string name="ManageAccount_DeleteWarning">이 지갑 주소 보기를 중지하시겠습니까?</string>
+
+    <string-array name="wallet_names">
+        <item>😰 식은땀 금고</item>
+        <item>🧂 짭짤한 원장</item>
+        <item>💧 확실히 유동적</item>
+        <item>⏳ 대기 중인 거래</item>
+        <item>🌈 상상 속 수익</item>
+        <item>🤡 흔들리는 페그</item>
+        <item>😤 극한의 버팀</item>
+        <item>☠️ 공식 렉트</item>
+        <item>👑 파산 왕관</item>
+        <item>📉 평범한 수익</item>
+        <item>🕸️ 먼지 쌓인 포트폴리오</item>
+        <item>🧳 빈티지 가방</item>
+        <item>👻 유령 수익</item>
+        <item>🐂 망상 황소</item>
+        <item>🛒 연속 저점매수</item>
+        <item>💼 프리미엄 배그홀더</item>
+        <item>🤨 의심스러운 수익</item>
+        <item>♾️ 영원한 하락</item>
+        <item>💭 빌린 확신</item>
+        <item>🦍 양자 유인원</item>
+        <item>🔍 피해망상 노드</item>
+        <item>🛋️ 게으른 스테이커</item>
+        <item>☕ 카페인 밸리데이터</item>
+        <item>🔮 파산 오라클</item>
+        <item>😴 졸린 밸리데이터</item>
+        <item>🎲 우연한 천재</item>
+        <item>🔐 마지못한 홀더</item>
+        <item>🤑 탐욕스러운 오라클</item>
+        <item>😵 혼란스러운 차익거래</item>
+        <item>🏃 광란의 거래소</item>
+        <item>🪢 러그풀 재단</item>
+        <item>🌉 의심스러운 브릿지</item>
+        <item>⛽ 터무니없는 수수료</item>
+        <item>🌶️ 매운 담보</item>
+        <item>🚌 과부하 멤풀</item>
+        <item>💨 연기 자욱한 제네시스</item>
+        <item>🕯️ 유령 포트폴리오</item>
+        <item>⌛ 무한한 인내</item>
+        <item>🥶 얼어붙은 버팀</item>
+        <item>💊 합성 용기</item>
+        <item>🎖️ 고귀한 농부</item>
+        <item>⚡ 일시적 백만장자</item>
+        <item>🗺️ 전략적 빈곤</item>
+        <item>😊 즐거운 렉트</item>
+        <item>🏰 무모한 요새</item>
+        <item>🎰 디젠 천국</item>
+        <item>🙏 겸손한 폐허</item>
+        <item>💎 다이아몬드 핸즈</item>
+        <item>🃏 종이 핸즈</item>
+        <item>🌙 달빛 망상</item>
+        <item>🚿 탈탈 털린 트레이더</item>
+        <item>🤏 아주 작은 포지션</item>
+        <item>🎯 행운의 추측</item>
+        <item>🌊 수중 포지션</item>
+        <item>💤 잠든 거인</item>
+        <item>🎪 유랑 서커스</item>
+        <item>🧸 감정적 헤지</item>
+        <item>🐯 종이 호랑이</item>
+        <item>🔁 재귀적 수익</item>
+        <item>🥴 어지러운 수익률</item>
+        <item>🏚️ 압류된 농장</item>
+        <item>🤫 조용한 고래</item>
+        <item>🌅 거짓 새벽</item>
+        <item>📊 랜덤 워크</item>
+        <item>🌋 변동성 화산</item>
+        <item>🎁 깜짝 청산</item>
+        <item>🏄 위험한 여정</item>
+        <item>🧲 자기 손실</item>
+        <item>🏋️ 무거운 가방</item>
+        <item>🎈 부풀려진 수익</item>
+        <item>🧪 실험적 펀드</item>
+        <item>🌸 취약한 포지션</item>
+        <item>🧋 버블 토큰</item>
+        <item>🏆 참가 트로피</item>
+        <item>🌝 보름달 펀드</item>
+        <item>🐸 희귀 페페</item>
+        <item>🧟 좀비 토큰</item>
+        <item>🦄 신화적 수익</item>
+        <item>🥊 싸워볼 기회</item>
+        <item>🌟 행복한 무지</item>
+        <item>🦆 고무 오리</item>
+        <item>🎋 대나무 프로토콜</item>
+        <item>🏴‍☠️ 해적 금고</item>
+        <item>🪄 마법 유동성</item>
+        <item>🏊 수중 금고</item>
+        <item>🎊 행운의 청산</item>
+        <item>🦋 나비 효과</item>
+        <item>🎸 플러그 뽑힌 금고</item>
+        <item>💥 폭발적인 수익</item>
+        <item>🧠 매끄러운 뇌</item>
+        <item>🪦 죽은 풀</item>
+        <item>🎡 순환 경제</item>
+        <item>🧘 선 청산</item>
+        <item>📌 놓친 바닥</item>
+        <item>🏴 어두운 숲</item>
+        <item>😎 자신만만한 루저</item>
+        <item>🌪️ 혼돈의 수익</item>
+        <item>🧬 돌연변이 프로토콜</item>
+        <item>🍕 배고픈 지갑</item>
+        <item>🎭 빌린 달</item>
+    </string-array>
+
     <string name="Balance_Receive_BackupRequired_Description">백업해야 합니다: %1$s을(를)</string>
     <!--Network Settings-->
     <!-- Show Key -->
