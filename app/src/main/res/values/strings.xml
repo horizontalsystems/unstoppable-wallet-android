@@ -107,7 +107,7 @@
     <string name="CreateWallet_N_Words">%s words</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
-    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
+    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase doesn’t match</string>
     <string name="CreateWallet_PassphraseDescription">Passphrases provide an additional layer of security for wallets.When restoring a wallet protected by a passphrase, the user must provide both the recovery phrase and the passphrase.\n\nPassphrases also allow users to create multiple independent multi-coin wallets from the same mnemonic, simply by using different passphrases.</string>
     <string name="CreateWallet_AdvancedOptions">Advanced Options</string>
     <string name="CreateWallet_PassphraseOptional">Passphrase (optional)</string>
@@ -1398,9 +1398,9 @@
     <string name="ManageAccounts_ViewOnlyWalletDescription">View a wallet by address without access to funds.</string>
 
     <string name="CreateNewWallet_Standard">Standard</string>
-    <string name="CreateNewWallet_Standard_Description">Create a wallet with a recovery phrase for full control and flexibility.</string>
+    <string name="CreateNewWallet_Standard_Description">A wallet with a recovery phrase that requires manual backup.</string>
     <string name="CreateNewWallet_Passkey">Passkey</string>
-    <string name="CreateNewWallet_Passkey_Description">Create a wallet secured by your device for easy access.</string>
+    <string name="CreateNewWallet_Passkey_Description">A wallet with a recovery phrase securely saved by your device.</string>
     <string name="CreateNewWallet_PasskeyTerms">Passkey Wallet Terms</string>
 
     <!-- Import Wallet -->

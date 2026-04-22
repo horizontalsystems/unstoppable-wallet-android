@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.createaccount
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
@@ -29,7 +30,7 @@ class CreateAccountPasskeyViewModel(
 ) : ViewModelUiState<CreateAccountPasskeyUiState>() {
 
     private val defaultAccountName = accountFactory.getNextAccountName()
-    private var accountName: String = defaultAccountName
+    private var accountName: String = getRandomWalletName()
     private var success: AccountType? = null
     private var error: String? = null
 
@@ -51,7 +52,7 @@ class CreateAccountPasskeyViewModel(
                     .map { it.normalizeNFKD() }
                 val accountType = AccountType.Mnemonic(words, "")
                 val account = accountFactory.account(
-                    name = accountName,
+                    name = accountName.ifBlank { defaultAccountName },
                     type = accountType,
                     origin = AccountOrigin.Created,
                     backedUp = true,
@@ -74,9 +75,17 @@ class CreateAccountPasskeyViewModel(
     }
 
     fun onChangeAccountName(v: String) {
-        accountName = v.ifBlank { defaultAccountName }
+        accountName = v
         emitState()
     }
+
+    fun generateRandomAccountName() {
+        accountName = getRandomWalletName()
+        emitState()
+    }
+
+    private fun getRandomWalletName(): String =
+        App.instance.localizedContext().resources.getStringArray(R.array.wallet_names).random()
 
     /** Called by the Fragment when PasskeyManager.register() throws. */
     fun onError(e: Throwable) {
