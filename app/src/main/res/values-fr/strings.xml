@@ -666,7 +666,7 @@
     <string name="RiskLevel_ProviderRiskLevel">Niveaux de risque du fournisseur</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">Les étiquettes ci-dessous expliquent différents niveaux de risque pour les fournisseurs de swap. Choisissez en conséquence.</string>
     <string name="RiskLevel_Auto_Description">Exécution automatique sur la chaîne. Les fonds ne peuvent pas être bloqués ou bloqués après soumission. Si le swap échoue, les fonds sont remboursés automatiquement.</string>
-    <string name="RiskLevel_Limited_Description">Le fournisseur opère en utilisant ses propres liquidités. Les rejets sont rares. Les gels sont théoriquement possibles mais très improbables.</string>
+    <string name="RiskLevel_Flexible_Description">Le fournisseur opère en utilisant ses propres liquidités. Les rejets sont rares. Les gels sont théoriquement possibles mais très improbables.</string>
     <string name="RiskLevel_Controlled_Description">Ces fournisseurs opèrent avec des liquidités de tierces parties et ont mis en place des politiques d\'AML. Dans la plupart des cas, les swaps sont rejetés et remboursés en cas de problème de LCA. Dans certaines situations, le fournisseur peut demander KYC avant de libérer des fonds.</string>
     <string name="RiskLevel_Precheck_Description">Le prestataire effectue son propre test d\'adresse avant le traitement de swap. Les rejets sont rares. Les gels sont théoriquement possibles mais très improbables.</string>
     <!-- Swap Confirmation -->

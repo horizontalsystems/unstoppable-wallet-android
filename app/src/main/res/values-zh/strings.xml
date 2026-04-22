@@ -665,7 +665,7 @@
     <string name="RiskLevel_ProviderRiskLevel">提供商风险级别</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">下面的标签解释交换供应商的不同风险等级。相应选择。</string>
     <string name="RiskLevel_Auto_Description">自动在链上执行。资金提交后不能冻结或冻结。如果交换失败，资金自动退还。</string>
-    <string name="RiskLevel_Limited_Description">提供商使用自己的流动性进行操作。拒绝是罕见的。冻结在理论上是可能的，但极不可能。</string>
+    <string name="RiskLevel_Flexible_Description">提供商使用自己的流动性进行操作。拒绝是罕见的。冻结在理论上是可能的，但极不可能。</string>
     <string name="RiskLevel_Controlled_Description">这些供应商以第三方流动资金运作，并制定了反洗钱政策。 在大多数情况下，如果发现任何AML问题，互换交易都会被拒绝并退还。在有些情况下，提供者可能会在释放资金之前请求了解青年。</string>
     <string name="RiskLevel_Precheck_Description">提供商自己的地址先筛选处理器。拒绝是罕见的。冻结在理论上是可能的，但极不可能。</string>
     <!-- Swap Confirmation -->

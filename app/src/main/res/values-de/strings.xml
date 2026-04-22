@@ -666,7 +666,7 @@
     <string name="RiskLevel_ProviderRiskLevel">Provider-Risiko-Level</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">Die unten aufgeführten Etiketten erläutern verschiedene Risikostufen von Swap-Anbietern. Wählen Sie entsprechend aus.</string>
     <string name="RiskLevel_Auto_Description">Automatische On-Kettenausführung kann nicht eingefroren oder blockiert werden, wenn der Swap-Ausfall fehlschlägt, werden die Gelder automatisch zurückerstattet.</string>
-    <string name="RiskLevel_Limited_Description">Anbieter betreibt ihre eigene Liquidität. Ablehnungen sind selten. Freezes sind theoretisch möglich, aber höchst unwahrscheinlich.</string>
+    <string name="RiskLevel_Flexible_Description">Anbieter betreibt ihre eigene Liquidität. Ablehnungen sind selten. Freezes sind theoretisch möglich, aber höchst unwahrscheinlich.</string>
     <string name="RiskLevel_Controlled_Description">Dieser Anbieter arbeitet mit Fremdliquidität und verfügt über AML-Richtlinien. In den meisten Fällen werden Swaps zurückgewiesen und erstattet, wenn AML-Probleme erkannt werden. In manchen Fällen kann der Anbieter KYC anfordern, bevor er Gelder freigibt.</string>
     <string name="RiskLevel_Precheck_Description">Der Provider macht seine eigene Adressprüfung vor der Verarbeitung Swap. Einwände sind selten. Einfrieren sind theoretisch möglich, aber höchst unwahrscheinlich.</string>
     <!-- Swap Confirmation -->
