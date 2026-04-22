@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.createaccount
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -39,6 +40,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
@@ -130,7 +134,17 @@ private fun CreateAccountIntroScreen(
                 initial = viewModel.accountName,
                 pasteEnabled = false,
                 hint = viewModel.defaultAccountName,
-                onValueChange = viewModel::onChangeAccountName
+                onValueChange = viewModel::onChangeAccountName,
+                trailingContent = {
+                    Box(modifier = Modifier.padding(end = 16.dp)) {
+                        HSIconButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
+                            icon = painterResource(R.drawable.ic_swap_circle_24),
+                            onClick = viewModel::generateRandomAccountName
+                        )
+                    }
+                }
             )
 
             VSpacer(32.dp)

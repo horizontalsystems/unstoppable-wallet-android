@@ -75,6 +75,7 @@ fun FormsInput(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
     onChangeFocus: ((Boolean) -> Unit)? = null,
+    trailingContent: (@Composable () -> Unit)? = null,
     onValueChange: (String) -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -188,7 +189,7 @@ fun FormsInput(
                 }
             }
 
-            if (textState.text.isNotEmpty()) {
+            if (textState.text.isNotEmpty() && trailingContent == null) {
                 ButtonSecondaryCircle(
                     modifier = Modifier.padding(end = 16.dp),
                     icon = R.drawable.ic_delete_20,
@@ -199,7 +200,7 @@ fun FormsInput(
                         focusRequester.requestFocus()
                     }
                 )
-            } else {
+            } else if (trailingContent == null) {
                 if (qrScannerEnabled) {
                     val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
                         if (result.resultCode == Activity.RESULT_OK) {
@@ -236,6 +237,8 @@ fun FormsInput(
                     )
                 }
             }
+
+            trailingContent?.invoke()
         }
 
         state?.errorOrNull?.localizedMessage?.let {
