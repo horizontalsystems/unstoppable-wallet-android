@@ -191,4 +191,107 @@
     <!--Edit Pin-->
     <!--Biometric Auth texts-->
     <!--Contacts-->
+
+    <string-array name="wallet_names">
+        <item>😰 خزنة المتعرق</item>
+        <item>🧂 دفتر الأستاذ المالح</item>
+        <item>💧 سيولة مؤكدة</item>
+        <item>⏳ معاملة معلقة</item>
+        <item>🌈 أرباح وهمية</item>
+        <item>🤡 ربط مترنح</item>
+        <item>😤 تحمل قصوى</item>
+        <item>☠️ مُفلس رسمياً</item>
+        <item>👑 تاج المعسر</item>
+        <item>📉 عوائد متواضعة</item>
+        <item>🕸️ محفظة مغبرة</item>
+        <item>🧳 حقيبة عتيقة</item>
+        <item>👻 أرباح الأشباح</item>
+        <item>🐂 ثور الأوهام</item>
+        <item>🛒 متصيد القاع المتسلسل</item>
+        <item>💼 حامل الكيس المميز</item>
+        <item>🤨 عائد مشبوه</item>
+        <item>♾️ هبوط أبدي</item>
+        <item>💭 قناعة مستعارة</item>
+        <item>🦍 القرد الكمي</item>
+        <item>🔍 عقدة بجنون الارتياب</item>
+        <item>🛋️ مُراهن كسول</item>
+        <item>☕ مُحقق كافيين</item>
+        <item>🔮 عرّاف مُفلس</item>
+        <item>😴 مُحقق نائم</item>
+        <item>🎲 عبقري بالصدفة</item>
+        <item>🔐 ممسك مُكره</item>
+        <item>🤑 عرّاف جشع</item>
+        <item>😵 مراجحة مُرتبكة</item>
+        <item>🏃 بورصة مُضطربة</item>
+        <item>🪢 أساس محترق</item>
+        <item>🌉 جسر مشبوه</item>
+        <item>⛽ رسوم فاحشة</item>
+        <item>🌶️ ضمان حار</item>
+        <item>🚌 ميم بول مكتظ</item>
+        <item>💨 بداية دخانية</item>
+        <item>🕯️ محفظة مسكونة</item>
+        <item>⌛ صبر لا نهائي</item>
+        <item>🥶 تحمل مُجمَّد</item>
+        <item>💊 شجاعة اصطناعية</item>
+        <item>🎖️ فلاح نبيل</item>
+        <item>⚡ مليونير مؤقت</item>
+        <item>🗺️ فقر استراتيجي</item>
+        <item>😊 إفلاس مبهج</item>
+        <item>🏰 قلعة متهورة</item>
+        <item>🎰 جنة المُضاربين</item>
+        <item>🙏 أنقاض متواضعة</item>
+        <item>💎 أيادي الألماس</item>
+        <item>🃏 أيادي الورق</item>
+        <item>🌙 وهم قمري</item>
+        <item>🚿 تاجر مُنهَك</item>
+        <item>🤏 تخصيص ضئيل</item>
+        <item>🎯 تخمين محظوظ</item>
+        <item>🌊 مركز تحت الماء</item>
+        <item>💤 عملاق نائم</item>
+        <item>🎪 سيرك جوال</item>
+        <item>🧸 تحوط عاطفي</item>
+        <item>🐯 نمر من ورق</item>
+        <item>🔁 أرباح متكررة</item>
+        <item>🥴 عوائد مُدوِّخة</item>
+        <item>🏚️ مزرعة محجوزة</item>
+        <item>🤫 حوت صامت</item>
+        <item>🌅 فجر زائف</item>
+        <item>📊 مسيرة عشوائية</item>
+        <item>🌋 جبل متقلب</item>
+        <item>🎁 تصفية مفاجئة</item>
+        <item>🏄 رحلة محفوفة بالمخاطر</item>
+        <item>🧲 خسارة مغناطيسية</item>
+        <item>🏋️ كيس ثقيل</item>
+        <item>🎈 عوائد مُضخَّمة</item>
+        <item>🧪 صندوق تجريبي</item>
+        <item>🌸 مركز هش</item>
+        <item>🧋 رمز فقاعي</item>
+        <item>🏆 جائزة المشاركة</item>
+        <item>🌝 صندوق البدر</item>
+        <item>🐸 بيبي نادر</item>
+        <item>🧟 رمز الزومبي</item>
+        <item>🦄 أرباح أسطورية</item>
+        <item>🥊 فرصة القتال</item>
+        <item>🌟 جهل سعيد</item>
+        <item>🦆 بطة مطاطية</item>
+        <item>🎋 بروتوكول الخيزران</item>
+        <item>🏴‍☠️ كنز القراصنة</item>
+        <item>🪄 سيولة سحرية</item>
+        <item>🏊 خزنة تحت الماء</item>
+        <item>🎊 تصفية محظوظة</item>
+        <item>🦋 تأثير الفراشة</item>
+        <item>🎸 خزنة مقطوعة</item>
+        <item>💥 عوائد انفجارية</item>
+        <item>🧠 دماغ ناعم</item>
+        <item>🪦 بركة ميتة</item>
+        <item>🎡 اقتصاد دائري</item>
+        <item>🧘 تصفية زن</item>
+        <item>📌 القاع الفائت</item>
+        <item>🏴 الغابة المظلمة</item>
+        <item>😎 خاسر واثق</item>
+        <item>🌪️ عائد فوضوي</item>
+        <item>🧬 بروتوكول متحور</item>
+        <item>🍕 محفظة جائعة</item>
+        <item>🎭 قمر مستعار</item>
+    </string-array>
 </resources>

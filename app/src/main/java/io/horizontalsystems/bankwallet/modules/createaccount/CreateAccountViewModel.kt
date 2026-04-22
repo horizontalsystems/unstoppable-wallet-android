@@ -86,7 +86,7 @@ class CreateAccountViewModel(
     }
 
     private fun getRandomWalletName(): String =
-        App.instance.resources.getStringArray(R.array.wallet_names).random()
+        App.instance.localizedContext().resources.getStringArray(R.array.wallet_names).random()
 
     fun onChangePassphrase(v: String) {
         if (passphraseValidator.containsValidCharacters(v)) {

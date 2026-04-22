@@ -1180,6 +1180,110 @@
     <string name="ManageAccount_Wallets">Wallets</string>
     <string name="ManageAccount_WatchAddresses">Wallets beobachten</string>
     <string name="ManageAccount_DeleteWarning">Möchten Sie die Beobachtung dieser Wallet-Adresse beenden?</string>
+
+    <string-array name="wallet_names">
+        <item>😰 Schweißige Tresor</item>
+        <item>🧂 Salziges Hauptbuch</item>
+        <item>💧 Definitiv Liquide</item>
+        <item>⏳ Ausstehende Transaktion</item>
+        <item>🌈 Imaginäre Gewinne</item>
+        <item>🤡 Wackeliger Kurs</item>
+        <item>😤 Maximales Cope</item>
+        <item>☠️ Zertifiziert Pleite</item>
+        <item>👑 Insolvente Krone</item>
+        <item>📉 Mittelmäßige Rendite</item>
+        <item>🕸️ Verstaubtes Portfolio</item>
+        <item>🧳 Vintage-Bag</item>
+        <item>👻 Phantomgewinne</item>
+        <item>🐂 Größenwahnsinniger Bulle</item>
+        <item>🛒 Serieller Dipper</item>
+        <item>💼 Premium Bagholder</item>
+        <item>🤨 Verdächtige Rendite</item>
+        <item>♾️ Ewiger Dip</item>
+        <item>💭 Geliehene Überzeugung</item>
+        <item>🦍 Quantum Affe</item>
+        <item>🔍 Paranoider Node</item>
+        <item>🛋️ Fauler Staker</item>
+        <item>☕ Koffeinhaltiger Validator</item>
+        <item>🔮 Pleite-Orakel</item>
+        <item>😴 Schläfriger Validator</item>
+        <item>🎲 Zufälliges Genie</item>
+        <item>🔐 Widerwilliger Hodler</item>
+        <item>🤑 Gieriges Orakel</item>
+        <item>😵 Verwirrte Arbitrage</item>
+        <item>🏃 Hektische Börse</item>
+        <item>🪢 Gerissenes Fundament</item>
+        <item>🌉 Zwielichtige Bridge</item>
+        <item>⛽ Überhöhte Gebühren</item>
+        <item>🌶️ Würzige Sicherheit</item>
+        <item>🚌 Überfüllter Mempool</item>
+        <item>💨 Rauchiges Genesis</item>
+        <item>🕯️ Verfluchtes Portfolio</item>
+        <item>⌛ Unendliche Geduld</item>
+        <item>🥶 Gefrorenes Cope</item>
+        <item>💊 Synthetischer Mut</item>
+        <item>🎖️ Edler Bauer</item>
+        <item>⚡ Temporärer Millionär</item>
+        <item>🗺️ Strategische Armut</item>
+        <item>😊 Fröhlich Pleite</item>
+        <item>🏰 Leichtsinnige Zitadelle</item>
+        <item>🎰 Degen-Paradies</item>
+        <item>🙏 Demütiger Schaden</item>
+        <item>💎 Diamanthände</item>
+        <item>🃏 Papierhände</item>
+        <item>🌙 Mondwahnvorstellung</item>
+        <item>🚿 Abgewaschener Trader</item>
+        <item>🤏 Winzige Allokation</item>
+        <item>🎯 Glückliche Schätzung</item>
+        <item>🌊 Unterwasserposition</item>
+        <item>💤 Schlafender Riese</item>
+        <item>🎪 Wanderzirkus</item>
+        <item>🧸 Emotionale Absicherung</item>
+        <item>🐯 Papier-Tiger</item>
+        <item>🔁 Rekursive Gewinne</item>
+        <item>🥴 Schwindelige Rendite</item>
+        <item>🏚️ Zwangsversteigerung</item>
+        <item>🤫 Stiller Wal</item>
+        <item>🌅 Falsche Morgendämmerung</item>
+        <item>📊 Zufälliger Marsch</item>
+        <item>🌋 Volatiler Berg</item>
+        <item>🎁 Überraschungsliquidation</item>
+        <item>🏄 Riskante Fahrt</item>
+        <item>🧲 Magnetischer Verlust</item>
+        <item>🏋️ Schwere Tasche</item>
+        <item>🎈 Aufgeblasene Rendite</item>
+        <item>🧪 Experimenteller Fonds</item>
+        <item>🌸 Zerbrechliche Position</item>
+        <item>🧋 Blubberiges Token</item>
+        <item>🏆 Teilnahme-Trophy</item>
+        <item>🌝 Vollmondsfonds</item>
+        <item>🐸 Seltener Pepe</item>
+        <item>🧟 Zombie-Token</item>
+        <item>🦄 Mythische Gewinne</item>
+        <item>🥊 Kämpferische Chance</item>
+        <item>🌟 Glückliche Unwissenheit</item>
+        <item>🦆 Quietscheente</item>
+        <item>🎋 Bambus-Protokoll</item>
+        <item>🏴‍☠️ Piraten-Schatzkammer</item>
+        <item>🪄 Magische Liquidität</item>
+        <item>🏊 Unterwasser-Tresor</item>
+        <item>🎊 Glückliche Liquidation</item>
+        <item>🦋 Schmetterlingseffekt</item>
+        <item>🎸 Abgekoppelter Tresor</item>
+        <item>💥 Explosive Rendite</item>
+        <item>🧠 Glattes Gehirn</item>
+        <item>🪦 Toter Pool</item>
+        <item>🎡 Kreislaufwirtschaft</item>
+        <item>🧘 Zen-Liquidation</item>
+        <item>📌 Verpasster Boden</item>
+        <item>🏴 Dunkler Wald</item>
+        <item>😎 Zuversichtlicher Verlierer</item>
+        <item>🌪️ Chaotischer Ertrag</item>
+        <item>🧬 Mutiertes Protokoll</item>
+        <item>🍕 Hungriges Wallet</item>
+        <item>🎭 Geborgter Mond</item>
+    </string-array>
+
     <string name="Balance_Receive_BackupRequired_Description">Sie müssen %1$s sichern</string>
     <!--Network Settings-->
     <!-- Show Key -->
