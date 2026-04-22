@@ -102,7 +102,7 @@ fun FormsInput(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .defaultMinSize(minHeight = 44.dp)
+                .defaultMinSize(minHeight = 54.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .border(0.5.dp, borderColor, RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence),
@@ -290,7 +290,7 @@ fun FormsInputPassword(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .defaultMinSize(minHeight = 44.dp)
+                .defaultMinSize(minHeight = 54.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .border(0.5.dp, borderColor, RoundedCornerShape(16.dp))
                 .background(ComposeAppTheme.colors.lawrence),
@@ -340,19 +340,7 @@ fun FormsInputPassword(
                 enabled = enabled,
             )
 
-            when (state) {
-                is DataState.Error -> {
-                    Icon(
-                        modifier = Modifier.padding(end = 8.dp),
-                        painter = painterResource(id = R.drawable.ic_attention_20),
-                        contentDescription = null,
-                        tint = cautionColor
-                    )
-                }
-                else -> {
-                    Spacer(modifier = Modifier.width(28.dp))
-                }
-            }
+            HSpacer(28.dp)
 
             Icon(
                 modifier = Modifier

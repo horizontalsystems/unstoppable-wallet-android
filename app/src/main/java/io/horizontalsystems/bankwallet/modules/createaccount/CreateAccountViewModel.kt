@@ -126,16 +126,7 @@ class CreateAccountViewModel(
         if (passphraseState is DataState.Error) {
             return true
         }
-
-        if (passphrase.isBlank()) {
-            passphraseState = DataState.Error(
-                Exception(
-                    Translator.getString(R.string.CreateWallet_Error_EmptyPassphrase)
-                )
-            )
-            return true
-        }
-        if (passphrase != passphraseConfirmation) {
+        if (passphrase.isNotBlank() && passphrase != passphraseConfirmation) {
             passphraseConfirmState = DataState.Error(
                 Exception(
                     Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation)

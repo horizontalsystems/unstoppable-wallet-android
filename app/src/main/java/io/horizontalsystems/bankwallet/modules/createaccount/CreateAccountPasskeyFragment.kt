@@ -1,7 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.createaccount
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,14 +32,16 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statAccountType
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
-import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderColored
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -53,7 +62,8 @@ fun CreateAccountPasskeyScreen(
     popUpToInclusiveId: Int,
     inclusive: Boolean
 ) {
-    val viewModel = viewModel<CreateAccountPasskeyViewModel>(factory = CreateAccountPasskeyViewModel.Factory())
+    val viewModel =
+        viewModel<CreateAccountPasskeyViewModel>(factory = CreateAccountPasskeyViewModel.Factory())
     val uiState = viewModel.uiState
     val context = LocalContext.current
     val view = LocalView.current
@@ -87,44 +97,57 @@ fun CreateAccountPasskeyScreen(
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_CreateNewWallet),
         onBack = navController::popBackStack,
-        menuItems = listOf(
-            MenuItem(
-                title = TranslatableString.ResString(R.string.Button_Create),
-                enabled = createButtonEnabled,
-                onClick = {
-                    val accountName = uiState.accountName
-                    createButtonEnabled = false
-                    scope.launch {
-                        try {
-                            val entropy = App.passkeyManager.register(
-                                context = context,
-                                accountName = accountName,
-                            )
-                            viewModel.createAccount(entropy)
-                        } catch (e: Exception) {
-                            viewModel.onError(e)
-                        } finally {
-                            createButtonEnabled = true
-                        }
-                    }
-                },
-                tint = ComposeAppTheme.colors.jacob
-            )
-        ),
     ) {
-        Column {
-            VSpacer(12.dp)
+        Column(
+            modifier = Modifier.windowInsetsPadding(WindowInsets.ime)
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+            ) {
+                SectionHeaderColored(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    color = ComposeAppTheme.colors.grey,
+                    title = stringResource(id = R.string.ManageAccount_WalletName)
+                )
+                FormsInput(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    initial = uiState.defaultAccountName,
+                    pasteEnabled = false,
+                    hint = uiState.defaultAccountName,
+                    onValueChange = viewModel::onChangeAccountName
+                )
 
-            HeaderText(stringResource(id = R.string.ManageAccount_Name))
-            FormsInput(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                initial = uiState.defaultAccountName,
-                pasteEnabled = false,
-                hint = uiState.defaultAccountName,
-                onValueChange = viewModel::onChangeAccountName
-            )
-
-            VSpacer(32.dp)
+                VSpacer(32.dp)
+            }
+            ButtonsGroupWithShade {
+                HSButton(
+                    title = stringResource(R.string.Button_Create),
+                    variant = ButtonVariant.Primary,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    onClick = {
+                        val accountName = uiState.accountName
+                        createButtonEnabled = false
+                        scope.launch {
+                            try {
+                                val entropy = App.passkeyManager.register(
+                                    context = context,
+                                    accountName = accountName,
+                                )
+                                viewModel.createAccount(entropy)
+                            } catch (e: Exception) {
+                                viewModel.onError(e)
+                            } finally {
+                                createButtonEnabled = true
+                            }
+                        }
+                    },
+                )
+            }
         }
     }
 }

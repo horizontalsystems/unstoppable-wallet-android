@@ -43,7 +43,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsIconButton
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
-import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderAndy
+import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderColored
 
 class ManageAccountsFragment : BaseComposeFragment() {
 
@@ -152,7 +152,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                     if (regularAccounts.isNotEmpty()) {
                         item {
                             BoxBordered(bottom = true) {
-                                SectionHeaderAndy(title = stringResource(R.string.ManageAccount_Wallets))
+                                SectionHeaderColored(title = stringResource(R.string.ManageAccount_Wallets))
                             }
                         }
                         regularAccounts.forEach { account ->
@@ -164,7 +164,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                     if (watchAccounts.isNotEmpty()) {
                         item {
                             BoxBordered(bottom = true) {
-                                SectionHeaderAndy(title = stringResource(R.string.ManageAccount_WatchAddresses))
+                                SectionHeaderColored(title = stringResource(R.string.ManageAccount_WatchAddresses))
                             }
                         }
                         watchAccounts.forEach { account ->
