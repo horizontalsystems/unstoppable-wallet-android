@@ -76,7 +76,7 @@ enum class UProvider(
         false,
         false,
         true,
-        RiskLevel.LIMITED,
+        RiskLevel.FLEXIBLE,
         false
     ),
     Barter(

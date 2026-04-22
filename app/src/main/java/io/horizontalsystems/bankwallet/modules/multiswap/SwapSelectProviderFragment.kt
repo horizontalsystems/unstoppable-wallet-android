@@ -257,7 +257,7 @@ fun RiskCell(
     val color = when (riskLevel) {
         RiskLevel.AUTO -> ComposeAppTheme.colors.remus
         RiskLevel.CONTROLLED -> ComposeAppTheme.colors.jacob
-        RiskLevel.LIMITED -> ComposeAppTheme.colors.ocean
+        RiskLevel.FLEXIBLE -> ComposeAppTheme.colors.ocean
         RiskLevel.PRECHECK -> ComposeAppTheme.colors.leah
     }
     val icon = riskLevel.icon

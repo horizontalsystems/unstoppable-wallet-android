@@ -666,7 +666,7 @@
     <string name="RiskLevel_ProviderRiskLevel">Provedores de Risco</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">Os rótulos abaixo explicam diferentes níveis de risco dos provedores de troca. Escolha de acordo.</string>
     <string name="RiskLevel_Auto_Description">Execução automática de on-chain. Fundos não podem ser congelados ou bloqueados após o envio. Se o swap falhar, os fundos são reembolsados automaticamente.</string>
-    <string name="RiskLevel_Limited_Description">O provedor opera com sua própria liquidez. Rejeições são raras. Congelamentos são teoricamente possíveis, mas altamente improváveis.</string>
+    <string name="RiskLevel_Flexible_Description">O provedor opera com sua própria liquidez. Rejeições são raras. Congelamentos são teoricamente possíveis, mas altamente improváveis.</string>
     <string name="RiskLevel_Controlled_Description">Este fornecedor opera com liquidez de terceiros e tem políticas de AML em vigor. Na maioria dos casos, os swaps são rejeitados e reembolsados se quaisquer problemas AML forem detectados. Em algumas situações, o provedor pode solicitar o KYC antes de liberar fundos.</string>
     <string name="RiskLevel_Precheck_Description">O provedor faz seu próprio endereço screening de troca de processamento anterior. Rejeições são raras. Congelamentos são teoricamente possíveis, mas altamente improváveis.</string>
     <!-- Swap Confirmation -->
