@@ -37,7 +37,7 @@ class CreateAccountViewModel(
     val mnemonicKinds = CreateAccountModule.Kind.values().toList()
 
     val defaultAccountName = accountFactory.getNextAccountName()
-    var accountName by mutableStateOf(getRandomWalletName(accountManager.accounts.map { it.name }.toSet()))
+    var accountName by mutableStateOf(accountManager.getRandomWalletName())
         private set
 
     var selectedKind: CreateAccountModule.Kind = Mnemonic12
@@ -81,7 +81,7 @@ class CreateAccountViewModel(
     }
 
     fun generateRandomAccountName() {
-        accountName = getRandomWalletName(accountManager.accounts.map { it.name }.toSet())
+        accountName = accountManager.getRandomWalletName()
     }
 
     fun onChangePassphrase(v: String) {

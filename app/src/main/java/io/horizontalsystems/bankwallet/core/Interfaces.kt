@@ -192,6 +192,7 @@ interface IAccountManager {
     fun setLevel(level: Int)
     fun updateAccountLevels(accountIds: List<String>, level: Int)
     fun updateMaxLevel(level: Int)
+    fun getRandomWalletName(): String
 }
 
 interface IBackupManager {
