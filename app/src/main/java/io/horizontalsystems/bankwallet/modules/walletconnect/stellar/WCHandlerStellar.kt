@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.stellar
 
-import com.reown.android.Core
-import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.entities.Account
@@ -9,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.handler.IWCHandler
 import io.horizontalsystems.bankwallet.modules.walletconnect.handler.MethodData
 import io.horizontalsystems.bankwallet.modules.walletconnect.handler.UnsupportedMethodException
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.AbstractWCAction
+import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.stellarkit.StellarKit
 
 class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHandler {
@@ -18,11 +17,7 @@ class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHa
     override val supportedMethods = listOf("stellar_signAndSubmitXDR", "stellar_signXDR")
     override val supportedEvents = listOf<String>()
 
-    override fun getAction(
-        request: Wallet.Model.SessionRequest.JSONRPCRequest,
-        peerMetaData: Core.Model.AppMetaData?,
-        chainInternalId: String?,
-    ): AbstractWCAction {
+    override fun getAction(request: HSDAppRequest, chainInternalId: String?): AbstractWCAction {
         val stellarKit = getStellarKit(App.accountManager.activeAccount!!)
 
         return when (request.method) {
@@ -33,7 +28,7 @@ class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHa
 
             "stellar_signXDR" -> WCActionStellarSignXdr(
                 request.params,
-                peerMetaData?.name ?: "",
+                request.peerMetaData?.name ?: "",
                 stellarKit
             )
 
@@ -47,7 +42,6 @@ class WCHandlerStellar(private val stellarKitManager: StellarKitManager) : IWCHa
 
     override fun getAccountAddresses(account: Account): List<String> {
         val address = stellarKitManager.getAddress(account.type)
-
         return supportedChains.map { "$it:$address" }
     }
 

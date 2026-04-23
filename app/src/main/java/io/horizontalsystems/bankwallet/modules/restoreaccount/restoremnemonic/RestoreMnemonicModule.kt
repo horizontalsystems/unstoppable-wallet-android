@@ -12,7 +12,7 @@ object RestoreMnemonicModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return RestoreMnemonicViewModel(
-                App.accountFactory,
+                App.accountManager,
                 App.wordsManager,
                 App.thirdKeyboardStorage,
             ) as T
@@ -20,8 +20,8 @@ object RestoreMnemonicModule {
     }
 
     data class UiState(
-        val passphraseEnabled: Boolean,
-        val passphraseError: String?,
+        val accountName: String,
+        val advancedOptionsEnabled: Boolean,
         val invalidWordRanges: List<IntRange>,
         val error: String?,
         val accountType: AccountType?,

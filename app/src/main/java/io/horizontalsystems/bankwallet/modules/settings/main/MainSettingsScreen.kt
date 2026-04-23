@@ -86,6 +86,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.subscriptions.core.PrioritySupport
 import io.horizontalsystems.subscriptions.core.SecureSend
 
@@ -157,7 +158,7 @@ private fun SettingSections(
     BannerCarousel(banners = banners)
 
     CellUniversalLawrenceSection(
-        listOf({
+        listOfNotNull({
             HsSettingCell(
                 R.string.SettingsSecurity_ManageKeys,
                 R.drawable.wallet_24,
@@ -204,7 +205,7 @@ private fun SettingSections(
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
                 }
             )
-        }, {
+        }, if (DAppManager.isAvailable) {{
             HsSettingCell(
                 R.string.DAppConnection_Title,
                 R.drawable.link_24,
@@ -215,11 +216,11 @@ private fun SettingSections(
                         WCManager.SupportState.Supported -> {
                             navController.addFromRight(WCListFragment())
 
-                            stat(
-                                page = StatPage.Settings,
-                                event = StatEvent.Open(StatPage.WalletConnect)
-                            )
-                        }
+                                stat(
+                                    page = StatPage.Settings,
+                                    event = StatEvent.Open(StatPage.WalletConnect)
+                                )
+                            }
 
                         WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
                             navController.addFromBottom(WCErrorNoAccountFragment())
@@ -231,11 +232,11 @@ private fun SettingSections(
                                 BackupRequiredDialog(BackupRequiredDialog.Input(state.account, text))
                             )
 
-                            stat(
-                                page = StatPage.Settings,
-                                event = StatEvent.Open(StatPage.BackupRequired)
-                            )
-                        }
+                                stat(
+                                    page = StatPage.Settings,
+                                    event = StatEvent.Open(StatPage.BackupRequired)
+                                )
+                            }
 
                         is WCManager.SupportState.NotSupported -> {
                             navController.slideFromBottom(
@@ -245,7 +246,7 @@ private fun SettingSections(
                     }
                 }
             )
-        },
+        }},
 //            {
 //            HsSettingCell(
 //                title = R.string.Settings_TonConnect,

@@ -16,36 +16,8 @@
         <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
         <item name="android:statusBarColor">@color/transparent</item>
 
-        <item name="BallanceCoinNameColor">@color/dark</item>
-        <item name="BallanceCoinAmountColor">@color/dark</item>
         <item name="TitleColor">@color/dark</item>
-        <item name="TextColorGreyLightToDark">@color/dark</item>
-        <item name="TextColorBarsToDark">@color/dark</item>
-        <item name="AboutBackgroundColor">@color/white</item>
-        <item name="BottomNavigationBackgroundColor">@color/light</item>
-        <item name="RippleColor">@color/ripple_black</item>
         <item name="RoundRippleColor">@color/light_grey</item>
-        <item name="BottomNavBackground">@drawable/shadow_bottom_navigation_light</item>
-        <item name="TransactionDetailBackground">@color/white</item>
-        <item name="TransactionDetailValueTextColor">@color/dark</item>
-        <item name="TransactionDetailBottomBarBackground">#f5fafafa</item>
-        <item name="LightBackground">@color/steel_light</item>
-        <item name="BottomSendButtonColor">@color/steel_light</item>
-        <item name="BottomSendButtonHighlightedColor">@color/light_grey</item>
-        <item name="BottomSendImageButtonTint">@color/black</item>
-        <item name="BottomDialogTextColor">@color/black</item>
-        <item name="ConfirmationDialogBackground">@color/light</item>
-        <item name="ProgressbarSpinnerColor">@color/light</item>
-        <item name="SwipeRefreshBackgroundColor">@color/light</item>
-        <item name="InputBackground">@color/white</item>
-        <item name="ConfirmationTextColor">@color/dark</item>
-        <item name="AddCoinButtonPlaceholder">@color/light</item>
-        <item name="SecondaryButtonStartGradient">#ffffffff</item>
-        <item name="SecondaryButtonEndGradient">#00ffffff</item>
-
-        <!--  Gradient colors-->
-        <item name="ColorGradientWhite">@color/white</item>
-        <item name="ColorWindowBackground">@color/light</item>
     </style>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
@@ -53,5 +25,6 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
         <item name="windowSplashScreenAnimationDuration">300</item>
         <item name="postSplashScreenTheme">@style/Theme.AppTheme.DayNight</item>
+        <item name="android:statusBarColor">@color/transparent</item>
     </style>
 </resources>

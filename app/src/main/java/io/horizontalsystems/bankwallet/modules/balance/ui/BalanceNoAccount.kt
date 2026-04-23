@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,41 +22,42 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import io.horizontalsystems.bankwallet.uiv3.components.cards.CardsErrorMessageDefault
 
 @Composable
 fun BalanceNoAccount(navController: NavBackStack<HSScreen>) {
     HSScaffold(
         title = stringResource(R.string.Wallet_Title)
     ) {
-        CardsErrorMessageDefault(
+        Box(
             modifier = Modifier
-                .align(Alignment.Center)
-                .padding(horizontal = 64.dp),
-            icon = painterResource(R.drawable.wallet_add_24),
-            iconTint = ComposeAppTheme.colors.grey,
-            buttonTitle = stringResource(R.string.ManageAccounts_CreateNewWallet),
-            buttonTitle2 = stringResource(R.string.ManageAccounts_ImportWallet),
-            buttonTitle3 = stringResource(R.string.ManageAccounts_WatchAddress),
-            onClick = {
-                navController.navigateWithTermsAccepted {
-                    navController.addFromRight(CreateAccountFragment())
+                .fillMaxSize()
+                .padding(bottom = 56.dp) //compensate bottom navigation height, to center content
+        ) {
+            AddWalletView(
+                modifier = Modifier
+                    .align(Alignment.Center),
+                icon = painterResource(R.drawable.wallet_add_24),
+                iconTint = ComposeAppTheme.colors.grey,
+                onNewWalletClick = {
+                    navController.navigateWithTermsAccepted {
+                        navController.addFromRight(CreateAccountFragment())
 
-                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.NewWallet))
+                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.NewWallet))
+                    }
+                },
+                onWalletRestoreClick = {
+                    navController.navigateWithTermsAccepted {
+                        navController.addFromRight(ImportWalletFragment())
+
+                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ImportWallet))
+                    }
+                },
+                onWatchWalletClick = {
+                    navController.addFromRight(WatchAddressFragment())
+
+                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.WatchWallet))
                 }
-            },
-            onClick2 = {
-                navController.navigateWithTermsAccepted {
-                    navController.addFromRight(ImportWalletFragment())
-
-                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ImportWallet))
-                }
-            },
-            onClick3 = {
-                navController.addFromRight(WatchAddressFragment())
-
-                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.WatchWallet))
-            }
-        )
+            )
+        }
     }
 }

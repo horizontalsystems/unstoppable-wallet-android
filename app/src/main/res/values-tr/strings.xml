@@ -829,6 +829,110 @@
     <string name="ManageAccount_Wallets">Cüzdanlar</string>
     <string name="ManageAccount_WatchAddresses">Cüzdan İzle</string>
     <string name="ManageAccount_DeleteWarning">Bu cüzdan adresini izlemeyi bırakmak istiyor musunuz?</string>
+
+    <string-array name="wallet_names">
+        <item>😰 Terli Kasa</item>
+        <item>🧂 Tuzlu Defter</item>
+        <item>💧 Kesinlikle Likit</item>
+        <item>⏳ Bekleyen İşlem</item>
+        <item>🌈 Hayali Karlar</item>
+        <item>🤡 Sallantılı Çıpa</item>
+        <item>😤 Maksimum Dayanma</item>
+        <item>☠️ Sertifikalı Batık</item>
+        <item>👑 Batkın Taç</item>
+        <item>📉 Vasat Getiri</item>
+        <item>🕸️ Tozlu Portföy</item>
+        <item>🧳 Vintage Çanta</item>
+        <item>👻 Hayalet Kazanç</item>
+        <item>🐂 Yanılsamalı Boğa</item>
+        <item>🛒 Seri Dip Alıcı</item>
+        <item>💼 Premium Çanta Taşıyıcı</item>
+        <item>🤨 Şüpheli Getiri</item>
+        <item>♾️ Sonsuz Dip</item>
+        <item>💭 Ödünç İnanç</item>
+        <item>🦍 Kuantum Maymun</item>
+        <item>🔍 Paranoyak Düğüm</item>
+        <item>🛋️ Tembel Staker</item>
+        <item>☕ Kafeinli Doğrulayıcı</item>
+        <item>🔮 Meteliksiz Kahin</item>
+        <item>😴 Uykulu Doğrulayıcı</item>
+        <item>🎲 Rastlantısal Dahi</item>
+        <item>🔐 İsteksiz Hodler</item>
+        <item>🤑 Açgözlü Kahin</item>
+        <item>😵 Kafası Karışık Arbitraj</item>
+        <item>🏃 Çılgın Borsa</item>
+        <item>🪢 Çakılmış Temel</item>
+        <item>🌉 Şüpheli Köprü</item>
+        <item>⛽ Aşırı Ücretler</item>
+        <item>🌶️ Acı Teminat</item>
+        <item>🚌 Tıkış Tıkış Mempool</item>
+        <item>💨 Dumanlı Başlangıç</item>
+        <item>🕯️ Lanetli Portföy</item>
+        <item>⌛ Sonsuz Sabır</item>
+        <item>🥶 Donmuş Dayanma</item>
+        <item>💊 Sentetik Cesaret</item>
+        <item>🎖️ Asil Köylü</item>
+        <item>⚡ Geçici Milyoner</item>
+        <item>🗺️ Stratejik Yoksulluk</item>
+        <item>😊 Neşeli Batma</item>
+        <item>🏰 Pervasız Kale</item>
+        <item>🎰 Degen Cenneti</item>
+        <item>🙏 Alçakgönüllü Enkaz</item>
+        <item>💎 Elmas Eller</item>
+        <item>🃏 Kağıt Eller</item>
+        <item>🌙 Ay Yanılsaması</item>
+        <item>🚿 Yıkanmış Trader</item>
+        <item>🤏 Küçücük Pozisyon</item>
+        <item>🎯 Şanslı Tahmin</item>
+        <item>🌊 Su Altı Pozisyonu</item>
+        <item>💤 Uyuyan Dev</item>
+        <item>🎪 Gezici Sirk</item>
+        <item>🧸 Duygusal Hedge</item>
+        <item>🐯 Kağıt Kaplan</item>
+        <item>🔁 Özyinelemeli Kazanç</item>
+        <item>🥴 Baş Döndürücü Getiri</item>
+        <item>🏚️ Hacizli Çiftlik</item>
+        <item>🤫 Sessiz Balina</item>
+        <item>🌅 Sahte Şafak</item>
+        <item>📊 Rastgele Yürüyüş</item>
+        <item>🌋 Değişken Dağ</item>
+        <item>🎁 Sürpriz Tasfiye</item>
+        <item>🏄 Riskli Yolculuk</item>
+        <item>🧲 Manyetik Kayıp</item>
+        <item>🏋️ Ağır Çanta</item>
+        <item>🎈 Şişirilmiş Getiri</item>
+        <item>🧪 Deneysel Fon</item>
+        <item>🌸 Kırılgan Pozisyon</item>
+        <item>🧋 Köpüklü Token</item>
+        <item>🏆 Katılım Kupası</item>
+        <item>🌝 Dolunay Fonu</item>
+        <item>🐸 Nadir Pepe</item>
+        <item>🧟 Zombi Token</item>
+        <item>🦄 Efsanevi Kazanç</item>
+        <item>🥊 Dövüş Şansı</item>
+        <item>🌟 Mutlu Cehalet</item>
+        <item>🦆 Lastik Ördek</item>
+        <item>🎋 Bambu Protokolü</item>
+        <item>🏴‍☠️ Korsan Hazinesi</item>
+        <item>🪄 Sihirli Likidite</item>
+        <item>🏊 Su Altı Kasa</item>
+        <item>🎊 Şanslı Tasfiye</item>
+        <item>🦋 Kelebek Etkisi</item>
+        <item>🎸 Fişi Çekilmiş Kasa</item>
+        <item>💥 Patlayıcı Getiri</item>
+        <item>🧠 Pürüzsüz Beyin</item>
+        <item>🪦 Ölü Havuz</item>
+        <item>🎡 Döngüsel Ekonomi</item>
+        <item>🧘 Zen Tasfiyesi</item>
+        <item>📌 Kaçırılan Dip</item>
+        <item>🏴 Karanlık Orman</item>
+        <item>😎 Kendine Güvenen Kaybeden</item>
+        <item>🌪️ Kaotik Getiri</item>
+        <item>🧬 Mutant Protokol</item>
+        <item>🍕 Aç Cüzdan</item>
+        <item>🎭 Ödünç Ay</item>
+    </string-array>
+
     <string name="Balance_Receive_BackupRequired_Description">%1$s yedeğini almanız gerekiyor</string>
     <!--Network Settings-->
     <!-- Show Key -->

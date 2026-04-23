@@ -313,7 +313,7 @@ class SwapViewModel(
 
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
     private fun reQuote() = quoteService.reQuote()
-    fun onActionStarted() = quoteService.onActionStarted()
+    fun onActionStarted(quote: SwapProviderQuote?) = quoteService.onActionStarted(quote)
     fun onActionCompleted() = quoteService.onActionCompleted()
 
     fun startProceed() {
@@ -353,7 +353,7 @@ class SwapViewModel(
     fun getCurrentQuote() = quoteState.quote
     fun onResume() {
         requoteOnTimeout = true
-        quoteService.restart()
+        quoteService.restart(::requoteIfTimeout)
     }
 
     fun onPause() {

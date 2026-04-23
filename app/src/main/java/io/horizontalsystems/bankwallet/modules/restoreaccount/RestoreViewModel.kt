@@ -16,7 +16,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class RestoreViewModel: ViewModelUiState<RestoreViewModel.UiState>() {
+class RestoreViewModel(): ViewModelUiState<RestoreViewModel.UiState>() {
     private val marketKit = App.marketKit
     private val accountFactory = App.accountFactory
     private val accountManager = App.accountManager
@@ -47,6 +47,20 @@ class RestoreViewModel: ViewModelUiState<RestoreViewModel.UiState>() {
 
     private var openSelectCoinsScreen = false
     private var restored = false
+
+    constructor(
+        accountType: AccountType? = null,
+        accountName: String = "",
+        manualBackup: Boolean = false,
+        fileBackup: Boolean = false,
+        statPage: StatPage? = null
+    ) : this() {
+        this.accountType = accountType
+        this.accountName = accountName
+        this.manualBackup = manualBackup
+        this.fileBackup = fileBackup
+        this.statPage = statPage
+    }
 
     override fun createState() = UiState(
         openSelectCoinsScreen = openSelectCoinsScreen,

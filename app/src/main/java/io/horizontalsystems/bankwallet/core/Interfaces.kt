@@ -111,6 +111,7 @@ interface ILocalStorage {
     var balanceTotalCoinUid: String?
     var termsAccepted: Boolean
     var swapTermsAccepted: Boolean
+    var passkeyTermsAccepted: Boolean
     var checkedTerms: List<String>
     var mainShowedOnce: Boolean
     var notificationId: String?
@@ -191,6 +192,7 @@ interface IAccountManager {
     fun setLevel(level: Int)
     fun updateAccountLevels(accountIds: List<String>, level: Int)
     fun updateMaxLevel(level: Int)
+    fun getRandomWalletName(): String
 }
 
 interface IBackupManager {

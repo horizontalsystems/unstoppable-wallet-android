@@ -6,25 +6,29 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_andy
 import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_leah
 
 @Composable
-fun SectionHeaderAndy(
+fun SectionHeaderColored(
+    modifier: Modifier = Modifier,
+    color: Color = ComposeAppTheme.colors.andy,
     title: String,
     icon: Int? = null,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(54.dp)
-            .padding(top = 24.dp, start = 16.dp, end = 16.dp),
+            .padding(top = 24.dp, start = 16.dp, end = 16.dp, bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         icon?.let {
@@ -35,7 +39,11 @@ fun SectionHeaderAndy(
             )
             HSpacer(8.dp)
         }
-        subheadSB_andy(text = title)
+        Text(
+            text = title,
+            style = ComposeAppTheme.typography.subheadSB,
+            color = color,
+        )
     }
 }
 

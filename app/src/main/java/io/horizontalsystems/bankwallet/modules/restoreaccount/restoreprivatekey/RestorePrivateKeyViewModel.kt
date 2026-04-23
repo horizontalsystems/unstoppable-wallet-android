@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.IAccountFactory
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.hexToByteArray
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -19,13 +19,12 @@ import io.horizontalsystems.stellarkit.StellarKit
 import java.math.BigInteger
 
 class RestorePrivateKeyViewModel(
-    accountFactory: IAccountFactory,
+    private val accountManager: IAccountManager,
 ) : ViewModel() {
 
-    val defaultName = accountFactory.getNextAccountName()
-    var accountName: String = defaultName
-        get() = field.ifBlank { defaultName }
-        private set
+    val defaultName = accountManager.getRandomWalletName()
+    private var _accountName: String by mutableStateOf(defaultName)
+    val accountName: String get() = _accountName
 
     private var text = ""
 
@@ -33,7 +32,11 @@ class RestorePrivateKeyViewModel(
         private set
 
     fun onEnterName(name: String) {
-        accountName = name
+        _accountName = name
+    }
+
+    fun generateRandomAccountName() {
+        _accountName = accountManager.getRandomWalletName()
     }
 
     fun onEnterPrivateKey(input: String) {
@@ -92,23 +95,19 @@ class RestorePrivateKeyViewModel(
 
     private fun getValidPrivateKey(privateKeyHex: String): BigInteger? {
         try {
-            //key should be 32 bytes long
             privateKeyHex.hexToByteArray().let {
                 if (it.size != 32) {
                     return null
                 }
             }
 
-            // Convert the hex private key to a BigInteger
             val privateKeyBigInt = BigInteger(privateKeyHex, 16)
 
-            // Define the order of the secp256k1 curve (n)
             val secp256k1Order = BigInteger(
                 "fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
                 16
             )
 
-            // Check if the private key is greater than zero and less than the order
             return if (privateKeyBigInt > BigInteger.ZERO && privateKeyBigInt < secp256k1Order) {
                 privateKeyBigInt
             } else {

@@ -4,8 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.reown.walletkit.client.Wallet.Params.Pair
-import com.reown.walletkit.client.WalletKit
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
@@ -29,6 +27,7 @@ import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
+import io.horizontalsystems.dapp.core.DAppManager
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
@@ -300,7 +299,12 @@ class BalanceViewModel(
             } else {
                 val wcUriVersion = WalletConnectListModule.getVersionFromUri(scannedText)
                 if (wcUriVersion == 2) {
-                    handleWalletConnectRequest(scannedText)
+                    if (DAppManager.isAvailable) {
+                        handleWalletConnectRequest(scannedText)
+                    } else {
+                        errorMessage = Translator.getString(R.string.Balance_Error_InvalidQrCode)
+                        emitState()
+                    }
                 } else {
                     handleAddressData(scannedText)
                 }
@@ -372,13 +376,10 @@ class BalanceViewModel(
     }
 
     fun connectWC(uri: String) {
-        WalletKit.pair(Pair(uri.trim()),
-            onSuccess = {
-                connectionResult = null
-            },
-            onError = {
-                connectionResult = WalletConnectListViewModel.ConnectionResult.Error
-            }
+        DAppManager.pair(
+            uri = uri.trim(),
+            onSuccess = { connectionResult = null },
+            onError = { connectionResult = WalletConnectListViewModel.ConnectionResult.Error }
         )
     }
 

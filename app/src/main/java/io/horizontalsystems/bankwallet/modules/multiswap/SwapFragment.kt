@@ -260,7 +260,7 @@ fun SwapScreen(
         },
         onClickNext = viewModel::startProceed,
         onActionStarted = {
-            viewModel.onActionStarted()
+            viewModel.onActionStarted(uiState.quote)
         },
         onActionCompleted = {
             viewModel.onActionCompleted()

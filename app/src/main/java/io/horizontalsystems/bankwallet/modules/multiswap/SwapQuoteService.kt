@@ -56,12 +56,11 @@ class SwapQuoteService {
         }
     }
 
-    fun restart() {
-        quotingJob?.cancel()
+    fun restart(onRestart: () -> Unit) {
         startProvidersJob?.cancel()
         startProvidersJob = coroutineScope.launch {
             startProviders()
-            runQuotation(silent = true)
+            onRestart()
         }
     }
 
@@ -221,7 +220,7 @@ class SwapQuoteService {
         runQuotation(silent = true)
     }
 
-    fun onActionStarted() {
+    fun onActionStarted(quote: SwapProviderQuote?) {
         preferredProvider = quote?.provider
     }
 

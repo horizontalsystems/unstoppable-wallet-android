@@ -26,7 +26,7 @@ android {
         applicationId = "io.horizontalsystems.bankwallet"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.compileSdk.get().toInt()
-        versionCode = 165
+        versionCode = 167
         versionName = "0.49.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -61,7 +61,7 @@ android {
     }
 
     signingConfigs {
-        create("appCenter") {
+        create("test") {
             storeFile = file("./test.keystore")
             storePassword = "testKeystore123"
             keyAlias = "testKeystore"
@@ -79,7 +79,6 @@ android {
     productFlavors {
         create("base") {
             dimension = "distribution"
-            signingConfig = signingConfigs.getByName("debug")
             resValue("string", "uswapApiKey", uswapApiKeyAndroid)
             resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressAndroid)
         }
@@ -95,7 +94,7 @@ android {
             dimension = "distribution"
             applicationIdSuffix = ".fdroidci"
             buildConfigField("boolean", "FDROID_BUILD", "true")
-            signingConfig = signingConfigs.getByName("appCenter")
+            signingConfig = signingConfigs.getByName("test")
             resValue("string", "uswapApiKey", uswapApiKeyFdroid)
             resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressFdroid)
         }
@@ -104,7 +103,7 @@ android {
             dimension = "distribution"
             applicationIdSuffix = ".appcenter"
             versionCode = System.getenv("BUILD_NUMBER")?.toIntOrNull() ?: defaultConfig.versionCode
-            signingConfig = signingConfigs.getByName("appCenter")
+            signingConfig = signingConfigs.getByName("test")
             resValue("string", "uswapApiKey", uswapApiKeyAndroid)
             resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressAndroid)
         }
@@ -112,7 +111,7 @@ android {
 
     buildTypes {
         debug {
-            signingConfig = null
+            signingConfig = signingConfigs.getByName("test")
             isDebuggable = true
             isMinifyEnabled = false
             applicationIdSuffix = ".dev"
@@ -135,7 +134,6 @@ android {
             resValue("string", "trongridApiKeys", "33374494-8060-447e-8367-90c5efd4ed95")
             resValue("string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz")
             resValue("string", "oneInchApiKey", "3EttyCzgWb2GLFIRoPIUYM0M4uKAVEcq")
-            resValue("string", "cryptoCompareApiKey", "c8de383886270c3aef172dc56db0fb6cf8dcfc75d415eaf8ed37341b862ea3c2")
             resValue("string", "blocksDecodedEthereumRpc", "https://api-dev.blocksdecoded.com/v1/ethereum-rpc/mainnet")
             resValue("string", "chainalysisBaseUrl", "https://public.chainalysis.com/api/v1/")
             resValue("string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4")
@@ -167,7 +165,6 @@ android {
             resValue("string", "trongridApiKeys", "8f5ae2c8-8012-42a8-b0ca-ffc2741f6a29,578aa64f-a79f-4ee8-86e9-e9860e2d050a,1e92f1fc-41f8-401f-a7f6-5b719b6f1280,d1511874-1547-48df-9536-a32cc85949ac")
             resValue("string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz")
             resValue("string", "oneInchApiKey", "3EttyCzgWb2GLFIRoPIUYM0M4uKAVEcq")
-            resValue("string", "cryptoCompareApiKey", "c8de383886270c3aef172dc56db0fb6cf8dcfc75d415eaf8ed37341b862ea3c2")
             resValue("string", "blocksDecodedEthereumRpc", "https://api.blocksdecoded.com/v1/ethereum-rpc/mainnet")
             resValue("string", "chainalysisBaseUrl", "https://public.chainalysis.com/api/v1/")
             resValue("string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4")
@@ -209,7 +206,7 @@ android {
 
     configurations.all {
         resolutionStrategy.dependencySubstitution {
-            substitute(module("org.bouncycastle:bcprov-jdk15to18:1.68")).using(module("org.bouncycastle:bcprov-jdk15on:1.65"))
+            substitute(module("org.bouncycastle:bcprov-jdk15to18:1.68")).using(module("org.bouncycastle:bcprov-jdk15on:1.70"))
             substitute(module("com.google.protobuf:protobuf-java:3.6.1")).using(module("com.google.protobuf:protobuf-javalite:3.21.1"))
             substitute(module("net.jcip:jcip-annotations:1.0")).using(module("com.github.stephenc.jcip:jcip-annotations:1.0-1"))
 
@@ -248,6 +245,7 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.biometric)
+    implementation(libs.androidx.credentials)
 
     // Lifecycle
     implementation(libs.androidx.lifecycle.extensions)
@@ -331,15 +329,6 @@ dependencies {
     api(libs.zxing)
     implementation(libs.qrose)
 
-    // Reown (WalletConnect)
-    implementation(platform(libs.reown.bom))
-    implementation(libs.reown.walletkit) {
-        exclude(group = "com.google.firebase")
-    }
-    implementation(libs.reown.android.core) {
-        exclude(group = "com.google.firebase")
-    }
-
     // Web3
     implementation(libs.web3j)
     implementation(libs.unstoppable.domains)
@@ -355,6 +344,9 @@ dependencies {
     implementation(libs.kit.solana)
     implementation(libs.kit.tron)
     implementation(libs.kit.zcash)
+
+    // BouncyCastle
+    implementation(libs.bouncycastle)
 
     // Binance
     implementation(libs.binance.connector) {
@@ -386,6 +378,7 @@ dependencies {
     implementation(project(":components:chartview"))
 
     implementation(project(":subscriptions-core"))
+    implementation(project(":dapp-core"))
 
     // UI Tests
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
@@ -415,6 +408,16 @@ afterEvaluate {
         "fdroidImplementation"(project(":subscriptions-fdroid"))
         "fdroidCiImplementation"(project(":subscriptions-fdroid"))
         "ciImplementation"(project(":subscriptions-dev"))
+
+        findProject(":dapp-wallet-connect")?.let {
+            "baseDebugImplementation"(it)
+            "baseReleaseImplementation"(it)
+            "ciImplementation"(it)
+        }
+
+        "baseDebugImplementation"(libs.androidx.credentials.play.services.auth)
+        "baseReleaseImplementation"(libs.androidx.credentials.play.services.auth)
+        "ciImplementation"(libs.androidx.credentials.play.services.auth)
     }
 }
 

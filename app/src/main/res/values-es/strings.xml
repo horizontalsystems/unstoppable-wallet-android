@@ -666,7 +666,7 @@
     <string name="RiskLevel_ProviderRiskLevel">Niveles de riesgo de proveedor</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">Las etiquetas a continuación explican diferentes niveles de riesgo de proveedores de swap. Elija en consecuencia.</string>
     <string name="RiskLevel_Auto_Description">Ejecución automática en cadena. Los fondos no se pueden congelar o bloquear después de la presentación. Si el intercambio falla los los fondos se reembolsarán automáticamente.</string>
-    <string name="RiskLevel_Limited_Description">El proveedor opera con su propia liquidez. Los rechazos son raros. Los congeladores son teóricamente posibles pero muy improbables.</string>
+    <string name="RiskLevel_Flexible_Description">El proveedor opera con su propia liquidez. Los rechazos son raros. Los congeladores son teóricamente posibles pero muy improbables.</string>
     <string name="RiskLevel_Controlled_Description">Este proveedor opera con liquidez de terceros y tiene políticas AML en vigor. En la mayoría de los casos, los swaps son rechazados y reembolsados si se detecta algún problema con AML. En algunas situaciones el proveedor puede solicitar KYC antes de liberar fondos.</string>
     <string name="RiskLevel_Precheck_Description">El proveedor realiza su propio análisis de direcciones de intercambio previo de procesamiento. Los rechazos son poco frecuentes.</string>
     <!-- Swap Confirmation -->
@@ -1171,6 +1171,110 @@
     <string name="ManageAccount_Wallets">Monederos</string>
     <string name="ManageAccount_WatchAddresses">Ver Monedero</string>
     <string name="ManageAccount_DeleteWarning">¿Quieres dejar de ver esta dirección de billetera?</string>
+
+    <string-array name="wallet_names">
+        <item>😰 Bóveda Sudorosa</item>
+        <item>🧂 Libro Mayor Salado</item>
+        <item>💧 Definitivamente Líquido</item>
+        <item>⏳ Transacción Pendiente</item>
+        <item>🌈 Ganancias Imaginarias</item>
+        <item>🤡 Vinculación Tambaleante</item>
+        <item>😤 Cope Máximo</item>
+        <item>☠️ Rekt Certificado</item>
+        <item>👑 Corona Insolvente</item>
+        <item>📉 Retornos Mediocres</item>
+        <item>🕸️ Cartera Polvorienta</item>
+        <item>🧳 Bolsa Vintage</item>
+        <item>👻 Ganancias Fantasma</item>
+        <item>🐂 Toro Ilusorio</item>
+        <item>🛒 Comprador Compulsivo</item>
+        <item>💼 Bagholder Premium</item>
+        <item>🤨 Rendimiento Sospechoso</item>
+        <item>♾️ Caída Eterna</item>
+        <item>💭 Convicción Prestada</item>
+        <item>🦍 Simio Cuántico</item>
+        <item>🔍 Nodo Paranoico</item>
+        <item>🛋️ Staker Perezoso</item>
+        <item>☕ Validador Cafeínado</item>
+        <item>🔮 Oráculo Arruinado</item>
+        <item>😴 Validador Soñoliento</item>
+        <item>🎲 Genio Accidental</item>
+        <item>🔐 Hodler Reticente</item>
+        <item>🤑 Oráculo Codicioso</item>
+        <item>😵 Arbitraje Confuso</item>
+        <item>🏃 Intercambio Frenético</item>
+        <item>🪢 Fundación Engañada</item>
+        <item>🌉 Puente Sospechoso</item>
+        <item>⛽ Comisiones Escandalosas</item>
+        <item>🌶️ Colateral Picante</item>
+        <item>🚌 Mempool Saturado</item>
+        <item>💨 Génesis Humeante</item>
+        <item>🕯️ Cartera Embrujada</item>
+        <item>⌛ Paciencia Infinita</item>
+        <item>🥶 Cope Congelado</item>
+        <item>💊 Valentía Sintética</item>
+        <item>🎖️ Campesino Noble</item>
+        <item>⚡ Millonario Temporal</item>
+        <item>🗺️ Pobreza Estratégica</item>
+        <item>😊 Rekt Alegre</item>
+        <item>🏰 Ciudadela Temeraria</item>
+        <item>🎰 Paraíso Degen</item>
+        <item>🙏 Ruina Humilde</item>
+        <item>💎 Manos de Diamante</item>
+        <item>🃏 Manos de Papel</item>
+        <item>🌙 Ilusión Lunar</item>
+        <item>🚿 Trader Liquidado</item>
+        <item>🤏 Asignación Diminuta</item>
+        <item>🎯 Adivinanza Afortunada</item>
+        <item>🌊 Posición Sumergida</item>
+        <item>💤 Gigante Dormido</item>
+        <item>🎪 Circo Itinerante</item>
+        <item>🧸 Cobertura Emocional</item>
+        <item>🐯 Tigre de Papel</item>
+        <item>🔁 Ganancias Recursivas</item>
+        <item>🥴 Retornos Mareantes</item>
+        <item>🏚️ Granja Embargada</item>
+        <item>🤫 Ballena Silenciosa</item>
+        <item>🌅 Amanecer Falso</item>
+        <item>📊 Paseo Aleatorio</item>
+        <item>🌋 Montaña Volátil</item>
+        <item>🎁 Liquidación Sorpresa</item>
+        <item>🏄 Viaje Arriesgado</item>
+        <item>🧲 Pérdida Magnética</item>
+        <item>🏋️ Bolsa Pesada</item>
+        <item>🎈 Retornos Inflados</item>
+        <item>🧪 Fondo Experimental</item>
+        <item>🌸 Posición Frágil</item>
+        <item>🧋 Token Burbujeante</item>
+        <item>🏆 Trofeo de Participación</item>
+        <item>🌝 Fondo Luna Llena</item>
+        <item>🐸 Pepe Raro</item>
+        <item>🧟 Token Zombi</item>
+        <item>🦄 Ganancias Míticas</item>
+        <item>🥊 Oportunidad de Lucha</item>
+        <item>🌟 Ignorancia Feliz</item>
+        <item>🦆 Pato de Goma</item>
+        <item>🎋 Protocolo Bambú</item>
+        <item>🏴‍☠️ Tesoro Pirata</item>
+        <item>🪄 Liquidez Mágica</item>
+        <item>🏊 Bóveda Sumergida</item>
+        <item>🎊 Liquidación Afortunada</item>
+        <item>🦋 Efecto Mariposa</item>
+        <item>🎸 Bóveda Desenchufada</item>
+        <item>💥 Retornos Explosivos</item>
+        <item>🧠 Cerebro Suavizado</item>
+        <item>🪦 Pool Muerto</item>
+        <item>🎡 Economía Circular</item>
+        <item>🧘 Liquidación Zen</item>
+        <item>📌 Suelo Perdido</item>
+        <item>🏴 Bosque Oscuro</item>
+        <item>😎 Perdedor Seguro</item>
+        <item>🌪️ Rendimiento Caótico</item>
+        <item>🧬 Protocolo Mutante</item>
+        <item>🍕 Billetera Hambrienta</item>
+        <item>🎭 Luna Prestada</item>
+    </string-array>
+
     <string name="Balance_Receive_BackupRequired_Description">Necesitas hacer una copia de seguridad %1$s</string>
     <!--Network Settings-->
     <!-- Show Key -->

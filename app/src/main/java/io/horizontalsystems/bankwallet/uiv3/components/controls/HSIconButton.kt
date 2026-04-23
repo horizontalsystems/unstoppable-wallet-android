@@ -56,6 +56,43 @@ fun HSIconButton(
 }
 
 @Composable
+fun HSIconButtonTinted(
+    variant: ButtonVariant = ButtonVariant.Primary,
+    style: ButtonStyle = ButtonStyle.Solid,
+    size: ButtonSize = ButtonSize.Medium,
+    icon: Painter,
+    iconTint: Color,
+    contentDescription: String? = null,
+    enabled: Boolean = true,
+    onClick: () -> Unit
+) {
+    val buttonProps = getButtonProps(size, style, variant)
+
+    Button(
+        modifier = Modifier.size(buttonProps.buttonSize),
+        shape = RoundedCornerShape(percent = 50),
+        onClick = onClick,
+        colors = ButtonPrimaryDefaults.textButtonColors(
+            backgroundColor = buttonProps.backgroundColor,
+            contentColor = buttonProps.contentColor,
+            disabledBackgroundColor = buttonProps.disabledBackgroundColor,
+            disabledContentColor = buttonProps.disabledContentColor,
+        ),
+        enabled = enabled,
+        contentPadding = PaddingValues(0.dp),
+        elevation = null
+    ) {
+        Icon(
+            modifier = Modifier.size(buttonProps.iconSize),
+            painter = icon,
+            tint = iconTint,
+            contentDescription = contentDescription,
+        )
+    }
+}
+
+
+@Composable
 private fun getButtonProps(size: ButtonSize, style: ButtonStyle, variant: ButtonVariant): IconButtonProps {
     val buttonSize = when (size) {
         ButtonSize.Medium -> 56.dp

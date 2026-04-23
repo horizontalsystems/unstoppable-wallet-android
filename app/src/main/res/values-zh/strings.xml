@@ -665,7 +665,7 @@
     <string name="RiskLevel_ProviderRiskLevel">提供商风险级别</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">下面的标签解释交换供应商的不同风险等级。相应选择。</string>
     <string name="RiskLevel_Auto_Description">自动在链上执行。资金提交后不能冻结或冻结。如果交换失败，资金自动退还。</string>
-    <string name="RiskLevel_Limited_Description">提供商使用自己的流动性进行操作。拒绝是罕见的。冻结在理论上是可能的，但极不可能。</string>
+    <string name="RiskLevel_Flexible_Description">提供商使用自己的流动性进行操作。拒绝是罕见的。冻结在理论上是可能的，但极不可能。</string>
     <string name="RiskLevel_Controlled_Description">这些供应商以第三方流动资金运作，并制定了反洗钱政策。 在大多数情况下，如果发现任何AML问题，互换交易都会被拒绝并退还。在有些情况下，提供者可能会在释放资金之前请求了解青年。</string>
     <string name="RiskLevel_Precheck_Description">提供商自己的地址先筛选处理器。拒绝是罕见的。冻结在理论上是可能的，但极不可能。</string>
     <!-- Swap Confirmation -->
@@ -1170,6 +1170,110 @@
     <string name="ManageAccount_Wallets">钱包</string>
     <string name="ManageAccount_WatchAddresses">观察地址</string>
     <string name="ManageAccount_DeleteWarning">您要停止监视这个钱包地址吗？</string>
+
+    <string-array name="wallet_names">
+        <item>😰 汗流浃背的金库</item>
+        <item>🧂 腌制账本</item>
+        <item>💧 绝对流动</item>
+        <item>⏳ 待处理交易</item>
+        <item>🌈 想象中的利润</item>
+        <item>🤡 摇摇欲坠的锚</item>
+        <item>😤 极限硬扛</item>
+        <item>☠️ 认证归零</item>
+        <item>👑 破产皇冠</item>
+        <item>📉 平庸回报</item>
+        <item>🕸️ 积灰投资组合</item>
+        <item>🧳 复古币袋</item>
+        <item>👻 幻影收益</item>
+        <item>🐂 妄想牛市</item>
+        <item>🛒 连环低吸</item>
+        <item>💼 高端套牢者</item>
+        <item>🤨 可疑收益</item>
+        <item>♾️ 永恒下跌</item>
+        <item>💭 借来的信念</item>
+        <item>🦍 量子猿猴</item>
+        <item>🔍 偏执节点</item>
+        <item>🛋️ 懒惰质押者</item>
+        <item>☕ 咖啡因验证者</item>
+        <item>🔮 破产预言机</item>
+        <item>😴 瞌睡验证者</item>
+        <item>🎲 意外天才</item>
+        <item>🔐 勉强持有者</item>
+        <item>🤑 贪婪预言机</item>
+        <item>😵 混乱套利</item>
+        <item>🏃 疯狂交易所</item>
+        <item>🪢 被砸的基础</item>
+        <item>🌉 可疑跨链桥</item>
+        <item>⛽ 离谱手续费</item>
+        <item>🌶️ 辛辣抵押品</item>
+        <item>🚌 拥堵内存池</item>
+        <item>💨 烟雾创世</item>
+        <item>🕯️ 闹鬼投资组合</item>
+        <item>⌛ 无限耐心</item>
+        <item>🥶 冻结硬扛</item>
+        <item>💊 合成勇气</item>
+        <item>🎖️ 高贵农民</item>
+        <item>⚡ 临时百万富翁</item>
+        <item>🗺️ 战略性贫困</item>
+        <item>😊 快乐归零</item>
+        <item>🏰 鲁莽堡垒</item>
+        <item>🎰 赌狗天堂</item>
+        <item>🙏 谦逊废墟</item>
+        <item>💎 钻石手</item>
+        <item>🃏 纸手</item>
+        <item>🌙 月亮幻觉</item>
+        <item>🚿 已洗劫交易者</item>
+        <item>🤏 微小仓位</item>
+        <item>🎯 幸运猜测</item>
+        <item>🌊 水下仓位</item>
+        <item>💤 沉睡巨人</item>
+        <item>🎪 流浪马戏团</item>
+        <item>🧸 情绪化对冲</item>
+        <item>🐯 纸老虎</item>
+        <item>🔁 递归收益</item>
+        <item>🥴 晕眩回报</item>
+        <item>🏚️ 被没收的农场</item>
+        <item>🤫 沉默的巨鲸</item>
+        <item>🌅 虚假黎明</item>
+        <item>📊 随机漫步</item>
+        <item>🌋 波动火山</item>
+        <item>🎁 惊喜清算</item>
+        <item>🏄 冒险之旅</item>
+        <item>🧲 磁性亏损</item>
+        <item>🏋️ 沉重的袋子</item>
+        <item>🎈 虚高回报</item>
+        <item>🧪 实验性基金</item>
+        <item>🌸 脆弱仓位</item>
+        <item>🧋 泡泡代币</item>
+        <item>🏆 参与奖杯</item>
+        <item>🌝 满月基金</item>
+        <item>🐸 稀有青蛙</item>
+        <item>🧟 僵尸代币</item>
+        <item>🦄 神话收益</item>
+        <item>🥊 搏一搏</item>
+        <item>🌟 无知的幸福</item>
+        <item>🦆 橡皮鸭</item>
+        <item>🎋 竹子协议</item>
+        <item>🏴‍☠️ 海盗金库</item>
+        <item>🪄 魔法流动性</item>
+        <item>🏊 水下金库</item>
+        <item>🎊 幸运清算</item>
+        <item>🦋 蝴蝶效应</item>
+        <item>🎸 断电金库</item>
+        <item>💥 爆炸性回报</item>
+        <item>🧠 光滑大脑</item>
+        <item>🪦 死亡池</item>
+        <item>🎡 循环经济</item>
+        <item>🧘 禅意清算</item>
+        <item>📌 错过底部</item>
+        <item>🏴 黑暗森林</item>
+        <item>😎 自信的输家</item>
+        <item>🌪️ 混沌收益</item>
+        <item>🧬 变异协议</item>
+        <item>🍕 饥饿钱包</item>
+        <item>🎭 借来的月亮</item>
+    </string-array>
+
     <string name="Balance_Receive_BackupRequired_Description">您需要备份 %1$s</string>
     <!--Network Settings-->
     <!-- Show Key -->

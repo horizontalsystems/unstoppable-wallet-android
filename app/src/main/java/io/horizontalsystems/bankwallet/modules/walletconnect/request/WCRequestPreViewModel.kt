@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.reown.walletkit.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
+import io.horizontalsystems.dapp.core.HSDAppRequest
 
 class WCRequestPreViewModel : ViewModelUiState<DataState<WCRequestPreUiState>>() {
     private val sessionRequest = WCDelegate.sessionRequestEvent
@@ -41,5 +41,5 @@ class WCRequestPreViewModel : ViewModelUiState<DataState<WCRequestPreUiState>>()
 
 data class WCRequestPreUiState(
     val wcAction: AbstractWCAction,
-    val sessionRequest: Wallet.Model.SessionRequest
+    val sessionRequest: HSDAppRequest
 )

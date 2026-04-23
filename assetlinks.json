@@ -1,0 +1,42 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_sign_in_with"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.horizontalsystems.bankwallet",
+      "sha256_cert_fingerprints": [
+        "C1:89:94:93:E4:40:48:91:78:B8:74:88:51:B7:2C:BE:D5:0C:28:2A:AA:8C:03:AE:23:6A:46:52:F8:C4:F2:7B"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_sign_in_with"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.horizontalsystems.bankwallet.appcenter",
+      "sha256_cert_fingerprints": [
+        "31:30:A8:11:2B:82:0C:09:1E:45:0B:8F:E0:AB:9F:15:4B:3C:E9:85:B5:4B:F8:DE:FB:24:E1:7A:5D:1C:71:17"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_sign_in_with"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "io.horizontalsystems.bankwallet.dev",
+      "sha256_cert_fingerprints": [
+        "31:30:A8:11:2B:82:0C:09:1E:45:0B:8F:E0:AB:9F:15:4B:3C:E9:85:B5:4B:F8:DE:FB:24:E1:7A:5D:1C:71:17",
+        "E7:C4:06:1F:0E:3A:BD:82:BD:C3:54:8C:61:70:6C:92:78:3A:BF:07:8A:10:8F:C0:27:F5:6A:A6:DD:1B:D2:6C"
+      ]
+    }
+  }
+]

@@ -65,7 +65,7 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.CONTROLLED,
+        RiskLevel.FLEXIBLE,
         false
     ),
     Swapuz(
@@ -76,7 +76,7 @@ enum class UProvider(
         false,
         false,
         true,
-        RiskLevel.LIMITED,
+        RiskLevel.FLEXIBLE,
         false
     ),
     Barter(

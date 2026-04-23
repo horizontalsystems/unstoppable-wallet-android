@@ -1,5 +1,7 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountCleaner
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAccountsStorage
@@ -168,6 +170,12 @@ class AccountManager(
             accountCleaner.clearAccounts(storage.getDeletedAccountIds())
             storage.clearDeleted()
         }
+    }
+
+    override fun getRandomWalletName(): String {
+        val existingNames = accounts.map { it.name }.toSet()
+        val all = App.instance.localizedContext().resources.getStringArray(R.array.wallet_names)
+        return all.filter { it !in existingNames }.randomOrNull() ?: all.random()
     }
 
 }

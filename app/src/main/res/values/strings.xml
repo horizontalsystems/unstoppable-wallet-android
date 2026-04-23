@@ -42,6 +42,7 @@
     <string name="Button_Save">Save</string>
     <string name="Button_IAgree">I Agree</string>
     <string name="Button_Continue">Continue</string>
+    <string name="Button_UnderstandAndContinue">I Understand and Continue</string>
     <string name="Button_Search">Search</string>
     <string name="Button_Back">Back</string>
     <string name="Button_Copy">Copy</string>
@@ -100,14 +101,19 @@
     <string name="CreateWallet_Mnemonic">Recovery Phrase</string>
     <string name="CreateWallet_Wordlist">Word List</string>
     <string name="Passphrase">Passphrase</string>
+    <string name="Passphrase_Placeholder">Passphrase (optional)</string>
     <string name="Password">Password</string>
     <string name="ConfirmPassphrase">Confirm</string>
     <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
     <string name="CreateWallet_N_Words">%s words</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
-    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
+    <string name="CreateWallet_Error_InvalidConfirmation">Passphrase doesn’t match</string>
     <string name="CreateWallet_PassphraseDescription">Passphrases provide an additional layer of security for wallets.When restoring a wallet protected by a passphrase, the user must provide both the recovery phrase and the passphrase.\n\nPassphrases also allow users to create multiple independent multi-coin wallets from the same mnemonic, simply by using different passphrases.</string>
+    <string name="CreateWallet_AdvancedOptions">Advanced Options</string>
+    <string name="CreateWallet_PassphraseOptional">Passphrase (optional)</string>
+    <string name="CreateWallet_AddPassphrase">Add Passphrase</string>
+    <string name="CreateWallet_PassphraseShortDescription">Adds extra protection to your wallet. Required with your recovery phrase to restore access.</string>
 
     <!--Languages-->
     <string name="Language_English">English</string>
@@ -136,10 +142,10 @@
 
     <!--Restore-->
     <string name="Restore_Advanced_Title">Advanced</string>
-    <string name="Restore_Error_MnemonicWordCount">Wrong words count. It must be between 12 or 24 words. You entered: %d</string>
+    <string name="Restore_Error_MnemonicWordCount">Recovery phrase must contain at least 12 words.</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
-    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
+    <string name="Restore_PassphraseDescription">If you used a passphrase, enter it here. Using a different one will create a new wallet.</string>
     <string name="Restore_Title">Choose Blockchains</string>
     <string name="Restore_By">Import By</string>
     <string name="Restore_RestoreBy">Import By</string>
@@ -785,13 +791,21 @@
     <string name="RiskLevel_ProviderRiskLevel">Provider Risk Levels</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">The labels below explain different risk levels of swap providers. Choose accordingly.</string>
     <string name="RiskLevel_Auto_Description">Automatic on-chain execution. Funds cannot be frozen or blocked after submission. If swap fails the funds are refunded automatically.</string>
-    <string name="RiskLevel_Limited_Description">Provider operates using their own liquidity. Rejections are rare. Freezes are theoretically possible but highly unlikely.</string>
+    <string name="RiskLevel_Flexible_Description">Provider operates using their own liquidity. Rejections are rare. Freezes are theoretically possible but highly unlikely.</string>
     <string name="RiskLevel_Controlled_Description">These provider operates with third party liquidity and has AML policies in place. In most cases swaps are rejected and refunded if any AML issues are detected. In some situations provider may request KYC before releasing funds.</string>
     <string name="RiskLevel_Precheck_Description">Provider does its own address screening prior processing swap. Rejections are rare. Freezes are theoretically possible but highly unlikely.</string>
     <string name="RiskLevel_Auto" translatable="false">Auto</string>
-    <string name="RiskLevel_Limited" translatable="false">Flexible</string>
+    <string name="RiskLevel_Flexible" translatable="false">Flexible</string>
     <string name="RiskLevel_Controlled" translatable="false">Controlled</string>
     <string name="RiskLevel_Precheck" translatable="false">PreCheck</string>
+
+
+    <string name="PasskeyTerms_DeviceDependency">Device Dependency</string>
+    <string name="PasskeyTerms_DeviceDependency_Description">Access requires your device. Losing access may result in loss of funds.</string>
+    <string name="PasskeyTerms_LimitedAccess">Limited cross-platform access</string>
+    <string name="PasskeyTerms_LimitedAccess_Description">May not work on all devices or platforms.</string>
+    <string name="PasskeyTerms_Responsibility">Responsibility</string>
+    <string name="PasskeyTerms_Responsibility_Description">You are responsible for access to your device. Unstoppable cannot recover this wallet if access is lost.</string>
 
     <!-- Swap Confirmation -->
 
@@ -1373,15 +1387,32 @@
 
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
+    <string name="ManageAccounts_AddWallet">Add Wallet</string>
     <string name="ManageAccounts_CreateNewWallet">New Wallet</string>
+    <string name="ManageAccounts_CreateNewWalletDescription">Create a new wallet to get started or add a new one.</string>
     <string name="ManageAccounts_ImportWallet">Import Wallet</string>
-    <string name="ManageAccounts_WatchAddress">Watch Address</string>
+    <string name="ManageAccounts_ExistingWallet">Existing Wallet</string>
+    <string name="ManageAccounts_ExistingWalletDescription">Import your wallet if you already have one to continue using it.</string>
+    <string name="ManageAccounts_WatchAddress">Watch Wallet</string>
+    <string name="ManageAccounts_ViewOnlyWallet">View Only Wallet</string>
+    <string name="ManageAccounts_NoActiveWallets">No Active Wallets</string>
+    <string name="ManageAccounts_ViewOnlyWalletDescription">View a wallet by address without access to funds.</string>
+
+    <string name="CreateNewWallet_Standard">Standard</string>
+    <string name="CreateNewWallet_Standard_Description">A wallet with a recovery phrase that requires manual backup.</string>
+    <string name="CreateNewWallet_Passkey">Passkey</string>
+    <string name="CreateNewWallet_Passkey_Description">A wallet with a recovery phrase securely saved by your device.</string>
+    <string name="CreateNewWallet_PasskeyTerms">Passkey Wallet Terms</string>
 
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">from File</string>
     <string name="ImportWallet_BackupFile_Description">Import a backup file from your local folder.</string>
     <string name="ImportWallet_RecoveryPhrase">from Recovery Phrase</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Import a wallet using a recovery phrase or a private key.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Import a wallet using a recovery phrase.</string>
+    <string name="ImportWallet_PrivateKey">from Private Key</string>
+    <string name="ImportWallet_PrivateKey_Description">Import a wallet using a private key.</string>
+    <string name="ImportWallet_Passkey">from Passkey</string>
+    <string name="ImportWallet_Passkey_Description">Restore your wallet using your device.</string>
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">This file is not a valid backup of the wallet, or the file has been corrupted and cannot be restored.</string>
     <string name="ImportWallet_SelectAnotherFile">Select Another File</string>
@@ -1404,6 +1435,7 @@
 
     <!--Manage Account-->
     <string name="ManageAccount_Name">Name</string>
+    <string name="ManageAccount_WalletName">Wallet Name</string>
     <string name="ManageAccount_Save">Save</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Manual Backup</string>
     <string name="ManageAccount_LocalBackup">Local Backup</string>
@@ -1420,6 +1452,109 @@
     <string name="ManageAccount_Wallets">Wallets</string>
     <string name="ManageAccount_WatchAddresses">Watch Wallets</string>
     <string name="ManageAccount_DeleteWarning">Do you want to stop watching this wallet address?</string>
+
+    <string-array name="wallet_names">
+        <item>😰 Sweaty Vault</item>
+        <item>🧂 Salty Ledger</item>
+        <item>💧 Definitely Liquid</item>
+        <item>⏳ Pending Transaction</item>
+        <item>🌈 Imaginary Profits</item>
+        <item>🤡 Wobbly Peg</item>
+        <item>😤 Maximum Cope</item>
+        <item>☠️ Certified Rekt</item>
+        <item>👑 Insolvent Crown</item>
+        <item>📉 Mediocre Returns</item>
+        <item>🕸️ Dusty Portfolio</item>
+        <item>🧳 Vintage Bag</item>
+        <item>👻 Phantom Gains</item>
+        <item>🐂 Delusional Bull</item>
+        <item>🛒 Serial Dipper</item>
+        <item>💼 Premium Bagholder</item>
+        <item>🤨 Suspicious Yield</item>
+        <item>♾️ Eternal Dip</item>
+        <item>💭 Borrowed Conviction</item>
+        <item>🦍 Quantum Ape</item>
+        <item>🔍 Paranoid Node</item>
+        <item>🛋️ Lazy Staker</item>
+        <item>☕ Caffeinated Validator</item>
+        <item>🔮 Broke Oracle</item>
+        <item>😴 Sleepy Validator</item>
+        <item>🎲 Accidental Genius</item>
+        <item>🔐 Reluctant Hodler</item>
+        <item>🤑 Greedy Oracle</item>
+        <item>😵 Confused Arbitrage</item>
+        <item>🏃 Frantic Exchange</item>
+        <item>🪢 Rugged Foundation</item>
+        <item>🌉 Sketchy Bridge</item>
+        <item>⛽ Outrageous Fees</item>
+        <item>🌶️ Spicy Collateral</item>
+        <item>🚌 Overcrowded Mempool</item>
+        <item>💨 Smoky Genesis</item>
+        <item>🕯️ Haunted Portfolio</item>
+        <item>⌛ Infinite Patience</item>
+        <item>🥶 Frozen Cope</item>
+        <item>💊 Synthetic Courage</item>
+        <item>🎖️ Noble Peasant</item>
+        <item>⚡ Temporary Millionaire</item>
+        <item>🗺️ Strategic Poverty</item>
+        <item>😊 Cheerful Rekt</item>
+        <item>🏰 Reckless Citadel</item>
+        <item>🎰 Degen Paradise</item>
+        <item>🙏 Humble Wreckage</item>
+        <item>💎 Diamond Hands</item>
+        <item>🃏 Paper Hands</item>
+        <item>🌙 Lunar Delusion</item>
+        <item>🚿 Washed Trader</item>
+        <item>🤏 Tiny Allocation</item>
+        <item>🎯 Lucky Guess</item>
+        <item>🌊 Underwater Position</item>
+        <item>💤 Sleeping Giant</item>
+        <item>🎪 Traveling Circus</item>
+        <item>🧸 Emotional Hedge</item>
+        <item>🐯 Paper Tiger</item>
+        <item>🔁 Recursive Gains</item>
+        <item>🥴 Dizzy Returns</item>
+        <item>🏚️ Foreclosed Farm</item>
+        <item>🤫 Silent Whale</item>
+        <item>🌅 False Dawn</item>
+        <item>📊 Random Walk</item>
+        <item>🌋 Volatile Mountain</item>
+        <item>🎁 Surprise Liquidation</item>
+        <item>🏄 Risky Ride</item>
+        <item>🧲 Magnetic Loss</item>
+        <item>🏋️ Heavy Bag</item>
+        <item>🎈 Inflated Returns</item>
+        <item>🧪 Experimental Fund</item>
+        <item>🌸 Fragile Position</item>
+        <item>🧋 Bubbly Token</item>
+        <item>🏆 Participation Trophy</item>
+        <item>🌝 Fullmoon Fund</item>
+        <item>🐸 Rare Pepe</item>
+        <item>🧟 Zombie Token</item>
+        <item>🦄 Mythical Gains</item>
+        <item>🥊 Fighting Chance</item>
+        <item>🌟 Blissful Ignorance</item>
+        <item>🦆 Rubber Duck</item>
+        <item>🎋 Bamboo Protocol</item>
+        <item>🏴‍☠️ Pirate Treasury</item>
+        <item>🪄 Magic Liquidity</item>
+        <item>🏊 Underwater Vault</item>
+        <item>🎊 Lucky Liquidation</item>
+        <item>🦋 Butterfly Effect</item>
+        <item>🎸 Unplugged Vault</item>
+        <item>💥 Explosive Returns</item>
+        <item>🧠 Smooth Brain</item>
+        <item>🪦 Dead Pool</item>
+        <item>🎡 Circular Economy</item>
+        <item>🧘 Zen Liquidation</item>
+        <item>📌 Missed Bottom</item>
+        <item>🏴 Dark Forest</item>
+        <item>😎 Confident Loser</item>
+        <item>🌪️ Chaotic Yield</item>
+        <item>🧬 Mutant Protocol</item>
+        <item>🍕 Hungry Wallet</item>
+        <item>🎭 Borrowed Moon</item>
+    </string-array>
 
     <string name="Balance_Receive_BackupRequired_Description">You need to backup %1$s</string>
 

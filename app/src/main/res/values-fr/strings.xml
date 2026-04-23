@@ -666,7 +666,7 @@
     <string name="RiskLevel_ProviderRiskLevel">Niveaux de risque du fournisseur</string>
     <string name="RiskLevel_ProviderRiskLevel_Description">Les étiquettes ci-dessous expliquent différents niveaux de risque pour les fournisseurs de swap. Choisissez en conséquence.</string>
     <string name="RiskLevel_Auto_Description">Exécution automatique sur la chaîne. Les fonds ne peuvent pas être bloqués ou bloqués après soumission. Si le swap échoue, les fonds sont remboursés automatiquement.</string>
-    <string name="RiskLevel_Limited_Description">Le fournisseur opère en utilisant ses propres liquidités. Les rejets sont rares. Les gels sont théoriquement possibles mais très improbables.</string>
+    <string name="RiskLevel_Flexible_Description">Le fournisseur opère en utilisant ses propres liquidités. Les rejets sont rares. Les gels sont théoriquement possibles mais très improbables.</string>
     <string name="RiskLevel_Controlled_Description">Ces fournisseurs opèrent avec des liquidités de tierces parties et ont mis en place des politiques d\'AML. Dans la plupart des cas, les swaps sont rejetés et remboursés en cas de problème de LCA. Dans certaines situations, le fournisseur peut demander KYC avant de libérer des fonds.</string>
     <string name="RiskLevel_Precheck_Description">Le prestataire effectue son propre test d\'adresse avant le traitement de swap. Les rejets sont rares. Les gels sont théoriquement possibles mais très improbables.</string>
     <!-- Swap Confirmation -->
@@ -1173,6 +1173,110 @@
     <string name="ManageAccount_Wallets">Portefeuilles</string>
     <string name="ManageAccount_WatchAddresses">Regarder les portefeuilles</string>
     <string name="ManageAccount_DeleteWarning">Voulez-vous arrêter de surveiller cette adresse de portefeuille ?</string>
+
+    <string-array name="wallet_names">
+        <item>😰 Coffre Suant</item>
+        <item>🧂 Grand Livre Salé</item>
+        <item>💧 Définitivement Liquide</item>
+        <item>⏳ Transaction En Attente</item>
+        <item>🌈 Profits Imaginaires</item>
+        <item>🤡 Ancrage Bancal</item>
+        <item>😤 Cope Maximum</item>
+        <item>☠️ Rekt Certifié</item>
+        <item>👑 Couronne Insolvable</item>
+        <item>📉 Rendements Médiocres</item>
+        <item>🕸️ Portefeuille Poussiéreux</item>
+        <item>🧳 Sac Vintage</item>
+        <item>👻 Gains Fantômes</item>
+        <item>🐂 Taureau Délirant</item>
+        <item>🛒 Acheteur Compulsif</item>
+        <item>💼 Bagholder Premium</item>
+        <item>🤨 Rendement Suspect</item>
+        <item>♾️ Dip Éternel</item>
+        <item>💭 Conviction Empruntée</item>
+        <item>🦍 Singe Quantique</item>
+        <item>🔍 Nœud Paranoïaque</item>
+        <item>🛋️ Staker Paresseux</item>
+        <item>☕ Validateur Caféiné</item>
+        <item>🔮 Oracle Fauché</item>
+        <item>😴 Validateur Endormi</item>
+        <item>🎲 Génie Accidentel</item>
+        <item>🔐 Hodler Réticent</item>
+        <item>🤑 Oracle Cupide</item>
+        <item>😵 Arbitrage Confus</item>
+        <item>🏃 Exchange Frénétique</item>
+        <item>🪢 Fondation Arnaquée</item>
+        <item>🌉 Pont Louche</item>
+        <item>⛽ Frais Exorbitants</item>
+        <item>🌶️ Collatéral Épicé</item>
+        <item>🚌 Mempool Bondé</item>
+        <item>💨 Genèse Enfumée</item>
+        <item>🕯️ Portefeuille Hanté</item>
+        <item>⌛ Patience Infinie</item>
+        <item>🥶 Cope Glacé</item>
+        <item>💊 Courage Synthétique</item>
+        <item>🎖️ Noble Paysan</item>
+        <item>⚡ Millionnaire Temporaire</item>
+        <item>🗺️ Pauvreté Stratégique</item>
+        <item>😊 Rekt Joyeux</item>
+        <item>🏰 Citadelle Imprudente</item>
+        <item>🎰 Paradis Degen</item>
+        <item>🙏 Ruine Humble</item>
+        <item>💎 Mains de Diamant</item>
+        <item>🃏 Mains en Papier</item>
+        <item>🌙 Délire Lunaire</item>
+        <item>🚿 Trader Lessivé</item>
+        <item>🤏 Allocation Minuscule</item>
+        <item>🎯 Supposition Heureuse</item>
+        <item>🌊 Position Submergée</item>
+        <item>💤 Géant Endormi</item>
+        <item>🎪 Cirque Ambulant</item>
+        <item>🧸 Couverture Émotionnelle</item>
+        <item>🐯 Tigre en Papier</item>
+        <item>🔁 Gains Récursifs</item>
+        <item>🥴 Rendements Vertigineux</item>
+        <item>🏚️ Ferme Saisie</item>
+        <item>🤫 Baleine Silencieuse</item>
+        <item>🌅 Fausse Aube</item>
+        <item>📊 Marche Aléatoire</item>
+        <item>🌋 Montagne Volatile</item>
+        <item>🎁 Liquidation Surprise</item>
+        <item>🏄 Balade Risquée</item>
+        <item>🧲 Perte Magnétique</item>
+        <item>🏋️ Sac Lourd</item>
+        <item>🎈 Rendements Gonflés</item>
+        <item>🧪 Fonds Expérimental</item>
+        <item>🌸 Position Fragile</item>
+        <item>🧋 Token Bulleux</item>
+        <item>🏆 Trophée de Participation</item>
+        <item>🌝 Fonds Pleine Lune</item>
+        <item>🐸 Rare Pepe</item>
+        <item>🧟 Token Zombie</item>
+        <item>🦄 Gains Mythiques</item>
+        <item>🥊 Chance de Combat</item>
+        <item>🌟 Ignorance Bienheureuse</item>
+        <item>🦆 Canard en Caoutchouc</item>
+        <item>🎋 Protocole Bambou</item>
+        <item>🏴‍☠️ Trésor Pirate</item>
+        <item>🪄 Liquidité Magique</item>
+        <item>🏊 Coffre Immergé</item>
+        <item>🎊 Liquidation Chanceuse</item>
+        <item>🦋 Effet Papillon</item>
+        <item>🎸 Coffre Débranché</item>
+        <item>💥 Rendements Explosifs</item>
+        <item>🧠 Cerveau Lisse</item>
+        <item>🪦 Pool Mort</item>
+        <item>🎡 Économie Circulaire</item>
+        <item>🧘 Liquidation Zen</item>
+        <item>📌 Fond Raté</item>
+        <item>🏴 Forêt Sombre</item>
+        <item>😎 Perdant Confiant</item>
+        <item>🌪️ Rendement Chaotique</item>
+        <item>🧬 Protocole Mutant</item>
+        <item>🍕 Portefeuille Affamé</item>
+        <item>🎭 Lune Empruntée</item>
+    </string-array>
+
     <string name="Balance_Receive_BackupRequired_Description">Vous devez sauvegarder %1$s</string>
     <!--Network Settings-->
     <!-- Show Key -->

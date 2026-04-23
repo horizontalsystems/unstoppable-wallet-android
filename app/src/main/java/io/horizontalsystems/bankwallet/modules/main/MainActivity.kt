@@ -10,12 +10,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.fragment.NavHostFragment
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.nav3.Nav3
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.hideKeyboard
+import io.horizontalsystems.dapp.core.HSDAppEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -80,23 +85,21 @@ class MainActivity : BaseActivity() {
 //        viewModel.wcEvent.observe(this) { wcEvent ->
 //            if (wcEvent != null) {
 //                when (wcEvent) {
-//                    is Wallet.Model.SessionRequest -> {
-////                        TODO("xxx nav3")
-////                        navController.slideFromBottom(R.id.wcRequestFragment)
+//                    is HSDAppEvent.SessionRequest -> {
+//                        navController.slideFromBottom(R.id.wcRequestFragment)
 //                    }
 //
-//                    is Wallet.Model.SessionProposal -> {
-////                        TODO("xxx nav3")
-////                        navController.slideFromBottom(R.id.wcSessionBottomSheetDialog)
+//                    is HSDAppEvent.SessionProposal -> {
+//                        navController.slideFromBottom(R.id.wcSessionBottomSheetDialog)
 //                    }
 //
-//                    is Wallet.Model.Error -> {
+//                    is HSDAppEvent.Error -> {
 //                        navHost.view?.let {
 //                            HudHelper.showErrorMessage(it, wcEvent.throwable.message ?: "Error")
 //                        }
 //                    }
 //
-//                    is Wallet.Model.SettledSessionResponse.Result -> {
+//                    is HSDAppEvent.SessionSettled -> {
 //                        navHost.view?.let {
 //                            HudHelper.showSuccessMessage(it, getString(R.string.Hud_Text_Connected))
 //                        }

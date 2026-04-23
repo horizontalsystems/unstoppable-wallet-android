@@ -503,4 +503,107 @@
     <string name="Contacts_NameHint">نام</string>
     <string name="Contacts_AddressHint">آدرس یا دامنه</string>
     <string name="Hud_Text_Connected">ارتباط برقرار شد</string>
+
+    <string-array name="wallet_names">
+        <item>😰 گاوصندوق عرق‌آور</item>
+        <item>🧂 دفتر کل نمکین</item>
+        <item>💧 قطعاً نقد</item>
+        <item>⏳ تراکنش معلق</item>
+        <item>🌈 سود خیالی</item>
+        <item>🤡 لنگر لرزان</item>
+        <item>😤 حداکثر تحمل</item>
+        <item>☠️ رسماً ورشکسته</item>
+        <item>👑 تاج معسر</item>
+        <item>📉 بازده متوسط</item>
+        <item>🕸️ پورتفولیوی گرد گرفته</item>
+        <item>🧳 کیف قدیمی</item>
+        <item>👻 سود شبح‌وار</item>
+        <item>🐂 گاو توهم‌زده</item>
+        <item>🛒 خریدار متسلسل کف</item>
+        <item>💼 کیف‌بر ممتاز</item>
+        <item>🤨 بازده مشکوک</item>
+        <item>♾️ ریزش ابدی</item>
+        <item>💭 اعتقاد قرضی</item>
+        <item>🦍 میمون کوانتومی</item>
+        <item>🔍 گره پارانوئید</item>
+        <item>🛋️ استیکر تنبل</item>
+        <item>☕ اعتبارسنج کافئینی</item>
+        <item>🔮 اوراکل ورشکسته</item>
+        <item>😴 اعتبارسنج خواب‌آلود</item>
+        <item>🎲 نابغه اتفاقی</item>
+        <item>🔐 هودلر اکراه‌آمیز</item>
+        <item>🤑 اوراکل طماع</item>
+        <item>😵 آربیتراژ گیج</item>
+        <item>🏃 صرافی هراسان</item>
+        <item>🪢 بنیاد فریب‌خورده</item>
+        <item>🌉 پل مشکوک</item>
+        <item>⛽ کارمزد گزاف</item>
+        <item>🌶️ وثیقه تند</item>
+        <item>🚌 ممپول شلوغ</item>
+        <item>💨 آغاز دودآلود</item>
+        <item>🕯️ پورتفولیوی جن‌زده</item>
+        <item>⌛ صبر بی‌نهایت</item>
+        <item>🥶 تحمل یخ‌زده</item>
+        <item>💊 شجاعت مصنوعی</item>
+        <item>🎖️ دهقان اشرافی</item>
+        <item>⚡ میلیونر موقت</item>
+        <item>🗺️ فقر استراتژیک</item>
+        <item>😊 ورشکستگی شاد</item>
+        <item>🏰 دژ بی‌پروا</item>
+        <item>🎰 بهشت دژن</item>
+        <item>🙏 ویرانه فروتن</item>
+        <item>💎 دست‌های الماسی</item>
+        <item>🃏 دست‌های کاغذی</item>
+        <item>🌙 توهم ماهتاب</item>
+        <item>🚿 تریدر شسته‌شده</item>
+        <item>🤏 تخصیص ناچیز</item>
+        <item>🎯 حدس خوش‌شانس</item>
+        <item>🌊 پوزیشن زیر آب</item>
+        <item>💤 غول خفته</item>
+        <item>🎪 سیرک دوره‌گرد</item>
+        <item>🧸 پوشش احساسی</item>
+        <item>🐯 ببر کاغذی</item>
+        <item>🔁 سود بازگشتی</item>
+        <item>🥴 بازده سرگیجه‌آور</item>
+        <item>🏚️ مزرعه توقیف‌شده</item>
+        <item>🤫 نهنگ ساکت</item>
+        <item>🌅 سپیده‌دم دروغین</item>
+        <item>📊 گردش تصادفی</item>
+        <item>🌋 کوه پرنوسان</item>
+        <item>🎁 انحلال غافلگیرکننده</item>
+        <item>🏄 سفر پرریسک</item>
+        <item>🧲 ضرر مغناطیسی</item>
+        <item>🏋️ کیف سنگین</item>
+        <item>🎈 بازده متورم</item>
+        <item>🧪 صندوق آزمایشی</item>
+        <item>🌸 پوزیشن شکننده</item>
+        <item>🧋 توکن حبابی</item>
+        <item>🏆 جایزه شرکت</item>
+        <item>🌝 صندوق ماه کامل</item>
+        <item>🐸 پپه نادر</item>
+        <item>🧟 توکن زامبی</item>
+        <item>🦄 سود افسانه‌ای</item>
+        <item>🥊 شانس مبارزه</item>
+        <item>🌟 جهل مبارک</item>
+        <item>🦆 اردک لاستیکی</item>
+        <item>🎋 پروتکل بامبو</item>
+        <item>🏴‍☠️ خزانه دزدان دریایی</item>
+        <item>🪄 نقدینگی جادویی</item>
+        <item>🏊 گاوصندوق زیر آب</item>
+        <item>🎊 انحلال خوش‌شانس</item>
+        <item>🦋 اثر پروانه</item>
+        <item>🎸 گاوصندوق قطع‌شده</item>
+        <item>💥 بازده انفجاری</item>
+        <item>🧠 مغز صاف</item>
+        <item>🪦 استخر مرده</item>
+        <item>🎡 اقتصاد چرخشی</item>
+        <item>🧘 انحلال ذن</item>
+        <item>📌 کف از دست رفته</item>
+        <item>🏴 جنگل تاریک</item>
+        <item>😎 بازنده مطمئن</item>
+        <item>🌪️ بازده آشوبناک</item>
+        <item>🧬 پروتکل جهش‌یافته</item>
+        <item>🍕 کیف پول گرسنه</item>
+        <item>🎭 ماه قرضی</item>
+    </string-array>
 </resources>

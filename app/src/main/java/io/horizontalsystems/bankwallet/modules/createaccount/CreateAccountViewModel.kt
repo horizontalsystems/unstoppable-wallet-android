@@ -37,8 +37,7 @@ class CreateAccountViewModel(
     val mnemonicKinds = CreateAccountModule.Kind.values().toList()
 
     val defaultAccountName = accountFactory.getNextAccountName()
-    var accountName: String = defaultAccountName
-        get() = field.ifBlank { defaultAccountName }
+    var accountName by mutableStateOf(accountManager.getRandomWalletName())
         private set
 
     var selectedKind: CreateAccountModule.Kind = Mnemonic12
@@ -63,7 +62,7 @@ class CreateAccountViewModel(
 
         val accountType = mnemonicAccountType(selectedKind.wordsCount)
         val account = accountFactory.account(
-            accountName,
+            accountName.ifBlank { defaultAccountName },
             accountType,
             AccountOrigin.Created,
             false,
@@ -79,6 +78,10 @@ class CreateAccountViewModel(
 
     fun onChangeAccountName(name: String) {
         accountName = name
+    }
+
+    fun generateRandomAccountName() {
+        accountName = accountManager.getRandomWalletName()
     }
 
     fun onChangePassphrase(v: String) {
@@ -103,11 +106,14 @@ class CreateAccountViewModel(
         selectedKind = kind
     }
 
-    fun setPassphraseEnabledState(enabled: Boolean) {
+    fun setAdvancedOptionsEnabled(enabled: Boolean) {
         passphraseEnabled = enabled
         if (!enabled) {
+            selectedKind = Mnemonic12
             passphrase = ""
             passphraseConfirmation = ""
+            passphraseState = null
+            passphraseConfirmState = null
         }
     }
 
@@ -119,16 +125,7 @@ class CreateAccountViewModel(
         if (passphraseState is DataState.Error) {
             return true
         }
-
-        if (passphrase.isBlank()) {
-            passphraseState = DataState.Error(
-                Exception(
-                    Translator.getString(R.string.CreateWallet_Error_EmptyPassphrase)
-                )
-            )
-            return true
-        }
-        if (passphrase != passphraseConfirmation) {
+        if (passphrase.isNotBlank() && passphrase != passphraseConfirmation) {
             passphraseConfirmState = DataState.Error(
                 Exception(
                     Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation)

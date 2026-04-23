@@ -18,10 +18,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuModule
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestorePhrase
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard.RestorePhraseNonStandard
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -48,8 +45,6 @@ private fun RestoreAccountNavHost(
     inclusive: Boolean
 ) {
     val navController = rememberNavController()
-    val restoreMenuViewModel: RestoreMenuViewModel =
-        viewModel(factory = RestoreMenuModule.Factory())
     val mainViewModel: RestoreViewModel = viewModel()
 
     val view = LocalView.current
@@ -85,30 +80,9 @@ private fun RestoreAccountNavHost(
     ) {
         composable("restore_phrase") {
             RestorePhrase(
-                advanced = false,
-                restoreMenuViewModel = restoreMenuViewModel,
                 mainViewModel = mainViewModel,
-                openRestoreAdvanced = { navController.navigate("restore_phrase_advanced") },
                 openSelectCoins = { mainViewModel.requestOpenSelectCoinsScreen() },
-                openNonStandardRestore = { navController.navigate("restore_phrase_nonstandard") },
                 onBackClick = { fragmentNavController.removeLastOrNull() },
-            )
-        }
-        composablePage("restore_phrase_advanced") {
-            AdvancedRestoreScreen(
-                restoreMenuViewModel = restoreMenuViewModel,
-                mainViewModel = mainViewModel,
-                openSelectNetworkScreen = { navController.navigate("restore_select_network") },
-                openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
-                openNonStandardRestore = {
-                    navController.navigate("restore_phrase_nonstandard")
-
-                    stat(
-                        page = StatPage.ImportWalletFromKeyAdvanced,
-                        event = StatEvent.Open(StatPage.ImportWalletNonStandard)
-                    )
-                },
-                onBackClick = { navController.popBackStack() }
             )
         }
         composablePage("restore_select_network") {
@@ -130,13 +104,6 @@ private fun RestoreAccountNavHost(
                 },
                 onBackClick = { navController.popBackStack() },
                 onFinish = onFinish
-            )
-        }
-        composablePage("restore_phrase_nonstandard") {
-            RestorePhraseNonStandard(
-                mainViewModel = mainViewModel,
-                openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
-                onBackClick = { navController.popBackStack() }
             )
         }
         composablePage("zcash_configure") {

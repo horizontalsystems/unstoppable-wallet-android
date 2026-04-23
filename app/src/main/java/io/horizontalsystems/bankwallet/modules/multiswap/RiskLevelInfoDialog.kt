@@ -105,8 +105,8 @@ fun RiskLevelList() {
     CellPrimary(
         middle = {
             RiskLevelCell(
-                RiskLevel.LIMITED,
-                stringResource(R.string.RiskLevel_Limited_Description)
+                RiskLevel.FLEXIBLE,
+                stringResource(R.string.RiskLevel_Flexible_Description)
             )
         }
     )
@@ -134,7 +134,7 @@ fun RiskLevelList() {
 private fun RiskLevelCell(level: RiskLevel, description: String) {
     val color = when (level) {
         RiskLevel.AUTO -> ComposeAppTheme.colors.remus
-        RiskLevel.LIMITED -> ComposeAppTheme.colors.ocean
+        RiskLevel.FLEXIBLE -> ComposeAppTheme.colors.ocean
         RiskLevel.CONTROLLED -> ComposeAppTheme.colors.jacob
         RiskLevel.PRECHECK -> ComposeAppTheme.colors.leah
     }
