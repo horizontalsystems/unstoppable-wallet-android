@@ -3,8 +3,10 @@ package cash.p.terminal.modules.syncerror
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
+import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.ISystemInfoManager
+import io.horizontalsystems.core.entities.BlockchainType
 
 class SyncErrorService(
     private val wallet: Wallet,
@@ -12,6 +14,7 @@ class SyncErrorService(
     val reportEmail: String,
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
+    private val solanaKitManager: SolanaKitManager,
     private val systemInfoManager: ISystemInfoManager,
 ) {
 
@@ -45,5 +48,14 @@ class SyncErrorService(
         appendLine("Blockchain: ${wallet.token.blockchainType.uid}")
         appendLine("Account Type: ${wallet.account.type.description}")
         appendLine("Account Origin: ${wallet.account.origin.value}")
+        if (wallet.token.blockchainType == BlockchainType.Solana) {
+            solanaKitManager.currentNetworkErrorInfo?.takeIf { it.isNotEmpty() }?.let { info ->
+                appendLine()
+                appendLine("--- Solana Network Error ---")
+                info.forEach { (key, value) ->
+                    appendLine("$key: $value")
+                }
+            }
+        }
     }
 }

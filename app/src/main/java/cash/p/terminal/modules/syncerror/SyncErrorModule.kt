@@ -2,9 +2,12 @@ package cash.p.terminal.modules.syncerror
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import cash.p.terminal.core.App
 import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.providers.AppConfigProvider
+import cash.p.terminal.core.managers.BtcBlockchainManager
+import cash.p.terminal.core.managers.EvmBlockchainManager
+import cash.p.terminal.core.managers.SolanaKitManager
+import cash.p.terminal.wallet.IAdapterManager
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.entities.Blockchain
 
@@ -15,10 +18,11 @@ object SyncErrorModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = SyncErrorService(
                 wallet,
-                App.adapterManager,
+                getKoinInstance<IAdapterManager>(),
                 AppConfigProvider.reportEmail,
-                App.btcBlockchainManager,
-                App.evmBlockchainManager,
+                getKoinInstance<BtcBlockchainManager>(),
+                getKoinInstance<EvmBlockchainManager>(),
+                getKoinInstance<SolanaKitManager>(),
                 getKoinInstance<ISystemInfoManager>()
             )
             return SyncErrorViewModel(service) as T

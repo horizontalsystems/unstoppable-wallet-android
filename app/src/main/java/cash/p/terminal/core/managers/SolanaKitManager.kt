@@ -16,10 +16,11 @@ import com.solana.core.PublicKey
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.entities.BlockchainType
-import timber.log.Timber
+import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.hdwalletkit.Base58
 import io.horizontalsystems.solanakit.Signer
 import io.horizontalsystems.solanakit.SolanaKit
+import io.horizontalsystems.solanakit.network.SolanaNetworkError
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -34,6 +35,7 @@ import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicInteger
 
 class SolanaKitManager(
@@ -67,14 +69,25 @@ class SolanaKitManager(
     var currentAccount: Account? = null
         private set
     private val solanaKitStoppedSubject = PublishSubject.create<Unit>()
+    private val networkLogger = AppLogger(BlockchainType.Solana.uid).getScoped("network")
 
     private val mutex = Mutex()
+    @Volatile
+    private var recentNetworkErrorInfo: Map<String, String>? = null
 
     val kitStoppedObservable: Observable<Unit>
         get() = solanaKitStoppedSubject
 
     val statusInfo: Map<String, Any>?
-        get() = solanaKitWrapper?.solanaKit?.statusInfo()
+        get() = solanaKitWrapper?.solanaKit?.statusInfo()?.let { info ->
+            linkedMapOf<String, Any>().apply {
+                putAll(info)
+                recentNetworkErrorInfo?.let { putAll(it) }
+            }
+        }
+
+    val currentNetworkErrorInfo: Map<String, String>?
+        get() = recentNetworkErrorInfo
 
     private fun handleUpdateNetwork() {
         stopKit()
@@ -146,17 +159,7 @@ class SolanaKitManager(
         val seed = accountType.seed
         val address = Signer.address(seed)
         val signer = Signer.getInstance(seed)
-
-        val kit = SolanaKit.getInstance(
-            application = App.instance,
-            addressString = address,
-            rpcSource = rpcSourceManager.rpcSource,
-            walletId = account.id,
-            limitFirstTimeTransactionCount = limitFirstTimeTransactionCount,
-            limitTimeTransactionCount = limitTimeTransactionCount
-        )
-
-        return SolanaKitWrapper(kit, signer)
+        return SolanaKitWrapper(createKit(address, account.id), signer)
     }
 
     private fun createKitInstance(
@@ -164,17 +167,7 @@ class SolanaKitManager(
         account: Account
     ): SolanaKitWrapper {
         val address = accountType.address
-
-        val kit = SolanaKit.getInstance(
-            application = App.instance,
-            addressString = address,
-            rpcSource = rpcSourceManager.rpcSource,
-            walletId = account.id,
-            limitFirstTimeTransactionCount = limitFirstTimeTransactionCount,
-            limitTimeTransactionCount = limitTimeTransactionCount
-        )
-
-        return SolanaKitWrapper(kit, null)
+        return SolanaKitWrapper(createKit(address, account.id), null)
     }
 
     private suspend fun createKitInstance(
@@ -189,16 +182,10 @@ class SolanaKitManager(
             )
         )
 
-        val kit = SolanaKit.getInstance(
-            application = App.instance,
-            addressString = Base58.encode(hardwarePublicKey.key.value.fromHex()),
-            rpcSource = rpcSourceManager.rpcSource,
-            walletId = accountId,
-            limitFirstTimeTransactionCount = limitFirstTimeTransactionCount,
-            limitTimeTransactionCount = limitTimeTransactionCount
+        return SolanaKitWrapper(
+            createKit(Base58.encode(hardwarePublicKey.key.value.fromHex()), accountId),
+            signer
         )
-
-        return SolanaKitWrapper(kit, signer)
     }
 
     suspend fun unlink(account: Account) = mutex.withLock {
@@ -263,6 +250,40 @@ class SolanaKitManager(
                 }
             }
         }
+    }
+
+    private fun createKit(address: String, walletId: String): SolanaKit =
+        SolanaKit.getInstance(
+            application = App.instance,
+            addressString = address,
+            rpcSource = rpcSourceManager.rpcSource,
+            walletId = walletId,
+            limitFirstTimeTransactionCount = limitFirstTimeTransactionCount,
+            limitTimeTransactionCount = limitTimeTransactionCount,
+            networkErrorListener = ::handleNetworkError
+        )
+
+    private fun handleNetworkError(error: SolanaNetworkError) {
+        val info = linkedMapOf(
+            "Recent Network Error Source" to error.source,
+            "Recent Network Error Method" to error.method,
+            "Recent Network Error URL" to error.url,
+            "Recent Network Error Host" to error.host,
+            "Recent Network Error Type" to error.throwable.javaClass.simpleName,
+            "Recent Network Error Message" to error.throwable.message.orEmpty(),
+        ).filterValues(String::isNotBlank).toMutableMap()
+
+        if (error.resolvedIps.isNotEmpty()) {
+            info["Recent Network Error Resolved IPs"] = error.resolvedIps.joinToString(", ")
+        }
+
+        recentNetworkErrorInfo = info
+        val message = info.entries.joinToString(separator = "\n") { (key, value) -> "$key: $value" }
+        networkLogger.warning(
+            message,
+            error.throwable
+        )
+        Timber.tag("SolanaNetwork").e(error.throwable, message)
     }
 
     private fun subscribeToEvents() {
