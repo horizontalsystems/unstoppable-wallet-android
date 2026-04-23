@@ -42,9 +42,10 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupFile
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.createaccount.WalletType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreFromPasskeyFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreAccountFragment
+import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreFromPasskeyFragment
+import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreFromPrivateKeyFragment
 import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -168,8 +169,8 @@ private fun ImportWalletScreen(
                 ) {
                     navController.navigateWithTermsAccepted {
                         navController.slideFromRight(
-                            R.id.restoreFromPrivateKeyFragment,
-                            ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
+                            RestoreFromPrivateKeyFragment(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)),
+
                         )
 
                         stat(
@@ -191,13 +192,14 @@ private fun ImportWalletScreen(
                         try {
                             val (entropy, accountName) = App.passkeyManager.authenticate(context)
                             navController.slideFromRight(
-                                R.id.restoreFromPasskeyFragment,
-                                RestoreFromPasskeyFragment.Input(
-                                    popUpToInclusiveId,
-                                    inclusive,
-                                    entropy,
-                                    accountName,
-                                )
+                                RestoreFromPasskeyFragment(
+                                    RestoreFromPasskeyFragment.Input(
+                                        popUpToInclusiveId,
+                                        inclusive,
+                                        entropy,
+                                        accountName,
+                                    )
+                                ),
                             )
                             stat(
                                 page = StatPage.ImportWallet,

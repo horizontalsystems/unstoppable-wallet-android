@@ -4,27 +4,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.RestorePrivateKey
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
+import kotlin.reflect.KClass
 
-class RestoreFromPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
+class RestoreFromPrivateKeyFragment(val input: ManageAccountsModule.Input?) : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: NavController) {
-        val input = navController.getInput<ManageAccountsModule.Input>()
-        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.restoreFromPrivateKeyFragment
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val popUpToInclusiveId = input?.popOffOnSuccess ?: RestoreFromPrivateKeyFragment::class
         val inclusive = input?.popOffInclusive ?: false
 
         RestoreFromPrivateKeyNavHost(navController, popUpToInclusiveId, inclusive)
@@ -33,8 +34,8 @@ class RestoreFromPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = fa
 
 @Composable
 private fun RestoreFromPrivateKeyNavHost(
-    fragmentNavController: NavController,
-    popUpToInclusiveId: Int,
+    fragmentNavController: NavBackStack<HSScreen>,
+    popUpToInclusiveId: KClass<out HSScreen>,
     inclusive: Boolean,
 ) {
     val navController = rememberNavController()
@@ -42,7 +43,7 @@ private fun RestoreFromPrivateKeyNavHost(
 
     val view = LocalView.current
     val onFinish: () -> Unit = {
-        fragmentNavController.popBackStack(popUpToInclusiveId, inclusive)
+        fragmentNavController.removeLastUntil(popUpToInclusiveId, inclusive)
     }
 
     val uiState = mainViewModel.uiState
@@ -76,7 +77,7 @@ private fun RestoreFromPrivateKeyNavHost(
                 mainViewModel = mainViewModel,
                 openSelectNetworkScreen = { navController.navigate("restore_select_network") },
                 openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
-                onBackClick = { fragmentNavController.popBackStack() },
+                onBackClick = { fragmentNavController.removeLastOrNull() },
             )
         }
         composablePage("restore_select_network") {

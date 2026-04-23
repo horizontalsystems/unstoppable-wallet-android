@@ -205,16 +205,17 @@ private fun SettingSections(
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
                 }
             )
-        }, if (DAppManager.isAvailable) {{
-            HsSettingCell(
-                R.string.DAppConnection_Title,
-                R.drawable.link_24,
-                value = (uiState.wcCounterType as? MainSettingsModule.CounterType.SessionCounter)?.number?.toString(),
-                counterBadge = (uiState.wcCounterType as? MainSettingsModule.CounterType.PendingRequestCounter)?.number?.toString(),
-                onClick = {
-                    when (val state = viewModel.walletConnectSupportState) {
-                        WCManager.SupportState.Supported -> {
-                            navController.addFromRight(WCListFragment())
+        }, if (DAppManager.isAvailable) {
+            {
+                HsSettingCell(
+                    R.string.DAppConnection_Title,
+                    R.drawable.link_24,
+                    value = (uiState.wcCounterType as? MainSettingsModule.CounterType.SessionCounter)?.number?.toString(),
+                    counterBadge = (uiState.wcCounterType as? MainSettingsModule.CounterType.PendingRequestCounter)?.number?.toString(),
+                    onClick = {
+                        when (val state = viewModel.walletConnectSupportState) {
+                            WCManager.SupportState.Supported -> {
+                                navController.addFromRight(WCListFragment())
 
                                 stat(
                                     page = StatPage.Settings,
@@ -222,15 +223,15 @@ private fun SettingSections(
                                 )
                             }
 
-                        WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-                            navController.addFromBottom(WCErrorNoAccountFragment())
-                        }
+                            WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
+                                navController.addFromBottom(WCErrorNoAccountFragment())
+                            }
 
-                        is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
-                            val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
-                            navController.slideFromBottom(
-                                BackupRequiredDialog(BackupRequiredDialog.Input(state.account, text))
-                            )
+                            is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                                val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
+                                navController.slideFromBottom(
+                                    BackupRequiredDialog(BackupRequiredDialog.Input(state.account, text))
+                                )
 
                                 stat(
                                     page = StatPage.Settings,
@@ -238,15 +239,18 @@ private fun SettingSections(
                                 )
                             }
 
-                        is WCManager.SupportState.NotSupported -> {
-                            navController.slideFromBottom(
-                                WCAccountTypeNotSupportedDialog(WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription))
-                            )
+                            is WCManager.SupportState.NotSupported -> {
+                                navController.slideFromBottom(
+                                    WCAccountTypeNotSupportedDialog(WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription))
+                                )
+                            }
                         }
                     }
-                }
-            )
-        }},
+                )
+            }
+        } else {
+            null
+        },
 //            {
 //            HsSettingCell(
 //                title = R.string.Settings_TonConnect,

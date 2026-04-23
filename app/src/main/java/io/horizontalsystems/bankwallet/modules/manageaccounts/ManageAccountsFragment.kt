@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -32,7 +32,6 @@ import io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
-import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.ActionViewItem
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -78,19 +77,19 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
 
     val args = when (mode) {
         ManageAccountsModule.Mode.Manage -> ManageAccountsModule.Input(
-            R.id.manageAccountsFragment,
+            ManageAccountsFragment::class,
             false
         )
 
         ManageAccountsModule.Mode.Switcher -> ManageAccountsModule.Input(
-            R.id.manageAccountsFragment,
+            ManageAccountsFragment::class,
             true
         )
     }
 
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_Title),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
         menuItems = listOf(
             MenuItemDropdown(
                 title = TranslatableString.ResString(R.string.Button_Add),
@@ -100,7 +99,7 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
                         title = TranslatableString.ResString(R.string.ManageAccounts_CreateNewWallet),
                         onClick = {
                             navController.navigateWithTermsAccepted {
-                                navController.slideFromRight(R.id.createAccountFragment, args)
+                                navController.slideFromRight(CreateAccountFragment(args))
                                 stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.NewWallet))
                             }
                         }
@@ -109,7 +108,7 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
                         title = TranslatableString.ResString(R.string.ManageAccounts_ExistingWallet),
                         onClick = {
                             navController.navigateWithTermsAccepted {
-                                navController.slideFromRight(R.id.importWalletFragment, args)
+                                navController.slideFromRight(ImportWalletFragment(args))
                                 stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.ImportWallet))
                             }
                         }
@@ -117,7 +116,7 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
                     MenuItem(
                         title = TranslatableString.ResString(R.string.ManageAccounts_ViewOnlyWallet),
                         onClick = {
-                            navController.slideFromRight(R.id.watchAddressFragment, args)
+                            navController.slideFromRight(WatchAddressFragment(args))
                             stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.WatchWallet))
                         }
                     ),
@@ -202,7 +201,7 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
 fun AccountCellWrapper(
     account: AccountViewItem,
     viewModel: ManageAccountsViewModel,
-    navController: NavController
+    navController: NavBackStack<HSScreen>
 ) {
     AccountCell(
         accountViewItem = account,
@@ -216,8 +215,7 @@ fun AccountCellWrapper(
         },
         onOptionIconClick = {
             navController.slideFromRight(
-                R.id.manageAccountFragment,
-                ManageAccountFragment.Input(account.accountId)
+                ManageAccountFragment(ManageAccountFragment.Input(account.accountId))
             )
 
             stat(

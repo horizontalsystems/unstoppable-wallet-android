@@ -24,16 +24,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statAccountType
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.D1
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
@@ -56,16 +57,15 @@ import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderColo
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
-class CreateAccountStandardFragment : BaseComposeFragment() {
+class CreateAccountStandardFragment(val input: ManageAccountsModule.Input?) : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent(navController: NavController) {
-        val input = navController.getInput<ManageAccountsModule.Input>()
-        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.createAccountFragment
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val popUpToInclusiveId = input?.popOffOnSuccess ?: CreateAccountFragment::class
         val inclusive = input?.popOffInclusive ?: true
         CreateAccountIntroScreen(
-            onBackClick = { navController.popBackStack() },
-            onFinish = { navController.popBackStack(popUpToInclusiveId, inclusive) },
+            onBackClick = { navController.removeLastOrNull() },
+            onFinish = { navController.removeLastUntil(popUpToInclusiveId, inclusive) },
         )
     }
 

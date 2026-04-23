@@ -3,26 +3,17 @@ package io.horizontalsystems.bankwallet.modules.createaccount
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
-import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.core.stats.statAccountType
+import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
+import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
@@ -46,10 +37,10 @@ class CreateAccountFragment(val input: ManageAccountsModule.Input? = null) : Bas
 
 
 @Composable
-fun CreateAccountScreen(navController: NavController, input: ManageAccountsModule.Input?) {
+fun CreateAccountScreen(navController: NavBackStack<HSScreen>, input: ManageAccountsModule.Input?) {
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_CreateNewWallet),
-        onBack = navController::popBackStack
+        onBack = navController::removeLastOrNull
     ) {
         Column {
             VSpacer(16.dp)
@@ -61,7 +52,7 @@ fun CreateAccountScreen(navController: NavController, input: ManageAccountsModul
                     subtitle = stringResource(R.string.CreateNewWallet_Standard_Description).hs,
                     borderTop = false
                 ) {
-                    navController.slideFromRight(R.id.createAccountStandardFragment, input)
+                    navController.addFromRight(CreateAccountStandardFragment(input))
                 }
                 WalletType(
                     icon = painterResource(R.drawable.touchid_24),
@@ -69,15 +60,16 @@ fun CreateAccountScreen(navController: NavController, input: ManageAccountsModul
                     subtitle = stringResource(R.string.CreateNewWallet_Passkey_Description).hs,
                     borderTop = true
                 ) {
-                    if (!App.localStorage.passkeyTermsAccepted) {
-                        navController.slideFromRightForResult<PassKeyTermsFragment.Result>(R.id.passkeyTermsFragment) { result ->
-                            if (result.termsAccepted) {
-                                navController.slideFromRight(R.id.createAccountPasskeyFragment, input)
-                            }
-                        }
-                    } else {
-                        navController.slideFromRight(R.id.createAccountPasskeyFragment, input)
-                    }
+//                    TODO("xxx nav3")
+//                    if (!App.localStorage.passkeyTermsAccepted) {
+//                        navController.slideFromRightForResult<PassKeyTermsFragment.Result>(R.id.passkeyTermsFragment) { result ->
+//                            if (result.termsAccepted) {
+//                                navController.slideFromRight(R.id.createAccountPasskeyFragment, input)
+//                            }
+//                        }
+//                    } else {
+//                        navController.slideFromRight(R.id.createAccountPasskeyFragment, input)
+//                    }
                 }
             }
 
@@ -120,6 +112,6 @@ fun WalletType(
 @Preview
 fun Preview_CreateAccountScreen() {
     ComposeAppTheme {
-        CreateAccountScreen(NavController(LocalContext.current), null)
+        CreateAccountScreen(NavBackStack(MainScreen), null)
     }
 }

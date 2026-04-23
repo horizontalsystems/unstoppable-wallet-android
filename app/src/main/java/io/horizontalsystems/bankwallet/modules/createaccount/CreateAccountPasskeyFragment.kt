@@ -26,17 +26,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.credentials.exceptions.CreateCredentialCancellationException
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statAccountType
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -49,12 +51,12 @@ import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderColo
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
-class CreateAccountPasskeyFragment : BaseComposeFragment() {
+class CreateAccountPasskeyFragment(val input: ManageAccountsModule.Input?) : BaseComposeFragment() {
     @Composable
-    override fun GetContent(navController: NavController) {
-        val input = navController.getInput<ManageAccountsModule.Input>()
-        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.createAccountFragment
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val popUpToInclusiveId = input?.popOffOnSuccess ?: CreateAccountFragment::class
         val inclusive = input?.popOffInclusive ?: true
         CreateAccountPasskeyScreen(navController, popUpToInclusiveId, inclusive)
     }
@@ -62,8 +64,8 @@ class CreateAccountPasskeyFragment : BaseComposeFragment() {
 
 @Composable
 fun CreateAccountPasskeyScreen(
-    navController: NavController,
-    popUpToInclusiveId: Int,
+    navController: NavBackStack<HSScreen>,
+    popUpToInclusiveId: KClass<out HSScreen>,
     inclusive: Boolean
 ) {
     val viewModel =
@@ -84,7 +86,7 @@ fun CreateAccountPasskeyScreen(
                 resId = R.string.Hud_Text_Created,
             )
             delay(300)
-            navController.popBackStack(popUpToInclusiveId, inclusive)
+            navController.removeLastUntil(popUpToInclusiveId, inclusive)
             stat(
                 page = StatPage.NewWalletPasskey,
                 event = StatEvent.CreateWallet(uiState.success.statAccountType)
@@ -100,7 +102,7 @@ fun CreateAccountPasskeyScreen(
 
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_CreateNewWallet),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier.windowInsetsPadding(WindowInsets.ime)
@@ -173,8 +175,8 @@ fun CreateAccountPasskeyScreen(
 fun Preview_CreateAccountPasskeyScreen() {
     ComposeAppTheme {
         CreateAccountPasskeyScreen(
-            NavController(LocalContext.current),
-            0,
+            NavBackStack(),
+            MainScreen::class,
             false
         )
     }

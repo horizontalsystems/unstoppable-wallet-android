@@ -1,38 +1,37 @@
 package io.horizontalsystems.bankwallet.modules.restoreaccount
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
 import io.horizontalsystems.marketkit.models.BlockchainType
-import kotlinx.parcelize.Parcelize
+import kotlin.reflect.KClass
 
-class RestoreFromPasskeyFragment : BaseComposeFragment(screenshotEnabled = false) {
+class RestoreFromPasskeyFragment(val input: Input) : BaseComposeFragment(screenshotEnabled = false) {
     @Composable
-    override fun GetContent(navController: NavController) {
-        RestoreFromPasskeyNavHost(navController, navController.requireInput())
+    override fun GetContent(navController: NavBackStack<HSScreen>) {
+        RestoreFromPasskeyNavHost(navController, input)
     }
 
-    @Parcelize
     data class Input(
-        val popOffOnSuccess: Int,
+        val popOffOnSuccess: KClass<out HSScreen>,
         val popOffInclusive: Boolean,
         val entropy: ByteArray,
         val accountName: String?
-    ) : Parcelable
+    )
 }
 
 @Composable
 private fun RestoreFromPasskeyNavHost(
-    fragmentNavController: NavController,
+    fragmentNavController: NavBackStack<HSScreen>,
     input: RestoreFromPasskeyFragment.Input,
 ) {
     val popUpToInclusiveId = input.popOffOnSuccess
@@ -70,9 +69,9 @@ private fun RestoreFromPasskeyNavHost(
                         else -> Unit
                     }
                 },
-                onBackClick = { fragmentNavController.popBackStack() },
+                onBackClick = { fragmentNavController.removeLastOrNull() },
                 onFinish = {
-                    fragmentNavController.popBackStack(popUpToInclusiveId, inclusive)
+                    fragmentNavController.removeLastUntil(popUpToInclusiveId, inclusive)
                 }
             )
         }
