@@ -30,7 +30,7 @@ class CreateAccountPasskeyViewModel(
 ) : ViewModelUiState<CreateAccountPasskeyUiState>() {
 
     private val defaultAccountName = accountFactory.getNextAccountName()
-    private var accountName: String = getRandomWalletName(accountManager.accounts.map { it.name }.toSet())
+    private var accountName: String = accountManager.getRandomWalletName()
     private var success: AccountType? = null
     private var error: String? = null
 
@@ -80,7 +80,7 @@ class CreateAccountPasskeyViewModel(
     }
 
     fun generateRandomAccountName() {
-        accountName = getRandomWalletName(accountManager.accounts.map { it.name }.toSet())
+        accountName = accountManager.getRandomWalletName()
         emitState()
     }
 

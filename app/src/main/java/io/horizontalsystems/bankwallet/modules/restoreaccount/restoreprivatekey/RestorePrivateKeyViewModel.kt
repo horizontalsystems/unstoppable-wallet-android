@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.core.hexToByteArray
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.createaccount.getRandomWalletName
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.EmptyText
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NoValidKey
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NonPrivateKey
@@ -23,7 +22,7 @@ class RestorePrivateKeyViewModel(
     private val accountManager: IAccountManager,
 ) : ViewModel() {
 
-    val defaultName = getRandomWalletName(accountManager.accounts.map { it.name }.toSet())
+    val defaultName = accountManager.getRandomWalletName()
     private var _accountName: String by mutableStateOf(defaultName)
     val accountName: String get() = _accountName.ifBlank { defaultName }
 
@@ -37,7 +36,7 @@ class RestorePrivateKeyViewModel(
     }
 
     fun generateRandomAccountName() {
-        _accountName = getRandomWalletName(accountManager.accounts.map { it.name }.toSet())
+        _accountName = accountManager.getRandomWalletName()
     }
 
     fun onEnterPrivateKey(input: String) {

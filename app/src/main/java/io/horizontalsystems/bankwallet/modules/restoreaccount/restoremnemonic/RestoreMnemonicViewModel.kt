@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.normalizeNFKD
-import io.horizontalsystems.bankwallet.modules.createaccount.getRandomWalletName
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.UiState
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.WordItem
 import io.horizontalsystems.core.CoreApp
@@ -39,7 +38,7 @@ class RestoreMnemonicViewModel(
 
     private val regex = Regex("\\S+")
 
-    val defaultName = getRandomWalletName(accountManager.accounts.map { it.name }.toSet())
+    val defaultName = accountManager.getRandomWalletName()
     private var _accountName: String = defaultName
     val accountName: String get() = _accountName.ifBlank { defaultName }
 
@@ -96,7 +95,7 @@ class RestoreMnemonicViewModel(
     }
 
     fun generateRandomAccountName() {
-        _accountName = getRandomWalletName(accountManager.accounts.map { it.name }.toSet())
+        _accountName = accountManager.getRandomWalletName()
         emitState()
     }
 
