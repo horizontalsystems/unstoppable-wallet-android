@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic
 
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.IAccountFactory
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.WordsManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.normalizeNFKD
+import io.horizontalsystems.bankwallet.modules.createaccount.getRandomWalletName
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.UiState
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.WordItem
 import io.horizontalsystems.core.CoreApp
@@ -16,16 +17,15 @@ import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.hdwalletkit.WordList
 
 class RestoreMnemonicViewModel(
-    accountFactory: IAccountFactory,
+    private val accountManager: IAccountManager,
     private val wordsManager: WordsManager,
     private val thirdKeyboardStorage: IThirdKeyboard,
 ) : ViewModelUiState<UiState>() {
 
     val mnemonicLanguages = Language.values().toList()
 
-    private var passphraseEnabled: Boolean = false
+    private var advancedOptionsEnabled: Boolean = false
     private var passphrase: String = ""
-    private var passphraseError: String? = null
     private var wordItems: List<WordItem> = listOf()
     private var invalidWordItems: List<WordItem> = listOf()
     private var invalidWordRanges: List<IntRange> = listOf()
@@ -37,21 +37,18 @@ class RestoreMnemonicViewModel(
     private var cursorPosition = 0
     private var mnemonicWordList = WordList.wordListStrict(language)
 
-
     private val regex = Regex("\\S+")
 
-    val defaultName = accountFactory.getNextAccountName()
-    var accountName: String = defaultName
-        get() = field.ifBlank { defaultName }
-        private set
-
+    val defaultName = getRandomWalletName(accountManager.accounts.map { it.name }.toSet())
+    private var _accountName: String = defaultName
+    val accountName: String get() = _accountName.ifBlank { defaultName }
 
     val isThirdPartyKeyboardAllowed: Boolean
         get() = CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed
 
     override fun createState() = UiState(
-        passphraseEnabled = passphraseEnabled,
-        passphraseError = passphraseError,
+        accountName = _accountName,
+        advancedOptionsEnabled = advancedOptionsEnabled,
         invalidWordRanges = invalidWordRanges,
         error = error,
         accountType = accountType,
@@ -80,24 +77,27 @@ class RestoreMnemonicViewModel(
         }
     }
 
-    fun onTogglePassphrase(enabled: Boolean) {
-        passphraseEnabled = enabled
-        passphrase = ""
-        passphraseError = null
-        passphraseError = null
-
+    fun onToggleAdvancedOptions(enabled: Boolean) {
+        advancedOptionsEnabled = enabled
+        if (!enabled) {
+            passphrase = ""
+            language = Language.English
+        }
         emitState()
     }
 
     fun onEnterPassphrase(passphrase: String) {
         this.passphrase = passphrase
-        passphraseError = null
-
         emitState()
     }
 
     fun onEnterName(name: String) {
-        accountName = name
+        _accountName = name
+    }
+
+    fun generateRandomAccountName() {
+        _accountName = getRandomWalletName(accountManager.accounts.map { it.name }.toSet())
+        emitState()
     }
 
     fun onEnterMnemonicPhrase(text: String, cursorPosition: Int) {
@@ -124,9 +124,6 @@ class RestoreMnemonicViewModel(
             }
             wordItems.size !in (Mnemonic.EntropyStrength.values().map { it.wordCount }) -> {
                 error = Translator.getString(R.string.Restore_Error_MnemonicWordCount, wordItems.size)
-            }
-            passphraseEnabled && passphrase.isBlank() -> {
-                passphraseError = Translator.getString(R.string.Restore_Error_EmptyPassphrase)
             }
             else -> {
                 try {

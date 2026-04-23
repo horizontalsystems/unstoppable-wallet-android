@@ -159,6 +159,24 @@ private fun ImportWalletScreen(
                         )
                     }
                 }
+                WalletType(
+                    icon = painterResource(R.drawable.key_24),
+                    title = stringResource(R.string.ImportWallet_PrivateKey).hs,
+                    subtitle = stringResource(R.string.ImportWallet_PrivateKey_Description).hs,
+                    borderTop = true
+                ) {
+                    navController.navigateWithTermsAccepted {
+                        navController.slideFromRight(
+                            R.id.restoreFromPrivateKeyFragment,
+                            ManageAccountsModule.Input(popUpToInclusiveId, inclusive)
+                        )
+
+                        stat(
+                            page = StatPage.ImportWallet,
+                            event = StatEvent.Open(StatPage.ImportWalletFromPrivateKey)
+                        )
+                    }
+                }
                 var passkeyEnabled by remember { mutableStateOf(true) }
                 WalletType(
                     icon = painterResource(R.drawable.touchid_24),
