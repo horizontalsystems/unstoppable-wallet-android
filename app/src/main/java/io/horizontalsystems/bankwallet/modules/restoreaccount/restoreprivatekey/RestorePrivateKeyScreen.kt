@@ -112,7 +112,7 @@ fun RestorePrivateKey(
             }
             ButtonsGroupWithShade {
                 HSButton(
-                    title = stringResource(R.string.Button_Create),
+                    title = stringResource(R.string.Button_Next),
                     variant = ButtonVariant.Primary,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -122,10 +122,10 @@ fun RestorePrivateKey(
                         if (accountTypes.isNotEmpty()) {
                             mainViewModel.setAccountData(
                                 accountTypes.singleOrNull(),
-                                viewModel.accountName,
+                                viewModel.accountName.ifBlank { viewModel.defaultName },
                                 true,
                                 false,
-                                StatPage.ImportWalletFromKeyAdvanced
+                                StatPage.ImportWalletFromPrivateKey
                             )
                             if (accountTypes.size == 1) {
                                 openSelectCoinsScreen.invoke()

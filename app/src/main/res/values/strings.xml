@@ -145,7 +145,7 @@
     <string name="Restore_Error_MnemonicWordCount">Recovery phrase must contain at least 12 words.</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
-    <string name="Restore_PassphraseDescription">If you used a passphrase, enter it here.Using a different one will create a new wallet.</string>
+    <string name="Restore_PassphraseDescription">If you used a passphrase, enter it here. Using a different one will create a new wallet.</string>
     <string name="Restore_Title">Choose Blockchains</string>
     <string name="Restore_By">Import By</string>
     <string name="Restore_RestoreBy">Import By</string>
@@ -1408,7 +1408,7 @@
     <string name="ImportWallet_BackupFile">from File</string>
     <string name="ImportWallet_BackupFile_Description">Import a backup file from your local folder.</string>
     <string name="ImportWallet_RecoveryPhrase">from Recovery Phrase</string>
-    <string name="ImportWallet_RecoveryPhrase_Description">Import a wallet using a recovery phrase or a private key.</string>
+    <string name="ImportWallet_RecoveryPhrase_Description">Import a wallet using a recovery phrase.</string>
     <string name="ImportWallet_PrivateKey">from Private Key</string>
     <string name="ImportWallet_PrivateKey_Description">Import a wallet using a private key.</string>
     <string name="ImportWallet_Passkey">from Passkey</string>

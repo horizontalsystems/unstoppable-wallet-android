@@ -24,7 +24,7 @@ class RestorePrivateKeyViewModel(
 
     val defaultName = accountManager.getRandomWalletName()
     private var _accountName: String by mutableStateOf(defaultName)
-    val accountName: String get() = _accountName.ifBlank { defaultName }
+    val accountName: String get() = _accountName
 
     private var text = ""
 
