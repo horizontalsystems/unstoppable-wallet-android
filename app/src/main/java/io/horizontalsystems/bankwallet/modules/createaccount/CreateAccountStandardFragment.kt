@@ -153,7 +153,7 @@ private fun CreateAccountIntroScreen(
                                 checked = advancedOptionsEnabled,
                                 onCheckedChange = {
                                     advancedOptionsEnabled = it
-                                    viewModel.setPassphraseEnabledState(it)
+                                    viewModel.setAdvancedOptionsEnabled(it)
                                 }
                             )
                         }

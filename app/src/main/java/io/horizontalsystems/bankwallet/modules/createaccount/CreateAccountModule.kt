@@ -8,6 +8,11 @@ import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 
+fun getRandomWalletName(existingNames: Set<String> = emptySet()): String {
+    val all = App.instance.localizedContext().resources.getStringArray(R.array.wallet_names)
+    return all.filter { it !in existingNames }.randomOrNull() ?: all.random()
+}
+
 object CreateAccountModule {
 
     class Factory : ViewModelProvider.Factory {

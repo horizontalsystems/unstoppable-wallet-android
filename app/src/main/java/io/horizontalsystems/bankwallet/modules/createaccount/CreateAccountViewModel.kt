@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
@@ -38,7 +37,7 @@ class CreateAccountViewModel(
     val mnemonicKinds = CreateAccountModule.Kind.values().toList()
 
     val defaultAccountName = accountFactory.getNextAccountName()
-    var accountName by mutableStateOf(getRandomWalletName())
+    var accountName by mutableStateOf(getRandomWalletName(accountManager.accounts.map { it.name }.toSet()))
         private set
 
     var selectedKind: CreateAccountModule.Kind = Mnemonic12
@@ -82,11 +81,8 @@ class CreateAccountViewModel(
     }
 
     fun generateRandomAccountName() {
-        accountName = getRandomWalletName()
+        accountName = getRandomWalletName(accountManager.accounts.map { it.name }.toSet())
     }
-
-    private fun getRandomWalletName(): String =
-        App.instance.localizedContext().resources.getStringArray(R.array.wallet_names).random()
 
     fun onChangePassphrase(v: String) {
         if (passphraseValidator.containsValidCharacters(v)) {
@@ -110,11 +106,14 @@ class CreateAccountViewModel(
         selectedKind = kind
     }
 
-    fun setPassphraseEnabledState(enabled: Boolean) {
+    fun setAdvancedOptionsEnabled(enabled: Boolean) {
         passphraseEnabled = enabled
         if (!enabled) {
+            selectedKind = Mnemonic12
             passphrase = ""
             passphraseConfirmation = ""
+            passphraseState = null
+            passphraseConfirmState = null
         }
     }
 

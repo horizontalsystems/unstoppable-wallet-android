@@ -139,11 +139,12 @@ fun CreateAccountPasskeyScreen(
                 HSButton(
                     title = stringResource(R.string.Button_Create),
                     variant = ButtonVariant.Primary,
+                    enabled = createButtonEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
                     onClick = {
-                        val accountName = uiState.accountName
+                        val accountName = uiState.accountName.ifBlank { uiState.defaultAccountName }
                         createButtonEnabled = false
                         scope.launch {
                             try {
