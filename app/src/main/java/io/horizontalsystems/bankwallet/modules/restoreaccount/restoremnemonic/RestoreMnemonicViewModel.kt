@@ -122,7 +122,7 @@ class RestoreMnemonicViewModel(
                 invalidWordRanges = invalidWordItems.map { it.range }
             }
             wordItems.size !in (Mnemonic.EntropyStrength.values().map { it.wordCount }) -> {
-                error = Translator.getString(R.string.Restore_Error_MnemonicWordCount, wordItems.size)
+                error = Translator.getString(R.string.Restore_Error_MnemonicWordCount)
             }
             else -> {
                 try {

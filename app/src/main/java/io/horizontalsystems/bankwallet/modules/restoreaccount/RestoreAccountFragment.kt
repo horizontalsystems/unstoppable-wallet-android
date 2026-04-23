@@ -15,7 +15,6 @@ import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestorePhrase
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard.RestorePhraseNonStandard
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -104,13 +103,6 @@ private fun RestoreAccountNavHost(
                 },
                 onBackClick = { navController.popBackStack() },
                 onFinish = onFinish
-            )
-        }
-        composablePage("restore_phrase_nonstandard") {
-            RestorePhraseNonStandard(
-                mainViewModel = mainViewModel,
-                openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
-                onBackClick = { navController.popBackStack() }
             )
         }
         composablePage("zcash_configure") {
