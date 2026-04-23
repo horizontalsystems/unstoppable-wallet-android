@@ -36,6 +36,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 class SolanaKitManager(
@@ -72,8 +73,7 @@ class SolanaKitManager(
     private val networkLogger = AppLogger(BlockchainType.Solana.uid).getScoped("network")
 
     private val mutex = Mutex()
-    @Volatile
-    private var recentNetworkErrorInfo: Map<String, String>? = null
+    private val recentNetworkErrorInfoByAccountId = ConcurrentHashMap<String, Map<String, String>>()
 
     val kitStoppedObservable: Observable<Unit>
         get() = solanaKitStoppedSubject
@@ -82,12 +82,14 @@ class SolanaKitManager(
         get() = solanaKitWrapper?.solanaKit?.statusInfo()?.let { info ->
             linkedMapOf<String, Any>().apply {
                 putAll(info)
-                recentNetworkErrorInfo?.let { putAll(it) }
+                currentNetworkErrorInfo?.let { putAll(it) }
             }
         }
 
-    val currentNetworkErrorInfo: Map<String, String>?
-        get() = recentNetworkErrorInfo
+    fun networkErrorInfo(accountId: String): Map<String, String>? = recentNetworkErrorInfoByAccountId[accountId]
+
+    private val currentNetworkErrorInfo: Map<String, String>?
+        get() = currentAccount?.id?.let(recentNetworkErrorInfoByAccountId::get)
 
     private fun handleUpdateNetwork() {
         stopKit()
@@ -260,10 +262,12 @@ class SolanaKitManager(
             walletId = walletId,
             limitFirstTimeTransactionCount = limitFirstTimeTransactionCount,
             limitTimeTransactionCount = limitTimeTransactionCount,
-            networkErrorListener = ::handleNetworkError
+            networkErrorListener = { error ->
+                handleNetworkError(walletId, error)
+            }
         )
 
-    private fun handleNetworkError(error: SolanaNetworkError) {
+    private fun handleNetworkError(accountId: String, error: SolanaNetworkError) {
         val info = linkedMapOf(
             "Recent Network Error Source" to error.source,
             "Recent Network Error Method" to error.method,
@@ -277,7 +281,7 @@ class SolanaKitManager(
             info["Recent Network Error Resolved IPs"] = error.resolvedIps.joinToString(", ")
         }
 
-        recentNetworkErrorInfo = info
+        recentNetworkErrorInfoByAccountId[accountId] = info
         val message = info.entries.joinToString(separator = "\n") { (key, value) -> "$key: $value" }
         networkLogger.warning(
             message,

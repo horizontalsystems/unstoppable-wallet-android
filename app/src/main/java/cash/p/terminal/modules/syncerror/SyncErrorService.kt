@@ -49,7 +49,7 @@ class SyncErrorService(
         appendLine("Account Type: ${wallet.account.type.description}")
         appendLine("Account Origin: ${wallet.account.origin.value}")
         if (wallet.token.blockchainType == BlockchainType.Solana) {
-            solanaKitManager.currentNetworkErrorInfo?.takeIf { it.isNotEmpty() }?.let { info ->
+            solanaKitManager.networkErrorInfo(wallet.account.id)?.takeIf { it.isNotEmpty() }?.let { info ->
                 appendLine()
                 appendLine("--- Solana Network Error ---")
                 info.forEach { (key, value) ->
