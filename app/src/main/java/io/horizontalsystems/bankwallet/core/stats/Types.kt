@@ -89,6 +89,8 @@ enum class StatPage(val key: String) {
     ImportFullFromFiles("import_full_from_files"),
     ImportWallet("import_wallet"),
     ImportWalletFromKey("import_wallet_from_key"),
+
+    ImportWalletFromPrivateKey("import_wallet_from_private_key"),
     ImportWalletFromPasskey("import_wallet_from_passkey"),
     ImportWalletFromKeyAdvanced("import_wallet_from_key_advanced"),
     ImportWalletFromCloud("import_wallet_from_cloud"),

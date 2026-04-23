@@ -262,6 +262,9 @@
         android:id="@+id/restoreFromPasskeyFragment"
         android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreFromPasskeyFragment" />
     <fragment
+        android:id="@+id/restoreFromPrivateKeyFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreFromPrivateKeyFragment" />
+    <fragment
         android:id="@+id/importWalletFragment"
         android:name="io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletFragment" />
     <fragment

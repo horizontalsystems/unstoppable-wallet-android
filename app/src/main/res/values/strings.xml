@@ -101,6 +101,7 @@
     <string name="CreateWallet_Mnemonic">Recovery Phrase</string>
     <string name="CreateWallet_Wordlist">Word List</string>
     <string name="Passphrase">Passphrase</string>
+    <string name="Passphrase_Placeholder">Passphrase (optional)</string>
     <string name="Password">Password</string>
     <string name="ConfirmPassphrase">Confirm</string>
     <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
@@ -141,10 +142,10 @@
 
     <!--Restore-->
     <string name="Restore_Advanced_Title">Advanced</string>
-    <string name="Restore_Error_MnemonicWordCount">Wrong words count. It must be between 12 or 24 words. You entered: %d</string>
+    <string name="Restore_Error_MnemonicWordCount">Recovery phrase must contain at least 12 words.</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
-    <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
+    <string name="Restore_PassphraseDescription">If you used a passphrase, enter it here.Using a different one will create a new wallet.</string>
     <string name="Restore_Title">Choose Blockchains</string>
     <string name="Restore_By">Import By</string>
     <string name="Restore_RestoreBy">Import By</string>
@@ -1408,6 +1409,8 @@
     <string name="ImportWallet_BackupFile_Description">Import a backup file from your local folder.</string>
     <string name="ImportWallet_RecoveryPhrase">from Recovery Phrase</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Import a wallet using a recovery phrase or a private key.</string>
+    <string name="ImportWallet_PrivateKey">from Private Key</string>
+    <string name="ImportWallet_PrivateKey_Description">Import a wallet using a private key.</string>
     <string name="ImportWallet_Passkey">from Passkey</string>
     <string name="ImportWallet_Passkey_Description">Restore your wallet using your device.</string>
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>

@@ -6,7 +6,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -14,35 +13,29 @@ import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestorePhrase
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard.RestorePhraseNonStandard
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.RestorePrivateKey
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 
-class RestoreAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
+class RestoreFromPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<ManageAccountsModule.Input>()
-        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.restoreAccountFragment
+        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.restoreFromPrivateKeyFragment
         val inclusive = input?.popOffInclusive ?: false
 
-        RestoreAccountNavHost(
-            navController,
-            popUpToInclusiveId,
-            inclusive
-        )
+        RestoreFromPrivateKeyNavHost(navController, popUpToInclusiveId, inclusive)
     }
-
 }
 
 @Composable
-private fun RestoreAccountNavHost(
+private fun RestoreFromPrivateKeyNavHost(
     fragmentNavController: NavController,
     popUpToInclusiveId: Int,
-    inclusive: Boolean
+    inclusive: Boolean,
 ) {
     val navController = rememberNavController()
     val mainViewModel: RestoreViewModel = viewModel()
@@ -76,12 +69,13 @@ private fun RestoreAccountNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = "restore_phrase",
+        startDestination = "restore_private_key",
     ) {
-        composable("restore_phrase") {
-            RestorePhrase(
+        composablePage("restore_private_key") {
+            RestorePrivateKey(
                 mainViewModel = mainViewModel,
-                openSelectCoins = { mainViewModel.requestOpenSelectCoinsScreen() },
+                openSelectNetworkScreen = { navController.navigate("restore_select_network") },
+                openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
                 onBackClick = { fragmentNavController.popBackStack() },
             )
         }
@@ -104,13 +98,6 @@ private fun RestoreAccountNavHost(
                 },
                 onBackClick = { navController.popBackStack() },
                 onFinish = onFinish
-            )
-        }
-        composablePage("restore_phrase_nonstandard") {
-            RestorePhraseNonStandard(
-                mainViewModel = mainViewModel,
-                openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
-                onBackClick = { navController.popBackStack() }
             )
         }
         composablePage("zcash_configure") {
