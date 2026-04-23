@@ -220,7 +220,7 @@ class SwapQuoteService {
         runQuotation(silent = true)
     }
 
-    fun onActionStarted() {
+    fun onActionStarted(quote: SwapProviderQuote?) {
         preferredProvider = quote?.provider
     }
 
