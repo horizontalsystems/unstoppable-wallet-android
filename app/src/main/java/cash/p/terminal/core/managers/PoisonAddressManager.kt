@@ -45,8 +45,7 @@ class PoisonAddressManager(
         if (isWhitelisted(existing)) return PoisonStatus.BLOCKCHAIN
         if (existing?.type == PoisonAddressType.SCAM) return PoisonStatus.SUSPICIOUS
 
-        val whitelisted = poisonAddressDao.getWhitelisted(blockchainUid, accountId, WHITELIST_MIN_SEND_COUNT)
-        if (isSimilarToKnown(normalized, whitelisted)) {
+        if (isSimilarToKnown(normalized, getKnownAddresses(blockchainType, accountId))) {
             saveScamAddress(normalized, blockchainType, accountId)
             return PoisonStatus.SUSPICIOUS
         }
@@ -113,8 +112,7 @@ class PoisonAddressManager(
         if (isWhitelisted(existing)) return false
         if (isInAddressBook(normalized, blockchainType)) return false
 
-        val whitelisted = poisonAddressDao.getWhitelisted(blockchainUid, accountId, WHITELIST_MIN_SEND_COUNT)
-        return isSimilarToKnown(normalized, whitelisted)
+        return isSimilarToKnown(normalized, getKnownAddresses(blockchainType, accountId))
     }
 
     fun saveKnownAddress(address: String, blockchainType: BlockchainType, accountId: String) {
@@ -164,15 +162,32 @@ class PoisonAddressManager(
 
     private fun isSimilarToKnown(
         normalizedAddress: String,
-        knownAddresses: List<PoisonAddress>
+        knownAddresses: List<String>
     ): Boolean {
         if (normalizedAddress.length < SIMILARITY_CHARS * 2) return false
         val prefix = normalizedAddress.take(SIMILARITY_CHARS)
         val suffix = normalizedAddress.takeLast(SIMILARITY_CHARS)
         return knownAddresses.any { known ->
-            known.address != normalizedAddress &&
-                    known.address.take(SIMILARITY_CHARS) == prefix &&
-                    known.address.takeLast(SIMILARITY_CHARS) == suffix
+            known != normalizedAddress &&
+                    known.take(SIMILARITY_CHARS) == prefix &&
+                    known.takeLast(SIMILARITY_CHARS) == suffix
         }
+    }
+
+    private fun getKnownAddresses(
+        blockchainType: BlockchainType,
+        accountId: String,
+    ): List<String> {
+        val whitelisted = poisonAddressDao
+            .getWhitelisted(blockchainType.uid, accountId, WHITELIST_MIN_SEND_COUNT)
+            .map { it.address }
+        val contactAddresses = contactsRepository
+            .getContactsFiltered(blockchainType = blockchainType)
+            .flatMap { contact ->
+                contact.addresses
+                    .filter { it.blockchain.type == blockchainType }
+                    .map { it.address.lowercase() }
+            }
+        return whitelisted + contactAddresses
     }
 }

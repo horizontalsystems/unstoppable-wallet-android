@@ -9,9 +9,11 @@ import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
+import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.transaction.TransactionSource
+import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
 import io.mockk.every
 import io.mockk.mockk
@@ -308,6 +310,139 @@ class PoisonAddressManagerTest {
 
         val result = manager.determinePoisonStatus(
             relevantAddress = address,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, result)
+    }
+
+    // --- Similarity against contact book (MOBILE-623) ---
+    // Addresses saved in the contact book must participate in the similarity
+    // check the same way whitelisted sent addresses do.
+
+    @Test
+    fun determinePoisonStatus_similarToAddressInContacts_returnsSuspicious() {
+        val knownAddress = "0x5bc24606e3abcdef000000000000000065e7a473c2"
+        val poisonAddress = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+
+        val blockchain = Blockchain(type = blockchainType, name = "Ethereum", eip3091url = null)
+        val knownContact = Contact(
+            uid = "contact-1",
+            name = "Trusted",
+            addresses = listOf(ContactAddress(blockchain, knownAddress)),
+        )
+
+        // Exact-match lookup: poison address itself is NOT in contacts.
+        every {
+            contactsRepository.getContactsFiltered(
+                blockchainType = blockchainType,
+                addressQuery = poisonAddress,
+            )
+        } returns emptyList()
+
+        // Known original address IS in the contact book for this blockchain.
+        every {
+            contactsRepository.getContactsFiltered(blockchainType = blockchainType)
+        } returns listOf(knownContact)
+
+        // No whitelisted sends — contact book is the only source of known addresses.
+        every { dao.getWhitelisted(blockchainUid, accountId, whitelistedSendCount) } returns emptyList()
+
+        val result = manager.determinePoisonStatus(
+            relevantAddress = poisonAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, result)
+    }
+
+    @Test
+    fun determinePoisonStatus_similarToContactAddressMixedCase_returnsSuspicious() {
+        // Contact addresses are stored in original case; similarity must be
+        // case-insensitive, matching the rest of the algorithm.
+        val knownAddressMixedCase = "0x5BC24606E3ABCDEF000000000000000065E7A473C2"
+        val poisonAddress = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+
+        val blockchain = Blockchain(type = blockchainType, name = "Ethereum", eip3091url = null)
+        val knownContact = Contact(
+            uid = "contact-1",
+            name = "Trusted",
+            addresses = listOf(ContactAddress(blockchain, knownAddressMixedCase)),
+        )
+
+        every {
+            contactsRepository.getContactsFiltered(
+                blockchainType = blockchainType,
+                addressQuery = poisonAddress,
+            )
+        } returns emptyList()
+        every {
+            contactsRepository.getContactsFiltered(blockchainType = blockchainType)
+        } returns listOf(knownContact)
+        every { dao.getWhitelisted(blockchainUid, accountId, whitelistedSendCount) } returns emptyList()
+
+        val result = manager.determinePoisonStatus(
+            relevantAddress = poisonAddress,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, result)
+    }
+
+    @Test
+    fun isAddressSuspicious_similarToAddressInContacts_returnsTrue() {
+        // Same bug path in isAddressSuspicious — used for copy warnings in send
+        // flow and transaction details. Contact-book addresses must also seed
+        // the similarity check.
+        val knownAddress = "0x5bc24606e3abcdef000000000000000065e7a473c2"
+        val poisonAddress = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+
+        val blockchain = Blockchain(type = blockchainType, name = "Ethereum", eip3091url = null)
+        val knownContact = Contact(
+            uid = "contact-1",
+            name = "Trusted",
+            addresses = listOf(ContactAddress(blockchain, knownAddress)),
+        )
+
+        every {
+            contactsRepository.getContactsFiltered(
+                blockchainType = blockchainType,
+                addressQuery = poisonAddress,
+            )
+        } returns emptyList()
+        every {
+            contactsRepository.getContactsFiltered(blockchainType = blockchainType)
+        } returns listOf(knownContact)
+        every { dao.getWhitelisted(blockchainUid, accountId, whitelistedSendCount) } returns emptyList()
+
+        assertTrue(manager.isAddressSuspicious(poisonAddress, blockchainType, accountId))
+    }
+
+    @Test
+    fun determinePoisonStatus_notSimilarToAnyContact_returnsBlockchain() {
+        // Negative: contact address with different prefix/suffix must not trigger.
+        val unrelatedContactAddress = "0xdeadbeef1111111111111111111111111111feed"
+        val incomingAddress = "0x5bc2b99867abcdef0000000000000000001b882463c2"
+
+        val blockchain = Blockchain(type = blockchainType, name = "Ethereum", eip3091url = null)
+        val contact = Contact(
+            uid = "contact-1",
+            name = "Unrelated",
+            addresses = listOf(ContactAddress(blockchain, unrelatedContactAddress)),
+        )
+
+        every {
+            contactsRepository.getContactsFiltered(blockchainType = blockchainType)
+        } returns listOf(contact)
+
+        val result = manager.determinePoisonStatus(
+            relevantAddress = incomingAddress,
             blockchainType = blockchainType,
             accountId = accountId,
             isOutgoing = false,
