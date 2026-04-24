@@ -181,6 +181,7 @@ class TransactionRecordRepository(
                             pendingRepository = pendingRepository,
                             pendingConverter = pendingConverter,
                             pendingTransactionMatcher = pendingTransactionMatcher,
+                            dispatcherProvider = dispatcherProvider,
                         )
                     }
                 }
@@ -251,6 +252,7 @@ class TransactionRecordRepository(
                         pendingRepository = pendingRepository,
                         pendingConverter = pendingConverter,
                         pendingTransactionMatcher = pendingTransactionMatcher,
+                        dispatcherProvider = dispatcherProvider,
                     )
                 }
             }

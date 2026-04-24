@@ -112,6 +112,47 @@ class TransactionAdapterManagerTest {
     }
 
     @Test
+    fun initAdapters_sameSourceWalletSetChanged_unlinksReplacedTransactionSource() = testScope.runTest {
+        val source = transactionSource(BlockchainType.Ethereum)
+        val firstWallet = wallet(source)
+        val secondWallet = wallet(source)
+        val firstAdapter = walletAdapter()
+        val secondAdapter = walletAdapter()
+        val firstTxAdapter = transactionsAdapter()
+        val secondTxAdapter = transactionsAdapter()
+
+        coEvery {
+            adapterFactory.evmTransactionsAdapter(source, BlockchainType.Ethereum)
+        } returnsMany listOf(firstTxAdapter, secondTxAdapter)
+
+        emitAdapters(mapOf(firstWallet to firstAdapter))
+        emitAdapters(mapOf(firstWallet to firstAdapter, secondWallet to secondAdapter))
+
+        coVerify(exactly = 1) {
+            adapterFactory.unlinkAdapter(source)
+        }
+    }
+
+    @Test
+    fun initAdapters_sameSourceSameWalletSet_doesNotUnlinkTransactionSource() = testScope.runTest {
+        val source = transactionSource(BlockchainType.Ethereum)
+        val wallet = wallet(source)
+        val adapter = walletAdapter()
+        val txAdapter = transactionsAdapter()
+
+        coEvery {
+            adapterFactory.evmTransactionsAdapter(source, BlockchainType.Ethereum)
+        } returns txAdapter
+
+        emitAdapters(mapOf(wallet to adapter))
+        emitAdapters(mapOf(wallet to adapter))
+
+        coVerify(exactly = 0) {
+            adapterFactory.unlinkAdapter(source)
+        }
+    }
+
+    @Test
     fun initAdapters_sameSourceNewEqualWalletAdapter_replacesTransactionsAdapter() = testScope.runTest {
         val source = transactionSource(BlockchainType.Ethereum)
         val wallet = wallet(source)

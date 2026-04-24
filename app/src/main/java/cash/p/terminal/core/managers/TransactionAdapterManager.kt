@@ -79,12 +79,15 @@ class TransactionAdapterManager(
         operationsMutex.withLock {
             val currentEntries = adapterEntries
             val newEntries = mutableMapOf<TransactionSource, AdapterEntry>()
+            val reusedSources = mutableSetOf<TransactionSource>()
 
             for ((source, entries) in adaptersMap.entries.groupBy { it.key.transactionSource }) {
                 val walletAdapterRefs = entries.mapTo(linkedSetOf()) { AdapterRef(it.value) }
                 val adapter = entries.first().value
 
-                val entry = currentEntries[source]?.takeIf { it.walletAdapterRefs == walletAdapterRefs }
+                val entry = currentEntries[source]
+                    ?.takeIf { it.walletAdapterRefs == walletAdapterRefs }
+                    ?.also { reusedSources += source }
                     ?: createTransactionAdapter(adapter, source)?.let { txAdapter ->
                         AdapterEntry(walletAdapterRefs, txAdapter)
                     }
@@ -94,8 +97,8 @@ class TransactionAdapterManager(
                 }
             }
 
-            val adaptersToUnlink = currentEntries.keys - newEntries.keys
-            adaptersToUnlink.forEach { source ->
+            val sourcesToUnlink = currentEntries.keys - reusedSources
+            sourcesToUnlink.forEach { source ->
                 adapterFactory.unlinkAdapter(source)
             }
 

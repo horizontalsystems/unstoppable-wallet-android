@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.core.ITransactionsAdapter
+import cash.p.terminal.core.TestDispatcherProvider
 import cash.p.terminal.core.converters.PendingTransactionConverter
 import cash.p.terminal.core.managers.CoinManager
 import cash.p.terminal.core.managers.PendingTransactionMatcher
@@ -12,6 +13,8 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
+import cash.p.terminal.modules.contacts.model.Contact
+import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountOrigin
 import cash.p.terminal.wallet.Token
@@ -26,6 +29,9 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -478,7 +484,82 @@ class TransactionAdapterWrapperTest {
         assertEquals(listOf(unmatchedPending.uid, realRecord.uid), records.map { it.uid })
     }
 
-    private fun createWrapper(
+    @Test
+    fun setContact_immediatelyFollowedByGet_doesNotReturnStaleCache() = runTest {
+        val token = createToken()
+        val source = createSource(blockchain = token.blockchain)
+        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
+        val contactA = Contact(
+            uid = "contact-A",
+            name = "A",
+            addresses = listOf(
+                ContactAddress(blockchain = token.blockchain, address = "bc1-contact-a")
+            ),
+        )
+        val nullContactRecord = createBitcoinOutgoingRecord(
+            token = token,
+            source = source,
+            uid = "null-contact-record",
+            transactionHash = "hash-null",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("-0.00000563"),
+            toAddress = "bc1-some-address",
+        )
+        val contactARecord = createBitcoinOutgoingRecord(
+            token = token,
+            source = source,
+            uid = "contact-a-record",
+            transactionHash = "hash-a",
+            timestamp = 1_715_000_010,
+            amount = BigDecimal("-0.00000703"),
+            toAddress = contactA.addresses.first().address,
+        )
+
+        val adapter = mockk<ITransactionsAdapter> {
+            coEvery {
+                getTransactions(any(), token, any(), FilterTransactionType.All, null)
+            } returns listOf(nullContactRecord)
+            coEvery {
+                getTransactions(
+                    any(), token, any(), FilterTransactionType.All, contactA.addresses.first().address
+                )
+            } returns listOf(contactARecord)
+            every { getTransactionRecordsFlow(any(), any(), any()) } returns emptyFlow()
+        }
+        val pendingRepository = mockk<PendingTransactionRepository> {
+            every { getActivePendingFlow(any()) } returns emptyFlow()
+            coEvery { getPendingForWallet(any()) } returns emptyList()
+        }
+
+        val wrapper = TransactionAdapterWrapper(
+            transactionsAdapter = adapter,
+            transactionWallet = transactionWallet,
+            transactionType = FilterTransactionType.All,
+            contact = null,
+            pendingRepository = pendingRepository,
+            pendingConverter = mockk(relaxed = true),
+            pendingTransactionMatcher = PendingTransactionMatcher(),
+            dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler), this),
+        )
+
+        wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        wrapper.setContact(contactA)
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = contactA,
+        )
+
+        assertEquals(listOf(contactARecord.uid), records.map { it.uid })
+        advanceUntilIdle()
+    }
+
+    private fun TestScope.createWrapper(
         transactionWallet: TransactionWallet,
         realRecords: List<TransactionRecord>,
         pendingRecords: List<PendingTransactionRecord>,
@@ -512,6 +593,7 @@ class TransactionAdapterWrapperTest {
             pendingRepository = pendingRepository,
             pendingConverter = pendingConverter,
             pendingTransactionMatcher = PendingTransactionMatcher(),
+            dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler), this),
         )
     }
 

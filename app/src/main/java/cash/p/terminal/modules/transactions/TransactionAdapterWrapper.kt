@@ -13,9 +13,9 @@ import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
+import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -41,6 +41,7 @@ class TransactionAdapterWrapper(
     private val pendingRepository: PendingTransactionRepository,
     private val pendingConverter: PendingTransactionConverter,
     private val pendingTransactionMatcher: PendingTransactionMatcher,
+    dispatcherProvider: DispatcherProvider,
 ) : Clearable {
     private data class PendingRealMatchCandidate(
         val realIndex: Int,
@@ -59,8 +60,7 @@ class TransactionAdapterWrapper(
     // Use StateFlow for allLoaded flag - this is more consistent than MutableSharedFlow
     private val _allLoaded = MutableStateFlow(false)
 
-    // Use SupervisorJob to prevent child failures from cancelling the entire scope
-    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    private val coroutineScope = CoroutineScope(dispatcherProvider.io + SupervisorJob())
     private var updatesJob: Job? = null
 
     val address: String?
@@ -74,27 +74,23 @@ class TransactionAdapterWrapper(
     }
 
     fun reload() {
-        coroutineScope.launch {
-            _transactionRecords.update { emptyList() }
-            _allLoaded.value = false
-            subscribeForUpdates()
-        }
+        resetCacheAndResubscribe()
     }
 
     fun setTransactionType(transactionType: FilterTransactionType) {
         this.transactionType = transactionType
-        _transactionRecords.update { emptyList() }
-        _allLoaded.value = false
-        subscribeForUpdates()
+        resetCacheAndResubscribe()
     }
 
     fun setContact(contact: Contact?) {
         this.contact = contact
-        coroutineScope.launch {
-            _transactionRecords.update { emptyList() }
-            _allLoaded.value = false
-            subscribeForUpdates()
-        }
+        resetCacheAndResubscribe()
+    }
+
+    private fun resetCacheAndResubscribe() {
+        _transactionRecords.update { emptyList() }
+        _allLoaded.value = false
+        subscribeForUpdates()
     }
 
     private fun subscribeForUpdates() {
