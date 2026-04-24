@@ -12,49 +12,72 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.transaction.TransactionSource
+import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArrayOrNull
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.math.BigDecimal
+import kotlin.coroutines.cancellation.CancellationException
 
 class SpamManager(
     private val localStorage: ILocalStorage,
     private val spamAddressStorage: SpamAddressStorage,
     private val transactionAdapterManager: TransactionAdapterManager,
-
+    private val dispatcherProvider: DispatcherProvider,
 ) {
+    private data class AdapterSubscription(
+        val adapter: ITransactionsAdapter,
+        val job: Job
+    )
+
     private val transferEventFactory = TransferEventFactory()
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(SupervisorJob() + dispatcherProvider.default)
+    private val adapterSubscriptionsMutex = Mutex()
+    private val adapterSubscriptions = mutableMapOf<TransactionSource, AdapterSubscription>()
 
     init {
         coroutineScope.launch {
-            transactionAdapterManager.adaptersReadyFlow.collect {
-                subscribeToAdapters(transactionAdapterManager)
-            }
+            transactionAdapterManager.adaptersReadyFlow.collect(::subscribeToAdapters)
         }
     }
 
     var hideSuspiciousTx = localStorage.hideSuspiciousTransactions
         private set
 
-    private fun subscribeToAdapters(transactionAdapterManager: TransactionAdapterManager) {
-        transactionAdapterManager.adaptersReadyFlow.value.forEach { (transactionSource, transactionsAdapter) ->
-            subscribeToAdapter(transactionSource, transactionsAdapter)
+    private suspend fun subscribeToAdapters(adapters: Map<TransactionSource, ITransactionsAdapter>) {
+        adapterSubscriptionsMutex.withLock {
+            val removedSources = adapterSubscriptions.keys - adapters.keys
+            removedSources.forEach { source ->
+                adapterSubscriptions.remove(source)?.job?.cancel()
+            }
+
+            adapters.forEach { (source, adapter) ->
+                val subscription = adapterSubscriptions[source]
+                if (subscription?.adapter === adapter) return@forEach
+
+                subscription?.job?.cancel()
+                adapterSubscriptions[source] = AdapterSubscription(
+                    adapter = adapter,
+                    job = subscribeToAdapter(source, adapter)
+                )
+            }
         }
     }
 
-    private fun subscribeToAdapter(source: TransactionSource, adapter: ITransactionsAdapter) {
+    private fun subscribeToAdapter(source: TransactionSource, adapter: ITransactionsAdapter): Job =
         coroutineScope.launch {
             adapter.transactionsStateUpdatedFlowable.asFlow().collect {
                 sync(source)
             }
         }
-    }
 
     fun updateFilterHideSuspiciousTx(hide: Boolean) {
         localStorage.hideSuspiciousTransactions = hide
@@ -63,6 +86,10 @@ class SpamManager(
 
     fun find(address: String): SpamAddress? {
         return spamAddressStorage.findByAddress(address)
+    }
+
+    fun close() {
+        coroutineScope.cancel()
     }
 
     companion object {
@@ -88,7 +115,7 @@ class SpamManager(
                 }
             }
 
-            if (totalNativeTransactionValue != null && isSpam(totalNativeTransactionValue!!) && nativeSenders.isNotEmpty()) {
+            if (totalNativeTransactionValue != null && isSpam(totalNativeTransactionValue) && nativeSenders.isNotEmpty()) {
                 spamTokenSenders.addAll(nativeSenders)
             }
 
@@ -129,24 +156,26 @@ class SpamManager(
     }
 
     private suspend fun sync(source: TransactionSource) {
-        withContext(Dispatchers.IO + CoroutineExceptionHandler { _, e ->
-            Timber.d("SpamManager sync error: $e")
-        }) {
-            val adapter = transactionAdapterManager?.getAdapter(source) ?: run {
-                return@withContext
-            }
-            val spamScanState =
-                spamAddressStorage.getSpamScanState(source.blockchain.type, source.account.id)
-            val transactions = adapter.getTransactionsAfter(spamScanState?.lastSyncedTransactionId)
-            val lastSyncedTransactionId = handle(transactions, source)
-            lastSyncedTransactionId?.let {
-                spamAddressStorage.save(
-                    SpamScanState(
-                        source.blockchain.type,
-                        source.account.id,
-                        lastSyncedTransactionId
+        withContext(dispatcherProvider.io) {
+            try {
+                val adapter = transactionAdapterManager.getAdapter(source) ?: return@withContext
+                val spamScanState =
+                    spamAddressStorage.getSpamScanState(source.blockchain.type, source.account.id)
+                val transactions = adapter.getTransactionsAfter(spamScanState?.lastSyncedTransactionId)
+                val lastSyncedTransactionId = handle(transactions, source)
+                lastSyncedTransactionId?.let {
+                    spamAddressStorage.save(
+                        SpamScanState(
+                            source.blockchain.type,
+                            source.account.id,
+                            lastSyncedTransactionId
+                        )
                     )
-                )
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Timber.d(e, "SpamManager sync error")
             }
         }
     }
@@ -178,7 +207,9 @@ class SpamManager(
 
         try {
             spamAddressStorage.save(spamAddresses)
-        } catch (_: Throwable) {
+        } catch (e: CancellationException) {
+            throw e
+        } catch (_: Exception) {
         }
 
         val sortedTransactions = transactions.sortedWith(

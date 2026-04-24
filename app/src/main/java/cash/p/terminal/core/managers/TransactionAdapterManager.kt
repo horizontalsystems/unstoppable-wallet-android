@@ -6,10 +6,11 @@ import cash.p.terminal.wallet.IAdapter
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.transaction.TransactionSource
+import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -19,10 +20,25 @@ import kotlinx.coroutines.sync.withLock
 
 class TransactionAdapterManager(
     private val adapterManager: IAdapterManager,
-    private val adapterFactory: AdapterFactory
+    private val adapterFactory: AdapterFactory,
+    dispatcherProvider: DispatcherProvider
 ) {
-    private val coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    private data class AdapterEntry(
+        val walletAdapterRefs: Set<AdapterRef>,
+        val transactionsAdapter: ITransactionsAdapter
+    )
+
+    private class AdapterRef(val adapter: IAdapter) {
+        override fun equals(other: Any?): Boolean =
+            other is AdapterRef && adapter === other.adapter
+
+        override fun hashCode(): Int =
+            System.identityHashCode(adapter)
+    }
+
+    private val coroutineScope = CoroutineScope(SupervisorJob() + dispatcherProvider.io)
     private val operationsMutex = Mutex()
+    private var adapterEntries: Map<TransactionSource, AdapterEntry> = emptyMap()
 
     private val _adaptersState =
         MutableStateFlow<Map<TransactionSource, ITransactionsAdapter>>(emptyMap())
@@ -55,29 +71,36 @@ class TransactionAdapterManager(
     fun getAdapter(source: TransactionSource): ITransactionsAdapter? =
         _adaptersState.value[source]
 
+    fun close() {
+        coroutineScope.cancel()
+    }
+
     private suspend fun initAdapters(adaptersMap: Map<Wallet, IAdapter>) =
         operationsMutex.withLock {
-            val currentAdapters = _adaptersState.value
-            val newAdapters = mutableMapOf<TransactionSource, ITransactionsAdapter>()
+            val currentEntries = adapterEntries
+            val newEntries = mutableMapOf<TransactionSource, AdapterEntry>()
 
-            for ((wallet, adapter) in adaptersMap) {
-                val source = wallet.transactionSource
-                if (newAdapters.containsKey(source)) continue
+            for ((source, entries) in adaptersMap.entries.groupBy { it.key.transactionSource }) {
+                val walletAdapterRefs = entries.mapTo(linkedSetOf()) { AdapterRef(it.value) }
+                val adapter = entries.first().value
 
-                val existingAdapter = currentAdapters[source]
-                val txAdapter = existingAdapter ?: createTransactionAdapter(adapter, source)
+                val entry = currentEntries[source]?.takeIf { it.walletAdapterRefs == walletAdapterRefs }
+                    ?: createTransactionAdapter(adapter, source)?.let { txAdapter ->
+                        AdapterEntry(walletAdapterRefs, txAdapter)
+                    }
 
-                txAdapter?.let {
-                    newAdapters[source] = it
+                entry?.let {
+                    newEntries[source] = it
                 }
             }
 
-            val adaptersToUnlink = currentAdapters.keys - newAdapters.keys
+            val adaptersToUnlink = currentEntries.keys - newEntries.keys
             adaptersToUnlink.forEach { source ->
                 adapterFactory.unlinkAdapter(source)
             }
 
-            _adaptersState.value = newAdapters
+            adapterEntries = newEntries
+            _adaptersState.value = newEntries.mapValues { it.value.transactionsAdapter }
         }
 
     private suspend fun createTransactionAdapter(
