@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.ui_compose.R
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import java.util.Calendar
 
 @Composable
 fun CellMultilineLawrenceSection(
@@ -386,7 +387,12 @@ fun CellFooter(text: String) {
 @Composable
 fun CellFooterPreview() {
     ComposeAppTheme {
-        CellFooter(text = stringResource(id = R.string.Market_PoweredByApi))
+        CellFooter(
+            text = stringResource(
+                R.string.footer_text,
+                Calendar.getInstance().get(Calendar.YEAR)
+            )
+        )
     }
 }
 

@@ -157,7 +157,6 @@
     <string name="Market_BtcDominance">BTC-Dominanz in Prozent</string>
     <string name="Market_Volume24h">24h Lautstärke</string>
     <string name="Market_SeeAll">Alle anzeigen</string>
-    <string name="Market_PoweredByApi">Powered by CoinGeko API</string>
     <string name="Market_Tab_Posts">Nachrichten</string>
     <string name="Market_Tab_Coins">Münzen</string>
     <string name="Market_Tab_Platform">Plattformen</string>

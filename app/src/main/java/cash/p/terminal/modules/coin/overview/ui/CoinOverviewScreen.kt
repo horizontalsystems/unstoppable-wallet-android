@@ -59,6 +59,7 @@ import cash.p.terminal.wallet.models.LinkType
 import io.horizontalsystems.chartview.chart.ChartViewModel
 import io.horizontalsystems.chartview.ui.Chart
 import cash.p.terminal.ui_compose.components.HudHelper
+import java.util.Calendar
 
 @Composable
 fun CoinOverviewScreen(
@@ -216,7 +217,12 @@ fun CoinOverviewScreen(
                                 }
 
                                 Spacer(modifier = Modifier.height(32.dp))
-                                CellFooter(text = stringResource(id = R.string.Market_PoweredByApi))
+                                CellFooter(
+                                    text = stringResource(
+                                        R.string.footer_text,
+                                        Calendar.getInstance().get(Calendar.YEAR)
+                                    )
+                                )
                             }
                         }
 

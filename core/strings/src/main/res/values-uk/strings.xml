@@ -163,7 +163,6 @@
     <string name="Market_BtcDominance">Домінування BTC</string>
     <string name="Market_Volume24h">Обсяг торгів (24г)</string>
     <string name="Market_SeeAll">Переглянути все</string>
-    <string name="Market_PoweredByApi">Працює на CoinGecko API</string>
     <string name="Market_Tab_Posts">Новини</string>
     <string name="Market_Tab_Coins">Монети</string>
     <string name="Market_Tab_Platform">Платформи</string>
