@@ -28,7 +28,7 @@ class DeleteContactsTermsFragment : BaseComposeFragment() {
             uiState = viewModel.uiState,
             onCheckboxToggle = viewModel::toggleCheckbox,
             onAgreeClick = {
-                navController.ensurePinSet(R.string.pin_set_for_delete_all_contacts) {
+                navController.ensurePinSet(R.string.PinSet_Info) {
                     navController.slideFromRightForResult<SetPinFragment.Result>(
                         R.id.setPinFragment,
                         SetPinFragment.Input(
