@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
+import cash.p.terminal.ui_compose.currentYear
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import java.util.Calendar
 
 @Composable
 fun ColumnScope.MarkdownFooter() {
@@ -27,7 +27,7 @@ fun ColumnScope.MarkdownFooter() {
     Spacer(Modifier.height(12.dp))
 
     Text(
-        text = stringResource(R.string.footer_text, Calendar.getInstance().get(Calendar.YEAR)),
+        text = stringResource(R.string.footer_text, currentYear()),
         style = ComposeAppTheme.typography.caption,
         color = ComposeAppTheme.colors.grey,
         modifier = Modifier

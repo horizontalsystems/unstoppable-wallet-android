@@ -35,7 +35,7 @@ import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.ui_compose.components.CellUniversal
 import cash.p.terminal.ui_compose.components.SectionUniversalLawrence
-import java.util.Calendar
+import cash.p.terminal.ui_compose.currentYear
 
 @Composable
 fun PrivacyScreen(
@@ -96,7 +96,7 @@ fun PrivacyScreen(
         Spacer(Modifier.height(12.dp))
 
         Text(
-            text = stringResource(R.string.footer_text, Calendar.getInstance().get(Calendar.YEAR)),
+            text = stringResource(R.string.footer_text, currentYear()),
             style = ComposeAppTheme.typography.caption,
             color = ComposeAppTheme.colors.grey,
             modifier = Modifier

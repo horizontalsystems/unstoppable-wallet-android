@@ -59,6 +59,7 @@ import cash.p.terminal.wallet.models.LinkType
 import io.horizontalsystems.chartview.chart.ChartViewModel
 import io.horizontalsystems.chartview.ui.Chart
 import cash.p.terminal.ui_compose.components.HudHelper
+import cash.p.terminal.ui_compose.currentYear
 
 @Composable
 fun CoinOverviewScreen(
@@ -216,7 +217,7 @@ fun CoinOverviewScreen(
                                 }
 
                                 Spacer(modifier = Modifier.height(32.dp))
-                                CellFooter(text = stringResource(id = R.string.Market_PoweredByApi))
+                                CellFooter(text = stringResource(R.string.footer_text, currentYear()))
                             }
                         }
 

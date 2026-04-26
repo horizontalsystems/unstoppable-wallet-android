@@ -32,8 +32,8 @@ import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.caption_grey
 import cash.p.terminal.ui_compose.components.subhead1_leah
 import cash.p.terminal.ui_compose.components.title2_leah
+import cash.p.terminal.ui_compose.currentYear
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import java.util.Calendar
 
 @Suppress("ModifierMissing")
 @Composable
@@ -91,10 +91,7 @@ fun AddressPoisoningInfoScreen(
             body_leah(text = stringResource(R.string.transaction_statuses_footer))
             VSpacer(24.dp)
             caption_grey(
-                text = stringResource(
-                    R.string.footer_text,
-                    Calendar.getInstance().get(Calendar.YEAR)
-                ),
+                text = stringResource(R.string.footer_text, currentYear()),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
             )

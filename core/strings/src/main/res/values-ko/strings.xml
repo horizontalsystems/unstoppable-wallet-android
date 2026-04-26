@@ -158,7 +158,6 @@
     <string name="Market_BtcDominance">BTC 지배력</string>
     <string name="Market_Volume24h">24시간 거래량</string>
     <string name="Market_SeeAll">모두 보기</string>
-    <string name="Market_PoweredByApi">CoinGeko API에 의해 구동됩니다</string>
     <string name="Market_Tab_Posts">뉴스</string>
     <string name="Market_Tab_Coins">코인</string>
     <string name="Market_Tab_Platform">플랫폼</string>

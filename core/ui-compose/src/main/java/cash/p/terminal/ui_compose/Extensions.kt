@@ -24,6 +24,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.time.Year
+
+fun currentYear(): Int = Year.now().value
 
 //  Fragment
 
