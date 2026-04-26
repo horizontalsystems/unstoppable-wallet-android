@@ -16,16 +16,14 @@ import io.horizontalsystems.core.entities.BlockchainType
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Flowable
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
 import java.math.BigDecimal
 import java.util.concurrent.atomic.AtomicInteger
@@ -36,38 +34,13 @@ class SpamManagerTest {
 
     private val sender = "0xabc123def456"
 
-    private val adaptersReadyFlow = MutableStateFlow<Map<TransactionSource, ITransactionsAdapter>>(emptyMap())
-    private val testDispatcher = StandardTestDispatcher()
-    private val testScope = TestScope(testDispatcher)
-
-    private lateinit var spamManager: SpamManager
-
-    @Before
-    fun setUp() {
-        val localStorage = mockk<ILocalStorage>(relaxed = true) {
-            every { hideSuspiciousTransactions } returns false
-        }
-        val transactionAdapterManager = mockk<TransactionAdapterManager>(relaxed = true) {
-            every { adaptersReadyFlow } returns this@SpamManagerTest.adaptersReadyFlow
-        }
-
-        spamManager = SpamManager(
-            localStorage = localStorage,
-            spamAddressStorage = mockk<SpamAddressStorage>(relaxed = true),
-            transactionAdapterManager = transactionAdapterManager,
-            dispatcherProvider = TestDispatcherProvider(testDispatcher, testScope)
-        )
-    }
-
-    @After
-    fun tearDown() {
-        spamManager.close()
-    }
-
     // --- subscribeToAdapters — adapter subscription lifecycle ---
 
     @Test
-    fun subscribeToAdapters_existingAdapterOnAdditionalSourceEmission_doesNotDuplicateSubscription() = testScope.runTest {
+    fun subscribeToAdapters_existingAdapterOnAdditionalSourceEmission_doesNotDuplicateSubscription() = runTest(UnconfinedTestDispatcher()) {
+        val adaptersFlow = MutableStateFlow<Map<TransactionSource, ITransactionsAdapter>>(emptyMap())
+        createSpamManager(adaptersFlow, backgroundScope)
+
         val firstSource = transactionSource(BlockchainType.Ethereum)
         val secondSource = transactionSource(BlockchainType.Solana)
         val firstSubscriptionCount = AtomicInteger()
@@ -75,27 +48,49 @@ class SpamManagerTest {
         val firstAdapter = transactionsAdapter(subscriptionCount = firstSubscriptionCount)
         val secondAdapter = transactionsAdapter(subscriptionCount = secondSubscriptionCount)
 
-        emitAdapters(mapOf(firstSource to firstAdapter))
+        adaptersFlow.value = mapOf(firstSource to firstAdapter)
         assertEquals(1, firstSubscriptionCount.get())
 
-        emitAdapters(mapOf(firstSource to firstAdapter, secondSource to secondAdapter))
+        adaptersFlow.value = mapOf(firstSource to firstAdapter, secondSource to secondAdapter)
 
         assertEquals(1, firstSubscriptionCount.get())
         assertEquals(1, secondSubscriptionCount.get())
     }
 
     @Test
-    fun subscribeToAdapters_removedAdapter_cancelsSubscription() = testScope.runTest {
+    fun subscribeToAdapters_removedAdapter_cancelsSubscription() = runTest(UnconfinedTestDispatcher()) {
+        val adaptersFlow = MutableStateFlow<Map<TransactionSource, ITransactionsAdapter>>(emptyMap())
+        createSpamManager(adaptersFlow, backgroundScope)
+
         val source = transactionSource(BlockchainType.Ethereum)
         val cancellationCount = AtomicInteger()
         val adapter = transactionsAdapter(cancellationCount = cancellationCount)
 
-        emitAdapters(mapOf(source to adapter))
+        adaptersFlow.value = mapOf(source to adapter)
         assertEquals(1, adapter.subscriptionCount.get())
 
-        emitAdapters(emptyMap())
+        adaptersFlow.value = emptyMap()
 
         assertEquals(1, cancellationCount.get())
+    }
+
+    private fun TestScope.createSpamManager(
+        adaptersFlow: MutableStateFlow<Map<TransactionSource, ITransactionsAdapter>>,
+        applicationScope: CoroutineScope,
+    ): SpamManager {
+        val localStorage = mockk<ILocalStorage>(relaxed = true) {
+            every { hideSuspiciousTransactions } returns false
+        }
+        val transactionAdapterManager = mockk<TransactionAdapterManager>(relaxed = true) {
+            every { adaptersReadyFlow } returns adaptersFlow
+        }
+
+        return SpamManager(
+            localStorage = localStorage,
+            spamAddressStorage = mockk<SpamAddressStorage>(relaxed = true),
+            transactionAdapterManager = transactionAdapterManager,
+            dispatcherProvider = TestDispatcherProvider(UnconfinedTestDispatcher(testScheduler), applicationScope),
+        )
     }
 
     // --- isSpam(events) — jetton-based spam detection ---
@@ -316,11 +311,6 @@ class SpamManagerTest {
         every { record.transactionRecordType } returns TransactionRecordType.EVM_OUTGOING
         every { record.mainValue } returns null
         assertFalse(SpamManager.isZeroAmountTransfer(record))
-    }
-
-    private fun emitAdapters(adapters: Map<TransactionSource, ITransactionsAdapter>) {
-        adaptersReadyFlow.value = adapters
-        testScope.advanceUntilIdle()
     }
 
     private fun transactionSource(blockchainType: BlockchainType): TransactionSource =

@@ -16,10 +16,7 @@ import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArrayOrNull
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.sync.Mutex
@@ -41,12 +38,11 @@ class SpamManager(
     )
 
     private val transferEventFactory = TransferEventFactory()
-    private val coroutineScope = CoroutineScope(SupervisorJob() + dispatcherProvider.default)
     private val adapterSubscriptionsMutex = Mutex()
     private val adapterSubscriptions = mutableMapOf<TransactionSource, AdapterSubscription>()
 
     init {
-        coroutineScope.launch {
+        dispatcherProvider.applicationScope.launch {
             transactionAdapterManager.adaptersReadyFlow.collect(::subscribeToAdapters)
         }
     }
@@ -75,7 +71,7 @@ class SpamManager(
     }
 
     private fun subscribeToAdapter(source: TransactionSource, adapter: ITransactionsAdapter): Job =
-        coroutineScope.launch {
+        dispatcherProvider.applicationScope.launch {
             adapter.transactionsStateUpdatedFlowable.asFlow().collect {
                 sync(source)
             }
@@ -93,10 +89,6 @@ class SpamManager(
     fun shouldHide(record: TransactionRecord): Boolean {
         if (!hideSuspiciousTx) return false
         return record.spam || isZeroAmountTransfer(record)
-    }
-
-    fun close() {
-        coroutineScope.cancel()
     }
 
     companion object {
