@@ -42,6 +42,8 @@
     <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Delete</string>
     <string name="Button_LearnMore">Learn More</string>
+    <string name="hardware_wallet">کیف پول سخت‌افزاری</string>
+    <string name="hardware_wallet_not_detected">کیف پول سخت‌افزاری (NFC شناسایی نشد)</string>
     <string name="hardware_wallet_offline_confirmation_title">فعال‌سازی آفلاین</string>
     <string name="hardware_wallet_offline_confirmation_message">امکان بررسی اصالت کارت روی سرور وجود ندارد. اتصال اینترنت خود را بررسی کنید یا فعال‌سازی آفلاین را مجاز کنید. هنگام فعال‌سازی آفلاین، بررسی‌های سرور انجام نمی‌شود و سطح اطمینان امنیتی کاهش می‌یابد. آیا می‌خواهید فعال‌سازی آفلاین را ادامه دهید؟</string>
     <string name="hardware_wallet_offline_confirmation_positive">ادامه به‌صورت آفلاین</string>

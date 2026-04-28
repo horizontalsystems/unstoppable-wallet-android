@@ -42,6 +42,8 @@
     <string name="Button_Browser">자동</string>
     <string name="Button_Delete">삭제</string>
     <string name="Button_LearnMore">자세히 보기</string>
+    <string name="hardware_wallet">하드웨어 지갑</string>
+    <string name="hardware_wallet_not_detected">하드웨어 지갑 (NFC 감지되지 않음)</string>
     <string name="hardware_wallet_offline_confirmation_title">오프라인 활성화</string>
     <string name="hardware_wallet_offline_confirmation_message">서버에서 카드의 진위를 확인할 수 없습니다. 인터넷 연결을 확인하거나 오프라인 활성화를 허용해 주세요. 오프라인 활성화 시 서버 검증이 생략되어 보안 보장이 낮아집니다. 오프라인으로 계속 진행하시겠습니까?</string>
     <string name="hardware_wallet_offline_confirmation_positive">오프라인으로 계속</string>

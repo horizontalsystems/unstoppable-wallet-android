@@ -42,6 +42,8 @@
     <string name="Button_Browser">Navegador</string>
     <string name="Button_Delete">Deletar</string>
     <string name="Button_LearnMore">Saiba Mais</string>
+    <string name="hardware_wallet">Carteira Hardware</string>
+    <string name="hardware_wallet_not_detected">Carteira Hardware (NFC não detectado)</string>
     <string name="hardware_wallet_offline_confirmation_title">Ativação offline</string>
     <string name="hardware_wallet_offline_confirmation_message">Não foi possível verificar a autenticidade do cartão no servidor. Verifique a conexão com a Internet ou permita a ativação offline. A ativação offline ignora as verificações no servidor e reduz a segurança. Deseja continuar a ativação offline?</string>
     <string name="hardware_wallet_offline_confirmation_positive">Continuar offline</string>

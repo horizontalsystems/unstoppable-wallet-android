@@ -27,6 +27,8 @@
     <string name="Button_Disconnect">Déconnecter</string>
     <string name="Button_Create">Créer</string>
     <string name="Button_Advanced">Avancé</string>
+    <string name="hardware_wallet">Portefeuille matériel</string>
+    <string name="hardware_wallet_not_detected">Portefeuille matériel (NFC non détecté)</string>
     <string name="hardware_wallet_offline_confirmation_title">Activation hors ligne</string>
     <string name="hardware_wallet_offline_confirmation_message">La vérification de l’authenticité de la carte ne peut pas accéder au serveur. Vérifiez votre connexion Internet ou autorisez l’activation hors ligne. L’activation hors ligne contourne les vérifications serveur et réduit le niveau de sécurité. Poursuivre l’activation hors ligne ?</string>
     <string name="hardware_wallet_offline_confirmation_positive">Continuer hors ligne</string>

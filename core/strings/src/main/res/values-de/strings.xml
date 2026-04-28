@@ -42,6 +42,8 @@
     <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Löschen</string>
     <string name="Button_LearnMore">Mehr erfahren</string>
+    <string name="hardware_wallet">Hardware-Wallet</string>
+    <string name="hardware_wallet_not_detected">Hardware-Wallet (kein NFC erkannt)</string>
     <string name="hardware_wallet_offline_confirmation_title">Offline-Aktivierung</string>
     <string name="hardware_wallet_offline_confirmation_message">Die Kartenprüfung kann den Server nicht erreichen. Prüfe deine Internetverbindung oder erlaube eine Offline-Aktivierung. Bei der Offline-Aktivierung entfallen Serverprüfungen, wodurch die Sicherheit sinkt. Offline-Aktivierung fortsetzen?</string>
     <string name="hardware_wallet_offline_confirmation_positive">Offline fortfahren</string>

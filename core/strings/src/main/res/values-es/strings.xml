@@ -42,6 +42,8 @@
     <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Eliminar</string>
     <string name="Button_LearnMore">Aprender más</string>
+    <string name="hardware_wallet">Cartera Hardware</string>
+    <string name="hardware_wallet_not_detected">Cartera Hardware (NFC no detectado)</string>
     <string name="hardware_wallet_offline_confirmation_title">Activación sin conexión</string>
     <string name="hardware_wallet_offline_confirmation_message">No se puede verificar la autenticidad de la tarjeta en el servidor. Revisa tu conexión a Internet o permite la activación sin conexión. Al activar sin conexión no se realizan comprobaciones en el servidor, lo que reduce la seguridad. ¿Continuar con la activación sin conexión?</string>
     <string name="hardware_wallet_offline_confirmation_positive">Continuar sin conexión</string>

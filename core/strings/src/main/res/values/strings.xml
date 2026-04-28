@@ -33,8 +33,8 @@
     <string name="Button_Disconnect">Disconnect</string>
     <string name="Button_Create">Create</string>
     <string name="Button_Advanced">Advanced</string>
-    <string name="hardware_wallet">Hardware wallet</string>
-    <string name="hardware_wallet_not_detected">Hardware wallet (no NFC detected)</string>
+    <string name="hardware_wallet">Hardware Wallet</string>
+    <string name="hardware_wallet_not_detected">Hardware Wallet (no NFC detected)</string>
     <string name="hardware_wallet_not_detected_error">No NFC reader detected, enable to use hardware cards</string>
     <string name="hardware_wallet_offline_confirmation_title">Offline activation</string>
     <string name="hardware_wallet_offline_confirmation_message">Card authenticity check cannot reach the server. Check your internet connection or allow offline activation. Offline activation skips server verification and reduces security assurance. Continue with offline activation?</string>

@@ -29,7 +29,7 @@
     <string name="Button_Create">Создать</string>
     <string name="Button_Advanced">Доп. настройки</string>
     <string name="hardware_wallet">Аппаратный кошелёк</string>
-    <string name="hardware_wallet_not_detected">Аппаратный кошелёк(NFC не обнаружен)</string>
+    <string name="hardware_wallet_not_detected">Аппаратный кошелёк (NFC не обнаружен)</string>
     <string name="hardware_wallet_not_detected_error">NFC-считыватель не обнаружен, включите для использования аппаратного кошелька</string>
     <string name="hardware_wallet_offline_confirmation_title">Офлайн-активация</string>
     <string name="hardware_wallet_offline_confirmation_message">Проверка подлинности карты на сервере невозможна. Проверьте подключение к интернету или разрешите офлайн-активацию. При офлайн-активации серверные проверки не выполняются — это снижает гарантию безопасности. Продолжить офлайн-активацию?</string>

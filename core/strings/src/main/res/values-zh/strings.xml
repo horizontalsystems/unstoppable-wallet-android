@@ -42,6 +42,8 @@
     <string name="Button_Browser">浏览器</string>
     <string name="Button_Delete">删除</string>
     <string name="Button_LearnMore">了解更多</string>
+    <string name="hardware_wallet">硬件钱包</string>
+    <string name="hardware_wallet_not_detected">硬件钱包（未检测到 NFC）</string>
     <string name="hardware_wallet_offline_confirmation_title">离线激活</string>
     <string name="hardware_wallet_offline_confirmation_message">无法在服务器上验证卡片真实性。请检查网络连接或允许离线激活。离线激活会跳过服务器验证，从而降低安全性保障。是否继续离线激活？</string>
     <string name="hardware_wallet_offline_confirmation_positive">继续离线</string>

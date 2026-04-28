@@ -42,6 +42,8 @@
     <string name="Button_Browser">Tarayıcı</string>
     <string name="Button_Delete">Sil</string>
     <string name="Button_LearnMore">Daha fazla bilgi edin</string>
+    <string name="hardware_wallet">Donanım Cüzdanı</string>
+    <string name="hardware_wallet_not_detected">Donanım Cüzdanı (NFC algılanmadı)</string>
     <string name="hardware_wallet_offline_confirmation_title">Çevrimdışı etkinleştirme</string>
     <string name="hardware_wallet_offline_confirmation_message">Kart doğrulaması sunucuya ulaşılamadığı için yapılamıyor. İnternet bağlantınızı kontrol edin veya çevrimdışı etkinleştirmeye izin verin. Çevrimdışı etkinleştirmede sunucu kontrolleri atlanır ve güvenlik seviyesi düşer. Çevrimdışı etkinleştirmeye devam edilsin mi?</string>
     <string name="hardware_wallet_offline_confirmation_positive">Çevrimdışı devam et</string>

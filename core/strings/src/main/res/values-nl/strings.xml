@@ -42,6 +42,8 @@
     <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Delete</string>
     <string name="Button_LearnMore">Learn More</string>
+    <string name="hardware_wallet">Hardware Wallet</string>
+    <string name="hardware_wallet_not_detected">Hardware Wallet (geen NFC gedetecteerd)</string>
     <string name="hardware_wallet_offline_confirmation_title">Offline activeren</string>
     <string name="hardware_wallet_offline_confirmation_message">De kaartverificatie kan de server niet bereiken. Controleer je internetverbinding of sta offline activeren toe. Bij offline activeren worden servercontroles overgeslagen, waardoor de veiligheid afneemt. Offline activering voortzetten?</string>
     <string name="hardware_wallet_offline_confirmation_positive">Offline doorgaan</string>

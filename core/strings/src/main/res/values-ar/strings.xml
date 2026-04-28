@@ -42,6 +42,8 @@
     <string name="Button_Browser">المتصفح</string>
     <string name="Button_Delete">حذف</string>
     <string name="Button_LearnMore">اعرف المزيد</string>
+    <string name="hardware_wallet">محفظة الأجهزة</string>
+    <string name="hardware_wallet_not_detected">محفظة الأجهزة (لم يتم اكتشاف NFC)</string>
     <string name="hardware_wallet_offline_confirmation_title">التفعيل بدون إنترنت</string>
     <string name="hardware_wallet_offline_confirmation_message">تعذر التحقق من أصالة البطاقة عبر الخادم. تحقق من اتصالك بالإنترنت أو اسمح بالتفعيل بدون إنترنت. في وضع عدم الاتصال لا يتم تنفيذ فحوصات الخادم، مما يقلل مستوى الأمان. هل ترغب في المتابعة بالتفعيل بدون إنترنت؟</string>
     <string name="hardware_wallet_offline_confirmation_positive">متابعة بدون إنترنت</string>
