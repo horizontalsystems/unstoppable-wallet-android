@@ -6,25 +6,14 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup Ruby v3.2
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2.2
-          bundler-cache: true
-
-      - name: Install Ruby Gems (Bundler)
-        run: |
-          bundle install --jobs 4 --retry 3
-        working-directory: fastlane/
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -35,15 +24,26 @@ jobs:
         run: |
           echo "BUILD_NUMBER_NEW=$(($APPCENTER_NUMBER+$GITHUB_RUN_NUMBER))" >> $GITHUB_ENV
 
-      - name: Create service account key file
+      - name: Get Release Notes
+        id: notes
         run: |
-          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > service-account.json  
+          AUTHOR=$(git log -1 --pretty=format:'%an')
+          MESSAGE=$(git log -1 --pretty=format:'%s')
+          echo "val=Author: $AUTHOR, changes: $MESSAGE" >> $GITHUB_OUTPUT
 
-      - name: Fastlane Build
-        uses: maierj/fastlane-action@v3.0.0
-        with:
-          lane: 'app_build_release'
-          options: '{ "app_name": "Unstoppable-Release" }'
-          subdirectory: 'fastlane'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build CI Release
+        run: ./gradlew clean assembleCiRelease --stacktrace --no-daemon
         env:
-          BUILD_NUMBER: ${{env.BUILD_NUMBER_NEW}}
+          BUILD_NUMBER: ${{ env.BUILD_NUMBER_NEW }}
+
+      - name: Upload CI Release to Firebase
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: 1:308085819273:android:d1451c165f07056ea00358
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+          groups: horsysteam
+          file: app/build/outputs/apk/ci/release/app-ci-release.apk
+          releaseNotes: ${{ steps.notes.outputs.val }}
