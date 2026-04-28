@@ -2,7 +2,7 @@ name: Android CI (Dev)
 
 on:
   push:
-    branches: [ version/*, test ]
+    branches: [ version/* ]
 
 jobs:
   build:
