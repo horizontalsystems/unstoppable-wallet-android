@@ -25,10 +25,10 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Base Release
-        run: ./gradlew :app:assembleBaseRelease --no-daemon
+        run: ./gradlew :app:assembleBaseRelease
 
       - name: Build F-Droid Release
-        run: ./gradlew :app:assembleFdroidRelease --no-daemon
+        run: ./gradlew :app:assembleFdroidRelease
 
       - name: Sign Base APK
         run: |
