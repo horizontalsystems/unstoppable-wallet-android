@@ -44,7 +44,7 @@ jobs:
         shell: bash
         run: |
           SHORT_SHA=${GITHUB_SHA::5}
-          cp app/build/outputs/apk/base/release/app-base-release.apk unstoppable_wallet_google_play_${SHORT_SHA}.apk
+          cp app/build/outputs/apk/base/release/app-base-release-unsigned.apk unstoppable_wallet_google_play_${SHORT_SHA}.apk
           cp app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk unstoppable_wallet_github_${SHORT_SHA}.apk
 
       - name: Upload to GitHub Release
