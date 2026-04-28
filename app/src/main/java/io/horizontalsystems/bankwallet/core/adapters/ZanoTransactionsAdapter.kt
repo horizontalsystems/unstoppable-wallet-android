@@ -33,10 +33,10 @@ class ZanoTransactionsAdapter(
         get() = kit.syncStateFlow.asFlowable().map { }
 
     override val lastBlockInfo: LastBlockInfo?
-        get() = null
+        get() = kit.lastBlockHeight?.toInt()?.let { LastBlockInfo(it) }
 
     override val lastBlockUpdatedFlowable: Flowable<Unit>
-        get() = Flowable.empty()
+        get() = kit.lastBlockUpdatedFlow.asFlowable()
 
     override suspend fun getTransactions(
         from: TransactionRecord?,

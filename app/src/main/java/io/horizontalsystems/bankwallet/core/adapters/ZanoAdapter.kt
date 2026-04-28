@@ -114,8 +114,14 @@ class ZanoAdapter(
             }
 
             val creationTimestamp = when (account.origin) {
-                AccountOrigin.Created -> restoreSettings.birthdayHeight ?: (System.currentTimeMillis() / 1000)
-                AccountOrigin.Restored -> restoreSettings.birthdayHeight ?: 0L
+                AccountOrigin.Created -> {
+                    val blockHeight = restoreSettings.birthdayHeight ?: ZanoKit.restoreHeightForDate(java.util.Date())
+                    ZanoKit.dateForRestoreHeight(blockHeight).time / 1000
+                }
+                AccountOrigin.Restored -> {
+                    val blockHeight = restoreSettings.birthdayHeight ?: 0L
+                    if (blockHeight > 0) ZanoKit.dateForRestoreHeight(blockHeight).time / 1000 else 0L
+                }
             }
 
             val wrapper = zanoKitManager.getZanoKitWrapper(account, creationTimestamp)

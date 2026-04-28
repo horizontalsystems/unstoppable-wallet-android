@@ -6,6 +6,8 @@ import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.zanokit.ZanoKit
+import java.util.Date
 
 class PredefinedBlockchainSettingsProvider(
     private val manager: RestoreSettingsManager,
@@ -23,7 +25,7 @@ class PredefinedBlockchainSettingsProvider(
                 settings.birthdayHeight = moneroBirthdayProvider.restoreHeightForNewWallet()
             }
             BlockchainType.Zano -> {
-                settings.birthdayHeight = System.currentTimeMillis() / 1000
+                settings.birthdayHeight = ZanoKit.restoreHeightForDate(Date())
             }
             else -> {}
         }

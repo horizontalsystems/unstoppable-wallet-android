@@ -2,10 +2,8 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
-import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager.ZanoNode
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.zanokit.ZanoKit
 import io.horizontalsystems.zanokit.ZanoWallet
 import kotlinx.coroutines.CoroutineScope
@@ -20,7 +18,7 @@ class ZanoKitManager(
     private val zanoNodeManager: ZanoNodeManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
-    private var job: Job? = null
+    private var stopJob: Job? = null
 
     private val _kitStartedFlow = MutableStateFlow(false)
     val kitStartedFlow: StateFlow<Boolean> = _kitStartedFlow
@@ -96,15 +94,16 @@ class ZanoKitManager(
     }
 
     private fun stop() {
-        job?.cancel()
-        job = scope.launch {
-            zanoKitWrapper?.kit?.stop()
-        }
+        val wrapper = zanoKitWrapper
         zanoKitWrapper = null
         currentAccount = null
+        if (wrapper != null) {
+            stopJob = scope.launch { wrapper.kit.stop() }
+        }
     }
 
     private suspend fun start() {
+        stopJob?.join() // wait for any in-flight stop to fully close the native wallet
         zanoKitWrapper?.kit?.start()
     }
 }

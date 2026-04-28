@@ -52,8 +52,7 @@ object BirthdayHeightHelper {
                 MoneroKit.dateForRestoreHeight(height)
             }
             BlockchainType.Zano -> {
-                // For Zano, height is stored as unix timestamp (seconds)
-                Date(height * 1000)
+                ZanoKit.dateForRestoreHeight(height)
             }
             else -> null
         }

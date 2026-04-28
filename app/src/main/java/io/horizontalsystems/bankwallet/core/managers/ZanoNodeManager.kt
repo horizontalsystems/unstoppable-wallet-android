@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.asSharedFlow
 class ZanoNodeManager(
     private val blockchainSettingsStorage: BlockchainSettingsStorage,
 ) {
-    private val _currentNodeUpdatedFlow = MutableSharedFlow<String>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _currentNodeUpdatedFlow = MutableSharedFlow<String>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val currentNodeUpdatedFlow = _currentNodeUpdatedFlow.asSharedFlow()
 
     val defaultNodes = listOf(
-        ZanoNode("node.zano.org:11211", "node.zano.org"),
+        ZanoNode("https://zano.unstoppable.money:443", "zano.unstoppable.money"),
         ZanoNode("zano.miner.rocks:11211", "zano.miner.rocks"),
     )
 
