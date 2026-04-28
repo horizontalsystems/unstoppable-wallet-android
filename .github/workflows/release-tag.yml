@@ -33,7 +33,7 @@ jobs:
       - name: Sign Base APK
         run: |
           apksigner sign --ks keystore.jks --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
-            app/build/outputs/apk/base/release/app-base-release.apk
+            app/build/outputs/apk/base/release/app-base-release-unsigned.apk
 
       - name: Sign F-Droid APK
         run: |
