@@ -14,6 +14,7 @@ import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.monerokit.MoneroKit
+import io.horizontalsystems.zanokit.ZanoKit
 import io.horizontalsystems.tonkit.FriendlyAddress
 
 interface EnterAddressValidator {
@@ -64,6 +65,14 @@ class StellarAddressValidator(private val token: Token) : EnterAddressValidator 
 class MoneroAddressValidator() : EnterAddressValidator {
     override suspend fun validate(address: Address) {
         MoneroKit.validateAddress(address.hex)
+    }
+}
+
+class ZanoAddressValidator : EnterAddressValidator {
+    override suspend fun validate(address: Address) {
+        if (!ZanoKit.isValidAddress(address.hex)) {
+            throw Exception("Invalid Zano address")
+        }
     }
 }
 

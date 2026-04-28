@@ -70,12 +70,13 @@ unstoppableDomains = "v7.1.0"
 
 # Wallet Kits
 moneroKit = "abc0c7a"
+zanoKit = "cbe84c8"
 stellarKit = "519533b"
 tonKit = "1bdebd4"
 bitcoinKit = "8178f56"
 ethereumKit = "8c70f5e"
 feeRateKit = "393cc14"
-marketKit = "b2aea45"
+marketKit = "3041563"
 solanaKit = "82c5ef4"
 tronKit = "2f07e86"
 zcashSdk = "29a99b3"
@@ -225,6 +226,7 @@ unstoppable-domains = { module = "com.github.unstoppabledomains:resolution-java"
 
 # Wallet Kits
 kit-monero = { module = "com.github.horizontalsystems:monero-kit-android", version.ref = "moneroKit" }
+kit-zano = { module = "com.github.horizontalsystems:zano-kit-android", version.ref = "zanoKit" }
 kit-stellar = { module = "com.github.horizontalsystems:stellar-kit-android", version.ref = "stellarKit" }
 kit-ton = { module = "com.github.horizontalsystems:ton-kit-android", version.ref = "tonKit" }
 kit-bitcoin = { module = "com.github.horizontalsystems:bitcoin-kit-android", version.ref = "bitcoinKit" }

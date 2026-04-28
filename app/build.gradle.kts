@@ -325,6 +325,7 @@ dependencies {
 
     // Wallet Kits
     implementation(libs.kit.monero)
+    implementation(libs.kit.zano)
     implementation(libs.kit.stellar)
     implementation(libs.kit.ton)
     implementation(libs.kit.bitcoin)

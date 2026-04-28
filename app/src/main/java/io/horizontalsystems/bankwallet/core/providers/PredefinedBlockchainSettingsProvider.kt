@@ -22,6 +22,9 @@ class PredefinedBlockchainSettingsProvider(
             BlockchainType.Monero -> {
                 settings.birthdayHeight = moneroBirthdayProvider.restoreHeightForNewWallet()
             }
+            BlockchainType.Zano -> {
+                settings.birthdayHeight = System.currentTimeMillis() / 1000
+            }
             else -> {}
         }
         if (settings.isNotEmpty()) {

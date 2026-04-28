@@ -272,6 +272,8 @@ val BlockchainType.blockTime : Long?
 
         BlockchainType.Monero -> 120
 
+        BlockchainType.Zano -> 120
+
         BlockchainType.ArbitrumOne -> 1
 
         else -> null

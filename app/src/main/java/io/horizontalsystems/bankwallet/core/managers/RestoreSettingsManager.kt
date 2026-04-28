@@ -63,6 +63,10 @@ class RestoreSettingsManager(
                         return moneroBirthdayProvider.restoreHeightForNewWallet().toString()
                     }
 
+                    BlockchainType.Zano -> {
+                        return (System.currentTimeMillis() / 1000).toString()
+                    }
+
                     else -> null
                 }
             }

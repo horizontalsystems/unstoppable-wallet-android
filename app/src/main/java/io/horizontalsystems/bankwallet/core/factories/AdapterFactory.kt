@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.adapters.EvmTransactionsAdapter
 import io.horizontalsystems.bankwallet.core.adapters.JettonAdapter
 import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.MoneroAdapter
+import io.horizontalsystems.bankwallet.core.adapters.ZanoAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionConverter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaTransactionsAdapter
@@ -37,6 +38,7 @@ import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
+import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
@@ -59,6 +61,7 @@ class AdapterFactory(
     private val tonKitManager: TonKitManager,
     private val stellarKitManager: StellarKitManager,
     private val moneroNodeManager: MoneroNodeManager,
+    private val zanoKitManager: ZanoKitManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val coinManager: ICoinManager,
@@ -183,6 +186,13 @@ class AdapterFactory(
                     node = moneroNodeManager.currentNode
                 )
             }
+            BlockchainType.Zano -> {
+                ZanoAdapter.create(
+                    wallet = wallet,
+                    zanoKitManager = zanoKitManager,
+                    restoreSettings = restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType),
+                )
+            }
 
             else -> null
         }
@@ -196,6 +206,14 @@ class AdapterFactory(
         is TokenType.Spl -> getSplAdapter(wallet, tokenType.address)
         is TokenType.Jetton -> getJettonAdapter(wallet, tokenType.address)
         is TokenType.Asset -> getStellarAssetAdapter(wallet, tokenType.code, tokenType.issuer)
+        is TokenType.ZanoAsset -> when (wallet.token.blockchainType) {
+            BlockchainType.Zano -> ZanoAdapter.create(
+                wallet = wallet,
+                zanoKitManager = zanoKitManager,
+                restoreSettings = restoreSettingsManager.settings(wallet.account, wallet.token.blockchainType),
+            )
+            else -> null
+        }
         is TokenType.Unsupported -> null
     }
 
@@ -286,6 +304,9 @@ class AdapterFactory(
             BlockchainType.Stellar -> {
                 stellarKitManager.unlink(wallet.account)
             }
+            BlockchainType.Zano -> {
+                zanoKitManager.unlink(wallet.account)
+            }
             else -> Unit
         }
     }
@@ -313,6 +334,9 @@ class AdapterFactory(
             }
             BlockchainType.Stellar -> {
                 stellarKitManager.unlink(transactionSource.account)
+            }
+            BlockchainType.Zano -> {
+                zanoKitManager.unlink(transactionSource.account)
             }
             else -> Unit
         }
