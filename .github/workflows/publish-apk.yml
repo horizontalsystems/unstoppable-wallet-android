@@ -1,4 +1,4 @@
-name: Android Release Build
+name: Build & Publish APK
 
 on:
   push:
