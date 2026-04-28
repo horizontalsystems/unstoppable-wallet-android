@@ -1,0 +1,55 @@
+name: Android Release Build
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: hsdao/android-release-build:java-17-update
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fix git safe directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Decode keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore.jks
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Base Release
+        run: ./gradlew :app:assembleBaseRelease --no-daemon
+
+      - name: Build F-Droid Release
+        run: ./gradlew :app:assembleFdroidRelease --no-daemon
+
+      - name: Sign Base APK
+        run: |
+          apksigner sign --ks keystore.jks --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
+            app/build/outputs/apk/base/release/app-base-release.apk
+
+      - name: Sign F-Droid APK
+        run: |
+          apksigner sign --ks keystore.jks --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
+            app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk
+
+      - name: Rename APKs
+        run: |
+          SHORT_SHA=${GITHUB_SHA::5}
+          cp app/build/outputs/apk/base/release/app-base-release.apk unstoppable_wallet_google_play_${SHORT_SHA}.apk
+          cp app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk unstoppable_wallet_github_${SHORT_SHA}.apk
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          prerelease: true
+          files: |
+            unstoppable_wallet_google_play_*.apk
+            unstoppable_wallet_github_*.apk
