@@ -43,7 +43,7 @@ jobs:
       - name: Rename APKs
         shell: bash
         run: |
-          SHORT_SHA=${GITHUB_SHA::5}
+          SHORT_SHA=${GITHUB_SHA::6}
           cp app/build/outputs/apk/base/release/app-base-release-unsigned.apk unstoppable_wallet_google_play_${SHORT_SHA}.apk
           cp app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk unstoppable_wallet_github_${SHORT_SHA}.apk
 
