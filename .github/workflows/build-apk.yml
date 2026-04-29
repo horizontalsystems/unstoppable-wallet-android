@@ -54,3 +54,29 @@ jobs:
           files: |
             unstoppable_wallet_google_play_*.apk
             unstoppable_wallet_github_*.apk
+
+      - name: Notify Telegram on success
+        if: success()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          message: |
+            ✅ Release build succeeded
+            Tag: ${{ github.ref_name }}
+            Author: @${{ github.actor }}
+            ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+
+      - name: Notify Telegram on failure
+        if: failure()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          message: |
+            ❌ Release build failed
+            Tag: ${{ github.ref_name }}
+            Author: @${{ github.actor }}
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
