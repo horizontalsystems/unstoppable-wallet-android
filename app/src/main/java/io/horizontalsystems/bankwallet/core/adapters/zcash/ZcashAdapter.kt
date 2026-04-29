@@ -627,20 +627,16 @@ class ZcashAdapter(
             return blockHeight.value
         }
 
-        suspend fun estimateBirthdayDate(context: Context, height: Long): Date? {
-            try {
-                val instant = SdkSynchronizer.estimateBirthdayDate(
-                    context = context,
-                    blockHeight = BlockHeight.new(height),
-                    network = ZcashNetwork.Mainnet
-                )
-                if (instant == null) {
-                    return null
-                }
-                return Date(instant.toEpochMilliseconds())
-            } catch (_: Throwable) {
-                return null
-            }
+        suspend fun estimateBirthdayDate(context: Context, height: Long) = try {
+            val instant = SdkSynchronizer.estimateBirthdayDate(
+                context = context,
+                height = BlockHeight.new(height),
+                network = ZcashNetwork.Mainnet
+            )
+
+            Date(instant.toEpochMilliseconds())
+        } catch (_: Throwable) {
+            null
         }
     }
 }
