@@ -330,7 +330,7 @@ class SwapViewModel(
             amlChecking = true
             emitState()
             try {
-                val addresses = SwapHelper.getSourceAddressesForToken(tokenIn, amountIn)
+                val addresses = SwapHelper.getSourceAddressesForAmlCheck(tokenIn, amountIn)
                 val passedAmlCheck = if (addresses.isNotEmpty()) {
                     provider.checkAmlAddresses(addresses)
                 } else {
