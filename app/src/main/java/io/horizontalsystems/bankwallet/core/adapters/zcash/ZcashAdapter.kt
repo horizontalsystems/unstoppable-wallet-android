@@ -635,7 +635,9 @@ class ZcashAdapter(
             )
 
             Date(instant.toEpochMilliseconds())
-        } catch (_: Throwable) {
+        } catch (e: CancellationException) {
+            throw e
+        } catch (_: Exception) {
             null
         }
     }
