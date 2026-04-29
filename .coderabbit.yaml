@@ -1,0 +1,69 @@
+reviews:
+  profile: "chill"
+  high_level_summary: true
+  poem: false
+  review_status: true
+
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - "^version/.*"
+    ignore_title_keywords:
+      - "WIP"
+      - "DO NOT REVIEW"
+      - "chore: auto-translate"
+
+  path_filters:
+    - "!**/build/**"
+    - "!**/.gradle/**"
+    - "!**/gradle/wrapper/**"
+    - "!**/*.iml"
+    - "!**/generated/**"
+    - "!**/*.pb.kt"
+    - "!**/res/values-*/strings.xml"
+
+  path_instructions:
+    - path: "**/*.kt"
+      instructions: |
+        This is an Android crypto wallet. Review priorities, in order:
+
+        1. Secret material (mnemonic, private key, seed, passphrase) must
+           never reach logs, analytics, SharedPreferences, DataStore, or any
+           persisted storage other than Android Keystore. Clipboard copy is
+           allowed only as an explicit user action from a sensitive-data
+           screen, ideally with a confirmation step and routed through the
+           app's centralized clipboard helper. Flag any path where a
+           secret-looking value crosses a forbidden boundary — even if the
+           variable is renamed through several function calls.
+
+        2. Logging: any Log.d/v/i/w/e or println that can contain secret
+           material must be guarded by BuildConfig.DEBUG and verified not
+           to ship.
+
+        3. Cryptographic operations must run on Dispatchers.IO or a
+           dedicated executor, never Dispatchers.Main.
+
+        4. StateFlow / SharedFlow values exposed to UI must not contain
+           secret material.
+
+  tools:
+    gitleaks:
+      enabled: true
+    semgrep:
+      enabled: true
+    ast-grep:
+      essential_rules: true
+    detekt:
+      enabled: false
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  learnings:
+    scope: "auto"
+  opt_out: false
+  code_guidelines:
+    filePatterns:
+      - "docs/CRYPTO_GUIDELINES.md"

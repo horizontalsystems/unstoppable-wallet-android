@@ -1,0 +1,293 @@
+rules:
+  - id: kotlin-secret-flow-to-logs
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern: $SECRET
+          - metavariable-regex:
+              metavariable: $SECRET
+              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|extendedKey|pin|secret)'
+    pattern-sinks:
+      - patterns:
+          - pattern: Log.d($TAG, $DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Log.d($TAG, $DATA, $TR)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Log.v($TAG, $DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Log.v($TAG, $DATA, $TR)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Log.i($TAG, $DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Log.i($TAG, $DATA, $TR)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Log.w($TAG, $DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Log.w($TAG, $DATA, $TR)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Log.e($TAG, $DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Log.e($TAG, $DATA, $TR)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: println($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.d($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.i($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.w($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.e($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.tag($TAG).d($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.tag($TAG).i($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.tag($TAG).w($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.tag($TAG).e($DATA)
+          - focus-metavariable: $DATA
+    message: |
+      Secret-looking data flows into a logging sink. Mnemonic/private-key
+      material must not reach logs, crash output, or telemetry.
+    languages: [kotlin]
+    severity: ERROR
+
+  - id: kotlin-secret-flow-to-telemetry
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern: $SECRET
+          - metavariable-regex:
+              metavariable: $SECRET
+              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|extendedKey|pin|secret)'
+    pattern-sinks:
+      - patterns:
+          - pattern: FirebaseCrashlytics.getInstance().log($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: FirebaseCrashlytics.getInstance().setCustomKey(..., $DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: FirebaseAnalytics.getInstance(...).logEvent(..., $DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: AppMetrica.reportEvent(..., $DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Sentry.captureMessage($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Sentry.captureException($DATA)
+          - focus-metavariable: $DATA
+    message: |
+      Secret-looking data flows into analytics or crash-reporting telemetry.
+      Do not send mnemonic/private-key material to third-party services.
+    languages: [kotlin]
+    severity: ERROR
+
+  - id: kotlin-secret-flow-to-sharedpreferences
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern: $SECRET
+          - metavariable-regex:
+              metavariable: $SECRET
+              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|extendedKey|pin|secret)'
+    pattern-sinks:
+      - patterns:
+          - pattern: $EDITOR.putString(..., $DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: $EDITOR.putStringSet(..., $DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: $EDITOR.putLong(..., $DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: $EDITOR.putInt(..., $DATA)
+          - focus-metavariable: $DATA
+    message: |
+      Secret-looking data flows into SharedPreferences. Use Android Keystore
+      for secret material.
+    languages: [kotlin]
+    severity: ERROR
+
+  - id: kotlin-secret-flow-to-datastore
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern: $SECRET
+          - metavariable-regex:
+              metavariable: $SECRET
+              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|extendedKey|pin|secret)'
+    pattern-sinks:
+      - patterns:
+          - pattern: |
+              $STORE.edit {
+                ...
+                $PREFERENCES[$KEY] = $DATA
+                ...
+              }
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: |
+              $STORE.updateData {
+                ...
+                $DATA
+                ...
+              }
+          - focus-metavariable: $DATA
+    message: |
+      Secret-looking data flows into DataStore-style persistence. Use Android
+      Keystore for secret material.
+    languages: [kotlin]
+    severity: ERROR
+
+  - id: kotlin-secret-flow-to-file-write
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern: $SECRET
+          - metavariable-regex:
+              metavariable: $SECRET
+              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|extendedKey|pin|secret)'
+    pattern-sinks:
+      - patterns:
+          - pattern: $FILE.writeText($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: $FILE.writeBytes($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: $STREAM.write($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: openFileOutput(...).write($DATA)
+          - focus-metavariable: $DATA
+    message: |
+      Secret-looking data flows into a file write. Secret material must not be
+      persisted to plain files.
+    languages: [kotlin]
+    severity: ERROR
+
+  - id: kotlin-direct-clipboard-write
+    pattern-either:
+      - pattern: $CM.setPrimaryClip(ClipData.newPlainText($LABEL, $X))
+      - pattern: |
+          $CLIP = ClipData.newPlainText($LABEL, $X)
+          ...
+          $CM.setPrimaryClip($CLIP)
+    paths:
+      exclude:
+        - "**/ui/helpers/TextHelper.kt"
+    message: |
+      Direct clipboard writes should go through TextHelper so copy UX and any
+      future auto-clear logic stay centralized.
+    languages: [kotlin]
+    severity: WARNING
+
+  - id: kotlin-secret-clipboard-copy
+    pattern-either:
+      - patterns:
+          - pattern: TextHelper.copyText($X)
+          - metavariable-regex:
+              metavariable: $X
+              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|secret|extendedKey)'
+      - pattern: TextHelper.copyText($OBJ.getKey(...))
+      - pattern: TextHelper.copyText($OBJ.words.joinToString(...))
+    paths:
+      exclude:
+        - "**/modules/manageaccount/recoveryphrase/RecoveryPhraseFragment.kt"
+        - "**/modules/manageaccount/SecretKeyScreen.kt"
+        - "**/modules/manageaccount/showextendedkey/ShowExtendedKeyFragment.kt"
+        - "**/modules/manageaccount/showmonerokey/ShowMoneroKeyFragment.kt"
+        - "**/ui/compose/components/TransactionInfoCells.kt"
+    message: |
+      Secret-looking data is being copied to clipboard outside the approved
+      backup/key flows. If this is intentional, add the screen to the allowlist
+      with a documented reason.
+    languages: [kotlin]
+    severity: WARNING
+
+  - id: kotlin-weak-randomness-in-crypto
+    pattern-either:
+      - pattern: kotlin.random.Random.Default.nextBytes(...)
+      - pattern: kotlin.random.Random.nextBytes(...)
+      - pattern: kotlin.random.Random.nextInt(...)
+      - pattern: kotlin.random.Random.nextLong(...)
+      - pattern: java.util.Random()
+      - pattern: Random().nextBytes(...)
+      - pattern: Random().nextInt(...)
+      - pattern: Random().nextLong(...)
+      - pattern: Math.random()
+      - pattern: ThreadLocalRandom.current().nextInt(...)
+      - pattern: ThreadLocalRandom.current().nextLong(...)
+      - pattern: ThreadLocalRandom.current().nextDouble(...)
+    paths:
+      include:
+        - "**/crypto/**"
+        - "**/*Mnemonic*.kt"
+        - "**/*PrivateKey*.kt"
+        - "**/*Signer*.kt"
+        - "**/*Signing*.kt"
+    message: |
+      Non-cryptographic randomness in a crypto-related path. Use
+      java.security.SecureRandom.
+    languages: [kotlin]
+    severity: ERROR
+
+  - id: kotlin-hardcoded-mnemonic-like-phrase
+    pattern-regex: '"[a-z]+(?: [a-z]+){11,}"'
+    paths:
+      exclude:
+        - "**/*Test.kt"
+        - "**/*Tests.kt"
+        - "**/androidTest/**"
+        - "**/test/**"
+    message: |
+      Hardcoded mnemonic-like phrase detected: 12+ English words in a single
+      string literal. Do not commit seed phrases or wallet recovery material.
+    languages: [kotlin]
+    severity: ERROR
+
+  - id: kotlin-hardcoded-encoded-secret-like-string
+    patterns:
+      - pattern-regex: '"(?=[A-Za-z0-9_+/=-]{64,}")(?:[^"]*[A-Za-z])(?:[^"]*[0-9])[^"]*"'
+      - pattern-not-regex: '"0x[0-9a-fA-F]{16,}"'
+      - pattern-not-regex: '"[0-9a-fA-F]{24,}"'
+      - pattern-not-regex: '"(?:application|text|image|audio|video)/[^"]+"'
+      - pattern-not-regex: '"https?://[^"]+"'
+      - pattern-not-regex: '"[A-Za-z_]+/[A-Za-z0-9.+_-]+"'
+    paths:
+      exclude:
+        - "**/*Test.kt"
+        - "**/*Tests.kt"
+        - "**/androidTest/**"
+        - "**/test/**"
+        - "**/build.gradle.kts"
+        - "**/core/providers/AppConfigProvider.kt"
+    message: |
+      Hardcoded encoded-secret-like string detected: a long single-token
+      literal with mixed letters and digits. This is often an API key, token,
+      or encoded secret and should be reviewed.
+    languages: [kotlin]
+    severity: WARNING

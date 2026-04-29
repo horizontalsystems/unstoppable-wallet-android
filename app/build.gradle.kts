@@ -197,6 +197,9 @@ android {
         jniLibs {
             useLegacyPackaging = true
         }
+        dex {
+            useLegacyPackaging = true
+        }
     }
 
     lint {
@@ -343,7 +346,7 @@ dependencies {
     implementation(libs.kit.market)
     implementation(libs.kit.solana)
     implementation(libs.kit.tron)
-    implementation(libs.kit.zcash)
+    implementation(libs.zcash.android.sdk)
 
     // BouncyCastle
     implementation(libs.bouncycastle)

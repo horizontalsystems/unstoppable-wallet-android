@@ -1,0 +1,82 @@
+name: Build APK
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: hsdao/android-release-build:java-17-update
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fix git safe directory
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Decode keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > keystore.jks
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Base Release
+        run: ./gradlew :app:assembleBaseRelease
+
+      - name: Build F-Droid Release
+        run: ./gradlew :app:assembleFdroidRelease
+
+      - name: Sign Base APK
+        run: |
+          apksigner sign --ks keystore.jks --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
+            app/build/outputs/apk/base/release/app-base-release-unsigned.apk
+
+      - name: Sign F-Droid APK
+        run: |
+          apksigner sign --ks keystore.jks --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
+            app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk
+
+      - name: Rename APKs
+        shell: bash
+        run: |
+          SHORT_SHA=${GITHUB_SHA::6}
+          cp app/build/outputs/apk/base/release/app-base-release-unsigned.apk unstoppable_wallet_google_play_${SHORT_SHA}.apk
+          cp app/build/outputs/apk/fdroid/release/app-fdroid-release-unsigned.apk unstoppable_wallet_github_${SHORT_SHA}.apk
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          prerelease: true
+          files: |
+            unstoppable_wallet_google_play_*.apk
+            unstoppable_wallet_github_*.apk
+
+      - name: Notify Telegram on success
+        if: success()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          message: |
+            ✅ Release build succeeded
+            Tag: ${{ github.ref_name }}
+            Author: @${{ github.actor }}
+            ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+
+      - name: Notify Telegram on failure
+        if: failure()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          disable_web_page_preview: true
+          message: |
+            ❌ Release build failed
+            Tag: ${{ github.ref_name }}
+            Author: @${{ github.actor }}
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

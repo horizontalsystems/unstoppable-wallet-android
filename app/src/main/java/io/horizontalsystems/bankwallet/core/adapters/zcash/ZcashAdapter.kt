@@ -62,6 +62,7 @@ import java.math.BigDecimal
 import java.util.Base64
 import java.util.Date
 import java.util.regex.Pattern
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.max
 import io.horizontalsystems.bankwallet.entities.Account as WalletAccount
 
@@ -627,20 +628,18 @@ class ZcashAdapter(
             return blockHeight.value
         }
 
-        suspend fun estimateBirthdayDate(context: Context, height: Long): Date? {
-            try {
-                val instant = SdkSynchronizer.estimateBirthdayDate(
-                    context = context,
-                    blockHeight = BlockHeight.new(height),
-                    network = ZcashNetwork.Mainnet
-                )
-                if (instant == null) {
-                    return null
-                }
-                return Date(instant.toEpochMilliseconds())
-            } catch (_: Throwable) {
-                return null
-            }
+        suspend fun estimateBirthdayDate(context: Context, height: Long) = try {
+            val instant = SdkSynchronizer.estimateBirthdayDate(
+                context = context,
+                height = BlockHeight.new(height),
+                network = ZcashNetwork.Mainnet
+            )
+
+            Date(instant.toEpochMilliseconds())
+        } catch (e: CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            null
         }
     }
 }

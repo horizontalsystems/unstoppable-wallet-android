@@ -69,16 +69,16 @@ web3j = "5.0.2"
 unstoppableDomains = "v7.1.0"
 
 # Wallet Kits
-moneroKit = "667a41d"
+moneroKit = "abc0c7a"
 stellarKit = "519533b"
-tonKit = "4dcc84a"
-bitcoinKit = "f565276"
+tonKit = "1bdebd4"
+bitcoinKit = "8178f56"
 ethereumKit = "8c70f5e"
 feeRateKit = "393cc14"
 marketKit = "b2aea45"
 solanaKit = "82c5ef4"
 tronKit = "2f07e86"
-zcashSdk = "29a99b3"
+zcashSdk = "2.4.8"
 
 # Binance
 binanceConnector = "3.4.1"
@@ -248,7 +248,7 @@ kit-fee-rate = { module = "com.github.horizontalsystems:blockchain-fee-rate-kit-
 kit-market = { module = "com.github.horizontalsystems:market-kit-android", version.ref = "marketKit" }
 kit-solana = { module = "com.github.horizontalsystems:solana-kit-android", version.ref = "solanaKit" }
 kit-tron = { module = "com.github.horizontalsystems:tron-kit-android", version.ref = "tronKit" }
-kit-zcash = { module = "com.github.horizontalsystems:zcash-android-wallet-sdk", version.ref = "zcashSdk" }
+zcash-android-sdk = { module = "cash.z.ecc.android:zcash-android-sdk", version.ref = "zcashSdk" }
 
 # Binance
 binance-connector = { module = "io.github.binance:binance-connector-java", version.ref = "binanceConnector" }
