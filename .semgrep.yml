@@ -12,19 +12,58 @@ rules:
           - pattern: Log.d($TAG, $DATA)
           - focus-metavariable: $DATA
       - patterns:
+          - pattern: Log.d($TAG, $DATA, $TR)
+          - focus-metavariable: $DATA
+      - patterns:
           - pattern: Log.v($TAG, $DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Log.v($TAG, $DATA, $TR)
           - focus-metavariable: $DATA
       - patterns:
           - pattern: Log.i($TAG, $DATA)
           - focus-metavariable: $DATA
       - patterns:
+          - pattern: Log.i($TAG, $DATA, $TR)
+          - focus-metavariable: $DATA
+      - patterns:
           - pattern: Log.w($TAG, $DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Log.w($TAG, $DATA, $TR)
           - focus-metavariable: $DATA
       - patterns:
           - pattern: Log.e($TAG, $DATA)
           - focus-metavariable: $DATA
       - patterns:
+          - pattern: Log.e($TAG, $DATA, $TR)
+          - focus-metavariable: $DATA
+      - patterns:
           - pattern: println($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.d($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.i($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.w($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.e($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.tag($TAG).d($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.tag($TAG).i($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.tag($TAG).w($DATA)
+          - focus-metavariable: $DATA
+      - patterns:
+          - pattern: Timber.tag($TAG).e($DATA)
           - focus-metavariable: $DATA
     message: |
       Secret-looking data flows into a logging sink. Mnemonic/private-key
