@@ -62,6 +62,7 @@ import java.math.BigDecimal
 import java.util.Base64
 import java.util.Date
 import java.util.regex.Pattern
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.max
 import io.horizontalsystems.bankwallet.entities.Account as WalletAccount
 
