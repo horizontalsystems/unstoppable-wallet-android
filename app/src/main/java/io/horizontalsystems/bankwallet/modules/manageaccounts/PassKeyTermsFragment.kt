@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -48,12 +49,12 @@ fun PasskeyTermsScreen(
 ) {
 
     val uiState = viewModel.uiState
+    val resultEventBus = LocalResultEventBus.current
 
     LaunchedEffect(uiState.closeScreen) {
         if (uiState.closeScreen) {
-//            TODO("xxx nav3")
-//            navController.setNavigationResultX(PassKeyTermsFragment.Result(true))
-//            navController.popBackStack()
+            resultEventBus.sendResult(PassKeyTermsFragment.Result(true))
+            navController.removeLastOrNull()
         }
     }
 
