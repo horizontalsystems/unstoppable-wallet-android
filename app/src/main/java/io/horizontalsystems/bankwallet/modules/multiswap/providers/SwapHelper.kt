@@ -47,8 +47,6 @@ object SwapHelper {
             || blockchainType == BlockchainType.Tron
             || blockchainType == BlockchainType.Ton
             || blockchainType == BlockchainType.Stellar
-            || blockchainType == BlockchainType.Zcash
-            || blockchainType == BlockchainType.Monero
         ) {
             App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
                 return it.receiveAddress
@@ -58,8 +56,21 @@ object SwapHelper {
         return null
     }
 
-    suspend fun getSourceAddressesForToken(token: Token, amountIn: BigDecimal): List<String> {
-        getSendingAddressForToken(token)?.let { return listOf(it) }
+    suspend fun getSourceAddressesForAmlCheck(token: Token, amountIn: BigDecimal): List<String> {
+        val blockchainType = token.blockchainType
+
+        if (blockchainType.isEvm
+            || blockchainType == BlockchainType.Solana
+            || blockchainType == BlockchainType.Tron
+            || blockchainType == BlockchainType.Ton
+            || blockchainType == BlockchainType.Stellar
+            || blockchainType == BlockchainType.Zcash
+            || blockchainType == BlockchainType.Monero
+        ) {
+            App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
+                return listOf(it.receiveAddress)
+            }
+        }
 
         // UTXO chains: select the UTXOs that will actually cover amountIn
         val adapter = App.adapterManager.getAdapterForToken<ISendBitcoinAdapter>(token) ?: return emptyList()
