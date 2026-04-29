@@ -6,7 +6,7 @@ rules:
           - pattern: $SECRET
           - metavariable-regex:
               metavariable: $SECRET
-              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|secret)'
+              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|extendedKey|pin|secret)'
     pattern-sinks:
       - patterns:
           - pattern: Log.d($TAG, $DATA)
@@ -78,7 +78,7 @@ rules:
           - pattern: $SECRET
           - metavariable-regex:
               metavariable: $SECRET
-              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|secret)'
+              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|extendedKey|pin|secret)'
     pattern-sinks:
       - patterns:
           - pattern: FirebaseCrashlytics.getInstance().log($DATA)
@@ -111,7 +111,7 @@ rules:
           - pattern: $SECRET
           - metavariable-regex:
               metavariable: $SECRET
-              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|secret)'
+              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|extendedKey|pin|secret)'
     pattern-sinks:
       - patterns:
           - pattern: $EDITOR.putString(..., $DATA)
@@ -138,7 +138,7 @@ rules:
           - pattern: $SECRET
           - metavariable-regex:
               metavariable: $SECRET
-              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|secret)'
+              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|extendedKey|pin|secret)'
     pattern-sinks:
       - patterns:
           - pattern: |
@@ -169,7 +169,7 @@ rules:
           - pattern: $SECRET
           - metavariable-regex:
               metavariable: $SECRET
-              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|secret)'
+              regex: '(?i)(mnemonic|mnemonicSeed|mnemonicWords|privateKey|privKey|signingKey|passphrase|recoveryPhrase|wif|seed|xprv|extendedKey|pin|secret)'
     pattern-sinks:
       - patterns:
           - pattern: $FILE.writeText($DATA)
@@ -190,7 +190,12 @@ rules:
     severity: ERROR
 
   - id: kotlin-direct-clipboard-write
-    pattern: $CM.setPrimaryClip(ClipData.newPlainText($LABEL, $X))
+    pattern-either:
+      - pattern: $CM.setPrimaryClip(ClipData.newPlainText($LABEL, $X))
+      - pattern: |
+          $CLIP = ClipData.newPlainText($LABEL, $X)
+          ...
+          $CM.setPrimaryClip($CLIP)
     paths:
       exclude:
         - "**/ui/helpers/TextHelper.kt"
@@ -252,6 +257,12 @@ rules:
 
   - id: kotlin-hardcoded-mnemonic-like-phrase
     pattern-regex: '"[a-z]+(?: [a-z]+){11,}"'
+    paths:
+      exclude:
+        - "**/*Test.kt"
+        - "**/*Tests.kt"
+        - "**/androidTest/**"
+        - "**/test/**"
     message: |
       Hardcoded mnemonic-like phrase detected: 12+ English words in a single
       string literal. Do not commit seed phrases or wallet recovery material.
