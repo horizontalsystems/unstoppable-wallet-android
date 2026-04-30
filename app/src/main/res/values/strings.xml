@@ -1403,6 +1403,9 @@
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_Passkey_Description">A wallet with a recovery phrase securely saved by your device.</string>
     <string name="CreateNewWallet_PasskeyTerms">Passkey Wallet Terms</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">Couldn\’t create passkey</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">This device does not support passkey wallets. You can create a Standard wallet instead.</string>
+    <string name="CreateNewWallet_Button_CreateStandardWallet">Create Standard Wallet</string>
 
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">from File</string>

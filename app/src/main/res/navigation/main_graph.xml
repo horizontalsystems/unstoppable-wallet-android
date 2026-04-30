@@ -503,4 +503,7 @@
     <dialog
         android:id="@+id/walletSwitchDialog"
         android:name="io.horizontalsystems.bankwallet.modules.main.WalletSwitchDialog" />
+    <dialog
+        android:id="@+id/createPasskeyNotSupported"
+        android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreatePasskeyNotSupported" />
 </navigation>
