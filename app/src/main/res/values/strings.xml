@@ -640,7 +640,7 @@
     <string name="WalletConnect_Error_UnsupportedMethods">Unsupported methods: %s</string>
     <string name="WalletConnect_Error_UnsupportedEvents">Unsupported events: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Request not found error</string>
-    <string name="WalletConnect_NoConnection">You don\’t have any connected dapps</string>
+    <string name="WalletConnect_NoConnection">You don\'t have any connected dapps</string>
     <string name="WalletConnect_ActiveWallet">Wallet</string>
     <string name="WalletConnect_NotSupportedDescription">You current wallet type %s does not support WalletConnect</string>
     <string name="WalletConnect_Unnamed">Unnamed</string>
@@ -817,7 +817,7 @@
     <string name="Activate_AlreadyActive_Title">Already Active</string>
     <string name="Activate_AlreadyActive_Description">The token is already active.</string>
     <string name="Activate_InsufficientBalance_Title">Insufficient Balance</string>
-    <string name="Activate_InsufficientBalance_Description">You don\’t have enough XLM balance to activate this token.</string>
+    <string name="Activate_InsufficientBalance_Description">You don\'t have enough XLM balance to activate this token.</string>
 
     <!-- Swap History -->
     <string name="SwapHistory_Title">Swap History</string>
@@ -1211,7 +1211,7 @@
 
     <!-- Privacy  -->
 
-    <string name="Privacy_Information">Unstoppable doesn\’t collect personal data like your balances or wallet addresses. We only use anonymous data to improve the app.</string>
+    <string name="Privacy_Information">Unstoppable doesn\'t collect personal data like your balances or wallet addresses. We only use anonymous data to improve the app.</string>
     <string name="ShareUiData">Share UI data</string>
     <string name="ShareUiDataDescription">This setting lets you turn off analytics and keep your activity fully private.</string>
 
@@ -1403,7 +1403,7 @@
     <string name="CreateNewWallet_Passkey">Passkey</string>
     <string name="CreateNewWallet_Passkey_Description">A wallet with a recovery phrase securely saved by your device.</string>
     <string name="CreateNewWallet_PasskeyTerms">Passkey Wallet Terms</string>
-    <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">Couldn\’t create passkey</string>
+    <string name="CreateNewWallet_CreatePasskeyNotSupported_Title">Couldn\'t create passkey</string>
     <string name="CreateNewWallet_CreatePasskeyNotSupported_Description">This device does not support passkey wallets. You can create a Standard wallet instead.</string>
     <string name="CreateNewWallet_Button_CreateStandardWallet">Create Standard Wallet</string>
 
