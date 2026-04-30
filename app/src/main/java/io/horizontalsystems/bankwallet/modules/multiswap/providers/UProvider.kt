@@ -43,7 +43,7 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.CONTROLLED,
+        RiskLevel.FLEXIBLE,
         false
     ),
     StealthEx(
