@@ -34,6 +34,7 @@ class BackupLocalPasswordViewModel(
 
     private var passphrase = ""
     private var passphraseConfirmation = ""
+    private var backupName = ""
 
     private var passphraseState: DataState.Error? = null
     private var passphraseConfirmState: DataState.Error? = null
@@ -43,27 +44,27 @@ class BackupLocalPasswordViewModel(
 
     private var backupJson: String? = null
 
-    var backupFileName: String = "UW_Backup.json"
-        private set
+    val backupFileName: String
+        get() {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            val currentDateTime = LocalDateTime.now().format(formatter)
+            val safeName = backupName.replace(" ", "_").ifBlank { "Backup" }
+            return "${safeName}_${currentDateTime}.json"
+        }
 
     init {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm")
-        val currentDateTime = LocalDateTime.now().format(formatter)
-
         when (type) {
             is BackupType.SingleWalletBackup -> {
                 val account = accountManager.account(type.accountId)
                 if (account == null) {
                     error = "Account is NULL"
-
                 } else {
-                    val walletName = account.name.replace(" ", "_")
-                    backupFileName = "UW_Backup_${walletName}_${currentDateTime}.json"
+                    backupName = account.name
                 }
             }
 
             is BackupType.FullBackup -> {
-                backupFileName = "UW_App_Backup_${currentDateTime}.json"
+                backupName = "App Backup"
             }
         }
 
@@ -71,6 +72,7 @@ class BackupLocalPasswordViewModel(
     }
 
     override fun createState() = BackupLocalPasswordModule.UiState(
+        backupName = backupName,
         passphraseState = passphraseState,
         passphraseConfirmState = passphraseConfirmState,
         showButtonSpinner = showButtonSpinner,
@@ -78,6 +80,11 @@ class BackupLocalPasswordViewModel(
         closeScreen = closeScreen,
         error = error
     )
+
+    fun onChangeBackupName(name: String) {
+        backupName = name
+        emitState()
+    }
 
     fun onChangePassphrase(v: String) {
         if (passphraseValidator.containsValidCharacters(v)) {

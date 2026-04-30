@@ -5,7 +5,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -36,11 +36,15 @@ import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBotto
 import io.horizontalsystems.bankwallet.modules.importwallet.getFileName
 import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
+import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.Section
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -127,34 +131,46 @@ private fun BackupManagerScreen(
         onBack = onBackClick,
     ) {
         Column {
-            Spacer(modifier = Modifier.height(12.dp))
-            CellUniversalLawrenceSection(
-                buildList {
-                    add {
-                        RowUniversal(onClick = { restoreLauncher.launch(arrayOf("application/json")) }) {
-                            Icon(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                painter = painterResource(R.drawable.ic_download_20),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.jacob
-                            )
-                            body_jacob(text = stringResource(R.string.BackupManager_RestoreBackup))
-                        }
-                    }
-
-                    add {
-                        RowUniversal(onClick = onCreateBackup) {
-                            Icon(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                painter = painterResource(R.drawable.ic_plus),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.jacob
-                            )
-                            body_jacob(text = stringResource(R.string.BackupManager_CreateBackup))
-                        }
-                    }
-                }
-            )
+            VSpacer(16.dp)
+            Section {
+                CellPrimary(
+                    left = {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            painter = painterResource(R.drawable.arrow_in_24),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.grey
+                        )
+                    },
+                    middle = {
+                        CellMiddleInfo(
+                            title = stringResource(R.string.BackupManager_RestoreBackup).hs,
+                            subtitle = stringResource(R.string.BackupManager_RestoreBackupDescription).hs
+                        )
+                    },
+                    right = { CellRightNavigation() },
+                    onClick = { restoreLauncher.launch(arrayOf("application/json")) }
+                )
+                HsDivider()
+                CellPrimary(
+                    left = {
+                        Icon(
+                            modifier = Modifier.size(24.dp),
+                            painter = painterResource(R.drawable.list_24),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.grey
+                        )
+                    },
+                    middle = {
+                        CellMiddleInfo(
+                            title = stringResource(R.string.BackupManager_CreateBackup).hs,
+                            subtitle = stringResource(R.string.BackupManager_CreateBackupDescription).hs
+                        )
+                    },
+                    right = { CellRightNavigation() },
+                    onClick = onCreateBackup
+                )
+            }
 
             Spacer(modifier = Modifier.height(32.dp))
         }
