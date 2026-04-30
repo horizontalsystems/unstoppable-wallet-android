@@ -1419,6 +1419,9 @@
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">This file is not a valid backup of the wallet, or the file has been corrupted and cannot be restored.</string>
     <string name="ImportWallet_SelectAnotherFile">Select Another File</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Title">Passkey restore is not supported</string>
+    <string name="ImportWallet_RestorePasskeyNotSupported_Description">This device does not support passkey restore. Use another restore method.</string>
+    <string name="ImportWallet_Button_Understood">Understood</string>
 
     <!-- Import Backup File -->
     <string name="ImportBackupFile_EnterPassword">Enter Password</string>

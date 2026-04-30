@@ -506,4 +506,7 @@
     <dialog
         android:id="@+id/createPasskeyNotSupported"
         android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreatePasskeyNotSupported" />
+    <dialog
+        android:id="@+id/restorePasskeyNotSupported"
+        android:name="io.horizontalsystems.bankwallet.modules.createaccount.RestorePasskeyNotSupported" />
 </navigation>

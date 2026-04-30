@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.NoCredentialException
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -203,6 +204,8 @@ private fun ImportWalletScreen(
                                 event = StatEvent.Open(StatPage.ImportWalletFromPasskey)
                             )
                         } catch (e: GetCredentialCancellationException) {
+                        } catch (e: NoCredentialException) {
+                            navController.slideFromBottom(R.id.restorePasskeyNotSupported)
                         } catch (e: Throwable) {
                             error = e.message ?: e.javaClass.simpleName
                         } finally {
