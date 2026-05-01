@@ -24,12 +24,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -39,12 +39,10 @@ import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
@@ -58,10 +56,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.Section
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
+import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightSelectors
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderColored
@@ -437,32 +438,43 @@ private fun BackupFileItems(
         }
         if (showBottomSheet) {
             BottomSheetContent(
-                onDismissRequest = {
-                    showBottomSheet = false
-                },
-                sheetState = sheetState
+                onDismissRequest = { showBottomSheet = false },
+                sheetState = sheetState,
+                buttons = {
+                    HSButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = ButtonVariant.Secondary,
+                        title = stringResource(R.string.BackupManager_MergeButton),
+                        onClick = {
+                            viewModel.restoreFullBackup()
+                            scope.launch {
+                                sheetState.hide()
+                                showBottomSheet = false
+                            }
+                        }
+                    )
+                    HSButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        variant = ButtonVariant.Secondary,
+                        style = ButtonStyle.Transparent,
+                        title = stringResource(R.string.Button_Cancel),
+                        onClick = {
+                            scope.launch {
+                                sheetState.hide()
+                                showBottomSheet = false
+                            }
+                        }
+                    )
+                }
             ) {
-                ConfirmationBottomSheet(
-                    title = stringResource(R.string.BackupManager_MergeTitle),
+                BottomSheetHeaderV3(
+                    image72 = painterResource(R.drawable.warning_filled_24),
+                    imageTint = ComposeAppTheme.colors.jacob,
+                    title = stringResource(R.string.BackupManager_MergeTitle)
+                )
+                TextBlock(
                     text = stringResource(R.string.BackupManager_MergeDescription),
-                    iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                    iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
-                    confirmText = stringResource(R.string.BackupManager_MergeButton),
-                    cautionType = Caution.Type.Error,
-                    cancelText = stringResource(R.string.Button_Cancel),
-                    onConfirm = {
-                        viewModel.restoreFullBackup()
-                        scope.launch {
-                            sheetState.hide()
-                            showBottomSheet = false
-                        }
-                    },
-                    onClose = {
-                        scope.launch {
-                            sheetState.hide()
-                            showBottomSheet = false
-                        }
-                    }
+                    textAlign = TextAlign.Center
                 )
             }
         }
