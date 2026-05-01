@@ -44,6 +44,7 @@ fun SelectBackupItemsScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
                     title = stringResource(R.string.Button_Next),
+                    enabled = uiState.viewState == ViewState.Success,
                     onClick = {
                         onNextClick(viewModel.selectedWallets, viewModel.selectedSections)
                     }

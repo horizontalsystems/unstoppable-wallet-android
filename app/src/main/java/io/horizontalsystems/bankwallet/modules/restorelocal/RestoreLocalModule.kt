@@ -37,8 +37,8 @@ object RestoreLocalModule {
         val showSelectCoins: AccountType?,
         val manualBackup: Boolean,
         val restored: Boolean,
-        var walletBackupViewItems: List<WalletBackupViewItem>,
-        var otherBackupViewItems: List<OtherBackupViewItem>,
+        val walletBackupViewItems: List<WalletBackupViewItem>,
+        val otherBackupViewItems: List<OtherBackupViewItem>,
         val showBackupItems: Boolean
     )
 }

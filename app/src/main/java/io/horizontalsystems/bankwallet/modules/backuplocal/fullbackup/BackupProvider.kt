@@ -463,7 +463,7 @@ class BackupProvider(
     @Throws
     fun createFullBackup(accountIds: List<String>, passphrase: String, sections: Set<BackupSection> = BackupSection.entries.toSet()): String {
         val wallets = accountManager.accounts
-            .filter { it.isWatchAccount || accountIds.contains(it.id) }
+            .filter { accountIds.contains(it.id) }
             .map {
                 val accountBackup = walletBackup(it, passphrase)
                 WalletBackup2(it.name, accountBackup)

@@ -53,10 +53,12 @@ class RestoreLocalViewModel(
 
     val accountName by lazy {
         fileName?.let { name ->
-            return@lazy name
+            val processed = name
                 .replace(".json", "")
                 .replace("UW_Backup_", "")
                 .replace("_", " ")
+                .trim()
+            if (processed.isNotBlank()) return@lazy processed
         }
         accountFactory.getNextAccountName()
     }
@@ -78,7 +80,7 @@ class RestoreLocalViewModel(
                     val backup = gson.fromJson(backupJsonString, FullBackup::class.java)
                     backup.settings.language // if single walletBackup it will throw exception
                     backup
-                } catch (ex: Exception) {
+                } catch (_: Exception) {
                     null
                 }
 
@@ -137,15 +139,15 @@ class RestoreLocalViewModel(
                 showBackupItems = true
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
-            } catch (invalidPassword: RestoreException.InvalidPasswordException) {
+            } catch (_: RestoreException.InvalidPasswordException) {
                 passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
-            }
-
-            withContext(Dispatchers.Main) {
-                showButtonSpinner = false
-                emitState()
+            } finally {
+                withContext(Dispatchers.Main) {
+                    showButtonSpinner = false
+                    emitState()
+                }
             }
         }
     }
@@ -188,25 +190,25 @@ class RestoreLocalViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 backupProvider.restoreFullBackup(decryptedFullBackup, passphrase)
+                this@RestoreLocalViewModel.decryptedFullBackup = null
                 restored = true
 
                 stat(page = statPage, event = StatEvent.ImportFull)
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
-            } catch (invalidPassword: RestoreException.InvalidPasswordException) {
+            } catch (_: RestoreException.InvalidPasswordException) {
                 passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
-            }
-
-            showButtonSpinner = false
-            withContext(Dispatchers.Main) {
-                emitState()
+            } finally {
+                withContext(Dispatchers.Main) {
+                    showButtonSpinner = false
+                    emitState()
+                }
             }
         }
     }
 
-    @Throws
     private fun restoreSingleWallet(backup: WalletBackup, accountName: String) {
         showButtonSpinner = true
         emitState()
@@ -223,14 +225,15 @@ class RestoreLocalViewModel(
                 stat(page = statPage, event = StatEvent.ImportWallet(type.statAccountType))
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
-            } catch (invalidPassword: RestoreException.InvalidPasswordException) {
+            } catch (_: RestoreException.InvalidPasswordException) {
                 passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
-            }
-            showButtonSpinner = false
-            withContext(Dispatchers.Main) {
-                emitState()
+            } finally {
+                withContext(Dispatchers.Main) {
+                    showButtonSpinner = false
+                    emitState()
+                }
             }
         }
     }

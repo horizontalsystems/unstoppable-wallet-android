@@ -224,6 +224,7 @@ private fun RestoreLocalScreen(
 
     LaunchedEffect(uiState.showSelectCoins) {
         uiState.showSelectCoins?.let { accountType ->
+            viewModel.onSelectCoinsShown()
             mainViewModel.setAccountData(
                 accountType,
                 viewModel.accountName,
@@ -234,7 +235,6 @@ private fun RestoreLocalScreen(
             keyboardController?.hide()
             delay(300)
             openSelectCoins.invoke()
-            viewModel.onSelectCoinsShown()
 
             stat(page = statPage, event = StatEvent.Open(StatPage.RestoreSelect))
         }
@@ -242,10 +242,10 @@ private fun RestoreLocalScreen(
 
     LaunchedEffect(uiState.showBackupItems) {
         if (uiState.showBackupItems) {
+            viewModel.onBackupItemsShown()
             keyboardController?.hide()
             delay(300)
             openBackupItems.invoke()
-            viewModel.onBackupItemsShown()
         }
     }
 
