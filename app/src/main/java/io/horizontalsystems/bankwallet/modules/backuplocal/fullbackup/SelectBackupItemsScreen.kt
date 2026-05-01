@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,20 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.Section
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
@@ -137,35 +128,6 @@ fun SelectBackupItemsScreen(
 
                 is ViewState.Error,
                 ViewState.Loading -> Unit
-            }
-        }
-    }
-}
-
-@Composable
-fun OtherBackupItems(otherBackupItems: List<SelectBackupItemsViewModel.OtherBackupViewItem>) {
-    CellUniversalLawrenceSection(items = otherBackupItems, showFrame = true) { item ->
-        RowUniversal(
-            modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Row {
-                    body_leah(text = item.title, modifier = Modifier.weight(1f))
-                    item.value?.let {
-                        subhead1_grey(
-                            text = item.value,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1
-                        )
-                    }
-                }
-                item.subtitle?.let {
-                    subhead2_grey(
-                        text = item.subtitle,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
-                    )
-                }
             }
         }
     }

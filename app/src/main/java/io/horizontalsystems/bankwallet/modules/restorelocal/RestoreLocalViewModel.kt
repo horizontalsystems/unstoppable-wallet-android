@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule.WalletBackup
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
+import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupSection
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupViewItemFactory
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.DecryptedFullBackup
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.FullBackup
@@ -59,6 +60,11 @@ class RestoreLocalViewModel(
         }
         accountFactory.getNextAccountName()
     }
+
+    val displayFileName: String? = fileName
+        ?.removeSuffix(".json")
+        ?.replace(Regex("_\\d{4}-\\d{2}-\\d{2}$"), "")
+        ?.replace("_", " ")
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -144,12 +150,35 @@ class RestoreLocalViewModel(
         }
     }
 
+    fun toggleWallet(wallet: WalletBackupViewItem) {
+        walletBackupViewItems = walletBackupViewItems.map {
+            if (it.account.id == wallet.account.id) it.copy(selected = !wallet.selected) else it
+        }
+        emitState()
+    }
+
+    fun toggleOtherItem(item: OtherBackupViewItem) {
+        otherBackupViewItems = otherBackupViewItems.map {
+            if (it.section != null && it.section == item.section) it.copy(selected = !item.selected) else it
+        }
+        emitState()
+    }
+
     fun shouldShowReplaceWarning(): Boolean {
-        return backupProvider.shouldShowReplaceWarning(decryptedFullBackup)
+        val contactsSelected = otherBackupViewItems.any { it.section == BackupSection.Contacts && it.selected }
+        return backupProvider.shouldShowReplaceWarning(decryptedFullBackup) && contactsSelected
     }
 
     fun restoreFullBackup() {
-        decryptedFullBackup?.let { restoreFullBackup(it) }
+        decryptedFullBackup?.let { backup ->
+            val selectedIds = walletBackupViewItems.filter { it.selected }.map { it.account.id }.toSet()
+            val selectedSections = otherBackupViewItems.mapNotNull { if (it.selected) it.section else null }.toSet()
+            val filtered = backup.copy(
+                wallets = backup.wallets.filter { it.account.id in selectedIds },
+                sections = selectedSections
+            )
+            restoreFullBackup(filtered)
+        }
     }
 
     private fun restoreFullBackup(decryptedFullBackup: DecryptedFullBackup) {

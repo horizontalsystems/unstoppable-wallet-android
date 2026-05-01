@@ -1200,6 +1200,11 @@
     <string name="BackupManager_Other">Data</string>
     <string name="BackupManager_Restore">Restore</string>
     <string name="BackupManager_BackupFileContents">List of contents in the backup file.</string>
+    <string name="BackupManager_RestoreItemsDescription">Choose what to restore. You can restore everything or only selected items.</string>
+    <string name="BackupManager_CountSavedAddresses">%d saved addresses</string>
+    <string name="BackupManager_CountAssets">%d assets</string>
+    <string name="BackupManager_CountNetworks">%d networks</string>
+    <string name="BackupManager_CountWallets">%d wallets</string>
     <string name="BackupManager_MergeTitle">Warning</string>
     <string name="BackupManager_MergeButton">Replace</string>
     <string name="BackupManager_MergeDescription">This action will overwrite your local payment contacts.</string>

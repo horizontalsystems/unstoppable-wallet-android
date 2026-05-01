@@ -19,18 +19,43 @@ class BackupViewItemFactory {
 
         val otherBackupViewItems = buildList {
             backupItems.watchWallets?.let {
-                add(SelectBackupItemsViewModel.OtherBackupViewItem(section = null, title = Translator.getString(R.string.BackupManager_WatchWallets), value = "$it"))
+                add(
+                    SelectBackupItemsViewModel.OtherBackupViewItem(
+                        section = null,
+                        title = Translator.getString(R.string.BackupManager_WatchWallets),
+                        value = Translator.getString(R.string.BackupManager_CountWallets, it)
+                    )
+                )
             }
             backupItems.contacts?.let {
-                add(SelectBackupItemsViewModel.OtherBackupViewItem(section = BackupSection.Contacts, title = Translator.getString(R.string.Contacts), value = "$it"))
+                add(
+                    SelectBackupItemsViewModel.OtherBackupViewItem(
+                        section = BackupSection.Contacts,
+                        title = Translator.getString(R.string.Contacts),
+                        value = Translator.getString(R.string.BackupManager_CountSavedAddresses, it)
+                    )
+                )
             }
             backupItems.watchlist?.let {
-                add(SelectBackupItemsViewModel.OtherBackupViewItem(section = BackupSection.Favourites, title = Translator.getString(R.string.BackupManager_Watchlist), value = "$it"))
+                add(
+                    SelectBackupItemsViewModel.OtherBackupViewItem(
+                        section = BackupSection.Favourites,
+                        title = Translator.getString(R.string.BackupManager_Watchlist),
+                        value = Translator.getString(R.string.BackupManager_CountAssets, it)
+                    )
+                )
             }
             backupItems.customRpc?.let {
-                add(SelectBackupItemsViewModel.OtherBackupViewItem(section = BackupSection.CustomRpc, title = Translator.getString(R.string.BackupManager_CustomRpc), value = "$it"))
+                add(
+                    SelectBackupItemsViewModel.OtherBackupViewItem(
+                        section = BackupSection.CustomRpc,
+                        title = Translator.getString(R.string.BackupManager_CustomRpc),
+                        value = Translator.getString(R.string.BackupManager_CountNetworks, it)
+                    )
+                )
             }
-            val showPreferences = backupItems.sections?.let { BackupSection.Preferences in it } ?: true
+            val showPreferences =
+                backupItems.sections?.let { BackupSection.Preferences in it } ?: true
             if (showPreferences) {
                 add(
                     SelectBackupItemsViewModel.OtherBackupViewItem(
