@@ -5,6 +5,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.NavigationType
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -33,18 +34,20 @@ fun AddWalletScreen(navController: NavBackStack<HSScreen>, input: ManageAccounts
     ) {
         AddWalletView(
             onNewWalletClick = {
-                navController.navigateWithTermsAccepted {
-                    navController.slideFromRight(CreateAccountFragment(input))
-
-                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.NewWallet))
-                }
+                navController.navigateWithTermsAccepted(
+                    screen = CreateAccountFragment(input),
+                    navigationType = NavigationType.SlideFromRight,
+                    statPageFrom = StatPage.Balance,
+                    statPageTo = StatPage.NewWallet
+                )
             },
             onWalletRestoreClick = {
-                navController.navigateWithTermsAccepted {
-                    navController.slideFromRight(ImportWalletFragment(input))
-
-                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ImportWallet))
-                }
+                navController.navigateWithTermsAccepted(
+                    screen = ImportWalletFragment(input),
+                    navigationType = NavigationType.SlideFromRight,
+                    statPageFrom = StatPage.Balance,
+                    statPageTo = StatPage.ImportWallet
+                )
             },
             onWatchWalletClick = {
                 navController.slideFromRight(WatchAddressFragment(input))

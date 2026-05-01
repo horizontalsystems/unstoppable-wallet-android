@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.settings.terms
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,9 +18,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.NavigationType
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -31,29 +35,41 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import kotlinx.parcelize.Parcelize
 
-class TermsFragment : BaseComposeFragment() {
-
+class TermsFragment(
+    val screen: HSScreen,
+    val statPageFrom: StatPage,
+    val statPageTo: StatPage,
+    val navigationType: NavigationType
+) : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        TermsScreen(navController = navController)
-    }
+        TermsScreen(
+            onAccepted = {
+                navController.removeLastOrNull()
+                when (navigationType) {
+                    NavigationType.SlideFromBottom -> navController.slideFromBottom(screen)
+                    NavigationType.SlideFromRight -> navController.slideFromRight(screen)
+                }
 
-    @Parcelize
-    data class Result(val termsAccepted: Boolean) : Parcelable
+                stat(page = statPageFrom, event = StatEvent.Open(statPageTo))
+            },
+            onDeclined = {
+                navController.removeLastOrNull()
+            }
+        )
+    }
 }
 
 @Composable
 fun TermsScreen(
-    navController: NavBackStack<HSScreen>,
-    viewModel: TermsViewModel = viewModel(factory = TermsModule.Factory())
+    onAccepted: () -> Unit,
+    onDeclined: () -> Unit
 ) {
-    val resultEventBus = LocalResultEventBus.current
+    val viewModel = viewModel<TermsViewModel>(factory = TermsModule.Factory())
     LaunchedEffect(viewModel.closeWithTermsAgreed) {
         if (viewModel.closeWithTermsAgreed) {
-            resultEventBus.sendResult(TermsFragment.Result(true))
-            navController.removeLastOrNull()
+            onAccepted()
             viewModel.onTermsAgreedConsumed()
         }
     }
@@ -65,8 +81,7 @@ fun TermsScreen(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    resultEventBus.sendResult(TermsFragment.Result(false))
-                    navController.removeLastOrNull()
+                    onDeclined()
                 }
             )
         )

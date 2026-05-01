@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.NavigationType
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -98,19 +99,23 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
                     MenuItem(
                         title = TranslatableString.ResString(R.string.ManageAccounts_CreateNewWallet),
                         onClick = {
-                            navController.navigateWithTermsAccepted {
-                                navController.slideFromRight(CreateAccountFragment(args))
-                                stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.NewWallet))
-                            }
+                            navController.navigateWithTermsAccepted(
+                                screen = CreateAccountFragment(args),
+                                navigationType = NavigationType.SlideFromRight,
+                                statPageFrom = StatPage.ManageWallets,
+                                statPageTo = StatPage.NewWallet
+                            )
                         }
                     ),
                     MenuItem(
                         title = TranslatableString.ResString(R.string.ManageAccounts_ExistingWallet),
                         onClick = {
-                            navController.navigateWithTermsAccepted {
-                                navController.slideFromRight(ImportWalletFragment(args))
-                                stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.ImportWallet))
-                            }
+                            navController.navigateWithTermsAccepted(
+                                screen = ImportWalletFragment(args),
+                                navigationType = NavigationType.SlideFromRight,
+                                statPageFrom = StatPage.ManageWallets,
+                                statPageTo = StatPage.ImportWallet
+                            )
                         }
                     ),
                     MenuItem(

@@ -2,11 +2,15 @@ package io.horizontalsystems.bankwallet.core
 
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavBackStack
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 
@@ -46,17 +50,26 @@ fun NavBackStack<HSScreen>.paidAction(paidAction: IPaidAction, block: () -> Unit
     }
 }
 
-fun NavBackStack<HSScreen>.navigateWithTermsAccepted(action: () -> Unit) {
-//    TODO("xxx nav3")
-//    if (!App.termsManager.allTermsAccepted) {
-//        slideFromBottomForResult<TermsFragment.Result>(TermsFragment()) { result ->
-//            if (result.termsAccepted) {
-//                action.invoke()
-//            }
-//        }
-//    } else {
-//        action.invoke()
-//    }
+enum class NavigationType {
+    SlideFromBottom,
+    SlideFromRight,
+}
+
+fun NavBackStack<HSScreen>.navigateWithTermsAccepted(
+    screen: HSScreen,
+    navigationType: NavigationType,
+    statPageFrom: StatPage,
+    statPageTo: StatPage
+) {
+    if (!App.termsManager.allTermsAccepted) {
+        slideFromBottom(TermsFragment(screen, statPageFrom, statPageTo, navigationType))
+    } else {
+        when (navigationType) {
+            NavigationType.SlideFromBottom -> slideFromBottom(screen)
+            NavigationType.SlideFromRight -> slideFromRight(screen)
+        }
+        stat(page = statPageFrom, event = StatEvent.Open(statPageTo))
+    }
 }
 
 fun NavBackStack<HSScreen>.ensurePinSet(descriptionResId: Int, action: () -> Unit) {

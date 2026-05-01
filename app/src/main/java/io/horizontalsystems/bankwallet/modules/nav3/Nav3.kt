@@ -15,7 +15,6 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.serialization.NavBackStackSerializer
 import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.subscriptions.core.IPaidAction
@@ -90,14 +89,6 @@ fun NavBackStack<HSScreen>.navigateWithPaidAction(paidAction: IPaidAction, scree
     } else {
         val premiumFeature = PremiumFeature.getFeature(paidAction)
 //        add(DefenseSystemFeatureScreen(premiumFeature, screen))
-    }
-}
-
-fun NavBackStack<HSScreen>.navigateWithTermsAccepted(screen: HSScreen) {
-    if (!App.termsManager.allTermsAccepted) {
-//        add(TermsScreen(screen))
-    } else {
-        add(screen)
     }
 }
 

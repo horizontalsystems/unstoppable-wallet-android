@@ -11,6 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.NavigationType
 import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -39,18 +40,20 @@ fun BalanceNoAccount(navController: NavBackStack<HSScreen>) {
                 icon = painterResource(R.drawable.wallet_add_24),
                 iconTint = ComposeAppTheme.colors.grey,
                 onNewWalletClick = {
-                    navController.navigateWithTermsAccepted {
-                        navController.addFromRight(CreateAccountFragment())
-
-                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.NewWallet))
-                    }
+                    navController.navigateWithTermsAccepted(
+                        screen = CreateAccountFragment(),
+                        navigationType = NavigationType.SlideFromRight,
+                        statPageFrom = StatPage.Balance,
+                        statPageTo = StatPage.NewWallet
+                    )
                 },
                 onWalletRestoreClick = {
-                    navController.navigateWithTermsAccepted {
-                        navController.addFromRight(ImportWalletFragment())
-
-                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ImportWallet))
-                    }
+                    navController.navigateWithTermsAccepted(
+                        screen = ImportWalletFragment(),
+                        navigationType = NavigationType.SlideFromRight,
+                        statPageFrom = StatPage.Balance,
+                        statPageTo = StatPage.ImportWallet
+                    )
                 },
                 onWatchWalletClick = {
                     navController.addFromRight(WatchAddressFragment())

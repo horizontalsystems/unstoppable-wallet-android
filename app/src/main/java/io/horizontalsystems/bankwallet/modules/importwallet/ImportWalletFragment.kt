@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.Caution
+import io.horizontalsystems.bankwallet.core.NavigationType
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -96,25 +97,21 @@ private fun ImportWalletScreen(
                         //validate json format
                         BackupFileValidator().validate(jsonString)
 
-                        navController.navigateWithTermsAccepted {
-                            val fileName = context.getFileName(uriNonNull)
-                            navController.slideFromBottom(
-                                RestoreLocalFragment(
-                                    RestoreLocalFragment.Input(
-                                        popUpToInclusiveId,
-                                        inclusive,
-                                        jsonString,
-                                        fileName,
-                                        StatPage.ImportWalletFromFiles
-                                    )
-                                ),
-                            )
-
-                            stat(
-                                page = StatPage.ImportWallet,
-                                event = StatEvent.Open(StatPage.ImportWalletFromFiles)
-                            )
-                        }
+                        val fileName = context.getFileName(uriNonNull)
+                        navController.navigateWithTermsAccepted(
+                            screen = RestoreLocalFragment(
+                                RestoreLocalFragment.Input(
+                                    popUpToInclusiveId,
+                                    inclusive,
+                                    jsonString,
+                                    fileName,
+                                    StatPage.ImportWalletFromFiles
+                                )
+                            ),
+                            navigationType = NavigationType.SlideFromBottom,
+                            statPageFrom = StatPage.ImportWallet,
+                            statPageTo = StatPage.ImportWalletFromFiles
+                        )
                     }
                 } catch (e: Throwable) {
                     Log.e("TAG", "ImportWalletScreen: ", e)
@@ -152,16 +149,12 @@ private fun ImportWalletScreen(
                     subtitle = stringResource(R.string.ImportWallet_RecoveryPhrase_Description).hs,
                     borderTop = false
                 ) {
-                    navController.navigateWithTermsAccepted {
-                        navController.slideFromRight(
-                            RestoreAccountFragment(ManageAccountsModule.Input(popUpToInclusiveId, inclusive))
-                        )
-
-                        stat(
-                            page = StatPage.ImportWallet,
-                            event = StatEvent.Open(StatPage.ImportWalletFromKey)
-                        )
-                    }
+                    navController.navigateWithTermsAccepted(
+                        screen = RestoreAccountFragment(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)),
+                        navigationType = NavigationType.SlideFromRight,
+                        statPageFrom = StatPage.ImportWallet,
+                        statPageTo = StatPage.ImportWalletFromKey
+                    )
                 }
                 WalletType(
                     icon = painterResource(R.drawable.key_24),
@@ -169,17 +162,12 @@ private fun ImportWalletScreen(
                     subtitle = stringResource(R.string.ImportWallet_PrivateKey_Description).hs,
                     borderTop = true
                 ) {
-                    navController.navigateWithTermsAccepted {
-                        navController.slideFromRight(
-                            RestoreFromPrivateKeyFragment(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)),
-
-                        )
-
-                        stat(
-                            page = StatPage.ImportWallet,
-                            event = StatEvent.Open(StatPage.ImportWalletFromPrivateKey)
-                        )
-                    }
+                    navController.navigateWithTermsAccepted(
+                        screen = RestoreFromPrivateKeyFragment(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)),
+                        navigationType = NavigationType.SlideFromRight,
+                        statPageFrom = StatPage.ImportWallet,
+                        statPageTo = StatPage.ImportWalletFromPrivateKey
+                    )
                 }
                 var passkeyEnabled by remember { mutableStateOf(true) }
                 WalletType(

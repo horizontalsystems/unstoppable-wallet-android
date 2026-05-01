@@ -25,10 +25,10 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.Caution
+import io.horizontalsystems.bankwallet.core.NavigationType
 import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -55,24 +55,20 @@ class BackupManagerFragment : BaseComposeFragment() {
                 navController.removeLastOrNull()
             },
             onRestoreBackup = { jsonString, fileName ->
-                navController.navigateWithTermsAccepted {
-                    navController.slideFromBottom(
-                        RestoreLocalFragment(
-                            RestoreLocalFragment.Input(
-                                BackupManagerFragment::class,
-                                false,
-                                jsonString,
-                                fileName,
-                                StatPage.ImportFullFromFiles
-                            )
-                        ),
-                    )
-
-                    stat(
-                        page = StatPage.BackupManager,
-                        event = StatEvent.Open(StatPage.ImportFullFromFiles)
-                    )
-                }
+                navController.navigateWithTermsAccepted(
+                    screen = RestoreLocalFragment(
+                        RestoreLocalFragment.Input(
+                            BackupManagerFragment::class,
+                            false,
+                            jsonString,
+                            fileName,
+                            StatPage.ImportFullFromFiles
+                        )
+                    ),
+                    navigationType = NavigationType.SlideFromBottom,
+                    statPageFrom = StatPage.BackupManager,
+                    statPageTo = StatPage.ImportFullFromFiles
+                )
             },
             onCreateBackup = navController.authorizedAction {
                 navController.addFromRight(BackupLocalFragment())
