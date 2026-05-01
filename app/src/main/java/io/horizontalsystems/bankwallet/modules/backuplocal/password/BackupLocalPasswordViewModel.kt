@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statAccountType
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
+import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupSection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ import java.time.format.DateTimeFormatter
 
 sealed class BackupType {
     class SingleWalletBackup(val accountId: String) : BackupType()
-    class FullBackup(val accountIds: List<String>) : BackupType()
+    class FullBackup(val accountIds: List<String>, val sections: Set<BackupSection> = BackupSection.entries.toSet()) : BackupType()
 }
 
 class BackupLocalPasswordViewModel(
@@ -169,7 +170,8 @@ class BackupLocalPasswordViewModel(
                     is BackupType.FullBackup -> {
                         backupProvider.createFullBackup(
                             accountIds = type.accountIds,
-                            passphrase = passphrase
+                            passphrase = passphrase,
+                            sections = type.sections
                         )
                     }
 
