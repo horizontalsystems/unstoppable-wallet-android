@@ -98,6 +98,7 @@ private fun RestoreAccountNavHost(
                     when (token.blockchainType) {
                         BlockchainType.Zcash -> navController.navigate("zcash_configure")
                         BlockchainType.Monero -> navController.navigate("monero_configure")
+                        BlockchainType.Zano -> navController.navigate("zano_configure")
                         else -> Unit
                     }
                 },
@@ -121,6 +122,20 @@ private fun RestoreAccountNavHost(
         composablePage("monero_configure") {
             RestoreBirthdayHeightScreen(
                 blockchainType = BlockchainType.Monero,
+                onCloseWithResult = { config ->
+                    mainViewModel.setBirthdayHeightConfig(config)
+                    navController.popBackStack()
+                },
+                onCloseClick = {
+                    mainViewModel.cancelBirthdayHeightConfig = true
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composablePage("zano_configure") {
+            RestoreBirthdayHeightScreen(
+                blockchainType = BlockchainType.Zano,
                 onCloseWithResult = { config ->
                     mainViewModel.setBirthdayHeightConfig(config)
                     navController.popBackStack()
