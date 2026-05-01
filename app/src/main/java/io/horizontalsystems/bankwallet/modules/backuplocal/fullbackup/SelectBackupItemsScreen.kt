@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -35,7 +36,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderColo
 
 @Composable
 fun SelectBackupItemsScreen(
-    onNextClick: (accountIds: List<String>) -> Unit,
+    onNextClick: (accountIds: List<String>, sections: Set<BackupSection>) -> Unit,
     onBackClick: () -> Unit
 ) {
     val viewModel =
@@ -53,7 +54,7 @@ fun SelectBackupItemsScreen(
                         .padding(horizontal = 24.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
-                        onNextClick(viewModel.selectedWallets)
+                        onNextClick(viewModel.selectedWallets, viewModel.selectedSections)
                     }
                 )
             }
@@ -120,10 +121,13 @@ fun SelectBackupItemsScreen(
                                     },
                                     right = {
                                         CellRightSelectors(
-                                            icon = painterResource(id = R.drawable.selector_checked_20),
-                                            iconTint = ComposeAppTheme.colors.jacob
+                                            icon = painterResource(id = if (item.selected) R.drawable.selector_checked_20 else R.drawable.selector_unchecked_20),
+                                            iconTint = if (item.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey
                                         )
-                                    }
+                                    },
+                                    onClick = if (item.section != null) {
+                                        { viewModel.toggleOtherItem(item) }
+                                    } else null
                                 )
                             }
                         }

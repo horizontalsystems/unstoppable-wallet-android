@@ -57,6 +57,13 @@ import kotlinx.coroutines.withContext
 import java.security.MessageDigest
 import java.util.UUID
 
+enum class BackupSection {
+    @SerializedName("contacts") Contacts,
+    @SerializedName("customRpc") CustomRpc,
+    @SerializedName("favourites") Favourites,
+    @SerializedName("preferences") Preferences;
+}
+
 class BackupFileValidator {
     private val gson: Gson by lazy {
         GsonBuilder()
@@ -209,73 +216,80 @@ class BackupProvider(
         }
     }
 
-    private suspend fun restoreSettings(settings: Settings, passphrase: String) {
-        balanceViewTypeManager.setViewType(settings.balanceViewType)
+    private suspend fun restoreSettings(
+        settings: Settings,
+        passphrase: String,
+        sections: Set<BackupSection> = BackupSection.entries.toSet()
+    ) {
+        if (BackupSection.Preferences in sections) {
+            balanceViewTypeManager.setViewType(settings.balanceViewType)
 
-        withContext(Dispatchers.Main) {
-            try {
-                themeService.setThemeType(settings.currentTheme)
-                languageManager.currentLocaleTag = settings.language
-            } catch (e: Exception) {
-                Log.e("e", "theme type restore", e)
+            withContext(Dispatchers.Main) {
+                try {
+                    themeService.setThemeType(settings.currentTheme)
+                    languageManager.currentLocaleTag = settings.language
+                } catch (e: Exception) {
+                    Log.e("e", "theme type restore", e)
+                }
+            }
+
+            restoreChartSettings(settings.chartIndicatorsEnabled, settings.chartIndicators)
+
+            balanceHiddenManager.setBalanceAutoHidden(settings.balanceAutoHidden)
+
+            settings.conversionTokenQueryId?.let { baseTokenManager.setBaseTokenQueryId(it) }
+
+            launchScreenService.setLaunchScreen(settings.launchScreen)
+            localStorage.marketsTabEnabled = settings.marketsTabEnabled
+            localStorage.balanceTabButtonsEnabled = settings.balanceHideButtons ?: false
+            localStorage.priceChangeInterval = settings.priceChangeMode ?: PriceChangeInterval.LAST_24H
+            currencyManager.setBaseCurrencyCode(settings.baseCurrency)
+
+            settings.btcModes.forEach { btcMode ->
+                val blockchainType = BlockchainType.fromUid(btcMode.blockchainTypeId)
+
+                val restoreMode = BtcRestoreMode.values().firstOrNull { it.raw == btcMode.restoreMode }
+                restoreMode?.let { btcBlockchainManager.save(it, blockchainType) }
+
+                val sortMode = TransactionDataSortMode.values().firstOrNull { it.raw == btcMode.sortMode }
+                sortMode?.let { btcBlockchainManager.save(sortMode, blockchainType) }
+            }
+
+            settings.solanaSyncSource?.let {
+                blockchainSettingsStorage.save(settings.solanaSyncSource.name, BlockchainType.Solana)
+            }
+
+            settings.moneroNodes?.custom?.forEach { node ->
+                val password = node.password?.let {
+                    val decryptedPassword = decrypted(it, passphrase)
+                    String(decryptedPassword, Charsets.UTF_8)
+                }
+                moneroNodeStorage.save(MoneroNodeRecord(node.url, node.login, password, node.trusted))
+            }
+
+            settings.moneroNodes?.selected?.forEach { node ->
+                blockchainSettingsStorage.saveMoneroNode(node.url)
+            }
+
+            if (settings.appIcon != (localStorage.appIcon ?: AppIcon.Main).titleText) {
+                AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
             }
         }
 
-        restoreChartSettings(settings.chartIndicatorsEnabled, settings.chartIndicators)
-
-        balanceHiddenManager.setBalanceAutoHidden(settings.balanceAutoHidden)
-
-        settings.conversionTokenQueryId?.let { baseTokenManager.setBaseTokenQueryId(it) }
-
-        launchScreenService.setLaunchScreen(settings.launchScreen)
-        localStorage.marketsTabEnabled = settings.marketsTabEnabled
-        localStorage.balanceTabButtonsEnabled = settings.balanceHideButtons ?: false
-        localStorage.priceChangeInterval = settings.priceChangeMode ?: PriceChangeInterval.LAST_24H
-        currencyManager.setBaseCurrencyCode(settings.baseCurrency)
-
-
-        settings.btcModes.forEach { btcMode ->
-            val blockchainType = BlockchainType.fromUid(btcMode.blockchainTypeId)
-
-            val restoreMode = BtcRestoreMode.values().firstOrNull { it.raw == btcMode.restoreMode }
-            restoreMode?.let { btcBlockchainManager.save(it, blockchainType) }
-
-            val sortMode = TransactionDataSortMode.values().firstOrNull { it.raw == btcMode.sortMode }
-            sortMode?.let { btcBlockchainManager.save(sortMode, blockchainType) }
-        }
-
-        settings.evmSyncSources.custom.forEach { syncSource ->
-            val blockchainType = BlockchainType.fromUid(syncSource.blockchainTypeId)
-            val auth = syncSource.auth?.let {
-                val decryptedAuth = decrypted(it, passphrase)
-                String(decryptedAuth, Charsets.UTF_8)
+        if (BackupSection.CustomRpc in sections) {
+            settings.evmSyncSources.custom.forEach { syncSource ->
+                val blockchainType = BlockchainType.fromUid(syncSource.blockchainTypeId)
+                val auth = syncSource.auth?.let {
+                    val decryptedAuth = decrypted(it, passphrase)
+                    String(decryptedAuth, Charsets.UTF_8)
+                }
+                evmSyncSourceManager.saveSyncSource(blockchainType, syncSource.url, auth)
             }
-            evmSyncSourceManager.saveSyncSource(blockchainType, syncSource.url, auth)
-        }
 
-        settings.evmSyncSources.selected.forEach { syncSource ->
-            val blockchainType = BlockchainType.fromUid(syncSource.blockchainTypeId)
-            blockchainSettingsStorage.save(syncSource.url, blockchainType)
-        }
-
-        settings.solanaSyncSource?.let {
-            blockchainSettingsStorage.save(settings.solanaSyncSource.name, BlockchainType.Solana)
-        }
-
-        settings.moneroNodes?.custom?.forEach { node ->
-            val password = node.password?.let {
-                val decryptedPassword = decrypted(it, passphrase)
-                String(decryptedPassword, Charsets.UTF_8)
+            settings.evmSyncSources.selected.forEach { syncSource ->
+                val blockchainType = BlockchainType.fromUid(syncSource.blockchainTypeId)
+                blockchainSettingsStorage.save(syncSource.url, blockchainType)
             }
-            moneroNodeStorage.save(MoneroNodeRecord(node.url, node.login, password, node.trusted))
-        }
-
-        settings.moneroNodes?.selected?.forEach { node ->
-            blockchainSettingsStorage.saveMoneroNode(node.url)
-        }
-
-        if (settings.appIcon != (localStorage.appIcon ?: AppIcon.Main).titleText) {
-            AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
         }
     }
 
@@ -335,22 +349,28 @@ class BackupProvider(
 
     @Throws
     suspend fun restoreFullBackup(fullBackup: DecryptedFullBackup, passphrase: String) {
+        val sections = fullBackup.sections
+
         if (fullBackup.wallets.isNotEmpty()) {
             restoreWallets(fullBackup.wallets)
         }
 
-        if (fullBackup.watchlist.isNotEmpty()) {
+        if (BackupSection.Favourites in sections && fullBackup.watchlist.isNotEmpty()) {
             marketFavoritesManager.addAll(fullBackup.watchlist)
         }
 
-        restoreSettings(fullBackup.settings, passphrase)
+        if (BackupSection.Preferences in sections || BackupSection.CustomRpc in sections) {
+            restoreSettings(fullBackup.settings, passphrase, sections)
+        }
 
-        if (fullBackup.contacts.isNotEmpty()) {
+        if (BackupSection.Contacts in sections && fullBackup.contacts.isNotEmpty()) {
             contactsRepository.restore(fullBackup.contacts)
         }
     }
 
     fun decryptedFullBackup(fullBackup: FullBackup, passphrase: String): DecryptedFullBackup {
+        val sections = fullBackup.sections?.toSet() ?: BackupSection.entries.toSet()
+
         val walletBackupItems = mutableListOf<WalletBackupItem>()
 
         fullBackup.wallets?.forEach { walletBackup2 ->
@@ -373,18 +393,22 @@ class BackupProvider(
         }
 
         var contacts = listOf<Contact>()
-        fullBackup.contacts?.let {
-            val decrypted = decrypted(it, passphrase)
-            val contactsBackupJson = String(decrypted, Charsets.UTF_8)
-
-            contacts = contactsRepository.parseFromJson(contactsBackupJson)
+        if (BackupSection.Contacts in sections) {
+            fullBackup.contacts?.let {
+                val decrypted = decrypted(it, passphrase)
+                val contactsBackupJson = String(decrypted, Charsets.UTF_8)
+                contacts = contactsRepository.parseFromJson(contactsBackupJson)
+            }
         }
+
+        val watchlist = if (BackupSection.Favourites in sections) fullBackup.watchlist ?: listOf() else listOf()
 
         return DecryptedFullBackup(
             wallets = walletBackupItems,
-            watchlist = fullBackup.watchlist ?: listOf(),
+            watchlist = watchlist,
             settings = fullBackup.settings,
-            contacts = contacts
+            contacts = contacts,
+            sections = sections
         )
     }
 
@@ -413,13 +437,18 @@ class BackupProvider(
             customRpcsCount = evmSyncSourceStorage.getAll().ifEmpty { null }?.size
         )
 
-    fun fullBackupItems(decryptedFullBackup: DecryptedFullBackup) =
-        fullBackupItems(
+    fun fullBackupItems(decryptedFullBackup: DecryptedFullBackup): BackupItems {
+        val customRpcsCount = if (BackupSection.CustomRpc in decryptedFullBackup.sections)
+            decryptedFullBackup.settings.evmSyncSources.custom.ifEmpty { null }?.size
+        else
+            null
+        return fullBackupItems(
             accounts = decryptedFullBackup.wallets.map { it.account },
             watchlist = decryptedFullBackup.watchlist,
             contacts = decryptedFullBackup.contacts,
-            customRpcsCount = decryptedFullBackup.settings.evmSyncSources.custom.ifEmpty { null }?.size
-        )
+            customRpcsCount = customRpcsCount
+        ).copy(sections = decryptedFullBackup.sections)
+    }
 
     fun shouldShowReplaceWarning(decryptedFullBackup: DecryptedFullBackup?): Boolean {
         return decryptedFullBackup != null && decryptedFullBackup.contacts.isNotEmpty() && contactsRepository.contacts.isNotEmpty()
@@ -432,7 +461,7 @@ class BackupProvider(
     }
 
     @Throws
-    fun createFullBackup(accountIds: List<String>, passphrase: String): String {
+    fun createFullBackup(accountIds: List<String>, passphrase: String, sections: Set<BackupSection> = BackupSection.entries.toSet()): String {
         val wallets = accountManager.accounts
             .filter { it.isWatchAccount || accountIds.contains(it.id) }
             .map {
@@ -440,7 +469,10 @@ class BackupProvider(
                 WalletBackup2(it.name, accountBackup)
             }
 
-        val watchlist = marketFavoritesManager.getAll().map { it.coinUid }
+        val watchlist = if (BackupSection.Favourites in sections)
+            marketFavoritesManager.getAll().map { it.coinUid }
+        else
+            listOf()
 
         val btcModes = btcBlockchainManager.allBlockchains.map { blockchain ->
             val restoreMode = btcBlockchainManager.restoreMode(blockchain.type)
@@ -453,19 +485,27 @@ class BackupProvider(
             EvmSyncSourceBackup(blockchain.uid, syncSource.uri.toString(), null)
         }
 
-        val customEvmSyncSources = evmBlockchainManager.allBlockchains.map { blockchain ->
-            val customEvmSyncSources = evmSyncSourceManager.customSyncSources(blockchain.type)
-            customEvmSyncSources.map { syncSource ->
-                val auth = syncSource.auth?.let { encrypted(it, passphrase) }
-                EvmSyncSourceBackup(blockchain.uid, syncSource.uri.toString(), auth)
-            }
-        }.flatten()
+        val customEvmSyncSources = if (BackupSection.CustomRpc in sections) {
+            evmBlockchainManager.allBlockchains.map { blockchain ->
+                val customEvmSyncSources = evmSyncSourceManager.customSyncSources(blockchain.type)
+                customEvmSyncSources.map { syncSource ->
+                    val auth = syncSource.auth?.let { encrypted(it, passphrase) }
+                    EvmSyncSourceBackup(blockchain.uid, syncSource.uri.toString(), auth)
+                }
+            }.flatten()
+        } else {
+            listOf()
+        }
 
         val tronSyncSource = evmSyncSourceManager.getSyncSource(BlockchainType.Tron)
         val selectedTronSyncSource = EvmSyncSourceBackup(BlockchainType.Tron.uid, tronSyncSource.uri.toString(), null)
-        val customTronSyncSources = evmSyncSourceManager.customSyncSources(BlockchainType.Tron).map { syncSource ->
-            val auth = syncSource.auth?.let { encrypted(it, passphrase) }
-            EvmSyncSourceBackup(BlockchainType.Tron.uid, syncSource.uri.toString(), auth)
+        val customTronSyncSources = if (BackupSection.CustomRpc in sections) {
+            evmSyncSourceManager.customSyncSources(BlockchainType.Tron).map { syncSource ->
+                val auth = syncSource.auth?.let { encrypted(it, passphrase) }
+                EvmSyncSourceBackup(BlockchainType.Tron.uid, syncSource.uri.toString(), auth)
+            }
+        } else {
+            listOf()
         }
 
         val evmSyncSources = EvmSyncSources(
@@ -504,7 +544,7 @@ class BackupProvider(
             moneroNodes = moneroNodes,
         )
 
-        val contacts = if (contactsRepository.contacts.isNotEmpty())
+        val contacts = if (BackupSection.Contacts in sections && contactsRepository.contacts.isNotEmpty())
             encrypted(contactsRepository.asJsonString, passphrase)
         else
             null
@@ -514,6 +554,7 @@ class BackupProvider(
             watchlist = watchlist.ifEmpty { null },
             settings = settings,
             contacts = contacts,
+            sections = sections.toList(),
             timestamp = System.currentTimeMillis() / 1000,
             version = version,
             id = UUID.randomUUID().toString()
@@ -639,7 +680,8 @@ data class DecryptedFullBackup(
     val wallets: List<WalletBackupItem>,
     val watchlist: List<String>,
     val settings: Settings,
-    val contacts: List<Contact>
+    val contacts: List<Contact>,
+    val sections: Set<BackupSection> = BackupSection.entries.toSet()
 )
 
 data class BackupItem(
@@ -653,6 +695,7 @@ data class BackupItems(
     val watchlist: Int?,
     val contacts: Int?,
     val customRpc: Int?,
+    val sections: Set<BackupSection>? = null
 )
 
 data class WalletBackup2(
@@ -665,6 +708,7 @@ data class FullBackup(
     val watchlist: List<String>?,
     val settings: Settings,
     val contacts: BackupLocalModule.BackupCrypto?,
+    val sections: List<BackupSection>?,
     val timestamp: Long,
     val version: Int,
     val id: String
