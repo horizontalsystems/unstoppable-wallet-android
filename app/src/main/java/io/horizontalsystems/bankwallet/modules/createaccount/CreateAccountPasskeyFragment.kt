@@ -32,6 +32,7 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -161,7 +162,7 @@ fun CreateAccountPasskeyScreen(
                                 viewModel.createAccount(entropy)
                             } catch (e: CreateCredentialCancellationException) {
                             } catch (e: CreateCredentialNoCreateOptionException) {
-                                navController.slideFromBottom(R.id.createPasskeyNotSupported)
+                                navController.slideFromBottom(CreatePasskeyNotSupported())
                             } catch (e: Exception) {
                                 viewModel.onError(e)
                             } finally {

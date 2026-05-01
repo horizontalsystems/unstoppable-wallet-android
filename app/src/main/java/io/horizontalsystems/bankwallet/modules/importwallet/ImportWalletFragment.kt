@@ -27,8 +27,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.credentials.exceptions.GetCredentialCancellationException
-import androidx.navigation3.runtime.NavBackStack
 import androidx.credentials.exceptions.NoCredentialException
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -41,6 +41,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupFileValidator
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
+import io.horizontalsystems.bankwallet.modules.createaccount.RestorePasskeyNotSupported
 import io.horizontalsystems.bankwallet.modules.createaccount.WalletType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -208,7 +209,7 @@ private fun ImportWalletScreen(
                             )
                         } catch (e: GetCredentialCancellationException) {
                         } catch (e: NoCredentialException) {
-                            navController.slideFromBottom(R.id.restorePasskeyNotSupported)
+                            navController.slideFromBottom(RestorePasskeyNotSupported())
                         } catch (e: Throwable) {
                             error = e.message ?: e.javaClass.simpleName
                         } finally {
