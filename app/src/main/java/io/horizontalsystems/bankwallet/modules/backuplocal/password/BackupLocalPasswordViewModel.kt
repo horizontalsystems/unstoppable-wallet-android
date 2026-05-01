@@ -141,7 +141,7 @@ class BackupLocalPasswordViewModel(
                     stat(page = StatPage.ExportFullToFiles, event = StatEvent.ExportFull)
                 }
             }
-            delay(1700) //Wait for showing Snackbar (SHORT duration ~ 1500ms)
+            delay(SNACKBAR_SHORT_CLOSE_DELAY_MS)
             closeScreen = true
             emitState()
         }
@@ -185,12 +185,17 @@ class BackupLocalPasswordViewModel(
                 }
             } catch (t: Throwable) {
                 error = t.message ?: t.javaClass.simpleName
+                showButtonSpinner = false
             }
 
             withContext(Dispatchers.Main) {
                 emitState()
             }
         }
+    }
+
+    companion object {
+        private const val SNACKBAR_SHORT_CLOSE_DELAY_MS = 1700L
     }
 
     private fun validatePassword() {
