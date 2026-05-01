@@ -1,0 +1,22 @@
+appId: io.horizontalsystems.bankwallet.dev
+---
+- assertVisible: "Security Terms"
+- tapOn: "Securely back up the recovery phrase for each wallet. It's the only way to regain access to your funds if the app is deleted or malfunctions. No one can restore it for you."
+- tapOn: "Disabling your smartphone's unlock PIN (or passcode) wipes all wallets from the app. You'll need your recovery phrases to restore access."
+- tapOn: "The app doesn't spy or collect data about your balances or transactions - we don't even know how many people use it. It only tracks anonymous usage patterns (pages opened, buttons tapped) to improve usability. You can turn this off in Settings → Privacy"
+- tapOn: "We do not hold your assets, access your private keys, or execute transactions on your behalf. The app does not provide brokerage, exchange, custody, escrow, or money-transmission services. All transactions are initiated, signed, and broadcast directly by you to public blockchain networks."
+- tapOn: "As part of its monetization model, the app earns small commissions from DEX swaps executed within the wallet. This helps us stay independent, open source, and free of VC money."
+- tapOn: "Blockchain transactions are irreversible. Always review transaction details before confirming."
+- scrollUntilVisible:
+    element:
+      text: "The app is verifiably open source, with all source code published online. Everything stated above can be publicly verified by anyone."
+- tapOn: "The app is verifiably open source, with all source code published online. Everything stated above can be publicly verified by anyone."
+- scrollUntilVisible:
+    element:
+      text: "You are solely responsible for the security of your funds, your conduct, and compliance with applicable laws in your jurisdiction as well as globally."
+- tapOn: "You are solely responsible for the security of your funds, your conduct, and compliance with applicable laws in your jurisdiction as well as globally."
+- scrollUntilVisible:
+    element:
+      text: "By proceeding, you acknowledge that security of your funds and legal compliance are ultimately your responsibility."
+- tapOn: "By proceeding, you acknowledge that security of your funds and legal compliance are ultimately your responsibility."
+- tapOn: "Next"

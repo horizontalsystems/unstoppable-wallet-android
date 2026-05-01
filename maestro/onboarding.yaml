@@ -1,0 +1,6 @@
+appId: io.horizontalsystems.bankwallet.dev
+---
+- launchApp:
+    clearState: true
+
+- runFlow: subflows/intro.yaml

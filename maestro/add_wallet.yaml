@@ -1,0 +1,10 @@
+appId: io.horizontalsystems.bankwallet.dev
+---
+- launchApp:
+    clearState: true
+
+- runFlow: subflows/intro.yaml
+- tapOn: "New Wallet"
+- runFlow: subflows/accept_security_terms.yaml
+- tapOn: "Standard"
+- tapOn: "Create"
