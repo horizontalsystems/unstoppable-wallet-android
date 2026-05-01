@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.stats
 
 import com.google.gson.Gson
+import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.BackgroundManagerState
@@ -32,7 +33,6 @@ import io.horizontalsystems.bankwallet.modules.settings.appearance.PriceChangeIn
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
-import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.CoroutineScope
@@ -56,7 +56,7 @@ class StatsManager(
     private val backgroundManager: BackgroundManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.IO)
-    private var uiStatsEnabled = localStorage.uiStatsEnabled ?: statsEnabledByDefault()
+    private var uiStatsEnabled = localStorage.uiStatsEnabled ?: !BuildConfig.FDROID_BUILD
 
     private val _uiStatsEnabledFlow = MutableStateFlow(uiStatsEnabled)
     val uiStatsEnabledFlow = _uiStatsEnabledFlow.asStateFlow()
@@ -73,18 +73,6 @@ class StatsManager(
                     sendStats()
                 }
             }
-        }
-    }
-
-    private fun statsEnabledByDefault(): Boolean {
-        val signatures = listOf(
-            "b797339fb356afce5160fe49274ee17a1c1816db", // appcenter
-            "5afb2517b06caac7f108ba9d96ad826f1c4ba30c", // hs
-        )
-
-        val applicationSignatures = App.instance.getApplicationSignatures()
-        return applicationSignatures.any {
-            signatures.contains(it.toHexString())
         }
     }
 
