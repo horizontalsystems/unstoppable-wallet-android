@@ -1205,9 +1205,9 @@
     <string name="BackupManager_CountAssets">%d assets</string>
     <string name="BackupManager_CountNetworks">%d networks</string>
     <string name="BackupManager_CountWallets">%d wallets</string>
-    <string name="BackupManager_MergeTitle">Warning</string>
+    <string name="BackupManager_MergeTitle">Attention!</string>
     <string name="BackupManager_MergeButton">Replace</string>
-    <string name="BackupManager_MergeDescription">This action will overwrite your local payment contacts.</string>
+    <string name="BackupManager_MergeDescription">Saved contacts will be replaced with data from the backup.</string>
 
     <string name="BackupManager_BackupRequired">Backup required</string>
     <string name="BackupManager_WatchWallets">Watch Wallets</string>
