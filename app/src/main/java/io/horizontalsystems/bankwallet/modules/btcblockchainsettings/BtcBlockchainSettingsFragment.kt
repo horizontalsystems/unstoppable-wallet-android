@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -61,8 +62,10 @@ private fun BtcBlockchainSettingsScreen(
     navController: NavBackStack<HSScreen>
 ) {
 
-    if (viewModel.closeScreen) {
-        navController.removeLastOrNull()
+    LaunchedEffect(viewModel.closeScreen) {
+        if (viewModel.closeScreen) {
+            navController.removeLastOrNull()
+        }
     }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
