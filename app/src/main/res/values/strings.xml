@@ -8,7 +8,7 @@
     <string name="Error_ParameterNotSet">Parameter is not set</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
 
-    <string name="Alert_Cancel">Cancel</string>
+    <string name="Alert_Cancel">Cancel Action</string>
     <string name="Alert_Copy">Copy</string>
     <string name="Alert_Skip" translatable="false">SKIP</string>
     <string name="Alert_Select" translatable="false">SELECT</string>
@@ -2081,8 +2081,14 @@
     <string name="Contacts_Error_DefinedAddress">This address is already used for %s</string>
     <string name="Contacts_Error_DefinedName">The name already exists</string>
 
-    <string name="Hud_Text_Connected">Connected</string>
+    <string name="Hud_Text_Connected">Connected to network</string>
     <string name="BirthdayDatePicker_Title">Select Date</string>
     <string name="BirthdayDatePicker_Description">Choose an approximate wallet creation date. \nThe block height will be calculated automatically.</string>
+
+    <!--Translation Test-->
+
+    <string name="TranslationTest_SendConfirmation">Review your transaction details before sending %1$s to %2$s.</string>
+    <string name="TranslationTest_GasFeeWarning">Network fee is unusually high. Proceed with caution.</string>
+    <string name="TranslationTest_PrivateKeyBackup">Your private key gives full access to your funds. Never share it with anyone.</string>
 
 </resources>
