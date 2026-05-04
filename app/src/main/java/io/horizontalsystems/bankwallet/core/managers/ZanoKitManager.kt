@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.managers
 
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.Account
@@ -8,7 +9,6 @@ import io.horizontalsystems.zanokit.ZanoKit
 import io.horizontalsystems.zanokit.ZanoWallet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -18,7 +18,6 @@ class ZanoKitManager(
     private val zanoNodeManager: ZanoNodeManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
-    private var stopJob: Job? = null
 
     private val _kitStartedFlow = MutableStateFlow(false)
     val kitStartedFlow: StateFlow<Boolean> = _kitStartedFlow
@@ -43,12 +42,14 @@ class ZanoKitManager(
 
     private fun handleNodeUpdate() {
         if (zanoKitWrapper == null) return
+        Log.e("eee", "handleNodeUpdate stop()")
         stop()
     }
 
     @Synchronized
     fun getZanoKitWrapper(account: Account, creationTimestamp: Long): ZanoKitWrapper {
         if (this.zanoKitWrapper != null && currentAccount != account) {
+            Log.e("eee", "getZanoKitWrapper stop()")
             stop()
         }
 
@@ -58,7 +59,7 @@ class ZanoKitManager(
                 is AccountType.Mnemonic -> createKitInstance(accountType, account, creationTimestamp)
                 else -> throw UnsupportedAccountException()
             }
-            scope.launch { start() }
+            this.zanoKitWrapper!!.kit.start()
             useCount = 0
             currentAccount = account
         }
@@ -88,6 +89,7 @@ class ZanoKitManager(
         if (account == currentAccount) {
             useCount -= 1
             if (useCount < 1) {
+                Log.e("eee", "ZanoKitManager unlink stop()")
                 stop()
             }
         }
@@ -97,14 +99,7 @@ class ZanoKitManager(
         val wrapper = zanoKitWrapper
         zanoKitWrapper = null
         currentAccount = null
-        if (wrapper != null) {
-            stopJob = scope.launch { wrapper.kit.stop() }
-        }
-    }
-
-    private suspend fun start() {
-        stopJob?.join() // wait for any in-flight stop to fully close the native wallet
-        zanoKitWrapper?.kit?.start()
+        wrapper?.kit?.stop()
     }
 }
 
