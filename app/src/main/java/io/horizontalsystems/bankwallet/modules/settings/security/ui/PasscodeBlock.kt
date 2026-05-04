@@ -95,11 +95,18 @@ fun PasscodeBlock(
                     CellMiddleInfo(title = stringResource(R.string.SettingsSecurity_Biometric_Authentication).hs)
                 },
                 right = {
+                    val enableBiometricsFlow = navController.ensurePinSet(R.string.PinSet_ForBiometrics) {
+                        viewModel.enableBiometrics()
+                    }
+
                     HsSwitch(
                         checked = uiState.biometricsEnabled,
                         onCheckedChange = { enabled ->
-                            if (enabled) navController.ensurePinSet(R.string.PinSet_ForBiometrics) { viewModel.enableBiometrics() }
-                            else viewModel.disableBiometrics()
+                            if (enabled) {
+                                enableBiometricsFlow()
+                            } else {
+                                viewModel.disableBiometrics()
+                            }
                         },
                     )
                 }

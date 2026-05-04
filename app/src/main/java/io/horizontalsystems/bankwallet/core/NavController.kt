@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
+import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
@@ -72,14 +73,23 @@ fun NavBackStack<HSScreen>.navigateWithTermsAccepted(
     }
 }
 
-fun NavBackStack<HSScreen>.ensurePinSet(descriptionResId: Int, action: () -> Unit) {
-    if (App.pinComponent.isPinSet) {
-        action.invoke()
+// todo("xxx nav3: not working. need to fix")
+@Composable
+fun NavBackStack<HSScreen>.ensurePinSet(descriptionResId: Int, action: () -> Unit): () -> Unit {
+    return if (App.pinComponent.isPinSet) {
+        {
+            action.invoke()
+        }
     } else {
-//        TODO("xxx nav3")
-//        slideFromRightForResult<SetPinFragment.Result>(SetPinFragment(SetPinFragment.Input(descriptionResId))) {
-//            action.invoke()
-//        }
+        slideFromRightForResult<SetPinFragment.Result>(
+            SetPinFragment(
+                SetPinFragment.Input(
+                    descriptionResId
+                )
+            )
+        ) {
+            action.invoke()
+        }
     }
 }
 

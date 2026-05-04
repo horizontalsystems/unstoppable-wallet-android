@@ -221,6 +221,11 @@ private fun SecurityCenterScreen(
                             navController.addFromRight(SetDuressPinIntroFragment())
                         }
                     }
+
+                    val setDuressPinFlow = navController.ensurePinSet(R.string.PinSet_ForDuress) {
+                        navController.addFromRight(SetDuressPinIntroFragment())
+                    }
+
                     CellPrimary(
                         middle = {
                             CellMiddleInfo(
@@ -234,9 +239,7 @@ private fun SecurityCenterScreen(
                                     if (uiState.pinEnabled) {
                                         authorizedActionDuressPin()
                                     } else {
-                                        navController.ensurePinSet(R.string.PinSet_ForDuress) {
-                                            navController.addFromRight(SetDuressPinIntroFragment())
-                                        }
+                                        setDuressPinFlow()
                                     }
                                 }
                                 stat(
