@@ -1,0 +1,47 @@
+name: Auto-Translate Strings
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - '**/src/main/res/values/strings.xml'
+
+permissions:
+  contents: write
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic
+
+      - name: Translate new strings
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python .github/scripts/translate_strings.py
+
+      - name: Commit and push translations
+        run: |
+          git config user.name "translator[bot]"
+          git config user.email "translator[bot]@users.noreply.github.com"
+          find . -path '*/src/main/res/values-*/strings.xml' -exec git add {} +
+          git add translation_snapshot.json 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "No translation changes to commit."
+          else
+            git commit -m "chore: auto-translate new strings"
+            git push
+          fi
