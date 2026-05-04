@@ -102,7 +102,9 @@ class RestoreLocalViewModel(
         restored = restored,
         walletBackupViewItems = walletBackupViewItems,
         otherBackupViewItems = otherBackupViewItems,
-        showBackupItems = showBackupItems
+        showBackupItems = showBackupItems,
+        hasSelection = walletBackupViewItems.any { it.selected } ||
+            otherBackupViewItems.any { it.selected && it.section != null }
     )
 
     fun onChangePassphrase(v: String) {

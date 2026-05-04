@@ -259,18 +259,6 @@ class BackupProvider(
                 blockchainSettingsStorage.save(settings.solanaSyncSource.name, BlockchainType.Solana)
             }
 
-            settings.moneroNodes?.custom?.forEach { node ->
-                val password = node.password?.let {
-                    val decryptedPassword = decrypted(it, passphrase)
-                    String(decryptedPassword, Charsets.UTF_8)
-                }
-                moneroNodeStorage.save(MoneroNodeRecord(node.url, node.login, password, node.trusted))
-            }
-
-            settings.moneroNodes?.selected?.forEach { node ->
-                blockchainSettingsStorage.saveMoneroNode(node.url)
-            }
-
             if (settings.appIcon != (localStorage.appIcon ?: AppIcon.Main).titleText) {
                 AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
             }
@@ -289,6 +277,18 @@ class BackupProvider(
             settings.evmSyncSources.selected.forEach { syncSource ->
                 val blockchainType = BlockchainType.fromUid(syncSource.blockchainTypeId)
                 blockchainSettingsStorage.save(syncSource.url, blockchainType)
+            }
+
+            settings.moneroNodes?.custom?.forEach { node ->
+                val password = node.password?.let {
+                    val decryptedPassword = decrypted(it, passphrase)
+                    String(decryptedPassword, Charsets.UTF_8)
+                }
+                moneroNodeStorage.save(MoneroNodeRecord(node.url, node.login, password, node.trusted))
+            }
+
+            settings.moneroNodes?.selected?.forEach { node ->
+                blockchainSettingsStorage.saveMoneroNode(node.url)
             }
         }
     }
@@ -437,10 +437,13 @@ class BackupProvider(
         )
 
     fun fullBackupItems(decryptedFullBackup: DecryptedFullBackup): BackupItems {
-        val customRpcsCount = if (BackupSection.CustomRpc in decryptedFullBackup.sections)
-            decryptedFullBackup.settings.evmSyncSources.custom.ifEmpty { null }?.size
-        else
+        val customRpcsCount = if (BackupSection.CustomRpc in decryptedFullBackup.sections) {
+            val evmCount = decryptedFullBackup.settings.evmSyncSources.custom.size
+            val moneroCount = decryptedFullBackup.settings.moneroNodes?.custom?.size ?: 0
+            (evmCount + moneroCount).takeIf { it > 0 }
+        } else {
             null
+        }
         return fullBackupItems(
             accounts = decryptedFullBackup.wallets.map { it.account },
             watchlist = decryptedFullBackup.watchlist,

@@ -36,14 +36,16 @@ class SelectBackupItemsViewModel(
         }
     }
 
+    val selectedSections: Set<BackupSection>
+        get() = otherBackupItems.mapNotNull { if (it.selected) it.section else null }.toSet()
+
     override fun createState() = UIState(
         viewState = viewState,
         wallets = wallets,
-        otherBackupItems = otherBackupItems
+        otherBackupItems = otherBackupItems,
+        nextEnabled = viewState == ViewState.Success &&
+            (selectedWallets.isNotEmpty() || selectedSections.isNotEmpty())
     )
-
-    val selectedSections: Set<BackupSection>
-        get() = otherBackupItems.mapNotNull { if (it.selected) it.section else null }.toSet()
 
     fun toggleOtherItem(item: OtherBackupViewItem) {
         otherBackupItems = otherBackupItems.map {
@@ -67,7 +69,8 @@ class SelectBackupItemsViewModel(
     data class UIState(
         val viewState: ViewState,
         val wallets: List<WalletBackupViewItem>,
-        val otherBackupItems: List<OtherBackupViewItem>
+        val otherBackupItems: List<OtherBackupViewItem>,
+        val nextEnabled: Boolean = false
     )
 
     data class WalletBackupViewItem(
