@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule.WalletBackup
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
+import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupSection
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupViewItemFactory
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.DecryptedFullBackup
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.FullBackup
@@ -52,13 +53,20 @@ class RestoreLocalViewModel(
 
     val accountName by lazy {
         fileName?.let { name ->
-            return@lazy name
+            val processed = name
                 .replace(".json", "")
                 .replace("UW_Backup_", "")
                 .replace("_", " ")
+                .trim()
+            if (processed.isNotBlank()) return@lazy processed
         }
         accountFactory.getNextAccountName()
     }
+
+    val displayFileName: String? = fileName
+        ?.removeSuffix(".json")
+        ?.replace(Regex("_\\d{4}-\\d{2}-\\d{2}$"), "")
+        ?.replace("_", " ")
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -72,7 +80,7 @@ class RestoreLocalViewModel(
                     val backup = gson.fromJson(backupJsonString, FullBackup::class.java)
                     backup.settings.language // if single walletBackup it will throw exception
                     backup
-                } catch (ex: Exception) {
+                } catch (_: Exception) {
                     null
                 }
 
@@ -94,7 +102,9 @@ class RestoreLocalViewModel(
         restored = restored,
         walletBackupViewItems = walletBackupViewItems,
         otherBackupViewItems = otherBackupViewItems,
-        showBackupItems = showBackupItems
+        showBackupItems = showBackupItems,
+        hasSelection = walletBackupViewItems.any { it.selected } ||
+            otherBackupViewItems.any { it.selected && it.section != null }
     )
 
     fun onChangePassphrase(v: String) {
@@ -131,25 +141,48 @@ class RestoreLocalViewModel(
                 showBackupItems = true
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
-            } catch (invalidPassword: RestoreException.InvalidPasswordException) {
+            } catch (_: RestoreException.InvalidPasswordException) {
                 passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
-            }
-
-            withContext(Dispatchers.Main) {
-                showButtonSpinner = false
-                emitState()
+            } finally {
+                withContext(Dispatchers.Main) {
+                    showButtonSpinner = false
+                    emitState()
+                }
             }
         }
     }
 
+    fun toggleWallet(wallet: WalletBackupViewItem) {
+        walletBackupViewItems = walletBackupViewItems.map {
+            if (it.account.id == wallet.account.id) it.copy(selected = !wallet.selected) else it
+        }
+        emitState()
+    }
+
+    fun toggleOtherItem(item: OtherBackupViewItem) {
+        otherBackupViewItems = otherBackupViewItems.map {
+            if (it.section != null && it.section == item.section) it.copy(selected = !item.selected) else it
+        }
+        emitState()
+    }
+
     fun shouldShowReplaceWarning(): Boolean {
-        return backupProvider.shouldShowReplaceWarning(decryptedFullBackup)
+        val contactsSelected = otherBackupViewItems.any { it.section == BackupSection.Contacts && it.selected }
+        return backupProvider.shouldShowReplaceWarning(decryptedFullBackup) && contactsSelected
     }
 
     fun restoreFullBackup() {
-        decryptedFullBackup?.let { restoreFullBackup(it) }
+        decryptedFullBackup?.let { backup ->
+            val selectedIds = walletBackupViewItems.filter { it.selected }.map { it.account.id }.toSet()
+            val selectedSections = otherBackupViewItems.mapNotNull { if (it.selected) it.section else null }.toSet()
+            val filtered = backup.copy(
+                wallets = backup.wallets.filter { it.account.id in selectedIds },
+                sections = selectedSections
+            )
+            restoreFullBackup(filtered)
+        }
     }
 
     private fun restoreFullBackup(decryptedFullBackup: DecryptedFullBackup) {
@@ -159,25 +192,25 @@ class RestoreLocalViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 backupProvider.restoreFullBackup(decryptedFullBackup, passphrase)
+                this@RestoreLocalViewModel.decryptedFullBackup = null
                 restored = true
 
                 stat(page = statPage, event = StatEvent.ImportFull)
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
-            } catch (invalidPassword: RestoreException.InvalidPasswordException) {
+            } catch (_: RestoreException.InvalidPasswordException) {
                 passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
-            }
-
-            showButtonSpinner = false
-            withContext(Dispatchers.Main) {
-                emitState()
+            } finally {
+                withContext(Dispatchers.Main) {
+                    showButtonSpinner = false
+                    emitState()
+                }
             }
         }
     }
 
-    @Throws
     private fun restoreSingleWallet(backup: WalletBackup, accountName: String) {
         showButtonSpinner = true
         emitState()
@@ -194,14 +227,15 @@ class RestoreLocalViewModel(
                 stat(page = statPage, event = StatEvent.ImportWallet(type.statAccountType))
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
-            } catch (invalidPassword: RestoreException.InvalidPasswordException) {
+            } catch (_: RestoreException.InvalidPasswordException) {
                 passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
-            }
-            showButtonSpinner = false
-            withContext(Dispatchers.Main) {
-                emitState()
+            } finally {
+                withContext(Dispatchers.Main) {
+                    showButtonSpinner = false
+                    emitState()
+                }
             }
         }
     }

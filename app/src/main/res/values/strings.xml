@@ -1190,16 +1190,24 @@
 
     <string name="BackupManager_Title">Backup Manager</string>
     <string name="BackupManager_RestoreBackup">Restore Backup</string>
-    <string name="BackupManager_CreateBackup">Create New Backup</string>
+    <string name="BackupManager_RestoreBackupDescription">Restore your wallet and app data from a backup file.</string>
+    <string name="BackupManager_CreateBackup">Create Backup</string>
+    <string name="BackupManager_CreateBackupDescription">Create a backup file of your wallets and app data.</string>
 
     <string name="BackupManager_BаckupFile">Backup File</string>
-    <string name="BackupManager_Wallets">WALLETS</string>
-    <string name="BackupManager_Other">OTHER</string>
+    <string name="BackupManager_SelectItemsDescription">Choose what to include in your backup. You can back up all or selected items.</string>
+    <string name="BackupManager_Wallets">Wallets</string>
+    <string name="BackupManager_Other">Data</string>
     <string name="BackupManager_Restore">Restore</string>
     <string name="BackupManager_BackupFileContents">List of contents in the backup file.</string>
-    <string name="BackupManager_MergeTitle">Warning</string>
+    <string name="BackupManager_RestoreItemsDescription">Choose what to restore. You can restore everything or only selected items.</string>
+    <string name="BackupManager_CountSavedAddresses">%d saved addresses</string>
+    <string name="BackupManager_CountAssets">%d assets</string>
+    <string name="BackupManager_CountNetworks">%d networks</string>
+    <string name="BackupManager_CountWallets">%d wallets</string>
+    <string name="BackupManager_MergeTitle">Attention!</string>
     <string name="BackupManager_MergeButton">Replace</string>
-    <string name="BackupManager_MergeDescription">This action will overwrite your local payment contacts.</string>
+    <string name="BackupManager_MergeDescription">Saved contacts will be replaced with data from the backup.</string>
 
     <string name="BackupManager_BackupRequired">Backup required</string>
     <string name="BackupManager_WatchWallets">Watch Wallets</string>
@@ -1583,6 +1591,11 @@
     <string name="LocalBackup_Title">Local Backup</string>
     <string name="LocalBackup_SaveAndBackup">Save and Backup</string>
     <string name="LocalBackup_SetPassword">Set Password</string>
+    <string name="LocalBackup_ProtectBackup">Protect Backup</string>
+    <string name="LocalBackup_ProtectBackupDescription">Create a password to protect your backup file.</string>
+    <string name="LocalBackup_BackupName">Backup Name</string>
+    <string name="LocalBackup_AddPassword">Add Password</string>
+    <string name="LocalBackup_ConfirmPassword">Confirm Password</string>
     <string name="LocalBackup_BackupSaved">Backup Saved</string>
     <string name="LocalBackup_PasswordInvalid">At least 8 characters, including one uppercase letter, one lowercase letter, one number and one symbol.</string>
     <string name="LocalBackup_DontForgetPasswordWarning">This password is used to encrypt backup file of your wallet. It can\'t be recovered or reset if lost or forgotten.</string>

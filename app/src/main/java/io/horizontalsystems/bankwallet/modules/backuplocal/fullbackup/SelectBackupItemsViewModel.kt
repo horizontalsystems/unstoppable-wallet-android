@@ -36,11 +36,23 @@ class SelectBackupItemsViewModel(
         }
     }
 
+    val selectedSections: Set<BackupSection>
+        get() = otherBackupItems.mapNotNull { if (it.selected) it.section else null }.toSet()
+
     override fun createState() = UIState(
         viewState = viewState,
         wallets = wallets,
-        otherBackupItems = otherBackupItems
+        otherBackupItems = otherBackupItems,
+        nextEnabled = viewState == ViewState.Success &&
+            (selectedWallets.isNotEmpty() || selectedSections.isNotEmpty())
     )
+
+    fun toggleOtherItem(item: OtherBackupViewItem) {
+        otherBackupItems = otherBackupItems.map {
+            if (it.section != null && it.section == item.section) it.copy(selected = !item.selected) else it
+        }
+        emitState()
+    }
 
     fun toggle(wallet: WalletBackupViewItem) {
         wallets = wallets.map {
@@ -57,7 +69,8 @@ class SelectBackupItemsViewModel(
     data class UIState(
         val viewState: ViewState,
         val wallets: List<WalletBackupViewItem>,
-        val otherBackupItems: List<OtherBackupViewItem>
+        val otherBackupItems: List<OtherBackupViewItem>,
+        val nextEnabled: Boolean = false
     )
 
     data class WalletBackupViewItem(
@@ -69,9 +82,11 @@ class SelectBackupItemsViewModel(
     )
 
     data class OtherBackupViewItem(
+        val section: BackupSection?,
         val title: String,
         val value: String? = null,
-        val subtitle: String? = null
+        val subtitle: String? = null,
+        val selected: Boolean = true
     )
 
     class Factory : ViewModelProvider.Factory {

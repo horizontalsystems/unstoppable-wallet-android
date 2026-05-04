@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statAccountType
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
+import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupSection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ import java.time.format.DateTimeFormatter
 
 sealed class BackupType {
     class SingleWalletBackup(val accountId: String) : BackupType()
-    class FullBackup(val accountIds: List<String>) : BackupType()
+    class FullBackup(val accountIds: List<String>, val sections: Set<BackupSection> = BackupSection.entries.toSet()) : BackupType()
 }
 
 class BackupLocalPasswordViewModel(
@@ -34,6 +35,7 @@ class BackupLocalPasswordViewModel(
 
     private var passphrase = ""
     private var passphraseConfirmation = ""
+    private var backupName = ""
 
     private var passphraseState: DataState.Error? = null
     private var passphraseConfirmState: DataState.Error? = null
@@ -43,27 +45,27 @@ class BackupLocalPasswordViewModel(
 
     private var backupJson: String? = null
 
-    var backupFileName: String = "UW_Backup.json"
-        private set
+    val backupFileName: String
+        get() {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            val currentDateTime = LocalDateTime.now().format(formatter)
+            val safeName = backupName.replace(" ", "_").ifBlank { "Backup" }
+            return "${safeName}_${currentDateTime}.json"
+        }
 
     init {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm")
-        val currentDateTime = LocalDateTime.now().format(formatter)
-
         when (type) {
             is BackupType.SingleWalletBackup -> {
                 val account = accountManager.account(type.accountId)
                 if (account == null) {
                     error = "Account is NULL"
-
                 } else {
-                    val walletName = account.name.replace(" ", "_")
-                    backupFileName = "UW_Backup_${walletName}_${currentDateTime}.json"
+                    backupName = account.name
                 }
             }
 
             is BackupType.FullBackup -> {
-                backupFileName = "UW_App_Backup_${currentDateTime}.json"
+                backupName = "App Backup"
             }
         }
 
@@ -71,6 +73,7 @@ class BackupLocalPasswordViewModel(
     }
 
     override fun createState() = BackupLocalPasswordModule.UiState(
+        backupName = backupName,
         passphraseState = passphraseState,
         passphraseConfirmState = passphraseConfirmState,
         showButtonSpinner = showButtonSpinner,
@@ -78,6 +81,11 @@ class BackupLocalPasswordViewModel(
         closeScreen = closeScreen,
         error = error
     )
+
+    fun onChangeBackupName(name: String) {
+        backupName = name
+        emitState()
+    }
 
     fun onChangePassphrase(v: String) {
         if (passphraseValidator.containsValidCharacters(v)) {
@@ -133,7 +141,7 @@ class BackupLocalPasswordViewModel(
                     stat(page = StatPage.ExportFullToFiles, event = StatEvent.ExportFull)
                 }
             }
-            delay(1700) //Wait for showing Snackbar (SHORT duration ~ 1500ms)
+            delay(SNACKBAR_SHORT_CLOSE_DELAY_MS)
             closeScreen = true
             emitState()
         }
@@ -162,7 +170,8 @@ class BackupLocalPasswordViewModel(
                     is BackupType.FullBackup -> {
                         backupProvider.createFullBackup(
                             accountIds = type.accountIds,
-                            passphrase = passphrase
+                            passphrase = passphrase,
+                            sections = type.sections
                         )
                     }
 
@@ -176,12 +185,17 @@ class BackupLocalPasswordViewModel(
                 }
             } catch (t: Throwable) {
                 error = t.message ?: t.javaClass.simpleName
+                showButtonSpinner = false
             }
 
             withContext(Dispatchers.Main) {
                 emitState()
             }
         }
+    }
+
+    companion object {
+        private const val SNACKBAR_SHORT_CLOSE_DELAY_MS = 1700L
     }
 
     private fun validatePassword() {

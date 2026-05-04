@@ -21,6 +21,7 @@ object BackupLocalPasswordModule {
     }
 
     data class UiState(
+        val backupName: String,
         val passphraseState: DataState.Error?,
         val passphraseConfirmState: DataState.Error?,
         val showButtonSpinner: Boolean,
