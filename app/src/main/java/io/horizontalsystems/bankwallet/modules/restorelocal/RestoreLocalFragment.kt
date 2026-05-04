@@ -354,6 +354,7 @@ private fun BackupFileItems(
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
                     title = stringResource(R.string.BackupManager_Restore),
+                    enabled = uiState.hasSelection,
                     onClick = {
                         if (viewModel.shouldShowReplaceWarning()) {
                             showBottomSheet = true

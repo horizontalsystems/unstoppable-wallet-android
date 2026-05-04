@@ -39,6 +39,7 @@ object RestoreLocalModule {
         val restored: Boolean,
         val walletBackupViewItems: List<WalletBackupViewItem>,
         val otherBackupViewItems: List<OtherBackupViewItem>,
-        val showBackupItems: Boolean
+        val showBackupItems: Boolean,
+        val hasSelection: Boolean,
     )
 }
