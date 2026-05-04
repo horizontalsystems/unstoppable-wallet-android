@@ -294,12 +294,3 @@ private fun BadgedIcon(
         }
     }
 }
-
-//TODO("xxx nav3")
-//fun NavController.safeGetBackStackEntry(destinationId: Int): NavBackStackEntry? {
-//    return try {
-//        this.getBackStackEntry(destinationId)
-//    } catch (e: IllegalArgumentException) {
-//        null
-//    }
-//}
