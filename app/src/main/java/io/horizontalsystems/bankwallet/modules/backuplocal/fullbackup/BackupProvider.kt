@@ -419,10 +419,9 @@ class BackupProvider(
         customRpcsCount: Int?
     ): BackupItems {
         val nonWatchAccounts = accounts.filter { !it.isWatchAccount }.sortedBy { it.name.lowercase() }
-        val watchAccounts = accounts.filter { it.isWatchAccount }
+        val watchAccounts = accounts.filter { it.isWatchAccount }.sortedBy { it.name.lowercase() }
         return BackupItems(
-            accounts = nonWatchAccounts,
-            watchWallets = watchAccounts.ifEmpty { null }?.size,
+            accounts = nonWatchAccounts + watchAccounts,
             watchlist = watchlist.ifEmpty { null }?.size,
             contacts = contacts.ifEmpty { null }?.size,
             customRpc = customRpcsCount,
@@ -691,7 +690,6 @@ data class BackupItem(
 
 data class BackupItems(
     val accounts: List<Account>,
-    val watchWallets: Int?,
     val watchlist: Int?,
     val contacts: Int?,
     val customRpc: Int?,
