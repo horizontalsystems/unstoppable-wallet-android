@@ -4,3 +4,6 @@ appId: io.horizontalsystems.bankwallet.dev
     clearState: true
 
 - runFlow: subflows/intro.yaml
+- assertVisible: "New Wallet"
+- assertVisible: "Existing Wallet"
+- assertVisible: "View Only Wallet"

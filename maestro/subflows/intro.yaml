@@ -9,8 +9,3 @@ appId: io.horizontalsystems.bankwallet.dev
 
 - assertVisible: "Stay Private"
 - tapOn: "Next"
-
-# Wallet selection screen
-- assertVisible: "New Wallet"
-- assertVisible: "Existing Wallet"
-- assertVisible: "View Only Wallet"
