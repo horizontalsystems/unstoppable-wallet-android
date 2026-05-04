@@ -650,6 +650,7 @@ val TokenType.meta: String?
     get() = when (this) {
         is TokenType.Derived -> this.derivation.name
         is TokenType.AddressTyped -> this.type.name
+        is TokenType.ZanoAsset -> this.reference
         else -> null
     }
 

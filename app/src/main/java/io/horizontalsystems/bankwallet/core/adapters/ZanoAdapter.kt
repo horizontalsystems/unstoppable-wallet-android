@@ -30,6 +30,7 @@ import java.math.BigDecimal
 class ZanoAdapter(
     private val kit: ZanoKit,
     private val assetId: String,
+    private val wallet: Wallet,
     private val transactionsProvider: ZanoTransactionsProvider,
     private val transactionsAdapter: ZanoTransactionsAdapter,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendMoneroAdapter, ITransactionsAdapter by transactionsAdapter {
@@ -42,7 +43,7 @@ class ZanoAdapter(
     override var balanceState: AdapterState = kit.syncStateFlow.value.toAdapterState()
 
     override val balanceData: BalanceData
-        get() = (kit.balance(assetId) ?: BalanceInfo(assetId, 0, 0, 0, 0)).toBalanceData()
+        get() = (kit.balance(assetId) ?: BalanceInfo(assetId, 0, 0, 0, 0)).toBalanceData(wallet.token.decimals)
 
     override val balanceUpdatedFlowable: Flowable<Unit>
         get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
@@ -87,7 +88,7 @@ class ZanoAdapter(
         get() = ""
 
     override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
-        val atomicAmount = amount.movePointRight(DECIMALS).toLong()
+        val atomicAmount = amount.movePointRight(wallet.token.decimals).toLong()
         kit.send(
             toAddress = address,
             assetId = assetId,
@@ -97,10 +98,10 @@ class ZanoAdapter(
     }
 
     override suspend fun estimateFee(amount: BigDecimal, address: String, memo: String?): BigDecimal =
-        kit.estimateFee().scaledDown(DECIMALS)
+        kit.estimateFee().scaledDown(ZANO_DECIMALS)
 
     companion object {
-        const val DECIMALS = 12
+        const val ZANO_DECIMALS = 12
 
         fun create(wallet: Wallet, zanoKitManager: ZanoKitManager, restoreSettings: RestoreSettings): ZanoAdapter {
             val account = wallet.account
@@ -129,7 +130,7 @@ class ZanoAdapter(
             val provider = ZanoTransactionsProvider(assetId)
             val txAdapter = ZanoTransactionsAdapter(kit, provider, wallet)
 
-            return ZanoAdapter(kit, assetId, provider, txAdapter)
+            return ZanoAdapter(kit, assetId, wallet, provider, txAdapter)
         }
     }
 }
@@ -147,8 +148,8 @@ fun SyncState.toAdapterState(): AdapterState = when (this) {
     is SyncState.NotSynced.StatusError -> AdapterState.NotSynced(Exception(message))
 }
 
-fun BalanceInfo.toBalanceData(): BalanceData {
-    val available = unlocked.scaledDown(ZanoAdapter.DECIMALS)
-    val pending = (awaitingIn + awaitingOut).coerceAtLeast(0).scaledDown(ZanoAdapter.DECIMALS)
+fun BalanceInfo.toBalanceData(decimals: Int): BalanceData {
+    val available = unlocked.scaledDown(decimals)
+    val pending = (awaitingIn + awaitingOut).coerceAtLeast(0).scaledDown(decimals)
     return BalanceData(available, pending = pending)
 }

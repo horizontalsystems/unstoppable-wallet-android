@@ -61,8 +61,8 @@ class ZanoTransactionsAdapter(
 
     private fun toRecord(tx: TransactionInfo): TransactionRecord {
         val blockHeight = if (tx.isPending || tx.blockHeight == 0L) null else tx.blockHeight.toInt()
-        val amount = tx.amount.scaledDown(DECIMALS)
-        val fee = tx.fee.scaledDown(DECIMALS).takeIf { it > BigDecimal.ZERO }
+        val amount = tx.amount.scaledDown(wallet.token.decimals)
+        val fee = tx.fee.scaledDown(ZANO_DECIMALS).takeIf { it > BigDecimal.ZERO }
 
         return when (tx.type) {
             TransactionType.incoming -> ZanoIncomingTransactionRecord(
@@ -100,7 +100,9 @@ class ZanoTransactionsAdapter(
         }
     }
 
+
+
     companion object {
-        const val DECIMALS = 12
+        const val ZANO_DECIMALS = 12
     }
 }
