@@ -211,3 +211,16 @@ ButtonPrimaryYellow(
 
 - Unit tests in `app/src/test/`
 - Instrumentation tests in `app/src/androidTest/`
+
+## Git Commit Messages
+
+Use **plain imperative mood**, no type prefixes (`feat:`, `chore:`, etc.):
+
+```
+Update provider data          ✓
+Fix apostrophe in strings.xml ✓
+chore: update provider data   ✗
+```
+
+The message should complete: *"If I add this commit, it will [message]."*  
+Summary line is **60 characters max**. Single-line for small changes; add a blank line + body for context when the why is non-obvious.
