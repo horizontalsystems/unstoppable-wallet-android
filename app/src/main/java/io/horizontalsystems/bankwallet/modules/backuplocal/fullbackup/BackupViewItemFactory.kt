@@ -11,22 +11,16 @@ class BackupViewItemFactory {
             SelectBackupItemsViewModel.WalletBackupViewItem(
                 account = account,
                 name = account.name,
-                type = account.type.detailedDescription,
+                type = if (account.isWatchAccount)
+                    Translator.getString(R.string.WatchWallet)
+                else
+                    account.type.detailedDescription,
                 backupRequired = !account.hasAnyBackup,
                 selected = true
             )
         }
 
         val otherBackupViewItems = buildList {
-            backupItems.watchWallets?.let {
-                add(
-                    SelectBackupItemsViewModel.OtherBackupViewItem(
-                        section = null,
-                        title = Translator.getString(R.string.BackupManager_WatchWallets),
-                        value = Translator.getString(R.string.BackupManager_CountWallets, it)
-                    )
-                )
-            }
             backupItems.contacts?.let {
                 add(
                     SelectBackupItemsViewModel.OtherBackupViewItem(
