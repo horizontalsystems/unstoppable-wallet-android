@@ -42,6 +42,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "No translation changes to commit."
           else
-            git commit -m "chore: auto-translate new strings"
+            git commit -m "Translate new strings"
             git push
           fi
