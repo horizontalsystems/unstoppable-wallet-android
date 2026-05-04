@@ -4,7 +4,7 @@
     <string name="Error_BrowserNotFound">Es wurde keine App zum Öffnen dieses Links gefunden</string>
     <string name="Error_ParameterNotSet">Parameter ist nicht festgelegt</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
-    <string name="Alert_Cancel">Abbrechen</string>
+    <string name="Alert_Cancel">Aktion abbrechen</string>
     <string name="Alert_Copy">Kopieren</string>
     <string name="Button_Show">Anzeigen</string>
     <string name="Button_Hide">Ausblenden</string>
@@ -1708,7 +1708,10 @@
     <string name="Contacts_ActionMore">Mehr</string>
     <string name="Contacts_Error_DefinedAddress">Diese Adresse wird bereits für %s verwendet</string>
     <string name="Contacts_Error_DefinedName">Dieser Name existiert bereits</string>
-    <string name="Hud_Text_Connected">Verbunden</string>
+    <string name="Hud_Text_Connected">Mit Netzwerk verbunden</string>
     <string name="BirthdayDatePicker_Title">Datum auswählen</string>
     <string name="BirthdayDatePicker_Description">Wählen Sie ein ungefähres Wallet-Erstellungsdatum. \nDie Blockhöhe wird automatisch berechnet.</string>
+    <string name="TranslationTest_SendConfirmation">Überprüfen Sie Ihre Transaktionsdetails, bevor Sie %1$s an %2$s senden.</string>
+    <string name="TranslationTest_GasFeeWarning">Die Netzwerkgebühr ist ungewöhnlich hoch. Fahren Sie mit Vorsicht fort.</string>
+    <string name="TranslationTest_PrivateKeyBackup">Ihr privater Schlüssel gewährt vollständigen Zugriff auf Ihre Gelder. Teilen Sie ihn nie mit jemandem.</string>
 </resources>

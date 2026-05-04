@@ -4,7 +4,7 @@
     <string name="Error_BrowserNotFound">Nenhum app encontrado para abrir este link</string>
     <string name="Error_ParameterNotSet">Parâmetro não está definido</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
-    <string name="Alert_Cancel">Cancelar</string>
+    <string name="Alert_Cancel">Cancelar ação</string>
     <string name="Alert_Copy">Copiar</string>
     <string name="Button_Show">Mostrar</string>
     <string name="Button_Hide">Ocultar</string>
@@ -1704,7 +1704,10 @@
     <string name="Contacts_ActionMore">Mais</string>
     <string name="Contacts_Error_DefinedAddress">Este endereço já está em uso para %s</string>
     <string name="Contacts_Error_DefinedName">O nome já existe</string>
-    <string name="Hud_Text_Connected">Conectado</string>
+    <string name="Hud_Text_Connected">Conectado à rede</string>
     <string name="BirthdayDatePicker_Title">Selecione Data</string>
     <string name="BirthdayDatePicker_Description">Escolha uma data de criação de carteira aproximada. \nA altura do bloco será calculada automaticamente.</string>
+    <string name="TranslationTest_SendConfirmation">Revise os detalhes da sua transação antes de enviar %1$s para %2$s.</string>
+    <string name="TranslationTest_GasFeeWarning">A taxa de rede está incomumente alta. Proceda com cautela.</string>
+    <string name="TranslationTest_PrivateKeyBackup">Sua chave privada concede acesso total aos seus fundos. Nunca a compartilhe com ninguém.</string>
 </resources>

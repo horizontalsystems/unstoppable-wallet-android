@@ -4,7 +4,7 @@
     <string name="Error_BrowserNotFound">Aucune application n\'a été trouvée pour ouvrir ce lien</string>
     <string name="Error_ParameterNotSet">Le paramètre n\'est pas défini</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
-    <string name="Alert_Cancel">Annuler</string>
+    <string name="Alert_Cancel">Annuler l'action</string>
     <string name="Alert_Copy">Copier</string>
     <string name="Button_Show">Afficher</string>
     <string name="Button_Hide">Masquer</string>
@@ -1701,7 +1701,10 @@
     <string name="Contacts_ActionMore">Plus</string>
     <string name="Contacts_Error_DefinedAddress">Cette adresse est déjà utilisée pour %s</string>
     <string name="Contacts_Error_DefinedName">Le nom a été utilisé</string>
-    <string name="Hud_Text_Connected">Connecté</string>
+    <string name="Hud_Text_Connected">Connecté au réseau</string>
     <string name="BirthdayDatePicker_Title">Sélectionnez la date</string>
     <string name="BirthdayDatePicker_Description">Choisissez une date approximative de création de portefeuille. \nLa hauteur du bloc sera calculée automatiquement.</string>
+    <string name="TranslationTest_SendConfirmation">Vérifiez les détails de votre transaction avant d'envoyer %1$s à %2$s.</string>
+    <string name="TranslationTest_GasFeeWarning">Les frais réseau sont inhabituellement élevés. Procédez avec prudence.</string>
+    <string name="TranslationTest_PrivateKeyBackup">Votre clé privée donne un accès complet à vos fonds. Ne la partagez jamais avec quiconque.</string>
 </resources>

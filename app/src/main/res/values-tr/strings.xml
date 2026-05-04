@@ -2,7 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Parametre ayarlanmadı</string>
-    <string name="Alert_Cancel">İptal</string>
+    <string name="Alert_Cancel">İşlemi İptal Et</string>
     <string name="Alert_Copy">Kopyala</string>
     <string name="Button_Show">Göster</string>
     <string name="Button_Hide">Gizle</string>
@@ -1293,5 +1293,8 @@
     <string name="Contacts_ActionMore">Daha fazla</string>
     <string name="Contacts_Error_DefinedAddress">Bu adres %s için zaten kullanılıyor</string>
     <string name="Contacts_Error_DefinedName">Bu isim zaten mevcut</string>
-    <string name="Hud_Text_Connected">Bağlandı</string>
+    <string name="Hud_Text_Connected">Ağa bağlandı</string>
+    <string name="TranslationTest_SendConfirmation">%1$s öğesini %2$s öğesine göndermeden önce işlem detaylarınızı gözden geçirin.</string>
+    <string name="TranslationTest_GasFeeWarning">Ağ ücreti alışılmadık derecede yüksektir. Dikkatli ilerlemeniz önerilir.</string>
+    <string name="TranslationTest_PrivateKeyBackup">Özel anahtarınız fonlarınıza tam erişim sağlar. Bunu asla kimseyle paylaşmayın.</string>
 </resources>

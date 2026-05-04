@@ -4,7 +4,7 @@
     <string name="Error_BrowserNotFound">No se encontró ninguna aplicación para abrir este enlace</string>
     <string name="Error_ParameterNotSet">Parámetro no establecido</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
-    <string name="Alert_Cancel">Cancelar</string>
+    <string name="Alert_Cancel">Cancelar acción</string>
     <string name="Alert_Copy">Copiar</string>
     <string name="Button_Show">Mostrar</string>
     <string name="Button_Hide">Ocultar</string>
@@ -1699,7 +1699,10 @@
     <string name="Contacts_ActionMore">Más</string>
     <string name="Contacts_Error_DefinedAddress">Esta dirección ya está en uso para %s</string>
     <string name="Contacts_Error_DefinedName">El nombre ya existe</string>
-    <string name="Hud_Text_Connected">Conectado</string>
+    <string name="Hud_Text_Connected">Conectado a la red</string>
     <string name="BirthdayDatePicker_Title">Seleccionar fecha</string>
     <string name="BirthdayDatePicker_Description">Elija una fecha aproximada de creación del monedero. \nLa altura del bloque se calculará automáticamente.</string>
+    <string name="TranslationTest_SendConfirmation">Revise los detalles de su transacción antes de enviar %1$s a %2$s.</string>
+    <string name="TranslationTest_GasFeeWarning">La tarifa de red es inusualmente alta. Proceda con precaución.</string>
+    <string name="TranslationTest_PrivateKeyBackup">Su clave privada otorga acceso completo a sus fondos. Nunca la comparta con nadie.</string>
 </resources>

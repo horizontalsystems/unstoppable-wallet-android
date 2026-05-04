@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="Alert_Cancel">انصراف</string>
+    <string name="Alert_Cancel">لغو عملیات</string>
     <string name="Alert_Copy">رونوشت</string>
     <string name="Button_Show">نمایش</string>
     <string name="Button_Cancel">انصراف</string>
@@ -502,7 +502,7 @@
     <!--Contacts-->
     <string name="Contacts_NameHint">نام</string>
     <string name="Contacts_AddressHint">آدرس یا دامنه</string>
-    <string name="Hud_Text_Connected">ارتباط برقرار شد</string>
+    <string name="Hud_Text_Connected">متصل به شبکه</string>
 
     <string-array name="wallet_names">
         <item>😰 گاوصندوق عرق‌آور</item>
@@ -606,4 +606,7 @@
         <item>🍕 کیف پول گرسنه</item>
         <item>🎭 ماه قرضی</item>
     </string-array>
+    <string name="TranslationTest_SendConfirmation">جزئیات تراکنش خود را قبل از ارسال %1$s به %2$s بررسی کنید.</string>
+    <string name="TranslationTest_GasFeeWarning">هزینه شبکه غیرمعمول است. با احتیاط پیش بروید.</string>
+    <string name="TranslationTest_PrivateKeyBackup">کلید خصوصی شما دسترسی کامل به صندوق شما را می‌دهد. هرگز آن را با کسی به اشتراک نگذارید.</string>
 </resources>

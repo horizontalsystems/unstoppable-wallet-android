@@ -4,7 +4,7 @@
     <string name="Error_BrowserNotFound">Не найдено приложений для открытия этой ссылки</string>
     <string name="Error_ParameterNotSet">Не задан параметр</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
-    <string name="Alert_Cancel">Отменить</string>
+    <string name="Alert_Cancel">Отменить действие</string>
     <string name="Alert_Copy">Скопировать</string>
     <string name="Button_Show">Показать</string>
     <string name="Button_Hide">Скрыть</string>
@@ -1706,7 +1706,10 @@
     <string name="Contacts_ActionMore">Ещё</string>
     <string name="Contacts_Error_DefinedAddress">Этот адрес уже используется для %s</string>
     <string name="Contacts_Error_DefinedName">Такое имя уже существует</string>
-    <string name="Hud_Text_Connected">Подключено</string>
+    <string name="Hud_Text_Connected">Подключено к сети</string>
     <string name="BirthdayDatePicker_Title">Выберите дату</string>
     <string name="BirthdayDatePicker_Description">Выберите приблизительную дату создания кошелька. \nВысота блока будет рассчитана автоматически.</string>
+    <string name="TranslationTest_SendConfirmation">Проверьте детали транзакции перед отправкой %1$s на %2$s.</string>
+    <string name="TranslationTest_GasFeeWarning">Сетевой сбор необычно высок. Действуйте с осторожностью.</string>
+    <string name="TranslationTest_PrivateKeyBackup">Ваш приватный ключ дает полный доступ к вашим средствам. Никогда не делитесь им ни с кем.</string>
 </resources>
