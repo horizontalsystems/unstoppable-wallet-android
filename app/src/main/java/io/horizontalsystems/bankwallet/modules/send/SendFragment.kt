@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -39,7 +38,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 import kotlin.reflect.KClass
 
-class SendFragment(val input: Input) : BaseFragment() {
+class SendFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
