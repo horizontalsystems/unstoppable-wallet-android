@@ -9,11 +9,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.addFromRight
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.manageaccounts.PassKeyTermsFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
@@ -54,22 +58,24 @@ fun CreateAccountScreen(navController: NavBackStack<HSScreen>, input: ManageAcco
                 ) {
                     navController.addFromRight(CreateAccountStandardFragment(input))
                 }
+
+                ResultEffect<PassKeyTermsFragment.Result> { result ->
+                    if (result.termsAccepted) {
+                        navController.slideFromRight(CreateAccountPasskeyFragment(input))
+                    }
+                }
+
                 WalletType(
                     icon = painterResource(R.drawable.touchid_24),
                     title = stringResource(R.string.CreateNewWallet_Passkey).hs,
                     subtitle = stringResource(R.string.CreateNewWallet_Passkey_Description).hs,
                     borderTop = true
                 ) {
-//                    TODO("xxx nav3")
-//                    if (!App.localStorage.passkeyTermsAccepted) {
-//                        navController.slideFromRightForResult<PassKeyTermsFragment.Result>(R.id.passkeyTermsFragment) { result ->
-//                            if (result.termsAccepted) {
-//                                navController.slideFromRight(R.id.createAccountPasskeyFragment, input)
-//                            }
-//                        }
-//                    } else {
-//                        navController.slideFromRight(R.id.createAccountPasskeyFragment, input)
-//                    }
+                    if (!App.localStorage.passkeyTermsAccepted) {
+                        navController.slideFromRight(PassKeyTermsFragment())
+                    } else {
+                        navController.slideFromRight(CreateAccountPasskeyFragment(input))
+                    }
                 }
             }
 
