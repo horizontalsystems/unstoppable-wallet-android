@@ -1,12 +1,11 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.AdapterState
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
-import io.horizontalsystems.bankwallet.core.ISendMoneroAdapter
+import io.horizontalsystems.bankwallet.core.ISendZanoAdapter
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
@@ -33,7 +32,7 @@ class ZanoAdapter(
     private val wallet: Wallet,
     private val transactionsProvider: ZanoTransactionsProvider,
     private val transactionsAdapter: ZanoTransactionsAdapter,
-) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendMoneroAdapter, ITransactionsAdapter by transactionsAdapter {
+) : IAdapter, IBalanceAdapter, IReceiveAdapter, ISendZanoAdapter, ITransactionsAdapter by transactionsAdapter {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -150,6 +149,6 @@ fun SyncState.toAdapterState(): AdapterState = when (this) {
 
 fun BalanceInfo.toBalanceData(decimals: Int): BalanceData {
     val available = unlocked.scaledDown(decimals)
-    val pending = (awaitingIn + awaitingOut).coerceAtLeast(0).scaledDown(decimals)
+    val pending = (total - unlocked).coerceAtLeast(0).scaledDown(decimals)
     return BalanceData(available, pending = pending)
 }
