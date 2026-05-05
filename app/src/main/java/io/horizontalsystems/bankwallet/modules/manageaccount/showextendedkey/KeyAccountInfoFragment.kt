@@ -17,8 +17,10 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 
-class KeyAccountInfoFragment : HSScreen() {
+@Serializable
+data object KeyAccountInfoFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

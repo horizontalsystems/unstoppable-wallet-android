@@ -6,8 +6,10 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationViewModel
+import kotlinx.serialization.Serializable
 
-class SendEvmSettingsFragment : HSScreen() {
+@Serializable
+data object SendEvmSettingsFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         SendEvmSettingsScreen(navController)

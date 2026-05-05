@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.detectors
 
-import android.os.Parcelable
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -48,9 +47,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class DetectorsFragment(val input: Input) : HSScreen() {
+@Serializable
+data class DetectorsFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -65,8 +65,8 @@ class DetectorsFragment(val input: Input) : HSScreen() {
         )
     }
 
-    @Parcelize
-    data class Input(val title: String, val issues: List<IssueParcelable>) : Parcelable
+    @Serializable
+    data class Input(val title: String, val issues: List<IssueParcelable>)
 
 }
 

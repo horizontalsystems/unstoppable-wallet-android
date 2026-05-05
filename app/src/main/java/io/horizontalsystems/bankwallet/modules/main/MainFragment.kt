@@ -186,7 +186,7 @@ private fun MainScreen(
 
     if (uiState.showDonationPage) {
         LaunchedEffect(Unit) {
-            fragmentNavController.addFromBottom(WhyDonateFragment())
+            fragmentNavController.addFromBottom(WhyDonateFragment)
             viewModel.donationShown()
         }
     }

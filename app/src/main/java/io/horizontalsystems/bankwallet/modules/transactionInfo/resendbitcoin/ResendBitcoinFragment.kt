@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo.resendbitcoin
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -54,12 +53,13 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class ResendBitcoinFragment(val input: Input) : HSScreen() {
+@Serializable
+data class ResendBitcoinFragment(val input: Input) : HSScreen() {
 
-    @Parcelize
-    data class Input(val optionType: SpeedUpCancelType) : Parcelable
+    @Serializable
+    data class Input(val optionType: SpeedUpCancelType)
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

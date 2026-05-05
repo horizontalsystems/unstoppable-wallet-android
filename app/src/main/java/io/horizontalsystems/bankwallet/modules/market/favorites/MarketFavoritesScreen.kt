@@ -155,7 +155,7 @@ fun MarketFavoritesScreen(
                                         )
                                         HSpacer(width = 12.dp)
                                         val forResult = navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
-                                            MarketSignalsFragment()
+                                            MarketSignalsFragment
                                         ) {
                                             if (it.enabled) {
                                                 viewModel.showSignals()

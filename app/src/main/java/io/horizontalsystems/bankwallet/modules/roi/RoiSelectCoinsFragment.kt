@@ -46,8 +46,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.subscriptions.core.TokenInsights
+import kotlinx.serialization.Serializable
 
-class RoiSelectCoinsFragment : HSScreen() {
+@Serializable
+data object RoiSelectCoinsFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         RoiSelectCoinsScreen(navController)

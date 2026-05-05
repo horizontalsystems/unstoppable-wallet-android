@@ -43,8 +43,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.subscriptions.core.TradeSignals
+import kotlinx.serialization.Serializable
 
-class MarketFiltersResultsFragment : HSScreen() {
+@Serializable
+data object MarketFiltersResultsFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -125,7 +127,7 @@ private fun SearchResultsScreen(
                                         )
                                         HSpacer(width = 12.dp)
                                         val forResult = navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
-                                            MarketSignalsFragment()
+                                            MarketSignalsFragment
                                         ) {
                                             if (it.enabled) {
                                                 viewModel.showSignals()

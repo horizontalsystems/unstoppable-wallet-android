@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -31,9 +30,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class CoinFragment(val input: Input) : HSScreen() {
+@Serializable
+data class CoinFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -44,8 +44,8 @@ class CoinFragment(val input: Input) : HSScreen() {
         )
     }
 
-    @Parcelize
-    data class Input(val coinUid: String) : Parcelable
+    @Serializable
+    data class Input(val coinUid: String)
 }
 
 @Composable

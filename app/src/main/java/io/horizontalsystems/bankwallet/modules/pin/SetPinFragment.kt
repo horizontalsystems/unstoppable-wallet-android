@@ -9,8 +9,10 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class SetPinFragment(val input: Input? = null) : HSScreen(screenshotEnabled = false) {
+@Serializable
+data class SetPinFragment(val input: Input? = null) : HSScreen(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -26,8 +28,8 @@ class SetPinFragment(val input: Input? = null) : HSScreen(screenshotEnabled = fa
         )
     }
 
-    @Parcelize
-    data class Input(val descriptionResId: Int) : Parcelable
+    @Serializable
+    data class Input(val descriptionResId: Int)
 
     @Parcelize
     data class Result(val success: Boolean) : Parcelable

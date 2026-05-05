@@ -18,9 +18,11 @@ import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeig
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-class RestoreFromPrivateKeyFragment(val input: ManageAccountsModule.Input?) : HSScreen(screenshotEnabled = false) {
+@Serializable
+data class RestoreFromPrivateKeyFragment(val input: ManageAccountsModule.Input?) : HSScreen(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

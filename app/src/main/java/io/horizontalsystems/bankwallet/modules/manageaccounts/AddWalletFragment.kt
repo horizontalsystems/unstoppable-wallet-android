@@ -16,8 +16,10 @@ import io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 
-class AddWalletFragment(val input: ManageAccountsModule.Input?) : HSScreen() {
+@Serializable
+data class AddWalletFragment(val input: ManageAccountsModule.Input?) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

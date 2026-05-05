@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +38,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.DisplayKeyTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -57,9 +57,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class ShowExtendedKeyFragment(val input: Input?) : HSScreen(screenshotEnabled = false) {
+@Serializable
+data class ShowExtendedKeyFragment(val input: Input?) : HSScreen(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -77,9 +78,8 @@ class ShowExtendedKeyFragment(val input: Input?) : HSScreen(screenshotEnabled = 
         }
     }
 
-    @Parcelize
-    data class Input(val extendedRootKeySerialized: String, val displayKeyType: DisplayKeyType) :
-        Parcelable {
+    @Serializable
+    data class Input(val extendedRootKeySerialized: String, @Serializable(with = DisplayKeyTypeSerializer::class) val displayKeyType: DisplayKeyType) {
         val extendedRootKey: HDExtendedKey?
             get() = try {
                 HDExtendedKey(extendedRootKeySerialized)
@@ -173,7 +173,7 @@ private fun ShowExtendedKeyScreen(
                                 title = stringResource(R.string.ExtendedKey_Account),
                                 value = viewModel.account.toString(),
                                 infoButtonClick = {
-                                    navController.addFromBottom(KeyAccountInfoFragment())
+                                    navController.addFromBottom(KeyAccountInfoFragment)
                                 },
                                 onClick = { showAccountSelectorDialog = true }
                             )

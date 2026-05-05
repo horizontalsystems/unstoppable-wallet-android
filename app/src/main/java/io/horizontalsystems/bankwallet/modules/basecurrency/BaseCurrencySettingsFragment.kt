@@ -48,8 +48,10 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
-class BaseCurrencySettingsFragment : HSScreen() {
+@Serializable
+data object BaseCurrencySettingsFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

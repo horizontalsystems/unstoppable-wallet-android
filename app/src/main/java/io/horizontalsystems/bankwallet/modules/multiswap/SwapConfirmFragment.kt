@@ -91,10 +91,12 @@ import io.horizontalsystems.subscriptions.core.SwapProtection
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.util.Locale
 
-class SwapConfirmFragment : HSScreen() {
+@Serializable
+data object SwapConfirmFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         SwapConfirmScreen(navController)
@@ -185,7 +187,7 @@ private fun SwapConfirmInternal(
 
     val onClickSettings = if (uiState.hasSettings) {
         {
-            navController.addFromRight(SwapTransactionSettingsFragment())
+            navController.addFromRight(SwapTransactionSettingsFragment)
         }
     } else {
         null
@@ -193,7 +195,7 @@ private fun SwapConfirmInternal(
 
     val onClickNonceSettings = if (uiState.hasNonceSettings) {
         {
-            navController.addFromRight(SwapTransactionNonceSettingsFragment())
+            navController.addFromRight(SwapTransactionNonceSettingsFragment)
         }
     } else {
         null

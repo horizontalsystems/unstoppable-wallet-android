@@ -65,9 +65,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottom.BottomSearchBar
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import java.util.Optional
 
-class MarketSearchFragment : HSScreen() {
+@Serializable
+data object MarketSearchFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         val viewModel = viewModel<MarketSearchViewModel>(
@@ -131,7 +133,7 @@ fun MarketSearchScreen(
                             isSearchActive = false
                             delay(500)
                         }
-                        navController.addFromRight(MarketFiltersFragment())
+                        navController.addFromRight(MarketFiltersFragment)
 
                         stat(
                             page = StatPage.Markets,

@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.metricchart
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
-enum class MetricsType : Parcelable {
+@Serializable
+enum class MetricsType {
     TotalMarketCap, Volume24h, Etf, TvlInDefi;
 }

@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
+import io.horizontalsystems.bankwallet.serializers.BlockchainListSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -34,8 +35,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class VaultBlockchainsSelectorFragment(val input: Input) : HSScreen() {
+@Serializable
+data class VaultBlockchainsSelectorFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -51,9 +54,8 @@ class VaultBlockchainsSelectorFragment(val input: Input) : HSScreen() {
         )
     }
 
-    @Parcelize
-    data class Input(val selected: List<Blockchain>, val allBlockchains: List<Blockchain>) :
-        Parcelable
+    @Serializable
+    data class Input(@Serializable(with = BlockchainListSerializer::class) val selected: List<Blockchain>, @Serializable(with = BlockchainListSerializer::class) val allBlockchains: List<Blockchain>)
 
     @Parcelize
     data class Result(val selected: List<Blockchain>) : Parcelable

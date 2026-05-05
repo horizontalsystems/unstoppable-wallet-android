@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,6 +14,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
+import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
+import io.horizontalsystems.bankwallet.serializers.ContactSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -25,17 +26,20 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.BlockchainType
+import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class SelectContactFragment(val input: Input) : HSScreen() {
+@Serializable
+data class SelectContactFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         SelectContactScreen(navController, input)
     }
 
-    @Parcelize
-    data class Input(val selected: Contact?, val blockchainType: BlockchainType?) : Parcelable
+    @Serializable
+    data class Input(@Serializable(with = ContactSerializer::class) val selected: Contact?, @Serializable(with = BlockchainTypeSerializer::class) val blockchainType: BlockchainType?)
 
     @Parcelize
     data class Result(val contact: Contact?) : Parcelable

@@ -24,8 +24,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import kotlinx.serialization.Serializable
 
-class DonateTokenSelectFragment : HSScreen() {
+@Serializable
+data object DonateTokenSelectFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -58,7 +60,7 @@ class DonateTokenSelectFragment : HSScreen() {
         ) {
             DonateHeader(
                 onClick = {
-                    navController.addFromRight(DonateAddressesFragment())
+                    navController.addFromRight(DonateAddressesFragment)
 
                     stat(page = StatPage.Donate, event = StatEvent.Open(StatPage.DonateAddressList))
                 }

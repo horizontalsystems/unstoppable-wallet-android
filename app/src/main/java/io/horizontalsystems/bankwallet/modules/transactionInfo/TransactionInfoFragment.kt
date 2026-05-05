@@ -44,8 +44,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoTran
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionNftAmountCell
 import io.horizontalsystems.bankwallet.ui.compose.components.WarningMessageCell
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 
-class TransactionInfoFragment : HSScreen() {
+@Serializable
+data object TransactionInfoFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

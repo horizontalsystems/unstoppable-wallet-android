@@ -25,8 +25,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 
-class SubscriptionFragment : HSScreen() {
+@Serializable
+data object SubscriptionFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -72,7 +74,7 @@ fun SubscriptionScreen(navController: NavBackStack<HSScreen>) {
                     CellUniversal(
                         borderTop = false,
                         onClick = {
-                            navController.addFromBottom(BuySubscriptionHavHostFragment())
+                            navController.addFromBottom(BuySubscriptionHavHostFragment)
                             stat(
                                 page = StatPage.PurchaseList,
                                 event = StatEvent.OpenPremium(StatPremiumTrigger.GetPremium)

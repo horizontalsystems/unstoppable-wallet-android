@@ -49,8 +49,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsIconButton
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderColored
+import kotlinx.serialization.Serializable
 
-class ManageAccountsFragment(val input: ManageAccountsModule.Mode) : HSScreen() {
+@Serializable
+data class ManageAccountsFragment(val input: ManageAccountsModule.Mode) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

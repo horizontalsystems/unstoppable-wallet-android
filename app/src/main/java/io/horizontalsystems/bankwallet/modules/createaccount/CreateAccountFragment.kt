@@ -28,8 +28,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.HSString
 import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import kotlinx.serialization.Serializable
 
-class CreateAccountFragment(val input: ManageAccountsModule.Input? = null) : HSScreen() {
+@Serializable
+data class CreateAccountFragment(val input: ManageAccountsModule.Input? = null) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

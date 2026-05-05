@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.indicators
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.navigation3.runtime.NavBackStack
@@ -9,9 +8,10 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class IndicatorSettingsFragment(val input: Input) : HSScreen() {
+@Serializable
+data class IndicatorSettingsFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -47,6 +47,6 @@ class IndicatorSettingsFragment(val input: Input) : HSScreen() {
         }
     }
 
-    @Parcelize
-    data class Input(val indicatorId: String) : Parcelable
+    @Serializable
+    data class Input(val indicatorId: String)
 }

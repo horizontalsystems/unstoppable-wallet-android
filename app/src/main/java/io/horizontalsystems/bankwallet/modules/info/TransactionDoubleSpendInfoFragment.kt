@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.info
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,9 +32,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class TransactionDoubleSpendInfoFragment(val input: Input) : HSScreen() {
+@Serializable
+data class TransactionDoubleSpendInfoFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -46,11 +46,11 @@ class TransactionDoubleSpendInfoFragment(val input: Input) : HSScreen() {
         )
     }
 
-    @Parcelize
+    @Serializable
     data class Input(
         val transactionHash: String,
         val conflictingTransactionHash: String,
-    ) : Parcelable
+    )
 }
 
 @Composable

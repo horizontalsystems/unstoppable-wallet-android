@@ -49,6 +49,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
+import io.horizontalsystems.bankwallet.serializers.KClassSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputPassword
@@ -71,9 +72,11 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-class RestoreLocalFragment(val input: Input) : HSScreen() {
+@Serializable
+data class RestoreLocalFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -88,8 +91,9 @@ class RestoreLocalFragment(val input: Input) : HSScreen() {
         ) { activity?.let { MainModule.startAsNewTask(it) } }
     }
 
+    @Serializable
     data class Input(
-        val popOffOnSuccess: KClass<out HSScreen>,
+        @Serializable(with = KClassSerializer::class) val popOffOnSuccess: KClass<out HSScreen>,
         val popOffInclusive: Boolean,
         val jsonFile: String,
         val fileName: String?,

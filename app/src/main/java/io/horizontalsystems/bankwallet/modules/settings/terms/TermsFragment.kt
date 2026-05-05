@@ -34,8 +34,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 
-class TermsFragment(
+@Serializable
+data class TermsFragment(
     val screen: HSScreen,
     val statPageFrom: StatPage,
     val statPageTo: StatPage,

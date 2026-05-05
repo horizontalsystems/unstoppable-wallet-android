@@ -11,10 +11,15 @@ import io.horizontalsystems.bankwallet.modules.enteraddress.EnterAddressScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.send.SendFragment.Input
+import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
+import io.horizontalsystems.bankwallet.serializers.KClassSerializer
+import io.horizontalsystems.bankwallet.serializers.WalletSerializer
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import kotlin.reflect.KClass
 
-class EnterAddressFragment(val input: Input) : HSScreen() {
+@Serializable
+data class EnterAddressFragment(val input: Input) : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         EnterAddressScreen(
@@ -41,12 +46,13 @@ class EnterAddressFragment(val input: Input) : HSScreen() {
         }
     }
 
+    @Serializable
     data class Input(
-        val wallet: Wallet,
+        @Serializable(with = WalletSerializer::class) val wallet: Wallet,
         val title: String,
-        val sendEntryPointDestId: KClass<out HSScreen>? = null,
+        @Serializable(with = KClassSerializer::class) val sendEntryPointDestId: KClass<out HSScreen>? = null,
         val address: String? = null,
-        val amount: BigDecimal? = null,
+        @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal? = null,
         val memo: String? = null,
     )
 }

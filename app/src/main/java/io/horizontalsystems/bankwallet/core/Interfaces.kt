@@ -391,6 +391,7 @@ interface IReceiveAdapter {
 }
 
 @Parcelize
+@kotlinx.serialization.Serializable
 data class UsedAddress(
     val index: Int,
     val address: String,

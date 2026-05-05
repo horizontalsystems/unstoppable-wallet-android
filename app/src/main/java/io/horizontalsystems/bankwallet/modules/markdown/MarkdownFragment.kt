@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.markdown
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
@@ -14,9 +13,10 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class MarkdownFragment(val input: Input) : HSScreen() {
+@Serializable
+data class MarkdownFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -33,12 +33,12 @@ class MarkdownFragment(val input: Input) : HSScreen() {
         )
     }
 
-    @Parcelize
+    @Serializable
     data class Input(
         val markdownUrl: String,
         val handleRelativeUrl: Boolean = false,
         val showAsPopup: Boolean = false,
-    ) : Parcelable
+    )
 }
 
 @Composable

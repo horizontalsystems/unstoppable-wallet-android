@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.info
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
@@ -18,17 +17,18 @@ import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class TransactionLockTimeInfoFragment(val input: Input) : HSScreen() {
+@Serializable
+data class TransactionLockTimeInfoFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         InfoScreen(input.lockTime, navController)
     }
 
-    @Parcelize
-    data class Input(val lockTime: String) : Parcelable
+    @Serializable
+    data class Input(val lockTime: String)
 }
 
 @Composable

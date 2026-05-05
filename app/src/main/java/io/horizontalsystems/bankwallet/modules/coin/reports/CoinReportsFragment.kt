@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.reports
 
-import android.os.Parcelable
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,9 +24,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellNews
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class CoinReportsFragment(val input: Input) : HSScreen() {
+@Serializable
+data class CoinReportsFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -43,8 +43,8 @@ class CoinReportsFragment(val input: Input) : HSScreen() {
         )
     }
 
-    @Parcelize
-    data class Input(val coinUid: String) : Parcelable
+    @Serializable
+    data class Input(val coinUid: String)
 }
 
 @Composable

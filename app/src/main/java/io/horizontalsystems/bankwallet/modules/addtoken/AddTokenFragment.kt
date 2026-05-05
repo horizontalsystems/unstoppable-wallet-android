@@ -45,8 +45,10 @@ import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.delay
+import kotlinx.serialization.Serializable
 
-class AddTokenFragment : HSScreen() {
+@Serializable
+data object AddTokenFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

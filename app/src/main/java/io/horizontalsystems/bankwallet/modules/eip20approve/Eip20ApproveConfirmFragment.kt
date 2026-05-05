@@ -53,9 +53,11 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
-class Eip20ApproveConfirmFragment : HSScreen() {
+@Serializable
+data object Eip20ApproveConfirmFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         Eip20ApproveConfirmScreen(navController)
@@ -78,7 +80,7 @@ fun Eip20ApproveConfirmScreen(navController: NavBackStack<HSScreen>) {
         initialLoading = uiState.initialLoading,
         onClickBack = navController::removeLastOrNull,
         onClickFeeSettings = {
-            navController.addFromRight(Eip20ApproveTransactionSettingsFragment())
+            navController.addFromRight(Eip20ApproveTransactionSettingsFragment)
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()

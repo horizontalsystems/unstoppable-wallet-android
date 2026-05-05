@@ -135,7 +135,7 @@ private fun SettingSections(
             add {
                 SubscriptionBanner(
                     onClick = {
-                        navController.addFromBottom(BuySubscriptionHavHostFragment())
+                        navController.addFromBottom(BuySubscriptionHavHostFragment)
                         stat(
                             page = StatPage.Settings,
                             event = StatEvent.OpenPremium(StatPremiumTrigger.Banner)
@@ -148,7 +148,7 @@ private fun SettingSections(
             add {
                 DonateBanner(
                     onClick = {
-                        navController.addFromBottom(WhyDonateFragment())
+                        navController.addFromBottom(WhyDonateFragment)
                     }
                 )
             }
@@ -176,7 +176,7 @@ private fun SettingSections(
                 R.string.BlockchainSettings_Title,
                 R.drawable.box_24,
                 onClick = {
-                    navController.addFromRight(BlockchainSettingsFragment())
+                    navController.addFromRight(BlockchainSettingsFragment)
 
                     stat(
                         page = StatPage.Settings,
@@ -190,7 +190,7 @@ private fun SettingSections(
                 R.drawable.shield_24,
                 showAlert = uiState.securityCenterShowAlert,
                 onClick = {
-                    navController.addFromRight(SecuritySettingsFragment())
+                    navController.addFromRight(SecuritySettingsFragment)
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Security))
                 }
@@ -200,7 +200,7 @@ private fun SettingSections(
                 R.string.Settings_Privacy,
                 R.drawable.lock_24,
                 onClick = {
-                    navController.addFromRight(PrivacySettingsFragment())
+                    navController.addFromRight(PrivacySettingsFragment)
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
                 }
@@ -299,7 +299,7 @@ private fun SettingSections(
                     R.string.Settings_AppSettings,
                     R.drawable.uw_logo_24,
                     onClick = {
-                        navController.addFromRight(AppearanceFragment())
+                        navController.addFromRight(AppearanceFragment)
 
                         stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Appearance))
                     }
@@ -312,7 +312,7 @@ private fun SettingSections(
                         R.drawable.premium_24,
                         value = if (uiState.hasSubscription) stringResource(R.string.SettingsSubscription_Active) else null,
                         onClick = {
-                            navController.addFromRight(SubscriptionFragment())
+                            navController.addFromRight(SubscriptionFragment)
                         }
                     )
                 }
@@ -323,7 +323,7 @@ private fun SettingSections(
                     R.string.BackupManager_Title,
                     R.drawable.file_24,
                     onClick = {
-                        navController.addFromRight(BackupManagerFragment())
+                        navController.addFromRight(BackupManagerFragment)
 
                         stat(
                             page = StatPage.Settings,
@@ -370,7 +370,7 @@ private fun SettingSections(
             iconTint = ComposeAppTheme.colors.jacob,
             onClick = {
                 navController.paidAction(SecureSend) {
-                    navController.addFromRight(AddressCheckFragment())
+                    navController.addFromRight(AddressCheckFragment)
                 }
                 stat(
                     page = StatPage.Settings,
@@ -390,7 +390,7 @@ private fun SettingSections(
                 R.drawable.ic_info_20,
                 showAlert = uiState.aboutAppShowAlert,
                 onClick = {
-                    navController.addFromRight(AboutFragment())
+                    navController.addFromRight(AboutFragment)
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.AboutApp))
                 }
@@ -420,7 +420,7 @@ private fun SettingSections(
                 R.string.Settings_Faq,
                 R.drawable.message_24,
                 onClick = {
-                    navController.addFromRight(FaqListFragment())
+                    navController.addFromRight(FaqListFragment)
                 }
             )
         }, {
@@ -428,7 +428,7 @@ private fun SettingSections(
                 R.string.Guides_Title,
                 R.drawable.book_24,
                 onClick = {
-                    navController.addFromRight(GuidesFragment())
+                    navController.addFromRight(GuidesFragment)
                 }
             )
         })
@@ -471,7 +471,7 @@ private fun SettingSections(
                 R.string.Settings_Donate,
                 R.drawable.ic_heart_24,
                 onClick = {
-                    navController.addFromRight(DonateTokenSelectFragment())
+                    navController.addFromRight(DonateTokenSelectFragment)
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
                 }

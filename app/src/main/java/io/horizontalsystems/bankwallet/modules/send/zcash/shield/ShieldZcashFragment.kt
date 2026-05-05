@@ -5,9 +5,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.KClassSerializer
+import io.horizontalsystems.bankwallet.serializers.WalletSerializer
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-class ShieldZcashFragment(val input: Input) : HSScreen() {
+@Serializable
+data class ShieldZcashFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -15,9 +19,10 @@ class ShieldZcashFragment(val input: Input) : HSScreen() {
         ShieldZcashScreen(navController, viewModel, input.entryPointDestId)
     }
 
+    @Serializable
     data class Input(
-        val wallet: Wallet,
-        val entryPointDestId: KClass<out HSScreen>
+        @Serializable(with = WalletSerializer::class) val wallet: Wallet,
+        @Serializable(with = KClassSerializer::class) val entryPointDestId: KClass<out HSScreen>
     )
 
 }

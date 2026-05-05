@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount
 
-import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -64,17 +63,18 @@ import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
 import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class ManageAccountFragment(val input: Input) : HSScreen() {
+@Serializable
+data class ManageAccountFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         ManageAccountScreen(navController, input.accountId)
     }
 
-    @Parcelize
-    data class Input(val accountId: String) : Parcelable
+    @Serializable
+    data class Input(val accountId: String)
 }
 
 @Composable

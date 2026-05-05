@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.history
 
-import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -53,16 +52,17 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class SwapInfoFragment(val input: Input) : HSScreen() {
+@Serializable
+data class SwapInfoFragment(val input: Input) : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         SwapInfoScreen(recordId = input.recordId, navController = navController)
     }
 
-    @Parcelize
-    data class Input(val recordId: Int) : Parcelable
+    @Serializable
+    data class Input(val recordId: Int)
 }
 
 @Composable

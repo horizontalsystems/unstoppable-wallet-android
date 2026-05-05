@@ -31,6 +31,8 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
+import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
+import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -40,20 +42,22 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
-class Eip20RevokeConfirmFragment(val input: Input) : HSScreen() {
+@Serializable
+data class Eip20RevokeConfirmFragment(val input: Input) : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         Eip20RevokeScreen(navController, input)
     }
 
-    @Parcelize
+    @Serializable
     data class Input(
-        val token: Token,
+        @Serializable(with = TokenSerializer::class) val token: Token,
         val spenderAddress: String,
-        val allowance: BigDecimal,
-    ) : Parcelable
+        @Serializable(with = BigDecimalSerializer::class) val allowance: BigDecimal,
+    )
 
     @Parcelize
     data class Result(val revoked: Boolean) : Parcelable
@@ -78,7 +82,7 @@ fun Eip20RevokeScreen(navController: NavBackStack<HSScreen>, input: Eip20RevokeC
         initialLoading = uiState.initialLoading,
         onClickBack = navController::removeLastOrNull,
         onClickFeeSettings = {
-            navController.addFromRight(Eip20RevokeTransactionSettingsFragment())
+            navController.addFromRight(Eip20RevokeTransactionSettingsFragment)
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()

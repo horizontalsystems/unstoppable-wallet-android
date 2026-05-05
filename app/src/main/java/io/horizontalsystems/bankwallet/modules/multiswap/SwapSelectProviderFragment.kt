@@ -56,8 +56,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsSectionButtons
+import kotlinx.serialization.Serializable
 
-class SwapSelectProviderFragment : HSScreen() {
+@Serializable
+data object SwapSelectProviderFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         SwapSelectProviderScreen(navController)

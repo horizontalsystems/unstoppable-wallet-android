@@ -1,10 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.coin.audits
 
-import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import javax.annotation.concurrent.Immutable
 
 object CoinAuditsModule {
@@ -34,12 +33,12 @@ object CoinAuditsModule {
         val auditors: List<AuditorViewItem>
     )
 
-    @Parcelize
+    @Serializable
     data class AuditParcelable(
         val date: String?,
         val name: String?,
         val auditUrl: String?,
         val techIssues: Int,
         val partnerName: String?
-    ) : Parcelable
+    )
 }

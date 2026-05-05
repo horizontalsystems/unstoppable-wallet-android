@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.eip20approve
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +17,8 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
+import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
+import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -30,22 +31,23 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Token
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
-class Eip20ApproveFragment(val input: Input) : HSScreen() {
+@Serializable
+data class Eip20ApproveFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         Eip20ApproveScreen(navController, input)
     }
 
-    @Parcelize
+    @Serializable
     data class Input(
-        val token: Token,
-        val requiredAllowance: BigDecimal,
+        @Serializable(with = TokenSerializer::class) val token: Token,
+        @Serializable(with = BigDecimalSerializer::class) val requiredAllowance: BigDecimal,
         val spenderAddress: String
-    ) : Parcelable
+    )
 }
 
 @Composable
@@ -72,7 +74,7 @@ fun Eip20ApproveScreen(navController: NavBackStack<HSScreen>, input: Eip20Approv
         ),
         bottomBar = {
             ButtonsGroupWithShade {
-                val forResult = navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>(Eip20ApproveConfirmFragment()) {
+                val forResult = navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>(Eip20ApproveConfirmFragment) {
                     resultEventBus.sendResult(it)
                     navController.removeLastOrNull()
                 }

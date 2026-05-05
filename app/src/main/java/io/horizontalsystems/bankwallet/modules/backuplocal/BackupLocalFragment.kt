@@ -13,8 +13,11 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBack
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupType
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.LocalBackupPasswordScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.AccountSerializer
+import kotlinx.serialization.Serializable
 
-class BackupLocalFragment(val account: Account? = null) : HSScreen() {
+@Serializable
+data class BackupLocalFragment(@Serializable(with = AccountSerializer::class) val account: Account? = null) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

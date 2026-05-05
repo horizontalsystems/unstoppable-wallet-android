@@ -68,8 +68,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetCo
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
-class AppearanceFragment : HSScreen() {
+@Serializable
+data object AppearanceFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -125,7 +127,7 @@ fun AppearanceScreen(navController: NavBackStack<HSScreen>) {
                             R.string.Settings_Language,
                             value = uiState.currentLanguage,
                             onClick = {
-                                navController.addFromRight(LanguageSettingsFragment())
+                                navController.addFromRight(LanguageSettingsFragment)
 
                                 stat(
                                     page = StatPage.Settings,
@@ -139,7 +141,7 @@ fun AppearanceScreen(navController: NavBackStack<HSScreen>) {
                             R.string.Settings_BaseCurrency,
                             value = uiState.baseCurrencyCode,
                             onClick = {
-                                navController.addFromRight(BaseCurrencySettingsFragment())
+                                navController.addFromRight(BaseCurrencySettingsFragment)
 
                                 stat(
                                     page = StatPage.Settings,

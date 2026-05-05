@@ -92,7 +92,7 @@ private fun SyncErrorScreen(navController: NavBackStack<HSScreen>, wallet: Walle
                                 }
 
                                 SyncErrorModule.BlockchainWrapper.Monero -> {
-                                    navController.addFromBottom(MoneroNetworkFragment())
+                                    navController.addFromBottom(MoneroNetworkFragment)
                                 }
 
                                 else -> {}

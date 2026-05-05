@@ -70,8 +70,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
-class MoneroNetworkFragment : HSScreen() {
+@Serializable
+data object MoneroNetworkFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

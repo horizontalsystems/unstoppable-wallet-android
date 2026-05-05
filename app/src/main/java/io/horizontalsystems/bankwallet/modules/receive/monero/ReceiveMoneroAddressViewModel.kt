@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.receive.monero
 
-import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -15,7 +14,7 @@ import io.horizontalsystems.bankwallet.modules.receive.viewmodels.AddressUriServ
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 class ReceiveMoneroAddressViewModel(
@@ -134,9 +133,9 @@ data class ReceiveMoneroUiState(
     override val mainNet: Boolean = true
 }
 
-@Parcelize
+@Serializable
 data class SubaddressViewItem(
     val index: Int,
     val address: String,
     val transactions: Int
-) : Parcelable
+)

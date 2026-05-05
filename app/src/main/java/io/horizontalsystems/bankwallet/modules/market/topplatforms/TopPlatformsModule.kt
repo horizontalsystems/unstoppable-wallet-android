@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market.topplatforms
 
-import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -12,7 +11,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 object TopPlatformsModule {
@@ -40,11 +39,11 @@ object TopPlatformsModule {
 
 }
 
-@Parcelize
+@Serializable
 data class Platform(
     val uid: String,
     val name: String,
-) : Parcelable
+)
 
 data class TopPlatformItem(
     val platform: Platform,

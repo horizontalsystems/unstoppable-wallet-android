@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
-import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -44,6 +43,8 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.balance.ui.WheelDatePickerBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.AccountSerializer
+import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -61,10 +62,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.time.LocalDate
 
-class EnterBirthdayHeightFragment(val input: Input) : HSScreen() {
+@Serializable
+data class EnterBirthdayHeightFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -76,12 +78,12 @@ class EnterBirthdayHeightFragment(val input: Input) : HSScreen() {
         )
     }
 
-    @Parcelize
+    @Serializable
     data class Input(
-        val blockchainType: BlockchainType,
-        val account: Account,
+        @Serializable(with = BlockchainTypeSerializer::class) val blockchainType: BlockchainType,
+        @Serializable(with = AccountSerializer::class) val account: Account,
         val currentBirthdayHeight: Long?
-    ) : Parcelable
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

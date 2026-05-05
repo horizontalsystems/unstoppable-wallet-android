@@ -94,7 +94,7 @@ fun TransactionsScreen(
                     icon = R.drawable.ic_manage_2_24,
                     showAlertDot = showFilterAlertDot,
                     onClick = {
-                        navController.addFromRight(TransactionsFilterFragment())
+                        navController.addFromRight(TransactionsFilterFragment)
 
                         stat(
                             page = StatPage.Transactions,
@@ -186,7 +186,7 @@ private fun onTransactionClick(
 
     viewModel.tmpTransactionRecordToShow = transactionItem.record
 
-    navController.addFromBottom(TransactionInfoFragment())
+    navController.addFromBottom(TransactionInfoFragment)
 
     stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionInfo))
 }

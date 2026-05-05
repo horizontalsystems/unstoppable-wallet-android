@@ -1,16 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.restoreconfig
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
+import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.marketkit.models.BlockchainType
+import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class BirthdayHeightConfig(val blockchainType: BlockchainType) : HSScreen() {
+@Serializable
+data class BirthdayHeightConfig(@Serializable(with = BlockchainTypeSerializer::class) val blockchainType: BlockchainType) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

@@ -12,8 +12,10 @@ import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumSubscribedScreen
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class BuySubscriptionHavHostFragment : HSScreen() {
+@Serializable
+data object BuySubscriptionHavHostFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         SubscriptionNavHost(

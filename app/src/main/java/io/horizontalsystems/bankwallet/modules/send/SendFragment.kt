@@ -34,11 +34,17 @@ import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
+import io.horizontalsystems.bankwallet.serializers.AddressSerializer
+import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
+import io.horizontalsystems.bankwallet.serializers.KClassSerializer
+import io.horizontalsystems.bankwallet.serializers.WalletSerializer
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import kotlin.reflect.KClass
 
-class SendFragment(val input: Input) : HSScreen() {
+@Serializable
+data class SendFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -193,13 +199,14 @@ class SendFragment(val input: Input) : HSScreen() {
         }
     }
 
+    @Serializable
     data class Input(
-        val wallet: Wallet,
+        @Serializable(with = WalletSerializer::class) val wallet: Wallet,
         val title: String,
-        val sendEntryPointDestId: KClass<out HSScreen>,
-        val address: Address,
+        @Serializable(with = KClassSerializer::class) val sendEntryPointDestId: KClass<out HSScreen>,
+        @Serializable(with = AddressSerializer::class) val address: Address,
         val riskyAddress: Boolean = false,
-        val amount: BigDecimal? = null,
+        @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal? = null,
         val hideAddress: Boolean = false,
         val memo: String? = null,
     )

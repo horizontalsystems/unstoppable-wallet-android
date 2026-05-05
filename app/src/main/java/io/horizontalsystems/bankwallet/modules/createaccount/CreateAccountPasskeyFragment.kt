@@ -53,9 +53,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderColo
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-class CreateAccountPasskeyFragment(val input: ManageAccountsModule.Input?) : HSScreen() {
+@Serializable
+data class CreateAccountPasskeyFragment(val input: ManageAccountsModule.Input?) : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         val popUpToInclusiveId = input?.popOffOnSuccess ?: CreateAccountFragment::class

@@ -1,11 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.coin.detectors
 
-import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 object DetectorsModule {
     @Suppress("UNCHECKED_CAST")
@@ -36,17 +35,17 @@ object DetectorsModule {
     )
 }
 
-@Parcelize
+@Serializable
 data class IssueParcelable(
     val issue: String,
     val title: String? = null,
     val description: String,
     val issues: List<IssueItemParcelable>? = null,
-) : Parcelable
+)
 
-@Parcelize
+@Serializable
 data class IssueItemParcelable(
     val impact: String,
     val confidence: String? = null,
     val description: String,
-) : Parcelable
+)

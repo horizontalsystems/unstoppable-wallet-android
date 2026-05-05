@@ -47,8 +47,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import kotlinx.serialization.Serializable
 
-class MetricsPageFragment(val metricsType: MetricsType) : HSScreen() {
+@Serializable
+data class MetricsPageFragment(val metricsType: MetricsType) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

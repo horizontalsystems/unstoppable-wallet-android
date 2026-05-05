@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
+import kotlinx.serialization.Serializable
 
 fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
     add(screen)
@@ -28,7 +29,7 @@ fun NavBackStack<HSScreen>.slideFromBottom(screen: HSScreen) {
 @Composable
 fun NavBackStack<HSScreen>.authorizedAction(action: () -> Unit): () -> Unit {
     return if (App.pinComponent.isPinSet) {
-        slideFromBottomForResult<ConfirmPinFragment.Result>(ConfirmPinFragment()) {
+        slideFromBottomForResult<ConfirmPinFragment.Result>(ConfirmPinFragment) {
             if (it.success) {
                 action.invoke()
             }
@@ -51,6 +52,7 @@ fun NavBackStack<HSScreen>.paidAction(paidAction: IPaidAction, block: () -> Unit
     }
 }
 
+@Serializable
 enum class NavigationType {
     SlideFromBottom,
     SlideFromRight,

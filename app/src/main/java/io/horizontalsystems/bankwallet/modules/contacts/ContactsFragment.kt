@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.contacts
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -23,10 +22,11 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 
-class ContactsFragment(val input: Input) : HSScreen() {
+@Serializable
+data class ContactsFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -36,8 +36,8 @@ class ContactsFragment(val input: Input) : HSScreen() {
         )
     }
 
-    @Parcelize
-    data class Input(val mode: Mode) : Parcelable
+    @Serializable
+    data class Input(val mode: Mode)
 }
 
 @Composable

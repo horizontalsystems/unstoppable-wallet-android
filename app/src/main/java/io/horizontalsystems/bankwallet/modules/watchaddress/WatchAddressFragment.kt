@@ -36,9 +36,11 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-class WatchAddressFragment(val input: ManageAccountsModule.Input? = null) : HSScreen() {
+@Serializable
+data class WatchAddressFragment(val input: ManageAccountsModule.Input? = null) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

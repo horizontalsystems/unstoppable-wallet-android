@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.releasenotes
 
-import android.os.Parcelable
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -32,9 +31,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_jacob
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class ReleaseNotesFragment(val input: Input) : HSScreen() {
+@Serializable
+data class ReleaseNotesFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -44,8 +44,8 @@ class ReleaseNotesFragment(val input: Input) : HSScreen() {
         )
     }
 
-    @Parcelize
-    data class Input(val showAsClosablePopup: Boolean) : Parcelable
+    @Serializable
+    data class Input(val showAsClosablePopup: Boolean)
 }
 
 @Composable

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -11,9 +10,10 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class SetDuressPinFragment(val input: Input? = null) : HSScreen(screenshotEnabled = false) {
+@Serializable
+data class SetDuressPinFragment(val input: Input? = null) : HSScreen(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -34,6 +34,6 @@ class SetDuressPinFragment(val input: Input? = null) : HSScreen(screenshotEnable
         )
     }
 
-    @Parcelize
-    data class Input(val accountIds: List<String>) : Parcelable
+    @Serializable
+    data class Input(val accountIds: List<String>)
 }

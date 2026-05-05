@@ -33,8 +33,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Blockchain
+import kotlinx.serialization.Serializable
 
-class FilterBlockchainFragment : HSScreen() {
+@Serializable
+data object FilterBlockchainFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo.options
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,26 +23,30 @@ import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
+import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class TransactionSpeedUpCancelFragment(val input: Input) : HSScreen() {
+@Serializable
+data class TransactionSpeedUpCancelFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         TransactionSpeedUpCancelScreen(navController, input)
     }
 
-    @Parcelize
+    @Serializable
     data class Input(
-        val blockchainType: BlockchainType,
+        @Serializable(with = BlockchainTypeSerializer::class) val blockchainType: BlockchainType,
         val optionType: SpeedUpCancelType,
         val transactionHash: String
-    ) : Parcelable
+    )
 
     @Parcelize
     data class Result(val success: Boolean) : Parcelable
@@ -82,7 +85,7 @@ private fun TransactionSpeedUpCancelScreen(
         initialLoading = uiState.initialLoading,
         onClickBack = { navController.removeLastOrNull() },
         onClickFeeSettings = {
-            navController.addFromBottom(TransactionSpeedUpCancelTransactionSettingsFragment())
+            navController.addFromBottom(TransactionSpeedUpCancelTransactionSettingsFragment)
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()

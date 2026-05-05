@@ -37,14 +37,16 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subheadR_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 
-class WhyDonateFragment : HSScreen() {
+@Serializable
+data object WhyDonateFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         WhyDonateView(
             onClick = {
-                navController.addFromRight(DonateTokenSelectFragment())
+                navController.addFromRight(DonateTokenSelectFragment)
                 stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
             },
             onClose = {

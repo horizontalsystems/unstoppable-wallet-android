@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.send
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -19,10 +18,12 @@ import io.horizontalsystems.bankwallet.modules.send.tron.SendTronConfirmationScr
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
-import kotlinx.parcelize.Parcelize
+import io.horizontalsystems.bankwallet.serializers.KClassSerializer
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-class SendConfirmationFragment(val input: Input) : HSScreen() {
+@Serializable
+data class SendConfirmationFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -99,10 +100,11 @@ class SendConfirmationFragment(val input: Input) : HSScreen() {
         }
     }
 
-    @Parcelize
-    enum class Type : Parcelable {
+    @Serializable
+    enum class Type {
         Bitcoin, ZCash, Solana, Tron, Ton, Stellar, Monero
     }
 
-    data class Input(val type: Type, val sendEntryPointDestId: KClass<out HSScreen>)
+    @Serializable
+    data class Input(val type: Type, @Serializable(with = KClassSerializer::class) val sendEntryPointDestId: KClass<out HSScreen>)
 }

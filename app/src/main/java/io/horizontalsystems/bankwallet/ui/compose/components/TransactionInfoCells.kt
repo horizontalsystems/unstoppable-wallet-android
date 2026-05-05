@@ -359,7 +359,7 @@ fun TransactionInfoStatusCell(
         HsIconButton(
             modifier = Modifier.size(20.dp),
             onClick = {
-                navController.addFromBottom(TransactionStatusInfoFragment())
+                navController.addFromBottom(TransactionStatusInfoFragment)
                 stat(
                     page = StatPage.TransactionInfo,
                     event = StatEvent.Open(StatPage.Info),

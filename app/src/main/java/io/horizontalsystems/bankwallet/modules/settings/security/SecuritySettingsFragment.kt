@@ -67,8 +67,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.subscriptions.core.RobberyProtection
 import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
+import kotlinx.serialization.Serializable
 
-class SecuritySettingsFragment : HSScreen() {
+@Serializable
+data object SecuritySettingsFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -121,7 +123,7 @@ private fun SecurityCenterScreen(
                         right = {
                             CellRightNavigation(subtitle = stringResource(uiState.autoLockIntervalName).hs)
                         },
-                        onClick = { navController.addFromRight(AutoLockIntervalsFragment()) }
+                        onClick = { navController.addFromRight(AutoLockIntervalsFragment) }
                     )
                     HsDivider()
                 }
@@ -215,14 +217,14 @@ private fun SecurityCenterScreen(
                 BoxBordered(top = true) {
                     val authorizedActionDuressPin = navController.authorizedAction {
                         if (uiState.duressPinEnabled) {
-                            navController.addFromRight(EditDuressPinFragment())
+                            navController.addFromRight(EditDuressPinFragment)
                         } else {
-                            navController.addFromRight(SetDuressPinIntroFragment())
+                            navController.addFromRight(SetDuressPinIntroFragment)
                         }
                     }
 
                     val setDuressPinFlow = navController.ensurePinSet(R.string.PinSet_ForDuress) {
-                        navController.addFromRight(SetDuressPinIntroFragment())
+                        navController.addFromRight(SetDuressPinIntroFragment)
                     }
 
                     CellPrimary(

@@ -109,7 +109,7 @@ fun Roi(roi: List<RoiViewItem>, navController: NavBackStack<HSScreen>) {
         }
 
         CellUniversal(
-            onClick = { navController.addFromRight(RoiSelectCoinsFragment()) }
+            onClick = { navController.addFromRight(RoiSelectCoinsFragment) }
         ) {
             subhead2_leah(text = stringResource(R.string.CoinPage_ROI_SelectCoins))
             HFillSpacer(16.dp)

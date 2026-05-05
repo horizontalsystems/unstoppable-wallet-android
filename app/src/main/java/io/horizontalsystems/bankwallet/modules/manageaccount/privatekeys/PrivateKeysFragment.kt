@@ -24,9 +24,12 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowM
 import io.horizontalsystems.bankwallet.modules.manageaccount.stellarsecretkey.StellarSecretKeyFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.KeyActionItem
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.AccountSerializer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 
-class PrivateKeysFragment(val input: Account) : HSScreen() {
+@Serializable
+data class PrivateKeysFragment(@Serializable(with = AccountSerializer::class) val input: Account) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

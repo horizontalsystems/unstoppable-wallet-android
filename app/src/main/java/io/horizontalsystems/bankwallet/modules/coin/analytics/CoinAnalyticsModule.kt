@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.analytics
 
-import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -21,7 +20,7 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainIssues
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 object CoinAnalyticsModule {
 
@@ -120,8 +119,8 @@ object CoinAnalyticsModule {
         }
     }
 
-    @Parcelize
-    enum class ScoreCategory(val title: Int, val description: Int) : Parcelable {
+    @Serializable
+    enum class ScoreCategory(val title: Int, val description: Int) {
         CexScoreCategory(R.string.CoinAnalytics_CexVolume, R.string.Coin_Analytics_OverallScore_CexVolume),
         DexVolumeScoreCategory(R.string.CoinAnalytics_DexVolume, R.string.Coin_Analytics_OverallScore_DexVolume),
         DexLiquidityScoreCategory(R.string.CoinAnalytics_DexLiquidity, R.string.Coin_Analytics_OverallScore_DexLiquidity),
@@ -154,8 +153,8 @@ object CoinAnalyticsModule {
         Line, Bars, StackedBars
     }
 
-    @Parcelize
-    enum class AnalyticInfo(val title: Int) : Parcelable {
+    @Serializable
+    enum class AnalyticInfo(val title: Int) {
         CexVolumeInfo(R.string.CoinAnalytics_CexVolume),
         DexVolumeInfo(R.string.CoinAnalytics_DexVolume),
         DexLiquidityInfo(R.string.CoinAnalytics_DexLiquidity),
@@ -166,8 +165,8 @@ object CoinAnalyticsModule {
         TechnicalIndicatorsInfo(R.string.TechnicalAdvice_InfoTitle),
     }
 
-    @Parcelize
-    enum class RankType(val title: Int, val description: Int, val headerIconName: String) : Parcelable {
+    @Serializable
+    enum class RankType(val title: Int, val description: Int, val headerIconName: String) {
         CexVolumeRank(R.string.CoinAnalytics_CexVolumeRank, R.string.CoinAnalytics_CexVolumeRank_Description, "cex_volume"),
         DexVolumeRank(R.string.CoinAnalytics_DexVolumeRank, R.string.CoinAnalytics_DexVolumeRank_Description, "dex_volume"),
         DexLiquidityRank(R.string.CoinAnalytics_DexLiquidityRank, R.string.CoinAnalytics_DexLiquidityRank_Description, "dex_liquidity"),

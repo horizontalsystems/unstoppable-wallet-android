@@ -36,8 +36,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 
-class BlockchainSettingsFragment : HSScreen() {
+@Serializable
+data object BlockchainSettingsFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -119,7 +121,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Solana -> {
-            navController.addFromBottom(SolanaNetworkFragment())
+            navController.addFromBottom(SolanaNetworkFragment)
 
             stat(
                 page = StatPage.BlockchainSettings,
@@ -128,7 +130,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Monero -> {
-            navController.addFromBottom(MoneroNetworkFragment())
+            navController.addFromBottom(MoneroNetworkFragment)
 
             stat(
                 page = StatPage.BlockchainSettings,

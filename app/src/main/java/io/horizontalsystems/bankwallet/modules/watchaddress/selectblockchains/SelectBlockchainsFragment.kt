@@ -25,6 +25,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
+import io.horizontalsystems.bankwallet.serializers.AccountTypeSerializer
+import io.horizontalsystems.bankwallet.serializers.KClassSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
@@ -37,9 +39,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-class SelectBlockchainsFragment(val input: Input) : HSScreen() {
+@Serializable
+data class SelectBlockchainsFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -52,10 +56,11 @@ class SelectBlockchainsFragment(val input: Input) : HSScreen() {
         )
     }
 
+    @Serializable
     data class Input(
-        val popOffOnSuccess: KClass<out HSScreen>,
+        @Serializable(with = KClassSerializer::class) val popOffOnSuccess: KClass<out HSScreen>,
         val popOffInclusive: Boolean,
-        val accountType: AccountType,
+        @Serializable(with = AccountTypeSerializer::class) val accountType: AccountType,
         val accountName: String?,
     )
 

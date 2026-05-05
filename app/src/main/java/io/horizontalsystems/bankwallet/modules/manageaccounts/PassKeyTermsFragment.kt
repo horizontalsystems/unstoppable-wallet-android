@@ -27,8 +27,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftSelectors
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
+import kotlinx.serialization.Serializable
 
-class PassKeyTermsFragment(val nextScreen: HSScreen) : HSScreen() {
+@Serializable
+data class PassKeyTermsFragment(val nextScreen: HSScreen) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.receive.monero
 
-import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,12 +28,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class SubaddressesParams(
     val subaddresses: List<SubaddressViewItem>
-) : Parcelable
+)
 
 @Composable
 fun MoneroSubaddressesScreen(

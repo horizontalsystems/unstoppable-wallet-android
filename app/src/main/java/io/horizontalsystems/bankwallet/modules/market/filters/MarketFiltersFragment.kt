@@ -67,8 +67,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetCo
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
-class MarketFiltersFragment : HSScreen() {
+@Serializable
+data object MarketFiltersFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -116,7 +118,7 @@ private fun AdvancedSearchScreen(
                     navController = navController,
                     viewModel = viewModel,
                     onFilterByBlockchainsClick = {
-                        navController.addFromBottom(BlockchainsSelectorFragment())
+                        navController.addFromBottom(BlockchainsSelectorFragment)
                     },
                     showBottomSheet = { type ->
                         bottomSheetType = type
@@ -132,7 +134,7 @@ private fun AdvancedSearchScreen(
                         .padding(horizontal = 16.dp),
                     title = uiState.buttonTitle,
                     onClick = {
-                        navController.addFromRight(MarketFiltersResultsFragment())
+                        navController.addFromRight(MarketFiltersResultsFragment)
                     },
                     showSpinner = uiState.showSpinner,
                     enabled = uiState.buttonEnabled,
@@ -303,7 +305,7 @@ fun AdvancedSearchContent(
             value = if (uiState.sectors.size == 1 && uiState.sectors[0].item == null) null else uiState.sectors.size.toString(),
             onDropdownClick = {
                 navController.paidAction(AdvancedSearch) {
-                    navController.addFromBottom(SectorsSelectorFragment())
+                    navController.addFromBottom(SectorsSelectorFragment)
                 }
                 stat(
                     page = StatPage.AdvancedSearch,

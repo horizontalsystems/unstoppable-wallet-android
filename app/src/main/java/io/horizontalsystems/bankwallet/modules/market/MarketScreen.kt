@@ -111,7 +111,7 @@ fun MarketScreen(
                         .background(ComposeAppTheme.colors.blade)
                         .height(48.dp)
                         .clickable {
-                            navController.addFromBottom(MarketSearchFragment())
+                            navController.addFromBottom(MarketSearchFragment)
                             stat(
                                 page = StatPage.Markets,
                                 event = StatEvent.Open(StatPage.MarketSearch)
@@ -331,11 +331,11 @@ private fun RowScope.MarketTotalCard(
 private fun openMetricsPage(metricsType: MetricsType, navController: NavBackStack<HSScreen>) {
     when (metricsType) {
         MetricsType.TvlInDefi -> {
-            navController.addFromBottom(TvlFragment())
+            navController.addFromBottom(TvlFragment)
         }
 
         MetricsType.Etf -> {
-            navController.addFromBottom(EtfFragment())
+            navController.addFromBottom(EtfFragment)
         }
 
         else -> {

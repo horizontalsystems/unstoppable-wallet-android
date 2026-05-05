@@ -20,15 +20,19 @@ import io.horizontalsystems.bankwallet.modules.receive.monero.ReceiveMoneroScree
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressesParams
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveAddressViewModel
+import io.horizontalsystems.bankwallet.serializers.KClassSerializer
+import io.horizontalsystems.bankwallet.serializers.WalletSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-class ReceiveFragment(val input: Input) : HSScreen() {
+@Serializable
+data class ReceiveFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -72,9 +76,10 @@ class ReceiveFragment(val input: Input) : HSScreen() {
             }
     }
 
+    @Serializable
     data class Input(
-        val wallet: Wallet,
-        val receiveEntryPointDestId: KClass<out HSScreen>? = null,
+        @Serializable(with = WalletSerializer::class) val wallet: Wallet,
+        @Serializable(with = KClassSerializer::class) val receiveEntryPointDestId: KClass<out HSScreen>? = null,
         val isTransparentAddress: Boolean = false
     )
 }

@@ -86,10 +86,12 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.EtfPoint
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import kotlin.math.abs
 
-class EtfFragment : HSScreen() {
+@Serializable
+data object EtfFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

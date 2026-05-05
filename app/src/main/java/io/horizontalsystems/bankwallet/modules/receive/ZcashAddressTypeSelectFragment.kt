@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
-import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +15,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.WalletSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -27,10 +27,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-
-class ZcashAddressTypeSelectFragment(val input: Input) : HSScreen() {
+@Serializable
+data class ZcashAddressTypeSelectFragment(val input: Input) : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         val wallet = input.wallet
@@ -48,8 +48,8 @@ class ZcashAddressTypeSelectFragment(val input: Input) : HSScreen() {
             })
     }
 
-    @Parcelize
-    data class Input(val wallet: Wallet) : Parcelable
+    @Serializable
+    data class Input(@Serializable(with = WalletSerializer::class) val wallet: Wallet)
 }
 
 @Composable

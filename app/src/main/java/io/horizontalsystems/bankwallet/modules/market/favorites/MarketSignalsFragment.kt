@@ -36,8 +36,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class MarketSignalsFragment : HSScreen() {
+@Serializable
+data object MarketSignalsFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         MarketSignalsScreen(navController)

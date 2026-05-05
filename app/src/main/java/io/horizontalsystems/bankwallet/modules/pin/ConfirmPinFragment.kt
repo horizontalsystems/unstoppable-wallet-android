@@ -7,8 +7,10 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinConfirm
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class ConfirmPinFragment : HSScreen(screenshotEnabled = false) {
+@Serializable
+data object ConfirmPinFragment : HSScreen(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

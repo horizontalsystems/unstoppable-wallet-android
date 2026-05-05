@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.sendtokenselect
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -13,12 +12,16 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
+import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
+import io.horizontalsystems.bankwallet.serializers.BlockchainTypeListSerializer
+import io.horizontalsystems.bankwallet.serializers.TokenTypeListSerializer
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
-class SendTokenSelectFragment(val input: Input? = null) : HSScreen() {
+@Serializable
+data class SendTokenSelectFragment(val input: Input? = null) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -45,12 +48,12 @@ class SendTokenSelectFragment(val input: Input? = null) : HSScreen() {
         )
     }
 
-    @Parcelize
+    @Serializable
     data class Input(
-        val blockchainTypes: List<BlockchainType>?,
-        val tokenTypes: List<TokenType>?,
+        @Serializable(with = BlockchainTypeListSerializer::class) val blockchainTypes: List<BlockchainType>?,
+        @Serializable(with = TokenTypeListSerializer::class) val tokenTypes: List<TokenType>?,
         val address: String,
-        val amount: BigDecimal?,
+        @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal?,
         val memo: String?
-    ) : Parcelable
+    )
 }

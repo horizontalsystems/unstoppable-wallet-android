@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.receive.ui
 
-import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -42,14 +41,14 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class UsedAddressesParams(
     val coinName: String,
     val usedAddresses: List<UsedAddress>,
     val usedChangeAddresses: List<UsedAddress>
-) : Parcelable
+)
 
 enum class UsedAddressTab(@StringRes val titleResId: Int) {
     ReceiveAddress(R.string.Balance_Receive_ReceiveAddresses),

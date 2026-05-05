@@ -29,9 +29,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_jacob
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
-class OverallScoreInfoFragment(val scoreCategory: ScoreCategory) : HSScreen() {
+@Serializable
+data class OverallScoreInfoFragment(val scoreCategory: ScoreCategory) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

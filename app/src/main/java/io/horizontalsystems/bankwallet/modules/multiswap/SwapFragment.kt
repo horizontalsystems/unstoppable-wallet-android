@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
 import android.annotation.SuppressLint
-import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -72,6 +71,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapHistoryFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
@@ -107,18 +107,19 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.marketkit.models.Token
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
-class SwapFragment(val input: Input? = null) : HSScreen() {
+@Serializable
+data class SwapFragment(val input: Input? = null) : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         SwapScreen(navController, input?.tokenIn, input?.tokenOut, navController::removeLastOrNull)
     }
 
-    @Parcelize
-    data class Input(val tokenIn: Token? = null, val tokenOut: Token? = null) : Parcelable
+    @Serializable
+    data class Input(@Serializable(with = TokenSerializer::class) val tokenIn: Token? = null, @Serializable(with = TokenSerializer::class) val tokenOut: Token? = null)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -150,7 +151,7 @@ fun SwapScreen(
     var showAmlErrorSheet by remember { mutableStateOf(false) }
     val amlErrorSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    val forResult = navController.slideFromRightForResult<SwapConfirmFragment.Result>(SwapConfirmFragment()) {
+    val forResult = navController.slideFromRightForResult<SwapConfirmFragment.Result>(SwapConfirmFragment) {
         if (it.success) {
             if (closeAfterSwap) {
                 navController.removeLastOrNull()
@@ -166,7 +167,7 @@ fun SwapScreen(
     }
 
     val forResultSwapTerms = navController.slideFromRightForResult<SwapTermsFragment.Result>(
-        SwapTermsFragment()
+        SwapTermsFragment
     ) {
         if (it.accepted) navigateToSwapConfirm()
     }
@@ -199,7 +200,7 @@ fun SwapScreen(
             onDismiss = { showAmlRiskSheet = false },
             onChooseAnotherProvider = {
                 showAmlRiskSheet = false
-                navController.slideFromBottom(SwapSelectProviderFragment())
+                navController.slideFromBottom(SwapSelectProviderFragment)
             },
         )
     }
@@ -253,7 +254,7 @@ fun SwapScreen(
         onEnterAmountPercentage = viewModel::onEnterAmountPercentage,
         onEnterFiatAmount = viewModel::onEnterFiatAmount,
         onClickProvider = {
-            navController.addFromBottom(SwapSelectProviderFragment())
+            navController.addFromBottom(SwapSelectProviderFragment)
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
@@ -306,7 +307,7 @@ private fun SwapScreenInner(
                 title = TranslatableString.ResString(R.string.SwapHistory_Title),
                 icon = R.drawable.ic_circle_clock_24,
                 onClick = {
-                    navController.addFromRight(SwapHistoryFragment())
+                    navController.addFromRight(SwapHistoryFragment)
                 }
             )),
         onBack = onClickClose,

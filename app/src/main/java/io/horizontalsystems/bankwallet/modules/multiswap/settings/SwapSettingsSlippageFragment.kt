@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.settings
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.NumberInputWithButtons
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
+import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -27,17 +27,20 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
+import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
-class SwapSettingsSlippageFragment(val input: Input) : HSScreen() {
+@Serializable
+data class SwapSettingsSlippageFragment(val input: Input) : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         SwapSlippageSettingsScreen(navController, input.slippage)
     }
 
-    @Parcelize
-    data class Input(val slippage: BigDecimal) : Parcelable
+    @Serializable
+    data class Input(@Serializable(with = BigDecimalSerializer::class) val slippage: BigDecimal)
 
     @Parcelize
     data class Result(val slippage: BigDecimal) : Parcelable

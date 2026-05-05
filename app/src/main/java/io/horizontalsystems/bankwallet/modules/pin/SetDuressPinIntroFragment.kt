@@ -36,8 +36,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 
-class SetDuressPinIntroFragment : HSScreen() {
+@Serializable
+data object SetDuressPinIntroFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         SetDuressPinIntroScreen(navController)
@@ -99,7 +101,7 @@ fun SetDuressPinIntroScreen(navController: NavBackStack<HSScreen>) {
                     title = stringResource(R.string.Button_Continue),
                     onClick = {
                         if (viewModel.shouldShowSelectAccounts) {
-                            navController.addFromRight(SetDuressPinSelectAccountsFragment())
+                            navController.addFromRight(SetDuressPinSelectAccountsFragment)
                         } else {
                             navController.addFromRight(SetDuressPinFragment())
                         }

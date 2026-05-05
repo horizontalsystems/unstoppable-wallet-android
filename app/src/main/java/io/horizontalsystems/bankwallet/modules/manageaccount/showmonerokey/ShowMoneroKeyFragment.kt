@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -27,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.MoneroKeysSerializer
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -36,9 +36,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
 import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class ShowMoneroKeyFragment(val input: Input) : HSScreen(screenshotEnabled = false) {
+@Serializable
+data class ShowMoneroKeyFragment(val input: Input) : HSScreen(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -51,8 +52,8 @@ class ShowMoneroKeyFragment(val input: Input) : HSScreen(screenshotEnabled = fal
         }
     }
 
-    @Parcelize
-    data class Input(val keys: MoneroKeys) : Parcelable
+    @Serializable
+    data class Input(@Serializable(with = MoneroKeysSerializer::class) val keys: MoneroKeys)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

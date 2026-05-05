@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.market.earn.vault
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -41,9 +40,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class VaultFragment(val input: Input) : HSScreen() {
+@Serializable
+data class VaultFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -59,7 +59,7 @@ class VaultFragment(val input: Input) : HSScreen() {
         )
     }
 
-    @Parcelize
+    @Serializable
     data class Input(
         val rank: Int,
         val address: String,
@@ -71,7 +71,7 @@ class VaultFragment(val input: Input) : HSScreen() {
         val assetSymbol: String,
         val protocolName: String,
         val assetLogo: String?,
-    ) : Parcelable
+    )
 
 }
 

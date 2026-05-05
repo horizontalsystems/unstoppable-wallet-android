@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey
 
-import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavBackStack
@@ -11,20 +10,21 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.SecretKeyScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class PrivateKeyFragment(val input: Input) : HSScreen(screenshotEnabled = false) {
+@Serializable
+data class PrivateKeyFragment(val input: Input) : HSScreen(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         PrivateKeyScreen(navController, input.privateKey, input.type)
     }
 
-    @Parcelize
-    data class Input(val privateKey: String, val type: Type) : Parcelable
+    @Serializable
+    data class Input(val privateKey: String, val type: Type)
 
-    @Parcelize
-    enum class Type : Parcelable {
+    @Serializable
+    enum class Type {
         Evm, Tron
     }
 }

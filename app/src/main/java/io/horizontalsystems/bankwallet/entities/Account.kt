@@ -17,6 +17,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.math.BigInteger
 import java.text.Normalizer
 
@@ -440,6 +441,7 @@ val HDWallet.Purpose.tokenTypeDerivation: TokenType.Derivation
         HDWallet.Purpose.BIP86 -> TokenType.Derivation.Bip86
     }
 
+@Serializable
 @Parcelize
 enum class AccountOrigin(val value: String) : Parcelable {
     Created("Created"),

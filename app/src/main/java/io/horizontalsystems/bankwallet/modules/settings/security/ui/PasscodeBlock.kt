@@ -45,7 +45,7 @@ fun PasscodeBlock(
             .background(ComposeAppTheme.colors.lawrence)
     ) {
         val authorizedActionEditPin = navController.authorizedAction {
-            navController.addFromRight(EditPinFragment())
+            navController.addFromRight(EditPinFragment)
         }
         CellPrimary(
             middle = {

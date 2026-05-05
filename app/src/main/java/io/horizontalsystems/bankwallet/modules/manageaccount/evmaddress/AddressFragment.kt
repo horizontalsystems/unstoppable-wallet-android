@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.evmaddress
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,20 +26,21 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class AddressFragment(val input: Input) : HSScreen(screenshotEnabled = false) {
+@Serializable
+data class AddressFragment(val input: Input) : HSScreen(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         AddressScreen(navController, input.address, input.type)
     }
 
-    @Parcelize
-    data class Input(val address: String, val type: Type) : Parcelable
+    @Serializable
+    data class Input(val address: String, val type: Type)
 
-    @Parcelize
-    enum class Type : Parcelable {
+    @Serializable
+    enum class Type {
         Evm, Tron
     }
 }

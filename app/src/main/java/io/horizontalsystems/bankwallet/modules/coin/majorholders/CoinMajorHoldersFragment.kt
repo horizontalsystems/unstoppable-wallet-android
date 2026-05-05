@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.coin.majorholders
 
-import android.os.Parcelable
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,6 +28,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.BlockchainSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -52,9 +52,10 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class CoinMajorHoldersFragment(val input: Input) : HSScreen() {
+@Serializable
+data class CoinMajorHoldersFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -65,8 +66,8 @@ class CoinMajorHoldersFragment(val input: Input) : HSScreen() {
         )
     }
 
-    @Parcelize
-    data class Input(val coinUid: String, val blockchain: Blockchain) : Parcelable
+    @Serializable
+    data class Input(val coinUid: String, @Serializable(with = BlockchainSerializer::class) val blockchain: Blockchain)
 }
 
 @Composable

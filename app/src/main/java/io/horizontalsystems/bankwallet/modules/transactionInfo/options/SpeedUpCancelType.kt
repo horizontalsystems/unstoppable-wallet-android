@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo.options
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
-enum class SpeedUpCancelType : Parcelable {
+@Serializable
+enum class SpeedUpCancelType {
     SpeedUp, Cancel
 }

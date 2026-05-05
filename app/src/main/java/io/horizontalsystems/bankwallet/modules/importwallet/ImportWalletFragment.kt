@@ -58,11 +58,13 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import java.io.File
 import kotlin.reflect.KClass
 
 
-class ImportWalletFragment(val input: ManageAccountsModule.Input? = null) : HSScreen() {
+@Serializable
+data class ImportWalletFragment(val input: ManageAccountsModule.Input? = null) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

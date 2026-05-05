@@ -55,8 +55,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderColored
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
+import kotlinx.serialization.Serializable
 
-class CreateAccountStandardFragment(val input: ManageAccountsModule.Input?) : HSScreen() {
+@Serializable
+data class CreateAccountStandardFragment(val input: ManageAccountsModule.Input?) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

@@ -5,7 +5,9 @@ import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
 import io.horizontalsystems.bankwallet.core.derivation
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.serialization.Serializable
 
+@Serializable
 enum class StatPage(val key: String) {
     AboutApp("about_app"),
     Academy("academy"),

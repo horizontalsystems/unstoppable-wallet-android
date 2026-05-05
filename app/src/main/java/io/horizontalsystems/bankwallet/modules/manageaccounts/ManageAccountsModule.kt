@@ -1,17 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.manageaccounts
 
-import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import kotlinx.parcelize.Parcelize
+import io.horizontalsystems.bankwallet.serializers.KClassSerializer
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
 object ManageAccountsModule {
-    data class Input(val popOffOnSuccess: KClass<out HSScreen>, val popOffInclusive: Boolean)
+    @Serializable
+    data class Input(@Serializable(with = KClassSerializer::class) val popOffOnSuccess: KClass<out HSScreen>, val popOffInclusive: Boolean)
 
     class Factory(private val mode: Mode) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -37,8 +38,8 @@ object ManageAccountsModule {
             val callback: () -> Unit
     )
 
-    @Parcelize
-    enum class Mode : Parcelable {
+    @Serializable
+    enum class Mode {
         Manage, Switcher
     }
 

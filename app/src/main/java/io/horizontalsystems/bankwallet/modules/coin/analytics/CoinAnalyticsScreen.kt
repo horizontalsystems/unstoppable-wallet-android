@@ -414,7 +414,7 @@ private fun handleActionClick(
         }
 
         CoinAnalyticsModule.ActionType.OpenTvl -> {
-            navController.addFromBottom(TvlFragment())
+            navController.addFromBottom(TvlFragment)
         }
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {

@@ -2,22 +2,19 @@ package io.horizontalsystems.bankwallet.serializers
 
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 object HDExtendedKeySerializer : KSerializer<HDExtendedKey> {
-    override val descriptor: SerialDescriptor
-        get() = TODO("Not yet implemented")
+    override val descriptor = PrimitiveSerialDescriptor("HDExtendedKey", PrimitiveKind.STRING)
 
-    override fun serialize(
-        encoder: Encoder,
-        value: HDExtendedKey
-    ) {
-        TODO("Not yet implemented")
+    override fun serialize(encoder: Encoder, value: HDExtendedKey) {
+        encoder.encodeString(value.serialize())
     }
 
     override fun deserialize(decoder: Decoder): HDExtendedKey {
-        TODO("Not yet implemented")
+        return HDExtendedKey(decoder.decodeString())
     }
 }

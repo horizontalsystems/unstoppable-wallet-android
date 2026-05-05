@@ -418,7 +418,7 @@ private fun onTransactionClick(
     val transactionItem = tokenBalanceViewModel.getTransactionItem(transactionViewItem) ?: return
     transactionsViewModel.tmpTransactionRecordToShow = transactionItem.record
 
-    navController.addFromBottom(TransactionInfoFragment())
+    navController.addFromBottom(TransactionInfoFragment)
 
     stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.TransactionInfo))
 }

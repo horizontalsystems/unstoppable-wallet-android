@@ -52,8 +52,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
 import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.serialization.Serializable
 
-class ManageWalletsFragment : HSScreen() {
+@Serializable
+data object ManageWalletsFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -122,7 +124,7 @@ private fun ManageWalletsScreen(
                     title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
                     icon = R.drawable.ic_add_24,
                     onClick = {
-                        navController.addFromRight(AddTokenFragment())
+                        navController.addFromRight(AddTokenFragment)
 
                         stat(
                             page = StatPage.CoinManager,

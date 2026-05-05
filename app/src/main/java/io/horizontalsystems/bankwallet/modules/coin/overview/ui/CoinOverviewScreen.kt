@@ -195,7 +195,7 @@ fun CoinOverviewScreen(
                                                 modifier = Modifier.height(28.dp),
                                                 icon = R.drawable.ic_setting_20
                                             ) {
-                                                navController.addFromRight(IndicatorsFragment())
+                                                navController.addFromRight(IndicatorsFragment)
 
                                                 stat(
                                                     page = StatPage.CoinOverview,

@@ -31,6 +31,10 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceSettingsFragment
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
+import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
+import io.horizontalsystems.bankwallet.serializers.KClassSerializer
+import io.horizontalsystems.bankwallet.serializers.SendEvmAdditionalInfoSerializer
+import io.horizontalsystems.bankwallet.serializers.TransactionDataParcelableSerializer
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.ethereumkit.models.Address
@@ -38,20 +42,23 @@ import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
-class SendEvmConfirmationFragment(val input: Input) : HSScreen() {
+@Serializable
+data class SendEvmConfirmationFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         SendEvmConfirmationScreen(navController, input)
     }
 
+    @Serializable
     data class Input(
-        val transactionDataParcelable: SendEvmModule.TransactionDataParcelable,
-        val additionalInfo: SendEvmData.AdditionalInfo?,
-        val blockchainType: BlockchainType,
-        val sendEntryPointDestId: KClass<out HSScreen>
+        @Serializable(with = TransactionDataParcelableSerializer::class) val transactionDataParcelable: SendEvmModule.TransactionDataParcelable,
+        @Serializable(with = SendEvmAdditionalInfoSerializer::class) val additionalInfo: SendEvmData.AdditionalInfo?,
+        @Serializable(with = BlockchainTypeSerializer::class) val blockchainType: BlockchainType,
+        @Serializable(with = KClassSerializer::class) val sendEntryPointDestId: KClass<out HSScreen>
     ) {
         val transactionData: TransactionData
             get() = TransactionData(
@@ -94,10 +101,10 @@ private fun SendEvmConfirmationScreen(
         initialLoading = uiState.initialLoading,
         onClickBack = { navController.removeLastOrNull() },
         onClickFeeSettings = {
-            navController.addFromBottom(SendEvmSettingsFragment())
+            navController.addFromBottom(SendEvmSettingsFragment)
         },
         onClickNonceSettings = {
-            navController.addFromBottom(SendEvmNonceSettingsFragment())
+            navController.addFromBottom(SendEvmNonceSettingsFragment)
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()

@@ -301,7 +301,7 @@ fun BalanceItems(
                                 when (val receiveAllowedState =
                                     viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
-                                        navController.addFromRight(ReceiveChooseCoinFragment())
+                                        navController.addFromRight(ReceiveChooseCoinFragment)
 
                                         stat(
                                             page = StatPage.Balance,
@@ -422,7 +422,7 @@ fun BalanceItems(
                             icon = painterResource(R.drawable.ic_manage_20),
                             contentDescription = stringResource(R.string.ManageCoins_title),
                             onClick = {
-                                navController.addFromRight(ManageWalletsFragment())
+                                navController.addFromRight(ManageWalletsFragment)
 
                                 stat(
                                     page = StatPage.Balance,

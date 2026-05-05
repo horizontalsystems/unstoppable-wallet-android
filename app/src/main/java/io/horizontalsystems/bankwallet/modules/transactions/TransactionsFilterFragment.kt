@@ -40,8 +40,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 
-class TransactionsFilterFragment : HSScreen() {
+@Serializable
+data object TransactionsFilterFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
@@ -106,7 +108,7 @@ fun FilterScreen(
                                 ?: stringResource(id = R.string.Transactions_Filter_AllBlockchains),
                             valueColor = if (filterBlockchain != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                             onClick = {
-                                navController.addFromRight(FilterBlockchainFragment())
+                                navController.addFromRight(FilterBlockchainFragment)
                             }
                         )
                     }
@@ -120,7 +122,7 @@ fun FilterScreen(
                                 ?: stringResource(id = R.string.Transactions_Filter_AllCoins),
                             valueColor = if (filterBlockchain != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                             onClick = {
-                                navController.addFromRight(FilterCoinFragment())
+                                navController.addFromRight(FilterCoinFragment)
                             }
                         )
                     }

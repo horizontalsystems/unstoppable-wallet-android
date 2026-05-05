@@ -33,8 +33,10 @@ import io.horizontalsystems.bankwallet.modules.receive.viewmodels.BchAddressType
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.DerivationSelectViewModel
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveSharedViewModel
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.serialization.Serializable
 
-class ReceiveChooseCoinFragment : HSScreen() {
+@Serializable
+data object ReceiveChooseCoinFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         ReceiveChooseCoinScreen(navController)
