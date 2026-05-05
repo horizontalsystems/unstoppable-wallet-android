@@ -14,7 +14,6 @@ import androidx.navigation.navigation
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -35,7 +34,7 @@ import io.horizontalsystems.bankwallet.modules.receive.viewmodels.DerivationSele
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveSharedViewModel
 import io.horizontalsystems.core.helpers.HudHelper
 
-class ReceiveChooseCoinFragment : BaseComposeFragment() {
+class ReceiveChooseCoinFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         ReceiveChooseCoinScreen(navController)

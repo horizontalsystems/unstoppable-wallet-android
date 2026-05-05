@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.NavigationType
 import io.horizontalsystems.bankwallet.core.addFromRight
@@ -50,7 +49,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class BackupManagerFragment : BaseComposeFragment() {
+class BackupManagerFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

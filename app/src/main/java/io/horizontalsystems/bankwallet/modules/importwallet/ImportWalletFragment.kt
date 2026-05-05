@@ -31,7 +31,6 @@ import androidx.credentials.exceptions.NoCredentialException
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.NavigationType
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
@@ -63,7 +62,7 @@ import java.io.File
 import kotlin.reflect.KClass
 
 
-class ImportWalletFragment(val input: ManageAccountsModule.Input? = null) : BaseComposeFragment() {
+class ImportWalletFragment(val input: ManageAccountsModule.Input? = null) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
@@ -68,7 +67,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Optional
 
-class MarketSearchFragment : BaseComposeFragment() {
+class MarketSearchFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         val viewModel = viewModel<MarketSearchViewModel>(

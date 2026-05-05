@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -60,7 +59,7 @@ import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
-class ShowExtendedKeyFragment(val input: Input?) : BaseComposeFragment(screenshotEnabled = false) {
+class ShowExtendedKeyFragment(val input: Input?) : HSScreen(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

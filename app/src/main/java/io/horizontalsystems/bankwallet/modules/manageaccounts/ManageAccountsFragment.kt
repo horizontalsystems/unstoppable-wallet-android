@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.NavigationType
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -51,7 +50,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsIco
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderColored
 
-class ManageAccountsFragment(val input: ManageAccountsModule.Mode) : BaseComposeFragment() {
+class ManageAccountsFragment(val input: ManageAccountsModule.Mode) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

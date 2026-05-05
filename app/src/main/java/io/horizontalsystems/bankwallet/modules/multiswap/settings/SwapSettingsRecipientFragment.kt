@@ -6,7 +6,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R.string.Button_Apply
 import io.horizontalsystems.bankwallet.R.string.SendEvmSettings_SetRecipient
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.enteraddress.EnterAddressScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -14,7 +13,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 
-class SwapSettingsRecipientFragment(val input: Input) : BaseComposeFragment() {
+class SwapSettingsRecipientFragment(val input: Input) : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         val resultEventBus = LocalResultEventBus.current

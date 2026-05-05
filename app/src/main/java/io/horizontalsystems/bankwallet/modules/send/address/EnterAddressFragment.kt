@@ -5,7 +5,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R.string.Button_Next
 import io.horizontalsystems.bankwallet.R.string.Send_EnterAddress
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enteraddress.EnterAddressScreen
@@ -15,7 +14,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendFragment.Input
 import java.math.BigDecimal
 import kotlin.reflect.KClass
 
-class EnterAddressFragment(val input: Input) : BaseComposeFragment() {
+class EnterAddressFragment(val input: Input) : HSScreen() {
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         EnterAddressScreen(

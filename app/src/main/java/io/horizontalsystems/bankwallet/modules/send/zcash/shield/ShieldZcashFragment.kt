@@ -3,12 +3,11 @@ package io.horizontalsystems.bankwallet.modules.send.zcash.shield
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlin.reflect.KClass
 
-class ShieldZcashFragment(val input: Input) : BaseComposeFragment() {
+class ShieldZcashFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

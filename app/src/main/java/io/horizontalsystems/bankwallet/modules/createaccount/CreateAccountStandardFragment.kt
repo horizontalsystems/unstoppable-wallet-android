@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -57,7 +56,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderColo
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
-class CreateAccountStandardFragment(val input: ManageAccountsModule.Input?) : BaseComposeFragment() {
+class CreateAccountStandardFragment(val input: ManageAccountsModule.Input?) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
