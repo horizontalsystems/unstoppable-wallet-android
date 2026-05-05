@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.manageaccounts.PassKeyTermsFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
-import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
@@ -59,12 +58,6 @@ fun CreateAccountScreen(navController: NavBackStack<HSScreen>, input: ManageAcco
                     navController.addFromRight(CreateAccountStandardFragment(input))
                 }
 
-                ResultEffect<PassKeyTermsFragment.Result> { result ->
-                    if (result.termsAccepted) {
-                        navController.slideFromRight(CreateAccountPasskeyFragment(input))
-                    }
-                }
-
                 WalletType(
                     icon = painterResource(R.drawable.touchid_24),
                     title = stringResource(R.string.CreateNewWallet_Passkey).hs,
@@ -72,7 +65,7 @@ fun CreateAccountScreen(navController: NavBackStack<HSScreen>, input: ManageAcco
                     borderTop = true
                 ) {
                     if (!App.localStorage.passkeyTermsAccepted) {
-                        navController.slideFromRight(PassKeyTermsFragment())
+                        navController.slideFromRight(PassKeyTermsFragment(CreateAccountPasskeyFragment(input)))
                     } else {
                         navController.slideFromRight(CreateAccountPasskeyFragment(input))
                     }

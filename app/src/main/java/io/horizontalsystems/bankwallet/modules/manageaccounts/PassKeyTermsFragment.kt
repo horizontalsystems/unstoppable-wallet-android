@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.manageaccounts
 
-import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,9 +15,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -29,32 +28,27 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftSelectors
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
-import kotlinx.parcelize.Parcelize
 
-class PassKeyTermsFragment : BaseComposeFragment() {
+class PassKeyTermsFragment(val nextScreen: HSScreen) : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
-        PasskeyTermsScreen(navController = navController)
+        PasskeyTermsScreen(navController = navController, nextScreen = nextScreen)
     }
-
-    @Parcelize
-    data class Result(val termsAccepted: Boolean) : Parcelable
 }
 
 @Composable
 fun PasskeyTermsScreen(
     navController: NavBackStack<HSScreen>,
+    nextScreen: HSScreen,
     viewModel: PasskeyTermsViewModel = viewModel(factory = PasskeyTermsModule.Factory())
 ) {
-
     val uiState = viewModel.uiState
-    val resultEventBus = LocalResultEventBus.current
 
     LaunchedEffect(uiState.closeScreen) {
         if (uiState.closeScreen) {
-            resultEventBus.sendResult(PassKeyTermsFragment.Result(true))
             navController.removeLastOrNull()
+            navController.slideFromRight(nextScreen)
         }
     }
 
