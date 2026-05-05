@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.Account
@@ -42,14 +41,12 @@ class ZanoKitManager(
 
     private fun handleNodeUpdate() {
         if (zanoKitWrapper == null) return
-        Log.e("eee", "handleNodeUpdate stop()")
         stop()
     }
 
     @Synchronized
     fun getZanoKitWrapper(account: Account, creationTimestamp: Long): ZanoKitWrapper {
         if (this.zanoKitWrapper != null && currentAccount != account) {
-            Log.e("eee", "getZanoKitWrapper stop()")
             stop()
         }
 
@@ -89,7 +86,6 @@ class ZanoKitManager(
         if (account == currentAccount) {
             useCount -= 1
             if (useCount < 1) {
-                Log.e("eee", "ZanoKitManager unlink stop()")
                 stop()
             }
         }

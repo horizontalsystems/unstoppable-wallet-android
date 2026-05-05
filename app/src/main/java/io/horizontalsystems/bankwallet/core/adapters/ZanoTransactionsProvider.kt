@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
-import android.util.Log
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.zanokit.TransactionInfo
 import io.horizontalsystems.zanokit.TransactionType
@@ -16,7 +15,6 @@ class ZanoTransactionsProvider(private val assetId: String) {
 
     fun onTransactions(all: List<TransactionInfo>) {
         val filtered = all.filter { it.assetId == assetId }
-        Log.e("eee", "ZanoTransactionsProvider[$assetId] onTransactions: all=${all.size} filtered=${filtered.size}")
         val newTransactions = filtered.filter { tx ->
             transactions.none { it.uid == tx.uid && it.blockHeight == tx.blockHeight }
         }
@@ -36,7 +34,6 @@ class ZanoTransactionsProvider(private val assetId: String) {
         val filtered = if (filters.isEmpty()) transactions else transactions.filter { tx -> filters.all { it(tx) } }
         val fromIndex = fromUid?.let { filtered.indexOfFirst { it.uid == fromUid } + 1 } ?: 0
         val result = filtered.subList(fromIndex, min(filtered.size, fromIndex + limit))
-        Log.e("eee", "ZanoTransactionsProvider[$assetId] getTransactions: returning ${result.size} txs (cache=${transactions.size})")
         return result
     }
 

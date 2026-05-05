@@ -1233,6 +1233,8 @@
 
     <!--Add Monero Node-->
     <string name="AddMoneroNode_AddNode">Add Node</string>
+    <string name="AddZanoNode_AddNode">Add Node</string>
+    <string name="AddZanoNode_NodeUrl">Node URL</string>
     <string name="AddMoneroNode_NodeUrl">Node Url</string>
     <string name="AddMoneroNode_Username">Username (optional)</string>
     <string name="AddMoneroNode_Pasword">Password (optional)</string>
@@ -1244,6 +1246,7 @@
         \n\nOff → transactions are shown only after confirmations from the network (slower, but safer and more private).</string>
     <string name="MoneroNodeSettings_Trusted">Trusted</string>
     <string name="MoneroNodeSettings_Description">Choose the node Unstoppable app should use for synchronizing wallet(s).</string>
+    <string name="ZanoNodeSettings_Description">Choose the node Unstoppable app should use for synchronizing wallet(s).</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">After changing source the wallet will have to resync itself.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source Unstoppable app should use for synchronizing wallet(s).</string>

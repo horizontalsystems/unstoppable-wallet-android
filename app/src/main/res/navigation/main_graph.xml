@@ -307,6 +307,10 @@
         android:name="io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkFragment"
         android:label="MoneroNetworkFragment" />
     <fragment
+        android:id="@+id/zanoNetworkFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.zanonetwork.ZanoNetworkFragment"
+        android:label="ZanoNetworkFragment" />
+    <fragment
         android:id="@+id/btcBlockchainSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsFragment" />
     <fragment
