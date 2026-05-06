@@ -50,33 +50,6 @@ class MainActivity : BaseActivity() {
 //            currentFocus?.hideKeyboard(this)
 //        }
 //
-        viewModel.tcSendRequest.observe(this) { request ->
-            if (request != null) {
-//                TODO("xxx nav3")
-//                navController.slideFromBottom(R.id.tcSendRequestFragment)
-            }
-        }
-
-        viewModel.tcDappRequest.observe(this) { request ->
-            if (request != null) {
-//                TODO("xxx nav3")
-//                navController.slideFromBottomForResult<TonConnectNewFragment.Result>(
-//                    R.id.tcNewFragment,
-//                    request.dAppRequest
-//                ) { result ->
-//                    if (request.closeAppOnResult) {
-//                        if (result.approved) {
-//                            //Need delay to get connected before closing activity
-//                            closeAfterDelay()
-//                        } else {
-//                            finish()
-//                        }
-//                    }
-//                }
-//                viewModel.onTcDappRequestHandled()
-            }
-        }
-
         viewModel.setIntent(intent)
     }
 
