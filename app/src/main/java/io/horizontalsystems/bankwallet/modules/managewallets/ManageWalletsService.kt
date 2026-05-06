@@ -6,8 +6,11 @@ import io.horizontalsystems.bankwallet.core.eligibleTokens
 import io.horizontalsystems.bankwallet.core.isDefault
 import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
-import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.restoreSettingTypes
+import io.horizontalsystems.bankwallet.core.sorting.SortCriterion
+
+import io.horizontalsystems.bankwallet.core.sorting.TokenSortContext
+import io.horizontalsystems.bankwallet.core.sorting.sortedByCriteria
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -83,20 +86,16 @@ class ManageWalletsService(
     }
 
     private fun sortItems() {
-        var comparator = compareByDescending<Item> {
-            it.enabled
+        val allItems = fullCoins.map { getItemsForFullCoin(it) }.flatten()
+        val criteria = buildList {
+            add(SortCriterion.Enabled)
+            if (filter.isBlank()) add(SortCriterion.BlockchainOrder)
         }
-
-        if (filter.isBlank()) {
-            comparator = comparator.thenBy {
-                it.token.blockchain.type.order
-            }
-        }
-
-        items = fullCoins
-            .map { getItemsForFullCoin(it) }
-            .flatten()
-            .sortedWith(comparator)
+        val enabledTokens = allItems.filter { it.enabled }.map { it.token }.toSet()
+        val sortedTokens = allItems.map { it.token }
+            .sortedByCriteria(criteria, TokenSortContext(enabledTokens = enabledTokens))
+        val itemsByToken = allItems.associateBy { it.token }
+        items = sortedTokens.mapNotNull { itemsByToken[it] }
     }
 
     private fun getItemsForFullCoin(fullCoin: FullCoin): List<Item> {

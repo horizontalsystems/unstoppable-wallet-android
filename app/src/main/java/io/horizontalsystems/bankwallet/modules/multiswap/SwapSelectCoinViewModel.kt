@@ -7,11 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.defaultTokenQuery
 import io.horizontalsystems.bankwallet.core.eligibleTokens
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
-import io.horizontalsystems.bankwallet.core.order
+import io.horizontalsystems.bankwallet.core.sorting.SortCriterion
+import io.horizontalsystems.bankwallet.core.sorting.TokenSortContext
+import io.horizontalsystems.bankwallet.core.sorting.sortedByCriteria
 import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.core.supports
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -68,20 +69,17 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
                 val balance =
                     adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
                 CoinBalanceItem(wallet.token, balance, getFiatValue(wallet.token, balance))
-            }.sortedWith(
-                if (otherSelectedToken != null) {
-                    compareBy<CoinBalanceItem> { it.token.blockchainType != otherSelectedToken.blockchainType }
-                        .thenByDescending { it.fiatBalanceValue?.value }
-                } else {
-                    compareByDescending { it.fiatBalanceValue?.value }
+            }.sortedByCriteria(
+                buildList {
+                    otherSelectedToken?.let { add(SortCriterion.SameBlockchainFirst(it.blockchainType)) }
+                    add(SortCriterion.FiatBalanceDescending)
+                    add(SortCriterion.CodeAscending)
+                    add(SortCriterion.BlockchainOrder)
+                    add(SortCriterion.Badge)
                 }
-                    .thenBy { it.token.coin.code }
-                    .thenBy { it.token.blockchainType.order }
-                    .thenBy { it.token.badge }
-            )
-                .let {
-                    resultTokens.addAll(it)
-                }
+            ).let {
+                resultTokens.addAll(it)
+            }
 
             // Suggested Tokens
             otherSelectedToken?.let { otherToken ->
@@ -96,10 +94,9 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
                 }
 
                 suggestedTokens
-                    .sortedWith(
-                        compareBy<Token> { it.coin.marketCapRank }
-                            .thenBy { it.blockchainType.order }
-                            .thenBy { it.badge }
+                    .sortedByCriteria(
+                        listOf(SortCriterion.MarketCapRank, SortCriterion.BlockchainOrder, SortCriterion.Badge),
+                        TokenSortContext()
                     )
                     .map { CoinBalanceItem(it, null, null) }
                     .let {
@@ -122,9 +119,9 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
             supportedNativeTokens.filter { token ->
                 (activeAccount == null || token.blockchainType.supports(activeAccount.type)) && resultTokens.none { it.token == token }
             }
-                .sortedWith(
-                    compareBy<Token> { it.blockchainType.order }
-                        .thenBy { it.badge }
+                .sortedByCriteria(
+                    listOf(SortCriterion.BlockchainOrder, SortCriterion.Badge),
+                    TokenSortContext()
                 ).map {
                     CoinBalanceItem(it, null, null)
                 }.let {

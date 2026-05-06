@@ -25,9 +25,11 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.CoinCategory
 import io.horizontalsystems.marketkit.models.CoinInvestment
 import io.horizontalsystems.marketkit.models.CoinTreasury
+import io.horizontalsystems.bankwallet.core.sorting.FullCoinSortContext
+import io.horizontalsystems.bankwallet.core.sorting.SortCriterion
+import io.horizontalsystems.bankwallet.core.sorting.sortedByCriteria
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.delay
-import java.util.Locale
 import java.util.Optional
 
 val <T> Optional<T>.orNull: T?
@@ -55,25 +57,9 @@ val CoinTreasury.logoUrl: String
     get() = "https://cdn.blocksdecoded.com/treasury-icons/$fundUid@3x.png"
 
 fun List<FullCoin>.sortedByFilter(filter: String): List<FullCoin> {
-    val baseComparator = compareBy<FullCoin> {
-        it.coin.marketCapRank ?: Int.MAX_VALUE
-    }.thenBy {
-        it.coin.name.lowercase(Locale.ENGLISH)
-    }
-    val comparator = if (filter.isNotBlank()) {
-        val lowercasedFilter = filter.lowercase()
-        compareByDescending<FullCoin> {
-            it.coin.code.lowercase() == lowercasedFilter
-        }.thenByDescending {
-            it.coin.code.lowercase().startsWith(lowercasedFilter)
-        }.thenByDescending {
-            it.coin.name.lowercase().startsWith(lowercasedFilter)
-        }.thenComparing(baseComparator)
-    } else {
-        baseComparator
-    }
-
-    return sortedWith(comparator)
+    val base = listOf(SortCriterion.MarketCapRank, SortCriterion.NameAscending)
+    val criteria = if (filter.isNotBlank()) listOf(SortCriterion.FilterRelevance) + base else base
+    return sortedByCriteria(criteria, FullCoinSortContext(filter = filter))
 }
 
 val Language.displayNameStringRes: Int
