@@ -510,6 +510,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             solanaRpcSourceManager = solanaRpcSourceManager,
             moneroNodeManager = moneroNodeManager,
             moneroNodeStorage = moneroNodeStorage,
+            zanoNodeManager = zanoNodeManager,
+            zanoNodeStorage = zanoNodeStorage,
             contactsRepository = contactsRepository
         )
 
