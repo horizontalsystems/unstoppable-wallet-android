@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.nav3
 
 //import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import android.view.WindowManager
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -83,6 +84,10 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
             showPinLockScreen = isLocked,
             onSuccess = {}
         )
+    }
+
+    BackHandler(enabled = isLocked) {
+        activity?.moveTaskToBack(true)
     }
 }
 
