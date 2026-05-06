@@ -5,46 +5,23 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.ComposeView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.fragment.NavHostFragment
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.nav3.Nav3
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.hideKeyboard
-import io.horizontalsystems.dapp.core.HSDAppEvent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 
 class MainActivity : BaseActivity() {
-
-    private lateinit var pinLockComposeView: ComposeView
-    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     private val viewModel by viewModels<MainActivityViewModel> {
         MainActivityViewModel.Factory()
     }
 
-    private var showPinLockScreen by mutableStateOf(false)
-
     override fun onResume() {
         super.onResume()
         validate()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        scope.cancel()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -64,8 +41,6 @@ class MainActivity : BaseActivity() {
         }
 
 //        TODO("xxx nav3")
-//        pinLockComposeView = findViewById(R.id.pinLockComposeView)
-//
 //        val navHost =
 //            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
 //        val navController = navHost.navController
@@ -140,30 +115,6 @@ class MainActivity : BaseActivity() {
         }
 
         viewModel.setIntent(intent)
-
-//        TODO("xxx nav3")
-//        pinLockComposeView.setContent {
-//            ComposeAppTheme {
-//                PinUnlock(
-//                    showPinLockScreen = showPinLockScreen,
-//                    onSuccess = {
-//                        showPinLockScreen = false
-//                    }
-//                )
-//            }
-//        }
-
-        observeLockState()
-    }
-
-    private fun observeLockState() {
-//        TODO("xxx nav3")
-//        scope.launch {
-//            App.pinComponent.isLockedFlow.collect { isLocked ->
-//                showPinLockScreen = isLocked
-//                pinLockComposeView.visibility = if (isLocked) { VISIBLE } else { GONE }
-//            }
-//        }
     }
 
     private fun closeAfterDelay() {

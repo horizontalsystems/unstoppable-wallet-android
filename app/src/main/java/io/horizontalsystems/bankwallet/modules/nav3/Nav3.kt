@@ -3,8 +3,11 @@ package io.horizontalsystems.bankwallet.modules.nav3
 //import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.lifecycle.ViewModel
@@ -15,7 +18,9 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.serialization.NavBackStackSerializer
 import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
+import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
@@ -23,7 +28,7 @@ import kotlin.reflect.KClass
 
 @Composable
 fun Nav3(mainActivityViewModel: MainActivityViewModel) {
-    val resultBus = remember { ResultEventBus() }
+    val isLocked by App.pinComponent.isLockedFlow.collectAsState()
 
     val backStack = rememberSerializable(
         serializer = NavBackStackSerializer(elementSerializer = NavKeySerializer())
@@ -46,32 +51,39 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
         }
     }
 
-    NavDisplay(
-        entryDecorators = listOf(
-            // Add the default decorators for managing scenes and saving state
-            rememberSaveableStateHolderNavEntryDecorator(),
-            rememberSharedViewModelStoreNavEntryDecorator(),
-            rememberResultEventBusNavEntryDecorator(),
-        ),
-        backStack = backStack,
-        sceneStrategy = bottomSheetStrategy,
-        entryProvider = { hSScreen ->
-            NavEntry(
-                key = hSScreen,
-                contentKey = hSScreen.contentKey(),
-                metadata = hSScreen.getMetadata(backStack)
-            ) {
-                if (currentScreen is MainScreen) {
-                    currentScreen.mainActivityViewModel = mainActivityViewModel
-                }
+    Box {
+        NavDisplay(
+            entryDecorators = listOf(
+                // Add the default decorators for managing scenes and saving state
+                rememberSaveableStateHolderNavEntryDecorator(),
+                rememberSharedViewModelStoreNavEntryDecorator(),
+                rememberResultEventBusNavEntryDecorator(),
+            ),
+            backStack = backStack,
+            sceneStrategy = bottomSheetStrategy,
+            entryProvider = { hSScreen ->
+                NavEntry(
+                    key = hSScreen,
+                    contentKey = hSScreen.contentKey(),
+                    metadata = hSScreen.getMetadata(backStack)
+                ) {
+                    if (currentScreen is MainScreen) {
+                        currentScreen.mainActivityViewModel = mainActivityViewModel
+                    }
 //                if (currentScreen is TonConnectSendRequestScreen) {
 //                    currentScreen.mainActivityViewModel = mainActivityViewModel
 //                }
 //                hSScreen.GetContent(backStack)
-                hSScreen.GetContent(backStack)
+                    hSScreen.GetContent(backStack)
+                }
             }
-        }
-    )
+        )
+
+        PinUnlock(
+            showPinLockScreen = isLocked,
+            onSuccess = {}
+        )
+    }
 }
 
 fun NavBackStack<HSScreen>.paidAction(paidAction: IPaidAction, block: () -> Unit) {
