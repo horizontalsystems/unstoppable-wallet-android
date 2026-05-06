@@ -18,6 +18,7 @@ import io.horizontalsystems.core.security.KeyStoreValidationError
 import io.horizontalsystems.dapp.core.HSDAppEvent
 import io.horizontalsystems.tonkit.models.SignTransaction
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class MainActivityViewModel(
     private val userManager: UserManager,
@@ -28,7 +29,7 @@ class MainActivityViewModel(
     private val tonConnectManager: TonConnectManager
 ) : ViewModel() {
 
-    val navigateToMainLiveData = MutableLiveData(false)
+    val navigateToMainLiveData = MutableLiveData<String?>(null)
     val wcEvent = MutableLiveData<HSDAppEvent?>()
     val tcSendRequest = MutableLiveData<SignTransaction?>()
     val tcDappRequest = MutableLiveData<DAppRequestEntityWrapper?>()
@@ -37,7 +38,7 @@ class MainActivityViewModel(
     init {
         viewModelScope.launch {
             userManager.currentUserLevelFlow.collect {
-                navigateToMainLiveData.postValue(true)
+                navigateToMainLiveData.postValue(UUID.randomUUID().toString())
             }
         }
         viewModelScope.launch {
@@ -96,7 +97,7 @@ class MainActivityViewModel(
     }
 
     fun onNavigatedToMain() {
-        navigateToMainLiveData.postValue(false)
+        navigateToMainLiveData.postValue(null)
     }
 
     fun setIntent(intent: Intent) {

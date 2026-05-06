@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.lifecycle.ViewModel
@@ -35,6 +36,14 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
         serializer = NavBackStackSerializer(elementSerializer = NavKeySerializer())
     ) {
         NavBackStack<HSScreen>(MainScreen)
+    }
+
+    val navigateToMain by mainActivityViewModel.navigateToMainLiveData.observeAsState()
+    LaunchedEffect(navigateToMain) {
+        if (navigateToMain != null) {
+            backStack.removeLastUntil(MainScreen::class, false)
+            mainActivityViewModel.onNavigatedToMain()
+        }
     }
 
     val bottomSheetStrategy = remember { BottomSheetSceneStrategy<HSScreen>() }

@@ -50,13 +50,6 @@ class MainActivity : BaseActivity() {
 //            currentFocus?.hideKeyboard(this)
 //        }
 //
-//        viewModel.navigateToMainLiveData.observe(this) {
-//            if (it) {
-//                navController.popBackStack(navController.graph.startDestinationId, false)
-//                viewModel.onNavigatedToMain()
-//            }
-//        }
-//
 //        viewModel.wcEvent.observe(this) { wcEvent ->
 //            if (wcEvent != null) {
 //                when (wcEvent) {
