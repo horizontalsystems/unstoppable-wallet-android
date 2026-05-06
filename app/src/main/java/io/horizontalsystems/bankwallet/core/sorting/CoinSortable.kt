@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.sorting
 
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.diff
+import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -33,6 +34,8 @@ private fun SortCriterion.toBalanceItemComparator(): Comparator<BalanceModule.Ba
             SortComparators.nullableDecimalDescending { it.balanceData.total }
         is SortCriterion.PercentGrowthDescending ->
             SortComparators.nullableDecimalDescending { it.coinPrice?.diff }
+        is SortCriterion.MarketCapRank ->
+            SortComparators.nullableIntAscending { it.wallet.coin.marketCapRank }
         is SortCriterion.BlockchainOrder ->
             compareBy { it.wallet.token.blockchainType.order }
         is SortCriterion.CodeAscending ->
@@ -73,6 +76,8 @@ private fun SortCriterion.toTokenComparator(ctx: TokenSortContext): Comparator<T
             SortComparators.nullableStringAscending { it.coin.code }
         is SortCriterion.NameAscending ->
             SortComparators.nullableStringAscending { it.coin.name }
+        is SortCriterion.CodeNativeFirst ->
+            SortComparators.booleanFirst { it.type.isNative }
         is SortCriterion.FilterRelevance ->
             tokenFilterRelevanceComparator(ctx.filter)
         else -> Comparator { _, _ -> 0 }
@@ -105,6 +110,8 @@ private fun SortCriterion.toFullCoinComparator(ctx: FullCoinSortContext): Compar
             SortComparators.nullableStringAscending { it.coin.code }
         is SortCriterion.NameAscending ->
             SortComparators.nullableStringAscending { it.coin.name }
+        is SortCriterion.CodeNativeFirst ->
+            SortComparators.booleanFirst { fullCoin -> fullCoin.tokens.any { it.type.isNative } }
         is SortCriterion.FilterRelevance ->
             fullCoinFilterRelevanceComparator(ctx.filter)
         else -> Comparator { _, _ -> 0 }
@@ -112,7 +119,7 @@ private fun SortCriterion.toFullCoinComparator(ctx: FullCoinSortContext): Compar
 
 // ---- Filter relevance helpers ---------------------------------------------------
 
-private fun tokenFilterRelevanceComparator(filter: String): Comparator<Token> {
+internal fun tokenFilterRelevanceComparator(filter: String): Comparator<Token> {
     if (filter.isBlank()) return Comparator { _, _ -> 0 }
     val lowercased = filter.lowercase(Locale.ENGLISH)
     return compareByDescending<Token> { it.coin.code.lowercase() == lowercased }

@@ -23,7 +23,14 @@ class BalanceSorter {
             SortCriterion.BlockchainOrder,
             SortCriterion.NameAscending,
         )
-        val NAME_CRITERIA = listOf(SortCriterion.CodeAscending)
+        val NAME_CRITERIA = listOf(SortCriterion.NameAscending)
         val PERCENT_GROWTH_CRITERIA = listOf(SortCriterion.PercentGrowthDescending)
+        val SEND_CRITERIA = listOf(
+            SortCriterion.NonZeroBalanceFirst,
+            SortCriterion.FiatBalanceDescending,
+            SortCriterion.BalanceDescending,
+            SortCriterion.MarketCapRank,
+            SortCriterion.NameAscending,
+        )
     }
 }

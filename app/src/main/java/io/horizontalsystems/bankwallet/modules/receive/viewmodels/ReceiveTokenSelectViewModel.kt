@@ -87,11 +87,19 @@ class ReceiveTokenSelectViewModel(
                 fullCoin to totalFiatValue
             }
             fullCoins = coins.sortedByCriteria(
-                listOf(SortCriterion.FiatBalanceDescending, SortCriterion.BlockchainOrder),
+                listOf(
+                    SortCriterion.FiatBalanceDescending,
+                    SortCriterion.CodeNativeFirst,
+                    SortCriterion.BlockchainOrder,
+                    SortCriterion.NameAscending,
+                ),
                 FullCoinSortContext(fiatValues = fiatValues)
             )
         } else {
-            fullCoins = coins
+            fullCoins = coins.sortedByCriteria(
+                listOf(SortCriterion.CodeNativeFirst),
+                FullCoinSortContext()
+            )
         }
     }
 

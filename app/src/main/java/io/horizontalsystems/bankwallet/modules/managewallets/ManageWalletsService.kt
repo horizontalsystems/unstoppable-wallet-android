@@ -89,11 +89,14 @@ class ManageWalletsService(
         val allItems = fullCoins.map { getItemsForFullCoin(it) }.flatten()
         val criteria = buildList {
             add(SortCriterion.Enabled)
-            if (filter.isBlank()) add(SortCriterion.BlockchainOrder)
+            if (filter.isNotBlank()) add(SortCriterion.FilterRelevance)
+            add(SortCriterion.CodeNativeFirst)
+            add(SortCriterion.BlockchainOrder)
+            add(SortCriterion.Badge)
         }
         val enabledTokens = allItems.filter { it.enabled }.map { it.token }.toSet()
         val sortedTokens = allItems.map { it.token }
-            .sortedByCriteria(criteria, TokenSortContext(enabledTokens = enabledTokens))
+            .sortedByCriteria(criteria, TokenSortContext(enabledTokens = enabledTokens, filter = filter))
         val itemsByToken = allItems.associateBy { it.token }
         items = sortedTokens.mapNotNull { itemsByToken[it] }
     }
