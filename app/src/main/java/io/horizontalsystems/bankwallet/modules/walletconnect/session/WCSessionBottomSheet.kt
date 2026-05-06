@@ -67,12 +67,12 @@ import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class WCSessionBottomSheet(val input: WCSessionModule.Input) : BaseComposableBottomSheetFragment() {
+class WCSessionBottomSheet(val input: WCSessionModule.Input?) : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
         val viewModel = viewModel<WCSessionViewModel>(
-            factory = WCSessionModule.Factory(input.sessionTopic)
+            factory = WCSessionModule.Factory(input?.sessionTopic)
         )
         WCSessionScreen(navController, viewModel)
     }

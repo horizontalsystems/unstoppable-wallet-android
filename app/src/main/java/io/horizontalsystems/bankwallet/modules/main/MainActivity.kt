@@ -50,36 +50,6 @@ class MainActivity : BaseActivity() {
 //            currentFocus?.hideKeyboard(this)
 //        }
 //
-//        viewModel.wcEvent.observe(this) { wcEvent ->
-//            if (wcEvent != null) {
-//                when (wcEvent) {
-//                    is HSDAppEvent.SessionRequest -> {
-//                        navController.slideFromBottom(R.id.wcRequestFragment)
-//                    }
-//
-//                    is HSDAppEvent.SessionProposal -> {
-//                        navController.slideFromBottom(R.id.wcSessionBottomSheetDialog)
-//                    }
-//
-//                    is HSDAppEvent.Error -> {
-//                        navHost.view?.let {
-//                            HudHelper.showErrorMessage(it, wcEvent.throwable.message ?: "Error")
-//                        }
-//                    }
-//
-//                    is HSDAppEvent.SessionSettled -> {
-//                        navHost.view?.let {
-//                            HudHelper.showSuccessMessage(it, getString(R.string.Hud_Text_Connected))
-//                        }
-//                    }
-//
-//                    else -> {}
-//                }
-//
-//                viewModel.onWcEventHandled()
-//            }
-//        }
-
         viewModel.tcSendRequest.observe(this) { request ->
             if (request != null) {
 //                TODO("xxx nav3")

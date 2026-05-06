@@ -12,6 +12,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSerializable
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
@@ -20,10 +22,16 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.runtime.serialization.NavBackStackSerializer
 import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionBottomSheet
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.dapp.core.HSDAppEvent
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlin.reflect.KClass
@@ -44,6 +52,35 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
             backStack.removeLastUntil(MainScreen::class, false)
             mainActivityViewModel.onNavigatedToMain()
         }
+    }
+
+    val wcEvent by mainActivityViewModel.wcEvent.observeAsState()
+
+    val view = LocalView.current
+    val hudTextConnected = stringResource(R.string.Hud_Text_Connected)
+
+    LaunchedEffect(wcEvent) {
+        when (val tmpWcEvent = wcEvent) {
+            is HSDAppEvent.SessionRequest -> {
+                backStack.slideFromBottom(WCRequestFragment())
+            }
+
+            is HSDAppEvent.SessionProposal -> {
+                backStack.slideFromBottom(WCSessionBottomSheet(null))
+            }
+
+            is HSDAppEvent.Error -> {
+                HudHelper.showErrorMessage(view, tmpWcEvent.throwable.message ?: "Error")
+            }
+
+            is HSDAppEvent.SessionSettled -> {
+                HudHelper.showSuccessMessage(view, hudTextConnected)
+            }
+
+            else -> {}
+        }
+
+        mainActivityViewModel.onWcEventHandled()
     }
 
     val bottomSheetStrategy = remember { BottomSheetSceneStrategy<HSScreen>() }
