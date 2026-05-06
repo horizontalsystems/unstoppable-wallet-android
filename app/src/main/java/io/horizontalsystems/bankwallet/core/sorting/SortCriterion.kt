@@ -15,5 +15,6 @@ sealed class SortCriterion {
     object NameAscending : SortCriterion()
     object Enabled : SortCriterion()
     object FilterRelevance : SortCriterion()
+    object CodeNativeFirst : SortCriterion()
     data class SameBlockchainFirst(val blockchainType: BlockchainType) : SortCriterion()
 }

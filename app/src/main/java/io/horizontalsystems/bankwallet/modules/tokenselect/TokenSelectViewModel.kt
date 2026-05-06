@@ -10,9 +10,9 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.title
+import io.horizontalsystems.bankwallet.core.sorting.sortedByCriteria
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceService
-import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSorter
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
@@ -134,7 +134,7 @@ class TokenSelectViewModel(
 
             noItems = filteredItems.isEmpty()
 
-            val itemsSorted = balanceSorter.sort(filteredItems, BalanceSortType.Value)
+            val itemsSorted = filteredItems.sortedByCriteria(BalanceSorter.SEND_CRITERIA)
             balanceViewItems = itemsSorted.map { balanceItem ->
                 balanceViewItemFactory.viewItem2(
                     item = balanceItem,

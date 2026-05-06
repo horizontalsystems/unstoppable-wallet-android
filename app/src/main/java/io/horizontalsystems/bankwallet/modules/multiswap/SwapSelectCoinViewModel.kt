@@ -74,6 +74,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
                     otherSelectedToken?.let { add(SortCriterion.SameBlockchainFirst(it.blockchainType)) }
                     add(SortCriterion.FiatBalanceDescending)
                     add(SortCriterion.CodeAscending)
+                    add(SortCriterion.CodeNativeFirst)
                     add(SortCriterion.BlockchainOrder)
                     add(SortCriterion.Badge)
                 }
@@ -95,7 +96,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
 
                 suggestedTokens
                     .sortedByCriteria(
-                        listOf(SortCriterion.MarketCapRank, SortCriterion.BlockchainOrder, SortCriterion.Badge),
+                        listOf(SortCriterion.MarketCapRank, SortCriterion.CodeNativeFirst, SortCriterion.BlockchainOrder, SortCriterion.Badge),
                         TokenSortContext()
                     )
                     .map { CoinBalanceItem(it, null, null) }
@@ -120,7 +121,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
                 (activeAccount == null || token.blockchainType.supports(activeAccount.type)) && resultTokens.none { it.token == token }
             }
                 .sortedByCriteria(
-                    listOf(SortCriterion.BlockchainOrder, SortCriterion.Badge),
+                    listOf(SortCriterion.CodeNativeFirst, SortCriterion.BlockchainOrder, SortCriterion.Badge),
                     TokenSortContext()
                 ).map {
                     CoinBalanceItem(it, null, null)
@@ -144,7 +145,10 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
 
                     CoinBalanceItem(token, balance, getFiatValue(token, balance))
                 }
-                .sortedWith(compareByDescending { it.balance })
+                .sortedByCriteria(
+                    listOf(SortCriterion.Enabled, SortCriterion.FilterRelevance, SortCriterion.CodeNativeFirst, SortCriterion.BlockchainOrder, SortCriterion.Badge),
+                    TokenSortContext(filter = query)
+                )
         } else {
             marketKit.fullCoins(query, 100)
                 .flatMap { fullCoin -> fullCoin.tokens }

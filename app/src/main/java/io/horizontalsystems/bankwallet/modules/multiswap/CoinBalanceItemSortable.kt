@@ -1,10 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
 import io.horizontalsystems.bankwallet.core.badge
+import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.sorting.SortComparators
 import io.horizontalsystems.bankwallet.core.sorting.SortCriterion
 import io.horizontalsystems.bankwallet.core.sorting.TokenSortContext
+import io.horizontalsystems.bankwallet.core.sorting.tokenFilterRelevanceComparator
 
 fun List<CoinBalanceItem>.sortedByCriteria(
     criteria: List<SortCriterion>,
@@ -33,5 +35,13 @@ private fun SortCriterion.toCoinBalanceItemComparator(ctx: TokenSortContext): Co
             compareBy { it.token.blockchainType.order }
         is SortCriterion.Badge ->
             SortComparators.nullableStringAscending { it.token.badge }
+        is SortCriterion.CodeNativeFirst ->
+            SortComparators.booleanFirst { it.token.type.isNative }
+        is SortCriterion.Enabled ->
+            SortComparators.booleanFirst { it.balance != null }
+        is SortCriterion.FilterRelevance -> {
+            val tokenComp = tokenFilterRelevanceComparator(ctx.filter)
+            Comparator { a, b -> tokenComp.compare(a.token, b.token) }
+        }
         else -> Comparator { _, _ -> 0 }
     }
