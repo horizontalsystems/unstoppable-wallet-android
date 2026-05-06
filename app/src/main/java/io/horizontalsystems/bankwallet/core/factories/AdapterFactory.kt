@@ -335,9 +335,6 @@ class AdapterFactory(
             BlockchainType.Stellar -> {
                 stellarKitManager.unlink(transactionSource.account)
             }
-            BlockchainType.Zano -> {
-                zanoKitManager.unlink(transactionSource.account)
-            }
             else -> Unit
         }
     }
