@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.nav3
 
 //import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,7 @@ import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
@@ -25,7 +27,10 @@ import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
+import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
+import io.horizontalsystems.bankwallet.modules.main.MainScreenValidationError
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewFragment
@@ -63,6 +68,24 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
     val view = LocalView.current
     val activity = LocalActivity.current
     val hudTextConnected = stringResource(R.string.Hud_Text_Connected)
+
+    LifecycleResumeEffect(Unit) {
+        try {
+            mainActivityViewModel.validate()
+        } catch (e: MainScreenValidationError.NoSystemLock) {
+            activity?.let { KeyStoreActivity.startForNoSystemLock(it); it.finish() }
+        } catch (e: MainScreenValidationError.KeyInvalidated) {
+            activity?.let { KeyStoreActivity.startForInvalidKey(it); it.finish() }
+        } catch (e: MainScreenValidationError.UserAuthentication) {
+            activity?.let { KeyStoreActivity.startForUserAuthentication(it); it.finish() }
+        } catch (e: MainScreenValidationError.Welcome) {
+            activity?.let { IntroActivity.start(it); it.finish() }
+        } catch (e: MainScreenValidationError.KeystoreRuntimeException) {
+            Toast.makeText(App.instance, "Issue with Keystore", Toast.LENGTH_SHORT).show()
+            activity?.finish()
+        }
+        onPauseOrDispose {}
+    }
 
     LaunchedEffect(wcEvent) {
         when (val tmpWcEvent = wcEvent) {
