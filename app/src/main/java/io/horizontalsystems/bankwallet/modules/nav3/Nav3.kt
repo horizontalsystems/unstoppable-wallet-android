@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.nav3
 
-//import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureScreen
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -32,14 +31,11 @@ import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainScreenValidationError
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
-import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionBottomSheet
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.hideKeyboard
 import io.horizontalsystems.dapp.core.HSDAppEvent
-import io.horizontalsystems.subscriptions.core.IPaidAction
-import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlin.reflect.KClass
 
 @Composable
@@ -51,6 +47,8 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
     ) {
         NavBackStack<HSScreen>(MainScreen)
     }
+
+    val bottomSheetStrategy = remember { BottomSheetSceneStrategy<HSScreen>() }
 
     val navigateToMain by mainActivityViewModel.navigateToMainLiveData.observeAsState()
     LaunchedEffect(navigateToMain) {
@@ -67,15 +65,15 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
     LifecycleResumeEffect(Unit) {
         try {
             mainActivityViewModel.validate()
-        } catch (e: MainScreenValidationError.NoSystemLock) {
+        } catch (_: MainScreenValidationError.NoSystemLock) {
             activity?.let { KeyStoreActivity.startForNoSystemLock(it); it.finish() }
-        } catch (e: MainScreenValidationError.KeyInvalidated) {
+        } catch (_: MainScreenValidationError.KeyInvalidated) {
             activity?.let { KeyStoreActivity.startForInvalidKey(it); it.finish() }
-        } catch (e: MainScreenValidationError.UserAuthentication) {
+        } catch (_: MainScreenValidationError.UserAuthentication) {
             activity?.let { KeyStoreActivity.startForUserAuthentication(it); it.finish() }
-        } catch (e: MainScreenValidationError.Welcome) {
+        } catch (_: MainScreenValidationError.Welcome) {
             activity?.let { IntroActivity.start(it); it.finish() }
-        } catch (e: MainScreenValidationError.KeystoreRuntimeException) {
+        } catch (_: MainScreenValidationError.KeystoreRuntimeException) {
             Toast.makeText(App.instance, "Issue with Keystore", Toast.LENGTH_SHORT).show()
             activity?.finish()
         }
@@ -84,7 +82,8 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
 
     val wcEvent by mainActivityViewModel.wcEvent.observeAsState()
     LaunchedEffect(wcEvent) {
-        when (val tmpWcEvent = wcEvent) {
+        val tmpWcEvent = wcEvent ?: return@LaunchedEffect
+        when (tmpWcEvent) {
             is HSDAppEvent.SessionRequest -> {
                 backStack.slideFromBottom(WCRequestFragment())
             }
@@ -119,8 +118,6 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
         }
     }
 
-    val bottomSheetStrategy = remember { BottomSheetSceneStrategy<HSScreen>() }
-
     Box {
         NavDisplay(
             entryDecorators = listOf(
@@ -137,13 +134,12 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
                     contentKey = hSScreen.contentKey(),
                     metadata = hSScreen.getMetadata(backStack)
                 ) {
-                    if (currentScreen is MainScreen) {
-                        currentScreen.mainActivityViewModel = mainActivityViewModel
+                    if (hSScreen is MainScreen) {
+                        hSScreen.mainActivityViewModel = mainActivityViewModel
                     }
 //                if (currentScreen is TonConnectSendRequestScreen) {
 //                    currentScreen.mainActivityViewModel = mainActivityViewModel
 //                }
-//                hSScreen.GetContent(backStack)
                     hSScreen.GetContent(backStack)
                 }
             }
@@ -157,24 +153,6 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
 
     BackHandler(enabled = isLocked) {
         activity?.moveTaskToBack(true)
-    }
-}
-
-fun NavBackStack<HSScreen>.paidAction(paidAction: IPaidAction, block: () -> Unit) {
-    if (UserSubscriptionManager.isActionAllowed(paidAction)) {
-        block.invoke()
-    } else {
-        val premiumFeature = PremiumFeature.getFeature(paidAction)
-//        add(DefenseSystemFeatureScreen(premiumFeature))
-    }
-}
-
-fun NavBackStack<HSScreen>.navigateWithPaidAction(paidAction: IPaidAction, screen: HSScreen) {
-    if (UserSubscriptionManager.isActionAllowed(paidAction)) {
-        add(screen)
-    } else {
-        val premiumFeature = PremiumFeature.getFeature(paidAction)
-//        add(DefenseSystemFeatureScreen(premiumFeature, screen))
     }
 }
 
