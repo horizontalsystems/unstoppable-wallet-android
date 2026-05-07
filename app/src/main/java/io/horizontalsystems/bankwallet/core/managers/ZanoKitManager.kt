@@ -111,8 +111,5 @@ class ZanoKitManager(
 
 class ZanoKitWrapper(val kit: ZanoKit)
 
-fun ZanoKit.statusInfo(): Map<String, Any> =
-    buildMap {
-        put("Sync State", syncStateFlow.value.toString())
-        put("Receive Address", receiveAddress)
-    }
+val ZanoKitManager.statusInfo: Map<String, Any>?
+    get() = zanoKitWrapper?.kit?.statusInfo()
