@@ -152,12 +152,6 @@ fun Nav3() {
                     contentKey = hSScreen.contentKey(),
                     metadata = hSScreen.getMetadata(backStack)
                 ) {
-                    if (hSScreen is MainScreen) {
-                        hSScreen.mainActivityViewModel = mainActivityViewModel
-                    }
-//                if (currentScreen is TonConnectSendRequestScreen) {
-//                    currentScreen.mainActivityViewModel = mainActivityViewModel
-//                }
                     hSScreen.GetContent(backStack)
                 }
             }

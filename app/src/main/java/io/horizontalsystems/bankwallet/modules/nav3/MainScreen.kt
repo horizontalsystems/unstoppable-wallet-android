@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.nav3
 
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,11 +20,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data object MainScreen : HSScreen() {
-    // TODO("Nav3: need to find other solution. There should not be mainActivityViewModel")
-    lateinit var mainActivityViewModel: MainActivityViewModel
-
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {
+        val mainActivityViewModel =
+            viewModel<MainActivityViewModel>(viewModelStoreOwner = LocalActivity.current as ComponentActivity)
+
         val activity = LocalActivity.current
 
         val tcSendRequest by mainActivityViewModel.tcSendRequest.observeAsState()
