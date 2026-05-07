@@ -6,11 +6,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -36,11 +36,9 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccount.recoveryphrase.RecoveryPhraseModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.B2
+import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.C2
-import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.D1
 import io.horizontalsystems.bankwallet.ui.compose.components.D2
 import io.horizontalsystems.bankwallet.ui.compose.components.D7
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -50,6 +48,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellPrimary
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsButtonText
+import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
@@ -173,27 +175,30 @@ fun ConfirmCopyBottomSheet(
 @Composable
 fun PassphraseCell(passphrase: String, hidden: Boolean) {
     if (passphrase.isNotBlank()) {
-        CellSingleLineLawrenceSection(
-            listOf {
-                Row(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_key_phrase_20),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.grey
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(ComposeAppTheme.colors.lawrence)
+        ) {
+            CellPrimary(
+                middle = {
+                    CellMiddleInfo(
+                        subtitle = stringResource(R.string.ShowKey_Passphrase).hs
                     )
-                    D1(
-                        text = stringResource(R.string.ShowKey_Passphrase),
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                },
+                right = {
+                    CellRightControlsButtonText(
+                        subtitle = if (hidden) "* * *".hs else passphrase.hs,
+                        icon = if (!hidden) painterResource(R.drawable.copy_filled_24) else null,
+                        iconTint = ComposeAppTheme.colors.grey,
+                        onIconClick = if (!hidden) {
+                            { TextHelper.copyText(passphrase) }
+                        } else null
                     )
-                    Spacer(Modifier.weight(1f))
-                    C2(text = if (hidden) "* * *" else passphrase)
                 }
-            })
+            )
+        }
         Spacer(Modifier.height(32.dp))
     }
 }
