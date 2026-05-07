@@ -33,8 +33,6 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainScreenValidationError
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
-import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewFragment
-import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectSendRequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionBottomSheet
 import io.horizontalsystems.core.helpers.HudHelper
@@ -42,7 +40,6 @@ import io.horizontalsystems.core.hideKeyboard
 import io.horizontalsystems.dapp.core.HSDAppEvent
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
-import kotlinx.coroutines.delay
 import kotlin.reflect.KClass
 
 @Composable
@@ -62,8 +59,6 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
             mainActivityViewModel.onNavigatedToMain()
         }
     }
-
-    val wcEvent by mainActivityViewModel.wcEvent.observeAsState()
 
     val view = LocalView.current
     val activity = LocalActivity.current
@@ -87,6 +82,7 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
         onPauseOrDispose {}
     }
 
+    val wcEvent by mainActivityViewModel.wcEvent.observeAsState()
     LaunchedEffect(wcEvent) {
         when (val tmpWcEvent = wcEvent) {
             is HSDAppEvent.SessionRequest -> {
@@ -111,37 +107,7 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
         mainActivityViewModel.onWcEventHandled()
     }
 
-    val tcSendRequest by mainActivityViewModel.tcSendRequest.observeAsState()
-    LaunchedEffect(tcSendRequest) {
-        if (tcSendRequest != null) {
-            backStack.slideFromBottom(TonConnectSendRequestFragment)
-        }
-    }
-
-
-    val tcDappRequest by mainActivityViewModel.tcDappRequest.observeAsState()
-    ResultEffect<TonConnectNewFragment.Result> { result ->
-        if (tcDappRequest?.closeAppOnResult == true) {
-            if (result.approved) {
-                //Need delay to get connected before closing activity
-                delay(1000)
-            }
-            activity?.finish()
-        }
-    }
-
-    LaunchedEffect(tcDappRequest) {
-        val tcDappRequest = tcDappRequest
-        if (tcDappRequest != null) {
-            backStack.slideFromBottom(TonConnectNewFragment(tcDappRequest.dAppRequest))
-            mainActivityViewModel.onTcDappRequestHandled()
-        }
-    }
-
-    val bottomSheetStrategy = remember { BottomSheetSceneStrategy<HSScreen>() }
-
     val currentScreen = backStack.lastOrNull()
-
     LaunchedEffect(currentScreen) {
         if (activity != null) {
             activity.currentFocus?.hideKeyboard(activity)
@@ -152,6 +118,8 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
             }
         }
     }
+
+    val bottomSheetStrategy = remember { BottomSheetSceneStrategy<HSScreen>() }
 
     Box {
         NavDisplay(
