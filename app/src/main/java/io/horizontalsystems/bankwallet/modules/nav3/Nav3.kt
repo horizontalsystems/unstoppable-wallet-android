@@ -1,11 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.nav3
 
+import android.content.Intent
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -61,6 +64,18 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
     val view = LocalView.current
     val activity = LocalActivity.current
     val hudTextConnected = stringResource(R.string.Hud_Text_Connected)
+
+    LaunchedEffect(Unit) {
+        activity?.intent?.let { mainActivityViewModel.setIntent(it) }
+    }
+
+    DisposableEffect(activity) {
+        val listener = { intent: Intent -> mainActivityViewModel.setIntent(intent) }
+        (activity as? ComponentActivity)?.addOnNewIntentListener(listener)
+        onDispose {
+            (activity as? ComponentActivity)?.removeOnNewIntentListener(listener)
+        }
+    }
 
     LifecycleResumeEffect(Unit) {
         try {

@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.main
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -15,12 +14,6 @@ class MainActivity : BaseActivity() {
         MainActivityViewModel.Factory()
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-        viewModel.setIntent(intent)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -30,7 +23,5 @@ class MainActivity : BaseActivity() {
                 Nav3(viewModel)
             }
         }
-
-        viewModel.setIntent(intent)
     }
 }
