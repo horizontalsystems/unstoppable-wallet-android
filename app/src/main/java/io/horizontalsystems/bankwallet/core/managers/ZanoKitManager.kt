@@ -1,6 +1,8 @@
 package io.horizontalsystems.bankwallet.core.managers
 
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.BackgroundManagerState
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -15,6 +17,7 @@ import kotlinx.coroutines.launch
 
 class ZanoKitManager(
     private val zanoNodeManager: ZanoNodeManager,
+    private val backgroundManager: BackgroundManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
 
@@ -35,6 +38,13 @@ class ZanoKitManager(
         scope.launch {
             zanoNodeManager.currentNodeUpdatedFlow.collect {
                 handleNodeUpdate()
+            }
+        }
+        scope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                if (state == BackgroundManagerState.EnterBackground) {
+                    zanoKitWrapper?.kit?.store()
+                }
             }
         }
     }

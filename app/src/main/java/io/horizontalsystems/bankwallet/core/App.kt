@@ -308,7 +308,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         moneroNodeManager = MoneroNodeManager(blockchainSettingsStorage, moneroNodeStorage, marketKit)
         zanoNodeStorage = ZanoNodeStorage(appDatabase)
         zanoNodeManager = ZanoNodeManager(blockchainSettingsStorage, zanoNodeStorage, marketKit)
-        zanoKitManager = ZanoKitManager(zanoNodeManager)
+        zanoKitManager = ZanoKitManager(zanoNodeManager, backgroundManager)
         coinManager = CoinManager(marketKit, walletManager)
 
         solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
