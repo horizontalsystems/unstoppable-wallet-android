@@ -182,7 +182,7 @@ fun TransactionAmountCell(
             url = coinIconUrl,
             alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(32.dp).clip(CircleShape)
         )
         HSpacer(16.dp)
         Column {
