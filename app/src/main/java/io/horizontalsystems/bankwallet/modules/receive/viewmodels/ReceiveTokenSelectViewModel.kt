@@ -97,8 +97,13 @@ class ReceiveTokenSelectViewModel(
             )
         } else {
             fullCoins = coins.sortedByCriteria(
-                listOf(SortCriterion.CodeNativeFirst),
-                FullCoinSortContext()
+                listOf(
+                    SortCriterion.FilterRelevance,
+                    SortCriterion.CodeNativeFirst,
+                    SortCriterion.MarketCapRank,
+                    SortCriterion.NameAscending,
+                ),
+                FullCoinSortContext(filter = searchQuery)
             )
         }
     }

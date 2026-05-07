@@ -149,11 +149,8 @@ class ManageWalletsService(
     private fun handleUpdated(wallets: List<Wallet>) {
         sync(wallets)
 
-        val newFullCons = fetchFullCoins()
-        if (newFullCons.size > fullCoins.size) {
-            fullCoins = newFullCons
-            sortItems()
-        }
+        fullCoins = fetchFullCoins()
+        sortItems()
 
         syncState()
     }

@@ -33,7 +33,7 @@ private fun SortCriterion.toBalanceItemComparator(): Comparator<BalanceModule.Ba
         is SortCriterion.BalanceDescending ->
             SortComparators.nullableDecimalDescending { it.balanceData.total }
         is SortCriterion.PercentGrowthDescending ->
-            SortComparators.nullableDecimalDescending { it.coinPrice?.diff }
+            SortComparators.nullableDecimalDescendingNullLast { it.coinPrice?.diff }
         is SortCriterion.MarketCapRank ->
             SortComparators.nullableIntAscending { it.wallet.coin.marketCapRank }
         is SortCriterion.BlockchainOrder ->
@@ -105,7 +105,7 @@ private fun SortCriterion.toFullCoinComparator(ctx: FullCoinSortContext): Compar
         is SortCriterion.MarketCapRank ->
             SortComparators.nullableIntAscending { it.coin.marketCapRank }
         is SortCriterion.BlockchainOrder ->
-            compareBy { it.tokens.firstOrNull()?.blockchainType?.order ?: Int.MAX_VALUE }
+            compareBy { it.tokens.minOfOrNull { t -> t.blockchainType.order } ?: Int.MAX_VALUE }
         is SortCriterion.CodeAscending ->
             SortComparators.nullableStringAscending { it.coin.code }
         is SortCriterion.NameAscending ->
@@ -122,15 +122,15 @@ private fun SortCriterion.toFullCoinComparator(ctx: FullCoinSortContext): Compar
 internal fun tokenFilterRelevanceComparator(filter: String): Comparator<Token> {
     if (filter.isBlank()) return Comparator { _, _ -> 0 }
     val lowercased = filter.lowercase(Locale.ENGLISH)
-    return compareByDescending<Token> { it.coin.code.lowercase() == lowercased }
-        .thenByDescending { it.coin.code.lowercase().startsWith(lowercased) }
-        .thenByDescending { it.coin.name.lowercase().startsWith(lowercased) }
+    return compareByDescending<Token> { it.coin.code.lowercase(Locale.ENGLISH) == lowercased }
+        .thenByDescending { it.coin.code.lowercase(Locale.ENGLISH).startsWith(lowercased) }
+        .thenByDescending { it.coin.name.lowercase(Locale.ENGLISH).startsWith(lowercased) }
 }
 
 private fun fullCoinFilterRelevanceComparator(filter: String): Comparator<FullCoin> {
     if (filter.isBlank()) return Comparator { _, _ -> 0 }
     val lowercased = filter.lowercase(Locale.ENGLISH)
-    return compareByDescending<FullCoin> { it.coin.code.lowercase() == lowercased }
-        .thenByDescending { it.coin.code.lowercase().startsWith(lowercased) }
-        .thenByDescending { it.coin.name.lowercase().startsWith(lowercased) }
+    return compareByDescending<FullCoin> { it.coin.code.lowercase(Locale.ENGLISH) == lowercased }
+        .thenByDescending { it.coin.code.lowercase(Locale.ENGLISH).startsWith(lowercased) }
+        .thenByDescending { it.coin.name.lowercase(Locale.ENGLISH).startsWith(lowercased) }
 }
