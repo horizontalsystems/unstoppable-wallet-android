@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
+import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel.Factory
 import io.horizontalsystems.bankwallet.modules.main.MainScreenValidationError
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment
@@ -43,7 +44,8 @@ import io.horizontalsystems.dapp.core.HSDAppEvent
 import kotlin.reflect.KClass
 
 @Composable
-fun Nav3(mainActivityViewModel: MainActivityViewModel) {
+fun Nav3() {
+    val mainActivityViewModel = viewModel<MainActivityViewModel>(factory = Factory())
     val isLocked by App.pinComponent.isLockedFlow.collectAsState()
 
     val backStack = rememberSerializable(
