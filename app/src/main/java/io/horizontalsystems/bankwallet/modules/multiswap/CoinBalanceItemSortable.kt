@@ -38,7 +38,7 @@ private fun SortCriterion.toCoinBalanceItemComparator(ctx: TokenSortContext): Co
         is SortCriterion.CodeNativeFirst ->
             SortComparators.booleanFirst { it.token.type.isNative }
         is SortCriterion.Enabled ->
-            SortComparators.booleanFirst { it.balance != null }
+            SortComparators.booleanFirst { ctx.enabledTokens.contains(it.token) }
         is SortCriterion.FilterRelevance -> {
             val tokenComp = tokenFilterRelevanceComparator(ctx.filter)
             Comparator { a, b -> tokenComp.compare(a.token, b.token) }

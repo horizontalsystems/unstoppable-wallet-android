@@ -147,7 +147,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
                 }
                 .sortedByCriteria(
                     listOf(SortCriterion.Enabled, SortCriterion.FilterRelevance, SortCriterion.CodeNativeFirst, SortCriterion.BlockchainOrder, SortCriterion.Badge),
-                    TokenSortContext(filter = query)
+                    TokenSortContext(filter = query, enabledTokens = activeWallets.map { it.token }.toSet())
                 )
         } else {
             marketKit.fullCoins(query, 100)
