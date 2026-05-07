@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.zanokit.ZanoKit
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -64,7 +65,7 @@ class RestoreSettingsManager(
                     }
 
                     BlockchainType.Zano -> {
-                        return (System.currentTimeMillis() / 1000).toString()
+                        return ZanoKit.restoreHeightForDate(java.util.Date()).toString()
                     }
 
                     else -> null

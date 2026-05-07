@@ -58,12 +58,14 @@ class BalanceAdapterRepository(
         coroutineScope.cancel()
     }
 
+    @Synchronized
     fun setWallet(wallets: List<Wallet>) {
         unsubscribeFromAdapterUpdates()
         this.wallets = wallets
         subscribeForAdapterUpdates()
     }
 
+    @Synchronized
     private fun unsubscribeFromAdapterUpdates() {
         balanceStateUpdatedJobs.forEach { it.cancel() }
         balanceStateUpdatedJobs.clear()
@@ -71,6 +73,7 @@ class BalanceAdapterRepository(
         balanceUpdatedJobs.clear()
     }
 
+    @Synchronized
     private fun subscribeForAdapterUpdates() {
         wallets.forEach { wallet ->
             adapterManager.getBalanceAdapterForWallet(wallet)?.let { adapter ->
