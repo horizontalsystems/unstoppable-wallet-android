@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.core.util.Consumer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -70,10 +71,10 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
     }
 
     DisposableEffect(activity) {
-        val listener = { intent: Intent -> mainActivityViewModel.setIntent(intent) }
-        (activity as? ComponentActivity)?.addOnNewIntentListener(listener)
+        val consumer = Consumer<Intent> { mainActivityViewModel.setIntent(it) }
+        (activity as? ComponentActivity)?.addOnNewIntentListener(consumer)
         onDispose {
-            (activity as? ComponentActivity)?.removeOnNewIntentListener(listener)
+            (activity as? ComponentActivity)?.removeOnNewIntentListener(consumer)
         }
     }
 
