@@ -137,16 +137,19 @@ fun Nav3() {
     }
 
     Box {
+        val eventBusNavEntryDecorator = rememberResultEventBusNavEntryDecorator<HSScreen>()
         NavDisplay(
             entryDecorators = listOf(
                 // Add the default decorators for managing scenes and saving state
                 rememberSaveableStateHolderNavEntryDecorator(),
                 rememberSharedViewModelStoreNavEntryDecorator(),
-                rememberResultEventBusNavEntryDecorator(),
+                eventBusNavEntryDecorator,
             ),
             backStack = backStack,
             sceneStrategy = bottomSheetStrategy,
             entryProvider = { hSScreen ->
+                eventBusNavEntryDecorator.setResultKeyUuid(hSScreen.resultKeyUuid)
+
                 NavEntry(
                     key = hSScreen,
                     contentKey = hSScreen.contentKey(),

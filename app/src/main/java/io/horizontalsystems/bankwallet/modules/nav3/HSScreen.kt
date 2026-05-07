@@ -17,6 +17,7 @@ abstract class HSScreen(
     val parentScreenClass: KClass<out HSScreen>? = null,
     val usePreviousScreenVmScope: Boolean = false,
 ) : NavKey {
+    var resultKeyUuid: String? = null
     val uuid = UUID.randomUUID().toString()
 
     fun contentKey() = "$className(#$uuid)"

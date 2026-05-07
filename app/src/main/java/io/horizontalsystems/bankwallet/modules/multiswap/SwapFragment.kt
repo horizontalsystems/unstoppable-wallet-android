@@ -227,12 +227,6 @@ fun SwapScreen(
         )
     }
 
-    val onClickCoinFrom = navController.slideFromBottomForResult<Token>(
-        SwapSelectCoinFragment(SwapSelectCoinFragment.Input(uiState.tokenOut, context.getString(R.string.Swap_YouPay)))
-    ) {
-        viewModel.onSelectTokenIn(it)
-    }
-
 //    LaunchedEffect(Unit) {
 //        if (tokenIn == null) {
 //            delay(300)
@@ -243,7 +237,16 @@ fun SwapScreen(
     SwapScreenInner(
         uiState = uiState,
         onClickClose = onClickClose,
-        onClickCoinFrom = onClickCoinFrom,
+        onClickCoinFrom = navController.slideFromBottomForResult<Token>(
+            SwapSelectCoinFragment(
+                SwapSelectCoinFragment.Input(
+                    uiState.tokenOut,
+                    context.getString(R.string.Swap_YouPay)
+                )
+            )
+        ) {
+            viewModel.onSelectTokenIn(it)
+        },
         onClickCoinTo = navController.slideFromBottomForResult<Token>(
             SwapSelectCoinFragment(SwapSelectCoinFragment.Input(uiState.tokenIn, context.getString(R.string.Swap_YouGet))),
         ) {

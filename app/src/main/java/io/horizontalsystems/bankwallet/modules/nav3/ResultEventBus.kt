@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.nav3
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
@@ -44,6 +43,8 @@ object LocalResultEventBus {
  * It provides a solution for event based results.
  */
 class ResultEventBus {
+    var resultKeyUuid: String? = null
+
     /**
      * Map from the result key to a channel of results.
      */
@@ -60,7 +61,7 @@ class ResultEventBus {
      * Sends a result into the channel associated with the given resultKey.
      */
     inline fun <reified T> sendResult(result: T, resultKey: String = T::class.toString()) {
-        Log.e("AAA", "sendResult, resultKey: $resultKey")
+        val resultKey = resultKeyUuid ?: resultKey
         if (!channelMap.contains(resultKey)) {
             channelMap[resultKey] = Channel(capacity = BUFFERED, onBufferOverflow = BufferOverflow.SUSPEND)
         }
@@ -89,5 +90,9 @@ class ResultEventBusNavEntryDecorator<T : Any>(val resultEventBus: ResultEventBu
             entry.Content()
         }
     },
-)
+) {
+    fun setResultKeyUuid(k: String?) {
+        resultEventBus.resultKeyUuid = k
+    }
+}
 

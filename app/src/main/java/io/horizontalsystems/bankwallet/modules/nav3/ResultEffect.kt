@@ -14,8 +14,10 @@ import androidx.compose.runtime.LaunchedEffect
 @Composable
 inline fun <reified T> ResultEffect(
     resultKey: String = T::class.toString(),
+    resultKeyUuid: String? = null,
     crossinline onResult: suspend (T) -> Unit
 ) {
+    val resultKey = resultKeyUuid ?: resultKey
     val resultEventBus = LocalResultEventBus.current
     LaunchedEffect(resultKey, resultEventBus.channelMap[resultKey]) {
         resultEventBus.getResultFlow<T>(resultKey)?.collect { result ->
