@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
@@ -59,16 +60,17 @@ data object TransactionInfoFragment : HSScreen() {
             return
         }
 
-        TransactionInfoScreen(viewModel(), navController)
+        TransactionInfoScreen(navController, transactionRecord)
     }
 
 }
 
 @Composable
 fun TransactionInfoScreen(
-    viewModel: TransactionInfoViewModel,
-    navController: NavBackStack<HSScreen>
+    navController: NavBackStack<HSScreen>,
+    transactionRecord: TransactionRecord
 ) {
+    val viewModel = viewModel<TransactionInfoViewModel>(factory = TransactionInfoModule.Factory(transactionRecord))
 
     HSScaffold(
         title = stringResource(R.string.TransactionInfo_Title),
