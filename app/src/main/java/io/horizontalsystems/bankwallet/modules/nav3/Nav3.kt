@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectSendRequestF
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionBottomSheet
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.hideKeyboard
 import io.horizontalsystems.dapp.core.HSDAppEvent
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
@@ -120,6 +121,7 @@ fun Nav3(mainActivityViewModel: MainActivityViewModel) {
 
     LaunchedEffect(currentScreen) {
         if (activity != null) {
+            activity.currentFocus?.hideKeyboard(activity)
             if (currentScreen?.screenshotEnabled == false) {
                 activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
             } else {

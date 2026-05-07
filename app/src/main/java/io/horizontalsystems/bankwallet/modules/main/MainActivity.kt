@@ -40,24 +40,7 @@ class MainActivity : BaseActivity() {
             }
         }
 
-//        TODO("xxx nav3")
-//        val navHost =
-//            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-//        val navController = navHost.navController
-//
-//        navController.setGraph(R.navigation.main_graph, intent.extras)
-//        navController.addOnDestinationChangedListener { _, _, _ ->
-//            currentFocus?.hideKeyboard(this)
-//        }
-//
         viewModel.setIntent(intent)
-    }
-
-    private fun closeAfterDelay() {
-        val handler = android.os.Handler(android.os.Looper.getMainLooper())
-        handler.postDelayed({
-            finish()
-        }, 1000)
     }
 
     private fun validate() = try {
