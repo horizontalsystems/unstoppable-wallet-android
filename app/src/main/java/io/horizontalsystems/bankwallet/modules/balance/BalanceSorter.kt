@@ -1,35 +1,36 @@
 package io.horizontalsystems.bankwallet.modules.balance
 
-import io.horizontalsystems.bankwallet.core.diff
-import io.horizontalsystems.bankwallet.core.order
-import java.math.BigDecimal
+import io.horizontalsystems.bankwallet.core.sorting.SortCriterion
+import io.horizontalsystems.bankwallet.core.sorting.sortedByCriteria
 
 class BalanceSorter {
 
     fun sort(items: Iterable<BalanceModule.BalanceItem>, sortType: BalanceSortType): List<BalanceModule.BalanceItem> {
-        return when (sortType) {
-            BalanceSortType.Value -> sortByBalance(items)
-            BalanceSortType.Name -> items.sortedBy { it.wallet.coin.code }
-            BalanceSortType.PercentGrowth -> items.sortedByDescending { it.coinPrice?.diff }
+        val criteria = when (sortType) {
+            BalanceSortType.Value -> VALUE_CRITERIA
+            BalanceSortType.Name -> NAME_CRITERIA
+            BalanceSortType.PercentGrowth -> PERCENT_GROWTH_CRITERIA
         }
+        return items.toList().sortedByCriteria(criteria)
     }
 
-    private fun sortByBalance(items: Iterable<BalanceModule.BalanceItem>): List<BalanceModule.BalanceItem> {
-        val comparator =
-                compareByDescending<BalanceModule.BalanceItem> {
-                    it.balanceData.total > BigDecimal.ZERO
-                }.thenByDescending {
-                    (it.balanceFiatTotal ?: BigDecimal.ZERO) > BigDecimal.ZERO
-                }.thenByDescending {
-                    it.balanceFiatTotal
-                }.thenByDescending {
-                    it.balanceData.total
-                }.thenBy {
-                    it.wallet.token.blockchainType.order
-                }.thenBy {
-                    it.wallet.coin.name
-                }
-
-        return items.sortedWith(comparator)
+    companion object {
+        val VALUE_CRITERIA = listOf(
+            SortCriterion.NonZeroBalanceFirst,
+            SortCriterion.HasPriceFirst,
+            SortCriterion.FiatBalanceDescending,
+            SortCriterion.BalanceDescending,
+            SortCriterion.BlockchainOrder,
+            SortCriterion.NameAscending,
+        )
+        val NAME_CRITERIA = listOf(SortCriterion.NameAscending)
+        val PERCENT_GROWTH_CRITERIA = listOf(SortCriterion.PercentGrowthDescending)
+        val SEND_CRITERIA = listOf(
+            SortCriterion.NonZeroBalanceFirst,
+            SortCriterion.FiatBalanceDescending,
+            SortCriterion.BalanceDescending,
+            SortCriterion.MarketCapRank,
+            SortCriterion.NameAscending,
+        )
     }
 }

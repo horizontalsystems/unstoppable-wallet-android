@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.eligibleTokens
 import io.horizontalsystems.bankwallet.core.isDefault
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -16,13 +15,15 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
-import io.horizontalsystems.bankwallet.core.order
+import io.horizontalsystems.bankwallet.core.sorting.FullCoinSortContext
+import io.horizontalsystems.bankwallet.core.sorting.SortCriterion
+import io.horizontalsystems.bankwallet.core.sorting.sortedByCriteria
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -73,10 +74,8 @@ class ReceiveTokenSelectViewModel(
         val coins = fullCoinsProvider.getItems()
 
         if (searchQuery.isEmpty()) {
-            val sortableItems = coins.map { fullCoin ->
-                val eligibleTokens = fullCoin.eligibleTokens(activeAccount.type)
-
-                val totalFiatValue = eligibleTokens
+            val fiatValues: Map<FullCoin, BigDecimal> = coins.associate { fullCoin ->
+                val totalFiatValue = fullCoin.eligibleTokens(activeAccount.type)
                     .mapNotNull { token -> walletManager.activeWallets.firstOrNull { it.token == token } }
                     .map { wallet ->
                         val balance =
@@ -85,21 +84,27 @@ class ReceiveTokenSelectViewModel(
                         getFiatValue(wallet.token, balance)?.value ?: BigDecimal.ZERO
                     }
                     .fold(BigDecimal.ZERO) { acc, value -> acc + value }
-
-                val secondarySortOrder =
-                    eligibleTokens.firstOrNull()?.blockchainType?.order ?: Int.MAX_VALUE
-
-                Triple(fullCoin, totalFiatValue, secondarySortOrder)
+                fullCoin to totalFiatValue
             }
-
-            val sortedCoins = sortableItems.sortedWith(
-                compareByDescending<Triple<FullCoin, BigDecimal, Int>> { it.second } // Primary sort: by total fiat value
-                    .thenBy { it.third }
-            ).map { it.first }
-
-            fullCoins = sortedCoins
+            fullCoins = coins.sortedByCriteria(
+                listOf(
+                    SortCriterion.FiatBalanceDescending,
+                    SortCriterion.CodeNativeFirst,
+                    SortCriterion.BlockchainOrder,
+                    SortCriterion.NameAscending,
+                ),
+                FullCoinSortContext(fiatValues = fiatValues)
+            )
         } else {
-            fullCoins = coins
+            fullCoins = coins.sortedByCriteria(
+                listOf(
+                    SortCriterion.FilterRelevance,
+                    SortCriterion.CodeNativeFirst,
+                    SortCriterion.MarketCapRank,
+                    SortCriterion.NameAscending,
+                ),
+                FullCoinSortContext(filter = searchQuery)
+            )
         }
     }
 
