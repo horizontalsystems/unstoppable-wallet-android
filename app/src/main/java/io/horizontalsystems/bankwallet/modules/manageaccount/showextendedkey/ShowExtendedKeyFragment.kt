@@ -38,7 +38,6 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.serializers.DisplayKeyTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -79,7 +78,7 @@ data class ShowExtendedKeyFragment(val input: Input?) : HSScreen(screenshotEnabl
     }
 
     @Serializable
-    data class Input(val extendedRootKeySerialized: String, @Serializable(with = DisplayKeyTypeSerializer::class) val displayKeyType: DisplayKeyType) {
+    data class Input(val extendedRootKeySerialized: String, val displayKeyType: DisplayKeyType) {
         val extendedRootKey: HDExtendedKey?
             get() = try {
                 HDExtendedKey(extendedRootKeySerialized)

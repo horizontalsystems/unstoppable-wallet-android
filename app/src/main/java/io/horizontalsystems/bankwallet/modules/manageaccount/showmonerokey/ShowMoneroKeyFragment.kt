@@ -26,7 +26,6 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.serializers.MoneroKeysSerializer
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -53,7 +52,7 @@ data class ShowMoneroKeyFragment(val input: Input) : HSScreen(screenshotEnabled 
     }
 
     @Serializable
-    data class Input(@Serializable(with = MoneroKeysSerializer::class) val keys: MoneroKeys)
+    data class Input(val keys: MoneroKeys)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -15,7 +15,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.serializers.WalletSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -49,7 +48,7 @@ data class ZcashAddressTypeSelectFragment(val input: Input) : HSScreen() {
     }
 
     @Serializable
-    data class Input(@Serializable(with = WalletSerializer::class) val wallet: Wallet)
+    data class Input(val wallet: Wallet)
 }
 
 @Composable

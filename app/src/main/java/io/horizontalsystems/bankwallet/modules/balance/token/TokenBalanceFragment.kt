@@ -8,11 +8,10 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
 import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
-import io.horizontalsystems.bankwallet.serializers.WalletSerializer
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TokenBalanceFragment(@Serializable(with = WalletSerializer::class) val wallet: Wallet) : HSScreen() {
+data class TokenBalanceFragment(val wallet: Wallet) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

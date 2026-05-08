@@ -6,9 +6,11 @@ import io.horizontalsystems.bankwallet.core.adapters.toMoneroSeed
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.monerokit.MoneroKit
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 object ShowMoneroKeyModule {
 
+    @Serializable
     @Parcelize
     class MoneroKeys(
         val spendKey: String,
