@@ -34,14 +34,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PinUnlock() {
+fun PinUnlock(isLocked: Boolean) {
     val viewModel = viewModel<PinUnlockViewModel>(factory = PinUnlockModule.Factory())
     val uiState = viewModel.uiState
 
     var showBiometricPrompt by remember { mutableStateOf(false) }
     var showBiometricDisabledAlert by remember { mutableStateOf(false) }
-    LaunchedEffect(uiState.biometricEnabled, uiState.inputState) {
-        if (uiState.biometricEnabled && uiState.inputState is PinUnlockModule.InputState.Enabled) {
+    LaunchedEffect(isLocked, uiState.biometricEnabled, uiState.inputState) {
+        if (isLocked && uiState.biometricEnabled && uiState.inputState is PinUnlockModule.InputState.Enabled) {
             showBiometricPrompt = true
         }
     }

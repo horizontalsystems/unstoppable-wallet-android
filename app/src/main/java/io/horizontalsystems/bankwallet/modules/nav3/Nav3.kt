@@ -6,6 +6,9 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -160,8 +163,12 @@ fun Nav3() {
             }
         )
 
-        if (isLocked) {
-            PinUnlock()
+        AnimatedVisibility(
+            visible = isLocked,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            PinUnlock(isLocked = isLocked)
         }
     }
 
