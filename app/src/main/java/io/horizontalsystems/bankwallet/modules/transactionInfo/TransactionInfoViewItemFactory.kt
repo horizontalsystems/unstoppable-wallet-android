@@ -9,6 +9,8 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zano.ZanoIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zano.ZanoOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ApproveTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCreationTransactionRecord
@@ -486,6 +488,34 @@ class TransactionInfoViewItemFactory(
                 if (!transaction.txKey.isNullOrEmpty()) {
                     miscItemsSection.add(TransactionInfoViewItem.TransactionSecretKey(transaction.txKey))
                 }
+            }
+
+            is ZanoIncomingTransactionRecord -> {
+                itemSections.add(
+                    TransactionViewItemFactoryHelper.getReceiveSectionItems(
+                        value = transaction.value,
+                        fromAddress = transaction.from,
+                        coinPrice = rates[transaction.value.coinUid],
+                        hideAmount = transactionItem.hideAmount,
+                        blockchainType = blockchainType,
+                    )
+                )
+                addMemoItem(transaction.memo, miscItemsSection)
+            }
+
+            is ZanoOutgoingTransactionRecord -> {
+                sentToSelf = transaction.sentToSelf
+                itemSections.add(
+                    TransactionViewItemFactoryHelper.getSendSectionItems(
+                        value = transaction.value,
+                        toAddress = transaction.to,
+                        coinPrice = rates[transaction.value.coinUid],
+                        hideAmount = transactionItem.hideAmount,
+                        sentToSelf = transaction.sentToSelf,
+                        blockchainType = blockchainType,
+                    )
+                )
+                addMemoItem(transaction.memo, miscItemsSection)
             }
 
             is ZcashShieldingTransactionRecord -> {

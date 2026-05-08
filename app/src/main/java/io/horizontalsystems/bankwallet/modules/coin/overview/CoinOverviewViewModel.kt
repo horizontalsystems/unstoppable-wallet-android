@@ -282,6 +282,23 @@ class CoinOverviewViewModel(
                         )
                     }
 
+                    is TokenType.ZanoAsset -> {
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        items.add(
+                            TokenVariant(
+                                value = tokenType.reference.shorten(),
+                                copyValue = tokenType.reference,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = null,
+                                name = token.blockchain.name,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet
+                            )
+                        )
+                    }
+
                     is TokenType.Unsupported -> {
                         items.add(
                             TokenVariant(

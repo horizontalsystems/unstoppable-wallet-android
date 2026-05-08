@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedException
 import io.horizontalsystems.bankwallet.core.adapters.MoneroAdapter
+import io.horizontalsystems.bankwallet.core.adapters.ZanoAdapter
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -58,6 +59,12 @@ object SendTransactionServiceFactory {
                 val adapter = App.adapterManager.getAdapterForToken<MoneroAdapter>(token)
                     ?: throw IllegalStateException("MoneroAdapter is null")
                 SendTransactionServiceMonero(adapter)
+            }
+
+            BlockchainType.Zano -> {
+                val adapter = App.adapterManager.getAdapterForToken<ZanoAdapter>(token)
+                    ?: throw IllegalStateException("ZanoAdapter is null")
+                SendTransactionServiceZano(adapter)
             }
 
             is BlockchainType.Unsupported,

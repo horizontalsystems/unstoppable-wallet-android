@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup
 
 import android.util.Log
+import io.horizontalsystems.bankwallet.entities.ZanoNodeRecord
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
@@ -9,7 +10,6 @@ import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IEnabledWalletStorage
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
@@ -23,10 +23,13 @@ import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
+import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.EvmSyncSourceStorage
 import io.horizontalsystems.bankwallet.core.storage.MoneroNodeStorage
+import io.horizontalsystems.bankwallet.core.storage.ZanoNodeStorage
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -58,10 +61,14 @@ import java.security.MessageDigest
 import java.util.UUID
 
 enum class BackupSection {
-    @SerializedName("contacts") Contacts,
-    @SerializedName("customRpc") CustomRpc,
-    @SerializedName("favourites") Favourites,
-    @SerializedName("preferences") Preferences;
+    @SerializedName("contacts")
+    Contacts,
+    @SerializedName("customRpc")
+    CustomRpc,
+    @SerializedName("favourites")
+    Favourites,
+    @SerializedName("preferences")
+    Preferences;
 }
 
 class BackupFileValidator {
@@ -114,6 +121,8 @@ class BackupProvider(
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
     private val moneroNodeManager: MoneroNodeManager,
     private val moneroNodeStorage: MoneroNodeStorage,
+    private val zanoNodeManager: ZanoNodeManager,
+    private val zanoNodeStorage: ZanoNodeStorage,
     private val contactsRepository: ContactsRepository
 ) {
     private val encryptDecryptManager by lazy { EncryptDecryptManager() }
@@ -289,6 +298,18 @@ class BackupProvider(
 
             settings.moneroNodes?.selected?.forEach { node ->
                 blockchainSettingsStorage.saveMoneroNode(node.url)
+            }
+
+            settings.zanoNodes?.custom?.forEach { node ->
+                zanoNodeStorage.save(ZanoNodeRecord(node.url))
+            }
+
+            settings.zanoNodes?.selected?.forEach { node ->
+                blockchainSettingsStorage.saveZanoNode(node.url)
+            }
+
+            if (settings.appIcon != (localStorage.appIcon ?: AppIcon.Main).titleText) {
+                AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
             }
         }
     }
@@ -524,6 +545,10 @@ class BackupProvider(
         }
         val moneroNodes = MoneroNodes(listOf(selectedMoneroNode), customMoneroNodes)
 
+        val selectedZanoNode = ZanoNodeBackup(BlockchainType.Zano.uid, zanoNodeManager.currentNode.host)
+        val customZanoNodes = zanoNodeStorage.getAll().map { ZanoNodeBackup(BlockchainType.Zano.uid, it.url) }
+        val zanoNodes = ZanoNodes(listOf(selectedZanoNode), customZanoNodes)
+
         val chartIndicators = chartIndicators()
 
         val settings = Settings(
@@ -544,6 +569,7 @@ class BackupProvider(
             evmSyncSources = evmSyncSources,
             solanaSyncSource = solanaSyncSource,
             moneroNodes = moneroNodes,
+            zanoNodes = zanoNodes,
         )
 
         val contacts = if (BackupSection.Contacts in sections && contactsRepository.contacts.isNotEmpty())
@@ -756,6 +782,17 @@ data class MoneroNodes(
     val custom: List<MoneroNodeBackup>
 )
 
+data class ZanoNodeBackup(
+    @SerializedName("blockchain_type_id")
+    val blockchainTypeId: String,
+    val url: String,
+)
+
+data class ZanoNodes(
+    val selected: List<ZanoNodeBackup>,
+    val custom: List<ZanoNodeBackup>,
+)
+
 data class RsiBackup(
     val period: Int,
     val enabled: Boolean
@@ -814,7 +851,9 @@ data class Settings(
     @SerializedName("solana_sync_source")
     val solanaSyncSource: SolanaSyncSource?,
     @SerializedName("monero_nodes")
-    val moneroNodes: MoneroNodes?
+    val moneroNodes: MoneroNodes?,
+    @SerializedName("zano_nodes")
+    val zanoNodes: ZanoNodes?
 )
 
 sealed class RestoreException(message: String) : Exception(message) {

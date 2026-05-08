@@ -17,6 +17,8 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zano.ZanoIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zano.ZanoOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ApproveTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCreationTransactionRecord
@@ -467,6 +469,24 @@ class TransactionViewItemFactory(
 
             is MoneroOutgoingTransactionRecord -> {
                 createViewItemFromMoneroOutgoingTransactionRecord(
+                    record,
+                    transactionItem.currencyValue,
+                    progress,
+                    icon
+                )
+            }
+
+            is ZanoIncomingTransactionRecord -> {
+                createViewItemFromZanoIncomingTransactionRecord(
+                    record,
+                    transactionItem.currencyValue,
+                    progress,
+                    icon
+                )
+            }
+
+            is ZanoOutgoingTransactionRecord -> {
+                createViewItemFromZanoOutgoingTransactionRecord(
                     record,
                     transactionItem.currencyValue,
                     progress,
@@ -1254,6 +1274,67 @@ class TransactionViewItemFactory(
         val secondaryValue = currencyValue?.let {
             getColoredValue(it, ColorName.Grey)
         }
+
+        return TransactionViewItem(
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Send),
+            subtitle = subtitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            showAmount = showAmount,
+            date = Date(record.timestamp * 1000),
+            sentToSelf = record.sentToSelf,
+            spam = record.spam,
+            icon = icon ?: singleValueIconType(record.value)
+        )
+    }
+
+    private fun createViewItemFromZanoIncomingTransactionRecord(
+        record: ZanoIncomingTransactionRecord,
+        currencyValue: CurrencyValue?,
+        progress: Float?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem {
+        val subtitle = record.from?.let {
+            Translator.getString(R.string.Transactions_From, mapped(it, record.blockchainType))
+        } ?: "---"
+
+        val primaryValue = getColoredValue(record.value, ColorName.Remus)
+        val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
+
+        return TransactionViewItem(
+            uid = record.uid,
+            progress = progress,
+            title = Translator.getString(R.string.Transactions_Receive),
+            subtitle = subtitle,
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            showAmount = showAmount,
+            date = Date(record.timestamp * 1000),
+            sentToSelf = false,
+            spam = record.spam,
+            icon = icon ?: singleValueIconType(record.value)
+        )
+    }
+
+    private fun createViewItemFromZanoOutgoingTransactionRecord(
+        record: ZanoOutgoingTransactionRecord,
+        currencyValue: CurrencyValue?,
+        progress: Float?,
+        icon: TransactionViewItem.Icon?
+    ): TransactionViewItem {
+        val subtitle = record.to?.let {
+            Translator.getString(R.string.Transactions_To, mapped(it, record.blockchainType))
+        } ?: "---"
+
+        val primaryValue = if (record.sentToSelf) {
+            ColoredValue(getCoinString(record.value, true), ColorName.Grey)
+        } else {
+            getColoredValue(record.value, getAmountColorForSend(icon))
+        }
+
+        val secondaryValue = currencyValue?.let { getColoredValue(it, ColorName.Grey) }
 
         return TransactionViewItem(
             uid = record.uid,

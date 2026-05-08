@@ -10,6 +10,8 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinConfirmat
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroViewModel
+import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoConfirmationScreen
+import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoViewModel
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaViewModel
 import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarConfirmationScreen
@@ -103,13 +105,23 @@ class SendConfirmationFragment : BaseComposeFragment() {
                         input.sendEntryPointDestId
                     )
                 }
+
+                Type.Zano -> {
+                    val sendZanoViewModel by navGraphViewModels<SendZanoViewModel>(R.id.sendXFragment)
+
+                    SendZanoConfirmationScreen(
+                        navController,
+                        sendZanoViewModel,
+                        input.sendEntryPointDestId
+                    )
+                }
             }
         }
     }
 
     @Parcelize
     enum class Type : Parcelable {
-        Bitcoin, ZCash, Solana, Tron, Ton, Stellar, Monero
+        Bitcoin, ZCash, Solana, Tron, Ton, Stellar, Monero, Zano
     }
 
     @Parcelize

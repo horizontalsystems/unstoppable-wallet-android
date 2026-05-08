@@ -60,6 +60,7 @@ import io.horizontalsystems.bankwallet.entities.EvmMethodLabel
 import io.horizontalsystems.bankwallet.entities.EvmSyncSourceRecord
 import io.horizontalsystems.bankwallet.entities.LogEntry
 import io.horizontalsystems.bankwallet.entities.MoneroNodeRecord
+import io.horizontalsystems.bankwallet.entities.ZanoNodeRecord
 import io.horizontalsystems.bankwallet.entities.RecentAddress
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
 import io.horizontalsystems.bankwallet.entities.ScannedTransaction
@@ -110,6 +111,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConne
     SpamScanState::class,
     RecentAddress::class,
     MoneroNodeRecord::class,
+    ZanoNodeRecord::class,
     SwapProviderAssetRecord::class,
     SwapProviderChainRecord::class,
     SwapRecord::class,
@@ -139,6 +141,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun scannedTransactionDao(): ScannedTransactionDao
     abstract fun recentAddressDao(): RecentAddressDao
     abstract fun moneroNodeDao(): MoneroNodeDao
+    abstract fun zanoNodeDao(): ZanoNodeDao
     abstract fun swapProviderAssetDao(): SwapProviderAssetDao
     abstract fun swapProviderChainDao(): SwapProviderChainDao
     abstract fun swapRecordDao(): SwapRecordDao
