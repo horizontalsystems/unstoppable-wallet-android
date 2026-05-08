@@ -34,25 +34,19 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PinUnlock(
-    showPinLockScreen: Boolean,
-    onSuccess: () -> Unit,
-) {
+fun PinUnlock() {
     val viewModel = viewModel<PinUnlockViewModel>(factory = PinUnlockModule.Factory())
     val uiState = viewModel.uiState
 
     var showBiometricPrompt by remember { mutableStateOf(false) }
     var showBiometricDisabledAlert by remember { mutableStateOf(false) }
-    LaunchedEffect(showPinLockScreen, uiState.fingerScannerEnabled, uiState.inputState) {
-        if (showPinLockScreen &&
-            uiState.fingerScannerEnabled &&
-            uiState.inputState is PinUnlockModule.InputState.Enabled) {
+    LaunchedEffect(uiState.biometricEnabled, uiState.inputState) {
+        if (uiState.biometricEnabled && uiState.inputState is PinUnlockModule.InputState.Enabled) {
             showBiometricPrompt = true
         }
     }
 
     if (uiState.unlocked) {
-        onSuccess.invoke()
         viewModel.unlocked()
     }
 
@@ -69,10 +63,6 @@ fun PinUnlock(
                 showBiometricPrompt = false
             }
         )
-    }
-
-    if (!showPinLockScreen) {
-        return
     }
 
     if (showBiometricDisabledAlert) {
@@ -120,7 +110,7 @@ fun PinUnlock(
             PinNumpad(
                 onNumberClick = { number -> viewModel.onKeyClick(number) },
                 onDeleteClick = { viewModel.onDelete() },
-                showFingerScanner = uiState.fingerScannerEnabled,
+                showBiometricScanner = uiState.biometricEnabled,
                 pinRandomized = viewModel.pinRandomized,
                 showBiometricPrompt = {
                     showBiometricPrompt = true

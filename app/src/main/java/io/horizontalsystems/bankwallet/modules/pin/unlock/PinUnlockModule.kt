@@ -33,7 +33,7 @@ object PinUnlockModule {
 
     data class PinUnlockViewState(
         val enteredCount: Int,
-        val fingerScannerEnabled: Boolean,
+        val biometricEnabled: Boolean,
         val unlocked: Boolean,
         val showShakeAnimation: Boolean,
         val inputState: InputState

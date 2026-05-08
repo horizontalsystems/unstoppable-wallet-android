@@ -160,10 +160,9 @@ fun Nav3() {
             }
         )
 
-        PinUnlock(
-            showPinLockScreen = isLocked,
-            onSuccess = {}
-        )
+        if (isLocked) {
+            PinUnlock()
+        }
     }
 
     BackHandler(enabled = isLocked) {

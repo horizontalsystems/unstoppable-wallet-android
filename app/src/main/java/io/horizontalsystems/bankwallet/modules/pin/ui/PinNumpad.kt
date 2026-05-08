@@ -36,7 +36,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
 fun PinNumpad(
-    showFingerScanner: Boolean = false,
+    showBiometricScanner: Boolean = false,
     pinRandomized: Boolean? = null,
     onNumberClick: (Int) -> Unit,
     onDeleteClick: () -> Unit,
@@ -69,7 +69,7 @@ fun PinNumpad(
             ImageKey(
                 image = R.drawable.icon_touch_id_24,
                 contentDescription = stringResource(R.string.Unlock_BiometricScanner),
-                visible = showFingerScanner,
+                visible = showBiometricScanner,
                 enabled = enabled
             ) {
                 showBiometricPrompt?.invoke()
@@ -199,7 +199,7 @@ fun Preview_Pin() {
             PinNumpad(
                 onNumberClick = { },
                 onDeleteClick = { },
-                showFingerScanner = true,
+                showBiometricScanner = true,
                 pinRandomized = true,
                 showBiometricPrompt = {
 
@@ -220,7 +220,7 @@ fun Preview_PinLocked() {
             PinNumpad(
                 onNumberClick = { },
                 onDeleteClick = { },
-                showFingerScanner = true,
+                showBiometricScanner = true,
                 pinRandomized = true,
                 showBiometricPrompt = {},
                 inputState = InputState.Locked("12:33")

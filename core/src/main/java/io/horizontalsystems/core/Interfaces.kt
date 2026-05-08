@@ -32,6 +32,7 @@ interface ISystemInfoManager {
 
 interface IPinComponent {
     var isBiometricAuthEnabled: Boolean
+    val isBiometricAuthEnabledFlow: StateFlow<Boolean>
     val isPinSet: Boolean
     val isLockedFlow: StateFlow<Boolean>
     val isLocked: Boolean

@@ -14,8 +14,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PinComponent(
@@ -75,7 +77,10 @@ class PinComponent(
         get() = pinSettingsStorage.biometricAuthEnabled
         set(value) {
             pinSettingsStorage.biometricAuthEnabled = value
+            isBiometricAuthEnabledFlow.update { value }
         }
+
+    override val isBiometricAuthEnabledFlow = MutableStateFlow(isBiometricAuthEnabled)
 
     // PIN validation
     override fun isUnique(pin: String, forDuress: Boolean): Boolean {

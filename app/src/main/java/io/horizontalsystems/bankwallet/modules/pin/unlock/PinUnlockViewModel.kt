@@ -32,16 +32,24 @@ class PinUnlockViewModel(
         private set
 
     private var enteredCount = 0
-    private val fingerScannerEnabled: Boolean
-        get() = systemInfoManager.biometricAuthSupported && pinComponent.isBiometricAuthEnabled
+    private var biometricEnabled = systemInfoManager.biometricAuthSupported && pinComponent.isBiometricAuthEnabled
 
     private var unlocked = false
     private var showShakeAnimation = false
     private var inputState: PinUnlockModule.InputState = PinUnlockModule.InputState.Enabled(attemptsLeft)
 
+    init {
+        viewModelScope.launch {
+            pinComponent.isBiometricAuthEnabledFlow.collect {
+                biometricEnabled = systemInfoManager.biometricAuthSupported && pinComponent.isBiometricAuthEnabled
+                emitState()
+            }
+        }
+    }
+
     override fun createState() = PinUnlockViewState(
         enteredCount = enteredCount,
-        fingerScannerEnabled = fingerScannerEnabled,
+        biometricEnabled = biometricEnabled,
         unlocked = unlocked,
         showShakeAnimation = showShakeAnimation,
         inputState = inputState
