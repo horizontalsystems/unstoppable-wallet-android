@@ -20,12 +20,10 @@ import java.util.UUID
 
 fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
     add(screen)
-//    TODO("xxx nav3")
 }
 
 fun NavBackStack<HSScreen>.slideFromBottom(screen: HSScreen) {
     add(screen)
-//    TODO("xxx nav3")
 }
 
 fun NavBackStack<HSScreen>.paidAction(paidAction: IPaidAction, block: () -> Unit) {
