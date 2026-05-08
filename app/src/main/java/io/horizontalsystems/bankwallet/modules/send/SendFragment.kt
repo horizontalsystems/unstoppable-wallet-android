@@ -34,7 +34,6 @@ import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
-import io.horizontalsystems.bankwallet.serializers.AddressSerializer
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
 import io.horizontalsystems.bankwallet.serializers.KClassSerializer
 import io.horizontalsystems.bankwallet.serializers.WalletSerializer
@@ -204,7 +203,7 @@ data class SendFragment(val input: Input) : HSScreen() {
         @Serializable(with = WalletSerializer::class) val wallet: Wallet,
         val title: String,
         @Serializable(with = KClassSerializer::class) val sendEntryPointDestId: KClass<out HSScreen>,
-        @Serializable(with = AddressSerializer::class) val address: Address,
+        val address: Address,
         val riskyAddress: Boolean = false,
         @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal? = null,
         val hideAddress: Boolean = false,

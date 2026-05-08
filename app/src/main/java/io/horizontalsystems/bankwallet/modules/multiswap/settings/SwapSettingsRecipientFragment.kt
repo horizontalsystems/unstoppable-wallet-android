@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.settings
 
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.NavBackStack
@@ -9,10 +10,8 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.enteraddress.EnterAddressScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.serializers.AddressSerializer
 import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.marketkit.models.Token
-import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -35,7 +34,7 @@ data class SwapSettingsRecipientFragment(val input: Input) : HSScreen() {
     }
 
     @Serializable
-    data class Input(@Serializable(with = TokenSerializer::class) val token: Token, @Serializable(with = AddressSerializer::class) val recipient: Address?)
+    data class Input(@Serializable(with = TokenSerializer::class) val token: Token, val recipient: Address?)
 
     @Parcelize
     data class Result(val address: Address?) : Parcelable
