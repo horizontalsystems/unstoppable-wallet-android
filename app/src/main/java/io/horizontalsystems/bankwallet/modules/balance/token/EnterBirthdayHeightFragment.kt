@@ -43,7 +43,6 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.balance.ui.WheelDatePickerBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.serializers.AccountSerializer
 import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -81,7 +80,7 @@ data class EnterBirthdayHeightFragment(val input: Input) : HSScreen() {
     @Serializable
     data class Input(
         @Serializable(with = BlockchainTypeSerializer::class) val blockchainType: BlockchainType,
-        @Serializable(with = AccountSerializer::class) val account: Account,
+        val account: Account,
         val currentBirthdayHeight: Long?
     )
 }

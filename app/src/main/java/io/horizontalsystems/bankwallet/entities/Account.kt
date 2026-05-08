@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
+import io.horizontalsystems.bankwallet.serializers.AccountTypeSerializer
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
@@ -21,11 +22,12 @@ import kotlinx.serialization.Serializable
 import java.math.BigInteger
 import java.text.Normalizer
 
+@Serializable
 @Parcelize
 data class Account(
     val id: String,
     val name: String,
-    val type: AccountType,
+    @Serializable(with = AccountTypeSerializer::class) val type: AccountType,
     val origin: AccountOrigin,
     val level: Int,
     val isBackedUp: Boolean = false,
