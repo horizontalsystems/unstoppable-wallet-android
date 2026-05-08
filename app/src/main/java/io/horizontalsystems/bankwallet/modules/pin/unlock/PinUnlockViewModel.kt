@@ -3,9 +3,9 @@ package io.horizontalsystems.bankwallet.modules.pin.unlock
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.core.ILockoutManager
 import io.horizontalsystems.bankwallet.modules.pin.core.LockoutState
@@ -21,26 +21,31 @@ import kotlinx.coroutines.launch
 class PinUnlockViewModel(
     private val pinComponent: IPinComponent,
     private val lockoutManager: ILockoutManager,
-    systemInfoManager: ISystemInfoManager,
+    private val systemInfoManager: ISystemInfoManager,
     private val timer: OneTimeTimer,
     private val localStorage: ILocalStorage,
-) : ViewModel(), OneTimerDelegate {
+) : ViewModelUiState<PinUnlockViewState>(), OneTimerDelegate {
 
     private var attemptsLeft: Int? = null
 
     var pinRandomized by mutableStateOf(localStorage.pinRandomized)
         private set
 
-    var uiState by mutableStateOf(
-        PinUnlockViewState(
-            enteredCount = 0,
-            fingerScannerEnabled = systemInfoManager.biometricAuthSupported && pinComponent.isBiometricAuthEnabled,
-            unlocked = false,
-            showShakeAnimation = false,
-            inputState = PinUnlockModule.InputState.Enabled(attemptsLeft)
-        )
+    private var enteredCount = 0
+    private val fingerScannerEnabled: Boolean
+        get() = systemInfoManager.biometricAuthSupported && pinComponent.isBiometricAuthEnabled
+
+    private var unlocked = false
+    private var showShakeAnimation = false
+    private var inputState: PinUnlockModule.InputState = PinUnlockModule.InputState.Enabled(attemptsLeft)
+
+    override fun createState() = PinUnlockViewState(
+        enteredCount = enteredCount,
+        fingerScannerEnabled = fingerScannerEnabled,
+        unlocked = unlocked,
+        showShakeAnimation = showShakeAnimation,
+        inputState = inputState
     )
-        private set
 
     private var enteredPin = ""
 
@@ -61,31 +66,34 @@ class PinUnlockViewModel(
     fun onBiometricsUnlock() {
         pinComponent.onBiometricUnlock()
         lockoutManager.dropFailedAttempts()
-        uiState = uiState.copy(unlocked = true)
+
+        unlocked = true
+        emitState()
     }
 
     fun onKeyClick(number: Int) {
         if (enteredPin.length < PinModule.PIN_COUNT) {
 
             enteredPin += number.toString()
-            uiState = uiState.copy(
-                enteredCount = enteredPin.length
-            )
+
+            enteredCount = enteredPin.length
+            emitState()
 
             if (enteredPin.length == PinModule.PIN_COUNT) {
                 if (unlock(enteredPin)) {
-                    uiState = uiState.copy(unlocked = true)
+                    unlocked = true
+                    emitState()
                 } else {
-                    uiState = uiState.copy(
-                        showShakeAnimation = true
-                    )
+                    showShakeAnimation = true
+                    emitState()
+
                     viewModelScope.launch {
                         delay(500)
                         enteredPin = ""
-                        uiState = uiState.copy(
-                            enteredCount = enteredPin.length,
-                            showShakeAnimation = false
-                        )
+
+                        enteredCount = enteredPin.length
+                        showShakeAnimation = false
+                        emitState()
                     }
                 }
             }
@@ -95,10 +103,10 @@ class PinUnlockViewModel(
     fun onDelete() {
         if (enteredPin.isNotEmpty()) {
             enteredPin = enteredPin.dropLast(1)
-            uiState = uiState.copy(
-                enteredCount = enteredPin.length,
-                showShakeAnimation = false
-            )
+
+            enteredCount = enteredPin.length
+            showShakeAnimation = false
+            emitState()
         }
     }
 
@@ -107,34 +115,36 @@ class PinUnlockViewModel(
     }
 
     fun onShakeAnimationFinish() {
-        uiState = uiState.copy(showShakeAnimation = false)
+        showShakeAnimation = false
+        emitState()
     }
 
     private fun resetState() {
         attemptsLeft = null
         enteredPin = ""
-        uiState = uiState.copy(
-            unlocked = false,
-            enteredCount = 0,
-            showShakeAnimation = false,
-            inputState = PinUnlockModule.InputState.Enabled(attemptsLeft)
-        )
+
+        unlocked = false
+        enteredCount = 0
+        showShakeAnimation = false
+        inputState = PinUnlockModule.InputState.Enabled(attemptsLeft)
+        emitState()
     }
 
     private fun updateLockoutState() {
-        uiState = when (val state = lockoutManager.currentState) {
+        when (val state = lockoutManager.currentState) {
             is LockoutState.Unlocked -> {
                 attemptsLeft = state.attemptsLeft
-                uiState.copy(inputState = PinUnlockModule.InputState.Enabled(attemptsLeft))
+                inputState = PinUnlockModule.InputState.Enabled(attemptsLeft)
+                emitState()
             }
 
             is LockoutState.Locked -> {
                 timer.schedule(state.until)
-                uiState.copy(
-                    inputState = PinUnlockModule.InputState.Locked(
-                        until = DateHelper.getOnlyTime(state.until)
-                    )
+
+                inputState = PinUnlockModule.InputState.Locked(
+                    until = DateHelper.getOnlyTime(state.until)
                 )
+                emitState()
             }
         }
     }
@@ -149,5 +159,4 @@ class PinUnlockViewModel(
             return false
         }
     }
-
 }
