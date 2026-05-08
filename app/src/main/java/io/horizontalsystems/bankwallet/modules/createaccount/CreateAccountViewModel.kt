@@ -73,6 +73,7 @@ class CreateAccountViewModel(
         activateDefaultWallets(account)
         predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zcash)
         predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Monero)
+        predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zano)
         success = accountType
     }
 

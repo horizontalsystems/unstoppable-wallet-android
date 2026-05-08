@@ -208,6 +208,8 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     }
                 }
 
+                BlockchainType.Zano -> Unit
+
                 is BlockchainType.Unsupported -> Unit
             }
         }

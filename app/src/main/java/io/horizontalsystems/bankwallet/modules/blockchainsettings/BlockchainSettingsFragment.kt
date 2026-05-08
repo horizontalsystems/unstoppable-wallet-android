@@ -131,6 +131,15 @@ private fun onClick(
                 event = StatEvent.OpenBlockchainSettingsEvm(item.blockchainItem.blockchain.uid)
             )
         }
+
+        is BlockchainSettingsModule.BlockchainItem.Zano -> {
+            navController.slideFromBottom(R.id.zanoNetworkFragment)
+
+            stat(
+                page = StatPage.BlockchainSettings,
+                event = StatEvent.OpenBlockchainSettingsEvm(item.blockchainItem.blockchain.uid)
+            )
+        }
     }
 }
 

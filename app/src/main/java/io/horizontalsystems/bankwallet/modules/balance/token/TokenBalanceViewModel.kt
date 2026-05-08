@@ -272,9 +272,6 @@ class TokenBalanceViewModel(
 
     private fun getBirthdayHeight(): Long? {
         val blockchainType = wallet.token.blockchainType
-        if (blockchainType != BlockchainType.Zcash && blockchainType != BlockchainType.Monero) {
-            return null
-        }
         return restoreSettingsManager.settings(wallet.account, blockchainType).birthdayHeight
     }
 

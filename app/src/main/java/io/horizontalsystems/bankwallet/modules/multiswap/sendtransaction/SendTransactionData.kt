@@ -82,4 +82,10 @@ sealed class SendTransactionData {
         val memo: String?,
     ) : SendTransactionData()
 
+    data class Zano(
+        val address: String,
+        val amount: BigDecimal,
+        val memo: String?,
+    ) : SendTransactionData()
+
 }

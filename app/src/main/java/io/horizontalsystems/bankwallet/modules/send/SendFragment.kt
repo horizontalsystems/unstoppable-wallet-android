@@ -25,6 +25,9 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroModule
+import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoModule
+import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoScreen
+import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroScreen
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroViewModel
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaModule
@@ -219,6 +222,23 @@ class SendFragment : BaseFragment() {
                                 title,
                                 findNavController(),
                                 sendMoneroViewModel,
+                                amountInputModeViewModel,
+                                sendEntryPointDestId,
+                                amount,
+                                memo,
+                                riskyAddress = riskyAddress
+                            )
+                        }
+                    }
+
+                    BlockchainType.Zano -> {
+                        val factory = SendZanoModule.Factory(wallet, address, hideAddress)
+                        val sendZanoViewModel by navGraphViewModels<SendZanoViewModel>(R.id.sendXFragment) { factory }
+                        setContent {
+                            SendZanoScreen(
+                                title,
+                                findNavController(),
+                                sendZanoViewModel,
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 amount,

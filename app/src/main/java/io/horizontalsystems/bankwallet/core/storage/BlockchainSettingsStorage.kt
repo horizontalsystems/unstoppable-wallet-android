@@ -12,6 +12,7 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
         const val keyBtcTransactionSort: String = "btc-transaction-sort"
         const val keyEvmSyncSourceUrl: String = "evm-sync-source-url"
         const val keyMoneroNode: String = "monero-node"
+        const val keyZanoNode: String = "zano-node"
     }
 
     private val dao by lazy { appDatabase.blockchainSettingDao() }
@@ -72,6 +73,19 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
             BlockchainSettingRecord(
                 blockchainUid = BlockchainType.Monero.uid,
                 key = keyMoneroNode,
+                value = host
+            )
+        )
+    }
+
+    fun zanoNodeHost(): String? =
+        dao.getBlockchainSetting(BlockchainType.Zano.uid, keyZanoNode)?.value
+
+    fun saveZanoNode(host: String) {
+        dao.insert(
+            BlockchainSettingRecord(
+                blockchainUid = BlockchainType.Zano.uid,
+                key = keyZanoNode,
                 value = host
             )
         )

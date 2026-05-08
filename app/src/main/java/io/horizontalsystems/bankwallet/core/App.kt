@@ -42,6 +42,8 @@ import io.horizontalsystems.bankwallet.core.managers.MigrationManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.NetworkManager
+import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
+import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.managers.NftAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataSyncer
@@ -87,6 +89,7 @@ import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
 import io.horizontalsystems.bankwallet.core.storage.EvmSyncSourceStorage
 import io.horizontalsystems.bankwallet.core.storage.MoneroNodeStorage
+import io.horizontalsystems.bankwallet.core.storage.ZanoNodeStorage
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
 import io.horizontalsystems.bankwallet.core.storage.RestoreSettingsStorage
 import io.horizontalsystems.bankwallet.core.storage.ScannedTransactionStorage
@@ -200,6 +203,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var solanaRpcSourceManager: SolanaRpcSourceManager
         lateinit var moneroNodeManager: MoneroNodeManager
         lateinit var moneroNodeStorage: MoneroNodeStorage
+        lateinit var zanoNodeStorage: ZanoNodeStorage
+        lateinit var zanoNodeManager: ZanoNodeManager
+        lateinit var zanoKitManager: ZanoKitManager
         lateinit var nftMetadataManager: NftMetadataManager
         lateinit var nftAdapterManager: NftAdapterManager
         lateinit var nftMetadataSyncer: NftMetadataSyncer
@@ -300,6 +306,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         moneroNodeStorage = MoneroNodeStorage(appDatabase)
         moneroNodeManager = MoneroNodeManager(blockchainSettingsStorage, moneroNodeStorage, marketKit)
+        zanoNodeStorage = ZanoNodeStorage(appDatabase)
+        zanoNodeManager = ZanoNodeManager(blockchainSettingsStorage, zanoNodeStorage, marketKit)
+        zanoKitManager = ZanoKitManager(zanoNodeManager, backgroundManager)
         coinManager = CoinManager(marketKit, walletManager)
 
         solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
@@ -393,7 +402,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             coinManager = coinManager,
             evmLabelManager = evmLabelManager,
             localStorage = localStorage,
-            moneroNodeManager = moneroNodeManager
+            moneroNodeManager = moneroNodeManager,
+            zanoKitManager = zanoKitManager,
         )
         adapterManager = AdapterManager(
             walletManager,
@@ -500,6 +510,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             solanaRpcSourceManager = solanaRpcSourceManager,
             moneroNodeManager = moneroNodeManager,
             moneroNodeStorage = moneroNodeStorage,
+            zanoNodeManager = zanoNodeManager,
+            zanoNodeStorage = zanoNodeStorage,
             contactsRepository = contactsRepository
         )
 
@@ -608,7 +620,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     private fun startTasks() {
         coroutineScope.launch {
             EthereumKit.init()
-            walletManager.start(restoreSettingsManager, moneroNodeManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager, tronKitManager)
+            walletManager.start(restoreSettingsManager, moneroNodeManager, zanoNodeManager, btcBlockchainManager, evmBlockchainManager, solanaKitManager, tronKitManager)
             adapterManager.startAdapterManager()
             marketKit.sync()
             rateAppManager.onAppLaunch()

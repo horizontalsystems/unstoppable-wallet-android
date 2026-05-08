@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRe
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zano.ZanoOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCreationTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmTransactionRecord
@@ -686,6 +687,14 @@ object TransactionViewItemFactoryHelper {
             }
 
             is MoneroOutgoingTransactionRecord -> {
+                transaction.fee?.let { fee ->
+                    if (!fee.zeroValue) {
+                        items.add(getFee(fee, rates[fee.coinUid]))
+                    }
+                }
+            }
+
+            is ZanoOutgoingTransactionRecord -> {
                 transaction.fee?.let { fee ->
                     if (!fee.zeroValue) {
                         items.add(getFee(fee, rates[fee.coinUid]))

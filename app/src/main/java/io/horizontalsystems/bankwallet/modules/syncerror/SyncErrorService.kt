@@ -17,6 +17,7 @@ class SyncErrorService(
     val blockchainWrapper by lazy {
         when (wallet.token.blockchainType) {
             BlockchainType.Monero -> SyncErrorModule.BlockchainWrapper.Monero
+            BlockchainType.Zano -> SyncErrorModule.BlockchainWrapper.Zano
             BlockchainType.Tron -> SyncErrorModule.BlockchainWrapper.Evm(wallet.token.blockchain)
             else -> {
                 btcBlockchainManager.blockchain(wallet.token.blockchainType)?.let {
