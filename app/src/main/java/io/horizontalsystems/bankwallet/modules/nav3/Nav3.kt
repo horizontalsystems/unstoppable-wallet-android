@@ -148,7 +148,7 @@ fun Nav3() {
             backStack = backStack,
             sceneStrategy = bottomSheetStrategy,
             entryProvider = { hSScreen ->
-                eventBusNavEntryDecorator.setResultKeyUuid(hSScreen.resultKeyUuid)
+                eventBusNavEntryDecorator.setResultKey(hSScreen.resultKey)
 
                 NavEntry(
                     key = hSScreen,

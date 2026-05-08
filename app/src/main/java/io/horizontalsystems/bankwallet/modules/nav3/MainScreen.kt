@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -17,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
+import java.util.UUID
 
 @Serializable
 data object MainScreen : HSScreen() {
@@ -35,7 +37,8 @@ data object MainScreen : HSScreen() {
         }
 
         val tcDappRequest by mainActivityViewModel.tcDappRequest.observeAsState()
-        ResultEffect<TonConnectNewFragment.Result> { result ->
+        val uuid = rememberSaveable { UUID.randomUUID().toString() }
+        ResultEffect<TonConnectNewFragment.Result>(resultKeyUuid = uuid) { result ->
             if (tcDappRequest?.closeAppOnResult == true) {
                 if (result.approved) {
                     //Need delay to get connected before closing activity
@@ -46,9 +49,11 @@ data object MainScreen : HSScreen() {
         }
 
         LaunchedEffect(tcDappRequest) {
-            val tcDappRequest = tcDappRequest
-            if (tcDappRequest != null) {
-                navController.slideFromBottom(TonConnectNewFragment(tcDappRequest.dAppRequest))
+            val tmpTcDappRequest = tcDappRequest
+            if (tmpTcDappRequest != null) {
+                val screen = TonConnectNewFragment(tmpTcDappRequest.dAppRequest)
+                screen.resultKey = uuid
+                navController.slideFromBottom(screen)
                 mainActivityViewModel.onTcDappRequestHandled()
             }
         }

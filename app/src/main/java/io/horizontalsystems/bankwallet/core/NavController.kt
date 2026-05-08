@@ -28,21 +28,6 @@ fun NavBackStack<HSScreen>.slideFromBottom(screen: HSScreen) {
 //    TODO("xxx nav3")
 }
 
-@Composable
-fun NavBackStack<HSScreen>.authorizedAction(action: () -> Unit): () -> Unit {
-    return if (App.pinComponent.isPinSet) {
-        slideFromBottomForResult<ConfirmPinFragment.Result>(ConfirmPinFragment) {
-            if (it.success) {
-                action.invoke()
-            }
-        }
-    } else {
-        {
-            action.invoke()
-        }
-    }
-}
-
 fun NavBackStack<HSScreen>.paidAction(paidAction: IPaidAction, block: () -> Unit) {
     if (UserSubscriptionManager.isActionAllowed(paidAction)) {
         block.invoke()
@@ -77,22 +62,49 @@ fun NavBackStack<HSScreen>.navigateWithTermsAccepted(
     }
 }
 
-// todo("xxx nav3: not working. need to fix")
+@Composable
+fun NavBackStack<HSScreen>.authorizedAction(action: () -> Unit): () -> Unit {
+    val uuid = rememberSaveable { UUID.randomUUID().toString() }
+    ResultEffect<ConfirmPinFragment.Result>(resultKeyUuid = uuid) {
+        if (it.success) {
+            action.invoke()
+        }
+    }
+
+    return if (App.pinComponent.isPinSet) {
+        {
+            val screen = ConfirmPinFragment
+            screen.resultKey = uuid
+            add(screen)
+        }
+    } else {
+        {
+            action.invoke()
+        }
+    }
+}
+
 @Composable
 fun NavBackStack<HSScreen>.ensurePinSet(descriptionResId: Int, action: () -> Unit): () -> Unit {
+    val uuid = rememberSaveable { UUID.randomUUID().toString() }
+    ResultEffect<SetPinFragment.Result>(resultKeyUuid = uuid) {
+        action.invoke()
+    }
+
     return if (App.pinComponent.isPinSet) {
         {
             action.invoke()
         }
     } else {
-        slideFromRightForResult<SetPinFragment.Result>(
-            SetPinFragment(
+        {
+            val screen = SetPinFragment(
                 SetPinFragment.Input(
                     descriptionResId
                 )
             )
-        ) {
-            action.invoke()
+
+            screen.resultKey = uuid
+            add(screen)
         }
     }
 }
@@ -108,7 +120,7 @@ inline fun <reified T> NavBackStack<HSScreen>.slideForResult(
         onResult.invoke(it)
     }
     return {
-        screen.resultKeyUuid = uuid
+        screen.resultKey = uuid
         add(screen)
     }
 }

@@ -8,16 +8,14 @@ import androidx.compose.runtime.LaunchedEffect
  *
  * The trailing lambda provides the result from a flow of results.
  *
- * @param resultKey the key that should be associated with this effect
  * @param onResult the callback to invoke when a result is received
  */
 @Composable
 inline fun <reified T> ResultEffect(
-    resultKey: String = T::class.toString(),
-    resultKeyUuid: String? = null,
+    resultKeyUuid: String,
     crossinline onResult: suspend (T) -> Unit
 ) {
-    val resultKey = resultKeyUuid ?: resultKey
+    val resultKey = resultKeyUuid
     val resultEventBus = LocalResultEventBus.current
     LaunchedEffect(resultKey, resultEventBus.channelMap[resultKey]) {
         resultEventBus.getResultFlow<T>(resultKey)?.collect { result ->
