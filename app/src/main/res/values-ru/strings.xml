@@ -986,15 +986,15 @@
     <!-- Backup Manager -->
     <string name="BackupManager_Title">Резерв.копирование</string>
     <string name="BackupManager_RestoreBackup">Восстановить резерв. копию</string>
-    <string name="BackupManager_CreateBackup">Создать новую резерв. копию</string>
+    <string name="BackupManager_CreateBackup">Создать резервную копию</string>
     <string name="BackupManager_BаckupFile">Файл резервной копии</string>
-    <string name="BackupManager_Wallets">КОШЕЛЬКИ</string>
-    <string name="BackupManager_Other">ДРУГИЕ</string>
+    <string name="BackupManager_Wallets">Кошельки</string>
+    <string name="BackupManager_Other">Данные</string>
     <string name="BackupManager_Restore">Восстановить</string>
     <string name="BackupManager_BackupFileContents">Список содержимого в файле резервной копии.</string>
-    <string name="BackupManager_MergeTitle">Внимание</string>
+    <string name="BackupManager_MergeTitle">Внимание!</string>
     <string name="BackupManager_MergeButton">Заменить</string>
-    <string name="BackupManager_MergeDescription">Это действие перезапишет ваши локальные контакты.</string>
+    <string name="BackupManager_MergeDescription">Сохраненные контакты будут заменены данными из резервной копии.</string>
     <string name="BackupManager_BackupRequired">Необходима резерв. копия</string>
     <string name="BackupManager_WatchWallets">Просмотр кошелька</string>
     <string name="BackupManager_Watchlist">Избранное</string>
@@ -1709,4 +1709,20 @@
     <string name="Hud_Text_Connected">Подключено</string>
     <string name="BirthdayDatePicker_Title">Выберите дату</string>
     <string name="BirthdayDatePicker_Description">Выберите приблизительную дату создания кошелька. \nВысота блока будет рассчитана автоматически.</string>
+    <string name="BackupManager_RestoreBackupDescription">Восстановите вашу учетную запись и данные приложения из файла резервной копии.</string>
+    <string name="BackupManager_CreateBackupDescription">Создайте файл резервной копии ваших кошельков и данных приложения.</string>
+    <string name="BackupManager_SelectItemsDescription">Выберите, что включить в резервную копию. Вы можете создать резервную копию всех или только выбранных элементов.</string>
+    <string name="BackupManager_RestoreItemsDescription">Выберите, что восстановить. Вы можете восстановить все или только выбранные элементы.</string>
+    <string name="BackupManager_CountSavedAddresses">сохраненные адреса: %d</string>
+    <string name="BackupManager_CountAssets">активы: %d</string>
+    <string name="BackupManager_CountNetworks">сети: %d</string>
+    <string name="BackupManager_CountWallets">кошельки: %d</string>
+    <string name="AddZanoNode_AddNode">Добавить узел</string>
+    <string name="AddZanoNode_NodeUrl">URL узла</string>
+    <string name="ZanoNodeSettings_Description">Выберите узел, который приложение Unstoppable должно использовать для синхронизации кошелька(ов).</string>
+    <string name="LocalBackup_ProtectBackup">Защитить резервную копию</string>
+    <string name="LocalBackup_ProtectBackupDescription">Создайте пароль для защиты файла резервной копии.</string>
+    <string name="LocalBackup_BackupName">Имя резервной копии</string>
+    <string name="LocalBackup_AddPassword">Добавить пароль</string>
+    <string name="LocalBackup_ConfirmPassword">Подтвердить пароль</string>
 </resources>
