@@ -7,8 +7,6 @@ import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.serializers.BigIntegerSerializer
-import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
-import io.horizontalsystems.bankwallet.serializers.TokenTypeSerializer
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
@@ -158,8 +156,8 @@ sealed class AccountType : Parcelable {
     @Parcelize
     data class BitcoinAddress(
         val address: String,
-        @Serializable(with = BlockchainTypeSerializer::class) val blockchainType: BlockchainType,
-        @Serializable(with = TokenTypeSerializer::class) val tokenType: TokenType,
+        val blockchainType: BlockchainType,
+        val tokenType: TokenType,
     ) : AccountType() {
 
         val serialized: String

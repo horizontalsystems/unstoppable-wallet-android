@@ -28,7 +28,6 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.serializers.BlockchainSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -67,7 +66,7 @@ data class CoinMajorHoldersFragment(val input: Input) : HSScreen() {
     }
 
     @Serializable
-    data class Input(val coinUid: String, @Serializable(with = BlockchainSerializer::class) val blockchain: Blockchain)
+    data class Input(val coinUid: String, val blockchain: Blockchain)
 }
 
 @Composable

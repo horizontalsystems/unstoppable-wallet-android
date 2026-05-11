@@ -5,7 +5,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.serialization.Serializable
 
@@ -17,7 +16,7 @@ data class SwapSelectCoinFragment(val input: Input) : HSScreen() {
     }
 
     @Serializable
-    data class Input(@Serializable(with = TokenSerializer::class) val token: Token?, val title: String)
+    data class Input(val token: Token?, val title: String)
 
 }
 

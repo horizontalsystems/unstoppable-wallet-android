@@ -13,8 +13,6 @@ import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
-import io.horizontalsystems.bankwallet.serializers.BlockchainTypeListSerializer
-import io.horizontalsystems.bankwallet.serializers.TokenTypeListSerializer
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.serialization.Serializable
@@ -50,8 +48,8 @@ data class SendTokenSelectFragment(val input: Input? = null) : HSScreen() {
 
     @Serializable
     data class Input(
-        @Serializable(with = BlockchainTypeListSerializer::class) val blockchainTypes: List<BlockchainType>?,
-        @Serializable(with = TokenTypeListSerializer::class) val tokenTypes: List<TokenType>?,
+        val blockchainTypes: List<BlockchainType>?,
+        val tokenTypes: List<TokenType>?,
         val address: String,
         @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal?,
         val memo: String?

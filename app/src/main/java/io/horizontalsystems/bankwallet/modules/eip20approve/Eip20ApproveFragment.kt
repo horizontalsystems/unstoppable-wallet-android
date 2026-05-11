@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
-import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -44,7 +43,7 @@ data class Eip20ApproveFragment(val input: Input) : HSScreen() {
 
     @Serializable
     data class Input(
-        @Serializable(with = TokenSerializer::class) val token: Token,
+        val token: Token,
         @Serializable(with = BigDecimalSerializer::class) val requiredAllowance: BigDecimal,
         val spenderAddress: String
     )

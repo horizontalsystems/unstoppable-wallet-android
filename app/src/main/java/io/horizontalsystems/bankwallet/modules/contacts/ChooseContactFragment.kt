@@ -29,7 +29,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -48,7 +47,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ChooseContactFragment(@Serializable(with = BlockchainTypeSerializer::class) val blockchainType: BlockchainType) : HSScreen() {
+data class ChooseContactFragment(val blockchainType: BlockchainType) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: NavBackStack<HSScreen>) {

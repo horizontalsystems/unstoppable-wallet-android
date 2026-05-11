@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.contacts.model
 
 import android.os.Parcelable
-import io.horizontalsystems.bankwallet.serializers.BlockchainSerializer
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -18,7 +17,7 @@ data class Contact(
 @Serializable
 @Parcelize
 data class ContactAddress(
-    @Serializable(with = BlockchainSerializer::class) val blockchain: Blockchain,
+    val blockchain: Blockchain,
     val address: String
 ) : Parcelable {
     override fun equals(other: Any?): Boolean {

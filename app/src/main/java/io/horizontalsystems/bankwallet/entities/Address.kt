@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.entities
 
 import android.os.Parcelable
-import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bitcoincore.core.purpose
 import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
 import io.horizontalsystems.hdwalletkit.HDWallet
@@ -15,7 +14,7 @@ import kotlinx.serialization.Serializable
 open class Address(
     val hex: String,
     val domain: String? = null,
-    @Serializable(with = BlockchainTypeSerializer::class) val blockchainType: BlockchainType? = null,
+    val blockchainType: BlockchainType? = null,
 ) : Parcelable {
     val title: String
         get() = domain ?: hex

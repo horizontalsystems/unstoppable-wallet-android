@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.enteraddress.EnterAddressScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
@@ -34,7 +33,7 @@ data class SwapSettingsRecipientFragment(val input: Input) : HSScreen() {
     }
 
     @Serializable
-    data class Input(@Serializable(with = TokenSerializer::class) val token: Token, val recipient: Address?)
+    data class Input(val token: Token, val recipient: Address?)
 
     @Parcelize
     data class Result(val address: Address?) : Parcelable

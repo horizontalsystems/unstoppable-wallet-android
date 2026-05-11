@@ -32,7 +32,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
-import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -54,7 +53,7 @@ data class Eip20RevokeConfirmFragment(val input: Input) : HSScreen() {
 
     @Serializable
     data class Input(
-        @Serializable(with = TokenSerializer::class) val token: Token,
+        val token: Token,
         val spenderAddress: String,
         @Serializable(with = BigDecimalSerializer::class) val allowance: BigDecimal,
     )

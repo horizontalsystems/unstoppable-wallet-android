@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo.options
 
+import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,13 +24,11 @@ import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
-import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
@@ -43,7 +42,7 @@ data class TransactionSpeedUpCancelFragment(val input: Input) : HSScreen() {
 
     @Serializable
     data class Input(
-        @Serializable(with = BlockchainTypeSerializer::class) val blockchainType: BlockchainType,
+        val blockchainType: BlockchainType,
         val optionType: SpeedUpCancelType,
         val transactionHash: String
     )

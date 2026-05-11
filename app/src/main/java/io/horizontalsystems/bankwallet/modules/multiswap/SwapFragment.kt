@@ -71,7 +71,6 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapHistoryFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.serializers.TokenSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
@@ -119,7 +118,7 @@ data class SwapFragment(val input: Input? = null) : HSScreen() {
     }
 
     @Serializable
-    data class Input(@Serializable(with = TokenSerializer::class) val tokenIn: Token? = null, @Serializable(with = TokenSerializer::class) val tokenOut: Token? = null)
+    data class Input(val tokenIn: Token? = null, val tokenOut: Token? = null)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

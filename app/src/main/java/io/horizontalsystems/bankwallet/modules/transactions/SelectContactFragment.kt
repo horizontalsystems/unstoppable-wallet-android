@@ -15,7 +15,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.serializers.BlockchainTypeSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -38,7 +37,7 @@ data class SelectContactFragment(val input: Input) : HSScreen() {
     }
 
     @Serializable
-    data class Input(val selected: Contact?, @Serializable(with = BlockchainTypeSerializer::class) val blockchainType: BlockchainType?)
+    data class Input(val selected: Contact?, val blockchainType: BlockchainType?)
 
     @Parcelize
     data class Result(val contact: Contact?) : Parcelable
