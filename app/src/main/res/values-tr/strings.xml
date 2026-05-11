@@ -670,15 +670,15 @@
     <!-- Backup Manager -->
     <string name="BackupManager_Title">Yedekleme yöneticisi</string>
     <string name="BackupManager_RestoreBackup">Yedeği Geri Yükle</string>
-    <string name="BackupManager_CreateBackup">Yeni Yedek Oluştur</string>
+    <string name="BackupManager_CreateBackup">Yedek Oluştur</string>
     <string name="BackupManager_BаckupFile">Yedek Dosyası</string>
-    <string name="BackupManager_Wallets">CÜZDANLAR</string>
-    <string name="BackupManager_Other">DİĞER</string>
+    <string name="BackupManager_Wallets">Cüzdanlar</string>
+    <string name="BackupManager_Other">Veriler</string>
     <string name="BackupManager_Restore">Geri Yükle</string>
     <string name="BackupManager_BackupFileContents">Yedek dosyasındaki içeriklerin listesi.</string>
-    <string name="BackupManager_MergeTitle">Uyarı</string>
+    <string name="BackupManager_MergeTitle">Dikkat!</string>
     <string name="BackupManager_MergeButton">Değiştir</string>
-    <string name="BackupManager_MergeDescription">Bu işlem, aygıtta bulunan ödeme kişilerinizin üzerine yazılır.</string>
+    <string name="BackupManager_MergeDescription">Kaydedilmiş kişiler yedekteki verilerle değiştirilecektir.</string>
     <string name="BackupManager_BackupRequired">Yedekleme Gerekli</string>
     <string name="BackupManager_WatchWallets">Cüzdan İzle</string>
     <string name="BackupManager_Watchlist">İzleme Listesi</string>
@@ -1294,4 +1294,20 @@
     <string name="Contacts_Error_DefinedAddress">Bu adres %s için zaten kullanılıyor</string>
     <string name="Contacts_Error_DefinedName">Bu isim zaten mevcut</string>
     <string name="Hud_Text_Connected">Bağlandı</string>
+    <string name="BackupManager_RestoreBackupDescription">Cüzdanınızı ve uygulama verilerinizi bir yedek dosyasından geri yükleyin.</string>
+    <string name="BackupManager_CreateBackupDescription">Cüzdanlarınız ve uygulama verilerinizin bir yedek dosyasını oluşturun.</string>
+    <string name="BackupManager_SelectItemsDescription">Yedeğinize neyi dahil edeceğinizi seçin. Tüm öğeleri veya seçili öğeleri yedekleyebilirsiniz.</string>
+    <string name="BackupManager_RestoreItemsDescription">Ne geri yüklemek istediğinizi seçin. Her şeyi veya yalnızca seçili öğeleri geri yükleyebilirsiniz.</string>
+    <string name="BackupManager_CountSavedAddresses">%d kaydedilmiş adres</string>
+    <string name="BackupManager_CountAssets">%d varlık</string>
+    <string name="BackupManager_CountNetworks">%d ağ</string>
+    <string name="BackupManager_CountWallets">%d cüzdan</string>
+    <string name="AddZanoNode_AddNode">Düğüm Ekle</string>
+    <string name="AddZanoNode_NodeUrl">Düğüm URL</string>
+    <string name="ZanoNodeSettings_Description">Unstoppable uygulamasının cüzdan(lar) senkronizasyonu için kullanması gereken düğümü seçin.</string>
+    <string name="LocalBackup_ProtectBackup">Yedeği Koru</string>
+    <string name="LocalBackup_ProtectBackupDescription">Yedek dosyasını korumak için bir parola oluşturun.</string>
+    <string name="LocalBackup_BackupName">Yedek Adı</string>
+    <string name="LocalBackup_AddPassword">Parola Ekle</string>
+    <string name="LocalBackup_ConfirmPassword">Parolayı Onayla</string>
 </resources>

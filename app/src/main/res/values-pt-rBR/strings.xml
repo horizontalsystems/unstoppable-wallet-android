@@ -984,15 +984,15 @@
     <!-- Backup Manager -->
     <string name="BackupManager_Title">Gerenciador de Backup</string>
     <string name="BackupManager_RestoreBackup">Restaurar Backup</string>
-    <string name="BackupManager_CreateBackup">Criar Novo Backup</string>
+    <string name="BackupManager_CreateBackup">Criar backup</string>
     <string name="BackupManager_BаckupFile">Arquivo de backup</string>
-    <string name="BackupManager_Wallets">CARTEIRAS</string>
-    <string name="BackupManager_Other">OUTRA</string>
+    <string name="BackupManager_Wallets">Carteiras</string>
+    <string name="BackupManager_Other">Dados</string>
     <string name="BackupManager_Restore">Restaurar</string>
     <string name="BackupManager_BackupFileContents">Lista de conteúdo do arquivo de backup.</string>
-    <string name="BackupManager_MergeTitle">Aviso</string>
+    <string name="BackupManager_MergeTitle">Atenção!</string>
     <string name="BackupManager_MergeButton">Substituir</string>
-    <string name="BackupManager_MergeDescription">Esta ação sobrescreverá seus contatos de pagamento locais.</string>
+    <string name="BackupManager_MergeDescription">Os contatos salvos serão substituídos pelos dados do backup.</string>
     <string name="BackupManager_BackupRequired">Backup necessário</string>
     <string name="BackupManager_WatchWallets">Carteiras de Relógio</string>
     <string name="BackupManager_Watchlist">Catálogo</string>
@@ -1707,4 +1707,20 @@
     <string name="Hud_Text_Connected">Conectado</string>
     <string name="BirthdayDatePicker_Title">Selecione Data</string>
     <string name="BirthdayDatePicker_Description">Escolha uma data de criação de carteira aproximada. \nA altura do bloco será calculada automaticamente.</string>
+    <string name="BackupManager_RestoreBackupDescription">Restaure sua carteira e dados do aplicativo de um arquivo de backup.</string>
+    <string name="BackupManager_CreateBackupDescription">Crie um arquivo de backup de suas carteiras e dados do aplicativo.</string>
+    <string name="BackupManager_SelectItemsDescription">Escolha o que incluir no seu backup. Você pode fazer backup de todos ou de itens selecionados.</string>
+    <string name="BackupManager_RestoreItemsDescription">Escolha o que restaurar. Você pode restaurar tudo ou apenas itens selecionados.</string>
+    <string name="BackupManager_CountSavedAddresses">%d endereços salvos</string>
+    <string name="BackupManager_CountAssets">%d ativos</string>
+    <string name="BackupManager_CountNetworks">%d redes</string>
+    <string name="BackupManager_CountWallets">%d carteiras</string>
+    <string name="AddZanoNode_AddNode">Adicionar nó</string>
+    <string name="AddZanoNode_NodeUrl">URL do nó</string>
+    <string name="ZanoNodeSettings_Description">Escolha o nó que o aplicativo Unstoppable deve usar para sincronizar a(s) carteira(s).</string>
+    <string name="LocalBackup_ProtectBackup">Proteger backup</string>
+    <string name="LocalBackup_ProtectBackupDescription">Crie uma senha para proteger seu arquivo de backup.</string>
+    <string name="LocalBackup_BackupName">Nome do backup</string>
+    <string name="LocalBackup_AddPassword">Adicionar senha</string>
+    <string name="LocalBackup_ConfirmPassword">Confirmar senha</string>
 </resources>
