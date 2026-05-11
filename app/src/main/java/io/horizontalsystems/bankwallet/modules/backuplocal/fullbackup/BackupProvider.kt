@@ -307,10 +307,6 @@ class BackupProvider(
             settings.zanoNodes?.selected?.forEach { node ->
                 blockchainSettingsStorage.saveZanoNode(node.url)
             }
-
-            if (settings.appIcon != (localStorage.appIcon ?: AppIcon.Main).titleText) {
-                AppIcon.fromTitle(settings.appIcon)?.let { appIconService.setAppIcon(it) }
-            }
         }
     }
 
