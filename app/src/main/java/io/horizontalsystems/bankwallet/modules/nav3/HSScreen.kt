@@ -16,14 +16,11 @@ import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.bankwallet.core.NavigationType
 import kotlinx.serialization.Serializable
 import java.util.UUID
-import kotlin.reflect.KClass
 
 @Serializable
 abstract class HSScreen(
     val bottomSheet: Boolean = false,
     val screenshotEnabled: Boolean = true,
-    val parentScreenClass: KClass<out HSScreen>? = null,
-    val usePreviousScreenVmScope: Boolean = false,
 ) : NavKey {
     var resultKey: String? = null
     val uuid = UUID.randomUUID().toString()
@@ -32,25 +29,9 @@ abstract class HSScreen(
     fun contentKey() = "$className(#$uuid)"
 
     @OptIn(ExperimentalMaterial3Api::class)
-    fun getMetadata(backStack: NavBackStack<HSScreen>) = buildMap {
+    fun getMetadata() = buildMap {
         if (bottomSheet) {
             putAll(BottomSheetSceneStrategy.bottomSheet())
-        }
-        if (usePreviousScreenVmScope) {
-            backStack.getOrNull(backStack.lastIndex - 1)?.let { parentScreen ->
-                putAll(
-                    SharedViewModelStoreNavEntryDecorator.parent(parentScreen.contentKey())
-                )
-            }
-        }
-        parentScreenClass?.let {
-            backStack.findLast {
-                it::class == parentScreenClass
-            }?.let { parentScreen ->
-                putAll(
-                    SharedViewModelStoreNavEntryDecorator.parent(parentScreen.contentKey())
-                )
-            }
         }
 
         putAll(getAnimationMetadata())

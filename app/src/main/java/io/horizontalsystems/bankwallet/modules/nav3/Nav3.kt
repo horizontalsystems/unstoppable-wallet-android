@@ -80,7 +80,7 @@ fun Nav3() {
                 NavEntry(
                     key = screen,
                     contentKey = screen.contentKey(),
-                    metadata = screen.getMetadata(backStack)
+                    metadata = screen.getMetadata()
                 ) {
                     screen.GetContent(backStack)
                 }
