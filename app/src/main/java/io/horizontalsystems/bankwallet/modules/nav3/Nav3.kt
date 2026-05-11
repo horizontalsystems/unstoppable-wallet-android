@@ -57,108 +57,32 @@ fun Nav3() {
         NavBackStack<HSScreen>(MainScreen)
     }
 
-    val bottomSheetStrategy = remember { BottomSheetSceneStrategy<HSScreen>() }
+    HandleNavigateToMain(mainActivityViewModel, backStack)
+    IntentEffect(mainActivityViewModel)
+    Validate(mainActivityViewModel)
+    HandleWcEvent(mainActivityViewModel, backStack)
+    ToggleScreenshot(backStack)
 
-    val navigateToMain by mainActivityViewModel.navigateToMainLiveData.observeAsState()
-    LaunchedEffect(navigateToMain) {
-        if (navigateToMain != null) {
-            backStack.removeLastUntil(MainScreen::class, false)
-            mainActivityViewModel.onNavigatedToMain()
-        }
-    }
-
-    val view = LocalView.current
     val activity = LocalActivity.current
-    val hudTextConnected = stringResource(R.string.Hud_Text_Connected)
-
-    LaunchedEffect(Unit) {
-        activity?.intent?.let { mainActivityViewModel.setIntent(it) }
-    }
-
-    DisposableEffect(activity) {
-        val consumer = Consumer<Intent> { mainActivityViewModel.setIntent(it) }
-        (activity as? ComponentActivity)?.addOnNewIntentListener(consumer)
-        onDispose {
-            (activity as? ComponentActivity)?.removeOnNewIntentListener(consumer)
-        }
-    }
-
-    LifecycleResumeEffect(Unit) {
-        try {
-            mainActivityViewModel.validate()
-        } catch (_: MainScreenValidationError.NoSystemLock) {
-            activity?.let { KeyStoreActivity.startForNoSystemLock(it); it.finish() }
-        } catch (_: MainScreenValidationError.KeyInvalidated) {
-            activity?.let { KeyStoreActivity.startForInvalidKey(it); it.finish() }
-        } catch (_: MainScreenValidationError.UserAuthentication) {
-            activity?.let { KeyStoreActivity.startForUserAuthentication(it); it.finish() }
-        } catch (_: MainScreenValidationError.Welcome) {
-            activity?.let { IntroActivity.start(it); it.finish() }
-        } catch (_: MainScreenValidationError.KeystoreRuntimeException) {
-            Toast.makeText(App.instance, "Issue with Keystore", Toast.LENGTH_SHORT).show()
-            activity?.finish()
-        }
-        onPauseOrDispose {}
-    }
-
-    val wcEvent by mainActivityViewModel.wcEvent.observeAsState()
-    LaunchedEffect(wcEvent) {
-        val tmpWcEvent = wcEvent ?: return@LaunchedEffect
-        when (tmpWcEvent) {
-            is HSDAppEvent.SessionRequest -> {
-                backStack.slideFromBottom(WCRequestFragment())
-            }
-
-            is HSDAppEvent.SessionProposal -> {
-                backStack.slideFromBottom(WCSessionBottomSheet(null))
-            }
-
-            is HSDAppEvent.Error -> {
-                HudHelper.showErrorMessage(view, tmpWcEvent.throwable.message ?: "Error")
-            }
-
-            is HSDAppEvent.SessionSettled -> {
-                HudHelper.showSuccessMessage(view, hudTextConnected)
-            }
-
-            else -> {}
-        }
-
-        mainActivityViewModel.onWcEventHandled()
-    }
-
-    val currentScreen = backStack.lastOrNull()
-    LaunchedEffect(currentScreen) {
-        if (activity != null) {
-            activity.currentFocus?.hideKeyboard(activity)
-            if (currentScreen?.screenshotEnabled == false) {
-                activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-            } else {
-                activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
-            }
-        }
-    }
 
     Box {
         val eventBusNavEntryDecorator = rememberResultEventBusNavEntryDecorator<HSScreen>()
         NavDisplay(
             entryDecorators = listOf(
-                // Add the default decorators for managing scenes and saving state
                 rememberSaveableStateHolderNavEntryDecorator(),
                 rememberSharedViewModelStoreNavEntryDecorator(),
                 eventBusNavEntryDecorator,
             ),
             backStack = backStack,
-            sceneStrategy = bottomSheetStrategy,
-            entryProvider = { hSScreen ->
-                eventBusNavEntryDecorator.setResultKey(hSScreen.resultKey)
-
+            sceneStrategy = remember { BottomSheetSceneStrategy() },
+            entryProvider = { screen ->
+                eventBusNavEntryDecorator.setResultKey(screen.resultKey)
                 NavEntry(
-                    key = hSScreen,
-                    contentKey = hSScreen.contentKey(),
-                    metadata = hSScreen.getMetadata(backStack)
+                    key = screen,
+                    contentKey = screen.contentKey(),
+                    metadata = screen.getMetadata(backStack)
                 ) {
-                    hSScreen.GetContent(backStack)
+                    screen.GetContent(backStack)
                 }
             }
         )
@@ -174,6 +98,94 @@ fun Nav3() {
 
     BackHandler(enabled = isLocked) {
         activity?.moveTaskToBack(true)
+    }
+}
+
+@Composable
+private fun HandleNavigateToMain(
+    viewModel: MainActivityViewModel,
+    backStack: NavBackStack<HSScreen>
+) {
+    val navigateToMain by viewModel.navigateToMainLiveData.observeAsState()
+    LaunchedEffect(navigateToMain) {
+        if (navigateToMain != null) {
+            backStack.removeLastUntil(MainScreen::class, false)
+            viewModel.onNavigatedToMain()
+        }
+    }
+}
+
+@Composable
+private fun IntentEffect(viewModel: MainActivityViewModel) {
+    val activity = LocalActivity.current
+    LaunchedEffect(Unit) {
+        activity?.intent?.let { viewModel.setIntent(it) }
+    }
+    DisposableEffect(activity) {
+        val consumer = Consumer<Intent> { viewModel.setIntent(it) }
+        (activity as? ComponentActivity)?.addOnNewIntentListener(consumer)
+        onDispose {
+            (activity as? ComponentActivity)?.removeOnNewIntentListener(consumer)
+        }
+    }
+}
+
+@Composable
+private fun Validate(viewModel: MainActivityViewModel) {
+    val activity = LocalActivity.current
+    LifecycleResumeEffect(Unit) {
+        try {
+            viewModel.validate()
+        } catch (_: MainScreenValidationError.NoSystemLock) {
+            activity?.let { KeyStoreActivity.startForNoSystemLock(it); it.finish() }
+        } catch (_: MainScreenValidationError.KeyInvalidated) {
+            activity?.let { KeyStoreActivity.startForInvalidKey(it); it.finish() }
+        } catch (_: MainScreenValidationError.UserAuthentication) {
+            activity?.let { KeyStoreActivity.startForUserAuthentication(it); it.finish() }
+        } catch (_: MainScreenValidationError.Welcome) {
+            activity?.let { IntroActivity.start(it); it.finish() }
+        } catch (_: MainScreenValidationError.KeystoreRuntimeException) {
+            Toast.makeText(App.instance, "Issue with Keystore", Toast.LENGTH_SHORT).show()
+            activity?.finish()
+        }
+        onPauseOrDispose {}
+    }
+}
+
+@Composable
+private fun HandleWcEvent(
+    viewModel: MainActivityViewModel,
+    backStack: NavBackStack<HSScreen>
+) {
+    val view = LocalView.current
+    val hudTextConnected = stringResource(R.string.Hud_Text_Connected)
+    val wcEvent by viewModel.wcEvent.observeAsState()
+    LaunchedEffect(wcEvent) {
+        val event = wcEvent ?: return@LaunchedEffect
+        when (event) {
+            is HSDAppEvent.SessionRequest -> backStack.slideFromBottom(WCRequestFragment())
+            is HSDAppEvent.SessionProposal -> backStack.slideFromBottom(WCSessionBottomSheet(null))
+            is HSDAppEvent.Error -> HudHelper.showErrorMessage(view, event.throwable.message ?: "Error")
+            is HSDAppEvent.SessionSettled -> HudHelper.showSuccessMessage(view, hudTextConnected)
+            else -> {}
+        }
+        viewModel.onWcEventHandled()
+    }
+}
+
+@Composable
+private fun ToggleScreenshot(backStack: NavBackStack<HSScreen>) {
+    val activity = LocalActivity.current
+    val currentScreen = backStack.lastOrNull()
+    LaunchedEffect(currentScreen) {
+        if (activity != null) {
+            activity.currentFocus?.hideKeyboard(activity)
+            if (currentScreen?.screenshotEnabled == false) {
+                activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+            } else {
+                activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+            }
+        }
     }
 }
 
