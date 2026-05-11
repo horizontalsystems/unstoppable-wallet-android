@@ -121,6 +121,7 @@ inline fun <reified T> NavBackStack<HSScreen>.slideForResult(
     }
     return {
         screen.resultKey = uuid
+        screen.navType = navigationType
         add(screen)
     }
 }
