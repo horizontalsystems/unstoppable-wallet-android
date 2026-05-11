@@ -7,12 +7,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -154,8 +150,6 @@ fun Nav3() {
             ),
             backStack = backStack,
             sceneStrategy = bottomSheetStrategy,
-            transitionSpec = { slideInHorizontally(tween(300)) { it } togetherWith fadeOut(tween(400)) },
-            popTransitionSpec = { fadeIn(tween(500)) togetherWith slideOutHorizontally(tween(300)) { it } },
             entryProvider = { hSScreen ->
                 eventBusNavEntryDecorator.setResultKey(hSScreen.resultKey)
 
