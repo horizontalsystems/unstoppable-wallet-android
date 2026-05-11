@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.text.split
 
 class ZanoKitManager(
     private val zanoNodeManager: ZanoNodeManager,
@@ -78,7 +79,7 @@ class ZanoKitManager(
     private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account, creationTimestamp: Long): ZanoKitWrapper {
         val node = zanoNodeManager.currentNode
         val wallet = ZanoWallet.Bip39(
-            mnemonic = accountType.words,
+            mnemonic = "top post mercy height badge hazard airport clump velvet category essay actor".split(" "),
             passphrase = accountType.passphrase,
             creationTimestamp = creationTimestamp,
         )
