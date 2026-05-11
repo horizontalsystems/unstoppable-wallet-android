@@ -53,6 +53,12 @@ class ZanoAdapter(
     override val receiveAddress: String
         get() = kit.receiveAddress
 
+    val isNativeAsset: Boolean
+        get() = assetId == ZanoKit.ZANO_ASSET_ID
+
+    val nativeAvailableBalance: BigDecimal
+        get() = kit.nativeBalance.unlocked.scaledDown(ZANO_DECIMALS)
+
     override val isMainNet: Boolean
         get() = true
 

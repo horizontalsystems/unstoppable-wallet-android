@@ -10,6 +10,9 @@ import io.horizontalsystems.bankwallet.core.adapters.ECashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
 import io.horizontalsystems.bankwallet.core.adapters.toMoneroSeed
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.zanokit.ZanoKit
+import io.horizontalsystems.zanokit.ZanoWallet
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.isEvm
@@ -66,6 +69,7 @@ object SwapHelper {
             || blockchainType == BlockchainType.Stellar
             || blockchainType == BlockchainType.Zcash
             || blockchainType == BlockchainType.Monero
+            || blockchainType == BlockchainType.Zano
         ) {
             App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
                 return listOf(it.receiveAddress)
@@ -142,6 +146,13 @@ object SwapHelper {
 
                 BlockchainType.Monero -> {
                     MoneroKit.getAddress(account.type.toMoneroSeed(), 0, 1)
+                }
+
+                BlockchainType.Zano -> {
+                    val accountType = account.type as? AccountType.Mnemonic
+                        ?: throw SwapError.NoDestinationAddress()
+                    ZanoKit.address(ZanoWallet.Bip39(accountType.words, accountType.passphrase, 0))
+                        ?: throw SwapError.NoDestinationAddress()
                 }
 
                 BlockchainType.Zcash -> {
