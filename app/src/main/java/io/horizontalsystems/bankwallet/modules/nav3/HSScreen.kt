@@ -14,8 +14,6 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.bankwallet.core.NavigationType
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 import java.util.UUID
 import kotlin.reflect.KClass
@@ -101,9 +99,5 @@ abstract class HSScreen(
     private val className = this.javaClass.simpleName
 
     @Composable
-    open fun GetContent(navController: NavBackStack<HSScreen>) {
-        HSScaffold(title = "TODO") {
-            body_leah(className)
-        }
-    }
+    abstract fun GetContent(navController: NavBackStack<HSScreen>)
 }
