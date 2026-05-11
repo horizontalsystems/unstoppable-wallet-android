@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -124,7 +124,7 @@ private fun ManageWalletsScreen(
                     title = TranslatableString.ResString(R.string.ManageCoins_AddToken),
                     icon = R.drawable.ic_add_24,
                     onClick = {
-                        navController.addFromRight(AddTokenFragment)
+                        navController.slideFromRight(AddTokenFragment)
 
                         stat(
                             page = StatPage.CoinManager,

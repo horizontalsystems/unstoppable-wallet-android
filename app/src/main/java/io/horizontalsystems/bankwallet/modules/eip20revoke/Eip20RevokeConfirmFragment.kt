@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.eip20approve.ConfirmTokenSection
@@ -81,7 +81,7 @@ fun Eip20RevokeScreen(navController: NavBackStack<HSScreen>, input: Eip20RevokeC
         initialLoading = uiState.initialLoading,
         onClickBack = navController::removeLastOrNull,
         onClickFeeSettings = {
-            navController.addFromRight(Eip20RevokeTransactionSettingsFragment)
+            navController.slideFromRight(Eip20RevokeTransactionSettingsFragment)
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()

@@ -31,7 +31,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -359,7 +358,7 @@ fun TransactionInfoStatusCell(
         HsIconButton(
             modifier = Modifier.size(20.dp),
             onClick = {
-                navController.addFromBottom(TransactionStatusInfoFragment)
+                navController.slideFromBottom(TransactionStatusInfoFragment)
                 stat(
                     page = StatPage.TransactionInfo,
                     event = StatEvent.Open(StatPage.Info),

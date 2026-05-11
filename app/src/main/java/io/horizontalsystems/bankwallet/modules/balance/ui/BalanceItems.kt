@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
@@ -301,7 +300,7 @@ fun BalanceItems(
                                 when (val receiveAllowedState =
                                     viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
-                                        navController.addFromRight(ReceiveChooseCoinFragment)
+                                        navController.slideFromRight(ReceiveChooseCoinFragment)
 
                                         stat(
                                             page = StatPage.Balance,
@@ -325,7 +324,7 @@ fun BalanceItems(
                             icon = R.drawable.ic_arrow_up_24,
                             title = stringResource(R.string.Balance_Send),
                             onClick = {
-                                navController.addFromRight(SendTokenSelectFragment())
+                                navController.slideFromRight(SendTokenSelectFragment())
 
                                 stat(
                                     page = StatPage.Balance,
@@ -339,7 +338,7 @@ fun BalanceItems(
                                 icon = R.drawable.ic_swap_circle_24,
                                 title = stringResource(R.string.Swap),
                                 onClick = {
-                                    navController.addFromRight(SwapFragment())
+                                    navController.slideFromRight(SwapFragment())
 
                                     stat(
                                         page = StatPage.Balance,
@@ -422,7 +421,7 @@ fun BalanceItems(
                             icon = painterResource(R.drawable.ic_manage_20),
                             contentDescription = stringResource(R.string.ManageCoins_title),
                             onClick = {
-                                navController.addFromRight(ManageWalletsFragment)
+                                navController.slideFromRight(ManageWalletsFragment)
 
                                 stat(
                                     page = StatPage.Balance,

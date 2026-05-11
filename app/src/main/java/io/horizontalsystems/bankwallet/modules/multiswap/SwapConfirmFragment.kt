@@ -34,12 +34,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.CoinValue
@@ -187,7 +187,7 @@ private fun SwapConfirmInternal(
 
     val onClickSettings = if (uiState.hasSettings) {
         {
-            navController.addFromRight(SwapTransactionSettingsFragment)
+            navController.slideFromRight(SwapTransactionSettingsFragment)
         }
     } else {
         null
@@ -195,7 +195,7 @@ private fun SwapConfirmInternal(
 
     val onClickNonceSettings = if (uiState.hasNonceSettings) {
         {
-            navController.addFromRight(SwapTransactionNonceSettingsFragment)
+            navController.slideFromRight(SwapTransactionNonceSettingsFragment)
         }
     } else {
         null

@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromBottom
-import io.horizontalsystems.bankwallet.core.addFromRight
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -94,7 +94,7 @@ fun TransactionsScreen(
                     icon = R.drawable.ic_manage_2_24,
                     showAlertDot = showFilterAlertDot,
                     onClick = {
-                        navController.addFromRight(TransactionsFilterFragment)
+                        navController.slideFromRight(TransactionsFilterFragment)
 
                         stat(
                             page = StatPage.Transactions,
@@ -186,7 +186,7 @@ private fun onTransactionClick(
 
     viewModel.tmpTransactionRecordToShow = transactionItem.record
 
-    navController.addFromBottom(TransactionInfoFragment)
+    navController.slideFromBottom(TransactionInfoFragment)
 
     stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionInfo))
 }

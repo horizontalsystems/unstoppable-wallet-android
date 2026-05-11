@@ -30,7 +30,6 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -123,7 +122,7 @@ private fun MainScreen(
                             },
                             onLongClick = if (destination.selected && destination.mainNavItem == MainNavigation.Balance) {
                                 {
-                                    fragmentNavController.addFromBottom(WalletSwitchDialog())
+                                    fragmentNavController.slideFromBottom(WalletSwitchDialog())
                                     stat(
                                         page = StatPage.Main,
                                         event = StatEvent.Open(StatPage.SwitchWallet)
@@ -186,7 +185,7 @@ private fun MainScreen(
 
     if (uiState.showDonationPage) {
         LaunchedEffect(Unit) {
-            fragmentNavController.addFromBottom(WhyDonateFragment)
+            fragmentNavController.slideFromBottom(WhyDonateFragment)
             viewModel.donationShown()
         }
     }
@@ -205,7 +204,7 @@ private fun MainScreen(
     if (uiState.wcSupportState != null) {
         when (val wcSupportState = uiState.wcSupportState) {
             SupportState.NotSupportedDueToNoActiveAccount -> {
-                fragmentNavController.addFromBottom(WCErrorNoAccountFragment())
+                fragmentNavController.slideFromBottom(WCErrorNoAccountFragment())
             }
 
             is SupportState.NotSupportedDueToNonBackedUpAccount -> {

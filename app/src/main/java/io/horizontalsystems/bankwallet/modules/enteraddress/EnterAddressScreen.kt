@@ -27,7 +27,6 @@ import androidx.navigation3.runtime.NavBackStack
 import com.tonapps.tonkeeper.api.shortAddress
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
-import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -122,7 +121,7 @@ fun EnterAddressScreen(
                         uiState.checkResults,
                     ) {
                         if (uiState.hasPremium){
-                            navController.addFromBottom(SecureSendConfigDialog())
+                            navController.slideFromBottom(SecureSendConfigDialog())
                         } else {
                             navController.slideFromBottom(
                                 DefenseSystemFeatureDialog(DefenseSystemFeatureDialog.Input(PremiumFeature.SecureSendFeature))

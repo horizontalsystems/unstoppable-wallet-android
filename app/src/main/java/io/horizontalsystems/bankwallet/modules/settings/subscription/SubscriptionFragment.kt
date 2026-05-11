@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
@@ -74,7 +74,7 @@ fun SubscriptionScreen(navController: NavBackStack<HSScreen>) {
                     CellUniversal(
                         borderTop = false,
                         onClick = {
-                            navController.addFromBottom(BuySubscriptionHavHostFragment)
+                            navController.slideFromBottom(BuySubscriptionHavHostFragment)
                             stat(
                                 page = StatPage.PurchaseList,
                                 event = StatEvent.OpenPremium(StatPremiumTrigger.GetPremium)

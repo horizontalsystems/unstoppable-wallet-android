@@ -30,9 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromBottom
-import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.paidAction
+import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
@@ -118,7 +118,7 @@ private fun AdvancedSearchScreen(
                     navController = navController,
                     viewModel = viewModel,
                     onFilterByBlockchainsClick = {
-                        navController.addFromBottom(BlockchainsSelectorFragment)
+                        navController.slideFromBottom(BlockchainsSelectorFragment)
                     },
                     showBottomSheet = { type ->
                         bottomSheetType = type
@@ -134,7 +134,7 @@ private fun AdvancedSearchScreen(
                         .padding(horizontal = 16.dp),
                     title = uiState.buttonTitle,
                     onClick = {
-                        navController.addFromRight(MarketFiltersResultsFragment)
+                        navController.slideFromRight(MarketFiltersResultsFragment)
                     },
                     showSpinner = uiState.showSpinner,
                     enabled = uiState.buttonEnabled,
@@ -305,7 +305,7 @@ fun AdvancedSearchContent(
             value = if (uiState.sectors.size == 1 && uiState.sectors[0].item == null) null else uiState.sectors.size.toString(),
             onDropdownClick = {
                 navController.paidAction(AdvancedSearch) {
-                    navController.addFromBottom(SectorsSelectorFragment)
+                    navController.slideFromBottom(SectorsSelectorFragment)
                 }
                 stat(
                     page = StatPage.AdvancedSearch,

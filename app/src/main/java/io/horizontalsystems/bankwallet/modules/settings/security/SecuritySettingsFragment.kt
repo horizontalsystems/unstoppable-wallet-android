@@ -24,12 +24,11 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromBottom
-import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.ensurePinSet
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
@@ -123,7 +122,7 @@ private fun SecurityCenterScreen(
                         right = {
                             CellRightNavigation(subtitle = stringResource(uiState.autoLockIntervalName).hs)
                         },
-                        onClick = { navController.addFromRight(AutoLockIntervalsFragment) }
+                        onClick = { navController.slideFromRight(AutoLockIntervalsFragment) }
                     )
                     HsDivider()
                 }
@@ -187,7 +186,7 @@ private fun SecurityCenterScreen(
                                     confirmChange = {
                                         if (UserSubscriptionManager.isActionAllowed(action)) {
                                             if (action == SecureSend) {
-                                                navController.addFromBottom(SecureSendConfigDialog())
+                                                navController.slideFromBottom(SecureSendConfigDialog())
                                                 false
                                             } else {
                                                 true
@@ -205,7 +204,7 @@ private fun SecurityCenterScreen(
                             },
                             onClick = if (action == SecureSend) {
                                 {
-                                    navController.addFromBottom(SecureSendConfigDialog())
+                                    navController.slideFromBottom(SecureSendConfigDialog())
                                 }
                             } else {
                                 null
@@ -217,14 +216,14 @@ private fun SecurityCenterScreen(
                 BoxBordered(top = true) {
                     val authorizedActionDuressPin = navController.authorizedAction {
                         if (uiState.duressPinEnabled) {
-                            navController.addFromRight(EditDuressPinFragment)
+                            navController.slideFromRight(EditDuressPinFragment)
                         } else {
-                            navController.addFromRight(SetDuressPinIntroFragment)
+                            navController.slideFromRight(SetDuressPinIntroFragment)
                         }
                     }
 
                     val setDuressPinFlow = navController.ensurePinSet(R.string.PinSet_ForDuress) {
-                        navController.addFromRight(SetDuressPinIntroFragment)
+                        navController.slideFromRight(SetDuressPinIntroFragment)
                     }
 
                     CellPrimary(

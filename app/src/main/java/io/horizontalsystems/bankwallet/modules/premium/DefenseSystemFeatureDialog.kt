@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.settings.banners.TextWithDynamicScale
 import io.horizontalsystems.bankwallet.modules.usersubscription.PremiumFeaturesDialog
@@ -233,7 +233,7 @@ private fun DefenseSystemFeatureScreen(
                     .fillMaxWidth()
                     .clickable {
                         navController.removeLastOrNull()
-                        navController.addFromBottom(PremiumFeaturesDialog())
+                        navController.slideFromBottom(PremiumFeaturesDialog())
                     }
                     .padding(horizontal = 32.dp, vertical = 12.dp),
                 text = stringResource(R.string.Premium_OnePurchaseUnlocksAllPremium),
@@ -247,7 +247,7 @@ private fun DefenseSystemFeatureScreen(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     navController.removeLastOrNull()
-                    navController.addFromBottom(SelectPlanDialog())
+                    navController.slideFromBottom(SelectPlanDialog())
                 }
             )
         }

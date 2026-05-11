@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -172,7 +172,7 @@ private fun ShowExtendedKeyScreen(
                                 title = stringResource(R.string.ExtendedKey_Account),
                                 value = viewModel.account.toString(),
                                 infoButtonClick = {
-                                    navController.addFromBottom(KeyAccountInfoFragment)
+                                    navController.slideFromBottom(KeyAccountInfoFragment)
                                 },
                                 onClick = { showAccountSelectorDialog = true }
                             )

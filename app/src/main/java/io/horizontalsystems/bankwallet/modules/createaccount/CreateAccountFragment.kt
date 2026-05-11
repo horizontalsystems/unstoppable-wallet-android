@@ -10,7 +10,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.PassKeyTermsFragment
@@ -56,7 +55,7 @@ fun CreateAccountScreen(navController: NavBackStack<HSScreen>, input: ManageAcco
                     subtitle = stringResource(R.string.CreateNewWallet_Standard_Description).hs,
                     borderTop = false
                 ) {
-                    navController.addFromRight(CreateAccountStandardFragment(input))
+                    navController.slideFromRight(CreateAccountStandardFragment(input))
                 }
 
                 WalletType(

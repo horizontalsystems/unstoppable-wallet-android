@@ -12,7 +12,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsFragment
@@ -92,7 +91,7 @@ private fun SyncErrorScreen(navController: NavBackStack<HSScreen>, wallet: Walle
                                 }
 
                                 SyncErrorModule.BlockchainWrapper.Monero -> {
-                                    navController.addFromBottom(MoneroNetworkFragment)
+                                    navController.slideFromBottom(MoneroNetworkFragment)
                                 }
 
                                 else -> {}

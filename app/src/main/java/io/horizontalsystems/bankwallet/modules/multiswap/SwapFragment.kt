@@ -57,11 +57,10 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromBottom
-import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -256,7 +255,7 @@ fun SwapScreen(
         onEnterAmountPercentage = viewModel::onEnterAmountPercentage,
         onEnterFiatAmount = viewModel::onEnterFiatAmount,
         onClickProvider = {
-            navController.addFromBottom(SwapSelectProviderFragment)
+            navController.slideFromBottom(SwapSelectProviderFragment)
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
@@ -309,7 +308,7 @@ private fun SwapScreenInner(
                 title = TranslatableString.ResString(R.string.SwapHistory_Title),
                 icon = R.drawable.ic_circle_clock_24,
                 onClick = {
-                    navController.addFromRight(SwapHistoryFragment)
+                    navController.slideFromRight(SwapHistoryFragment)
                 }
             )),
         onBack = onClickClose,

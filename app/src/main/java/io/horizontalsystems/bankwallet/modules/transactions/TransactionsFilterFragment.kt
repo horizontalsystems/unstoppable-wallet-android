@@ -23,8 +23,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.badge
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -108,7 +108,7 @@ fun FilterScreen(
                                 ?: stringResource(id = R.string.Transactions_Filter_AllBlockchains),
                             valueColor = if (filterBlockchain != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                             onClick = {
-                                navController.addFromRight(FilterBlockchainFragment)
+                                navController.slideFromRight(FilterBlockchainFragment)
                             }
                         )
                     }
@@ -122,7 +122,7 @@ fun FilterScreen(
                                 ?: stringResource(id = R.string.Transactions_Filter_AllCoins),
                             valueColor = if (filterBlockchain != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                             onClick = {
-                                navController.addFromRight(FilterCoinFragment)
+                                navController.slideFromRight(FilterCoinFragment)
                             }
                         )
                     }

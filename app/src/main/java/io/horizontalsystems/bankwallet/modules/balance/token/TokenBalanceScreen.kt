@@ -31,7 +31,6 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
-import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
@@ -418,7 +417,7 @@ private fun onTransactionClick(
     val transactionItem = tokenBalanceViewModel.getTransactionItem(transactionViewItem) ?: return
     transactionsViewModel.tmpTransactionRecordToShow = transactionItem.record
 
-    navController.addFromBottom(TransactionInfoFragment)
+    navController.slideFromBottom(TransactionInfoFragment)
 
     stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.TransactionInfo))
 }

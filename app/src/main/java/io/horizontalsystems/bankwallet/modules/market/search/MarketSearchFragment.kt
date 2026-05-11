@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -133,7 +132,7 @@ fun MarketSearchScreen(
                             isSearchActive = false
                             delay(500)
                         }
-                        navController.addFromRight(MarketFiltersFragment)
+                        navController.slideFromRight(MarketFiltersFragment)
 
                         stat(
                             page = StatPage.Markets,

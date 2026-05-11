@@ -17,7 +17,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
-import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -97,10 +96,10 @@ private fun SendEvmConfirmationScreen(
         initialLoading = uiState.initialLoading,
         onClickBack = { navController.removeLastOrNull() },
         onClickFeeSettings = {
-            navController.addFromBottom(SendEvmSettingsFragment)
+            navController.slideFromBottom(SendEvmSettingsFragment)
         },
         onClickNonceSettings = {
-            navController.addFromBottom(SendEvmNonceSettingsFragment)
+            navController.slideFromBottom(SendEvmNonceSettingsFragment)
         },
         buttonsSlot = {
             val coroutineScope = rememberCoroutineScope()

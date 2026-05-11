@@ -12,8 +12,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.NavigationType
-import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -56,7 +56,7 @@ fun BalanceNoAccount(navController: NavBackStack<HSScreen>) {
                     )
                 },
                 onWatchWalletClick = {
-                    navController.addFromRight(WatchAddressFragment())
+                    navController.slideFromRight(WatchAddressFragment())
 
                     stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.WatchWallet))
                 }

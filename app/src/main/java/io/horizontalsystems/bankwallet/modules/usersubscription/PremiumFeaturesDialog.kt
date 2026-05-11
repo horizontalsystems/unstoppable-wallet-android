@@ -38,7 +38,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
@@ -231,7 +230,7 @@ fun PremiumFeaturesScreen(
                                 isPlanSelectBottomSheetVisible = true
                             } ?: run {
                                 onClose.invoke()
-                                navController.addFromBottom(SelectPlanDialog())
+                                navController.slideFromBottom(SelectPlanDialog())
                             }
                         }
                     )

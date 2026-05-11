@@ -25,9 +25,9 @@ import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.NavigationType
-import io.horizontalsystems.bankwallet.core.addFromRight
 import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -76,7 +76,7 @@ data object BackupManagerFragment : HSScreen() {
                 )
             },
             onCreateBackup = navController.authorizedAction {
-                navController.addFromRight(BackupLocalFragment())
+                navController.slideFromRight(BackupLocalFragment())
 
                 stat(
                     page = StatPage.BackupManager,

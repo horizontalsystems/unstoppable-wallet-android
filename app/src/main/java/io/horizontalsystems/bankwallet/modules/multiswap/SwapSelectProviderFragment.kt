@@ -30,7 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.addFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -87,7 +87,7 @@ fun SwapSelectProviderScreen(navController: NavBackStack<HSScreen>) {
             viewModel.setSortType(it)
         },
         onBadgeClick = {
-            navController.addFromBottom(RiskLevelInfoDialog())
+            navController.slideFromBottom(RiskLevelInfoDialog())
         }
     ) {
         swapViewModel.onSelectQuote(it)

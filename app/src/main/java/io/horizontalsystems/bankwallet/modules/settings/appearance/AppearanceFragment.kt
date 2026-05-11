@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromRight
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -127,7 +127,7 @@ fun AppearanceScreen(navController: NavBackStack<HSScreen>) {
                             R.string.Settings_Language,
                             value = uiState.currentLanguage,
                             onClick = {
-                                navController.addFromRight(LanguageSettingsFragment)
+                                navController.slideFromRight(LanguageSettingsFragment)
 
                                 stat(
                                     page = StatPage.Settings,
@@ -141,7 +141,7 @@ fun AppearanceScreen(navController: NavBackStack<HSScreen>) {
                             R.string.Settings_BaseCurrency,
                             value = uiState.baseCurrencyCode,
                             onClick = {
-                                navController.addFromRight(BaseCurrencySettingsFragment)
+                                navController.slideFromRight(BaseCurrencySettingsFragment)
 
                                 stat(
                                     page = StatPage.Settings,

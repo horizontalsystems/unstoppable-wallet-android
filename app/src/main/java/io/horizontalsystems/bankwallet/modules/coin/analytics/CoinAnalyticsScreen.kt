@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.addFromBottom
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -414,7 +413,7 @@ private fun handleActionClick(
         }
 
         CoinAnalyticsModule.ActionType.OpenTvl -> {
-            navController.addFromBottom(TvlFragment)
+            navController.slideFromBottom(TvlFragment)
         }
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {
