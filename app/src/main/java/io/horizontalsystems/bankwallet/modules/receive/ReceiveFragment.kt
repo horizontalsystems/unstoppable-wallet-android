@@ -20,7 +20,6 @@ import io.horizontalsystems.bankwallet.modules.receive.monero.ReceiveMoneroScree
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressesParams
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveAddressViewModel
-import io.horizontalsystems.bankwallet.serializers.KClassSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -78,7 +77,7 @@ data class ReceiveFragment(val input: Input) : HSScreen() {
     @Serializable
     data class Input(
         val wallet: Wallet,
-        @Serializable(with = KClassSerializer::class) val receiveEntryPointDestId: KClass<out HSScreen>? = null,
+        val receiveEntryPointDestId: KClass<out HSScreen>? = null,
         val isTransparentAddress: Boolean = false
     )
 }

@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.send.tron.SendTronConfirmationScr
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
-import io.horizontalsystems.bankwallet.serializers.KClassSerializer
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
@@ -106,5 +105,5 @@ data class SendConfirmationFragment(val input: Input) : HSScreen() {
     }
 
     @Serializable
-    data class Input(val type: Type, @Serializable(with = KClassSerializer::class) val sendEntryPointDestId: KClass<out HSScreen>)
+    data class Input(val type: Type, val sendEntryPointDestId: KClass<out HSScreen>)
 }

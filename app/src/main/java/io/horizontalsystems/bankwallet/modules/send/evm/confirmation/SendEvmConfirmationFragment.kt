@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceSettingsFragment
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
-import io.horizontalsystems.bankwallet.serializers.KClassSerializer
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.ethereumkit.models.Address
@@ -55,7 +54,7 @@ data class SendEvmConfirmationFragment(val input: Input) : HSScreen() {
         val transactionDataParcelable: SendEvmModule.TransactionDataParcelable,
         val additionalInfo: SendEvmData.AdditionalInfo?,
         val blockchainType: BlockchainType,
-        @Serializable(with = KClassSerializer::class) val sendEntryPointDestId: KClass<out HSScreen>
+        val sendEntryPointDestId: KClass<out HSScreen>
     ) {
         val transactionData: TransactionData
             get() = TransactionData(
