@@ -19,10 +19,12 @@ import kotlinx.serialization.Serializable
 import java.util.UUID
 
 fun NavBackStack<HSScreen>.slideFromRight(screen: HSScreen) {
+    screen.navType = NavigationType.SlideFromRight
     add(screen)
 }
 
 fun NavBackStack<HSScreen>.slideFromBottom(screen: HSScreen) {
+    screen.navType = NavigationType.SlideFromBottom
     add(screen)
 }
 
