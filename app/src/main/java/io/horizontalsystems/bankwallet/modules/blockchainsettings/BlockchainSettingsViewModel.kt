@@ -58,7 +58,17 @@ class BlockchainSettingsViewModel(
                         blockchainItem = item
                     )
                 }
-            btcLikeChains = (btcItems + moneroItems).sortedBy { it.blockchainItem.blockchain.type.order }
+            val zanoItems = blockchainItems
+                .filterIsInstance<BlockchainSettingsModule.BlockchainItem.Zano>()
+                .map { item ->
+                    BlockchainSettingsModule.BlockchainViewItem(
+                        title = item.blockchain.name,
+                        subtitle = item.node.name,
+                        imageUrl = item.blockchain.type.imageUrl,
+                        blockchainItem = item
+                    )
+                }
+            btcLikeChains = (btcItems + moneroItems + zanoItems).sortedBy { it.blockchainItem.blockchain.type.order }
 
             otherChains = blockchainItems
                 .filterNot { it is BlockchainSettingsModule.BlockchainItem.Btc }

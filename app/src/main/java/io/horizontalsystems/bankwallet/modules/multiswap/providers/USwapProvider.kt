@@ -68,6 +68,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
         "dash" to BlockchainType.Dash,
         "ecash" to BlockchainType.ECash,
         "monero" to BlockchainType.Monero,
+        "zano" to BlockchainType.Zano,
         "100" to BlockchainType.Gnosis,
 //        "" to BlockchainType.Fantom,
 //        "" to BlockchainType.ZkSync,
@@ -204,6 +205,18 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
 
                 BlockchainType.Monero -> {
                     App.marketKit.token(TokenQuery(blockchainType, TokenType.Native))?.let {
+                        assetsMap[it] = token.identifier
+                    }
+                }
+
+                BlockchainType.Zano -> {
+                    val tokenType = if (!token.address.isNullOrBlank()) {
+                        TokenType.ZanoAsset(token.address)
+                    } else {
+                        TokenType.Native
+                    }
+
+                    App.marketKit.token(TokenQuery(blockchainType, tokenType))?.let {
                         assetsMap[it] = token.identifier
                     }
                 }
@@ -512,6 +525,27 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                 }
 
                 return SendTransactionData.Monero(
+                    address = bestRoute.inboundAddress,
+                    amount = amountIn,
+                    memo = bestRoute.txExtraAttribute?.get("memo")
+                )
+            }
+
+            BlockchainType.Zano -> {
+                val simpleZanoTransactionProviders = listOf(
+                    UProvider.Near,
+                    UProvider.QuickEx,
+                    UProvider.LetsExchange,
+                    UProvider.StealthEx,
+                    UProvider.Exolix,
+                    UProvider.Swapuz
+                )
+
+                if (!simpleZanoTransactionProviders.contains(provider)) {
+                    throw IllegalStateException("Only simple ZANO tx providers are supported")
+                }
+
+                return SendTransactionData.Zano(
                     address = bestRoute.inboundAddress,
                     amount = amountIn,
                     memo = bestRoute.txExtraAttribute?.get("memo")

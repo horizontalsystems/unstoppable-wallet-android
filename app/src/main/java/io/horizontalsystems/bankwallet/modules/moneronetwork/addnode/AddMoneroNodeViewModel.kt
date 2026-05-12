@@ -1,11 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.moneronetwork.addnode
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -17,15 +14,18 @@ import java.net.URI
 
 class AddMoneroNodeViewModel(
     private val nodeManager: MoneroNodeManager
-) : ViewModel() {
+) : ViewModelUiState<AddMoneroNodeViewState>() {
 
     private var url = ""
     private var username: String? = null
     private var password: String? = null
     private var urlCaution: Caution? = null
+    private var closeScreen = false
 
-    var viewState by mutableStateOf(AddMoneroNodeViewState(null))
-        private set
+    override fun createState() = AddMoneroNodeViewState(
+        urlCaution = urlCaution,
+        closeScreen = closeScreen,
+    )
 
     fun onEnterUsername(username: String) {
         this.username = username.trim()
@@ -38,11 +38,13 @@ class AddMoneroNodeViewModel(
     fun onEnterRpcUrl(enteredUrl: String) {
         urlCaution = null
         url = enteredUrl.trim()
-        syncState()
+        emitState()
     }
 
     fun onScreenClose() {
-        viewState = AddMoneroNodeViewState()
+        urlCaution = null
+        closeScreen = false
+        emitState()
     }
 
     fun onAddClick() {
@@ -50,29 +52,26 @@ class AddMoneroNodeViewModel(
 
         try {
             sourceUri = URI(url)
-            val hasRequiredProtocol = listOf("https").contains(sourceUri.scheme)
-            if (!hasRequiredProtocol) {
-                throw MalformedURLException()
-            }
-        } catch (_: Throwable) {
+            val scheme = sourceUri.scheme?.lowercase()
+            val hasRequiredProtocol = scheme == "https"
+            val hasHost = !sourceUri.host.isNullOrBlank()
+            if (!hasRequiredProtocol || !hasHost) throw MalformedURLException()
+        } catch (_: Exception) {
             urlCaution = Caution(Translator.getString(R.string.AddMoneroNode_Error_InvalidUrl), Caution.Type.Error)
-            syncState()
+            emitState()
             return
         }
 
         if (nodeManager.allNodes.any { it.host == url }) {
             urlCaution = Caution(Translator.getString(R.string.AddMoneroNode_Warning_UrlExists), Caution.Type.Warning)
-            syncState()
+            emitState()
             return
         }
 
         nodeManager.addMoneroNode(url, username, password, true)
 
-        viewState = AddMoneroNodeViewState(null, true)
-    }
-
-    private fun syncState() {
-        viewState = AddMoneroNodeViewState(urlCaution)
+        closeScreen = true
+        emitState()
     }
 }
 

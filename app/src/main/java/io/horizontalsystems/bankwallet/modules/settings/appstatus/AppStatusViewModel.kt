@@ -18,6 +18,8 @@ import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
+import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
+import io.horizontalsystems.bankwallet.core.managers.statusInfo
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule.BlockContent
 import io.horizontalsystems.core.ISystemInfoManager
@@ -41,6 +43,7 @@ class AppStatusViewModel(
     private val stellarKitManager: StellarKitManager,
     private val solanaKitManager: SolanaKitManager,
     private val btcBlockchainManager: BtcBlockchainManager,
+    private val zanoKitManager: ZanoKitManager,
 ) : ViewModelUiState<AppStatusModule.UiState>() {
 
     private var blockViewItems: List<AppStatusModule.BlockData> = emptyList()
@@ -205,6 +208,10 @@ class AppStatusViewModel(
                 }
             }
 
+        zanoKitManager.statusInfo?.let { statusInfo ->
+            blockchainStatus["Zano"] = statusInfo
+        }
+
         tronKitManager.statusInfo?.let { statusInfo ->
             blockchainStatus["Tron"] = statusInfo
         }
@@ -280,6 +287,12 @@ class AppStatusViewModel(
                     blocks.add(block)
                 }
             }
+
+        zanoKitManager.statusInfo?.let { statusInfo ->
+            val title = if (blocks.isEmpty()) "Blockchain Status" else null
+            val block = getBlockchainInfoBlock(title, "Zano", statusInfo)
+            blocks.add(block)
+        }
 
         tronKitManager.statusInfo?.let { statusInfo ->
             val title = if (blocks.isEmpty()) "Blockchain Status" else null

@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.MoneroAdapter
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -20,6 +23,7 @@ class SendTransactionServiceMonero(
 
     private var sendData: SendTransactionData.Monero? = null
     private var fee: BigDecimal? = null
+    private var cautions: List<CautionViewItem> = emptyList()
 
     override fun start(coroutineScope: CoroutineScope) = Unit
 
@@ -28,6 +32,20 @@ class SendTransactionServiceMonero(
 
         sendData = data
         fee = adapter.estimateFee(data.amount, data.address, data.memo)
+
+        val feeValue = fee ?: BigDecimal.ZERO
+        val available = adapter.balanceData.available
+        cautions = if (data.amount + feeValue > available) {
+            listOf(
+                CautionViewItem(
+                    title = Translator.getString(R.string.EthereumTransaction_Error_InsufficientBalance_Title),
+                    text = Translator.getString(R.string.Swap_ErrorInsufficientBalance),
+                    type = CautionViewItem.Type.Error
+                )
+            )
+        } else {
+            emptyList()
+        }
 
         emitState()
     }
@@ -43,8 +61,8 @@ class SendTransactionServiceMonero(
         networkFee = fee?.let {
             getAmountData(CoinValue(feeToken, it))
         },
-        cautions = listOf(),
-        sendable = sendData != null && fee != null,
+        cautions = cautions,
+        sendable = sendData != null && fee != null && cautions.none { it.type == CautionViewItem.Type.Error },
         loading = sendData == null || fee == null,
         fields = listOf(),
     )

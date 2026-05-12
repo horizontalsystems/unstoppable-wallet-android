@@ -14,6 +14,7 @@ import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.monerokit.MoneroKit
+import io.horizontalsystems.zanokit.ZanoKit
 import io.horizontalsystems.tonkit.FriendlyAddress
 
 interface EnterAddressValidator {
@@ -67,6 +68,16 @@ class MoneroAddressValidator() : EnterAddressValidator {
     }
 }
 
+class ZanoAddressValidator : EnterAddressValidator {
+    override suspend fun validate(address: Address) {
+        if (!ZanoKit.isValidAddress(address.hex)) {
+            throw AddressValidationError.InvalidAddress(
+                Translator.getString(R.string.Send_Address_Error_InvalidAddress)
+            )
+        }
+    }
+}
+
 class TronAddressValidator(
     private val token: Token,
     private val adapterManager: IAdapterManager
@@ -108,4 +119,5 @@ sealed class AddressValidationError : Throwable() {
         override val message = "Send adapter is not found"
     }
     class SendToSelfForbidden(override val message: String) : AddressValidationError()
+    class InvalidAddress(override val message: String) : AddressValidationError()
 }

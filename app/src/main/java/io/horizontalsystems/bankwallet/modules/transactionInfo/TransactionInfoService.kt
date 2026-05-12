@@ -13,6 +13,8 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zano.ZanoIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zano.ZanoOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ApproveTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.EvmIncomingTransactionRecord
@@ -165,6 +167,12 @@ class TransactionInfoService(
                     listOf(tx.value.coinUid)
                 }
                 is MoneroOutgoingTransactionRecord -> {
+                    listOf(tx.fee?.coinUid, tx.value.coinUid)
+                }
+                is ZanoIncomingTransactionRecord -> {
+                    listOf(tx.value.coinUid)
+                }
+                is ZanoOutgoingTransactionRecord -> {
                     listOf(tx.fee?.coinUid, tx.value.coinUid)
                 }
                 else -> emptyList()

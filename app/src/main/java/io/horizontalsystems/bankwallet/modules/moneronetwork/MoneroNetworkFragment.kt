@@ -190,16 +190,16 @@ private fun MoneroNetworkScreen(
                     }
 
                     item {
-                        CellUniversalLawrenceSection(viewModel.viewState.defaultItems) { item ->
+                        CellUniversalLawrenceSection(viewModel.uiState.defaultItems) { item ->
                             BlockchainSettingCell(item.name, item.url, item.selected, null) {
                                 showTrustedSettings(item.node)
                             }
                         }
                     }
 
-                    if (viewModel.viewState.customItems.isNotEmpty()) {
+                    if (viewModel.uiState.customItems.isNotEmpty()) {
                         customNodeListSection(
-                            viewModel.viewState.customItems,
+                            viewModel.uiState.customItems,
                             revealedCardId,
                             onClick = { node ->
                                 showTrustedSettings(node)

@@ -22,6 +22,7 @@ object AppStatusModule {
                 App.stellarKitManager,
                 App.solanaKitManager,
                 App.btcBlockchainManager,
+                App.zanoKitManager,
             )
             return viewModel as T
         }

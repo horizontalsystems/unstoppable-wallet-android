@@ -10,6 +10,9 @@ import io.horizontalsystems.bankwallet.core.adapters.ECashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.LitecoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
 import io.horizontalsystems.bankwallet.core.adapters.toMoneroSeed
+import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.zanokit.ZanoKit
+import io.horizontalsystems.zanokit.ZanoWallet
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.core.isEvm
@@ -22,8 +25,10 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.monerokit.MoneroKit
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.util.concurrent.ConcurrentHashMap
 
@@ -66,6 +71,7 @@ object SwapHelper {
             || blockchainType == BlockchainType.Stellar
             || blockchainType == BlockchainType.Zcash
             || blockchainType == BlockchainType.Monero
+            || blockchainType == BlockchainType.Zano
         ) {
             App.adapterManager.getAdapterForToken<IReceiveAdapter>(token)?.let {
                 return listOf(it.receiveAddress)
@@ -141,15 +147,25 @@ object SwapHelper {
                 }
 
                 BlockchainType.Monero -> {
-                    MoneroKit.getAddress(account.type.toMoneroSeed(), 0, 1)
+                    withContext(Dispatchers.IO) {
+                        MoneroKit.getAddress(account.type.toMoneroSeed(), 0, 1)
+                    }
+                }
+
+                BlockchainType.Zano -> {
+                    val accountType = account.type as? AccountType.Mnemonic
+                        ?: throw SwapError.NoDestinationAddress()
+                    withContext(Dispatchers.IO) {
+                        ZanoKit.address(ZanoWallet.Bip39(accountType.words, accountType.passphrase, 0))
+                            ?: throw SwapError.NoDestinationAddress()
+                    }
                 }
 
                 BlockchainType.Zcash -> {
                     zcashAddressCache[account.id] ?: zcashAddressMutex.withLock {
-                        zcashAddressCache[account.id]
-                            ?: ZcashAdapter.getTransparentAddress(account).also {
-                                zcashAddressCache[account.id] = it
-                            }
+                        zcashAddressCache[account.id] ?: withContext(Dispatchers.IO) {
+                            ZcashAdapter.getTransparentAddress(account)
+                        }.also { zcashAddressCache[account.id] = it }
                     }
                 }
 

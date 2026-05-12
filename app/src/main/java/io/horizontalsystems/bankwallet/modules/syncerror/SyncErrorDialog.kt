@@ -94,6 +94,10 @@ private fun SyncErrorScreen(navController: NavBackStack<HSScreen>, wallet: Walle
                                     navController.slideFromBottom(MoneroNetworkFragment)
                                 }
 
+                                SyncErrorModule.BlockchainWrapper.Zano -> {
+                                    navController.slideFromBottom(R.id.zanoNetworkFragment)
+                                }
+
                                 else -> {}
                             }
                         }

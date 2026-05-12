@@ -51,6 +51,7 @@ import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_73_74
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_74_75
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_75_76
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_76_77
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_77_78
 import io.horizontalsystems.bankwallet.entities.ActiveAccount
 import io.horizontalsystems.bankwallet.entities.BlockchainSettingRecord
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
@@ -60,6 +61,7 @@ import io.horizontalsystems.bankwallet.entities.EvmMethodLabel
 import io.horizontalsystems.bankwallet.entities.EvmSyncSourceRecord
 import io.horizontalsystems.bankwallet.entities.LogEntry
 import io.horizontalsystems.bankwallet.entities.MoneroNodeRecord
+import io.horizontalsystems.bankwallet.entities.ZanoNodeRecord
 import io.horizontalsystems.bankwallet.entities.RecentAddress
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
 import io.horizontalsystems.bankwallet.entities.ScannedTransaction
@@ -83,7 +85,7 @@ import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSe
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
 
-@Database(version = 77, exportSchema = false, entities = [
+@Database(version = 78, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -110,6 +112,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConne
     SpamScanState::class,
     RecentAddress::class,
     MoneroNodeRecord::class,
+    ZanoNodeRecord::class,
     SwapProviderAssetRecord::class,
     SwapProviderChainRecord::class,
     SwapRecord::class,
@@ -139,6 +142,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun scannedTransactionDao(): ScannedTransactionDao
     abstract fun recentAddressDao(): RecentAddressDao
     abstract fun moneroNodeDao(): MoneroNodeDao
+    abstract fun zanoNodeDao(): ZanoNodeDao
     abstract fun swapProviderAssetDao(): SwapProviderAssetDao
     abstract fun swapProviderChainDao(): SwapProviderChainDao
     abstract fun swapRecordDao(): SwapRecordDao
@@ -205,6 +209,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_74_75,
                     Migration_75_76,
                     Migration_76_77,
+                    Migration_77_78,
                     )
                     .build()
         }

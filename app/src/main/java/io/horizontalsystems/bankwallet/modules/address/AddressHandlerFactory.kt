@@ -83,6 +83,10 @@ class AddressHandlerFactory(
                 addressHandlers.add(AddressHandlerMonero())
             }
 
+            BlockchainType.Zano -> {
+                addressHandlers.add(AddressHandlerZano())
+            }
+
             is BlockchainType.Unsupported -> {
             }
         }
