@@ -68,6 +68,17 @@ enum class UProvider(
         RiskLevel.FLEXIBLE,
         false
     ),
+    Cce(
+        "CCE",
+        "CCE Cash",
+        R.drawable.swap_provider_cce,
+        SwapProviderType.CEX,
+        true,
+        false,
+        true,
+        RiskLevel.FLEXIBLE,
+        false
+    ),
     Swapuz(
         "SWAPUZ",
         "Swapuz",
