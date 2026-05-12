@@ -35,7 +35,7 @@ object SendZanoModule {
             val feeService = SendZanoFeeService(adapter)
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
             val feeToken = App.coinManager.getToken(TokenQuery(wallet.token.blockchainType, TokenType.Native))
-                ?: throw IllegalArgumentException()
+                ?: throw IllegalArgumentException("Missing token for fee: ${TokenQuery(wallet.token.blockchainType, TokenType.Native)}")
 
             return SendZanoViewModel(
                 wallet,
