@@ -1704,8 +1704,8 @@
     <string name="Hud_Text_Connected">Connecté</string>
     <string name="BirthdayDatePicker_Title">Sélectionnez la date</string>
     <string name="BirthdayDatePicker_Description">Choisissez une date approximative de création de portefeuille. \nLa hauteur du bloc sera calculée automatiquement.</string>
-    <string name="BackupManager_RestoreBackupDescription">Restaurez votre portefeuille et les données de l'application à partir d'un fichier de sauvegarde.</string>
-    <string name="BackupManager_CreateBackupDescription">Créez un fichier de sauvegarde de vos portefeuilles et données d'application.</string>
+    <string name="BackupManager_RestoreBackupDescription">Restaurez votre portefeuille et les données de l\'application à partir d\'un fichier de sauvegarde.</string>
+    <string name="BackupManager_CreateBackupDescription">Créez un fichier de sauvegarde de vos portefeuilles et données d\'application.</string>
     <string name="BackupManager_SelectItemsDescription">Choisissez ce que vous souhaitez inclure dans votre sauvegarde. Vous pouvez sauvegarder tous les éléments ou seulement certains éléments.</string>
     <string name="BackupManager_RestoreItemsDescription">Choisissez ce que vous souhaitez restaurer. Vous pouvez restaurer tout ou uniquement certains éléments.</string>
     <string name="BackupManager_CountSavedAddresses">%d adresses enregistrées</string>
@@ -1714,12 +1714,12 @@
     <string name="BackupManager_CountWallets">%d portefeuilles</string>
     <string name="AddZanoNode_AddNode">Ajouter un nœud</string>
     <string name="AddZanoNode_NodeUrl">URL du nœud</string>
-    <string name="ZanoNodeSettings_Description">Choisissez le nœud que l'application Unstoppable doit utiliser pour synchroniser le(s) portefeuille(s).</string>
+    <string name="ZanoNodeSettings_Description">Choisissez le nœud que l\'application Unstoppable doit utiliser pour synchroniser le(s) portefeuille(s).</string>
     <string name="LocalBackup_ProtectBackup">Protéger la sauvegarde</string>
     <string name="LocalBackup_ProtectBackupDescription">Créez un mot de passe pour protéger votre fichier de sauvegarde.</string>
     <string name="LocalBackup_BackupName">Nom de la sauvegarde</string>
     <string name="LocalBackup_AddPassword">Ajouter un mot de passe</string>
     <string name="LocalBackup_ConfirmPassword">Confirmer le mot de passe</string>
     <string name="AddZanoNode_Warning_UrlExists">Un nœud avec cette URL existe déjà</string>
-    <string name="AddZanoNode_Error_InvalidUrl">L'URL saisie est invalide. Les URL valides doivent avoir l'un des schémas suivants : http, https</string>
+    <string name="AddZanoNode_Error_InvalidUrl">L\'URL saisie est invalide. Les URL valides doivent avoir l\'un des schémas suivants : http, https</string>
 </resources>

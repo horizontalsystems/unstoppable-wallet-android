@@ -1310,6 +1310,6 @@
     <string name="LocalBackup_BackupName">Yedek Adı</string>
     <string name="LocalBackup_AddPassword">Parola Ekle</string>
     <string name="LocalBackup_ConfirmPassword">Parolayı Onayla</string>
-    <string name="AddZanoNode_Warning_UrlExists">Bu URL'ye sahip bir düğüm zaten var</string>
-    <string name="AddZanoNode_Error_InvalidUrl">Girilen URL geçersizdir. Geçerli URL'ler aşağıdaki şemalardan birine sahip olmalıdır: http, https</string>
+    <string name="AddZanoNode_Warning_UrlExists">Bu URL\'ye sahip bir düğüm zaten var</string>
+    <string name="AddZanoNode_Error_InvalidUrl">Girilen URL geçersizdir. Geçerli URL\'ler aşağıdaki şemalardan birine sahip olmalıdır: http, https</string>
 </resources>
