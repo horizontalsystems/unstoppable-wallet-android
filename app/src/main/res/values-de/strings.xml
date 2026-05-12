@@ -1727,4 +1727,6 @@
     <string name="LocalBackup_BackupName">Sicherungsname</string>
     <string name="LocalBackup_AddPassword">Passwort hinzufügen</string>
     <string name="LocalBackup_ConfirmPassword">Passwort bestätigen</string>
+    <string name="AddZanoNode_Warning_UrlExists">Node mit dieser URL existiert bereits</string>
+    <string name="AddZanoNode_Error_InvalidUrl">Eingegebene URL ist ungültig. Gültige URLs müssen eines der folgenden Schemas haben: http, https</string>
 </resources>

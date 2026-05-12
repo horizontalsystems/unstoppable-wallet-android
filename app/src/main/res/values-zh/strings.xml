@@ -1717,4 +1717,6 @@
     <string name="LocalBackup_BackupName">备份名称</string>
     <string name="LocalBackup_AddPassword">添加密码</string>
     <string name="LocalBackup_ConfirmPassword">确认密码</string>
+    <string name="AddZanoNode_Warning_UrlExists">此URL的节点已存在</string>
+    <string name="AddZanoNode_Error_InvalidUrl">输入的URL无效。有效的URL必须具有以下方案之一：http, https</string>
 </resources>

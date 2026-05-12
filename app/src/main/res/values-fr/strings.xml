@@ -1720,4 +1720,6 @@
     <string name="LocalBackup_BackupName">Nom de la sauvegarde</string>
     <string name="LocalBackup_AddPassword">Ajouter un mot de passe</string>
     <string name="LocalBackup_ConfirmPassword">Confirmer le mot de passe</string>
+    <string name="AddZanoNode_Warning_UrlExists">Un nœud avec cette URL existe déjà</string>
+    <string name="AddZanoNode_Error_InvalidUrl">L'URL saisie est invalide. Les URL valides doivent avoir l'un des schémas suivants : http, https</string>
 </resources>
