@@ -71,7 +71,9 @@ class MoneroAddressValidator() : EnterAddressValidator {
 class ZanoAddressValidator : EnterAddressValidator {
     override suspend fun validate(address: Address) {
         if (!ZanoKit.isValidAddress(address.hex)) {
-            throw Exception("Invalid Zano address")
+            throw AddressValidationError.InvalidAddress(
+                Translator.getString(R.string.Send_Address_Error_InvalidAddress)
+            )
         }
     }
 }
@@ -117,4 +119,5 @@ sealed class AddressValidationError : Throwable() {
         override val message = "Send adapter is not found"
     }
     class SendToSelfForbidden(override val message: String) : AddressValidationError()
+    class InvalidAddress(override val message: String) : AddressValidationError()
 }
