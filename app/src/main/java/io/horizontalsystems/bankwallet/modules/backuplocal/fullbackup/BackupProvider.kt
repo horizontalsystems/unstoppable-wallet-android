@@ -445,19 +445,24 @@ class BackupProvider(
         )
     }
 
-    fun fullBackupItems() =
-        fullBackupItems(
+    fun fullBackupItems(): BackupItems {
+        val customRpcsTotal = evmSyncSourceStorage.getAll().size +
+            moneroNodeManager.customNodes.size +
+            zanoNodeManager.customNodes.size
+        return fullBackupItems(
             accounts = accountManager.accounts,
             watchlist = marketFavoritesManager.getAll().map { it.coinUid },
             contacts = contactsRepository.contacts,
-            customRpcsCount = evmSyncSourceStorage.getAll().ifEmpty { null }?.size
+            customRpcsCount = customRpcsTotal.takeIf { it > 0 }
         )
+    }
 
     fun fullBackupItems(decryptedFullBackup: DecryptedFullBackup): BackupItems {
         val customRpcsCount = if (BackupSection.CustomRpc in decryptedFullBackup.sections) {
             val evmCount = decryptedFullBackup.settings.evmSyncSources.custom.size
             val moneroCount = decryptedFullBackup.settings.moneroNodes?.custom?.size ?: 0
-            (evmCount + moneroCount).takeIf { it > 0 }
+            val zanoCount = decryptedFullBackup.settings.zanoNodes?.custom?.size ?: 0
+            (evmCount + moneroCount + zanoCount).takeIf { it > 0 }
         } else {
             null
         }
@@ -535,14 +540,22 @@ class BackupProvider(
         val solanaSyncSource = SolanaSyncSource(BlockchainType.Solana.uid, solanaRpcSourceManager.rpcSource.name)
 
         val selectedMoneroNode = MoneroNodeBackup(BlockchainType.Monero.uid, moneroNodeManager.currentNode.host, null, null, false)
-        val customMoneroNodes = moneroNodeStorage.getAll().map { nodeRecord ->
-            val password = nodeRecord.password?.let { encrypted(it, passphrase) }
-            MoneroNodeBackup(BlockchainType.Monero.uid, nodeRecord.url, nodeRecord.username, password, false)
+        val customMoneroNodes = if (BackupSection.CustomRpc in sections) {
+            moneroNodeManager.customNodes.map { node ->
+                val password = node.password?.let { encrypted(it, passphrase) }
+                MoneroNodeBackup(BlockchainType.Monero.uid, node.host, node.username, password, node.trusted)
+            }
+        } else {
+            listOf()
         }
         val moneroNodes = MoneroNodes(listOf(selectedMoneroNode), customMoneroNodes)
 
         val selectedZanoNode = ZanoNodeBackup(BlockchainType.Zano.uid, zanoNodeManager.currentNode.host)
-        val customZanoNodes = zanoNodeStorage.getAll().map { ZanoNodeBackup(BlockchainType.Zano.uid, it.url) }
+        val customZanoNodes = if (BackupSection.CustomRpc in sections) {
+            zanoNodeManager.customNodes.map { ZanoNodeBackup(BlockchainType.Zano.uid, it.host) }
+        } else {
+            listOf()
+        }
         val zanoNodes = ZanoNodes(listOf(selectedZanoNode), customZanoNodes)
 
         val chartIndicators = chartIndicators()
