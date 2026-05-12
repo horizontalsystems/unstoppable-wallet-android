@@ -359,10 +359,8 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Montant transparent</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Vous avez un solde ZEC maintenu dans une adresse transparente. Pour l\'utiliser dans Unstoppable, il doit être protégé pour une vie privée totale.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Bouclier</string>
-    <string name="Balance_Zcash_Unified">Unifié</string>
-    <string name="Balance_Zcash_UnifiedDescription">Utiliser pour les transferts personnels et privés entre portefeuilles.</string>
     <string name="Balance_Zcash_Transparent">Transparence</string>
-    <string name="Balance_Zcash_TransparentDescription">Utilisé pour recevoir des échanges ou des services qui ne prennent pas en charge les adresses unifiées.</string>
+    <string name="Balance_Zcash_TransparentDescription">Utilisez pour recevoir des bourses ou des services qui ne supportent pas les adresses blindées.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Envoyer</string>
     <!--Send-->
@@ -984,15 +982,15 @@
     <!-- Backup Manager -->
     <string name="BackupManager_Title">Gestionnaire de sauvegarde</string>
     <string name="BackupManager_RestoreBackup">Restaurer la sauvegarde</string>
-    <string name="BackupManager_CreateBackup">Créer une nouvelle sauvegarde</string>
+    <string name="BackupManager_CreateBackup">Créer une Sauvegarde</string>
     <string name="BackupManager_BаckupFile">Fichier de sauvegarde</string>
-    <string name="BackupManager_Wallets">WALLETS</string>
-    <string name="BackupManager_Other">AUTRE</string>
+    <string name="BackupManager_Wallets">Portefeuilles</string>
+    <string name="BackupManager_Other">Données</string>
     <string name="BackupManager_Restore">Restaurer</string>
     <string name="BackupManager_BackupFileContents">Liste des contenus dans le fichier de sauvegarde.</string>
-    <string name="BackupManager_MergeTitle">Avertissement</string>
+    <string name="BackupManager_MergeTitle">Attention!</string>
     <string name="BackupManager_MergeButton">Remplacer</string>
-    <string name="BackupManager_MergeDescription">Cette action écrasera vos contacts de paiement locaux.</string>
+    <string name="BackupManager_MergeDescription">Les contacts sauvegardés seront remplacés par les données de la sauvegarde.</string>
     <string name="BackupManager_BackupRequired">Sauvegarde requise</string>
     <string name="BackupManager_WatchWallets">Regarder les portefeuilles</string>
     <string name="BackupManager_Watchlist">Favoris</string>
@@ -1704,4 +1702,19 @@
     <string name="Hud_Text_Connected">Connecté</string>
     <string name="BirthdayDatePicker_Title">Sélectionnez la date</string>
     <string name="BirthdayDatePicker_Description">Choisissez une date approximative de création de portefeuille. \nLa hauteur du bloc sera calculée automatiquement.</string>
+    <string name="Balance_Zcash_Shielded">Blindé</string>
+    <string name="Balance_Zcash_ShieldedDescription">Utilisez pour les transferts personnels et privés entre portefeuilles.</string>
+    <string name="BackupManager_RestoreBackupDescription">Restaurez votre portefeuille et les données de l\'application à partir d\'un fichier de sauvegarde.</string>
+    <string name="BackupManager_CreateBackupDescription">Créez un fichier de sauvegarde de vos portefeuilles et données d\'application.</string>
+    <string name="BackupManager_SelectItemsDescription">Choisissez ce que vous souhaitez inclure dans votre sauvegarde. Vous pouvez sauvegarder tout ou seulement des éléments sélectionnés.</string>
+    <string name="BackupManager_RestoreItemsDescription">Choisissez ce que vous souhaitez restaurer. Vous pouvez tout restaurer ou seulement les éléments sélectionnés.</string>
+    <string name="BackupManager_CountSavedAddresses">%d adresses sauvegardées</string>
+    <string name="BackupManager_CountAssets">%d actifs</string>
+    <string name="BackupManager_CountNetworks">%d réseaux</string>
+    <string name="BackupManager_CountWallets">%d portefeuilles</string>
+    <string name="LocalBackup_ProtectBackup">Protéger la Sauvegarde</string>
+    <string name="LocalBackup_ProtectBackupDescription">Créez un mot de passe pour protéger votre fichier de sauvegarde.</string>
+    <string name="LocalBackup_BackupName">Nom de la Sauvegarde</string>
+    <string name="LocalBackup_AddPassword">Ajouter un Mot de Passe</string>
+    <string name="LocalBackup_ConfirmPassword">Confirmer le Mot de Passe</string>
 </resources>

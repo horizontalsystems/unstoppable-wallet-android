@@ -360,10 +360,8 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparent сумма</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">У вас есть ZEC, находящийся на transparent адресе. Чтобы использовать его в Unstoppable, необходимо выполнить shielding для полной приватности.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Щит</string>
-    <string name="Balance_Zcash_Unified">Единый</string>
-    <string name="Balance_Zcash_UnifiedDescription">Используйте для личных и частных переводов между кошельками.</string>
     <string name="Balance_Zcash_Transparent">Прозрачный</string>
-    <string name="Balance_Zcash_TransparentDescription">Используйте для получения от бирж или сервисов, которые не поддерживают унифицированные адреса.</string>
+    <string name="Balance_Zcash_TransparentDescription">Используйте для получения от бирж или услуг, которые не поддерживают защищённые адреса.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
     <!--Send-->
@@ -986,15 +984,15 @@
     <!-- Backup Manager -->
     <string name="BackupManager_Title">Резерв.копирование</string>
     <string name="BackupManager_RestoreBackup">Восстановить резерв. копию</string>
-    <string name="BackupManager_CreateBackup">Создать новую резерв. копию</string>
+    <string name="BackupManager_CreateBackup">Создать Резервную Копию</string>
     <string name="BackupManager_BаckupFile">Файл резервной копии</string>
-    <string name="BackupManager_Wallets">КОШЕЛЬКИ</string>
-    <string name="BackupManager_Other">ДРУГИЕ</string>
+    <string name="BackupManager_Wallets">Кошельки</string>
+    <string name="BackupManager_Other">Данные</string>
     <string name="BackupManager_Restore">Восстановить</string>
     <string name="BackupManager_BackupFileContents">Список содержимого в файле резервной копии.</string>
-    <string name="BackupManager_MergeTitle">Внимание</string>
+    <string name="BackupManager_MergeTitle">Внимание!</string>
     <string name="BackupManager_MergeButton">Заменить</string>
-    <string name="BackupManager_MergeDescription">Это действие перезапишет ваши локальные контакты.</string>
+    <string name="BackupManager_MergeDescription">Сохранённые контакты будут заменены данными из резервной копии.</string>
     <string name="BackupManager_BackupRequired">Необходима резерв. копия</string>
     <string name="BackupManager_WatchWallets">Просмотр кошелька</string>
     <string name="BackupManager_Watchlist">Избранное</string>
@@ -1709,4 +1707,19 @@
     <string name="Hud_Text_Connected">Подключено</string>
     <string name="BirthdayDatePicker_Title">Выберите дату</string>
     <string name="BirthdayDatePicker_Description">Выберите приблизительную дату создания кошелька. \nВысота блока будет рассчитана автоматически.</string>
+    <string name="Balance_Zcash_Shielded">Защищённый</string>
+    <string name="Balance_Zcash_ShieldedDescription">Используйте для приватных и защищённых переводов между кошельками.</string>
+    <string name="BackupManager_RestoreBackupDescription">Восстановите ваш кошелек и данные приложения из файла резервной копии.</string>
+    <string name="BackupManager_CreateBackupDescription">Создайте файл резервной копии ваших кошельков и данных приложения.</string>
+    <string name="BackupManager_SelectItemsDescription">Выберите, что включить в резервную копию. Вы можете скопировать всё или выбранные элементы.</string>
+    <string name="BackupManager_RestoreItemsDescription">Выберите, что восстановить. Вы можете восстановить всё или только выбранные элементы.</string>
+    <string name="BackupManager_CountSavedAddresses">%d сохранённых адресов</string>
+    <string name="BackupManager_CountAssets">%d активов</string>
+    <string name="BackupManager_CountNetworks">%d сетей</string>
+    <string name="BackupManager_CountWallets">%d кошельков</string>
+    <string name="LocalBackup_ProtectBackup">Защитить Резервную Копию</string>
+    <string name="LocalBackup_ProtectBackupDescription">Создайте пароль для защиты файла резервной копии.</string>
+    <string name="LocalBackup_BackupName">Имя Резервной Копии</string>
+    <string name="LocalBackup_AddPassword">Добавить Пароль</string>
+    <string name="LocalBackup_ConfirmPassword">Подтвердить Пароль</string>
 </resources>

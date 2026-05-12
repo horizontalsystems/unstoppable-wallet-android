@@ -358,10 +358,8 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">现在我们的钱包无法使用透明平衡，但这笔钱可以由其他钱包使用 t-address 支持使用</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">盾牌</string>
-    <string name="Balance_Zcash_Unified">统一的</string>
-    <string name="Balance_Zcash_UnifiedDescription">用于钱包之间的个人和私人转账。</string>
     <string name="Balance_Zcash_Transparent">透明的</string>
-    <string name="Balance_Zcash_TransparentDescription">用于接收来自交易所或不支持统一地址的服务。</string>
+    <string name="Balance_Zcash_TransparentDescription">用于从不支持屏蔽地址的交易所或服务接收资金。</string>
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
     <!--Send-->
@@ -983,15 +981,15 @@
     <!-- Backup Manager -->
     <string name="BackupManager_Title">备份管理器</string>
     <string name="BackupManager_RestoreBackup">还原备份</string>
-    <string name="BackupManager_CreateBackup">创建新备份</string>
+    <string name="BackupManager_CreateBackup">创建备份</string>
     <string name="BackupManager_BаckupFile">备份文件</string>
-    <string name="BackupManager_Wallets">战利品</string>
-    <string name="BackupManager_Other">其他</string>
+    <string name="BackupManager_Wallets">钱包</string>
+    <string name="BackupManager_Other">数据</string>
     <string name="BackupManager_Restore">恢复自</string>
     <string name="BackupManager_BackupFileContents">备份文件中的内容列表。</string>
-    <string name="BackupManager_MergeTitle">警告</string>
+    <string name="BackupManager_MergeTitle">注意！</string>
     <string name="BackupManager_MergeButton">替换</string>
-    <string name="BackupManager_MergeDescription">此操作将覆盖您的本地付款联系人。</string>
+    <string name="BackupManager_MergeDescription">已保存的联系人将被备份中的数据替换。</string>
     <string name="BackupManager_BackupRequired">必须备份</string>
     <string name="BackupManager_WatchWallets">观察地址</string>
     <string name="BackupManager_Watchlist">关注</string>
@@ -1701,4 +1699,19 @@
     <string name="Hud_Text_Connected">已连接</string>
     <string name="BirthdayDatePicker_Title">选择日期</string>
     <string name="BirthdayDatePicker_Description">选择一个大致的钱包创建日期。 \n区块高度将自动计算。</string>
+    <string name="Balance_Zcash_Shielded">屏蔽账户</string>
+    <string name="Balance_Zcash_ShieldedDescription">用于钱包之间的个人和私密转账。</string>
+    <string name="BackupManager_RestoreBackupDescription">从备份文件恢复您的钱包和应用数据。</string>
+    <string name="BackupManager_CreateBackupDescription">创建钱包和应用数据的备份文件。</string>
+    <string name="BackupManager_SelectItemsDescription">选择要包含在备份中的内容。您可以备份全部或选定项目。</string>
+    <string name="BackupManager_RestoreItemsDescription">选择要恢复的内容。您可以恢复全部或仅选定项目。</string>
+    <string name="BackupManager_CountSavedAddresses">%d 个已保存地址</string>
+    <string name="BackupManager_CountAssets">%d 项资产</string>
+    <string name="BackupManager_CountNetworks">%d 个网络</string>
+    <string name="BackupManager_CountWallets">%d 个钱包</string>
+    <string name="LocalBackup_ProtectBackup">保护备份</string>
+    <string name="LocalBackup_ProtectBackupDescription">创建密码以保护您的备份文件。</string>
+    <string name="LocalBackup_BackupName">备份名称</string>
+    <string name="LocalBackup_AddPassword">添加密码</string>
+    <string name="LocalBackup_ConfirmPassword">确认密码</string>
 </resources>
