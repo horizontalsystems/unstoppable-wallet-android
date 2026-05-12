@@ -27,7 +27,6 @@ import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
-import io.horizontalsystems.bankwallet.core.storage.EvmSyncSourceStorage
 import io.horizontalsystems.bankwallet.core.storage.MoneroNodeStorage
 import io.horizontalsystems.bankwallet.core.storage.ZanoNodeStorage
 import io.horizontalsystems.bankwallet.entities.Account
@@ -117,7 +116,6 @@ class BackupProvider(
     private val currencyManager: CurrencyManager,
     private val btcBlockchainManager: BtcBlockchainManager,
     private val evmSyncSourceManager: EvmSyncSourceManager,
-    private val evmSyncSourceStorage: EvmSyncSourceStorage,
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
     private val moneroNodeManager: MoneroNodeManager,
     private val moneroNodeStorage: MoneroNodeStorage,
@@ -446,7 +444,10 @@ class BackupProvider(
     }
 
     fun fullBackupItems(): BackupItems {
-        val customRpcsTotal = evmSyncSourceStorage.getAll().size +
+        val evmAndTronCustomRpcsCount = evmBlockchainManager.allBlockchains.sumOf {
+            evmSyncSourceManager.customSyncSources(it.type).size
+        } + evmSyncSourceManager.customSyncSources(BlockchainType.Tron).size
+        val customRpcsTotal = evmAndTronCustomRpcsCount +
             moneroNodeManager.customNodes.size +
             zanoNodeManager.customNodes.size
         return fullBackupItems(
