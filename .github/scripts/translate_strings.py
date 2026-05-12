@@ -50,6 +50,16 @@ def has_cdata(value: str) -> bool:
     return "<![CDATA[" in value
 
 
+def escape_xml_value(value: str) -> str:
+    """Escape characters that must be escaped in Android strings.xml values."""
+    # & first — only when not already part of a named XML entity
+    value = re.sub(r'&(?!(amp|lt|gt|apos|quot);)', '&amp;', value)
+    value = value.replace('<', '&lt;').replace('>', '&gt;')
+    value = re.sub(r'(?<!\\)"', r'\\"', value)
+    value = re.sub(r"(?<!\\)'", r"\\'", value)
+    return value
+
+
 def parse_strings(content: str) -> dict[str, str]:
     """Return all translatable, non-CDATA strings from XML content."""
     result = {}
@@ -141,6 +151,7 @@ def apply_translations(lang_file: str, new_translations: dict[str, str], deleted
 
     # Apply new/updated translations
     for key, value in new_translations.items():
+        value = escape_xml_value(value)
         existing_pat = re.compile(
             rf'<string\s+name="{re.escape(key)}"[^>]*>.*?</string>',
             re.DOTALL,
