@@ -25,6 +25,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
     override val type = SwapProviderType.DEX
     override val requireTerms = false
     override val isEvm = true
+    override val supportsMevProtection = true
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
 
     override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = true
