@@ -29,7 +29,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 @Composable
 fun AddZanoNodeScreen(navController: NavController) {
     val viewModel = viewModel<AddZanoNodeViewModel>(factory = AddZanoNodeModule.Factory())
-    if (viewModel.viewState.closeScreen) {
+    if (viewModel.uiState.closeScreen) {
         navController.popBackStack()
         viewModel.onScreenClose()
     }
@@ -57,7 +57,7 @@ fun AddZanoNodeScreen(navController: NavController) {
                     qrScannerEnabled = true,
                     onValueChange = viewModel::onEnterUrl,
                     hint = "https://",
-                    state = getState(viewModel.viewState.urlCaution)
+                    state = getState(viewModel.uiState.urlCaution)
                 )
                 Spacer(Modifier.height(60.dp))
             }
