@@ -1725,4 +1725,6 @@
     <string name="LocalBackup_BackupName">Имя резервной копии</string>
     <string name="LocalBackup_AddPassword">Добавить пароль</string>
     <string name="LocalBackup_ConfirmPassword">Подтвердить пароль</string>
+    <string name="AddZanoNode_Warning_UrlExists">Узел с этим URL уже существует</string>
+    <string name="AddZanoNode_Error_InvalidUrl">Введённый URL невалиден. Валидный URL должен иметь одну из следующих схем: http, https</string>
 </resources>

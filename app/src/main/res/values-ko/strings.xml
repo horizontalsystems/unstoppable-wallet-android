@@ -1479,4 +1479,6 @@
     <string name="LocalBackup_BackupName">백업 이름</string>
     <string name="LocalBackup_AddPassword">비밀번호 추가</string>
     <string name="LocalBackup_ConfirmPassword">비밀번호 확인</string>
+    <string name="AddZanoNode_Warning_UrlExists">이 URL의 노드가 이미 존재합니다</string>
+    <string name="AddZanoNode_Error_InvalidUrl">입력한 URL이 유효하지 않습니다. 유효한 URL은 다음 중 하나의 스키마를 가져야 합니다: http, https</string>
 </resources>

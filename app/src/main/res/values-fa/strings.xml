@@ -625,4 +625,6 @@
     <string name="LocalBackup_BackupName">نام پشتیبان</string>
     <string name="LocalBackup_AddPassword">افزودن رمز عبور</string>
     <string name="LocalBackup_ConfirmPassword">تأیید رمز عبور</string>
+    <string name="AddZanoNode_Warning_UrlExists">گره با این URL قبلاً وجود دارد</string>
+    <string name="AddZanoNode_Error_InvalidUrl">URL وارد شده نامعتبر است. URL های معتبر باید یکی از طرح های زیر را داشته باشند: http, https</string>
 </resources>

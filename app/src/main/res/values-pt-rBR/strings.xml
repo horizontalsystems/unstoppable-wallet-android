@@ -1723,4 +1723,6 @@
     <string name="LocalBackup_BackupName">Nome do backup</string>
     <string name="LocalBackup_AddPassword">Adicionar senha</string>
     <string name="LocalBackup_ConfirmPassword">Confirmar senha</string>
+    <string name="AddZanoNode_Warning_UrlExists">Já existe um nó com esta URL</string>
+    <string name="AddZanoNode_Error_InvalidUrl">A URL inserida é inválida. URLs válidas devem ter um dos seguintes esquemas: http, https</string>
 </resources>
