@@ -95,7 +95,7 @@ class ReceiveAddressViewModel(
             else -> {
                 if (wallet.token.blockchainType == BlockchainType.Zcash) {
                     addressType =
-                        Translator.getString(if (isTransparentAddress) R.string.Balance_Zcash_Transparent else R.string.Balance_Zcash_Unified)
+                        Translator.getString(if (isTransparentAddress) R.string.Balance_Zcash_Transparent else R.string.Balance_Zcash_Shielded)
                 } else {
                     blockchainName = wallet.token.blockchain.name
                 }
