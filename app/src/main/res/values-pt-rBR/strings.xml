@@ -359,10 +359,8 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Valor transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">O saldo transparente não pode ser usado em nossa carteira por enquanto. Mas este dinheiro pode ser gasto por outras carteiras com suporte a endereços.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Escudos</string>
-    <string name="Balance_Zcash_Unified">Unificado</string>
-    <string name="Balance_Zcash_UnifiedDescription">Use para transferências pessoais e privadas entre carteiras.</string>
     <string name="Balance_Zcash_Transparent">Transparente</string>
-    <string name="Balance_Zcash_TransparentDescription">Use para receber de trocas ou serviços que não suportam endereços unificados.</string>
+    <string name="Balance_Zcash_TransparentDescription">Use para receber de exchanges ou serviços que não suportam endereços blindados.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
     <!--Send-->
@@ -1725,4 +1723,6 @@
     <string name="LocalBackup_ConfirmPassword">Confirmar senha</string>
     <string name="AddZanoNode_Warning_UrlExists">Já existe um nó com esta URL</string>
     <string name="AddZanoNode_Error_InvalidUrl">A URL inserida é inválida. URLs válidas devem ter um dos seguintes esquemas: http, https</string>
+    <string name="Balance_Zcash_Shielded">Blindado</string>
+    <string name="Balance_Zcash_ShieldedDescription">Use para transferências pessoais e privadas entre carteiras.</string>
 </resources>

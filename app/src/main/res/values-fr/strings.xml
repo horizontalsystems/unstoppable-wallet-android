@@ -359,10 +359,8 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Montant transparent</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Vous avez un solde ZEC maintenu dans une adresse transparente. Pour l\'utiliser dans Unstoppable, il doit être protégé pour une vie privée totale.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Bouclier</string>
-    <string name="Balance_Zcash_Unified">Unifié</string>
-    <string name="Balance_Zcash_UnifiedDescription">Utiliser pour les transferts personnels et privés entre portefeuilles.</string>
     <string name="Balance_Zcash_Transparent">Transparence</string>
-    <string name="Balance_Zcash_TransparentDescription">Utilisé pour recevoir des échanges ou des services qui ne prennent pas en charge les adresses unifiées.</string>
+    <string name="Balance_Zcash_TransparentDescription">À utiliser pour recevoir des échanges ou des services qui ne supportent pas les adresses blindées.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Envoyer</string>
     <!--Send-->
@@ -1722,4 +1720,6 @@
     <string name="LocalBackup_ConfirmPassword">Confirmer le mot de passe</string>
     <string name="AddZanoNode_Warning_UrlExists">Un nœud avec cette URL existe déjà</string>
     <string name="AddZanoNode_Error_InvalidUrl">L\'URL saisie est invalide. Les URL valides doivent avoir l\'un des schémas suivants : http, https</string>
+    <string name="Balance_Zcash_Shielded">Blindé</string>
+    <string name="Balance_Zcash_ShieldedDescription">À utiliser pour les transferts personnels et privés entre portefeuilles.</string>
 </resources>
