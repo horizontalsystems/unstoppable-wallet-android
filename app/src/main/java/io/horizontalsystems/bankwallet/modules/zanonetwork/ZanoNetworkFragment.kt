@@ -138,16 +138,16 @@ private fun ZanoNetworkScreen(
                 }
 
                 item {
-                    CellUniversalLawrenceSection(viewModel.viewState.defaultItems) { item ->
+                    CellUniversalLawrenceSection(viewModel.uiState.defaultItems) { item ->
                         BlockchainSettingCell(item.name, item.url, item.selected, null) {
                             viewModel.onSelectNode(item.node)
                         }
                     }
                 }
 
-                if (viewModel.viewState.customItems.isNotEmpty()) {
+                if (viewModel.uiState.customItems.isNotEmpty()) {
                     customNodeListSection(
-                        items = viewModel.viewState.customItems,
+                        items = viewModel.uiState.customItems,
                         revealedCardId = revealedCardId,
                         onClick = { viewModel.onSelectNode(it) },
                         onReveal = { id -> if (revealedCardId != id) revealedCardId = id },

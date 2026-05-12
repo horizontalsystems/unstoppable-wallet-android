@@ -1,38 +1,35 @@
 package io.horizontalsystems.bankwallet.modules.zanonetwork
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager.ZanoNode
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class ZanoNetworkViewModel(
     private val zanoNodeManager: ZanoNodeManager
-) : ViewModel() {
-
-    var viewState by mutableStateOf(ViewState(emptyList(), emptyList()))
-        private set
+) : ViewModelUiState<ZanoNetworkViewModel.ViewState>() {
 
     val title = "Zano"
 
-    init {
-        zanoNodeManager.nodesUpdatedFlow
-            .onEach { syncState() }
-            .launchIn(viewModelScope)
-
-        syncState()
-    }
-
-    private fun syncState() {
+    override fun createState(): ViewState {
         val selectedNode = zanoNodeManager.currentNode
-        viewState = ViewState(
+        return ViewState(
             defaultItems = viewItems(zanoNodeManager.defaultNodes, selectedNode),
             customItems = viewItems(zanoNodeManager.customNodes, selectedNode)
         )
+    }
+
+    init {
+        viewModelScope.launch {
+            try {
+                zanoNodeManager.nodesUpdatedFlow.collect {
+                    emitState()
+                }
+            } catch (e: Exception) {
+                // nodesUpdatedFlow is a MutableSharedFlow and does not throw in normal operation
+            }
+        }
     }
 
     private fun viewItems(nodes: List<ZanoNode>, selectedNode: ZanoNode) =
@@ -49,7 +46,7 @@ class ZanoNetworkViewModel(
     fun onSelectNode(node: ZanoNode) {
         if (zanoNodeManager.currentNode == node) return
         zanoNodeManager.save(node)
-        syncState()
+        emitState()
     }
 
     fun onRemoveCustomNode(node: ZanoNode) {
