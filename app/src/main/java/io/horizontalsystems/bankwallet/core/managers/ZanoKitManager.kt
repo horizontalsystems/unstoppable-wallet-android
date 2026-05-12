@@ -44,7 +44,7 @@ class ZanoKitManager(
         scope.launch {
             backgroundManager.stateFlow.collect { state ->
                 if (state == BackgroundManagerState.EnterBackground) {
-                    synchronized(this@ZanoKitManager) { zanoKitWrapper?.kit }?.store()
+                    synchronized(this@ZanoKitManager) { zanoKitWrapper?.kit?.store() }
                 }
             }
         }
