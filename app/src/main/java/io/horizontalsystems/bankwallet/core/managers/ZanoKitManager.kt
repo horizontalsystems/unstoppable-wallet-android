@@ -10,17 +10,17 @@ import io.horizontalsystems.zanokit.ZanoKit
 import io.horizontalsystems.zanokit.ZanoWallet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.text.split
 
 class ZanoKitManager(
     private val zanoNodeManager: ZanoNodeManager,
     private val backgroundManager: BackgroundManager,
 ) {
-    private val scope = CoroutineScope(Dispatchers.Default)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     private val _kitStartedFlow = MutableStateFlow(false)
     val kitStartedFlow: StateFlow<Boolean> = _kitStartedFlow
@@ -44,12 +44,13 @@ class ZanoKitManager(
         scope.launch {
             backgroundManager.stateFlow.collect { state ->
                 if (state == BackgroundManagerState.EnterBackground) {
-                    zanoKitWrapper?.kit?.store()
+                    synchronized(this@ZanoKitManager) { zanoKitWrapper?.kit }?.store()
                 }
             }
         }
     }
 
+    @Synchronized
     private fun handleNodeUpdate() {
         if (zanoKitWrapper == null) return
         stop()
@@ -79,7 +80,7 @@ class ZanoKitManager(
     private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account, creationTimestamp: Long): ZanoKitWrapper {
         val node = zanoNodeManager.currentNode
         val wallet = ZanoWallet.Bip39(
-            mnemonic = "top post mercy height badge hazard airport clump velvet category essay actor".split(" "),
+            mnemonic = accountType.words,
             passphrase = accountType.passphrase,
             creationTimestamp = creationTimestamp,
         )
