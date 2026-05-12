@@ -69,6 +69,7 @@ fun Nav3() {
 
     Box {
         val eventBusNavEntryDecorator = rememberResultEventBusNavEntryDecorator<HSScreen>()
+        val bottomSheetStrategy = remember { BottomSheetSceneStrategy<HSScreen>() }
         NavDisplay(
             modifier = Modifier.fillMaxSize(),
             entryDecorators = listOf(
@@ -77,7 +78,7 @@ fun Nav3() {
                 eventBusNavEntryDecorator,
             ),
             backStack = backStack,
-            sceneStrategy = remember { BottomSheetSceneStrategy() },
+            sceneStrategies = listOf(bottomSheetStrategy),
             entryProvider = { screen ->
                 eventBusNavEntryDecorator.setResultKey(screen.resultKey)
                 NavEntry(
