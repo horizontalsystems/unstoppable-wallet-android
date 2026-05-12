@@ -75,6 +75,7 @@ class SendMoneroFeeService(private val adapter: ISendMoneroAdapter) : ServiceSta
             } else {
                 mutex.withLock {
                     fee = null
+                    error = null
                     inProgress = false
                     emitState()
                 }

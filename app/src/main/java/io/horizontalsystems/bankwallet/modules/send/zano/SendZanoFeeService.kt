@@ -75,6 +75,7 @@ class SendZanoFeeService(private val adapter: ISendZanoAdapter) : ServiceState<S
             } else {
                 mutex.withLock {
                     fee = null
+                    error = null
                     inProgress = false
                     emitState()
                 }
