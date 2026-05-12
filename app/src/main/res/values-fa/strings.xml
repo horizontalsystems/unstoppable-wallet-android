@@ -330,8 +330,8 @@
     <string name="SettingsAboutApp_Site">وب سایت پروژه</string>
     <!-- Blockchain Settings  -->
     <!-- Backup Manager -->
-    <string name="BackupManager_Other">غیره</string>
-    <string name="BackupManager_MergeTitle">هشدار</string>
+    <string name="BackupManager_Other">داده‌ها</string>
+    <string name="BackupManager_MergeTitle">توجه!</string>
     <!-- Privacy  -->
     <!-- Security Center -->
     <!--Evm Network-->
@@ -606,4 +606,23 @@
         <item>🍕 کیف پول گرسنه</item>
         <item>🎭 ماه قرضی</item>
     </string-array>
+    <string name="Balance_Zcash_Shielded">محافظت‌شده</string>
+    <string name="Balance_Zcash_ShieldedDescription">برای انتقال های شخصی و خصوصی بین کیف پول‌ها استفاده کنید.</string>
+    <string name="Balance_Zcash_TransparentDescription">برای دریافت از صرافی‌ها یا سرویس‌هایی که آدرس‌های محافظت‌شده را پشتیبانی نمی‌کنند، استفاده کنید.</string>
+    <string name="BackupManager_RestoreBackupDescription">کیف پول و داده‌های برنامه خود را از یک فایل پشتیبان بازیابی کنید.</string>
+    <string name="BackupManager_CreateBackup">ایجاد پشتیبان</string>
+    <string name="BackupManager_CreateBackupDescription">یک فایل پشتیبان از کیف پول‌ها و داده‌های برنامه خود ایجاد کنید.</string>
+    <string name="BackupManager_SelectItemsDescription">انتخاب کنید که چه چیزی را در پشتیبان خود بگنجانید. می‌توانید همه یا موارد انتخاب‌شده را پشتیبان‌گیری کنید.</string>
+    <string name="BackupManager_Wallets">کیف پول‌ها</string>
+    <string name="BackupManager_RestoreItemsDescription">انتخاب کنید که چه چیزی را بازیابی کنید. می‌توانید همه یا فقط موارد انتخاب‌شده را بازیابی کنید.</string>
+    <string name="BackupManager_CountSavedAddresses">%d آدرس ذخیره‌شده</string>
+    <string name="BackupManager_CountAssets">%d دارایی</string>
+    <string name="BackupManager_CountNetworks">%d شبکه</string>
+    <string name="BackupManager_CountWallets">%d کیف پول</string>
+    <string name="BackupManager_MergeDescription">مخاطبین ذخیره‌شده با داده‌های پشتیبان جایگزین خواهند شد.</string>
+    <string name="LocalBackup_ProtectBackup">محافظت از پشتیبان</string>
+    <string name="LocalBackup_ProtectBackupDescription">یک رمز عبور برای محافظت از فایل پشتیبان خود ایجاد کنید.</string>
+    <string name="LocalBackup_BackupName">نام پشتیبان</string>
+    <string name="LocalBackup_AddPassword">افزودن رمز عبور</string>
+    <string name="LocalBackup_ConfirmPassword">تایید رمز عبور</string>
 </resources>

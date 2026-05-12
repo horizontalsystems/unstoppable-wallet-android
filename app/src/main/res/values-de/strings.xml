@@ -359,10 +359,8 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparenter Betrag</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Transparentes Guthaben kann momentan in unserer Brieftasche nicht verwendet werden. Dieses Geld kann jedoch von anderen Brieftaschen mit t-address Unterstützung ausgegeben werden</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Schild</string>
-    <string name="Balance_Zcash_Unified">Einheitlich</string>
-    <string name="Balance_Zcash_UnifiedDescription">Für private und private Überweisungen zwischen Brieftaschen verwenden.</string>
     <string name="Balance_Zcash_Transparent">Transparent</string>
-    <string name="Balance_Zcash_TransparentDescription">Verwenden Sie zum Empfangen von Börsen oder Diensten, die keine einheitlichen Adressen unterstützen.</string>
+    <string name="Balance_Zcash_TransparentDescription">Verwenden Sie zum Empfangen von Börsen oder Diensten, die keine geschützten Adressen unterstützen.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Senden</string>
     <!--Send-->
@@ -984,15 +982,15 @@
     <!-- Backup Manager -->
     <string name="BackupManager_Title">Backup-Manager</string>
     <string name="BackupManager_RestoreBackup">Backup wiederherstellen</string>
-    <string name="BackupManager_CreateBackup">Neue Sicherung erstellen</string>
+    <string name="BackupManager_CreateBackup">Sicherung erstellen</string>
     <string name="BackupManager_BаckupFile">Backup-Datei</string>
-    <string name="BackupManager_Wallets">WALLETE</string>
-    <string name="BackupManager_Other">ANDERE</string>
+    <string name="BackupManager_Wallets">Wallets</string>
+    <string name="BackupManager_Other">Daten</string>
     <string name="BackupManager_Restore">Wiederherstellen</string>
     <string name="BackupManager_BackupFileContents">Liste der Inhalte in der Backup-Datei.</string>
-    <string name="BackupManager_MergeTitle">Warnung</string>
+    <string name="BackupManager_MergeTitle">Achtung!</string>
     <string name="BackupManager_MergeButton">Ersetzen</string>
-    <string name="BackupManager_MergeDescription">Diese Aktion wird Ihre lokalen Zahlungskontakte überschreiben.</string>
+    <string name="BackupManager_MergeDescription">Gespeicherte Kontakte werden durch Daten aus der Sicherung ersetzt.</string>
     <string name="BackupManager_BackupRequired">Sicherung erforderlich</string>
     <string name="BackupManager_WatchWallets">Wallets beobachten</string>
     <string name="BackupManager_Watchlist">Favoriten</string>
@@ -1711,4 +1709,19 @@
     <string name="Hud_Text_Connected">Verbunden</string>
     <string name="BirthdayDatePicker_Title">Datum auswählen</string>
     <string name="BirthdayDatePicker_Description">Wählen Sie ein ungefähres Wallet-Erstellungsdatum. \nDie Blockhöhe wird automatisch berechnet.</string>
+    <string name="Balance_Zcash_Shielded">Geschützt</string>
+    <string name="Balance_Zcash_ShieldedDescription">Verwenden Sie für private und vertrauliche Überweisungen zwischen Wallets.</string>
+    <string name="BackupManager_RestoreBackupDescription">Stellen Sie Ihr Wallet und Ihre App-Daten aus einer Sicherungsdatei wieder her.</string>
+    <string name="BackupManager_CreateBackupDescription">Erstellen Sie eine Sicherungsdatei Ihrer Wallets und App-Daten.</string>
+    <string name="BackupManager_SelectItemsDescription">Wählen Sie aus, was in Ihre Sicherung aufgenommen werden soll. Sie können alle oder ausgewählte Elemente sichern.</string>
+    <string name="BackupManager_RestoreItemsDescription">Wählen Sie aus, was wiederhergestellt werden soll. Sie können alles oder nur ausgewählte Elemente wiederherstellen.</string>
+    <string name="BackupManager_CountSavedAddresses">%d gespeicherte Adressen</string>
+    <string name="BackupManager_CountAssets">%d Assets</string>
+    <string name="BackupManager_CountNetworks">%d Netzwerke</string>
+    <string name="BackupManager_CountWallets">%d Wallets</string>
+    <string name="LocalBackup_ProtectBackup">Sicherung schützen</string>
+    <string name="LocalBackup_ProtectBackupDescription">Erstellen Sie ein Passwort zum Schutz Ihrer Sicherungsdatei.</string>
+    <string name="LocalBackup_BackupName">Sicherungsname</string>
+    <string name="LocalBackup_AddPassword">Passwort hinzufügen</string>
+    <string name="LocalBackup_ConfirmPassword">Passwort bestätigen</string>
 </resources>

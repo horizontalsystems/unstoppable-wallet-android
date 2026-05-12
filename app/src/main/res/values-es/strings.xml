@@ -359,10 +359,8 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Monto transparente</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">El saldo transparente no puede ser utilizado en nuestra cartera por ahora. Pero este dinero puede ser gastado por otras billeteras con soporte de e-address</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Escudo</string>
-    <string name="Balance_Zcash_Unified">Unificado</string>
-    <string name="Balance_Zcash_UnifiedDescription">Uso para transferencias personales y privadas entre billeteras.</string>
     <string name="Balance_Zcash_Transparent">Transparente</string>
-    <string name="Balance_Zcash_TransparentDescription">Utilizar para recibir desde intercambios o servicios que no soporten direcciones unificadas.</string>
+    <string name="Balance_Zcash_TransparentDescription">Utilícelo para recibir de intercambios o servicios que no admiten direcciones protegidas.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
     <!--Send-->
@@ -984,15 +982,15 @@
     <!-- Backup Manager -->
     <string name="BackupManager_Title">Gestor de copias de seguridad</string>
     <string name="BackupManager_RestoreBackup">Restaurar copia de seguridad</string>
-    <string name="BackupManager_CreateBackup">Crear nueva copia de seguridad</string>
+    <string name="BackupManager_CreateBackup">Crear copia de seguridad</string>
     <string name="BackupManager_BаckupFile">Copia de seguridad</string>
-    <string name="BackupManager_Wallets">MONEDEROS</string>
-    <string name="BackupManager_Other">OTROS</string>
+    <string name="BackupManager_Wallets">Billeteras</string>
+    <string name="BackupManager_Other">Datos</string>
     <string name="BackupManager_Restore">Restaurar</string>
     <string name="BackupManager_BackupFileContents">Lista de contenidos en el archivo de copia de seguridad.</string>
-    <string name="BackupManager_MergeTitle">Aviso</string>
+    <string name="BackupManager_MergeTitle">¡Atención!</string>
     <string name="BackupManager_MergeButton">Reemplazar</string>
-    <string name="BackupManager_MergeDescription">Esta acción sobrescribirá sus contactos de pago locales.</string>
+    <string name="BackupManager_MergeDescription">Los contactos guardados serán reemplazados por datos de la copia de seguridad.</string>
     <string name="BackupManager_BackupRequired">Copia de seguridad requerida</string>
     <string name="BackupManager_WatchWallets">Ver Monedero</string>
     <string name="BackupManager_Watchlist">Lista de Seguimiento</string>
@@ -1702,4 +1700,19 @@
     <string name="Hud_Text_Connected">Conectado</string>
     <string name="BirthdayDatePicker_Title">Seleccionar fecha</string>
     <string name="BirthdayDatePicker_Description">Elija una fecha aproximada de creación del monedero. \nLa altura del bloque se calculará automáticamente.</string>
+    <string name="Balance_Zcash_Shielded">Protegido</string>
+    <string name="Balance_Zcash_ShieldedDescription">Utilícelo para transferencias personales y privadas entre billeteras.</string>
+    <string name="BackupManager_RestoreBackupDescription">Restaure su billetera y datos de la aplicación desde un archivo de copia de seguridad.</string>
+    <string name="BackupManager_CreateBackupDescription">Cree un archivo de copia de seguridad de sus billeteras y datos de la aplicación.</string>
+    <string name="BackupManager_SelectItemsDescription">Elija qué incluir en su copia de seguridad. Puede hacer copia de seguridad de todos o de elementos seleccionados.</string>
+    <string name="BackupManager_RestoreItemsDescription">Elija qué restaurar. Puede restaurar todo o solo elementos seleccionados.</string>
+    <string name="BackupManager_CountSavedAddresses">%d direcciones guardadas</string>
+    <string name="BackupManager_CountAssets">%d activos</string>
+    <string name="BackupManager_CountNetworks">%d redes</string>
+    <string name="BackupManager_CountWallets">%d billeteras</string>
+    <string name="LocalBackup_ProtectBackup">Proteger copia de seguridad</string>
+    <string name="LocalBackup_ProtectBackupDescription">Cree una contraseña para proteger su archivo de copia de seguridad.</string>
+    <string name="LocalBackup_BackupName">Nombre de copia de seguridad</string>
+    <string name="LocalBackup_AddPassword">Agregar contraseña</string>
+    <string name="LocalBackup_ConfirmPassword">Confirmar contraseña</string>
 </resources>

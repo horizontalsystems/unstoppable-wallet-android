@@ -340,10 +340,8 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">투명 주소에 보유 중인 ZEC 잔액이 있습니다. Unstoppable에서 사용하려면 완전한 프라이버시 보호를 위해 보호(Shield) 처리해야 합니다.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">차폐(Shield)</string>
-    <string name="Balance_Zcash_Unified">통합 주소</string>
-    <string name="Balance_Zcash_UnifiedDescription">지갑 간 개인적이고 프라이빗한 전송에 사용하세요.</string>
     <string name="Balance_Zcash_Transparent">透明</string>
-    <string name="Balance_Zcash_TransparentDescription">통합 주소를 지원하지 않는 거래소나 서비스로부터 수신할 때 사용하세요.</string>
+    <string name="Balance_Zcash_TransparentDescription">보호된 주소를 지원하지 않는 거래소 또는 서비스에서 수신할 때 사용하십시오.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">전송</string>
     <!--Send-->
@@ -796,15 +794,15 @@
     <!-- Backup Manager -->
     <string name="BackupManager_Title">백업 관리자</string>
     <string name="BackupManager_RestoreBackup">백업 복원</string>
-    <string name="BackupManager_CreateBackup">새로운 백업 생성</string>
+    <string name="BackupManager_CreateBackup">백업 생성</string>
     <string name="BackupManager_BаckupFile">백업 파일</string>
     <string name="BackupManager_Wallets">지갑</string>
-    <string name="BackupManager_Other">기타</string>
+    <string name="BackupManager_Other">데이터</string>
     <string name="BackupManager_Restore">복구</string>
     <string name="BackupManager_BackupFileContents">백업 파일의 내용 목록</string>
-    <string name="BackupManager_MergeTitle">경고</string>
+    <string name="BackupManager_MergeTitle">주의!</string>
     <string name="BackupManager_MergeButton">위젯 변경</string>
-    <string name="BackupManager_MergeDescription">이 작업을 수행하면 현지 결제 연락처가 덮어쓰여집니다.</string>
+    <string name="BackupManager_MergeDescription">저장된 연락처가 백업의 데이터로 바뀝니다.</string>
     <string name="BackupManager_BackupRequired">백업이 필요합니다</string>
     <string name="BackupManager_WatchWallets">관찰 주소</string>
     <string name="BackupManager_Watchlist">관심 목록</string>
@@ -1463,4 +1461,19 @@
     <string name="Contacts_Error_DefinedAddress">이 주소는 이미 %s에 사용되었습니다</string>
     <string name="Contacts_Error_DefinedName">해당 이름은 이미 존재합니다</string>
     <string name="Hud_Text_Connected">연결됨</string>
+    <string name="Balance_Zcash_Shielded">보호됨</string>
+    <string name="Balance_Zcash_ShieldedDescription">지갑 간의 개인 및 비공개 전송에 사용하십시오.</string>
+    <string name="BackupManager_RestoreBackupDescription">백업 파일에서 지갑 및 앱 데이터를 복원하십시오.</string>
+    <string name="BackupManager_CreateBackupDescription">지갑 및 앱 데이터의 백업 파일을 생성하십시오.</string>
+    <string name="BackupManager_SelectItemsDescription">백업에 포함할 항목을 선택하십시오. 모든 항목 또는 선택한 항목만 백업할 수 있습니다.</string>
+    <string name="BackupManager_RestoreItemsDescription">복원할 항목을 선택하십시오. 모든 항목 또는 선택한 항목만 복원할 수 있습니다.</string>
+    <string name="BackupManager_CountSavedAddresses">%d개의 저장된 주소</string>
+    <string name="BackupManager_CountAssets">%d개의 자산</string>
+    <string name="BackupManager_CountNetworks">%d개의 네트워크</string>
+    <string name="BackupManager_CountWallets">%d개의 지갑</string>
+    <string name="LocalBackup_ProtectBackup">백업 보호</string>
+    <string name="LocalBackup_ProtectBackupDescription">백업 파일을 보호하기 위한 비밀번호를 생성하십시오.</string>
+    <string name="LocalBackup_BackupName">백업 이름</string>
+    <string name="LocalBackup_AddPassword">비밀번호 추가</string>
+    <string name="LocalBackup_ConfirmPassword">비밀번호 확인</string>
 </resources>
