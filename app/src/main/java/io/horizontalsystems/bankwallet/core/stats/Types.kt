@@ -29,6 +29,7 @@ enum class StatPage(val key: String) {
     BlockchainSettingsEvm("blockchain_settings_evm"),
     BlockchainSettingsEvmAdd("blockchain_settings_evm_add"),
     BlockchainSettingsSolana("blockchain_settings_sol"),
+    BlockchainSettingsCryptoNote("blockchain_settings_cryptonote"),
     CloudBackup("cloud_backup"),
     FileBackup("file_backup"),
     CoinAnalytics("coin_analytics"),
@@ -189,6 +190,7 @@ sealed class StatEvent {
     data class OpenBlockchainSettingsBtc(val chainUid: String) : StatEvent()
     data class OpenBlockchainSettingsEvm(val chainUid: String) : StatEvent()
     data class OpenBlockchainSettingsEvmAdd(val chainUid: String) : StatEvent()
+    data class OpenBlockchainSettingsCryptoNote(val chainUid: String) : StatEvent()
 
     data class OpenCategory(val categoryUid: String) : StatEvent()
     data class OpenCoin(val coinUid: String) : StatEvent()
@@ -289,6 +291,7 @@ sealed class StatEvent {
             is OpenBlockchainSettingsBtc,
             is OpenBlockchainSettingsEvm,
             is OpenBlockchainSettingsEvmAdd,
+            is OpenBlockchainSettingsCryptoNote,
             is OpenCategory,
             is OpenCoin,
             is OpenPlatform,
@@ -394,6 +397,11 @@ sealed class StatEvent {
 
             is OpenBlockchainSettingsEvmAdd -> mapOf(
                 StatParam.Page to StatPage.BlockchainSettingsEvmAdd.key,
+                StatParam.ChainUid to chainUid
+            )
+
+            is OpenBlockchainSettingsCryptoNote -> mapOf(
+                StatParam.Page to StatPage.BlockchainSettingsCryptoNote.key,
                 StatParam.ChainUid to chainUid
             )
 
