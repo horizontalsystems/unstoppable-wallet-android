@@ -23,7 +23,6 @@ class ZanoNodeManager(
     val defaultNodesInitial = listOf(
         ZanoNode("https://zano.unstoppable.money:443", "zano.unstoppable.money"),
         ZanoNode("https://node.zano.org:443", "node.zano.org"),
-        ZanoNode("http://37.27.100.59:10500", "37.27.100.59"),
     )
 
     val defaultNodes: List<ZanoNode> get() = defaultNodesInitial
