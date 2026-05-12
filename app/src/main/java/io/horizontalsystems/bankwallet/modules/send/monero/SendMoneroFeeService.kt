@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send.monero
 
 import io.horizontalsystems.bankwallet.core.ISendMoneroAdapter
 import io.horizontalsystems.bankwallet.entities.Address
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -12,6 +13,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.math.BigDecimal
 
 class SendMoneroFeeService(private val adapter: ISendMoneroAdapter) : AutoCloseable {
@@ -28,6 +31,7 @@ class SendMoneroFeeService(private val adapter: ISendMoneroAdapter) : AutoClosea
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
+    private val mutex = Mutex()
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var estimateFeeJob: Job? = null
 
@@ -39,23 +43,38 @@ class SendMoneroFeeService(private val adapter: ISendMoneroAdapter) : AutoClosea
         estimateFeeJob?.cancel()
         estimateFeeJob = coroutineScope.launch {
             if (amount != null && address != null) {
-                inProgress = true
-                emitState()
+                mutex.withLock {
+                    inProgress = true
+                    emitState()
+                }
 
                 delay(1000)
-                ensureActive()
-                try {
-                    fee = adapter.estimateFee(amount, address.hex, memo)
-                } catch (_: Throwable) {
-                    delay(500)
-                    refreshFeeAndEmitState()
+
+                var estimatedFee: BigDecimal? = null
+                while (true) {
+                    ensureActive()
+                    try {
+                        estimatedFee = adapter.estimateFee(amount, address.hex, memo)
+                        break
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (_: Throwable) {
+                        delay(500)
+                    }
+                }
+
+                mutex.withLock {
+                    fee = estimatedFee
+                    inProgress = false
+                    emitState()
                 }
             } else {
-                fee = null
+                mutex.withLock {
+                    fee = null
+                    inProgress = false
+                    emitState()
+                }
             }
-
-            inProgress = false
-            emitState()
         }
     }
 
