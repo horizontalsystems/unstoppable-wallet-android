@@ -6,14 +6,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.LifecycleResumeEffect
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
+import kotlin.reflect.KClass
 
 @Composable
 fun SendZanoConfirmationScreen(
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     sendViewModel: SendZanoViewModel,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: KClass<out HSScreen>
 ) {
     var confirmationData by remember { mutableStateOf(sendViewModel.getConfirmationData()) }
     var refresh by remember { mutableStateOf(false) }

@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
@@ -31,14 +32,15 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import java.math.BigDecimal
+import kotlin.reflect.KClass
 
 @Composable
 fun SendZanoScreen(
     title: String,
-    navController: NavController,
+    navController: NavBackStack<HSScreen>,
     viewModel: SendZanoViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int,
+    sendEntryPointDestId: KClass<out HSScreen>,
     amount: BigDecimal?,
     memo: String?,
     riskyAddress: Boolean
@@ -68,7 +70,7 @@ fun SendZanoScreen(
 
         SendScreen(
             title = title,
-            onBack = { navController.popBackStack() }
+            onBack = { navController.removeLastOrNull() }
         ) {
             VSpacer(16.dp)
             if (uiState.showAddressInput) {
@@ -77,7 +79,7 @@ fun SendZanoScreen(
                     value = uiState.address.hex,
                     riskyAddress = riskyAddress
                 ) {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 }
                 VSpacer(16.dp)
             }
@@ -126,6 +128,16 @@ fun SendZanoScreen(
                 navController = navController,
             )
 
+            val forResult = navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
+                AddressRiskyBottomSheetAlert(
+                    AddressRiskyBottomSheetAlert.Input(
+                        alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
+                    )
+                )
+            ) {
+                openConfirm(navController, sendEntryPointDestId)
+            }
+
             ButtonPrimaryYellow(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -134,14 +146,7 @@ fun SendZanoScreen(
                 onClick = {
                     if (riskyAddress) {
                         keyboardController?.hide()
-                        navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
-                            R.id.addressRiskyBottomSheetAlert,
-                            AddressRiskyBottomSheetAlert.Input(
-                                alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
-                            )
-                        ) {
-                            openConfirm(navController, sendEntryPointDestId)
-                        }
+                        forResult()
                     } else {
                         openConfirm(navController, sendEntryPointDestId)
                     }
@@ -153,14 +158,13 @@ fun SendZanoScreen(
 }
 
 private fun openConfirm(
-    navController: NavController,
-    sendEntryPointDestId: Int
+    navController: NavBackStack<HSScreen>,
+    sendEntryPointDestId: KClass<out HSScreen>
 ) {
     navController.slideFromRight(
-        R.id.sendConfirmation,
-        SendConfirmationFragment.Input(
+        SendConfirmationFragment(SendConfirmationFragment.Input(
             SendConfirmationFragment.Type.Zano,
             sendEntryPointDestId
-        )
+        ))
     )
 }

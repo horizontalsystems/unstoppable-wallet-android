@@ -8,8 +8,6 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinConfirmat
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroViewModel
-import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoConfirmationScreen
-import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoViewModel
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaViewModel
 import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarConfirmationScreen
@@ -18,6 +16,8 @@ import io.horizontalsystems.bankwallet.modules.send.ton.SendTonConfirmationScree
 import io.horizontalsystems.bankwallet.modules.send.ton.SendTonViewModel
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
+import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoConfirmationScreen
+import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
 import kotlinx.serialization.Serializable
@@ -100,7 +100,7 @@ data class SendConfirmationFragment(val input: Input) : HSScreen() {
             }
 
             Type.Zano -> {
-                val sendZanoViewModel by navGraphViewModels<SendZanoViewModel>(R.id.sendXFragment)
+                val sendZanoViewModel = navController.viewModelForScreen<SendZanoViewModel>(SendFragment::class)
 
                 SendZanoConfirmationScreen(
                     navController,

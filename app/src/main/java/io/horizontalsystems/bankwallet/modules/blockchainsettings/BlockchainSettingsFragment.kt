@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment
 import io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.solananetwork.SolanaNetworkFragment
+import io.horizontalsystems.bankwallet.modules.zanonetwork.ZanoNetworkFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -138,7 +139,7 @@ private fun onClick(
         }
 
         is BlockchainSettingsModule.BlockchainItem.Zano -> {
-            navController.slideFromBottom(R.id.zanoNetworkFragment)
+            navController.slideFromBottom(ZanoNetworkFragment)
 
             stat(
                 page = StatPage.BlockchainSettings,

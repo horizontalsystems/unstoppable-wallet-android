@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockcha
 import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment
 import io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.zanonetwork.ZanoNetworkFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -95,7 +96,7 @@ private fun SyncErrorScreen(navController: NavBackStack<HSScreen>, wallet: Walle
                                 }
 
                                 SyncErrorModule.BlockchainWrapper.Zano -> {
-                                    navController.slideFromBottom(R.id.zanoNetworkFragment)
+                                    navController.slideFromBottom(ZanoNetworkFragment)
                                 }
 
                                 else -> {}

@@ -17,9 +17,6 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroModule
-import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoModule
-import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoScreen
-import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroScreen
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroViewModel
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaModule
@@ -34,6 +31,9 @@ import io.horizontalsystems.bankwallet.modules.send.ton.SendTonViewModel
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronModule
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronScreen
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
+import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoModule
+import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoScreen
+import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
@@ -197,19 +197,17 @@ data class SendFragment(val input: Input) : HSScreen() {
 
             BlockchainType.Zano -> {
                 val factory = SendZanoModule.Factory(wallet, address, hideAddress)
-                val sendZanoViewModel by navGraphViewModels<SendZanoViewModel>(R.id.sendXFragment) { factory }
-                setContent {
-                    SendZanoScreen(
-                        title,
-                        findNavController(),
-                        sendZanoViewModel,
-                        amountInputModeViewModel,
-                        sendEntryPointDestId,
-                        amount,
-                        memo,
-                        riskyAddress = riskyAddress
-                    )
-                }
+                val sendZanoViewModel = viewModel<SendZanoViewModel>(factory = factory)
+                SendZanoScreen(
+                    title,
+                    navController,
+                    sendZanoViewModel,
+                    amountInputModeViewModel,
+                    sendEntryPointDestId,
+                    amount,
+                    memo,
+                    riskyAddress = riskyAddress
+                )
             }
 
             else -> {}
