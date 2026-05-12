@@ -128,7 +128,7 @@ private fun onClick(
 
             stat(
                 page = StatPage.BlockchainSettings,
-                event = StatEvent.OpenBlockchainSettingsEvm(item.blockchainItem.blockchain.uid)
+                event = StatEvent.OpenBlockchainSettingsCryptoNote(item.blockchainItem.blockchain.uid)
             )
         }
 
@@ -137,7 +137,7 @@ private fun onClick(
 
             stat(
                 page = StatPage.BlockchainSettings,
-                event = StatEvent.OpenBlockchainSettingsEvm(item.blockchainItem.blockchain.uid)
+                event = StatEvent.OpenBlockchainSettingsCryptoNote(item.blockchainItem.blockchain.uid)
             )
         }
     }
