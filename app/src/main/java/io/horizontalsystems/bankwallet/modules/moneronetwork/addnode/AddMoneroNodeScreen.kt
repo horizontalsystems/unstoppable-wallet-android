@@ -31,7 +31,7 @@ fun AddMoneroNodeScreen(
     navController: NavController
 ) {
     val viewModel = viewModel<AddMoneroNodeViewModel>(factory = AddMoneroNodeModule.Factory())
-    if (viewModel.viewState.closeScreen) {
+    if (viewModel.uiState.closeScreen) {
         navController.popBackStack()
         viewModel.onScreenClose()
     }
@@ -63,7 +63,7 @@ fun AddMoneroNodeScreen(
                     qrScannerEnabled = true,
                     onValueChange = viewModel::onEnterRpcUrl,
                     hint = "",
-                    state = getState(viewModel.viewState.urlCaution)
+                    state = getState(viewModel.uiState.urlCaution)
                 )
                 Spacer(modifier = Modifier.height(24.dp))
 
