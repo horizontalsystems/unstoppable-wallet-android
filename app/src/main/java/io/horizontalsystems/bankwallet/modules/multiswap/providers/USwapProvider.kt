@@ -42,7 +42,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
     override val requireTerms = provider.requireTerms
     override val riskLevel = provider.riskLevel
 
-    override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = false
+    override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = isEvm
 
     private val unstoppableAPI = APIClient.build(
         App.appConfigProvider.uswapApiBaseUrl,
@@ -426,6 +426,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     UProvider.LetsExchange,
                     UProvider.StealthEx,
                     UProvider.Exolix,
+                    UProvider.Cce,
                     UProvider.Swapuz
                 )
 
@@ -496,6 +497,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     UProvider.LetsExchange,
                     UProvider.StealthEx,
                     UProvider.Exolix,
+                    UProvider.Cce,
                     UProvider.Swapuz
                 )
 
@@ -517,6 +519,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     UProvider.LetsExchange,
                     UProvider.StealthEx,
                     UProvider.Exolix,
+                    UProvider.Cce,
                     UProvider.Swapuz
                 )
 
@@ -538,6 +541,7 @@ class USwapProvider(private val provider: UProvider) : IMultiSwapProvider {
                     UProvider.LetsExchange,
                     UProvider.StealthEx,
                     UProvider.Exolix,
+                    UProvider.Cce,
                     UProvider.Swapuz
                 )
 

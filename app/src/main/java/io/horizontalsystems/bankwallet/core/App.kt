@@ -506,7 +506,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             currencyManager = currencyManager,
             btcBlockchainManager = btcBlockchainManager,
             evmSyncSourceManager = evmSyncSourceManager,
-            evmSyncSourceStorage = evmSyncSourceStorage,
             solanaRpcSourceManager = solanaRpcSourceManager,
             moneroNodeManager = moneroNodeManager,
             moneroNodeStorage = moneroNodeStorage,

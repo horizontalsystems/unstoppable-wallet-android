@@ -340,10 +340,8 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">透明金额</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">투명 주소에 보유 중인 ZEC 잔액이 있습니다. Unstoppable에서 사용하려면 완전한 프라이버시 보호를 위해 보호(Shield) 처리해야 합니다.</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">차폐(Shield)</string>
-    <string name="Balance_Zcash_Unified">통합 주소</string>
-    <string name="Balance_Zcash_UnifiedDescription">지갑 간 개인적이고 프라이빗한 전송에 사용하세요.</string>
     <string name="Balance_Zcash_Transparent">透明</string>
-    <string name="Balance_Zcash_TransparentDescription">통합 주소를 지원하지 않는 거래소나 서비스로부터 수신할 때 사용하세요.</string>
+    <string name="Balance_Zcash_TransparentDescription">보호된 주소를 지원하지 않는 거래소 또는 서비스로부터 수신할 때 사용합니다.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">전송</string>
     <!--Send-->
@@ -1481,4 +1479,6 @@
     <string name="LocalBackup_ConfirmPassword">비밀번호 확인</string>
     <string name="AddZanoNode_Warning_UrlExists">이 URL의 노드가 이미 존재합니다</string>
     <string name="AddZanoNode_Error_InvalidUrl">입력한 URL이 유효하지 않습니다. 유효한 URL은 다음 중 하나의 스키마를 가져야 합니다: http, https</string>
+    <string name="Balance_Zcash_Shielded">보호됨</string>
+    <string name="Balance_Zcash_ShieldedDescription">지갑 간 개인 및 비공개 송금에 사용합니다.</string>
 </resources>

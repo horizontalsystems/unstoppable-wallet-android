@@ -88,8 +88,8 @@ fun ZcashAddressTypeSelectScreen(
             CellPrimary(
                 middle = {
                     CellMiddleInfo(
-                        title = stringResource(R.string.Balance_Zcash_Unified).hs,
-                        subtitle = stringResource(R.string.Balance_Zcash_UnifiedDescription).hs,
+                        title = stringResource(R.string.Balance_Zcash_Shielded).hs,
+                        subtitle = stringResource(R.string.Balance_Zcash_ShieldedDescription).hs,
                     )
                 },
                 right = {

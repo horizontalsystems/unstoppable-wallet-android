@@ -18,6 +18,7 @@ object MultiSwapProviderRegistry {
         USwapProvider(UProvider.LetsExchange),
         USwapProvider(UProvider.StealthEx),
         USwapProvider(UProvider.Exolix),
+        USwapProvider(UProvider.Cce),
         USwapProvider(UProvider.Swapuz),
         USwapProvider(UProvider.Barter),
     )

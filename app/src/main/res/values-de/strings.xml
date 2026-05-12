@@ -359,10 +359,8 @@
     <string name="Balance_Zcash_UnshieldedBalance_Info_Title">Transparenter Betrag</string>
     <string name="Balance_Zcash_UnshieldedBalance_Info_Description">Transparentes Guthaben kann momentan in unserer Brieftasche nicht verwendet werden. Dieses Geld kann jedoch von anderen Brieftaschen mit t-address Unterstützung ausgegeben werden</string>
     <string name="Balance_Zcash_UnshieldedBalance_Shield">Schild</string>
-    <string name="Balance_Zcash_Unified">Einheitlich</string>
-    <string name="Balance_Zcash_UnifiedDescription">Für private und private Überweisungen zwischen Brieftaschen verwenden.</string>
     <string name="Balance_Zcash_Transparent">Transparent</string>
-    <string name="Balance_Zcash_TransparentDescription">Verwenden Sie zum Empfangen von Börsen oder Diensten, die keine einheitlichen Adressen unterstützen.</string>
+    <string name="Balance_Zcash_TransparentDescription">Verwenden Sie für den Empfang von Börsen oder Diensten, die keine geschützten Adressen unterstützen.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Senden</string>
     <!--Send-->
@@ -1729,4 +1727,6 @@
     <string name="LocalBackup_ConfirmPassword">Passwort bestätigen</string>
     <string name="AddZanoNode_Warning_UrlExists">Node mit dieser URL existiert bereits</string>
     <string name="AddZanoNode_Error_InvalidUrl">Eingegebene URL ist ungültig. Gültige URLs müssen eines der folgenden Schemas haben: http, https</string>
+    <string name="Balance_Zcash_Shielded">Geschützt</string>
+    <string name="Balance_Zcash_ShieldedDescription">Verwenden Sie für private und vertrauliche Transfers zwischen Wallets.</string>
 </resources>
