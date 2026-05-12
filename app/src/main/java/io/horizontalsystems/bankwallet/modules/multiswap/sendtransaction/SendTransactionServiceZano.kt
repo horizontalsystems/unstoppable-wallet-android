@@ -19,10 +19,11 @@ class SendTransactionServiceZano(
     override val sendTransactionSettingsFlow = MutableStateFlow(SendTransactionSettings.Zano())
 
     private val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Zano, TokenType.Native))
-        ?: throw IllegalArgumentException()
+        ?: throw IllegalArgumentException("Zano native token not found for fee calculation")
 
     private var sendData: SendTransactionData.Zano? = null
     private var fee: BigDecimal? = null
+    private var error: Throwable? = null
     private var cautions: List<CautionViewItem> = emptyList()
 
     override fun start(coroutineScope: CoroutineScope) = Unit
@@ -31,9 +32,15 @@ class SendTransactionServiceZano(
         check(data is SendTransactionData.Zano)
 
         sendData = data
-        fee = adapter.estimateFee(data.amount, data.address, data.memo)
-
-        cautions = buildCautions(data, fee)
+        error = null
+        try {
+            fee = adapter.estimateFee(data.amount, data.address, data.memo)
+            cautions = buildCautions(data, fee)
+        } catch (e: Throwable) {
+            fee = null
+            cautions = emptyList()
+            error = e
+        }
 
         emitState()
     }
@@ -90,9 +97,9 @@ class SendTransactionServiceZano(
         networkFee = fee?.let {
             getAmountData(CoinValue(feeToken, it))
         },
-        cautions = cautions,
-        sendable = sendData != null && fee != null && cautions.none { it.type == CautionViewItem.Type.Error },
-        loading = sendData == null || fee == null,
+        cautions = cautions + listOfNotNull(error?.let { CautionViewItem.fromThrowable(it) }),
+        sendable = sendData != null && fee != null && error == null && cautions.none { it.type == CautionViewItem.Type.Error },
+        loading = sendData == null || (fee == null && error == null),
         fields = listOf(),
     )
 }
