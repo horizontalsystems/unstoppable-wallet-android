@@ -12,17 +12,15 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.address.HSAddressCell
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
@@ -37,7 +35,7 @@ import kotlin.reflect.KClass
 @Composable
 fun SendTronScreen(
     title: String,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     viewModel: SendTronViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: KClass<out HSScreen>,
@@ -146,7 +144,7 @@ fun SendTronScreen(
 
 private fun openConfirm(
     viewModel: SendTronViewModel,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     sendEntryPointDestId: KClass<out HSScreen>
 ) {
     viewModel.onNavigateToConfirmation()

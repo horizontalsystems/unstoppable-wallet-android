@@ -2,12 +2,10 @@ package io.horizontalsystems.bankwallet.modules.multiswap.action
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.eip20revoke.Eip20RevokeConfirmFragment
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
@@ -29,7 +27,7 @@ class ActionRevoke(
         stringResource(R.string.Approve_RevokeAndApproveInfo, CoinValue(token, allowance).getFormattedFull())
 
     @Composable
-    override fun executor(navController: NavBackStack<HSScreen>, onActionCompleted: () -> Unit): () -> Unit {
+    override fun executor(navController: HSNavigation, onActionCompleted: () -> Unit): () -> Unit {
         return navController.slideFromBottomForResult<Eip20RevokeConfirmFragment.Result>(
             Eip20RevokeConfirmFragment(
                 Eip20RevokeConfirmFragment.Input(token, spenderAddress, allowance)

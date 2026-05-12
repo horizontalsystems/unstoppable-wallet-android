@@ -2,13 +2,13 @@ package io.horizontalsystems.bankwallet.modules.send
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinNavHost
@@ -47,7 +47,7 @@ import kotlin.reflect.KClass
 data class SendFragment(val input: Input) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val wallet = input.wallet
         val title = input.title
         val sendEntryPointDestId = input.sendEntryPointDestId

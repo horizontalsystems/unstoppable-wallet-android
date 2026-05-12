@@ -34,12 +34,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -70,7 +68,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 class WCSessionBottomSheet(val input: WCSessionModule.Input?) : BaseComposableBottomSheetFragment() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val viewModel = viewModel<WCSessionViewModel>(
             factory = WCSessionModule.Factory(input?.sessionTopic)
         )
@@ -81,7 +79,7 @@ class WCSessionBottomSheet(val input: WCSessionModule.Input?) : BaseComposableBo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WCSessionScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     viewModel: WCSessionViewModel,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)

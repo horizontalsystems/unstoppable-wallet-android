@@ -12,17 +12,14 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -43,7 +40,7 @@ import kotlin.reflect.KClass
 data class WatchAddressFragment(val input: ManageAccountsModule.Input? = null) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val popUpToInclusiveId = input?.popOffOnSuccess ?: WatchAddressFragment::class
         val inclusive = input?.popOffInclusive ?: true
         WatchAddressScreen(navController, popUpToInclusiveId, inclusive)
@@ -52,7 +49,7 @@ data class WatchAddressFragment(val input: ManageAccountsModule.Input? = null) :
 }
 
 @Composable
-fun WatchAddressScreen(navController: NavBackStack<HSScreen>, popUpToInclusiveId: KClass<out HSScreen>, inclusive: Boolean) {
+fun WatchAddressScreen(navController: HSNavigation, popUpToInclusiveId: KClass<out HSScreen>, inclusive: Boolean) {
     val view = LocalView.current
 
     val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())

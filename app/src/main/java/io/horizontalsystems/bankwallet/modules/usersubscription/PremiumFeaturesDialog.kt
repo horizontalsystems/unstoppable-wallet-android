@@ -36,10 +36,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PlanItems
@@ -61,7 +59,7 @@ import kotlinx.coroutines.launch
 class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         PremiumFeaturesScreen(
             navController = navController,
             navHostController = null,
@@ -73,7 +71,7 @@ class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PremiumFeaturesScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     navHostController: NavHostController?,
     onClose: () -> Unit
 ) {
@@ -260,7 +258,7 @@ fun PremiumFeaturesScreen(
 
 @Composable
 fun FeaturesSection(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     icon: Int,
     title: String,
     features: List<IPaidAction>

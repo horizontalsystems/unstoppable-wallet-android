@@ -8,19 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
-import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -51,7 +48,7 @@ import kotlinx.serialization.Serializable
 data object TransactionInfoFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val viewModelTxs = navController.viewModelForScreen<TransactionsViewModel>(MainScreen::class)
 
         val transactionRecord = viewModelTxs.tmpTransactionRecordToShow
@@ -67,7 +64,7 @@ data object TransactionInfoFragment : HSScreen() {
 
 @Composable
 fun TransactionInfoScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     transactionRecord: TransactionRecord
 ) {
     val viewModel = viewModel<TransactionInfoViewModel>(factory = TransactionInfoModule.Factory(transactionRecord))
@@ -91,7 +88,7 @@ fun TransactionInfoScreen(
 @Composable
 fun TransactionInfo(
     viewModel: TransactionInfoViewModel,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -106,7 +103,7 @@ fun TransactionInfo(
 @Composable
 fun TransactionInfoSection(
     section: List<TransactionInfoViewItem>,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     getRawTransaction: () -> String?
 ) {
     //items without background

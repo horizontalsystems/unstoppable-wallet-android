@@ -2,13 +2,13 @@ package io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.SecretKeyScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.serialization.Serializable
 
@@ -16,7 +16,7 @@ import kotlinx.serialization.Serializable
 data class PrivateKeyFragment(val input: Input) : HSScreen(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         PrivateKeyScreen(navController, input.privateKey, input.type)
     }
 
@@ -31,7 +31,7 @@ data class PrivateKeyFragment(val input: Input) : HSScreen(screenshotEnabled = f
 
 @Composable
 fun PrivateKeyScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     evmPrivateKey: String,
     type: PrivateKeyFragment.Type,
 ) {

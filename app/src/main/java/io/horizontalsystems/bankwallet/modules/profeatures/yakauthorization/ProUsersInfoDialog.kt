@@ -11,9 +11,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -26,7 +25,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 
 class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         ProUsersInfoScreen(
             navController,
             listOf(
@@ -41,7 +40,7 @@ class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-private fun ProUsersInfoScreen(navController: NavBackStack<HSScreen>, features: List<String>) {
+private fun ProUsersInfoScreen(navController: HSNavigation, features: List<String>) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.icon_24_lock),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),

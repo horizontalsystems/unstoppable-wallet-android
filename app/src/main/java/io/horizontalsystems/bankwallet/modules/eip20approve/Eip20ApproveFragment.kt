@@ -10,11 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
@@ -37,7 +36,7 @@ import java.math.BigDecimal
 data class Eip20ApproveFragment(val input: Input) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         Eip20ApproveScreen(navController, input)
     }
 
@@ -50,7 +49,7 @@ data class Eip20ApproveFragment(val input: Input) : HSScreen() {
 }
 
 @Composable
-fun Eip20ApproveScreen(navController: NavBackStack<HSScreen>, input: Eip20ApproveFragment.Input) {
+fun Eip20ApproveScreen(navController: HSNavigation, input: Eip20ApproveFragment.Input) {
     val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<Eip20ApproveViewModel>(
         factory = Eip20ApproveViewModel.Factory(

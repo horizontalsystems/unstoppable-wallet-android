@@ -19,17 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment
 import io.horizontalsystems.bankwallet.modules.configuredtoken.ConfiguredTokenInfoDialog
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
@@ -58,7 +55,7 @@ import kotlinx.serialization.Serializable
 data object ManageWalletsFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val vmFactory = remember { ManageWalletsModule.Factory() }
         val viewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory)
         val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory)
@@ -75,7 +72,7 @@ data object ManageWalletsFragment : HSScreen() {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun ManageWalletsScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     viewModel: ManageWalletsViewModel,
     restoreSettingsViewModel: RestoreSettingsViewModel
 ) {

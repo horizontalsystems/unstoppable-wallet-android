@@ -10,7 +10,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.bankwallet.core.NavigationType
@@ -80,5 +79,5 @@ abstract class HSScreen(
     private val className = this.javaClass.simpleName
 
     @Composable
-    abstract fun GetContent(navController: NavBackStack<HSScreen>)
+    abstract fun GetContent(navController: HSNavigation)
 }

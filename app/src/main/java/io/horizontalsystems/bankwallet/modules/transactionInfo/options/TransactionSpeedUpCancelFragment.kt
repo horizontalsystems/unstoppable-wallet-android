@@ -13,13 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
@@ -35,7 +34,7 @@ import kotlinx.serialization.Serializable
 data class TransactionSpeedUpCancelFragment(val input: Input) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         TransactionSpeedUpCancelScreen(navController, input)
     }
 
@@ -52,7 +51,7 @@ data class TransactionSpeedUpCancelFragment(val input: Input) : HSScreen() {
 
 @Composable
 private fun TransactionSpeedUpCancelScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     input: TransactionSpeedUpCancelFragment.Input
 ) {
     val resultEventBus = LocalResultEventBus.current

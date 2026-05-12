@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.core.util.Consumer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
@@ -34,7 +33,6 @@ import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
@@ -46,7 +44,6 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionBo
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.hideKeyboard
 import io.horizontalsystems.dapp.core.HSDAppEvent
-import kotlin.reflect.KClass
 
 @Composable
 fun Nav3() {
@@ -59,11 +56,13 @@ fun Nav3() {
         NavBackStack<HSScreen>(MainScreen)
     }
 
-    HandleNavigateToMain(mainActivityViewModel, backStack)
+    val hsNavigation = remember { HSNavigation(backStack) }
+
+    HandleNavigateToMain(mainActivityViewModel, hsNavigation)
     IntentEffect(mainActivityViewModel)
     Validate(mainActivityViewModel)
-    HandleWcEvent(mainActivityViewModel, backStack)
-    ToggleScreenshot(backStack)
+    HandleWcEvent(mainActivityViewModel, hsNavigation)
+    ToggleScreenshot(hsNavigation)
 
     val activity = LocalActivity.current
 
@@ -86,7 +85,7 @@ fun Nav3() {
                     contentKey = screen.contentKey(),
                     metadata = screen.getMetadata()
                 ) {
-                    screen.GetContent(backStack)
+                    screen.GetContent(HSNavigation(backStack))
                 }
             }
         )
@@ -108,12 +107,12 @@ fun Nav3() {
 @Composable
 private fun HandleNavigateToMain(
     viewModel: MainActivityViewModel,
-    backStack: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     val navigateToMain by viewModel.navigateToMainLiveData.observeAsState()
     LaunchedEffect(navigateToMain) {
         if (navigateToMain != null) {
-            backStack.removeLastUntil(MainScreen::class, false)
+            navController.removeLastUntil(MainScreen::class, false)
             viewModel.onNavigatedToMain()
         }
     }
@@ -159,7 +158,7 @@ private fun Validate(viewModel: MainActivityViewModel) {
 @Composable
 private fun HandleWcEvent(
     viewModel: MainActivityViewModel,
-    backStack: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     val view = LocalView.current
     val hudTextConnected = stringResource(R.string.Hud_Text_Connected)
@@ -167,8 +166,8 @@ private fun HandleWcEvent(
     LaunchedEffect(wcEvent) {
         val event = wcEvent ?: return@LaunchedEffect
         when (event) {
-            is HSDAppEvent.SessionRequest -> backStack.slideFromBottom(WCRequestFragment())
-            is HSDAppEvent.SessionProposal -> backStack.slideFromBottom(WCSessionBottomSheet(null))
+            is HSDAppEvent.SessionRequest -> navController.slideFromBottom(WCRequestFragment())
+            is HSDAppEvent.SessionProposal -> navController.slideFromBottom(WCSessionBottomSheet(null))
             is HSDAppEvent.Error -> HudHelper.showErrorMessage(view, event.throwable.message ?: "Error")
             is HSDAppEvent.SessionSettled -> HudHelper.showSuccessMessage(view, hudTextConnected)
             else -> {}
@@ -178,9 +177,9 @@ private fun HandleWcEvent(
 }
 
 @Composable
-private fun ToggleScreenshot(backStack: NavBackStack<HSScreen>) {
+private fun ToggleScreenshot(navController: HSNavigation) {
     val activity = LocalActivity.current
-    val currentScreen = backStack.lastOrNull()
+    val currentScreen = navController.lastOrNull()
     LaunchedEffect(currentScreen) {
         if (activity != null) {
             activity.currentFocus?.hideKeyboard(activity)
@@ -191,34 +190,4 @@ private fun ToggleScreenshot(backStack: NavBackStack<HSScreen>) {
             }
         }
     }
-}
-
-fun NavBackStack<HSScreen>.removeLastUntil(klass: KClass<out HSScreen>, inclusive: Boolean) {
-    val index = indexOfLast { it::class == klass }
-    if (index != -1) {
-        for (i in lastIndex downTo (index + 1)) {
-            removeAt(i)
-        }
-        if (inclusive) {
-            removeAt(index)
-        }
-    }
-}
-
-@Composable
-inline fun <reified VM : ViewModel> NavBackStack<HSScreen>.viewModelForScreen(klass: KClass<out HSScreen>) : VM {
-    val hSScreen = checkNotNull(findLast { it::class == klass })
-
-    return viewModel(
-        viewModelStoreOwner = rememberChildViewModelStoreOwner(hSScreen.contentKey()),
-    )
-}
-
-@Composable
-inline fun <reified VM : ViewModel> NavBackStack<HSScreen>.viewModelForPrevScreen() : VM {
-    val hSScreen = this[lastIndex - 1]
-
-    return viewModel(
-        viewModelStoreOwner = rememberChildViewModelStoreOwner(hSScreen.contentKey()),
-    )
 }

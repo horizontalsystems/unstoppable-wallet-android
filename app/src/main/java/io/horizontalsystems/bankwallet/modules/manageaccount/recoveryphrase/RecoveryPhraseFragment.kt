@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -29,6 +28,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.PassphraseCell
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.SeedPhraseList
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -44,7 +44,7 @@ import kotlinx.serialization.Serializable
 data class RecoveryPhraseFragment(val input: Account) : HSScreen(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         RecoveryPhraseScreen(navController, input)
     }
 
@@ -53,7 +53,7 @@ data class RecoveryPhraseFragment(val input: Account) : HSScreen(screenshotEnabl
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RecoveryPhraseScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     account: Account,
 ) {
     val viewModel =

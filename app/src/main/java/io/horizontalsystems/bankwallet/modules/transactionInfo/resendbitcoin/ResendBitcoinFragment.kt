@@ -17,11 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -33,9 +31,8 @@ import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.send.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
@@ -62,7 +59,7 @@ data class ResendBitcoinFragment(val input: Input) : HSScreen() {
     data class Input(val optionType: SpeedUpCancelType)
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val transactionInfoViewModel = navController.viewModelForScreen<TransactionInfoViewModel>(TransactionInfoFragment::class)
 
         val vmFactory = remember {
@@ -83,7 +80,7 @@ data class ResendBitcoinFragment(val input: Input) : HSScreen() {
 
     @Composable
     private fun ResendBitcoinScreen(
-        navController: NavBackStack<HSScreen>,
+        navController: HSNavigation,
         resendViewModel: ResendBitcoinViewModel
     ) {
         val closeUntilDestId = TransactionInfoFragment::class

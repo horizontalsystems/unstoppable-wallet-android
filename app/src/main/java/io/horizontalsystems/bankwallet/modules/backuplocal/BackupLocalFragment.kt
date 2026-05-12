@@ -5,13 +5,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupSection
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBackupItemsScreen
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.BackupType
 import io.horizontalsystems.bankwallet.modules.backuplocal.password.LocalBackupPasswordScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.serialization.Serializable
 
@@ -19,7 +19,7 @@ import kotlinx.serialization.Serializable
 data class BackupLocalFragment(val account: Account? = null) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         if (account != null) {
             SingleWalletBackupNavHost(navController, account.id)
         } else {
@@ -29,7 +29,7 @@ data class BackupLocalFragment(val account: Account? = null) : HSScreen() {
 }
 
 @Composable
-private fun FullBackupNavHost(fragmentNavController: NavBackStack<HSScreen>) {
+private fun FullBackupNavHost(fragmentNavController: HSNavigation) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
@@ -75,7 +75,7 @@ private fun FullBackupNavHost(fragmentNavController: NavBackStack<HSScreen>) {
 }
 
 @Composable
-private fun SingleWalletBackupNavHost(fragmentNavController: NavBackStack<HSScreen>, accountId: String) {
+private fun SingleWalletBackupNavHost(fragmentNavController: HSNavigation, accountId: String) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,

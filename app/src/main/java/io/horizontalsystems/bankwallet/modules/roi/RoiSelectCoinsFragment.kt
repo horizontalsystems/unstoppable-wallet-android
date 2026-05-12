@@ -24,10 +24,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -51,7 +50,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object RoiSelectCoinsFragment : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         RoiSelectCoinsScreen(navController)
     }
 
@@ -59,7 +58,7 @@ data object RoiSelectCoinsFragment : HSScreen() {
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
-fun RoiSelectCoinsScreen(navController: NavBackStack<HSScreen>) {
+fun RoiSelectCoinsScreen(navController: HSNavigation) {
     val viewModel = viewModel<RoiSelectCoinsViewModel>(factory = RoiSelectCoinsViewModel.Factory())
 
     val uiState = viewModel.uiState

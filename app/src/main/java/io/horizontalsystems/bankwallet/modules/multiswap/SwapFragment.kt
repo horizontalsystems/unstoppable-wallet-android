@@ -55,13 +55,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.badge
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -69,6 +64,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapHistoryFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -112,7 +108,7 @@ import java.net.UnknownHostException
 @Serializable
 data class SwapFragment(val input: Input? = null) : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         SwapScreen(navController, input?.tokenIn, input?.tokenOut, navController::removeLastOrNull)
     }
 
@@ -124,7 +120,7 @@ data class SwapFragment(val input: Input? = null) : HSScreen() {
 @SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 fun SwapScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     tokenIn: Token? = null,
     tokenOut: Token? = null,
     onClickClose: (() -> Unit)? = null,
@@ -287,7 +283,7 @@ private fun SwapScreenInner(
     onClickNext: () -> Unit,
     onActionStarted: () -> Unit,
     onActionCompleted: () -> Unit,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     onResume: () -> Unit,
     onPause: () -> Unit,
     bottomPadding: Dp = 0.dp,
@@ -607,7 +603,7 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 fun PriceImpactField(
     priceImpact: BigDecimal?,
     priceImpactLevel: PriceImpactLevel?,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     if (priceImpact == null || priceImpactLevel == null) return
 

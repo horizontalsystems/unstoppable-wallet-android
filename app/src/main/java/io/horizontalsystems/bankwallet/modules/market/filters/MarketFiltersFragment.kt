@@ -28,11 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.paidAction
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
@@ -46,6 +42,7 @@ import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModul
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.TradingSignals
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.TradingVolume
 import io.horizontalsystems.bankwallet.modules.market.filtersresult.MarketFiltersResultsFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -73,7 +70,7 @@ import kotlinx.serialization.Serializable
 data object MarketFiltersFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         AdvancedSearchScreen(
             viewModel(factory = MarketFiltersModule.Factory()),
             navController,
@@ -86,7 +83,7 @@ data object MarketFiltersFragment : HSScreen() {
 @Composable
 private fun AdvancedSearchScreen(
     viewModel: MarketFiltersViewModel,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
 ) {
     val uiState = viewModel.uiState
     val errorMessage = uiState.errorMessage
@@ -267,7 +264,7 @@ private fun BSContent(
 
 @Composable
 fun AdvancedSearchContent(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     viewModel: MarketFiltersViewModel,
     onFilterByBlockchainsClick: () -> Unit,
     showBottomSheet: (MarketFiltersModule.FilterDropdown) -> Unit,

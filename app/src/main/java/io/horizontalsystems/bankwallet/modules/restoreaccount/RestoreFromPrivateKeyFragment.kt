@@ -6,12 +6,11 @@ import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.RestorePrivateKey
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
@@ -25,7 +24,7 @@ import kotlin.reflect.KClass
 data class RestoreFromPrivateKeyFragment(val input: ManageAccountsModule.Input?) : HSScreen(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val popUpToInclusiveId = input?.popOffOnSuccess ?: RestoreFromPrivateKeyFragment::class
         val inclusive = input?.popOffInclusive ?: false
 
@@ -35,7 +34,7 @@ data class RestoreFromPrivateKeyFragment(val input: ManageAccountsModule.Input?)
 
 @Composable
 private fun RestoreFromPrivateKeyNavHost(
-    fragmentNavController: NavBackStack<HSScreen>,
+    fragmentNavController: HSNavigation,
     popUpToInclusiveId: KClass<out HSScreen>,
     inclusive: Boolean,
 ) {

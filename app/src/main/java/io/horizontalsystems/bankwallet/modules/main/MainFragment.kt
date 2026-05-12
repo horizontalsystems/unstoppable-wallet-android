@@ -28,11 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -42,7 +39,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.market.MarketScreen
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapScreen
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.rateapp.RateApp
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceModule
@@ -65,7 +62,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun MainScreenWithRootedDeviceCheck(
     transactionsViewModel: TransactionsViewModel,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory()),
     mainActivityViewModel: MainActivityViewModel
 ) {
@@ -80,7 +77,7 @@ fun MainScreenWithRootedDeviceCheck(
 private fun MainScreen(
     mainActivityViewModel: MainActivityViewModel,
     transactionsViewModel: TransactionsViewModel,
-    fragmentNavController: NavBackStack<HSScreen>,
+    fragmentNavController: HSNavigation,
     viewModel: MainViewModel = viewModel(factory = MainModule.Factory())
 ) {
     val activityIntent by mainActivityViewModel.intentLiveData.observeAsState()

@@ -4,11 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -18,7 +17,7 @@ import kotlin.reflect.KClass
 @Serializable
 data class RestoreFromPasskeyFragment(val input: Input) : HSScreen(screenshotEnabled = false) {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         RestoreFromPasskeyNavHost(navController, input)
     }
 
@@ -33,7 +32,7 @@ data class RestoreFromPasskeyFragment(val input: Input) : HSScreen(screenshotEna
 
 @Composable
 private fun RestoreFromPasskeyNavHost(
-    fragmentNavController: NavBackStack<HSScreen>,
+    fragmentNavController: HSNavigation,
     input: RestoreFromPasskeyFragment.Input,
 ) {
     val popUpToInclusiveId = input.popOffOnSuccess

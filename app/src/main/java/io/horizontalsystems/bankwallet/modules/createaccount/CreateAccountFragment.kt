@@ -10,9 +10,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.PassKeyTermsFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -33,14 +33,14 @@ import kotlinx.serialization.Serializable
 data class CreateAccountFragment(val input: ManageAccountsModule.Input? = null) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         CreateAccountScreen(navController, input)
     }
 }
 
 
 @Composable
-fun CreateAccountScreen(navController: NavBackStack<HSScreen>, input: ManageAccountsModule.Input?) {
+fun CreateAccountScreen(navController: HSNavigation, input: ManageAccountsModule.Input?) {
     HSScaffold(
         title = stringResource(R.string.ManageAccounts_CreateNewWallet),
         onBack = navController::removeLastOrNull
@@ -111,6 +111,6 @@ fun WalletType(
 @Preview
 fun Preview_CreateAccountScreen() {
     ComposeAppTheme {
-        CreateAccountScreen(NavBackStack(MainScreen), null)
+        CreateAccountScreen(HSNavigation(NavBackStack(MainScreen)), null)
     }
 }

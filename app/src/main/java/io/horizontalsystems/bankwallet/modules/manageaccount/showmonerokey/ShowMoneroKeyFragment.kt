@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.MenuItem
 import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowMoneroKeyModule.MoneroKeyType
@@ -25,6 +24,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.showmonerokey.ShowM
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
@@ -41,7 +41,7 @@ import kotlinx.serialization.Serializable
 data class ShowMoneroKeyFragment(val input: Input) : HSScreen(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val keys = input?.keys
 
         if (keys == null) {
@@ -58,7 +58,7 @@ data class ShowMoneroKeyFragment(val input: Input) : HSScreen(screenshotEnabled 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ShowMoneroKeyScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     keys: MoneroKeys
 ) {
     val view = LocalView.current

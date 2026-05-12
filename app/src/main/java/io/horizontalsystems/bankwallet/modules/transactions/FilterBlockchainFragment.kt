@@ -21,13 +21,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -39,7 +38,7 @@ import kotlinx.serialization.Serializable
 data object FilterBlockchainFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val viewModel = navController.viewModelForScreen<TransactionsViewModel>(MainScreen::class)
 
         FilterBlockchainScreen(navController, viewModel)
@@ -48,7 +47,7 @@ data object FilterBlockchainFragment : HSScreen() {
 
 
 @Composable
-fun FilterBlockchainScreen(navController: NavBackStack<HSScreen>, viewModel: TransactionsViewModel) {
+fun FilterBlockchainScreen(navController: HSNavigation, viewModel: TransactionsViewModel) {
     val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
 
     HSScaffold(
@@ -73,7 +72,7 @@ fun FilterBlockchainScreen(navController: NavBackStack<HSScreen>, viewModel: Tra
 private fun BlockchainCell(
     viewModel: TransactionsViewModel,
     filterItem: Filter<Blockchain?>,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     CellMultilineClear(borderTop = true) {
         Row(

@@ -20,13 +20,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector.AddTokenBlockchainSelectorScreen
 import io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector.BlockchainSelectorResult
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.TitleValueCell
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -51,7 +51,7 @@ import kotlinx.serialization.Serializable
 data object AddTokenFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         AddTokenNavHost(navController)
     }
 
@@ -62,7 +62,7 @@ private const val BlockchainSelectorPage = "blockchain_selector"
 
 @Composable
 private fun AddTokenNavHost(
-    fragmentNavController: NavBackStack<HSScreen>,
+    fragmentNavController: HSNavigation,
     viewModel: AddTokenViewModel = viewModel(factory = AddTokenModule.Factory())
 ) {
     val navController = rememberNavController()

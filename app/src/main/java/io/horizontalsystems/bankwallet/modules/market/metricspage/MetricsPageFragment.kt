@@ -16,12 +16,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statPage
@@ -31,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -53,7 +52,7 @@ import kotlinx.serialization.Serializable
 data class MetricsPageFragment(val metricsType: MetricsType) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val factory = remember { MetricsPageModule.Factory(metricsType) }
         val chartViewModel = viewModel<ChartViewModel>(factory = factory)
         val viewModel = viewModel<MetricsPageViewModel>(factory = factory)
@@ -64,7 +63,7 @@ data class MetricsPageFragment(val metricsType: MetricsType) : HSScreen() {
         }
     }
 
-    private fun onCoinClick(coinUid: String, navController: NavBackStack<HSScreen>) {
+    private fun onCoinClick(coinUid: String, navController: HSNavigation) {
         val arguments = CoinFragment.Input(coinUid)
 
         navController.slideFromRight(CoinFragment(arguments))
@@ -75,7 +74,7 @@ data class MetricsPageFragment(val metricsType: MetricsType) : HSScreen() {
     fun MetricsPage(
         viewModel: MetricsPageViewModel,
         chartViewModel: ChartViewModel,
-        navController: NavBackStack<HSScreen>,
+        navController: HSNavigation,
         onCoinClick: (String) -> Unit,
     ) {
         val uiState = viewModel.uiState

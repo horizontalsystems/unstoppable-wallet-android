@@ -21,12 +21,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -40,6 +36,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKey
 import io.horizontalsystems.bankwallet.modules.manageaccount.privatekeys.PrivateKeysFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.publickeys.PublicKeysFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.recoveryphrase.RecoveryPhraseFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -69,7 +66,7 @@ import kotlinx.serialization.Serializable
 data class ManageAccountFragment(val input: Input) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         ManageAccountScreen(navController, input.accountId)
     }
 
@@ -78,7 +75,7 @@ data class ManageAccountFragment(val input: Input) : HSScreen() {
 }
 
 @Composable
-fun ManageAccountScreen(navController: NavBackStack<HSScreen>, accountId: String) {
+fun ManageAccountScreen(navController: HSNavigation, accountId: String) {
     val viewModel =
         viewModel<ManageAccountViewModel>(factory = ManageAccountModule.Factory(accountId))
 
@@ -196,7 +193,7 @@ fun ManageAccountScreen(navController: NavBackStack<HSScreen>, accountId: String
 private fun BackupActions(
     backupActions: List<BackupItem>,
     account: Account,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     val actionItems = mutableListOf<@Composable () -> Unit>()
     val infoItems = mutableListOf<@Composable () -> Unit>()
@@ -262,7 +259,7 @@ private fun BackupActions(
 @Composable
 private fun KeyActions(
     viewModel: ManageAccountViewModel,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     val actionItems = mutableListOf<@Composable () -> Unit>()
 

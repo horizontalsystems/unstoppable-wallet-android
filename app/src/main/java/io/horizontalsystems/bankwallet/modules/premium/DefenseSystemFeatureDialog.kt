@@ -24,10 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.settings.banners.TextWithDynamicScale
 import io.horizontalsystems.bankwallet.modules.usersubscription.PremiumFeaturesDialog
 import io.horizontalsystems.bankwallet.modules.usersubscription.SelectPlanDialog
@@ -56,7 +54,7 @@ import kotlinx.parcelize.Parcelize
 
 class DefenseSystemFeatureDialog(val input: Input) : BaseComposableBottomSheetFragment() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         DefenseSystemFeatureScreen(
             navController,
             input.feature,
@@ -134,7 +132,7 @@ enum class PremiumFeature(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun DefenseSystemFeatureScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     feature: PremiumFeature,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)

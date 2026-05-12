@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import androidx.navigation3.runtime.NavBackStack
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializationContext
@@ -8,11 +7,10 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.entities.Faq
 import io.horizontalsystems.bankwallet.entities.FaqMap
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -37,7 +35,7 @@ object FaqManager {
         .registerTypeAdapter(Faq::class.java, FaqDeserializer(faqListUrl))
         .create()
 
-    fun showFaqPage(navController: NavBackStack<HSScreen>, path: String, language: String = "en") {
+    fun showFaqPage(navController: HSNavigation, path: String, language: String = "en") {
         navController.slideFromBottom(
             MarkdownFragment(MarkdownFragment.Input(getFaqUrl(path, language), true, true))
         )

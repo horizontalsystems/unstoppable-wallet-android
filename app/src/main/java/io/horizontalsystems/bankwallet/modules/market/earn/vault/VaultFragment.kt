@@ -19,10 +19,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
@@ -46,7 +46,7 @@ import kotlinx.serialization.Serializable
 data class VaultFragment(val input: Input) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val factory = VaultModule.Factory(input)
         val viewModel = viewModel<VaultViewModel>(factory = factory)
         val chartViewModel = viewModel<ChartViewModel>(
@@ -79,7 +79,7 @@ data class VaultFragment(val input: Input) : HSScreen() {
 private fun VaultScreen(
     viewModel: VaultViewModel,
     chartViewModel: ChartViewModel,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
 ) {
     val uiState = viewModel.uiState
     val context = LocalContext.current

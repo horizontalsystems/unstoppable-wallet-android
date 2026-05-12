@@ -10,12 +10,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.receive.monero.ReceiveMoneroScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.UsedAddressesParams
@@ -33,7 +31,7 @@ import kotlin.reflect.KClass
 data class ReceiveFragment(val input: Input) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val wallet = input.wallet
         val token = wallet.token
         when (token.blockchainType) {
@@ -84,7 +82,7 @@ data class ReceiveFragment(val input: Input) : HSScreen() {
 
 @Composable
 fun ReceiveScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     wallet: Wallet,
     receiveEntryPointDestId: KClass<out HSScreen>?,
     isTransparentAddress: Boolean,

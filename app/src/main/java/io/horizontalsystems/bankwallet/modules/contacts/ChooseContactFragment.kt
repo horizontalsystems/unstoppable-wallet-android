@@ -24,9 +24,9 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.shorten
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -50,7 +50,7 @@ import kotlinx.serialization.Serializable
 data class ChooseContactFragment(val blockchainType: BlockchainType) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         ChooseContactScreen(blockchainType, navController)
     }
 
@@ -61,7 +61,7 @@ data class ChooseContactFragment(val blockchainType: BlockchainType) : HSScreen(
 @Composable
 fun ChooseContactScreen(
     blockchainType: BlockchainType,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<ChooseContactViewModel>(factory = ChooseContactViewModel.Factory(blockchainType))

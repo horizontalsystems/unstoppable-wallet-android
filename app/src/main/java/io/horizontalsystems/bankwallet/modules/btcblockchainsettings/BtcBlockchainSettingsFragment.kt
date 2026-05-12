@@ -23,11 +23,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule.BlockchainSettingsIcon
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -48,7 +48,7 @@ import kotlinx.serialization.Serializable
 data class BtcBlockchainSettingsFragment(val blockchain: Blockchain) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val viewModel = viewModel<BtcBlockchainSettingsViewModel>(
             factory = BtcBlockchainSettingsModule.Factory(blockchain)
         )
@@ -60,7 +60,7 @@ data class BtcBlockchainSettingsFragment(val blockchain: Blockchain) : HSScreen(
 @Composable
 private fun BtcBlockchainSettingsScreen(
     viewModel: BtcBlockchainSettingsViewModel,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
 
     LaunchedEffect(viewModel.closeScreen) {

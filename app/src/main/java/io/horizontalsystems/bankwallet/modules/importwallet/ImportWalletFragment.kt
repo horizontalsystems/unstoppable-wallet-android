@@ -28,14 +28,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.NoCredentialException
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.NavigationType
-import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -44,6 +40,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBotto
 import io.horizontalsystems.bankwallet.modules.createaccount.RestorePasskeyNotSupported
 import io.horizontalsystems.bankwallet.modules.createaccount.WalletType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreAccountFragment
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreFromPasskeyFragment
@@ -67,7 +64,7 @@ import kotlin.reflect.KClass
 data class ImportWalletFragment(val input: ManageAccountsModule.Input? = null) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val popUpToInclusiveId = input?.popOffOnSuccess ?: ImportWalletFragment::class
         val inclusive = input?.popOffInclusive ?: true
 
@@ -79,7 +76,7 @@ data class ImportWalletFragment(val input: ManageAccountsModule.Input? = null) :
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ImportWalletScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     popUpToInclusiveId: KClass<out HSScreen>,
     inclusive: Boolean
 ) {

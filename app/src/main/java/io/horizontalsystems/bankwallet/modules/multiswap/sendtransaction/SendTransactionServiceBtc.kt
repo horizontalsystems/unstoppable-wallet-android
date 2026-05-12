@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
@@ -24,7 +23,7 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinAddressService
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinAmountService
@@ -178,7 +177,7 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
     }
 
     @Composable
-    override fun GetSettingsContent(navController: NavBackStack<HSScreen>) {
+    override fun GetSettingsContent(navController: HSNavigation) {
         val sendSettingsViewModel = viewModel<SendBtcSettingsViewModel>(
             factory = SendBtcSettingsViewModel.Factory(feeRateService, feeService, token)
         )
@@ -206,7 +205,7 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
 
 @Composable
 fun SendBtcFeeSettingsScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     viewModel: SendBtcSettingsViewModel
 ) {
     val uiState = viewModel.uiState

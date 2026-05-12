@@ -8,8 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainScreenWithRootedDeviceCheck
 import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewFragment
@@ -23,7 +21,7 @@ import java.util.UUID
 @Serializable
 data object MainScreen : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val mainActivityViewModel =
             viewModel<MainActivityViewModel>(viewModelStoreOwner = LocalActivity.current as ComponentActivity)
 
@@ -66,7 +64,7 @@ data object MainScreen : HSScreen() {
     }
 
     //    @Composable
-//    override fun GetContent(backStack: NavBackStack<HSScreen>) {
+//    override fun GetContent(backStack: HSNavigation) {
 //        MainScreenWithRootedDeviceCheck(
 //            mainActivityViewModel = mainActivityViewModel,
 //            backStack = backStack,

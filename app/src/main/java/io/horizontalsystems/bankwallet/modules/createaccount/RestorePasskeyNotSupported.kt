@@ -8,9 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
@@ -23,14 +22,14 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 class RestorePasskeyNotSupported : BaseComposableBottomSheetFragment() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         RestorePasskeyNotSupportedScreen(navController)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RestorePasskeyNotSupportedScreen(navController: NavBackStack<HSScreen>) {
+fun RestorePasskeyNotSupportedScreen(navController: HSNavigation) {
     BottomSheetContent(
         onDismissRequest = navController::removeLastOrNull,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)

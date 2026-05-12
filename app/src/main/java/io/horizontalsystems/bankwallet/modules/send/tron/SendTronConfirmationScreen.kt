@@ -26,9 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -37,8 +35,8 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.modules.send.ConfirmationBottomSection
 import io.horizontalsystems.bankwallet.modules.send.ConfirmationTopSection
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
@@ -59,7 +57,7 @@ import kotlin.reflect.KClass
 
 @Composable
 fun SendTronConfirmationScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     sendViewModel: SendTronViewModel,
     sendEntryPointDestId: KClass<out HSScreen>?
 ) {
@@ -243,7 +241,7 @@ private fun ResourcesConsumed(
     title: String,
     value: String,
     info: String,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),

@@ -10,13 +10,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostFragment
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -31,14 +30,14 @@ import kotlinx.serialization.Serializable
 data object SubscriptionFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         SubscriptionScreen(navController)
     }
 
 }
 
 @Composable
-fun SubscriptionScreen(navController: NavBackStack<HSScreen>) {
+fun SubscriptionScreen(navController: HSNavigation) {
     val viewModel = viewModel<SubscriptionViewModel>()
 
     val uiState = viewModel.uiState

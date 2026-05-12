@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.pin
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.NavBackStack
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinConfirm
@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
 data object ConfirmPinFragment : HSScreen(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val resultEventBus = LocalResultEventBus.current
         PinConfirm(
             onSuccess = {

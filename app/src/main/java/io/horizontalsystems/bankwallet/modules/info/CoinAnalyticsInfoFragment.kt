@@ -8,12 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticInfo
 import io.horizontalsystems.bankwallet.modules.info.ui.BulletedText
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoBody
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoHeader
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -24,7 +24,7 @@ import kotlinx.serialization.Serializable
 data class CoinAnalyticsInfoFragment(val input: AnalyticInfo) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         CoinAnalyticsInfoScreen(input) { navController.removeLastOrNull() }
     }
 }

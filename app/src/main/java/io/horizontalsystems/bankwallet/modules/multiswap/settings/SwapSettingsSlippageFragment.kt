@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.settings
 
+import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,12 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.NumberInputWithButtons
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
@@ -27,7 +28,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
-import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
@@ -35,7 +35,7 @@ import java.math.BigDecimal
 @Serializable
 data class SwapSettingsSlippageFragment(val input: Input) : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         SwapSlippageSettingsScreen(navController, input.slippage)
     }
 
@@ -48,7 +48,7 @@ data class SwapSettingsSlippageFragment(val input: Input) : HSScreen() {
 
 @Composable
 fun SwapSlippageSettingsScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     initialSlippage: BigDecimal
 ) {
     val resultEventBus = LocalResultEventBus.current

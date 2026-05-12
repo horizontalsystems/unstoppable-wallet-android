@@ -19,16 +19,14 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
 import io.horizontalsystems.bankwallet.modules.eip20approve.ConfirmTokenSection
 import io.horizontalsystems.bankwallet.modules.eip20approve.SpenderCell
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
@@ -47,7 +45,7 @@ import java.math.BigDecimal
 @Serializable
 data class Eip20RevokeConfirmFragment(val input: Input) : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         Eip20RevokeScreen(navController, input)
     }
 
@@ -63,7 +61,7 @@ data class Eip20RevokeConfirmFragment(val input: Input) : HSScreen() {
 }
 
 @Composable
-fun Eip20RevokeScreen(navController: NavBackStack<HSScreen>, input: Eip20RevokeConfirmFragment.Input) {
+fun Eip20RevokeScreen(navController: HSNavigation, input: Eip20RevokeConfirmFragment.Input) {
     val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<Eip20RevokeConfirmViewModel>(
         factory = Eip20RevokeConfirmViewModel.Factory(

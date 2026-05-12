@@ -40,13 +40,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -65,7 +62,7 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFragment
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinFragment
@@ -198,7 +195,7 @@ fun BalanceItems(
     balanceViewItems: List<BalanceViewItem2>,
     viewModel: BalanceViewModel,
     accountViewItem: AccountViewItem,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     uiState: BalanceUiState,
     onScanClick: () -> Unit,
 ) {
@@ -509,7 +506,7 @@ fun BalanceItems(
 private fun handleContextMenuClick(
     menuItem: BalanceContextMenuItem,
     balanceViewItem: BalanceViewItem2,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     onAddressCopyClick: (Wallet) -> Unit,
     onDisable: (BalanceViewItem2) -> Unit
 ) {
@@ -563,7 +560,7 @@ private fun handleContextMenuClick(
     }
 }
 
-private fun handleReceiveAddress(viewModel: BalanceViewModel, wallet: Wallet, view: View, navController: NavBackStack<HSScreen>) {
+private fun handleReceiveAddress(viewModel: BalanceViewModel, wallet: Wallet, view: View, navController: HSNavigation) {
     val address = viewModel.getReceiveAddress(wallet)
     val receiveAllowedState = viewModel.getReceiveAllowedState()
 
@@ -580,7 +577,7 @@ private fun showErrorAddressUnavailable(view: View) {
 
 private fun showBackupRequiredDialog(
     account: Account,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     val text = Translator.getString(
         R.string.Balance_Receive_BackupRequired_Description,

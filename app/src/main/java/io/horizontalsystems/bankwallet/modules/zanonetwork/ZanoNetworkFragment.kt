@@ -37,13 +37,13 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager.ZanoNode
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
@@ -71,7 +71,7 @@ import kotlinx.serialization.Serializable
 data object ZanoNetworkFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         ZanoNetworkNavHost(navController)
     }
 
@@ -81,7 +81,7 @@ private const val ZanoNetworkPage = "zano_network"
 private const val AddNodePage = "add_node"
 
 @Composable
-private fun ZanoNetworkNavHost(fragmentNavController: NavBackStack<HSScreen>) {
+private fun ZanoNetworkNavHost(fragmentNavController: HSNavigation) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = ZanoNetworkPage) {
         composable(ZanoNetworkPage) {

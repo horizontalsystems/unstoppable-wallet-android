@@ -13,11 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.paidAction
-import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
@@ -28,8 +24,8 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketSignalsFragment
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersFragment
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersViewModel
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
@@ -49,7 +45,7 @@ import kotlinx.serialization.Serializable
 data object MarketFiltersResultsFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val marketSearchFilterViewModel = navController.viewModelForScreen<MarketFiltersViewModel>(MarketFiltersFragment::class)
         val viewModel = viewModel<MarketFiltersResultViewModel>(
             factory = MarketFiltersResultsModule.Factory(marketSearchFilterViewModel.service)
@@ -63,7 +59,7 @@ data object MarketFiltersResultsFragment : HSScreen() {
 @Composable
 private fun SearchResultsScreen(
     viewModel: MarketFiltersResultViewModel,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
 
     val uiState = viewModel.uiState

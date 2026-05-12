@@ -12,15 +12,13 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.TransactionInfoHelper
 import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.coinAmountString
 import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.coinIconPainter
@@ -86,7 +84,7 @@ fun AmountCellTV(
     coinAmountColor: AmountColor,
     coinAmountSign: AmountSign,
     transactionInfoHelper: TransactionInfoHelper,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     statPage: StatPage,
     borderTop: Boolean = true
 ) {

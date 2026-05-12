@@ -23,10 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.badge
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.gradientBadge
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.noteAmount
@@ -55,7 +53,7 @@ import io.horizontalsystems.subscriptions.core.numberOfDays
 
 class SelectPlanDialog : BaseComposableBottomSheetFragment() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         SelectPlanBottomSheet(
             onDismiss = { navController.removeLastOrNull() },
             onPurchase = {

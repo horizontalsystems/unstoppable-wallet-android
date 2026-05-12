@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.NavBackStack
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroConfirmationScreen
@@ -27,7 +26,7 @@ import kotlin.reflect.KClass
 data class SendConfirmationFragment(val input: Input) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         when (input.type) {
             Type.Bitcoin -> {
                 val sendBitcoinViewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendFragment::class)

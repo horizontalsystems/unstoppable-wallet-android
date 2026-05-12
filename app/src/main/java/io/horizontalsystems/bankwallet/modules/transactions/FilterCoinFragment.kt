@@ -22,15 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.B2
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
@@ -43,7 +42,7 @@ import kotlinx.serialization.Serializable
 data object FilterCoinFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val viewModel = navController.viewModelForScreen<TransactionsViewModel>(MainScreen::class)
         FilterCoinScreen(navController, viewModel)
     }
@@ -52,7 +51,7 @@ data object FilterCoinFragment : HSScreen() {
 
 
 @Composable
-fun FilterCoinScreen(navController: NavBackStack<HSScreen>, viewModel: TransactionsViewModel) {
+fun FilterCoinScreen(navController: HSNavigation, viewModel: TransactionsViewModel) {
     val filterCoins by viewModel.filterTokensLiveData.observeAsState()
 
     HSScaffold(

@@ -11,9 +11,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
@@ -25,7 +24,7 @@ import kotlinx.parcelize.Parcelize
 class ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         ConfirmDeleteAllScreen(navController)
     }
 
@@ -34,7 +33,7 @@ class ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-fun ConfirmDeleteAllScreen(navController: NavBackStack<HSScreen>) {
+fun ConfirmDeleteAllScreen(navController: HSNavigation) {
     val resultEventBus = LocalResultEventBus.current
     ComposeAppTheme {
         BottomSheetHeader(

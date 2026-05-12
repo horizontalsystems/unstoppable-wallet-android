@@ -27,16 +27,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForPrevScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -61,13 +59,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SwapSelectProviderFragment : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         SwapSelectProviderScreen(navController)
     }
 }
 
 @Composable
-fun SwapSelectProviderScreen(navController: NavBackStack<HSScreen>) {
+fun SwapSelectProviderScreen(navController: HSNavigation) {
     val swapViewModel = navController.viewModelForPrevScreen<SwapViewModel>()
     val viewModel = viewModel<SwapSelectProviderViewModel>(
         factory = SwapSelectProviderViewModel.Factory(

@@ -14,11 +14,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -35,7 +34,7 @@ import kotlinx.serialization.Serializable
 data object BlockchainsSelectorFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         FilterByBlockchainsScreen(
             navController.viewModelForScreen(MarketFiltersFragment::class),
             navController,
@@ -47,7 +46,7 @@ data object BlockchainsSelectorFragment : HSScreen() {
 @Composable
 private fun FilterByBlockchainsScreen(
     viewModel: MarketFiltersViewModel,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     val uiState = viewModel.uiState
 

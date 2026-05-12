@@ -20,11 +20,10 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.removeLastUntil
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
@@ -44,7 +43,7 @@ import kotlin.reflect.KClass
 data class SelectBlockchainsFragment(val input: Input) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         SelectBlockchainsScreen(
             input.accountType,
             input.accountName,
@@ -68,7 +67,7 @@ data class SelectBlockchainsFragment(val input: Input) : HSScreen() {
 private fun SelectBlockchainsScreen(
     accountType: AccountType,
     accountName: String?,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     popUpToInclusiveId: KClass<out HSScreen>,
     inclusive: Boolean
 ) {

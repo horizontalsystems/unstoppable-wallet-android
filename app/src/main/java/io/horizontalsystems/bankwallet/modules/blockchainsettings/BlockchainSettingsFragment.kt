@@ -16,16 +16,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsFragment
 import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment
 import io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.solananetwork.SolanaNetworkFragment
 import io.horizontalsystems.bankwallet.modules.zanonetwork.ZanoNetworkFragment
@@ -42,7 +41,7 @@ import kotlinx.serialization.Serializable
 data object BlockchainSettingsFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         BlockchainSettingsScreen(
             navController = navController,
         )
@@ -52,7 +51,7 @@ data object BlockchainSettingsFragment : HSScreen() {
 
 @Composable
 private fun BlockchainSettingsScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     viewModel: BlockchainSettingsViewModel = viewModel(factory = BlockchainSettingsModule.Factory()),
 ) {
 
@@ -80,7 +79,7 @@ private fun BlockchainSettingsScreen(
 fun BlockchainSettingsBlock(
     btcLikeChains: List<BlockchainSettingsModule.BlockchainViewItem>,
     otherChains: List<BlockchainSettingsModule.BlockchainViewItem>,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     CellUniversalLawrenceSection(btcLikeChains) { item ->
         BlockchainSettingCell(item) {
@@ -97,7 +96,7 @@ fun BlockchainSettingsBlock(
 
 private fun onClick(
     item: BlockchainSettingsModule.BlockchainViewItem,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     when (item.blockchainItem) {
         is BlockchainSettingsModule.BlockchainItem.Btc -> {

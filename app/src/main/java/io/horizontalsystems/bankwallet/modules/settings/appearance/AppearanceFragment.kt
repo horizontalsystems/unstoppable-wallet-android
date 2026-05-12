@@ -38,13 +38,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.basecurrency.BaseCurrencySettingsFragment
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -74,7 +73,7 @@ import kotlinx.serialization.Serializable
 data object AppearanceFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         AppearanceScreen(navController)
     }
 
@@ -82,7 +81,7 @@ data object AppearanceFragment : HSScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppearanceScreen(navController: NavBackStack<HSScreen>) {
+fun AppearanceScreen(navController: HSNavigation) {
     val viewModel = viewModel<AppearanceViewModel>(factory = AppearanceModule.Factory())
     val uiState = viewModel.uiState
 

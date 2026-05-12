@@ -32,11 +32,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -58,7 +55,7 @@ import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatforms
 import io.horizontalsystems.bankwallet.modules.market.topsectors.TopSectorsScreen
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -77,7 +74,7 @@ import java.math.BigDecimal
 
 @Composable
 fun MarketScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
 ) {
     val viewModel = viewModel<MarketViewModel>(factory = MarketModule.Factory())
     val uiState = viewModel.uiState
@@ -139,7 +136,7 @@ fun MarketScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TabsSection(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     tabs: Array<Tab>,
     selectedTab: Tab,
     onTabClick: (Tab) -> Unit
@@ -193,7 +190,7 @@ private fun getDiff(it: BigDecimal): String {
 
 @Composable
 fun MetricsBoard(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     marketGlobal: MarketGlobal?,
     currency: Currency
 ) {
@@ -327,7 +324,7 @@ private fun RowScope.MarketTotalCard(
     }
 }
 
-private fun openMetricsPage(metricsType: MetricsType, navController: NavBackStack<HSScreen>) {
+private fun openMetricsPage(metricsType: MetricsType, navController: HSNavigation) {
     when (metricsType) {
         MetricsType.TvlInDefi -> {
             navController.slideFromBottom(TvlFragment)
@@ -345,7 +342,7 @@ private fun openMetricsPage(metricsType: MetricsType, navController: NavBackStac
     stat(page = StatPage.Markets, event = StatEvent.Open(metricsType.statPage))
 }
 
-private fun onCoinClick(coinUid: String, navController: NavBackStack<HSScreen>) {
+private fun onCoinClick(coinUid: String, navController: HSNavigation) {
     val arguments = CoinFragment.Input(coinUid)
 
     navController.slideFromRight(CoinFragment(arguments))

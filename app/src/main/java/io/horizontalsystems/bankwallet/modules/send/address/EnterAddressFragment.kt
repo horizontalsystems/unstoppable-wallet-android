@@ -2,12 +2,11 @@ package io.horizontalsystems.bankwallet.modules.send.address
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R.string.Button_Next
 import io.horizontalsystems.bankwallet.R.string.Send_EnterAddress
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enteraddress.EnterAddressScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.send.SendFragment.Input
@@ -19,7 +18,7 @@ import kotlin.reflect.KClass
 @Serializable
 data class EnterAddressFragment(val input: Input) : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         EnterAddressScreen(
             navController = navController,
             token = input.wallet.token,

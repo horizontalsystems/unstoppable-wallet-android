@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.send.evm.settings
 
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.NavBackStack
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationViewModel
 import kotlinx.serialization.Serializable
@@ -11,13 +10,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SendEvmNonceSettingsFragment : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         NonceSettingsScreen(navController)
     }
 }
 
 @Composable
-fun NonceSettingsScreen(navController: NavBackStack<HSScreen>) {
+fun NonceSettingsScreen(navController: HSNavigation) {
     val viewModel = navController.viewModelForScreen<SendEvmConfirmationViewModel>(SendEvmConfirmationFragment::class)
     val sendTransactionService = viewModel.sendTransactionService
 

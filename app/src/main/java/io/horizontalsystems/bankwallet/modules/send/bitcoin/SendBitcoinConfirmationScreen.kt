@@ -7,10 +7,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.LifecycleResumeEffect
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stringResId
 import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -19,7 +19,7 @@ import kotlin.reflect.KClass
 
 @Composable
 fun SendBitcoinConfirmationScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     sendViewModel: SendBitcoinViewModel,
     sendEntryPointDestId: KClass<out HSScreen>
 ) {

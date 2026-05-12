@@ -9,16 +9,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyFragment
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -33,7 +31,7 @@ import kotlinx.parcelize.Parcelize
 class BackupRequiredDialog(val input: Input) : BaseComposableBottomSheetFragment() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         BackupRequiredScreen(navController, input.account, input.text)
     }
 
@@ -43,7 +41,7 @@ class BackupRequiredDialog(val input: Input) : BaseComposableBottomSheetFragment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BackupRequiredScreen(navController: NavBackStack<HSScreen>, account: Account, text: String) {
+fun BackupRequiredScreen(navController: HSNavigation, account: Account, text: String) {
     ComposeAppTheme {
         BottomSheetContent(
             onDismissRequest = navController::removeLastOrNull,

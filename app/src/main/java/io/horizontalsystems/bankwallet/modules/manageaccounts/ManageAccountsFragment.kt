@@ -18,11 +18,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.NavigationType
-import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -32,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -55,13 +53,13 @@ import kotlinx.serialization.Serializable
 data class ManageAccountsFragment(val input: ManageAccountsModule.Mode) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         ManageAccountsScreen(navController, input)
     }
 }
 
 @Composable
-fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAccountsModule.Mode) {
+fun ManageAccountsScreen(navController: HSNavigation, mode: ManageAccountsModule.Mode) {
     BackupRequiredAlert(navController)
 
     val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
@@ -207,7 +205,7 @@ fun ManageAccountsScreen(navController: NavBackStack<HSScreen>, mode: ManageAcco
 fun AccountCellWrapper(
     account: AccountViewItem,
     viewModel: ManageAccountsViewModel,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     AccountCell(
         accountViewItem = account,

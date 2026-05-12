@@ -15,9 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -41,7 +41,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object MarketSignalsFragment : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         MarketSignalsScreen(navController)
     }
 
@@ -50,7 +50,7 @@ data object MarketSignalsFragment : HSScreen() {
 }
 
 @Composable
-fun MarketSignalsScreen(navController: NavBackStack<HSScreen>) {
+fun MarketSignalsScreen(navController: HSNavigation) {
     val resultEventBus = LocalResultEventBus.current
     HSScaffold(
         title = stringResource(R.string.Market_Signals),

@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.marketkit.models.Token
@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SwapSelectCoinFragment(val input: Input) : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         SwapSelectCoinScreen(navController, input.token, input.title)
     }
 
@@ -22,7 +22,7 @@ data class SwapSelectCoinFragment(val input: Input) : HSScreen() {
 
 @Composable
 private fun SwapSelectCoinScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     token: Token?,
     title: String?
 ) {

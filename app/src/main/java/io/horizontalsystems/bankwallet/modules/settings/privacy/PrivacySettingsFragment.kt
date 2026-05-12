@@ -18,12 +18,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.settings.privacy.tor.SecurityTorSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.privacy.tor.SecurityTorSettingsViewModel
@@ -45,7 +45,7 @@ import kotlin.system.exitProcess
 data object PrivacySettingsFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val torViewModel = viewModel<SecurityTorSettingsViewModel>(
             factory = SecurityTorSettingsModule.Factory()
         )
@@ -68,7 +68,7 @@ data object PrivacySettingsFragment : HSScreen() {
 
 @Composable
 fun PrivacyScreen(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     torViewModel: SecurityTorSettingsViewModel,
     restartApp: () -> Unit = {},
 ) {

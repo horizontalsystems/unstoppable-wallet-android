@@ -34,16 +34,14 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialog
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.animations.shake
@@ -66,7 +64,7 @@ import java.math.BigDecimal
 @Composable
 fun Eip1559FeeSettings(
     viewModel: Eip1559FeeSettingsViewModel,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     val summaryViewItem = viewModel.feeSummaryViewItem
     val currentBaseFee = viewModel.currentBaseFee
@@ -157,7 +155,7 @@ fun EvmSettingsInput(
     decimals: Int,
     warnings: List<Warning>,
     errors: List<Throwable>,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
     onClickDecrement: () -> Unit
@@ -188,7 +186,7 @@ fun EvmSettingsInput(
     value: BigDecimal,
     decimals: Int,
     caution: HSCaution?,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
     onClickDecrement: () -> Unit
@@ -219,7 +217,7 @@ private fun EvmSettingsInput(
     value: BigDecimal,
     decimals: Int,
     textColor: Color,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     onValueChange: (BigDecimal) -> Unit,
     onClickIncrement: () -> Unit,
     onClickDecrement: () -> Unit,
@@ -347,7 +345,7 @@ fun ButtonsGroupWithShade(
 @Composable
 fun LegacyFeeSettings(
     viewModel: LegacyFeeSettingsViewModel,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     val summaryViewItem = viewModel.feeSummaryViewItem
     val viewItem = viewModel.feeViewItem
@@ -426,7 +424,7 @@ fun Cautions(cautions: List<CautionViewItem>) {
 
 @Composable
 private fun FeeField(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     primary: String,
     secondary: String? = null,
     title: String,

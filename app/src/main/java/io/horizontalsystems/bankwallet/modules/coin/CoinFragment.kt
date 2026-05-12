@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -19,6 +18,7 @@ import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsScreen
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -36,7 +36,7 @@ import kotlinx.serialization.Serializable
 data class CoinFragment(val input: Input) : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         CoinScreen(
             input.coinUid,
             viewModel(factory = CoinModule.Factory(input.coinUid)),
@@ -52,7 +52,7 @@ data class CoinFragment(val input: Input) : HSScreen() {
 fun CoinScreen(
     coinUid: String,
     coinViewModel: CoinViewModel?,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     if (coinViewModel != null) {
         CoinTabs(coinViewModel, navController)
@@ -64,7 +64,7 @@ fun CoinScreen(
 @Composable
 fun CoinTabs(
     viewModel: CoinViewModel,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     val tabs = viewModel.tabs
     val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
@@ -162,7 +162,7 @@ fun CoinTabs(
 }
 
 @Composable
-fun CoinNotFound(coinUid: String, navController: NavBackStack<HSScreen>) {
+fun CoinNotFound(coinUid: String, navController: HSNavigation) {
     HSScaffold(
         title = coinUid,
         onBack = navController::removeLastOrNull,

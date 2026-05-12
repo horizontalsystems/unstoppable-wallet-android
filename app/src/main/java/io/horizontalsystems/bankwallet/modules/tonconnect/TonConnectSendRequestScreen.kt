@@ -17,16 +17,14 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
-import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.xtransaction.cells.HeaderCell
 import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.TransactionInfoHelper
 import io.horizontalsystems.bankwallet.modules.xtransaction.sections.BurnSection
@@ -49,7 +47,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun TonConnectSendRequestScreen(navController: NavBackStack<HSScreen>) {
+fun TonConnectSendRequestScreen(navController: HSNavigation) {
     val logger = remember { AppLogger("ton-connect request") }
     val mainActivityViewModel =
         viewModel<MainActivityViewModel>(viewModelStoreOwner = LocalActivity.current as ComponentActivity)
@@ -169,7 +167,7 @@ fun TonConnectSendRequestScreen(navController: NavBackStack<HSScreen>) {
 fun TonConnectRequestActionSection(
     action: TonTransactionRecord.Action,
     transactionInfoHelper: TransactionInfoHelper,
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
 ) {
     when (val actionType = action.type) {
         is TonTransactionRecord.Action.Type.Burn -> {

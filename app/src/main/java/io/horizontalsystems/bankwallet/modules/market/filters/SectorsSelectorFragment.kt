@@ -19,11 +19,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -40,7 +39,7 @@ import kotlinx.serialization.Serializable
 data object SectorsSelectorFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val viewModel = navController.viewModelForScreen<MarketFiltersViewModel>(MarketFiltersFragment::class)
 
         SectorsSelectorScreen(
@@ -54,7 +53,7 @@ data object SectorsSelectorFragment : HSScreen() {
 @Composable
 fun SectorsSelectorScreen(
     viewModel: MarketFiltersViewModel,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     val uiState = viewModel.uiState
     var selectedItems by remember { mutableStateOf(uiState.sectors) }

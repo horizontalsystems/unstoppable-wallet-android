@@ -1,8 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.action
 
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.NavBackStack
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 
 interface ISwapProviderAction {
     val inProgress: Boolean
@@ -17,5 +16,5 @@ interface ISwapProviderAction {
     fun getDescription() : String? = null
 
     @Composable
-    fun executor(navController: NavBackStack<HSScreen>, onActionCompleted: () -> Unit): () -> Unit
+    fun executor(navController: HSNavigation, onActionCompleted: () -> Unit): () -> Unit
 }

@@ -21,7 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.shorten
@@ -29,7 +28,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -56,7 +55,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 
 @Composable
 fun SendEvmTransactionView(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     items: List<SectionViewItem>,
     cautions: List<CautionViewItem>,
     transactionFields: List<DataField>,
@@ -95,7 +94,7 @@ fun SendEvmTransactionView(
 }
 
 @Composable
-fun SectionView(viewItems: List<ViewItem>, navController: NavBackStack<HSScreen>, statPage: StatPage) {
+fun SectionView(viewItems: List<ViewItem>, navController: HSNavigation, statPage: StatPage) {
     Box {
         CellUniversalLawrenceSection(viewItems) { item ->
             when (item) {

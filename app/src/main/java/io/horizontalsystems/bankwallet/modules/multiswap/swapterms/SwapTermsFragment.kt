@@ -15,9 +15,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.highlightText
@@ -38,7 +38,7 @@ import kotlinx.serialization.Serializable
 data object SwapTermsFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         SwapTermsScreen(navController)
     }
 
@@ -47,7 +47,7 @@ data object SwapTermsFragment : HSScreen() {
 }
 
 @Composable
-fun SwapTermsScreen(navController: NavBackStack<HSScreen>) {
+fun SwapTermsScreen(navController: HSNavigation) {
     val resultEventBus = LocalResultEventBus.current
     val viewModel = viewModel<SwapTermsViewModel>(factory = SwapTermsModule.Factory())
     val uiState = viewModel.uiState

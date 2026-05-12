@@ -16,12 +16,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.coin.RoiViewItem
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.roi.RoiSelectCoinsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
@@ -36,7 +34,7 @@ import io.horizontalsystems.marketkit.models.HsTimePeriod
 import java.math.BigDecimal
 
 @Composable
-fun Roi(roi: List<RoiViewItem>, navController: NavBackStack<HSScreen>) {
+fun Roi(roi: List<RoiViewItem>, navController: HSNavigation) {
     SectionUniversalLawrence {
         roi.forEachIndexed { index, item ->
             Box {

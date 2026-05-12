@@ -39,7 +39,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -52,6 +51,7 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.ChartTab
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.GraphicLine
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -94,7 +94,7 @@ import kotlin.math.abs
 data object EtfFragment : HSScreen() {
 
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         val factory = remember { EtfModule.Factory() }
         val viewModel = viewModel<EtfViewModel>(factory = factory)
         EtfPage(viewModel, navController)
@@ -104,7 +104,7 @@ data object EtfFragment : HSScreen() {
 @Composable
 fun EtfPage(
     viewModel: EtfViewModel,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     val tabs = EtfModule.EtfTab.entries
     var selectedTab by remember { mutableStateOf(EtfModule.EtfTab.BtcTab) }

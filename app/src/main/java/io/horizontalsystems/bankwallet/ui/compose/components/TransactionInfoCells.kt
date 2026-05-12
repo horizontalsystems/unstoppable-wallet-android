@@ -29,11 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.shorten
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -46,7 +43,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment
 import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment
 import io.horizontalsystems.bankwallet.modules.info.TransactionStatusInfoFragment
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.transactionInfo.AmountType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
@@ -261,7 +258,7 @@ fun TransactionInfoAddressCell(
     value: String,
     showAdd: Boolean,
     blockchainType: BlockchainType?,
-    navController: NavBackStack<HSScreen>? = null,
+    navController: HSNavigation? = null,
     onCopy: (() -> Unit)? = null,
     onAddToExisting: (() -> Unit)? = null,
     onAddToNew: (() -> Unit)? = null,
@@ -346,7 +343,7 @@ fun TransactionInfoContactCell(name: String) {
 @Composable
 fun TransactionInfoStatusCell(
     status: TransactionStatus,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -415,7 +412,7 @@ fun TransactionInfoStatusCell(
 fun TransactionInfoSpeedUpCell(
     transactionHash: String,
     blockchainType: BlockchainType,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -442,7 +439,7 @@ fun TransactionInfoSpeedUpCell(
 fun TransactionInfoCancelCell(
     transactionHash: String,
     blockchainType: BlockchainType,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -630,7 +627,7 @@ fun TransactionInfoRawTransaction(rawTransaction: () -> String?) {
 @Composable
 fun TransactionInfoBtcLockCell(
     lockState: TransactionInfoViewItem.LockState,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -674,7 +671,7 @@ fun TransactionInfoBtcLockCell(
 fun TransactionInfoDoubleSpendCell(
     transactionHash: String,
     conflictingHash: String,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -751,7 +748,7 @@ private fun openTransactionOptionsModule(
     type: SpeedUpCancelType,
     transactionHash: String,
     blockchainType: BlockchainType,
-    navController: NavBackStack<HSScreen>
+    navController: HSNavigation
 ) {
     when (blockchainType) {
         BlockchainType.Bitcoin,

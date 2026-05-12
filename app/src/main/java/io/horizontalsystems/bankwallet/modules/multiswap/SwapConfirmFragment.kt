@@ -32,15 +32,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
@@ -54,9 +50,9 @@ import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsSl
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionNonceSettingsFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionSettingsFragment
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.modules.nav3.viewModelForPrevScreen
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog.Input
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
@@ -98,7 +94,7 @@ import java.util.Locale
 @Serializable
 data object SwapConfirmFragment : HSScreen() {
     @Composable
-    override fun GetContent(navController: NavBackStack<HSScreen>) {
+    override fun GetContent(navController: HSNavigation) {
         SwapConfirmScreen(navController)
     }
 
@@ -107,7 +103,7 @@ data object SwapConfirmFragment : HSScreen() {
 }
 
 @Composable
-fun SwapConfirmScreen(navController: NavBackStack<HSScreen>) {
+fun SwapConfirmScreen(navController: HSNavigation) {
     val swapViewModel = navController.viewModelForPrevScreen<SwapViewModel>()
     val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
 
@@ -126,7 +122,7 @@ fun SwapConfirmScreen(navController: NavBackStack<HSScreen>) {
 
 @Composable
 private fun SwapConfirmError(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     viewModel: SwapConfirmViewModel,
     uiState: SwapConfirmUiState,
     error: Throwable
@@ -177,7 +173,7 @@ private fun SwapConfirmError(
 
 @Composable
 private fun SwapConfirmInternal(
-    navController: NavBackStack<HSScreen>,
+    navController: HSNavigation,
     viewModel: SwapConfirmViewModel,
     uiState: SwapConfirmUiState,
 ) {
