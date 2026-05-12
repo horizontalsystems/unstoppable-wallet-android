@@ -119,7 +119,7 @@ espresso = "3.7.0"
 testRunner = "1.7.0"
 
 # AGP
-agp = "9.1.1"
+agp = "9.2.1"
 
 # Nav 3
 nav3Core = "1.1.1"
