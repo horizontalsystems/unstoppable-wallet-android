@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -50,7 +49,7 @@ private fun MarkdownScreen(
     viewModel: MarkdownViewModel = viewModel(factory = MarkdownModule.Factory(markdownUrl))
 ) {
     HSScaffold(
-        title = stringResource(R.string.CoinPage_Indicators),
+        title = "",
         onBack = if (showAsPopup) null else onCloseClick,
         menuItems = if (showAsPopup) listOf(
             MenuItem(

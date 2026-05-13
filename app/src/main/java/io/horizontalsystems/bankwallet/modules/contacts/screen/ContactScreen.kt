@@ -105,7 +105,7 @@ fun ContactScreen(
     }
 
     HSScaffold(
-        title = stringResource(R.string.CoinPage_Indicators),
+        title = uiState.headerTitle.getString(),
         onBack = confirmNavigateToBack,
         menuItems = listOf(
             MenuItem(
