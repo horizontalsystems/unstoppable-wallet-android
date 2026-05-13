@@ -14,6 +14,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalView
@@ -60,6 +61,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
 import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -79,18 +81,22 @@ fun ManageAccountScreen(navController: HSNavigation, accountId: String) {
     val viewModel =
         viewModel<ManageAccountViewModel>(factory = ManageAccountModule.Factory(accountId))
 
-    if (viewModel.viewState.closeScreen) {
-        navController.removeLastOrNull()
-        viewModel.onClose()
+    val viewState = viewModel.viewState
+    LaunchedEffect(viewState.closeScreen) {
+        if (viewState.closeScreen) {
+            delay(300)
+            navController.removeLastOrNull()
+            viewModel.onClose()
+        }
     }
     HSScaffold(
-        title = viewModel.viewState.title,
+        title = viewState.title,
         onBack = { navController.removeLastOrNull() },
         menuItems = listOf(
             MenuItem(
                 title = TranslatableString.ResString(R.string.ManageAccount_Save),
                 onClick = { viewModel.onSave() },
-                enabled = viewModel.viewState.canSave,
+                enabled = viewState.canSave,
                 tint = ComposeAppTheme.colors.jacob
             )
         )
@@ -107,7 +113,7 @@ fun ManageAccountScreen(navController: HSNavigation, accountId: String) {
 
                 FormsInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = viewModel.viewState.title,
+                    initial = viewState.title,
                     hint = "",
                     onValueChange = {
                         viewModel.onChange(it)
@@ -119,7 +125,7 @@ fun ManageAccountScreen(navController: HSNavigation, accountId: String) {
                     }
                 )
 
-                when (viewModel.viewState.headerNote) {
+                when (viewState.headerNote) {
                     HeaderNote.NonStandardAccount -> {
                         AlertCard(
                             modifier = Modifier
@@ -158,9 +164,9 @@ fun ManageAccountScreen(navController: HSNavigation, accountId: String) {
 
                 KeyActions(viewModel, navController)
 
-                if (viewModel.viewState.backupActions.isNotEmpty()) {
+                if (viewState.backupActions.isNotEmpty()) {
                     BackupActions(
-                        viewModel.viewState.backupActions,
+                        viewState.backupActions,
                         viewModel.account,
                         navController
                     )
