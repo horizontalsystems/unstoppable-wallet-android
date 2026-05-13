@@ -226,7 +226,8 @@ class SwapConfirmViewModel(
         hasNonceSettings = sendTransactionService.hasNonceSettings,
         swapDefenseSystemMessage = swapDefenseState.systemMessage,
         mevProtectionEnabled = swapDefenseState.mevProtectionEnabled,
-        supportsMevProtection = sendTransactionService.supportsMevProtection,
+        supportsMevProtection = sendTransactionService.supportsMevProtection &&
+                swapProvider.mevProtectionAllowed(tokenIn, tokenOut),
         mevProtectionActionAllowed = swapDefenseState.mevProtectionActionAllowed,
         recipient = recipient,
         slippage = slippage,
@@ -382,7 +383,11 @@ class SwapConfirmViewModel(
                 sendTransactionService,
                 TimerService(),
                 PriceImpactService(PriceImpactLevel.Normal),
-                SwapDefenseSystemService(sendTransactionService.supportsMevProtection, App.paidActionSettingsManager),
+                SwapDefenseSystemService(
+                    sendTransactionService.supportsMevProtection &&
+                            quote.provider.mevProtectionAllowed(quote.tokenIn, quote.tokenOut),
+                    App.paidActionSettingsManager
+                ),
                 App.backgroundManager
             )
         }

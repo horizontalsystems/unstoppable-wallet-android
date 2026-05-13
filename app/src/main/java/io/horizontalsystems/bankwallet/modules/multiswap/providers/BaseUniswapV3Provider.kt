@@ -29,6 +29,9 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : IMultiSwapProvider {
 
     override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = true
 
+    override fun mevProtectionAllowed(tokenIn: Token, tokenOut: Token): Boolean =
+        tokenIn.blockchainType == tokenOut.blockchainType && tokenIn.blockchainType.isEvm
+
     final override suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,

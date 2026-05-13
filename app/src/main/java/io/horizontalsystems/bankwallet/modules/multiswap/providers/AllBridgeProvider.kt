@@ -153,6 +153,9 @@ object AllBridgeProvider : IMultiSwapProvider {
     override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) =
         tokenInBlockchainTypeUid == tokenOutBlockchainTypeUid
 
+    override fun mevProtectionAllowed(tokenIn: Token, tokenOut: Token): Boolean =
+        tokenIn.blockchainType == tokenOut.blockchainType && tokenIn.blockchainType.isEvm
+
     override fun supports(blockchainType: BlockchainType): Boolean {
         // overriding fun supports(tokenFrom: Token, tokenTo: Token) makes this method redundant
         return true
