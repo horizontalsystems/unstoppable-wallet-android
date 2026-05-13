@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.blockTime
 import io.horizontalsystems.bankwallet.core.convertedError
+import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.modules.multiswap.EvmBlockchainHelper
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuote
@@ -38,6 +39,9 @@ object OneInchProvider : IMultiSwapProvider {
     private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
 
     override fun isSingleChainSwap(tokenInBlockchainTypeUid: String, tokenOutBlockchainTypeUid: String) = true
+
+    override fun mevProtectionAllowed(tokenIn: Token, tokenOut: Token): Boolean =
+        tokenIn.blockchainType == tokenOut.blockchainType && tokenIn.blockchainType.isEvm
 
     override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
         BlockchainType.Ethereum,
