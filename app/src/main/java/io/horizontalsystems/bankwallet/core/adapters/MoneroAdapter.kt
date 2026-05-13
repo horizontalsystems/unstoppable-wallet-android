@@ -80,9 +80,7 @@ class MoneroAdapter(
 
         kit.allTransactionsFlow.collectWith(coroutineScope, transactionsProvider::onTransactions)
 
-        coroutineScope.launch {
-            kit.start()
-        }
+        kit.start()
 
         coroutineScope.launch {
             backgroundManager.stateFlow.collect {
@@ -94,22 +92,15 @@ class MoneroAdapter(
     }
 
     override fun stop() {
-        val job = coroutineScope.launch {
-            kit.saveState()
-            kit.stop()
-        }
-
-        job.invokeOnCompletion {
-            coroutineScope.cancel()
-        }
+        kit.saveState()
+        kit.stop()
+        coroutineScope.cancel()
     }
 
     override fun refresh() {
         if (kit.syncStateFlow.value is SyncState.NotSynced) {
-            coroutineScope.launch {
-                kit.stop()
-                kit.start()
-            }
+            kit.stop()
+            kit.start()
         }
     }
 
