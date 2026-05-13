@@ -5,6 +5,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.HSScreenKClassSerializer
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
@@ -20,7 +21,7 @@ data class ShieldZcashFragment(val input: Input) : HSScreen() {
     @Serializable
     data class Input(
         val wallet: Wallet,
-        val entryPointDestId: KClass<out HSScreen>
+        @Serializable(with = HSScreenKClassSerializer::class) val entryPointDestId: KClass<out HSScreen>
     )
 
 }

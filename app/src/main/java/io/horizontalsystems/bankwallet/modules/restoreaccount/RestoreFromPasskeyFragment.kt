@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
+import io.horizontalsystems.bankwallet.serializers.HSScreenKClassSerializer
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
@@ -23,7 +24,7 @@ data class RestoreFromPasskeyFragment(val input: Input) : HSScreen(screenshotEna
 
     @Serializable
     data class Input(
-        val popOffOnSuccess: KClass<out HSScreen>,
+        @Serializable(with = HSScreenKClassSerializer::class) val popOffOnSuccess: KClass<out HSScreen>,
         val popOffInclusive: Boolean,
         val entropy: ByteArray,
         val accountName: String?

@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.send.SendFragment.Input
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
+import io.horizontalsystems.bankwallet.serializers.HSScreenKClassSerializer
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import kotlin.reflect.KClass
@@ -47,7 +48,7 @@ data class EnterAddressFragment(val input: Input) : HSScreen() {
     data class Input(
         val wallet: Wallet,
         val title: String,
-        val sendEntryPointDestId: KClass<out HSScreen>? = null,
+        @Serializable(with = HSScreenKClassSerializer::class) val sendEntryPointDestId: KClass<out HSScreen>? = null,
         val address: String? = null,
         @Serializable(with = BigDecimalSerializer::class) val amount: BigDecimal? = null,
         val memo: String? = null,

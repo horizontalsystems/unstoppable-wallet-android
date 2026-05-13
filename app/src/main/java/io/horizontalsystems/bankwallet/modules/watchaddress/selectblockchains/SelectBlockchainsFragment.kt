@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.serializers.HSScreenKClassSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
@@ -55,7 +56,7 @@ data class SelectBlockchainsFragment(val input: Input) : HSScreen() {
 
     @Serializable
     data class Input(
-        val popOffOnSuccess: KClass<out HSScreen>,
+        @Serializable(with = HSScreenKClassSerializer::class) val popOffOnSuccess: KClass<out HSScreen>,
         val popOffInclusive: Boolean,
         val accountType: AccountType,
         val accountName: String?,

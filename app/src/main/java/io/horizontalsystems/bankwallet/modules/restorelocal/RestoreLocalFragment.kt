@@ -48,6 +48,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
+import io.horizontalsystems.bankwallet.serializers.HSScreenKClassSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputPassword
@@ -91,7 +92,7 @@ data class RestoreLocalFragment(val input: Input) : HSScreen() {
 
     @Serializable
     data class Input(
-        val popOffOnSuccess: KClass<out HSScreen>,
+        @Serializable(with = HSScreenKClassSerializer::class) val popOffOnSuccess: KClass<out HSScreen>,
         val popOffInclusive: Boolean,
         val jsonFile: String,
         val fileName: String?,
