@@ -32,6 +32,7 @@ abstract class BaseThorChainProvider(
     private val affiliate: String?,
     private val affiliateBps: Int?,
 ) : IMultiSwapProvider {
+    open val streamingInterval: Long = 1
     override val type = SwapProviderType.DEX
     override val requireTerms = false
 
@@ -175,7 +176,7 @@ abstract class BaseThorChainProvider(
             destination = destinationAddress,
             affiliate = affiliate,
             affiliateBps = affiliateBps,
-            streamingInterval = 1,
+            streamingInterval = streamingInterval,
             streamingQuantity = 0,
             liquidityToleranceBps = slippage?.movePointRight(2)?.toLong(),
             refundAddress = refundAddress,

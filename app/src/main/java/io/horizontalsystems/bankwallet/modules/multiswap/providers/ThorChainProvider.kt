@@ -7,6 +7,7 @@ object ThorChainProvider : BaseThorChainProvider(
     affiliate = "hrz",
     affiliateBps = 100,
 ) {
+    override val streamingInterval: Long = 0
     override val id = "thorchain"
     override val title = "THORChain"
     override val icon = R.drawable.swap_provider_thorchain
