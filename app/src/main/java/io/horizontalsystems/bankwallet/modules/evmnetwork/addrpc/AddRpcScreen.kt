@@ -11,11 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
@@ -28,12 +28,12 @@ import io.horizontalsystems.marketkit.models.Blockchain
 
 @Composable
 fun AddRpcScreen(
-    navController: NavHostController,
+    navController: HSNavigation,
     blockchain: Blockchain,
 ) {
     val viewModel = viewModel<AddRpcViewModel>(factory = AddRpcModule.Factory(blockchain))
     if (viewModel.viewState.closeScreen) {
-        navController.popBackStack()
+        navController.removeLastOrNull()
         viewModel.onScreenClose()
     }
 
@@ -44,7 +44,7 @@ fun AddRpcScreen(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
                 onClick = {
-                    navController.popBackStack()
+                    navController.removeLastOrNull()
                 }
             )
         )

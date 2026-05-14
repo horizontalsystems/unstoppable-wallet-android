@@ -33,13 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -75,43 +70,31 @@ data class EvmNetworkFragment(val blockchain: Blockchain) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        EvmNetworkNavHost(navController, blockchain)
+        EvmNetworkScreen(
+            navController = navController,
+            blockchain = blockchain,
+            onBackPress = { navController.removeLastOrNull() },
+        )
     }
 
 }
 
-private const val EvmNetworkPage = "evm_network"
-private const val AddRpcPage = "add_rpc"
+@Serializable
+data class AddRpcPage(val blockchain: Blockchain) : HSScreen() {
 
-@Composable
-private fun EvmNetworkNavHost(
-    fragmentNavController: HSNavigation,
-    blockchain: Blockchain
-) {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = EvmNetworkPage,
-    ) {
-        composable(EvmNetworkPage) {
-            EvmNetworkScreen(
-                navController = navController,
-                blockchain = blockchain,
-                onBackPress = { fragmentNavController.removeLastOrNull() },
-            )
-        }
-        composablePopup(AddRpcPage) {
-            AddRpcScreen(
-                navController = navController,
-                blockchain = blockchain
-            )
-        }
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        AddRpcScreen(
+            navController = navController,
+            blockchain = blockchain
+        )
     }
+
 }
 
 @Composable
 private fun EvmNetworkScreen(
-    navController: NavHostController,
+    navController: HSNavigation,
     blockchain: Blockchain,
     onBackPress: () -> Unit,
 ) {
@@ -208,7 +191,7 @@ private fun EvmNetworkScreen(
                 item {
                     Spacer(Modifier.height(32.dp))
                     AddButton {
-                        navController.navigate(AddRpcPage)
+                        navController.add(AddRpcPage(blockchain))
 
                         stat(
                             page = StatPage.BlockchainSettingsEvm,
