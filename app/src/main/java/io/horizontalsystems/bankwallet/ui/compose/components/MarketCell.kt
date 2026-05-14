@@ -54,6 +54,7 @@ fun MarketCoin(
                     size = 32,
                     painter = rememberAsyncImagePainter(
                         model = coinIconUrl,
+                        placeholder = painterResource(coinIconPlaceholder),
                         error = alternativeCoinIconUrl?.let { alternativeUrl ->
                             rememberAsyncImagePainter(
                                 model = alternativeUrl,
