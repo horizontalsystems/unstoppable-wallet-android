@@ -3,9 +3,8 @@ package io.horizontalsystems.bankwallet.modules.market.topcoins
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,14 +29,14 @@ import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
-import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
-import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinListSlidable
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSDropdownButton
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuGroup
+import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -77,10 +76,13 @@ fun TopCoins(
                 }
 
                 ViewState.Success -> {
-                    val listState = rememberLazyListState()
-
-                    LaunchedEffect(uiState.period, uiState.topMarket, uiState.sortingField) {
-                        listState.scrollToItem(0)
+                    val listState = rememberSaveable(
+                        uiState.period,
+                        uiState.topMarket,
+                        uiState.sortingField,
+                        saver = LazyListState.Saver
+                    ) {
+                        LazyListState()
                     }
 
                     CoinListSlidable(
