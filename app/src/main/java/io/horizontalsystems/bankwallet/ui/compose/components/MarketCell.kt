@@ -49,20 +49,26 @@ fun MarketCoin(
     ) {
         CellPrimary(
             left = {
-                CellLeftImage(
-                    type = ImageType.Ellipse,
-                    size = 32,
-                    painter = rememberAsyncImagePainter(
-                        model = coinIconUrl,
-                        placeholder = painterResource(coinIconPlaceholder),
-                        error = alternativeCoinIconUrl?.let { alternativeUrl ->
-                            rememberAsyncImagePainter(
-                                model = alternativeUrl,
-                                error = painterResource(coinIconPlaceholder)
-                            )
-                        } ?: painterResource(coinIconPlaceholder)
-                    ),
-                )
+                Box {
+                    CellLeftImage(
+                        type = ImageType.Ellipse,
+                        size = 32,
+                        painter = painterResource(coinIconPlaceholder),
+                    )
+                    CellLeftImage(
+                        type = ImageType.Ellipse,
+                        size = 32,
+                        painter = rememberAsyncImagePainter(
+                            model = coinIconUrl,
+                            error = alternativeCoinIconUrl?.let { alternativeUrl ->
+                                rememberAsyncImagePainter(
+                                    model = alternativeUrl,
+                                    error = painterResource(coinIconPlaceholder)
+                                )
+                            }
+                        ),
+                    )
+                }
             },
             middle = {
                 CellMiddleInfo(
