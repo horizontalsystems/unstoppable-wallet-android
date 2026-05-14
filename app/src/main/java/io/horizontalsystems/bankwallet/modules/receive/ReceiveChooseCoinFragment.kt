@@ -1,30 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.BCH_ADDRESS_FORMAT_SCREEN
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.COIN_SELECT_SCREEN
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.DERIVATION_SELECT_SCREEN
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.NETWORK_SELECT_SCREEN
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinRoutes.ZCASH_ADDRESS_TYPE_SELECT_SCREEN
 import io.horizontalsystems.bankwallet.modules.receive.ui.AddressFormatSelectScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.NetworkSelectScreen
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveTokenSelectScreen
@@ -38,138 +25,126 @@ import kotlinx.serialization.Serializable
 data object ReceiveChooseCoinFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        ReceiveChooseCoinScreen(navController)
+        val viewModel = viewModel<ReceiveSharedViewModel>()
+        val activeAccount = App.accountManager.activeAccount
+        if (activeAccount == null) {
+            CloseWithMessage(navController)
+            return
+        }
+        ReceiveTokenSelectScreen(
+            activeAccount = activeAccount,
+            onMultipleAddressesClick = { coinUid ->
+                viewModel.coinUid = coinUid
+                navController.add(BchAddressFormatScreen)
+            },
+            onMultipleDerivationsClick = { coinUid ->
+                viewModel.coinUid = coinUid
+                navController.add(DerivationSelectScreen)
+            },
+            onMultipleBlockchainsClick = { coinUid ->
+                viewModel.coinUid = coinUid
+                navController.add(NetworkSelectScreen)
+            },
+            onMultipleZcashAddressTypeClick = { wallet ->
+                viewModel.wallet = wallet
+                navController.add(ZcashAddressTypeSelectScreen)
+            },
+            onCoinClick = { wallet ->
+                onSelectWallet(wallet, navController)
+            },
+            onBackPress = { navController.removeLastOrNull() },
+        )
     }
 }
 
-object ReceiveChooseCoinRoutes {
-    const val COIN_SELECT_SCREEN = "coin_select_screen"
-    const val BCH_ADDRESS_FORMAT_SCREEN = "bch_address_format_screen"
-    const val DERIVATION_SELECT_SCREEN = "derivation_select_screen"
-    const val NETWORK_SELECT_SCREEN = "network_select_screen"
-    const val ZCASH_ADDRESS_TYPE_SELECT_SCREEN = "zcash_address_type_select_screen"
+@Serializable
+data object BchAddressFormatScreen : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinFragment::class)
+        val coinUid = viewModel.coinUid
+        if (coinUid == null) {
+            CloseWithMessage(navController)
+            return
+        }
+        val bchAddressViewModel = viewModel<BchAddressTypeSelectViewModel>(
+            factory = BchAddressTypeSelectViewModel.Factory(coinUid)
+        )
+        AddressFormatSelectScreen(
+            addressFormatItems = bchAddressViewModel.items,
+            description = stringResource(R.string.Balance_Receive_AddressFormat_RecommendedAddressType),
+            onSelect = { wallet ->
+                onSelectWallet(wallet, navController)
+            },
+            closeModule = { navController.removeLastOrNull() },
+            onBackPress = { navController.removeLastOrNull() }
+        )
+    }
 }
 
-@Composable
-fun ReceiveChooseCoinScreen(
-    fragmentNavController: HSNavigation
-) {
-    val navController = rememberNavController()
-
-    NavHost(
-        navController = navController,
-        startDestination = "receive_screen_choose_coin"
-    ) {
-        navigation(
-            startDestination = COIN_SELECT_SCREEN,
-            route = "receive_screen_choose_coin"
-        ) {
-            composablePage(COIN_SELECT_SCREEN) { entry ->
-                val viewModel = entry.sharedViewModel<ReceiveSharedViewModel>(navController)
-                val activeAccount = App.accountManager.activeAccount
-                if (activeAccount == null) {
-                    CloseWithMessage(fragmentNavController)
-                    return@composablePage
-                }
-                ReceiveTokenSelectScreen(
-                    activeAccount = activeAccount,
-                    onMultipleAddressesClick = { coinUid ->
-                        viewModel.coinUid = coinUid
-                        navController.navigate(BCH_ADDRESS_FORMAT_SCREEN)
-                    },
-                    onMultipleDerivationsClick = { coinUid ->
-                        viewModel.coinUid = coinUid
-                        navController.navigate(DERIVATION_SELECT_SCREEN)
-                    },
-                    onMultipleBlockchainsClick = { coinUid ->
-                        viewModel.coinUid = coinUid
-                        navController.navigate(NETWORK_SELECT_SCREEN)
-                    },
-                    onMultipleZcashAddressTypeClick = { wallet ->
-                        viewModel.wallet = wallet
-                        navController.navigate(ZCASH_ADDRESS_TYPE_SELECT_SCREEN)
-                    },
-                    onCoinClick = { wallet ->
-                        onSelectWallet(wallet, fragmentNavController)
-                    },
-                    onBackPress = navigateBack(fragmentNavController, navController),
-                )
-            }
-            composablePage(BCH_ADDRESS_FORMAT_SCREEN) { entry ->
-                val viewModel = entry.sharedViewModel<ReceiveSharedViewModel>(navController)
-                val coinUid = viewModel.coinUid
-                if (coinUid == null) {
-                    CloseWithMessage(fragmentNavController)
-                    return@composablePage
-                }
-                val bchAddressViewModel = viewModel<BchAddressTypeSelectViewModel>(
-                    factory = BchAddressTypeSelectViewModel.Factory(coinUid)
-                )
-                AddressFormatSelectScreen(
-                    addressFormatItems = bchAddressViewModel.items,
-                    description = stringResource(R.string.Balance_Receive_AddressFormat_RecommendedAddressType),
-                    onSelect = { wallet ->
-                        onSelectWallet(wallet, fragmentNavController)
-                    },
-                    closeModule = { fragmentNavController.removeLastOrNull() },
-                    onBackPress = navigateBack(fragmentNavController, navController)
-                )
-            }
-            composablePage(DERIVATION_SELECT_SCREEN) { entry ->
-                val viewModel = entry.sharedViewModel<ReceiveSharedViewModel>(navController)
-                val coinUid = viewModel.coinUid
-                if (coinUid == null) {
-                    CloseWithMessage(fragmentNavController)
-                    return@composablePage
-                }
-                val derivationViewModel = viewModel<DerivationSelectViewModel>(
-                    factory = DerivationSelectViewModel.Factory(coinUid)
-                )
-                AddressFormatSelectScreen(
-                    addressFormatItems = derivationViewModel.items,
-                    description = stringResource(R.string.Balance_Receive_AddressFormat_RecommendedDerivation),
-                    onSelect = { wallet ->
-                        onSelectWallet(wallet, fragmentNavController)
-                    },
-                    closeModule = { fragmentNavController.removeLastOrNull() },
-                    onBackPress = navigateBack(fragmentNavController, navController)
-                )
-            }
-            composablePage(NETWORK_SELECT_SCREEN) { entry ->
-                val viewModel = entry.sharedViewModel<ReceiveSharedViewModel>(navController)
-                val activeAccount = viewModel.activeAccount
-                val fullCoin = viewModel.fullCoin()
-                if (activeAccount == null || fullCoin == null) {
-                    CloseWithMessage(fragmentNavController)
-                    return@composablePage
-                }
-                NetworkSelectScreen(
-                    navController = navController,
-                    activeAccount = activeAccount,
-                    fullCoin = fullCoin,
-                    closeModule = { fragmentNavController.removeLastOrNull() },
-                    onSelect = { wallet ->
-                        onSelectWallet(wallet, fragmentNavController)
-                    }
-                )
-            }
-            composablePage(ZCASH_ADDRESS_TYPE_SELECT_SCREEN) { entry ->
-                val viewModel = entry.sharedViewModel<ReceiveSharedViewModel>(navController)
-                val wallet = viewModel.wallet
-                if (wallet == null) {
-                    CloseWithMessage(fragmentNavController)
-                    return@composablePage
-                }
-
-                ZcashAddressTypeSelectScreen(
-                    onZcashAddressTypeClick = { isTransparent ->
-                        onSelectWallet(wallet, fragmentNavController, isTransparent)
-                    },
-                    onBackPress = navigateBack(fragmentNavController, navController),
-                    closeModule = { fragmentNavController.removeLastOrNull() }
-                )
-            }
+data object DerivationSelectScreen : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinFragment::class)
+        val coinUid = viewModel.coinUid
+        if (coinUid == null) {
+            CloseWithMessage(navController)
+            return
         }
+        val derivationViewModel = viewModel<DerivationSelectViewModel>(
+            factory = DerivationSelectViewModel.Factory(coinUid)
+        )
+        AddressFormatSelectScreen(
+            addressFormatItems = derivationViewModel.items,
+            description = stringResource(R.string.Balance_Receive_AddressFormat_RecommendedDerivation),
+            onSelect = { wallet ->
+                onSelectWallet(wallet, navController)
+            },
+            closeModule = { navController.removeLastOrNull() },
+            onBackPress = { navController.removeLastOrNull() }
+        )
+    }
+}
+
+data object NetworkSelectScreen : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinFragment::class)
+        val activeAccount = viewModel.activeAccount
+        val fullCoin = viewModel.fullCoin()
+        if (activeAccount == null || fullCoin == null) {
+            CloseWithMessage(navController)
+            return
+        }
+        NetworkSelectScreen(
+            navController = navController,
+            activeAccount = activeAccount,
+            fullCoin = fullCoin,
+            closeModule = { navController.removeLastOrNull() },
+            onSelect = { wallet ->
+                onSelectWallet(wallet, navController)
+            }
+        )
+    }
+}
+
+data object ZcashAddressTypeSelectScreen : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinFragment::class)
+        val wallet = viewModel.wallet
+        if (wallet == null) {
+            CloseWithMessage(navController)
+            return
+        }
+
+        ZcashAddressTypeSelectScreen(
+            onZcashAddressTypeClick = { isTransparent ->
+                onSelectWallet(wallet, navController, isTransparent)
+            },
+            onBackPress = { navController.removeLastOrNull() },
+            closeModule = { navController.removeLastOrNull() }
+        )
     }
 }
 
@@ -187,27 +162,6 @@ private fun onSelectWallet(
     )
 
     stat(page = StatPage.ReceiveTokenList, event = StatEvent.OpenReceive(wallet.token))
-}
-
-fun navigateBack(
-    fragmentNavController: HSNavigation,
-    navController: NavHostController
-): () -> Unit = {
-    val result = navController.popBackStack()
-    if (!result) {
-        fragmentNavController.removeLastOrNull()
-    }
-}
-
-@Composable
-inline fun <reified T : ViewModel> NavBackStackEntry.sharedViewModel(
-    navController: NavHostController,
-): T {
-    val navGraphRoute = destination.parent?.route ?: return viewModel()
-    val parentEntry = remember(this) {
-        navController.getBackStackEntry(navGraphRoute)
-    }
-    return viewModel(parentEntry)
 }
 
 @Composable
