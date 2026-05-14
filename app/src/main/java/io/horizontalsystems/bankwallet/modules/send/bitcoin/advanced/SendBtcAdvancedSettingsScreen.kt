@@ -27,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
@@ -63,7 +62,6 @@ import java.math.BigDecimal
 @Composable
 fun SendBtcAdvancedSettingsScreen(
     fragmentNavController: HSNavigation,
-    navController: NavHostController,
     sendBitcoinViewModel: SendBitcoinViewModel,
     amountInputType: AmountInputType,
 ) {
@@ -90,7 +88,7 @@ fun SendBtcAdvancedSettingsScreen(
     ComposeAppTheme {
         HSScaffold(
             title = stringResource(R.string.Send_Advanced),
-            onBack = navController::popBackStack,
+            onBack = fragmentNavController::removeLastOrNull,
             menuItems = listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Button_Reset),
@@ -143,7 +141,7 @@ fun SendBtcAdvancedSettingsScreen(
                 if (uiState.transactionSortingSupported) {
                     VSpacer(24.dp)
                     TransactionDataSortSettings(
-                        navController,
+                        fragmentNavController,
                         wallet.coin.code,
                         viewModel.uiState.transactionSortTitle,
                     ) {
@@ -332,7 +330,7 @@ private fun BottomSheetTransactionOrderSelector(
 
 @Composable
 private fun TransactionDataSortSettings(
-    navController: NavHostController,
+    navController: HSNavigation,
     coinCode: String,
     valueTitle: String,
     onClick: () -> Unit
@@ -340,7 +338,7 @@ private fun TransactionDataSortSettings(
     HeaderText(
         text = stringResource(R.string.BtcBlockchainSettings_TransactionSettings),
         onInfoClick = {
-            navController.navigate(TransactionInputsSortInfoPage)
+            navController.add(TransactionInputsSortInfoPage)
         })
     CellUniversalLawrenceSection(
         listOf {

@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule
-import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinNavHost
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
@@ -70,7 +70,7 @@ data class SendFragment(val input: Input) : HSScreen() {
             BlockchainType.Dash -> {
                 val factory = SendBitcoinModule.Factory(wallet, address, hideAddress)
                 val sendBitcoinViewModel = viewModel<SendBitcoinViewModel>(factory = factory)
-                SendBitcoinNavHost(
+                SendBitcoinScreen(
                     title = title,
                     fragmentNavController = navController,
                     viewModel = sendBitcoinViewModel,

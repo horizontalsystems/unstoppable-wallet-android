@@ -24,13 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
@@ -44,6 +38,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScreen
@@ -58,64 +53,46 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 import kotlin.reflect.KClass
 
+@Serializable
+data object SendBtcAdvancedSettingsPage : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        val viewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendFragment::class)
+        val amountInputModeViewModel = navController.viewModelForScreen<AmountInputModeViewModel>(SendFragment::class)
+        SendBtcAdvancedSettingsScreen(
+            fragmentNavController = navController,
+            sendBitcoinViewModel = viewModel,
+            amountInputType = amountInputModeViewModel.inputType,
+        )
+    }
+}
 
-const val SendBtcPage = "send_btc"
-const val SendBtcAdvancedSettingsPage = "send_btc_advanced_settings"
-const val TransactionInputsSortInfoPage = "transaction_input_sort_info_settings"
-const val UtxoExpertModePage = "utxo_expert_mode_page"
+data object TransactionInputsSortInfoPage : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        BtcTransactionInputSortInfoScreen { navController.removeLastOrNull() }
+    }
+}
 
-@Composable
-fun SendBitcoinNavHost(
-    title: String,
-    fragmentNavController: HSNavigation,
-    viewModel: SendBitcoinViewModel,
-    amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: KClass<out HSScreen>,
-    amount: BigDecimal?,
-    riskyAddress: Boolean
-) {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = SendBtcPage,
-    ) {
-        composable(SendBtcPage) {
-            SendBitcoinScreen(
-                title,
-                fragmentNavController,
-                navController,
-                viewModel,
-                amountInputModeViewModel,
-                sendEntryPointDestId,
-                amount,
-                riskyAddress
-            )
-        }
-        composablePage(SendBtcAdvancedSettingsPage) {
-            SendBtcAdvancedSettingsScreen(
-                fragmentNavController = fragmentNavController,
-                navController = navController,
-                sendBitcoinViewModel = viewModel,
-                amountInputType = amountInputModeViewModel.inputType,
-            )
-        }
-        composablePopup(TransactionInputsSortInfoPage) { BtcTransactionInputSortInfoScreen { navController.popBackStack() } }
-        composablePage(UtxoExpertModePage) {
-            UtxoExpertModeScreen(
-                adapter = viewModel.adapter,
-                token = viewModel.wallet.token,
-                customUnspentOutputs = viewModel.customUnspentOutputs,
-                updateUnspentOutputs = {
-                    viewModel.updateCustomUnspentOutputs(it)
-                },
-                onBackClick = {
-                    navController.popBackStack()
-                }
-            )
-        }
+data object UtxoExpertModePage : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        val viewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendFragment::class)
+        UtxoExpertModeScreen(
+            adapter = viewModel.adapter,
+            token = viewModel.wallet.token,
+            customUnspentOutputs = viewModel.customUnspentOutputs,
+            updateUnspentOutputs = {
+                viewModel.updateCustomUnspentOutputs(it)
+            },
+            onBackClick = {
+                navController.removeLastOrNull()
+            }
+        )
     }
 }
 
@@ -123,7 +100,6 @@ fun SendBitcoinNavHost(
 fun SendBitcoinScreen(
     title: String,
     fragmentNavController: HSNavigation,
-    composeNavController: NavHostController,
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: KClass<out HSScreen>,
@@ -162,7 +138,7 @@ fun SendBitcoinScreen(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
                     icon = R.drawable.manage_24,
-                    onClick = { composeNavController.navigate(SendBtcAdvancedSettingsPage) }
+                    onClick = { fragmentNavController.add(SendBtcAdvancedSettingsPage) }
                 ),
             ),
         ) {
@@ -230,7 +206,7 @@ fun SendBitcoinScreen(
                         UtxoCell(
                             utxoData = utxoData,
                             onClick = {
-                                composeNavController.navigate(UtxoExpertModePage)
+                                fragmentNavController.add(UtxoExpertModePage)
                             }
                         )
                     }
