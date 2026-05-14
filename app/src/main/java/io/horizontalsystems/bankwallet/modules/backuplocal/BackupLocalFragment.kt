@@ -1,11 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupSection
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBackupItemsScreen
@@ -21,76 +16,43 @@ data class BackupLocalFragment(val account: Account? = null) : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         if (account != null) {
-            SingleWalletBackupNavHost(navController, account.id)
+            LocalBackupPasswordScreen(
+                backupType = BackupType.SingleWalletBackup(account.id),
+                onBackClick = {
+                    navController.removeLastOrNull()
+                },
+                onFinish = {
+                    navController.removeLastOrNull()
+                }
+            )
         } else {
-            FullBackupNavHost(fragmentNavController = navController)
-        }
-    }
-}
-
-@Composable
-private fun FullBackupNavHost(fragmentNavController: HSNavigation) {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = "select_backup_items",
-    ) {
-        composable("select_backup_items") {
             SelectBackupItemsScreen(
                 onNextClick = { accountIdsList, sections ->
-                    val accountIds = accountIdsList.joinToString(",")
-                    val sectionsStr = sections.joinToString(",") { it.name }
-                    navController.navigate("password_page?accountIds=$accountIds&sections=$sectionsStr")
+                    navController.add(LocalBackupPasswordPage(accountIdsList, sections))
                 },
                 onBackClick = {
-                    fragmentNavController.removeLastOrNull()
-                }
-            )
-        }
-
-        composablePage(
-            route = "password_page?accountIds={accountIds}&sections={sections}",
-            arguments = listOf(
-                navArgument("accountIds") { nullable = true },
-                navArgument("sections") { nullable = true }
-            )
-        ) { backStackEntry ->
-            val accountIds = backStackEntry.arguments?.getString("accountIds")
-                ?.split(",")?.filter { it.isNotEmpty() } ?: listOf()
-            val sections = backStackEntry.arguments?.getString("sections")
-                ?.split(",")
-                ?.mapNotNull { name -> BackupSection.entries.firstOrNull { it.name == name } }
-                ?.toSet() ?: BackupSection.entries.toSet()
-            LocalBackupPasswordScreen(
-                backupType = BackupType.FullBackup(accountIds, sections),
-                onBackClick = {
-                    navController.popBackStack()
-                },
-                onFinish = {
-                    fragmentNavController.removeLastOrNull()
+                    navController.removeLastOrNull()
                 }
             )
         }
     }
 }
 
-@Composable
-private fun SingleWalletBackupNavHost(fragmentNavController: HSNavigation, accountId: String) {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = "password_page",
-    ) {
-        composablePage("password_page") {
-            LocalBackupPasswordScreen(
-                backupType = BackupType.SingleWalletBackup(accountId),
-                onBackClick = {
-                    navController.popBackStack()
-                },
-                onFinish = {
-                    fragmentNavController.removeLastOrNull()
-                }
-            )
-        }
+@Serializable
+data class LocalBackupPasswordPage(
+    val accountIds: List<String>,
+    val sections: Set<BackupSection>
+) : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        LocalBackupPasswordScreen(
+            backupType = BackupType.FullBackup(accountIds, sections),
+            onBackClick = {
+                navController.removeLastOrNull()
+            },
+            onFinish = {
+                navController.removeLastOrNull()
+            }
+        )
     }
 }
