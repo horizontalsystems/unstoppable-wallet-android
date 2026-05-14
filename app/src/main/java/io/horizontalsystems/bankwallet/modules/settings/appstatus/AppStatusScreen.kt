@@ -17,12 +17,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule.BlockContent
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule.BlockData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -43,7 +43,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
 fun AppStatusScreen(
-    navController: NavHostController
+    navController: HSNavigation
 ) {
     val viewModel = viewModel<AppStatusViewModel>(factory = AppStatusModule.Factory())
     val uiState = viewModel.uiState
@@ -52,7 +52,7 @@ fun AppStatusScreen(
 
     HSScaffold(
         title = stringResource(R.string.Settings_AppStatus),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier

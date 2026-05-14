@@ -11,13 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -38,45 +32,43 @@ data object AboutFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        AboutNavHost(navController)
+        AboutScreen(
+            navController,
+            { navController.removeLastOrNull() }
+        )
     }
-
 }
 
-private const val AboutPage = "about"
-private const val ReleaseNotesPage = "release_notes"
-private const val AppStatusPage = "app_status"
-private const val TermsPage = "terms"
+@Serializable
+data object ReleaseNotesPage: HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        ReleaseNotesScreen(false, { navController.removeLastOrNull() })
+    }
+}
 
-@Composable
-private fun AboutNavHost(fragmentNavController: HSNavigation) {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = AboutPage,
-    ) {
-        composable(AboutPage) {
-            AboutScreen(
-                navController,
-                { fragmentNavController.removeLastOrNull() }
-            )
-        }
-        composablePage(ReleaseNotesPage) {
-            ReleaseNotesScreen(false, { navController.popBackStack() })
-        }
-        composablePage(AppStatusPage) { AppStatusScreen(navController) }
-        composablePopup(TermsPage) {
-            TermsScreen(
-                onAccepted = navController::popBackStack,
-                onDeclined = navController::popBackStack
-            )
-        }
+@Serializable
+data object AppStatusPage: HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        AppStatusScreen(navController)
+    }
+}
+
+@Serializable
+data object TermsPage: HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        TermsScreen(
+            onAccepted = navController::removeLastOrNull,
+            onDeclined = navController::removeLastOrNull
+        )
     }
 }
 
 @Composable
 private fun AboutScreen(
-    navController: NavHostController,
+    navController: HSNavigation,
     onBackPress: () -> Unit,
     aboutViewModel: AboutViewModel = viewModel(factory = AboutModule.Factory()),
 ) {
@@ -95,7 +87,7 @@ private fun AboutScreen(
 @Composable
 private fun SettingSections(
     viewModel: AboutViewModel,
-    navController: NavHostController
+    navController: HSNavigation
 ) {
 
     val context = LocalContext.current
@@ -107,7 +99,7 @@ private fun SettingSections(
                 icon = R.drawable.ic_info_20,
                 value = viewModel.appVersion,
                 onClick = {
-                    navController.navigate(ReleaseNotesPage)
+                    navController.add(ReleaseNotesPage)
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.WhatsNew))
                 }
@@ -123,7 +115,7 @@ private fun SettingSections(
                 R.string.Settings_AppStatus,
                 R.drawable.ic_app_status,
                 onClick = {
-                    navController.navigate(AppStatusPage)
+                    navController.add(AppStatusPage)
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.AppStatus))
                 }
@@ -134,7 +126,7 @@ private fun SettingSections(
                 R.drawable.ic_terms_20,
                 showAlert = viewModel.termsShowAlert,
                 onClick = {
-                    navController.navigate(TermsPage)
+                    navController.add(TermsPage)
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Terms))
                 }
