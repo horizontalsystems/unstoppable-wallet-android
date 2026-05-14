@@ -206,7 +206,7 @@ fun ManageWalletsScreen(
             }
 
             item {
-                VSpacer(height = 72.dp)
+                VSpacer(height = 100.dp)
             }
         }
 

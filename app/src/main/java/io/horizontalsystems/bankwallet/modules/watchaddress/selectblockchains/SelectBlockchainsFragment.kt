@@ -158,7 +158,7 @@ private fun SelectBlockchainsScreen(
                 }
             }
             item {
-                VSpacer(72.dp)
+                VSpacer(height = 100.dp)
             }
         }
 
