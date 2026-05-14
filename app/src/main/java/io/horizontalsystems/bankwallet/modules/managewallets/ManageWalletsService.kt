@@ -64,12 +64,6 @@ class ManageWalletsService(
                 enable(it.token, it.settings)
             }
         }
-        coroutineScope.launch {
-            balanceService.balanceItemsFlow.collect {
-                sortItems()
-                syncState()
-            }
-        }
 
         balanceService.start()
 
@@ -171,10 +165,11 @@ class ManageWalletsService(
 
     private fun handleUpdated(wallets: List<Wallet>) {
         sync(wallets)
-
         fullCoins = fetchFullCoins()
-        sortItems()
-
+        items = items.map { item ->
+            val enabled = isEnabled(item.token)
+            item.copy(enabled = enabled, hasInfo = hasInfo(item.token, enabled))
+        }
         syncState()
     }
 
