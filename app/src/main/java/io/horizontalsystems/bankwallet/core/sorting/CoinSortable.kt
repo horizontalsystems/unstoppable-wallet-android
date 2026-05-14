@@ -68,6 +68,8 @@ private fun SortCriterion.toTokenComparator(ctx: TokenSortContext): Comparator<T
             SortComparators.nullableDecimalDescending { ctx.fiatValues[it] }
         is SortCriterion.MarketCapRank ->
             SortComparators.nullableIntAscending { it.coin.marketCapRank }
+        is SortCriterion.BalanceTabOrder ->
+            SortComparators.nullableIntAscending { ctx.balanceOrder[it] }
         is SortCriterion.BlockchainOrder ->
             compareBy { it.blockchainType.order }
         is SortCriterion.Badge ->

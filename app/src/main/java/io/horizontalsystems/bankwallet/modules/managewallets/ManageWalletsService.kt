@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.sorting.sortedByCriteria
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.balance.BalanceService
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -33,7 +34,8 @@ class ManageWalletsService(
     private val walletManager: WalletManager,
     private val restoreSettingsService: RestoreSettingsService,
     private val fullCoinsProvider: FullCoinsProvider?,
-    private val account: Account?
+    private val account: Account?,
+    private val balanceService: BalanceService,
 ) : Clearable {
 
     private val _itemsFlow = MutableStateFlow<List<Item>>(listOf())
@@ -62,6 +64,14 @@ class ManageWalletsService(
                 enable(it.token, it.settings)
             }
         }
+        coroutineScope.launch {
+            balanceService.balanceItemsFlow.collect {
+                sortItems()
+                syncState()
+            }
+        }
+
+        balanceService.start()
 
         sync(walletManager.activeWallets)
         syncFullCoins()
@@ -90,13 +100,25 @@ class ManageWalletsService(
         val criteria = buildList {
             add(SortCriterion.Enabled)
             if (filter.isNotBlank()) add(SortCriterion.FilterRelevance)
+            add(SortCriterion.BalanceTabOrder)
             add(SortCriterion.CodeNativeFirst)
             add(SortCriterion.BlockchainOrder)
             add(SortCriterion.Badge)
         }
         val enabledTokens = allItems.filter { it.enabled }.map { it.token }.toSet()
+        val balanceOrder: Map<Token, Int> = balanceService.balanceItemsFlow.value
+            .orEmpty()
+            .mapIndexed { index, item -> item.wallet.token to index }
+            .toMap()
         val sortedTokens = allItems.map { it.token }
-            .sortedByCriteria(criteria, TokenSortContext(enabledTokens = enabledTokens, filter = filter))
+            .sortedByCriteria(
+                criteria,
+                TokenSortContext(
+                    enabledTokens = enabledTokens,
+                    filter = filter,
+                    balanceOrder = balanceOrder,
+                )
+            )
         val itemsByToken = allItems.associateBy { it.token }
         items = sortedTokens.mapNotNull { itemsByToken[it] }
     }
@@ -210,6 +232,7 @@ class ManageWalletsService(
     }
 
     override fun clear() {
+        balanceService.clear()
         coroutineScope.cancel()
     }
 
