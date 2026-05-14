@@ -9,8 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellBlockchainChecked
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -22,13 +23,14 @@ const val BlockchainSelectorResult = "blockchain_selector_result_key"
 fun AddTokenBlockchainSelectorScreen(
     blockchains: List<Blockchain>,
     selectedBlockchain: Blockchain,
-    navController: NavHostController,
+    navController: HSNavigation,
 ) {
+    val resultEventBus = LocalResultEventBus.current
     var selectedItem = selectedBlockchain
 
     HSScaffold(
         title = stringResource(R.string.Market_Filter_Blockchains),
-        onBack = navController::popBackStack,
+        onBack = navController::removeLastOrNull,
     ) {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
@@ -42,10 +44,8 @@ fun AddTokenBlockchainSelectorScreen(
                         checked = selectedItem == item,
                     ) {
                         selectedItem = item
-                        navController.previousBackStackEntry
-                            ?.savedStateHandle
-                            ?.set(BlockchainSelectorResult, listOf(item))
-                        navController.popBackStack()
+                        resultEventBus.sendResult(item)
+                        navController.removeLastOrNull()
                     }
                 }
             }

@@ -9,23 +9,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
-import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector.AddTokenBlockchainSelectorScreen
-import io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector.BlockchainSelectorResult
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.TitleValueCell
@@ -52,59 +45,35 @@ data object AddTokenFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        AddTokenNavHost(navController)
+        val viewModel = viewModel<AddTokenViewModel>(factory = AddTokenModule.Factory())
+        AddTokenScreen(
+            navController = navController,
+            closeScreen = { navController.removeLastOrNull() },
+            viewModel = viewModel
+        )
     }
-
 }
 
-private const val AddTokenPage = "add_token"
-private const val BlockchainSelectorPage = "blockchain_selector"
+@Serializable
+data object BlockchainSelectorPage : HSScreen() {
 
-@Composable
-private fun AddTokenNavHost(
-    fragmentNavController: HSNavigation,
-    viewModel: AddTokenViewModel = viewModel(factory = AddTokenModule.Factory())
-) {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = AddTokenPage,
-    ) {
-        composable(AddTokenPage) {
-            AddTokenScreen(
-                navController = navController,
-                closeScreen = { fragmentNavController.removeLastOrNull() },
-                viewModel = viewModel
-            )
-        }
-        composablePage(BlockchainSelectorPage) {
-            AddTokenBlockchainSelectorScreen(
-                blockchains = viewModel.blockchains,
-                selectedBlockchain = viewModel.selectedBlockchain,
-                navController = navController
-            )
-        }
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        val viewModel = navController.viewModelForScreen<AddTokenViewModel>(AddTokenFragment::class)
+        AddTokenBlockchainSelectorScreen(
+            blockchains = viewModel.blockchains,
+            selectedBlockchain = viewModel.selectedBlockchain,
+            navController = navController
+        )
     }
 }
 
 @Composable
 private fun AddTokenScreen(
-    navController: NavHostController,
+    navController: HSNavigation,
     closeScreen: () -> Unit,
     viewModel: AddTokenViewModel,
 ) {
-    navController.currentBackStackEntry
-        ?.savedStateHandle
-        ?.getStateFlow<List<Blockchain>>(BlockchainSelectorResult, emptyList())
-        ?.collectAsState()?.value?.let { selectedItems ->
-            if (selectedItems.isNotEmpty()) {
-                viewModel.onBlockchainSelect(selectedItems.first())
-                navController.currentBackStackEntry
-                    ?.savedStateHandle
-                    ?.set<List<Blockchain>>(BlockchainSelectorResult, emptyList())
-            }
-        }
-
     val uiState = viewModel.uiState
     val view = LocalView.current
 
@@ -139,7 +108,9 @@ private fun AddTokenScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
-                        onClick = { navController.navigate(BlockchainSelectorPage) }
+                        onClick = navController.slideFromRightForResult<Blockchain>(BlockchainSelectorPage) {
+                            viewModel.onBlockchainSelect(it)
+                        }
                     ) {
                         Image(
                             painter = painterResource(R.drawable.ic_blocks_24),
