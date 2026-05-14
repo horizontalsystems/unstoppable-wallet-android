@@ -13,11 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
@@ -27,10 +27,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 @Composable
-fun AddZanoNodeScreen(navController: NavController) {
+fun AddZanoNodeScreen(navController: HSNavigation) {
     val viewModel = viewModel<AddZanoNodeViewModel>(factory = AddZanoNodeModule.Factory())
     if (viewModel.uiState.closeScreen) {
-        navController.popBackStack()
+        navController.removeLastOrNull()
         viewModel.onScreenClose()
     }
 
@@ -40,7 +40,7 @@ fun AddZanoNodeScreen(navController: NavController) {
             MenuItem(
                 title = TranslatableString.ResString(R.string.Button_Close),
                 icon = R.drawable.ic_close,
-                onClick = { navController.popBackStack() }
+                onClick = { navController.removeLastOrNull() }
             )
         )
     ) {

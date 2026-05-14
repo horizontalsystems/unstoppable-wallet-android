@@ -33,13 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager.ZanoNode
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
@@ -72,33 +67,26 @@ data object ZanoNetworkFragment : HSScreen() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        ZanoNetworkNavHost(navController)
+        ZanoNetworkScreen(
+            navController = navController,
+            onBackPress = { navController.removeLastOrNull() }
+        )
     }
 
 }
 
-private const val ZanoNetworkPage = "zano_network"
-private const val AddNodePage = "add_node"
+@Serializable
+data object AddNodePage : HSScreen() {
 
-@Composable
-private fun ZanoNetworkNavHost(fragmentNavController: HSNavigation) {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = ZanoNetworkPage) {
-        composable(ZanoNetworkPage) {
-            ZanoNetworkScreen(
-                navController = navController,
-                onBackPress = { fragmentNavController.removeLastOrNull() }
-            )
-        }
-        composablePopup(AddNodePage) {
-            AddZanoNodeScreen(navController = navController)
-        }
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        AddZanoNodeScreen(navController = navController)
     }
 }
 
 @Composable
 private fun ZanoNetworkScreen(
-    navController: NavController,
+    navController: HSNavigation,
     onBackPress: () -> Unit,
 ) {
     val viewModel = viewModel<ZanoNetworkViewModel>(factory = ZanoNetworkModule.Factory())
@@ -164,7 +152,7 @@ private fun ZanoNetworkScreen(
 
                 item {
                     Spacer(Modifier.height(32.dp))
-                    AddButton { navController.navigate(AddNodePage) }
+                    AddButton { navController.add(AddNodePage) }
                     Spacer(Modifier.height(60.dp))
                 }
             }
