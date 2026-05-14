@@ -2,10 +2,6 @@ package io.horizontalsystems.bankwallet.modules.usersubscription
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
@@ -18,43 +14,31 @@ import kotlinx.serialization.Serializable
 data object BuySubscriptionHavHostFragment : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        SubscriptionNavHost(
-            navController = navController,
-            onClose = { navController.removeLastOrNull() })
+        PremiumFeaturesScreen(
+            navController,
+            true,
+            onClose = { navController.removeLastOrNull() }
+        )
     }
 
     @Parcelize
     data class Input(val action: IPaidAction) : Parcelable
 
-    @Parcelize
-    class Result : Parcelable
 }
 
-@Composable
-fun SubscriptionNavHost(
-    navController: HSNavigation,
-    onClose: () -> Unit
-) {
-    val resultEventBus = LocalResultEventBus.current
-    val navHostController = rememberNavController()
-    NavHost(
-        navController = navHostController,
-        startDestination = "select_subscription",
-    ) {
-        composable("select_subscription") {
-            PremiumFeaturesScreen(
-                navController,
-                navHostController,
-                onClose = onClose
-            )
-        }
-        composablePopup("premium_subscribed_page") {
-            PremiumSubscribedScreen(
-                onCloseClick = {
-                    resultEventBus.sendResult(BuySubscriptionHavHostFragment.Result())
-                    onClose()
-                }
-            )
-        }
+@Serializable
+data object PremiumSubscribedPage : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        val resultEventBus = LocalResultEventBus.current
+        PremiumSubscribedScreen(
+            onCloseClick = {
+                resultEventBus.sendResult(Result())
+                navController.removeLastUntil(BuySubscriptionHavHostFragment::class, true)
+            }
+        )
     }
+
+    @Parcelize
+    class Result : Parcelable
 }

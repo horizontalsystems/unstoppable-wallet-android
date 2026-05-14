@@ -35,7 +35,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
@@ -62,7 +61,7 @@ class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
     override fun GetContent(navController: HSNavigation) {
         PremiumFeaturesScreen(
             navController = navController,
-            navHostController = null,
+            usedInHavHost = false,
             onClose = { navController.removeLastOrNull() }
         )
     }
@@ -72,7 +71,7 @@ class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
 @Composable
 fun PremiumFeaturesScreen(
     navController: HSNavigation,
-    navHostController: NavHostController?,
+    usedInHavHost: Boolean,
     onClose: () -> Unit
 ) {
     val viewModel = viewModel<BuySubscriptionViewModel> {
@@ -224,9 +223,9 @@ fun PremiumFeaturesScreen(
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             //when used in NavHost
-                            navHostController?.let {
+                            if (usedInHavHost) {
                                 isPlanSelectBottomSheetVisible = true
-                            } ?: run {
+                            } else {
                                 onClose.invoke()
                                 navController.slideFromBottom(SelectPlanDialog())
                             }
@@ -248,7 +247,7 @@ fun PremiumFeaturesScreen(
                             plansModalBottomSheetState.hide()
                             isPlanSelectBottomSheetVisible = false
                         }
-                        navHostController?.navigate("premium_subscribed_page")
+                        navController.add(PremiumSubscribedPage)
                     }
                 )
             }
