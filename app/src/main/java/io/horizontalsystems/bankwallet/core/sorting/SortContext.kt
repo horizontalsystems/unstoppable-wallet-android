@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.sorting
 
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -11,7 +10,7 @@ class TokenSortContext(
     filter: String = "",
     val enabledTokens: Set<Token> = emptySet(),
     val fiatValues: Map<Token, BigDecimal> = emptyMap(),
-    val referenceBlockchain: BlockchainType? = null
+    val balanceOrder: Map<Token, Int> = emptyMap(),
 ) : SortContext(filter)
 
 class FullCoinSortContext(
