@@ -67,9 +67,9 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.core.utils.Utils
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
-import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
@@ -111,8 +111,13 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun RestorePhrase(
-    mainViewModel: RestoreViewModel,
-    openSelectCoins: () -> Unit,
+    openSelectCoins: (
+        accountType: AccountType,
+        accountName: String,
+        manualBackup: Boolean,
+        fileBackup: Boolean,
+        statPage: StatPage
+    ) -> Unit,
     onBackClick: () -> Unit,
 ) {
     val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
@@ -433,8 +438,13 @@ fun RestorePhrase(
     }
 
     uiState.accountType?.let { accountType ->
-        mainViewModel.setAccountData(accountType, viewModel.accountName, true, false, statPage)
-        openSelectCoins.invoke()
+        openSelectCoins.invoke(
+            accountType,
+            viewModel.accountName,
+            true,
+            false,
+            statPage
+        )
         viewModel.onSelectCoinsShown()
 
         stat(page = statPage, event = StatEvent.Open(StatPage.RestoreSelect))

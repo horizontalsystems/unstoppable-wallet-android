@@ -1,19 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.restoreaccount
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.RestorePhrase
 import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
-import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
-import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -21,52 +18,44 @@ data class RestoreAccountFragment(val input: ManageAccountsModule.Input) : HSScr
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        RestoreAccountNavHost(
-            navController,
-            input
+        RestorePhrase(
+            openSelectCoins = { accountType: AccountType, accountName: String, manualBackup: Boolean, fileBackup: Boolean, statPage: StatPage ->
+                navController.add(
+                    restore_select_coins(
+                        input,
+                        accountType,
+                        accountName,
+                        manualBackup,
+                        fileBackup,
+                        statPage
+                    )
+                )
+            },
+            onBackClick = { navController.removeLastOrNull() },
         )
     }
-
-}
-
-@Composable
-private fun RestoreAccountNavHost(
-    navController: HSNavigation,
-    input: ManageAccountsModule.Input
-) {
-    val mainViewModel: RestoreViewModel = viewModel()
-
-    val view = LocalView.current
-
-    val uiState = mainViewModel.uiState
-
-    LaunchedEffect(uiState.restored) {
-        if (uiState.restored) {
-            HudHelper.showSuccessMessage(
-                contenView = view,
-                resId = R.string.Hud_Text_Restored,
-                icon = R.drawable.icon_add_to_wallet_2_24,
-                iconTint = R.color.white
-            )
-            delay(300)
-            navController.removeLastUntil(input.popOffOnSuccess, input.popOffInclusive)
-        }
-    }
-
-    RestorePhrase(
-        mainViewModel = mainViewModel,
-        openSelectCoins = {
-            navController.add(restore_select_coins(input))
-        },
-        onBackClick = { navController.removeLastOrNull() },
-    )
 }
 
 @Serializable
-data class restore_select_coins(val input: ManageAccountsModule.Input) : HSScreen() {
+data class restore_select_coins(
+    val input: ManageAccountsModule.Input,
+    val accountType: AccountType,
+    val accountName: String,
+    val manualBackup: Boolean,
+    val fileBackup: Boolean,
+    val statPage: StatPage
+) : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(RestoreAccountFragment::class)
+        val mainViewModel = viewModel<RestoreViewModel> {
+            RestoreViewModel(
+                accountType,
+                accountName,
+                manualBackup,
+                fileBackup,
+                statPage
+            )
+        }
 
         ManageWalletsScreen(
             mainViewModel = mainViewModel,
@@ -90,7 +79,7 @@ data class restore_select_coins(val input: ManageAccountsModule.Input) : HSScree
 data object zcash_configure : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(RestoreAccountFragment::class)
+        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(restore_select_coins::class)
 
         RestoreBirthdayHeightScreen(
             blockchainType = BlockchainType.Zcash,
@@ -110,7 +99,7 @@ data object zcash_configure : HSScreen() {
 data object monero_configure : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(RestoreAccountFragment::class)
+        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(restore_select_coins::class)
 
         RestoreBirthdayHeightScreen(
             blockchainType = BlockchainType.Monero,
@@ -130,7 +119,7 @@ data object monero_configure : HSScreen() {
 data object zano_configure : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(RestoreAccountFragment::class)
+        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(restore_select_coins::class)
 
         RestoreBirthdayHeightScreen(
             blockchainType = BlockchainType.Zano,
