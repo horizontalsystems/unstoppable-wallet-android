@@ -40,13 +40,6 @@ private fun RestoreAccountNavHost(
 
     val uiState = mainViewModel.uiState
 
-    LaunchedEffect(uiState.openSelectCoinsScreen) {
-        if (uiState.openSelectCoinsScreen) {
-            mainViewModel.openSelectCoinsScreenHandled()
-            navController.add(restore_select_coins(input))
-        }
-    }
-
     LaunchedEffect(uiState.restored) {
         if (uiState.restored) {
             HudHelper.showSuccessMessage(
@@ -62,7 +55,9 @@ private fun RestoreAccountNavHost(
 
     RestorePhrase(
         mainViewModel = mainViewModel,
-        openSelectCoins = { mainViewModel.requestOpenSelectCoinsScreen() },
+        openSelectCoins = {
+            navController.add(restore_select_coins(input))
+        },
         onBackClick = { navController.removeLastOrNull() },
     )
 }
