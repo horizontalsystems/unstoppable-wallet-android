@@ -4,11 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -19,7 +15,6 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
-import kotlin.reflect.KClass
 
 @Serializable
 data class RestoreAccountFragment(val input: ManageAccountsModule.Input) : HSScreen(screenshotEnabled = false) {
@@ -28,8 +23,7 @@ data class RestoreAccountFragment(val input: ManageAccountsModule.Input) : HSScr
     override fun GetContent(navController: HSNavigation) {
         RestoreAccountNavHost(
             navController,
-            input.popOffOnSuccess,
-            input.popOffInclusive
+            input
         )
     }
 
@@ -37,24 +31,19 @@ data class RestoreAccountFragment(val input: ManageAccountsModule.Input) : HSScr
 
 @Composable
 private fun RestoreAccountNavHost(
-    fragmentNavController: HSNavigation,
-    popUpToInclusiveId: KClass<out HSScreen>,
-    inclusive: Boolean
+    navController: HSNavigation,
+    input: ManageAccountsModule.Input
 ) {
-    val navController = rememberNavController()
     val mainViewModel: RestoreViewModel = viewModel()
 
     val view = LocalView.current
-    val onFinish: () -> Unit = {
-        fragmentNavController.removeLastUntil(popUpToInclusiveId, inclusive)
-    }
 
     val uiState = mainViewModel.uiState
 
     LaunchedEffect(uiState.openSelectCoinsScreen) {
         if (uiState.openSelectCoinsScreen) {
             mainViewModel.openSelectCoinsScreenHandled()
-            navController.navigate("restore_select_coins")
+            navController.add(restore_select_coins(input))
         }
     }
 
@@ -67,82 +56,97 @@ private fun RestoreAccountNavHost(
                 iconTint = R.color.white
             )
             delay(300)
-            onFinish.invoke()
+            navController.removeLastUntil(input.popOffOnSuccess, input.popOffInclusive)
         }
     }
 
-    NavHost(
-        navController = navController,
-        startDestination = "restore_phrase",
-    ) {
-        composable("restore_phrase") {
-            RestorePhrase(
-                mainViewModel = mainViewModel,
-                openSelectCoins = { mainViewModel.requestOpenSelectCoinsScreen() },
-                onBackClick = { fragmentNavController.removeLastOrNull() },
-            )
-        }
-        composablePage("restore_select_network") {
-            SelectNetworkScreen(
-                mainViewModel = mainViewModel,
-                openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
-                onBackClick = { navController.popBackStack() }
-            )
-        }
-        composablePage("restore_select_coins") {
-            ManageWalletsScreen(
-                mainViewModel = mainViewModel,
-                openBirthdayHeightConfigure = { token ->
-                    when (token.blockchainType) {
-                        BlockchainType.Zcash -> navController.navigate("zcash_configure")
-                        BlockchainType.Monero -> navController.navigate("monero_configure")
-                        BlockchainType.Zano -> navController.navigate("zano_configure")
-                        else -> Unit
-                    }
-                },
-                onBackClick = { navController.popBackStack() },
-                onFinish = onFinish
-            )
-        }
-        composablePage("zcash_configure") {
-            RestoreBirthdayHeightScreen(
-                blockchainType = BlockchainType.Zcash,
-                onCloseWithResult = { config ->
-                    mainViewModel.setBirthdayHeightConfig(config)
-                    navController.popBackStack()
-                },
-                onCloseClick = {
-                    mainViewModel.cancelBirthdayHeightConfig = true
-                    navController.popBackStack()
-                }
-            )
-        }
-        composablePage("monero_configure") {
-            RestoreBirthdayHeightScreen(
-                blockchainType = BlockchainType.Monero,
-                onCloseWithResult = { config ->
-                    mainViewModel.setBirthdayHeightConfig(config)
-                    navController.popBackStack()
-                },
-                onCloseClick = {
-                    mainViewModel.cancelBirthdayHeightConfig = true
-                    navController.popBackStack()
-                }
-            )
-        }
+    RestorePhrase(
+        mainViewModel = mainViewModel,
+        openSelectCoins = { mainViewModel.requestOpenSelectCoinsScreen() },
+        onBackClick = { navController.removeLastOrNull() },
+    )
+}
 
-        composablePage("zano_configure") {
-            RestoreBirthdayHeightScreen(
-                blockchainType = BlockchainType.Zano,
-                onCloseWithResult = { config ->
-                    mainViewModel.setBirthdayHeightConfig(config)
-                    navController.popBackStack()
-                },
-                onCloseClick = {
-                    mainViewModel.cancelBirthdayHeightConfig = true
-                    navController.popBackStack()
+@Serializable
+data class restore_select_coins(val input: ManageAccountsModule.Input) : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(RestoreAccountFragment::class)
+
+        ManageWalletsScreen(
+            mainViewModel = mainViewModel,
+            openBirthdayHeightConfigure = { token ->
+                when (token.blockchainType) {
+                    BlockchainType.Zcash -> navController.add(zcash_configure)
+                    BlockchainType.Monero -> navController.add(monero_configure)
+                    BlockchainType.Zano -> navController.add(zano_configure)
+                    else -> Unit
                 }
-            )
-        }
+            },
+            onBackClick = { navController.removeLastOrNull() },
+            onFinish = {
+                navController.removeLastUntil(input.popOffOnSuccess, input.popOffInclusive)
+            }
+        )
+    }
+}
+
+@Serializable
+data object zcash_configure : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(RestoreAccountFragment::class)
+
+        RestoreBirthdayHeightScreen(
+            blockchainType = BlockchainType.Zcash,
+            onCloseWithResult = { config ->
+                mainViewModel.setBirthdayHeightConfig(config)
+                navController.removeLastOrNull()
+            },
+            onCloseClick = {
+                mainViewModel.cancelBirthdayHeightConfig = true
+                navController.removeLastOrNull()
+            }
+        )
+    }
+}
+
+@Serializable
+data object monero_configure : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(RestoreAccountFragment::class)
+
+        RestoreBirthdayHeightScreen(
+            blockchainType = BlockchainType.Monero,
+            onCloseWithResult = { config ->
+                mainViewModel.setBirthdayHeightConfig(config)
+                navController.removeLastOrNull()
+            },
+            onCloseClick = {
+                mainViewModel.cancelBirthdayHeightConfig = true
+                navController.removeLastOrNull()
+            }
+        )
+    }
+}
+
+@Serializable
+data object zano_configure : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(RestoreAccountFragment::class)
+
+        RestoreBirthdayHeightScreen(
+            blockchainType = BlockchainType.Zano,
+            onCloseWithResult = { config ->
+                mainViewModel.setBirthdayHeightConfig(config)
+                navController.removeLastOrNull()
+            },
+            onCloseClick = {
+                mainViewModel.cancelBirthdayHeightConfig = true
+                navController.removeLastOrNull()
+            }
+        )
     }
 }
