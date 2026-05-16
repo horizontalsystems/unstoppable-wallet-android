@@ -44,7 +44,7 @@ class WatchAddressViewModel(
     private var openBirthdayHeightScreen: Boolean = false
 
     val defaultAccountName = watchAddressService.nextWatchAccountName()
-    var accountName: String = defaultAccountName
+    var accountName: String = watchAddressService.generateRandomWatchAccountName()
         get() = field.ifBlank { defaultAccountName }
         private set
 
@@ -62,6 +62,12 @@ class WatchAddressViewModel(
     fun onEnterAccountName(v: String) {
         accountNameEdited = v.isNotBlank()
         accountName = v
+    }
+
+    fun generateRandomAccountName() {
+        accountName = watchAddressService.generateRandomWatchAccountName()
+        accountNameEdited = true
+        emitState()
     }
 
     fun onEnterInput(v: String) {
@@ -173,7 +179,9 @@ class WatchAddressViewModel(
     private fun setAddress(address: Address) {
         this.address = address
         if (!accountNameEdited) {
-            accountName = address.domain ?: defaultAccountName
+            address.domain?.let {
+                accountName = it
+            }
         }
 
         type = addressType(address)
