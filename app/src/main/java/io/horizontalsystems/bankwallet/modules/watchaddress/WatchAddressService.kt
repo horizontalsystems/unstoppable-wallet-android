@@ -27,6 +27,8 @@ class WatchAddressService(
 
     fun nextWatchAccountName() = accountFactory.getNextWatchAccountName()
 
+    fun generateRandomWatchAccountName(): String = accountManager.getRandomWalletName()
+
     fun tokens(accountType: AccountType): List<Token> {
         val tokenQueries = buildList {
             when (accountType) {

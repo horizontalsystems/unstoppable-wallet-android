@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -33,8 +34,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputMultiline
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSIconButton
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
@@ -121,7 +124,17 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 initial = viewModel.accountName,
                 pasteEnabled = false,
                 hint = viewModel.defaultAccountName,
-                onValueChange = viewModel::onEnterAccountName
+                onValueChange = viewModel::onEnterAccountName,
+                trailingContent = {
+                    Box(modifier = Modifier.padding(end = 16.dp)) {
+                        HSIconButton(
+                            variant = ButtonVariant.Secondary,
+                            size = ButtonSize.Small,
+                            icon = painterResource(R.drawable.ic_swap_circle_24),
+                            onClick = viewModel::generateRandomAccountName
+                        )
+                    }
+                }
             )
             VSpacer(32.dp)
             FormsInputMultiline(
