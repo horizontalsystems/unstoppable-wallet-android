@@ -97,7 +97,7 @@ fun ManageWalletsScreen(
 
     mainViewModel.birthdayHeightConfig?.let { config ->
         restoreSettingsViewModel.onEnter(config)
-        mainViewModel.setBirthdayHeightConfig(null)
+        mainViewModel.setBirthdayHeightConfig2(null)
     }
 
     if (mainViewModel.cancelBirthdayHeightConfig) {

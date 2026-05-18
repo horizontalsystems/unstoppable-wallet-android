@@ -105,7 +105,7 @@ private fun RestoreFromPrivateKeyNavHost(
             RestoreBirthdayHeightScreen(
                 blockchainType = BlockchainType.Zcash,
                 onCloseWithResult = { config ->
-                    mainViewModel.setBirthdayHeightConfig(config)
+                    mainViewModel.setBirthdayHeightConfig2(config)
                     navController.popBackStack()
                 },
                 onCloseClick = {
@@ -118,7 +118,7 @@ private fun RestoreFromPrivateKeyNavHost(
             RestoreBirthdayHeightScreen(
                 blockchainType = BlockchainType.Monero,
                 onCloseWithResult = { config ->
-                    mainViewModel.setBirthdayHeightConfig(config)
+                    mainViewModel.setBirthdayHeightConfig2(config)
                     navController.popBackStack()
                 },
                 onCloseClick = {

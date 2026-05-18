@@ -66,7 +66,7 @@ data class restore_select_coins(
         ResultEffect<RestoreBirthdayHeightPage.Result>(resultKeyUuid = uuid) {
             val config = it.config
             if (config != null) {
-                mainViewModel.setBirthdayHeightConfig(config)
+                mainViewModel.setBirthdayHeightConfig2(config)
             } else {
                 mainViewModel.cancelBirthdayHeightConfig = true
             }

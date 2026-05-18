@@ -1,5 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.restoreaccount
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
@@ -37,13 +40,13 @@ class RestoreViewModel(): ViewModelUiState<RestoreViewModel.UiState>() {
     var fileBackup: Boolean = false
         private set
 
-    var birthdayHeightConfig: BirthdayHeightConfig? = null
+    var birthdayHeightConfig: BirthdayHeightConfig? by mutableStateOf(null)
         private set
 
     var statPage: StatPage? = null
         private set
 
-    var cancelBirthdayHeightConfig: Boolean = false
+    var cancelBirthdayHeightConfig: Boolean by mutableStateOf(false)
 
     private var openSelectCoinsScreen = false
     private var restored = false
@@ -79,7 +82,7 @@ class RestoreViewModel(): ViewModelUiState<RestoreViewModel.UiState>() {
         this.accountType = accountType
     }
 
-    fun setBirthdayHeightConfig(config: BirthdayHeightConfig?) {
+    fun setBirthdayHeightConfig2(config: BirthdayHeightConfig?) {
         birthdayHeightConfig = config
     }
 
