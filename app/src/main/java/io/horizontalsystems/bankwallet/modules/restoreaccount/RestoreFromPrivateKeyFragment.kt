@@ -4,18 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.composablePage
+import io.horizontalsystems.bankwallet.core.NavigationType
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreprivatekey.RestorePrivateKey
-import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
@@ -34,24 +30,34 @@ data class RestoreFromPrivateKeyFragment(val input: ManageAccountsModule.Input?)
 
 @Composable
 private fun RestoreFromPrivateKeyNavHost(
-    fragmentNavController: HSNavigation,
+    navController: HSNavigation,
     popUpToInclusiveId: KClass<out HSScreen>,
     inclusive: Boolean,
 ) {
-    val navController = rememberNavController()
     val mainViewModel: RestoreViewModel = viewModel()
 
     val view = LocalView.current
-    val onFinish: () -> Unit = {
-        fragmentNavController.removeLastUntil(popUpToInclusiveId, inclusive)
-    }
 
     val uiState = mainViewModel.uiState
 
     LaunchedEffect(uiState.openSelectCoinsScreen) {
         if (uiState.openSelectCoinsScreen) {
             mainViewModel.openSelectCoinsScreenHandled()
-            navController.navigate("restore_select_coins")
+
+            val accountType = mainViewModel.accountType
+            val statPage = mainViewModel.statPage
+            if (accountType != null && statPage != null) {
+                navController.add(
+                    restore_select_coins(
+                        input = ManageAccountsModule.Input(popUpToInclusiveId, inclusive),
+                        accountType = accountType,
+                        accountName = mainViewModel.accountName,
+                        manualBackup = mainViewModel.manualBackup,
+                        fileBackup = mainViewModel.fileBackup,
+                        statPage = statPage
+                    )
+                )
+            }
         }
     }
 
@@ -64,68 +70,31 @@ private fun RestoreFromPrivateKeyNavHost(
                 iconTint = R.color.white
             )
             delay(300)
-            onFinish.invoke()
+            navController.removeLastUntil(popUpToInclusiveId, inclusive)
         }
     }
 
-    NavHost(
-        navController = navController,
-        startDestination = "restore_private_key",
-    ) {
-        composablePage("restore_private_key") {
-            RestorePrivateKey(
-                mainViewModel = mainViewModel,
-                openSelectNetworkScreen = { navController.navigate("restore_select_network") },
-                openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
-                onBackClick = { fragmentNavController.removeLastOrNull() },
-            )
-        }
-        composablePage("restore_select_network") {
-            SelectNetworkScreen(
-                mainViewModel = mainViewModel,
-                openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
-                onBackClick = { navController.popBackStack() }
-            )
-        }
-        composablePage("restore_select_coins") {
-            ManageWalletsScreen(
-                mainViewModel = mainViewModel,
-                openBirthdayHeightConfigure = { token ->
-                    when (token.blockchainType) {
-                        BlockchainType.Zcash -> navController.navigate("zcash_configure")
-                        BlockchainType.Monero -> navController.navigate("monero_configure")
-                        else -> Unit
-                    }
-                },
-                onBackClick = { navController.popBackStack() },
-                onFinish = onFinish
-            )
-        }
-        composablePage("zcash_configure") {
-            RestoreBirthdayHeightScreen(
-                blockchainType = BlockchainType.Zcash,
-                onCloseWithResult = { config ->
-                    mainViewModel.setBirthdayHeightConfig2(config)
-                    navController.popBackStack()
-                },
-                onCloseClick = {
-                    mainViewModel.cancelBirthdayHeightConfig = true
-                    navController.popBackStack()
-                }
-            )
-        }
-        composablePage("monero_configure") {
-            RestoreBirthdayHeightScreen(
-                blockchainType = BlockchainType.Monero,
-                onCloseWithResult = { config ->
-                    mainViewModel.setBirthdayHeightConfig2(config)
-                    navController.popBackStack()
-                },
-                onCloseClick = {
-                    mainViewModel.cancelBirthdayHeightConfig = true
-                    navController.popBackStack()
-                }
-            )
-        }
+    RestorePrivateKey(
+        mainViewModel = mainViewModel,
+        openSelectNetworkScreen = navController.slideForResult<AccountType>(
+            navigationType = NavigationType.SlideFromRight,
+            screenBuilder = { restore_select_network(mainViewModel.accountTypes) }
+        ) {
+            mainViewModel.setAccountType(it)
+            mainViewModel.requestOpenSelectCoinsScreen()
+        },
+        openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
+        onBackClick = { navController.removeLastOrNull() },
+    )
+}
+
+@Serializable
+data class restore_select_network(val accountTypes: List<AccountType>) : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        SelectNetworkScreen(
+            onBackClick = { navController.removeLastOrNull() },
+            accountTypes = accountTypes
+        )
     }
 }
