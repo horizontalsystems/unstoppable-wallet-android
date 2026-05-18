@@ -32,22 +32,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
-import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
-import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
+import io.horizontalsystems.bankwallet.modules.restoreaccount.restore_select_coins
 import io.horizontalsystems.bankwallet.serializers.HSScreenKClassSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -68,7 +64,6 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeaderColored
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
@@ -79,7 +74,6 @@ data class RestoreLocalFragment(val input: Input) : HSScreen() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val activity = LocalActivity.current
         RestoreLocalNavHost(
             input.jsonFile,
             input.fileName,
@@ -87,7 +81,7 @@ data class RestoreLocalFragment(val input: Input) : HSScreen() {
             navController,
             input.popOffOnSuccess,
             input.popOffInclusive
-        ) { activity?.let { MainModule.startAsNewTask(it) } }
+        )
     }
 
     @Serializable
@@ -105,12 +99,10 @@ private fun RestoreLocalNavHost(
     backupJsonString: String?,
     fileName: String?,
     statPage: StatPage,
-    fragmentNavController: HSNavigation,
+    navController: HSNavigation,
     popUpToInclusiveId: KClass<out HSScreen>,
     popUpInclusive: Boolean,
-    reloadApp: () -> Unit,
 ) {
-    val navController = rememberNavController()
     val mainViewModel: RestoreViewModel = viewModel()
     val viewModel = viewModel<RestoreLocalViewModel>(
         factory = RestoreLocalModule.Factory(
@@ -119,68 +111,53 @@ private fun RestoreLocalNavHost(
             statPage
         )
     )
-    NavHost(
-        navController = navController,
-        startDestination = "restore_local",
-    ) {
-        composable("restore_local") {
-            RestoreLocalScreen(
-                viewModel = viewModel,
-                mainViewModel = mainViewModel,
-                statPage = statPage,
-                onBackClick = { fragmentNavController.removeLastOrNull() },
-                close = { fragmentNavController.removeLastUntil(popUpToInclusiveId, popUpInclusive) },
-                openSelectCoins = { navController.navigate("restore_select_coins") },
-                openBackupItems = { navController.navigate("backup_file") }
+
+    RestoreLocalScreen(
+        viewModel = viewModel,
+        mainViewModel = mainViewModel,
+        statPage = statPage,
+        onBackClick = { navController.removeLastOrNull() },
+        close = { navController.removeLastUntil(popUpToInclusiveId, popUpInclusive) },
+        openSelectCoins = {
+            val accountType = mainViewModel.accountType
+            if (accountType != null) {
+                navController.add(
+                    restore_select_coins(
+                        input = ManageAccountsModule.Input(popUpToInclusiveId, popUpInclusive),
+                        accountType = accountType,
+                        accountName = mainViewModel.accountName,
+                        manualBackup = mainViewModel.manualBackup,
+                        fileBackup = mainViewModel.fileBackup,
+                        statPage = statPage
+                    )
+                )
+            }
+        },
+        openBackupItems = {
+            navController.add(
+                backup_file(
+                    input = ManageAccountsModule.Input(popUpToInclusiveId, popUpInclusive)
+                )
             )
         }
-        composablePage("backup_file") {
-            BackupFileItems(
-                viewModel,
-                onBackClick = { navController.popBackStack() },
-                close = { fragmentNavController.removeLastUntil(popUpToInclusiveId, popUpInclusive) },
-                reloadApp = reloadApp
-            )
-        }
-        composablePage("restore_select_coins") {
-            ManageWalletsScreen(
-                mainViewModel = mainViewModel,
-                openBirthdayHeightConfigure = { token ->
-                    when (token.blockchainType) {
-                        BlockchainType.Zcash -> navController.navigate("zcash_configure")
-                        BlockchainType.Monero -> navController.navigate("monero_configure")
-                        else -> Unit
-                    }
-                },
-                onBackClick = { navController.popBackStack() }
-            ) { fragmentNavController.removeLastUntil(popUpToInclusiveId, popUpInclusive) }
-        }
-        composablePage("zcash_configure") {
-            RestoreBirthdayHeightScreen(
-                blockchainType = BlockchainType.Zcash,
-                onCloseWithResult = { config ->
-                    mainViewModel.setBirthdayHeightConfig2(config)
-                    navController.popBackStack()
-                },
-                onCloseClick = {
-                    mainViewModel.cancelBirthdayHeightConfig = true
-                    navController.popBackStack()
-                }
-            )
-        }
-        composablePage("monero_configure") {
-            RestoreBirthdayHeightScreen(
-                blockchainType = BlockchainType.Monero,
-                onCloseWithResult = { config ->
-                    mainViewModel.setBirthdayHeightConfig2(config)
-                    navController.popBackStack()
-                },
-                onCloseClick = {
-                    mainViewModel.cancelBirthdayHeightConfig = true
-                    navController.popBackStack()
-                }
-            )
-        }
+    )
+}
+
+@Serializable
+data class backup_file(val input: ManageAccountsModule.Input) : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        val viewModel = navController.viewModelForScreenOrNull<RestoreLocalViewModel>(
+            RestoreLocalFragment::class
+        ) ?: return
+
+        val activity = LocalActivity.current
+        BackupFileItems(
+            viewModel = viewModel,
+            onBackClick = { navController.removeLastOrNull() },
+            close = { navController.removeLastUntil(input.popOffOnSuccess, input.popOffInclusive) },
+            reloadApp = { activity?.let { MainModule.startAsNewTask(it) } }
+        )
     }
 }
 

@@ -84,6 +84,15 @@ class HSNavigation(val backStack: NavBackStack<HSScreen>) {
         )
     }
 
+    @Composable
+    inline fun <reified VM : ViewModel> viewModelForScreenOrNull(klass: KClass<out HSScreen>) : VM? {
+        val hSScreen = backStack.findLast { it::class == klass } ?: return null
+
+        return viewModel(
+            viewModelStoreOwner = rememberChildViewModelStoreOwner(hSScreen.contentKey()),
+        )
+    }
+
     fun add(element: HSScreen): Boolean {
         return backStack.add(element)
     }
