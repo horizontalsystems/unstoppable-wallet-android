@@ -63,40 +63,11 @@ allprojects {
         mavenCentral()
         mavenLocal()
         maven { url "https://jitpack.io" }
-        if (!project.hasProperty('fdroid')) {
-            maven {
-                url = uri("https://piratecash.github.io/monero-kit-android")
-                content {
-                    includeGroup("com.github.piratecash")
-                }
-            }
-            maven {
-                url = uri("https://piratecash.github.io/bitcoin-kit-android")
-                content {
-                    includeGroup("com.github.piratecash")
-                    includeGroup("com.github.piratecash.bitcoin-kit-android")
-                }
-            }
-            maven {
-                url = uri("https://piratecash.github.io/SolanaKT")
-                content {
-                    includeGroup("com.github.piratecash")
-                }
-            }
-            maven {
-                url = uri("https://piratecash.github.io/solana-kit-android")
-                content {
-                    includeGroup("com.github.piratecash")
-                }
-            }
-            maven {
-                url = uri("https://piratecash.github.io/ethereum-kit-android")
-                content {
-                    includeGroup("com.github.piratecash")
-                }
-            }
-        }
     }
+}
+
+if (!project.hasProperty('fdroid')) {
+    apply from: 'config/piratecash-repos.gradle'
 }
 
 gradle.projectsEvaluated {
