@@ -5,8 +5,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.NavigationType
-import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -42,8 +40,6 @@ private fun RestoreFromPrivateKeyNavHost(
 
     LaunchedEffect(uiState.openSelectCoinsScreen) {
         if (uiState.openSelectCoinsScreen) {
-            mainViewModel.openSelectCoinsScreenHandled()
-
             val accountType = mainViewModel.accountType
             val statPage = mainViewModel.statPage
             if (accountType != null && statPage != null) {
@@ -58,6 +54,7 @@ private fun RestoreFromPrivateKeyNavHost(
                     )
                 )
             }
+            mainViewModel.openSelectCoinsScreenHandled()
         }
     }
 
@@ -76,12 +73,8 @@ private fun RestoreFromPrivateKeyNavHost(
 
     RestorePrivateKey(
         mainViewModel = mainViewModel,
-        openSelectNetworkScreen = navController.slideForResult<AccountType>(
-            navigationType = NavigationType.SlideFromRight,
-            screenBuilder = { restore_select_network(mainViewModel.accountTypes) }
-        ) {
-            mainViewModel.setAccountType(it)
-            mainViewModel.requestOpenSelectCoinsScreen()
+        openSelectNetworkScreen = {
+            navController.add(restore_select_network(ManageAccountsModule.Input(popUpToInclusiveId, inclusive)))
         },
         openSelectCoinsScreen = { mainViewModel.requestOpenSelectCoinsScreen() },
         onBackClick = { navController.removeLastOrNull() },
@@ -89,12 +82,51 @@ private fun RestoreFromPrivateKeyNavHost(
 }
 
 @Serializable
-data class restore_select_network(val accountTypes: List<AccountType>) : HSScreen() {
+data class restore_select_network(val input: ManageAccountsModule.Input) : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
+        val mainViewModel = navController.viewModelForScreenOrNull<RestoreViewModel>(RestoreFromPrivateKeyFragment::class) ?: return
+
+        val uiState = mainViewModel.uiState
+        val view = LocalView.current
+
+        LaunchedEffect(uiState.openSelectCoinsScreen) {
+            if (uiState.openSelectCoinsScreen) {
+                val accountType = mainViewModel.accountType
+                val statPage = mainViewModel.statPage
+                if (accountType != null && statPage != null) {
+                    navController.add(
+                        restore_select_coins(
+                            input = input,
+                            accountType = accountType,
+                            accountName = mainViewModel.accountName,
+                            manualBackup = mainViewModel.manualBackup,
+                            fileBackup = mainViewModel.fileBackup,
+                            statPage = statPage
+                        )
+                    )
+                }
+                mainViewModel.openSelectCoinsScreenHandled()
+            }
+        }
+
+        LaunchedEffect(uiState.restored) {
+            if (uiState.restored) {
+                HudHelper.showSuccessMessage(
+                    contenView = view,
+                    resId = R.string.Hud_Text_Restored,
+                    icon = R.drawable.icon_add_to_wallet_2_24,
+                    iconTint = R.color.white
+                )
+                delay(300)
+                navController.removeLastUntil(input.popOffOnSuccess, input.popOffInclusive)
+            }
+        }
+
         SelectNetworkScreen(
             onBackClick = { navController.removeLastOrNull() },
-            accountTypes = accountTypes
+            accountTypes = mainViewModel.accountTypes,
+            mainViewModel = mainViewModel
         )
     }
 }

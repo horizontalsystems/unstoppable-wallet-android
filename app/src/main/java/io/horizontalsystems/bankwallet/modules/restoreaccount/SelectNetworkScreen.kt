@@ -11,7 +11,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -23,9 +22,9 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 @Composable
 fun SelectNetworkScreen(
     onBackClick: () -> Unit,
-    accountTypes: List<AccountType>
+    accountTypes: List<AccountType>,
+    mainViewModel: RestoreViewModel
 ) {
-    val resultEventBus = LocalResultEventBus.current
     HSScaffold(
         title = stringResource(R.string.Restore_SelectNetwork_Title),
         onBack = onBackClick
@@ -51,9 +50,8 @@ fun SelectNetworkScreen(
                             CellRightNavigation()
                         },
                         onClick = {
-                            resultEventBus.sendResult(type)
-                            // todo: find another solution
-                            onBackClick()
+                            mainViewModel.setAccountType(type)
+                            mainViewModel.requestOpenSelectCoinsScreen()
                         }
                     )
                 }
