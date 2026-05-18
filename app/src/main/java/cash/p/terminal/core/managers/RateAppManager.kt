@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import androidx.annotation.VisibleForTesting
 import androidx.core.content.ContextCompat
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.core.ILocalStorage
@@ -13,8 +14,6 @@ import cash.p.terminal.core.IRateAppManager
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.wallet.IWalletManager
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 import java.time.Instant
 
@@ -25,9 +24,8 @@ class RateAppManager(
     private val localStorage: ILocalStorage) : IRateAppManager {
 
     private val _showRateFlow = MutableStateFlow(false)
-    override val showRateAppFlow = _showRateFlow.filterNotNull()
+    override val showRateAppFlow = _showRateFlow
 
-    private val MIN_LAUNCH_COUNT = 5
     private val MIN_COINS_COUNT = 2
     private val COUNTDOWN_TIME_INTERVAL: Long = 10 * 1000 // 10 seconds
     private val REQUEST_TIME_INTERVAL = 40 * 24 * 60 * 60 // 40 Days
@@ -36,7 +34,13 @@ class RateAppManager(
     private var isRequestAllowed = false
     private var isOnBalancePage = false
 
-    private fun onCountdownPass() {
+    private val canRequestRating: Boolean
+        get() = !localStorage.isCalculatorModeEnabled
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun onCountdownPass() {
+        if (!canRequestRating) return
+
         var balance: BigDecimal = BigDecimal.ZERO
 
         for (wallet in walletManager.activeWallets) {
@@ -65,6 +69,8 @@ class RateAppManager(
     }
 
     override fun onAppLaunch() {
+        if (!canRequestRating) return
+
         val launchCount = localStorage.appLaunchCount
         if (launchCount < MIN_LAUNCH_COUNT) {
             localStorage.appLaunchCount = launchCount + 1
@@ -82,10 +88,10 @@ class RateAppManager(
     }
 
     private fun showIfAllowed() {
-        if (isOnBalancePage && isRequestAllowed) {
+        if (canRequestRating && isOnBalancePage && isRequestAllowed) {
             localStorage.rateAppLastRequestTime = Instant.now().epochSecond
             isRequestAllowed = false
-            _showRateFlow.update { true }
+            _showRateFlow.value = true
         }
     }
 
@@ -97,6 +103,7 @@ class RateAppManager(
     }
 
     companion object {
+        internal const val MIN_LAUNCH_COUNT = 5
 
         fun openPlayMarket(context: Context) {
             try {
