@@ -43,10 +43,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.fragment.ktx)
 
-    // Navigation component
-    api(libs.androidx.navigation.fragment.ktx)
-    api(libs.androidx.navigation.ui.ktx)
-
     implementation(libs.rxjava)
     implementation(libs.androidx.biometric)
     implementation(libs.google.material)

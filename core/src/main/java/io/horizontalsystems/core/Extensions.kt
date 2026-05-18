@@ -8,9 +8,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import java.math.BigDecimal
 import java.math.BigInteger
 import kotlin.math.absoluteValue
@@ -20,33 +17,6 @@ fun View.hideKeyboard(context: Context) {
     val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.hideSoftInputFromWindow(windowToken, 0)
 }
-
-fun NavController.setNavigationResult(key: String, bundle: Bundle, destinationId: Int? = null) {
-    val backStackEntry = when (destinationId) {
-        null -> previousBackStackEntry
-        else -> currentBackStack.value.findLast { it.destination.id == destinationId }
-    }
-
-    backStackEntry?.savedStateHandle?.set(key, bundle)
-}
-
-fun NavController.getNavigationResult(keyResult: String, onResult: (Bundle) -> Unit) {
-    currentBackStackEntry?.let { backStackEntry ->
-        backStackEntry.savedStateHandle.getLiveData<Bundle>(keyResult).observe(backStackEntry) {
-            onResult.invoke(it)
-
-            backStackEntry.savedStateHandle.remove<Bundle>(keyResult)
-        }
-    }
-}
-
-//  Fragment
-
-fun Fragment.findNavController(): NavController {
-    return NavHostFragment.findNavController(this)
-}
-
-//  String
 
 fun String.hexToByteArray(): ByteArray {
     return ByteArray(this.length / 2) {
