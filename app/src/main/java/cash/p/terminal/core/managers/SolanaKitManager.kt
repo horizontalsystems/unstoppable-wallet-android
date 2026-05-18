@@ -18,6 +18,7 @@ import com.solana.core.PublicKey
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.extractCertificateChainInfo
 import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.hdwalletkit.Base58
 import io.horizontalsystems.solanakit.Signer
@@ -304,6 +305,8 @@ class SolanaKitManager(
         if (error.resolvedIps.isNotEmpty()) {
             info["Recent Network Error Resolved IPs"] = error.resolvedIps.joinToString(", ")
         }
+
+        info += error.throwable.extractCertificateChainInfo()
 
         recentNetworkErrorInfoByAccountId[accountId] = info
         val message = info.entries.joinToString(separator = "\n") { (key, value) -> "$key: $value" }
