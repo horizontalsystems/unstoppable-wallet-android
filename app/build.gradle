@@ -20,7 +20,7 @@ plugins {
 
 // Git version information helpers (using modern providers.exec API)
 def gitHashProvider = providers.exec {
-    commandLine 'git', 'rev-parse', '--short', 'HEAD'
+    commandLine 'git', 'rev-parse', '--short=10', 'HEAD'
     ignoreExitValue = true
 }.standardOutput.asText.map { it.trim() }
 
