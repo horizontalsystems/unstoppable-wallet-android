@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,14 +28,17 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.serializers.HSScreenKClassSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
+import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
@@ -102,18 +106,9 @@ private fun SelectBlockchainsScreen(
     HSScaffold(
         title = stringResource(title),
         onBack = navController::removeLastOrNull,
-        menuItems = listOf(
-            MenuItem(
-                title = TranslatableString.ResString(R.string.Button_Done),
-                onClick = viewModel::onClickWatch,
-                enabled = submitEnabled,
-                tint = ComposeAppTheme.colors.jacob
-            )
-        ),
     ) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             item {
                 Spacer(modifier = Modifier.height(12.dp))
@@ -163,6 +158,23 @@ private fun SelectBlockchainsScreen(
                         )
                     }
                 }
+            }
+            item {
+                VSpacer(height = 100.dp)
+            }
+        }
+
+        Box(modifier = Modifier.align(Alignment.BottomCenter)) {
+            ButtonsGroupWithShade {
+                HSButton(
+                    title = stringResource(R.string.Button_Done),
+                    variant = ButtonVariant.Primary,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    enabled = submitEnabled,
+                    onClick = viewModel::onClickWatch,
+                )
             }
         }
     }
