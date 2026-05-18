@@ -1,18 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.restoreaccount
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
-import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.ResultEffect
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
-import io.horizontalsystems.bankwallet.modules.restoreconfig.RestoreBirthdayHeightScreen
 import io.horizontalsystems.bankwallet.serializers.HSScreenKClassSerializer
-import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.serialization.Serializable
+import java.util.UUID
 import kotlin.reflect.KClass
 
 @Serializable
@@ -33,17 +31,13 @@ data class RestoreFromPasskeyFragment(val input: Input) : HSScreen(screenshotEna
 
 @Composable
 private fun RestoreFromPasskeyNavHost(
-    fragmentNavController: HSNavigation,
+    navController: HSNavigation,
     input: RestoreFromPasskeyFragment.Input,
 ) {
-    val popUpToInclusiveId = input.popOffOnSuccess
-    val inclusive = input.popOffInclusive
-
     val viewModel = viewModel<RestoreFromPasskeyViewModel>(
         factory = RestoreFromPasskeyViewModel.Factory()
     )
 
-    val navController = rememberNavController()
     val mainViewModel: RestoreViewModel = viewModel {
         val accountType = viewModel.getAccountType(input.entropy)
         val accountName = viewModel.getAccountName(input.accountName)
@@ -57,51 +51,26 @@ private fun RestoreFromPasskeyNavHost(
         )
     }
 
-    NavHost(
-        navController = navController,
-        startDestination = "restore_select_coins",
-    ) {
-        composablePage("restore_select_coins") {
-            ManageWalletsScreen(
-                mainViewModel = mainViewModel,
-                openBirthdayHeightConfigure = { token ->
-                    when (token.blockchainType) {
-                        BlockchainType.Zcash -> navController.navigate("zcash_configure")
-                        BlockchainType.Monero -> navController.navigate("monero_configure")
-                        else -> Unit
-                    }
-                },
-                onBackClick = { fragmentNavController.removeLastOrNull() },
-                onFinish = {
-                    fragmentNavController.removeLastUntil(popUpToInclusiveId, inclusive)
-                }
-            )
-        }
-        composablePage("zcash_configure") {
-            RestoreBirthdayHeightScreen(
-                blockchainType = BlockchainType.Zcash,
-                onCloseWithResult = { config ->
-                    mainViewModel.setBirthdayHeightConfig2(config)
-                    navController.popBackStack()
-                },
-                onCloseClick = {
-                    mainViewModel.cancelBirthdayHeightConfig = true
-                    navController.popBackStack()
-                }
-            )
-        }
-        composablePage("monero_configure") {
-            RestoreBirthdayHeightScreen(
-                blockchainType = BlockchainType.Monero,
-                onCloseWithResult = { config ->
-                    mainViewModel.setBirthdayHeightConfig2(config)
-                    navController.popBackStack()
-                },
-                onCloseClick = {
-                    mainViewModel.cancelBirthdayHeightConfig = true
-                    navController.popBackStack()
-                }
-            )
+    val uuid = rememberSaveable { UUID.randomUUID().toString() }
+    ResultEffect<RestoreBirthdayHeightPage.Result>(resultKeyUuid = uuid) {
+        val config = it.config
+        if (config != null) {
+            mainViewModel.setBirthdayHeightConfig2(config)
+        } else {
+            mainViewModel.cancelBirthdayHeightConfig = true
         }
     }
+
+    ManageWalletsScreen(
+        mainViewModel = mainViewModel,
+        openBirthdayHeightConfigure = { token ->
+            val screen = RestoreBirthdayHeightPage(token.blockchainType)
+            screen.resultKey = uuid
+            navController.add(screen)
+        },
+        onBackClick = { navController.removeLastOrNull() },
+        onFinish = {
+            navController.removeLastUntil(input.popOffOnSuccess, input.popOffInclusive)
+        }
+    )
 }
