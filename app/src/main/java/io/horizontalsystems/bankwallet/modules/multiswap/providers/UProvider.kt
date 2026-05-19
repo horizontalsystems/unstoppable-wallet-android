@@ -21,7 +21,7 @@ enum class UProvider(
         false,
         false,
         true,
-        RiskLevel.CONTROLLED,
+        RiskLevel.FAIR,
         false
     ),
     QuickEx(
@@ -32,7 +32,7 @@ enum class UProvider(
         true,
         true,
         true,
-        RiskLevel.PRECHECK,
+        RiskLevel.GOOD,
         false
     ),
     LetsExchange(
@@ -43,7 +43,7 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.FLEXIBLE,
+        RiskLevel.GOOD,
         false
     ),
     StealthEx(
@@ -54,7 +54,7 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.CONTROLLED,
+        RiskLevel.FAIR,
         false
     ),
     Exolix(
@@ -65,7 +65,7 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.FLEXIBLE,
+        RiskLevel.GOOD,
         false
     ),
     Cce(
@@ -76,7 +76,7 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.FLEXIBLE,
+        RiskLevel.GOOD,
         false
     ),
     Swapuz(
@@ -87,7 +87,7 @@ enum class UProvider(
         false,
         false,
         true,
-        RiskLevel.FLEXIBLE,
+        RiskLevel.GOOD,
         false
     ),
     Barter(
@@ -98,7 +98,7 @@ enum class UProvider(
         true,
         false,
         true,
-        RiskLevel.CONTROLLED,
+        RiskLevel.FAIR,
         true
     );
 }
