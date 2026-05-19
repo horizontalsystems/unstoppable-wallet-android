@@ -1481,4 +1481,9 @@
     <string name="AddZanoNode_Error_InvalidUrl">입력한 URL이 유효하지 않습니다. 유효한 URL은 다음 중 하나의 스키마를 가져야 합니다: http, https</string>
     <string name="Balance_Zcash_Shielded">보호됨</string>
     <string name="Balance_Zcash_ShieldedDescription">지갑 간 개인 및 비공개 송금에 사용합니다.</string>
+    <string name="RiskLevel_ProviderRiskLevel">공급자 점수</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">이러한 수준은 공급자가 스왑 및 거래 확인을 어떻게 처리하는지 보여줍니다.</string>
+    <string name="RiskLevel_Excellent_Description">직접 온체인 실행. 공급자 확인 또는 동결 없음. 스왑 실패 시 자동 환불.</string>
+    <string name="RiskLevel_Good_Description">공급자가 완료 전에 거래를 자동으로 확인합니다. 문제가 감지되면 스왑이 거부되고 자금이 환불됩니다.</string>
+    <string name="RiskLevel_Fair_Description">일부 거래에는 추가 확인이 필요할 수 있습니다. 문제가 감지되면 자금이 자동으로 환불됩니다.</string>
 </resources>
