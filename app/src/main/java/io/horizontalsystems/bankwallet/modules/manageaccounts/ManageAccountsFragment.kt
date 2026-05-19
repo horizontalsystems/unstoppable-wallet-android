@@ -174,7 +174,7 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                         }
                     }
                     item {
-                        VSpacer(32.dp)
+                        VSpacer(88.dp)
                     }
                 }
             }
