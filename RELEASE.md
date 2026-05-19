@@ -73,15 +73,24 @@ Where:<br>
 `test.sh` bash script located at `[Wallet-Project-Path]/docker`<br>
 APK-FILE-NAME: Name of the apk file<br>
 
-### 8. Upload Build to Google Play
+### 8. Deploy Asset Links
+
+Deploy the Digital Asset Links files so App Links and passkey verification work correctly.
+
+* `assetlinks.json` → `https://unstoppable.money/.well-known/assetlinks.json`
+* `assetlinks-dev.json` → `https://dev.unstoppable.money/.well-known/assetlinks.json`
+
+`${appLinksHost}` is defined in `app/build.gradle.kts`. Both files must be served with `Content-Type: application/json` and be publicly accessible over HTTPS.
+
+### 9. Upload Build to Google Play
 
 * Upload apk to `Google Play Console`.
 
-### 9. Create Release in GitHub Repository
+### 10. Create Release in GitHub Repository
 
 * Create new `Release`, add changelog and upload apk file. Make note in changelog if the 'Supported Android Versions' was changed
 * Compute the sha256 and md5 checksums of the apk file and attach them as separate files, named unstoppable-wallet-[version].apk.sha256 and unstoppable-wallet-[version].apk.md5 respectively, under the 'Assets' section.
 
-### 10. Make sure Unstoppable Wallet is 'Reproducible' in [WalletScrutiny](https://walletscrutiny.com/android/io.horizontalsystems.bankwallet/)
+### 11. Make sure Unstoppable Wallet is 'Reproducible' in [WalletScrutiny](https://walletscrutiny.com/android/io.horizontalsystems.bankwallet/)
 
 * After apk is uploaded to Google Play make sure that new version of Unstoppable Wallet is 'Reproducible' in WalletScrutiny.
