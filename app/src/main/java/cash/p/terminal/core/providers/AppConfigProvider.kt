@@ -122,6 +122,8 @@ object AppConfigProvider {
         EncodedSecrets.ALPHA_AML_API_KEY
     }
 
+    val premiumApiBaseUrl by lazy { BuildConfig.PREMIUM_API_BASE_URL }
+
     val merkleIoKey by lazy {
         EncodedSecrets.MERKLE_IO_KEY
     }
