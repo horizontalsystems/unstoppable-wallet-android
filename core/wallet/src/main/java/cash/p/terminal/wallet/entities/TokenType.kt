@@ -26,6 +26,12 @@ sealed class TokenType : Parcelable {
     @Parcelize
     object Native : TokenType()
 
+    /**
+     * Litecoin-only MWEB account type.
+     */
+    @Parcelize
+    object Mweb : TokenType()
+
     @Parcelize
     data class Derived(val derivation: Derivation) : TokenType()
 
@@ -54,6 +60,7 @@ sealed class TokenType : Parcelable {
         get() {
             val parts = when (this) {
                 Native -> listOf("native")
+                Mweb -> listOf("mweb")
                 is Eip20 -> listOf("eip20", address)
                 is Spl -> listOf("spl", address)
                 is Jetton -> listOf("the-open-network", address)
@@ -73,6 +80,7 @@ sealed class TokenType : Parcelable {
     val values: Value
         get() = when (this) {
             is Native -> Value("native", "")
+            Mweb -> Value("mweb", "")
             is Eip20 -> Value("eip20", address)
             is Spl -> Value("spl", address)
             is Jetton -> Value("the-open-network", address)
@@ -93,6 +101,7 @@ sealed class TokenType : Parcelable {
         fun fromType(type: String, reference: String = ""): TokenType {
             when (type) {
                 "native" -> return Native
+                "mweb" -> return Mweb
 
                 "eip20" -> {
                     if (reference.isNotBlank()) {

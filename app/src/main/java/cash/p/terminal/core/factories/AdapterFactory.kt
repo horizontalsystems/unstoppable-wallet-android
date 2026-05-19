@@ -60,14 +60,18 @@ import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.data.repository.EvmTransactionRepository
 import cash.p.terminal.network.pirate.domain.repository.MasterNodesRepository
 import cash.p.terminal.premium.domain.usecase.GetBnbAddressUseCase
+import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.IAdapter
 import cash.p.terminal.wallet.IReceiveAdapter
+import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.isStakingWallet
+import cash.p.terminal.wallet.litecoinMwebAccountIds
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.tonkit.Address
 import org.koin.java.KoinJavaComponent.inject
@@ -90,7 +94,9 @@ class AdapterFactory(
     private val localStorage: ILocalStorage,
     private val masterNodesRepository: MasterNodesRepository,
     private val getBnbAddressUseCase: GetBnbAddressUseCase,
-    private val feeRateProvider: FeeRateProvider
+    private val feeRateProvider: FeeRateProvider,
+    private val dispatcherProvider: DispatcherProvider,
+    private val walletManager: IWalletManager,
 ) {
     private val logger = AppLogger("adapter-factory")
 
@@ -173,8 +179,11 @@ class AdapterFactory(
         return MoneroAdapter(moneroKitWrapper)
     }
 
-    suspend fun getAdapterOrNull(wallet: Wallet) = try {
-        getAdapter(wallet)?.also {
+    suspend fun getAdapterOrNull(
+        wallet: Wallet,
+        activeLitecoinMwebAccounts: Set<String>? = null,
+    ) = try {
+        getAdapter(wallet, activeLitecoinMwebAccounts)?.also {
             storeBnbAddresses(it, wallet)
         }
     } catch (e: Throwable) {
@@ -195,7 +204,10 @@ class AdapterFactory(
         }
     }
 
-    private suspend fun getAdapter(wallet: Wallet) =
+    private suspend fun getAdapter(
+        wallet: Wallet,
+        activeLitecoinMwebAccounts: Set<String>?,
+    ) =
         when (val tokenType = wallet.token.type) {
             is TokenType.Derived -> {
                 when (wallet.token.blockchainType) {
@@ -218,11 +230,17 @@ class AdapterFactory(
                             BlockchainType.Litecoin,
                             wallet.account.origin
                         )
+                        val mwebRestoreSettings = restoreSettingsManager.settings(
+                            wallet.account,
+                            BlockchainType.Litecoin
+                        ).takeIf { litecoinMwebActive(wallet, activeLitecoinMwebAccounts) }
                         LitecoinAdapter(
                             wallet = wallet,
                             syncMode = syncMode,
                             backgroundManager = backgroundManager,
                             derivation = tokenType.derivation,
+                            mwebRestoreSettings = mwebRestoreSettings,
+                            dispatcherProvider = dispatcherProvider,
                             feeRateProvider = LitecoinFeeRateProvider(feeRateProvider)
                         )
                     }
@@ -269,6 +287,28 @@ class AdapterFactory(
                     }
 
                     else -> null
+                }
+            }
+
+            TokenType.Mweb -> {
+                if (wallet.token.blockchainType != BlockchainType.Litecoin) {
+                    null
+                } else {
+                    val syncMode = btcBlockchainManager.syncMode(
+                        BlockchainType.Litecoin,
+                        wallet.account.origin
+                    )
+                    LitecoinAdapter(
+                        wallet = wallet,
+                        syncMode = syncMode,
+                        backgroundManager = backgroundManager,
+                        restoreSettings = restoreSettingsManager.settings(
+                            wallet.account,
+                            wallet.token.blockchainType
+                        ),
+                        dispatcherProvider = dispatcherProvider,
+                        feeRateProvider = LitecoinFeeRateProvider(feeRateProvider)
+                    )
                 }
             }
 
@@ -428,6 +468,16 @@ class AdapterFactory(
             evmTransactionSource = syncSource.transactionSource,
             evmLabelManager = evmLabelManager
         )
+    }
+
+    private fun litecoinMwebActive(
+        wallet: Wallet,
+        activeLitecoinMwebAccounts: Set<String>?,
+    ): Boolean {
+        if (wallet.account.type !is AccountType.Mnemonic) return false
+
+        val activeAccountIds = activeLitecoinMwebAccounts ?: walletManager.activeWallets.litecoinMwebAccountIds()
+        return wallet.account.id in activeAccountIds
     }
 
     suspend fun solanaTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {

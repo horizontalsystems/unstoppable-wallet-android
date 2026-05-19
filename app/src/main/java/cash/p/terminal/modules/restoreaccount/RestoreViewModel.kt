@@ -2,6 +2,8 @@ package cash.p.terminal.modules.restoreaccount
 
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.TokenConfig
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import cash.p.terminal.wallet.AccountType
 import io.horizontalsystems.hdwalletkit.Language
 
@@ -41,17 +43,13 @@ class RestoreViewModel: ViewModel() {
         prefillMnemonicLanguage = mnemonicLanguage
     }
 
-    var tokenZCashConfig: TokenConfig? = null
-        private set
-    var tokenMoneroConfig: TokenConfig? = null
-        private set
-    var tokenZCashInitialConfig: TokenConfig? = null
-        private set
-    var tokenMoneroInitialConfig: TokenConfig? = null
-        private set
+    private val _tokenConfigResult = MutableStateFlow<TokenConfigResult?>(null)
+    val tokenConfigResult = _tokenConfigResult.asStateFlow()
 
-    var cancelZCashConfig: Boolean = false
-    var cancelMoneroConfig: Boolean = false
+    private var tokenConfigResultId = 0
+
+    var tokenInitialConfig: TokenConfig? = null
+        private set
 
     fun setAccountData(accountType: AccountType, accountName: String, manualBackup: Boolean, fileBackup: Boolean) {
         this.accountType = accountType
@@ -60,20 +58,35 @@ class RestoreViewModel: ViewModel() {
         this.fileBackup = fileBackup
     }
 
-    fun setZCashConfig(config: TokenConfig?) {
-        tokenZCashConfig = config
+    fun setTokenInitialConfig(config: TokenConfig?) {
+        tokenInitialConfig = config
     }
 
-    fun setMoneroConfig(config: TokenConfig?) {
-        tokenMoneroConfig = config
+    fun setTokenConfig(config: TokenConfig) {
+        _tokenConfigResult.value = TokenConfigResult.Entered(nextTokenConfigResultId(), config)
+        tokenInitialConfig = null
     }
 
-    fun setZCashInitialConfig(config: TokenConfig?) {
-        tokenZCashInitialConfig = config
+    fun cancelTokenConfig() {
+        _tokenConfigResult.value = TokenConfigResult.Cancelled(nextTokenConfigResultId())
+        tokenInitialConfig = null
     }
 
-    fun setMoneroInitialConfig(config: TokenConfig?) {
-        tokenMoneroInitialConfig = config
+    fun clearTokenConfigResult(id: Int) {
+        if (_tokenConfigResult.value?.id == id) {
+            _tokenConfigResult.value = null
+        }
     }
 
+    private fun nextTokenConfigResultId(): Int {
+        tokenConfigResultId += 1
+        return tokenConfigResultId
+    }
+}
+
+sealed interface TokenConfigResult {
+    val id: Int
+
+    data class Entered(override val id: Int, val config: TokenConfig) : TokenConfigResult
+    data class Cancelled(override val id: Int) : TokenConfigResult
 }

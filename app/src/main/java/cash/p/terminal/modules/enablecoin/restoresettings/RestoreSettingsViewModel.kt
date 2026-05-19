@@ -24,6 +24,7 @@ class RestoreSettingsViewModel(
 
     private var currentRequest: RestoreSettingsService.Request? = null
     private var currentRequestConfig: TokenConfig? = null
+    private val queuedRequests = ArrayDeque<RestoreSettingsService.Request>()
 
     private val accountCleaner: AccountCleaner by inject(AccountCleaner::class.java)
 
@@ -36,6 +37,11 @@ class RestoreSettingsViewModel(
     }
 
     private fun handleRequest(request: RestoreSettingsService.Request) {
+        if (currentRequest != null) {
+            queuedRequests.addLast(request)
+            return
+        }
+
         currentRequest = request
         currentRequestConfig = request.initialConfig
 
@@ -47,27 +53,36 @@ class RestoreSettingsViewModel(
     }
 
     override fun onEnter(tokenConfig: TokenConfig) {
+        viewModelScope.launch {
+            enter(tokenConfig)
+        }
+    }
+
+    private suspend fun enter(tokenConfig: TokenConfig) {
         val request = currentRequest ?: return
 
-        viewModelScope.launch {
-            when (request.requestType) {
-                RestoreSettingsService.RequestType.BirthdayHeight -> {
-                    val changed =
-                        request.initialConfig?.birthdayHeight != tokenConfig.birthdayHeight
-                    if (changed) {
-                        // Clear wallet DB
-                        accountCleaner.clearWalletForCurrentAccount(request.token.blockchainType)
+        when (request.requestType) {
+            RestoreSettingsService.RequestType.BirthdayHeight -> {
+                val changed =
+                    request.initialConfig != null &&
+                        request.initialConfig.birthdayHeight != tokenConfig.birthdayHeight
+                if (changed) {
+                    // A new restore height invalidates previously scanned local wallet data.
+                    request.accountId?.let { accountId ->
+                        accountCleaner.clearWalletForAccount(accountId, request.token)
                     }
-                    service.enter(tokenConfig, request.token)
                 }
+                service.enter(tokenConfig, request.token)
             }
         }
+        finishRequest(request)
     }
 
     override fun onCancelEnterBirthdayHeight() {
         val request = currentRequest ?: return
 
         service.cancel(request.token)
+        finishRequest(request)
     }
 
     override fun onCleared() {
@@ -81,6 +96,16 @@ class RestoreSettingsViewModel(
     override fun consumeInitialConfig(): TokenConfig? {
         return currentRequestConfig.also {
             currentRequestConfig = null
+        }
+    }
+
+    private fun finishRequest(request: RestoreSettingsService.Request) {
+        if (currentRequest != request) return
+
+        currentRequest = null
+        currentRequestConfig = null
+        if (queuedRequests.isNotEmpty()) {
+            handleRequest(queuedRequests.removeFirst())
         }
     }
 }

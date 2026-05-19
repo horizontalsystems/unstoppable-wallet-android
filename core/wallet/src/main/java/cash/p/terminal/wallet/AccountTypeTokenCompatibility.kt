@@ -9,6 +9,12 @@ fun AccountType.isCompatibleWith(blockchainType: BlockchainType, tokenType: Toke
             blockchainType == BlockchainType.Monero && tokenType == TokenType.Native
         }
 
-        else -> true
+        is AccountType.Mnemonic -> {
+            tokenType != TokenType.Mweb || blockchainType == BlockchainType.Litecoin
+        }
+
+        else -> {
+            tokenType != TokenType.Mweb
+        }
     }
 }

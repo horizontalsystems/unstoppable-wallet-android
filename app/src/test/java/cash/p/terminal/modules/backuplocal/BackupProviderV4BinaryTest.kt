@@ -11,7 +11,9 @@ import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.EvmSyncSourceManager
 import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.managers.MarketFavoritesManager
+import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.managers.RestoreSettingsManager
+import cash.p.terminal.core.managers.RestoreSettingType
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
 import cash.p.terminal.core.storage.BlockchainSettingsStorage
 import cash.p.terminal.core.storage.EvmSyncSourceStorage
@@ -23,11 +25,16 @@ import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.settings.appearance.AppIconService
 import cash.p.terminal.modules.settings.appearance.LaunchScreenService
 import cash.p.terminal.modules.theme.ThemeService
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountOrigin
+import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IEnabledWalletStorage
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.balance.BalanceViewType
+import cash.p.terminal.wallet.entities.EnabledWallet
 import io.horizontalsystems.core.CurrencyManager
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.solanakit.models.RpcSource
 import io.mockk.every
@@ -36,7 +43,9 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -143,7 +152,7 @@ class BackupProviderV4BinaryTest {
     // region V4 Binary Backup Creation with Retry
 
     @Test
-    fun `createFullBackupV4Binary succeeds with empty wallet lists`() {
+    fun createFullBackupV4Binary_emptyWalletLists_succeeds() {
         val result = backupProvider.createFullBackupV4Binary(
             accountIds1 = emptyList(),
             passphrase1 = "mainPassword",
@@ -158,7 +167,57 @@ class BackupProviderV4BinaryTest {
     }
 
     @Test
-    fun `createFullBackupV4Binary with dual passwords succeeds via retry mechanism`() {
+    fun createWalletBackup_litecoinMwebBackup_keepsMetadataAndBirthdayOnMwebEntry() {
+        val account = Account(
+            id = "account-id",
+            name = "Wallet",
+            type = AccountType.Mnemonic(List(12) { "abandon" }, ""),
+            origin = AccountOrigin.Created,
+            level = 0
+        )
+        val restoreSettings = RestoreSettings().apply {
+            this[RestoreSettingType.BirthdayHeight] = "2257920"
+        }
+        every { settingsManager.settings(account, BlockchainType.Litecoin) } returns restoreSettings
+        every { walletStorage.enabledWallets(account.id) } returns listOf(
+            EnabledWallet(
+                tokenQueryId = "litecoin|derived:bip84",
+                accountId = account.id,
+                coinName = "Litecoin",
+                coinCode = "LTC",
+                coinDecimals = 8,
+                coinImage = null
+            ),
+            EnabledWallet(
+                tokenQueryId = "litecoin|mweb",
+                accountId = account.id,
+                coinName = "Litecoin",
+                coinCode = "LTC",
+                coinDecimals = 8,
+                coinImage = null
+            )
+        )
+
+        val enabledWalletBackups = backupProvider.enabledWalletBackups(account)
+        val publicLitecoin = enabledWalletBackups.first {
+            it.tokenQueryId == "litecoin|derived:bip84"
+        }
+        val mwebLitecoin = enabledWalletBackups.first {
+            it.tokenQueryId == "litecoin|mweb"
+        }
+
+        assertNull(publicLitecoin.settings)
+        assertEquals("Litecoin", mwebLitecoin.coinName)
+        assertEquals("LTC", mwebLitecoin.coinCode)
+        assertEquals(8, mwebLitecoin.decimals)
+        assertEquals(
+            "2257920",
+            mwebLitecoin.settings?.get(RestoreSettingType.BirthdayHeight)
+        )
+    }
+
+    @Test
+    fun createFullBackupV4Binary_dualPasswords_succeedsViaRetryMechanism() {
         // This test verifies the retry mechanism works in BackupProvider
         // Even if passwords derive colliding offsets, retry with new salt should succeed
 
@@ -185,7 +244,7 @@ class BackupProviderV4BinaryTest {
     }
 
     @Test
-    fun `createFullBackupV4Binary retry mechanism handles potential collisions`() {
+    fun createFullBackupV4Binary_retryMechanism_handlesPotentialCollisions() {
         // Run multiple times to ensure retry mechanism is robust
         repeat(5) { iteration ->
             val result = backupProvider.createFullBackupV4Binary(
@@ -204,7 +263,7 @@ class BackupProviderV4BinaryTest {
     // available in Android crypto providers, not in standard JVM unit test environment.
     // The actual wallet encryption with accounts is tested through instrumented tests.
     // @Test
-    // fun `createFullBackupV4Binary with accounts creates valid backup`() { ... }
+    // fun createFullBackupV4Binary_withAccounts_createsValidBackup() { ... }
 
     // endregion
 }

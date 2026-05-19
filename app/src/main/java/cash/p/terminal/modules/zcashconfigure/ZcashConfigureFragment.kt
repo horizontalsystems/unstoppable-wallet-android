@@ -95,12 +95,12 @@ class ZcashConfigureFragment : BaseComposeFragment() {
         val initialConfig = navController.getInput<Input>()?.initialConfig
         ZcashConfigureScreen(
             initialConfig = initialConfig,
-            onCloseWithResult = { closeWithConfigt(it, navController) },
+            onCloseWithResult = { closeWithConfig(it, navController) },
             onCloseClick = { close(navController) }
         )
     }
 
-    private fun closeWithConfigt(config: TokenConfig, navController: NavController) {
+    private fun closeWithConfig(config: TokenConfig, navController: NavController) {
         navController.setNavigationResultX(Result(config))
         navController.popBackStackSafely()
     }
@@ -139,10 +139,11 @@ fun ZcashConfigureScreen(
         viewModel.setInitialConfig(initialConfig)
     }
 
-    uiState.closeWithResult?.let {
+    LaunchedEffect(uiState.closeWithResult) {
+        val result = uiState.closeWithResult ?: return@LaunchedEffect
         viewModel.onClosed()
         keyboardController?.hide()
-        onCloseWithResult.invoke(it)
+        onCloseWithResult.invoke(result)
     }
 
     var textState by rememberSaveable("", stateSaver = TextFieldValue.Saver) {

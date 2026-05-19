@@ -62,7 +62,7 @@ class CancelOrScanDialog : BaseComposableBottomSheetFragment() {
 private fun CancelOrScanScreen(navController: NavController, accountType: AccountType?) {
     val isTrezor = accountType is AccountType.TrezorDevice
     val bodyText = stringResource(
-        if (isTrezor) R.string.connect_trezor_to_add_message else R.string.scan_to_add_mesage
+        if (isTrezor) R.string.connect_trezor_to_add_message else R.string.scan_to_add_message
     )
     val confirmText = stringResource(
         if (isTrezor) R.string.connect else R.string.scan

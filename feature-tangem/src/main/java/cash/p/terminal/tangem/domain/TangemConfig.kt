@@ -33,7 +33,8 @@ object TangemConfig {
 
     private val excludedTokenTypesForHardwareWallet by lazy {
         setOf(
-            TokenType.Derived(TokenType.Derivation.Bip86) // Taproot derivation is not supported on hardware wallets
+            TokenType.Derived(TokenType.Derivation.Bip86), // Taproot derivation is not supported on hardware wallets
+            TokenType.Mweb
         )
     }
 

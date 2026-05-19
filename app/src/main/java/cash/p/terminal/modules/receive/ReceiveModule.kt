@@ -6,14 +6,19 @@ import cash.p.terminal.core.App
 import cash.p.terminal.wallet.entities.UsedAddress
 import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.receive.viewmodels.ReceiveAddressViewModel
+import cash.p.terminal.wallet.Wallet
+import io.horizontalsystems.core.DispatcherProvider
+import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 
 object ReceiveModule {
 
-    class Factory(private val wallet: cash.p.terminal.wallet.Wallet) : ViewModelProvider.Factory {
+    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+        private val dispatcherProvider: DispatcherProvider by inject(DispatcherProvider::class.java)
+
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ReceiveAddressViewModel(wallet, App.adapterManager) as T
+            return ReceiveAddressViewModel(wallet, App.adapterManager, dispatcherProvider) as T
         }
     }
 

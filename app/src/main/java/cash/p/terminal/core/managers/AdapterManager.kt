@@ -11,6 +11,8 @@ import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.BalanceData
+import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.litecoinMwebAccountIds
 import io.horizontalsystems.core.entities.BlockchainType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -125,16 +127,27 @@ class AdapterManager(
         }
     }
 
-    private fun reinitAdapters(blockchainType: BlockchainType) {
-        val wallets = adaptersMap.keys.filter { it.token.blockchainType == blockchainType }
-        if (wallets.isEmpty()) return
-
-        wallets.forEach { wallet ->
-            balanceSubscriptionJobs.remove(wallet)?.cancel()
-            adaptersMap[wallet]?.stop()
-            adaptersMap.remove(wallet)
+    private suspend fun reinitAdapters(blockchainType: BlockchainType) {
+        val removedAdapters = mutex.withLock {
+            adaptersMap.keys
+                .filter { it.token.blockchainType == blockchainType }
+                .mapNotNull { wallet ->
+                    val adapter = adaptersMap.remove(wallet) ?: return@mapNotNull null
+                    balanceSubscriptionJobs.remove(wallet)?.cancel()
+                    wallet to adapter
+                }
+                .also {
+                    if (it.isNotEmpty()) {
+                        adaptersReadySubject.onNext(HashMap(adaptersMap))
+                    }
+                }
         }
+        if (removedAdapters.isEmpty()) return
 
+        removedAdapters.forEach { (wallet, adapter) ->
+            adapter.stop()
+            adapterFactory.unlinkAdapter(wallet)
+        }
         requestInitAdapters(walletManager.activeWallets)
     }
 
@@ -162,6 +175,8 @@ class AdapterManager(
         val currentAdapters = adaptersMap.toMutableMap()
         adaptersMap.clear()
         _initializationInProgressFlow.value = true
+        val previousLitecoinMwebAccounts = currentAdapters.keys.litecoinMwebAccountIds()
+        val activeLitecoinMwebAccounts = wallets.litecoinMwebAccountIds()
 
         // Only one account is active at a time
         val activeAccountId = wallets.firstOrNull()?.account?.id
@@ -176,11 +191,16 @@ class AdapterManager(
         val toCreate = mutableListOf<Wallet>()
 
         wallets.forEach { wallet ->
-            val existing = currentAdapters.remove(wallet)
-            if (existing != null) {
-                reusable[wallet] = existing
-            } else {
+            val existing = currentAdapters[wallet]
+            if (existing == null || wallet.needsLitecoinMwebRecreate(
+                    previousLitecoinMwebAccounts,
+                    activeLitecoinMwebAccounts
+                )
+            ) {
                 toCreate.add(wallet)
+            } else {
+                currentAdapters.remove(wallet)
+                reusable[wallet] = existing
             }
         }
 
@@ -214,7 +234,7 @@ class AdapterManager(
                 val jobs = toCreate.map { wallet ->
                     launch {
                         try {
-                            val adapter = adapterFactory.getAdapterOrNull(wallet)
+                            val adapter = adapterFactory.getAdapterOrNull(wallet, activeLitecoinMwebAccounts)
                             adapter?.start()
                             adapter?.let {
                                 adaptersMap[wallet] = it
@@ -249,6 +269,16 @@ class AdapterManager(
         _initializationInProgressFlow.value = false
     }
 
+    private fun Wallet.needsLitecoinMwebRecreate(
+        previousLitecoinMwebAccounts: Set<String>,
+        activeLitecoinMwebAccounts: Set<String>,
+    ): Boolean {
+        if (token.blockchainType != BlockchainType.Litecoin) return false
+        if (token.type !is TokenType.Derived) return false
+
+        return (account.id in previousLitecoinMwebAccounts) != (account.id in activeLitecoinMwebAccounts)
+    }
+
     /**
      * Partial refresh of adapters
      * For the given list of wallets do:
@@ -260,6 +290,7 @@ class AdapterManager(
         coroutineScope.launch {
             mutex.withLock {
                 val walletsToRefresh = wallets.filter { adaptersMap.containsKey(it) }
+                val activeLitecoinMwebAccounts = walletManager.activeWallets.litecoinMwebAccountIds()
 
                 // remove and stop adapters
                 walletsToRefresh.forEach { wallet ->
@@ -274,7 +305,7 @@ class AdapterManager(
 
                 // add and start new adapters
                 walletsToRefresh.forEach { wallet ->
-                    adapterFactory.getAdapterOrNull(wallet)?.let { adapter ->
+                    adapterFactory.getAdapterOrNull(wallet, activeLitecoinMwebAccounts)?.let { adapter ->
                         adaptersMap[wallet] = adapter
                         adapter.start()
                         (adapter as? IBalanceAdapter)?.let { balanceAdapter ->
@@ -297,6 +328,41 @@ class AdapterManager(
             coroutineScope.launch {
                 adaptersMap[wallet]?.refresh()
             }
+        }
+    }
+
+    override suspend fun stopAdapters(accountIds: List<String>) {
+        val accountIdSet = accountIds.toSet()
+        stopMatchingAdapters { it.account.id in accountIdSet }
+    }
+
+    override suspend fun stopAdapters(accountIds: List<String>, blockchainType: BlockchainType) {
+        val accountIdSet = accountIds.toSet()
+        stopMatchingAdapters {
+            it.account.id in accountIdSet && it.token.blockchainType == blockchainType
+        }
+    }
+
+    private suspend fun stopMatchingAdapters(matchingWallet: (Wallet) -> Boolean) {
+        val removedAdapters = mutex.withLock {
+            adaptersMap.keys
+                .filter(matchingWallet)
+                .mapNotNull { wallet ->
+                    adaptersMap.remove(wallet)?.let { adapter ->
+                        balanceSubscriptionJobs.remove(wallet)?.cancel()
+                        wallet to adapter
+                    }
+                }
+                .also {
+                    if (it.isNotEmpty()) {
+                        adaptersReadySubject.onNext(HashMap(adaptersMap))
+                    }
+                }
+        }
+
+        removedAdapters.forEach { (wallet, adapter) ->
+            adapter.stop()
+            adapterFactory.unlinkAdapter(wallet)
         }
     }
 
@@ -339,7 +405,8 @@ class AdapterManager(
 
     override fun getAdjustedBalanceData(wallet: Wallet): BalanceData? {
         val adapter = getBalanceAdapterForWallet(wallet) ?: return null
-        return pendingBalanceCalculator.adjustBalance(wallet, adapter.balanceData)
+        val rawBalance = adapter.balanceData
+        return pendingBalanceCalculator.adjustBalance(wallet, rawBalance)
     }
 
     override fun getAdjustedBalanceDataForToken(token: Token): BalanceData? {

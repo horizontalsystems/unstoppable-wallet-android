@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.HSCaution
+import cash.p.terminal.core.IMwebAddressValidator
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.LocalizedException
@@ -23,6 +24,7 @@ import cash.p.terminal.modules.send.bitcoin.SendBitcoinModule.rbfSupported
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.IAdapterManager
+import cash.p.terminal.wallet.IBalanceAdapter
 import cash.p.terminal.wallet.Wallet
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.trezor.domain.TrezorCancelledException
@@ -30,10 +32,12 @@ import com.tangem.common.core.TangemSdkError
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
 import cash.p.terminal.modules.send.BaseSendViewModel
+import cash.p.terminal.wallet.isLitecoinMweb
+import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.logger.AppLogger
 import io.horizontalsystems.hodler.LockTimeInterval
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.inject
@@ -56,7 +60,8 @@ class SendBitcoinViewModel(
     private val localStorage: ILocalStorage,
     private val address: Address?,
     private val pendingRegistrar: PendingTransactionRegistrar,
-    private val adapterManager: IAdapterManager
+    private val adapterManager: IAdapterManager,
+    private val dispatcherProvider: DispatcherProvider
 ) : BaseSendViewModel<SendBitcoinUiState>(wallet, adapterManager) {
     private companion object {
         val BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS = listOf(
@@ -65,6 +70,13 @@ class SendBitcoinViewModel(
             BlockchainType.PirateCash
         )
     }
+
+    private data class SendRequest(
+        val address: Address,
+        val amount: BigDecimal,
+        val feeRate: Int,
+        val sdkBalance: BigDecimal
+    )
 
     private val recentAddressManager: RecentAddressManager by inject(RecentAddressManager::class.java)
 
@@ -85,10 +97,9 @@ class SendBitcoinViewModel(
     private var utxoData = SendBitcoinModule.UtxoData()
     private var memo: String? = null
     private var pendingTxId: String? = null
-    private var isMemoAvailable: Boolean =
-        blockchainType !in BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS
-    private var isAdvancedSettingsAvailable: Boolean =
-        blockchainType !in BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS
+    private val isMweb = wallet.token.isLitecoinMweb
+    private var isMemoAvailable: Boolean = false
+    private var isAdvancedSettingsAvailable: Boolean = false
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
@@ -123,12 +134,27 @@ class SendBitcoinViewModel(
             utxoExpertModeEnabled = enabled
             emitState()
         }
+        (adapter as? IBalanceAdapter)?.balanceUpdatedFlow?.let { balanceUpdatedFlow ->
+            viewModelScope.launch {
+                balanceUpdatedFlow.collectLatest {
+                    withContext(dispatcherProvider.default) {
+                        refreshBalanceDependentServices()
+                    }
+                }
+            }
+        }
 
+        refreshFeatureAvailability()
         viewModelScope.launch {
             feeRateService.start()
         }
 
         addressService.setAddress(address)
+    }
+
+    private fun refreshBalanceDependentServices() {
+        amountService.refreshAvailableBalance()
+        feeService.refresh()
     }
 
     override fun createState(): SendBitcoinUiState {
@@ -147,7 +173,7 @@ class SendBitcoinViewModel(
             feeRateCaution = feeRateState.feeRateCaution,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend && (!poison || riskAccepted),
             showAddressInput = showAddressInput,
-            utxoData = if (utxoExpertModeEnabled) utxoData else null,
+            utxoData = if (utxoExpertModeEnabled && isAdvancedSettingsAvailable) utxoData else null,
             isAdvancedSettingsAvailable = isAdvancedSettingsAvailable,
             isPoisonAddress = poison,
             riskAccepted = riskAccepted,
@@ -164,6 +190,8 @@ class SendBitcoinViewModel(
     }
 
     fun onEnterMemo(memoValue: String) {
+        if (!isMemoAvailable) return
+
         val memo = memoValue.ifBlank { null }
 
         this.memo = memo
@@ -197,7 +225,7 @@ class SendBitcoinViewModel(
     }
 
     fun onEnterLockTimeInterval(lockTimeInterval: LockTimeInterval?) {
-        pluginService.setLockTimeInterval(lockTimeInterval)
+        pluginService.setLockTimeInterval(lockTimeInterval.takeIf { isAdvancedSettingsAvailable })
     }
 
     fun updateCustomUnspentOutputs(customUnspentOutputs: List<UnspentOutputInfo>) {
@@ -228,10 +256,34 @@ class SendBitcoinViewModel(
     private fun handleUpdatedAddressState(addressState: SendBitcoinAddressService.State) {
         this.addressState = addressState
 
+        refreshFeatureAvailability()
         amountService.setValidAddress(addressState.validAddress)
         feeService.setValidAddress(addressState.validAddress)
 
         emitState()
+    }
+
+    private fun refreshFeatureAvailability() {
+        val mwebTransaction = isMwebTransaction(addressState.validAddress)
+        isMemoAvailable = !mwebTransaction && blockchainType !in BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS
+        isAdvancedSettingsAvailable = !mwebTransaction && blockchainType !in BLOCKCHAINS_NOT_SUPPORTING_EXTRA_SETTINGS
+
+        if (mwebTransaction) {
+            if (memo != null) {
+                memo = null
+                amountService.setMemo(null, forceEmit = false)
+                feeService.setMemo(null, forceEmit = false)
+            }
+            if (pluginState.lockTimeInterval != null) {
+                pluginService.setLockTimeInterval(null)
+            }
+        }
+    }
+
+    private fun isMwebTransaction(address: Address?): Boolean {
+        val destination = address?.hex ?: return isMweb
+        val mwebAddressValidator = adapter as? IMwebAddressValidator
+        return isMweb || mwebAddressValidator?.isMwebAddress(destination) == true
     }
 
     private fun handleUpdatedFeeRateState(feeRateState: SendBitcoinFeeRateService.State) {
@@ -259,19 +311,22 @@ class SendBitcoinViewModel(
             utxoData = SendBitcoinModule.UtxoData()
         } else if (customUnspentOutputs == null) {
             //set unspent outputs as auto
-            updateUtxoData(info?.unspentOutputs?.size ?: 0)
+            updateUtxoData(info?.selectedUtxoCount ?: 0)
         }
         emitState()
     }
 
     fun getConfirmationData(): SendConfirmationData {
-        val address = addressState.validAddress!!
+        val address = addressState.validAddress
+            ?: throw LocalizedException(R.string.send_error_address_unavailable)
+        val amount = amountState.amount
+            ?: throw LocalizedException(R.string.send_error_amount_unavailable)
         val contact = contactsRepo.getContactsFiltered(
             blockchainType,
             addressQuery = address.hex
         ).firstOrNull()
         return SendConfirmationData(
-            amount = amountState.amount!!,
+            amount = amount,
             fee = fee,
             address = address,
             contact = contact,
@@ -289,35 +344,21 @@ class SendBitcoinViewModel(
         }
     }
 
-    private suspend fun send() = withContext(Dispatchers.IO) {
+    private suspend fun send() = withContext(dispatcherProvider.io) {
         val logger = logger.getScopedUnique()
         logger.info("click")
         try {
             sendResult = SendResult.Sending
             logger.info("sending tx")
-            pendingTxId = registerPendingTransaction()
-            val transactionRecord = adapter.send(
-                amount = amountState.amount!!,
-                address = addressState.validAddress!!.hex,
-                memo = memo,
-                feeRate = feeRateState.feeRate!!,
-                unspentOutputs = customUnspentOutputs,
-                pluginData = pluginState.pluginData,
-                transactionSorting = btcBlockchainManager.transactionSortMode(adapter.blockchainType),
-                rbfEnabled = blockchainType.rbfSupported && localStorage.rbfEnabled,
-                changeToFirstInput = false,
-                utxoFilters = UtxoFilters()
-            )
-            pendingTxId?.let { pendingRegistrar.updateTxId(it, transactionRecord) }
-            val isQueued = adapter.isTransactionInSendQueue(transactionRecord)
-            logger.info("success, queued=$isQueued")
-            onSendSuccess(addressState.validAddress?.hex)
-            sendResult = if (isQueued) {
-                SendResult.SentButQueued(transactionRecord)
-            } else {
-                SendResult.Sent(transactionRecord)
+            val request = sendRequest()
+            if (isMwebTransaction(request.address)) {
+                logger.info("mweb send")
             }
-            address?.let { recentAddressManager.setRecentAddress(address, blockchainType) }
+
+            pendingTxId = pendingRegistrar.register(pendingTransactionDraft(request))
+            val transactionHash = broadcastTransaction(request)
+            pendingTxId?.let { pendingRegistrar.updateTxId(it, transactionHash) }
+            completeSuccessfulSend(request.address, transactionHash, logger)
         } catch (e: TangemSdkError.UserCancelled) {
             pendingTxId?.let { pendingRegistrar.deleteFailed(it) }
             sendResult = null
@@ -337,21 +378,62 @@ class SendBitcoinViewModel(
         }
     }
 
-    private suspend fun registerPendingTransaction(): String {
+    private fun sendRequest(): SendRequest {
+        val validAddress = addressState.validAddress
+            ?: throw LocalizedException(R.string.send_error_address_unavailable)
+        val amount = amountState.amount
+            ?: throw LocalizedException(R.string.send_error_amount_unavailable)
+        val feeRate = feeRateState.feeRate
+            ?: throw LocalizedException(R.string.send_error_fee_rate_unavailable)
         val sdkBalance = adapterManager.getBalanceAdapterForWallet(wallet)
             ?.balanceData?.available ?: amountState.availableBalance
-            ?: throw IllegalStateException("Balance unavailable")
-        val draft = PendingTransactionDraft(
+            ?: throw LocalizedException(R.string.send_error_balance_unavailable)
+
+        return SendRequest(validAddress, amount, feeRate, sdkBalance)
+    }
+
+    private fun pendingTransactionDraft(request: SendRequest): PendingTransactionDraft {
+        return PendingTransactionDraft(
             wallet = wallet,
             token = wallet.token,
-            amount = amountState.amount!!,
+            amount = request.amount,
             fee = fee,
-            sdkBalanceAtCreation = sdkBalance,
+            sdkBalanceAtCreation = request.sdkBalance,
             fromAddress = "",
-            toAddress = addressState.validAddress!!.hex,
+            toAddress = request.address.hex,
             memo = memo
         )
-        return pendingRegistrar.register(draft)
+    }
+
+    private suspend fun broadcastTransaction(request: SendRequest): String {
+        return adapter.send(
+            amount = request.amount,
+            address = request.address.hex,
+            memo = memo,
+            feeRate = request.feeRate,
+            unspentOutputs = customUnspentOutputs,
+            pluginData = pluginState.pluginData,
+            transactionSorting = btcBlockchainManager.transactionSortMode(adapter.blockchainType),
+            rbfEnabled = !isMweb && blockchainType.rbfSupported && localStorage.rbfEnabled,
+            changeToFirstInput = false,
+            utxoFilters = UtxoFilters()
+        )
+    }
+
+    private fun completeSuccessfulSend(address: Address, transactionHash: String, logger: AppLogger) {
+        val isQueued = adapter.isTransactionInSendQueue(transactionHash)
+
+        logger.info("success, queued=$isQueued")
+        onSendSuccess(address.hex)
+        sendResult = if (isQueued) {
+            SendResult.SentButQueued(transactionHash)
+        } else {
+            SendResult.Sent(transactionHash)
+        }
+
+        this.address?.let {
+            recentAddressManager.setRecentAddress(it, blockchainType)
+        }
     }
 
     private fun createCaution(error: Throwable) = when (error) {

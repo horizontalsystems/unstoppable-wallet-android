@@ -166,6 +166,9 @@ android {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            firebaseCrashlytics {
+                nativeSymbolUploadEnabled true
+            }
             resValue "string", "uniswapGraphUrl", "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2"
             resValue "string", "is_release", "true"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json"
@@ -289,6 +292,7 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.crashlytics.ndk)
     implementation(libs.kotlinx.serialization.json)
 
     implementation libs.lifecycle.viewmodel.ktx
@@ -525,3 +529,15 @@ task copyChangelogs(type: Copy) {
 }
 
 preBuild.dependsOn copyChangelogs
+
+// macOS Finder silently creates .DS_Store files inside build/ when its windows
+// or IDE file browsers traverse generated dirs. AGP tasks like dexBuilderDebug
+// then fail to clean their output because unexpected files appear there.
+tasks.register('cleanMacOsMetadata') {
+    description = 'Remove .DS_Store files from build dir before any build task runs'
+    group = 'build'
+    doFirst {
+        delete fileTree(buildDir).matching { include '**/.DS_Store' }
+    }
+}
+preBuild.dependsOn cleanMacOsMetadata

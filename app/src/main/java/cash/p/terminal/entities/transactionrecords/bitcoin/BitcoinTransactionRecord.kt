@@ -33,6 +33,7 @@ class BitcoinTransactionRecord(
     val showRawTransaction: Boolean,
     val replaceable: Boolean = false,
     override val mainValue: TransactionValue = TransactionValue.CoinValue(token, amount),
+    val canonicalTransactionHash: String? = null,
 ) : TransactionRecord(
     uid = uid,
     transactionHash = transactionHash,
@@ -49,6 +50,34 @@ class BitcoinTransactionRecord(
     memo = memo,
     sentToSelf = sentToSelf
 ) {
+
+    fun withMainAmount(amount: BigDecimal): BitcoinTransactionRecord {
+        return BitcoinTransactionRecord(
+            token = token,
+            amount = amount,
+            to = to,
+            from = from,
+            changeAddresses = changeAddresses,
+            uid = uid,
+            transactionHash = transactionHash,
+            transactionIndex = transactionIndex,
+            blockHeight = blockHeight,
+            confirmationsThreshold = confirmationsThreshold,
+            timestamp = timestamp,
+            failed = failed,
+            memo = memo,
+            source = source,
+            sentToSelf = sentToSelf,
+            transactionRecordType = transactionRecordType,
+            fee = fee,
+            lockInfo = lockInfo,
+            conflictingHash = conflictingHash,
+            showRawTransaction = showRawTransaction,
+            replaceable = replaceable,
+            mainValue = TransactionValue.CoinValue(token, amount),
+            canonicalTransactionHash = canonicalTransactionHash,
+        )
+    }
 
     override fun changedBy(oldBlockInfo: LastBlockInfo?, newBlockInfo: LastBlockInfo?): Boolean {
         return super.changedBy(oldBlockInfo, newBlockInfo)

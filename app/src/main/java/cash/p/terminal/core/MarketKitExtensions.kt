@@ -13,6 +13,7 @@ import cash.p.terminal.wallet.accountTypeDerivation
 import cash.p.terminal.wallet.bitcoinCashCoinType
 import cash.p.terminal.wallet.customCoinUid
 import cash.p.terminal.wallet.isCompatibleWith
+import cash.p.terminal.wallet.isLitecoinMweb
 import cash.p.terminal.wallet.entities.BitcoinCashCoinType
 import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.entities.TokenQuery
@@ -46,7 +47,8 @@ val TokenQuery.isSupported: Boolean
     get() = when (blockchainType) {
         BlockchainType.Bitcoin,
         BlockchainType.Litecoin -> {
-            tokenType is TokenType.Derived
+            tokenType is TokenType.Derived ||
+                isLitecoinMweb
         }
 
         BlockchainType.BitcoinCash -> {
@@ -104,7 +106,7 @@ val Blockchain.description: String
         BlockchainType.BitcoinCash -> "BCH (Legacy, CashAddress)"
         BlockchainType.ECash -> "XEC"
         BlockchainType.Zcash -> "ZEC"
-        BlockchainType.Litecoin -> "LTC (BIP44, BIP49, BIP84, BIP86)"
+        BlockchainType.Litecoin -> "LTC (BIP44, BIP49, BIP84, BIP86, MWEB)"
         BlockchainType.Dash -> "DASH"
         BlockchainType.Ethereum -> "ETH, ERC20 tokens"
         BlockchainType.BinanceSmartChain -> "BNB, BEP20 tokens"
@@ -138,6 +140,18 @@ val BlockchainType.restoreSettingTypes: List<RestoreSettingType>
         BlockchainType.Monero -> listOf(RestoreSettingType.BirthdayHeight)
         else -> listOf()
     }
+
+val TokenQuery.restoreSettingTypes: List<RestoreSettingType>
+    get() = when {
+        isLitecoinMweb -> {
+            listOf(RestoreSettingType.BirthdayHeight)
+        }
+
+        else -> blockchainType.restoreSettingTypes
+    }
+
+val Token.restoreSettingTypes: List<RestoreSettingType>
+    get() = tokenQuery.restoreSettingTypes
 
 private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
     val map = mutableMapOf<BlockchainType, Int>()
@@ -365,6 +379,7 @@ val TokenType.order: Int
             TokenType.Native -> 0
             is TokenType.Derived -> derivation.accountTypeDerivation.order
             is TokenType.AddressTyped -> type.bitcoinCashCoinType.ordinal
+            TokenType.Mweb -> Derivation.bip86.order + 1
             else -> Int.MAX_VALUE
         }
     }
@@ -421,6 +436,10 @@ fun Token.supports(accountType: AccountType): Boolean {
             tokenQuery.tokenType == accountType.tokenType
         }
 
+        is AccountType.HardwareCard -> {
+            type != TokenType.Mweb
+        }
+
         is AccountType.HdExtendedKey -> {
             when (blockchainType) {
                 BlockchainType.Bitcoin,
@@ -454,6 +473,10 @@ fun Token.supports(accountType: AccountType): Boolean {
 
                 else -> false
             }
+        }
+
+        is AccountType.Mnemonic -> {
+            type != TokenType.Mweb || blockchainType == BlockchainType.Litecoin
         }
 
         is AccountType.MnemonicMonero -> {
@@ -496,11 +519,16 @@ val TokenType.AddressType.kitCoinType: MainNetBitcoinCash.CoinType
 
 val BlockchainType.nativeTokenQueries: List<TokenQuery>
     get() = when (this) {
-        BlockchainType.Bitcoin,
-        BlockchainType.Litecoin -> {
+        BlockchainType.Bitcoin -> {
             TokenType.Derivation.entries.map {
                 TokenQuery(this, TokenType.Derived(it))
             }
+        }
+
+        BlockchainType.Litecoin -> {
+            TokenType.Derivation.entries.map {
+                TokenQuery(this, TokenType.Derived(it))
+            } + TokenQuery(this, TokenType.Mweb)
         }
 
         BlockchainType.BitcoinCash -> {
@@ -538,6 +566,7 @@ val BlockchainType.defaultTokenQuery: TokenQuery
 
 val TokenType.title: String
     get() = when (this) {
+        TokenType.Mweb -> "MWEB"
         is TokenType.Derived -> derivation.accountTypeDerivation.rawName
         is TokenType.AddressTyped -> type.bitcoinCashCoinType.title
         is TokenType.AddressSpecTyped -> type.name
@@ -546,6 +575,7 @@ val TokenType.title: String
 
 val TokenType.description: String
     get() = when (this) {
+        TokenType.Mweb -> Translator.getString(R.string.token_type_litecoin_mweb)
         is TokenType.Derived -> derivation.accountTypeDerivation.addressType + derivation.accountTypeDerivation.recommended
         is TokenType.AddressTyped -> Translator.getString(type.bitcoinCashCoinType.description)
         is TokenType.AddressSpecTyped -> Translator.getString(type.zCashCoinType.description)
@@ -561,6 +591,7 @@ val TokenType.isDefault
 
 val TokenType.isNative: Boolean
     get() = this is TokenType.Native ||
+            this == TokenType.Mweb ||
             this is TokenType.Derived ||
             this is TokenType.AddressTyped ||
             this is TokenType.AddressSpecTyped

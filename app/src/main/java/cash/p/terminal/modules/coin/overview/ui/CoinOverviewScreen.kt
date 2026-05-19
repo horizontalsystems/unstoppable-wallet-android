@@ -102,9 +102,10 @@ fun CoinOverviewScreen(
     val manageWalletsViewModel = viewModel<ManageWalletsViewModel>(factory = vmFactory1)
     val restoreSettingsViewModel = viewModel<RestoreSettingsViewModel>(factory = vmFactory1)
 
-    restoreSettingsViewModel.openTokenConfigure?.let { token ->
-        navController.openRestoreSettingsDialog(token, restoreSettingsViewModel)
-    }
+    navController.openRestoreSettingsDialog(
+        token = restoreSettingsViewModel.openTokenConfigure,
+        restoreSettingsViewModel = restoreSettingsViewModel
+    )
 
 
     HSSwipeRefresh(

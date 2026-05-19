@@ -11,6 +11,7 @@ import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.Wallet
+import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.entities.BlockchainType
 import org.koin.java.KoinJavaComponent.inject
 
@@ -24,6 +25,7 @@ object SendBitcoinModule {
     ) : ViewModelProvider.Factory {
         private val adapterManager: IAdapterManager by inject(IAdapterManager::class.java)
         private val pendingRegistrar: PendingTransactionRegistrar by inject(PendingTransactionRegistrar::class.java)
+        private val dispatcherProvider: DispatcherProvider by inject(DispatcherProvider::class.java)
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val provider = FeeRateProviderFactory.provider(wallet.token.blockchainType)!!
@@ -48,7 +50,8 @@ object SendBitcoinModule {
                 localStorage = App.localStorage,
                 address = address,
                 pendingRegistrar = pendingRegistrar,
-                adapterManager = adapterManager
+                adapterManager = adapterManager,
+                dispatcherProvider = dispatcherProvider
             ) as T
         }
     }

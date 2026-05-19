@@ -27,10 +27,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -106,9 +106,10 @@ internal fun ManageWalletsScreen(
         }
     }
 
-    restoreSettingsViewModel.openTokenConfigure?.let { token ->
-        navController.openRestoreSettingsDialog(token, restoreSettingsViewModel)
-    }
+    navController.openRestoreSettingsDialog(
+        token = restoreSettingsViewModel.openTokenConfigure,
+        restoreSettingsViewModel = restoreSettingsViewModel
+    )
 
     Box(
         modifier = Modifier
@@ -216,8 +217,8 @@ internal fun ManageWalletsScreen(
             ScanToAddBlock(manageWalletsCallback.hardwareActionButtonText, requestScan)
         }
         LaunchedEffect(manageWalletsCallback.errorMsg) {
-            if (manageWalletsCallback.errorMsg != null) {
-                HudHelper.showErrorMessage(context, manageWalletsCallback.errorMsg!!)
+            manageWalletsCallback.errorMsg?.let {
+                HudHelper.showErrorMessage(context, it)
             }
         }
 

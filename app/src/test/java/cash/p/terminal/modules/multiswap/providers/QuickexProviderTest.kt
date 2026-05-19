@@ -14,7 +14,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -67,7 +67,7 @@ class QuickexProviderTest {
     }
 
     @Test
-    fun activeAccountChanged_invalidatesZcashTransparentAddressCache() = runBlocking {
+    fun activeAccountChanged_invalidatesZcashTransparentAddressCache() = runTest {
         val transparentToken = mockZcashToken(TokenType.AddressSpecType.Transparent)
         marketKit.stubZcashTransparentToken(transparentToken)
         coEvery { walletUseCase.getOneTimeReceiveAddress(transparentToken) } returnsMany
@@ -88,7 +88,7 @@ class QuickexProviderTest {
     }
 
     @Test
-    fun sameAccount_reusesZcashTransparentAddressCache() = runBlocking {
+    fun sameAccount_reusesZcashTransparentAddressCache() = runTest {
         val transparentToken = mockZcashToken(TokenType.AddressSpecType.Transparent)
         marketKit.stubZcashTransparentToken(transparentToken)
         coEvery { walletUseCase.getOneTimeReceiveAddress(transparentToken) } returns "addr-cached"
@@ -107,7 +107,7 @@ class QuickexProviderTest {
     }
 
     @Test
-    fun getWarningMessage_nonZcashTokenIn_returnsNull() = runBlocking {
+    fun getWarningMessage_nonZcashTokenIn_returnsNull() = runTest {
         val provider = createProvider()
 
         assertNull(provider.getWarningMessage(mockNonZcashNativeToken(), mockk(relaxed = true)))

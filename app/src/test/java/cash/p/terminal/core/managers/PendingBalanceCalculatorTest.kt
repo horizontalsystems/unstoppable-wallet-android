@@ -9,6 +9,7 @@ import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.entities.BlockchainType
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineDispatcher
@@ -136,6 +137,107 @@ class PendingBalanceCalculatorTest {
         assertTrue("pendingChangedFlow should emit on onPendingInserted", emitted)
     }
 
+    // For Bitcoin/MWEB the SDK deducts spent UTXOs on broadcast: currentSdkBalance
+    // immediately equals sdkBalanceAtCreation - amount - fee. The cleanup heuristic
+    // matches "currentSdkBalance is close to expectedAfterConfirm" and
+    // fires the moment the broadcast completes, dropping the pending entity before
+    // the transaction is actually included in a block. The expected behaviour is to
+    // keep the pending entry until the SDK reports the confirmed change output.
+    @Test
+    fun adjustBalance_mwebSdkDeductedImmediately_doesNotDeletePendingPrematurely() = runTest(dispatcher) {
+        val calculator = PendingBalanceCalculator(pendingRepository, dispatcherProvider)
+        calculator.onPendingInserted(
+            createMwebLitecoinPendingEntity(
+                id = "ltc-mweb-pending",
+                amountAtomic = "1000000",
+                feeAtomic = "100000",
+                sdkBalanceAtCreationAtomic = "2600000"
+            )
+        )
+
+        val wallet = createMwebLitecoinWallet()
+        // SDK already deducted on broadcast: 0.026 - 0.01 - 0.001 = 0.015 LTC.
+        val rawBalance = BalanceData(available = BigDecimal("0.015"))
+
+        calculator.adjustBalance(wallet, rawBalance)
+        advanceUntilIdle()
+
+        coVerify(exactly = 0) { pendingRepository.deleteByIds(any()) }
+    }
+
+    @Test
+    fun adjustBalance_mwebSdkTemporarilyReportsZeroBeforeChangeSnapshot_returnsExpectedRemainingBalance() = runTest(dispatcher) {
+        val calculator = PendingBalanceCalculator(pendingRepository, dispatcherProvider)
+        calculator.onPendingInserted(
+            createMwebLitecoinPendingEntity(
+                id = "ltc-mweb-pending",
+                amountAtomic = "1000000",
+                feeAtomic = "100000",
+                sdkBalanceAtCreationAtomic = "2600000"
+            )
+        )
+
+        val wallet = createMwebLitecoinWallet()
+        val rawBalance = BalanceData(available = BigDecimal.ZERO)
+
+        val adjusted = calculator.adjustBalance(wallet, rawBalance)
+        advanceUntilIdle()
+
+        assertEquals(
+            BigDecimal("0.015").stripTrailingZeros(),
+            adjusted.available.stripTrailingZeros()
+        )
+        coVerify(exactly = 0) { pendingRepository.deleteByIds(any()) }
+    }
+
+    @Test
+    fun adjustBalance_mwebSdkReportsPositiveBelowExpected_keepsSdkAvailableBalance() = runTest(dispatcher) {
+        val calculator = PendingBalanceCalculator(pendingRepository, dispatcherProvider)
+        calculator.onPendingInserted(
+            createMwebLitecoinPendingEntity(
+                id = "ltc-mweb-pending",
+                amountAtomic = "1000000",
+                feeAtomic = "100000",
+                sdkBalanceAtCreationAtomic = "2600000"
+            )
+        )
+
+        val wallet = createMwebLitecoinWallet()
+        val rawBalance = BalanceData(available = BigDecimal("0.014"))
+
+        val adjusted = calculator.adjustBalance(wallet, rawBalance)
+
+        assertEquals(
+            BigDecimal("0.014").stripTrailingZeros(),
+            adjusted.available.stripTrailingZeros()
+        )
+    }
+
+    @Test
+    fun adjustBalance_publicLitecoinSdkDeductedImmediately_returnsSdkAvailableBalance() = runTest(dispatcher) {
+        val tokenType = TokenType.Derived(TokenType.Derivation.Bip84)
+        val calculator = PendingBalanceCalculator(pendingRepository, dispatcherProvider)
+        calculator.onPendingInserted(
+            createLitecoinPendingEntity(
+                id = "ltc-public-pending",
+                tokenTypeId = tokenType.id,
+                amountAtomic = "1000000",
+                feeAtomic = "100000",
+                sdkBalanceAtCreationAtomic = "2600000"
+            )
+        )
+
+        val wallet = createLitecoinWallet(tokenType)
+        val rawBalance = BalanceData(available = BigDecimal("0.015"))
+
+        val adjusted = calculator.adjustBalance(wallet, rawBalance)
+
+        assertEquals(
+            BigDecimal("0.015").stripTrailingZeros(),
+            adjusted.available.stripTrailingZeros()
+        )
+    }
+
     private fun createMockWallet(): Wallet {
         val account = mockk<Account> {
             every { id } returns "account-1"
@@ -151,6 +253,64 @@ class PendingBalanceCalculatorTest {
             every { this@mockk.token } returns token
         }
     }
+
+    private fun createMwebLitecoinWallet(): Wallet {
+        return createLitecoinWallet(TokenType.Mweb)
+    }
+
+    private fun createLitecoinWallet(tokenType: TokenType): Wallet {
+        val account = mockk<Account> {
+            every { id } returns "account-1"
+        }
+        val token = mockk<Token> {
+            every { coin } returns Coin(uid = "litecoin", name = "Litecoin", code = "LTC")
+            every { type } returns tokenType
+            every { blockchainType } returns BlockchainType.Litecoin
+            every { decimals } returns 8
+        }
+        return mockk {
+            every { this@mockk.account } returns account
+            every { this@mockk.token } returns token
+        }
+    }
+
+    private fun createMwebLitecoinPendingEntity(
+        id: String,
+        amountAtomic: String,
+        feeAtomic: String,
+        sdkBalanceAtCreationAtomic: String
+    ) = createLitecoinPendingEntity(
+        id = id,
+        tokenTypeId = TokenType.Mweb.id,
+        amountAtomic = amountAtomic,
+        feeAtomic = feeAtomic,
+        sdkBalanceAtCreationAtomic = sdkBalanceAtCreationAtomic,
+    )
+
+    private fun createLitecoinPendingEntity(
+        id: String,
+        tokenTypeId: String,
+        amountAtomic: String,
+        feeAtomic: String,
+        sdkBalanceAtCreationAtomic: String
+    ) = PendingTransactionEntity(
+        id = id,
+        walletId = "account-1",
+        coinUid = "litecoin",
+        blockchainTypeUid = "litecoin",
+        tokenTypeId = tokenTypeId,
+        meta = null,
+        amountAtomic = amountAtomic,
+        feeAtomic = feeAtomic,
+        sdkBalanceAtCreationAtomic = sdkBalanceAtCreationAtomic,
+        fromAddress = "",
+        toAddress = "ltcmweb...",
+        txHash = null,
+        nonce = null,
+        memo = null,
+        createdAt = System.currentTimeMillis(),
+        expiresAt = System.currentTimeMillis() + 3600000
+    )
 
     private fun createPendingEntity(
         id: String,

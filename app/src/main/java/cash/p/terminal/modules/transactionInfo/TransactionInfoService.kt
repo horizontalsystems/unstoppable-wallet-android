@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.transactionInfo
 
 import cash.p.terminal.core.ITransactionsAdapter
+import cash.p.terminal.core.TransactionExplorerData
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PoisonAddressManager
@@ -81,10 +82,7 @@ class TransactionInfoService(
         record = transactionRecord,
         externalStatus = null,
         lastBlockInfo = adapter.lastBlockInfo,
-        explorerData = TransactionInfoModule.ExplorerData(
-            adapter.explorerTitle,
-            adapter.getTransactionUrl(transactionRecord.transactionHash)
-        ),
+        explorerData = adapter.getTransactionExplorerData(transactionRecord).map { it.toExplorerData() },
         rates = mapOf(),
         nftMetadata = mapOf(),
         hideAmount = balanceHiddenManager.isTransactionInfoHidden(transactionRecord.uid, walletUid),
@@ -100,6 +98,9 @@ class TransactionInfoService(
             field = value
             _transactionInfoItemFlow.update { value }
         }
+
+    private fun TransactionExplorerData.toExplorerData() =
+        TransactionInfoModule.ExplorerData(title, url)
 
     private val coinUidsForRates: List<String>
         get() {

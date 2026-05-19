@@ -131,6 +131,42 @@ class CoinSyncerTest {
     // region filterValidTokens tests
 
     @Test
+    fun transform_litecoinNativeToken_createsDerivedTokens() {
+        val result = coinSyncer.transform(
+            listOf(createToken(coinUid = "litecoin", blockchainUid = "litecoin", decimals = 8))
+        )
+
+        assertEquals(
+            listOf(
+                "derived" to "Bip44",
+                "derived" to "Bip49",
+                "derived" to "Bip84",
+                "derived" to "Bip86"
+            ),
+            result.map { it.type to it.reference }
+        )
+        assertTrue(result.all { it.coinUid == "litecoin" && it.blockchainUid == "litecoin" && it.decimals == 8 })
+    }
+
+    @Test
+    fun transform_litecoinNativeAndMwebTokens_preservesMwebToken() {
+        val result = coinSyncer.transform(
+            listOf(
+                createToken(coinUid = "litecoin", blockchainUid = "litecoin", decimals = 8),
+                createToken(
+                    coinUid = "litecoin",
+                    blockchainUid = "litecoin",
+                    type = "mweb",
+                    decimals = 8
+                )
+            )
+        )
+
+        assertEquals(1, result.count { it.coinUid == "litecoin" && it.blockchainUid == "litecoin" && it.type == "mweb" })
+        assertEquals(4, result.count { it.coinUid == "litecoin" && it.blockchainUid == "litecoin" && it.type == "derived" })
+    }
+
+    @Test
     fun filterValidTokens_validBlockchainUid_retainsToken() {
         val blockchains = listOf(
             BlockchainEntity(uid = "ethereum", name = "Ethereum", eip3091url = null),

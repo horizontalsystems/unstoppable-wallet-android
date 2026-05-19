@@ -12,17 +12,12 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Test
 import java.math.BigDecimal
 
@@ -35,10 +30,17 @@ class MultiSwapRouteResolverTest {
     private val bscBlockchain = Blockchain(BlockchainType.BinanceSmartChain, "BSC", null)
     private val tonBlockchain = Blockchain(BlockchainType.Ton, "TON", null)
     private val ethBlockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null)
+    private val litecoinBlockchain = Blockchain(BlockchainType.Litecoin, "Litecoin", null)
 
     private val bnbNative = mockToken("bnb", bscBlockchain, TokenType.Native)
     private val tonNative = mockToken("ton", tonBlockchain, TokenType.Native)
     private val ethNative = mockToken("eth", ethBlockchain, TokenType.Native)
+    private val litecoinPublic = mockToken(
+        "ltc-public",
+        litecoinBlockchain,
+        TokenType.Derived(TokenType.Derivation.Bip84)
+    )
+    private val litecoinMweb = mockToken("ltc-mweb", litecoinBlockchain, TokenType.Mweb)
 
     private val pirateJetton = mockToken("pirate", tonBlockchain, TokenType.Jetton("addr1"))
     private val cosaBep20 = mockToken("cosa", bscBlockchain, TokenType.Eip20("addr2"))
@@ -152,6 +154,16 @@ class MultiSwapRouteResolverTest {
         assertEquals(listOf(bnbNative), result)
     }
 
+    @Test
+    fun buildCandidateIntermediates_mwebInput_treatsMwebAsRouteNonNative() {
+        every { marketKit.nativeToken(BlockchainType.Litecoin) } returns litecoinPublic
+        every { marketKit.nativeToken(BlockchainType.Ethereum) } returns ethNative
+
+        val result = resolver.buildCandidateIntermediates(litecoinMweb, usdtErc20)
+
+        assertEquals(listOf(litecoinPublic, ethNative), result)
+    }
+
     // --- findRoute fallback to second candidate ---
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -159,51 +171,44 @@ class MultiSwapRouteResolverTest {
     fun findRoute_firstCandidateNoQuotes_fallsBackToSecond() = runTest {
         val testDispatcher = UnconfinedTestDispatcher(testScheduler)
         val testScope = CoroutineScope(testDispatcher)
-        Dispatchers.setMain(testDispatcher)
-        try {
-            val testResolver = MultiSwapRouteResolver(marketKit, TestDispatcherProvider(testDispatcher, testScope))
+        val testResolver = MultiSwapRouteResolver(marketKit, TestDispatcherProvider(testDispatcher, testScope))
 
-            every { marketKit.nativeToken(BlockchainType.Ton) } returns tonNative
-            every { marketKit.nativeToken(BlockchainType.BinanceSmartChain) } returns bnbNative
+        every { marketKit.nativeToken(BlockchainType.Ton) } returns tonNative
+        every { marketKit.nativeToken(BlockchainType.BinanceSmartChain) } returns bnbNative
 
-            // Provider A: supports PIRATE→TON and TON→COSA, but fetchQuote for PIRATE→TON fails
-            val providerA = mockk<IMultiSwapProvider>(relaxed = true) {
-                coEvery { supports(pirateJetton, tonNative) } returns true
-                coEvery { supports(tonNative, cosaBep20) } returns true
-                coEvery { supports(pirateJetton, bnbNative) } returns false
-                coEvery { supports(bnbNative, cosaBep20) } returns false
-                coEvery { fetchQuote(pirateJetton, tonNative, any(), any()) } throws RuntimeException("no quote")
-            }
-
-            // Provider B: supports PIRATE→BNB and BNB→COSA with valid quotes
-            val providerB = mockk<IMultiSwapProvider>(relaxed = true) {
-                coEvery { supports(pirateJetton, tonNative) } returns false
-                coEvery { supports(tonNative, cosaBep20) } returns false
-                coEvery { supports(pirateJetton, bnbNative) } returns true
-                coEvery { supports(bnbNative, cosaBep20) } returns true
-                coEvery { fetchQuote(pirateJetton, bnbNative, any(), any()) } returns mockk(relaxed = true) {
-                    every { amountOut } returns BigDecimal("10")
-                }
-                coEvery { fetchQuote(bnbNative, cosaBep20, any(), any()) } returns mockk(relaxed = true) {
-                    every { amountOut } returns BigDecimal("500")
-                }
-            }
-
-            val providers = listOf(providerA, providerB)
-
-            val route = testResolver.findRoute(
-                providers = providers,
-                tokenIn = pirateJetton,
-                tokenOut = cosaBep20,
-                amountIn = BigDecimal("100"),
-                settings = emptyMap(),
-            )
-
-            assertNotNull(route)
-            assertEquals(bnbNative, route?.intermediateCoin)
-        } finally {
-            Dispatchers.resetMain()
+        // Provider A supports the route but cannot quote the first leg.
+        val providerA = mockk<IMultiSwapProvider>(relaxed = true) {
+            coEvery { supports(pirateJetton, tonNative) } returns true
+            coEvery { supports(tonNative, cosaBep20) } returns true
+            coEvery { supports(pirateJetton, bnbNative) } returns false
+            coEvery { supports(bnbNative, cosaBep20) } returns false
+            coEvery { fetchQuote(pirateJetton, tonNative, any(), any()) } throws RuntimeException("no quote")
         }
+
+        // Provider B is the fallback route with valid quotes for both legs.
+        val providerB = mockk<IMultiSwapProvider>(relaxed = true) {
+            coEvery { supports(pirateJetton, tonNative) } returns false
+            coEvery { supports(tonNative, cosaBep20) } returns false
+            coEvery { supports(pirateJetton, bnbNative) } returns true
+            coEvery { supports(bnbNative, cosaBep20) } returns true
+            coEvery { fetchQuote(pirateJetton, bnbNative, any(), any()) } returns mockk(relaxed = true) {
+                every { amountOut } returns BigDecimal("10")
+            }
+            coEvery { fetchQuote(bnbNative, cosaBep20, any(), any()) } returns mockk(relaxed = true) {
+                every { amountOut } returns BigDecimal("500")
+            }
+        }
+
+        val route = testResolver.findRoute(
+            providers = listOf(providerA, providerB),
+            tokenIn = pirateJetton,
+            tokenOut = cosaBep20,
+            amountIn = BigDecimal("100"),
+            settings = emptyMap(),
+        )
+
+        assertNotNull(route)
+        assertEquals(bnbNative, route?.intermediateCoin)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -211,55 +216,49 @@ class MultiSwapRouteResolverTest {
     fun findRoute_twoBuildableCandidates_selectsBestFinalOutput() = runTest {
         val testDispatcher = UnconfinedTestDispatcher(testScheduler)
         val testScope = CoroutineScope(testDispatcher)
-        Dispatchers.setMain(testDispatcher)
-        try {
-            val testResolver = MultiSwapRouteResolver(marketKit, TestDispatcherProvider(testDispatcher, testScope))
+        val testResolver = MultiSwapRouteResolver(marketKit, TestDispatcherProvider(testDispatcher, testScope))
 
-            every { marketKit.nativeToken(BlockchainType.Ton) } returns tonNative
-            every { marketKit.nativeToken(BlockchainType.BinanceSmartChain) } returns bnbNative
+        every { marketKit.nativeToken(BlockchainType.Ton) } returns tonNative
+        every { marketKit.nativeToken(BlockchainType.BinanceSmartChain) } returns bnbNative
 
-            // Provider A: supports route via TON, gives 200 COSA final output
-            val providerA = mockk<IMultiSwapProvider>(relaxed = true) {
-                coEvery { supports(pirateJetton, tonNative) } returns true
-                coEvery { supports(tonNative, cosaBep20) } returns true
-                coEvery { supports(pirateJetton, bnbNative) } returns false
-                coEvery { supports(bnbNative, cosaBep20) } returns false
-                coEvery { fetchQuote(pirateJetton, tonNative, any(), any()) } returns mockk(relaxed = true) {
-                    every { amountOut } returns BigDecimal("5")
-                }
-                coEvery { fetchQuote(tonNative, cosaBep20, any(), any()) } returns mockk(relaxed = true) {
-                    every { amountOut } returns BigDecimal("200")
-                }
+        // TON route is buildable but produces a smaller final output.
+        val providerA = mockk<IMultiSwapProvider>(relaxed = true) {
+            coEvery { supports(pirateJetton, tonNative) } returns true
+            coEvery { supports(tonNative, cosaBep20) } returns true
+            coEvery { supports(pirateJetton, bnbNative) } returns false
+            coEvery { supports(bnbNative, cosaBep20) } returns false
+            coEvery { fetchQuote(pirateJetton, tonNative, any(), any()) } returns mockk(relaxed = true) {
+                every { amountOut } returns BigDecimal("5")
             }
-
-            // Provider B: supports route via BNB, gives 500 COSA final output (better)
-            val providerB = mockk<IMultiSwapProvider>(relaxed = true) {
-                coEvery { supports(pirateJetton, tonNative) } returns false
-                coEvery { supports(tonNative, cosaBep20) } returns false
-                coEvery { supports(pirateJetton, bnbNative) } returns true
-                coEvery { supports(bnbNative, cosaBep20) } returns true
-                coEvery { fetchQuote(pirateJetton, bnbNative, any(), any()) } returns mockk(relaxed = true) {
-                    every { amountOut } returns BigDecimal("10")
-                }
-                coEvery { fetchQuote(bnbNative, cosaBep20, any(), any()) } returns mockk(relaxed = true) {
-                    every { amountOut } returns BigDecimal("500")
-                }
+            coEvery { fetchQuote(tonNative, cosaBep20, any(), any()) } returns mockk(relaxed = true) {
+                every { amountOut } returns BigDecimal("200")
             }
-
-            val route = testResolver.findRoute(
-                providers = listOf(providerA, providerB),
-                tokenIn = pirateJetton,
-                tokenOut = cosaBep20,
-                amountIn = BigDecimal("100"),
-                settings = emptyMap(),
-            )
-
-            assertNotNull(route)
-            // BNB route gives 500, TON route gives 200 → BNB should win
-            assertEquals(bnbNative, route?.intermediateCoin)
-            assertEquals(BigDecimal("500"), route?.selectedLeg2Quote?.amountOut)
-        } finally {
-            Dispatchers.resetMain()
         }
+
+        // BNB route is also buildable and should win by final output.
+        val providerB = mockk<IMultiSwapProvider>(relaxed = true) {
+            coEvery { supports(pirateJetton, tonNative) } returns false
+            coEvery { supports(tonNative, cosaBep20) } returns false
+            coEvery { supports(pirateJetton, bnbNative) } returns true
+            coEvery { supports(bnbNative, cosaBep20) } returns true
+            coEvery { fetchQuote(pirateJetton, bnbNative, any(), any()) } returns mockk(relaxed = true) {
+                every { amountOut } returns BigDecimal("10")
+            }
+            coEvery { fetchQuote(bnbNative, cosaBep20, any(), any()) } returns mockk(relaxed = true) {
+                every { amountOut } returns BigDecimal("500")
+            }
+        }
+
+        val route = testResolver.findRoute(
+            providers = listOf(providerA, providerB),
+            tokenIn = pirateJetton,
+            tokenOut = cosaBep20,
+            amountIn = BigDecimal("100"),
+            settings = emptyMap(),
+        )
+
+        assertNotNull(route)
+        assertEquals(bnbNative, route?.intermediateCoin)
+        assertEquals(BigDecimal("500"), route?.selectedLeg2Quote?.amountOut)
     }
 }

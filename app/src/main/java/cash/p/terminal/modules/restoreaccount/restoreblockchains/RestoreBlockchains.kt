@@ -23,6 +23,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,13 +31,16 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.restoreSettingTypes
 import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.TokenConfig
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
+import cash.p.terminal.modules.restoreaccount.TokenConfigResult
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.extensions.BottomSheetSelectorMultiple
 import cash.p.terminal.ui_compose.TransparentModalBottomSheet
@@ -84,35 +88,29 @@ fun ManageWalletsScreen(
     val blockchainTokensViewModel: BlockchainTokensViewModel = viewModel(factory = factory)
 
     val view = LocalView.current
+    val currentOpenConfigure by rememberUpdatedState(openConfigure)
+    val currentOnFinish by rememberUpdatedState(onFinish)
 
     val coinItems by viewModel.viewItemsLiveData.observeAsState()
     val doneButtonEnabled by viewModel.restoreEnabledLiveData.observeAsState(false)
     val restored = viewModel.restored
 
-    mainViewModel.tokenZCashConfig?.let { config ->
-        restoreSettingsViewModel.onEnter(config)
-        mainViewModel.setZCashConfig(null)
+    val tokenConfigResult by mainViewModel.tokenConfigResult.collectAsStateWithLifecycle()
+    LaunchedEffect(tokenConfigResult?.id) {
+        val result = tokenConfigResult ?: return@LaunchedEffect
+        when (result) {
+            is TokenConfigResult.Entered -> restoreSettingsViewModel.onEnter(result.config)
+            is TokenConfigResult.Cancelled -> restoreSettingsViewModel.onCancelEnterBirthdayHeight()
+        }
+        mainViewModel.clearTokenConfigResult(result.id)
     }
 
-    mainViewModel.tokenMoneroConfig?.let { config ->
-        restoreSettingsViewModel.onEnter(config)
-        mainViewModel.setMoneroConfig(null)
-    }
-
-    if (mainViewModel.cancelZCashConfig) {
-        restoreSettingsViewModel.onCancelEnterBirthdayHeight()
-        mainViewModel.cancelZCashConfig = false
-    }
-
-    if (mainViewModel.cancelMoneroConfig) {
-        restoreSettingsViewModel.onCancelEnterBirthdayHeight()
-        mainViewModel.cancelMoneroConfig = false
-    }
-
-    restoreSettingsViewModel.openTokenConfigure?.let {
+    val openTokenConfigure = restoreSettingsViewModel.openTokenConfigure
+    LaunchedEffect(openTokenConfigure) {
+        val token = openTokenConfigure ?: return@LaunchedEffect
         val initialConfig = restoreSettingsViewModel.consumeInitialConfig()
         restoreSettingsViewModel.tokenConfigureOpened()
-        openConfigure(it, initialConfig)
+        currentOpenConfigure(token, initialConfig)
     }
 
     LaunchedEffect(restored) {
@@ -124,7 +122,7 @@ fun ManageWalletsScreen(
                 iconTint = R.color.white
             )
             delay(300)
-            onFinish()
+            currentOnFinish()
         }
     }
 
@@ -150,12 +148,13 @@ fun ManageWalletsScreen(
                 BottomSheetSelectorMultiple(
                     config = config,
                     onItemsSelected = { indexes ->
+                        val selectedTokens = blockchainTokensViewModel.currentRequest?.let { request ->
+                            indexes.mapNotNull { request.tokens.getOrNull(it) }
+                        }.orEmpty()
+
                         blockchainTokensViewModel.onSelect(indexes)
-                        blockchainTokensViewModel.currentRequest?.let {
-                            it.tokens.firstOrNull()?.let { firstToken ->
-                                viewModel.showApproveSettings(firstToken)
-                            }
-                        }
+                        selectedTokens.firstOrNull { it.restoreSettingTypes.isNotEmpty() }
+                            ?.let(viewModel::showApproveSettings)
                     },
                     onCloseClick = {
                         blockchainTokensViewModel.onCancelSelect()

@@ -47,6 +47,12 @@ object SendTransactionServiceFactory {
                 } else throw UnsupportedException("Unsupported token type: $tokenType")
             }
 
+            TokenType.Mweb -> {
+                if (token.blockchainType == BlockchainType.Litecoin) {
+                    SendTransactionServiceBitcoin(token)
+                } else throw UnsupportedException("Unsupported token type: $tokenType")
+            }
+
             TokenType.Native -> when (token.blockchainType) {
                 BlockchainType.Dash,
                 BlockchainType.Dogecoin,

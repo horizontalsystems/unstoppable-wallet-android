@@ -28,7 +28,6 @@
     <string name="Button_Create">创建</string>
     <string name="Button_Advanced">高级</string>
     <string name="hardware_wallet">硬件钱包</string>
-    <string name="hardware_wallet_not_detected_error">未检测到NFC读取器，请启用以使用硬件卡</string>
     <string name="Button_Restore">恢复</string>
     <string name="Button_Reset">重置</string>
     <string name="Button_Understand">我理解</string>
@@ -45,6 +44,7 @@
     <string name="Button_Delete">删除</string>
     <string name="Button_LearnMore">了解更多</string>
     <string name="hardware_wallet_not_detected">硬件钱包（未检测到 NFC）</string>
+    <string name="hardware_wallet_not_detected_error">未检测到NFC读取器，请启用以使用硬件卡</string>
     <string name="hardware_wallet_offline_confirmation_title">离线激活</string>
     <string name="hardware_wallet_offline_confirmation_message">无法在服务器上验证卡片真实性。请检查网络连接或允许离线激活。离线激活会跳过服务器验证，从而降低安全性保障。是否继续离线激活？</string>
     <string name="hardware_wallet_offline_confirmation_positive">继续离线</string>
@@ -98,6 +98,17 @@
     <string name="CreateWallet_Error_InvalidConfirmation">确认密码不匹配</string>
     <string name="create_wallet_error_failed">创建钱包失败。请重试或重启应用。</string>
     <string name="CreateWallet_PassphraseDescription">密码为钱包添加一个额外的安全层。要恢复这个钱包，用户既需要密码，也需要密码。\n\n密码也使得用户可以轻松地使用单一的密钥但不同的密码来拥有许多多币钱包。</string>
+    <!--Languages-->
+    <string name="language_english">汉语</string>
+    <string name="language_japanese">日语</string>
+    <string name="language_korean">韩语</string>
+    <string name="language_spanish">西班牙文</string>
+    <string name="language_simplified_chinese">中文（简体）</string>
+    <string name="language_traditional_chinese">中文（繁体）</string>
+    <string name="language_french">法语</string>
+    <string name="language_italian">意大利语</string>
+    <string name="language_czech">捷克语</string>
+    <string name="language_portuguese">葡萄牙语</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">⭐️⭐️⭐️⭐️⭐</string>
     <string name="RateApp_Description_Rate_This_App">喜欢P.CASH？分享反馈和想法以使其更进一步。</string>
@@ -106,9 +117,10 @@
     <!--Restore-->
     <string name="Restore_Advanced_Title">高级</string>
     <string name="Restore_Error_MnemonicWordCount">个数有误。必须为12到24个单词。您输入了：%d</string>
+    <string name="invalid_height">无效高度</string>
     <string name="restoreheight_title">恢复起始区块</string>
     <string name="restoreheight_hint">输入区块或日期 (YYYY-MM-DD)</string>
-    <string name="invalid_height">无效高度</string>
+    <string name="restoreheight_hint_block_only">输入区块编号</string>
     <string name="invalid_height_format">无效高度，请确保您输入的是 YYYY-MM-DD 格式或出生高度</string>
     <string name="invalid_qr_code">无效的二维码</string>
     <string name="blockchair_height_by_date_connection_error">无法连接到 Blockchair 以按日期查找高度</string>
@@ -522,10 +534,7 @@
     <string name="WalletConnect_Pairings_Delete">删除</string>
     <string name="WalletConnect_DeleteAllPairs">删除所有对</string>
 
-    <string name="scan">扫描</string>
     <string name="connect">连接</string>
-    <string name="adding_tokens">Adding tokens</string>
-    <string name="scan_to_add_mesage">您需要扫描卡片以添加代币</string>
     <string name="connect_trezor_to_add_message">您需要连接 Trezor 以添加代币</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">警告</string>
@@ -1054,7 +1063,6 @@
     <string name="ManageAccounts_CreateNewWallet">创建</string>
     <string name="ManageAccounts_ImportWallet">恢复自</string>
     <string name="ManageAccounts_WatchAddress">观察地址</string>
-    <string name="scan_card_to_add">扫描卡片以添加代币</string>
     <string name="add_via_trezor">通过 Trezor 添加</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">从文件</string>
@@ -1151,14 +1159,14 @@
     <string name="passphrase_terms_term1">我理解要访问资金，我必须输入密码短语，与创建时完全一致，包括相同的字符、空格和大小写。</string>
     <string name="passphrase_terms_term2">我理解如果密码短语丢失或输入错误，没有其确切值我将无法恢复我的钱包。</string>
     <string name="passphrase_terms_term3">我理解使用错误的密码短语恢复钱包时，应用程序不会显示错误，而是会创建一个新的（空的）钱包。</string>
-    <string name="passphrase_terms_term4">我理解这样的钱包只能在支持 BIP-39 标准和密码短语的应用程序中恢复（例如 Trezor），大多数应用程序不支持此功能。</string>
+    <string name="passphrase_terms_term4">我理解这样的钱包只能在支持 BIP-39 标准和密码短语的应用程序中恢复，大多数应用程序不支持此功能。</string>
     <string name="passphrase_terms_term5">我理解开发者无法访问我的数据，也无法帮助我恢复钱包，因为该应用程序是非托管的。</string>
     <string name="passphrase_terms_term6">我理解风险并希望使用密码短语</string>
     <string-array name="passphrase_terms_checkboxes">
         <item>我理解&lt;b>要访问资金，我必须输入密码短语&lt;/b>，与创建时完全一致，包括相同的字符、空格和大小写。</item>
         <item>我理解&lt;b>如果密码短语丢失或输入错误&lt;/b>，没有其确切值&lt;b>我将无法恢复我的钱包&lt;/b>。</item>
         <item>我理解&lt;b>使用错误的密码短语恢复钱包时&lt;/b>，应用程序不会显示错误，而是会&lt;b>创建一个新的（空的）钱包&lt;/b>。</item>
-        <item>我理解&lt;b>这样的钱包只能在支持 BIP-39 标准和密码短语的应用程序中恢复&lt;/b>（例如 Trezor），大多数应用程序&lt;b>不支持此功能&lt;/b>。</item>
+        <item>我理解&lt;b>这样的钱包只能在支持 BIP-39 标准和密码短语的应用程序中恢复&lt;/b>，大多数应用程序&lt;b>不支持此功能&lt;/b>。</item>
         <item>我理解&lt;b>开发者无法访问我的数据&lt;/b>，也无法帮助我恢复钱包，因为该应用程序是&lt;b>非托管的&lt;/b>。</item>
         <item>&lt;b>我理解风险并希望使用密码短语&lt;/b></item>
     </string-array>
@@ -1227,6 +1235,7 @@
     <string name="zcash_transparent_description">Fully traceable transactions</string>
     <string name="zcash_shielded_description">Private protected transactions</string>
     <string name="zcash_unified_description">Combined transparent and private transactions</string>
+    <string name="token_type_litecoin_mweb">隐私莱特币</string>
     <!-- Tor -->
     <string name="Tor_Connection_Enable">启用Tor</string>
     <string name="Tor_Connection_Disable">禁用Tor</string>
@@ -1931,7 +1940,8 @@
     <string name="native_library_error_title">无法启动</string>
     <string name="native_library_error_message">无法加载所需组件。请尝试从 Play 商店重新安装应用。</string>
     <string name="native_library_error_close">关闭</string>
-    <string name="scan_tangem_card">扫描 Tangem 卡</string>
+    <string name="scan_tangem_card">扫描 Tangem 卡片</string>
+    <string name="scan_card_to_add">扫描卡片以添加代币</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">兑换完成</string>
     <string name="multi_swap_no_providers">没有可用的提供商</string>
@@ -1946,4 +1956,14 @@
     <string name="multi_swap_cancel_swap">取消兑换</string>
     <string name="multi_swap_cancel_swap_warning">第一步兑换已完成。中间代币在您的钱包中，将继续归您所有。仅第二步兑换会被取消。</string>
     <string name="swap_leg_title">兑换 %d</string>
+    <string name="scan">扫描</string>
+    <string name="adding_tokens">正在添加代币</string>
+    <string name="scan_to_add_message">您需要扫描卡片以添加代币</string>
+    <string name="error_hardware_wallet_some_tokens_not_found">部分代币无法添加</string>
+    <string name="send_error_address_unavailable">地址不可用</string>
+    <string name="send_error_amount_unavailable">金额不可用</string>
+    <string name="send_error_fee_rate_unavailable">费率不可用</string>
+    <string name="send_error_balance_unavailable">余额不可用</string>
+    <string name="litecoin_mweb_invalid_amount">无效的 Litecoin MWEB 金额</string>
+    <string name="litecoin_hardware_extended_public_key_required">硬件 Litecoin 钱包需要扩展公钥</string>
 </resources>

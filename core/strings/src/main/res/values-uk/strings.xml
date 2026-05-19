@@ -100,6 +100,17 @@
     <string name="CreateWallet_Error_InvalidConfirmation">Підтверджена кодова фраза не збігається</string>
     <string name="create_wallet_error_failed">Не вдалося створити гаманець. Спробуйте ще раз або перезапустіть додаток.</string>
     <string name="CreateWallet_PassphraseDescription">Кодова фраза додає додатковий шар безпеки для гаманців. Щоб відновити такий гаманець, потрібні як мнемонік, так і кодова фраза.\n\nКодова фраза також полегшує користувачам можливість мати безліч мульти-монетних гаманців, використовуючи одну фразу відновлення, але інший пароль.</string>
+    <!--Languages-->
+    <string name="language_english">Англійська</string>
+    <string name="language_japanese">Японська</string>
+    <string name="language_korean">Корейська</string>
+    <string name="language_spanish">Іспанська</string>
+    <string name="language_simplified_chinese">Китайська (спрощена)</string>
+    <string name="language_traditional_chinese">Китайська (традиційна)</string>
+    <string name="language_french">Французька</string>
+    <string name="language_italian">Італійська</string>
+    <string name="language_czech">Чеська</string>
+    <string name="language_portuguese">Португальська</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">⭐️⭐️⭐️⭐️⭐️</string>
     <string name="RateApp_Description_Rate_This_App">Вам подобається P.CASH? Поділіться відгуками та ідеями для подальшого розвитку гаманця.</string>
@@ -1168,14 +1179,14 @@
     <string name="passphrase_terms_term1">Я розумію, що для доступу до коштів я повинен ввести кодову фразу точно так, як вона була створена, з тими ж символами, пробілами та регістром.</string>
     <string name="passphrase_terms_term2">Я розумію, що якщо кодова фраза буде втрачена або введена неправильно, я не зможу відновити свій гаманець без її точного значення.</string>
     <string name="passphrase_terms_term3">Я розумію, що при відновленні гаманця з неправильною кодовою фразою додаток не покаже помилку, а створить новий (порожній) гаманець.</string>
-    <string name="passphrase_terms_term4">Я розумію, що такий гаманець можна відновити тільки в додатках, які підтримують стандарт BIP-39 з кодовою фразою (наприклад, Trezor), і більшість додатків не підтримують цю функцію.</string>
+    <string name="passphrase_terms_term4">Я розумію, що такий гаманець можна відновити тільки в додатках, які підтримують стандарт BIP-39 з кодовою фразою, і більшість додатків не підтримують цю функцію.</string>
     <string name="passphrase_terms_term5">Я розумію, що розробники не мають доступу до моїх даних і не можуть допомогти мені відновити гаманець, оскільки додаток є некастодіальним.</string>
     <string name="passphrase_terms_term6">Я розумію ризики і хочу використовувати кодову фразу</string>
     <string-array name="passphrase_terms_checkboxes">
         <item>Я розумію, що &lt;b>для доступу до коштів я повинен ввести кодову фразу&lt;/b> точно так, як вона була створена, з тими ж символами, пробілами та регістром.</item>
         <item>Я розумію, що &lt;b>якщо кодова фраза буде втрачена або введена неправильно&lt;/b>, я &lt;b>не зможу відновити свій гаманець&lt;/b> без її точного значення.</item>
         <item>Я розумію, що &lt;b>при відновленні гаманця з неправильною кодовою фразою&lt;/b> додаток не покаже помилку, а &lt;b>створить новий (порожній) гаманець&lt;/b>.</item>
-        <item>Я розумію, що &lt;b>такий гаманець можна відновити тільки в додатках, які підтримують стандарт BIP-39 з кодовою фразою&lt;/b> (наприклад, Trezor), і більшість додатків &lt;b>не підтримують цю функцію&lt;/b>.</item>
+        <item>Я розумію, що &lt;b>такий гаманець можна відновити тільки в додатках, які підтримують стандарт BIP-39 з кодовою фразою&lt;/b>, і більшість додатків &lt;b>не підтримують цю функцію&lt;/b>.</item>
         <item>Я розумію, що &lt;b>розробники не мають доступу до моїх даних&lt;/b> і не можуть допомогти мені відновити гаманець, оскільки додаток є &lt;b>некастодіальним&lt;/b>.</item>
         <item>&lt;b>Я розумію ризики і хочу використовувати кодову фразу&lt;/b></item>
     </string-array>
@@ -1255,6 +1266,7 @@
     <string name="zcash_transparent_description">Повністю відстежувані транзакції</string>
     <string name="zcash_shielded_description">Приватні захищені транзакції</string>
     <string name="zcash_unified_description">Комбіновані прозорі та приватні транзакції</string>
+    <string name="token_type_litecoin_mweb">Приватний Litecoin</string>
     <!-- Tor -->
     <string name="Tor_Connection_Enable">Увімкнути Tor</string>
     <string name="Tor_Connection_Disable">Вимкнути Tor</string>
@@ -1705,7 +1717,7 @@
     <string name="scan">Сканувати</string>
     <string name="connect">Підключити</string>
     <string name="adding_tokens">Додавання токенів</string>
-    <string name="scan_to_add_mesage">Щоб додати токени, необхідно відсканувати карту.</string>
+    <string name="scan_to_add_message">Щоб додати токени, необхідно відсканувати карту.</string>
     <string name="connect_trezor_to_add_message">Щоб додати токени, необхідно підключити Trezor.</string>
     <string name="create_wallet">Створити гаманець</string>
     <string name="create">Створити</string>
@@ -1758,9 +1770,16 @@
     <string name="error_no_active_account">Активний обліковий запис не знайдено</string>
     <string name="error_hardware_wallet_not_supported">Поки не підтримується апаратною картою</string>
     <string name="error_hardware_wallet_some_tokens_not_found">Деякі токени не вдалося додати</string>
-    <string name="scan_tangem_card">Сканувати Tangem картку</string>
+    <string name="send_error_address_unavailable">Адреса недоступна</string>
+    <string name="send_error_amount_unavailable">Сума недоступна</string>
+    <string name="send_error_fee_rate_unavailable">Ставка комісії недоступна</string>
+    <string name="send_error_balance_unavailable">Баланс недоступний</string>
+    <string name="litecoin_mweb_invalid_amount">Некоректна сума Litecoin MWEB</string>
+    <string name="litecoin_hardware_extended_public_key_required">Для апаратного гаманця Litecoin потрібен розширений публічний ключ</string>
+    <string name="scan_tangem_card">Сканувати картку Tangem</string>
     <string name="restoreheight_title">Початковий блок для відновлення</string>
     <string name="restoreheight_hint">Вкажіть блок або дату (РРРР-ММ-ДД)</string>
+    <string name="restoreheight_hint_block_only">Вкажіть номер блоку</string>
     <string name="Restore_Error_MnemonicWordCount_monero">Невірна кількість слів. Має бути 25. Ви ввели: %d</string>
     <string name="invalid_height">Невірне значення висоти</string>
     <string name="invalid_height_format">Невірне значення висоти, переконайтесь, що ви ввели РРРР-ММ-ДД або висоту народження</string>

@@ -1,5 +1,7 @@
 package cash.p.terminal.modules.enablecoin.restoresettings
 
+import cash.p.terminal.core.managers.LitecoinBirthdayProvider
+import cash.p.terminal.core.managers.LitecoinMwebRestoreHeight
 import cash.p.terminal.core.managers.RestoreSettingType
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.managers.RestoreSettingsManager
@@ -10,13 +12,15 @@ import cash.p.terminal.wallet.AccountOrigin
 import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.isLitecoinMweb
 import io.horizontalsystems.core.entities.BlockchainType
 import io.reactivex.subjects.PublishSubject
 import org.koin.java.KoinJavaComponent.inject
 
 class RestoreSettingsService(
     private val manager: RestoreSettingsManager,
-    private val zcashBirthdayProvider: ZcashBirthdayProvider
+    private val zcashBirthdayProvider: ZcashBirthdayProvider,
+    private val litecoinBirthdayProvider: LitecoinBirthdayProvider
 ) : Clearable {
 
     val approveSettingsObservable = PublishSubject.create<TokenWithSettings>()
@@ -35,7 +39,7 @@ class RestoreSettingsService(
 
         if (account != null && account.origin == AccountOrigin.Created) {
             val settings = RestoreSettings()
-            blockchainType.restoreSettingTypes.forEach { settingType ->
+            token.restoreSettingTypes.forEach { settingType ->
                 manager.getSettingValueForCreatedAccount(settingType, blockchainType)?.let {
                     settings[settingType] = it
                 }
@@ -48,7 +52,7 @@ class RestoreSettingsService(
             account?.let { manager.settings(it, blockchainType) } ?: RestoreSettings()
 
         val requiresBirthdayHeight =
-            blockchainType.restoreSettingTypes.contains(RestoreSettingType.BirthdayHeight)
+            token.restoreSettingTypes.contains(RestoreSettingType.BirthdayHeight)
 
         if (requiresBirthdayHeight && (forceRequest || existingSettings.birthdayHeight == null)
         ) {
@@ -64,13 +68,19 @@ class RestoreSettingsService(
                 Request(
                     token = token,
                     requestType = RequestType.BirthdayHeight,
-                    initialConfig = requestConfig
+                    initialConfig = requestConfig,
+                    accountId = account?.id
                 )
             )
             return
         }
 
-        approveSettingsObservable.onNext(TokenWithSettings(token, RestoreSettings()))
+        approveSettingsObservable.onNext(
+            TokenWithSettings(
+                token = token,
+                settings = if (requiresBirthdayHeight) existingSettings else RestoreSettings()
+            )
+        )
     }
 
     fun save(settings: RestoreSettings, account: Account, blockchainType: BlockchainType) {
@@ -80,7 +90,7 @@ class RestoreSettingsService(
     fun enter(tokenConfig: TokenConfig, token: Token): Boolean {
         val settings = RestoreSettings()
         settings.birthdayHeight = when (token.blockchainType) {
-            BlockchainType.Zcash, BlockchainType.Zcash -> {
+            BlockchainType.Zcash -> {
                 if (tokenConfig.restoreAsNew) {
                     tokenConfig.birthdayHeight?.toLongOrNull()
                         ?: zcashBirthdayProvider.getLatestCheckpointBlockHeight()
@@ -91,6 +101,19 @@ class RestoreSettingsService(
 
             BlockchainType.Monero -> {
                 tokenConfig.birthdayHeight?.toLongOrNull() ?: -1
+            }
+
+            BlockchainType.Litecoin -> {
+                if (token.isLitecoinMweb) {
+                    if (tokenConfig.restoreAsNew) {
+                        LitecoinMwebRestoreHeight.parse(tokenConfig.birthdayHeight)
+                            ?: litecoinBirthdayProvider.getLatestCheckpointBlockHeight()
+                    } else {
+                        LitecoinMwebRestoreHeight.parse(tokenConfig.birthdayHeight)
+                    }
+                } else {
+                    null
+                }
             }
 
             else -> null
@@ -120,7 +143,8 @@ class RestoreSettingsService(
     data class Request(
         val token: Token,
         val requestType: RequestType,
-        val initialConfig: TokenConfig? = null
+        val initialConfig: TokenConfig? = null,
+        val accountId: String? = null
     )
 
     enum class RequestType {

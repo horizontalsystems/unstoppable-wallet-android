@@ -2,16 +2,20 @@ package cash.p.terminal.wallet
 
 import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.wallet.entities.EnabledWallet
+import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.policy.HardwareWalletTokenPolicy
 import cash.p.terminal.wallet.useCases.GetHardwarePublicKeyForWalletUseCase
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
+import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class WalletStorageTest {
 
@@ -69,7 +73,7 @@ class WalletStorageTest {
     }
 
     @Test
-    fun `save ignores duplicates within the same batch`() {
+    fun save_duplicateWalletsInSameBatch_ignoresDuplicates() {
         val enabledWalletStorage = InMemoryEnabledWalletStorage()
         val walletStorage = WalletStorage(
             marketKit = mockk(relaxed = true),
@@ -87,7 +91,7 @@ class WalletStorageTest {
     }
 
     @Test
-    fun `save skips wallets already persisted for account`() {
+    fun save_walletAlreadyPersistedForAccount_skipsWallet() {
         val enabledWalletStorage = InMemoryEnabledWalletStorage()
         val walletStorage = WalletStorage(
             marketKit = mockk(relaxed = true),
@@ -119,7 +123,7 @@ class WalletStorageTest {
     }
 
     @Test
-    fun `walletFactory skips unsupported token for monero mnemonic account`() {
+    fun walletFactory_unsupportedTokenForMoneroMnemonicAccount_skipsWallet() {
         val moneroAccount = Account(
             id = "monero-account-id",
             name = "Monero",
@@ -147,6 +151,52 @@ class WalletStorageTest {
 
         assertNull(walletFactory.create(evmToken, moneroAccount, null))
         assertNotNull(walletFactory.create(moneroToken, moneroAccount, null))
+    }
+
+    @Test
+    fun walletFactory_moneroTokenWithBip39MnemonicAccount_createsWallet() {
+        val moneroToken = Token(
+            coin = Coin(uid = "monero", name = "Monero", code = "XMR"),
+            blockchain = Blockchain(BlockchainType.Monero, "Monero", null),
+            type = TokenType.Native,
+            decimals = 12
+        )
+
+        assertNotNull(walletFactory.create(moneroToken, account, null))
+    }
+
+    @Test
+    fun wallets_unsupportedTokenWithoutCoinMetadata_skipsWallet() = runTest {
+        val enabledWalletStorage = InMemoryEnabledWalletStorage()
+        val marketKit = mockk<MarketKitWrapper> {
+            every { tokens(any<List<TokenQuery>>()) } returns emptyList()
+            every { blockchains(listOf(BlockchainType.Litecoin.uid)) } returns listOf(
+                Blockchain(BlockchainType.Litecoin, "Litecoin", null)
+            )
+        }
+        val walletStorage = WalletStorage(
+            marketKit = marketKit,
+            storage = enabledWalletStorage,
+            getHardwarePublicKeyForWalletUseCase = GetHardwarePublicKeyForWalletUseCase(hardwareStorage),
+            walletFactory = walletFactory,
+            deletedWalletChecker = deletedWalletChecker
+        )
+        enabledWalletStorage.save(
+            listOf(
+                EnabledWallet(
+                    tokenQueryId = "litecoin|future",
+                    accountId = account.id,
+                    coinName = null,
+                    coinCode = null,
+                    coinDecimals = null,
+                    coinImage = null
+                )
+            )
+        )
+
+        val wallets = walletStorage.wallets(account)
+
+        assertTrue(wallets.isEmpty())
     }
 
     private fun assertSingleWalletStored(

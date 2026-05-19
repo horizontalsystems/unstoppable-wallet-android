@@ -5,6 +5,7 @@ import cash.p.terminal.R
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.entities.UsedAddress
 import cash.p.terminal.core.factories.uriScheme
+import cash.p.terminal.core.title
 import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.entities.AddressUri
 import cash.p.terminal.ui_compose.entities.ViewState
@@ -16,14 +17,15 @@ import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.wallet.accountTypeDerivation
 import cash.p.terminal.wallet.bitcoinCashCoinType
 import cash.p.terminal.wallet.entities.TokenType
-import kotlinx.coroutines.Dispatchers
+import io.horizontalsystems.core.DispatcherProvider
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 
 class ReceiveAddressViewModel(
     private val wallet: Wallet,
-    private val adapterManager: IAdapterManager
+    private val adapterManager: IAdapterManager,
+    private val dispatcherProvider: DispatcherProvider,
 ) : ViewModelUiState<ReceiveModule.UiState>() {
 
     private var viewState: ViewState = ViewState.Loading
@@ -41,13 +43,13 @@ class ReceiveAddressViewModel(
     private var alertText: ReceiveModule.AlertText? = getAlertText(watchAccount)
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherProvider.io) {
             adapterManager.adaptersReadyObservable.asFlow()
                 .collect {
                     setData()
                 }
         }
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherProvider.io) {
             setData()
         }
         setNetworkName()
@@ -78,6 +80,10 @@ class ReceiveAddressViewModel(
 
             is TokenType.AddressTyped -> {
                 addressFormat = tokenType.type.bitcoinCashCoinType.title
+            }
+
+            TokenType.Mweb -> {
+                addressFormat = tokenType.title
             }
 
             else -> {
@@ -152,7 +158,7 @@ class ReceiveAddressViewModel(
     }
 
     fun onErrorClick() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherProvider.io) {
             setData()
         }
     }

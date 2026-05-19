@@ -6,6 +6,7 @@ import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.isLitecoinMweb
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.bitcoincore.storage.UtxoFilters
@@ -64,7 +65,7 @@ class SendBitcoinAmountService(
         }
     }
 
-    private fun refreshAvailableBalance() {
+    private fun updateAvailableBalance() {
         val dynamicBalance = feeRate?.let {
             adapter.availableBalance(
                 it,
@@ -77,11 +78,39 @@ class SendBitcoinAmountService(
             )
         }
         val adjustedBalance = adapterManager.getAdjustedBalanceData(wallet)?.available
-        availableBalance = when {
-            dynamicBalance == null -> null
-            adjustedBalance == null -> dynamicBalance
-            else -> minOf(dynamicBalance, adjustedBalance)
+        availableBalance = displayedAvailableBalance(dynamicBalance, adjustedBalance)
+    }
+
+    private fun displayedAvailableBalance(
+        dynamicBalance: BigDecimal?,
+        adjustedBalance: BigDecimal?
+    ): BigDecimal? {
+        if (dynamicBalance == null) return null
+        if (adjustedBalance == null) return dynamicBalance
+
+        // MWEB dry-run can temporarily return 0 while local unconfirmed change is waiting for a block.
+        if (wallet.token.isLitecoinMweb && dynamicBalance.signum() == 0 && adjustedBalance.signum() > 0) {
+            return adjustedBalance
         }
+
+        return minOf(dynamicBalance, adjustedBalance)
+    }
+
+    private fun refreshAmountState(
+        forceEmit: Boolean = true,
+        afterBalanceUpdate: () -> Unit = {}
+    ) {
+        updateAvailableBalance()
+        afterBalanceUpdate()
+        validateAmount()
+
+        if (forceEmit) {
+            emitState()
+        }
+    }
+
+    fun refreshAvailableBalance() {
+        refreshAmountState()
     }
 
     private fun refreshMinimumSendAmount() {
@@ -113,29 +142,21 @@ class SendBitcoinAmountService(
     fun setValidAddress(validAddress: Address?) {
         this.validAddress = validAddress
 
-        refreshAvailableBalance()
-        refreshMinimumSendAmount()
-        validateAmount()
-
-        emitState()
+        refreshAmountState {
+            refreshMinimumSendAmount()
+        }
     }
 
     fun setFeeRate(feeRate: Int?) {
         this.feeRate = feeRate
 
-        refreshAvailableBalance()
-        validateAmount()
-
-        emitState()
+        refreshAmountState()
     }
 
     fun setPluginData(pluginData: Map<Byte, IPluginData>?) {
         this.pluginData = pluginData
 
-        refreshAvailableBalance()
-        validateAmount()
-
-        emitState()
+        refreshAmountState()
     }
 
     fun setUserMinimumSendAmount(userMinimumSendAmount: Int?, forceEmit: Boolean = true) {
@@ -153,41 +174,24 @@ class SendBitcoinAmountService(
     fun setChangeToFirstInput(changeToFirstInput: Boolean, forceEmit: Boolean = true) {
         this.changeToFirstInput = changeToFirstInput
 
-        refreshAvailableBalance()
-        validateAmount()
-
-        if (forceEmit) {
-            emitState()
-        }
+        refreshAmountState(forceEmit = forceEmit)
     }
 
     fun setUtxoFilters(utxoFilters: UtxoFilters, forceEmit: Boolean = true) {
         this.utxoFilters = utxoFilters
 
-        refreshAvailableBalance()
-        validateAmount()
-
-        if (forceEmit) {
-            emitState()
-        }
+        refreshAmountState(forceEmit = forceEmit)
     }
 
     fun setCustomUnspentOutputs(customUnspentOutputs: List<UnspentOutputInfo>?) {
         this.customUnspentOutputs = customUnspentOutputs
-        refreshAvailableBalance()
-        validateAmount()
-        emitState()
+        refreshAmountState()
     }
 
     fun setMemo(memo: String?, forceEmit: Boolean = true) {
         this.memo = memo
 
-        refreshAvailableBalance()
-        validateAmount()
-
-        if (forceEmit) {
-            emitState()
-        }
+        refreshAmountState(forceEmit = forceEmit)
     }
 
     data class State(

@@ -17,6 +17,7 @@ import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.WalletFactory
 import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.isLitecoinMweb
 import cash.p.terminal.wallet.useCases.GetHardwarePublicKeyForWalletUseCase
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.CoroutineScope
@@ -134,6 +135,7 @@ class ManageWalletsService(
 
     private fun hasInfo(token: Token, enabled: Boolean) = when (token.type) {
         is TokenType.Native -> token.blockchainType is BlockchainType.Zcash && enabled
+        TokenType.Mweb,
         is TokenType.Derived,
         is TokenType.AddressTyped,
         is TokenType.Eip20,
@@ -216,7 +218,7 @@ class ManageWalletsService(
         coroutineScope.launch {
             // Only create wallet for the clicked token (not all with same contract)
             // Toggle sync is handled by isEnabled() checking by contract address
-            if (token.blockchainType.restoreSettingTypes.isNotEmpty()) {
+            if (token.restoreSettingTypes.isNotEmpty()) {
                 restoreSettingsService.approveSettings(
                     token = token,
                     account = account,
@@ -283,6 +285,7 @@ class ManageWalletsService(
                 wallet.token.blockchainType == BlockchainType.Zcash
             }
 
+            BlockchainType.Litecoin -> token.isLitecoinMweb
             else -> false
         }
     }

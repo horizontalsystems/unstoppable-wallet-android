@@ -12,6 +12,9 @@ object LocaleHelper {
     val fallbackLocale: Locale = Locale.ENGLISH
 
     private const val SELECTED_LANGUAGE = "Locale.Helper.Selected.Language"
+    private val supportedLanguageTags: Set<String> by lazy {
+        LocaleType.values().mapTo(hashSetOf()) { it.tag }
+    }
     private val RTL: Set<String> by lazy {
         hashSetOf(
             "ar",
@@ -44,18 +47,12 @@ object LocaleHelper {
     }
 
     private fun getSystemLocale(context: Context): Locale {
-        val systemLocale = context.resources.configuration.locales.get(0)
-        var tag = systemLocale.toLanguageTag()
-
-        //App language tags are in the format "en", except "pt-BR"
-        if (tag.contains("-") && tag != LocaleType.pt_br.tag) {
-            tag = tag.split("-")[0]
-        }
+        val tag = context.resources.configuration.locales.get(0).supportedLanguageTag()
 
         //use system locale if it is supported by app, else use fallback locale
-        if (LocaleType.values().map { it.tag }.contains(tag)) {
+        if (supportedLanguageTags.contains(tag)) {
             val localeFromSupportedTag = Locale.forLanguageTag(tag)
-            setLocale(context, localeFromSupportedTag)
+            persist(context, localeFromSupportedTag)
             return localeFromSupportedTag
         }
         return fallbackLocale
@@ -80,12 +77,25 @@ object LocaleHelper {
     private fun updateContextLocale(context: Context, locale: Locale): Context {
         Locale.setDefault(locale)
 
-        val configuration = Configuration()
+        val currentConfiguration = context.resources.configuration
+        if (currentConfiguration.locales.get(0).supportedLanguageTag() == locale.toLanguageTag()) {
+            return context
+        }
+
+        val configuration = Configuration(currentConfiguration)
         configuration.setLocale(locale)
-        configuration.setLayoutDirection(locale)
         configuration.setLayoutDirection(locale)
 
         return context.createConfigurationContext(configuration)
+    }
+
+    private fun Locale.supportedLanguageTag(): String {
+        val tag = toLanguageTag()
+        return if (tag.contains("-") && tag != LocaleType.pt_br.tag) {
+            tag.substringBefore("-")
+        } else {
+            tag
+        }
     }
 
     private fun getPreferences(context: Context): SharedPreferences {

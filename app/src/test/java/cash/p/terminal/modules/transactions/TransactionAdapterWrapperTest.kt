@@ -28,6 +28,8 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -43,6 +45,11 @@ import java.math.BigDecimal
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TransactionAdapterWrapperTest {
+    private companion object {
+        const val MWEB_ADDRESS =
+            "ltcmweb1qq2nlqa567pq3hwgch23a9fhuvgfe96erem3v00gph7pjkmwrz09nkq5" +
+                "fuwudw8gjmw59n6uv268r3ky23epxkr9fejdf9m6gxlkjy6lne5l82w3k"
+    }
 
     @After
     fun tearDown() {
@@ -86,6 +93,106 @@ class TransactionAdapterWrapperTest {
         )
 
         assertEquals(listOf(realRecord.uid), records.map { it.uid })
+        assertCoinAmount(BigDecimal("-0.00000563"), records.single())
+    }
+
+    @Test
+    fun get_concurrentRequests_useSingleAdapterLoad() = runTest {
+        val token = createToken()
+        val source = createSource(blockchain = token.blockchain)
+        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
+        val realRecord = createBitcoinOutgoingRecord(
+            token = token,
+            source = source,
+            uid = "real-tx",
+            transactionHash = "abc123",
+            timestamp = 1_715_000_005,
+            amount = BigDecimal("-0.00000563"),
+            toAddress = "bc1recipient",
+        )
+        var loadCount = 0
+        val adapter = mockk<ITransactionsAdapter> {
+            coEvery { getTransactions(any(), any(), any(), any(), any()) } coAnswers {
+                loadCount++
+                delay(100)
+                listOf(realRecord)
+            }
+            every { getTransactionRecordsFlow(any(), any(), any()) } returns emptyFlow()
+        }
+        val pendingRepository = mockk<PendingTransactionRepository> {
+            every { getActivePendingFlow(any()) } returns emptyFlow()
+            coEvery { getPendingForWallet(any()) } returns emptyList()
+        }
+        val wrapper = TransactionAdapterWrapper(
+            transactionsAdapter = adapter,
+            transactionWallet = transactionWallet,
+            transactionType = FilterTransactionType.All,
+            contact = null,
+            pendingRepository = pendingRepository,
+            pendingConverter = mockk(relaxed = true),
+            pendingTransactionMatcher = PendingTransactionMatcher(),
+            dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler), this),
+        )
+
+        val first = async {
+            wrapper.get(
+                limit = 20,
+                requestedFilterType = FilterTransactionType.All,
+                requestedContact = null,
+            )
+        }
+        val second = async {
+            wrapper.get(
+                limit = 20,
+                requestedFilterType = FilterTransactionType.All,
+                requestedContact = null,
+            )
+        }
+        advanceUntilIdle()
+
+        assertEquals(listOf(realRecord.uid), first.await().map { it.uid })
+        assertEquals(listOf(realRecord.uid), second.await().map { it.uid })
+        assertEquals(1, loadCount)
+    }
+
+    @Test
+    fun get_realBitcoinRecordMatchesPendingByHashWithDifferentAmount_keepsRealAmount() = runTest {
+        val token = createToken()
+        val source = createSource(blockchain = token.blockchain)
+        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
+        val realRecord = createBitcoinOutgoingRecord(
+            token = token,
+            source = source,
+            uid = "real-tx",
+            transactionHash = "same-hash",
+            timestamp = 1_715_000_005,
+            amount = BigDecimal("-0.00000703"),
+            toAddress = "bc1real-recipient",
+        )
+        val pendingRecord = createPendingRecord(
+            token = token,
+            source = source,
+            uid = "pending-1",
+            transactionHash = "same-hash",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("0.00000563"),
+            toAddress = "bc1pending-recipient",
+        )
+
+        val wrapper = createWrapper(
+            transactionWallet = transactionWallet,
+            realRecords = listOf(realRecord),
+            pendingRecords = listOf(pendingRecord),
+        )
+
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(realRecord.uid), records.map { it.uid })
+        assertCoinAmount(BigDecimal("-0.00000703"), records.single())
     }
 
     @Test
@@ -125,6 +232,215 @@ class TransactionAdapterWrapperTest {
         )
 
         assertEquals(listOf(realRecord.uid, pendingRecord.uid), records.map { it.uid })
+        assertCoinAmount(BigDecimal("-0.00000703"), records.first())
+    }
+
+    @Test
+    fun get_litecoinMwebPegInPublicRecordMatchesPendingWithDifferentAmount_pendingIsFilteredOut() = runTest {
+        val token = createLitecoinToken()
+        val source = createSource(blockchain = token.blockchain)
+        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
+        val changeAddress = "ltc1qchangeaddress"
+        val realRecord = createBitcoinRecord(
+            token = token,
+            source = source,
+            uid = "public-pegin",
+            transactionHash = "public-hash",
+            timestamp = 1_715_000_005,
+            amount = BigDecimal("-0.03509574"),
+            toAddress = null,
+            transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+            changeAddresses = listOf(changeAddress),
+            toAddresses = emptyList(),
+        )
+        val pendingRecord = createPendingRecord(
+            token = token,
+            source = source,
+            uid = "pending-mweb",
+            transactionHash = "mweb-hash",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("0.00882613"),
+            toAddress = MWEB_ADDRESS,
+        )
+
+        val wrapper = createWrapper(
+            transactionWallet = transactionWallet,
+            realRecords = listOf(realRecord),
+            pendingRecords = listOf(pendingRecord),
+        )
+
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(realRecord.uid), records.map { it.uid })
+        assertCoinAmount(BigDecimal("-0.00882613"), records.single())
+    }
+
+    @Test
+    fun get_litecoinMwebPegInPublicRecordWithoutRecipientsOrChange_pendingRemainsVisible() = runTest {
+        val token = createLitecoinToken()
+        val source = createSource(blockchain = token.blockchain)
+        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
+        val realRecord = createBitcoinRecord(
+            token = token,
+            source = source,
+            uid = "ambiguous-public-send",
+            transactionHash = "public-hash",
+            timestamp = 1_715_000_005,
+            amount = BigDecimal("-0.03509574"),
+            toAddress = null,
+            transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+        )
+        val pendingRecord = createPendingRecord(
+            token = token,
+            source = source,
+            uid = "pending-mweb",
+            transactionHash = "mweb-hash",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("0.00882613"),
+            toAddress = MWEB_ADDRESS,
+        )
+
+        val wrapper = createWrapper(
+            transactionWallet = transactionWallet,
+            realRecords = listOf(realRecord),
+            pendingRecords = listOf(pendingRecord),
+        )
+
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(realRecord.uid, pendingRecord.uid), records.map { it.uid })
+    }
+
+    @Test
+    fun get_litecoinMwebPegInPublicRecordWithChangeAddress_pendingIsFilteredOut() = runTest {
+        val token = createLitecoinToken()
+        val source = createSource(blockchain = token.blockchain)
+        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
+        val changeAddress = "ltc1qchangeaddress"
+        val realRecord = createBitcoinRecord(
+            token = token,
+            source = source,
+            uid = "public-pegin",
+            transactionHash = "public-hash",
+            timestamp = 1_715_000_005,
+            amount = BigDecimal("-0.03509574"),
+            toAddress = changeAddress,
+            transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+            changeAddresses = listOf(changeAddress),
+        )
+        val pendingRecord = createPendingRecord(
+            token = token,
+            source = source,
+            uid = "pending-mweb",
+            transactionHash = "mweb-hash",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("0.00882613"),
+            toAddress = MWEB_ADDRESS,
+        )
+
+        val wrapper = createWrapper(
+            transactionWallet = transactionWallet,
+            realRecords = listOf(realRecord),
+            pendingRecords = listOf(pendingRecord),
+        )
+
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(realRecord.uid), records.map { it.uid })
+        assertCoinAmount(BigDecimal("-0.00882613"), records.single())
+    }
+
+    @Test
+    fun get_litecoinMwebPegInPublicRecordWithRecipient_pendingRemainsVisible() = runTest {
+        val token = createLitecoinToken()
+        val source = createSource(blockchain = token.blockchain)
+        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
+        val realRecord = createBitcoinOutgoingRecord(
+            token = token,
+            source = source,
+            uid = "regular-public-send",
+            transactionHash = "public-hash",
+            timestamp = 1_715_000_005,
+            amount = BigDecimal("-0.03509574"),
+            toAddress = "ltc1regularrecipient",
+        )
+        val pendingRecord = createPendingRecord(
+            token = token,
+            source = source,
+            uid = "pending-mweb",
+            transactionHash = "mweb-hash",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("0.00882613"),
+            toAddress = MWEB_ADDRESS,
+        )
+
+        val wrapper = createWrapper(
+            transactionWallet = transactionWallet,
+            realRecords = listOf(realRecord),
+            pendingRecords = listOf(pendingRecord),
+        )
+
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(realRecord.uid, pendingRecord.uid), records.map { it.uid })
+        assertCoinAmount(BigDecimal("-0.03509574"), records.first())
+    }
+
+    @Test
+    fun get_litecoinRegularPendingWithEmptyRecipientReal_pendingRemainsVisible() = runTest {
+        val token = createLitecoinToken()
+        val source = createSource(blockchain = token.blockchain)
+        val transactionWallet = TransactionWallet(token = token, source = source, badge = null)
+        val realRecord = createBitcoinRecord(
+            token = token,
+            source = source,
+            uid = "empty-recipient-public-send",
+            transactionHash = "public-hash",
+            timestamp = 1_715_000_005,
+            amount = BigDecimal("-0.03509574"),
+            toAddress = null,
+            transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+        )
+        val pendingRecord = createPendingRecord(
+            token = token,
+            source = source,
+            uid = "pending-regular",
+            transactionHash = "pending-hash",
+            timestamp = 1_715_000_000,
+            amount = BigDecimal("0.00882613"),
+            toAddress = "ltc1regularrecipient",
+        )
+
+        val wrapper = createWrapper(
+            transactionWallet = transactionWallet,
+            realRecords = listOf(realRecord),
+            pendingRecords = listOf(pendingRecord),
+        )
+
+        val records = wrapper.get(
+            limit = 20,
+            requestedFilterType = FilterTransactionType.All,
+            requestedContact = null,
+        )
+
+        assertEquals(listOf(realRecord.uid, pendingRecord.uid), records.map { it.uid })
+        assertCoinAmount(BigDecimal("-0.03509574"), records.first())
     }
 
     @Test
@@ -647,14 +963,16 @@ class TransactionAdapterWrapperTest {
         transactionHash: String,
         timestamp: Long,
         amount: BigDecimal,
-        toAddress: String,
+        toAddress: String?,
         transactionRecordType: TransactionRecordType,
+        changeAddresses: List<String> = emptyList(),
+        toAddresses: List<String>? = toAddress?.let { listOf(it) },
     ) = BitcoinTransactionRecord(
         token = token,
         amount = amount,
-        to = listOf(toAddress),
+        to = toAddresses,
         from = null,
-        changeAddresses = emptyList(),
+        changeAddresses = changeAddresses,
         uid = uid,
         transactionHash = transactionHash,
         transactionIndex = 0,
@@ -692,6 +1010,11 @@ class TransactionAdapterWrapperTest {
         transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
     )
 
+    private fun assertCoinAmount(expected: BigDecimal, record: TransactionRecord) {
+        val coinValue = record.mainValue as TransactionValue.CoinValue
+        assertEquals(0, expected.compareTo(coinValue.value))
+    }
+
     private fun createToken(): Token {
         val coin = Coin(uid = "bitcoin", name = "Bitcoin", code = "BTC")
         val blockchain = Blockchain(BlockchainType.Bitcoin, "Bitcoin", null)
@@ -699,6 +1022,17 @@ class TransactionAdapterWrapperTest {
             coin = coin,
             blockchain = blockchain,
             type = TokenType.Derived(TokenType.Derivation.Bip86),
+            decimals = 8,
+        )
+    }
+
+    private fun createLitecoinToken(): Token {
+        val coin = Coin(uid = "litecoin", name = "Litecoin", code = "LTC")
+        val blockchain = Blockchain(BlockchainType.Litecoin, "Litecoin", null)
+        return Token(
+            coin = coin,
+            blockchain = blockchain,
+            type = TokenType.Derived(TokenType.Derivation.Bip84),
             decimals = 8,
         )
     }

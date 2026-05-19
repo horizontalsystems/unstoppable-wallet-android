@@ -20,6 +20,7 @@ import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.WalletFactory
+import cash.p.terminal.wallet.isLitecoinMweb
 import cash.p.terminal.wallet.title
 import cash.p.terminal.wallet.useCases.GetHardwarePublicKeyForWalletUseCase
 import io.horizontalsystems.core.entities.Blockchain
@@ -129,7 +130,9 @@ class RestoreBlockchainsService(
             restoreSettingsMap[token] = restoreSettings
         }
 
-        enabledTokens.add(token)
+        if (!enabledTokens.contains(token)) {
+            enabledTokens.add(token)
+        }
 
         syncCanRestore()
         syncState()
@@ -179,7 +182,7 @@ class RestoreBlockchainsService(
     }
 
     fun showApproveSettings(token: Token) {
-        if (token.blockchainType.restoreSettingTypes.isNotEmpty()) {
+        if (token.restoreSettingTypes.isNotEmpty()) {
             restoreSettingsService.approveSettings(
                 token = token,
                 forceRequest = shouldForceBirthdayHeightDialog(token),
@@ -246,6 +249,7 @@ class RestoreBlockchainsService(
         return when (token.blockchainType) {
             BlockchainType.Monero -> true
             BlockchainType.Zcash -> enabledTokens.none { it.blockchainType == BlockchainType.Zcash }
+            BlockchainType.Litecoin -> token.isLitecoinMweb
             else -> false
         }
     }

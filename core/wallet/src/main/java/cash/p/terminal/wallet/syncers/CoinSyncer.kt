@@ -157,7 +157,7 @@ class CoinSyncer(
         syncerStateDao.save(keyTokensCount, tokensCount.toString())
     }
 
-    private fun transform(tokenEntities: List<TokenEntity>): List<TokenEntity> {
+    internal fun transform(tokenEntities: List<TokenEntity>): List<TokenEntity> {
         val derivationReferences = TokenType.Derivation.values().map { it.name }
         val addressTypes = TokenType.AddressType.values().map { it.name }
         val addressSpecTypes = TokenType.AddressSpecType.values().map { it.name }

@@ -74,7 +74,7 @@ data class TransactionInfoItem(
     val record: TransactionRecord,
     val externalStatus: TransactionStatus?,
     val lastBlockInfo: LastBlockInfo?,
-    val explorerData: TransactionInfoModule.ExplorerData,
+    val explorerData: List<TransactionInfoModule.ExplorerData>,
     val rates: Map<String, CurrencyValue>,
     val nftMetadata: Map<NftUid, NftAssetBriefMetadata>,
     val hideAmount: Boolean,

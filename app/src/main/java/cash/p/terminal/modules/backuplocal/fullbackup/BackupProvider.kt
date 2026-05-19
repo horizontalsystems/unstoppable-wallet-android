@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.backuplocal.fullbackup
 
-import android.util.Log
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
 import cash.p.terminal.core.ILocalStorage
@@ -16,7 +15,9 @@ import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.managers.RestoreSettingsManager
+import cash.p.terminal.core.managers.RestoreSettingType
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
+import cash.p.terminal.core.restoreSettingTypes
 import cash.p.terminal.core.storage.BlockchainSettingsStorage
 import cash.p.terminal.core.storage.EvmSyncSourceStorage
 import cash.p.terminal.entities.BtcRestoreMode
@@ -54,8 +55,9 @@ import io.horizontalsystems.core.toRawHexString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.security.MessageDigest
-import java.util.Random
+import java.security.SecureRandom
 import java.util.UUID
+import timber.log.Timber
 
 class BackupFileValidator {
     private val gson: Gson by lazy {
@@ -270,11 +272,8 @@ class BackupProvider(
 
         enabledWalletBackups.forEach { enabledWalletBackup ->
             TokenQuery.fromId(enabledWalletBackup.tokenQueryId)?.let { tokenQuery ->
-                if (!enabledWalletBackup.settings.isNullOrEmpty()) {
-                    val restoreSettings = RestoreSettings()
-                    enabledWalletBackup.settings.forEach { (restoreSettingType, value) ->
-                        restoreSettings[restoreSettingType] = value
-                    }
+                val restoreSettings = enabledWalletBackup.restoreSettings(tokenQuery)
+                if (restoreSettings != null) {
                     restoreSettingsManager.save(restoreSettings, account, tokenQuery.blockchainType)
                 } else if (type is AccountType.MnemonicMonero) {
                     // For Monero-only accounts without settings in backup, save height from AccountType
@@ -308,11 +307,8 @@ class BackupProvider(
 
             it.enabledWallets.forEach { enabledWalletBackup ->
                 TokenQuery.fromId(enabledWalletBackup.tokenQueryId)?.let { tokenQuery ->
-                    if (!enabledWalletBackup.settings.isNullOrEmpty()) {
-                        val restoreSettings = RestoreSettings()
-                        enabledWalletBackup.settings.forEach { (restoreSettingType, value) ->
-                            restoreSettings[restoreSettingType] = value
-                        }
+                    val restoreSettings = enabledWalletBackup.restoreSettings(tokenQuery)
+                    if (restoreSettings != null) {
                         restoreSettingsManager.save(
                             restoreSettings,
                             account,
@@ -347,7 +343,7 @@ class BackupProvider(
                 themeService.setThemeType(settings.currentTheme)
                 languageManager.currentLocaleTag = settings.language
             } catch (e: Exception) {
-                Log.e("e", "theme type restore", e)
+                Timber.e(e, "Failed to restore theme or language settings")
             }
         }
 
@@ -966,6 +962,7 @@ class BackupProvider(
         // Characters safe for JSON string values (alphanumeric)
         private const val PADDING_CHARS =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        private val PADDING_RANDOM = SecureRandom()
     }
 
     /**
@@ -1008,15 +1005,12 @@ class BackupProvider(
     }
 
     /**
-     * Generates a random string of specified length.
-     * Uses regular Random (not SecureRandom) since padding is just filler data
-     * that will be encrypted anyway - no cryptographic strength needed.
+     * Padding hides small wallet-count differences in encrypted backups, so its filler must not be predictable.
      */
     private fun generateRandomPadding(length: Int): String {
-        val random = Random()
         val sb = StringBuilder(length)
         repeat(length) {
-            sb.append(PADDING_CHARS[random.nextInt(PADDING_CHARS.length)])
+            sb.append(PADDING_CHARS[PADDING_RANDOM.nextInt(PADDING_CHARS.length)])
         }
         return sb.toString()
     }
@@ -1152,20 +1146,6 @@ class BackupProvider(
         val encrypted = encryptDecryptManager.encrypt(secretText, key, iv)
         val mac = EncryptDecryptManager.generateMac(key, encrypted.toByteArray())
 
-        val wallets = walletStorage.enabledWallets(account.id)
-
-        val enabledWalletsBackup = wallets.mapNotNull {
-            val tokenQuery = TokenQuery.fromId(it.tokenQueryId) ?: return@mapNotNull null
-            val settings = settingsManager.settings(account, tokenQuery.blockchainType).values
-            BackupLocalModule.EnabledWalletBackup(
-                tokenQueryId = it.tokenQueryId,
-                coinName = it.coinName,
-                coinCode = it.coinCode,
-                decimals = it.coinDecimals,
-                settings = settings.ifEmpty { null }
-            )
-        }
-
         val crypto = BackupLocalModule.BackupCrypto(
             cipher = "aes-128-ctr",
             cipherparams = BackupLocalModule.CipherParams(iv),
@@ -1179,12 +1159,56 @@ class BackupProvider(
             crypto = crypto,
             id = id,
             type = BackupLocalModule.getAccountTypeString(account.type),
-            enabledWallets = enabledWalletsBackup,
+            enabledWallets = enabledWalletBackups(account),
             manualBackup = account.isBackedUp,
             fileBackup = account.isFileBackedUp,
             timestamp = System.currentTimeMillis() / 1000,
             version = version
         )
+    }
+
+    internal fun enabledWalletBackups(account: Account): List<BackupLocalModule.EnabledWalletBackup> {
+        return walletStorage.enabledWallets(account.id).mapNotNull {
+            val tokenQuery = TokenQuery.fromId(it.tokenQueryId) ?: return@mapNotNull null
+            BackupLocalModule.EnabledWalletBackup(
+                tokenQueryId = it.tokenQueryId,
+                coinName = it.coinName,
+                coinCode = it.coinCode,
+                decimals = it.coinDecimals,
+                settings = settingsBackup(account, tokenQuery)
+            )
+        }
+    }
+
+    private fun BackupLocalModule.EnabledWalletBackup.restoreSettings(
+        tokenQuery: TokenQuery
+    ): RestoreSettings? {
+        val allowedTypes = tokenQuery.restoreSettingTypes.toSet()
+        if (allowedTypes.isEmpty()) return null
+
+        val filteredSettings = settings
+            ?.filterKeys { it in allowedTypes }
+            .orEmpty()
+        if (filteredSettings.isEmpty()) return null
+
+        return RestoreSettings().apply {
+            filteredSettings.forEach { (restoreSettingType, value) ->
+                this[restoreSettingType] = value
+            }
+        }
+    }
+
+    private fun settingsBackup(
+        account: Account,
+        tokenQuery: TokenQuery
+    ): Map<RestoreSettingType, String>? {
+        val allowedTypes = tokenQuery.restoreSettingTypes.toSet()
+        if (allowedTypes.isEmpty()) return null
+
+        return settingsManager.settings(account, tokenQuery.blockchainType)
+            .values
+            .filterKeys { it in allowedTypes }
+            .ifEmpty { null }
     }
 
 }

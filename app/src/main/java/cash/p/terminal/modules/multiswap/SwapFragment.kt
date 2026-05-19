@@ -354,9 +354,10 @@ private fun SwapMainScreen(
         viewModel<RestoreSettingsViewModel>(factory = manageWalletsFactory)
     val manageWalletsViewModel = viewModel<ManageWalletsViewModel>(factory = manageWalletsFactory)
 
-    restoreSettingsViewModel.openTokenConfigure?.let { token ->
-        fragmentNavController.openRestoreSettingsDialog(token, restoreSettingsViewModel)
-    }
+    fragmentNavController.openRestoreSettingsDialog(
+        token = restoreSettingsViewModel.openTokenConfigure,
+        restoreSettingsViewModel = restoreSettingsViewModel
+    )
 
     LaunchedEffect(manageWalletsViewModel.errorMsg) {
         manageWalletsViewModel.errorMsg?.let {

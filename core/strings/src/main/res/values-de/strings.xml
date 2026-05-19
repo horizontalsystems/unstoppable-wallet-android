@@ -28,7 +28,6 @@
     <string name="Button_Create">Erstellen</string>
     <string name="Button_Advanced">Erweitert</string>
     <string name="hardware_wallet">Hardware-Wallet</string>
-    <string name="hardware_wallet_not_detected_error">Kein NFC-Leser erkannt. Bitte aktivieren, um Hardware-Karten zu nutzen</string>
     <string name="Button_Restore">Wiederherstellen</string>
     <string name="Button_Reset">Zurücksetzen</string>
     <string name="Button_Understand">Ich stimme zu</string>
@@ -45,6 +44,7 @@
     <string name="Button_Delete">Löschen</string>
     <string name="Button_LearnMore">Mehr erfahren</string>
     <string name="hardware_wallet_not_detected">Hardware-Wallet (kein NFC erkannt)</string>
+    <string name="hardware_wallet_not_detected_error">Kein NFC-Leser erkannt. Bitte aktivieren, um Hardware-Karten zu nutzen</string>
     <string name="hardware_wallet_offline_confirmation_title">Offline-Aktivierung</string>
     <string name="hardware_wallet_offline_confirmation_message">Die Kartenprüfung kann den Server nicht erreichen. Prüfe deine Internetverbindung oder erlaube eine Offline-Aktivierung. Bei der Offline-Aktivierung entfallen Serverprüfungen, wodurch die Sicherheit sinkt. Offline-Aktivierung fortsetzen?</string>
     <string name="hardware_wallet_offline_confirmation_positive">Offline fortfahren</string>
@@ -97,6 +97,17 @@
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase-Bestätigung stimmt nicht überein</string>
     <string name="create_wallet_error_failed">Wallet konnte nicht erstellt werden. Bitte versuchen Sie es erneut oder starten Sie die App neu.</string>
     <string name="CreateWallet_PassphraseDescription">Passphrases fügen eine zusätzliche Sicherheitsschicht für Brieftaschen hinzu. Um eine solche Brieftasche wiederherzustellen, benötigt ein Benutzer sowohl mnemonische als auch eine Passphrase.\n\nPassphrasen erleichtern es Benutzern auch, mehrere Multicoin-Wallets mit einem einzigen mnemonischen, aber anderen Passwort zu haben.</string>
+    <!--Languages-->
+    <string name="language_english">Englisch</string>
+    <string name="language_japanese">Japanisch</string>
+    <string name="language_korean">Koreanisch</string>
+    <string name="language_spanish">Spanisch</string>
+    <string name="language_simplified_chinese">Chinesisch (vereinfacht)</string>
+    <string name="language_traditional_chinese">Chinesisch (traditionell)</string>
+    <string name="language_french">Französisch</string>
+    <string name="language_italian">Italienisch</string>
+    <string name="language_czech">Tschechisch</string>
+    <string name="language_portuguese">Portugiesisch</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">⭐️⭐️⭐️⭐️⭐</string>
     <string name="RateApp_Description_Rate_This_App">Gefällt Ihnen P.CASH? Teilen Sie uns Ihr Feedback und Ihre Ideen zur Weiterentwicklung mit.</string>
@@ -105,9 +116,10 @@
     <!--Restore-->
     <string name="Restore_Advanced_Title">Erweitert</string>
     <string name="Restore_Error_MnemonicWordCount">Falsche Wortzahl. Sie muss zwischen 12 und 24 Wörtern liegen. Sie haben eingegeben: %d</string>
+    <string name="invalid_height">Ungültige Höhe</string>
     <string name="restoreheight_title">Startblock für Wiederherstellung</string>
     <string name="restoreheight_hint">Block oder Datum eingeben (JJJJ-MM-TT)</string>
-    <string name="invalid_height">Ungültige Höhe</string>
+    <string name="restoreheight_hint_block_only">Blocknummer eingeben</string>
     <string name="invalid_height_format">Ungültige Höhe, bitte stellen Sie sicher, dass Sie JJJJ-MM-TT oder Geburtshöhe eingegeben haben</string>
     <string name="invalid_qr_code">Ungültiger QR-Code</string>
     <string name="blockchair_height_by_date_connection_error">Keine Verbindung zu Blockchair möglich, um die Höhe nach Datum zu finden</string>
@@ -520,10 +532,7 @@
     <string name="WalletConnect_Pairings_Delete">Löschen</string>
     <string name="WalletConnect_DeleteAllPairs">Alle Paare löschen</string>
 
-    <string name="scan">Scannen</string>
     <string name="connect">Verbinden</string>
-    <string name="adding_tokens">Adding tokens</string>
-    <string name="scan_to_add_mesage">Sie müssen die Karte scannen, um Token hinzuzufügen</string>
     <string name="connect_trezor_to_add_message">Sie müssen Trezor verbinden, um Token hinzuzufügen</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warnung</string>
@@ -1053,7 +1062,6 @@
     <string name="ManageAccounts_CreateNewWallet">Erstellen</string>
     <string name="ManageAccounts_ImportWallet">Wiederherstellen</string>
     <string name="ManageAccounts_WatchAddress">Watch-Adresse</string>
-    <string name="scan_card_to_add">Karte scannen, um Token hinzuzufügen</string>
     <string name="add_via_trezor">Über Trezor hinzufügen</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">aus Datei</string>
@@ -1152,14 +1160,14 @@ Die App ermöglicht es Ihnen, aus Bequemlichkeit ein Backup mit einem einfachen 
     <string name="passphrase_terms_term1">Ich verstehe, dass ich für den Zugriff auf die Mittel die Passphrase genau so eingeben muss, wie sie erstellt wurde, mit denselben Zeichen, Leerzeichen und Groß-/Kleinschreibung.</string>
     <string name="passphrase_terms_term2">Ich verstehe, dass wenn die Passphrase verloren geht oder falsch eingegeben wird, ich meine Brieftasche nicht wiederherstellen kann ohne ihren genauen Wert.</string>
     <string name="passphrase_terms_term3">Ich verstehe, dass bei der Wiederherstellung einer Brieftasche mit einer falschen Passphrase die Anwendung keinen Fehler anzeigt, sondern eine neue (leere) Brieftasche erstellt.</string>
-    <string name="passphrase_terms_term4">Ich verstehe, dass eine solche Brieftasche nur in Anwendungen wiederhergestellt werden kann, die den BIP-39-Standard mit Passphrase unterstützen (z.B. Trezor), und die meisten Anwendungen diese Funktion nicht unterstützen.</string>
+    <string name="passphrase_terms_term4">Ich verstehe, dass eine solche Brieftasche nur in Anwendungen wiederhergestellt werden kann, die den BIP-39-Standard mit Passphrase unterstützen, und die meisten Anwendungen diese Funktion nicht unterstützen.</string>
     <string name="passphrase_terms_term5">Ich verstehe, dass Entwickler keinen Zugriff auf meine Daten haben und mir nicht helfen können, meine Brieftasche wiederherzustellen, da die Anwendung nicht-verwahrend ist.</string>
     <string name="passphrase_terms_term6">Ich verstehe die Risiken und möchte die Passphrase verwenden</string>
     <string-array name="passphrase_terms_checkboxes">
         <item>Ich verstehe, dass &lt;b>ich für den Zugriff auf die Mittel die Passphrase eingeben muss&lt;/b> genau so, wie sie erstellt wurde, mit denselben Zeichen, Leerzeichen und Groß-/Kleinschreibung.</item>
         <item>Ich verstehe, dass &lt;b>wenn die Passphrase verloren geht oder falsch eingegeben wird&lt;/b>, ich &lt;b>meine Brieftasche nicht wiederherstellen kann&lt;/b> ohne ihren genauen Wert.</item>
         <item>Ich verstehe, dass &lt;b>bei der Wiederherstellung einer Brieftasche mit einer falschen Passphrase&lt;/b> die Anwendung keinen Fehler anzeigt, sondern &lt;b>eine neue (leere) Brieftasche erstellt&lt;/b>.</item>
-        <item>Ich verstehe, dass &lt;b>eine solche Brieftasche nur in Anwendungen wiederhergestellt werden kann, die den BIP-39-Standard mit Passphrase unterstützen&lt;/b> (z.B. Trezor), und die meisten Anwendungen &lt;b>diese Funktion nicht unterstützen&lt;/b>.</item>
+        <item>Ich verstehe, dass &lt;b>eine solche Brieftasche nur in Anwendungen wiederhergestellt werden kann, die den BIP-39-Standard mit Passphrase unterstützen&lt;/b>, und die meisten Anwendungen &lt;b>diese Funktion nicht unterstützen&lt;/b>.</item>
         <item>Ich verstehe, dass &lt;b>Entwickler keinen Zugriff auf meine Daten haben&lt;/b> und mir nicht helfen können, meine Brieftasche wiederherzustellen, da die Anwendung &lt;b>nicht-verwahrend&lt;/b> ist.</item>
         <item>&lt;b>Ich verstehe die Risiken und möchte die Passphrase verwenden&lt;/b></item>
     </string-array>
@@ -1227,6 +1235,7 @@ Die App ermöglicht es Ihnen, aus Bequemlichkeit ein Backup mit einem einfachen 
     <string name="zcash_transparent_description">Fully traceable transactions</string>
     <string name="zcash_shielded_description">Private protected transactions</string>
     <string name="zcash_unified_description">Combined transparent and private transactions</string>
+    <string name="token_type_litecoin_mweb">Privates Litecoin</string>
     <!-- Tor -->
     <string name="Tor_Connection_Enable">Tor aktivieren</string>
     <string name="Tor_Connection_Disable">Tor deaktivieren</string>
@@ -1938,6 +1947,8 @@ Die App ermöglicht es Ihnen, aus Bequemlichkeit ein Backup mit einem einfachen 
     <string name="native_library_error_title">Start nicht möglich</string>
     <string name="native_library_error_message">Eine erforderliche Komponente konnte nicht geladen werden. Bitte versuchen Sie, die App aus dem Play Store neu zu installieren.</string>
     <string name="native_library_error_close">Schließen</string>
+    <string name="scan_tangem_card">Tangem-Karte scannen</string>
+    <string name="scan_card_to_add">Karte scannen, um Token hinzuzufügen</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">Tausch abgeschlossen</string>
     <string name="multi_swap_no_providers">Keine Anbieter verfügbar</string>
@@ -1952,5 +1963,14 @@ Die App ermöglicht es Ihnen, aus Bequemlichkeit ein Backup mit einem einfachen 
     <string name="multi_swap_cancel_swap">Tausch abbrechen</string>
     <string name="multi_swap_cancel_swap_warning">Der erste Tausch wurde bereits abgeschlossen. Die Zwischenmünzen befinden sich in Ihrer Wallet und bleiben Ihnen erhalten. Nur der zweite Tauschschritt wird abgebrochen.</string>
     <string name="swap_leg_title">Tausch %d</string>
-    <string name="scan_tangem_card">Tangem-Karte scannen</string>
+    <string name="scan">Scannen</string>
+    <string name="adding_tokens">Token werden hinzugefügt</string>
+    <string name="scan_to_add_message">Sie müssen die Karte scannen, um Token hinzuzufügen</string>
+    <string name="error_hardware_wallet_some_tokens_not_found">Einige Token konnten nicht hinzugefügt werden</string>
+    <string name="send_error_address_unavailable">Adresse nicht verfügbar</string>
+    <string name="send_error_amount_unavailable">Betrag nicht verfügbar</string>
+    <string name="send_error_fee_rate_unavailable">Gebührensatz nicht verfügbar</string>
+    <string name="send_error_balance_unavailable">Guthaben nicht verfügbar</string>
+    <string name="litecoin_mweb_invalid_amount">Ungültiger Litecoin-MWEB-Betrag</string>
+    <string name="litecoin_hardware_extended_public_key_required">Hardware-Litecoin-Wallet benötigt einen erweiterten öffentlichen Schlüssel</string>
 </resources>

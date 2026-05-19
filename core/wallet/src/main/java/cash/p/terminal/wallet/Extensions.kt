@@ -10,8 +10,27 @@ fun Token.isMonero() =
     (tokenQuery.blockchainType == BlockchainType.Monero &&
             tokenQuery.tokenType == TokenType.Native)
 
+val Token.isLitecoinMweb: Boolean
+    get() = isLitecoinMweb(blockchainType, type)
+
+val TokenQuery.isLitecoinMweb: Boolean
+    get() = isLitecoinMweb(blockchainType, tokenType)
+
+private fun isLitecoinMweb(blockchainType: BlockchainType, tokenType: TokenType): Boolean {
+    return blockchainType == BlockchainType.Litecoin && tokenType == TokenType.Mweb
+}
+
+fun Collection<Wallet>.litecoinMwebAccountIds(): Set<String> =
+    mapNotNull { wallet ->
+        wallet.account.id.takeIf { wallet.token.isLitecoinMweb }
+    }.toSet()
+
 val Token.badge: String?
     get() = when (val tokenType = type) {
+        TokenType.Mweb -> {
+            "MWEB"
+        }
+
         is TokenType.Derived -> {
             tokenType.derivation.accountTypeDerivation.value.uppercase()
         }
@@ -57,6 +76,10 @@ val Token.protocolType: String?
 
 val TokenQuery.protocolType: String?
     get() = when (tokenType) {
+        TokenType.Mweb -> {
+            "MWEB"
+        }
+
         is TokenType.Native -> {
             when (blockchainType) {
                 BlockchainType.Ethereum,
@@ -118,6 +141,7 @@ val TokenQuery.customCoinUid: String
 
 val TokenType.meta: String?
     get() = when (this) {
+        TokenType.Mweb -> "MWEB"
         is TokenType.Derived -> this.derivation.name
         is TokenType.AddressTyped -> this.type.name
         is TokenType.AddressSpecTyped -> this.type.name

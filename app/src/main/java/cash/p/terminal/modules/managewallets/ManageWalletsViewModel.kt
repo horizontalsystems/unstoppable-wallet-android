@@ -156,7 +156,11 @@ class ManageWalletsViewModel(
         }
         updateNeedToShowScanToAddButton()
 
-        errorMsg = if (notFoundTokens.isNotEmpty()) App.instance.getString(R.string.error_hardware_wallet_some_tokens_not_found) else null
+        errorMsg = if (notFoundTokens.isNotEmpty()) {
+            App.instance.getString(R.string.error_hardware_wallet_some_tokens_not_found)
+        } else {
+            null
+        }
 
         hardwarePublicKeyStorage.save(publicKeys)
         existingPublicKeys = hardwarePublicKeyStorage.getAllPublicKeys(account.id)

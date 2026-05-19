@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.usecase.ValidateMoneroHeightUseCase
+import cash.p.terminal.modules.enablecoin.restoresettings.BirthdayHeightConfigUiState
 import cash.p.terminal.modules.enablecoin.restoresettings.TokenConfig
 import cash.p.terminal.strings.helpers.Translator
 
@@ -14,7 +15,7 @@ class MoneroConfigureViewModel(
 ) : ViewModel() {
 
     var uiState by mutableStateOf(
-        MoneroConfigUIState(
+        BirthdayHeightConfigUiState(
             birthdayHeight = "",
             restoreAsNew = true,
         )
@@ -47,7 +48,7 @@ class MoneroConfigureViewModel(
     }
 
     fun onDoneClick() {
-        val heightDetected =  if (uiState.restoreAsNew) {
+        val heightDetected = if (uiState.restoreAsNew) {
             validateMoneroHeightUseCase.getTodayHeight()
         } else {
             validateMoneroHeightUseCase(uiState.birthdayHeight)
@@ -65,11 +66,8 @@ class MoneroConfigureViewModel(
             }
         )
     }
-}
 
-data class MoneroConfigUIState(
-    val birthdayHeight: String,
-    val restoreAsNew: Boolean,
-    val closeWithResult: TokenConfig? = null,
-    var errorHeight: String? = null
-)
+    fun onClosed() {
+        uiState = uiState.copy(closeWithResult = null)
+    }
+}

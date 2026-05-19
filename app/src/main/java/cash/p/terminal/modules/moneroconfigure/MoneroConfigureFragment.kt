@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.activity.addCallback
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -47,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.modules.enablecoin.restoresettings.BirthdayHeightConfigUiState
 import cash.p.terminal.modules.enablecoin.restoresettings.TokenConfig
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.navigation.popBackStackSafely
@@ -76,6 +78,7 @@ class MoneroConfigureFragment : BaseComposeFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         activity?.onBackPressedDispatcher?.addCallback(this) {
+            isEnabled = false
             close(findNavController())
         }
     }
@@ -88,7 +91,10 @@ class MoneroConfigureFragment : BaseComposeFragment() {
             viewModel.setInitialConfig(initialConfig)
         }
         MoneroConfigureScreen(
-            onCloseWithResult = { closeWithConfigt(it, navController) },
+            onCloseWithResult = {
+                viewModel.onClosed()
+                closeWithConfig(it, navController)
+            },
             onCloseClick = { close(navController) },
             onRestoreNew = viewModel::onRestoreNew,
             onSetBirthdayHeight = viewModel::setBirthdayHeight,
@@ -97,9 +103,9 @@ class MoneroConfigureFragment : BaseComposeFragment() {
         )
     }
 
-    private fun closeWithConfigt(config: TokenConfig, navController: NavController) {
+    private fun closeWithConfig(config: TokenConfig, navController: NavController) {
         navController.setNavigationResultX(Result(config))
-        navController.popBackStackSafely()
+        navController.popBackStack()
     }
 
     private fun close(navController: NavController) {
@@ -122,7 +128,10 @@ fun MoneroConfigureScreen(
     onRestoreNew: (Boolean) -> Unit,
     onSetBirthdayHeight: (String) -> Unit,
     onDoneClick: () -> Unit,
-    uiState: MoneroConfigUIState,
+    uiState: BirthdayHeightConfigUiState,
+    title: String? = null,
+    blockchainType: BlockchainType = BlockchainType.Monero,
+    @StringRes heightHintRes: Int = R.string.restoreheight_hint,
     windowInsets: WindowInsets = NavigationBarDefaults.windowInsets
 ) {
 
@@ -142,7 +151,13 @@ fun MoneroConfigureScreen(
 
     Scaffold(
         containerColor = ComposeAppTheme.colors.tyler,
-        topBar = { ZcashAppBar(onCloseClick = onCloseClick) }
+        topBar = {
+            BirthdayHeightAppBar(
+                title = title ?: stringResource(R.string.restore_monero),
+                blockchainType = blockchainType,
+                onCloseClick = onCloseClick
+            )
+        }
     ) {
         Column(modifier = Modifier.padding(it)) {
             Column(
@@ -191,7 +206,7 @@ fun MoneroConfigureScreen(
                         initial = uiState.birthdayHeight,
                         pasteEnabled = false,
                         singleLine = true,
-                        hint = stringResource(R.string.restoreheight_hint),
+                        hint = stringResource(heightHintRes),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Ascii,
                             imeAction = ImeAction.Done
@@ -270,7 +285,9 @@ private fun OptionCell(
 }
 
 @Composable
-fun ZcashAppBar(
+fun BirthdayHeightAppBar(
+    title: String,
+    blockchainType: BlockchainType,
     onCloseClick: () -> Unit,
 ) {
     AppBar(
@@ -281,13 +298,13 @@ fun ZcashAppBar(
                         .padding(end = 16.dp)
                         .size(24.dp),
                     painter = rememberAsyncImagePainterWithFallback(
-                        model = BlockchainType.Monero.imageUrl,
+                        model = blockchainType.imageUrl,
                         error = painterResource(R.drawable.ic_platform_placeholder_32)
                     ),
                     contentDescription = null
                 )
                 title3_leah(
-                    text = stringResource(R.string.restore_monero),
+                    text = title,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -313,7 +330,7 @@ private fun Preview_MoneroConfigure() {
             onRestoreNew = {},
             onSetBirthdayHeight = {},
             onDoneClick = {},
-            uiState = MoneroConfigUIState(
+            uiState = BirthdayHeightConfigUiState(
                 birthdayHeight = "",
                 restoreAsNew = true,
                 closeWithResult = null,

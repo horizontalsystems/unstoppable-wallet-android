@@ -3,7 +3,9 @@ package cash.p.terminal.modules.restoreaccount.restoreblockchains
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
+import cash.p.terminal.core.managers.LitecoinBirthdayProvider
 import cash.p.terminal.core.managers.RestoreSettingsManager
+import cash.p.terminal.core.managers.ZcashBirthdayProvider
 import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensService
 import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
@@ -22,8 +24,10 @@ object RestoreBlockchainsModule {
     ) : ViewModelProvider.Factory {
 
         private val restoreSettingsManager: RestoreSettingsManager by inject(RestoreSettingsManager::class.java)
+        private val zcashBirthdayProvider: ZcashBirthdayProvider by inject(ZcashBirthdayProvider::class.java)
+        private val litecoinBirthdayProvider: LitecoinBirthdayProvider by inject(LitecoinBirthdayProvider::class.java)
         private val restoreSettingsService by lazy {
-            RestoreSettingsService(restoreSettingsManager, App.zcashBirthdayProvider)
+            RestoreSettingsService(restoreSettingsManager, zcashBirthdayProvider, litecoinBirthdayProvider)
         }
         private val blockchainTokensService by lazy {
             BlockchainTokensService()

@@ -39,16 +39,14 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.Caution
 import cash.p.terminal.core.composablePage
-import cash.p.terminal.core.composablePopup
 import cash.p.terminal.modules.backuplocal.fullbackup.OtherBackupItems
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.main.MainModule
-import cash.p.terminal.modules.moneroconfigure.MoneroConfigureScreen
-import cash.p.terminal.modules.moneroconfigure.MoneroConfigureViewModel
+import cash.p.terminal.modules.restoreaccount.addRestoreTokenConfigureRoutes
+import cash.p.terminal.modules.restoreaccount.openRestoreTokenConfigure
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
-import cash.p.terminal.modules.zcashconfigure.ZcashConfigureScreen
 import cash.p.terminal.navigation.popBackStackSafely
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.BaseComposeFragment
@@ -68,11 +66,9 @@ import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_lucian
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import org.koin.compose.viewmodel.koinViewModel
 
 class RestoreLocalFragment : BaseComposeFragment() {
 
@@ -141,54 +137,12 @@ private fun RestoreLocalNavHost(
             ManageWalletsScreen(
                 mainViewModel = mainViewModel,
                 openConfigure = { token, initialConfig ->
-                    if (token.blockchainType == BlockchainType.Zcash) {
-                        mainViewModel.setZCashInitialConfig(initialConfig)
-                        navController.navigate("zcash_configure")
-                    } else if (token.blockchainType == BlockchainType.Monero) {
-                        mainViewModel.setMoneroInitialConfig(initialConfig)
-                        navController.navigate("monero_configure")
-                    }
+                    navController.openRestoreTokenConfigure(token, initialConfig, mainViewModel)
                 },
                 onBackClick = { navController.popBackStackSafely() }
             ) { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) }
         }
-        composablePopup("zcash_configure") {
-            ZcashConfigureScreen(
-                initialConfig = mainViewModel.tokenZCashInitialConfig,
-                onCloseWithResult = { config ->
-                    mainViewModel.setZCashConfig(config)
-                    mainViewModel.setZCashInitialConfig(null)
-                    navController.popBackStackSafely()
-                },
-                onCloseClick = {
-                    mainViewModel.cancelZCashConfig = true
-                    mainViewModel.setZCashInitialConfig(null)
-                    navController.popBackStackSafely()
-                }
-            )
-        }
-        composablePopup("monero_configure") {
-            val viewModel: MoneroConfigureViewModel = koinViewModel()
-            LaunchedEffect(mainViewModel.tokenMoneroInitialConfig) {
-                viewModel.setInitialConfig(mainViewModel.tokenMoneroInitialConfig)
-            }
-            MoneroConfigureScreen(
-                onCloseWithResult = {
-                    mainViewModel.setMoneroConfig(it)
-                    mainViewModel.setMoneroInitialConfig(null)
-                    navController.popBackStackSafely()
-                },
-                onCloseClick = {
-                    mainViewModel.cancelMoneroConfig = true
-                    mainViewModel.setMoneroInitialConfig(null)
-                    navController.popBackStackSafely()
-                },
-                onRestoreNew = viewModel::onRestoreNew,
-                onSetBirthdayHeight = viewModel::setBirthdayHeight,
-                onDoneClick = viewModel::onDoneClick,
-                uiState = viewModel.uiState,
-            )
-        }
+        addRestoreTokenConfigureRoutes(navController, mainViewModel)
     }
 }
 

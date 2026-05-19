@@ -28,8 +28,8 @@
     <string name="Button_Create">Créer</string>
     <string name="Button_Advanced">Avancé</string>
     <string name="hardware_wallet">Portefeuille matériel</string>
-    <string name="hardware_wallet_not_detected_error">Aucun lecteur NFC détecté, activez-le pour utiliser les cartes matérielles</string>
     <string name="hardware_wallet_not_detected">Portefeuille matériel (NFC non détecté)</string>
+    <string name="hardware_wallet_not_detected_error">Aucun lecteur NFC détecté, activez-le pour utiliser les cartes matérielles</string>
     <string name="hardware_wallet_offline_confirmation_title">Activation hors ligne</string>
     <string name="hardware_wallet_offline_confirmation_message">La vérification de l’authenticité de la carte ne peut pas accéder au serveur. Vérifiez votre connexion Internet ou autorisez l’activation hors ligne. L’activation hors ligne contourne les vérifications serveur et réduit le niveau de sécurité. Poursuivre l’activation hors ligne ?</string>
     <string name="hardware_wallet_offline_confirmation_positive">Continuer hors ligne</string>
@@ -98,6 +98,17 @@
     <string name="CreateWallet_Error_InvalidConfirmation">La confirmation de la phrase d\'authentification ne correspond pas</string>
     <string name="create_wallet_error_failed">Impossible de créer le portefeuille. Veuillez réessayer ou redémarrer l\'application.</string>
     <string name="CreateWallet_PassphraseDescription">Les phrases de passe ajoutent une couche de sécurité supplémentaire pour les portefeuilles. Pour restaurer un tel portefeuille, un utilisateur a besoin à la fois de mnémonique et d\'une phrase de passe.\n\nLes phrases de passe permettent également aux utilisateurs d\'avoir facilement de nombreux portefeuilles multi-pièces en utilisant un seul mot de passe mnémonique mais différent.</string>
+    <!--Languages-->
+    <string name="language_english">Anglais</string>
+    <string name="language_japanese">Japonais</string>
+    <string name="language_korean">Coréen</string>
+    <string name="language_spanish">Espagnol</string>
+    <string name="language_simplified_chinese">Chinois (simplifié)</string>
+    <string name="language_traditional_chinese">Chinois (Traditionnel)</string>
+    <string name="language_french">Français</string>
+    <string name="language_italian">Italien</string>
+    <string name="language_czech">Tchèque</string>
+    <string name="language_portuguese">Portugais</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">⭐️⭐️⭐️⭐️⭐</string>
     <string name="RateApp_Description_Rate_This_App">Vous aimez P.CASH? Partagez vos commentaires et vos idées pour aller plus loin.</string>
@@ -106,9 +117,10 @@
     <!--Restore-->
     <string name="Restore_Advanced_Title">Avancé</string>
     <string name="Restore_Error_MnemonicWordCount">Le nombre de mots est incorrect. Il doit être compris entre 12 et 24 mots. Vous avez saisi : %d</string>
+    <string name="invalid_height">Hauteur invalide</string>
     <string name="restoreheight_title">Bloc initial de restauration</string>
     <string name="restoreheight_hint">Indiquez le bloc ou la date (AAAA-MM-JJ)</string>
-    <string name="invalid_height">Hauteur invalide</string>
+    <string name="restoreheight_hint_block_only">Saisissez le numéro de bloc</string>
     <string name="invalid_height_format">Hauteur invalide, assurez-vous d\'avoir entré AAAA-MM-JJ ou la hauteur de naissance</string>
     <string name="invalid_qr_code">Code QR invalide</string>
     <string name="blockchair_height_by_date_connection_error">Impossible de se connecter à Blockchair pour trouver la hauteur par date</string>
@@ -522,10 +534,7 @@
     <string name="WalletConnect_Pairings_Delete">Supprimer</string>
     <string name="WalletConnect_DeleteAllPairs">Supprimer toutes les paires</string>
 
-    <string name="scan">Scanner</string>
     <string name="connect">Connecter</string>
-    <string name="adding_tokens">Adding tokens</string>
-    <string name="scan_to_add_mesage">Vous devez scanner la carte pour ajouter des jetons</string>
     <string name="connect_trezor_to_add_message">Vous devez connecter Trezor pour ajouter des jetons</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Attention</string>
@@ -581,7 +590,7 @@
     <string name="swap_create_wallet_description_with_zcash">You don\'t have all chosen wallets, need to create first,\nto exchange ZEC you need to create transparent address first</string>
     <string name="Swap_Approve">Approuver</string>
     <string name="Swap_Approving">Approbation</string>
-    <string name="Swap_Swapping">Échange en cours</string>
+    <string name="Swap_Swapping">Swap en cours</string>
     <string name="Swap_Quoting">Quotation</string>
     <string name="Swap_Providers">Service</string>
     <string name="Swap_SwapProvider_Title">Fournisseur de swap</string>
@@ -1059,7 +1068,6 @@
     <string name="ManageAccounts_CreateNewWallet">Créer</string>
     <string name="ManageAccounts_ImportWallet">Restaurer</string>
     <string name="ManageAccounts_WatchAddress">Adresse à suivre</string>
-    <string name="scan_card_to_add">Scanner la carte pour ajouter un jeton</string>
     <string name="add_via_trezor">Ajouter via Trezor</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">À partir du fichier</string>
@@ -1158,14 +1166,14 @@ La aplicación permite crear una copia de seguridad con una contraseña sencilla
     <string name="passphrase_terms_term1">Je comprends que pour accéder aux fonds, je dois entrer la phrase secrète exactement comme elle a été créée, avec les mêmes caractères, espaces et casse.</string>
     <string name="passphrase_terms_term2">Je comprends que si la phrase secrète est perdue ou entrée incorrectement, je ne pourrai pas récupérer mon portefeuille sans sa valeur exacte.</string>
     <string name="passphrase_terms_term3">Je comprends que lors de la restauration d\'un portefeuille avec une phrase secrète incorrecte, l\'application n\'affichera pas d\'erreur, mais créera un nouveau portefeuille (vide).</string>
-    <string name="passphrase_terms_term4">Je comprends que un tel portefeuille ne peut être restauré que dans des applications prenant en charge la norme BIP-39 avec phrase secrète (par exemple, Trezor), et la plupart des applications ne prennent pas en charge cette fonctionnalité.</string>
+    <string name="passphrase_terms_term4">Je comprends que un tel portefeuille ne peut être restauré que dans des applications prenant en charge la norme BIP-39 avec phrase secrète, et la plupart des applications ne prennent pas en charge cette fonctionnalité.</string>
     <string name="passphrase_terms_term5">Je comprends que les développeurs n\'ont pas accès à mes données et ne peuvent pas m\'aider à récupérer mon portefeuille, car l\'application est non-custodiale.</string>
     <string name="passphrase_terms_term6">Je comprends les risques et je souhaite utiliser la phrase secrète</string>
     <string-array name="passphrase_terms_checkboxes">
         <item>Je comprends que &lt;b>pour accéder aux fonds, je dois entrer la phrase secrète&lt;/b> exactement comme elle a été créée, avec les mêmes caractères, espaces et casse.</item>
         <item>Je comprends que &lt;b>si la phrase secrète est perdue ou entrée incorrectement&lt;/b>, je &lt;b>ne pourrai pas récupérer mon portefeuille&lt;/b> sans sa valeur exacte.</item>
         <item>Je comprends que &lt;b>lors de la restauration d\'un portefeuille avec une phrase secrète incorrecte&lt;/b>, l\'application n\'affichera pas d\'erreur, mais &lt;b>créera un nouveau portefeuille (vide)&lt;/b>.</item>
-        <item>Je comprends que &lt;b>un tel portefeuille ne peut être restauré que dans des applications prenant en charge la norme BIP-39 avec phrase secrète&lt;/b> (par exemple, Trezor), et la plupart des applications &lt;b>ne prennent pas en charge cette fonctionnalité&lt;/b>.</item>
+        <item>Je comprends que &lt;b>un tel portefeuille ne peut être restauré que dans des applications prenant en charge la norme BIP-39 avec phrase secrète&lt;/b>, et la plupart des applications &lt;b>ne prennent pas en charge cette fonctionnalité&lt;/b>.</item>
         <item>Je comprends que &lt;b>les développeurs n\'ont pas accès à mes données&lt;/b> et ne peuvent pas m\'aider à récupérer mon portefeuille, car l\'application est &lt;b>non-custodiale&lt;/b>.</item>
         <item>&lt;b>Je comprends les risques et je souhaite utiliser la phrase secrète&lt;/b></item>
     </string-array>
@@ -1234,6 +1242,7 @@ La aplicación permite crear una copia de seguridad con una contraseña sencilla
     <string name="zcash_transparent_description">Fully traceable transactions</string>
     <string name="zcash_shielded_description">Private protected transactions</string>
     <string name="zcash_unified_description">Combined transparent and private transactions</string>
+    <string name="token_type_litecoin_mweb">Litecoin privé</string>
     <!-- Tor -->
     <string name="Tor_Connection_Enable">Activer Tor</string>
     <string name="Tor_Connection_Disable">Désactiver Tor</string>
@@ -1944,6 +1953,8 @@ La aplicación permite crear una copia de seguridad con una contraseña sencilla
     <string name="native_library_error_title">Impossible de démarrer</string>
     <string name="native_library_error_message">Un composant requis n\'a pas pu être chargé. Veuillez réinstaller l\'application depuis le Play Store.</string>
     <string name="native_library_error_close">Fermer</string>
+    <string name="scan_tangem_card">Scanner la carte Tangem</string>
+    <string name="scan_card_to_add">Scanner la carte pour ajouter un jeton</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">Échange terminé</string>
     <string name="multi_swap_no_providers">Aucun fournisseur disponible</string>
@@ -1958,5 +1969,14 @@ La aplicación permite crear una copia de seguridad con una contraseña sencilla
     <string name="multi_swap_cancel_swap">Annuler l\'échange</string>
     <string name="multi_swap_cancel_swap_warning">Le premier échange a déjà été effectué. Les jetons intermédiaires sont dans votre portefeuille et resteront les vôtres. Seule la deuxième étape de l\'échange sera annulée.</string>
     <string name="swap_leg_title">Échange %d</string>
-    <string name="scan_tangem_card">Scanner la carte Tangem</string>
+    <string name="scan">Scanner</string>
+    <string name="adding_tokens">Ajout de jetons</string>
+    <string name="scan_to_add_message">Vous devez scanner la carte pour ajouter des jetons</string>
+    <string name="error_hardware_wallet_some_tokens_not_found">Certains jetons n’ont pas pu être ajoutés</string>
+    <string name="send_error_address_unavailable">Adresse indisponible</string>
+    <string name="send_error_amount_unavailable">Montant indisponible</string>
+    <string name="send_error_fee_rate_unavailable">Taux de frais indisponible</string>
+    <string name="send_error_balance_unavailable">Solde indisponible</string>
+    <string name="litecoin_mweb_invalid_amount">Montant Litecoin MWEB invalide</string>
+    <string name="litecoin_hardware_extended_public_key_required">Le portefeuille matériel Litecoin nécessite une clé publique étendue</string>
 </resources>

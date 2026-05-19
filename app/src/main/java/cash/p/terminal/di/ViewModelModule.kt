@@ -21,6 +21,7 @@ import cash.p.terminal.modules.manageaccount.backupkey.BackupKeyViewModel
 import cash.p.terminal.modules.main.MainViewModel
 import cash.p.terminal.modules.pin.unlock.PinUnlockViewModel
 import cash.p.terminal.modules.moneroconfigure.MoneroConfigureViewModel
+import cash.p.terminal.modules.mwebconfigure.MwebConfigureViewModel
 import cash.p.terminal.modules.premium.about.AboutPremiumViewModel
 import cash.p.terminal.modules.premium.settings.PushNotificationsViewModel
 import cash.p.terminal.modules.premium.settings.PremiumSettingsViewModel
@@ -85,6 +86,7 @@ val viewModelModule = module {
     viewModel { params -> BlockchainStatusViewModel(provider = params.get(), dispatcherProvider = get()) }
     viewModelOf(::AppCacheViewModel)
     viewModelOf(::MoneroConfigureViewModel)
+    viewModelOf(::MwebConfigureViewModel)
     viewModelOf(::AboutPremiumViewModel)
     viewModelOf(::PremiumSettingsViewModel)
     viewModelOf(::PushNotificationsViewModel)

@@ -185,29 +185,11 @@ abstract class BitcoinBaseAdapter(
                 transactionRecordsSubject
             }
 
-            FilterTransactionType.Incoming -> {
-                transactionRecordsSubject
-                    .map { records ->
-                        records.filter {
-                            it.transactionRecordType == TransactionRecordType.BITCOIN_INCOMING ||
-                                    (it.transactionRecordType == TransactionRecordType.BITCOIN_OUTGOING &&
-                                            (it as BitcoinTransactionRecord).sentToSelf)
-                        }
-                    }
-                    .filter {
-                        it.isNotEmpty()
-                    }
-            }
-
+            FilterTransactionType.Incoming,
             FilterTransactionType.Outgoing -> {
                 transactionRecordsSubject
-                    .map { records ->
-                        records.filter { it.transactionRecordType == TransactionRecordType.BITCOIN_OUTGOING }
-                    }
-                    .filter {
-                        it.isNotEmpty()
-                    }
-
+                    .map { records -> filterBitcoinTransactionRecords(records, transactionType) }
+                    .filter { it.isNotEmpty() }
             }
 
             FilterTransactionType.Swap,
@@ -217,6 +199,29 @@ abstract class BitcoinBaseAdapter(
         }
 
         return observable.toFlowable(BackpressureStrategy.BUFFER)
+    }
+
+    protected fun filterBitcoinTransactionRecords(
+        records: List<TransactionRecord>,
+        transactionType: FilterTransactionType
+    ): List<TransactionRecord> {
+        return when (transactionType) {
+            FilterTransactionType.All -> records
+            FilterTransactionType.Incoming -> {
+                records.filter {
+                    it.transactionRecordType == TransactionRecordType.BITCOIN_INCOMING ||
+                        (it.transactionRecordType == TransactionRecordType.BITCOIN_OUTGOING &&
+                            (it as BitcoinTransactionRecord).sentToSelf)
+                }
+            }
+            FilterTransactionType.Outgoing -> {
+                records.filter { it.transactionRecordType == TransactionRecordType.BITCOIN_OUTGOING }
+            }
+            FilterTransactionType.Swap,
+            FilterTransactionType.Approve -> {
+                emptyList()
+            }
+        }
     }
 
     override val debugInfo: String = ""
@@ -733,5 +738,6 @@ data class BitcoinFeeInfo(
     val unspentOutputs: List<UnspentOutput>,
     val fee: BigDecimal,
     val changeValue: BigDecimal?,
-    val changeAddress: Address?
+    val changeAddress: Address?,
+    val selectedUtxoCount: Int = unspentOutputs.size
 )

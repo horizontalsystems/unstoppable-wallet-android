@@ -28,7 +28,6 @@
     <string name="Button_Create">생성하기</string>
     <string name="Button_Advanced">고급의</string>
     <string name="hardware_wallet">하드웨어 지갑</string>
-    <string name="hardware_wallet_not_detected_error">NFC 리더가 감지되지 않았습니다. 하드웨어 카드를 사용하려면 활성화하세요</string>
     <string name="Button_Restore">복구</string>
     <string name="Button_Reset">초기화</string>
     <string name="Button_Understand">이해합니다</string>
@@ -45,6 +44,7 @@
     <string name="Button_Delete">삭제</string>
     <string name="Button_LearnMore">자세히 보기</string>
     <string name="hardware_wallet_not_detected">하드웨어 지갑 (NFC 감지되지 않음)</string>
+    <string name="hardware_wallet_not_detected_error">NFC 리더가 감지되지 않았습니다. 하드웨어 카드를 사용하려면 활성화하세요</string>
     <string name="hardware_wallet_offline_confirmation_title">오프라인 활성화</string>
     <string name="hardware_wallet_offline_confirmation_message">서버에서 카드의 진위를 확인할 수 없습니다. 인터넷 연결을 확인하거나 오프라인 활성화를 허용해 주세요. 오프라인 활성화 시 서버 검증이 생략되어 보안 보장이 낮아집니다. 오프라인으로 계속 진행하시겠습니까?</string>
     <string name="hardware_wallet_offline_confirmation_positive">오프라인으로 계속</string>
@@ -92,12 +92,23 @@
     <string name="ConfirmPassphrase">확인</string>
     <string name="CreateWallet_N_WordsRecommended">%s 단어 (권장)</string>
     <string name="CreateWallet_N_Words">%s 단어</string>
-    <string name="create_wallet_n_words_monero">%s 단어 (Monero 전용)</string>
+    <string name="create_wallet_n_words_monero">%s 단어(Monero 전용)</string>
     <string name="CreateWallet_Error_EmptyPassphrase">암호 문구는 필수 입력 사항입니다</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">지원되는 기호만 사용하세요:  <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">암호 확인이 일치하지 않습니다</string>
     <string name="create_wallet_error_failed">지갑 생성에 실패했습니다. 다시 시도하거나 앱을 재시작해 주세요.</string>
     <string name="CreateWallet_PassphraseDescription">암호는 지갑에 대한 추가 보안 계층을 추가합니다. 이러한 지갑을 복원하려면 사용자는 니모닉과 암호가 모두 필요했습니다.\n\n암호는 또한 사용자가 하나의 니모닉을 사용하지만 다른 암호를 사용하여 여러 코인 지갑을 쉽게 가질 수 있도록 합니다.</string>
+    <!--Languages-->
+    <string name="language_english">영어</string>
+    <string name="language_japanese">일본어</string>
+    <string name="language_korean">한국어</string>
+    <string name="language_spanish">스페인어</string>
+    <string name="language_simplified_chinese">중국어(간체)</string>
+    <string name="language_traditional_chinese">중국어 (번체)</string>
+    <string name="language_french">프랑스어</string>
+    <string name="language_italian">이탈리아어</string>
+    <string name="language_czech">체코어</string>
+    <string name="language_portuguese">포르투갈어</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">⭐️⭐️⭐️⭐️⭐</string>
     <string name="RateApp_Description_Rate_This_App">P.CASH을 즐기고 계십니까? 더 발전하기 위해 피드백과 아이디어를 공유해 주세요.</string>
@@ -106,9 +117,10 @@
     <!--Restore-->
     <string name="Restore_Advanced_Title">고급의</string>
     <string name="Restore_Error_MnemonicWordCount">단어 수가 틀렸습니다. 12 개 와 24개 사이여야 합니다. 이렇게 입력했습니다: %d</string>
+    <string name="invalid_height">잘못된 높이</string>
     <string name="restoreheight_title">복원 시작 블록</string>
     <string name="restoreheight_hint">블록 또는 날짜를 입력하세요(YYYY-MM-DD)</string>
-    <string name="invalid_height">잘못된 높이</string>
+    <string name="restoreheight_hint_block_only">블록 번호 입력</string>
     <string name="invalid_height_format">잘못된 높이, YYYY-MM-DD 형식이나 출생 높이를 입력했는지 확인하세요</string>
     <string name="invalid_qr_code">잘못된 QR 코드</string>
     <string name="blockchair_height_by_date_connection_error">날짜로 높이를 찾기 위해 Blockchair에 연결할 수 없습니다</string>
@@ -526,10 +538,7 @@
     <string name="WalletConnect_Pairings_Delete">삭제</string>
     <string name="WalletConnect_DeleteAllPairs">모든 쌍 삭제</string>
 
-    <string name="scan">스캔</string>
     <string name="connect">연결</string>
-    <string name="adding_tokens">Adding tokens</string>
-    <string name="scan_to_add_mesage">토큰을 추가하려면 카드를 스캔해야 합니다</string>
     <string name="connect_trezor_to_add_message">토큰을 추가하려면 Trezor를 연결해야 합니다</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">경고</string>
@@ -1062,7 +1071,6 @@
     <string name="ManageAccounts_CreateNewWallet">만들기</string>
     <string name="ManageAccounts_ImportWallet">다음에서 복원하기</string>
     <string name="ManageAccounts_WatchAddress">주소 관찰</string>
-    <string name="scan_card_to_add">토큰을 추가하려면 카드를 스캔하세요</string>
     <string name="add_via_trezor">Trezor로 추가</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">파일에서</string>
@@ -1161,14 +1169,14 @@
     <string name="passphrase_terms_term1">자금에 접근하려면 암호문을 생성할 때와 정확히 동일한 문자, 공백, 대소문자로 입력해야 함을 이해합니다.</string>
     <string name="passphrase_terms_term2">암호문을 분실하거나 잘못 입력하면 정확한 값 없이는 지갑을 복구할 수 없음을 이해합니다.</string>
     <string name="passphrase_terms_term3">잘못된 암호문으로 지갑을 복원할 경우 앱은 오류를 표시하지 않고 새로운 (빈) 지갑을 생성함을 이해합니다.</string>
-    <string name="passphrase_terms_term4">이러한 지갑은 BIP-39 표준과 암호문을 지원하는 앱(예: Trezor)에서만 복원 가능하며, 대부분의 앱은 이 기능을 지원하지 않음을 이해합니다.</string>
+    <string name="passphrase_terms_term4">이러한 지갑은 BIP-39 표준과 암호문을 지원하는 앱에서만 복원 가능하며, 대부분의 앱은 이 기능을 지원하지 않음을 이해합니다.</string>
     <string name="passphrase_terms_term5">개발자는 제 데이터에 접근할 수 없으며 앱이 비수탁형이기 때문에 지갑 복구를 도와줄 수 없음을 이해합니다.</string>
     <string name="passphrase_terms_term6">위험을 이해하고 암호문을 사용하고 싶습니다</string>
     <string-array name="passphrase_terms_checkboxes">
         <item>&lt;b>자금에 접근하려면 암호문을 입력해야 함&lt;/b>을 이해하며, 생성할 때와 정확히 동일한 문자, 공백, 대소문자로 입력해야 합니다.</item>
         <item>&lt;b>암호문을 분실하거나 잘못 입력하면&lt;/b> 정확한 값 없이는 &lt;b>지갑을 복구할 수 없음&lt;/b>을 이해합니다.</item>
         <item>&lt;b>잘못된 암호문으로 지갑을 복원할 경우&lt;/b> 앱은 오류를 표시하지 않고 &lt;b>새로운 (빈) 지갑을 생성함&lt;/b>을 이해합니다.</item>
-        <item>&lt;b>이러한 지갑은 BIP-39 표준과 암호문을 지원하는 앱에서만 복원 가능&lt;/b>하며(예: Trezor), 대부분의 앱은 &lt;b>이 기능을 지원하지 않음&lt;/b>을 이해합니다.</item>
+        <item>&lt;b>이러한 지갑은 BIP-39 표준과 암호문을 지원하는 앱에서만 복원 가능&lt;/b>하며, 대부분의 앱은 &lt;b>이 기능을 지원하지 않음&lt;/b>을 이해합니다.</item>
         <item>&lt;b>개발자는 제 데이터에 접근할 수 없으며&lt;/b> 앱이 &lt;b>비수탁형&lt;/b>이기 때문에 지갑 복구를 도와줄 수 없음을 이해합니다.</item>
         <item>&lt;b>위험을 이해하고 암호문을 사용하고 싶습니다&lt;/b></item>
     </string-array>
@@ -1236,6 +1244,7 @@
     <string name="zcash_transparent_description">Fully traceable transactions</string>
     <string name="zcash_shielded_description">Private protected transactions</string>
     <string name="zcash_unified_description">Combined transparent and private transactions</string>
+    <string name="token_type_litecoin_mweb">비공개 라이트코인</string>
     <!-- Tor -->
     <string name="Tor_Connection_Enable">토르 활성화</string>
     <string name="Tor_Connection_Disable">토르 비활성화</string>
@@ -1941,6 +1950,7 @@
     <string name="native_library_error_message">필수 구성 요소를 로드하지 못했습니다. Play 스토어에서 앱을 다시 설치해 주세요.</string>
     <string name="native_library_error_close">닫기</string>
     <string name="scan_tangem_card">Tangem 카드 스캔</string>
+    <string name="scan_card_to_add">토큰을 추가하려면 카드를 스캔하세요</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">교환 완료</string>
     <string name="multi_swap_no_providers">사용 가능한 공급자 없음</string>
@@ -1955,4 +1965,14 @@
     <string name="multi_swap_cancel_swap">스왑 취소</string>
     <string name="multi_swap_cancel_swap_warning">첫 번째 스왑은 이미 완료되었습니다. 중간 코인은 지갑에 있으며 계속 보유됩니다. 두 번째 스왑 단계만 취소됩니다.</string>
     <string name="swap_leg_title">스왑 %d</string>
+    <string name="scan">스캔</string>
+    <string name="adding_tokens">토큰 추가 중</string>
+    <string name="scan_to_add_message">토큰을 추가하려면 카드를 스캔해야 합니다</string>
+    <string name="error_hardware_wallet_some_tokens_not_found">일부 토큰을 추가할 수 없습니다</string>
+    <string name="send_error_address_unavailable">주소를 사용할 수 없습니다</string>
+    <string name="send_error_amount_unavailable">금액을 사용할 수 없습니다</string>
+    <string name="send_error_fee_rate_unavailable">수수료율을 사용할 수 없습니다</string>
+    <string name="send_error_balance_unavailable">잔액을 사용할 수 없습니다</string>
+    <string name="litecoin_mweb_invalid_amount">Litecoin MWEB 금액이 올바르지 않습니다</string>
+    <string name="litecoin_hardware_extended_public_key_required">하드웨어 Litecoin 지갑에는 확장 공개 키가 필요합니다</string>
 </resources>

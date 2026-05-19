@@ -2,6 +2,7 @@ package cash.p.terminal.modules.transactionInfo
 
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.TestDispatcherProvider
+import cash.p.terminal.core.TransactionExplorerData
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PoisonAddressManager
@@ -102,6 +103,9 @@ class TransactionInfoServiceTest : KoinTest {
         every { transactionRecord.timestamp } returns 1000L
         every { adapter.explorerTitle } returns "Explorer"
         every { adapter.getTransactionUrl(any()) } returns "https://explorer.com/tx/0xabc"
+        every {
+            adapter.getTransactionExplorerData(any())
+        } returns listOf(TransactionExplorerData("Explorer", "https://explorer.com/tx/0xabc"))
         every { adapter.lastBlockInfo } returns null
         every { adapter.lastBlockUpdatedFlowable } returns lastBlockSubject.toFlowable(
             io.reactivex.BackpressureStrategy.LATEST
@@ -170,6 +174,22 @@ class TransactionInfoServiceTest : KoinTest {
 
         val item = service.transactionInfoItemFlow.first()
         assertEquals(null, item.externalStatus)
+    }
+
+    @Test
+    fun transactionInfoItem_multipleExplorerData_preserved() {
+        val explorerData = listOf(
+            TransactionExplorerData("blockchair.com", "https://blockchair.com/litecoin/transaction/hash"),
+            TransactionExplorerData("mwebexplorer.com", "https://www.mwebexplorer.com/blocks/block/900")
+        )
+        every { adapter.getTransactionExplorerData(transactionRecord) } returns explorerData
+
+        val service = createService(userSwapTransactionId = null)
+
+        assertEquals(
+            explorerData.map { TransactionInfoModule.ExplorerData(it.title, it.url) },
+            service.transactionInfoItem.explorerData
+        )
     }
 
     @Test

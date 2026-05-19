@@ -14,12 +14,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.composablePage
-import cash.p.terminal.core.composablePopup
 import cash.p.terminal.modules.createaccount.passphraseterms.PassphraseTermsScreen
 import cash.p.terminal.modules.createaccount.passphraseterms.PassphraseTermsViewModel
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
-import cash.p.terminal.modules.moneroconfigure.MoneroConfigureScreen
-import cash.p.terminal.modules.moneroconfigure.MoneroConfigureViewModel
 import cash.p.terminal.modules.restoreaccount.duplicatewallet.DuplicateWalletScreen
 import cash.p.terminal.modules.restoreaccount.duplicatewallet.DuplicateWalletViewModel
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
@@ -27,7 +24,6 @@ import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreMenuModule
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreMenuViewModel
 import cash.p.terminal.modules.restoreaccount.restoremnemonic.RestorePhrase
 import cash.p.terminal.modules.restoreaccount.restoremnemonicnonstandard.RestorePhraseNonStandard
-import cash.p.terminal.modules.zcashconfigure.ZcashConfigureScreen
 import cash.p.terminal.navigation.navigateUpSafely
 import cash.p.terminal.navigation.popBackStackSafely
 import cash.p.terminal.strings.helpers.Translator.getString
@@ -35,7 +31,6 @@ import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.HudHelper
 import cash.p.terminal.ui_compose.getInput
 import cash.p.terminal.wallet.IAccountManager
-import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.hdwalletkit.Language
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -208,13 +203,7 @@ private fun RestoreAccountNavHost(
             ManageWalletsScreen(
                 mainViewModel = mainViewModel,
                 openConfigure = { token, initialConfig ->
-                    if (token.blockchainType == BlockchainType.Zcash) {
-                        mainViewModel.setZCashInitialConfig(initialConfig)
-                        navController.navigate("zcash_configure")
-                    } else if (token.blockchainType == BlockchainType.Monero) {
-                        mainViewModel.setMoneroInitialConfig(initialConfig)
-                        navController.navigate("monero_configure")
-                    }
+                    navController.openRestoreTokenConfigure(token, initialConfig, mainViewModel)
                 },
                 onBackClick = { navController.popBackStackSafely() }
             ) { fragmentNavController.popBackStack(popUpToInclusiveId, inclusive) }
@@ -226,42 +215,6 @@ private fun RestoreAccountNavHost(
                 onBackClick = { navController.popBackStackSafely() }
             )
         }
-        composablePopup("zcash_configure") {
-            ZcashConfigureScreen(
-                initialConfig = mainViewModel.tokenZCashInitialConfig,
-                onCloseWithResult = { config ->
-                    mainViewModel.setZCashConfig(config)
-                    mainViewModel.setZCashInitialConfig(null)
-                    navController.popBackStackSafely()
-                },
-                onCloseClick = {
-                    mainViewModel.cancelZCashConfig = true
-                    mainViewModel.setZCashInitialConfig(null)
-                    navController.popBackStackSafely()
-                }
-            )
-        }
-        composablePopup("monero_configure") {
-            val viewModel: MoneroConfigureViewModel = koinViewModel()
-            LaunchedEffect(mainViewModel.tokenMoneroInitialConfig) {
-                viewModel.setInitialConfig(mainViewModel.tokenMoneroInitialConfig)
-            }
-            MoneroConfigureScreen(
-                onCloseWithResult = {
-                    mainViewModel.setMoneroConfig(it)
-                    mainViewModel.setMoneroInitialConfig(null)
-                    navController.popBackStackSafely()
-                },
-                onCloseClick = {
-                    mainViewModel.cancelMoneroConfig = true
-                    mainViewModel.setMoneroInitialConfig(null)
-                    navController.popBackStackSafely()
-                },
-                onRestoreNew = viewModel::onRestoreNew,
-                onSetBirthdayHeight = viewModel::setBirthdayHeight,
-                onDoneClick = viewModel::onDoneClick,
-                uiState = viewModel.uiState,
-            )
-        }
+        addRestoreTokenConfigureRoutes(navController, mainViewModel)
     }
 }

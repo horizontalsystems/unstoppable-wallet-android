@@ -17530,5 +17530,6 @@ INSERT OR REPLACE INTO TokenEntity VALUES('litecoin','litecoin','derived',8,'Bip
 INSERT OR REPLACE INTO TokenEntity VALUES('litecoin','litecoin','derived',8,'Bip49');
 INSERT OR REPLACE INTO TokenEntity VALUES('litecoin','litecoin','derived',8,'Bip84');
 INSERT OR REPLACE INTO TokenEntity VALUES('litecoin','litecoin','derived',8,'Bip86');
+INSERT OR REPLACE INTO TokenEntity VALUES('litecoin','litecoin','mweb',8,'');
 INSERT OR REPLACE INTO TokenEntity VALUES('bitcoin-cash','bitcoin-cash','address_type',8,'Type0');
 INSERT OR REPLACE INTO TokenEntity VALUES('bitcoin-cash','bitcoin-cash','address_type',8,'Type145');

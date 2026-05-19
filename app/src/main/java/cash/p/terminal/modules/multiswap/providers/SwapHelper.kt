@@ -16,6 +16,7 @@ import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.wallet.NoActiveAccount
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.isLitecoinMweb
 import cash.p.terminal.wallet.useCases.WalletUseCase
 import io.horizontalsystems.core.entities.BlockchainType
 import org.koin.java.KoinJavaComponent.inject
@@ -60,6 +61,9 @@ object SwapHelper {
                 }
 
                 BlockchainType.Litecoin -> {
+                    if (token.isLitecoinMweb) {
+                        throw SwapError.NoDestinationAddress()
+                    }
                     LitecoinAdapter.firstAddress(account.type, token.type)
                 }
 
@@ -119,7 +123,7 @@ object SwapHelper {
             val approveInProgress =
                 approveTransaction != null && approveTransaction.value?.zeroValue != true
 
-            return ActionApprove(
+            ActionApprove(
                 amountIn,
                 routerAddress,
                 token,
@@ -133,7 +137,7 @@ object SwapHelper {
 
         return token.blockchainType is BlockchainType.Tron
                 && tokenType is TokenType.Eip20
-                && tokenType.address.lowercase() == "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t".lowercase()
+                && tokenType.address.equals("TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t", ignoreCase = true)
     }
 
 }

@@ -748,10 +748,11 @@ class TransactionInfoViewItemFactory(
                 )
             )
         }
-        if (transactionItem.record.transactionHash.isNotEmpty()) {
-            itemSections.add(
-                TransactionViewItemFactoryHelper.getExplorerSectionItems(transactionItem.explorerData)
-            )
+        if (transactionItem.record.transactionHash.isNotEmpty() && transactionItem.explorerData.isNotEmpty()) {
+            val explorerItems = TransactionViewItemFactoryHelper.getExplorerSectionItems(transactionItem.explorerData)
+            if (explorerItems.isNotEmpty()) {
+                itemSections.add(explorerItems)
+            }
         }
         transactionItem.transactionStatusUrl?.let {
             itemSections.add(

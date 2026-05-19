@@ -1,10 +1,12 @@
 package cash.p.terminal.core.managers
 
 import cash.p.terminal.core.isNative
+import cash.p.terminal.core.tryOrNull
 import cash.p.terminal.entities.PendingTransactionEntity
 import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.isLitecoinMweb
 import cash.p.terminal.wallet.entities.BalanceData
 import io.horizontalsystems.core.DispatcherProvider
 import kotlinx.coroutines.CoroutineScope
@@ -64,8 +66,8 @@ class PendingBalanceCalculator(
 
     fun adjustBalance(wallet: Wallet, rawBalance: BalanceData): BalanceData {
         val pendingList = pendingCache[wallet.account.id] ?: return rawBalance
-        val deduction = calculateDeduction(pendingList, wallet.token, rawBalance.available)
-        return rawBalance.copy(available = rawBalance.available - deduction)
+        val adjustedAvailable = calculateAdjustedAvailable(pendingList, wallet.token, rawBalance.available)
+        return rawBalance.copy(available = adjustedAvailable)
     }
 
     /**
@@ -74,7 +76,7 @@ class PendingBalanceCalculator(
      * - Bitcoin/Zcash: SDK deducts immediately → we apply 0 deduction
      * - Mixed: SDK partially deducted → we apply remaining deduction
      */
-    private fun calculateDeduction(
+    private fun calculateAdjustedAvailable(
         pendingList: List<PendingTransactionEntity>,
         token: Token,
         currentSdkBalance: BigDecimal
@@ -84,7 +86,7 @@ class PendingBalanceCalculator(
                 it.tokenTypeId == token.type.id &&
                 it.blockchainTypeUid == token.blockchainType.uid
         }
-        if (relevantPending.isEmpty()) return BigDecimal.ZERO
+        if (relevantPending.isEmpty()) return currentSdkBalance
 
         // Fee is only deducted from native token balance (not ERC-20/TRC-20/Jetton)
         val isNativeToken = token.type.isNative
@@ -113,28 +115,41 @@ class PendingBalanceCalculator(
         // 4. Our deduction = total pending - what SDK already deducted
         val ourDeduction = (totalPendingAmount - sdkAlreadyDeducted)
             .coerceAtLeast(BigDecimal.ZERO)
+        val adjustedAfterDeduction = currentSdkBalance - ourDeduction.coerceAtMost(currentSdkBalance)
+        val expectedMwebAvailable = if (token.isLitecoinMweb) {
+            (baselineSdkBalance - totalPendingAmount).coerceAtLeast(BigDecimal.ZERO)
+        } else {
+            null
+        }
+        val mwebZeroSnapshotFallbackAvailable = expectedMwebAvailable?.takeIf {
+            currentSdkBalance.signum() == 0 && it.signum() > 0
+        }
 
         // 5. Check for confirmed TXs to cleanup (per-TX confirmation detection)
         // Collect IDs first to avoid race condition during async deletion
-        val idsToDelete = relevantPending.filter { entity ->
-            val amount = entity.amountAtomic.toBigDecimal().movePointLeft(token.decimals)
-            val fee = if (isNativeToken) {
-                entity.feeAtomic?.toBigDecimal()?.movePointLeft(token.decimals)
-                    ?: BigDecimal.ZERO
-            } else BigDecimal.ZERO
-            val sdkAtCreation = entity.sdkBalanceAtCreationAtomic.toBigDecimal()
-                .movePointLeft(token.decimals)
-            val expectedAfterConfirm = sdkAtCreation - amount - fee
-            val tolerance = (amount + fee) * BigDecimal("0.05") // 5% tolerance
-            (currentSdkBalance - expectedAfterConfirm).abs() <= tolerance
-        }.map { it.id }
+        val idsToDelete = if (expectedMwebAvailable != null) {
+            // MWEB replaces spent confirmed inputs with unconfirmed change right after broadcast.
+            emptyList()
+        } else {
+            relevantPending.filter { entity ->
+                val amount = entity.amountAtomic.toBigDecimal().movePointLeft(token.decimals)
+                val fee = if (isNativeToken) {
+                    entity.feeAtomic?.toBigDecimal()?.movePointLeft(token.decimals)
+                        ?: BigDecimal.ZERO
+                } else BigDecimal.ZERO
+                val sdkAtCreation = entity.sdkBalanceAtCreationAtomic.toBigDecimal()
+                    .movePointLeft(token.decimals)
+                val expectedAfterConfirm = sdkAtCreation - amount - fee
+                val tolerance = (amount + fee) * BigDecimal("0.05") // 5% tolerance
+                (currentSdkBalance - expectedAfterConfirm).abs() <= tolerance
+            }.map { it.id }
+        }
         if (idsToDelete.isNotEmpty()) {
             scope.launch {
-                runCatching { pendingRepository.deleteByIds(idsToDelete) }
+                tryOrNull { pendingRepository.deleteByIds(idsToDelete) }
             }
         }
 
-        // 6. Safety: never deduct more than current balance
-        return ourDeduction.coerceAtMost(currentSdkBalance)
+        return mwebZeroSnapshotFallbackAvailable ?: adjustedAfterDeduction
     }
 }

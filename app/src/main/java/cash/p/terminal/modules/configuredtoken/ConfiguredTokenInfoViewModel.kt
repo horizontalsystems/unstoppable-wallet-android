@@ -68,6 +68,10 @@ class ConfiguredTokenInfoViewModel(
                 ConfiguredTokenInfoType.Bch
             }
 
+            TokenType.Mweb -> {
+                BirthdayHeight(getBirthdayHeight(token))
+            }
+
             TokenType.Native -> null
             is TokenType.AddressSpecTyped -> when (token.blockchainType) {
                 BlockchainType.Zcash -> {

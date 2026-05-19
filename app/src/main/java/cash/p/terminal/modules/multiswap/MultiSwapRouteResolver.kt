@@ -5,6 +5,7 @@ import cash.p.terminal.core.isNative
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.TokenType
 
 import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.entities.BlockchainType
@@ -33,7 +34,7 @@ class MultiSwapRouteResolver(
         amountIn: BigDecimal,
         settings: Map<String, Any?>,
     ): MultiSwapRoute? = withContext(dispatcherProvider.io) {
-        if (tokenIn.type.isNative && tokenOut.type.isNative) return@withContext null
+        if (tokenIn.isRouteNative && tokenOut.isRouteNative) return@withContext null
 
         val candidates = buildCandidateIntermediates(tokenIn, tokenOut)
         if (candidates.isEmpty()) return@withContext null
@@ -55,8 +56,8 @@ class MultiSwapRouteResolver(
 
     @VisibleForTesting
     internal fun buildCandidateIntermediates(tokenIn: Token, tokenOut: Token): List<Token> {
-        val intermediateA = if (!tokenIn.type.isNative) marketKit.nativeToken(tokenIn.blockchainType) else null
-        val intermediateB = if (!tokenOut.type.isNative) marketKit.nativeToken(tokenOut.blockchainType) else null
+        val intermediateA = if (!tokenIn.isRouteNative) marketKit.nativeToken(tokenIn.blockchainType) else null
+        val intermediateB = if (!tokenOut.isRouteNative) marketKit.nativeToken(tokenOut.blockchainType) else null
 
         return buildList {
             if (intermediateA != null && intermediateA != tokenOut) add(intermediateA)
@@ -89,6 +90,12 @@ class MultiSwapRouteResolver(
             }
         }.awaitAll().filterNotNull()
     }
+
+    private val Token.isRouteNative: Boolean
+        get() = type.isNative && !isLitecoinMwebRouteToken
+
+    private val Token.isLitecoinMwebRouteToken: Boolean
+        get() = blockchainType == BlockchainType.Litecoin && type == TokenType.Mweb
 
     private suspend fun filterSupported(
         providers: List<IMultiSwapProvider>,

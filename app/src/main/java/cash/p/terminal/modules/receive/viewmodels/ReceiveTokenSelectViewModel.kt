@@ -18,6 +18,7 @@ import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.WalletFactory
 import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.entities.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.useCases.GetHardwarePublicKeyForWalletUseCase
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
@@ -80,52 +81,47 @@ class ReceiveTokenSelectViewModel(
                 CoinForReceiveType.Single(wallet)
             }
 
-            eligibleTokens.all { it.type is TokenType.Derived } -> {
-                val activeWallets =
-                    walletManager.activeWallets.filter { it.coin == fullCoin.coin }
-
-                when {
-                    activeWallets.isEmpty() -> {
-                        eligibleTokens.find { it.type.isDefault }?.let { default ->
-                            val wallet = createWallet(default) ?: return null
-                            CoinForReceiveType.Single(wallet)
-                        }
-                    }
-
-                    activeWallets.size == 1 -> {
-                        CoinForReceiveType.Single(activeWallets.first())
-                    }
-
-                    else -> {
-                        CoinForReceiveType.MultipleDerivations
-                    }
-                }
+            eligibleTokens.all { it.type is TokenType.Derived } ||
+                eligibleTokens.all { it.isLitecoinAddressVariant() } -> {
+                receiveType(fullCoin, eligibleTokens, CoinForReceiveType.MultipleDerivations)
             }
 
             eligibleTokens.all { it.type is TokenType.AddressTyped } -> {
-                val activeWallets =
-                    walletManager.activeWallets.filter { it.coin == fullCoin.coin }
-
-                when {
-                    activeWallets.isEmpty() -> {
-                        eligibleTokens.find { it.type.isDefault }?.let { default ->
-                            val wallet = createWallet(default) ?: return null
-                            CoinForReceiveType.Single(wallet)
-                        }
-                    }
-
-                    activeWallets.size == 1 -> {
-                        CoinForReceiveType.Single(activeWallets.first())
-                    }
-
-                    else -> {
-                        CoinForReceiveType.MultipleAddressTypes
-                    }
-                }
+                receiveType(fullCoin, eligibleTokens, CoinForReceiveType.MultipleAddressTypes)
             }
 
             else -> CoinForReceiveType.MultipleBlockchains
         }
+    }
+
+    private suspend fun receiveType(
+        fullCoin: FullCoin,
+        eligibleTokens: List<Token>,
+        multipleType: CoinForReceiveType
+    ): CoinForReceiveType? {
+        val activeWallets = walletManager.activeWallets.filter { it.coin == fullCoin.coin }
+
+        return when {
+            activeWallets.isEmpty() -> {
+                eligibleTokens.find { it.type.isDefault }?.let { default ->
+                    val wallet = createWallet(default) ?: return null
+                    CoinForReceiveType.Single(wallet)
+                }
+            }
+
+            activeWallets.size == 1 -> {
+                CoinForReceiveType.Single(activeWallets.first())
+            }
+
+            else -> {
+                multipleType
+            }
+        }
+    }
+
+    private fun Token.isLitecoinAddressVariant(): Boolean {
+        return blockchainType == BlockchainType.Litecoin &&
+            (type is TokenType.Derived || type == TokenType.Mweb)
     }
 
     private suspend fun getOrCreateWallet(token: Token): Wallet? {

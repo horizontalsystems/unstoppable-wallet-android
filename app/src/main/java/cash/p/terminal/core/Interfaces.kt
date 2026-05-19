@@ -137,7 +137,12 @@ interface ITransactionsAdapter {
     ): Flow<List<TransactionRecord>>
 
     fun getTransactionUrl(transactionHash: String): String
+
+    fun getTransactionExplorerData(record: TransactionRecord): List<TransactionExplorerData> =
+        listOf(TransactionExplorerData(explorerTitle, getTransactionUrl(record.transactionHash)))
 }
+
+data class TransactionExplorerData(val title: String, val url: String?)
 
 class UnsupportedFilterException : Exception()
 
@@ -168,6 +173,7 @@ interface ISendBitcoinAdapter {
     ): BitcoinFeeInfo?
 
     fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
+
     suspend fun send(
         amount: BigDecimal,
         address: String,
@@ -184,6 +190,10 @@ interface ISendBitcoinAdapter {
     fun isTransactionInSendQueue(txHash: String): Boolean
 
     fun satoshiToBTC(value: Long): BigDecimal
+}
+
+interface IMwebAddressValidator {
+    fun isMwebAddress(address: String): Boolean
 }
 
 internal interface ISendEthereumAdapter : IBalanceAdapter {

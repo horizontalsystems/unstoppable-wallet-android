@@ -3,6 +3,8 @@ package cash.p.terminal.modules.receive.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
+import cash.p.terminal.core.description
+import cash.p.terminal.core.title
 import cash.p.terminal.modules.receive.ui.AddressFormatItem
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.accountTypeDerivation
@@ -14,15 +16,26 @@ class DerivationSelectViewModel(coinUid: String, walletManager: IWalletManager) 
             it.coin.uid == coinUid
         }
         .mapNotNull { wallet ->
-            val derivation =
-                (wallet.token.type as? TokenType.Derived)?.derivation ?: return@mapNotNull null
-            val accountTypeDerivation = derivation.accountTypeDerivation
+            when (val type = wallet.token.type) {
+                is TokenType.Derived -> {
+                    val accountTypeDerivation = type.derivation.accountTypeDerivation
+                    AddressFormatItem(
+                        title = accountTypeDerivation.addressType + accountTypeDerivation.recommended,
+                        subtitle = accountTypeDerivation.value.uppercase(),
+                        wallet = wallet
+                    )
+                }
 
-            AddressFormatItem(
-                title = accountTypeDerivation.addressType + accountTypeDerivation.recommended,
-                subtitle = accountTypeDerivation.value.uppercase(),
-                wallet = wallet
-            )
+                TokenType.Mweb -> {
+                    AddressFormatItem(
+                        title = type.description,
+                        subtitle = type.title,
+                        wallet = wallet
+                    )
+                }
+
+                else -> null
+            }
         }
 
     class Factory(private val coinUid: String) : ViewModelProvider.Factory {

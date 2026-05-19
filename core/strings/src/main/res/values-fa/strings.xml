@@ -28,7 +28,6 @@
     <string name="Button_Create">به وجود آوردن</string>
     <string name="Button_Advanced">Advanced</string>
     <string name="hardware_wallet">کیف پول سخت‌افزاری</string>
-    <string name="hardware_wallet_not_detected_error">خواننده NFC شناسایی نشد، برای استفاده از کارت‌های سخت‌افزاری آن را فعال کنید</string>
     <string name="Button_Restore">بازگرداني</string>
     <string name="Button_Reset">تنظیم مجدد</string>
     <string name="Button_Understand">می فهمم</string>
@@ -45,6 +44,7 @@
     <string name="Button_Delete">Delete</string>
     <string name="Button_LearnMore">Learn More</string>
     <string name="hardware_wallet_not_detected">کیف پول سخت‌افزاری (NFC شناسایی نشد)</string>
+    <string name="hardware_wallet_not_detected_error">خواننده NFC شناسایی نشد، برای استفاده از کارت‌های سخت‌افزاری آن را فعال کنید</string>
     <string name="hardware_wallet_offline_confirmation_title">فعال‌سازی آفلاین</string>
     <string name="hardware_wallet_offline_confirmation_message">امکان بررسی اصالت کارت روی سرور وجود ندارد. اتصال اینترنت خود را بررسی کنید یا فعال‌سازی آفلاین را مجاز کنید. هنگام فعال‌سازی آفلاین، بررسی‌های سرور انجام نمی‌شود و سطح اطمینان امنیتی کاهش می‌یابد. آیا می‌خواهید فعال‌سازی آفلاین را ادامه دهید؟</string>
     <string name="hardware_wallet_offline_confirmation_positive">ادامه به‌صورت آفلاین</string>
@@ -92,12 +92,23 @@
     <string name="ConfirmPassphrase">تاييد</string>
     <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
     <string name="CreateWallet_N_Words">%s کلمه</string>
-    <string name="create_wallet_n_words_monero">%s کلمه (فقط Monero)</string>
+    <string name="create_wallet_n_words_monero">%s کلمه (فقط مونرو)</string>
     <string name="CreateWallet_Error_EmptyPassphrase">رمز عبور نمی تواند خالی باشد</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">تأیید عبارت عبور مطابقت ندارد</string>
     <string name="create_wallet_error_failed">ایجاد کیف پول ناموفق بود. لطفاً دوباره تلاش کنید یا برنامه را مجدداً راه‌اندازی کنید.</string>
     <string name="CreateWallet_PassphraseDescription">Passphrases add additional security layer for wallets. To restore such wallet a user required both a recovery phrase as well as a passphrase.\n\nPassphrases also make it easy for users to have many multi-coin wallets using a single mnemonic but different passwords.</string>
+    <!--Languages-->
+    <string name="language_english">انگلیسی</string>
+    <string name="language_japanese">ژاپنی</string>
+    <string name="language_korean">کره ای</string>
+    <string name="language_spanish">اسپانیایی</string>
+    <string name="language_simplified_chinese">زبان چینی ساده شده</string>
+    <string name="language_traditional_chinese">چینی - سنتی</string>
+    <string name="language_french">فرانسوی</string>
+    <string name="language_italian">ایتالیایی</string>
+    <string name="language_czech">کشور چک</string>
+    <string name="language_portuguese">پرتغالی</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">⭐️⭐️⭐️⭐️⭐️</string>
     <string name="RateApp_Description_Rate_This_App">آیا از کارکردن با توقف ناپذیر لذت می برید؟ نظرات و ایده های خود را برای پیشبرد بیشتر با ما به اشتراک بگذارید.</string>
@@ -106,9 +117,10 @@
     <!--Restore-->
     <string name="Restore_Advanced_Title">Advanced</string>
     <string name="Restore_Error_MnemonicWordCount">تعداد کلمات اشتباه. باید بین ۱۲ تا ۱۴ کلمه باشد. شما وارد کردید: %d</string>
+    <string name="invalid_height">ارتفاع نامعتبر</string>
     <string name="restoreheight_title">بلوک شروع برای بازیابی</string>
     <string name="restoreheight_hint">بلوک یا تاریخ را وارد کنید (YYYY-MM-DD)</string>
-    <string name="invalid_height">ارتفاع نامعتبر</string>
+    <string name="restoreheight_hint_block_only">شماره بلوک را وارد کنید</string>
     <string name="invalid_height_format">ارتفاع نامعتبر، مطمئن شوید که تاریخ را به صورت YYYY-MM-DD یا ارتفاع تولد وارد کرده‌اید</string>
     <string name="invalid_qr_code">کد QR نامعتبر</string>
     <string name="blockchair_height_by_date_connection_error">امکان اتصال به Blockchair برای یافتن ارتفاع بر اساس تاریخ وجود ندارد</string>
@@ -518,10 +530,7 @@
     <string name="WalletConnect_NoConnection">هیچ dApp متصلی ندارید</string>
     <string name="WalletConnect_PendingRequests">درخواست‌های در انتظار</string>
     <string name="WalletConnect_ActiveWallet">کیف پول فعال</string>
-    <string name="scan">اسکن</string>
     <string name="connect">اتصال</string>
-    <string name="adding_tokens">Adding tokens</string>
-    <string name="scan_to_add_mesage">برای افزودن توکن‌ها باید کارت را اسکن کنید</string>
     <string name="connect_trezor_to_add_message">برای افزودن توکن‌ها باید Trezor را متصل کنید</string>
     <string name="WalletConnect_Unnamed">بدون نام</string>
     <string name="WalletConnect_Pairings">جفت‌سازی‌ها</string>
@@ -1065,7 +1074,6 @@
     <string name="ManageAccounts_CreateNewWallet">به وجود آوردن</string>
     <string name="ManageAccounts_ImportWallet">بازگرداني</string>
     <string name="ManageAccounts_WatchAddress">مشاهده آدرس</string>
-    <string name="scan_card_to_add">اسکن کارت برای افزودن توکن</string>
     <string name="add_via_trezor">اضافه کردن از طریق Trezor</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">from File</string>
@@ -1164,14 +1172,14 @@
     <string name="passphrase_terms_term1">من درک می‌کنم که برای دسترسی به وجوه، باید عبارت عبور را دقیقاً همان‌طور که ایجاد شده وارد کنم، با همان کاراکترها، فاصله‌ها و بزرگ/کوچکی حروف.</string>
     <string name="passphrase_terms_term2">من درک می‌کنم که اگر عبارت عبور گم شود یا اشتباه وارد شود، بدون مقدار دقیق آن نمی‌توانم کیف پول خود را بازیابی کنم.</string>
     <string name="passphrase_terms_term3">من درک می‌کنم که هنگام بازیابی کیف پول با عبارت عبور نادرست، برنامه خطایی نشان نمی‌دهد، بلکه یک کیف پول جدید (خالی) ایجاد می‌کند.</string>
-    <string name="passphrase_terms_term4">من درک می‌کنم که چنین کیف پولی فقط در برنامه‌هایی که استاندارد BIP-39 با عبارت عبور را پشتیبانی می‌کنند قابل بازیابی است (مثلاً Trezor)، و بیشتر برنامه‌ها این ویژگی را پشتیبانی نمی‌کنند.</string>
+    <string name="passphrase_terms_term4">من درک می‌کنم که چنین کیف پولی فقط در برنامه‌هایی که استاندارد BIP-39 با عبارت عبور را پشتیبانی می‌کنند قابل بازیابی است، و بیشتر برنامه‌ها این ویژگی را پشتیبانی نمی‌کنند.</string>
     <string name="passphrase_terms_term5">من درک می‌کنم که توسعه‌دهندگان به داده‌های من دسترسی ندارند و نمی‌توانند به من در بازیابی کیف پولم کمک کنند، زیرا برنامه غیر امانی است.</string>
     <string name="passphrase_terms_term6">من ریسک‌ها را درک می‌کنم و می‌خواهم از عبارت عبور استفاده کنم</string>
     <string-array name="passphrase_terms_checkboxes">
         <item>من درک می‌کنم که &lt;b>برای دسترسی به وجوه، باید عبارت عبور را وارد کنم&lt;/b> دقیقاً همان‌طور که ایجاد شده، با همان کاراکترها، فاصله‌ها و بزرگ/کوچکی حروف.</item>
         <item>من درک می‌کنم که &lt;b>اگر عبارت عبور گم شود یا اشتباه وارد شود&lt;/b>، بدون مقدار دقیق آن &lt;b>نمی‌توانم کیف پول خود را بازیابی کنم&lt;/b>.</item>
         <item>من درک می‌کنم که &lt;b>هنگام بازیابی کیف پول با عبارت عبور نادرست&lt;/b>، برنامه خطایی نشان نمی‌دهد، بلکه &lt;b>یک کیف پول جدید (خالی) ایجاد می‌کند&lt;/b>.</item>
-        <item>من درک می‌کنم که &lt;b>چنین کیف پولی فقط در برنامه‌هایی که استاندارد BIP-39 با عبارت عبور را پشتیبانی می‌کنند قابل بازیابی است&lt;/b> (مثلاً Trezor)، و بیشتر برنامه‌ها &lt;b>این ویژگی را پشتیبانی نمی‌کنند&lt;/b>.</item>
+        <item>من درک می‌کنم که &lt;b>چنین کیف پولی فقط در برنامه‌هایی که استاندارد BIP-39 با عبارت عبور را پشتیبانی می‌کنند قابل بازیابی است&lt;/b>، و بیشتر برنامه‌ها &lt;b>این ویژگی را پشتیبانی نمی‌کنند&lt;/b>.</item>
         <item>من درک می‌کنم که &lt;b>توسعه‌دهندگان به داده‌های من دسترسی ندارند&lt;/b> و نمی‌توانند به من در بازیابی کیف پولم کمک کنند، زیرا برنامه &lt;b>غیر امانی&lt;/b> است.</item>
         <item>&lt;b>من ریسک‌ها را درک می‌کنم و می‌خواهم از عبارت عبور استفاده کنم&lt;/b></item>
     </string-array>
@@ -1240,6 +1248,7 @@
     <string name="zcash_transparent_description">Fully traceable transactions</string>
     <string name="zcash_shielded_description">Private protected transactions</string>
     <string name="zcash_unified_description">Combined transparent and private transactions</string>
+    <string name="token_type_litecoin_mweb">لایت‌کوین خصوصی</string>
     <!-- Tor -->
     <string name="Tor_Connection_Enable">فعال کردن Tor</string>
     <string name="Tor_Connection_Disable">Tor را غیرفعال کنید</string>
@@ -1950,6 +1959,8 @@
     <string name="native_library_error_title">راه‌اندازی ناموفق</string>
     <string name="native_library_error_message">بارگذاری یک جزء ضروری ناموفق بود. لطفاً برنامه را از Play Store دوباره نصب کنید.</string>
     <string name="native_library_error_close">بستن</string>
+    <string name="scan_tangem_card">اسکن کارت Tangem</string>
+    <string name="scan_card_to_add">اسکن کارت برای افزودن توکن</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">مبادله انجام شد</string>
     <string name="multi_swap_no_providers">هیچ ارائه‌دهنده‌ای موجود نیست</string>
@@ -1964,5 +1975,14 @@
     <string name="multi_swap_cancel_swap">لغو تبادل</string>
     <string name="multi_swap_cancel_swap_warning">اولین تبادل قبلاً انجام شده است. سکه‌های واسطه در کیف پول شما هستند و متعلق به شما باقی می‌مانند. فقط مرحله دوم تبادل لغو خواهد شد.</string>
     <string name="swap_leg_title">مبادله %d</string>
-    <string name="scan_tangem_card">اسکن کارت Tangem</string>
+    <string name="scan">اسکن</string>
+    <string name="adding_tokens">در حال افزودن توکن‌ها</string>
+    <string name="scan_to_add_message">برای افزودن توکن‌ها باید کارت را اسکن کنید</string>
+    <string name="error_hardware_wallet_some_tokens_not_found">برخی توکن‌ها اضافه نشدند</string>
+    <string name="send_error_address_unavailable">آدرس در دسترس نیست</string>
+    <string name="send_error_amount_unavailable">مبلغ در دسترس نیست</string>
+    <string name="send_error_fee_rate_unavailable">نرخ کارمزد در دسترس نیست</string>
+    <string name="send_error_balance_unavailable">موجودی در دسترس نیست</string>
+    <string name="litecoin_mweb_invalid_amount">مبلغ Litecoin MWEB نامعتبر است</string>
+    <string name="litecoin_hardware_extended_public_key_required">کیف پول سخت‌افزاری Litecoin به کلید عمومی توسعه‌یافته نیاز دارد</string>
 </resources>

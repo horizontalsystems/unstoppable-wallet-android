@@ -9,11 +9,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.assetUrl
+import cash.p.terminal.core.description
 import cash.p.terminal.core.eip20TokenUrl
 import cash.p.terminal.core.isSupported
 import cash.p.terminal.core.jettonUrl
 import cash.p.terminal.core.order
 import cash.p.terminal.core.supports
+import cash.p.terminal.core.title
 import cash.p.terminal.ui_compose.entities.ViewState
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.coin.CoinViewFactory
@@ -298,6 +300,25 @@ class CoinOverviewViewModel(
                                 token = token,
                                 canAddToWallet = canAddToWallet,
                                 inWallet = inWallet
+                            )
+                        )
+                    }
+
+                    TokenType.Mweb -> {
+                        type = TokenVariants.Type.Bips
+
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        items.add(
+                            TokenVariant(
+                                value = tokenType.description,
+                                copyValue = null,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = null,
+                                name = tokenType.title,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet,
                             )
                         )
                     }

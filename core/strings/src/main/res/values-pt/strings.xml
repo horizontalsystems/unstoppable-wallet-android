@@ -28,7 +28,6 @@
     <string name="Button_Create">Criar</string>
     <string name="Button_Advanced">Avançado</string>
     <string name="hardware_wallet">Carteira de hardware</string>
-    <string name="hardware_wallet_not_detected_error">Leitor NFC não detetado, ative-o para usar cartões de hardware</string>
     <string name="Button_Restore">Restaurar</string>
     <string name="Button_Reset">Redefinir</string>
     <string name="Button_Understand">Estou ciente</string>
@@ -45,6 +44,7 @@
     <string name="Button_Delete">Deletar</string>
     <string name="Button_LearnMore">Learn More</string>
     <string name="hardware_wallet_not_detected">Carteira Hardware (NFC não detetado)</string>
+    <string name="hardware_wallet_not_detected_error">Leitor NFC não detetado, ative-o para usar cartões de hardware</string>
     <string name="hardware_wallet_offline_confirmation_title">Ativação offline</string>
     <string name="hardware_wallet_offline_confirmation_message">Não é possível verificar a autenticidade do cartão no servidor. Verifique a ligação à Internet ou permita a ativação offline. Ao ativar offline, não são efetuadas verificações no servidor, o que reduz a segurança. Pretende continuar com a ativação offline?</string>
     <string name="hardware_wallet_offline_confirmation_positive">Continuar offline</string>
@@ -92,12 +92,23 @@
     <string name="ConfirmPassphrase">Confirmar</string>
     <string name="CreateWallet_N_WordsRecommended">%s palavras (recomendado)</string>
     <string name="CreateWallet_N_Words">%s palavras</string>
-    <string name="create_wallet_n_words_monero">%s palavras (apenas Monero)</string>
+    <string name="create_wallet_n_words_monero">%s palavras (somente Monero)</string>
     <string name="CreateWallet_Error_EmptyPassphrase">A senha não pode estar vazia</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor, use apenas símbolos suportados: <![CDATA[A-Z a-z 0-9 \' " ` & / ? : ; . , ~ * $ = + - [ ](){} <> \ _ # @ £% ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Confirmação da senha não coincide</string>
     <string name="create_wallet_error_failed">Falha ao criar a carteira. Tente novamente ou reinicie o aplicativo.</string>
     <string name="CreateWallet_PassphraseDescription">Frases secretas adicionam camada de segurança adicional para carteiras. Para restaurar essa carteira, o usuário exigia uma frase de recuperação e uma frase secreta.\n\nAs frases secretas também facilitam para os usuários ter muitas carteiras com várias moedas usando um único mnemônico, mas com senhas diferentes.</string>
+    <!--Languages-->
+    <string name="language_english">Inglês</string>
+    <string name="language_japanese">Japonês</string>
+    <string name="language_korean">Coreano</string>
+    <string name="language_spanish">Espanhol</string>
+    <string name="language_simplified_chinese">Chinês (Simplificado)</string>
+    <string name="language_traditional_chinese">Chinês (Tradicional)</string>
+    <string name="language_french">Francês</string>
+    <string name="language_italian">Italiano</string>
+    <string name="language_czech">Tcheco</string>
+    <string name="language_portuguese">Português</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">⭐️⭐️⭐️⭐️⭐</string>
     <string name="RateApp_Description_Rate_This_App">Gostou da P.CASH? Compartilhe seus comentários e ideias para que ela possa ir mais longe.</string>
@@ -106,9 +117,10 @@
     <!--Restore-->
     <string name="Restore_Advanced_Title">Avançado</string>
     <string name="Restore_Error_MnemonicWordCount">Número incorreto de palavras. Deve ter entre 12 ou 24 palavras. Você inseriu: %d</string>
+    <string name="invalid_height">Altura inválida</string>
     <string name="restoreheight_title">Bloco inicial de recuperação</string>
     <string name="restoreheight_hint">Introduza o bloco ou a data (AAAA-MM-DD)</string>
-    <string name="invalid_height">Altura inválida</string>
+    <string name="restoreheight_hint_block_only">Informe o número do bloco</string>
     <string name="invalid_height_format">Altura inválida, certifique-se de que inseriu AAAA-MM-DD ou altura de nascimento</string>
     <string name="invalid_qr_code">Código QR inválido</string>
     <string name="blockchair_height_by_date_connection_error">Não foi possível conectar ao Blockchair para encontrar a altura pela data</string>
@@ -526,10 +538,7 @@
     <string name="WalletConnect_Pairings_Delete">Deletar</string>
     <string name="WalletConnect_DeleteAllPairs">Deletar todos pareados</string>
 
-    <string name="scan">Digitalizar</string>
     <string name="connect">Conectar</string>
-    <string name="adding_tokens">Adding tokens</string>
-    <string name="scan_to_add_mesage">Você precisa digitalizar o cartão para adicionar tokens</string>
     <string name="connect_trezor_to_add_message">Você precisa conectar o Trezor para adicionar tokens</string>
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Aviso</string>
@@ -1063,7 +1072,6 @@
     <string name="ManageAccounts_CreateNewWallet">Criar</string>
     <string name="ManageAccounts_ImportWallet">Restaurar</string>
     <string name="ManageAccounts_WatchAddress">Ver Endereço</string>
-    <string name="scan_card_to_add">Digitalize o cartão para adicionar token</string>
     <string name="add_via_trezor">Adicionar via Trezor</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">from File</string>
@@ -1160,14 +1168,14 @@
     <string name="passphrase_terms_term1">Compreendo que para aceder aos fundos, devo introduzir a frase-senha exatamente como foi criada, com os mesmos caracteres, espaços e maiúsculas/minúsculas.</string>
     <string name="passphrase_terms_term2">Compreendo que se a frase-senha for perdida ou introduzida incorretamente, não poderei recuperar a minha carteira sem o seu valor exato.</string>
     <string name="passphrase_terms_term3">Compreendo que ao restaurar uma carteira com uma frase-senha incorreta, a aplicação não mostrará um erro, mas criará uma nova carteira (vazia).</string>
-    <string name="passphrase_terms_term4">Compreendo que tal carteira só pode ser restaurada em aplicações que suportam o padrão BIP-39 com frase-senha (por exemplo, Trezor), e a maioria das aplicações não suporta esta funcionalidade.</string>
+    <string name="passphrase_terms_term4">Compreendo que tal carteira só pode ser restaurada em aplicações que suportam o padrão BIP-39 com frase-senha, e a maioria das aplicações não suporta esta funcionalidade.</string>
     <string name="passphrase_terms_term5">Compreendo que os programadores não têm acesso aos meus dados e não podem ajudar-me a recuperar a minha carteira, pois a aplicação é não-custodial.</string>
     <string name="passphrase_terms_term6">Compreendo os riscos e quero usar a frase-senha</string>
     <string-array name="passphrase_terms_checkboxes">
         <item>Compreendo que &lt;b>para aceder aos fundos, devo introduzir a frase-senha&lt;/b> exatamente como foi criada, com os mesmos caracteres, espaços e maiúsculas/minúsculas.</item>
         <item>Compreendo que &lt;b>se a frase-senha for perdida ou introduzida incorretamente&lt;/b>, &lt;b>não poderei recuperar a minha carteira&lt;/b> sem o seu valor exato.</item>
         <item>Compreendo que &lt;b>ao restaurar uma carteira com uma frase-senha incorreta&lt;/b>, a aplicação não mostrará um erro, mas &lt;b>criará uma nova carteira (vazia)&lt;/b>.</item>
-        <item>Compreendo que &lt;b>tal carteira só pode ser restaurada em aplicações que suportam o padrão BIP-39 com frase-senha&lt;/b> (por exemplo, Trezor), e a maioria das aplicações &lt;b>não suporta esta funcionalidade&lt;/b>.</item>
+        <item>Compreendo que &lt;b>tal carteira só pode ser restaurada em aplicações que suportam o padrão BIP-39 com frase-senha&lt;/b>, e a maioria das aplicações &lt;b>não suporta esta funcionalidade&lt;/b>.</item>
         <item>Compreendo que &lt;b>os programadores não têm acesso aos meus dados&lt;/b> e não podem ajudar-me a recuperar a minha carteira, pois a aplicação é &lt;b>não-custodial&lt;/b>.</item>
         <item>&lt;b>Compreendo os riscos e quero usar a frase-senha&lt;/b></item>
     </string-array>
@@ -1236,6 +1244,7 @@
     <string name="zcash_transparent_description">Fully traceable transactions</string>
     <string name="zcash_shielded_description">Private protected transactions</string>
     <string name="zcash_unified_description">Combined transparent and private transactions</string>
+    <string name="token_type_litecoin_mweb">Litecoin privado</string>
     <!-- Tor -->
     <string name="Tor_Connection_Enable">Ativar Tor</string>
     <string name="Tor_Connection_Disable">Desativar Tor</string>
@@ -1947,6 +1956,7 @@
     <string name="native_library_error_message">Não foi possível carregar um componente necessário. Por favor, reinstale a aplicação a partir da Play Store.</string>
     <string name="native_library_error_close">Fechar</string>
     <string name="scan_tangem_card">Digitalizar cartão Tangem</string>
+    <string name="scan_card_to_add">Digitalize o cartão para adicionar token</string>
     <!--Multi-Swap-->
     <string name="multi_swap_completed">Troca concluída</string>
     <string name="multi_swap_no_providers">Nenhum provedor disponível</string>
@@ -1961,4 +1971,14 @@
     <string name="multi_swap_cancel_swap">Cancelar troca</string>
     <string name="multi_swap_cancel_swap_warning">A primeira troca já foi concluída. As moedas intermediárias estão na sua carteira e continuarão suas. Apenas o segundo passo da troca será cancelado.</string>
     <string name="swap_leg_title">Troca %d</string>
+    <string name="scan">Digitalizar</string>
+    <string name="adding_tokens">A adicionar tokens</string>
+    <string name="scan_to_add_message">Você precisa digitalizar o cartão para adicionar tokens</string>
+    <string name="error_hardware_wallet_some_tokens_not_found">Não foi possível adicionar alguns tokens</string>
+    <string name="send_error_address_unavailable">Endereço indisponível</string>
+    <string name="send_error_amount_unavailable">Montante indisponível</string>
+    <string name="send_error_fee_rate_unavailable">Taxa de comissão indisponível</string>
+    <string name="send_error_balance_unavailable">Saldo indisponível</string>
+    <string name="litecoin_mweb_invalid_amount">Montante Litecoin MWEB inválido</string>
+    <string name="litecoin_hardware_extended_public_key_required">A carteira hardware Litecoin requer uma chave pública estendida</string>
 </resources>

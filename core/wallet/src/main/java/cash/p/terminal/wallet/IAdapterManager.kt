@@ -1,6 +1,7 @@
 package cash.p.terminal.wallet
 
 import cash.p.terminal.wallet.entities.BalanceData
+import io.horizontalsystems.core.entities.BlockchainType
 import io.reactivex.Flowable
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,6 +29,8 @@ interface IAdapterManager {
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
     fun refreshAdapters(wallets: List<Wallet>)
     fun refreshByWallet(wallet: Wallet)
+    suspend fun stopAdapters(accountIds: List<String>) = Unit
+    suspend fun stopAdapters(accountIds: List<String>, blockchainType: BlockchainType) = Unit
 
     /**
      * Get balance data adjusted for pending transactions.

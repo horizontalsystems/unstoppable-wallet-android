@@ -348,6 +348,9 @@
         android:id="@+id/moneroConfigure"
         android:name="cash.p.terminal.modules.moneroconfigure.MoneroConfigureFragment"/>
     <fragment
+        android:id="@+id/mwebConfigure"
+        android:name="cash.p.terminal.modules.mwebconfigure.MwebConfigureFragment"/>
+    <fragment
         android:id="@+id/receiveFragment"
         android:name="cash.p.terminal.modules.receive.ReceiveFragment" />
     <fragment

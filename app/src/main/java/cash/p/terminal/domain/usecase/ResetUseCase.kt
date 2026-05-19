@@ -1,9 +1,10 @@
 package cash.p.terminal.domain.usecase
 
 import android.content.Context
+import androidx.core.content.edit
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import cash.p.terminal.core.App
-import io.horizontalsystems.core.DispatcherProvider
+import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.storage.AppDatabase
 import cash.p.terminal.core.tor.torcore.TorConstants
 import cash.p.terminal.modules.contacts.ContactsRepository
@@ -12,20 +13,21 @@ import cash.p.terminal.modules.walletconnect.WCDelegate
 import cash.p.terminal.strings.helpers.LocaleHelper
 import cash.p.terminal.wallet.IAccountCleaner
 import cash.p.terminal.wallet.IAccountManager
+import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.widgets.MarketWidget
 import cash.p.terminal.widgets.MarketWidgetStateDefinition
 import cash.p.terminal.widgets.MarketWidgetWorker
+import io.horizontalsystems.core.DispatcherProvider
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
-import androidx.core.content.edit
-import cash.p.terminal.core.ILocalStorage
 
 class ResetUseCase(
     private val context: Context,
     private val localStorage: ILocalStorage,
     private val appDatabase: AppDatabase,
     private val accountManager: IAccountManager,
+    private val adapterManager: IAdapterManager,
     private val accountCleaner: IAccountCleaner,
     private val contactsRepository: ContactsRepository,
     private val dispatcherProvider: DispatcherProvider,
@@ -40,6 +42,7 @@ class ResetUseCase(
             runCatching {
                 val accountIds = accountManager.accounts.map { it.id }
                 if (accountIds.isNotEmpty()) {
+                    adapterManager.stopAdapters(accountIds)
                     accountCleaner.clearAccounts(accountIds)
                 }
             }.onFailure { Timber.w(it, "Failed clearing account artifacts") }

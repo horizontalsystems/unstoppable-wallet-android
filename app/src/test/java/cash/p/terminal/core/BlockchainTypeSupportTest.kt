@@ -1,9 +1,11 @@
 package cash.p.terminal.core
 
+import cash.p.terminal.core.managers.RestoreSettingType
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.AccountType.MnemonicMonero
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
@@ -12,6 +14,7 @@ import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.mockk.every
 import io.mockk.mockk
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -36,6 +39,18 @@ class BlockchainTypeSupportTest {
         password = "",
         height = 0,
         walletInnerName = "wallet"
+    )
+
+    private fun mnemonicAccount() = AccountType.Mnemonic(
+        words = List(12) { "abandon" },
+        passphrase = ""
+    )
+
+    private fun hardwareCardAccount() = AccountType.HardwareCard(
+        cardId = "card-id",
+        backupCardsCount = 0,
+        walletPublicKey = "wallet-public-key",
+        signedHashes = 0
     )
 
     // --- Dash: BlockchainType.supports() ---
@@ -287,5 +302,77 @@ class BlockchainTypeSupportTest {
             TokenType.Eip20("0xc2132d05d31c914a87c6611c10748aeb04b58e8f")
         )
         assertFalse(usdt.supports(moneroMnemonicAccount()))
+    }
+
+    @Test
+    fun tokenSupports_litecoinMwebWithMnemonic_returnsTrue() {
+        assertTrue(token(BlockchainType.Litecoin, TokenType.Mweb).supports(mnemonicAccount()))
+    }
+
+    @Test
+    fun tokenSupports_litecoinMwebWithHardwareCard_returnsFalse() {
+        assertFalse(token(BlockchainType.Litecoin, TokenType.Mweb).supports(hardwareCardAccount()))
+    }
+
+    @Test
+    fun tokenSupports_bitcoinMwebWithMnemonic_returnsFalse() {
+        assertFalse(token(BlockchainType.Bitcoin, TokenType.Mweb).supports(mnemonicAccount()))
+    }
+
+    @Test
+    fun nativeTokenQueries_litecoin_includesDerivedAndMwebTokens() {
+        val tokenTypes = BlockchainType.Litecoin.nativeTokenQueries.map { it.tokenType }
+
+        assertEquals(
+            listOf(
+                TokenType.Derived(TokenType.Derivation.Bip44),
+                TokenType.Derived(TokenType.Derivation.Bip49),
+                TokenType.Derived(TokenType.Derivation.Bip84),
+                TokenType.Derived(TokenType.Derivation.Bip86),
+                TokenType.Mweb
+            ),
+            tokenTypes
+        )
+    }
+
+    @Test
+    fun restoreSettingTypes_litecoinMweb_containsBirthdayHeight() {
+        val restoreSettingTypes = token(BlockchainType.Litecoin, TokenType.Mweb).restoreSettingTypes
+
+        assertEquals(listOf(RestoreSettingType.BirthdayHeight), restoreSettingTypes)
+    }
+
+    @Test
+    fun restoreSettingTypes_litecoinDerived_returnsEmptyList() {
+        val restoreSettingTypes = token(
+            BlockchainType.Litecoin,
+            TokenType.Derived(TokenType.Derivation.Bip84)
+        ).restoreSettingTypes
+
+        assertTrue(restoreSettingTypes.isEmpty())
+    }
+
+    @Test
+    fun restoreSettingTypes_litecoinMwebTokenQuery_containsBirthdayHeight() {
+        val restoreSettingTypes = TokenQuery(BlockchainType.Litecoin, TokenType.Mweb).restoreSettingTypes
+
+        assertEquals(listOf(RestoreSettingType.BirthdayHeight), restoreSettingTypes)
+    }
+
+    @Test
+    fun restoreSettingTypes_zcashNativeTokenQuery_containsBirthdayHeight() {
+        val restoreSettingTypes = TokenQuery(BlockchainType.Zcash, TokenType.Native).restoreSettingTypes
+
+        assertEquals(listOf(RestoreSettingType.BirthdayHeight), restoreSettingTypes)
+    }
+
+    @Test
+    fun restoreSettingTypes_unsupportedTokenQuery_returnsEmptyList() {
+        val restoreSettingTypes = TokenQuery(
+            BlockchainType.Litecoin,
+            TokenType.Unsupported("mweb", "")
+        ).restoreSettingTypes
+
+        assertTrue(restoreSettingTypes.isEmpty())
     }
 }
