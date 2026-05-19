@@ -27,14 +27,17 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class SyncErrorDialog(val input: Input) : BaseComposableBottomSheetFragment() {
+@Serializable
+data class SyncErrorDialog(val input: Input) : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
         SyncErrorScreen(navController, input.wallet)
     }
 
+    @Serializable
     @Parcelize
     data class Input(val wallet: Wallet, val errorMessage: String?) : Parcelable
 }

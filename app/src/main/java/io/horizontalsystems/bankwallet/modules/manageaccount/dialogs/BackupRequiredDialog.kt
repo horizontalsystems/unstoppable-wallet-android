@@ -27,14 +27,17 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class BackupRequiredDialog(val input: Input) : BaseComposableBottomSheetFragment() {
+@Serializable
+data class BackupRequiredDialog(val input: Input) : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
         BackupRequiredScreen(navController, input.account, input.text)
     }
 
+    @Serializable
     @Parcelize
     data class Input(val account: Account, val text: String) : Parcelable
 }

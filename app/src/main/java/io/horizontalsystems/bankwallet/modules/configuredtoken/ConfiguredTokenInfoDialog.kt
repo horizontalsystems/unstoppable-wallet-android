@@ -32,8 +32,10 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.serialization.Serializable
 
-class ConfiguredTokenInfoDialog(val token: Token) : BaseComposableBottomSheetFragment() {
+@Serializable
+data class ConfiguredTokenInfoDialog(val token: Token) : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

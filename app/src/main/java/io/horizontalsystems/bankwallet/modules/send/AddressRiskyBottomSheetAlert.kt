@@ -20,8 +20,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class AddressRiskyBottomSheetAlert(val input: Input) : BaseComposableBottomSheetFragment() {
+@Serializable
+data class AddressRiskyBottomSheetAlert(val input: Input) : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
@@ -37,6 +39,7 @@ class AddressRiskyBottomSheetAlert(val input: Input) : BaseComposableBottomSheet
         )
     }
 
+    @Serializable
     @Parcelize
     data class Input(val alertText: String) : Parcelable
 

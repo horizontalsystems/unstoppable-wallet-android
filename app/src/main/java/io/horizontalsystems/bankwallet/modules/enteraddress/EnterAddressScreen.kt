@@ -119,7 +119,7 @@ fun EnterAddressScreen(
                         uiState.checkResults,
                     ) {
                         if (uiState.hasPremium){
-                            navController.slideFromBottom(SecureSendConfigDialog())
+                            navController.slideFromBottom(SecureSendConfigDialog)
                         } else {
                             navController.slideFromBottom(
                                 DefenseSystemFeatureDialog(DefenseSystemFeatureDialog.Input(PremiumFeature.SecureSendFeature))

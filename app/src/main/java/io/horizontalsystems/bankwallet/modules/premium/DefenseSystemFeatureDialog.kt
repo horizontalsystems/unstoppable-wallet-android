@@ -51,8 +51,10 @@ import io.horizontalsystems.subscriptions.core.SwapProtection
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class DefenseSystemFeatureDialog(val input: Input) : BaseComposableBottomSheetFragment() {
+@Serializable
+data class DefenseSystemFeatureDialog(val input: Input) : BaseComposableBottomSheetFragment() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         DefenseSystemFeatureScreen(
@@ -61,11 +63,13 @@ class DefenseSystemFeatureDialog(val input: Input) : BaseComposableBottomSheetFr
         )
     }
 
+    @Serializable
     @Parcelize
     data class Input(val feature: PremiumFeature) :
         Parcelable
 }
 
+@Serializable
 @Parcelize
 enum class PremiumFeature(
     val titleRes: Int,
@@ -231,7 +235,7 @@ private fun DefenseSystemFeatureScreen(
                     .fillMaxWidth()
                     .clickable {
                         navController.removeLastOrNull()
-                        navController.slideFromBottom(PremiumFeaturesDialog())
+                        navController.slideFromBottom(PremiumFeaturesDialog)
                     }
                     .padding(horizontal = 32.dp, vertical = 12.dp),
                 text = stringResource(R.string.Premium_OnePurchaseUnlocksAllPremium),
@@ -245,7 +249,7 @@ private fun DefenseSystemFeatureScreen(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     navController.removeLastOrNull()
-                    navController.slideFromBottom(SelectPlanDialog())
+                    navController.slideFromBottom(SelectPlanDialog)
                 }
             )
         }

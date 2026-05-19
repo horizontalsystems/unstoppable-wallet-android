@@ -15,14 +15,17 @@ import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class FeeSettingsInfoDialog(val input: Input) : BaseComposableBottomSheetFragment() {
+@Serializable
+data class FeeSettingsInfoDialog(val input: Input) : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
         FeeSettingsInfoScreen(input.title, input.text) { navController.removeLastOrNull() }
     }
 
+    @Serializable
     @Parcelize
     data class Input(val title: String, val text: String) : Parcelable
 }

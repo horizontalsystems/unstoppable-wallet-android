@@ -149,7 +149,7 @@ fun WCSessionsScreen(
                         },
                         onRequestClick = { requestViewItem ->
                             viewModel.setRequestToOpen(requestViewItem.request)
-                            navController.slideFromBottom(WCRequestFragment())
+                            navController.slideFromBottom(WCRequestFragment)
                         }
                     )
                 }

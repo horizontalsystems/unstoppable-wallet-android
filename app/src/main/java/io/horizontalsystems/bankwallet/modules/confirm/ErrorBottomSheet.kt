@@ -20,14 +20,17 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class ErrorBottomSheet(val input: Input) : BaseComposableBottomSheetFragment() {
+@Serializable
+data class ErrorBottomSheet(val input: Input) : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
         ErrorBottomSheetScreen(navController, input.error)
     }
 
+    @Serializable
     @Parcelize
     data class Input(val error: String) : Parcelable
 }

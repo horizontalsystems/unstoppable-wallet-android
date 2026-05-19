@@ -50,15 +50,17 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSSelector
 import io.horizontalsystems.subscriptions.core.HSPurchase
 import io.horizontalsystems.subscriptions.core.numberOfDays
+import kotlinx.serialization.Serializable
 
-class SelectPlanDialog : BaseComposableBottomSheetFragment() {
+@Serializable
+data object SelectPlanDialog : BaseComposableBottomSheetFragment() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         SelectPlanBottomSheet(
             onDismiss = { navController.removeLastOrNull() },
             onPurchase = {
                 navController.removeLastOrNull()
-                navController.slideFromBottom(PremiumSubscribedDialog())
+                navController.slideFromBottom(PremiumSubscribedDialog)
             },
         )
     }

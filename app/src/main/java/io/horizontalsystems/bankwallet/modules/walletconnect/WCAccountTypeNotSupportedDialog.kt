@@ -22,8 +22,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class WCAccountTypeNotSupportedDialog(val input: Input) : BaseComposableBottomSheetFragment() {
+@Serializable
+data class WCAccountTypeNotSupportedDialog(val input: Input) : BaseComposableBottomSheetFragment() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         WCAccountTypeNotSupportedScreen(
@@ -40,6 +42,7 @@ class WCAccountTypeNotSupportedDialog(val input: Input) : BaseComposableBottomSh
         )
     }
 
+    @Serializable
     @Parcelize
     data class Input(val accountTypeDescription: String) : Parcelable
 }

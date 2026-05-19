@@ -15,8 +15,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class ProChartFragment(val input: Input) : BaseComposableBottomSheetFragment() {
+@Serializable
+data class ProChartFragment(val input: Input) : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
@@ -38,6 +40,7 @@ class ProChartFragment(val input: Input) : BaseComposableBottomSheetFragment() {
         }
     }
 
+    @Serializable
     @Parcelize
     data class Input(
         val coinUid: String,

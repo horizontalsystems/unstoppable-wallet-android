@@ -162,7 +162,7 @@ fun CreateAccountPasskeyScreen(
                                 viewModel.createAccount(entropy)
                             } catch (e: CreateCredentialCancellationException) {
                             } catch (e: CreateCredentialNoCreateOptionException) {
-                                navController.slideFromBottom(CreatePasskeyNotSupported())
+                                navController.slideFromBottom(CreatePasskeyNotSupported)
                             } catch (e: Exception) {
                                 viewModel.onError(e)
                             } finally {

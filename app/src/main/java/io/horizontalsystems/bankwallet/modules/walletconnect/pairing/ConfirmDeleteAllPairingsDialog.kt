@@ -20,8 +20,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
+@Serializable
+data object ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

@@ -22,8 +22,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import kotlinx.serialization.Serializable
 
-class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
+@Serializable
+data object ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         ProUsersInfoScreen(

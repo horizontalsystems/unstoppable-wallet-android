@@ -18,8 +18,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import kotlinx.serialization.Serializable
 
-class WCErrorNoAccountFragment : BaseComposableBottomSheetFragment() {
+@Serializable
+data object WCErrorNoAccountFragment : BaseComposableBottomSheetFragment() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         WalletConnectErrorNoAccount() {

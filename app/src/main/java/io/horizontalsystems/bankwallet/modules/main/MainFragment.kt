@@ -119,7 +119,7 @@ private fun MainScreen(
                             },
                             onLongClick = if (destination.selected && destination.mainNavItem == MainNavigation.Balance) {
                                 {
-                                    fragmentNavController.slideFromBottom(WalletSwitchDialog())
+                                    fragmentNavController.slideFromBottom(WalletSwitchDialog)
                                     stat(
                                         page = StatPage.Main,
                                         event = StatEvent.Open(StatPage.SwitchWallet)
@@ -201,7 +201,7 @@ private fun MainScreen(
     if (uiState.wcSupportState != null) {
         when (val wcSupportState = uiState.wcSupportState) {
             SupportState.NotSupportedDueToNoActiveAccount -> {
-                fragmentNavController.slideFromBottom(WCErrorNoAccountFragment())
+                fragmentNavController.slideFromBottom(WCErrorNoAccountFragment)
             }
 
             is SupportState.NotSupportedDueToNonBackedUpAccount -> {

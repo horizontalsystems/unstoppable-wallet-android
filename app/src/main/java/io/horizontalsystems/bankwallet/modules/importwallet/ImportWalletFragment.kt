@@ -195,7 +195,7 @@ private fun ImportWalletScreen(
                             )
                         } catch (e: GetCredentialCancellationException) {
                         } catch (e: NoCredentialException) {
-                            navController.slideFromBottom(RestorePasskeyNotSupported())
+                            navController.slideFromBottom(RestorePasskeyNotSupported)
                         } catch (e: Throwable) {
                             error = e.message ?: e.javaClass.simpleName
                         } finally {

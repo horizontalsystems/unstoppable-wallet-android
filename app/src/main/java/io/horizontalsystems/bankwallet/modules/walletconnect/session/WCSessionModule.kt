@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 object WCSessionModule {
 
@@ -29,6 +30,7 @@ object WCSessionModule {
         }
     }
 
+    @Serializable
     @Parcelize
     data class Input(val sessionTopic: String) : Parcelable
 }

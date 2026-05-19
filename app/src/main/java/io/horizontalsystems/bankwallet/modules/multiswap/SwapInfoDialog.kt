@@ -18,14 +18,17 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-class SwapInfoDialog(val input: Input) : BaseComposableBottomSheetFragment() {
+@Serializable
+data class SwapInfoDialog(val input: Input) : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
         SwapInfoView(input.title, input.text) { navController.removeLastOrNull() }
     }
 
+    @Serializable
     @Parcelize
     data class Input(val title: String, val text: String) : Parcelable
 }

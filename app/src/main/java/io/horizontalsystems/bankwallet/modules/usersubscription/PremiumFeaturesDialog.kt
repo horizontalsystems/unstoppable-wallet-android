@@ -54,8 +54,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
-class PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
+@Serializable
+data object PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
@@ -227,7 +229,7 @@ fun PremiumFeaturesScreen(
                                 isPlanSelectBottomSheetVisible = true
                             } else {
                                 onClose.invoke()
-                                navController.slideFromBottom(SelectPlanDialog())
+                                navController.slideFromBottom(SelectPlanDialog)
                             }
                         }
                     )

@@ -13,8 +13,10 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.ui.extensions.WalletSwitchBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
+import kotlinx.serialization.Serializable
 
-class WalletSwitchDialog : BaseComposableBottomSheetFragment() {
+@Serializable
+data object WalletSwitchDialog : BaseComposableBottomSheetFragment() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         WalletSwitchScreen(navController)

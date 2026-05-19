@@ -218,7 +218,7 @@ private fun SettingSections(
                             }
 
                             WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-                                navController.slideFromBottom(WCErrorNoAccountFragment())
+                                navController.slideFromBottom(WCErrorNoAccountFragment)
                             }
 
                             is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {

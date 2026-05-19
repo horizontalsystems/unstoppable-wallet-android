@@ -166,7 +166,7 @@ private fun HandleWcEvent(
     LaunchedEffect(wcEvent) {
         val event = wcEvent ?: return@LaunchedEffect
         when (event) {
-            is HSDAppEvent.SessionRequest -> navController.slideFromBottom(WCRequestFragment())
+            is HSDAppEvent.SessionRequest -> navController.slideFromBottom(WCRequestFragment)
             is HSDAppEvent.SessionProposal -> navController.slideFromBottom(WCSessionBottomSheet(null))
             is HSDAppEvent.Error -> HudHelper.showErrorMessage(view, event.throwable.message ?: "Error")
             is HSDAppEvent.SessionSettled -> HudHelper.showSuccessMessage(view, hudTextConnected)

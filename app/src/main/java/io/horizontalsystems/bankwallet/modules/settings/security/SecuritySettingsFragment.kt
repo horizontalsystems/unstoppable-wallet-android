@@ -181,7 +181,7 @@ private fun SecurityCenterScreen(
                                     confirmChange = {
                                         if (UserSubscriptionManager.isActionAllowed(action)) {
                                             if (action == SecureSend) {
-                                                navController.slideFromBottom(SecureSendConfigDialog())
+                                                navController.slideFromBottom(SecureSendConfigDialog)
                                                 false
                                             } else {
                                                 true
@@ -199,7 +199,7 @@ private fun SecurityCenterScreen(
                             },
                             onClick = if (action == SecureSend) {
                                 {
-                                    navController.slideFromBottom(SecureSendConfigDialog())
+                                    navController.slideFromBottom(SecureSendConfigDialog)
                                 }
                             } else {
                                 null

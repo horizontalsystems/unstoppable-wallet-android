@@ -37,8 +37,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
+import kotlinx.serialization.Serializable
 
-class RiskLevelInfoDialog : BaseComposableBottomSheetFragment() {
+@Serializable
+data object RiskLevelInfoDialog : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

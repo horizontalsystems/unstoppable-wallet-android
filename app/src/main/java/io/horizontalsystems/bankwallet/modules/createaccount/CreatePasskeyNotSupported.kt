@@ -18,8 +18,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHe
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.ButtonsStack
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import kotlinx.serialization.Serializable
 
-class CreatePasskeyNotSupported : BaseComposableBottomSheetFragment() {
+@Serializable
+data object CreatePasskeyNotSupported : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

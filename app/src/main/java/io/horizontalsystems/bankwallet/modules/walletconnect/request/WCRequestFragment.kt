@@ -62,10 +62,12 @@ import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
 private val logger = AppLogger("wallet-connect request")
 
-class WCRequestFragment : BaseComposableBottomSheetFragment() {
+@Serializable
+data object WCRequestFragment : BaseComposableBottomSheetFragment() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         val wcRequestRouterViewModel =

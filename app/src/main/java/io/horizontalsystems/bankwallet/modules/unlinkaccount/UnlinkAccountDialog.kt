@@ -36,8 +36,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSSelector
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.serialization.Serializable
 
-class UnlinkAccountDialog(val account: Account) : BaseComposableBottomSheetFragment() {
+@Serializable
+data class UnlinkAccountDialog(val account: Account) : BaseComposableBottomSheetFragment() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         UnlinkAccountScreen(navController, account)

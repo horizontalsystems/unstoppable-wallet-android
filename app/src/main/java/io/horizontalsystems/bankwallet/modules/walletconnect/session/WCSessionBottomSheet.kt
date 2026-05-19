@@ -64,8 +64,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import io.horizontalsystems.bankwallet.uiv3.components.section.SectionHeader
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.serialization.Serializable
 
-class WCSessionBottomSheet(val input: WCSessionModule.Input?) : BaseComposableBottomSheetFragment() {
+@Serializable
+data class WCSessionBottomSheet(val input: WCSessionModule.Input?) : BaseComposableBottomSheetFragment() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

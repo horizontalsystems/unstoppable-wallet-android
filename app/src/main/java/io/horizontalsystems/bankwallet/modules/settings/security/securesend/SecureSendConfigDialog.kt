@@ -24,8 +24,10 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
+import kotlinx.serialization.Serializable
 
-class SecureSendConfigDialog : BaseComposableBottomSheetFragment() {
+@Serializable
+data object SecureSendConfigDialog : BaseComposableBottomSheetFragment() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         SecureSendConfigScreen(navController)
