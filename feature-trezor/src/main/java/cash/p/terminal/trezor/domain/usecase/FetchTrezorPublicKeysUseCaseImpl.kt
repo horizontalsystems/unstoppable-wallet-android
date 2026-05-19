@@ -31,16 +31,13 @@ internal class FetchTrezorPublicKeysUseCaseImpl(
         val methodGroups = uniqueSpecs.groupBy { it.method }
 
         val keyCache = mutableMapOf<BlockchainSpec, KeyData?>()
-        var isFirstCall = true
         for ((method, specs) in methodGroups) {
             Timber.d("Trezor: calling ${method.value} with ${specs.size} spec(s)")
-            val clearSession = isFirstCall
-            isFirstCall = false
             if (specs.size == 1) {
                 val spec = specs.single()
-                keyCache[spec] = fetchSingle(spec, clearSession)
+                keyCache[spec] = fetchSingle(spec)
             } else {
-                val results = fetchBundle(method, specs, clearSession)
+                val results = fetchBundle(method, specs)
                 specs.forEachIndexed { i, spec -> keyCache[spec] = results.getOrNull(i) }
             }
         }
@@ -61,14 +58,14 @@ internal class FetchTrezorPublicKeysUseCaseImpl(
     }
 
     @OptIn(ExperimentalStdlibApi::class)
-    private suspend fun fetchSingle(spec: BlockchainSpec, clearSession: Boolean): KeyData? {
+    private suspend fun fetchSingle(spec: BlockchainSpec): KeyData? {
         val params = JsonObject(
             buildMap {
                 spec.coin?.let { put("coin", JsonPrimitive(it)) }
                 put("path", JsonPrimitive(spec.path))
             }
         )
-        val response = deepLinkManager.call(spec.method, params, clearSession)
+        val response = deepLinkManager.call(spec.method, params)
         Timber.d("Trezor: ${spec.method.value} coin=${spec.coin} path=${spec.path} success=${response.success}")
         if (!response.success) return null
         return parseKeyData(response.payload?.jsonObject, spec.keyField)
@@ -77,8 +74,7 @@ internal class FetchTrezorPublicKeysUseCaseImpl(
     @OptIn(ExperimentalStdlibApi::class)
     private suspend fun fetchBundle(
         method: TrezorMethod,
-        specs: List<BlockchainSpec>,
-        clearSession: Boolean
+        specs: List<BlockchainSpec>
     ): List<KeyData?> {
         val bundleItems = specs.map { spec ->
             JsonObject(
@@ -90,7 +86,7 @@ internal class FetchTrezorPublicKeysUseCaseImpl(
             )
         }
         val params = JsonObject(mapOf("bundle" to JsonArray(bundleItems)))
-        val response = deepLinkManager.call(method, params, clearSession)
+        val response = deepLinkManager.call(method, params)
         Timber.d("Trezor: ${method.value} bundle success=${response.success}")
         if (!response.success) return specs.map { null }
 
