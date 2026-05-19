@@ -110,7 +110,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="unstoppable.money" />
+                <data android:host="@string/appLinksHost" />
                 <data android:pathPrefix="/referral" />
             </intent-filter>
         </activity>
