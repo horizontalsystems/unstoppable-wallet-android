@@ -660,12 +660,8 @@
     <string name="SwapSettings_Warning_UnusualSlippage">您的交易可能提前完成</string>
     <string name="SwapSort_BestRate">最佳率</string>
     <string name="SwapSort_BestTime">最快的</string>
-    <string name="RiskLevel_ProviderRiskLevel">提供商风险级别</string>
-    <string name="RiskLevel_ProviderRiskLevel_Description">下面的标签解释交换供应商的不同风险等级。相应选择。</string>
-    <string name="RiskLevel_Auto_Description">自动在链上执行。资金提交后不能冻结或冻结。如果交换失败，资金自动退还。</string>
-    <string name="RiskLevel_Flexible_Description">提供商使用自己的流动性进行操作。拒绝是罕见的。冻结在理论上是可能的，但极不可能。</string>
-    <string name="RiskLevel_Controlled_Description">这些供应商以第三方流动资金运作，并制定了反洗钱政策。 在大多数情况下，如果发现任何AML问题，互换交易都会被拒绝并退还。在有些情况下，提供者可能会在释放资金之前请求了解青年。</string>
-    <string name="RiskLevel_Precheck_Description">提供商自己的地址先筛选处理器。拒绝是罕见的。冻结在理论上是可能的，但极不可能。</string>
+    <string name="RiskLevel_ProviderRiskLevel">提供商评分</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">这些级别显示提供商如何处理交换和交易检查。</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">激活令牌</string>
     <string name="ActivationRequired_DialogDescription">若要接收 %s，您需要激活令牌。Stellar 网络需要为每个令牌建立信任线。 没有它，你的钱包就不能收到 %s ——交易将被拒绝，资金将不会交付。</string>
@@ -1719,4 +1715,7 @@
     <string name="AddZanoNode_Error_InvalidUrl">输入的URL无效。有效的URL必须具有以下方案之一：http, https</string>
     <string name="Balance_Zcash_Shielded">受保护</string>
     <string name="Balance_Zcash_ShieldedDescription">用于钱包之间的个人和私密转账。</string>
+    <string name="RiskLevel_Excellent_Description">直接链上执行。无提供商检查或冻结。交换失败时自动退款。</string>
+    <string name="RiskLevel_Good_Description">提供商在完成前自动检查交易。如果检测到问题，交换将被拒绝，资金将被退款。</string>
+    <string name="RiskLevel_Fair_Description">某些交易可能需要额外验证。如果检测到问题，资金通常会自动退款。</string>
 </resources>

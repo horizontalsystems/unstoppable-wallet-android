@@ -663,12 +663,8 @@
     <string name="SwapSettings_Warning_UnusualSlippage">Ваша транзакция может быть авансированной</string>
     <string name="SwapSort_BestRate">Лучший курс</string>
     <string name="SwapSort_BestTime">Самый быстрый</string>
-    <string name="RiskLevel_ProviderRiskLevel">Уровни риска провайдера</string>
-    <string name="RiskLevel_ProviderRiskLevel_Description">Нижеприведенные метки объясняют различные уровни риска поставщиков подкачки. Выберите соответственно.</string>
-    <string name="RiskLevel_Auto_Description">Автоматическое выполнение по цепочке. Средства не могут быть заморожены или заблокированы после отправки. В случае неудачи средства возвращаются автоматически.</string>
-    <string name="RiskLevel_Flexible_Description">Провайдер работает с собственной ликвидностью. Отклонения редки. Замораживание теоретически возможно, но весьма маловероятно.</string>
-    <string name="RiskLevel_Controlled_Description">Эти провайдеры работают с ликвидностью третьих лиц и имеют политику AML. В большинстве случаев переводы отвергаются и возвращаются в случае обнаружения проблем с AML. В некоторых случаях провайдер может запросить KYC перед получением средств.</string>
-    <string name="RiskLevel_Precheck_Description">Провайдер делает свой собственный адресный просеиватель перед обработкой. Отклоненные файлы теоретически возможны, но весьма маловероятны.</string>
+    <string name="RiskLevel_ProviderRiskLevel">Рейтинг провайдера</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">Эти уровни показывают, как провайдеры обрабатывают свопы и проверки транзакций.</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Активировать токен</string>
     <string name="ActivationRequired_DialogDescription">Чтобы получить %s, вам нужно активировать токен. Для каждого токена Stellar сети требуется установить линию доверия. Без него ваш кошелек не может получить %s — транзакция будет отклонена, а средства не будут доставлены.</string>
@@ -1727,4 +1723,7 @@
     <string name="AddZanoNode_Error_InvalidUrl">Введённый URL невалиден. Валидный URL должен иметь одну из следующих схем: http, https</string>
     <string name="Balance_Zcash_Shielded">Защищённый</string>
     <string name="Balance_Zcash_ShieldedDescription">Используется для личных и конфиденциальных переводов между кошельками.</string>
+    <string name="RiskLevel_Excellent_Description">Прямое исполнение в сети. Без проверок провайдера или замораживания. Автоматический возврат при неудаче свопа.</string>
+    <string name="RiskLevel_Good_Description">Провайдер автоматически проверяет транзакции перед завершением. При обнаружении проблем своп отклоняется и средства возвращаются.</string>
+    <string name="RiskLevel_Fair_Description">Для некоторых транзакций может потребоваться дополнительная проверка. При обнаружении проблем средства обычно возвращаются автоматически.</string>
 </resources>

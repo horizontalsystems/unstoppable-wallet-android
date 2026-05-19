@@ -661,12 +661,8 @@
     <string name="SwapSettings_Warning_UnusualSlippage">Votre transaction peut être frontrun</string>
     <string name="SwapSort_BestRate">Meilleur tarif</string>
     <string name="SwapSort_BestTime">Le plus rapide</string>
-    <string name="RiskLevel_ProviderRiskLevel">Niveaux de risque du fournisseur</string>
-    <string name="RiskLevel_ProviderRiskLevel_Description">Les étiquettes ci-dessous expliquent différents niveaux de risque pour les fournisseurs de swap. Choisissez en conséquence.</string>
-    <string name="RiskLevel_Auto_Description">Exécution automatique sur la chaîne. Les fonds ne peuvent pas être bloqués ou bloqués après soumission. Si le swap échoue, les fonds sont remboursés automatiquement.</string>
-    <string name="RiskLevel_Flexible_Description">Le fournisseur opère en utilisant ses propres liquidités. Les rejets sont rares. Les gels sont théoriquement possibles mais très improbables.</string>
-    <string name="RiskLevel_Controlled_Description">Ces fournisseurs opèrent avec des liquidités de tierces parties et ont mis en place des politiques d\'AML. Dans la plupart des cas, les swaps sont rejetés et remboursés en cas de problème de LCA. Dans certaines situations, le fournisseur peut demander KYC avant de libérer des fonds.</string>
-    <string name="RiskLevel_Precheck_Description">Le prestataire effectue son propre test d\'adresse avant le traitement de swap. Les rejets sont rares. Les gels sont théoriquement possibles mais très improbables.</string>
+    <string name="RiskLevel_ProviderRiskLevel">Score du Fournisseur</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">Ces niveaux montrent comment les fournisseurs gèrent les swaps et les vérifications de transactions.</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Activer le jeton</string>
     <string name="ActivationRequired_DialogDescription">Pour recevoir %1$s, vous devez activer le jeton. Le réseau Stellar nécessite une ligne de confiance pour chaque jeton. Sans elle, votre portefeuille ne peut pas recevoir %2$s — la transaction sera rejetée et les fonds ne seront pas livrés.</string>
@@ -1722,4 +1718,7 @@
     <string name="AddZanoNode_Error_InvalidUrl">L\'URL saisie est invalide. Les URL valides doivent avoir l\'un des schémas suivants : http, https</string>
     <string name="Balance_Zcash_Shielded">Blindé</string>
     <string name="Balance_Zcash_ShieldedDescription">À utiliser pour les transferts personnels et privés entre portefeuilles.</string>
+    <string name="RiskLevel_Excellent_Description">Exécution directe en chaîne. Aucune vérification ou gel du fournisseur. Remboursements automatiques en cas d\'échec du swap.</string>
+    <string name="RiskLevel_Good_Description">Le fournisseur vérifie automatiquement les transactions avant leur finalisation. Si des problèmes sont détectés, le swap est rejeté et les fonds sont remboursés.</string>
+    <string name="RiskLevel_Fair_Description">Une vérification supplémentaire peut être nécessaire pour certaines transactions. Si des problèmes sont détectés, les fonds sont généralement remboursés automatiquement.</string>
 </resources>
