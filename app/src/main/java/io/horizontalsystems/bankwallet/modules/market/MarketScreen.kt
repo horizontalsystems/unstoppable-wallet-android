@@ -8,26 +8,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -55,9 +48,9 @@ import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatforms
 import io.horizontalsystems.bankwallet.modules.market.topsectors.TopSectorsScreen
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_bran
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_lucian
@@ -80,51 +73,28 @@ fun MarketScreen(
 
     HSScaffold(
         title = stringResource(R.string.Market_Title),
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Balance_ReceiveHint_Search),
+                icon = R.drawable.ic_search,
+                tint = ComposeAppTheme.colors.grey,
+                onClick = {
+                    navController.slideFromBottom(R.id.marketSearchFragment)
+                    stat(
+                        page = StatPage.Markets,
+                        event = StatEvent.Open(StatPage.MarketSearch)
+                    )
+                }
+            )
+        ),
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Column() {
+            Column {
 //                Crossfade(uiState.marketGlobal, label = "") {
 //                    MetricsBoard(navController, it, uiState.currency)
 //                }
                 TabsSection(navController, tabs, uiState.selectedTab) { tab ->
                     viewModel.onSelect(tab)
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(horizontal = 24.dp)
-                    .windowInsetsPadding(WindowInsets.navigationBars)
-                    .padding(bottom = 72.dp),//bottomBar height 56 + 16 padding
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(24.dp))
-                        .background(ComposeAppTheme.colors.blade)
-                        .height(48.dp)
-                        .clickable {
-                            navController.slideFromBottom(R.id.marketSearchFragment)
-                            stat(
-                                page = StatPage.Markets,
-                                event = StatEvent.Open(StatPage.MarketSearch)
-                            )
-                        }
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_search),
-                        contentDescription = "Search",
-                        tint = ComposeAppTheme.colors.grey,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    HSpacer(8.dp)
-                    body_grey(
-                        text = stringResource(R.string.Balance_ReceiveHint_Search),
-                        modifier = Modifier.fillMaxWidth()
-                    )
                 }
             }
         }
