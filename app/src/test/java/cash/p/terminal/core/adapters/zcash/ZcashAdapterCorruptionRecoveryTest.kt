@@ -3,6 +3,7 @@ package cash.p.terminal.core.adapters.zcash
 import android.content.Context
 import android.database.sqlite.SQLiteDatabaseCorruptException
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.TestDispatcherProvider
 import cash.p.terminal.core.managers.BackgroundKeepAliveManager
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.domain.usecase.ClearZCashWalletDataUseCase
@@ -178,6 +179,7 @@ class ZcashAdapterCorruptionRecoveryTest {
             localStorage = localStorage,
             backgroundManager = backgroundManager,
             singleUseAddressManager = singleUseAddressManager,
+            dispatcherProvider = TestDispatcherProvider(dispatcher, testScope),
         )
     }
 
