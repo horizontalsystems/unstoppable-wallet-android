@@ -366,7 +366,7 @@ private fun SwapScreenInner(
                                 },
                                 onClickProvider = onClickProvider,
                                 onClickProviderScoreInfo = {
-                                    navController.slideFromBottom(R.id.riskLevelInfoBottomSheet)
+                                    navController.slideFromBottom(RiskLevelInfoDialog())
                                 }
                             )
                         }
