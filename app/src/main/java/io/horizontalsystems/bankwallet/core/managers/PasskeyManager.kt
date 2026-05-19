@@ -8,6 +8,7 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.PublicKeyCredential
+import io.horizontalsystems.bankwallet.core.App
 import org.json.JSONArray
 import org.json.JSONObject
 import java.security.SecureRandom
@@ -23,7 +24,7 @@ class PasskeyManager {
     }
 
     companion object {
-        private const val RP_ID = "unstoppable.money"
+        private val RP_ID = App.appConfigProvider.appLinksHost
         private const val RP_NAME = "Unstoppable Wallet"
         private val PRF_SALT_BYTES = "wallet".toByteArray(Charsets.UTF_8)
         private const val B64_FLAGS = Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP
