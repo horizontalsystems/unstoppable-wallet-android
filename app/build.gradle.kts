@@ -104,6 +104,7 @@ android {
             applicationIdSuffix = ".appcenter"
             versionCode = System.getenv("BUILD_NUMBER")?.toIntOrNull() ?: defaultConfig.versionCode
             signingConfig = signingConfigs.getByName("test")
+            resValue("string", "appLinksHost", "dev.unstoppable.money")
             resValue("string", "uswapApiKey", uswapApiKeyAndroid)
             resValue("string", "oneInchPartnerFeeAddress", oneInchFeeAddressAndroid)
         }
@@ -115,6 +116,7 @@ android {
             isDebuggable = true
             isMinifyEnabled = false
             applicationIdSuffix = ".dev"
+            resValue("string", "appLinksHost", "dev.unstoppable.money")
             resValue("string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB")
             resValue("string", "etherscanKey", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE")
             resValue("string", "bscscanKey", "R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN")
@@ -146,6 +148,7 @@ android {
             isDebuggable = false
             isMinifyEnabled = false
             isShrinkResources = false
+            resValue("string", "appLinksHost", "unstoppable.money")
             resValue("string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB")
             resValue("string", "etherscanKey", "IEXTB9RE7MUV2UQ9X238RP146IEJB1J5HS,27S4V3GYJGMCPWQZ2T4SF9355QBQYQ3FI7,YK4KEA3TANM8KZ5J6E2Q1ZIM6YDM8TEABM,FU7CYEXQEUSMXJJF8MZR6BNRMP9XT8S9CP")
             resValue("string", "bscscanKey", "FQ2HSNNEHVG71U96P1TF3WF9RTF6AF5MRA,G6K8VZDWYSJHTCRURRITFZ2ZWV48GRGTZQ,R396MSJNCKX2YK4EIMP3EWYAW21NSVMXRN,8QW2JNMPHPUPAACFGXZ3A5PVQY6PBCJPEG")

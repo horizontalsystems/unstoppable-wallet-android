@@ -63,6 +63,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapHistoryFragment
+import io.horizontalsystems.bankwallet.modules.multiswap.providers.RiskLevel
 import io.horizontalsystems.bankwallet.modules.multiswap.swapterms.SwapTermsFragment
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
@@ -79,22 +80,21 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
 import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
 import io.horizontalsystems.bankwallet.uiv3.components.AlertType
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
-import io.horizontalsystems.bankwallet.uiv3.components.cell.CellLeftImage
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfoTextIcon
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightControlsButtonText
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightInfo
-import io.horizontalsystems.bankwallet.uiv3.components.cell.ImageType
+import io.horizontalsystems.bankwallet.uiv3.components.cell.CellSecondary
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonStyle
@@ -364,7 +364,10 @@ private fun SwapScreenInner(
                                 onClickPrice = {
                                     showRegularPrice = !showRegularPrice
                                 },
-                                onClickProvider = onClickProvider
+                                onClickProvider = onClickProvider,
+                                onClickProviderScoreInfo = {
+                                    navController.slideFromBottom(R.id.riskLevelInfoBottomSheet)
+                                }
                             )
                         }
 
@@ -510,78 +513,104 @@ private fun ProviderCellInfo(
     quote: SwapProviderQuote,
     showRegularPrice: Boolean,
     onClickPrice: () -> Unit,
-    onClickProvider: () -> Unit
+    onClickProvider: () -> Unit,
+    onClickProviderScoreInfo: () -> Unit,
+) {
+    val swapPriceUIHelper = SwapPriceUIHelper(
+        quote.tokenIn,
+        quote.tokenOut,
+        quote.amountIn,
+        quote.amountOut
+    )
+    val priceStr = if (showRegularPrice) {
+        swapPriceUIHelper.priceStr
+    } else {
+        swapPriceUIHelper.priceInvStr
+    }
+
+    Column(
+        modifier = Modifier.padding(vertical = 8.dp)
+    ) {
+        CellSecondary(
+            middle = {
+                LeftSelector(
+                    title = quote.provider.titleShort,
+                    onClick = onClickProvider
+                )
+            },
+            right = {
+                CellRightControlsButtonText(
+                    subhead = priceStr.hs(color = ComposeAppTheme.colors.leah),
+                    onClick = onClickPrice
+                )
+            }
+        )
+        CellSecondary(
+            middle = {
+                CellMiddleInfoTextIcon(
+                    text = stringResource(R.string.RiskLevel_ProviderRiskLevel).hs,
+                    icon = painterResource(R.drawable.ic_info_24),
+                    iconTint = ComposeAppTheme.colors.grey,
+                    onIconClick = onClickProviderScoreInfo,
+                )
+            },
+            right = {
+                RiskScore(riskLevel = quote.provider.riskLevel)
+            }
+        )
+    }
+}
+
+@Composable
+private fun LeftSelector(
+    title: String,
+    onClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier.padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.clickable { onClick.invoke() }
     ) {
-        CellLeftImage(
-            painter = painterResource(quote.provider.icon),
-            type = ImageType.Rectangle,
-            size = 24,
+        subhead2_leah(title)
+        Icon(
+            modifier = Modifier
+                .size(20.dp),
+            painter = painterResource(R.drawable.arrow_s_down_24),
+            contentDescription = null,
+            tint = ComposeAppTheme.colors.leah
         )
-        Row(
-            modifier = Modifier.clickable(
-                onClick = onClickProvider,
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
-            ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(2.dp)
-            ) {
-                subhead_leah(quote.provider.titleShort)
-                RiskCell(riskLevel = quote.provider.riskLevel)
-            }
-            HSpacer(8.dp)
-            Icon(
-                modifier = Modifier.size(20.dp),
-                painter = painterResource(R.drawable.arrow_s_down_20),
-                tint = ComposeAppTheme.colors.grey,
-                contentDescription = null,
-            )
-        }
-        val swapPriceUIHelper = SwapPriceUIHelper(
-            quote.tokenIn,
-            quote.tokenOut,
-            quote.amountIn,
-            quote.amountOut
+    }
+}
+
+@Composable
+private fun RiskScore(
+    modifier: Modifier = Modifier,
+    riskLevel: RiskLevel,
+) {
+    val color = when (riskLevel) {
+        RiskLevel.EXCELLENT -> ComposeAppTheme.colors.remus
+        RiskLevel.GOOD -> ComposeAppTheme.colors.ocean
+        RiskLevel.FAIR -> ComposeAppTheme.colors.jacob
+    }
+    val icon = riskLevel.icon
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(riskLevel.title),
+            style = ComposeAppTheme.typography.subheadSB,
+            color = color,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
         )
-
-        val priceStr = if (showRegularPrice) {
-            swapPriceUIHelper.priceStr
-        } else {
-            swapPriceUIHelper.priceInvStr
-        }
-
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            CellRightControlsButtonText(
-                subhead = priceStr.hs(color = ComposeAppTheme.colors.leah),
-                onClick = onClickPrice
-            )
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.clock_filled_24),
-                    modifier = Modifier.size(16.dp),
-                    tint = ComposeAppTheme.colors.grey,
-                    contentDescription = null
-                )
-                captionSB_grey(
-                    text = quote.swapQuote.estimationTime?.let { formatDurationShort(it) }
-                        ?: stringResource(R.string.NotAvailable)
-                )
-            }
-        }
+        HSpacer(4.dp)
+        Icon(
+            painter = painterResource(icon),
+            modifier = Modifier.size(20.dp),
+            tint = color,
+            contentDescription = null
+        )
     }
 }
 

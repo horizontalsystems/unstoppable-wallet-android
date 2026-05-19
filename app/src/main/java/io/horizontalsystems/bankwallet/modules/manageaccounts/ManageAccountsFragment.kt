@@ -183,7 +183,7 @@ fun ManageAccountsScreen(navController: HSNavigation, mode: ManageAccountsModule
                         }
                     }
                     item {
-                        VSpacer(32.dp)
+                        VSpacer(88.dp)
                     }
                 }
             }

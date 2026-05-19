@@ -661,12 +661,8 @@
     <string name="SwapSettings_Warning_UnusualSlippage">Ihre Transaktion könnte Frontrun sein</string>
     <string name="SwapSort_BestRate">Bester Kurs</string>
     <string name="SwapSort_BestTime">Schnellste</string>
-    <string name="RiskLevel_ProviderRiskLevel">Provider-Risiko-Level</string>
-    <string name="RiskLevel_ProviderRiskLevel_Description">Die unten aufgeführten Etiketten erläutern verschiedene Risikostufen von Swap-Anbietern. Wählen Sie entsprechend aus.</string>
-    <string name="RiskLevel_Auto_Description">Automatische On-Kettenausführung kann nicht eingefroren oder blockiert werden, wenn der Swap-Ausfall fehlschlägt, werden die Gelder automatisch zurückerstattet.</string>
-    <string name="RiskLevel_Flexible_Description">Anbieter betreibt ihre eigene Liquidität. Ablehnungen sind selten. Freezes sind theoretisch möglich, aber höchst unwahrscheinlich.</string>
-    <string name="RiskLevel_Controlled_Description">Dieser Anbieter arbeitet mit Fremdliquidität und verfügt über AML-Richtlinien. In den meisten Fällen werden Swaps zurückgewiesen und erstattet, wenn AML-Probleme erkannt werden. In manchen Fällen kann der Anbieter KYC anfordern, bevor er Gelder freigibt.</string>
-    <string name="RiskLevel_Precheck_Description">Der Provider macht seine eigene Adressprüfung vor der Verarbeitung Swap. Einwände sind selten. Einfrieren sind theoretisch möglich, aber höchst unwahrscheinlich.</string>
+    <string name="RiskLevel_ProviderRiskLevel">Anbieter-Bewertung</string>
+    <string name="RiskLevel_ProviderRiskLevel_Description">Diese Stufen zeigen, wie Anbieter Swaps und Transaktionsprüfungen handhaben.</string>
     <!-- Swap Confirmation -->
     <string name="ActivationRequired_DialogTitle">Token aktivieren</string>
     <string name="ActivationRequired_DialogDescription">Um %szu erhalten, müssen Sie das Token aktivieren. Das Stellar-Netzwerk benötigt eine Vertrauenszeile für jeden Token einzurichten. Ohne sie kann Ihre Brieftasche nicht %s erhalten – die Transaktion wird zurückgewiesen und das Guthaben wird nicht ausgeliefert.</string>
@@ -1729,4 +1725,7 @@
     <string name="AddZanoNode_Error_InvalidUrl">Eingegebene URL ist ungültig. Gültige URLs müssen eines der folgenden Schemas haben: http, https</string>
     <string name="Balance_Zcash_Shielded">Geschützt</string>
     <string name="Balance_Zcash_ShieldedDescription">Verwenden Sie für private und vertrauliche Transfers zwischen Wallets.</string>
+    <string name="RiskLevel_Excellent_Description">Direkte On-Chain-Ausführung. Keine Anbieterprüfungen oder Sperren. Automatische Rückerstattung bei fehlgeschlagenem Swap.</string>
+    <string name="RiskLevel_Good_Description">Der Anbieter prüft Transaktionen automatisch vor Abschluss. Bei erkannten Problemen wird der Swap abgelehnt und Gelder werden erstattet.</string>
+    <string name="RiskLevel_Fair_Description">Zusätzliche Überprüfung kann für einige Transaktionen erforderlich sein. Bei erkannten Problemen werden Gelder normalerweise automatisch erstattet.</string>
 </resources>

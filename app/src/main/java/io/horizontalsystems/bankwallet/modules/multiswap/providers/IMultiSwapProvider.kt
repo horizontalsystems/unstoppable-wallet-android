@@ -69,8 +69,7 @@ enum class SwapProviderType(val title: String) {
 }
 
 enum class RiskLevel(val title: Int, val icon: Int) {
-    AUTO(R.string.RiskLevel_Auto, R.drawable.shield_check_filled_24),
-    FLEXIBLE(R.string.RiskLevel_Flexible, R.drawable.thumbsup_24),
-    CONTROLLED(R.string.RiskLevel_Controlled, R.drawable.ic_warning_filled_24),
-    PRECHECK(R.string.RiskLevel_Precheck, R.drawable.radar_24)
+    EXCELLENT(R.string.RiskLevel_Excellent, R.drawable.star_filled_24),
+    GOOD(R.string.RiskLevel_Good, R.drawable.shield_check_filled_24),
+    FAIR(R.string.RiskLevel_Fair, R.drawable.thumbsup_24)
 }

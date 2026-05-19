@@ -96,6 +96,10 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         Translator.getString(R.string.oneInchApiKey)
     }
 
+    val appLinksHost by lazy {
+        Translator.getString(R.string.appLinksHost)
+    }
+
     val fiatDecimal: Int = 2
     val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 

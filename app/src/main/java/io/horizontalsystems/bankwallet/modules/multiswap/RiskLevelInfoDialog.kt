@@ -92,8 +92,8 @@ fun RiskLevelList() {
     CellPrimary(
         middle = {
             RiskLevelCell(
-                RiskLevel.AUTO,
-                stringResource(R.string.RiskLevel_Auto_Description)
+                RiskLevel.EXCELLENT,
+                stringResource(R.string.RiskLevel_Excellent_Description)
             )
 
         }
@@ -102,8 +102,8 @@ fun RiskLevelList() {
     CellPrimary(
         middle = {
             RiskLevelCell(
-                RiskLevel.FLEXIBLE,
-                stringResource(R.string.RiskLevel_Flexible_Description)
+                RiskLevel.GOOD,
+                stringResource(R.string.RiskLevel_Good_Description)
             )
         }
     )
@@ -111,17 +111,8 @@ fun RiskLevelList() {
     CellPrimary(
         middle = {
             RiskLevelCell(
-                RiskLevel.PRECHECK,
-                stringResource(R.string.RiskLevel_Precheck_Description)
-            )
-        }
-    )
-    HsDivider()
-    CellPrimary(
-        middle = {
-            RiskLevelCell(
-                RiskLevel.CONTROLLED,
-                stringResource(R.string.RiskLevel_Controlled_Description)
+                RiskLevel.FAIR,
+                stringResource(R.string.RiskLevel_Fair_Description)
             )
         }
     )
@@ -130,10 +121,9 @@ fun RiskLevelList() {
 @Composable
 private fun RiskLevelCell(level: RiskLevel, description: String) {
     val color = when (level) {
-        RiskLevel.AUTO -> ComposeAppTheme.colors.remus
-        RiskLevel.FLEXIBLE -> ComposeAppTheme.colors.ocean
-        RiskLevel.CONTROLLED -> ComposeAppTheme.colors.jacob
-        RiskLevel.PRECHECK -> ComposeAppTheme.colors.leah
+        RiskLevel.EXCELLENT -> ComposeAppTheme.colors.remus
+        RiskLevel.GOOD -> ComposeAppTheme.colors.ocean
+        RiskLevel.FAIR -> ComposeAppTheme.colors.jacob
     }
 
     Column {
