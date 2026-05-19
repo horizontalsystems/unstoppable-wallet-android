@@ -33,7 +33,7 @@ object AllBridgeProvider : IMultiSwapProvider {
     override val icon = R.drawable.swap_provider_allbridge
     override val type = SwapProviderType.DEX
     override val requireTerms = false
-    override val riskLevel = RiskLevel.AUTO
+    override val riskLevel = RiskLevel.EXCELLENT
     private val feePaymentMethod = FeePaymentMethod.StableCoin
 
     private val proxies = mapOf(
