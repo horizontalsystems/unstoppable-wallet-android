@@ -20,10 +20,10 @@ import java.util.UUID
 abstract class HSScreen(
     val bottomSheet: Boolean = false,
     val screenshotEnabled: Boolean = true,
+    var resultKey: String? = null,
+    val uuid: String = UUID.randomUUID().toString(),
+    var navType: NavigationType = NavigationType.SlideFromRight,
 ) : NavKey {
-    var resultKey: String? = null
-    val uuid = UUID.randomUUID().toString()
-    var navType = NavigationType.SlideFromRight
 
     fun contentKey() = "$className(#$uuid)"
 

@@ -38,12 +38,12 @@ import kotlinx.serialization.Serializable
 data object IntroScreen : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        IntroScreen()
+        IntroScreenContent()
     }
 }
 
 @Composable
-private fun IntroScreen() {
+private fun IntroScreenContent() {
     val viewModel = viewModel<IntroViewModel>(factory = IntroModule.Factory())
 
     val pageCount = 3

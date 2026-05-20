@@ -62,12 +62,4 @@ data object MainScreen : HSScreen() {
             mainActivityViewModel = mainActivityViewModel,
         )
     }
-
-    //    @Composable
-//    override fun GetContent(backStack: HSNavigation) {
-//        MainScreenWithRootedDeviceCheck(
-//            mainActivityViewModel = mainActivityViewModel,
-//            backStack = backStack,
-//        )
-//    }
 }
