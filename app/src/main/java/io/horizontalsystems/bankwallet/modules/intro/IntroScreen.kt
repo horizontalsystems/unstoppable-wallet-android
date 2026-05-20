@@ -1,13 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.intro
 
-import android.content.Context
-import android.content.Intent
-import android.content.res.Configuration
-import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,15 +17,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseActivity
-import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
@@ -38,36 +32,20 @@ import io.horizontalsystems.bankwallet.ui.compose.components.SliderIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 
-class IntroActivity : BaseActivity() {
-
-    val viewModel by viewModels<IntroViewModel> { IntroModule.Factory() }
-
-    private val nightMode by lazy {
-        val uiMode =
-            App.instance.resources?.configuration?.uiMode?.and(Configuration.UI_MODE_NIGHT_MASK)
-        uiMode == Configuration.UI_MODE_NIGHT_YES
+@Serializable
+data object IntroScreen : HSScreen() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        IntroScreen()
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            IntroScreen(viewModel, nightMode) { finish() }
-        }
-    }
-
-    companion object {
-        fun start(context: Context) {
-            val intent = Intent(context, IntroActivity::class.java)
-            context.startActivity(intent)
-        }
-    }
-
 }
 
 @Composable
-private fun IntroScreen(viewModel: IntroViewModel, nightMode: Boolean, closeActivity: () -> Unit) {
+private fun IntroScreen() {
+    val viewModel = viewModel<IntroViewModel>(factory = IntroModule.Factory())
+
     val pageCount = 3
     val pagerState = rememberPagerState(initialPage = 0) { pageCount }
     ComposeAppTheme {
@@ -77,21 +55,15 @@ private fun IntroScreen(viewModel: IntroViewModel, nightMode: Boolean, closeActi
             state = pagerState,
             verticalAlignment = Alignment.Top,
         ) { index ->
-            SlidingContent(viewModel.slides[index], nightMode)
+            SlidingContent(viewModel.slides[index])
         }
 
-        StaticContent(viewModel, pagerState, closeActivity, pageCount)
+        StaticContent(viewModel, pagerState, pageCount)
     }
 }
 
 @Composable
-private fun StaticContent(
-    viewModel: IntroViewModel,
-    pagerState: PagerState,
-    closeActivity: () -> Unit,
-    pageCount: Int
-) {
-    val context = LocalContext.current
+private fun StaticContent(viewModel: IntroViewModel, pagerState: PagerState, pageCount: Int) {
     val coroutineScope = rememberCoroutineScope()
 
     Column(
@@ -146,9 +118,6 @@ private fun StaticContent(
                     }
                 } else {
                     viewModel.onStartClicked()
-                    MainModule.start(context)
-                    closeActivity()
-
                 }
             })
         Spacer(Modifier.height(60.dp))
@@ -156,10 +125,8 @@ private fun StaticContent(
 }
 
 @Composable
-private fun SlidingContent(
-    slideData: IntroModule.IntroSliderData,
-    nightMode: Boolean
-) {
+private fun SlidingContent(slideData: IntroModule.IntroSliderData) {
+    val nightMode = isSystemInDarkTheme()
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally

@@ -113,6 +113,7 @@ interface ILocalStorage {
     var swapTermsAccepted: Boolean
     var passkeyTermsAccepted: Boolean
     var checkedTerms: List<String>
+    val mainShowedOnceFlow: StateFlow<Boolean>
     var mainShowedOnce: Boolean
     var notificationId: String?
     var notificationServerTime: Long

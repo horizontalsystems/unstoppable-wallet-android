@@ -440,7 +440,10 @@ class LocalStorageManager(
         get() = preferences.getBoolean(MAIN_SHOWED_ONCE, false)
         set(value) {
             preferences.edit().putBoolean(MAIN_SHOWED_ONCE, value).apply()
+            mainShowedOnceFlow.update { value }
         }
+
+    override val mainShowedOnceFlow = MutableStateFlow(mainShowedOnce)
 
     override var notificationId: String?
         get() = preferences.getString(NOTIFICATION_ID, null)

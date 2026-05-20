@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.DAppRequestEntityWrapper
 import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 import io.horizontalsystems.bankwallet.core.managers.UserManager
@@ -27,7 +28,7 @@ class MainActivityViewModel(
     private val keyStoreManager: IKeyStoreManager,
     private val localStorage: ILocalStorage,
     private val tonConnectManager: TonConnectManager
-) : ViewModel() {
+) : ViewModelUiState<MainUIState>() {
 
     val navigateToMainLiveData = MutableLiveData<String?>(null)
     val wcEvent = MutableLiveData<HSDAppEvent?>()
@@ -35,7 +36,20 @@ class MainActivityViewModel(
     val tcDappRequest = MutableLiveData<DAppRequestEntityWrapper?>()
     val intentLiveData = MutableLiveData<Intent?>()
 
+    var mainShowedOnce = localStorage.mainShowedOnceFlow.value
+
+    override fun createState() = MainUIState(
+        mainShowedOnce = mainShowedOnce
+    )
+
     init {
+        viewModelScope.launch {
+            localStorage.mainShowedOnceFlow.collect {
+                mainShowedOnce = it
+                emitState()
+            }
+        }
+
         viewModelScope.launch {
             userManager.currentUserLevelFlow.collect {
                 navigateToMainLiveData.postValue(UUID.randomUUID().toString())
@@ -90,10 +104,6 @@ class MainActivityViewModel(
         } catch (e: RuntimeException) {
             throw MainScreenValidationError.KeystoreRuntimeException()
         }
-
-        if (accountManager.isAccountsEmpty && !localStorage.mainShowedOnce) {
-            throw MainScreenValidationError.Welcome()
-        }
     }
 
     fun onNavigatedToMain() {
@@ -123,8 +133,9 @@ class MainActivityViewModel(
     }
 }
 
+data class MainUIState(val mainShowedOnce: Boolean)
+
 sealed class MainScreenValidationError : Exception() {
-    class Welcome : MainScreenValidationError()
     class Unlock : MainScreenValidationError()
     class NoSystemLock : MainScreenValidationError()
     class KeyInvalidated : MainScreenValidationError()

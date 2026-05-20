@@ -33,7 +33,6 @@ import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.navigation3.ui.NavDisplay
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel.Factory
@@ -53,7 +52,7 @@ fun Nav3() {
     val backStack = rememberSerializable(
         serializer = NavBackStackSerializer(elementSerializer = NavKeySerializer())
     ) {
-        NavBackStack<HSScreen>(MainScreen)
+        NavBackStack<HSScreen>(EntryScreen)
     }
 
     val hsNavigation = remember { HSNavigation(backStack) }
@@ -145,8 +144,6 @@ private fun Validate(viewModel: MainActivityViewModel) {
             activity?.let { KeyStoreActivity.startForInvalidKey(it); it.finish() }
         } catch (_: MainScreenValidationError.UserAuthentication) {
             activity?.let { KeyStoreActivity.startForUserAuthentication(it); it.finish() }
-        } catch (_: MainScreenValidationError.Welcome) {
-            activity?.let { IntroActivity.start(it); it.finish() }
         } catch (_: MainScreenValidationError.KeystoreRuntimeException) {
             Toast.makeText(App.instance, "Issue with Keystore", Toast.LENGTH_SHORT).show()
             activity?.finish()
