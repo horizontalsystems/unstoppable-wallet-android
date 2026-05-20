@@ -14,7 +14,6 @@ lifecycle = "2.10.0"
 appcompat = "1.7.1"
 constraintlayout = "2.2.1"
 coreKtx = "1.18.0"
-fragmentKtx = "1.8.9"
 room = "2.8.4"
 work = "2.11.2"
 biometric = "1.1.0"
@@ -141,7 +140,6 @@ androidx-material3-adaptive-navigation3 = { group = "androidx.compose.material3.
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
-androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "preference" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreen" }
