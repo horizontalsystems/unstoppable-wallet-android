@@ -109,7 +109,7 @@ fun TopCoins(
                             )
                         },
                         onCoinClick = onCoinClick,
-                        bottomPadding = 140.dp,
+                        bottomPadding = 70.dp,
                         preItems = {
                             stickyHeader {
                                 HeaderSorting(
