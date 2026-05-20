@@ -111,7 +111,7 @@ private fun HandleNavigateToMain(
     val navigateToMain by viewModel.navigateToMainLiveData.observeAsState()
     LaunchedEffect(navigateToMain) {
         if (navigateToMain != null) {
-            navController.removeLastUntil(MainScreen::class, false)
+            navController.removeLastUntil(EntryScreen::class, false)
             viewModel.onNavigatedToMain()
         }
     }

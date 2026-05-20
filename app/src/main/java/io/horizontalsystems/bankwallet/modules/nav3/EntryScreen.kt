@@ -16,13 +16,11 @@ data object EntryScreen : HSScreen() {
             App.localStorage.mainShowedOnceFlow.collectAsStateWithLifecycle()
 
         Crossfade(mainShowedOnce) {
-            val screen = if (it) {
-                MainScreen
+            if (it) {
+                MainScreen(navController)
             } else {
-                IntroScreen
+                IntroScreen()
             }
-
-            screen.GetContent(navController)
         }
     }
 }

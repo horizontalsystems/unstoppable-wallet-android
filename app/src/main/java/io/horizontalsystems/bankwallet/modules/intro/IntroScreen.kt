@@ -23,8 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
@@ -32,18 +30,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.SliderIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Serializable
-
-@Serializable
-data object IntroScreen : HSScreen() {
-    @Composable
-    override fun GetContent(navController: HSNavigation) {
-        IntroScreenContent()
-    }
-}
 
 @Composable
-private fun IntroScreenContent() {
+fun IntroScreen() {
     val viewModel = viewModel<IntroViewModel>(factory = IntroModule.Factory())
 
     val pageCount = 3

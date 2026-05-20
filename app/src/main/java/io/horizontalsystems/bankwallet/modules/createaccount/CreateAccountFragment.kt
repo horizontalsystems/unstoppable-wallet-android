@@ -12,9 +12,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.PassKeyTermsFragment
+import io.horizontalsystems.bankwallet.modules.nav3.EntryScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
-import io.horizontalsystems.bankwallet.modules.nav3.MainScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.uiv3.components.BoxBordered
@@ -111,6 +111,6 @@ fun WalletType(
 @Preview
 fun Preview_CreateAccountScreen() {
     ComposeAppTheme {
-        CreateAccountScreen(HSNavigation(NavBackStack(MainScreen)), null)
+        CreateAccountScreen(HSNavigation(NavBackStack(EntryScreen)), null)
     }
 }
