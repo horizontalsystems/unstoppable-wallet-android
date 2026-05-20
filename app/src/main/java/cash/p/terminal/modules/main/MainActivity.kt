@@ -52,11 +52,16 @@ open class MainActivity : BaseActivity() {
     private val cardSdkProvider: CardSdkProvider by inject()
     private val localStorage: ILocalStorage by inject()
     private val pinComponent: IPinComponent by inject()
-    private lateinit var pinLockComposeView: ComposeView
+    private var pinLockComposeView: ComposeView? = null
     private var showPinLockScreen by mutableStateOf(false)
 
     override fun onResume() {
         super.onResume()
+        if (showPinLockScreen && !pinComponent.isLockedFlow.value) {
+            showPinLockScreen = false
+            pinLockComposeView?.visibility = GONE
+            applyLockWindowFlags(isLocked = false, calculatorMode = true)
+        }
         validate()
     }
 
@@ -164,8 +169,9 @@ open class MainActivity : BaseActivity() {
             }
         }
 
-        pinLockComposeView = findViewById(R.id.pinLockComposeView)
-        pinLockComposeView.setContent {
+        val composeView = findViewById<ComposeView>(R.id.pinLockComposeView)
+        pinLockComposeView = composeView
+        composeView.setContent {
             ComposeAppTheme {
                 val calculatorMode by localStorage.isCalculatorModeEnabledFlow
                     .collectAsStateWithLifecycle()
@@ -237,7 +243,7 @@ open class MainActivity : BaseActivity() {
             ) { locked, calculatorMode -> locked to calculatorMode }
                 .collect { (isLocked, calculatorMode) ->
                     showPinLockScreen = isLocked
-                    pinLockComposeView.visibility = if (isLocked) VISIBLE else GONE
+                    pinLockComposeView?.visibility = if (isLocked) VISIBLE else GONE
                     applyTaskDescription(calculatorMode)
                     applyLockWindowFlags(isLocked, calculatorMode)
                 }
@@ -245,16 +251,13 @@ open class MainActivity : BaseActivity() {
     }
 
     private fun showCalculatorLockScreenInRecents() {
-        if (!localStorage.isCalculatorModeEnabled ||
-            !pinComponent.isPinSet ||
-            !::pinLockComposeView.isInitialized
-        ) {
+        val composeView = pinLockComposeView ?: return
+        if (!localStorage.isCalculatorModeEnabled || !pinComponent.isPinSet) {
             return
         }
 
-        pinComponent.lock()
         showPinLockScreen = true
-        pinLockComposeView.visibility = VISIBLE
+        composeView.visibility = VISIBLE
         applyTaskDescription(calculatorMode = true)
         applyLockWindowFlags(isLocked = true, calculatorMode = true)
     }
