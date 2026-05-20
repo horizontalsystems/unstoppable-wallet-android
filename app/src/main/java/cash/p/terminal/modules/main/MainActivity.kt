@@ -57,6 +57,10 @@ open class MainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        // Refresh lock state synchronously: BackgroundManager → PinComponent emits
+        // EnterForeground on a different coroutine and may not have run yet, so the
+        // check below would otherwise race and briefly hide the calculator overlay.
+        pinComponent.willEnterForeground()
         if (showPinLockScreen && !pinComponent.isLockedFlow.value) {
             showPinLockScreen = false
             pinLockComposeView?.visibility = GONE
