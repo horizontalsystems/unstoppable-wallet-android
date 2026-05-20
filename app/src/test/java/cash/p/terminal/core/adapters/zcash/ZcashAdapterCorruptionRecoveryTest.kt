@@ -41,6 +41,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -188,6 +189,7 @@ class ZcashAdapterCorruptionRecoveryTest {
         if (::adapter.isInitialized) {
             adapter.stop()
         }
+        testScope.cancel()
         stopKoin()
         Dispatchers.resetMain()
         unmockkAll()

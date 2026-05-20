@@ -148,7 +148,7 @@ class ZcashAdapter(
     private var statusJob: Job? = null
     private var subscriberScope: CoroutineScope? = null
     override val isMainNet: Boolean = true
-    private val scope = CoroutineScope(dispatcherProvider.io)
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     private var balanceCheckJob: Job? = null
     private val balanceCheckMutex = Mutex()
