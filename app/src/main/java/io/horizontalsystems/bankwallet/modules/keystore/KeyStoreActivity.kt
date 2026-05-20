@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
@@ -39,8 +40,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.BottomSheetsElement
 import io.horizontalsystems.bankwallet.ui.compose.components.BottomSheetsElementsHeader
 import io.horizontalsystems.bankwallet.ui.compose.components.BottomSheetsElementsText
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.parcelable
-import io.horizontalsystems.core.putParcelableExtra
 
 class KeyStoreActivity : BaseActivity() {
 
@@ -118,10 +117,17 @@ class KeyStoreActivity : BaseActivity() {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or
                         Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-                putParcelableExtra(MODE, mode)
+                putExtra(MODE, mode as Parcelable)
             }
 
             context.startActivity(intent)
+        }
+
+        //  Intent & Parcelable Enum
+
+        inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
+            Build.VERSION.SDK_INT >= 33 -> getParcelableExtra(key, T::class.java)
+            else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
         }
     }
 }

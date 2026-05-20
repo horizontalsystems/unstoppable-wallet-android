@@ -2,10 +2,6 @@ package io.horizontalsystems.core
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
-import android.os.Build.VERSION.SDK_INT
-import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import java.math.BigDecimal
@@ -30,22 +26,6 @@ fun ByteArray.toHexString(): String {
     return this.joinToString(separator = "") {
         it.toInt().and(0xff).toString(16).padStart(2, '0')
     }
-}
-
-//  Intent & Parcelable Enum
-
-fun Intent.putParcelableExtra(key: String, value: Parcelable) {
-    putExtra(key, value)
-}
-
-inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? = when {
-    SDK_INT >= 33 -> getParcelable(key, T::class.java)
-    else -> @Suppress("DEPRECATION") getParcelable(key) as? T
-}
-
-inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
-    SDK_INT >= 33 -> getParcelableExtra(key, T::class.java)
-    else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
 }
 
 fun BigDecimal.scaleUp(scale: Int): BigInteger {
