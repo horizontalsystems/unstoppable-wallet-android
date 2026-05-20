@@ -81,7 +81,7 @@ fun MarketScreen(
                 icon = R.drawable.ic_search,
                 tint = ComposeAppTheme.colors.grey,
                 onClick = {
-                    navController.slideFromBottom(R.id.marketSearchFragment)
+                    navController.slideFromBottom(MarketSearchFragment)
                     stat(
                         page = StatPage.Markets,
                         event = StatEvent.Open(StatPage.MarketSearch)
