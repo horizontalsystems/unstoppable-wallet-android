@@ -24,6 +24,7 @@ class PoisonAddressManager(
     companion object {
         private const val SIMILARITY_CHARS = 3
         private const val WHITELIST_MIN_SEND_COUNT = 3
+        private const val SIMILARITY_MIN_SEND_COUNT = 1
     }
 
     @Suppress("ReturnCount")
@@ -182,8 +183,8 @@ class PoisonAddressManager(
         blockchainType: BlockchainType,
         accountId: String,
     ): List<String> {
-        val whitelisted = poisonAddressDao
-            .getWhitelisted(blockchainType.uid, accountId, WHITELIST_MIN_SEND_COUNT)
+        val knownAddresses = poisonAddressDao
+            .getWhitelisted(blockchainType.uid, accountId, SIMILARITY_MIN_SEND_COUNT)
             .map { it.address }
         val contactAddresses = contactsRepository
             .getContactsFiltered(blockchainType = blockchainType)
@@ -192,6 +193,6 @@ class PoisonAddressManager(
                     .filter { it.blockchain.type == blockchainType }
                     .map { it.address.lowercase() }
             }
-        return whitelisted + contactAddresses
+        return knownAddresses + contactAddresses
     }
 }
