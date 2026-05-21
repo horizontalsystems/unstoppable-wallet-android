@@ -8,31 +8,31 @@ import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.compose.runtime.LaunchedEffect
 import cash.p.terminal.MainGraphDirections
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseActivity
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.notifications.TransactionNotificationManager
 import cash.p.terminal.core.navigateWithTermsAccepted
-import cash.p.terminal.modules.createaccount.CreateAccountFragment
-import cash.p.terminal.modules.intro.IntroActivity
-import cash.p.terminal.modules.keystore.KeyStoreActivity
+import cash.p.terminal.core.notifications.TransactionNotificationManager
 import cash.p.terminal.modules.calculator.lockscreen.CalculatorLockScreen
 import cash.p.terminal.modules.calculator.lockscreen.CalculatorLockScreenActions
 import cash.p.terminal.modules.calculator.lockscreen.CalculatorLockScreenViewModel
+import cash.p.terminal.modules.createaccount.CreateAccountFragment
+import cash.p.terminal.modules.intro.IntroActivity
+import cash.p.terminal.modules.keystore.KeyStoreActivity
 import cash.p.terminal.modules.pin.ui.PinUnlock
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.compose.viewmodel.koinViewModel
+import cash.p.terminal.modules.settings.appearance.AppIconService
 import cash.p.terminal.modules.tonconnect.TonConnectNewFragment
 import cash.p.terminal.navigation.slideFromBottom
 import cash.p.terminal.navigation.slideFromBottomForResult
@@ -45,11 +45,13 @@ import io.horizontalsystems.core.hideKeyboard
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import org.koin.compose.viewmodel.koinViewModel
 
 open class MainActivity : BaseActivity() {
 
     val viewModel: MainActivityViewModel by inject()
     private val cardSdkProvider: CardSdkProvider by inject()
+    private val appIconService: AppIconService by inject()
     private val localStorage: ILocalStorage by inject()
     private val pinComponent: IPinComponent by inject()
     private lateinit var pinLockComposeView: ComposeView
@@ -63,6 +65,11 @@ open class MainActivity : BaseActivity() {
     override fun onPause() {
         super.onPause()
         showCalculatorLockScreenInRecents()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        appIconService.applyPendingLauncherAliasUpdate()
     }
 
     override fun onNewIntent(intent: Intent) {

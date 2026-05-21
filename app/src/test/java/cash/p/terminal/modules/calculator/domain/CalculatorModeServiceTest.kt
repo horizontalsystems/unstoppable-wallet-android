@@ -86,6 +86,31 @@ class CalculatorModeServiceTest {
     }
 
     @Test
+    fun disableAfterPremiumLoss_calculatorCreatedPin_keepsPinAndDefersLauncherAliasUpdate() {
+        every { localStorage.isCalculatorModeEnabled } returns true
+        every { localStorage.calculatorModeCreatedPin } returns true
+        every { localStorage.previousAppIconName } returns AppIcon.Pirate.name
+
+        service.disableAfterPremiumLoss()
+
+        verify { appIconService.setAppIcon(AppIcon.Pirate, updateLauncherAliases = false) }
+        verify(exactly = 0) { pinComponent.disablePin() }
+        verify { localStorage.calculatorModeCreatedPin = false }
+        verify { localStorage.calculatorModeLauncherAliasUpdatePending = true }
+    }
+
+    @Test
+    fun disableAfterPremiumLoss_alreadyDisabled_doesNothing() {
+        every { localStorage.isCalculatorModeEnabled } returns false
+
+        service.disableAfterPremiumLoss()
+
+        verify(exactly = 0) { appIconService.setAppIcon(any(), updateLauncherAliases = any()) }
+        verify(exactly = 0) { pinComponent.disablePin() }
+        verify(exactly = 0) { localStorage.calculatorModeLauncherAliasUpdatePending = any() }
+    }
+
+    @Test
     fun disable_calculatorDidNotCreatePin_keepsPin() {
         every { localStorage.isCalculatorModeEnabled } returns true
         every { localStorage.calculatorModeCreatedPin } returns false

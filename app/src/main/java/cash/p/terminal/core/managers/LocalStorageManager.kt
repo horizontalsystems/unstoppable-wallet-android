@@ -517,6 +517,12 @@ class LocalStorageManager(
         commit = true,
     )
 
+    override var calculatorModeLauncherAliasUpdatePending by preferences.delegate(
+        key = "calculator_mode_launcher_alias_update_pending",
+        default = false,
+        commit = true,
+    )
+
     override var previousAppIconName: String?
         get() = preferences.getString(PREVIOUS_APP_ICON, null)
         set(value) {

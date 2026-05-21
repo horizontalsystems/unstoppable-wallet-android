@@ -106,7 +106,7 @@ class MainActivityViewModel(
         ) {
             val premiumType = checkPremiumUseCase.update()
             if (!premiumType.isPremium() && localStorage.isCalculatorModeEnabled) {
-                calculatorModeService.disable(keepPin = true)
+                calculatorModeService.disableAfterPremiumLoss()
             }
         }
     }

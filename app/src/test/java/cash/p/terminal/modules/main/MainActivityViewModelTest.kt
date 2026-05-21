@@ -19,6 +19,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -101,6 +102,20 @@ class MainActivityViewModelTest {
         advanceUntilIdle()
 
         coVerify(exactly = 2) { checkPremiumUseCase.update() }
+    }
+
+    @Test
+    fun currentUserLevelFlow_premiumLostInCalculatorMode_disablesCalculatorWithoutRestartPath() = runTest(dispatcher) {
+        every { localStorage.isCalculatorModeEnabled } returns true
+
+        createViewModel()
+        advanceUntilIdle()
+
+        userManager.setUserLevel(0)
+        isLockedFlow.value = false
+        advanceUntilIdle()
+
+        verify { calculatorModeService.disableAfterPremiumLoss() }
     }
 
     private fun createViewModel() = MainActivityViewModel(
