@@ -564,6 +564,18 @@ class CalculatorLockScreenViewModelTest {
     }
 
     @Test
+    fun onToggleSignClick_expressionAtMaxLength_ignoresGrowth() {
+        val viewModel = createViewModel()
+        val expression = "1.11111111111111×222222222222222×333333333333333×444444444444444"
+        assertEquals(64, expression.length)
+        typeExpression(viewModel, expression)
+
+        viewModel.onToggleSignClick()
+
+        assertEquals(expression, viewModel.uiState.expression)
+    }
+
+    @Test
     fun onEqualsClick_resultExceeds15Digits_usesScientificNotation() {
         val viewModel = createViewModel()
         typeExpression(viewModel, "999999999999999×999999999999999")

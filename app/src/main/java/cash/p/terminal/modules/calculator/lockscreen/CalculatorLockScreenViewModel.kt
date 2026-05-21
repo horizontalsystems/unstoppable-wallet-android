@@ -217,12 +217,11 @@ class CalculatorLockScreenViewModel(
     }
 
     private fun appendToExpression(text: String) {
-        val newExpression = uiState.expression + text
-        if (newExpression.length > MAX_EXPRESSION_LENGTH) return
-        updateExpression(newExpression)
+        updateExpression(uiState.expression + text)
     }
 
     private fun updateExpression(newExpression: String) {
+        if (newExpression.length > MAX_EXPRESSION_LENGTH) return
         val live = liveResultOrNull(newExpression)
         uiState = uiState.copy(
             expression = newExpression,
