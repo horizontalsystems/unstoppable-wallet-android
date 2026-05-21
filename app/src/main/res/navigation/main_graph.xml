@@ -463,6 +463,21 @@
         android:id="@+id/wcListFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment" />
     <fragment
+        android:id="@+id/openCryptoPayFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.opencryptopay.OpenCryptoPayFragment" />
+    <fragment
+        android:id="@+id/openCryptoPayEvmConfirmationFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.opencryptopay.OpenCryptoPayEvmConfirmationFragment" />
+    <fragment
+        android:id="@+id/openCryptoPayConfirmationFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.opencryptopay.OpenCryptoPayConfirmationFragment" />
+    <fragment
+        android:id="@+id/openCryptoPayEvmSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.opencryptopay.OpenCryptoPayEvmSettingsFragment" />
+    <fragment
+        android:id="@+id/openCryptoPayEvmNonceSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.opencryptopay.OpenCryptoPayEvmNonceSettingsFragment" />
+    <fragment
         android:id="@+id/tcListFragment"
         android:name="io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectMainFragment" />
     <fragment

@@ -314,6 +314,29 @@ abstract class BitcoinBaseAdapter(
         return transaction?.let { transactionRecord(it) }
     }
 
+    override fun rawTransaction(
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+        feeRate: Int,
+        unspentOutputs: List<UnspentOutputInfo>?,
+        utxoFilters: UtxoFilters,
+    ): String {
+        return kit.rawTransaction(
+            address = address,
+            memo = memo,
+            value = amount.movePointRight(decimal).toLong(),
+            senderPay = true,
+            feeRate = feeRate,
+            sortType = TransactionDataSortType.None,
+            unspentOutputs = unspentOutputs,
+            pluginData = mapOf(),
+            rbfEnabled = false,
+            changeToFirstInput = false,
+            filters = utxoFilters,
+        )
+    }
+
     override fun selectUnspentOutputs(value: BigDecimal, feeRate: Int): List<UnspentOutputInfo> {
         return kit.selectUnspentOutputs(value.movePointRight(decimal).toLong(), feeRate)
     }

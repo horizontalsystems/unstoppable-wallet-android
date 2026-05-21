@@ -185,6 +185,17 @@ class SendTransactionServiceBtc(private val token: Token) : AbstractSendTransact
         SendBtcFeeSettingsScreen(navController, sendSettingsViewModel)
     }
 
+    fun signTransaction(): String {
+        return adapter.rawTransaction(
+            amount = amountState.amount!!,
+            address = addressState.validAddress?.hex!!,
+            memo = memo,
+            feeRate = feeRateState.feeRate!!,
+            unspentOutputs = null,
+            utxoFilters = utxoFilters,
+        )
+    }
+
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult.Btc {
         val transactionRecord = adapter.send(
             amount = amountState.amount!!,

@@ -395,6 +395,16 @@
     <string name="Wallet_Title">Wallet</string>
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Send">Send</string>
+    <string name="OpenCryptoPay_Title">Pay</string>
+    <string name="OpenCryptoPay_Pay">Pay</string>
+    <string name="OpenCryptoPay_Expired">Expired</string>
+    <string name="OpenCryptoPay_Merchant">Merchant</string>
+    <string name="OpenCryptoPay_Amount">Amount</string>
+    <string name="OpenCryptoPay_ChooseAsset">Choose Asset</string>
+    <string name="OpenCryptoPay_ChooseTokenDescription">Choose the token you want to use for payment</string>
+    <string name="OpenCryptoPay_NoSupportedMethods">No supported payment methods available for this wallet</string>
+    <string name="OpenCryptoPay_URL">URL</string>
+    <string name="OpenCryptoPay_ExpiresIn">Expires In</string>
     <string name="Balance_Receive">Receive</string>
     <string name="Balance_RatePerCoin">%1$s per %2$s</string>
     <string name="Balance_SyncedUntil">until %s</string>

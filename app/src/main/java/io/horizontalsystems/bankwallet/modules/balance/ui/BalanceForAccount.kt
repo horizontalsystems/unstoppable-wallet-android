@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
+import io.horizontalsystems.bankwallet.modules.opencryptopay.OpenCryptoPayFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCInvalidUrlBottomSheet
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
@@ -115,8 +116,19 @@ fun BalanceForAccount(
         viewModel.onWalletConnectRequestHandled()
     }
 
-    BackupRequiredAlert(navController)
     val uiState = viewModel.uiState
+
+    LaunchedEffect(uiState.openOcpPayment) {
+        uiState.openOcpPayment?.let { lnurl ->
+            navController.slideFromRight(
+                R.id.openCryptoPayFragment,
+                OpenCryptoPayFragment.Input(lnurl)
+            )
+            viewModel.onOcpPaymentOpened()
+        }
+    }
+
+    BackupRequiredAlert(navController)
 
     HSScaffold(
         title = accountViewItem.name,

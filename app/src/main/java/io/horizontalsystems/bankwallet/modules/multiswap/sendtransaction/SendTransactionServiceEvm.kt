@@ -219,6 +219,17 @@ class SendTransactionServiceEvm(
         feeService.setTransactionData(data.transactionData)
     }
 
+    suspend fun signTransaction(): String {
+        val tx = transaction ?: throw Exception("Transaction not ready")
+        if (tx.errors.isNotEmpty()) throw Exception("Transaction has errors")
+        return evmKitWrapper.signSingle(
+            tx.transactionData,
+            tx.gasData.gasPrice,
+            tx.gasData.gasLimit,
+            tx.nonce,
+        ).await()
+    }
+
     override suspend fun sendTransaction(mevProtectionEnabled: Boolean): SendTransactionResult.Evm {
         val transaction = transaction ?: throw Exception()
         if (transaction.errors.isNotEmpty()) throw Exception()

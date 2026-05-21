@@ -107,9 +107,9 @@ class MoneroAdapter(
     override val debugInfo: String
         get() = ""
 
-    override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
+    override suspend fun send(amount: BigDecimal, address: String, memo: String?): String {
         val amountInPiconero = amount.movePointRight(DECIMALS).toLong()
-        kit.send(amountInPiconero, address, memo)
+        return kit.send(amountInPiconero, address, memo)
     }
 
     override suspend fun estimateFee(
