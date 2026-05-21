@@ -20,6 +20,7 @@ inline fun <reified T> ResultEffect(
     LaunchedEffect(resultKey, resultEventBus.channelMap[resultKey]) {
         resultEventBus.getResultFlow<T>(resultKey)?.collect { result ->
             onResult.invoke(result as T)
+            resultEventBus.channelMap.remove(resultKey)
         }
     }
 }
