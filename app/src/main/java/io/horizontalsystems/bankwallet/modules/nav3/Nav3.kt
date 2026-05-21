@@ -84,7 +84,7 @@ fun Nav3() {
                     contentKey = screen.contentKey(),
                     metadata = screen.getMetadata()
                 ) {
-                    screen.GetContent(HSNavigation(backStack))
+                    screen.GetContent(hsNavigation)
                 }
             }
         )
