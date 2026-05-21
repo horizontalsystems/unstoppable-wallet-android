@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup
 
 import android.util.Log
-import io.horizontalsystems.bankwallet.entities.ZanoNodeRecord
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
@@ -37,6 +36,7 @@ import io.horizontalsystems.bankwallet.entities.EnabledWallet
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.entities.MoneroNodeRecord
 import io.horizontalsystems.bankwallet.entities.TransactionDataSortMode
+import io.horizontalsystems.bankwallet.entities.ZanoNodeRecord
 import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
@@ -56,9 +56,11 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 import java.security.MessageDigest
 import java.util.UUID
 
+@Serializable
 enum class BackupSection {
     @SerializedName("contacts")
     Contacts,
