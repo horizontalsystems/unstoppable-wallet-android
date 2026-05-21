@@ -521,6 +521,112 @@ class CalculatorLockScreenViewModelTest {
     }
 
     @Test
+    fun onDigitClick_currentNumberHas15Digits_ignoresFurtherDigits() {
+        val viewModel = createViewModel()
+
+        repeat(20) { viewModel.onDigitClick('9') }
+
+        assertEquals("999999999999999", viewModel.uiState.expression)
+    }
+
+    @Test
+    fun onDigitClick_perOperandLimitIsIndependent_allowsNewNumberAfterOperator() {
+        val viewModel = createViewModel()
+
+        repeat(20) { viewModel.onDigitClick('1') }
+        viewModel.onOperatorClick('+')
+        repeat(20) { viewModel.onDigitClick('2') }
+
+        assertEquals("111111111111111+222222222222222", viewModel.uiState.expression)
+    }
+
+    @Test
+    fun onDigitClick_perOperandLimitCountsDigitsOnly_decimalPointDoesNotConsumeLimit() {
+        val viewModel = createViewModel()
+
+        viewModel.onDigitClick('1')
+        viewModel.onDecimalClick()
+        repeat(20) { viewModel.onDigitClick('2') }
+
+        assertEquals("1.22222222222222", viewModel.uiState.expression)
+    }
+
+    @Test
+    fun appendToExpression_exceedsMaxExpressionLength_ignoresFurtherInput() {
+        val viewModel = createViewModel()
+
+        repeat(80) {
+            viewModel.onDigitClick('1')
+            viewModel.onOperatorClick('+')
+        }
+
+        assertTrue(viewModel.uiState.expression.length <= 64)
+    }
+
+    @Test
+    fun onEqualsClick_resultExceeds15Digits_usesScientificNotation() {
+        val viewModel = createViewModel()
+        typeExpression(viewModel, "999999999999999×999999999999999")
+
+        viewModel.onEqualsClick()
+
+        assertEquals("9.99999999999998e+29", viewModel.uiState.displayedResult)
+    }
+
+    @Test
+    fun onEqualsClick_resultIsExtremelySmall_usesScientificNotation() {
+        val viewModel = createViewModel()
+        typeExpression(viewModel, "1÷999999999999999")
+
+        viewModel.onEqualsClick()
+
+        assertEquals("1e-15", viewModel.uiState.displayedResult)
+    }
+
+    @Test
+    fun onEqualsClick_resultIsRoundToFifteenSignificantDigits() {
+        val viewModel = createViewModel()
+        typeExpression(viewModel, "1÷3")
+
+        viewModel.onEqualsClick()
+
+        assertEquals("0.333333333333333", viewModel.uiState.displayedResult)
+    }
+
+    @Test
+    fun onEqualsClick_fractionalResultRoundedToIntegerForDisplay_skipsPinLookup() = runTest(dispatcher) {
+        val viewModel = createViewModel()
+        // 1/3*3 = 0.999...99 exact — visually rounds to "1", but must not unlock PIN 000001.
+        typeExpression(viewModel, "1÷3×3")
+        viewModel.onEqualsClick()
+        advanceUntilIdle()
+
+        verify(exactly = 0) { throttle.tryConsume() }
+        coVerify(exactly = 0) { attemptPinUnlock(any()) }
+        assertEquals("1", viewModel.uiState.displayedResult)
+    }
+
+    @Test
+    fun onEqualsClick_resultIsSixteenDigitInteger_usesScientificNotation() {
+        val viewModel = createViewModel()
+        typeExpression(viewModel, "999999999999999+1")
+
+        viewModel.onEqualsClick()
+
+        assertEquals("1e+15", viewModel.uiState.displayedResult)
+    }
+
+    @Test
+    fun onEqualsClick_resultIsFifteenNines_staysPlain() {
+        val viewModel = createViewModel()
+        typeExpression(viewModel, "999999999999998+1")
+
+        viewModel.onEqualsClick()
+
+        assertEquals("999999999999999", viewModel.uiState.displayedResult)
+    }
+
+    @Test
     fun onUnlockedConsumed_clearsExpressionAndUnlockedFlag() {
         val viewModel = createViewModel()
         viewModel.onDigitClick('1')
