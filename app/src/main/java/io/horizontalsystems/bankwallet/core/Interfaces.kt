@@ -438,6 +438,15 @@ interface ISendBitcoinAdapter {
         utxoFilters: UtxoFilters
     ): BitcoinTransactionRecord?
 
+    fun rawTransaction(
+        amount: BigDecimal,
+        address: String,
+        memo: String?,
+        feeRate: Int,
+        unspentOutputs: List<UnspentOutputInfo>?,
+        utxoFilters: UtxoFilters,
+    ): String
+
     fun satoshiToBTC(value: Long): BigDecimal
 }
 
@@ -492,13 +501,13 @@ interface ISendStellarAdapter {
 
 interface ISendMoneroAdapter {
     val balanceData: BalanceData
-    suspend fun send(amount: BigDecimal, address: String, memo: String?)
+    suspend fun send(amount: BigDecimal, address: String, memo: String?): String
     suspend fun estimateFee(amount: BigDecimal, address: String, memo: String?) : BigDecimal
 }
 
 interface ISendZanoAdapter {
     val balanceData: BalanceData
-    suspend fun send(amount: BigDecimal, address: String, memo: String?)
+    suspend fun send(amount: BigDecimal, address: String, memo: String?): String
     suspend fun estimateFee(amount: BigDecimal, address: String, memo: String?) : BigDecimal
 }
 
@@ -509,9 +518,9 @@ interface ISendTronAdapter {
     suspend fun estimateFee(amount: BigDecimal, to: TronAddress): List<Fee>
     suspend fun estimateFee(transaction: CreatedTransaction): List<Fee>
     suspend fun estimateFee(contract: Contract): List<Fee>
-    suspend fun send(amount: BigDecimal, to: TronAddress, feeLimit: Long?)
-    suspend fun send(contract: Contract, feeLimit: Long?)
-    suspend fun send(createdTransaction: CreatedTransaction)
+    suspend fun send(amount: BigDecimal, to: TronAddress, feeLimit: Long?): String
+    suspend fun send(contract: Contract, feeLimit: Long?): String
+    suspend fun send(createdTransaction: CreatedTransaction): String
     suspend fun isAddressActive(address: TronAddress): Boolean
     fun isOwnAddress(address: TronAddress): Boolean
 }

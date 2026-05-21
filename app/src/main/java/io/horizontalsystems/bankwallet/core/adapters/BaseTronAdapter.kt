@@ -48,16 +48,16 @@ abstract class BaseTronAdapter(
         return tronKit.estimateFee(transaction)
     }
 
-    override suspend fun send(contract: Contract, feeLimit: Long?) {
+    override suspend fun send(contract: Contract, feeLimit: Long?): String {
         if (signer == null) throw Exception()
 
-        tronKit.send(contract, signer, feeLimit)
+        return tronKit.send(contract, signer, feeLimit)
     }
 
-    override suspend fun send(createdTransaction: CreatedTransaction) {
+    override suspend fun send(createdTransaction: CreatedTransaction): String {
         if (signer == null) throw Exception()
 
-        tronKit.send(createdTransaction, signer)
+        return tronKit.send(createdTransaction, signer)
     }
 
     override suspend fun isAddressActive(address: Address): Boolean = withContext(Dispatchers.IO) {

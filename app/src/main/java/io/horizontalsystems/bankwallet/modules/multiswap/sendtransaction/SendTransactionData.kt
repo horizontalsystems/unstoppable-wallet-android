@@ -26,6 +26,7 @@ sealed class SendTransactionData {
     sealed class Tron : SendTransactionData() {
         data class WithContract(val contract: Contract) : Tron()
         data class WithCreateTransaction(val transaction: CreatedTransaction) : Tron()
+        data class Simple(val address: String, val amount: BigDecimal) : Tron()
     }
 
     sealed class Solana : SendTransactionData() {
@@ -39,6 +40,7 @@ sealed class SendTransactionData {
 
             override fun hashCode() = rawTransaction.contentHashCode()
         }
+        data class Simple(val address: String, val amount: BigDecimal) : Solana()
     }
 
     sealed class Stellar : SendTransactionData() {

@@ -9,7 +9,9 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.core.TransactionBuilder
 import io.horizontalsystems.ethereumkit.core.signer.Signer
+import io.horizontalsystems.ethereumkit.core.toHexString
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.FullTransaction
@@ -253,6 +255,20 @@ class EvmKitWrapper(
                 } else {
                     evmKit.send(rawTransaction, signature)
                 }
+            }
+    }
+
+    fun signSingle(
+        transactionData: TransactionData,
+        gasPrice: GasPrice,
+        gasLimit: Long,
+        nonce: Long?,
+    ): Single<String> {
+        if (signer == null) return Single.error(Exception())
+        return evmKit.rawTransaction(transactionData, gasPrice, gasLimit, nonce)
+            .map { rawTransaction ->
+                val signature = signer.signature(rawTransaction)
+                TransactionBuilder.encode(rawTransaction, signature, evmKit.chain.id).toHexString()
             }
     }
 }

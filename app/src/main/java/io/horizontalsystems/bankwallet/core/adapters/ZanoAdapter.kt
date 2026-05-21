@@ -92,9 +92,9 @@ class ZanoAdapter(
     override val debugInfo: String
         get() = ""
 
-    override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
+    override suspend fun send(amount: BigDecimal, address: String, memo: String?): String {
         val atomicAmount = amount.movePointRight(wallet.token.decimals).toLong()
-        kit.send(
+        return kit.send(
             toAddress = address,
             assetId = assetId,
             amount = SendAmount.Value(atomicAmount),
