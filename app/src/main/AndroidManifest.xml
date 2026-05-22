@@ -123,7 +123,7 @@
             android:label="@string/calculator_app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.App.Starting"
+            android:theme="@style/Theme.App.Starting.Calculator"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".modules.intro.IntroActivity"
