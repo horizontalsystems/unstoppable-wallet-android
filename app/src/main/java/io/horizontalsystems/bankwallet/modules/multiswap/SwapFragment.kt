@@ -152,7 +152,7 @@ fun SwapScreen(
     var showAmlErrorSheet by remember { mutableStateOf(false) }
     val amlErrorSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    val forResult = navController.slideFromRightForResult<SwapConfirmFragment.Result>(SwapConfirmFragment(parentScreenContentKey)) {
+    val forResult = navController.slideFromRightForResult<SwapConfirmFragment.Result>({ SwapConfirmFragment(parentScreenContentKey) }) {
         if (it.success) {
             if (closeAfterSwap) {
                 navController.removeLastOrNull()
@@ -168,7 +168,7 @@ fun SwapScreen(
     }
 
     val forResultSwapTerms = navController.slideFromRightForResult<SwapTermsFragment.Result>(
-        SwapTermsFragment
+        { SwapTermsFragment }
     ) {
         if (it.accepted) navigateToSwapConfirm()
     }
@@ -239,17 +239,19 @@ fun SwapScreen(
         uiState = uiState,
         onClickClose = onClickClose,
         onClickCoinFrom = navController.slideFromBottomForResult<Token>(
-            SwapSelectCoinFragment(
-                SwapSelectCoinFragment.Input(
-                    uiState.tokenOut,
-                    context.getString(R.string.Swap_YouPay)
+            {
+                SwapSelectCoinFragment(
+                    SwapSelectCoinFragment.Input(
+                        uiState.tokenOut,
+                        context.getString(R.string.Swap_YouPay)
+                    )
                 )
-            )
+            }
         ) {
             viewModel.onSelectTokenIn(it)
         },
         onClickCoinTo = navController.slideFromBottomForResult<Token>(
-            SwapSelectCoinFragment(SwapSelectCoinFragment.Input(uiState.tokenIn, context.getString(R.string.Swap_YouGet))),
+            { SwapSelectCoinFragment(SwapSelectCoinFragment.Input(uiState.tokenIn, context.getString(R.string.Swap_YouGet))) },
         ) {
             viewModel.onSelectTokenOut(it)
         },

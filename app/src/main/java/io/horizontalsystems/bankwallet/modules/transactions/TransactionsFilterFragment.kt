@@ -126,12 +126,14 @@ fun FilterScreen(
                 )
                 VSpacer(32.dp)
                 val forResult = navController.slideFromRightForResult<SelectContactFragment.Result>(
-                    SelectContactFragment(
-                        SelectContactFragment.Input(
-                            filterContact,
-                            filterBlockchain?.type
+                    {
+                        SelectContactFragment(
+                            SelectContactFragment.Input(
+                                filterContact,
+                                filterBlockchain?.type
+                            )
                         )
-                    )
+                    }
                 ) {
                     viewModel.onEnterContact(it.contact)
                 }

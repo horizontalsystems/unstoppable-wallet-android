@@ -114,11 +114,13 @@ fun SendEvmScreen(
             )
 
             val forResult = navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
-                AddressRiskyBottomSheetAlert(
-                    AddressRiskyBottomSheetAlert.Input(
-                        alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
+                {
+                    AddressRiskyBottomSheetAlert(
+                        AddressRiskyBottomSheetAlert.Input(
+                            alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
+                        )
                     )
-                )
+                }
             ) {
                 openSendConfirm(
                     viewModel,

@@ -29,9 +29,11 @@ class ActionRevoke(
     @Composable
     override fun executor(navController: HSNavigation, onActionCompleted: () -> Unit): () -> Unit {
         return navController.slideFromBottomForResult<Eip20RevokeConfirmFragment.Result>(
-            Eip20RevokeConfirmFragment(
-                Eip20RevokeConfirmFragment.Input(token, spenderAddress, allowance)
-            )
+            {
+                Eip20RevokeConfirmFragment(
+                    Eip20RevokeConfirmFragment.Input(token, spenderAddress, allowance)
+                )
+            }
         ) {
             onActionCompleted.invoke()
         }

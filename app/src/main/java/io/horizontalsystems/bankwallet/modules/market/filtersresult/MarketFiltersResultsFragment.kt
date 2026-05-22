@@ -123,7 +123,7 @@ private fun SearchResultsScreen(
                                         )
                                         HSpacer(width = 12.dp)
                                         val forResult = navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
-                                            MarketSignalsFragment
+                                            { MarketSignalsFragment }
                                         ) {
                                             if (it.enabled) {
                                                 viewModel.showSignals()

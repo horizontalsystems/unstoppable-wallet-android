@@ -165,12 +165,14 @@ fun MarketEarnScreen(
                                         )
                                         HSpacer(width = 12.dp)
                                         val forResult = navController.slideFromRightForResult<VaultBlockchainsSelectorFragment.Result>(
-                                            VaultBlockchainsSelectorFragment(
-                                                VaultBlockchainsSelectorFragment.Input(
-                                                    uiState.selectedBlockchains,
-                                                    uiState.blockchains
+                                            {
+                                                VaultBlockchainsSelectorFragment(
+                                                    VaultBlockchainsSelectorFragment.Input(
+                                                        uiState.selectedBlockchains,
+                                                        uiState.blockchains
+                                                    )
                                                 )
-                                            )
+                                            }
                                         ) {
                                             viewModel.onBlockchainsSelected(it.selected)
                                         }

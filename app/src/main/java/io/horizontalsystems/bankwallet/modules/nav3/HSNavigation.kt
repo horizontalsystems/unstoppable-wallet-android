@@ -142,18 +142,18 @@ class HSNavigation(val backStack: NavBackStack<HSScreen>) {
 
     @Composable
     inline fun <reified T> slideFromBottomForResult(
-        screen: HSScreen,
+        crossinline screenBuilder: () -> HSScreen,
         crossinline onResult: (T) -> Unit
     ): () -> Unit {
-        return slideForResult(screen, NavigationType.SlideFromBottom, onResult)
+        return slideForResult(NavigationType.SlideFromBottom, screenBuilder, onResult)
     }
 
     @Composable
     inline fun <reified T> slideFromRightForResult(
-        screen: HSScreen,
+        crossinline screenBuilder: () -> HSScreen,
         crossinline onResult: (T) -> Unit
     ): () -> Unit {
-        return slideForResult(screen, NavigationType.SlideFromRight, onResult)
+        return slideForResult(NavigationType.SlideFromRight, screenBuilder, onResult)
     }
 
     @Composable

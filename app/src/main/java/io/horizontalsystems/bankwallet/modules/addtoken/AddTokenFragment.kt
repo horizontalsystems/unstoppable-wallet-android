@@ -108,7 +108,7 @@ private fun AddTokenScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
-                        onClick = navController.slideFromRightForResult<Blockchain>(BlockchainSelectorPage) {
+                        onClick = navController.slideFromRightForResult<Blockchain>({ BlockchainSelectorPage }) {
                             viewModel.onBlockchainSelect(it)
                         }
                     ) {

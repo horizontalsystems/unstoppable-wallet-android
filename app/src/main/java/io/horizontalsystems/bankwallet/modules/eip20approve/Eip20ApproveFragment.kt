@@ -72,7 +72,7 @@ fun Eip20ApproveScreen(navController: HSNavigation, input: Eip20ApproveFragment.
         ),
         bottomBar = {
             ButtonsGroupWithShade {
-                val forResult = navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>(Eip20ApproveConfirmFragment) {
+                val forResult = navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>({ Eip20ApproveConfirmFragment }) {
                     resultEventBus.sendResult(it)
                     navController.removeLastOrNull()
                 }
