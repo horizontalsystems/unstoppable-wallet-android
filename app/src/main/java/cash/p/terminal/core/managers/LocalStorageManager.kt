@@ -910,7 +910,6 @@ class LocalStorageManager(
         default = ""
     )
 
-
     override var pushNotificationsEnabled by preferences.delegate(
         key = "push_notifications_enabled",
         default = false

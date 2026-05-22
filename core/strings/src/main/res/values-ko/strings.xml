@@ -14,6 +14,10 @@
     <string name="Button_Next">다음</string>
     <string name="Button_Enable">활성화</string>
     <string name="Button_Disable">비활성화</string>
+    <string name="button_enable">켜기</string>
+    <string name="button_disable">끄기</string>
+    <string name="button_do_not_enable">켜지 않기</string>
+    <string name="button_do_not_disable">끄지 않기</string>
     <string name="Button_Close">가까운, 닫힌</string>
     <string name="Button_Ok">확인</string>
     <string name="Button_Done">완료</string>
@@ -1573,6 +1577,8 @@
     <string name="push_notification">푸시 알림</string>
     <string name="premium_push_notifications_show">알림 표시</string>
     <string name="premium_push_notifications_warning">거래 알림을 받으려면 선택한 블록체인에 대해 앱이 백그라운드에서 계속 활성 상태로 유지될 수 있습니다. 이로 인해 앱을 사용하지 않을 때도 배터리 사용량이 늘어날 수 있습니다.</string>
+    <string name="push_notifications_calculator_mode_warning">계산기 모드가 켜져 있습니다. 푸시 알림으로 이 기기에 암호화폐 앱이 설치되어 있음이 드러날 수 있습니다. 알림을 켜시겠습니까?</string>
+    <string name="calculator_mode_push_notifications_warning">푸시 알림이 켜져 있습니다. 앱이 계산기 모드에서도 지갑 알림을 표시할 수 있습니다. 개인정보 보호를 위해 푸시 알림을 끄시겠습니까?</string>
     <string name="push_notification_polling_interval">확인 간격</string>
     <string name="push_notification_interval_realtime">실시간</string>
     <string name="push_notification_interval_5min">5분마다</string>

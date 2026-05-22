@@ -66,7 +66,9 @@ class AppearanceViewModel(
         selectedLaunchScreen = launchScreenService.selectedLaunchScreen,
         selectedBalanceViewType = balanceViewTypeManager.balanceViewType,
         priceChangeInterval = priceChangeInterval,
-        priceChangeIntervalOptions = priceChangeIntervalOptions
+        priceChangeIntervalOptions = priceChangeIntervalOptions,
+        pushNotificationsEnabled = localStorage.pushNotificationsEnabled,
+        isCalculatorModeEnabled = localStorage.isCalculatorModeEnabled,
     )
 
     private fun buildBalanceViewTypeSelect(value: BalanceViewType): Select<BalanceViewType> {
@@ -151,5 +153,7 @@ data class AppearanceUIState(
     val selectedLaunchScreen: LaunchPage,
     val selectedBalanceViewType: BalanceViewType,
     val priceChangeInterval: PriceChangeInterval,
-    val priceChangeIntervalOptions: Select<PriceChangeInterval>
+    val priceChangeIntervalOptions: Select<PriceChangeInterval>,
+    val pushNotificationsEnabled: Boolean,
+    val isCalculatorModeEnabled: Boolean,
 )

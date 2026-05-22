@@ -15,8 +15,8 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
+import cash.p.terminal.modules.calculator.CalculatorModePushNotificationsWarningDialog
 import cash.p.terminal.modules.calculator.domain.CalculatorAutoLockOption
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.AppCloseWarningBottomSheet
@@ -38,32 +39,70 @@ import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CalculatorPinSettingsScreen(
     uiState: CalculatorPinSettingsUiState,
-    onToggleCalculator: (Boolean) -> Unit,
+    onToggleCalculator: (Boolean, Boolean) -> Unit,
     onAutoLockClick: () -> Unit,
     onClose: () -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
-    var pendingToggle by remember { mutableStateOf<Boolean?>(null) }
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var pendingToggle by rememberSaveable { mutableStateOf<Boolean?>(null) }
+    var disablePushNotifications by rememberSaveable { mutableStateOf(false) }
+    var showPushNotificationsWarning by rememberSaveable { mutableStateOf(false) }
 
-    pendingToggle?.let { newValue ->
-        AppCloseWarningBottomSheet(
-            sheetState = sheetState,
-            onDismiss = { pendingToggle = null },
-            onConfirm = {
-                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                    pendingToggle = null
-                    onToggleCalculator(newValue)
-                }
-            },
-        )
-    }
+    CalculatorModePushNotificationsWarningDialog(
+        onCloseClick = { showPushNotificationsWarning = false },
+        onDisablePushClick = {
+            showPushNotificationsWarning = false
+            disablePushNotifications = true
+            pendingToggle = true
+        },
+        onKeepPushClick = {
+            showPushNotificationsWarning = false
+            disablePushNotifications = false
+            pendingToggle = true
+        },
+        visible = showPushNotificationsWarning,
+    )
 
+    CalculatorModeAppCloseWarning(
+        pendingToggle = pendingToggle,
+        disablePushNotifications = disablePushNotifications,
+        onDismiss = {
+            pendingToggle = null
+            disablePushNotifications = false
+        },
+        onConfirm = { enabled, shouldDisablePushNotifications ->
+            pendingToggle = null
+            disablePushNotifications = false
+            onToggleCalculator(enabled, shouldDisablePushNotifications)
+        },
+    )
+
+    CalculatorPinSettingsContent(
+        uiState = uiState,
+        onToggleRequest = { newValue ->
+            if (newValue && uiState.pushNotificationsEnabled) {
+                showPushNotificationsWarning = true
+            } else {
+                pendingToggle = newValue
+            }
+        },
+        onAutoLockClick = onAutoLockClick,
+        onClose = onClose,
+    )
+}
+
+@Composable
+private fun CalculatorPinSettingsContent(
+    uiState: CalculatorPinSettingsUiState,
+    onToggleRequest: (Boolean) -> Unit,
+    onAutoLockClick: () -> Unit,
+    onClose: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Scaffold(
+        modifier = modifier,
         containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
@@ -82,11 +121,36 @@ internal fun CalculatorPinSettingsScreen(
             SettingsSection(
                 isEnabled = uiState.isEnabled,
                 autoLockTitle = uiState.autoLockOption.formatShort(),
-                onToggleRequest = { newValue -> pendingToggle = newValue },
+                onToggleRequest = onToggleRequest,
                 onAutoLockClick = onAutoLockClick,
             )
             Description()
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Suppress("ModifierMissing")
+private fun CalculatorModeAppCloseWarning(
+    pendingToggle: Boolean?,
+    disablePushNotifications: Boolean,
+    onDismiss: () -> Unit,
+    onConfirm: (Boolean, Boolean) -> Unit,
+) {
+    val scope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    pendingToggle?.let { enabled ->
+        AppCloseWarningBottomSheet(
+            sheetState = sheetState,
+            onDismiss = onDismiss,
+            onConfirm = {
+                scope.launch { sheetState.hide() }.invokeOnCompletion {
+                    onConfirm(enabled, enabled && disablePushNotifications)
+                }
+            },
+        )
     }
 }
 
@@ -164,8 +228,9 @@ private fun CalculatorPinSettingsScreenPreview() {
             uiState = CalculatorPinSettingsUiState(
                 isEnabled = true,
                 autoLockOption = CalculatorAutoLockOption.DEFAULT,
+                pushNotificationsEnabled = true,
             ),
-            onToggleCalculator = {},
+            onToggleCalculator = { _, _ -> },
             onAutoLockClick = {},
             onClose = {},
         )
