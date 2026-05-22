@@ -109,7 +109,13 @@ import java.net.UnknownHostException
 data class SwapFragment(val input: Input? = null) : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        SwapScreen(navController, input?.tokenIn, input?.tokenOut, navController::removeLastOrNull)
+        SwapScreen(
+            navController = navController,
+            parentScreenContentKey = contentKey(),
+            tokenIn = input?.tokenIn,
+            tokenOut = input?.tokenOut,
+            onClickClose = navController::removeLastOrNull
+        )
     }
 
     @Serializable
@@ -121,6 +127,7 @@ data class SwapFragment(val input: Input? = null) : HSScreen() {
 @Composable
 fun SwapScreen(
     navController: HSNavigation,
+    parentScreenContentKey: String,
     tokenIn: Token? = null,
     tokenOut: Token? = null,
     onClickClose: (() -> Unit)? = null,
@@ -145,7 +152,7 @@ fun SwapScreen(
     var showAmlErrorSheet by remember { mutableStateOf(false) }
     val amlErrorSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    val forResult = navController.slideFromRightForResult<SwapConfirmFragment.Result>(SwapConfirmFragment) {
+    val forResult = navController.slideFromRightForResult<SwapConfirmFragment.Result>(SwapConfirmFragment(parentScreenContentKey)) {
         if (it.success) {
             if (closeAfterSwap) {
                 navController.removeLastOrNull()
@@ -194,7 +201,7 @@ fun SwapScreen(
             onDismiss = { showAmlRiskSheet = false },
             onChooseAnotherProvider = {
                 showAmlRiskSheet = false
-                navController.slideFromBottom(SwapSelectProviderFragment)
+                navController.slideFromBottom(SwapSelectProviderFragment(parentScreenContentKey))
             },
         )
     }
@@ -251,7 +258,7 @@ fun SwapScreen(
         onEnterAmountPercentage = viewModel::onEnterAmountPercentage,
         onEnterFiatAmount = viewModel::onEnterFiatAmount,
         onClickProvider = {
-            navController.slideFromBottom(SwapSelectProviderFragment)
+            navController.slideFromBottom(SwapSelectProviderFragment(parentScreenContentKey))
 
             stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },

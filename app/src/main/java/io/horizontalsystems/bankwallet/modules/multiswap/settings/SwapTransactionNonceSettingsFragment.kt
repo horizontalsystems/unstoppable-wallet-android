@@ -7,16 +7,19 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SwapTransactionNonceSettingsFragment : HSScreen() {
+data class SwapTransactionNonceSettingsFragment(val parentScreenContentKey: String) : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        SwapTransactionNonceSettingsScreen(navController)
+        SwapTransactionNonceSettingsScreen(navController, parentScreenContentKey)
     }
 }
 
 @Composable
-fun SwapTransactionNonceSettingsScreen(navController: HSNavigation) {
-    val viewModel = navController.viewModelForPrevScreen<SwapConfirmViewModel>()
+fun SwapTransactionNonceSettingsScreen(
+    navController: HSNavigation,
+    parentScreenContentKey: String
+) {
+    val viewModel = navController.viewModelForScreen<SwapConfirmViewModel>(parentScreenContentKey)
 
     val sendTransactionService = viewModel.sendTransactionService
 

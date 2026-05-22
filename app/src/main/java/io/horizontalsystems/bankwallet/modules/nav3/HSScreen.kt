@@ -25,7 +25,7 @@ abstract class HSScreen(
     var navType: NavigationType = NavigationType.SlideFromRight,
 ) : NavKey {
 
-    fun contentKey() = "$className(#$uuid)"
+    fun contentKey() = this::class.simpleName ?: "HSScreen"
 
     @OptIn(ExperimentalMaterial3Api::class)
     fun getMetadata() = buildMap {
@@ -75,8 +75,6 @@ abstract class HSScreen(
         }
 
     }
-
-    private val className = this.javaClass.simpleName
 
     @Composable
     abstract fun GetContent(navController: HSNavigation)

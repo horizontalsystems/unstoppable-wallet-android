@@ -77,19 +77,13 @@ class HSNavigation(val backStack: NavBackStack<HSScreen>) {
 
     @Composable
     inline fun <reified VM : ViewModel> viewModelForScreen(klass: KClass<out HSScreen>) : VM {
-        val hSScreen = checkNotNull(backStack.findLast { it::class == klass })
-
-        return viewModel(
-            viewModelStoreOwner = rememberChildViewModelStoreOwner(hSScreen.contentKey()),
-        )
+        return viewModelForScreen(klass.simpleName ?: "HSScreen")
     }
 
     @Composable
-    inline fun <reified VM : ViewModel> viewModelForScreenOrNull(klass: KClass<out HSScreen>) : VM? {
-        val hSScreen = backStack.findLast { it::class == klass } ?: return null
-
+    inline fun <reified VM : ViewModel> viewModelForScreen(contentKey: String) : VM {
         return viewModel(
-            viewModelStoreOwner = rememberChildViewModelStoreOwner(hSScreen.contentKey()),
+            viewModelStoreOwner = rememberChildViewModelStoreOwner(contentKey),
         )
     }
 
@@ -144,15 +138,6 @@ class HSNavigation(val backStack: NavBackStack<HSScreen>) {
                 add(screen)
             }
         }
-    }
-
-    @Composable
-    inline fun <reified VM : ViewModel> viewModelForPrevScreen() : VM {
-        val hSScreen = backStack[backStack.lastIndex - 1]
-
-        return viewModel(
-            viewModelStoreOwner = rememberChildViewModelStoreOwner(hSScreen.contentKey()),
-        )
     }
 
     @Composable

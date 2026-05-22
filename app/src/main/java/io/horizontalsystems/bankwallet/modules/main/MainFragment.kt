@@ -64,12 +64,13 @@ fun MainScreenWithRootedDeviceCheck(
     transactionsViewModel: TransactionsViewModel,
     navController: HSNavigation,
     rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory()),
-    mainActivityViewModel: MainActivityViewModel
+    mainActivityViewModel: MainActivityViewModel,
+    parentScreenContentKey: String
 ) {
     if (rootedDeviceViewModel.showRootedDeviceWarning) {
         RootedDeviceScreen { rootedDeviceViewModel.ignoreRootedDeviceWarning() }
     } else {
-        MainScreen(mainActivityViewModel, transactionsViewModel, navController)
+        MainScreen(mainActivityViewModel, transactionsViewModel, navController, parentScreenContentKey)
     }
 }
 
@@ -78,6 +79,7 @@ private fun MainScreen(
     mainActivityViewModel: MainActivityViewModel,
     transactionsViewModel: TransactionsViewModel,
     fragmentNavController: HSNavigation,
+    parentScreenContentKey: String,
     viewModel: MainViewModel = viewModel(factory = MainModule.Factory())
 ) {
     val activityIntent by mainActivityViewModel.intentLiveData.observeAsState()
@@ -154,7 +156,8 @@ private fun MainScreen(
                     MainNavigation.Market -> MarketScreen(fragmentNavController)
                     MainNavigation.Balance -> BalanceScreen(fragmentNavController)
                     MainNavigation.Swap -> SwapScreen(
-                        fragmentNavController,
+                        navController = fragmentNavController,
+                        parentScreenContentKey = parentScreenContentKey,
                         onClickClose = null,
                         bottomPadding = navigationBarHeight,
                         closeAfterSwap = false

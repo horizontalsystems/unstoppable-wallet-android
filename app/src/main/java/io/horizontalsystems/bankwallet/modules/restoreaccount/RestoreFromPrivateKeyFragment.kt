@@ -85,7 +85,7 @@ private fun RestoreFromPrivateKeyNavHost(
 data class restore_select_network(val input: ManageAccountsModule.Input) : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val mainViewModel = navController.viewModelForScreenOrNull<RestoreViewModel>(RestoreFromPrivateKeyFragment::class) ?: return
+        val mainViewModel = navController.viewModelForScreen<RestoreViewModel>(RestoreFromPrivateKeyFragment::class)
 
         val uiState = mainViewModel.uiState
         val view = LocalView.current

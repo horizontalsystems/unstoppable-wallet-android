@@ -92,10 +92,10 @@ import java.math.BigDecimal
 import java.util.Locale
 
 @Serializable
-data object SwapConfirmFragment : HSScreen() {
+data class SwapConfirmFragment(val parentScreenContentKey: String) : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        SwapConfirmScreen(navController)
+        SwapConfirmScreen(navController, parentScreenContentKey, contentKey())
     }
 
     @Parcelize
@@ -103,8 +103,12 @@ data object SwapConfirmFragment : HSScreen() {
 }
 
 @Composable
-fun SwapConfirmScreen(navController: HSNavigation) {
-    val swapViewModel = navController.viewModelForPrevScreen<SwapViewModel>()
+fun SwapConfirmScreen(
+    navController: HSNavigation,
+    parentScreenContentKey: String,
+    screenContentKey: String
+) {
+    val swapViewModel = navController.viewModelForScreen<SwapViewModel>(parentScreenContentKey)
     val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
 
     val viewModel = viewModel<SwapConfirmViewModel>(
@@ -116,7 +120,7 @@ fun SwapConfirmScreen(navController: HSNavigation) {
     if (uiState.error != null) {
         SwapConfirmError(navController, viewModel, uiState, uiState.error)
     } else {
-        SwapConfirmInternal(navController, viewModel, uiState)
+        SwapConfirmInternal(navController, viewModel, uiState, screenContentKey)
     }
 }
 
@@ -176,6 +180,7 @@ private fun SwapConfirmInternal(
     navController: HSNavigation,
     viewModel: SwapConfirmViewModel,
     uiState: SwapConfirmUiState,
+    screenContentKey: String,
 ) {
     val resultEventBus = LocalResultEventBus.current
     val coroutineScope = rememberCoroutineScope()
@@ -183,7 +188,7 @@ private fun SwapConfirmInternal(
 
     val onClickSettings = if (uiState.hasSettings) {
         {
-            navController.slideFromRight(SwapTransactionSettingsFragment)
+            navController.slideFromRight(SwapTransactionSettingsFragment(screenContentKey))
         }
     } else {
         null
@@ -191,7 +196,7 @@ private fun SwapConfirmInternal(
 
     val onClickNonceSettings = if (uiState.hasNonceSettings) {
         {
-            navController.slideFromRight(SwapTransactionNonceSettingsFragment)
+            navController.slideFromRight(SwapTransactionNonceSettingsFragment(screenContentKey))
         }
     } else {
         null

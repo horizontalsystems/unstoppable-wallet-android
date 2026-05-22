@@ -18,7 +18,7 @@ import kotlinx.coroutines.delay
 import java.util.UUID
 
 @Composable
-fun MainScreen(navController: HSNavigation) {
+fun MainScreen(navController: HSNavigation, parentScreenContentKey: String) {
     val mainActivityViewModel =
         viewModel<MainActivityViewModel>(viewModelStoreOwner = LocalActivity.current as ComponentActivity)
 
@@ -57,5 +57,6 @@ fun MainScreen(navController: HSNavigation) {
         transactionsViewModel = viewModel<TransactionsViewModel>(factory = TransactionsModule.Factory()),
         navController = navController,
         mainActivityViewModel = mainActivityViewModel,
+        parentScreenContentKey = parentScreenContentKey
     )
 }

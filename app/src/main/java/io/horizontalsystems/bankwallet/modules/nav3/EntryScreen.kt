@@ -17,7 +17,7 @@ data object EntryScreen : HSScreen() {
 
         Crossfade(mainShowedOnce) {
             if (it) {
-                MainScreen(navController)
+                MainScreen(navController, contentKey())
             } else {
                 IntroScreen()
             }

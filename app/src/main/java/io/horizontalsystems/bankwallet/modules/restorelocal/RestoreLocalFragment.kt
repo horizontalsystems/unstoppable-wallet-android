@@ -147,9 +147,9 @@ private fun RestoreLocalNavHost(
 data class backup_file(val input: ManageAccountsModule.Input) : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreenOrNull<RestoreLocalViewModel>(
+        val viewModel = navController.viewModelForScreen<RestoreLocalViewModel>(
             RestoreLocalFragment::class
-        ) ?: return
+        )
 
         val activity = LocalActivity.current
         BackupFileItems(

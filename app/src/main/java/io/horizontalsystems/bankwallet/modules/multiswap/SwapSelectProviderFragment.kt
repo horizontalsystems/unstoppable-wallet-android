@@ -57,16 +57,19 @@ import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsSectionButtons
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SwapSelectProviderFragment : HSScreen() {
+data class SwapSelectProviderFragment(val parentScreenContentKey: String) : HSScreen() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        SwapSelectProviderScreen(navController)
+        SwapSelectProviderScreen(navController, parentScreenContentKey)
     }
 }
 
 @Composable
-fun SwapSelectProviderScreen(navController: HSNavigation) {
-    val swapViewModel = navController.viewModelForPrevScreen<SwapViewModel>()
+fun SwapSelectProviderScreen(
+    navController: HSNavigation,
+    parentScreenContentKey: String
+) {
+    val swapViewModel = navController.viewModelForScreen<SwapViewModel>(parentScreenContentKey)
     val viewModel = viewModel<SwapSelectProviderViewModel>(
         factory = SwapSelectProviderViewModel.Factory(
             swapViewModel.uiState.quotes,
