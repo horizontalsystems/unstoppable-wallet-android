@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -452,6 +453,16 @@ fun CellUniversalLawrenceSection(
 ) {
     CellUniversalLawrenceSection(listOf(content))
 }
+
+fun getShape(itemsCount: Int, index: Int): Shape = when {
+    itemsCount == 1 -> RoundedCornerShape(12.dp)
+    itemsCount - 1 == index -> RoundedCornerShape(0.dp, 0.dp, 12.dp, 12.dp)
+    index == 0 -> RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp)
+    else -> RoundedCornerShape(0.dp)
+}
+
+fun showDivider(itemsCount: Int, index: Int): Boolean =
+    itemsCount != 1 && index != 0
 
 @Composable
 fun CellUniversalLawrenceSection(

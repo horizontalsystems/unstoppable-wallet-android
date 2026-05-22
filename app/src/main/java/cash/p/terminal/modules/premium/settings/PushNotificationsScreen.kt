@@ -3,16 +3,18 @@
 package cash.p.terminal.modules.premium.settings
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +23,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,6 +48,8 @@ import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_grey50
 import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.getShape
+import cash.p.terminal.ui_compose.components.showDivider
 import cash.p.terminal.ui_compose.components.subhead1_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
@@ -76,50 +82,57 @@ internal fun PushNotificationsScreen(
             )
         }
     ) { paddingValues ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
         ) {
-            VSpacer(12.dp)
-            CellUniversalLawrenceSection {
-                SwitchWithTextWarning(
-                    text = stringResource(R.string.premium_push_notifications_show),
-                    checked = uiState.showNotifications,
-                    showWarning = uiState.showNotifications && noNotificationPermission,
-                    onWarningIconClick = onPermissionWarningClick,
-                    onCheckedChange = onShowNotificationsToggle,
-                )
-            }
-            if (uiState.showNotifications && noNotificationPermission) {
+            item {
                 VSpacer(12.dp)
-                TextImportantError(
+                CellUniversalLawrenceSection {
+                    SwitchWithTextWarning(
+                        text = stringResource(R.string.premium_push_notifications_show),
+                        checked = uiState.showNotifications,
+                        showWarning = uiState.showNotifications && noNotificationPermission,
+                        onWarningIconClick = onPermissionWarningClick,
+                        onCheckedChange = onShowNotificationsToggle,
+                    )
+                }
+                if (uiState.showNotifications && noNotificationPermission) {
+                    VSpacer(12.dp)
+                    TextImportantError(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        text = stringResource(R.string.notification_permission_revoked_message),
+                    )
+                }
+                VSpacer(12.dp)
+                TextImportantWarning(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(R.string.notification_permission_revoked_message),
+                    text = stringResource(R.string.premium_push_notifications_warning)
                 )
             }
-            VSpacer(12.dp)
-            TextImportantWarning(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(R.string.premium_push_notifications_warning)
-            )
-            PollingIntervalSection(
-                pollingInterval = uiState.pollingInterval,
-                enabled = uiState.showNotifications,
-                onPollingIntervalChange = onPollingIntervalChange,
-            )
-            NotificationContentSection(
-                uiState = uiState,
-                onShowBlockchainNameToggle = onShowBlockchainNameToggle,
-                onShowCoinAmountToggle = onShowCoinAmountToggle,
-                onShowFiatAmountToggle = onShowFiatAmountToggle,
-            )
-            BlockchainsSection(
+            item {
+                PollingIntervalSection(
+                    pollingInterval = uiState.pollingInterval,
+                    enabled = uiState.showNotifications,
+                    onPollingIntervalChange = onPollingIntervalChange,
+                )
+            }
+            item {
+                NotificationContentSection(
+                    uiState = uiState,
+                    onShowBlockchainNameToggle = onShowBlockchainNameToggle,
+                    onShowCoinAmountToggle = onShowCoinAmountToggle,
+                    onShowFiatAmountToggle = onShowFiatAmountToggle,
+                )
+            }
+            blockchainsSection(
                 uiState = uiState,
                 onBlockchainNotificationsToggle = onBlockchainNotificationsToggle,
             )
-            VSpacer(32.dp)
+            item {
+                VSpacer(32.dp)
+            }
         }
     }
 }
@@ -177,27 +190,38 @@ private fun PollingIntervalSection(
     }
 }
 
-@Composable
-private fun BlockchainsSection(
+private fun LazyListScope.blockchainsSection(
     uiState: PushNotificationsUiState,
     onBlockchainNotificationsToggle: (String, Boolean) -> Unit,
 ) {
-    VSpacer(20.dp)
-    InfoText(
-        text = stringResource(R.string.Market_Filter_Blockchains).uppercase(),
-        paddingBottom = 8.dp
-    )
+    item {
+        VSpacer(20.dp)
+        InfoText(
+            text = stringResource(R.string.Market_Filter_Blockchains).uppercase(),
+            paddingBottom = 8.dp
+        )
+    }
     if (uiState.loading) {
-        LoadingBlockchainsSection()
+        item {
+            LoadingBlockchainsSection()
+        }
     } else {
-        CellUniversalLawrenceSection(uiState.blockchains) { item ->
-            PushNotificationBlockchainCell(
-                item = item,
-                enabled = uiState.showNotifications,
-                onToggle = { enabled ->
-                    onBlockchainNotificationsToggle(item.uid, enabled)
-                }
-            )
+        itemsIndexed(
+            items = uiState.blockchains,
+            key = { _, item -> item.uid },
+        ) { index, item ->
+            BlockchainSectionCell(
+                shape = getShape(uiState.blockchains.size, index),
+                showDivider = showDivider(uiState.blockchains.size, index),
+            ) {
+                PushNotificationBlockchainCell(
+                    item = item,
+                    enabled = uiState.showNotifications,
+                    onToggle = { enabled ->
+                        onBlockchainNotificationsToggle(item.uid, enabled)
+                    }
+                )
+            }
         }
     }
 }
@@ -255,6 +279,30 @@ private fun LoadingBlockchainsSection() {
         ) {
             HSCircularProgressIndicator(progress = 0.15f, size = 32.dp)
         }
+    }
+}
+
+@Composable
+private fun BlockchainSectionCell(
+    shape: Shape,
+    showDivider: Boolean,
+    content: @Composable () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(shape)
+            .background(ComposeAppTheme.colors.lawrence),
+    ) {
+        if (showDivider) {
+            HorizontalDivider(
+                modifier = Modifier.align(Alignment.TopCenter),
+                thickness = 1.dp,
+                color = ComposeAppTheme.colors.steel10,
+            )
+        }
+        content()
     }
 }
 
