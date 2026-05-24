@@ -4,6 +4,7 @@ import cash.p.terminal.core.storage.PoisonAddressDao
 import cash.p.terminal.entities.PoisonAddress
 import cash.p.terminal.entities.PoisonAddressType
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
+import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
@@ -23,6 +24,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.math.BigDecimal
 
 @Suppress("LargeClass")
 class PoisonAddressManagerTest {
@@ -901,7 +903,151 @@ class PoisonAddressManagerTest {
         assertEquals(PoisonStatus.BLOCKCHAIN, manager.getPoisonStatus(record))
     }
 
+    // --- Bitcoin/Litecoin: outgoing UTXO tx is authored locally ---
+    // An outgoing Litecoin MWEB transaction was wrongly shown as "received from
+    // the blockchain" instead of "created by this wallet". UTXO sends are signed
+    // by the wallet keys, so an outgoing BitcoinTransactionRecord is wallet-created.
+
+    @Test
+    fun getPoisonStatus_outgoingLitecoinWithAddress_returnsCreated() {
+        val record = createBitcoinRecord(
+            to = listOf("ltc1q_destination_address_aaa"),
+            transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+        )
+
+        assertEquals(PoisonStatus.CREATED, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_outgoingLitecoinMwebNoAddress_returnsCreated() {
+        // Pure MWEB-to-MWEB sends carry no resolvable recipient address (to == null).
+        val record = createBitcoinRecord(
+            to = null,
+            transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+        )
+
+        assertEquals(PoisonStatus.CREATED, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_watchAccountOutgoingLitecoin_returnsBlockchain() {
+        // Watch accounts have no signing key — they cannot author transactions.
+        val record = createBitcoinRecord(
+            to = listOf("ltc1q_destination_address_aaa"),
+            transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+            isWatch = true,
+        )
+
+        assertEquals(PoisonStatus.BLOCKCHAIN, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_incomingLitecoin_returnsBlockchain() {
+        val record = createBitcoinRecord(
+            from = "ltc1q_sender_address_bbb",
+            transactionRecordType = TransactionRecordType.BITCOIN_INCOMING,
+        )
+
+        assertEquals(PoisonStatus.BLOCKCHAIN, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun determinePoisonStatus_nullAddressOutgoingCreatedByWallet_returnsCreated() {
+        // Wallet-created outgoing tx with no resolvable address must still be CREATED,
+        // not pre-empted by the null-address BLOCKCHAIN shortcut.
+        val result = manager.determinePoisonStatus(
+            relevantAddress = null,
+            blockchainType = BlockchainType.Litecoin,
+            accountId = accountId,
+            isOutgoing = true,
+            isCreatedByWallet = true,
+        )
+        assertEquals(PoisonStatus.CREATED, result)
+    }
+
+    // --- Zcash: outgoing tx is authored locally ---
+    // Zcash sends (including swaps from a unified address) are emitted as
+    // BitcoinTransactionRecord, so an outgoing one is signed by the wallet keys
+    // and must be reported as wallet-created, not loaded from the blockchain.
+
+    @Test
+    fun getPoisonStatus_outgoingZcashWithAddress_returnsCreated() {
+        val record = createBitcoinRecord(
+            to = listOf("t1_swap_deposit_address_zzz"),
+            transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+            recordBlockchainType = BlockchainType.Zcash,
+        )
+
+        assertEquals(PoisonStatus.CREATED, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_watchAccountOutgoingZcash_returnsBlockchain() {
+        // Watch accounts have no signing key — they cannot author transactions.
+        val record = createBitcoinRecord(
+            to = listOf("t1_swap_deposit_address_zzz"),
+            transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+            isWatch = true,
+            recordBlockchainType = BlockchainType.Zcash,
+        )
+
+        assertEquals(PoisonStatus.BLOCKCHAIN, manager.getPoisonStatus(record))
+    }
+
+    @Test
+    fun getPoisonStatus_incomingZcash_returnsBlockchain() {
+        val record = createBitcoinRecord(
+            from = "t1_sender_address_yyy",
+            transactionRecordType = TransactionRecordType.BITCOIN_INCOMING,
+            recordBlockchainType = BlockchainType.Zcash,
+        )
+
+        assertEquals(PoisonStatus.BLOCKCHAIN, manager.getPoisonStatus(record))
+    }
+
     // --- Helpers ---
+
+    private fun createBitcoinRecord(
+        to: List<String>? = null,
+        from: String? = null,
+        transactionRecordType: TransactionRecordType,
+        isWatch: Boolean = false,
+        recordBlockchainType: BlockchainType = BlockchainType.Litecoin,
+    ): BitcoinTransactionRecord {
+        val token = mockk<Token>(relaxed = true) {
+            every { blockchainType } returns recordBlockchainType
+        }
+        val source = mockk<TransactionSource>(relaxed = true) {
+            every { blockchain } returns mockk(relaxed = true) {
+                every { type } returns recordBlockchainType
+            }
+            every { account } returns mockk(relaxed = true) {
+                every { id } returns accountId
+                every { isWatchAccount } returns isWatch
+            }
+        }
+        return BitcoinTransactionRecord(
+            token = token,
+            amount = BigDecimal.ONE,
+            to = to,
+            from = from,
+            changeAddresses = null,
+            uid = "uid-1",
+            transactionHash = "ltchash123",
+            transactionIndex = 0,
+            blockHeight = 100,
+            confirmationsThreshold = 6,
+            timestamp = 1000L,
+            failed = false,
+            memo = null,
+            source = source,
+            transactionRecordType = transactionRecordType,
+            fee = null,
+            lockInfo = null,
+            conflictingHash = null,
+            showRawTransaction = false,
+        )
+    }
 
     private fun createEvmRecord(
         from: String? = null,

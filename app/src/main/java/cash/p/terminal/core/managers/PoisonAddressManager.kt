@@ -5,6 +5,7 @@ import cash.p.terminal.entities.PoisonAddress
 import cash.p.terminal.entities.PoisonAddressType
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
+import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
@@ -34,7 +35,9 @@ class PoisonAddressManager(
         isOutgoing: Boolean,
         isCreatedByWallet: Boolean,
     ): PoisonStatus {
-        if (relevantAddress == null) return PoisonStatus.BLOCKCHAIN
+        if (relevantAddress == null) {
+            return if (isOutgoing && isCreatedByWallet) PoisonStatus.CREATED else PoisonStatus.BLOCKCHAIN
+        }
         val normalized = relevantAddress.lowercase()
         val blockchainUid = blockchainType.uid
 
@@ -67,6 +70,9 @@ class PoisonAddressManager(
         val isCreatedByWallet = !account.isWatchAccount && when (record) {
             is EvmTransactionRecord -> outgoing && !record.foreignTransaction
             is TronTransactionRecord -> outgoing && !record.foreignTransaction
+            // UTXO sends are signed by the wallet's own keys, so an outgoing
+            // Bitcoin/Litecoin record (including MWEB) is always wallet-created.
+            is BitcoinTransactionRecord -> outgoing
             else -> false
         }
 

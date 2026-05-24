@@ -8,6 +8,7 @@ import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRec
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.entities.transactionrecords.ton.TonTransactionRecord
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.litecoinkit.LitecoinKit
 import io.horizontalsystems.litecoinkit.mweb.address.MwebAddressCodec
@@ -58,9 +59,8 @@ class PendingTransactionMatcher {
             return MatchScore(isMatch = false, confidence = 0.0)
         }
 
-        if (isLitecoinMwebPegInPending(pending, real)) {
-            return litecoinMwebPegInMatchScore(pending, real)
-                ?: MatchScore(isMatch = false, confidence = 0.0)
+        litecoinMwebMatchScore(pending, real)?.let {
+            return it
         }
 
         return calculateFuzzyMatchScore(
@@ -102,6 +102,55 @@ class PendingTransactionMatcher {
         return MatchScore(isMatch = false, confidence = 0.0)
     }
 
+    private fun litecoinMwebMatchScore(
+        pending: PendingTransactionRecord,
+        real: TransactionRecord
+    ): MatchScore? {
+        if (!isLitecoinMwebMatchCandidate(pending, real)) {
+            return null
+        }
+
+        if (isLitecoinMwebLocalIdentifierMatch(pending, real)) {
+            return MatchScore(isMatch = true, confidence = 1.0)
+        }
+
+        if (isLitecoinMwebPegInPending(pending)) {
+            return litecoinMwebPegInMatchScore(pending, real)
+                ?: MatchScore(isMatch = false, confidence = 0.0)
+        }
+
+        return null
+    }
+
+    private fun isLitecoinMwebMatchCandidate(
+        pending: PendingTransactionRecord,
+        real: TransactionRecord
+    ): Boolean {
+        return pending.blockchainType == BlockchainType.Litecoin &&
+            real.blockchainType == BlockchainType.Litecoin
+    }
+
+    private fun isLitecoinMwebLocalIdentifierMatch(
+        pending: PendingTransactionRecord,
+        real: TransactionRecord
+    ): Boolean {
+        val pendingIdentifier = pending.transactionHash.takeIf { it.isNotBlank() } ?: return false
+        val bitcoinRecord = real as? BitcoinTransactionRecord ?: return false
+        val canonicalHash = bitcoinRecord.canonicalTransactionHash?.takeIf { it.isNotBlank() } ?: return false
+
+        return pending.token.type == TokenType.Mweb &&
+            canonicalHash.equals(real.transactionHash, ignoreCase = true) &&
+            real.uid.matchesMwebLocalIdentifier(pendingIdentifier) &&
+            compareAmounts(pending.amount.abs(), real) &&
+            compareAddresses(pending.to?.firstOrNull(), real.to?.firstOrNull())
+    }
+
+    private fun compareAddresses(pendingTo: String?, realTo: String?): Boolean {
+        val pendingAddress = pendingTo?.takeIf { it.isNotBlank() } ?: return false
+        val realAddress = realTo?.takeIf { it.isNotBlank() } ?: return false
+        return pendingAddress.equals(realAddress, ignoreCase = true)
+    }
+
     private fun litecoinMwebPegInMatchScore(
         pending: PendingTransactionRecord,
         real: TransactionRecord
@@ -133,13 +182,8 @@ class PendingTransactionMatcher {
         )
     }
 
-    private fun isLitecoinMwebPegInPending(
-        pending: PendingTransactionRecord,
-        real: TransactionRecord
-    ): Boolean {
-        return pending.blockchainType == BlockchainType.Litecoin &&
-            real.blockchainType == BlockchainType.Litecoin &&
-            pending.to.orEmpty().any { it.isLitecoinMwebAddress() }
+    private fun isLitecoinMwebPegInPending(pending: PendingTransactionRecord): Boolean {
+        return pending.to.orEmpty().any { it.isLitecoinMwebAddress() }
     }
 
     fun calculateMatchScore(
@@ -215,6 +259,11 @@ class PendingTransactionMatcher {
 
     private fun String.isLitecoinMwebAddress(): Boolean {
         return LITECOIN_MWEB_ADDRESS_CODECS.any { it.isValid(this) }
+    }
+
+    private fun String.matchesMwebLocalIdentifier(identifier: String): Boolean {
+        return equals(identifier, ignoreCase = true) ||
+            substringAfterLast(':').equals(identifier, ignoreCase = true)
     }
 
     private fun TransactionRecord.hasLitecoinMwebPegInDestination(): Boolean {

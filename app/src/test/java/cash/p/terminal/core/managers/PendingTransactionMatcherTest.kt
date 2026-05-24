@@ -167,6 +167,48 @@ class PendingTransactionMatcherTest {
         assertFalse(outsideTolerance.isMatch)
     }
 
+    @Test
+    fun matchScoreForRealRecord_litecoinMwebPegOutCanonicalHashWithLocalOutputId_matches() {
+        val localOutputId = "created-output-id"
+        val pending = pendingMwebPegOut(
+            amount = BigDecimal("0.01"),
+            transactionHash = localOutputId,
+        )
+        val real = mwebLitecoinRecord(
+            amount = BigDecimal("-0.01"),
+            uid = "mweb-outgoing:$localOutputId",
+            transactionHash = "canonical-public-hash",
+            canonicalTransactionHash = "canonical-public-hash",
+            to = listOf(PUBLIC_ADDRESS),
+            timestamp = TIMESTAMP + 600,
+        )
+
+        val score = matcher.matchScoreForRealRecord(pending, real)
+
+        assertTrue(score.isMatch)
+    }
+
+    @Test
+    fun matchScoreForRealRecord_litecoinMwebPegOutCanonicalHashWithDifferentAddress_doesNotMatch() {
+        val localOutputId = "created-output-id"
+        val pending = pendingMwebPegOut(
+            amount = BigDecimal("0.01"),
+            transactionHash = localOutputId,
+        )
+        val real = mwebLitecoinRecord(
+            amount = BigDecimal("-0.01"),
+            uid = "mweb-outgoing:$localOutputId",
+            transactionHash = "canonical-public-hash",
+            canonicalTransactionHash = "canonical-public-hash",
+            to = listOf("ltc1differentdestination"),
+            timestamp = TIMESTAMP + 600,
+        )
+
+        val score = matcher.matchScoreForRealRecord(pending, real)
+
+        assertFalse(score.isMatch)
+    }
+
     private fun pendingMwebPegIn(amount: BigDecimal) = PendingTransactionRecord(
         uid = "pending-mweb",
         transactionHash = "mweb-hash",
@@ -175,6 +217,22 @@ class PendingTransactionMatcherTest {
         token = token,
         amount = amount,
         toAddress = MWEB_ADDRESS,
+        fromAddress = "",
+        expiresAt = Long.MAX_VALUE,
+        memo = null
+    )
+
+    private fun pendingMwebPegOut(
+        amount: BigDecimal,
+        transactionHash: String,
+    ) = PendingTransactionRecord(
+        uid = "pending-mweb-peg-out",
+        transactionHash = transactionHash,
+        timestamp = TIMESTAMP,
+        source = mwebSource,
+        token = mwebToken,
+        amount = amount,
+        toAddress = PUBLIC_ADDRESS,
         fromAddress = "",
         expiresAt = Long.MAX_VALUE,
         memo = null
@@ -209,12 +267,46 @@ class PendingTransactionMatcherTest {
         replaceable = false,
     )
 
-    private fun litecoinToken(): Token {
+    private fun mwebLitecoinRecord(
+        amount: BigDecimal,
+        uid: String,
+        transactionHash: String,
+        canonicalTransactionHash: String?,
+        to: List<String>?,
+        timestamp: Long,
+    ) = BitcoinTransactionRecord(
+        token = mwebToken,
+        amount = amount,
+        to = to,
+        from = null,
+        changeAddresses = null,
+        uid = uid,
+        transactionHash = transactionHash,
+        transactionIndex = 0,
+        blockHeight = null,
+        confirmationsThreshold = 1,
+        timestamp = timestamp,
+        failed = false,
+        memo = null,
+        source = mwebSource,
+        sentToSelf = false,
+        transactionRecordType = TransactionRecordType.BITCOIN_OUTGOING,
+        fee = null,
+        lockInfo = null,
+        conflictingHash = null,
+        showRawTransaction = false,
+        replaceable = false,
+        canonicalTransactionHash = canonicalTransactionHash,
+    )
+
+    private fun litecoinToken(
+        type: TokenType = TokenType.Derived(TokenType.Derivation.Bip84),
+    ): Token {
         val blockchain = Blockchain(BlockchainType.Litecoin, "Litecoin", null)
         return Token(
             coin = Coin(uid = "litecoin", name = "Litecoin", code = "LTC"),
             blockchain = blockchain,
-            type = TokenType.Derived(TokenType.Derivation.Bip84),
+            type = type,
             decimals = 8,
         )
     }
@@ -232,8 +324,12 @@ class PendingTransactionMatcherTest {
 
     private companion object {
         const val TIMESTAMP = 1_715_000_000L
+        const val PUBLIC_ADDRESS = "ltc1qpublicdestination"
         const val MWEB_ADDRESS =
             "ltcmweb1qq2nlqa567pq3hwgch23a9fhuvgfe96erem3v00gph7pjkmwrz09nkq5" +
                 "fuwudw8gjmw59n6uv268r3ky23epxkr9fejdf9m6gxlkjy6lne5l82w3k"
     }
+
+    private val mwebToken = litecoinToken(TokenType.Mweb)
+    private val mwebSource = transactionSource(mwebToken)
 }
