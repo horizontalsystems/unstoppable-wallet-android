@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.zanonetwork.addnode
 
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -7,8 +8,10 @@ import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import java.net.MalformedURLException
 import java.net.URI
+import javax.inject.Inject
 
-class AddZanoNodeViewModel(
+@HiltViewModel
+class AddZanoNodeViewModel @Inject constructor(
     private val nodeManager: ZanoNodeManager
 ) : ViewModelUiState<AddZanoNodeViewState>() {
 

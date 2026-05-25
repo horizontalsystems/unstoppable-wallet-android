@@ -58,7 +58,7 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.displayNameStringRes
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -120,7 +120,7 @@ fun RestorePhrase(
     ) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    val viewModel = viewModel<RestoreMnemonicViewModel>(factory = RestoreMnemonicModule.Factory())
+    val viewModel = hiltViewModel<RestoreMnemonicViewModel>()
     val uiState = viewModel.uiState
     val context = LocalContext.current
     val statPage = StatPage.ImportWalletFromKey

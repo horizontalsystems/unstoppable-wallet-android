@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic
 
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -14,8 +15,10 @@ import io.horizontalsystems.core.IThirdKeyboard
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.horizontalsystems.hdwalletkit.WordList
+import javax.inject.Inject
 
-class RestoreMnemonicViewModel(
+@HiltViewModel
+class RestoreMnemonicViewModel @Inject constructor(
     private val accountManager: IAccountManager,
     private val wordsManager: WordsManager,
     private val thirdKeyboardStorage: IThirdKeyboard,
