@@ -5,10 +5,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsModule.TermViewItem
+import javax.inject.Inject
 
-class TermsViewModel(private val termsManager: ITermsManager) : ViewModel() {
+@HiltViewModel
+class TermsViewModel @Inject constructor(private val termsManager: ITermsManager) : ViewModel() {
 
     private val terms by termsManager::terms
 

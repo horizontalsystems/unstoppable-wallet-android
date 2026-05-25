@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -52,9 +52,7 @@ data object LanguageSettingsPage : HSPage() {
 private fun LanguageScreen(
     navController: HSNavigation,
     reloadApp: () -> Unit,
-    viewModel: LanguageSettingsViewModel = viewModel(
-        factory = LanguageSettingsModule.Factory()
-    )
+    viewModel: LanguageSettingsViewModel = hiltViewModel()
 ) {
     if (viewModel.closeScreen) {
         navController.removeLastOrNull()

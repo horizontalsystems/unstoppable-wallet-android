@@ -14,7 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.NavigationType
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -69,7 +69,7 @@ fun TermsScreen(
     onAccepted: () -> Unit,
     onDeclined: () -> Unit
 ) {
-    val viewModel = viewModel<TermsViewModel>(factory = TermsModule.Factory())
+    val viewModel = hiltViewModel<TermsViewModel>()
     LaunchedEffect(viewModel.closeWithTermsAgreed) {
         if (viewModel.closeWithTermsAgreed) {
             onAccepted()

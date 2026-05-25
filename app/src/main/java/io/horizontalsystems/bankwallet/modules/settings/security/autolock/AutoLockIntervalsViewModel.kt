@@ -1,9 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.autolock
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import javax.inject.Inject
 
-class AutoLockIntervalsViewModel(
+@HiltViewModel
+class AutoLockIntervalsViewModel @Inject constructor(
     private val localStorage: ILocalStorage
 ) : ViewModel() {
 

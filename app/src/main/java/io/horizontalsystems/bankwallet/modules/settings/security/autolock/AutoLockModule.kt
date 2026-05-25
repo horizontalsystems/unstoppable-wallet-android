@@ -1,18 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.autolock
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 
 object AutoLockModule {
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return AutoLockIntervalsViewModel(App.localStorage) as T
-        }
-    }
-
     data class AutoLockIntervalViewItem(val interval: AutoLockInterval, val selected: Boolean)
 }
 

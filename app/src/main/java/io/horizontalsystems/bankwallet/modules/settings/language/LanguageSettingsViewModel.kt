@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
@@ -11,8 +12,10 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.core.helpers.LocaleType
+import javax.inject.Inject
 
-class LanguageSettingsViewModel(
+@HiltViewModel
+class LanguageSettingsViewModel @Inject constructor(
     private val languageManager: LanguageManager,
     private val localStorage: ILocalStorage
 ) : ViewModel() {
@@ -51,5 +54,4 @@ class LanguageSettingsViewModel(
             stat(page = StatPage.Language, event = StatEvent.SwitchLanguage(localeType.tag))
         }
     }
-
 }
