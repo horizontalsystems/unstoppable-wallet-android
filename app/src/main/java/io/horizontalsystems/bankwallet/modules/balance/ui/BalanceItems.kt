@@ -40,7 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -62,7 +62,6 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequi
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsPage
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinPage
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressPage
@@ -198,7 +197,7 @@ fun BalanceItems(
     uiState: BalanceUiState,
     onScanClick: () -> Unit,
 ) {
-    val rateAppViewModel = viewModel<RateAppViewModel>(factory = RateAppModule.Factory())
+    val rateAppViewModel = hiltViewModel<RateAppViewModel>()
     DisposableEffect(true) {
         rateAppViewModel.onBalancePageActive()
         onDispose {

@@ -5,12 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.entities.AccountType
 
-class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
+@HiltViewModel
+class BalanceAccountsViewModel @Inject constructor(accountManager: IAccountManager) : ViewModel() {
 
     var balanceScreenState by mutableStateOf<BalanceScreenState?>(null)
         private set

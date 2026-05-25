@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.balance.ui
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.modules.balance.BalanceAccountsViewModel
-import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceScreenState
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 
@@ -11,7 +10,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 fun BalanceScreen(
     navController: HSNavigation,
 ) {
-    val viewModel = viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
+    val viewModel = hiltViewModel<BalanceAccountsViewModel>()
 
     when (val tmpAccount = viewModel.balanceScreenState) {
         BalanceScreenState.NoAccount -> BalanceNoAccount(navController)

@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -58,7 +58,7 @@ data object FaqListPage : HSPage() {
 private fun FaqScreen(
     onCloseClick: () -> Unit,
     onItemClick: (Faq) -> Unit,
-    viewModel: FaqViewModel = viewModel(factory = FaqModule.Factory())
+    viewModel: FaqViewModel = hiltViewModel()
 ) {
     val viewState = viewModel.viewState
 

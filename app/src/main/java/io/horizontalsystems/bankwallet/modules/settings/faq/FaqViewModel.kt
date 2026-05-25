@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.Faq
 import io.horizontalsystems.bankwallet.entities.FaqSection
@@ -12,7 +14,8 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
-class FaqViewModel(private val repository: FaqRepository) : ViewModel() {
+@HiltViewModel
+class FaqViewModel @Inject constructor(private val repository: FaqRepository) : ViewModel() {
 
     var sections by mutableStateOf<List<FaqSection>>(listOf())
         private set

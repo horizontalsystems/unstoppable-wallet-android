@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -43,7 +43,7 @@ data object IndicatorsPage : HSPage() {
 @Composable
 fun IndicatorsScreen(navController: HSNavigation) {
     val chartIndicatorsViewModel =
-        viewModel<ChartIndicatorsViewModel>(factory = ChartIndicatorsViewModel.Factory())
+        hiltViewModel<ChartIndicatorsViewModel>()
 
     val uiState = chartIndicatorsViewModel.uiState
     val toggleIndicator = { indicator: ChartIndicatorSetting, checked: Boolean ->

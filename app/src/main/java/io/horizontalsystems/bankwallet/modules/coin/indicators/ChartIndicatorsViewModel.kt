@@ -1,15 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.coin.indicators
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ChartIndicatorsViewModel(
+@HiltViewModel
+class ChartIndicatorsViewModel @Inject constructor(
     private val chartIndicatorManager: ChartIndicatorManager
 ) : ViewModelUiState<ChartIndicatorsUiState>() {
     private var maIndicators: List<ChartIndicatorSetting> = listOf()
@@ -43,13 +44,6 @@ class ChartIndicatorsViewModel(
 
     fun disable(indicator: ChartIndicatorSetting) {
         chartIndicatorManager.disableIndicator(indicator.id)
-    }
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ChartIndicatorsViewModel(App.chartIndicatorManager) as T
-        }
     }
 
 }

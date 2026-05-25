@@ -15,12 +15,6 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.CoinPrice
 
 object BalanceModule {
-    class AccountsFactory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return BalanceAccountsViewModel(App.accountManager) as T
-        }
-    }
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
