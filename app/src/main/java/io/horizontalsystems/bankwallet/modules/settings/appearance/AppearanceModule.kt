@@ -1,35 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.settings.appearance
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
-
-object AppearanceModule {
-
-    class Factory() : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val launchScreenService = LaunchScreenService(App.localStorage)
-            val appIconService = AppIconService(App.localStorage)
-            val themeService = ThemeService(App.localStorage)
-            return AppearanceViewModel(
-                launchScreenService,
-                appIconService,
-                themeService,
-                App.balanceViewTypeManager,
-                App.localStorage,
-                App.languageManager,
-                App.currencyManager,
-            ) as T
-        }
-    }
-
-}
 
 enum class AppIcon(val icon: Int, val titleText: String, val isDeprecated: Boolean = false) : WithTranslatableTitle {
     Main(R.drawable.launcher_main_preview, "Main"),

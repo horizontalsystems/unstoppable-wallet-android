@@ -37,7 +37,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -82,7 +82,7 @@ data object AppearancePage : HSPage() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppearanceScreen(navController: HSNavigation) {
-    val viewModel = viewModel<AppearanceViewModel>(factory = AppearanceModule.Factory())
+    val viewModel = hiltViewModel<AppearanceViewModel>()
     val uiState = viewModel.uiState
 
     var selectedAppIcon by remember { mutableStateOf<AppIcon?>(null) }

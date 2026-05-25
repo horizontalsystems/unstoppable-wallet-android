@@ -27,6 +27,10 @@ import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.stats.StatsManager
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
+import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
+import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
+import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.core.ISystemInfoManager
@@ -113,6 +117,18 @@ object AppModule {
 
     @Provides @Singleton
     fun provideStatsManager(): StatsManager = App.statsManager
+
+    @Provides @Singleton
+    fun provideAppIconService(): AppIconService = App.appIconService
+
+    @Provides @Singleton
+    fun provideBalanceViewTypeManager(): BalanceViewTypeManager = App.balanceViewTypeManager
+
+    @Provides @Singleton
+    fun provideLaunchScreenService(): LaunchScreenService = LaunchScreenService(App.localStorage)
+
+    @Provides @Singleton
+    fun provideThemeService(): ThemeService = ThemeService(App.localStorage)
 
     // --- Storage / display state ---
 

@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.appearance
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -17,8 +18,10 @@ import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import javax.inject.Inject
 
-class AppearanceViewModel(
+@HiltViewModel
+class AppearanceViewModel @Inject constructor(
     private val launchScreenService: LaunchScreenService,
     private val appIconService: AppIconService,
     private val themeService: ThemeService,
