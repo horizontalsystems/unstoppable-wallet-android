@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -50,7 +51,7 @@ import kotlinx.coroutines.launch
 fun TonConnectSendRequestScreen(navController: HSNavigation) {
     val logger = remember { AppLogger("ton-connect request") }
     val mainActivityViewModel =
-        viewModel<MainActivityViewModel>(viewModelStoreOwner = LocalActivity.current as ComponentActivity)
+        hiltViewModel<MainActivityViewModel>(viewModelStoreOwner = LocalActivity.current as ComponentActivity)
     val viewModel = viewModel<TonConnectSendRequestViewModel>(initializer = {
         val sendRequestEntity = mainActivityViewModel.tcSendRequest.value
         mainActivityViewModel.onTcSendRequestHandled()

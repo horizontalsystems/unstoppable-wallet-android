@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.main
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.Account
+import javax.inject.Inject
 
-class WalletSwitchViewModel(
+@HiltViewModel
+class WalletSwitchViewModel @Inject constructor(
     private val accountManager: IAccountManager
 ) : ViewModelUiState<WalletSwitchViewModel.UiState>() {
 
@@ -36,10 +36,4 @@ class WalletSwitchViewModel(
         val activeWallet: Account?
     )
 
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WalletSwitchViewModel(App.accountManager) as T
-        }
-    }
 }

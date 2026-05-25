@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.main
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -26,7 +26,7 @@ data object WalletSwitchSheet : HSBottomSheet() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WalletSwitchScreen(navController: HSNavigation) {
-    val viewModel = viewModel<WalletSwitchViewModel>(factory = WalletSwitchViewModel.Factory())
+    val viewModel = hiltViewModel<WalletSwitchViewModel>()
     val uiState = viewModel.uiState
 
     ComposeAppTheme {

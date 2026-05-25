@@ -24,7 +24,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.core.util.Consumer
 import androidx.lifecycle.compose.LifecycleResumeEffect
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
@@ -35,7 +35,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
-import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel.Factory
 import io.horizontalsystems.bankwallet.modules.main.MainScreenValidationError
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestSheet
@@ -46,7 +45,7 @@ import io.horizontalsystems.dapp.core.HSDAppEvent
 
 @Composable
 fun Nav3() {
-    val mainActivityViewModel = viewModel<MainActivityViewModel>(factory = Factory())
+    val mainActivityViewModel = hiltViewModel<MainActivityViewModel>()
     val isLocked by App.pinComponent.isLockedFlow.collectAsState()
 
     val backStack = rememberSerializable(

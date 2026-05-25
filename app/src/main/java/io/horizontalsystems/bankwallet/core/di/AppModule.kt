@@ -38,6 +38,11 @@ import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
+import io.horizontalsystems.bankwallet.core.INetworkManager
+import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
+import io.horizontalsystems.bankwallet.core.managers.DonationShowManager
+import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
+import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
@@ -54,7 +59,10 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+import io.horizontalsystems.core.CoreApp
+import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.ISystemInfoManager
+import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 import javax.inject.Singleton
 
 /**
@@ -224,4 +232,27 @@ object AppModule {
 
     @Provides @Singleton
     fun provideEvmLabelManager(): EvmLabelManager = App.evmLabelManager
+
+    // --- Main module ---
+
+    @Provides @Singleton
+    fun provideUserManager(): UserManager = App.userManager
+
+    @Provides @Singleton
+    fun provideKeyStoreManager(): IKeyStoreManager = CoreApp.keyStoreManager
+
+    @Provides @Singleton
+    fun provideTonConnectManager(): TonConnectManager = App.tonConnectManager
+
+    @Provides @Singleton
+    fun provideReleaseNotesManager(): ReleaseNotesManager = App.releaseNotesManager
+
+    @Provides @Singleton
+    fun provideDonationShowManager(): DonationShowManager = App.donationShowManager
+
+    @Provides @Singleton
+    fun provideNetworkManager(): INetworkManager = App.networkManager
+
+    @Provides @Singleton
+    fun provideActionCompletedDelegate(): ActionCompletedDelegate = ActionCompletedDelegate
 }

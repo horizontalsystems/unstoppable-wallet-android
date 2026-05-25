@@ -8,7 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainScreenWithRootedDeviceCheck
 import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewPage
@@ -20,7 +19,7 @@ import java.util.UUID
 @Composable
 fun MainScreen(navController: HSNavigation, parentScreenContentKey: String) {
     val mainActivityViewModel =
-        viewModel<MainActivityViewModel>(viewModelStoreOwner = LocalActivity.current as ComponentActivity)
+        hiltViewModel<MainActivityViewModel>(viewModelStoreOwner = LocalActivity.current as ComponentActivity)
 
     val activity = LocalActivity.current
 

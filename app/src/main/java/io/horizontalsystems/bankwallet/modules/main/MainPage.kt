@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -81,7 +80,7 @@ private fun MainScreen(
     transactionsViewModel: TransactionsViewModel,
     fragmentNavController: HSNavigation,
     parentScreenContentKey: String,
-    viewModel: MainViewModel = viewModel(factory = MainModule.Factory())
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     val activityIntent by mainActivityViewModel.intentLiveData.observeAsState()
     LaunchedEffect(activityIntent) {

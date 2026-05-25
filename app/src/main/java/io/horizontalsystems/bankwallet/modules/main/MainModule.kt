@@ -5,37 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.modules.balance.OpenSendTokenSelect
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import kotlinx.parcelize.Parcelize
 
 object MainModule {
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MainViewModel(
-                App.pinComponent,
-                App.rateAppManager,
-                App.backupManager,
-                App.termsManager,
-                App.accountManager,
-                App.releaseNotesManager,
-                App.donationShowManager,
-                App.localStorage,
-                App.wcSessionManager,
-                App.wcManager,
-                App.networkManager,
-                ActionCompletedDelegate
-            ) as T
-        }
-    }
 
     fun start(context: Context, data: Uri? = null) {
         val intent = Intent(context, MainActivity::class.java)

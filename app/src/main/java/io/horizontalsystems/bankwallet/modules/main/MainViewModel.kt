@@ -4,8 +4,8 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.core.managers.DonationShowManager
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
+import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 import io.horizontalsystems.bankwallet.core.managers.WalletEventType
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -38,8 +39,10 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
+import javax.inject.Inject
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val pinComponent: IPinComponent,
     rateAppManager: IRateAppManager,
     private val backupManager: IBackupManager,
@@ -51,7 +54,8 @@ class MainViewModel(
     wcSessionManager: WCSessionManager,
     private val wcManager: WCManager,
     private val networkManager: INetworkManager,
-    private val actionCompletedDelegate: ActionCompletedDelegate
+    private val actionCompletedDelegate: ActionCompletedDelegate,
+    private val tonConnectManager: TonConnectManager,
 ) : ViewModelUiState<MainModule.UiState>() {
 
     private var wcPendingRequestsCount = 0
@@ -444,7 +448,7 @@ class MainViewModel(
             // so we don't need closing app in this case
             val closeApp = returnParam != "none"
             viewModelScope.launch {
-                App.tonConnectManager.handle(uri.toString(), closeApp)
+                tonConnectManager.handle(uri.toString(), closeApp)
             }
             return
         }

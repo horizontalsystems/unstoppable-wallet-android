@@ -2,10 +2,8 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import android.content.Intent
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -20,8 +18,10 @@ import io.horizontalsystems.dapp.core.HSDAppEvent
 import io.horizontalsystems.tonkit.models.SignTransaction
 import kotlinx.coroutines.launch
 import java.util.UUID
+import javax.inject.Inject
 
-class MainActivityViewModel(
+@HiltViewModel
+class MainActivityViewModel @Inject constructor(
     private val userManager: UserManager,
     private val accountManager: IAccountManager,
     private val systemInfoManager: ISystemInfoManager,
@@ -118,19 +118,6 @@ class MainActivityViewModel(
         intentLiveData.postValue(null)
     }
 
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MainActivityViewModel(
-                App.userManager,
-                App.accountManager,
-                App.systemInfoManager,
-                App.keyStoreManager,
-                App.localStorage,
-                App.tonConnectManager,
-            ) as T
-        }
-    }
 }
 
 data class MainUIState(val mainShowedOnce: Boolean)
