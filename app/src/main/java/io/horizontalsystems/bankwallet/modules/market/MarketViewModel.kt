@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -13,8 +14,10 @@ import io.horizontalsystems.marketkit.models.MarketGlobal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
+import javax.inject.Inject
 
-class MarketViewModel(
+@HiltViewModel
+class MarketViewModel @Inject constructor(
     private val marketStorage: IMarketStorage,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,

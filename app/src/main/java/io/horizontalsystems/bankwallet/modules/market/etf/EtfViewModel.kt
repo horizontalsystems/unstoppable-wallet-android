@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.market.etf
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -25,10 +26,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
+import javax.inject.Inject
 
-class EtfViewModel(
+@HiltViewModel
+class EtfViewModel @Inject constructor(
     private val currencyManager: CurrencyManager,
-    private val marketKit: MarketKitWrapper
+    private val marketKit: MarketKitWrapper,
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<EtfModule.UiState>() {
 
     val sortByOptions = listOf(
@@ -148,7 +152,7 @@ class EtfViewModel(
         iconUrl = "https://cdn.blocksdecoded.com/etf-tresuries/${rankedEtf.etf.ticker}@3x.png",
         subtitle = rankedEtf.etf.name,
         value = rankedEtf.etf.totalAssets?.let {
-            App.numberFormatter.formatFiatShort(it, currencyManager.baseCurrency.symbol, 0)
+            numberFormatter.formatFiatShort(it, currencyManager.baseCurrency.symbol, 0)
         },
         subvalue = rankedEtf.etf.priceChangeValue(listTimePeriod)?.let {
             MarketDataValue.Diff(

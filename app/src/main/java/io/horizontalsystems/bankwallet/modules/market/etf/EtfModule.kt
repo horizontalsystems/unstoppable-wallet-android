@@ -2,10 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.etf
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatPeriod
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -18,13 +15,6 @@ import io.horizontalsystems.marketkit.models.EtfPoint
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 
 object EtfModule {
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return EtfViewModel(App.currencyManager, App.marketKit) as T
-        }
-    }
 
     @Immutable
     data class EtfViewItem(

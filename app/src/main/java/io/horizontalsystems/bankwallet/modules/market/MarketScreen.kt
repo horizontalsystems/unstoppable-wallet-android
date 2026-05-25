@@ -24,7 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -69,7 +69,7 @@ import java.math.BigDecimal
 fun MarketScreen(
     navController: HSNavigation,
 ) {
-    val viewModel = viewModel<MarketViewModel>(factory = MarketModule.Factory())
+    val viewModel = hiltViewModel<MarketViewModel>()
     val uiState = viewModel.uiState
     val tabs = viewModel.tabs
 

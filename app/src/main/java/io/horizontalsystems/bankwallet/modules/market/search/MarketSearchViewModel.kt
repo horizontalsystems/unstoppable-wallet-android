@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.market.search
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -12,12 +15,17 @@ import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import javax.inject.Inject
 
-class MarketSearchViewModel(
+@HiltViewModel
+class MarketSearchViewModel @Inject constructor(
     private val marketFavoritesManager: MarketFavoritesManager,
-    private val marketSearchService: MarketSearchService,
-    private val marketDiscoveryService: MarketDiscoveryService,
+    marketKit: MarketKitWrapper,
+    localStorage: ILocalStorage,
 ) : ViewModelUiState<UiState>() {
+
+    private val marketSearchService = MarketSearchService(marketKit)
+    private val marketDiscoveryService = MarketDiscoveryService(marketKit, localStorage)
     private var searchState = marketSearchService.stateFlow.value
     private var discoveryState = marketDiscoveryService.stateFlow.value
     private var listId: String = ""

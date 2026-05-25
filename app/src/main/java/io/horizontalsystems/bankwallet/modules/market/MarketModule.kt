@@ -6,8 +6,6 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -25,20 +23,6 @@ import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 object MarketModule {
-
-    class Factory : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MarketViewModel(
-                App.marketStorage,
-                App.marketKit,
-                App.currencyManager,
-                App.localStorage
-            ) as T
-        }
-
-    }
 
     data class UiState(
         val selectedTab: Tab,

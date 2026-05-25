@@ -39,9 +39,11 @@ import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.IMarketStorage
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.DonationShowManager
+import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
@@ -259,4 +261,10 @@ object AppModule {
 
     @Provides @Singleton
     fun provideBackgroundManager(): BackgroundManager = App.backgroundManager
+
+    @Provides @Singleton
+    fun provideMarketStorage(): IMarketStorage = App.marketStorage
+
+    @Provides @Singleton
+    fun provideMarketFavoritesManager(): MarketFavoritesManager = App.marketFavoritesManager
 }

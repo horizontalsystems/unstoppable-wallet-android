@@ -32,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
@@ -70,9 +70,7 @@ import java.util.Optional
 data object MarketSearchPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = viewModel<MarketSearchViewModel>(
-            factory = MarketSearchModule.Factory()
-        )
+        val viewModel = hiltViewModel<MarketSearchViewModel>()
         MarketSearchScreen(viewModel, navController)
     }
 }

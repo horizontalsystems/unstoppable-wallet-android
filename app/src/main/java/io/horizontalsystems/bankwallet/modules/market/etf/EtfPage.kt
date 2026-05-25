@@ -38,7 +38,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -95,8 +95,7 @@ data object EtfPage : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val factory = remember { EtfModule.Factory() }
-        val viewModel = viewModel<EtfViewModel>(factory = factory)
+        val viewModel = hiltViewModel<EtfViewModel>()
         EtfPage(viewModel, navController)
     }
 }
