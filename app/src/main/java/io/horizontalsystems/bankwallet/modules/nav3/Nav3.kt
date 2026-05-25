@@ -52,7 +52,7 @@ fun Nav3() {
     val backStack = rememberSerializable(
         serializer = NavBackStackSerializer(elementSerializer = NavKeySerializer())
     ) {
-        NavBackStack<HSPage>(EntryScreen)
+        NavBackStack<HSPage>(EntryPage)
     }
 
     val hsNavigation = remember { HSNavigation(backStack) }
@@ -111,7 +111,7 @@ private fun HandleNavigateToMain(
     val navigateToMain by viewModel.navigateToMainLiveData.observeAsState()
     LaunchedEffect(navigateToMain) {
         if (navigateToMain != null) {
-            navController.removeLastUntil(EntryScreen::class, false)
+            navController.removeLastUntil(EntryPage::class, false)
             viewModel.onNavigatedToMain()
         }
     }

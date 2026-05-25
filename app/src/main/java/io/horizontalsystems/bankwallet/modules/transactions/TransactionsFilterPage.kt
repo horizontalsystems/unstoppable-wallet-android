@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.nav3.EntryScreen
+import io.horizontalsystems.bankwallet.modules.nav3.EntryPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -44,7 +44,7 @@ data object TransactionsFilterPage : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<TransactionsViewModel>(EntryScreen::class)
+        val viewModel = navController.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
 
         FilterScreen(
             navController,

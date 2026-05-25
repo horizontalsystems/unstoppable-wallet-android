@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.serializers.HSScreenKClassSerializer
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -26,6 +27,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.cell.CellRightNavigation
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
 import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.serialization.Serializable
+import kotlin.reflect.KClass
 
 @Serializable
 data class ZcashAddressTypeSelectPage(val input: Input) : HSPage() {
@@ -37,6 +39,7 @@ data class ZcashAddressTypeSelectPage(val input: Input) : HSPage() {
                 navController.slideFromRight(
                     ReceivePage(ReceivePage.Input(
                         wallet = wallet,
+                        receiveEntryPointDestId = input.receiveEntryPointDestId,
                         isTransparentAddress = isTransparent
                     ))
                 )
@@ -47,7 +50,10 @@ data class ZcashAddressTypeSelectPage(val input: Input) : HSPage() {
     }
 
     @Serializable
-    data class Input(val wallet: Wallet)
+    data class Input(
+        val wallet: Wallet,
+        @Serializable(with = HSScreenKClassSerializer::class) val receiveEntryPointDestId: KClass<out HSPage>? = null
+    )
 }
 
 @Composable

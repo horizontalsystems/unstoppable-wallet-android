@@ -37,7 +37,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statAccountType
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.nav3.EntryScreen
+import io.horizontalsystems.bankwallet.modules.nav3.EntryPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -182,7 +182,7 @@ fun Preview_CreateAccountPasskeyScreen() {
     ComposeAppTheme {
         CreateAccountPasskeyScreen(
             HSNavigation(NavBackStack()),
-            EntryScreen::class,
+            EntryPage::class,
             false
         )
     }

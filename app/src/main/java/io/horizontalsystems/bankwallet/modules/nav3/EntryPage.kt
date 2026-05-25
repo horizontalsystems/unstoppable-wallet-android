@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.modules.intro.IntroScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object EntryScreen : HSPage() {
+data object EntryPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         val mainShowedOnce by

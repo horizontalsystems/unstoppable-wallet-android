@@ -35,19 +35,22 @@ data object ReceiveChooseCoinPage : HSPage() {
             activeAccount = activeAccount,
             onMultipleAddressesClick = { coinUid ->
                 viewModel.coinUid = coinUid
-                navController.add(BchAddressFormatScreen)
+                navController.add(BchAddressFormatPage)
             },
             onMultipleDerivationsClick = { coinUid ->
                 viewModel.coinUid = coinUid
-                navController.add(DerivationSelectScreen)
+                navController.add(DerivationSelectPage)
             },
             onMultipleBlockchainsClick = { coinUid ->
                 viewModel.coinUid = coinUid
-                navController.add(NetworkSelectScreen)
+                navController.add(NetworkSelectPage)
             },
             onMultipleZcashAddressTypeClick = { wallet ->
-                viewModel.wallet = wallet
-                navController.add(ZcashAddressTypeSelectScreen)
+                navController.add(
+                    ZcashAddressTypeSelectPage(
+                        ZcashAddressTypeSelectPage.Input(wallet, ReceiveChooseCoinPage::class)
+                    )
+                )
             },
             onCoinClick = { wallet ->
                 onSelectWallet(wallet, navController)
@@ -58,7 +61,7 @@ data object ReceiveChooseCoinPage : HSPage() {
 }
 
 @Serializable
-data object BchAddressFormatScreen : HSPage() {
+data object BchAddressFormatPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
@@ -82,7 +85,7 @@ data object BchAddressFormatScreen : HSPage() {
     }
 }
 
-data object DerivationSelectScreen : HSPage() {
+data object DerivationSelectPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
@@ -106,7 +109,7 @@ data object DerivationSelectScreen : HSPage() {
     }
 }
 
-data object NetworkSelectScreen : HSPage() {
+data object NetworkSelectPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
@@ -124,26 +127,6 @@ data object NetworkSelectScreen : HSPage() {
             onSelect = { wallet ->
                 onSelectWallet(wallet, navController)
             }
-        )
-    }
-}
-
-data object ZcashAddressTypeSelectScreen : HSPage() {
-    @Composable
-    override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<ReceiveSharedViewModel>(ReceiveChooseCoinPage::class)
-        val wallet = viewModel.wallet
-        if (wallet == null) {
-            CloseWithMessage(navController)
-            return
-        }
-
-        ZcashAddressTypeSelectScreen(
-            onZcashAddressTypeClick = { isTransparent ->
-                onSelectWallet(wallet, navController, isTransparent)
-            },
-            onBackPress = { navController.removeLastOrNull() },
-            closeModule = { navController.removeLastOrNull() }
         )
     }
 }

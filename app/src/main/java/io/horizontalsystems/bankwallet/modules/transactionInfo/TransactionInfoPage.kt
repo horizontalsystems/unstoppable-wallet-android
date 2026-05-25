@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.coin.CoinPage
-import io.horizontalsystems.bankwallet.modules.nav3.EntryScreen
+import io.horizontalsystems.bankwallet.modules.nav3.EntryPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
@@ -49,7 +49,7 @@ data object TransactionInfoPage : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModelTxs = navController.viewModelForScreen<TransactionsViewModel>(EntryScreen::class)
+        val viewModelTxs = navController.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
 
         val transactionRecord = viewModelTxs.tmpTransactionRecordToShow
         if (transactionRecord == null) {
