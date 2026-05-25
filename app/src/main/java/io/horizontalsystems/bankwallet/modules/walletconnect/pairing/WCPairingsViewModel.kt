@@ -1,12 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.pairing
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.dapp.core.HSDAppPairing
+import javax.inject.Inject
 
-class WCPairingsViewModel : ViewModelUiState<WCPairingsUiState>() {
+@HiltViewModel
+class WCPairingsViewModel @Inject constructor() : ViewModelUiState<WCPairingsUiState>() {
 
     private val pairings: List<PairingViewItem>
         get() = WCDelegate.getPairings().map { getPairingViewItem(it) }
@@ -37,12 +38,6 @@ class WCPairingsViewModel : ViewModelUiState<WCPairingsUiState>() {
         emitState()
     }
 
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WCPairingsViewModel() as T
-        }
-    }
 }
 
 data class PairingViewItem(

@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.google.gson.Gson
@@ -70,8 +71,7 @@ private val logger = AppLogger("wallet-connect request")
 data object WCRequestSheet : HSBottomSheet() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val wcRequestRouterViewModel =
-            viewModel<WCRequestRouterViewModel>(factory = WCRequestRouterViewModel.Factory())
+        val wcRequestRouterViewModel = hiltViewModel<WCRequestRouterViewModel>()
 
         val uiState = wcRequestRouterViewModel.uiState
 

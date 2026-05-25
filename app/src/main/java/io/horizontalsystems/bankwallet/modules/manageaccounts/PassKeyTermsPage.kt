@@ -11,7 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -41,7 +41,7 @@ data class PassKeyTermsPage(val nextScreen: HSPage) : HSPage() {
 fun PasskeyTermsScreen(
     navController: HSNavigation,
     nextScreen: HSPage,
-    viewModel: PasskeyTermsViewModel = viewModel(factory = PasskeyTermsModule.Factory())
+    viewModel: PasskeyTermsViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState
 

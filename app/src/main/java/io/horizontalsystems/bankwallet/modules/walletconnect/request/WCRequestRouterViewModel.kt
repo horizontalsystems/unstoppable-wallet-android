@@ -1,13 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.marketkit.models.BlockchainType
+import javax.inject.Inject
 
-class WCRequestRouterViewModel : ViewModelUiState<WCRequestRouterUiState>() {
+@HiltViewModel
+class WCRequestRouterViewModel @Inject constructor(
+    private val evmBlockchainManager: EvmBlockchainManager
+) : ViewModelUiState<WCRequestRouterUiState>() {
     private val sessionRequest = WCDelegate.sessionRequestEvent
     private val blockchainType = determineBlockchainType()
 
@@ -19,7 +22,7 @@ class WCRequestRouterViewModel : ViewModelUiState<WCRequestRouterUiState>() {
             "eip155" -> {
                 val chainId = chainParts[1].toIntOrNull()
                 chainId?.let {
-                    App.evmBlockchainManager.getBlockchain(it)
+                    evmBlockchainManager.getBlockchain(it)
                 }?.type
             }
 
@@ -39,13 +42,6 @@ class WCRequestRouterViewModel : ViewModelUiState<WCRequestRouterUiState>() {
     override fun createState() = WCRequestRouterUiState(
         blockchainType = blockchainType
     )
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WCRequestRouterViewModel() as T
-        }
-    }
 }
 
 data class WCRequestRouterUiState(val blockchainType: BlockchainType?)

@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.manageaccounts
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import javax.inject.Inject
 
-class PasskeyTermsViewModel(
+@HiltViewModel
+class PasskeyTermsViewModel @Inject constructor(
     private val localStorage: ILocalStorage
 ) : ViewModelUiState<UiState>() {
 
@@ -69,11 +69,3 @@ enum class PasskeyTerm(val title: Int, val description: Int) {
     ),
 }
 
-object PasskeyTermsModule {
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return PasskeyTermsViewModel(App.localStorage) as T
-        }
-    }
-}

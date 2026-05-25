@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -48,7 +48,7 @@ data object WCPairingsPage : HSPage() {
 
 @Composable
 fun WCPairingsScreen(navController: HSNavigation) {
-    val viewModel = viewModel<WCPairingsViewModel>(factory = WCPairingsViewModel.Factory())
+    val viewModel = hiltViewModel<WCPairingsViewModel>()
     val uiState = viewModel.uiState
 
     LaunchedEffect(uiState.closeScreen) {
