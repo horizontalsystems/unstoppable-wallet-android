@@ -1,14 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.settings.guides
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.horizontalsystems.bankwallet.entities.ViewState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import javax.inject.Inject
 
-class GuidesViewModel(private val repository: GuidesRepository) : ViewModelUiState<GuidesUiState>() {
+@HiltViewModel
+class GuidesViewModel @Inject constructor(private val repository: GuidesRepository) : ViewModelUiState<GuidesUiState>() {
     private var viewState: ViewState = ViewState.Loading
     private var categories = listOf<GuideCategory>()
     private var selectedCategory: GuideCategory? = null

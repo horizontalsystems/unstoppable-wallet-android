@@ -5,14 +5,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.ITorManager
 import io.horizontalsystems.core.IPinComponent
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
+import javax.inject.Inject
 
-class SecurityTorSettingsViewModel(
+@HiltViewModel
+class SecurityTorSettingsViewModel @Inject constructor(
     private val torManager: ITorManager,
     private val pinComponent: IPinComponent,
 ) : ViewModel() {
@@ -64,5 +67,4 @@ class SecurityTorSettingsViewModel(
     fun resetSwitch() {
         torCheckEnabled = torManager.isTorEnabled
     }
-
 }

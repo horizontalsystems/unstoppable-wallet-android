@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITermsManager
+import io.horizontalsystems.bankwallet.core.ITorManager
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -24,6 +25,7 @@ import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
@@ -68,6 +70,12 @@ object AppModule {
 
     @Provides @Singleton
     fun providePaidActionSettingsManager(): PaidActionSettingsManager = App.paidActionSettingsManager
+
+    @Provides @Singleton
+    fun provideTorManager(): ITorManager = App.torKitManager
+
+    @Provides @Singleton
+    fun provideConnectivityManager(): ConnectivityManager = App.connectivityManager
 
     @Provides @Singleton
     fun provideAccountManager(): IAccountManager = App.accountManager

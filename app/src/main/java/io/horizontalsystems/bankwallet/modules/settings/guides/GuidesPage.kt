@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -51,7 +51,7 @@ data object GuidesPage : HSPage() {
 
 @Composable
 fun GuidesScreen(navController: HSNavigation) {
-    val viewModel = viewModel<GuidesViewModel>(factory = GuidesModule.Factory())
+    val viewModel = hiltViewModel<GuidesViewModel>()
 
     val uiState = viewModel.uiState
 

@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -26,7 +25,6 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
-import io.horizontalsystems.bankwallet.modules.settings.privacy.tor.SecurityTorSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.privacy.tor.SecurityTorSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.SecurityCenterCell
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.TorBlock
@@ -47,9 +45,7 @@ data object PrivacySettingsPage : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val torViewModel = viewModel<SecurityTorSettingsViewModel>(
-            factory = SecurityTorSettingsModule.Factory()
-        )
+        val torViewModel = hiltViewModel<SecurityTorSettingsViewModel>()
 
         val activity = LocalActivity.current
         PrivacyScreen(
