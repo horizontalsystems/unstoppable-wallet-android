@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITermsManager
@@ -27,10 +28,14 @@ import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.stats.StatsManager
+import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
+import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.core.ISystemInfoManager
@@ -48,6 +53,21 @@ object AppModule {
 
     @Provides @Singleton
     fun provideWalletManager(): WalletManager = App.walletManager
+
+    @Provides @Singleton
+    fun provideBackupManager(): IBackupManager = App.backupManager
+
+    @Provides @Singleton
+    fun providePinComponent(): IPinComponent = App.pinComponent
+
+    @Provides @Singleton
+    fun provideWCSessionManager(): WCSessionManager = App.wcSessionManager
+
+    @Provides @Singleton
+    fun provideWCManager(): WCManager = App.wcManager
+
+    @Provides @Singleton
+    fun providePaidActionSettingsManager(): PaidActionSettingsManager = App.paidActionSettingsManager
 
     @Provides @Singleton
     fun provideAccountManager(): IAccountManager = App.accountManager

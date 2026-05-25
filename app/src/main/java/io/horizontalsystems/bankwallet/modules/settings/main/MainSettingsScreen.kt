@@ -34,7 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -91,7 +91,7 @@ import io.horizontalsystems.subscriptions.core.SecureSend
 @Composable
 fun SettingsScreen(
     navController: HSNavigation,
-    viewModel: MainSettingsViewModel = viewModel(factory = MainSettingsModule.Factory()),
+    viewModel: MainSettingsViewModel = hiltViewModel(),
 ) {
 
     Surface(

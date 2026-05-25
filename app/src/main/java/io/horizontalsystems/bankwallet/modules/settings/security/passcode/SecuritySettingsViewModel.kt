@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.security.passcode
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
@@ -14,8 +15,10 @@ import io.horizontalsystems.subscriptions.core.SecureSend
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SecuritySettingsViewModel(
+@HiltViewModel
+class SecuritySettingsViewModel @Inject constructor(
     systemInfoManager: ISystemInfoManager,
     private val pinComponent: IPinComponent,
     private val balanceHiddenManager: BalanceHiddenManager,

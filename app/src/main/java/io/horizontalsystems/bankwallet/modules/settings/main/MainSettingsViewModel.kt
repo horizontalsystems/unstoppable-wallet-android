@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.settings.main
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
@@ -17,8 +18,10 @@ import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
+import javax.inject.Inject
 
-class MainSettingsViewModel(
+@HiltViewModel
+class MainSettingsViewModel @Inject constructor(
     private val backupManager: IBackupManager,
     private val systemInfoManager: ISystemInfoManager,
     private val termsManager: ITermsManager,

@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -34,7 +34,6 @@ import io.horizontalsystems.bankwallet.modules.pin.SetDuressPinIntroPage
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockIntervalsPage
-import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.securesend.SecureSendConfigSheet
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
@@ -69,7 +68,7 @@ data object SecuritySettingsPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         SecurityCenterScreen(
-            securitySettingsViewModel = viewModel(factory = SecurityPasscodeSettingsModule.Factory()),
+            securitySettingsViewModel = hiltViewModel(),
             navController = navController,
         )
     }
