@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -45,7 +45,7 @@ data object AddTokenPage : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = viewModel<AddTokenViewModel>(factory = AddTokenModule.Factory())
+        val viewModel = hiltViewModel<AddTokenViewModel>()
         AddTokenScreen(
             navController = navController,
             closeScreen = { navController.removeLastOrNull() },

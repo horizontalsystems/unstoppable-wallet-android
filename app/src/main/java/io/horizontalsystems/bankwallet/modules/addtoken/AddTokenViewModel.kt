@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -14,8 +15,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class AddTokenViewModel(private val addTokenService: AddTokenService) :
+@HiltViewModel
+class AddTokenViewModel @Inject constructor(private val addTokenService: AddTokenService) :
     ViewModelUiState<AddTokenUiState>() {
 
     private var loading = false
