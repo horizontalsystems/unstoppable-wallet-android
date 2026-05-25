@@ -2,12 +2,8 @@ package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterShortened
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
@@ -15,29 +11,6 @@ import io.horizontalsystems.marketkit.models.FullCoin
 import java.math.BigDecimal
 
 object TvlModule {
-
-    @Suppress("UNCHECKED_CAST")
-    class Factory : ViewModelProvider.Factory {
-        private val globalMarketRepository: GlobalMarketRepository by lazy {
-            GlobalMarketRepository(App.marketKit)
-        }
-
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return when (modelClass) {
-                TvlViewModel::class.java -> {
-                    val service = TvlService(App.currencyManager, globalMarketRepository)
-                    val tvlViewItemFactory = TvlViewItemFactory()
-                    TvlViewModel(service, tvlViewItemFactory) as T
-                }
-                TvlChartViewModel::class.java -> {
-                    val chartService = TvlChartService(App.currencyManager, globalMarketRepository)
-                    val chartNumberFormatter = ChartCurrencyValueFormatterShortened()
-                    TvlChartViewModel(chartService, chartNumberFormatter) as T
-                }
-                else -> throw IllegalArgumentException()
-            }
-        }
-    }
 
     data class MarketTvlItem(
         val fullCoin: FullCoin?,

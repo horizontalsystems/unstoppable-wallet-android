@@ -13,13 +13,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -69,9 +68,8 @@ data object TvlPage : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val vmFactory = remember { TvlModule.Factory() }
-        val tvlChartViewModel = viewModel<TvlChartViewModel>(factory = vmFactory)
-        val viewModel = viewModel<TvlViewModel>(factory = vmFactory)
+        val tvlChartViewModel = hiltViewModel<TvlChartViewModel>()
+        val viewModel = hiltViewModel<TvlViewModel>()
 
         val view = LocalView.current
         TvlScreen(viewModel, tvlChartViewModel, navController) {

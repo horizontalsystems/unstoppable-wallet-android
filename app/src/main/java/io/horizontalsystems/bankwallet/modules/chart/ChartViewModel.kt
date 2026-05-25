@@ -22,7 +22,7 @@ import kotlinx.coroutines.rx2.asFlow
 import java.util.Date
 
 open class ChartViewModel(
-    private val service: AbstractChartService,
+    protected val service: AbstractChartService,
     private val valueFormatter: ChartModule.ChartNumberFormatter,
 ) : ViewModelUiState<ChartUiState>() {
 

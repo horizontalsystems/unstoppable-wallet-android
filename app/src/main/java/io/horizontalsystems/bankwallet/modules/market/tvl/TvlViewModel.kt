@@ -3,7 +3,10 @@ package io.horizontalsystems.bankwallet.modules.market.tvl
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -13,6 +16,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.SelectorDialogState
+import javax.inject.Inject
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule.TvlDiffType
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -20,10 +24,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
-class TvlViewModel(
-    private val service: TvlService,
-    private val tvlViewItemFactory: TvlViewItemFactory,
+@HiltViewModel
+class TvlViewModel @Inject constructor(
+    marketKit: MarketKitWrapper,
+    currencyManager: CurrencyManager,
 ) : ViewModel() {
+    private val service = TvlService(currencyManager, GlobalMarketRepository(marketKit))
+    private val tvlViewItemFactory = TvlViewItemFactory()
 
     private var tvlDiffType: TvlDiffType = TvlDiffType.Percent
         set(value) {
