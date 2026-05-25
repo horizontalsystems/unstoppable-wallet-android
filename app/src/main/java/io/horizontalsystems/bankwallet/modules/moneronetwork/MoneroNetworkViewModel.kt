@@ -1,12 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.moneronetwork
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager.MoneroNode
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MoneroNetworkViewModel(
+@HiltViewModel
+class MoneroNetworkViewModel @Inject constructor(
     private val moneroNodeManager: MoneroNodeManager
 ) : ViewModelUiState<MoneroNetworkViewModel.ViewState>() {
 

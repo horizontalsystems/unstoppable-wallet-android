@@ -1,12 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.zanonetwork
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager.ZanoNode
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ZanoNetworkViewModel(
+@HiltViewModel
+class ZanoNetworkViewModel @Inject constructor(
     private val zanoNodeManager: ZanoNodeManager
 ) : ViewModelUiState<ZanoNetworkViewModel.ViewState>() {
 

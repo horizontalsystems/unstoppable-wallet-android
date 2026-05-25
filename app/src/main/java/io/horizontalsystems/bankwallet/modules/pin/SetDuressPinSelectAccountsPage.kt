@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -45,7 +45,7 @@ data object SetDuressPinSelectAccountsPage : HSPage() {
 @Composable
 fun SetDuressPinSelectAccountsScreen(navController: HSNavigation) {
     val viewModel =
-        viewModel<SetDuressPinSelectAccountsViewModel>(factory = SetDuressPinSelectAccountsViewModel.Factory())
+        hiltViewModel<SetDuressPinSelectAccountsViewModel>()
     val regularAccounts = viewModel.regularAccounts
     val watchAccounts = viewModel.watchAccounts
     val selected = remember { mutableStateListOf<String>() }

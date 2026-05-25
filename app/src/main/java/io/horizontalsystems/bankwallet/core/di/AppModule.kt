@@ -29,6 +29,8 @@ import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
+import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
+import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
@@ -89,6 +91,12 @@ object AppModule {
 
     @Provides @Singleton
     fun provideRootUtil(): RootUtil = RootUtil
+
+    @Provides @Singleton
+    fun provideMoneroNodeManager(): MoneroNodeManager = App.moneroNodeManager
+
+    @Provides @Singleton
+    fun provideZanoNodeManager(): ZanoNodeManager = App.zanoNodeManager
 
     @Provides @Singleton
     fun provideAccountFactory(): IAccountFactory = App.accountFactory

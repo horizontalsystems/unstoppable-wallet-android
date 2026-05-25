@@ -33,7 +33,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BlockchainSettingCell
@@ -89,7 +90,7 @@ private fun MoneroNetworkScreen(
     navController: HSNavigation,
     onBackPress: () -> Unit,
 ) {
-    val viewModel = viewModel<MoneroNetworkViewModel>(factory = MoneroNetworkModule.Factory())
+    val viewModel = hiltViewModel<MoneroNetworkViewModel>()
     var revealedCardId by remember { mutableStateOf<String?>(null) }
     val view = LocalView.current
     val coroutineScope = rememberCoroutineScope()

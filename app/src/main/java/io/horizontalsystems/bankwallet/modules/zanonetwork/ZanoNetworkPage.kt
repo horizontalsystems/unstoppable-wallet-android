@@ -32,7 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -89,7 +89,7 @@ private fun ZanoNetworkScreen(
     navController: HSNavigation,
     onBackPress: () -> Unit,
 ) {
-    val viewModel = viewModel<ZanoNetworkViewModel>(factory = ZanoNetworkModule.Factory())
+    val viewModel = hiltViewModel<ZanoNetworkViewModel>()
     var revealedCardId by remember { mutableStateOf<String?>(null) }
     val view = LocalView.current
 
