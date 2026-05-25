@@ -2,7 +2,9 @@ package io.horizontalsystems.bankwallet.modules.usersubscription
 
 import android.app.Activity
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import javax.inject.Inject
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -12,7 +14,8 @@ import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
 import java.time.Period
 
-class BuySubscriptionChoosePlanViewModel : ViewModelUiState<BuySubscriptionChoosePlanUiState>() {
+@HiltViewModel
+class BuySubscriptionChoosePlanViewModel @Inject constructor() : ViewModelUiState<BuySubscriptionChoosePlanUiState>() {
     private var freeTrialPeriod: Period? = null
     private var basePlans: List<BasePlan> = listOf()
     private var purchaseInProgress = false

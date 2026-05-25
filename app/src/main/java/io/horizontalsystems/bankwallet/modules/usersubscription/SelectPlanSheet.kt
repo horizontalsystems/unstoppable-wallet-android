@@ -22,7 +22,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.badge
@@ -71,7 +71,7 @@ data object SelectPlanSheet : HSBottomSheet() {
 fun SelectPlanBottomSheet(
     onDismiss: () -> Unit,
     onPurchase: () -> Unit,
-    viewModel: BuySubscriptionChoosePlanViewModel = viewModel(),
+    viewModel: BuySubscriptionChoosePlanViewModel = hiltViewModel(),
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val uiState = viewModel.uiState

@@ -23,6 +23,7 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
+import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
@@ -152,6 +153,9 @@ object AppModule {
 
     @Provides @Singleton
     fun provideSpamManager(): SpamManager = App.spamManager
+
+    @Provides @Singleton
+    fun provideSwapTermsManager(): SwapTermsManager = App.swapTermsManager
 
     @Provides @Singleton
     fun provideContactsRepository(): ContactsRepository = App.contactsRepository

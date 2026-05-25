@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -49,7 +49,7 @@ data object SwapTermsPage : HSPage() {
 @Composable
 fun SwapTermsScreen(navController: HSNavigation) {
     val resultEventBus = LocalResultEventBus.current
-    val viewModel = viewModel<SwapTermsViewModel>(factory = SwapTermsModule.Factory())
+    val viewModel = hiltViewModel<SwapTermsViewModel>()
     val uiState = viewModel.uiState
     val terms = uiState.terms
 

@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.swapterms
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.SwapTermType
 import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
+import javax.inject.Inject
 
-class SwapTermsViewModel(private val swapTermsManager: SwapTermsManager) :
+@HiltViewModel
+class SwapTermsViewModel @Inject constructor(private val swapTermsManager: SwapTermsManager) :
     ViewModelUiState<UiState>() {
 
     private val terms = swapTermsManager.terms
@@ -42,11 +42,3 @@ data class UiState(
     val buttonEnabled: Boolean
 )
 
-object SwapTermsModule {
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapTermsViewModel(App.swapTermsManager) as T
-        }
-    }
-}

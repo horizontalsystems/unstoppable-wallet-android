@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.usersubscription
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import javax.inject.Inject
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.PrioritySupport
@@ -15,7 +17,8 @@ import io.horizontalsystems.subscriptions.core.TradeSignals
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
 
-class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
+@HiltViewModel
+class BuySubscriptionViewModel @Inject constructor() : ViewModelUiState<BuySubscriptionUiState>() {
     private var subscription: Subscription? = null
     private var hasFreeTrial = false
     private val defenseSystemFeatures = listOf(
