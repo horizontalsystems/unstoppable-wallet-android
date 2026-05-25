@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.NavigationType
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -60,7 +60,8 @@ data class ManageAccountsPage(val input: ManageAccountsModule.Mode) : HSPage() {
 
 @Composable
 fun ManageAccountsScreen(navController: HSNavigation, mode: ManageAccountsModule.Mode) {
-    val viewModel = viewModel<ManageAccountsViewModel>(factory = ManageAccountsModule.Factory(mode))
+    val viewModel = hiltViewModel<ManageAccountsViewModel>()
+    viewModel.mode = mode
     var searchQuery by remember { mutableStateOf(viewModel.searchQuery) }
     var isSearchActive by remember { mutableStateOf(false) }
 

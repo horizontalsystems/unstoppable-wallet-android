@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.set.PinSetModule
 import io.horizontalsystems.bankwallet.modules.pin.set.PinSetViewModel
@@ -23,8 +23,9 @@ fun PinSet(
     dismissWithSuccess: () -> Unit,
     onBackPress: () -> Unit,
     forDuress: Boolean = false,
-    viewModel: PinSetViewModel = viewModel(factory = PinSetModule.Factory(forDuress))
 ) {
+    val viewModel = hiltViewModel<PinSetViewModel>()
+    viewModel.forDuress = forDuress
     if (viewModel.uiState.finished) {
         dismissWithSuccess.invoke()
         viewModel.finished()

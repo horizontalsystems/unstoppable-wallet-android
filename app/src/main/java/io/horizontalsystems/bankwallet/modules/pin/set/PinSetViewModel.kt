@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.pin.set
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -11,11 +12,14 @@ import io.horizontalsystems.bankwallet.modules.pin.set.PinSetModule.SetStage.Ent
 import io.horizontalsystems.core.IPinComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PinSetViewModel(
+@HiltViewModel
+class PinSetViewModel @Inject constructor(
     private val pinComponent: IPinComponent,
-    private val forDuress: Boolean,
 ) : ViewModelUiState<PinSetViewState>() {
+
+    var forDuress: Boolean = false
 
     private var enteredPin = ""
     private var submittedPin = ""
@@ -98,14 +102,9 @@ class PinSetViewModel(
     private fun resetWithError(errorMessage: Int) {
         submittedPin = ""
         enteredPin = ""
-
         stage = Enter
         reverseSlideAnimation = true
         error = Translator.getString(errorMessage)
-        viewModelScope.launch {
-            delay(500)
-            emitState()
-        }
+        emitState()
     }
-
 }

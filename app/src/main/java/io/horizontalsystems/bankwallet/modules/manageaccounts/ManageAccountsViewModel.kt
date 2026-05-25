@@ -5,17 +5,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
+import javax.inject.Inject
 
-class ManageAccountsViewModel(
+@HiltViewModel
+class ManageAccountsViewModel @Inject constructor(
     private val accountManager: IAccountManager,
-    private val mode: ManageAccountsModule.Mode
 ) : ViewModel() {
+
+    var mode: ManageAccountsModule.Mode = ManageAccountsModule.Mode.Manage
 
     var viewItems by mutableStateOf<Pair<List<AccountViewItem>, List<AccountViewItem>>?>(null)
     var finish by mutableStateOf(false)
