@@ -1,10 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
 import android.os.Parcelable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonParser
-import io.horizontalsystems.bankwallet.core.App
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
@@ -14,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
+import javax.inject.Inject
 import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
 import kotlin.coroutines.resume
@@ -27,7 +27,8 @@ private const val ETH_SIGN_METHOD = "eth_sign"
 private const val SEND_TRANSACTION_METHOD = "eth_sendTransaction"
 private const val SIGN_TRANSACTION_METHOD = "eth_signTransaction"
 
-class WCRequestEvmViewModel(
+@HiltViewModel
+class WCRequestEvmViewModel @Inject constructor(
     private val accountManager: IAccountManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val wcManager: WCManager,
@@ -186,16 +187,6 @@ class WCRequestEvmViewModel(
         }
     }
 
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WCRequestEvmViewModel(
-                App.accountManager,
-                App.evmBlockchainManager,
-                App.wcManager
-            ) as T
-        }
-    }
 }
 
 sealed class SessionRequestUI {

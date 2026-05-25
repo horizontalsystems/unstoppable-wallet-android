@@ -1,16 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.dapp.core.HSDAppRequest
+import javax.inject.Inject
 
-class WCRequestPreViewModel : ViewModelUiState<DataState<WCRequestPreUiState>>() {
+@HiltViewModel
+class WCRequestPreViewModel @Inject constructor(
+    private val wcManager: WCManager
+) : ViewModelUiState<DataState<WCRequestPreUiState>>() {
     private val sessionRequest = WCDelegate.sessionRequestEvent
-    private val wcAction = App.wcManager.getActionForRequest(sessionRequest)
+    private val wcAction = wcManager.getActionForRequest(sessionRequest)
 
     override fun createState() = when {
         sessionRequest == null -> {
@@ -28,13 +31,6 @@ class WCRequestPreViewModel : ViewModelUiState<DataState<WCRequestPreUiState>>()
                     sessionRequest = sessionRequest,
                 )
             )
-        }
-    }
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WCRequestPreViewModel() as T
         }
     }
 }
