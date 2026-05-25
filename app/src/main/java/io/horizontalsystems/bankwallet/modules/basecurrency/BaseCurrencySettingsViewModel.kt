@@ -4,13 +4,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Currency
+import javax.inject.Inject
 
-class BaseCurrencySettingsViewModel(private val currencyManager: CurrencyManager) : ViewModel() {
+@HiltViewModel
+class BaseCurrencySettingsViewModel @Inject constructor(private val currencyManager: CurrencyManager) : ViewModel() {
 
     private val popularCurrencyCodes = listOf("USD", "EUR", "GBP", "JPY")
     private val popularCurrencies: List<Currency>

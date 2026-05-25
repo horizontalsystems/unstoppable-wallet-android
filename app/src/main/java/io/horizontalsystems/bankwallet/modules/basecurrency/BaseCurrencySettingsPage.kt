@@ -30,7 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
@@ -64,9 +64,7 @@ data object BaseCurrencySettingsPage : HSPage() {
 @Composable
 private fun BaseCurrencyScreen(
     navController: HSNavigation,
-    viewModel: BaseCurrencySettingsViewModel = viewModel(
-        factory = BaseCurrencySettingsModule.Factory()
-    )
+    viewModel: BaseCurrencySettingsViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = androidx.compose.material3.rememberModalBottomSheetState(
