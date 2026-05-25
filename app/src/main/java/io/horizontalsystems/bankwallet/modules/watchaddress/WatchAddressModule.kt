@@ -1,9 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.watchaddress
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object WatchAddressModule {
@@ -19,25 +15,5 @@ object WatchAddressModule {
         add(BlockchainType.ECash)
         add(BlockchainType.Stellar)
         add(BlockchainType.Monero)
-    }
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = WatchAddressService(
-                App.accountManager,
-                App.walletActivator,
-                App.accountFactory,
-                App.marketKit,
-                App.evmBlockchainManager,
-                App.restoreSettingsManager
-            )
-            val addressHandlerFactory = AddressHandlerFactory(App.appConfigProvider.udnApiKey)
-            val addressParserChain = addressHandlerFactory.parserChain(
-                blockchainTypes = supportedBlockchainTypes,
-                blockchainTypesWithEns = listOf(BlockchainType.Ethereum)
-            )
-            return WatchAddressViewModel(service, addressParserChain) as T
-        }
     }
 }

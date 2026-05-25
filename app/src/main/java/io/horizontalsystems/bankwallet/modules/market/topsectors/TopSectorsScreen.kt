@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -58,7 +58,7 @@ import io.horizontalsystems.marketkit.models.CoinCategory
 fun TopSectorsScreen(
     navController: HSNavigation
 ) {
-    val viewModel = viewModel<TopSectorsViewModel>(factory = TopSectorsViewModel.Factory())
+    val viewModel = hiltViewModel<TopSectorsViewModel>()
     val uiState = viewModel.uiState
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }

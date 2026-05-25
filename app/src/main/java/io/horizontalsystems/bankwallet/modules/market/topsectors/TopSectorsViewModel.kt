@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.market.topsectors
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import javax.inject.Inject
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -28,11 +28,13 @@ import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
-class TopSectorsViewModel(
+@HiltViewModel
+class TopSectorsViewModel @Inject constructor(
     private val currencyManager: CurrencyManager,
-    private val topSectorsRepository: TopSectorsRepository,
+    marketKit: MarketKitWrapper,
     private val numberFormatter: IAppNumberFormatter
 ) : ViewModelUiState<TopSectorsUiState>() {
+    private val topSectorsRepository = TopSectorsRepository(marketKit)
     private var isRefreshing = false
     private var items = listOf<TopSectorViewItem>()
     private var viewState: ViewState = ViewState.Loading
@@ -173,16 +175,6 @@ class TopSectorsViewModel(
         }
     }
 
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TopSectorsViewModel(
-                App.currencyManager,
-                TopSectorsRepository(App.marketKit),
-                App.numberFormatter
-            ) as T
-        }
-    }
 }
 
 data class TopSectorWithDiff(

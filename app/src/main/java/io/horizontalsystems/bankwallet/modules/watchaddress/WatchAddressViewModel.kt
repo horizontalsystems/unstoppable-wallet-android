@@ -1,8 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.watchaddress
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.IAccountFactory
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.WalletActivator
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -14,6 +22,7 @@ import io.horizontalsystems.bankwallet.entities.BitcoinAddress
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.MoneroWatchAddress
 import io.horizontalsystems.bankwallet.entities.tokenType
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
 import io.horizontalsystems.bankwallet.modules.address.AddressParserChain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -23,11 +32,28 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class WatchAddressViewModel(
-    private val watchAddressService: WatchAddressService,
-    private val addressParserChain: AddressParserChain
+@HiltViewModel
+class WatchAddressViewModel @Inject constructor(
+    accountManager: IAccountManager,
+    walletActivator: WalletActivator,
+    accountFactory: IAccountFactory,
+    marketKit: MarketKitWrapper,
+    evmBlockchainManager: EvmBlockchainManager,
+    restoreSettingsManager: RestoreSettingsManager,
+    appConfigProvider: AppConfigProvider,
 ) : ViewModelUiState<WatchAddressUiState>() {
+    private val watchAddressService = WatchAddressService(
+        accountManager, walletActivator, accountFactory, marketKit, evmBlockchainManager, restoreSettingsManager
+    )
+    private val addressParserChain: AddressParserChain = run {
+        val factory = AddressHandlerFactory(appConfigProvider.udnApiKey)
+        factory.parserChain(
+            blockchainTypes = WatchAddressModule.supportedBlockchainTypes,
+            blockchainTypesWithEns = listOf(BlockchainType.Ethereum)
+        )
+    }
 
     private var accountCreated = false
     private var submitButtonType: SubmitButtonType = SubmitButtonType.Next(false)

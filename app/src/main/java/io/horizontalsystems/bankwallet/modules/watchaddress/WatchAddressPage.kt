@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -57,7 +57,7 @@ data class WatchAddressPage(val input: ManageAccountsModule.Input? = null) : HSP
 fun WatchAddressScreen(navController: HSNavigation, popUpToInclusiveId: KClass<out HSPage>, inclusive: Boolean) {
     val view = LocalView.current
 
-    val viewModel = viewModel<WatchAddressViewModel>(factory = WatchAddressModule.Factory())
+    val viewModel = hiltViewModel<WatchAddressViewModel>()
     val uiState = viewModel.uiState
     val accountCreated = uiState.accountCreated
     val submitType = uiState.submitButtonType

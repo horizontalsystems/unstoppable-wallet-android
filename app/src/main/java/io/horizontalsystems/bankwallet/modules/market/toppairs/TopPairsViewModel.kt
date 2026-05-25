@@ -1,12 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.market.toppairs
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import javax.inject.Inject
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -24,7 +24,8 @@ import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
-class TopPairsViewModel(
+@HiltViewModel
+class TopPairsViewModel @Inject constructor(
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
 ) : ViewModelUiState<TopPairsUiState>() {
@@ -111,12 +112,6 @@ class TopPairsViewModel(
         )
     }
 
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return TopPairsViewModel(App.marketKit, App.currencyManager) as T
-        }
-    }
 
 }
 

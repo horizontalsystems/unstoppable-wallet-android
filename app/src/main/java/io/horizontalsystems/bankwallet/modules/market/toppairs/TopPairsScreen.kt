@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.fiatIconUrl
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -53,7 +53,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TopPairsScreen() {
-    val viewModel = viewModel<TopPairsViewModel>(factory = TopPairsViewModel.Factory())
+    val viewModel = hiltViewModel<TopPairsViewModel>()
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
