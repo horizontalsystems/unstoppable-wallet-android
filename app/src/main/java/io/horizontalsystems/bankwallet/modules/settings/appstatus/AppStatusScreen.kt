@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ShareCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -45,7 +45,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 fun AppStatusScreen(
     navController: HSNavigation
 ) {
-    val viewModel = viewModel<AppStatusViewModel>(factory = AppStatusModule.Factory())
+    val viewModel = hiltViewModel<AppStatusViewModel>()
     val uiState = viewModel.uiState
     val localView = LocalView.current
     val context = LocalContext.current

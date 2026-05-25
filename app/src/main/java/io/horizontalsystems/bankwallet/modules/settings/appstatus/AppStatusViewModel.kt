@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.AppLog
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.BaseTonAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.core.managers.statusInfo
 import io.horizontalsystems.bankwallet.entities.Account
@@ -29,8 +30,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
+import javax.inject.Inject
 
-class AppStatusViewModel(
+@HiltViewModel
+class AppStatusViewModel @Inject constructor(
     private val systemInfoManager: ISystemInfoManager,
     private val localStorage: ILocalStorage,
     private val accountManager: IAccountManager,

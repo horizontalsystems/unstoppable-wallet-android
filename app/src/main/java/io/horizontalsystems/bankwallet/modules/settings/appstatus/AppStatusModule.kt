@@ -1,32 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.settings.appstatus
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
-
 object AppStatusModule {
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val viewModel = AppStatusViewModel(
-                App.systemInfoManager,
-                App.localStorage,
-                App.accountManager,
-                App.walletManager,
-                App.adapterManager,
-                App.marketKit,
-                App.evmBlockchainManager,
-                App.tronKitManager,
-                App.tonKitManager,
-                App.stellarKitManager,
-                App.solanaKitManager,
-                App.btcBlockchainManager,
-                App.zanoKitManager,
-            )
-            return viewModel as T
-        }
-    }
 
     sealed class BlockContent {
         data class Header(val title: String) : BlockContent()

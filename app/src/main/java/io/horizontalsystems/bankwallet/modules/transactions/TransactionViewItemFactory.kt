@@ -15,10 +15,6 @@ import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroIncomingTransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.zano.ZanoIncomingTransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.zano.ZanoOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ApproveTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCallTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ContractCreationTransactionRecord
@@ -29,6 +25,8 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ExternalC
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.SwapTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.TransferEvent
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.UnknownSwapTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.monero.MoneroOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
@@ -38,6 +36,8 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronExte
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.tron.TronTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zano.ZanoIncomingTransactionRecord
+import io.horizontalsystems.bankwallet.entities.transactionrecords.zano.ZanoOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.zcash.ZcashShieldingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
@@ -47,8 +47,9 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.tronkit.models.Contract
 import java.math.BigDecimal
 import java.util.Date
+import javax.inject.Inject
 
-class TransactionViewItemFactory(
+class TransactionViewItemFactory @Inject constructor(
     private val evmLabelManager: EvmLabelManager,
     private val contactsRepository: ContactsRepository,
     private val balanceHiddenManager: BalanceHiddenManager,

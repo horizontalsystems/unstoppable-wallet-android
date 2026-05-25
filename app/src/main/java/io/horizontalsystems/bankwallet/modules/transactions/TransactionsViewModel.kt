@@ -3,13 +3,14 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
@@ -30,8 +31,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.util.Calendar
 import java.util.Date
+import javax.inject.Inject
 
-class TransactionsViewModel(
+@HiltViewModel
+class TransactionsViewModel @Inject constructor(
     private val service: TransactionsService,
     private val transactionViewItem2Factory: TransactionViewItemFactory,
     private val balanceHiddenManager: BalanceHiddenManager,

@@ -7,12 +7,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainScreenWithRootedDeviceCheck
 import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewPage
 import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectSendRequestPage
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import kotlinx.coroutines.delay
 import java.util.UUID
@@ -54,7 +54,7 @@ fun MainScreen(navController: HSNavigation, parentScreenContentKey: String) {
     }
 
     MainScreenWithRootedDeviceCheck(
-        transactionsViewModel = viewModel<TransactionsViewModel>(factory = TransactionsModule.Factory()),
+        transactionsViewModel = hiltViewModel<TransactionsViewModel>(),
         navController = navController,
         mainActivityViewModel = mainActivityViewModel,
         parentScreenContentKey = parentScreenContentKey
