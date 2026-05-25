@@ -82,7 +82,7 @@ class TransactionViewItemFactory(
         cache.clear()
     }
 
-    fun convertToViewItemCached(
+    suspend fun convertToViewItemCached(
         transactionItem: TransactionItem,
         walletUid: String? = null,
         matchedSwap: SwapProviderTransaction? = null

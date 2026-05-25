@@ -20,10 +20,12 @@ import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.helpers.DateHelper
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
@@ -69,7 +71,7 @@ class TransactionViewItemFactoryCacheTest {
         every { balanceHiddenManager.isTransactionInfoHidden(any()) } returns false
         every { balanceHiddenManager.isTransactionInfoHiddenForWallet(any(), any()) } returns false
         every { localStorage.addressPoisoningViewMode } returns AddressPoisoningViewMode.COMPACT
-        every { poisonAddressManager.getPoisonStatus(any<TransactionRecord>()) } returns PoisonStatus.BLOCKCHAIN
+        coEvery { poisonAddressManager.getPoisonStatus(any<TransactionRecord>()) } returns PoisonStatus.BLOCKCHAIN
 
         factory = TransactionViewItemFactory(
             evmLabelManager = evmLabelManager,
@@ -90,7 +92,7 @@ class TransactionViewItemFactoryCacheTest {
     }
 
     @Test
-    fun convertToViewItemCached_updatedListData_rebuildsCachedItem() {
+    fun convertToViewItemCached_updatedListData_rebuildsCachedItem() = runTest {
         val initialRecord = createUnknownSwapRecord(
             uid = "swap-uid",
             valueOut = null,
@@ -124,7 +126,7 @@ class TransactionViewItemFactoryCacheTest {
     }
 
     @Test
-    fun convertToViewItemCached_detailsOnlyCopy_reusesCachedItem() {
+    fun convertToViewItemCached_detailsOnlyCopy_reusesCachedItem() = runTest {
         val record = createUnknownSwapRecord(
             uid = "swap-uid",
             valueOut = null,

@@ -124,6 +124,7 @@ private class FakeAppDatabase(
     override fun moneroFileDao() = unsupported()
     override fun pendingMultiSwapDao() = unsupported()
     override fun pendingTransactionDao() = unsupported()
+    override fun locallyCreatedTransactionDao() = unsupported()
     override fun zcashSingleUseAddressDao() = unsupported()
     override fun userDeletedWalletDao() = unsupported()
     override fun poisonAddressDao() = unsupported()

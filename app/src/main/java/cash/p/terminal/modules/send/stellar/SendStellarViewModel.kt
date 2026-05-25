@@ -27,7 +27,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import cash.p.terminal.R
-import cash.p.terminal.trezor.domain.TrezorCancelledException
 import cash.p.terminal.core.providers.AppConfigProvider
 import org.koin.java.KoinJavaComponent.inject
 import java.net.UnknownHostException
@@ -182,13 +181,16 @@ class SendStellarViewModel(
             sendResult = SendResult.Sending
             logger.info("sending tx")
 
-            adapter.send(amountState.amount!!, addressState.address?.hex!!, memo)
+            val amount = checkNotNull(amountState.amount)
+            val address = checkNotNull(addressState.address)
+            val txHash = adapter.send(amount, address.hex, memo)
+            locallyCreatedTransactionRepository.markCreated(wallet, txHash)
 
-            onSendSuccess(addressState.address?.hex)
-            sendResult = SendResult.Sent()
+            onSendSuccess(address.hex)
+            sendResult = SendResult.Sent(txHash)
             logger.info("success")
 
-            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Stellar)
+            recentAddressManager.setRecentAddress(address, BlockchainType.Stellar)
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
             logger.warning("failed", e)
@@ -214,4 +216,3 @@ data class SendStellarUiState(
     val isPoisonAddress: Boolean = false,
     val riskAccepted: Boolean = false,
 )
-

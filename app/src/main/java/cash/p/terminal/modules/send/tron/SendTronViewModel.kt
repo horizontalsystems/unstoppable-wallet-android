@@ -263,13 +263,16 @@ class SendTronViewModel(
             logger.info("sending tx")
 
             val amount = confirmationData.amount
-            adapter.send(amount, addressState.tronAddress!!, feeState.feeLimit)
+            val tronAddress = checkNotNull(addressState.tronAddress)
+            val address = addressState.address
+            val txId = adapter.send(amount, tronAddress, feeState.feeLimit)
+            locallyCreatedTransactionRepository.markCreated(wallet, txId)
 
-            onSendSuccess(addressState.address?.hex)
-            sendResult = SendResult.Sent()
+            onSendSuccess(address?.hex)
+            sendResult = SendResult.Sent(txId)
             logger.info("success")
 
-            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Tron)
+            address?.let { recentAddressManager.setRecentAddress(it, BlockchainType.Tron) }
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
             logger.warning("failed", e)

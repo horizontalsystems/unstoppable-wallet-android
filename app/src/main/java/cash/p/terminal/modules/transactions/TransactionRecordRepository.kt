@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.core.converters.PendingTransactionConverter
+import cash.p.terminal.core.managers.LocallyCreatedTransactionRepository
 import cash.p.terminal.core.managers.PendingTransactionMatcher
 import cash.p.terminal.core.managers.PendingTransactionRepository
 import cash.p.terminal.core.managers.TransactionAdapterManager
@@ -31,6 +32,7 @@ class TransactionRecordRepository(
     private val pendingRepository: PendingTransactionRepository,
     private val pendingConverter: PendingTransactionConverter,
     private val pendingTransactionMatcher: PendingTransactionMatcher,
+    private val locallyCreatedTransactionRepository: LocallyCreatedTransactionRepository,
     private val dispatcherProvider: DispatcherProvider
 ) : ITransactionRecordRepository {
 
@@ -181,6 +183,7 @@ class TransactionRecordRepository(
                             pendingRepository = pendingRepository,
                             pendingConverter = pendingConverter,
                             pendingTransactionMatcher = pendingTransactionMatcher,
+                            locallyCreatedTransactionRepository = locallyCreatedTransactionRepository,
                             dispatcherProvider = dispatcherProvider,
                         )
                     }
@@ -252,6 +255,7 @@ class TransactionRecordRepository(
                         pendingRepository = pendingRepository,
                         pendingConverter = pendingConverter,
                         pendingTransactionMatcher = pendingTransactionMatcher,
+                        locallyCreatedTransactionRepository = locallyCreatedTransactionRepository,
                         dispatcherProvider = dispatcherProvider,
                     )
                 }

@@ -354,7 +354,7 @@ class TokenBalanceViewModel(
 
     fun showAllTransactions(show: Boolean) = transactionHiddenManager.showAllTransactions(show)
 
-    private fun refreshTransactionsFromCache() {
+    private suspend fun refreshTransactionsFromCache() {
         val currentItems = transactionsService.transactionItemsFlow.value
         if (currentItems.isNotEmpty()) {
             updateTransactions(currentItems)
@@ -366,7 +366,9 @@ class TokenBalanceViewModel(
         if (current != lastAddressPoisoningViewMode) {
             lastAddressPoisoningViewMode = current
             transactionViewItem2Factory.updateCache()
-            refreshTransactionsFromCache()
+            viewModelScope.launch {
+                refreshTransactionsFromCache()
+            }
         }
     }
 
@@ -513,7 +515,7 @@ class TokenBalanceViewModel(
         return hasReachedSyncedState()
     }
 
-    private fun updateTransactions(items: List<TransactionItem>) {
+    private suspend fun updateTransactions(items: List<TransactionItem>) {
         // Skip the initial empty emission from transactionRecordRepository.set() while
         // still syncing. Once syncing finishes, allow empty items through so coins with
         // zero transactions show "no transactions" instead of "wait for sync" forever.

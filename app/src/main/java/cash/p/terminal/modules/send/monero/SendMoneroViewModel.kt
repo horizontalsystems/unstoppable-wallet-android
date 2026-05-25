@@ -149,7 +149,8 @@ class SendMoneroViewModel(
 
         try {
             sendResult = SendResult.Sending
-            val fee = adapter.estimateFee(decimalAmount, addressState.address!!.hex, null)
+            val address = checkNotNull(addressState.address).hex
+            val fee = adapter.estimateFee(decimalAmount, address, null)
             val totalSolAmount =
                 (if (sendToken.type == TokenType.Native) decimalAmount else BigDecimal.ZERO) + fee
 
@@ -158,10 +159,11 @@ class SendMoneroViewModel(
             if (totalSolAmount > availableBalance)
                 throw EvmError.InsufficientBalanceWithFee
 
-            adapter.send(decimalAmount, addressState.address!!.hex, null)
+            val txId = adapter.send(decimalAmount, address, null)
+            locallyCreatedTransactionRepository.markCreated(wallet, txId)
 
-            onSendSuccess(addressState.address?.hex)
-            sendResult = SendResult.Sent()
+            onSendSuccess(address)
+            sendResult = SendResult.Sent(txId)
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
         }

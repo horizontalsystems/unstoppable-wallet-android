@@ -196,7 +196,7 @@ class TokenBalanceViewModelTest : KoinTest {
         every { localStorage.displayDiffPricePeriod } returns DisplayPricePeriod.ONE_DAY
         every { localStorage.displayDiffOptionType } returns DisplayDiffOptionType.BOTH
         every { localStorage.isRoundingAmountMainPage } returns false
-        every { transactionViewItemFactory.convertToViewItemCached(any(), any(), any()) } answers {
+        coEvery { transactionViewItemFactory.convertToViewItemCached(any(), any(), any()) } answers {
             createMockTransactionViewItem(firstArg<TransactionItem>().record.uid)
         }
     }

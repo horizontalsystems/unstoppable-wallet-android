@@ -21,6 +21,7 @@ import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.core.managers.PoisonAddressManager
+import cash.p.terminal.core.managers.LocallyCreatedTransactionRepository
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.ui_compose.components.HudHelper
 import io.horizontalsystems.core.ViewModelUiState
@@ -37,6 +38,9 @@ abstract class BaseSendViewModel<T>(
     private val marketKit: MarketKitWrapper by inject(MarketKitWrapper::class.java)
     private val balanceHiddenManager: IBalanceHiddenManager by inject(IBalanceHiddenManager::class.java)
     private val poisonAddressManager: PoisonAddressManager by inject(PoisonAddressManager::class.java)
+    protected val locallyCreatedTransactionRepository: LocallyCreatedTransactionRepository by inject(
+        LocallyCreatedTransactionRepository::class.java
+    )
 
     var isSynced by mutableStateOf(true)
         private set

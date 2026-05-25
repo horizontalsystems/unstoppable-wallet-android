@@ -25,10 +25,12 @@ class AccountCleaner(
     private val walletManager: IWalletManager,
     private val moneroFileDao: MoneroFileDao,
     private val smsNotificationSettings: ISmsNotificationSettings,
-    private val pinDbStorage: PinDbStorage
+    private val pinDbStorage: PinDbStorage,
+    private val locallyCreatedTransactionRepository: LocallyCreatedTransactionRepository,
 ) : IAccountCleaner {
 
     override suspend fun clearAccounts(accountIds: List<String>) {
+        locallyCreatedTransactionRepository.deleteByAccountIds(accountIds)
         accountIds.forEach { clearAccount(it) }
     }
 
