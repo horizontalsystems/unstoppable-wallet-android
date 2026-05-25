@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.market.filters
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.BlockchainViewItem
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -13,9 +16,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
+import javax.inject.Inject
 
-class MarketFiltersViewModel(val service: MarketFiltersService) :
-    ViewModelUiState<MarketFiltersUiState>() {
+@HiltViewModel
+class MarketFiltersViewModel @Inject constructor(
+    marketKit: MarketKitWrapper,
+    currencyManager: CurrencyManager,
+) : ViewModelUiState<MarketFiltersUiState>() {
+    val service = MarketFiltersService(marketKit, currencyManager.baseCurrency)
 
     private var coinListSet: CoinList = CoinList.Top100
     private var period = FilterViewItemWrapper(

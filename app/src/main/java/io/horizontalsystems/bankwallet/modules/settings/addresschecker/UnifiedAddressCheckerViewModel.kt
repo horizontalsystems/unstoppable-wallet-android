@@ -1,18 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.settings.addresschecker
 
 import android.util.Log
-import io.horizontalsystems.bankwallet.core.address.HashDitAddressValidator
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.address.ChainalysisAddressValidator
 import io.horizontalsystems.bankwallet.core.address.Eip20AddressValidator
+import io.horizontalsystems.bankwallet.core.address.HashDitAddressValidator
 import io.horizontalsystems.bankwallet.core.address.Trc20AddressValidator
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
@@ -24,16 +24,28 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
-class UnifiedAddressCheckerViewModel(
+@HiltViewModel
+class UnifiedAddressCheckerViewModel @Inject constructor(
     private val marketKitWrapper: MarketKitWrapper,
-    addressHandlerFactory: AddressHandlerFactory,
-    private val hashDitValidator: HashDitAddressValidator,
-    private val chainalysisValidator: ChainalysisAddressValidator,
-    private val eip20Validator: Eip20AddressValidator,
-    private val trc20Validator: Trc20AddressValidator,
+    appConfigProvider: AppConfigProvider,
+    evmBlockchainManager: EvmBlockchainManager,
+    evmSyncSourceManager: EvmSyncSourceManager,
 ) : ViewModelUiState<AddressCheckState>() {
+    private val addressHandlerFactory = AddressHandlerFactory(appConfigProvider.udnApiKey)
+    private val hashDitValidator = HashDitAddressValidator(
+        appConfigProvider.hashDitBaseUrl,
+        appConfigProvider.hashDitApiKey,
+        evmBlockchainManager
+    )
+    private val chainalysisValidator = ChainalysisAddressValidator(
+        appConfigProvider.chainalysisBaseUrl,
+        appConfigProvider.chainalysisApiKey
+    )
+    private val eip20Validator = Eip20AddressValidator(evmSyncSourceManager)
+    private val trc20Validator = Trc20AddressValidator()
     private var addressValidationInProgress: Boolean = false
 
     private var checkResults: Map<IssueType, CheckState> = emptyMap()
@@ -220,28 +232,6 @@ class UnifiedAddressCheckerViewModel(
         }
     }
 
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val addressHandlerFactory = AddressHandlerFactory(App.appConfigProvider.udnApiKey)
-            val appConfigProvider = App.appConfigProvider
-            return UnifiedAddressCheckerViewModel(
-                App.marketKit,
-                addressHandlerFactory,
-                HashDitAddressValidator(
-                    appConfigProvider.hashDitBaseUrl,
-                    appConfigProvider.hashDitApiKey,
-                    App.evmBlockchainManager
-                ),
-                ChainalysisAddressValidator(
-                    appConfigProvider.chainalysisBaseUrl,
-                    appConfigProvider.chainalysisApiKey
-                ),
-                Eip20AddressValidator(App.evmSyncSourceManager),
-                Trc20AddressValidator(),
-            ) as T
-        }
-    }
 }
 
 data class AddressCheckState(

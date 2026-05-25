@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.filters
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
@@ -13,15 +10,6 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Single
 
 object MarketFiltersModule {
-    class Factory : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = MarketFiltersService(App.marketKit, App.currencyManager.baseCurrency)
-            return MarketFiltersViewModel(service) as T
-        }
-
-    }
 
     enum class FilterDropdown(val titleResId: Int){
         CoinSet(R.string.Market_Filter_ChooseSet),

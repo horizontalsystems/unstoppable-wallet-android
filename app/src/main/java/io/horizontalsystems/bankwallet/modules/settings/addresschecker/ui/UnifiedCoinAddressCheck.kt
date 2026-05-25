@@ -39,7 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
@@ -72,8 +72,7 @@ import kotlinx.coroutines.launch
 fun UnifiedAddressCheckScreen(
     onClose: () -> Unit,
 ) {
-    val viewModel =
-        viewModel<UnifiedAddressCheckerViewModel>(factory = UnifiedAddressCheckerViewModel.Factory())
+    val viewModel = hiltViewModel<UnifiedAddressCheckerViewModel>()
 
     val coroutineScope = rememberCoroutineScope()
     val infoModalBottomSheetState =
