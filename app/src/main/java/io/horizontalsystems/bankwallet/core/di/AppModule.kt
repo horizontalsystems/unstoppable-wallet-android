@@ -72,6 +72,7 @@ import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.IKeyStoreManager
+import io.horizontalsystems.core.ILockoutStorage
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 import javax.inject.Singleton
@@ -257,6 +258,9 @@ object AppModule {
 
     @Provides @Singleton
     fun provideKeyStoreManager(): IKeyStoreManager = CoreApp.keyStoreManager
+
+    @Provides @Singleton
+    fun provideLockoutStorage(): ILockoutStorage = CoreApp.lockoutStorage
 
     @Provides @Singleton
     fun provideTonConnectManager(): TonConnectManager = App.tonConnectManager

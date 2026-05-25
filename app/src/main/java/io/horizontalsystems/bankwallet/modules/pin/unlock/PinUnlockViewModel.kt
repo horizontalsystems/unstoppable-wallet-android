@@ -4,27 +4,38 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.core.ILockoutManager
+import io.horizontalsystems.bankwallet.modules.pin.core.LockoutManager
 import io.horizontalsystems.bankwallet.modules.pin.core.LockoutState
+import io.horizontalsystems.bankwallet.modules.pin.core.LockoutUntilDateFactory
 import io.horizontalsystems.bankwallet.modules.pin.core.OneTimeTimer
 import io.horizontalsystems.bankwallet.modules.pin.core.OneTimerDelegate
+import io.horizontalsystems.bankwallet.modules.pin.core.UptimeProvider
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockModule.PinUnlockViewState
+import io.horizontalsystems.core.CurrentDateProvider
+import io.horizontalsystems.core.ILockoutStorage
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PinUnlockViewModel(
+@HiltViewModel
+class PinUnlockViewModel @Inject constructor(
     private val pinComponent: IPinComponent,
-    private val lockoutManager: ILockoutManager,
+    lockoutStorage: ILockoutStorage,
     private val systemInfoManager: ISystemInfoManager,
-    private val timer: OneTimeTimer,
     private val localStorage: ILocalStorage,
 ) : ViewModelUiState<PinUnlockViewState>(), OneTimerDelegate {
+    private val lockoutManager: ILockoutManager = LockoutManager(
+        lockoutStorage, UptimeProvider(), LockoutUntilDateFactory(CurrentDateProvider())
+    )
+    private val timer = OneTimeTimer()
 
     private var attemptsLeft: Int? = null
 

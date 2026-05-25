@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinConfirmViewModel
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
@@ -17,7 +17,7 @@ fun PinConfirm(
     onSuccess: () -> Unit,
     onCancel: () -> Unit,
 ) {
-    val viewModel = viewModel<PinConfirmViewModel>(factory = PinConfirmViewModel.Factory())
+    val viewModel = hiltViewModel<PinConfirmViewModel>()
 
     if (viewModel.uiState.unlocked) {
         onSuccess.invoke()

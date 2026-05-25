@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockModule
 import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockViewModel
@@ -35,7 +35,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PinUnlock(isLocked: Boolean) {
-    val viewModel = viewModel<PinUnlockViewModel>(factory = PinUnlockModule.Factory())
+    val viewModel = hiltViewModel<PinUnlockViewModel>()
     val uiState = viewModel.uiState
 
     var showBiometricPrompt by remember { mutableStateOf(false) }

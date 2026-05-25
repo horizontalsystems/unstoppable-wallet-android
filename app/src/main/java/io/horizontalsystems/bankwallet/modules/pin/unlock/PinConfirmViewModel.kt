@@ -4,9 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.core.ILockoutManager
@@ -16,19 +15,24 @@ import io.horizontalsystems.bankwallet.modules.pin.core.LockoutUntilDateFactory
 import io.horizontalsystems.bankwallet.modules.pin.core.OneTimeTimer
 import io.horizontalsystems.bankwallet.modules.pin.core.OneTimerDelegate
 import io.horizontalsystems.bankwallet.modules.pin.core.UptimeProvider
-import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.CurrentDateProvider
+import io.horizontalsystems.core.ILockoutStorage
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PinConfirmViewModel(
+@HiltViewModel
+class PinConfirmViewModel @Inject constructor(
     private val pinComponent: IPinComponent,
-    private val lockoutManager: ILockoutManager,
-    private val timer: OneTimeTimer,
+    lockoutStorage: ILockoutStorage,
     private val localStorage: ILocalStorage,
 ) : ViewModel(), OneTimerDelegate {
+    private val lockoutManager: ILockoutManager = LockoutManager(
+        lockoutStorage, UptimeProvider(), LockoutUntilDateFactory(CurrentDateProvider())
+    )
+    private val timer = OneTimeTimer()
 
     private var attemptsLeft: Int? = null
 
@@ -137,23 +141,6 @@ class PinConfirmViewModel(
         return valid
     }
 
-    class Factory : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val lockoutManager = LockoutManager(
-                CoreApp.lockoutStorage, UptimeProvider(), LockoutUntilDateFactory(
-                    CurrentDateProvider()
-                )
-            )
-            return PinConfirmViewModel(
-                App.pinComponent,
-                lockoutManager,
-                OneTimeTimer(),
-                App.localStorage
-            ) as T
-        }
-    }
 }
 
 data class PinConfirmViewState(
