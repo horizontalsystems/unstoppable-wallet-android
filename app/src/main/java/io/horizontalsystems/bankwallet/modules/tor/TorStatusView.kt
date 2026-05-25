@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
@@ -29,7 +29,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun TorStatusView(
-    viewModel: TorConnectionViewModel = viewModel(factory = TorConnectionModule.Factory())
+    viewModel: TorConnectionViewModel = hiltViewModel()
 ) {
 
     val animatedSize by animateDpAsState(

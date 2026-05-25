@@ -3,14 +3,24 @@ package io.horizontalsystems.bankwallet.modules.market.posts
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import javax.inject.Inject
 
-class MarketPostsViewModel(private val service: MarketPostService) : ViewModel() {
+@HiltViewModel
+class MarketPostsViewModel @Inject constructor(
+    marketKit: MarketKitWrapper,
+    backgroundManager: BackgroundManager,
+) : ViewModel() {
+
+    private val service = MarketPostService(marketKit, backgroundManager)
 
     val itemsLiveData = MutableLiveData<List<MarketPostsModule.PostViewItem>>()
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)

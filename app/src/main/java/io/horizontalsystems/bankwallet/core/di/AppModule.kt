@@ -38,6 +38,7 @@ import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
+import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.DonationShowManager
@@ -255,4 +256,7 @@ object AppModule {
 
     @Provides @Singleton
     fun provideActionCompletedDelegate(): ActionCompletedDelegate = ActionCompletedDelegate
+
+    @Provides @Singleton
+    fun provideBackgroundManager(): BackgroundManager = App.backgroundManager
 }
