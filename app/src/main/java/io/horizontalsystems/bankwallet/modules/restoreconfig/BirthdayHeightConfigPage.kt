@@ -12,7 +12,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BirthdayHeightConfig(val blockchainType: BlockchainType) : HSPage() {
+data class BirthdayHeightConfigPage(val blockchainType: BlockchainType) : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

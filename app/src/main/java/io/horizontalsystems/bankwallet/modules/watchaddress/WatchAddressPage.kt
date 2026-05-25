@@ -24,7 +24,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
-import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
+import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigPage
 import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsPage
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputMultiline
@@ -93,8 +93,8 @@ fun WatchAddressScreen(navController: HSNavigation, popUpToInclusiveId: KClass<o
     if (uiState.openBirthdayHeightScreen) {
         viewModel.onBirthdayHeightScreenOpened()
 
-        val forResult = navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
-            { BirthdayHeightConfig(BlockchainType.Monero) }
+        val forResult = navController.slideFromRightForResult<BirthdayHeightConfigPage.Result>(
+            { BirthdayHeightConfigPage(BlockchainType.Monero) }
         ) { result ->
             if (result.config != null) {
                 viewModel.onBirthdayHeightEntered(result.config.birthdayHeight?.toLongOrNull())

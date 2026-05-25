@@ -46,7 +46,7 @@ import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
+import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -109,8 +109,8 @@ fun CoinOverviewScreen(
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        val forResult = navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
-            { BirthdayHeightConfig(token.blockchainType) }
+        val forResult = navController.slideFromRightForResult<BirthdayHeightConfigPage.Result>(
+            { BirthdayHeightConfigPage(token.blockchainType) }
         ) {
             if (it.config != null) {
                 restoreSettingsViewModel.onEnter(it.config)

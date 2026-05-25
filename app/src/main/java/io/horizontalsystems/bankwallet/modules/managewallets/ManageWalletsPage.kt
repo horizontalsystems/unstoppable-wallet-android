@@ -29,7 +29,7 @@ import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.Restor
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
-import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
+import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfigPage
 import io.horizontalsystems.bankwallet.modules.tokenselect.SelectChainTab
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -98,8 +98,8 @@ private fun ManageWalletsScreen(
     restoreSettingsViewModel.openBirthdayHeightConfig?.let { token ->
         restoreSettingsViewModel.birthdayHeightConfigOpened()
 
-        val forResult = navController.slideFromRightForResult<BirthdayHeightConfig.Result>(
-            { BirthdayHeightConfig(token.blockchainType) }
+        val forResult = navController.slideFromRightForResult<BirthdayHeightConfigPage.Result>(
+            { BirthdayHeightConfigPage(token.blockchainType) }
         ) {
             if (it.config != null) {
                 restoreSettingsViewModel.onEnter(it.config)
