@@ -17,13 +17,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AddressRiskyBottomSheetAlert(val input: Input) : BaseComposableBottomSheetFragment() {
+data class AddressRiskyBottomSheetAlert(val input: Input) : BaseComposableBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

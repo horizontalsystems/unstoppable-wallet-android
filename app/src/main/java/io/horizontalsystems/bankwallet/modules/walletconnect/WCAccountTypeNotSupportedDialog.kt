@@ -19,13 +19,13 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class WCAccountTypeNotSupportedDialog(val input: Input) : BaseComposableBottomSheetFragment() {
+data class WCAccountTypeNotSupportedDialog(val input: Input) : BaseComposableBottomSheet() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         WCAccountTypeNotSupportedScreen(

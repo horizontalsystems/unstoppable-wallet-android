@@ -28,7 +28,7 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
@@ -40,7 +40,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.info.TextBlock
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object RiskLevelInfoDialog : BaseComposableBottomSheetFragment() {
+data object RiskLevelInfoDialog : BaseComposableBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

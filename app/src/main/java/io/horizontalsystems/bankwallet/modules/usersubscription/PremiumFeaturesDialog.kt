@@ -47,7 +47,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
@@ -57,7 +57,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object PremiumFeaturesDialog : BaseComposableBottomSheetFragment() {
+data object PremiumFeaturesDialog : BaseComposableBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

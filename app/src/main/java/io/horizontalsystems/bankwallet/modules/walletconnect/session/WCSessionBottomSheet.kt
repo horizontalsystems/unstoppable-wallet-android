@@ -47,7 +47,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_lucian
 import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_remus
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
 import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
@@ -67,7 +67,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class WCSessionBottomSheet(val input: WCSessionModule.Input?) : BaseComposableBottomSheetFragment() {
+data class WCSessionBottomSheet(val input: WCSessionModule.Input?) : BaseComposableBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

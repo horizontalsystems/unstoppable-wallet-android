@@ -38,7 +38,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel.Factory
 import io.horizontalsystems.bankwallet.modules.main.MainScreenValidationError
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequest
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionBottomSheet
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.hideKeyboard
@@ -163,7 +163,7 @@ private fun HandleWcEvent(
     LaunchedEffect(wcEvent) {
         val event = wcEvent ?: return@LaunchedEffect
         when (event) {
-            is HSDAppEvent.SessionRequest -> navController.slideFromBottom(WCRequestFragment)
+            is HSDAppEvent.SessionRequest -> navController.slideFromBottom(WCRequest)
             is HSDAppEvent.SessionProposal -> navController.slideFromBottom(WCSessionBottomSheet(null))
             is HSDAppEvent.Error -> HudHelper.showErrorMessage(view, event.throwable.message ?: "Error")
             is HSDAppEvent.SessionSettled -> HudHelper.showSuccessMessage(view, hudTextConnected)

@@ -63,7 +63,7 @@ import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySetting
 import io.horizontalsystems.bankwallet.modules.settings.subscription.SubscriptionPage
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostPage
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccount
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -218,7 +218,7 @@ private fun SettingSections(
                             }
 
                             WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-                                navController.slideFromBottom(WCErrorNoAccountFragment)
+                                navController.slideFromBottom(WCErrorNoAccount)
                             }
 
                             is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {

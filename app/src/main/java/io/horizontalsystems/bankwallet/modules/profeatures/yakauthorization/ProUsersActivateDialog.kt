@@ -16,12 +16,12 @@ import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ProUsersActivateDialog : BaseComposableBottomSheetFragment() {
+data object ProUsersActivateDialog : BaseComposableBottomSheet() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         val authorizationViewModel  = navController.viewModelForScreen<YakAuthorizationViewModel>(CoinPage::class)

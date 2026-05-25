@@ -46,7 +46,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MessageToSign
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -67,7 +67,7 @@ import kotlinx.serialization.Serializable
 private val logger = AppLogger("wallet-connect request")
 
 @Serializable
-data object WCRequestFragment : BaseComposableBottomSheetFragment() {
+data object WCRequest : BaseComposableBottomSheet() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         val wcRequestRouterViewModel =

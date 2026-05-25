@@ -34,7 +34,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.DynamicSliderIndica
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.ButtonsStack
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
@@ -54,7 +54,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DefenseSystemFeatureDialog(val input: Input) : BaseComposableBottomSheetFragment() {
+data class DefenseSystemFeatureDialog(val input: Input) : BaseComposableBottomSheet() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         DefenseSystemFeatureScreen(

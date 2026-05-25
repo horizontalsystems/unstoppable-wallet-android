@@ -38,7 +38,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
@@ -53,7 +53,7 @@ import io.horizontalsystems.subscriptions.core.numberOfDays
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SelectPlanDialog : BaseComposableBottomSheetFragment() {
+data object SelectPlanDialog : BaseComposableBottomSheet() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         SelectPlanBottomSheet(

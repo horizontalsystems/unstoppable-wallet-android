@@ -51,7 +51,7 @@ import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
 import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccount
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
@@ -204,7 +204,7 @@ private fun MainScreen(
     if (uiState.wcSupportState != null) {
         when (val wcSupportState = uiState.wcSupportState) {
             SupportState.NotSupportedDueToNoActiveAccount -> {
-                fragmentNavController.slideFromBottom(WCErrorNoAccountFragment)
+                fragmentNavController.slideFromBottom(WCErrorNoAccount)
             }
 
             is SupportState.NotSupportedDueToNonBackedUpAccount -> {

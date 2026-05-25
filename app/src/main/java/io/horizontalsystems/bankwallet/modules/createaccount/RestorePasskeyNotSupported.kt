@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.ButtonsStack
@@ -21,7 +21,7 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object RestorePasskeyNotSupported : BaseComposableBottomSheetFragment() {
+data object RestorePasskeyNotSupported : BaseComposableBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

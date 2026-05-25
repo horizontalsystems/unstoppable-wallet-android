@@ -17,13 +17,13 @@ import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheetFragment() {
+data object ConfirmDeleteAllPairingsDialog : BaseComposableBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

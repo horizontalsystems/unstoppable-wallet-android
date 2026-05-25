@@ -26,11 +26,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
+import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object PremiumSubscribedDialog : BaseComposableBottomSheetFragment() {
+data object PremiumSubscribedDialog : BaseComposableBottomSheet() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         PremiumSubscribedScreen(

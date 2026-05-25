@@ -41,8 +41,8 @@ import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesPag
 import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoPage
 import io.horizontalsystems.bankwallet.modules.info.OverallScoreInfoPage
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlPage
-import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
-import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment.Input
+import io.horizontalsystems.bankwallet.modules.metricchart.ProChart
+import io.horizontalsystems.bankwallet.modules.metricchart.ProChart.Input
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
@@ -178,7 +178,7 @@ private fun AnalyticsBlock(
                     val chartType = block.analyticChart?.chartType
                     if (coinUid != null && chartType != null) {
                         navController.add(
-                            ProChartFragment(
+                            ProChart(
                                 Input(
                                     coinUid,
                                     Translator.getString(chartType.titleRes),

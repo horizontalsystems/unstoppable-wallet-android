@@ -46,7 +46,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectL
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListUiState
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel.ConnectionResult
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequest
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -149,7 +149,7 @@ fun WCSessionsScreen(
                         },
                         onRequestClick = { requestViewItem ->
                             viewModel.setRequestToOpen(requestViewItem.request)
-                            navController.slideFromBottom(WCRequestFragment)
+                            navController.slideFromBottom(WCRequest)
                         }
                     )
                 }
