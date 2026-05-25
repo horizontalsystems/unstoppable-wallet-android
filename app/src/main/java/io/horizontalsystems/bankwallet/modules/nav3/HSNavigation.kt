@@ -158,23 +158,6 @@ class HSNavigation(val backStack: NavBackStack<HSScreen>) {
 
     @Composable
     inline fun <reified T> slideForResult(
-        screen: HSScreen,
-        navigationType: NavigationType,
-        crossinline onResult: (T) -> Unit
-    ): () -> Unit {
-        val uuid = rememberSaveable { UUID.randomUUID().toString() }
-        ResultEffect<T>(resultKeyUuid = uuid) {
-            onResult.invoke(it)
-        }
-        return {
-            screen.resultKey = uuid
-            screen.navType = navigationType
-            add(screen)
-        }
-    }
-
-    @Composable
-    inline fun <reified T> slideForResult(
         navigationType: NavigationType,
         crossinline screenBuilder: () -> HSScreen,
         crossinline onResult: (T) -> Unit
