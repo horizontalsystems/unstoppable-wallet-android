@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -30,8 +30,7 @@ fun SelectBackupItemsScreen(
     onNextClick: (accountIds: List<String>, sections: Set<BackupSection>) -> Unit,
     onBackClick: () -> Unit
 ) {
-    val viewModel =
-        viewModel<SelectBackupItemsViewModel>(factory = SelectBackupItemsViewModel.Factory())
+    val viewModel = hiltViewModel<SelectBackupItemsViewModel>()
     val uiState = viewModel.uiState
 
     HSScaffold(

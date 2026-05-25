@@ -32,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
@@ -60,7 +60,7 @@ data object SwapHistoryPage : HSPage() {
 
 @Composable
 fun SwapHistoryScreen(navController: HSNavigation) {
-    val viewModel = viewModel<SwapHistoryViewModel>(factory = SwapHistoryViewModel.Factory())
+    val viewModel = hiltViewModel<SwapHistoryViewModel>()
     val uiState = viewModel.uiState
 
     HSScaffold(

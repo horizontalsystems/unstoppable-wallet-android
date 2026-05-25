@@ -22,8 +22,12 @@ import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
+import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
+import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupViewItemFactory
+import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
@@ -156,6 +160,18 @@ object AppModule {
 
     @Provides @Singleton
     fun provideSwapTermsManager(): SwapTermsManager = App.swapTermsManager
+
+    @Provides @Singleton
+    fun provideSwapRecordManager(): SwapRecordManager = App.swapRecordManager
+
+    @Provides @Singleton
+    fun provideNumberFormatter(): IAppNumberFormatter = App.numberFormatter
+
+    @Provides @Singleton
+    fun provideBackupProvider(): BackupProvider = App.backupProvider
+
+    @Provides @Singleton
+    fun provideBackupViewItemFactory(): BackupViewItemFactory = BackupViewItemFactory()
 
     @Provides @Singleton
     fun provideContactsRepository(): ContactsRepository = App.contactsRepository

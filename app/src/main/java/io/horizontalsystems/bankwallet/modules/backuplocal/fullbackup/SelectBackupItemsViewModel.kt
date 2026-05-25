@@ -1,17 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBackupItemsViewModel.UIState
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SelectBackupItemsViewModel(
+@HiltViewModel
+class SelectBackupItemsViewModel @Inject constructor(
     private val backupProvider: BackupProvider,
     private val backupViewItemFactory: BackupViewItemFactory
 ) : ViewModelUiState<UIState>() {
@@ -89,11 +89,5 @@ class SelectBackupItemsViewModel(
         val selected: Boolean = true
     )
 
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SelectBackupItemsViewModel(App.backupProvider, BackupViewItemFactory()) as T
-        }
-    }
 
 }

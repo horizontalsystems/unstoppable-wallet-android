@@ -1,10 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.history
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
@@ -13,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.core.helpers.DateHelper
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
@@ -21,7 +20,8 @@ import java.math.RoundingMode
 import java.util.Calendar
 import java.util.Date
 
-class SwapHistoryViewModel(
+@HiltViewModel
+class SwapHistoryViewModel @Inject constructor(
     private val swapRecordManager: SwapRecordManager,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
@@ -126,18 +126,6 @@ class SwapHistoryViewModel(
         val price = price ?: return null
         val fiat = (amount * price).setScale(decimals, RoundingMode.DOWN).stripTrailingZeros()
         return numberFormatter.formatFiatShort(fiat, symbol, decimals)
-    }
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapHistoryViewModel(
-                swapRecordManager = App.swapRecordManager,
-                marketKit = App.marketKit,
-                currencyManager = App.currencyManager,
-                numberFormatter = App.numberFormatter,
-            ) as T
-        }
     }
 
     private fun formatDate(date: Date): String {
