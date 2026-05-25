@@ -147,7 +147,7 @@ class PoisonAddressManagerTest {
     @Test
     fun determinePoisonStatus_similarToKnown_returnsSuspicious() {
         val knownAddress = "0xaaaa_middle_bbb"
-        val similarAddress = "0xa_different_bbb"
+        val similarAddress = "0xaaa_poison_bbb"
         every { dao.getWhitelisted(blockchainUid, accountId, similarityMinSendCount) } returns
             listOf(PoisonAddress(knownAddress, blockchainUid, accountId, PoisonAddressType.KNOWN, whitelistedSendCount))
 
@@ -270,9 +270,9 @@ class PoisonAddressManagerTest {
     // --- Similarity edge cases ---
 
     @Test
-    fun determinePoisonStatus_similarFirst3Last3Match_returnsSuspicious() {
-        val knownAddress = "abc_known_xyz"
-        val similarAddress = "abc_poison_xyz"
+    fun determinePoisonStatus_matchingPrefixAndSuffix_returnsSuspicious() {
+        val knownAddress = "0xabc_known_xyz"
+        val similarAddress = "0xabc_poison_xyz"
         every { dao.getWhitelisted(blockchainUid, accountId, similarityMinSendCount) } returns
             listOf(PoisonAddress(knownAddress, blockchainUid, accountId, PoisonAddressType.KNOWN, whitelistedSendCount))
 
@@ -454,7 +454,7 @@ class PoisonAddressManagerTest {
 
     @Test
     fun determinePoisonStatus_shortAddress_returnsBlockchain() {
-        val shortAddress = "abcde"  // length 5 < SIMILARITY_CHARS * 2 = 6
+        val shortAddress = "abcde"  // length 5 < prefixChars (5 for EVM) + SIMILARITY_CHARS (3) = 8
         every { dao.getWhitelisted(blockchainUid, accountId, similarityMinSendCount) } returns
             listOf(PoisonAddress("abcxe", blockchainUid, accountId, PoisonAddressType.KNOWN, whitelistedSendCount))
 
@@ -489,9 +489,9 @@ class PoisonAddressManagerTest {
     }
 
     @Test
-    fun isAddressSuspicious_similarToKnown_returnsTrue() {
-        val knownAddress = "abc_known_xyz"
-        val similarAddress = "abc_poison_xyz"
+    fun isAddressSuspicious_matchingPrefixAndSuffix_returnsTrue() {
+        val knownAddress = "0xabc_known_xyz"
+        val similarAddress = "0xabc_poison_xyz"
         every { dao.getWhitelisted(blockchainUid, accountId, similarityMinSendCount) } returns
             listOf(PoisonAddress(knownAddress, blockchainUid, accountId, PoisonAddressType.KNOWN, whitelistedSendCount))
 
@@ -954,6 +954,100 @@ class PoisonAddressManagerTest {
         )
 
         assertEquals(PoisonStatus.BLOCKCHAIN, manager.getPoisonStatus(record))
+    }
+
+    // --- Constant address prefixes are excluded from the meaningful similarity window ---
+    // Chains with an auto-generated leading prefix (EVM "0x", Tron "T", Stellar "G",
+    // TON "EQ"/"UQ", Monero "4"/"8") must not let that prefix count as entropy. The match
+    // window is extended by the prefix length, so SIMILARITY_CHARS significant characters
+    // are always compared after it.
+
+    @Test
+    fun determinePoisonStatus_evmSharesOnlyPrefixAndOneChar_returnsBlockchain() {
+        // "0x" + 1 char ("0x5") is identical, but the next significant chars differ.
+        // The old 3-char window would have wrongly flagged this as a false positive.
+        val knownAddress = "0x5ab0000000000000000000000000000000000003c2"
+        val candidate = "0x5cd0000000000000000000000000000000000003c2"
+        every { dao.getWhitelisted(blockchainUid, accountId, similarityMinSendCount) } returns
+            listOf(PoisonAddress(knownAddress, blockchainUid, accountId, PoisonAddressType.KNOWN, whitelistedSendCount))
+
+        val result = manager.determinePoisonStatus(
+            relevantAddress = candidate,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.BLOCKCHAIN, result)
+    }
+
+    @Test
+    fun determinePoisonStatus_evmSharesPrefixPlusThreeChars_returnsSuspicious() {
+        // "0x" + 3 significant chars ("0x5ab") and the last 3 chars match → flagged.
+        val knownAddress = "0x5ab0000000000000000000000000000000000003c2"
+        val candidate = "0x5abffffffffffffffffffffffffffffffffffff3c2"
+        every { dao.getWhitelisted(blockchainUid, accountId, similarityMinSendCount) } returns
+            listOf(PoisonAddress(knownAddress, blockchainUid, accountId, PoisonAddressType.KNOWN, whitelistedSendCount))
+
+        val result = manager.determinePoisonStatus(
+            relevantAddress = candidate,
+            blockchainType = blockchainType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, result)
+    }
+
+    @Test
+    fun isAddressSuspicious_tronSharesPrefixAndTwoChars_returnsFalse() {
+        // Tron addresses start with a constant "T". Sharing "T" + 2 chars ("tab") is not
+        // enough — the meaningful window is "T" + 3 significant chars.
+        val knownAddress = "tab1middle000000000000000000000000xyz"
+        val candidate = "tab2middle000000000000000000000000xyz"
+        val tronUid = BlockchainType.Tron.uid
+        every { dao.get(any(), tronUid, accountId) } returns null
+        every { contactsRepository.getContactsFiltered(BlockchainType.Tron, addressQuery = candidate) } returns emptyList()
+        every { dao.getWhitelisted(tronUid, accountId, similarityMinSendCount) } returns
+            listOf(PoisonAddress(knownAddress, tronUid, accountId, PoisonAddressType.KNOWN, whitelistedSendCount))
+
+        assertFalse(manager.isAddressSuspicious(candidate, BlockchainType.Tron, accountId))
+    }
+
+    @Test
+    fun isAddressSuspicious_tronSharesPrefixAndThreeChars_returnsTrue() {
+        val knownAddress = "tab1middle000000000000000000000000xyz"
+        val candidate = "tab1poison000000000000000000000000xyz"
+        val tronUid = BlockchainType.Tron.uid
+        every { dao.get(any(), tronUid, accountId) } returns null
+        every { contactsRepository.getContactsFiltered(BlockchainType.Tron, addressQuery = candidate) } returns emptyList()
+        every { dao.getWhitelisted(tronUid, accountId, similarityMinSendCount) } returns
+            listOf(PoisonAddress(knownAddress, tronUid, accountId, PoisonAddressType.KNOWN, whitelistedSendCount))
+
+        assertTrue(manager.isAddressSuspicious(candidate, BlockchainType.Tron, accountId))
+    }
+
+    @Test
+    fun determinePoisonStatus_utxoChainOutOfScope_usesDefaultThreeChars() {
+        // UTXO chains are intentionally out of scope for prefix-aware matching, so the
+        // default 3-char window is preserved (legacy behavior). Bitcoin addresses also
+        // span several formats (1.../3.../bc1...) with no single shared prefix to offset.
+        val bitcoinType = BlockchainType.Bitcoin
+        val bitcoinUid = bitcoinType.uid
+        val knownAddress = "bc1known000000000000000000000xyz"
+        val candidate = "bc1poison00000000000000000000xyz"
+        every { dao.get(any(), bitcoinUid, accountId) } returns null
+        every { dao.getWhitelisted(bitcoinUid, accountId, similarityMinSendCount) } returns
+            listOf(PoisonAddress(knownAddress, bitcoinUid, accountId, PoisonAddressType.KNOWN, whitelistedSendCount))
+
+        val result = manager.determinePoisonStatus(
+            relevantAddress = candidate,
+            blockchainType = bitcoinType,
+            accountId = accountId,
+            isOutgoing = false,
+            isCreatedByWallet = false,
+        )
+        assertEquals(PoisonStatus.SUSPICIOUS, result)
     }
 
     // --- Helpers ---
