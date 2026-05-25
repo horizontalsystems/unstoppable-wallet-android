@@ -23,7 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -76,7 +76,7 @@ private fun CreateAccountIntroScreen(
     onBackClick: () -> Unit,
     onFinish: () -> Unit
 ) {
-    val viewModel = viewModel<CreateAccountViewModel>(factory = CreateAccountModule.Factory())
+    val viewModel = hiltViewModel<CreateAccountViewModel>()
     val view = LocalView.current
 
     var advancedOptionsEnabled by remember { mutableStateOf(false) }

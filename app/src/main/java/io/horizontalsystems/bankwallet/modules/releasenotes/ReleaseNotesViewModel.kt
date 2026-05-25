@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
@@ -20,14 +21,17 @@ import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
 import java.net.URL
 import java.util.Calendar
+import javax.inject.Inject
 
-class ReleaseNotesViewModel(
+@HiltViewModel
+class ReleaseNotesViewModel @Inject constructor(
     private val networkManager: INetworkManager,
-    private val contentUrl: String,
     private val connectivityManager: ConnectivityManager,
     private val releaseNotesManager: ReleaseNotesManager,
     appConfigProvider: AppConfigProvider
 ) : ViewModel() {
+
+    private val contentUrl = releaseNotesManager.releaseNotesUrl
 
     val twitterUrl = appConfigProvider.appTwitterLink
     val telegramUrl = appConfigProvider.appTelegramLink

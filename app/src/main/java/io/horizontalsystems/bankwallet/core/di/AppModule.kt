@@ -44,8 +44,14 @@ import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ActionCompletedDelegate
 import io.horizontalsystems.bankwallet.core.managers.DonationShowManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.MoneroBirthdayProvider
+import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.UserManager
+import io.horizontalsystems.bankwallet.core.managers.WalletActivator
+import io.horizontalsystems.bankwallet.core.managers.ZcashBirthdayProvider
+import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.utils.RootUtil
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
@@ -267,4 +273,30 @@ object AppModule {
 
     @Provides @Singleton
     fun provideMarketFavoritesManager(): MarketFavoritesManager = App.marketFavoritesManager
+
+    // --- Account creation / restore ---
+
+    @Provides @Singleton
+    fun provideWalletActivator(): WalletActivator = App.walletActivator
+
+    @Provides @Singleton
+    fun providePassphraseValidator(): PassphraseValidator = PassphraseValidator()
+
+    @Provides @Singleton
+    fun provideRestoreSettingsManager(): RestoreSettingsManager = App.restoreSettingsManager
+
+    @Provides @Singleton
+    fun provideZcashBirthdayProvider(): ZcashBirthdayProvider = App.zcashBirthdayProvider
+
+    @Provides @Singleton
+    fun provideMoneroBirthdayProvider(): MoneroBirthdayProvider = App.moneroBirthdayProvider
+
+    @Provides @Singleton
+    fun providePredefinedBlockchainSettingsProvider(
+        restoreSettingsManager: RestoreSettingsManager,
+        zcashBirthdayProvider: ZcashBirthdayProvider,
+        moneroBirthdayProvider: MoneroBirthdayProvider,
+    ): PredefinedBlockchainSettingsProvider = PredefinedBlockchainSettingsProvider(
+        restoreSettingsManager, zcashBirthdayProvider, moneroBirthdayProvider
+    )
 }

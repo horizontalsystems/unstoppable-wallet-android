@@ -1,32 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.createaccount
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
-import io.horizontalsystems.bankwallet.core.providers.PredefinedBlockchainSettingsProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 
 object CreateAccountModule {
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return CreateAccountViewModel(
-                App.accountFactory,
-                App.wordsManager,
-                App.accountManager,
-                App.walletActivator,
-                PassphraseValidator(),
-                PredefinedBlockchainSettingsProvider(
-                    App.restoreSettingsManager,
-                    App.zcashBirthdayProvider,
-                    App.moneroBirthdayProvider
-                )
-            ) as T
-        }
-    }
 
     enum class Kind(val wordsCount: Int) {
         Mnemonic12(12),

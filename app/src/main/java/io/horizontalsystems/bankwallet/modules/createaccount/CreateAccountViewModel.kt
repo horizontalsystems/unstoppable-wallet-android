@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
@@ -21,8 +22,10 @@ import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountModule
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import javax.inject.Inject
 
-class CreateAccountViewModel(
+@HiltViewModel
+class CreateAccountViewModel @Inject constructor(
     private val accountFactory: IAccountFactory,
     private val wordsManager: WordsManager,
     private val accountManager: IAccountManager,
