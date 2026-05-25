@@ -25,6 +25,8 @@ import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
+import io.horizontalsystems.bankwallet.core.stats.StatsManager
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.core.ISystemInfoManager
@@ -101,10 +103,16 @@ object AppModule {
     // --- Settings helpers ---
 
     @Provides @Singleton
+    fun provideAppConfigProvider(): AppConfigProvider = App.appConfigProvider
+
+    @Provides @Singleton
     fun provideTermsManager(): ITermsManager = App.termsManager
 
     @Provides @Singleton
     fun provideLanguageManager(): LanguageManager = App.languageManager
+
+    @Provides @Singleton
+    fun provideStatsManager(): StatsManager = App.statsManager
 
     // --- Storage / display state ---
 

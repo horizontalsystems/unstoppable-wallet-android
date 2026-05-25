@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -59,7 +59,7 @@ data object AppStatusPage: HSPage() {
 private fun AboutScreen(
     navController: HSNavigation,
     onBackPress: () -> Unit,
-    aboutViewModel: AboutViewModel = viewModel(factory = AboutModule.Factory()),
+    aboutViewModel: AboutViewModel = hiltViewModel(),
 ) {
     HSScaffold(
         title = stringResource(R.string.SettingsAboutApp_Title),

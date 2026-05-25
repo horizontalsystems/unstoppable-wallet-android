@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -72,7 +73,7 @@ fun PrivacyScreen(
     torViewModel: SecurityTorSettingsViewModel,
     restartApp: () -> Unit = {},
 ) {
-    val viewModel = viewModel<PrivacyViewModel>(factory = PrivacyViewModel.Factory())
+    val viewModel = hiltViewModel<PrivacyViewModel>()
     val uiState = viewModel.uiState
     val context = LocalContext.current
 

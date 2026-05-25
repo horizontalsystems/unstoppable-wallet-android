@@ -5,14 +5,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.core.ISystemInfoManager
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AboutViewModel(
+@HiltViewModel
+class AboutViewModel @Inject constructor(
     private val appConfigProvider: AppConfigProvider,
     private val termsManager: ITermsManager,
     private val systemInfoManager: ISystemInfoManager,
@@ -40,5 +43,4 @@ class AboutViewModel(
             }
         }
     }
-
 }
