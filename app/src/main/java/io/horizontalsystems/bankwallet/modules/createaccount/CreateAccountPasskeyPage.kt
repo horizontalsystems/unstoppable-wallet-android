@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.credentials.exceptions.CreateCredentialCancellationException
 import androidx.credentials.exceptions.CreateCredentialNoCreateOptionException
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation3.runtime.NavBackStack
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -72,8 +72,7 @@ fun CreateAccountPasskeyScreen(
     popUpToInclusiveId: KClass<out HSPage>,
     inclusive: Boolean
 ) {
-    val viewModel =
-        viewModel<CreateAccountPasskeyViewModel>(factory = CreateAccountPasskeyViewModel.Factory())
+    val viewModel = hiltViewModel<CreateAccountPasskeyViewModel>()
     val uiState = viewModel.uiState
     val context = LocalContext.current
     val view = LocalView.current

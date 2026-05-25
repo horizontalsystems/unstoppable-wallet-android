@@ -1,7 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.BackgroundManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.PriceManager
+import io.horizontalsystems.bankwallet.core.managers.SignalsControlManager
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -10,14 +18,31 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
+import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import javax.inject.Inject
 
-class MarketFavoritesViewModel(
-    private val service: MarketFavoritesService,
+@HiltViewModel
+class MarketFavoritesViewModel @Inject constructor(
+    marketKit: MarketKitWrapper,
+    marketFavoritesManager: MarketFavoritesManager,
+    localStorage: ILocalStorage,
+    marketWidgetManager: MarketWidgetManager,
+    currencyManager: CurrencyManager,
+    backgroundManager: BackgroundManager,
+    priceManager: PriceManager,
 ) : ViewModelUiState<MarketFavoritesModule.UiState>() {
+    private val service = MarketFavoritesService(
+        MarketFavoritesRepository(marketKit, marketFavoritesManager),
+        MarketFavoritesMenuService(localStorage, marketWidgetManager),
+        currencyManager,
+        backgroundManager,
+        priceManager,
+        SignalsControlManager(localStorage)
+    )
 
     private var marketItemsWrapper: List<MarketItemWrapper> = listOf()
     val periods = listOf(

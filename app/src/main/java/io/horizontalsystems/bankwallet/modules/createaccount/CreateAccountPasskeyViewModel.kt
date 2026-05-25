@@ -1,10 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.createaccount
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -21,8 +19,10 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CreateAccountPasskeyViewModel(
+@HiltViewModel
+class CreateAccountPasskeyViewModel @Inject constructor(
     private val accountFactory: IAccountFactory,
     private val accountManager: IAccountManager,
     private val walletActivator: WalletActivator,
@@ -111,21 +111,6 @@ class CreateAccountPasskeyViewModel(
         walletActivator.activateWallets(account, tokenQueries)
     }
 
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return CreateAccountPasskeyViewModel(
-                App.accountFactory,
-                App.accountManager,
-                App.walletActivator,
-                PredefinedBlockchainSettingsProvider(
-                    App.restoreSettingsManager,
-                    App.zcashBirthdayProvider,
-                    App.moneroBirthdayProvider
-                )
-            ) as T
-        }
-    }
 }
 
 data class CreateAccountPasskeyUiState(

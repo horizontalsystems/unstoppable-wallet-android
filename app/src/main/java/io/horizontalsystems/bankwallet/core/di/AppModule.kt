@@ -38,7 +38,9 @@ import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
+import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
+import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
 import io.horizontalsystems.bankwallet.core.BackgroundManager
 import io.horizontalsystems.bankwallet.core.IMarketStorage
@@ -285,6 +287,12 @@ object AppModule {
 
     @Provides @Singleton
     fun provideMarketFavoritesManager(): MarketFavoritesManager = App.marketFavoritesManager
+
+    @Provides @Singleton
+    fun providePriceManager(): PriceManager = App.priceManager
+
+    @Provides @Singleton
+    fun provideMarketWidgetManager(): MarketWidgetManager = App.marketWidgetManager
 
     // --- Account creation / restore ---
 

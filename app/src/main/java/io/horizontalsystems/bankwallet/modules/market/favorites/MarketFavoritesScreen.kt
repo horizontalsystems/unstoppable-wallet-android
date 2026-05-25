@@ -10,7 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -45,7 +45,7 @@ import io.horizontalsystems.subscriptions.core.TradeSignals
 fun MarketFavoritesScreen(
     navController: HSNavigation
 ) {
-    val viewModel = viewModel<MarketFavoritesViewModel>(factory = MarketFavoritesModule.Factory())
+    val viewModel = hiltViewModel<MarketFavoritesViewModel>()
     val uiState = viewModel.uiState
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
