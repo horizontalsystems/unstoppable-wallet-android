@@ -1,12 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.intro
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import javax.inject.Inject
 
-class IntroViewModel(
-        private val localStorage: ILocalStorage
-): ViewModel() {
+@HiltViewModel
+class IntroViewModel @Inject constructor(
+    private val localStorage: ILocalStorage
+) : ViewModel() {
 
     val slides = listOf(
         IntroModule.IntroSliderData(
@@ -32,5 +35,4 @@ class IntroViewModel(
     fun onStartClicked() {
         localStorage.mainShowedOnce = true
     }
-
 }

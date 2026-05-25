@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun IntroScreen() {
-    val viewModel = viewModel<IntroViewModel>(factory = IntroModule.Factory())
+    val viewModel = hiltViewModel<IntroViewModel>()
 
     val pageCount = 3
     val pagerState = rememberPagerState(initialPage = 0) { pageCount }

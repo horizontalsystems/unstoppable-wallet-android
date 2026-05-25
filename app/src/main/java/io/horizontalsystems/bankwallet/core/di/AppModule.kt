@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
@@ -28,6 +29,7 @@ import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
+import io.horizontalsystems.bankwallet.core.utils.RootUtil
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
@@ -84,6 +86,12 @@ object AppModule {
 
     @Provides @Singleton
     fun provideChartIndicatorManager(): ChartIndicatorManager = App.chartIndicatorManager
+
+    @Provides @Singleton
+    fun provideRootUtil(): RootUtil = RootUtil
+
+    @Provides @Singleton
+    fun provideAccountFactory(): IAccountFactory = App.accountFactory
 
     @Provides @Singleton
     fun provideAccountManager(): IAccountManager = App.accountManager
