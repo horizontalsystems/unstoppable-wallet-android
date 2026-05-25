@@ -43,7 +43,7 @@ class HSNavigation(val backStack: NavBackStack<HSPage>) {
         statPageTo: StatPage
     ) {
         if (!App.termsManager.allTermsAccepted) {
-            slideFromBottom(TermsPage(screen, statPageFrom, statPageTo, navigationType))
+            slideFromBottom(TermsPage(TermsPage.Input(screen, statPageFrom, statPageTo, navigationType)))
         } else {
             when (navigationType) {
                 NavigationType.SlideFromBottom -> slideFromBottom(screen)

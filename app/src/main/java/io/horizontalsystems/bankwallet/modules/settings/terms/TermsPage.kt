@@ -35,29 +35,33 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TermsPage(
-    val screen: HSPage,
-    val statPageFrom: StatPage,
-    val statPageTo: StatPage,
-    val navigationType: NavigationType
-) : HSPage() {
+data class TermsPage(val input: Input? = null) : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         TermsScreen(
             onAccepted = {
                 navController.removeLastOrNull()
-                when (navigationType) {
-                    NavigationType.SlideFromBottom -> navController.slideFromBottom(screen)
-                    NavigationType.SlideFromRight -> navController.slideFromRight(screen)
+                input?.let {
+                    when (input.navigationType) {
+                        NavigationType.SlideFromBottom -> navController.slideFromBottom(input.screen)
+                        NavigationType.SlideFromRight -> navController.slideFromRight(input.screen)
+                    }
+                    stat(page = input.statPageFrom, event = StatEvent.Open(input.statPageTo))
                 }
-
-                stat(page = statPageFrom, event = StatEvent.Open(statPageTo))
             },
             onDeclined = {
                 navController.removeLastOrNull()
             }
         )
     }
+
+    @Serializable
+    data class Input(
+        val screen: HSPage,
+        val statPageFrom: StatPage,
+        val statPageTo: StatPage,
+        val navigationType: NavigationType
+    )
 }
 
 @Composable

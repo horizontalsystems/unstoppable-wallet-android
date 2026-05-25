@@ -22,7 +22,7 @@ import java.util.UUID
 
 
 @Serializable
-data class ContactsPage(val input: Input) : HSPage() {
+data class ContactsRouterPage(val input: Input) : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

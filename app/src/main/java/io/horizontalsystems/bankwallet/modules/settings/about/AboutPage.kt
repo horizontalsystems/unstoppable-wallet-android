@@ -21,7 +21,6 @@ import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsPage
-import io.horizontalsystems.bankwallet.modules.settings.terms.TermsScreen
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -53,17 +52,6 @@ data object AppStatusPage: HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         AppStatusScreen(navController)
-    }
-}
-
-@Serializable
-data object TermsPage: HSPage() {
-    @Composable
-    override fun GetContent(navController: HSNavigation) {
-        TermsScreen(
-            onAccepted = navController::removeLastOrNull,
-            onDeclined = navController::removeLastOrNull
-        )
     }
 }
 
@@ -127,7 +115,7 @@ private fun SettingSections(
                 R.drawable.ic_terms_20,
                 showAlert = viewModel.termsShowAlert,
                 onClick = {
-                    navController.add(TermsPage)
+                    navController.add(TermsPage())
 
                     stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Terms))
                 }

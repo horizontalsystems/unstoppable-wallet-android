@@ -38,7 +38,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statResendType
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsPage
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRouterPage
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoPage
 import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoPage
@@ -311,15 +311,15 @@ fun TransactionInfoAddressCell(
                     val args = when (action) {
                         ContactsModule.AddAddressAction.AddToNewContact -> {
                             onAddToNew?.invoke()
-                            ContactsPage.Input(Mode.AddAddressToNewContact(blockchainType, value))
+                            ContactsRouterPage.Input(Mode.AddAddressToNewContact(blockchainType, value))
                         }
 
                         ContactsModule.AddAddressAction.AddToExistingContact -> {
                             onAddToExisting?.invoke()
-                            ContactsPage.Input(Mode.AddAddressToExistingContact(blockchainType, value))
+                            ContactsRouterPage.Input(Mode.AddAddressToExistingContact(blockchainType, value))
                         }
                     }
-                    navController?.slideFromRight(ContactsPage(args))
+                    navController?.slideFromRight(ContactsRouterPage(args))
                 }
             })
     }
