@@ -2,12 +2,15 @@ package io.horizontalsystems.bankwallet.modules.settings.subscription
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.subscriptions.core.UserSubscription
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 
-class SubscriptionViewModel : ViewModelUiState<ManageSubscriptionUiState>() {
+@HiltViewModel
+class SubscriptionViewModel @Inject constructor() : ViewModelUiState<ManageSubscriptionUiState>() {
     private var userHasActiveSubscription = false
 
     init {

@@ -9,7 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -38,7 +38,7 @@ data object SubscriptionPage : HSPage() {
 
 @Composable
 fun SubscriptionScreen(navController: HSNavigation) {
-    val viewModel = viewModel<SubscriptionViewModel>()
+    val viewModel = hiltViewModel<SubscriptionViewModel>()
 
     val uiState = viewModel.uiState
     val context = LocalContext.current

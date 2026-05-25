@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.restoreaccount
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -15,9 +15,7 @@ import kotlin.reflect.KClass
 data class RestoreFromPasskeyPage(val input: Input) : HSPage(screenshotEnabled = false) {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = viewModel<RestoreFromPasskeyViewModel>(
-            factory = RestoreFromPasskeyViewModel.Factory()
-        )
+        val viewModel = hiltViewModel<RestoreFromPasskeyViewModel>()
 
         val accountType = remember { viewModel.getAccountType(input.entropy) }
         val accountName = remember { viewModel.getAccountName(input.accountName) }
