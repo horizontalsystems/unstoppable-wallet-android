@@ -26,8 +26,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeaderMultiline
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
@@ -35,7 +35,7 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ConfiguredTokenInfoDialog(val token: Token) : BaseComposableBottomSheet() {
+data class ConfiguredTokenInfoSheet(val token: Token) : HSBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

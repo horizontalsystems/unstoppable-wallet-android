@@ -38,7 +38,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorSheet
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
@@ -103,8 +103,8 @@ fun SendConfirmationScreen(
 
         is SendResult.Failed -> {
             navController.slideFromBottom(
-                ErrorBottomSheet(
-                    ErrorBottomSheet.Input(
+                ErrorSheet(
+                    ErrorSheet.Input(
                         sendResult.caution.getDescription() ?: sendResult.caution.getString()
                     )
                 )

@@ -16,7 +16,7 @@ data object WCEvmTransactionSettingsPage : HSPage() {
 
 @Composable
 fun WCEvmTransactionSettingsScreen(navController: HSNavigation) {
-    val viewModel = navController.viewModelForScreen<WCSendEthereumTransactionRequestViewModel>(WCRequest::class)
+    val viewModel = navController.viewModelForScreen<WCSendEthereumTransactionRequestViewModel>(WCRequestSheet::class)
 
     val sendTransactionService = viewModel.sendTransactionService
 

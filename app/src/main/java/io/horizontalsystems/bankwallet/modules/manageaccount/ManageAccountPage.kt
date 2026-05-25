@@ -39,7 +39,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.publickeys.PublicKe
 import io.horizontalsystems.bankwallet.modules.manageaccount.recoveryphrase.RecoveryPhrasePage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
-import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountDialog
+import io.horizontalsystems.bankwallet.modules.unlinkaccount.UnlinkAccountSheet
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
@@ -180,7 +180,7 @@ fun ManageAccountScreen(navController: HSNavigation, accountId: String) {
                             icon = painterResource(id = R.drawable.ic_delete_20)
                         ) {
                             navController.slideFromBottom(
-                                UnlinkAccountDialog(viewModel.account)
+                                UnlinkAccountSheet(viewModel.account)
                             )
 
                             stat(

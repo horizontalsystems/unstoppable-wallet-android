@@ -33,13 +33,13 @@ import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredAlert
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredSheet
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccount
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedSheet
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.WCInvalidUrlBottomSheet
@@ -103,14 +103,14 @@ fun BalanceForAccount(
                 }
 
                 WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-                    navController.slideFromBottom(WCErrorNoAccount)
+                    navController.slideFromBottom(WCErrorNoAccountSheet)
                 }
 
                 is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
                     val text =
                         Translator.getString(R.string.WalletConnect_Error_NeedBackup)
                     navController.slideFromBottom(
-                        BackupRequiredDialog(BackupRequiredDialog.Input(state.account, text))
+                        BackupRequiredSheet(BackupRequiredSheet.Input(state.account, text))
                     )
 
                     stat(
@@ -121,7 +121,7 @@ fun BalanceForAccount(
 
                 is WCManager.SupportState.NotSupported -> {
                     navController.slideFromBottom(
-                        WCAccountTypeNotSupportedDialog(WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription))
+                        WCAccountTypeNotSupportedSheet(WCAccountTypeNotSupportedSheet.Input(state.accountTypeDescription))
                     )
                 }
             }

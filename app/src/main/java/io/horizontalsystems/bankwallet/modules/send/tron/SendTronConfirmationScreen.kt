@@ -30,9 +30,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
-import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoSheet
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -95,8 +95,8 @@ fun SendTronConfirmationScreen(
 
         is SendResult.Failed -> {
             navController.slideFromBottom(
-                ErrorBottomSheet(
-                    ErrorBottomSheet.Input(sendResult.caution.getDescription() ?: sendResult.caution.getString())
+                ErrorSheet(
+                    ErrorSheet.Input(sendResult.caution.getDescription() ?: sendResult.caution.getString())
                 )
             )
         }
@@ -252,7 +252,7 @@ private fun ResourcesConsumed(
             modifier = Modifier.size(20.dp),
             onClick = {
                 navController.slideFromBottom(
-                    FeeSettingsInfoDialog(FeeSettingsInfoDialog.Input(title, info))
+                    FeeSettingsInfoSheet(FeeSettingsInfoSheet.Input(title, info))
                 )
             }
         ) {

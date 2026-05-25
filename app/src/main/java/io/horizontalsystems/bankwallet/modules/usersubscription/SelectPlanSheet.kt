@@ -31,14 +31,14 @@ import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionM
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.noteText
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.stringRepresentation
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.title
-import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumSubscribedDialog
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumSubscribedSheet
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeOrangeGradient
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottombars.ButtonsGroupHorizontal
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
@@ -53,14 +53,14 @@ import io.horizontalsystems.subscriptions.core.numberOfDays
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object SelectPlanDialog : BaseComposableBottomSheet() {
+data object SelectPlanSheet : HSBottomSheet() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         SelectPlanBottomSheet(
             onDismiss = { navController.removeLastOrNull() },
             onPurchase = {
                 navController.removeLastOrNull()
-                navController.slideFromBottom(PremiumSubscribedDialog)
+                navController.slideFromBottom(PremiumSubscribedSheet)
             },
         )
     }

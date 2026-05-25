@@ -36,7 +36,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceScreen
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredSheet
 import io.horizontalsystems.bankwallet.modules.market.MarketScreen
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapScreen
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -50,8 +50,8 @@ import io.horizontalsystems.bankwallet.modules.settings.donate.WhyDonatePage
 import io.horizontalsystems.bankwallet.modules.settings.main.SettingsScreen
 import io.horizontalsystems.bankwallet.modules.tor.TorStatusView
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccount
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedSheet
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager.SupportState
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
@@ -121,7 +121,7 @@ private fun MainScreen(
                             },
                             onLongClick = if (destination.selected && destination.mainNavItem == MainNavigation.Balance) {
                                 {
-                                    fragmentNavController.slideFromBottom(WalletSwitchDialog)
+                                    fragmentNavController.slideFromBottom(WalletSwitchSheet)
                                     stat(
                                         page = StatPage.Main,
                                         event = StatEvent.Open(StatPage.SwitchWallet)
@@ -204,13 +204,13 @@ private fun MainScreen(
     if (uiState.wcSupportState != null) {
         when (val wcSupportState = uiState.wcSupportState) {
             SupportState.NotSupportedDueToNoActiveAccount -> {
-                fragmentNavController.slideFromBottom(WCErrorNoAccount)
+                fragmentNavController.slideFromBottom(WCErrorNoAccountSheet)
             }
 
             is SupportState.NotSupportedDueToNonBackedUpAccount -> {
                 val text = stringResource(R.string.WalletConnect_Error_NeedBackup)
                 fragmentNavController.slideFromBottom(
-                    BackupRequiredDialog(BackupRequiredDialog.Input(wcSupportState.account, text))
+                    BackupRequiredSheet(BackupRequiredSheet.Input(wcSupportState.account, text))
                 )
 
                 stat(page = StatPage.Main, event = StatEvent.Open(StatPage.BackupRequired))
@@ -218,7 +218,7 @@ private fun MainScreen(
 
             is SupportState.NotSupported -> {
                 fragmentNavController.slideFromBottom(
-                    WCAccountTypeNotSupportedDialog(WCAccountTypeNotSupportedDialog.Input(wcSupportState.accountTypeDescription))
+                    WCAccountTypeNotSupportedSheet(WCAccountTypeNotSupportedSheet.Input(wcSupportState.accountTypeDescription))
                 )
             }
 

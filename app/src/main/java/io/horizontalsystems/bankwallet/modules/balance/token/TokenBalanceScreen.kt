@@ -46,14 +46,14 @@ import io.horizontalsystems.bankwallet.modules.balance.StellarLockedValue
 import io.horizontalsystems.bankwallet.modules.balance.ZcashLockedValue
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceActionButton
 import io.horizontalsystems.bankwallet.modules.coin.CoinPage
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredSheet
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.receive.ReceivePage
 import io.horizontalsystems.bankwallet.modules.receive.ZcashAddressTypeSelectPage
 import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressPage
 import io.horizontalsystems.bankwallet.modules.send.zcash.shield.ShieldZcashPage
-import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
+import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorSheet
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoPage
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
@@ -214,7 +214,7 @@ fun TokenBalanceScreen(
                     e.coinTitle
                 )
                 navController.slideFromBottom(
-                    BackupRequiredDialog(BackupRequiredDialog.Input(e.account, text))
+                    BackupRequiredSheet(BackupRequiredSheet.Input(e.account, text))
                 )
 
                 stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
@@ -375,7 +375,7 @@ fun TokenBalanceScreen(
                             e.coinTitle
                         )
                         navController.slideFromBottom(
-                            BackupRequiredDialog(BackupRequiredDialog.Input(e.account, text))
+                            BackupRequiredSheet(BackupRequiredSheet.Input(e.account, text))
                         )
 
                         stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
@@ -399,7 +399,7 @@ private fun openSyncErrorDialog(
 
     wallet?.let {
         navController.slideFromBottom(
-            SyncErrorDialog(SyncErrorDialog.Input(wallet, errorMessage))
+            SyncErrorSheet(SyncErrorSheet.Input(wallet, errorMessage))
         )
     }
 }

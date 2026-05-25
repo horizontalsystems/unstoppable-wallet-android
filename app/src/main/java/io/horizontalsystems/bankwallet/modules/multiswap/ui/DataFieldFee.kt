@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.multiswap.FeeRow
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialog
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoSheet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 
 @Composable
@@ -37,7 +37,7 @@ fun DataFieldFeeTemplate(
         onInfoClick = infoText?.let {
             {
                 navController.slideFromBottom(
-                    SwapInfoDialog(SwapInfoDialog.Input(title, infoText))
+                    SwapInfoSheet(SwapInfoSheet.Input(title, infoText))
                 )
             }
         }

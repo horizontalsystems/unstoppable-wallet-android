@@ -44,7 +44,7 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupMana
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsPage
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsPage
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredSheet
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -62,8 +62,8 @@ import io.horizontalsystems.bankwallet.modules.settings.privacy.PrivacySettingsP
 import io.horizontalsystems.bankwallet.modules.settings.security.SecuritySettingsPage
 import io.horizontalsystems.bankwallet.modules.settings.subscription.SubscriptionPage
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionHavHostPage
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccount
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedSheet
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -218,13 +218,13 @@ private fun SettingSections(
                             }
 
                             WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
-                                navController.slideFromBottom(WCErrorNoAccount)
+                                navController.slideFromBottom(WCErrorNoAccountSheet)
                             }
 
                             is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
                                 val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
                                 navController.slideFromBottom(
-                                    BackupRequiredDialog(BackupRequiredDialog.Input(state.account, text))
+                                    BackupRequiredSheet(BackupRequiredSheet.Input(state.account, text))
                                 )
 
                                 stat(
@@ -235,7 +235,7 @@ private fun SettingSections(
 
                             is WCManager.SupportState.NotSupported -> {
                                 navController.slideFromBottom(
-                                    WCAccountTypeNotSupportedDialog(WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription))
+                                    WCAccountTypeNotSupportedSheet(WCAccountTypeNotSupportedSheet.Input(state.accountTypeDescription))
                                 )
                             }
                         }

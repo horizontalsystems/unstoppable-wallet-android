@@ -26,7 +26,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorSheet
 import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.OnlyRequired
 import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.Unlimited
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
@@ -100,8 +100,8 @@ fun Eip20ApproveConfirmScreen(navController: HSNavigation) {
                             resultEventBus.sendResult(Eip20ApproveConfirmPage.Result(true))
                             navController.removeLastOrNull()
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(ErrorBottomSheet(
-                                ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName)
+                            navController.slideFromBottom(ErrorSheet(
+                                ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
                             ))
                         }
 

@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorSheet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
@@ -129,8 +129,8 @@ private fun SendEvmConfirmationScreen(
                             navController.removeLastUntil(input.sendEntryPointDestId, true)
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
-                            navController.slideFromBottom(ErrorBottomSheet(
-                                ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName)
+                            navController.slideFromBottom(ErrorSheet(
+                                ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
                             ))
                         }
 

@@ -12,13 +12,13 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FeeSettingsInfoDialog(val input: Input) : BaseComposableBottomSheet() {
+data class FeeSettingsInfoSheet(val input: Input) : HSBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

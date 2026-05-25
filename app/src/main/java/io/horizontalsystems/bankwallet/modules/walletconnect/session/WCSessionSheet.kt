@@ -38,7 +38,7 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
@@ -47,7 +47,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_lucian
 import io.horizontalsystems.bankwallet.ui.compose.components.subheadSB_remus
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead_grey
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.AlertCard
 import io.horizontalsystems.bankwallet.uiv3.components.AlertFormat
@@ -67,7 +67,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class WCSessionBottomSheet(val input: WCSessionModule.Input?) : BaseComposableBottomSheet() {
+data class WCSessionSheet(val input: WCSessionModule.Input?) : HSBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
@@ -165,7 +165,7 @@ fun WCSessionScreen(
                     .padding(16.dp)
                     .clickable(enabled = !uiState.scamProtectionActionAllowed) {
                         navController.slideFromBottom(
-                            DefenseSystemFeatureDialog(DefenseSystemFeatureDialog.Input(PremiumFeature.ScamProtectionFeature))
+                            DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(PremiumFeature.ScamProtectionFeature))
                         )
                     },
                 horizontalArrangement = Arrangement.spacedBy(16.dp),

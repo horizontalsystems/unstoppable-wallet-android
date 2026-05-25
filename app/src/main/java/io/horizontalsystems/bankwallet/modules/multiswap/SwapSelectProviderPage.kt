@@ -88,7 +88,7 @@ fun SwapSelectProviderScreen(
             viewModel.setSortType(it)
         },
         onBadgeClick = {
-            navController.slideFromBottom(RiskLevelInfoDialog)
+            navController.slideFromBottom(RiskLevelInfoSheet)
         }
     ) {
         swapViewModel.onSelectQuote(it)

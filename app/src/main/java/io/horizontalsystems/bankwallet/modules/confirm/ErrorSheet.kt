@@ -12,7 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
@@ -23,7 +23,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ErrorBottomSheet(val input: Input) : BaseComposableBottomSheet() {
+data class ErrorSheet(val input: Input) : HSBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

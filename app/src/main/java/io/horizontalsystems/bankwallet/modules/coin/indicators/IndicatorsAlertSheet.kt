@@ -14,12 +14,12 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object IndicatorsAlertDialog : BaseComposableBottomSheet() {
+data object IndicatorsAlertSheet : HSBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

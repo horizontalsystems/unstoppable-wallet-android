@@ -25,7 +25,7 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorSheet
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
@@ -98,8 +98,8 @@ fun ActivateTokenScreen(
                             resultEventBus.sendResult(ActivateTokenPage.Result(true))
                             navController.removeLastOrNull()
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(ErrorBottomSheet(
-                                ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName)
+                            navController.slideFromBottom(ErrorSheet(
+                                ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
                             ))
                         }
 

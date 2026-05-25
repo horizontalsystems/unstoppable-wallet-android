@@ -33,7 +33,7 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.shorten
-import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoSheet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
@@ -145,7 +145,7 @@ fun WCSendEthRequestScreen(
                     sections = uiState.sectionViewItems,
                     onInfoClick = {
                         navController.slideFromBottom(
-                            FeeSettingsInfoDialog(FeeSettingsInfoDialog.Input(feeText, feeInfoText))
+                            FeeSettingsInfoSheet(FeeSettingsInfoSheet.Input(feeText, feeInfoText))
                         )
                     },
                     onCopy = { snackbarActions.showSuccessMessage(it) }
@@ -161,7 +161,7 @@ fun WCSendEthRequestScreen(
                     secondaryValue = uiState.networkFee?.secondary?.getFormatted(),
                     onInfoClick = {
                         navController.slideFromBottom(
-                            FeeSettingsInfoDialog(FeeSettingsInfoDialog.Input(feeText, feeInfoText))
+                            FeeSettingsInfoSheet(FeeSettingsInfoSheet.Input(feeText, feeInfoText))
                         )
                     }
                 )

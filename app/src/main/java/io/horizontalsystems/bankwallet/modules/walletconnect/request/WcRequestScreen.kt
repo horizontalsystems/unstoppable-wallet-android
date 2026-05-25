@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoSheet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.DataBlock
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -122,7 +122,7 @@ fun WcRequestScreen(
                     sections = uiState.contentItems,
                     onInfoClick = {
                         navController.slideFromBottom(
-                            FeeSettingsInfoDialog(FeeSettingsInfoDialog.Input(feeText, feeInfoText))
+                            FeeSettingsInfoSheet(FeeSettingsInfoSheet.Input(feeText, feeInfoText))
                         )
                     },
                     onCopy = {

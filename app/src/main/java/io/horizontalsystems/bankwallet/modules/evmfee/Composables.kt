@@ -40,7 +40,7 @@ import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialog
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoSheet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -224,7 +224,7 @@ private fun EvmSettingsInput(
 ) {
     HeaderText(text = title) {
         navController.slideFromBottom(
-            SwapInfoDialog(SwapInfoDialog.Input(title, info))
+            SwapInfoSheet(SwapInfoSheet.Input(title, info))
         )
     }
 
@@ -438,7 +438,7 @@ private fun FeeField(
                 iconTint = ComposeAppTheme.colors.grey,
                 onIconClick = {
                     navController.slideFromBottom(
-                        SwapInfoDialog(SwapInfoDialog.Input(title, info))
+                        SwapInfoSheet(SwapInfoSheet.Input(title, info))
                     )
                 }
             )

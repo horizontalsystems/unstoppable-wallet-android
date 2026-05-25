@@ -41,10 +41,10 @@ import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesPag
 import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoPage
 import io.horizontalsystems.bankwallet.modules.info.OverallScoreInfoPage
 import io.horizontalsystems.bankwallet.modules.market.tvl.TvlPage
-import io.horizontalsystems.bankwallet.modules.metricchart.ProChart
-import io.horizontalsystems.bankwallet.modules.metricchart.ProChart.Input
+import io.horizontalsystems.bankwallet.modules.metricchart.ProChartSheet
+import io.horizontalsystems.bankwallet.modules.metricchart.ProChartSheet.Input
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
@@ -178,7 +178,7 @@ private fun AnalyticsBlock(
                     val chartType = block.analyticChart?.chartType
                     if (coinUid != null && chartType != null) {
                         navController.add(
-                            ProChart(
+                            ProChartSheet(
                                 Input(
                                     coinUid,
                                     Translator.getString(chartType.titleRes),
@@ -306,7 +306,7 @@ private fun AnalyticsPreviewBlock(
         },
         onClick = {
             navController.slideFromBottom(
-                DefenseSystemFeatureDialog(DefenseSystemFeatureDialog.Input(PremiumFeature.TokenInsightsFeature))
+                DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(PremiumFeature.TokenInsightsFeature))
             )
             stat(
                 page = StatPage.CoinAnalytics,

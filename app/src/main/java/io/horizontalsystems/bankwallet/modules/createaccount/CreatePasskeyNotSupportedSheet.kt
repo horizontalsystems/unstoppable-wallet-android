@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.ButtonsStack
@@ -21,17 +21,17 @@ import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object RestorePasskeyNotSupported : BaseComposableBottomSheet() {
+data object CreatePasskeyNotSupportedSheet : HSBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        RestorePasskeyNotSupportedScreen(navController)
+        CreatePasskeyNotSupportedScreen(navController)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RestorePasskeyNotSupportedScreen(navController: HSNavigation) {
+fun CreatePasskeyNotSupportedScreen(navController: HSNavigation) {
     BottomSheetContent(
         onDismissRequest = navController::removeLastOrNull,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -39,10 +39,10 @@ fun RestorePasskeyNotSupportedScreen(navController: HSNavigation) {
         BottomSheetHeaderV3(
             image72 = painterResource(R.drawable.warning_filled_24),
             imageTint = ComposeAppTheme.colors.jacob,
-            title = stringResource(R.string.ImportWallet_RestorePasskeyNotSupported_Title)
+            title = stringResource(R.string.CreateNewWallet_CreatePasskeyNotSupported_Title)
         )
         InfoTextBody(
-            text = stringResource(R.string.ImportWallet_RestorePasskeyNotSupported_Description),
+            text = stringResource(R.string.CreateNewWallet_CreatePasskeyNotSupported_Description),
             color = ComposeAppTheme.colors.grey,
             textAlign = TextAlign.Center
         )
@@ -50,9 +50,10 @@ fun RestorePasskeyNotSupportedScreen(navController: HSNavigation) {
             HSButton(
                 modifier = Modifier.fillMaxWidth(),
                 variant = ButtonVariant.Secondary,
-                title = stringResource(R.string.ImportWallet_Button_Understood)
+                title = stringResource(R.string.CreateNewWallet_Button_CreateStandardWallet)
             ) {
-                navController.removeLastOrNull()
+                navController.removeLastUntil(CreateAccountPage::class, false)
+                navController.slideFromRight(CreateAccountStandardPage(null))
             }
         }
     }

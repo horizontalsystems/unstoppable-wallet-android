@@ -5,7 +5,7 @@ import androidx.compose.ui.res.stringResource
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoDialog
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapInfoSheet
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -31,7 +31,7 @@ data class DataFieldSlippage(val slippage: BigDecimal) : DataField {
             value = App.numberFormatter.format(slippage, 0, 2, suffix = "%").hs(color = color),
             onInfoClick = {
                 navController.slideFromBottom(
-                    SwapInfoDialog(SwapInfoDialog.Input(infoTitle, infoText))
+                    SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText))
                 )
             }
         )

@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PlanItems
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.TitleCenteredTopBar
@@ -47,7 +47,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonVariant
 import io.horizontalsystems.bankwallet.uiv3.components.controls.HSButton
@@ -57,7 +57,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object PremiumFeaturesDialog : BaseComposableBottomSheet() {
+data object PremiumFeaturesSheet : HSBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
@@ -229,7 +229,7 @@ fun PremiumFeaturesScreen(
                                 isPlanSelectBottomSheetVisible = true
                             } else {
                                 onClose.invoke()
-                                navController.slideFromBottom(SelectPlanDialog)
+                                navController.slideFromBottom(SelectPlanSheet)
                             }
                         }
                     )
@@ -273,7 +273,7 @@ fun FeaturesSection(
             onItemClick = { action ->
                 val feature = PremiumFeature.getFeature(action)
                 navController.slideFromBottom(
-                    DefenseSystemFeatureDialog(DefenseSystemFeatureDialog.Input(feature))
+                    DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(feature))
                 )
             }
         )

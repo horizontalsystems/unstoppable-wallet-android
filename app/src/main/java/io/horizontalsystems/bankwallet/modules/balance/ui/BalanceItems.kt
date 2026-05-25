@@ -59,7 +59,7 @@ import io.horizontalsystems.bankwallet.modules.balance.ReceiveAllowedState
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
 import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalancePage
 import io.horizontalsystems.bankwallet.modules.coin.CoinPage
-import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
+import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredSheet
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsPage
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -584,7 +584,7 @@ private fun showBackupRequiredDialog(
         account.name
     )
     navController.slideFromBottom(
-        BackupRequiredDialog(BackupRequiredDialog.Input(account, text))
+        BackupRequiredSheet(BackupRequiredSheet.Input(account, text))
     )
     stat(
         page = StatPage.Balance,

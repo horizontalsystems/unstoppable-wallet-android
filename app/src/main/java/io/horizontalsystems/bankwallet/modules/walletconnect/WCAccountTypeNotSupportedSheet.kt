@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
+import android.os.Parcelable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,26 +13,46 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object WCErrorNoAccount : BaseComposableBottomSheet() {
+data class WCAccountTypeNotSupportedSheet(val input: Input) : HSBottomSheet() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        WalletConnectErrorNoAccount() {
-            navController.removeLastOrNull()
-        }
+        WCAccountTypeNotSupportedScreen(
+            accountTypeDescription = input.accountTypeDescription,
+            onCloseClick = {
+                navController.removeLastOrNull()
+            },
+            onSwitchClick = {
+                navController.removeLastOrNull()
+                navController.slideFromRight(
+                    ManageAccountsPage(ManageAccountsModule.Mode.Manage)
+                )
+            }
+        )
     }
+
+    @Serializable
+    @Parcelize
+    data class Input(val accountTypeDescription: String) : Parcelable
 }
 
 @Composable
-fun WalletConnectErrorNoAccount(onCloseClick: () -> Unit) {
+fun WCAccountTypeNotSupportedScreen(
+    accountTypeDescription: String,
+    onCloseClick: () -> Unit,
+    onSwitchClick: () -> Unit
+) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
@@ -40,14 +61,14 @@ fun WalletConnectErrorNoAccount(onCloseClick: () -> Unit) {
     ) {
         TextImportantWarning(
             modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-            text = stringResource(id = R.string.WalletConnect_Error_NoWallet)
+            text = stringResource(id = R.string.WalletConnect_NotSupportedDescription, accountTypeDescription)
         )
         ButtonPrimaryYellow(
             modifier = Modifier
                 .padding(vertical = 20.dp, horizontal = 24.dp)
                 .fillMaxWidth(),
-            title = stringResource(R.string.Button_Close),
-            onClick = onCloseClick
+            title = stringResource(R.string.Button_Switch),
+            onClick = onSwitchClick
         )
         Spacer(Modifier.height(12.dp))
     }
@@ -55,8 +76,8 @@ fun WalletConnectErrorNoAccount(onCloseClick: () -> Unit) {
 
 @Preview
 @Composable
-private fun WalletConnectErrorNoAccountPreview() {
+private fun WalletConnectErrorWatchAccountPreview() {
     ComposeAppTheme {
-        WalletConnectErrorNoAccount({})
+        WCAccountTypeNotSupportedScreen("Account Type Desc", {}, {})
     }
 }

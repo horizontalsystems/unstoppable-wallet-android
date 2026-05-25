@@ -27,14 +27,14 @@ import androidx.compose.ui.unit.sp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.settings.banners.TextWithDynamicScale
-import io.horizontalsystems.bankwallet.modules.usersubscription.PremiumFeaturesDialog
-import io.horizontalsystems.bankwallet.modules.usersubscription.SelectPlanDialog
+import io.horizontalsystems.bankwallet.modules.usersubscription.PremiumFeaturesSheet
+import io.horizontalsystems.bankwallet.modules.usersubscription.SelectPlanSheet
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.DynamicSliderIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.ButtonsStack
 import io.horizontalsystems.bankwallet.uiv3.components.controls.ButtonSize
@@ -54,7 +54,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DefenseSystemFeatureDialog(val input: Input) : BaseComposableBottomSheet() {
+data class DefenseSystemFeatureSheet(val input: Input) : HSBottomSheet() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         DefenseSystemFeatureScreen(
@@ -235,7 +235,7 @@ private fun DefenseSystemFeatureScreen(
                     .fillMaxWidth()
                     .clickable {
                         navController.removeLastOrNull()
-                        navController.slideFromBottom(PremiumFeaturesDialog)
+                        navController.slideFromBottom(PremiumFeaturesSheet)
                     }
                     .padding(horizontal = 32.dp, vertical = 12.dp),
                 text = stringResource(R.string.Premium_OnePurchaseUnlocksAllPremium),
@@ -249,7 +249,7 @@ private fun DefenseSystemFeatureScreen(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     navController.removeLastOrNull()
-                    navController.slideFromBottom(SelectPlanDialog)
+                    navController.slideFromBottom(SelectPlanSheet)
                 }
             )
         }

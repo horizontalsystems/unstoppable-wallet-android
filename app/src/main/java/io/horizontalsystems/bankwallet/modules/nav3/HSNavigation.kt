@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinPage
 import io.horizontalsystems.bankwallet.modules.pin.SetPinPage
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsPage
 import io.horizontalsystems.subscriptions.core.IPaidAction
@@ -88,7 +88,7 @@ class HSNavigation(val backStack: NavBackStack<HSPage>) {
         } else {
             val premiumFeature = PremiumFeature.getFeature(paidAction)
             slideFromBottom(
-                DefenseSystemFeatureDialog(DefenseSystemFeatureDialog.Input(premiumFeature))
+                DefenseSystemFeatureSheet(DefenseSystemFeatureSheet.Input(premiumFeature))
             )
         }
     }

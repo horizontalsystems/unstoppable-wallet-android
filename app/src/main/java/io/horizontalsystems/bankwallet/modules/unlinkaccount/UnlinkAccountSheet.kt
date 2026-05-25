@@ -25,7 +25,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
-import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheet
+import io.horizontalsystems.bankwallet.ui.extensions.HSBottomSheet
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetHeaderV3
 import io.horizontalsystems.bankwallet.uiv3.components.cell.CellMiddleInfo
@@ -39,7 +39,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UnlinkAccountDialog(val account: Account) : BaseComposableBottomSheet() {
+data class UnlinkAccountSheet(val account: Account) : HSBottomSheet() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         UnlinkAccountScreen(navController, account)

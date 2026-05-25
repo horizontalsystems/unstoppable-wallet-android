@@ -36,7 +36,7 @@ import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
-import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
+import io.horizontalsystems.bankwallet.modules.send.AddressRiskySheet
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationPage
 import io.horizontalsystems.bankwallet.modules.send.SendPage
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
@@ -229,10 +229,10 @@ fun SendBitcoinScreen(
 
                 VSpacer(16.dp)
 
-                val forResult = fragmentNavController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
+                val forResult = fragmentNavController.slideFromBottomForResult<AddressRiskySheet.Result>(
                     {
-                        AddressRiskyBottomSheetAlert(
-                            AddressRiskyBottomSheetAlert.Input(
+                        AddressRiskySheet(
+                            AddressRiskySheet.Input(
                                 alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
                             )
                         )

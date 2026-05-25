@@ -375,7 +375,7 @@ private fun SwapScreenInner(
                                 },
                                 onClickProvider = onClickProvider,
                                 onClickProviderScoreInfo = {
-                                    navController.slideFromBottom(RiskLevelInfoDialog)
+                                    navController.slideFromBottom(RiskLevelInfoSheet)
                                 }
                             )
                         }
@@ -654,7 +654,7 @@ fun PriceImpactField(
             .hs(color = getPriceImpactColor(priceImpactLevel)),
         onInfoClick = {
             navController.slideFromBottom(
-                SwapInfoDialog(SwapInfoDialog.Input(infoTitle, infoText))
+                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText))
             )
         }
     )

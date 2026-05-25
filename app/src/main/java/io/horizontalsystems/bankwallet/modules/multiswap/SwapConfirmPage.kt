@@ -42,7 +42,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsRecipientPage
@@ -53,8 +53,8 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
-import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog.Input
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet
+import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureSheet.Input
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -249,8 +249,8 @@ private fun SwapConfirmInternal(
                                 resultEventBus.sendResult(SwapConfirmPage.Result(true))
                                 navController.removeLastOrNull()
                             } catch (t: Throwable) {
-                                navController.slideFromBottom(ErrorBottomSheet(
-                                    ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName)
+                                navController.slideFromBottom(ErrorSheet(
+                                    ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
                                 ))
                             }
 
@@ -319,7 +319,7 @@ private fun SwapConfirmInternal(
                             .hs(ComposeAppTheme.colors.leah),
                         onInfoClick = {
                             navController.slideFromBottom(
-                                SwapInfoDialog(SwapInfoDialog.Input(infoTitle, infoText))
+                                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText))
                             )
                         }
                     )
@@ -332,7 +332,7 @@ private fun SwapConfirmInternal(
                         value = "~${formatDuration(estimatedTime)}".hs(ComposeAppTheme.colors.leah),
                         onInfoClick = {
                             navController.slideFromBottom(
-                                SwapInfoDialog(SwapInfoDialog.Input(infoTitle, infoText))
+                                SwapInfoSheet(SwapInfoSheet.Input(infoTitle, infoText))
                             )
                         }
                     )
@@ -396,7 +396,7 @@ private fun SwapConfirmInternal(
                         confirmChange = {
                             if (!uiState.mevProtectionActionAllowed) {
                                 navController.slideFromBottom(
-                                    DefenseSystemFeatureDialog(Input(PremiumFeature.getFeature(paidAction = SwapProtection)))
+                                    DefenseSystemFeatureSheet(Input(PremiumFeature.getFeature(paidAction = SwapProtection)))
                                 )
                                 false
                             } else {

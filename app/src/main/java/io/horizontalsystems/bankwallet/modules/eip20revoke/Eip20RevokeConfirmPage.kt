@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorSheet
 import io.horizontalsystems.bankwallet.modules.eip20approve.ConfirmTokenSection
 import io.horizontalsystems.bankwallet.modules.eip20approve.SpenderCell
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
@@ -102,8 +102,8 @@ fun Eip20RevokeScreen(navController: HSNavigation, input: Eip20RevokeConfirmPage
                             resultEventBus.sendResult(Eip20RevokeConfirmPage.Result(true))
                             navController.removeLastOrNull()
                         } catch (t: Throwable) {
-                            navController.slideFromBottom(ErrorBottomSheet(
-                                ErrorBottomSheet.Input(t.message ?: t.javaClass.simpleName)
+                            navController.slideFromBottom(ErrorSheet(
+                                ErrorSheet.Input(t.message ?: t.javaClass.simpleName)
                             ))
                         }
 

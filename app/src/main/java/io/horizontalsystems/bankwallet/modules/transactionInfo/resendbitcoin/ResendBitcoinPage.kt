@@ -27,7 +27,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
-import io.horizontalsystems.bankwallet.modules.confirm.ErrorBottomSheet
+import io.horizontalsystems.bankwallet.modules.confirm.ErrorSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
@@ -97,8 +97,8 @@ data class ResendBitcoinPage(val input: Input) : HSPage() {
             }
 
             is SendResult.Failed -> {
-                navController.slideFromBottom(ErrorBottomSheet(
-                    ErrorBottomSheet.Input(uiState.sendResult.caution.getString())
+                navController.slideFromBottom(ErrorSheet(
+                    ErrorSheet.Input(uiState.sendResult.caution.getString())
                 ))
             }
 

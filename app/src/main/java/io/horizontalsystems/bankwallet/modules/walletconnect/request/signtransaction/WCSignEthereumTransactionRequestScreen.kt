@@ -30,7 +30,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoSheet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.SessionRequestUI
@@ -143,7 +143,7 @@ fun WCSignEthereumTransactionRequestScreen(
                     sections = uiState.sectionViewItems,
                     onInfoClick = {
                         navController.slideFromBottom(
-                            FeeSettingsInfoDialog(FeeSettingsInfoDialog.Input(feeText, feeInfoText))
+                            FeeSettingsInfoSheet(FeeSettingsInfoSheet.Input(feeText, feeInfoText))
                         )
                     },
                     onCopy = {
@@ -161,7 +161,7 @@ fun WCSignEthereumTransactionRequestScreen(
                         secondaryValue = fee.secondary?.getFormatted(),
                         onInfoClick = {
                             navController.slideFromBottom(
-                                FeeSettingsInfoDialog(FeeSettingsInfoDialog.Input(feeText, feeInfoText))
+                                FeeSettingsInfoSheet(FeeSettingsInfoSheet.Input(feeText, feeInfoText))
                             )
                         }
                     )

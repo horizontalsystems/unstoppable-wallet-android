@@ -44,7 +44,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.contextMenuItems
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
+import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -261,7 +261,7 @@ fun onSyncErrorClicked(viewItem: BalanceViewItem2, viewModel: BalanceViewModel, 
             val errorMessage = syncErrorDetails.errorMessage
 
             navController.slideFromBottom(
-                SyncErrorDialog(SyncErrorDialog.Input(wallet, errorMessage))
+                SyncErrorSheet(SyncErrorSheet.Input(wallet, errorMessage))
             )
         }
 

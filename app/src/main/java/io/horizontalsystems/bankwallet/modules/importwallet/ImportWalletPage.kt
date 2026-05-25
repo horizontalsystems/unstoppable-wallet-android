@@ -37,7 +37,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupFileValidator
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
-import io.horizontalsystems.bankwallet.modules.createaccount.RestorePasskeyNotSupported
+import io.horizontalsystems.bankwallet.modules.createaccount.RestorePasskeyNotSupportedSheet
 import io.horizontalsystems.bankwallet.modules.createaccount.WalletType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -195,7 +195,7 @@ private fun ImportWalletScreen(
                             )
                         } catch (e: GetCredentialCancellationException) {
                         } catch (e: NoCredentialException) {
-                            navController.slideFromBottom(RestorePasskeyNotSupported)
+                            navController.slideFromBottom(RestorePasskeyNotSupportedSheet)
                         } catch (e: Throwable) {
                             error = e.message ?: e.javaClass.simpleName
                         } finally {

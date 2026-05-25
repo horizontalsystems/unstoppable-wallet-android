@@ -25,8 +25,8 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionBottomSheet
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionSheet
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -48,7 +48,7 @@ fun WCSessionCell(
             .background(ComposeAppTheme.colors.lawrence)
             .clickable {
                 navController.slideFromBottom(
-                    WCSessionBottomSheet(WCSessionModule.Input(session.sessionTopic))
+                    WCSessionSheet(WCSessionModule.Input(session.sessionTopic))
                 )
             },
         contentAlignment = Alignment.Center

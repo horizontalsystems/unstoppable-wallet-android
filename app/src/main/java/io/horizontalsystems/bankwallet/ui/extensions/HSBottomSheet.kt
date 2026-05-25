@@ -37,7 +37,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import kotlinx.serialization.Serializable
 
 @Serializable
-abstract class BaseComposableBottomSheet : HSPage(bottomSheet = true)
+abstract class HSBottomSheet : HSPage(bottomSheet = true)
 
 @Composable
 fun BottomSheetHeader(

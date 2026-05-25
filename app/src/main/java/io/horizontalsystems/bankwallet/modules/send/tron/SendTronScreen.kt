@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
-import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
+import io.horizontalsystems.bankwallet.modules.send.AddressRiskySheet
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationPage
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -110,10 +110,10 @@ fun SendTronScreen(
                 rate = viewModel.coinRate
             )
 
-            val forResult = navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
+            val forResult = navController.slideFromBottomForResult<AddressRiskySheet.Result>(
                 {
-                    AddressRiskyBottomSheetAlert(
-                        AddressRiskyBottomSheetAlert.Input(
+                    AddressRiskySheet(
+                        AddressRiskySheet.Input(
                             alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
                         )
                     )
