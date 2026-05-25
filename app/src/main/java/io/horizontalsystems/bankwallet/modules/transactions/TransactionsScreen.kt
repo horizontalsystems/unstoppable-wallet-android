@@ -45,7 +45,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceAccountsViewModel
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceScreenState
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.HSCircularProgressIndicator
@@ -91,7 +91,7 @@ fun TransactionsScreen(
                     icon = R.drawable.ic_manage_2_24,
                     showAlertDot = showFilterAlertDot,
                     onClick = {
-                        navController.slideFromRight(TransactionsFilterFragment)
+                        navController.slideFromRight(TransactionsFilterPage)
 
                         stat(
                             page = StatPage.Transactions,
@@ -183,7 +183,7 @@ private fun onTransactionClick(
 
     viewModel.tmpTransactionRecordToShow = transactionItem.record
 
-    navController.slideFromBottom(TransactionInfoFragment)
+    navController.slideFromBottom(TransactionInfoPage)
 
     stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionInfo))
 }

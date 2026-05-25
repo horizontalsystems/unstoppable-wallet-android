@@ -36,7 +36,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
-import io.horizontalsystems.bankwallet.modules.coin.indicators.IndicatorsFragment
+import io.horizontalsystems.bankwallet.modules.coin.indicators.IndicatorsPage
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewModule
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.HudMessageType
@@ -44,7 +44,7 @@ import io.horizontalsystems.bankwallet.modules.coin.ui.CoinScreenTitle
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsModule
 import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsViewModel
-import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.modules.markdown.MarkdownPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.restoreconfig.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -191,7 +191,7 @@ fun CoinOverviewScreen(
                                                 modifier = Modifier.height(28.dp),
                                                 icon = R.drawable.ic_setting_20
                                             ) {
-                                                navController.slideFromRight(IndicatorsFragment)
+                                                navController.slideFromRight(IndicatorsPage)
 
                                                 stat(
                                                     page = StatPage.CoinOverview,
@@ -293,7 +293,7 @@ private fun onClick(coinLink: CoinLink, context: Context, navController: HSNavig
     when (coinLink.linkType) {
         LinkType.Guide -> {
             navController.slideFromRight(
-                MarkdownFragment(MarkdownFragment.Input(absoluteUrl, true))
+                MarkdownPage(MarkdownPage.Input(absoluteUrl, true))
             )
         }
 

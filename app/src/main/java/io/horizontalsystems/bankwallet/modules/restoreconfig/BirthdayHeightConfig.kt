@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
 import io.horizontalsystems.bankwallet.modules.nav3.ResultEventBus
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -12,7 +12,7 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BirthdayHeightConfig(val blockchainType: BlockchainType) : HSScreen() {
+data class BirthdayHeightConfig(val blockchainType: BlockchainType) : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {

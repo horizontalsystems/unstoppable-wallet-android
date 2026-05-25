@@ -9,7 +9,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
 import kotlin.reflect.KClass
 
@@ -17,7 +17,7 @@ import kotlin.reflect.KClass
 fun ShieldZcashScreen(
     navController: HSNavigation,
     viewModel: ShieldZcashViewModel,
-    sendEntryPointDestId: KClass<out HSScreen>
+    sendEntryPointDestId: KClass<out HSPage>
 ) {
     var confirmationData by remember { mutableStateOf(viewModel.getConfirmationData()) }
     var refresh by remember { mutableStateOf(false) }

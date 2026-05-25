@@ -1,0 +1,141 @@
+package io.horizontalsystems.bankwallet.modules.settings.terms
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.NavigationType
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HsCheckbox
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class TermsPage(
+    val screen: HSPage,
+    val statPageFrom: StatPage,
+    val statPageTo: StatPage,
+    val navigationType: NavigationType
+) : HSPage() {
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        TermsScreen(
+            onAccepted = {
+                navController.removeLastOrNull()
+                when (navigationType) {
+                    NavigationType.SlideFromBottom -> navController.slideFromBottom(screen)
+                    NavigationType.SlideFromRight -> navController.slideFromRight(screen)
+                }
+
+                stat(page = statPageFrom, event = StatEvent.Open(statPageTo))
+            },
+            onDeclined = {
+                navController.removeLastOrNull()
+            }
+        )
+    }
+}
+
+@Composable
+fun TermsScreen(
+    onAccepted: () -> Unit,
+    onDeclined: () -> Unit
+) {
+    val viewModel = viewModel<TermsViewModel>(factory = TermsModule.Factory())
+    LaunchedEffect(viewModel.closeWithTermsAgreed) {
+        if (viewModel.closeWithTermsAgreed) {
+            onAccepted()
+            viewModel.onTermsAgreedConsumed()
+        }
+    }
+
+    HSScaffold(
+        title = stringResource(R.string.Settings_Terms),
+        menuItems = listOf(
+            MenuItem(
+                title = TranslatableString.ResString(R.string.Button_Close),
+                icon = R.drawable.ic_close,
+                onClick = {
+                    onDeclined()
+                }
+            )
+        )
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                VSpacer(12.dp)
+
+                CellUniversalLawrenceSection(viewModel.termsViewItems) { item ->
+                    val onClick = if (!viewModel.readOnlyState) {
+                        { viewModel.onTapTerm(item.termType, !item.checked) }
+                    } else {
+                        null
+                    }
+
+                    RowUniversal(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        onClick = onClick
+                    ) {
+                        HsCheckbox(
+                            checked = item.checked,
+                            enabled = !viewModel.readOnlyState,
+                            onCheckedChange = { checked ->
+                                viewModel.onTapTerm(item.termType, checked)
+                            },
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        subhead2_leah(
+                            text = stringResource(item.termType.description)
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(60.dp))
+            }
+
+            if (viewModel.isAcceptButtonVisible) {
+                ButtonsGroupWithShade {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
+                        title = stringResource(R.string.Button_Next),
+                        onClick = { viewModel.onAgreeClick() },
+                        enabled = viewModel.buttonEnabled
+                    )
+                }
+            }
+        }
+    }
+}
+

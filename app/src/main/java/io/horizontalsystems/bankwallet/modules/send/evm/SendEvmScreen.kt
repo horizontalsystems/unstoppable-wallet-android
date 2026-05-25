@@ -23,10 +23,10 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
-import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -45,7 +45,7 @@ fun SendEvmScreen(
     amount: BigDecimal?,
     hideAddress: Boolean,
     riskyAddress: Boolean,
-    sendEntryPointDestId: KClass<out HSScreen>,
+    sendEntryPointDestId: KClass<out HSPage>,
 ) {
     val uiState = viewModel.uiState
 
@@ -158,12 +158,12 @@ fun SendEvmScreen(
 private fun openSendConfirm(
     viewModel: SendEvmViewModel,
     navController: HSNavigation,
-    sendEntryPointDestId: KClass<out HSScreen>
+    sendEntryPointDestId: KClass<out HSPage>
 ) {
     val blockchainType = viewModel.wallet.token.blockchainType
     viewModel.getSendData()?.let {
         navController.slideFromRight(
-            SendEvmConfirmationFragment(SendEvmConfirmationFragment.Input(
+            SendEvmConfirmationPage(SendEvmConfirmationPage.Input(
                 sendData = it,
                 blockchainType = blockchainType,
                 sendEntryPointDestId = sendEntryPointDestId

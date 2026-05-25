@@ -34,7 +34,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.modules.market.earn.vault.VaultFragment
+import io.horizontalsystems.bankwallet.modules.market.earn.vault.VaultPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -112,7 +112,7 @@ fun MarketEarnScreen(
                             blurredItems = uiState.blurredItems,
                             scrollToTop = scrollToTopAfterUpdate,
                             onCoinClick = { viewItem ->
-                                val input = VaultFragment.Input(
+                                val input = VaultPage.Input(
                                     rank = viewItem.rank,
                                     address = viewItem.address,
                                     name = viewItem.name,
@@ -125,7 +125,7 @@ fun MarketEarnScreen(
                                     assetLogo = viewItem.assetLogo
                                 )
                                 navController.paidAction(TokenInsights) {
-                                    navController.slideFromRight(VaultFragment(input))
+                                    navController.slideFromRight(VaultPage(input))
                                 }
                             },
                             onGetPremiumClick = {
@@ -164,10 +164,10 @@ fun MarketEarnScreen(
                                             },
                                         )
                                         HSpacer(width = 12.dp)
-                                        val forResult = navController.slideFromRightForResult<VaultBlockchainsSelectorFragment.Result>(
+                                        val forResult = navController.slideFromRightForResult<VaultBlockchainsSelectorPage.Result>(
                                             {
-                                                VaultBlockchainsSelectorFragment(
-                                                    VaultBlockchainsSelectorFragment.Input(
+                                                VaultBlockchainsSelectorPage(
+                                                    VaultBlockchainsSelectorPage.Input(
                                                         uiState.selectedBlockchains,
                                                         uiState.blockchains
                                                     )

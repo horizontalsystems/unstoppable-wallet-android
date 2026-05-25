@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.eip20revoke.Eip20RevokeConfirmFragment
+import io.horizontalsystems.bankwallet.modules.eip20revoke.Eip20RevokeConfirmPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -28,10 +28,10 @@ class ActionRevoke(
 
     @Composable
     override fun executor(navController: HSNavigation, onActionCompleted: () -> Unit): () -> Unit {
-        return navController.slideFromBottomForResult<Eip20RevokeConfirmFragment.Result>(
+        return navController.slideFromBottomForResult<Eip20RevokeConfirmPage.Result>(
             {
-                Eip20RevokeConfirmFragment(
-                    Eip20RevokeConfirmFragment.Input(token, spenderAddress, allowance)
+                Eip20RevokeConfirmPage(
+                    Eip20RevokeConfirmPage.Input(token, spenderAddress, allowance)
                 )
             }
         ) {

@@ -45,16 +45,16 @@ import io.horizontalsystems.bankwallet.modules.balance.LockedValue
 import io.horizontalsystems.bankwallet.modules.balance.StellarLockedValue
 import io.horizontalsystems.bankwallet.modules.balance.ZcashLockedValue
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceActionButton
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinPage
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapFragment
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveFragment
-import io.horizontalsystems.bankwallet.modules.receive.ZcashAddressTypeSelectFragment
-import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
-import io.horizontalsystems.bankwallet.modules.send.zcash.shield.ShieldZcashFragment
+import io.horizontalsystems.bankwallet.modules.receive.ReceivePage
+import io.horizontalsystems.bankwallet.modules.receive.ZcashAddressTypeSelectPage
+import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressPage
+import io.horizontalsystems.bankwallet.modules.send.zcash.shield.ShieldZcashPage
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoFragment
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoPage
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.transactionList
@@ -179,9 +179,9 @@ fun TokenBalanceScreen(
                         title = TranslatableString.ResString(R.string.Coin_Info),
                         onClick = {
                             val coinUid = uiState.balanceViewItem.wallet.coin.uid
-                            val arguments = CoinFragment.Input(coinUid)
+                            val arguments = CoinPage.Input(coinUid)
 
-                            navController.slideFromRight(CoinFragment(arguments))
+                            navController.slideFromRight(CoinPage(arguments))
 
                             stat(
                                 page = StatPage.TokenPage,
@@ -198,11 +198,11 @@ fun TokenBalanceScreen(
                 val wallet = viewModel.getWalletForReceive()
                 if (wallet.token.blockchainType == BlockchainType.Zcash) {
                     navController.slideFromRight(
-                        ZcashAddressTypeSelectFragment(ZcashAddressTypeSelectFragment.Input(wallet))
+                        ZcashAddressTypeSelectPage(ZcashAddressTypeSelectPage.Input(wallet))
                     )
                 } else {
                     navController.slideFromRight(
-                        ReceiveFragment(ReceiveFragment.Input(wallet))
+                        ReceivePage(ReceivePage.Input(wallet))
                     )
                 }
 
@@ -244,7 +244,7 @@ fun TokenBalanceScreen(
                             birthdayHeight = birthdayHeight,
                             onClick = {
                                 navController.slideFromRight(
-                                    EnterBirthdayHeightFragment(EnterBirthdayHeightFragment.Input(
+                                    EnterBirthdayHeightPage(EnterBirthdayHeightPage.Input(
                                         blockchainType = balanceViewItem.wallet.token.blockchainType,
                                         account = balanceViewItem.wallet.account,
                                         currentBirthdayHeight = birthdayHeight
@@ -321,7 +321,7 @@ fun TokenBalanceScreen(
                             bottomSheetState.hide()
                             bottomSheetContent = null
                             navController.slideFromRight(
-                                ShieldZcashFragment(ShieldZcashFragment.Input(wallet, TokenBalanceFragment::class))
+                                ShieldZcashPage(ShieldZcashPage.Input(wallet, TokenBalancePage::class))
                             )
                         }
                     },
@@ -366,7 +366,7 @@ fun TokenBalanceScreen(
                     try {
                         val wallet = viewModel.getWalletForTronReceive()
                         navController.slideFromRight(
-                            ReceiveFragment(ReceiveFragment.Input(wallet))
+                            ReceivePage(ReceivePage.Input(wallet))
                         )
                     } catch (e: BackupRequiredError) {
                         val text = Translator.getString(
@@ -414,7 +414,7 @@ private fun onTransactionClick(
     val transactionItem = tokenBalanceViewModel.getTransactionItem(transactionViewItem) ?: return
     transactionsViewModel.tmpTransactionRecordToShow = transactionItem.record
 
-    navController.slideFromBottom(TransactionInfoFragment)
+    navController.slideFromBottom(TransactionInfoPage)
 
     stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.TransactionInfo))
 }
@@ -802,9 +802,9 @@ private fun ButtonsRow(
             enabled = !viewItem.wallet.token.isCustom,
             onClick = {
                 val coinUid = viewItem.wallet.coin.uid
-                val arguments = CoinFragment.Input(coinUid)
+                val arguments = CoinPage.Input(coinUid)
 
-                navController.slideFromRight(CoinFragment(arguments))
+                navController.slideFromRight(CoinPage(arguments))
 
                 stat(page = StatPage.TokenPage, event = StatEvent.OpenCoin(coinUid))
             },
@@ -825,7 +825,7 @@ private fun ButtonsRow(
                     viewItem.wallet.token.fullCoin.coin.code
                 )
                 navController.slideFromRight(
-                    EnterAddressFragment(EnterAddressFragment.Input(
+                    EnterAddressPage(EnterAddressPage.Input(
                         wallet = viewItem.wallet,
                         title = sendTitle
                     ))
@@ -843,7 +843,7 @@ private fun ButtonsRow(
                 icon = R.drawable.ic_swap_circle_24,
                 title = stringResource(R.string.Swap),
                 onClick = {
-                    navController.slideFromRight(SwapFragment(SwapFragment.Input(tokenIn = viewItem.wallet.token)))
+                    navController.slideFromRight(SwapPage(SwapPage.Input(tokenIn = viewItem.wallet.token)))
 
                     stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.Swap))
                 },

@@ -52,7 +52,7 @@ fun Nav3() {
     val backStack = rememberSerializable(
         serializer = NavBackStackSerializer(elementSerializer = NavKeySerializer())
     ) {
-        NavBackStack<HSScreen>(EntryScreen)
+        NavBackStack<HSPage>(EntryScreen)
     }
 
     val hsNavigation = remember { HSNavigation(backStack) }
@@ -66,8 +66,8 @@ fun Nav3() {
     val activity = LocalActivity.current
 
     Box {
-        val eventBusNavEntryDecorator = rememberResultEventBusNavEntryDecorator<HSScreen>()
-        val bottomSheetStrategy = remember { BottomSheetSceneStrategy<HSScreen>() }
+        val eventBusNavEntryDecorator = rememberResultEventBusNavEntryDecorator<HSPage>()
+        val bottomSheetStrategy = remember { BottomSheetSceneStrategy<HSPage>() }
         NavDisplay(
             modifier = Modifier.fillMaxSize(),
             entryDecorators = listOf(

@@ -14,8 +14,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.pin.EditPinFragment
-import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
+import io.horizontalsystems.bankwallet.modules.pin.EditPinPage
+import io.horizontalsystems.bankwallet.modules.pin.SetPinPage
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -41,7 +41,7 @@ fun PasscodeBlock(
             .background(ComposeAppTheme.colors.lawrence)
     ) {
         val authorizedActionEditPin = navController.authorizedAction {
-            navController.slideFromRight(EditPinFragment)
+            navController.slideFromRight(EditPinPage)
         }
         CellPrimary(
             middle = {
@@ -59,7 +59,7 @@ fun PasscodeBlock(
                 )
             },
             onClick = {
-                if (!uiState.pinEnabled) navController.slideFromRight(SetPinFragment())
+                if (!uiState.pinEnabled) navController.slideFromRight(SetPinPage())
                 else authorizedActionEditPin()
             }
         )

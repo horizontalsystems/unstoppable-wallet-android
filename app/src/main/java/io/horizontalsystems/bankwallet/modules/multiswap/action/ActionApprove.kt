@@ -3,8 +3,8 @@ package io.horizontalsystems.bankwallet.modules.multiswap.action
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.eip20approve.Eip20ApproveConfirmFragment
-import io.horizontalsystems.bankwallet.modules.eip20approve.Eip20ApproveFragment
+import io.horizontalsystems.bankwallet.modules.eip20approve.Eip20ApproveConfirmPage
+import io.horizontalsystems.bankwallet.modules.eip20approve.Eip20ApprovePage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -24,14 +24,14 @@ class ActionApprove(
 
     @Composable
     override fun executor(navController: HSNavigation, onActionCompleted: () -> Unit): () -> Unit {
-        val approveData = Eip20ApproveFragment.Input(
+        val approveData = Eip20ApprovePage.Input(
             tokenIn,
             requiredAllowance,
             spenderAddress
         )
 
-        return navController.slideFromBottomForResult<Eip20ApproveConfirmFragment.Result>(
-            { Eip20ApproveFragment(approveData) }
+        return navController.slideFromBottomForResult<Eip20ApproveConfirmPage.Result>(
+            { Eip20ApprovePage(approveData) }
         ) {
             onActionCompleted.invoke()
         }

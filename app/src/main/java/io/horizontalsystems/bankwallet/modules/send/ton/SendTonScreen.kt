@@ -22,9 +22,9 @@ import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
-import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.send.SendConfirmationPage
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -38,7 +38,7 @@ fun SendTonScreen(
     navController: HSNavigation,
     viewModel: SendTonViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: KClass<out HSScreen>,
+    sendEntryPointDestId: KClass<out HSPage>,
     amount: BigDecimal?,
     riskyAddress: Boolean
 ) {
@@ -159,11 +159,11 @@ fun SendTonScreen(
 
 private fun openConfirm(
     navController: HSNavigation,
-    sendEntryPointDestId: KClass<out HSScreen>
+    sendEntryPointDestId: KClass<out HSPage>
 ) {
     navController.slideFromRight(
-        SendConfirmationFragment(SendConfirmationFragment.Input(
-            SendConfirmationFragment.Type.Ton,
+        SendConfirmationPage(SendConfirmationPage.Input(
+            SendConfirmationPage.Type.Ton,
             sendEntryPointDestId
         ))
     )

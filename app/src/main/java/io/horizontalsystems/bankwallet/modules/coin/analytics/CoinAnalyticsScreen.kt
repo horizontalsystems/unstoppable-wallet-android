@@ -30,17 +30,17 @@ import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsContai
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsContentNumber
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsFooterCell
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.TechnicalAdviceBlock
-import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment
-import io.horizontalsystems.bankwallet.modules.coin.detectors.DetectorsFragment
-import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
-import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
+import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsPage
+import io.horizontalsystems.bankwallet.modules.coin.detectors.DetectorsPage
+import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsPage
+import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersPage
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.modules.coin.ranks.CoinRankFragment
-import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
-import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesFragment
-import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment
-import io.horizontalsystems.bankwallet.modules.info.OverallScoreInfoFragment
-import io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment
+import io.horizontalsystems.bankwallet.modules.coin.ranks.CoinRankPage
+import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsPage
+import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesPage
+import io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoPage
+import io.horizontalsystems.bankwallet.modules.info.OverallScoreInfoPage
+import io.horizontalsystems.bankwallet.modules.market.tvl.TvlPage
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment.Input
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -153,7 +153,7 @@ private fun AnalyticsBlock(
                     isPreview = false,
                     onInfoClick = block.info?.let { info ->
                         {
-                            navController.slideFromRight(CoinAnalyticsInfoFragment(info))
+                            navController.slideFromRight(CoinAnalyticsInfoPage(info))
                         }
                     }
                 )
@@ -289,7 +289,7 @@ private fun AnalyticsPreviewBlock(
                     isPreview = true,
                     onInfoClick = block.info?.let { info ->
                         {
-                            navController.slideFromRight(CoinAnalyticsInfoFragment(info))
+                            navController.slideFromRight(CoinAnalyticsInfoPage(info))
                         }
                     }
                 )
@@ -378,44 +378,44 @@ private fun handleActionClick(
     when (action) {
         is CoinAnalyticsModule.ActionType.OpenTokenHolders -> {
             navController.slideFromBottom(
-                CoinMajorHoldersFragment(CoinMajorHoldersFragment.Input(action.coin.uid, action.blockchain))
+                CoinMajorHoldersPage(CoinMajorHoldersPage.Input(action.coin.uid, action.blockchain))
             )
         }
 
         is CoinAnalyticsModule.ActionType.OpenAudits -> {
-            val arguments = CoinAuditsFragment.Input(action.audits)
-            navController.slideFromRight(CoinAuditsFragment(arguments))
+            val arguments = CoinAuditsPage.Input(action.audits)
+            navController.slideFromRight(CoinAuditsPage(arguments))
         }
 
         is CoinAnalyticsModule.ActionType.OpenTreasuries -> {
-            navController.slideFromRight(CoinTreasuriesFragment(action.coin))
+            navController.slideFromRight(CoinTreasuriesPage(action.coin))
         }
 
         is CoinAnalyticsModule.ActionType.OpenReports -> {
-            val arguments = CoinReportsFragment.Input(action.coinUid)
-            navController.slideFromRight(CoinReportsFragment(arguments))
+            val arguments = CoinReportsPage.Input(action.coinUid)
+            navController.slideFromRight(CoinReportsPage(arguments))
         }
 
         is CoinAnalyticsModule.ActionType.OpenInvestors -> {
-            val arguments = CoinInvestmentsFragment.Input(action.coinUid)
-            navController.slideFromRight(CoinInvestmentsFragment(arguments))
+            val arguments = CoinInvestmentsPage.Input(action.coinUid)
+            navController.slideFromRight(CoinInvestmentsPage(arguments))
         }
 
         is CoinAnalyticsModule.ActionType.OpenRank -> {
-            navController.slideFromBottom(CoinRankFragment(action.type))
+            navController.slideFromBottom(CoinRankPage(action.type))
         }
 
         is CoinAnalyticsModule.ActionType.OpenOverallScoreInfo -> {
-            navController.slideFromRight(OverallScoreInfoFragment(action.scoreCategory))
+            navController.slideFromRight(OverallScoreInfoPage(action.scoreCategory))
         }
 
         CoinAnalyticsModule.ActionType.OpenTvl -> {
-            navController.slideFromBottom(TvlFragment)
+            navController.slideFromBottom(TvlPage)
         }
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {
-            val params = DetectorsFragment.Input(action.title, action.issues)
-            navController.slideFromRight(DetectorsFragment(params))
+            val params = DetectorsPage.Input(action.title, action.issues)
+            navController.slideFromRight(DetectorsPage(params))
         }
     }
 }

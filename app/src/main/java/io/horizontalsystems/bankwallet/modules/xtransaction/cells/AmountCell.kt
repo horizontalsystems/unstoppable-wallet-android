@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.TransactionValue
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.TransactionInfoHelper
 import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.coinAmountString
@@ -114,7 +114,7 @@ fun AmountCellTV(
         ),
         onClick = {
             navController.slideFromRight(
-                CoinFragment(CoinFragment.Input(transactionValue.coinUid))
+                CoinPage(CoinPage.Input(transactionValue.coinUid))
             )
 
             stat(

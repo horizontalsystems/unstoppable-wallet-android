@@ -11,7 +11,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -24,7 +24,7 @@ import kotlinx.serialization.Serializable
 data object ProUsersActivateDialog : BaseComposableBottomSheetFragment() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val authorizationViewModel  = navController.viewModelForScreen<YakAuthorizationViewModel>(CoinFragment::class)
+        val authorizationViewModel  = navController.viewModelForScreen<YakAuthorizationViewModel>(CoinPage::class)
         ProUsersActivateScreen(
             { navController.removeLastOrNull() },
             { authorizationViewModel.onActivateClick() }

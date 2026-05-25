@@ -1,0 +1,175 @@
+package io.horizontalsystems.bankwallet.modules.coin
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statTab
+import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsScreen
+import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabItem
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTop
+import io.horizontalsystems.bankwallet.uiv3.components.tabs.TabsTopType
+import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class CoinPage(val input: Input) : HSPage() {
+
+    @Composable
+    override fun GetContent(navController: HSNavigation) {
+        CoinScreen(
+            input.coinUid,
+            viewModel(factory = CoinModule.Factory(input.coinUid)),
+            navController
+        )
+    }
+
+    @Serializable
+    data class Input(val coinUid: String)
+}
+
+@Composable
+fun CoinScreen(
+    coinUid: String,
+    coinViewModel: CoinViewModel?,
+    navController: HSNavigation
+) {
+    if (coinViewModel != null) {
+        CoinTabs(coinViewModel, navController)
+    } else {
+        CoinNotFound(coinUid, navController)
+    }
+}
+
+@Composable
+fun CoinTabs(
+    viewModel: CoinViewModel,
+    navController: HSNavigation
+) {
+    val tabs = viewModel.tabs
+    val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
+    val coroutineScope = rememberCoroutineScope()
+    val view = LocalView.current
+
+    HSScaffold(
+        title = viewModel.fullCoin.coin.code,
+        onBack = navController::removeLastOrNull,
+        menuItems = buildList {
+            if (viewModel.isWatchlistEnabled) {
+                if (viewModel.isFavorite) {
+                    add(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
+                            icon = R.drawable.ic_heart_filled_24,
+                            tint = ComposeAppTheme.colors.jacob,
+                            onClick = {
+                                viewModel.onUnfavoriteClick()
+
+                                stat(
+                                    page = StatPage.CoinPage,
+                                    event = StatEvent.RemoveFromWatchlist(viewModel.fullCoin.coin.uid)
+                                )
+                            }
+                        )
+                    )
+                } else {
+                    add(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.CoinPage_Favorite),
+                            icon = R.drawable.ic_heart_24,
+                            tint = ComposeAppTheme.colors.grey,
+                            onClick = {
+                                viewModel.onFavoriteClick()
+
+                                stat(
+                                    page = StatPage.CoinPage,
+                                    event = StatEvent.AddToWatchlist(viewModel.fullCoin.coin.uid)
+                                )
+                            }
+                        )
+                    )
+                }
+            }
+        }
+    ) {
+        Column(
+            modifier = Modifier.navigationBarsPadding()
+        ) {
+            val selectedTab = tabs[pagerState.currentPage]
+            val tabItems = tabs.map {
+                TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+            }
+            TabsTop(TabsTopType.Fitted, tabItems) { tab ->
+                coroutineScope.launch {
+                    pagerState.scrollToPage(tab.ordinal)
+
+                    stat(page = StatPage.CoinPage, event = StatEvent.SwitchTab(tab.statTab))
+                }
+            }
+
+            HorizontalPager(
+                state = pagerState,
+                userScrollEnabled = false
+            ) { page ->
+                when (tabs[page]) {
+                    CoinModule.Tab.Overview -> {
+                        CoinOverviewScreen(
+                            fullCoin = viewModel.fullCoin,
+                            navController = navController
+                        )
+                    }
+
+                    CoinModule.Tab.Market -> {
+                        CoinMarketsScreen(fullCoin = viewModel.fullCoin)
+                    }
+
+                    CoinModule.Tab.Details -> {
+                        CoinAnalyticsScreen(
+                            fullCoin = viewModel.fullCoin,
+                            navController = navController
+                        )
+                    }
+                }
+            }
+
+            viewModel.successMessage?.let {
+                HudHelper.showSuccessMessage(view, it)
+
+                viewModel.onSuccessMessageShown()
+            }
+        }
+    }
+}
+
+@Composable
+fun CoinNotFound(coinUid: String, navController: HSNavigation) {
+    HSScaffold(
+        title = coinUid,
+        onBack = navController::removeLastOrNull,
+    ) {
+        ListEmptyView(
+            text = stringResource(R.string.CoinPage_CoinNotFound, coinUid),
+            icon = R.drawable.ic_not_available
+        )
+    }
+}

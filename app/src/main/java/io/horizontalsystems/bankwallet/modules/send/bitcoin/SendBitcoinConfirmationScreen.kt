@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stringResId
 import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.cell.hs
@@ -21,7 +21,7 @@ import kotlin.reflect.KClass
 fun SendBitcoinConfirmationScreen(
     navController: HSNavigation,
     sendViewModel: SendBitcoinViewModel,
-    sendEntryPointDestId: KClass<out HSScreen>
+    sendEntryPointDestId: KClass<out HSPage>
 ) {
     var confirmationData by remember { mutableStateOf(sendViewModel.getConfirmationData()) }
     var refresh by remember { mutableStateOf(false) }

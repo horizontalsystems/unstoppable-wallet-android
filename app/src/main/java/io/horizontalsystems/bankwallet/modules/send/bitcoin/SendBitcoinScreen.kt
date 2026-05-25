@@ -35,10 +35,10 @@ import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
-import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
-import io.horizontalsystems.bankwallet.modules.send.SendFragment
+import io.horizontalsystems.bankwallet.modules.send.SendConfirmationPage
+import io.horizontalsystems.bankwallet.modules.send.SendPage
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScreen
@@ -58,11 +58,11 @@ import java.math.BigDecimal
 import kotlin.reflect.KClass
 
 @Serializable
-data object SendBtcAdvancedSettingsPage : HSScreen() {
+data object SendBtcAdvancedSettingsPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendFragment::class)
-        val amountInputModeViewModel = navController.viewModelForScreen<AmountInputModeViewModel>(SendFragment::class)
+        val viewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
+        val amountInputModeViewModel = navController.viewModelForScreen<AmountInputModeViewModel>(SendPage::class)
         SendBtcAdvancedSettingsScreen(
             fragmentNavController = navController,
             sendBitcoinViewModel = viewModel,
@@ -71,17 +71,17 @@ data object SendBtcAdvancedSettingsPage : HSScreen() {
     }
 }
 
-data object TransactionInputsSortInfoPage : HSScreen() {
+data object TransactionInputsSortInfoPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         BtcTransactionInputSortInfoScreen { navController.removeLastOrNull() }
     }
 }
 
-data object UtxoExpertModePage : HSScreen() {
+data object UtxoExpertModePage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendFragment::class)
+        val viewModel = navController.viewModelForScreen<SendBitcoinViewModel>(SendPage::class)
         UtxoExpertModeScreen(
             adapter = viewModel.adapter,
             token = viewModel.wallet.token,
@@ -102,7 +102,7 @@ fun SendBitcoinScreen(
     fragmentNavController: HSNavigation,
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: KClass<out HSScreen>,
+    sendEntryPointDestId: KClass<out HSPage>,
     amount: BigDecimal?,
     riskyAddress: Boolean,
 ) {
@@ -264,11 +264,11 @@ fun SendBitcoinScreen(
 
 private fun openConfirm(
     fragmentNavController: HSNavigation,
-    sendEntryPointDestId: KClass<out HSScreen>
+    sendEntryPointDestId: KClass<out HSPage>
 ) {
     fragmentNavController.slideFromRight(
-        SendConfirmationFragment(SendConfirmationFragment.Input(
-            SendConfirmationFragment.Type.Bitcoin,
+        SendConfirmationPage(SendConfirmationPage.Input(
+            SendConfirmationPage.Type.Bitcoin,
             sendEntryPointDestId
         ))
     )

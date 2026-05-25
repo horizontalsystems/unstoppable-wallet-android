@@ -14,8 +14,8 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalFragment
-import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyFragment
+import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalPage
+import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
@@ -55,7 +55,7 @@ fun BackupRequiredScreen(navController: HSNavigation, account: Account, text: St
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         navController.slideFromBottom(
-                            BackupKeyFragment(account)
+                            BackupKeyPage(account)
                         )
 
                         stat(
@@ -69,7 +69,7 @@ fun BackupRequiredScreen(navController: HSNavigation, account: Account, text: St
                     modifier = Modifier.fillMaxWidth(),
                     variant = ButtonVariant.Secondary,
                     onClick = {
-                        navController.slideFromBottom(BackupLocalFragment(account))
+                        navController.slideFromBottom(BackupLocalPage(account))
 
                         stat(
                             page = StatPage.BackupRequired,

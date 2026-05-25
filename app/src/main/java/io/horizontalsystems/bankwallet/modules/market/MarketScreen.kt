@@ -34,19 +34,19 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statPage
 import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinPage
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.Tab
 import io.horizontalsystems.bankwallet.modules.market.earn.MarketEarnScreen
-import io.horizontalsystems.bankwallet.modules.market.etf.EtfFragment
+import io.horizontalsystems.bankwallet.modules.market.etf.EtfPage
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesScreen
-import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageFragment
+import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPage
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
-import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment
+import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchPage
 import io.horizontalsystems.bankwallet.modules.market.topcoins.TopCoins
 import io.horizontalsystems.bankwallet.modules.market.toppairs.TopPairsScreen
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatforms
 import io.horizontalsystems.bankwallet.modules.market.topsectors.TopSectorsScreen
-import io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment
+import io.horizontalsystems.bankwallet.modules.market.tvl.TvlPage
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -81,7 +81,7 @@ fun MarketScreen(
                 icon = R.drawable.ic_search,
                 tint = ComposeAppTheme.colors.grey,
                 onClick = {
-                    navController.slideFromBottom(MarketSearchFragment)
+                    navController.slideFromBottom(MarketSearchPage)
                     stat(
                         page = StatPage.Markets,
                         event = StatEvent.Open(StatPage.MarketSearch)
@@ -297,15 +297,15 @@ private fun RowScope.MarketTotalCard(
 private fun openMetricsPage(metricsType: MetricsType, navController: HSNavigation) {
     when (metricsType) {
         MetricsType.TvlInDefi -> {
-            navController.slideFromBottom(TvlFragment)
+            navController.slideFromBottom(TvlPage)
         }
 
         MetricsType.Etf -> {
-            navController.slideFromBottom(EtfFragment)
+            navController.slideFromBottom(EtfPage)
         }
 
         else -> {
-            navController.slideFromBottom(MetricsPageFragment(metricsType))
+            navController.slideFromBottom(MetricsPage(metricsType))
         }
     }
 
@@ -313,9 +313,9 @@ private fun openMetricsPage(metricsType: MetricsType, navController: HSNavigatio
 }
 
 private fun onCoinClick(coinUid: String, navController: HSNavigation) {
-    val arguments = CoinFragment.Input(coinUid)
+    val arguments = CoinPage.Input(coinUid)
 
-    navController.slideFromRight(CoinFragment(arguments))
+    navController.slideFromRight(CoinPage(arguments))
 
     stat(page = StatPage.Markets, event = StatEvent.OpenCoin(coinUid), section = StatSection.Coins)
 }

@@ -37,20 +37,20 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statResendType
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsPage
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
-import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment
-import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment
-import io.horizontalsystems.bankwallet.modules.info.TransactionStatusInfoFragment
+import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoPage
+import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoPage
+import io.horizontalsystems.bankwallet.modules.info.TransactionStatusInfoPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.transactionInfo.AmountType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.SpeedUpCancelType
-import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
-import io.horizontalsystems.bankwallet.modules.transactionInfo.resendbitcoin.ResendBitcoinFragment
+import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelPage
+import io.horizontalsystems.bankwallet.modules.transactionInfo.resendbitcoin.ResendBitcoinPage
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -311,15 +311,15 @@ fun TransactionInfoAddressCell(
                     val args = when (action) {
                         ContactsModule.AddAddressAction.AddToNewContact -> {
                             onAddToNew?.invoke()
-                            ContactsFragment.Input(Mode.AddAddressToNewContact(blockchainType, value))
+                            ContactsPage.Input(Mode.AddAddressToNewContact(blockchainType, value))
                         }
 
                         ContactsModule.AddAddressAction.AddToExistingContact -> {
                             onAddToExisting?.invoke()
-                            ContactsFragment.Input(Mode.AddAddressToExistingContact(blockchainType, value))
+                            ContactsPage.Input(Mode.AddAddressToExistingContact(blockchainType, value))
                         }
                     }
-                    navController?.slideFromRight(ContactsFragment(args))
+                    navController?.slideFromRight(ContactsPage(args))
                 }
             })
     }
@@ -355,7 +355,7 @@ fun TransactionInfoStatusCell(
         HsIconButton(
             modifier = Modifier.size(20.dp),
             onClick = {
-                navController.slideFromBottom(TransactionStatusInfoFragment)
+                navController.slideFromBottom(TransactionStatusInfoPage)
                 stat(
                     page = StatPage.TransactionInfo,
                     event = StatEvent.Open(StatPage.Info),
@@ -647,7 +647,7 @@ fun TransactionInfoBtcLockCell(
                     val lockTime = DateHelper.getFullDate(lockState.date)
 
                     navController.slideFromBottom(
-                        TransactionLockTimeInfoFragment(TransactionLockTimeInfoFragment.Input(lockTime))
+                        TransactionLockTimeInfoPage(TransactionLockTimeInfoPage.Input(lockTime))
                     )
 
                     stat(
@@ -691,8 +691,8 @@ fun TransactionInfoDoubleSpendCell(
             modifier = Modifier.size(20.dp),
             onClick = {
                 navController.slideFromBottom(
-                    TransactionDoubleSpendInfoFragment(
-                        TransactionDoubleSpendInfoFragment.Input(
+                    TransactionDoubleSpendInfoPage(
+                        TransactionDoubleSpendInfoPage.Input(
                             transactionHash,
                             conflictingHash
                         )
@@ -757,7 +757,7 @@ private fun openTransactionOptionsModule(
         BlockchainType.Litecoin,
         BlockchainType.Dash -> {
             navController.slideFromRight(
-                ResendBitcoinFragment(ResendBitcoinFragment.Input(type))
+                ResendBitcoinPage(ResendBitcoinPage.Input(type))
             )
         }
 
@@ -770,7 +770,7 @@ private fun openTransactionOptionsModule(
         BlockchainType.ZkSync,
         BlockchainType.ArbitrumOne -> {
             navController.slideFromRight(
-                TransactionSpeedUpCancelFragment(TransactionSpeedUpCancelFragment.Input(blockchainType, type, transactionHash))
+                TransactionSpeedUpCancelPage(TransactionSpeedUpCancelPage.Input(blockchainType, type, transactionHash))
             )
         }
 

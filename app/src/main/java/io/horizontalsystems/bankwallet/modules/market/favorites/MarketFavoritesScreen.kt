@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statPeriod
 import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.coin.CoinPage
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -99,8 +99,8 @@ fun MarketFavoritesScreen(
                                 )
                             },
                             onCoinClick = { coinUid ->
-                                val arguments = CoinFragment.Input(coinUid)
-                                navController.slideFromRight(CoinFragment(arguments))
+                                val arguments = CoinPage.Input(coinUid)
+                                navController.slideFromRight(CoinPage(arguments))
 
                                 stat(
                                     page = StatPage.Markets,
@@ -150,8 +150,8 @@ fun MarketFavoritesScreen(
                                             }
                                         )
                                         HSpacer(width = 12.dp)
-                                        val forResult = navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
-                                            { MarketSignalsFragment }
+                                        val forResult = navController.slideFromBottomForResult<MarketSignalsPage.Result>(
+                                            { MarketSignalsPage }
                                         ) {
                                             if (it.enabled) {
                                                 viewModel.showSignals()

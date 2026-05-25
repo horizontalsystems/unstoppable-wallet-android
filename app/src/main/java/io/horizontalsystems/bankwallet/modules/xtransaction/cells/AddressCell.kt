@@ -16,8 +16,8 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsPage
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -96,7 +96,7 @@ fun AddressCell(
                                 event = StatEvent.Open(StatPage.ContactNew),
                                 section = statSection
                             )
-                            ContactsFragment.Input(
+                            ContactsPage.Input(
                                 Mode.AddAddressToNewContact(
                                     blockchainType,
                                     value
@@ -110,7 +110,7 @@ fun AddressCell(
                                 event = StatEvent.Open(StatPage.ContactAddToExisting),
                                 section = statSection
                             )
-                            ContactsFragment.Input(
+                            ContactsPage.Input(
                                 Mode.AddAddressToExistingContact(
                                     blockchainType,
                                     value
@@ -118,7 +118,7 @@ fun AddressCell(
                             )
                         }
                     }
-                    navController?.slideFromRight(ContactsFragment(args))
+                    navController?.slideFromRight(ContactsPage(args))
                 }
             })
     }

@@ -21,9 +21,9 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
-import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.send.SendConfirmationPage
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -38,7 +38,7 @@ fun SendSolanaScreen(
     navController: HSNavigation,
     viewModel: SendSolanaViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: KClass<out HSScreen>,
+    sendEntryPointDestId: KClass<out HSPage>,
     amount: BigDecimal?,
     riskyAddress: Boolean
 ) {
@@ -145,11 +145,11 @@ fun SendSolanaScreen(
 
 private fun openConfirm(
     navController: HSNavigation,
-    sendEntryPointDestId: KClass<out HSScreen>
+    sendEntryPointDestId: KClass<out HSPage>
 ) {
     navController.slideFromRight(
-        SendConfirmationFragment(SendConfirmationFragment.Input(
-            SendConfirmationFragment.Type.Solana,
+        SendConfirmationPage(SendConfirmationPage.Input(
+            SendConfirmationPage.Type.Solana,
             sendEntryPointDestId
         ))
     )

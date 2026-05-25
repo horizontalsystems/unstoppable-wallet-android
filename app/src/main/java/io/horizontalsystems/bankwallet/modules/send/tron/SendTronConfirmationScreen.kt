@@ -36,10 +36,10 @@ import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFeeTemplate
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.send.ConfirmationBottomSection
 import io.horizontalsystems.bankwallet.modules.send.ConfirmationTopSection
-import io.horizontalsystems.bankwallet.modules.send.SendFragment
+import io.horizontalsystems.bankwallet.modules.send.SendPage
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.send.getFormattedFee
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -59,9 +59,9 @@ import kotlin.reflect.KClass
 fun SendTronConfirmationScreen(
     navController: HSNavigation,
     sendViewModel: SendTronViewModel,
-    sendEntryPointDestId: KClass<out HSScreen>?
+    sendEntryPointDestId: KClass<out HSPage>?
 ) {
-    val closeUntilDestId = sendEntryPointDestId ?: SendFragment::class
+    val closeUntilDestId = sendEntryPointDestId ?: SendPage::class
     val confirmationData = sendViewModel.confirmationData ?: return
 
     val uiState = sendViewModel.uiState

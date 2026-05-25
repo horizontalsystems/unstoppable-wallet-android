@@ -10,8 +10,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.main.MainScreenWithRootedDeviceCheck
-import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewFragment
-import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectSendRequestFragment
+import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewPage
+import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectSendRequestPage
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import kotlinx.coroutines.delay
@@ -27,13 +27,13 @@ fun MainScreen(navController: HSNavigation, parentScreenContentKey: String) {
     val tcSendRequest by mainActivityViewModel.tcSendRequest.observeAsState()
     LaunchedEffect(tcSendRequest) {
         if (tcSendRequest != null) {
-            navController.slideFromBottom(TonConnectSendRequestFragment)
+            navController.slideFromBottom(TonConnectSendRequestPage)
         }
     }
 
     val tcDappRequest by mainActivityViewModel.tcDappRequest.observeAsState()
     val uuid = rememberSaveable { UUID.randomUUID().toString() }
-    ResultEffect<TonConnectNewFragment.Result>(resultKeyUuid = uuid) { result ->
+    ResultEffect<TonConnectNewPage.Result>(resultKeyUuid = uuid) { result ->
         if (tcDappRequest?.closeAppOnResult == true) {
             if (result.approved) {
                 //Need delay to get connected before closing activity
@@ -46,7 +46,7 @@ fun MainScreen(navController: HSNavigation, parentScreenContentKey: String) {
     LaunchedEffect(tcDappRequest) {
         val tmpTcDappRequest = tcDappRequest
         if (tmpTcDappRequest != null) {
-            val screen = TonConnectNewFragment(tmpTcDappRequest.dAppRequest)
+            val screen = TonConnectNewPage(tmpTcDappRequest.dAppRequest)
             screen.resultKey = uuid
             navController.slideFromBottom(screen)
             mainActivityViewModel.onTcDappRequestHandled()

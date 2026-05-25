@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.coin.RoiViewItem
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.roi.RoiSelectCoinsFragment
+import io.horizontalsystems.bankwallet.modules.roi.RoiSelectCoinsPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -107,7 +107,7 @@ fun Roi(roi: List<RoiViewItem>, navController: HSNavigation) {
         }
 
         CellUniversal(
-            onClick = { navController.slideFromRight(RoiSelectCoinsFragment) }
+            onClick = { navController.slideFromRight(RoiSelectCoinsPage) }
         ) {
             subhead2_leah(text = stringResource(R.string.CoinPage_ROI_SelectCoins))
             HFillSpacer(16.dp)

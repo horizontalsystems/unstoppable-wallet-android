@@ -57,17 +57,17 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.ReceiveAllowedState
 import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
-import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceFragment
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalancePage
+import io.horizontalsystems.bankwallet.modules.coin.CoinPage
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
-import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsFragment
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapFragment
+import io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsPage
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
-import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinFragment
-import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
-import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
+import io.horizontalsystems.bankwallet.modules.receive.ReceiveChooseCoinPage
+import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressPage
+import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
@@ -214,7 +214,7 @@ fun BalanceItems(
     val navigateToTokenBalance: (BalanceViewItem2) -> Unit = remember {
         {
             navController.slideFromRight(
-                TokenBalanceFragment(it.wallet)
+                TokenBalancePage(it.wallet)
             )
 
             stat(page = StatPage.Balance, event = StatEvent.OpenTokenPage(it.wallet.token))
@@ -297,7 +297,7 @@ fun BalanceItems(
                                 when (val receiveAllowedState =
                                     viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
-                                        navController.slideFromRight(ReceiveChooseCoinFragment)
+                                        navController.slideFromRight(ReceiveChooseCoinPage)
 
                                         stat(
                                             page = StatPage.Balance,
@@ -321,7 +321,7 @@ fun BalanceItems(
                             icon = R.drawable.ic_arrow_up_24,
                             title = stringResource(R.string.Balance_Send),
                             onClick = {
-                                navController.slideFromRight(SendTokenSelectFragment())
+                                navController.slideFromRight(SendTokenSelectPage())
 
                                 stat(
                                     page = StatPage.Balance,
@@ -335,7 +335,7 @@ fun BalanceItems(
                                 icon = R.drawable.ic_swap_circle_24,
                                 title = stringResource(R.string.Swap),
                                 onClick = {
-                                    navController.slideFromRight(SwapFragment())
+                                    navController.slideFromRight(SwapPage())
 
                                     stat(
                                         page = StatPage.Balance,
@@ -418,7 +418,7 @@ fun BalanceItems(
                             icon = painterResource(R.drawable.ic_manage_20),
                             contentDescription = stringResource(R.string.ManageCoins_title),
                             onClick = {
-                                navController.slideFromRight(ManageWalletsFragment)
+                                navController.slideFromRight(ManageWalletsPage)
 
                                 stat(
                                     page = StatPage.Balance,
@@ -491,7 +491,7 @@ fun BalanceItems(
     }
     uiState.openSend?.let { openSend ->
         navController.slideFromRight(
-            SendTokenSelectFragment(SendTokenSelectFragment.Input(
+            SendTokenSelectPage(SendTokenSelectPage.Input(
                 openSend.blockchainTypes,
                 openSend.tokenTypes,
                 openSend.address,
@@ -517,7 +517,7 @@ private fun handleContextMenuClick(
                 balanceViewItem.wallet.token.fullCoin.coin.code
             )
             navController.slideFromRight(
-                EnterAddressFragment(EnterAddressFragment.Input(
+                EnterAddressPage(EnterAddressPage.Input(
                     wallet = balanceViewItem.wallet,
                     title = sendTitle
                 ))
@@ -533,7 +533,7 @@ private fun handleContextMenuClick(
 
         BalanceContextMenuItem.Swap -> {
             navController.slideFromRight(
-                SwapFragment(SwapFragment.Input(tokenIn = balanceViewItem.wallet.token))
+                SwapPage(SwapPage.Input(tokenIn = balanceViewItem.wallet.token))
             )
 
             stat(
@@ -544,9 +544,9 @@ private fun handleContextMenuClick(
 
         BalanceContextMenuItem.CoinInfo -> {
             val coinUid = balanceViewItem.wallet.coin.uid
-            val arguments = CoinFragment.Input(coinUid)
+            val arguments = CoinPage.Input(coinUid)
 
-            navController.slideFromRight(CoinFragment(arguments))
+            navController.slideFromRight(CoinPage(arguments))
 
             stat(
                 page = StatPage.Balance,

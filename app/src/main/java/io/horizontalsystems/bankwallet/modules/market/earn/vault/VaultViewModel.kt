@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 
 class VaultViewModel(
-    input: VaultFragment.Input,
+    input: VaultPage.Input,
 ) : ViewModelUiState<VaultModule.UiState>() {
 
     private var viewState: ViewState = ViewState.Loading
@@ -38,7 +38,7 @@ class VaultViewModel(
 
 object VaultModule {
 
-    class Factory(private val input: VaultFragment.Input) : ViewModelProvider.Factory {
+    class Factory(private val input: VaultPage.Input) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {

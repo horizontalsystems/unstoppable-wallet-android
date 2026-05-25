@@ -14,10 +14,10 @@ import io.horizontalsystems.bankwallet.core.NavigationType
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment
-import io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletFragment
+import io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountPage
+import io.horizontalsystems.bankwallet.modules.importwallet.ImportWalletPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressFragment
+import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
@@ -38,7 +38,7 @@ fun BalanceNoAccount(navController: HSNavigation) {
                 iconTint = ComposeAppTheme.colors.grey,
                 onNewWalletClick = {
                     navController.navigateWithTermsAccepted(
-                        screen = CreateAccountFragment(),
+                        screen = CreateAccountPage(),
                         navigationType = NavigationType.SlideFromRight,
                         statPageFrom = StatPage.Balance,
                         statPageTo = StatPage.NewWallet
@@ -46,14 +46,14 @@ fun BalanceNoAccount(navController: HSNavigation) {
                 },
                 onWalletRestoreClick = {
                     navController.navigateWithTermsAccepted(
-                        screen = ImportWalletFragment(),
+                        screen = ImportWalletPage(),
                         navigationType = NavigationType.SlideFromRight,
                         statPageFrom = StatPage.Balance,
                         statPageTo = StatPage.ImportWallet
                     )
                 },
                 onWatchWalletClick = {
-                    navController.slideFromRight(WatchAddressFragment())
+                    navController.slideFromRight(WatchAddressPage())
 
                     stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.WatchWallet))
                 }

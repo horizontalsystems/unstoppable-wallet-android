@@ -52,8 +52,8 @@ fun CreatePasskeyNotSupportedScreen(navController: HSNavigation) {
                 variant = ButtonVariant.Secondary,
                 title = stringResource(R.string.CreateNewWallet_Button_CreateStandardWallet)
             ) {
-                navController.removeLastUntil(CreateAccountFragment::class, false)
-                navController.slideFromRight(CreateAccountStandardFragment(null))
+                navController.removeLastUntil(CreateAccountPage::class, false)
+                navController.slideFromRight(CreateAccountStandardPage(null))
             }
         }
     }

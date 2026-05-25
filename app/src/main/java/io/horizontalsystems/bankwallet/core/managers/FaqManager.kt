@@ -9,7 +9,7 @@ import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Faq
 import io.horizontalsystems.bankwallet.entities.FaqMap
-import io.horizontalsystems.bankwallet.modules.markdown.MarkdownFragment
+import io.horizontalsystems.bankwallet.modules.markdown.MarkdownPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.reactivex.Single
 import okhttp3.OkHttpClient
@@ -37,7 +37,7 @@ object FaqManager {
 
     fun showFaqPage(navController: HSNavigation, path: String, language: String = "en") {
         navController.slideFromBottom(
-            MarkdownFragment(MarkdownFragment.Input(getFaqUrl(path, language), true, true))
+            MarkdownPage(MarkdownPage.Input(getFaqUrl(path, language), true, true))
         )
     }
 

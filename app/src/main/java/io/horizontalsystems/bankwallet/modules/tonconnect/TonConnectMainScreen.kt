@@ -57,7 +57,7 @@ fun TonConnectMainScreen(navController: HSNavigation, deepLinkUri: String?) {
     val dAppRequestEntity = uiState.dAppRequestEntity
     LaunchedEffect(dAppRequestEntity) {
         if (dAppRequestEntity != null) {
-            navController.slideFromBottom(TonConnectNewFragment(dAppRequestEntity))
+            navController.slideFromBottom(TonConnectNewPage(dAppRequestEntity))
             viewModel.onDappRequestHandled()
         }
     }

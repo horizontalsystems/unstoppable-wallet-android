@@ -12,11 +12,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsFragment
-import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkFragment
-import io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkFragment
+import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsPage
+import io.horizontalsystems.bankwallet.modules.evmnetwork.EvmNetworkPage
+import io.horizontalsystems.bankwallet.modules.moneronetwork.MoneroNetworkPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.zanonetwork.ZanoNetworkFragment
+import io.horizontalsystems.bankwallet.modules.zanonetwork.ZanoNetworkPage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.extensions.BaseComposableBottomSheetFragment
 import io.horizontalsystems.bankwallet.uiv3.components.bottomsheet.BottomSheetContent
@@ -82,22 +82,22 @@ private fun SyncErrorScreen(navController: HSNavigation, wallet: Wallet) {
                             when (blockchainWrapper) {
                                 is SyncErrorModule.BlockchainWrapper.Bitcoin -> {
                                     navController.slideFromBottom(
-                                        BtcBlockchainSettingsFragment(blockchainWrapper.blockchain),
+                                        BtcBlockchainSettingsPage(blockchainWrapper.blockchain),
                                     )
                                 }
 
                                 is SyncErrorModule.BlockchainWrapper.Evm -> {
                                     navController.slideFromBottom(
-                                        EvmNetworkFragment(blockchainWrapper.blockchain)
+                                        EvmNetworkPage(blockchainWrapper.blockchain)
                                     )
                                 }
 
                                 SyncErrorModule.BlockchainWrapper.Monero -> {
-                                    navController.slideFromBottom(MoneroNetworkFragment)
+                                    navController.slideFromBottom(MoneroNetworkPage)
                                 }
 
                                 SyncErrorModule.BlockchainWrapper.Zano -> {
-                                    navController.slideFromBottom(ZanoNetworkFragment)
+                                    navController.slideFromBottom(ZanoNetworkPage)
                                 }
 
                                 else -> {}

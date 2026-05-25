@@ -13,7 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HsDivider
@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import kotlin.reflect.KClass
 
 @Composable
-fun ReceiveMoneroScreen(navController: HSNavigation, wallet: Wallet, receiveEntryPointDestId: KClass<out HSScreen>?) {
+fun ReceiveMoneroScreen(navController: HSNavigation, wallet: Wallet, receiveEntryPointDestId: KClass<out HSPage>?) {
     val addressViewModel = viewModel<ReceiveMoneroAddressViewModel>(factory = ReceiveMoneroAddressViewModel.Factory(wallet))
 
     val uiState = addressViewModel.uiState
@@ -38,7 +38,7 @@ fun ReceiveMoneroScreen(navController: HSNavigation, wallet: Wallet, receiveEntr
                     modifier = Modifier.height(52.dp),
                     onClick = {
                         navController.slideFromRight(
-                            MoneroSubaddressesFragment(SubaddressesParams(uiState.subaddresses))
+                            MoneroSubaddressesPage(SubaddressesParams(uiState.subaddresses))
                         )
                     }
                 ) {

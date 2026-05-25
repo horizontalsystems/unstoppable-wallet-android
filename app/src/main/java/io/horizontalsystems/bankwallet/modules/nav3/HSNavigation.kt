@@ -10,24 +10,24 @@ import io.horizontalsystems.bankwallet.core.NavigationType
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
-import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
+import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinPage
+import io.horizontalsystems.bankwallet.modules.pin.SetPinPage
 import io.horizontalsystems.bankwallet.modules.premium.DefenseSystemFeatureDialog
 import io.horizontalsystems.bankwallet.modules.premium.PremiumFeature
-import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
+import io.horizontalsystems.bankwallet.modules.settings.terms.TermsPage
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import java.util.UUID
 import kotlin.reflect.KClass
 
-class HSNavigation(val backStack: NavBackStack<HSScreen>) {
+class HSNavigation(val backStack: NavBackStack<HSPage>) {
 
-    fun slideFromRight(screen: HSScreen) {
+    fun slideFromRight(screen: HSPage) {
         screen.navType = NavigationType.SlideFromRight
         backStack.add(screen)
     }
 
-    fun slideFromBottom(screen: HSScreen) {
+    fun slideFromBottom(screen: HSPage) {
         screen.navType = NavigationType.SlideFromBottom
         backStack.add(screen)
     }
@@ -37,13 +37,13 @@ class HSNavigation(val backStack: NavBackStack<HSScreen>) {
     }
 
     fun navigateWithTermsAccepted(
-        screen: HSScreen,
+        screen: HSPage,
         navigationType: NavigationType,
         statPageFrom: StatPage,
         statPageTo: StatPage
     ) {
         if (!App.termsManager.allTermsAccepted) {
-            slideFromBottom(TermsFragment(screen, statPageFrom, statPageTo, navigationType))
+            slideFromBottom(TermsPage(screen, statPageFrom, statPageTo, navigationType))
         } else {
             when (navigationType) {
                 NavigationType.SlideFromBottom -> slideFromBottom(screen)
@@ -54,29 +54,7 @@ class HSNavigation(val backStack: NavBackStack<HSScreen>) {
     }
 
     @Composable
-    fun authorizedAction(action: () -> Unit): () -> Unit {
-        val uuid = rememberSaveable { UUID.randomUUID().toString() }
-        ResultEffect<ConfirmPinFragment.Result>(resultKeyUuid = uuid) {
-            if (it.success) {
-                action.invoke()
-            }
-        }
-
-        return if (App.pinComponent.isPinSet) {
-            {
-                val screen = ConfirmPinFragment
-                screen.resultKey = uuid
-                add(screen)
-            }
-        } else {
-            {
-                action.invoke()
-            }
-        }
-    }
-
-    @Composable
-    inline fun <reified VM : ViewModel> viewModelForScreen(klass: KClass<out HSScreen>) : VM {
+    inline fun <reified VM : ViewModel> viewModelForScreen(klass: KClass<out HSPage>) : VM {
         return viewModelForScreen(klass.simpleName ?: "HSScreen")
     }
 
@@ -87,12 +65,12 @@ class HSNavigation(val backStack: NavBackStack<HSScreen>) {
         )
     }
 
-    fun add(element: HSScreen): Boolean {
+    fun add(element: HSPage): Boolean {
         return backStack.add(element)
     }
 
 
-    fun removeLastUntil(klass: KClass<out HSScreen>, inclusive: Boolean) {
+    fun removeLastUntil(klass: KClass<out HSPage>, inclusive: Boolean) {
         val index = backStack.indexOfLast { it::class == klass }
         if (index != -1) {
             for (i in backStack.lastIndex downTo (index + 1)) {
@@ -118,7 +96,7 @@ class HSNavigation(val backStack: NavBackStack<HSScreen>) {
     @Composable
     fun ensurePinSet(descriptionResId: Int, action: () -> Unit): () -> Unit {
         val uuid = rememberSaveable { UUID.randomUUID().toString() }
-        ResultEffect<SetPinFragment.Result>(resultKeyUuid = uuid) {
+        ResultEffect<SetPinPage.Result>(resultKeyUuid = uuid) {
             action.invoke()
         }
 
@@ -128,8 +106,8 @@ class HSNavigation(val backStack: NavBackStack<HSScreen>) {
             }
         } else {
             {
-                val screen = SetPinFragment(
-                    SetPinFragment.Input(
+                val screen = SetPinPage(
+                    SetPinPage.Input(
                         descriptionResId
                     )
                 )
@@ -142,7 +120,7 @@ class HSNavigation(val backStack: NavBackStack<HSScreen>) {
 
     @Composable
     inline fun <reified T> slideFromBottomForResult(
-        crossinline screenBuilder: () -> HSScreen,
+        crossinline screenBuilder: () -> HSPage,
         crossinline onResult: (T) -> Unit
     ): () -> Unit {
         return slideForResult(NavigationType.SlideFromBottom, screenBuilder, onResult)
@@ -150,16 +128,38 @@ class HSNavigation(val backStack: NavBackStack<HSScreen>) {
 
     @Composable
     inline fun <reified T> slideFromRightForResult(
-        crossinline screenBuilder: () -> HSScreen,
+        crossinline screenBuilder: () -> HSPage,
         crossinline onResult: (T) -> Unit
     ): () -> Unit {
         return slideForResult(NavigationType.SlideFromRight, screenBuilder, onResult)
     }
 
     @Composable
+    fun authorizedAction(action: () -> Unit): () -> Unit {
+        val uuid = rememberSaveable { UUID.randomUUID().toString() }
+        ResultEffect<ConfirmPinPage.Result>(resultKeyUuid = uuid) {
+            if (it.success) {
+                action.invoke()
+            }
+        }
+
+        return if (App.pinComponent.isPinSet) {
+            {
+                val screen = ConfirmPinPage
+                screen.resultKey = uuid
+                add(screen)
+            }
+        } else {
+            {
+                action.invoke()
+            }
+        }
+    }
+
+    @Composable
     inline fun <reified T> slideForResult(
         navigationType: NavigationType,
-        crossinline screenBuilder: () -> HSScreen,
+        crossinline screenBuilder: () -> HSPage,
         crossinline onResult: (T) -> Unit
     ): () -> Unit {
         val uuid = rememberSaveable { UUID.randomUUID().toString() }
@@ -174,7 +174,7 @@ class HSNavigation(val backStack: NavBackStack<HSScreen>) {
         }
     }
 
-    fun lastOrNull(): HSScreen? {
+    fun lastOrNull(): HSPage? {
         return backStack.lastOrNull()
     }
 }

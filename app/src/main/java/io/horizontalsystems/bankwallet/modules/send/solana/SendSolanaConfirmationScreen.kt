@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
 import kotlin.reflect.KClass
 
@@ -15,7 +15,7 @@ import kotlin.reflect.KClass
 fun SendSolanaConfirmationScreen(
     navController: HSNavigation,
     sendViewModel: SendSolanaViewModel,
-    sendEntryPointDestId: KClass<out HSScreen>
+    sendEntryPointDestId: KClass<out HSPage>
 ) {
     var confirmationData by remember { mutableStateOf(sendViewModel.getConfirmationData()) }
     var refresh by remember { mutableStateOf(false) }

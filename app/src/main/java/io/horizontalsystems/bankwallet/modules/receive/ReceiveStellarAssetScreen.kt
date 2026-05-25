@@ -21,9 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.activatetoken.ActivateTokenFragment
+import io.horizontalsystems.bankwallet.modules.activatetoken.ActivateTokenPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
-import io.horizontalsystems.bankwallet.modules.nav3.HSScreen
+import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.receive.ui.ReceiveAddressScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
@@ -41,15 +41,15 @@ import kotlinx.coroutines.launch
 import kotlin.reflect.KClass
 
 @Composable
-fun ReceiveStellarAssetScreen(navController: HSNavigation, wallet: Wallet, receiveEntryPointDestId: KClass<out HSScreen>?) {
+fun ReceiveStellarAssetScreen(navController: HSNavigation, wallet: Wallet, receiveEntryPointDestId: KClass<out HSPage>?) {
     val viewModel = viewModel<ReceiveStellarAssetViewModel>(factory = ReceiveStellarAssetViewModel.Factory(wallet))
     val uiState = viewModel.uiState
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
 
-    val runActivation = navController.slideFromBottomForResult<ActivateTokenFragment.Result>(
-        { ActivateTokenFragment(wallet) }
+    val runActivation = navController.slideFromBottomForResult<ActivateTokenPage.Result>(
+        { ActivateTokenPage(wallet) }
     ) {
         scope.launch {
             viewModel.onActivationResult(it.activated)
