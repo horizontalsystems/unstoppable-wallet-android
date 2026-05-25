@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.core.managers.SwapTermsManager
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupViewItemFactory
 import io.horizontalsystems.bankwallet.modules.multiswap.history.SwapRecordManager
+import io.horizontalsystems.bankwallet.modules.roi.RoiManager
 import io.horizontalsystems.bankwallet.core.managers.StellarKitManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
@@ -172,6 +173,9 @@ object AppModule {
 
     @Provides @Singleton
     fun provideBackupViewItemFactory(): BackupViewItemFactory = BackupViewItemFactory()
+
+    @Provides @Singleton
+    fun provideRoiManager(): RoiManager = App.roiManager
 
     @Provides @Singleton
     fun provideContactsRepository(): ContactsRepository = App.contactsRepository

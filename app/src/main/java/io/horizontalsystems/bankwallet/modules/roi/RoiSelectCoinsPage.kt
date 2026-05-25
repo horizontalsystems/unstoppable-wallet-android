@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -59,7 +59,7 @@ data object RoiSelectCoinsPage : HSPage() {
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun RoiSelectCoinsScreen(navController: HSNavigation) {
-    val viewModel = viewModel<RoiSelectCoinsViewModel>(factory = RoiSelectCoinsViewModel.Factory())
+    val viewModel = hiltViewModel<RoiSelectCoinsViewModel>()
 
     val uiState = viewModel.uiState
 

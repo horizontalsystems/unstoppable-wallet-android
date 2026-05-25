@@ -1,10 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.roi
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -15,10 +13,12 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.HsTimePeriod
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import java.util.UUID
 
-class RoiSelectCoinsViewModel(
+@HiltViewModel
+class RoiSelectCoinsViewModel @Inject constructor(
     private val marketKit: MarketKitWrapper,
     private val roiManager: RoiManager
 ) : ViewModelUiState<RoiSelectCoinsUiState>() {
@@ -123,12 +123,6 @@ class RoiSelectCoinsViewModel(
         emitState()
     }
 
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RoiSelectCoinsViewModel(App.marketKit, App.roiManager) as T
-        }
-    }
 }
 
 class CapacityExceededException : Exception(Translator.getString(R.string.ROI_SelectCoin_Warning_AllowedNumberOfCoins, 3))

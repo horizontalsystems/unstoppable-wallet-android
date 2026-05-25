@@ -4,8 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import javax.inject.Inject
 import io.horizontalsystems.bankwallet.core.hexToByteArray
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -18,7 +20,8 @@ import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.stellarkit.StellarKit
 import java.math.BigInteger
 
-class RestorePrivateKeyViewModel(
+@HiltViewModel
+class RestorePrivateKeyViewModel @Inject constructor(
     private val accountManager: IAccountManager,
 ) : ViewModel() {
 
