@@ -1,8 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.blockchainsettings
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager.MoneroNode
 import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager.ZanoNode
 import io.horizontalsystems.bankwallet.core.managers.ZcashLightWalletEndpointManager.ZcashEndpoint
@@ -13,24 +10,6 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.solanakit.models.RpcSource
 
 object BlockchainSettingsModule {
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service =
-                BlockchainSettingsService(
-                    App.btcBlockchainManager,
-                    App.evmBlockchainManager,
-                    App.evmSyncSourceManager,
-                    App.solanaRpcSourceManager,
-                    App.moneroNodeManager,
-                    App.zanoNodeManager,
-                    App.zcashEndpointManager,
-                    App.marketKit
-                )
-            return BlockchainSettingsViewModel(service) as T
-        }
-    }
 
     data class BlockchainViewItem(
         val title: String,

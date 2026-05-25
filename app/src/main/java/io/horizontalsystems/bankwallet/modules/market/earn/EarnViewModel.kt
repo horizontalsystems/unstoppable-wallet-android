@@ -1,14 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.market.earn
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import javax.inject.Inject
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -29,7 +29,8 @@ import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 import kotlin.coroutines.cancellation.CancellationException
 
-class MarketEarnViewModel(
+@HiltViewModel
+class MarketEarnViewModel @Inject constructor(
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
 ) : ViewModelUiState<EarnModule.UiState>() {
@@ -314,16 +315,6 @@ class MarketEarnViewModel(
 }
 
 object EarnModule {
-
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MarketEarnViewModel(
-                App.marketKit,
-                App.currencyManager
-            ) as T
-        }
-    }
 
     enum class ApyPeriod(@StringRes val titleResId: Int) : WithTranslatableTitle {
         ONE_DAY(R.string.CoinPage_TimeDuration_Day),

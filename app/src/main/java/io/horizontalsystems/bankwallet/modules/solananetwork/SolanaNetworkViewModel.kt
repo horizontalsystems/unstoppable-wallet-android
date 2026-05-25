@@ -5,11 +5,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import javax.inject.Inject
 
-class SolanaNetworkViewModel(private val service: SolanaNetworkService) : ViewModel() {
+@HiltViewModel
+class SolanaNetworkViewModel @Inject constructor(
+    solanaRpcSourceManager: SolanaRpcSourceManager,
+) : ViewModel() {
+    private val service = SolanaNetworkService(solanaRpcSourceManager)
 
     var closeScreen by mutableStateOf(false)
         private set

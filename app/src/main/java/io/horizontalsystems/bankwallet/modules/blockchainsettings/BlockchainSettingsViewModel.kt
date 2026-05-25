@@ -5,15 +5,35 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.MoneroNodeManager
+import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
+import io.horizontalsystems.bankwallet.core.managers.ZanoNodeManager
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import javax.inject.Inject
 
-class BlockchainSettingsViewModel(
-    private val service: BlockchainSettingsService
+@HiltViewModel
+class BlockchainSettingsViewModel @Inject constructor(
+    btcBlockchainManager: BtcBlockchainManager,
+    evmBlockchainManager: EvmBlockchainManager,
+    evmSyncSourceManager: EvmSyncSourceManager,
+    solanaRpcSourceManager: SolanaRpcSourceManager,
+    moneroNodeManager: MoneroNodeManager,
+    zanoNodeManager: ZanoNodeManager,
+    marketKit: MarketKitWrapper,
 ) : ViewModel() {
+    private val service = BlockchainSettingsService(
+        btcBlockchainManager, evmBlockchainManager, evmSyncSourceManager,
+        solanaRpcSourceManager, moneroNodeManager, zanoNodeManager, marketKit
+    )
 
     var btcLikeChains by mutableStateOf<List<BlockchainSettingsModule.BlockchainViewItem>>(listOf())
         private set

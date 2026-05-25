@@ -24,7 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -66,7 +66,7 @@ import java.math.BigDecimal
 fun MarketEarnScreen(
     navController: HSNavigation
 ) {
-    val viewModel = viewModel<MarketEarnViewModel>(factory = EarnModule.Factory())
+    val viewModel = hiltViewModel<MarketEarnViewModel>()
     val uiState = viewModel.uiState
     var openFilterSelector by rememberSaveable { mutableStateOf(false) }
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
