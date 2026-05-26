@@ -4,16 +4,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ISendZanoAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
@@ -21,39 +31,49 @@ import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
-class SendZanoViewModel(
-    val wallet: Wallet,
-    private val sendToken: Token,
-    val feeToken: Token,
-    private val adapter: ISendZanoAdapter,
-    val coinMaxAllowedDecimals: Int,
-    private val xRateService: XRateService,
-    private val address: Address,
-    private val showAddressInput: Boolean,
-    private val amountService: SendAmountService,
-    private val addressService: SendZanoAddressService,
-    private val feeService: SendZanoFeeService,
+@HiltViewModel(assistedFactory = SendZanoViewModel.Factory::class)
+class SendZanoViewModel @AssistedInject constructor(
+    @Assisted val wallet: Wallet,
+    @Assisted private val address: Address,
+    @Assisted private val hideAddress: Boolean,
+    adapterManager: IAdapterManager,
+    marketKit: MarketKitWrapper,
+    currencyManager: CurrencyManager,
+    coinManager: ICoinManager,
     private val contactsRepo: ContactsRepository,
     private val recentAddressManager: RecentAddressManager,
+    appConfigProvider: AppConfigProvider,
 ) : ViewModelUiState<SendZanoUiState>() {
-    val blockchainType = wallet.token.blockchainType
-    val feeTokenMaxAllowedDecimals = feeToken.decimals
-    val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
-    private var amountState = amountService.stateFlow.value
-    private var addressState = addressService.stateFlow.value
-    private var feeState = feeService.stateFlow.value
+    private val adapter: ISendZanoAdapter
+    private val xRateService: XRateService
+    private val amountService: SendAmountService
+    private val addressService: SendZanoAddressService
+    private val feeService: SendZanoFeeService
+    val feeToken: Token
+    val coinMaxAllowedDecimals = wallet.token.decimals
+    val fiatMaxAllowedDecimals: Int
+    val blockchainType = wallet.token.blockchainType
+    val feeTokenMaxAllowedDecimals: Int
+    private val sendToken = wallet.token
+    private val showAddressInput = !hideAddress
+
+    private var amountState: SendAmountService.State
+    private var addressState: SendZanoAddressService.State
+    private var feeState: SendZanoFeeService.State
     private var memo: String? = null
 
-    var coinRate by mutableStateOf(xRateService.getRate(sendToken.coin.uid))
+    var coinRate by mutableStateOf<CurrencyValue?>(null)
         private set
-    var feeCoinRate by mutableStateOf(xRateService.getRate(feeToken.coin.uid))
+    var feeCoinRate by mutableStateOf<CurrencyValue?>(null)
         private set
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
@@ -61,6 +81,29 @@ class SendZanoViewModel(
     private val logger: AppLogger = AppLogger("send-zano")
 
     init {
+        adapter = adapterManager.getAdapterForWallet<ISendZanoAdapter>(wallet)
+            ?: throw IllegalStateException("ISendZanoAdapter is null")
+        xRateService = XRateService(marketKit, currencyManager.baseCurrency)
+        feeToken = coinManager.getToken(TokenQuery(wallet.token.blockchainType, TokenType.Native))
+            ?: throw IllegalArgumentException("Missing token for fee: ${TokenQuery(wallet.token.blockchainType, TokenType.Native)}")
+        fiatMaxAllowedDecimals = appConfigProvider.fiatDecimal
+        feeTokenMaxAllowedDecimals = feeToken.decimals
+
+        amountService = SendAmountService(
+            amountValidator = AmountValidator(),
+            coinCode = wallet.coin.code,
+            availableBalance = adapter.balanceData.available
+        )
+        addressService = SendZanoAddressService()
+        feeService = SendZanoFeeService(adapter)
+
+        amountState = amountService.stateFlow.value
+        addressState = addressService.stateFlow.value
+        feeState = feeService.stateFlow.value
+
+        coinRate = xRateService.getRate(sendToken.coin.uid)
+        feeCoinRate = xRateService.getRate(feeToken.coin.uid)
+
         addCloseable(feeService)
 
         viewModelScope.launch(Dispatchers.Default) {
@@ -109,27 +152,23 @@ class SendZanoViewModel(
 
     fun onEnterMemo(memo: String) {
         this.memo = memo.ifBlank { null }
-
         feeService.setMemo(this.memo)
     }
 
     private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
         feeService.setAmount(amountState.amount)
-
         emitState()
     }
 
     private fun handleUpdatedAddressState(addressState: SendZanoAddressService.State) {
         this.addressState = addressState
         feeService.setAddress(addressState.address)
-
         emitState()
     }
 
     private fun handleUpdatedFeeState(feeState: SendZanoFeeService.State) {
         this.feeState = feeState
-
         emitState()
     }
 
@@ -152,7 +191,6 @@ class SendZanoViewModel(
 
     fun onClickSend() {
         logger.info("click send button")
-
         viewModelScope.launch {
             send()
         }
@@ -179,6 +217,11 @@ class SendZanoViewModel(
         is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
         is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(wallet: Wallet, address: Address, hideAddress: Boolean): SendZanoViewModel
     }
 }
 

@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
-import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
@@ -27,7 +26,6 @@ import io.horizontalsystems.bankwallet.modules.send.ton.SendTonScreen
 import io.horizontalsystems.bankwallet.modules.send.ton.SendTonViewModel
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronScreen
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
-import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoModule
 import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoScreen
 import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
@@ -63,8 +61,9 @@ data class SendPage(val input: Input) : HSPage() {
             BlockchainType.ECash,
             BlockchainType.Litecoin,
             BlockchainType.Dash -> {
-                val factory = SendBitcoinModule.Factory(wallet, address, hideAddress)
-                val sendBitcoinViewModel = viewModel<SendBitcoinViewModel>(factory = factory)
+                val sendBitcoinViewModel = hiltViewModel<SendBitcoinViewModel, SendBitcoinViewModel.Factory> { factory ->
+                    factory.create(wallet, address, hideAddress)
+                }
                 SendBitcoinScreen(
                     title = title,
                     fragmentNavController = navController,
@@ -198,8 +197,9 @@ data class SendPage(val input: Input) : HSPage() {
             }
 
             BlockchainType.Zano -> {
-                val factory = SendZanoModule.Factory(wallet, address, hideAddress)
-                val sendZanoViewModel = viewModel<SendZanoViewModel>(factory = factory)
+                val sendZanoViewModel = hiltViewModel<SendZanoViewModel, SendZanoViewModel.Factory> { factory ->
+                    factory.create(wallet, address, hideAddress)
+                }
                 SendZanoScreen(
                     title,
                     navController,
