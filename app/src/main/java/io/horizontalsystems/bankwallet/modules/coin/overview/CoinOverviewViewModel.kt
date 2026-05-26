@@ -7,9 +7,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.LanguageManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.accountTypeDerivation
 import io.horizontalsystems.bankwallet.core.assetUrl
 import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
@@ -26,19 +35,41 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
+import io.horizontalsystems.bankwallet.modules.roi.RoiManager
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
-class CoinOverviewViewModel(
-    private val service: CoinOverviewService,
-    private val factory: CoinViewFactory,
+@HiltViewModel(assistedFactory = CoinOverviewViewModel.Factory::class)
+class CoinOverviewViewModel @AssistedInject constructor(
+    @Assisted val fullCoin: FullCoin,
+    private val marketKit: MarketKitWrapper,
+    private val currencyManager: CurrencyManager,
+    private val appConfigProvider: AppConfigProvider,
+    private val languageManager: LanguageManager,
+    private val roiManager: RoiManager,
+    private val numberFormatter: IAppNumberFormatter,
     private val walletManager: WalletManager,
     private val accountManager: IAccountManager,
-    private val chartIndicatorManager: ChartIndicatorManager
+    private val chartIndicatorManager: ChartIndicatorManager,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(fullCoin: FullCoin): CoinOverviewViewModel
+    }
+
+    private val service = CoinOverviewService(
+        fullCoin,
+        marketKit,
+        currencyManager,
+        appConfigProvider,
+        languageManager,
+        roiManager,
+    )
+    private val factory = CoinViewFactory(currencyManager.baseCurrency, numberFormatter, roiManager)
 
     val isRefreshingLiveData = MutableLiveData<Boolean>(false)
     val overviewLiveData = MutableLiveData<CoinOverviewViewItem>()
@@ -61,7 +92,6 @@ class CoinOverviewViewModel(
             field = value
             showHudMessage = value
         }
-    val fullCoin = service.fullCoin
     private var activeAccount = accountManager.activeAccount
     private var activeWallets = walletManager.activeWallets
 

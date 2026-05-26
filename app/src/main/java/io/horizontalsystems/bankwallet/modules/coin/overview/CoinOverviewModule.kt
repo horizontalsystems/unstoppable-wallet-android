@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataItem
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
-import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
 import io.horizontalsystems.bankwallet.modules.coin.RoiViewItem
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfoOverview
@@ -16,44 +15,18 @@ import io.horizontalsystems.marketkit.models.Token
 
 object CoinOverviewModule {
 
-    class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
+    class ChartFactory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-
-            return when (modelClass) {
-                CoinOverviewViewModel::class.java -> {
-                    val currency = App.currencyManager.baseCurrency
-                    val service = CoinOverviewService(
-                        fullCoin,
-                        App.marketKit,
-                        App.currencyManager,
-                        App.appConfigProvider,
-                        App.languageManager,
-                        App.roiManager
-                    )
-
-                    CoinOverviewViewModel(
-                        service,
-                        CoinViewFactory(currency, App.numberFormatter, App.roiManager),
-                        App.walletManager,
-                        App.accountManager,
-                        App.chartIndicatorManager
-                    ) as T
-                }
-                ChartViewModel::class.java -> {
-                    val chartService = CoinOverviewChartService(
-                        App.marketKit,
-                        App.currencyManager,
-                        fullCoin.coin.uid,
-                        App.chartIndicatorManager
-                    )
-                    val chartNumberFormatter = ChartCurrencyValueFormatterSignificant()
-                    ChartModule.createViewModel(chartService, chartNumberFormatter) as T
-                }
-                else -> throw IllegalArgumentException()
-            }
+            val chartService = CoinOverviewChartService(
+                App.marketKit,
+                App.currencyManager,
+                fullCoin.coin.uid,
+                App.chartIndicatorManager
+            )
+            val chartNumberFormatter = ChartCurrencyValueFormatterSignificant()
+            return ChartModule.createViewModel(chartService, chartNumberFormatter) as T
         }
-
     }
 }
 

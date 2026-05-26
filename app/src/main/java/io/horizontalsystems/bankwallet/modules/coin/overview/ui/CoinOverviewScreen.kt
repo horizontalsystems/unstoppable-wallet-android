@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
@@ -70,9 +71,10 @@ fun CoinOverviewScreen(
     fullCoin: FullCoin,
     navController: HSNavigation
 ) {
-    val vmFactory by lazy { CoinOverviewModule.Factory(fullCoin) }
-    val viewModel = viewModel<CoinOverviewViewModel>(factory = vmFactory)
-    val chartViewModel = viewModel<ChartViewModel>(factory = vmFactory)
+    val viewModel = hiltViewModel<CoinOverviewViewModel, CoinOverviewViewModel.Factory> { factory ->
+        factory.create(fullCoin)
+    }
+    val chartViewModel = viewModel<ChartViewModel>(factory = CoinOverviewModule.ChartFactory(fullCoin))
 
     val refreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val overview by viewModel.overviewLiveData.observeAsState()
