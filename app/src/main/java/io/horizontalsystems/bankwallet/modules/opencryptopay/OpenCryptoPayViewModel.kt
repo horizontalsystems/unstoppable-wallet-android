@@ -54,21 +54,12 @@ class OpenCryptoPayViewModel(
         viewModelScope.launch {
             try {
                 val url = resolveApiUrl(lnurl)
-                Timber.d("OCP resolvedApiUrl=$url")
                 apiUrl = url
                 val baseUrl = url.substringBefore("?").let { u ->
                     val lastSlash = u.lastIndexOf('/')
                     if (lastSlash > 8) u.substring(0, lastSlash + 1) else "$u/"
                 }
                 val response = OcpApiService.service(baseUrl).getPaymentDetails(url, timeout = 0)
-
-                Timber.d(
-                    "OCP payment fetched: status=${response.statusCode} quote=${response.quote?.id}" +
-                    " expires=${response.quote?.expiration}" +
-                    " merchant=${response.merchant}" +
-                    " amount=${response.requestedAmount?.amount} ${response.requestedAmount?.asset}" +
-                    " methods=${response.transferAmounts.map { t -> "${t.method}(minFee=${t.minFee}):[${t.assets.joinToString { it.asset + "=" + it.amount }}]" }}"
-                )
 
                 if (response.statusCode == 404 || response.quote == null) {
                     error = response.message ?: "No active payment at this register"
@@ -299,11 +290,6 @@ suspend fun fetchOcpTransactionDetails(
         quote = quoteId,
         method = method,
         asset = asset,
-    )
-    Timber.d(
-        "OCP txResponse: uri=${txResponse.uri} hint=${txResponse.hint}" +
-        " id=${txResponse.id} paymentId=${txResponse.paymentId}" +
-        " txId=${txResponse.txId} method=${txResponse.method}"
     )
     val proofUrl = extractProofUrl(txResponse.hint, callbackUrl, paymentId)
     val uri = txResponse.uri ?: throw Exception("No transaction URI received")
