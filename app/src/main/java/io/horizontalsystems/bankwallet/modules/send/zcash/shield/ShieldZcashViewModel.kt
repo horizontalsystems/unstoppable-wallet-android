@@ -6,11 +6,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.send.SendResult
@@ -22,11 +29,17 @@ import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
-class ShieldZcashViewModel(
-    private val adapter: ZcashAdapter,
-    private val wallet: Wallet,
-    private val xRateService: XRateService,
+@HiltViewModel(assistedFactory = ShieldZcashViewModel.Factory::class)
+class ShieldZcashViewModel @AssistedInject constructor(
+    @Assisted private val wallet: Wallet,
+    adapterManager: IAdapterManager,
+    marketKit: MarketKitWrapper,
+    currencyManager: CurrencyManager,
 ) : ViewModel() {
+    private val adapter: ZcashAdapter = adapterManager.getAdapterForWallet<ZcashAdapter>(wallet)
+        ?: throw IllegalStateException("ZcashAdapter is null")
+    private val xRateService: XRateService = XRateService(marketKit, currencyManager.baseCurrency)
+
     private val logger = AppLogger("Shield-Zcash")
 
     val blockchainType = wallet.token.blockchainType
@@ -93,5 +106,10 @@ class ShieldZcashViewModel(
         is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
         is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(wallet: Wallet): ShieldZcashViewModel
     }
 }

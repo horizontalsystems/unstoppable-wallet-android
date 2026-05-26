@@ -1,34 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.session
 
 import android.os.Parcelable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.dapp.core.HSDAppRequest
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 object WCSessionModule {
-
-    class Factory(
-        private val sessionTopic: String?,
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WCSessionViewModel(
-                sessionManager = App.wcSessionManager,
-                connectivityManager = App.connectivityManager,
-                account = App.accountManager.activeAccount,
-                topic = sessionTopic,
-                wcManager = App.wcManager,
-                networkManager = App.networkManager,
-                appConfigProvider = App.appConfigProvider,
-                paidActionSettingsManager = App.paidActionSettingsManager
-            ) as T
-        }
-    }
 
     @Serializable
     @Parcelize

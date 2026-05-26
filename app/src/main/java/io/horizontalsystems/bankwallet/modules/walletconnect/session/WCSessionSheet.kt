@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -71,9 +71,9 @@ data class WCSessionSheet(val input: WCSessionModule.Input?) : HSBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = viewModel<WCSessionViewModel>(
-            factory = WCSessionModule.Factory(input?.sessionTopic)
-        )
+        val viewModel = hiltViewModel<WCSessionViewModel, WCSessionViewModel.Factory> { factory ->
+            factory.create(input?.sessionTopic)
+        }
         WCSessionScreen(navController, viewModel)
     }
 }

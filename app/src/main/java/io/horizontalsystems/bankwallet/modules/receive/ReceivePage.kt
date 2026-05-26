@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -89,7 +89,9 @@ fun ReceiveScreen(
     isTransparentAddress: Boolean,
 ) {
     val addressViewModel =
-        viewModel<ReceiveAddressViewModel>(factory = ReceiveModule.Factory(wallet, isTransparentAddress))
+        hiltViewModel<ReceiveAddressViewModel, ReceiveAddressViewModel.Factory> { factory ->
+            factory.create(wallet, isTransparentAddress)
+        }
 
     val uiState = addressViewModel.uiState
     ReceiveAddressScreen(

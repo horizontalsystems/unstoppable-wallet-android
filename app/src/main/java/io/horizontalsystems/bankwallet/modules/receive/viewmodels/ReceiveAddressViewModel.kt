@@ -1,9 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -20,10 +23,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 
-class ReceiveAddressViewModel(
-    private val wallet: Wallet,
+@HiltViewModel(assistedFactory = ReceiveAddressViewModel.Factory::class)
+class ReceiveAddressViewModel @AssistedInject constructor(
+    @Assisted private val wallet: Wallet,
+    @Assisted("isTransparentAddress") private val isTransparentAddress: Boolean,
     private val adapterManager: IAdapterManager,
-    private val isTransparentAddress: Boolean,
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<ReceiveModule.UiState>() {
 
     private var viewState: ViewState = ViewState.Loading
@@ -78,7 +83,7 @@ class ReceiveAddressViewModel(
         addressType = addressType,
         watchAccount = watchAccount,
         amount = amount,
-        amountString = amount?.let { App.numberFormatter.formatCoinFull(it, wallet.token.coin.code, wallet.token.decimals) },
+        amountString = amount?.let { numberFormatter.formatCoinFull(it, wallet.token.coin.code, wallet.token.decimals) },
         alertText = null,
     )
 
@@ -95,7 +100,7 @@ class ReceiveAddressViewModel(
             else -> {
                 if (wallet.token.blockchainType == BlockchainType.Zcash) {
                     addressType =
-                        Translator.getString(if (isTransparentAddress) R.string.Balance_Zcash_Transparent else R.string.Balance_Zcash_Shielded)
+                        Translator.getString(if (isTransparentAddress) io.horizontalsystems.bankwallet.R.string.Balance_Zcash_Transparent else io.horizontalsystems.bankwallet.R.string.Balance_Zcash_Shielded)
                 } else {
                     blockchainName = wallet.token.blockchain.name
                 }
@@ -144,4 +149,11 @@ class ReceiveAddressViewModel(
         emitState()
     }
 
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            wallet: Wallet,
+            @Assisted("isTransparentAddress") isTransparentAddress: Boolean,
+        ): ReceiveAddressViewModel
+    }
 }

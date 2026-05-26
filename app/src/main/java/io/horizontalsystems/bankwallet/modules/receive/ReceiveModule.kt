@@ -1,25 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveAddressViewModel
 import java.math.BigDecimal
 
 object ReceiveModule {
-
-    class Factory(
-        private val wallet: Wallet,
-        private val isTransparentAddress: Boolean,
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ReceiveAddressViewModel(wallet, App.adapterManager, isTransparentAddress) as T
-        }
-    }
 
     sealed class AdditionalData {
         class Amount(val value: String) : AdditionalData()

@@ -1,11 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.session
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.PaidActionSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.ServiceWCWhitelist
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
@@ -38,16 +43,19 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class WCSessionViewModel(
+@HiltViewModel(assistedFactory = WCSessionViewModel.Factory::class)
+class WCSessionViewModel @AssistedInject constructor(
     private val sessionManager: WCSessionManager,
     private val connectivityManager: ConnectivityManager,
-    private val account: Account?,
-    private val topic: String?,
+    @Assisted private val topic: String?,
     private val wcManager: WCManager,
     private val networkManager: INetworkManager,
     appConfigProvider: AppConfigProvider,
-    private val paidActionSettingsManager: PaidActionSettingsManager
+    private val paidActionSettingsManager: PaidActionSettingsManager,
+    accountManager: IAccountManager,
+    private val evmBlockchainManager: EvmBlockchainManager,
 ) : ViewModelUiState<WCSessionUiState>() {
+    private val account: Account? = accountManager.activeAccount
 
     val marketApiBaseUrl = appConfigProvider.marketApiBaseUrl
 
@@ -481,7 +489,7 @@ class WCSessionViewModel(
             "eip155" -> {
                 val chainId = chainParts[1].toIntOrNull()
                 chainId?.let {
-                    App.evmBlockchainManager.getBlockchain(it)
+                    evmBlockchainManager.getBlockchain(it)
                 }?.type
             }
 
@@ -552,6 +560,11 @@ class WCSessionViewModel(
     fun errorShown() {
         showError = null
         emitState()
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(topic: String?): WCSessionViewModel
     }
 }
 
