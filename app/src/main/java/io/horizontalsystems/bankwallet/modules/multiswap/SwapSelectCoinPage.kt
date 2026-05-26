@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
 import io.horizontalsystems.bankwallet.modules.nav3.LocalResultEventBus
@@ -27,9 +27,9 @@ private fun SwapSelectCoinScreen(
     title: String?
 ) {
     val resultEventBus = LocalResultEventBus.current
-    val viewModel = viewModel<SwapSelectCoinViewModel>(
-        factory = SwapSelectCoinViewModel.Factory(token)
-    )
+    val viewModel = hiltViewModel<SwapSelectCoinViewModel, SwapSelectCoinViewModel.Factory> { factory ->
+        factory.create(token)
+    }
     val uiState = viewModel.uiState
 
     SelectSwapCoinDialogScreen(

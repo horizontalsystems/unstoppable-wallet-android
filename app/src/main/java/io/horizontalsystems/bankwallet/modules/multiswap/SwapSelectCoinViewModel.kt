@@ -4,10 +4,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.defaultTokenQuery
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.eligibleTokens
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
+import io.horizontalsystems.bankwallet.core.nativeTokenQueries
+import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.core.sorting.SortCriterion
 import io.horizontalsystems.bankwallet.core.sorting.TokenSortContext
 import io.horizontalsystems.bankwallet.core.supported
@@ -23,13 +35,24 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
-class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewModel() {
-    private val activeAccount = App.accountManager.activeAccount
-    private val coinsProvider = activeAccount?.let { FullCoinsProvider(App.marketKit, it) }
-    private val adapterManager = App.adapterManager
-    private val currencyManager = App.currencyManager
-    private val marketKit = App.marketKit
-    private val localStorage = App.localStorage
+@HiltViewModel(assistedFactory = SwapSelectCoinViewModel.Factory::class)
+class SwapSelectCoinViewModel @AssistedInject constructor(
+    @Assisted private val otherSelectedToken: Token?,
+    private val accountManager: IAccountManager,
+    private val marketKit: MarketKitWrapper,
+    private val adapterManager: IAdapterManager,
+    private val currencyManager: CurrencyManager,
+    private val walletManager: WalletManager,
+    private val localStorage: ILocalStorage,
+) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(otherSelectedToken: Token?): SwapSelectCoinViewModel
+    }
+
+    private val activeAccount = accountManager.activeAccount
+    private val coinsProvider = activeAccount?.let { FullCoinsProvider(marketKit, it) }
     private var query = ""
 
     private var popular = listOf<CoinBalanceItem>()
@@ -51,7 +74,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
         private set
 
     init {
-        coinsProvider?.setActiveWallets(App.walletManager.activeWallets)
+        coinsProvider?.setActiveWallets(walletManager.activeWallets)
         viewModelScope.launch {
             loadSections()
             emitState()
@@ -199,13 +222,6 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
             } else {
                 it.value
             }
-        }
-    }
-
-    class Factory(private val otherSelectedToken: Token?) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapSelectCoinViewModel(otherSelectedToken) as T
         }
     }
 

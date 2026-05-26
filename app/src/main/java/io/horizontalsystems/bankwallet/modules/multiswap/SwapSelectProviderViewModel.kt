@@ -1,22 +1,33 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
-class SwapSelectProviderViewModel(
-    private val quotes: List<SwapProviderQuote>,
-    private val quote: SwapProviderQuote?
+@HiltViewModel(assistedFactory = SwapSelectProviderViewModel.Factory::class)
+class SwapSelectProviderViewModel @AssistedInject constructor(
+    @Assisted private val quotes: List<SwapProviderQuote>,
+    @Assisted private val quote: SwapProviderQuote?,
+    private val currencyManager: CurrencyManager,
+    private val marketKit: MarketKitWrapper,
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<SwapSelectProviderUiState>() {
-    private val currencyManager = App.currencyManager
-    private val marketKit = App.marketKit
+
+    @AssistedFactory
+    interface Factory {
+        fun create(quotes: List<SwapProviderQuote>, quote: SwapProviderQuote?): SwapSelectProviderViewModel
+    }
 
     private val currency = currencyManager.baseCurrency
     private var tokenIn = quotes.first().tokenIn
@@ -61,7 +72,7 @@ class SwapSelectProviderViewModel(
 
         return quotes.map { quote ->
             val fiatAmountOut = getFiatValue(quote.amountOut, rateTokenOut)
-            val tokenAmount = App.numberFormatter.formatCoinFull(
+            val tokenAmount = numberFormatter.formatCoinFull(
                 quote.amountOut,
                 quote.tokenOut.coin.code,
                 quote.tokenOut.decimals
@@ -98,13 +109,6 @@ class SwapSelectProviderViewModel(
         this.sortType = sortType
         quoteViewItems = getViewItems(quotes.sorted())
         emitState()
-    }
-
-    class Factory(private val quotes: List<SwapProviderQuote>, private val quote: SwapProviderQuote?) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapSelectProviderViewModel(quotes, quote) as T
-        }
     }
 }
 
