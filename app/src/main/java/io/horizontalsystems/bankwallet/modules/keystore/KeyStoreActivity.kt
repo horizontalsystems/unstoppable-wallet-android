@@ -8,6 +8,8 @@ import android.os.Parcelable
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.withCreationCallback
 import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -41,13 +43,20 @@ import io.horizontalsystems.bankwallet.ui.compose.components.BottomSheetsElement
 import io.horizontalsystems.bankwallet.ui.compose.components.BottomSheetsElementsText
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
+@AndroidEntryPoint
 class KeyStoreActivity : BaseActivity() {
 
     private val mode by lazy {
         intent.parcelable<KeyStoreModule.ModeType>(MODE)!!
     }
 
-    val viewModel by viewModels<KeyStoreViewModel> { KeyStoreModule.Factory(mode) }
+    val viewModel by viewModels<KeyStoreViewModel>(
+        extrasProducer = {
+            defaultViewModelCreationExtras.withCreationCallback<KeyStoreViewModel.Factory> { factory ->
+                factory.create(mode)
+            }
+        }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

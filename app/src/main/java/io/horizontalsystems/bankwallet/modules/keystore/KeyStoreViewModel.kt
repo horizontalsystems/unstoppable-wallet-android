@@ -4,11 +4,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.core.IKeyStoreManager
 
-class KeyStoreViewModel(
+@HiltViewModel(assistedFactory = KeyStoreViewModel.Factory::class)
+class KeyStoreViewModel @AssistedInject constructor(
     private val keyStoreManager: IKeyStoreManager,
-    mode: KeyStoreModule.ModeType
+    @Assisted mode: KeyStoreModule.ModeType
 ) : ViewModel() {
 
     var showSystemLockWarning by mutableStateOf(false)
@@ -66,4 +71,8 @@ class KeyStoreViewModel(
         closeApp = false
     }
 
+    @AssistedFactory
+    interface Factory {
+        fun create(mode: KeyStoreModule.ModeType): KeyStoreViewModel
+    }
 }
