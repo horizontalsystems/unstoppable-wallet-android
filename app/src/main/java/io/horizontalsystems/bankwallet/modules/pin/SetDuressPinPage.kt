@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.pin
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
@@ -16,9 +16,9 @@ data class SetDuressPinPage(val input: Input? = null) : HSPage(screenshotEnabled
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = viewModel<SetDuressPinViewModel>(
-            factory = SetDuressPinViewModel.Factory(input)
-        )
+        val viewModel = hiltViewModel<SetDuressPinViewModel, SetDuressPinViewModel.Factory> { factory ->
+            factory.create(input)
+        }
         val view = LocalView.current
         PinSet(
             title = stringResource(id = R.string.SetDuressPin_Title),

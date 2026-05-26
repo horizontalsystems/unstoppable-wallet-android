@@ -4,15 +4,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 
-class UnlinkAccountViewModel(
-    private val account: Account,
-    private val accountManager: IAccountManager
+@HiltViewModel(assistedFactory = UnlinkAccountViewModel.Factory::class)
+class UnlinkAccountViewModel @AssistedInject constructor(
+    @Assisted private val account: Account,
+    private val accountManager: IAccountManager,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(account: Account): UnlinkAccountViewModel
+    }
     val accountName = account.name
 
     var confirmations by mutableStateOf<List<ConfirmationItem>>(listOf())

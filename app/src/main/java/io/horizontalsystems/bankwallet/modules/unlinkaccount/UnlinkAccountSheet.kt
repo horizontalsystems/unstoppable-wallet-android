@@ -15,7 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -49,8 +49,9 @@ data class UnlinkAccountSheet(val account: Account) : HSBottomSheet() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun UnlinkAccountScreen(navController: HSNavigation, account: Account) {
-    val viewModel =
-        viewModel<UnlinkAccountViewModel>(factory = UnlinkAccountModule.Factory(account))
+    val viewModel = hiltViewModel<UnlinkAccountViewModel, UnlinkAccountViewModel.Factory> { factory ->
+        factory.create(account)
+    }
 
     val confirmations = viewModel.confirmations
     val unlinkEnabled = viewModel.unlinkEnabled
