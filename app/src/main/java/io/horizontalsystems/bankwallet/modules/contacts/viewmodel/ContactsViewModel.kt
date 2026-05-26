@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.contacts.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.shorten
@@ -10,10 +14,16 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import kotlinx.coroutines.launch
 
-class ContactsViewModel(
+@HiltViewModel(assistedFactory = ContactsViewModel.Factory::class)
+class ContactsViewModel @AssistedInject constructor(
+    @Assisted private val mode: Mode,
     private val repository: ContactsRepository,
-    private val mode: Mode
 ) : ViewModelUiState<ContactsViewModel.UiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(mode: Mode): ContactsViewModel
+    }
 
     private val readOnly = mode != Mode.Full
     private val showAddContact = !readOnly

@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.modules.contacts
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.contacts.model.ContactAddress
@@ -61,7 +61,9 @@ data class ContactsRouterPage(val input: Input) : HSPage() {
 data class ContactsPage(val mode: Mode, val addAddress: ContactAddress?) : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = viewModel<ContactsViewModel>(factory = ContactsModule.ContactsViewModelFactory(mode))
+        val viewModel = hiltViewModel<ContactsViewModel, ContactsViewModel.Factory> { factory ->
+            factory.create(mode)
+        }
         ContactsScreen(
             viewModel = viewModel,
             onNavigateToBack = { navController.removeLastOrNull() },
@@ -80,7 +82,9 @@ data class ContactPage(
 ) : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = viewModel<ContactViewModel>(factory = ContactsModule.ContactViewModelFactory(contact, newAddress))
+        val viewModel = hiltViewModel<ContactViewModel, ContactViewModel.Factory> { factory ->
+            factory.create(contact, newAddress)
+        }
 
         // todo: find better solution
         val uuid = rememberSaveable { UUID.randomUUID().toString() }
@@ -120,13 +124,13 @@ data class AddressPage(
 ) : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = viewModel<AddressViewModel>(
-            factory = ContactsModule.AddressViewModelFactory(
+        val viewModel = hiltViewModel<AddressViewModel, AddressViewModel.Factory> { factory ->
+            factory.create(
                 contactUid = contactUid,
                 contactAddress = address,
-                definedAddresses = definedAddresses
+                definedAddresses = definedAddresses,
             )
-        )
+        }
 
         val resultEventBus = LocalResultEventBus.current
 

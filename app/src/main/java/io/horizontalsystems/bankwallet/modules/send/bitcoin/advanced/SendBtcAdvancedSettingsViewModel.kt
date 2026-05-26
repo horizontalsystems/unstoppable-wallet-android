@@ -1,5 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced
 
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
@@ -9,11 +13,17 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule.rb
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsModule.SortModeViewItem
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class SendBtcAdvancedSettingsViewModel(
-    val blockchainType: BlockchainType,
+@HiltViewModel(assistedFactory = SendBtcAdvancedSettingsViewModel.Factory::class)
+class SendBtcAdvancedSettingsViewModel @AssistedInject constructor(
+    @Assisted val blockchainType: BlockchainType,
     private val btcBlockchainManager: BtcBlockchainManager,
     private val localStorage: ILocalStorage,
 ) : ViewModelUiState<SendBtcAdvancedSettingsModule.UiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(blockchainType: BlockchainType): SendBtcAdvancedSettingsViewModel
+    }
 
     private var sortMode = btcBlockchainManager.transactionSortMode(blockchainType)
     private val sortOptions: List<SortModeViewItem>

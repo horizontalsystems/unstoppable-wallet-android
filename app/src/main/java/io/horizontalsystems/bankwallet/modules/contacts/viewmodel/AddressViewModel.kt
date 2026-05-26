@@ -1,11 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.contacts.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.order
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
@@ -23,14 +28,26 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddressViewModel(
-    private val contactUid: String?,
+@HiltViewModel(assistedFactory = AddressViewModel.Factory::class)
+class AddressViewModel @AssistedInject constructor(
+    @Assisted private val contactUid: String?,
+    @Assisted contactAddress: ContactAddress?,
+    @Assisted definedAddresses: List<ContactAddress>?,
     private val contactsRepository: ContactsRepository,
-    private val addressHandlerFactory: AddressHandlerFactory,
+    appConfigProvider: AppConfigProvider,
     marketKit: MarketKitWrapper,
-    contactAddress: ContactAddress?,
-    definedAddresses: List<ContactAddress>?
 ) : ViewModelUiState<AddressViewModel.UiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            contactUid: String?,
+            contactAddress: ContactAddress?,
+            definedAddresses: List<ContactAddress>?,
+        ): AddressViewModel
+    }
+
+    private val addressHandlerFactory = AddressHandlerFactory(appConfigProvider.udnApiKey)
 
     private val title = if (contactAddress == null)
         TranslatableString.ResString(R.string.Contacts_AddAddress)

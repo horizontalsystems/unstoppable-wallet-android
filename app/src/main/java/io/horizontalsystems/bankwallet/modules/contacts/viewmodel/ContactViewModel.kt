@@ -1,5 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.contacts.viewmodel
 
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.order
@@ -11,11 +15,17 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Blockchain
 import java.util.UUID
 
-class ContactViewModel(
+@HiltViewModel(assistedFactory = ContactViewModel.Factory::class)
+class ContactViewModel @AssistedInject constructor(
+    @Assisted existingContact: Contact?,
+    @Assisted newAddress: ContactAddress?,
     private val repository: ContactsRepository,
-    existingContact: Contact?,
-    newAddress: ContactAddress?
 ) : ViewModelUiState<ContactViewModel.UiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(existingContact: Contact?, newAddress: ContactAddress?): ContactViewModel
+    }
 
     val contact = existingContact ?: Contact(UUID.randomUUID().toString(), "", listOf())
     private val title = if (existingContact == null)
@@ -29,7 +39,7 @@ class ContactViewModel(
     private val isNewContact = existingContact == null
     private var closeAfterSave = false
     private var error: ContactValidationException? = null
-    
+
     init {
         newAddress?.let {
             setAddress(it)
