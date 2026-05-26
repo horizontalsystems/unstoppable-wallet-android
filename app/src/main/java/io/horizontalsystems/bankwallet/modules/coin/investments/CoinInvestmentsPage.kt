@@ -21,7 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsModule.FundViewItem
@@ -48,7 +48,9 @@ data class CoinInvestmentsPage(val input: Input) : HSPage() {
     override fun GetContent(navController: HSNavigation) {
         val context = LocalContext.current
         CoinInvestmentsScreen(
-            viewModel = viewModel(factory = CoinInvestmentsModule.Factory(input.coinUid)),
+            viewModel = hiltViewModel<CoinInvestmentsViewModel, CoinInvestmentsViewModel.Factory> { factory ->
+                factory.create(input.coinUid)
+            },
             onClickNavigation = {
                 navController.removeLastOrNull()
             },

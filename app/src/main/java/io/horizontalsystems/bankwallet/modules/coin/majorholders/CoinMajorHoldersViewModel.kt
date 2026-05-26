@@ -2,31 +2,48 @@ package io.horizontalsystems.bankwallet.modules.coin.majorholders
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.brandColor
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
 import io.horizontalsystems.bankwallet.modules.coin.MajorHolderItem
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersModule.UiState
+import io.horizontalsystems.bankwallet.modules.roi.RoiManager
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.TokenHolders
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 import java.net.UnknownHostException
 
-class CoinMajorHoldersViewModel(
-    private val coinUid: String,
-    private val blockchain: Blockchain,
+@HiltViewModel(assistedFactory = CoinMajorHoldersViewModel.Factory::class)
+class CoinMajorHoldersViewModel @AssistedInject constructor(
+    @Assisted private val coinUid: String,
+    @Assisted private val blockchain: Blockchain,
     private val marketKit: MarketKitWrapper,
-    private val factory: CoinViewFactory
+    private val currencyManager: CurrencyManager,
+    private val numberFormatter: IAppNumberFormatter,
+    private val roiManager: RoiManager,
 ) : ViewModelUiState<UiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(coinUid: String, blockchain: Blockchain): CoinMajorHoldersViewModel
+    }
+
+    private val factory: CoinViewFactory
+        get() = CoinViewFactory(currencyManager.baseCurrency, numberFormatter, roiManager)
 
     private var viewState: ViewState = ViewState.Loading
     private var top10Share: String = ""
@@ -43,7 +60,7 @@ class CoinMajorHoldersViewModel(
     override fun createState() = UiState(
         viewState = viewState,
         top10Share = top10Share,
-        totalHoldersCount  = totalHoldersCount,
+        totalHoldersCount = totalHoldersCount,
         seeAllUrl = seeAllUrl,
         chartData = chartData,
         topHolders = topHolders,
@@ -64,7 +81,6 @@ class CoinMajorHoldersViewModel(
 
     private fun fetch() {
         viewModelScope.launch {
-            delay(200)
             try {
                 val result = getTokenHolders(coinUid, blockchain.uid)
                 val top10ShareNumber = result.topHolders.sumOf { it.percentage }
@@ -83,9 +99,10 @@ class CoinMajorHoldersViewModel(
         }
     }
 
-    private suspend fun getTokenHolders(coinUid: String, blockchainUid: String): TokenHolders = withContext(Dispatchers.IO) {
-        marketKit.tokenHoldersSingle(coinUid, blockchainUid).await()
-    }
+    private suspend fun getTokenHolders(coinUid: String, blockchainUid: String): TokenHolders =
+        withContext(Dispatchers.IO) {
+            marketKit.tokenHoldersSingle(coinUid, blockchainUid).await()
+        }
 
     private fun getChartData(top10ShareFloat: Float, blockchain: Blockchain): List<StackBarSlice> {
         val remaining = 100f - top10ShareFloat

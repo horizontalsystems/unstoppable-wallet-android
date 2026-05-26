@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
@@ -33,7 +33,9 @@ data class CoinReportsPage(val input: Input) : HSPage() {
     override fun GetContent(navController: HSNavigation) {
         val context = LocalContext.current
         CoinReportsScreen(
-            viewModel = viewModel(factory = CoinReportsModule.Factory(input.coinUid)),
+            viewModel = hiltViewModel<CoinReportsViewModel, CoinReportsViewModel.Factory> { factory ->
+                factory.create(input.coinUid)
+            },
             onClickNavigation = {
                 navController.removeLastOrNull()
             },

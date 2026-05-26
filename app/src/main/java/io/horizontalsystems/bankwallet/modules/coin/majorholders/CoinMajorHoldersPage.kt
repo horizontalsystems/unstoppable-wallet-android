@@ -20,7 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -74,9 +74,9 @@ private fun CoinMajorHoldersScreen(
     coinUid: String,
     blockchain: Blockchain,
     navController: HSNavigation,
-    viewModel: CoinMajorHoldersViewModel = viewModel(
-        factory = CoinMajorHoldersModule.Factory(coinUid, blockchain)
-    )
+    viewModel: CoinMajorHoldersViewModel = hiltViewModel<CoinMajorHoldersViewModel, CoinMajorHoldersViewModel.Factory> { factory ->
+        factory.create(coinUid, blockchain)
+    }
 ) {
 
     HSScaffold(
