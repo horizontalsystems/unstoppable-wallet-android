@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -43,12 +43,9 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 fun TopCoins(
     onCoinClick: (String) -> Unit,
 ) {
-    val viewModel = viewModel<MarketTopCoinsViewModel>(
-        factory = MarketTopCoinsViewModel.Factory(
-            TopMarket.Top100,
-            SortingField.TopGainers,
-        )
-    )
+    val viewModel = hiltViewModel<MarketTopCoinsViewModel, MarketTopCoinsViewModel.Factory> { factory ->
+        factory.create(TopMarket.Top100, SortingField.TopGainers)
+    }
 
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
     var openTopSelector by rememberSaveable { mutableStateOf(false) }

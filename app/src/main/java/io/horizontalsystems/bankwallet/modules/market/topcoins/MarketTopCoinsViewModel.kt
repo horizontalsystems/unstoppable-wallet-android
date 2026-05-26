@@ -1,9 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.topcoins
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
@@ -24,13 +25,19 @@ import kotlinx.coroutines.rx2.await
 import kotlin.enums.EnumEntries
 import kotlin.math.min
 
-class MarketTopCoinsViewModel(
-    private var topMarket: TopMarket,
-    private var sortingField: SortingField,
+@HiltViewModel(assistedFactory = MarketTopCoinsViewModel.Factory::class)
+class MarketTopCoinsViewModel @AssistedInject constructor(
+    @Assisted private var topMarket: TopMarket,
+    @Assisted private var sortingField: SortingField,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
     private val favoritesManager: MarketFavoritesManager,
 ) : ViewModelUiState<MarketTopCoinsUiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(topMarket: TopMarket, sortingField: SortingField): MarketTopCoinsViewModel
+    }
 
     private val periods = listOf(
         TimeDuration.OneDay,
@@ -216,21 +223,6 @@ class MarketTopCoinsViewModel(
         }
     }
 
-    class Factory(
-        private val topMarket: TopMarket,
-        private val sortingField: SortingField,
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MarketTopCoinsViewModel(
-                topMarket,
-                sortingField,
-                App.marketKit,
-                App.currencyManager,
-                App.marketFavoritesManager
-            ) as T
-        }
-    }
 }
 
 data class MarketTopCoinsUiState(

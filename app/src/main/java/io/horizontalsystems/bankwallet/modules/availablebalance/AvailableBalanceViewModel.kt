@@ -4,17 +4,31 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import java.math.BigDecimal
 
-class AvailableBalanceViewModel(
-    private val coinCode: String,
-    private val coinDecimal: Int,
-    private val fiatDecimal: Int
+@HiltViewModel(assistedFactory = AvailableBalanceViewModel.Factory::class)
+class AvailableBalanceViewModel @AssistedInject constructor(
+    @Assisted private val coinCode: String,
+    @Assisted("coinDecimal") private val coinDecimal: Int,
+    @Assisted("fiatDecimal") private val fiatDecimal: Int,
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            coinCode: String,
+            @Assisted("coinDecimal") coinDecimal: Int,
+            @Assisted("fiatDecimal") fiatDecimal: Int,
+        ): AvailableBalanceViewModel
+    }
 
     var amountInputType: AmountInputType? = null
     var availableBalance: BigDecimal? = null
@@ -30,7 +44,7 @@ class AvailableBalanceViewModel(
         formatted = when {
             tmpAvailableBalance == null || tmpAmountInputMode == null -> null
             tmpAmountInputMode == AmountInputType.COIN -> {
-                App.numberFormatter.formatCoinFull(tmpAvailableBalance, coinCode, coinDecimal)
+                numberFormatter.formatCoinFull(tmpAvailableBalance, coinCode, coinDecimal)
             }
             tmpAmountInputMode == AmountInputType.CURRENCY -> {
                 xRate
@@ -44,21 +58,4 @@ class AvailableBalanceViewModel(
     }
 }
 
-object AvailableBalanceModule {
-
-    @Suppress("UNCHECKED_CAST")
-    class Factory(
-        private val coinCode: String,
-        private val coinDecimal: Int,
-        private val fiatDecimal: Int,
-    ) : ViewModelProvider.Factory {
-
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return AvailableBalanceViewModel(
-                coinCode,
-                coinDecimal,
-                fiatDecimal
-            ) as T
-        }
-    }
-}
+object AvailableBalanceModule
