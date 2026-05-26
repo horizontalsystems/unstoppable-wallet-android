@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.topplatforms
 
 import androidx.compose.runtime.Immutable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketField
@@ -15,14 +12,6 @@ import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
 object TopPlatformsModule {
-
-    class Factory(private val timeDuration: TimeDuration?) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val repository = TopPlatformsRepository(App.marketKit)
-            return TopPlatformsViewModel(repository, App.currencyManager, timeDuration) as T
-        }
-    }
 
     data class Menu(
         val sortingFieldSelect: Select<SortingField>,

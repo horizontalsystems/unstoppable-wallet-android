@@ -1,10 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.market.topplatforms
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.SortingField
@@ -12,11 +17,20 @@ import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class TopPlatformsViewModel(
-    private val repository: TopPlatformsRepository,
+@HiltViewModel(assistedFactory = TopPlatformsViewModel.Factory::class)
+class TopPlatformsViewModel @AssistedInject constructor(
+    @Assisted timeDuration: TimeDuration?,
     private val currencyManager: CurrencyManager,
-    timeDuration: TimeDuration?,
+    private val numberFormatter: IAppNumberFormatter,
+    marketKit: MarketKitWrapper,
 ) : ViewModelUiState<TopPlatformsModule.UiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(timeDuration: TimeDuration?): TopPlatformsViewModel
+    }
+
+    private val repository = TopPlatformsRepository(marketKit)
 
     val sortingOptions = listOf(
         SortingField.HighestCap,
@@ -88,7 +102,7 @@ class TopPlatformsViewModel(
                     R.string.MarketTopPlatforms_Protocols,
                     item.protocols
                 ),
-                marketCap = App.numberFormatter.formatFiatShort(
+                marketCap = numberFormatter.formatFiatShort(
                     item.marketCap,
                     currencyManager.baseCurrency.symbol,
                     2

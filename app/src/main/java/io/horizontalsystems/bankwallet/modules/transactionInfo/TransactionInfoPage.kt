@@ -7,7 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -67,7 +67,9 @@ fun TransactionInfoScreen(
     navController: HSNavigation,
     transactionRecord: TransactionRecord
 ) {
-    val viewModel = viewModel<TransactionInfoViewModel>(factory = TransactionInfoModule.Factory(transactionRecord))
+    val viewModel = hiltViewModel<TransactionInfoViewModel, TransactionInfoViewModel.Factory> { factory ->
+        factory.create(transactionRecord)
+    }
 
     HSScaffold(
         title = stringResource(R.string.TransactionInfo_Title),

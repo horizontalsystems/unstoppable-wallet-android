@@ -5,15 +5,51 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
+import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
+import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+import io.horizontalsystems.bankwallet.modules.transactions.NftMetadataService
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import kotlinx.coroutines.launch
 
-class TransactionInfoViewModel(
-    private val service: TransactionInfoService,
-    private val factory: TransactionInfoViewItemFactory,
-    private val contactsRepository: ContactsRepository
+@HiltViewModel(assistedFactory = TransactionInfoViewModel.Factory::class)
+class TransactionInfoViewModel @AssistedInject constructor(
+    @Assisted transactionRecord: TransactionRecord,
+    transactionAdapterManager: TransactionAdapterManager,
+    marketKit: MarketKitWrapper,
+    currencyManager: CurrencyManager,
+    nftMetadataManager: NftMetadataManager,
+    balanceHiddenManager: BalanceHiddenManager,
+    private val contactsRepository: ContactsRepository,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(transactionRecord: TransactionRecord): TransactionInfoViewModel
+    }
+
+    private val transactionSource = transactionRecord.source
+    private val adapter = transactionAdapterManager.getAdapter(transactionSource)!!
+    private val service = TransactionInfoService(
+        transactionRecord,
+        adapter,
+        marketKit,
+        currencyManager,
+        NftMetadataService(nftMetadataManager),
+        balanceHiddenManager.balanceHidden,
+    )
+    private val factory = TransactionInfoViewItemFactory(
+        transactionSource.blockchain.type.resendable,
+        transactionSource.blockchain.type
+    )
 
     val source: TransactionSource by service::source
     val transactionRecord by service::transactionRecord
