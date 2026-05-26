@@ -4,16 +4,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class AmountInputViewModel2(
-    private val coinCode: String,
-    private val coinDecimal: Int,
-    private val fiatDecimal: Int,
-    private var inputType: AmountInputType
+@HiltViewModel(assistedFactory = AmountInputViewModel2.Factory::class)
+class AmountInputViewModel2 @AssistedInject constructor(
+    @Assisted private val coinCode: String,
+    @Assisted("coinDecimal") private val coinDecimal: Int,
+    @Assisted("fiatDecimal") private val fiatDecimal: Int,
+    @Assisted private var inputType: AmountInputType,
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModel() {
 
     private var availableBalance = BigDecimal.ZERO
@@ -98,10 +104,10 @@ class AmountInputViewModel2(
         } else {
             when (inputType) {
                 AmountInputType.COIN -> {
-                    App.numberFormatter.format(currencyAmount ?: BigDecimal.ZERO, fiatDecimal, fiatDecimal, prefix = tmpRate.currency.symbol)
+                    numberFormatter.format(currencyAmount ?: BigDecimal.ZERO, fiatDecimal, fiatDecimal, prefix = tmpRate.currency.symbol)
                 }
                 AmountInputType.CURRENCY -> {
-                    App.numberFormatter.formatCoinFull(coinAmount ?: BigDecimal.ZERO, coinCode, coinDecimal)
+                    numberFormatter.formatCoinFull(coinAmount ?: BigDecimal.ZERO, coinCode, coinDecimal)
                 }
             }
         }
@@ -153,4 +159,13 @@ class AmountInputViewModel2(
         return amount.scale() <= maxAllowedScale
     }
 
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            coinCode: String,
+            @Assisted("coinDecimal") coinDecimal: Int,
+            @Assisted("fiatDecimal") fiatDecimal: Int,
+            inputType: AmountInputType,
+        ): AmountInputViewModel2
+    }
 }

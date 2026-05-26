@@ -34,7 +34,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -66,14 +66,11 @@ fun HSAmountInput(
     rate: CurrencyValue?,
     amountUnique: AmountUnique? = null
 ) {
-    val viewModel = viewModel<AmountInputViewModel2>(
-        factory = AmountInputModule.Factory(
-            coinCode,
-            coinDecimal,
-            fiatDecimal,
-            inputType
-        )
-    )
+    val viewModel = hiltViewModel<AmountInputViewModel2, AmountInputViewModel2.Factory>(
+        key = "$coinCode-$coinDecimal-$fiatDecimal"
+    ) { factory ->
+        factory.create(coinCode, coinDecimal, fiatDecimal, inputType)
+    }
     LaunchedEffect(availableBalance) {
         viewModel.setAvailableBalance(availableBalance)
     }

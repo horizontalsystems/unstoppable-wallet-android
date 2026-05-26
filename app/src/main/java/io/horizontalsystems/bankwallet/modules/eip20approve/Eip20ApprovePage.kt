@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -51,13 +51,9 @@ data class Eip20ApprovePage(val input: Input) : HSPage() {
 @Composable
 fun Eip20ApproveScreen(navController: HSNavigation, input: Eip20ApprovePage.Input) {
     val resultEventBus = LocalResultEventBus.current
-    val viewModel = viewModel<Eip20ApproveViewModel>(
-        factory = Eip20ApproveViewModel.Factory(
-            input.token,
-            input.requiredAllowance,
-            input.spenderAddress,
-        )
-    )
+    val viewModel = hiltViewModel<Eip20ApproveViewModel, Eip20ApproveViewModel.Factory> { factory ->
+        factory.create(input.token, input.requiredAllowance, input.spenderAddress)
+    }
 
     val uiState = viewModel.uiState
 

@@ -1,9 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.eip20approve
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.Eip20Adapter
@@ -11,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.adapters.Trc20Adapter
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.isEvm
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
@@ -20,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.FiatService
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.AbstractSendTransactionService
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceFactory
+import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceState
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -29,41 +32,33 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
-class Eip20ApproveViewModel(
-    private val token: Token,
-    private val requiredAllowance: BigDecimal,
-    private val spenderAddress: String,
+@HiltViewModel(assistedFactory = Eip20ApproveViewModel.Factory::class)
+class Eip20ApproveViewModel @AssistedInject constructor(
+    @Assisted private val token: Token,
+    @Assisted private val requiredAllowance: BigDecimal,
+    @Assisted private val spenderAddress: String,
     private val adapterManager: IAdapterManager,
-    val sendTransactionService: AbstractSendTransactionService,
     private val currencyManager: CurrencyManager,
-    private val fiatService: FiatService,
+    marketKit: MarketKitWrapper,
     private val contactsRepository: ContactsRepository,
 ) : ViewModelUiState<Eip20ApproveUiState>() {
+    val sendTransactionService: AbstractSendTransactionService
+    private val fiatService: FiatService
+
     private val currency = currencyManager.baseCurrency
     private var allowanceMode = OnlyRequired
     private var initialLoading = true
-    private var sendTransactionState = sendTransactionService.stateFlow.value
+    private var sendTransactionState: SendTransactionServiceState
     private var fiatAmount: BigDecimal? = null
     private val contact = contactsRepository.getContactsFiltered(
         blockchainType = token.blockchainType,
         addressQuery = spenderAddress
     ).firstOrNull()
 
-    override fun createState() = Eip20ApproveUiState(
-        token = token,
-        requiredAllowance = requiredAllowance,
-        allowanceMode = allowanceMode,
-        networkFee = sendTransactionState.networkFee,
-        cautions = sendTransactionState.cautions,
-        currency = currency,
-        fiatAmount = fiatAmount,
-        spenderAddress = spenderAddress,
-        contact = contact,
-        approveEnabled = sendTransactionState.sendable,
-        initialLoading = initialLoading,
-    )
-
     init {
+        sendTransactionService = SendTransactionServiceFactory.create(token)
+        fiatService = FiatService(marketKit)
+        sendTransactionState = sendTransactionService.stateFlow.value
 
         fiatService.setCurrency(currency)
         fiatService.setToken(token)
@@ -87,6 +82,20 @@ class Eip20ApproveViewModel(
 
         sendTransactionService.start(viewModelScope)
     }
+
+    override fun createState() = Eip20ApproveUiState(
+        token = token,
+        requiredAllowance = requiredAllowance,
+        allowanceMode = allowanceMode,
+        networkFee = sendTransactionState.networkFee,
+        cautions = sendTransactionState.cautions,
+        currency = currency,
+        fiatAmount = fiatAmount,
+        spenderAddress = spenderAddress,
+        contact = contact,
+        approveEnabled = sendTransactionState.sendable,
+        initialLoading = initialLoading,
+    )
 
     fun setAllowanceMode(allowanceMode: AllowanceMode) {
         this.allowanceMode = allowanceMode
@@ -140,26 +149,9 @@ class Eip20ApproveViewModel(
         sendTransactionService.sendTransaction()
     }
 
-    class Factory(
-        private val token: Token,
-        private val requiredAllowance: BigDecimal,
-        private val spenderAddress: String,
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val sendTransactionService = SendTransactionServiceFactory.create(token)
-
-            return Eip20ApproveViewModel(
-                token,
-                requiredAllowance,
-                spenderAddress,
-                App.adapterManager,
-                sendTransactionService,
-                App.currencyManager,
-                FiatService(App.marketKit),
-                App.contactsRepository
-            ) as T
-        }
+    @AssistedFactory
+    interface Factory {
+        fun create(token: Token, requiredAllowance: BigDecimal, spenderAddress: String): Eip20ApproveViewModel
     }
 }
 

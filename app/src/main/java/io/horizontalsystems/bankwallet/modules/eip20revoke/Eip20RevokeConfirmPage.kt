@@ -18,7 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.confirm.ErrorSheet
@@ -63,13 +63,9 @@ data class Eip20RevokeConfirmPage(val input: Input) : HSPage() {
 @Composable
 fun Eip20RevokeScreen(navController: HSNavigation, input: Eip20RevokeConfirmPage.Input) {
     val resultEventBus = LocalResultEventBus.current
-    val viewModel = viewModel<Eip20RevokeConfirmViewModel>(
-        factory = Eip20RevokeConfirmViewModel.Factory(
-            input.token,
-            input.spenderAddress,
-            input.allowance
-        )
-    )
+    val viewModel = hiltViewModel<Eip20RevokeConfirmViewModel, Eip20RevokeConfirmViewModel.Factory> { factory ->
+        factory.create(input.token, input.spenderAddress, input.allowance)
+    }
 
     val uiState = viewModel.uiState
     val view = LocalView.current
