@@ -2,14 +2,22 @@ package io.horizontalsystems.bankwallet.modules.transactionInfo.resendbitcoin
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.IFeeRateProvider
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
+import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
@@ -18,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.send.SendWarningRiskOfGettingStuck
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.SpeedUpCancelType
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bitcoincore.rbf.ReplacementTransaction
@@ -26,36 +35,40 @@ import io.horizontalsystems.bitcoincore.rbf.ReplacementTransactionInfo
 import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
-class ResendBitcoinViewModel(
-    private val type: SpeedUpCancelType,
-    private val transactionRecord: BitcoinOutgoingTransactionRecord,
-
-    private val replacementInfo: ReplacementTransactionInfo?,
-
-    private val adapter: BitcoinBaseAdapter,
-    private val feeRateProvider: IFeeRateProvider,
-    private val xRateService: XRateService,
+@HiltViewModel(assistedFactory = ResendBitcoinViewModel.Factory::class)
+class ResendBitcoinViewModel @AssistedInject constructor(
+    @Assisted private val type: SpeedUpCancelType,
+    @Assisted private val transactionRecord: BitcoinOutgoingTransactionRecord,
+    @Assisted private val source: TransactionSource,
+    transactionAdapterManager: TransactionAdapterManager,
+    marketKit: MarketKitWrapper,
+    currencyManager: CurrencyManager,
     private val contactsRepo: ContactsRepository,
+    appConfigProvider: AppConfigProvider,
 ) : ViewModelUiState<ResendBitcoinUiState>() {
 
     private val titleResId: Int
     private val sendButtonTitleResId: Int
     private val addressTitleResId: Int
 
-    private val token = adapter.wallet.token
+    private val adapter: BitcoinBaseAdapter
+    private val replacementInfo: ReplacementTransactionInfo?
+    private val feeRateProvider: IFeeRateProvider
+    private val xRateService: XRateService
+    private val token: Token
+    private val logger: AppLogger
+
     private val transactionHash = transactionRecord.transactionHash
-
-    private val logger = AppLogger("Resend-${token.coin.code}")
-
-    private val coinMaxAllowedDecimals: Int = token.decimals
-    private val fiatMaxAllowedDecimals: Int = App.appConfigProvider.fiatDecimal
-    private val blockchainType: BlockchainType = token.blockchainType
-    private val coinRate: CurrencyValue? = xRateService.getRate(token.coin.uid)
+    private val coinMaxAllowedDecimals: Int
+    private val fiatMaxAllowedDecimals: Int = appConfigProvider.fiatDecimal
+    private val blockchainType: BlockchainType
+    private val coinRate: CurrencyValue?
 
     private var sendResult: SendResult? = null
     private var feeCaution: HSCaution? = null
@@ -67,6 +80,20 @@ class ResendBitcoinViewModel(
     private var record = transactionRecord
 
     init {
+        adapter = transactionAdapterManager.getAdapter(source) as BitcoinBaseAdapter
+        replacementInfo = when (type) {
+            SpeedUpCancelType.SpeedUp -> adapter.speedUpTransactionInfo(transactionRecord.transactionHash)
+            SpeedUpCancelType.Cancel -> adapter.cancelTransactionInfo(transactionRecord.transactionHash)
+        }
+        xRateService = XRateService(marketKit, currencyManager.baseCurrency)
+        feeRateProvider = FeeRateProviderFactory.provider(adapter.wallet.token.blockchainType)!!
+
+        token = adapter.wallet.token
+        coinMaxAllowedDecimals = token.decimals
+        blockchainType = token.blockchainType
+        coinRate = xRateService.getRate(token.coin.uid)
+        logger = AppLogger("Resend-${token.coin.code}")
+
         when (type) {
             SpeedUpCancelType.SpeedUp -> {
                 titleResId = R.string.TransactionInfoOptions_SpeedUp_Title
@@ -211,6 +238,10 @@ class ResendBitcoinViewModel(
         }
     }
 
+    @AssistedFactory
+    interface Factory {
+        fun create(type: SpeedUpCancelType, transactionRecord: BitcoinOutgoingTransactionRecord, source: TransactionSource): ResendBitcoinViewModel
+    }
 }
 
 data class ResendBitcoinUiState(

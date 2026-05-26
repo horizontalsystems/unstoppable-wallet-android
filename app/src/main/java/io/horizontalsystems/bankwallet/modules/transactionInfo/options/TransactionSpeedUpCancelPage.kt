@@ -12,7 +12,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -58,13 +58,9 @@ private fun TransactionSpeedUpCancelScreen(
     val logger = remember { AppLogger("tx-speedUp-cancel") }
     val view = LocalView.current
 
-    val viewModel = viewModel<TransactionSpeedUpCancelViewModel>(
-        factory = TransactionSpeedUpCancelViewModel.Factory(
-            input.blockchainType,
-            input.transactionHash,
-            input.optionType,
-        )
-    )
+    val viewModel = hiltViewModel<TransactionSpeedUpCancelViewModel, TransactionSpeedUpCancelViewModel.Factory> { factory ->
+        factory.create(input.transactionHash, input.optionType, input.blockchainType)
+    }
 
     val uiState = viewModel.uiState
 

@@ -9,14 +9,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
@@ -61,16 +60,12 @@ data class ResendBitcoinPage(val input: Input) : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         val transactionInfoViewModel = navController.viewModelForScreen<TransactionInfoViewModel>(TransactionInfoPage::class)
+        val transactionRecord = transactionInfoViewModel.transactionRecord as BitcoinOutgoingTransactionRecord
+        val source = transactionInfoViewModel.source
 
-        val vmFactory = remember {
-            ResendBitcoinModule.Factory(
-                input.optionType,
-                transactionInfoViewModel.transactionRecord as BitcoinOutgoingTransactionRecord,
-                transactionInfoViewModel.source
-            )
+        val resendViewModel = hiltViewModel<ResendBitcoinViewModel, ResendBitcoinViewModel.Factory> { factory ->
+            factory.create(input.optionType, transactionRecord, source)
         }
-
-        val resendViewModel = viewModel<ResendBitcoinViewModel>(factory = vmFactory)
 
         ResendBitcoinScreen(
             navController = navController,

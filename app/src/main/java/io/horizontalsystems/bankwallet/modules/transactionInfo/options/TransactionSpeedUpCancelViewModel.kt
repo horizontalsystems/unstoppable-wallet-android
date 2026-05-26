@@ -1,14 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo.options
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceEvm
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceState
@@ -22,13 +29,22 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigInteger
 
-class TransactionSpeedUpCancelViewModel(
-    val sendTransactionService: SendTransactionServiceEvm,
-    private val transactionHash: String,
-    private val evmKitWrapper: EvmKitWrapper,
-    private val optionType: SpeedUpCancelType,
-    private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory
+@HiltViewModel(assistedFactory = TransactionSpeedUpCancelViewModel.Factory::class)
+class TransactionSpeedUpCancelViewModel @AssistedInject constructor(
+    @Assisted private val transactionHash: String,
+    @Assisted private val optionType: SpeedUpCancelType,
+    @Assisted blockchainType: BlockchainType,
+    evmBlockchainManager: EvmBlockchainManager,
+    marketKit: MarketKitWrapper,
+    currencyManager: CurrencyManager,
+    coinManager: ICoinManager,
+    evmLabelManager: EvmLabelManager,
+    contactsRepository: ContactsRepository,
 ) : ViewModelUiState<TransactionSpeedUpCancelUiState>() {
+
+    private val evmKitWrapper: EvmKitWrapper
+    private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory
+    val sendTransactionService: SendTransactionServiceEvm
 
     val title: String = when (optionType) {
         SpeedUpCancelType.SpeedUp -> Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Title)
@@ -41,7 +57,7 @@ class TransactionSpeedUpCancelViewModel(
     }
 
     private var initialLoading = true
-    private var sendTransactionState: SendTransactionServiceState = sendTransactionService.stateFlow.value
+    private var sendTransactionState: SendTransactionServiceState
     private var error: Throwable? = null
     private var sectionViewItems: List<SectionViewItem> = listOf()
 
@@ -54,6 +70,15 @@ class TransactionSpeedUpCancelViewModel(
     )
 
     init {
+        val feeToken = evmBlockchainManager.getBaseToken(blockchainType)!!
+        val coinServiceFactory = EvmCoinServiceFactory(feeToken, marketKit, currencyManager, coinManager)
+        sendEvmTransactionViewItemFactory = SendEvmTransactionViewItemFactory(
+            evmLabelManager, coinServiceFactory, contactsRepository, blockchainType
+        )
+        evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!!
+        sendTransactionService = SendTransactionServiceEvm(blockchainType)
+        sendTransactionState = sendTransactionService.stateFlow.value
+
         val fullTransaction = evmKitWrapper.evmKit
             .getFullTransactions(listOf(transactionHash.hexStringToByteArray()))
             .first()
@@ -109,40 +134,9 @@ class TransactionSpeedUpCancelViewModel(
         sendTransactionService.sendTransaction()
     }
 
-    class Factory(
-        private val blockchainType: BlockchainType,
-        private val transactionHash: String,
-        private val optionType: SpeedUpCancelType,
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val sendTransactionService = SendTransactionServiceEvm(blockchainType)
-            val feeToken = App.evmBlockchainManager.getBaseToken(blockchainType)!!
-            val coinServiceFactory = EvmCoinServiceFactory(
-                feeToken,
-                App.marketKit,
-                App.currencyManager,
-                App.coinManager
-            )
-
-            val sendEvmTransactionViewItemFactory = SendEvmTransactionViewItemFactory(
-                App.evmLabelManager,
-                coinServiceFactory,
-                App.contactsRepository,
-                blockchainType
-            )
-
-            val evmKitWrapper =
-                App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!!
-
-            return TransactionSpeedUpCancelViewModel(
-                sendTransactionService,
-                transactionHash,
-                evmKitWrapper,
-                optionType,
-                sendEvmTransactionViewItemFactory
-            ) as T
-        }
+    @AssistedFactory
+    interface Factory {
+        fun create(transactionHash: String, optionType: SpeedUpCancelType, blockchainType: BlockchainType): TransactionSpeedUpCancelViewModel
     }
 }
 
