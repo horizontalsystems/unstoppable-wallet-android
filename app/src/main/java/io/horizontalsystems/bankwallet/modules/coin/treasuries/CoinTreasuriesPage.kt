@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -47,7 +47,9 @@ data class CoinTreasuriesPage(val input: Coin) : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         CoinTreasuriesScreen(
-            viewModel = viewModel(factory = CoinTreasuriesModule.Factory(input)),
+            viewModel = hiltViewModel<CoinTreasuriesViewModel, CoinTreasuriesViewModel.Factory> { factory ->
+                factory.create(input)
+            },
             onBackClick = { navController.removeLastOrNull() }
         )
     }

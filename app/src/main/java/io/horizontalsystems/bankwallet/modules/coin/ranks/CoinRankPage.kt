@@ -29,7 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -74,9 +74,9 @@ data class CoinRankPage(val type: RankType) : HSPage() {
 private fun CoinRankScreen(
     type: RankType,
     navController: HSNavigation,
-    viewModel: CoinRankViewModel = viewModel(
-        factory = CoinRankModule.Factory(type)
-    )
+    viewModel: CoinRankViewModel = hiltViewModel<CoinRankViewModel, CoinRankViewModel.Factory> { factory ->
+        factory.create(type)
+    }
 ) {
     val uiState = viewModel.uiState
     val viewItems = viewModel.uiState.rankViewItems

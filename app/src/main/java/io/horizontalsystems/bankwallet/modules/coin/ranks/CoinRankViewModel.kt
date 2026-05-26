@@ -1,9 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.coin.ranks
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Currency
@@ -23,12 +28,20 @@ import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
-class CoinRankViewModel(
-    private val rankType: RankType,
-    private val baseCurrency: Currency,
+@HiltViewModel(assistedFactory = CoinRankViewModel.Factory::class)
+class CoinRankViewModel @AssistedInject constructor(
+    @Assisted private val rankType: RankType,
+    private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
     private val numberFormatter: IAppNumberFormatter
 ) : ViewModelUiState<UiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(rankType: RankType): CoinRankViewModel
+    }
+
+    private val baseCurrency: Currency get() = currencyManager.baseCurrency
 
     private var internalItems: List<InternalItem> = emptyList()
     private var viewState: ViewState = ViewState.Loading
