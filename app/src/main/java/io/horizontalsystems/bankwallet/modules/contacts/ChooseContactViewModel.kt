@@ -4,14 +4,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class ChooseContactViewModel(
+@HiltViewModel(assistedFactory = ChooseContactViewModel.Factory::class)
+class ChooseContactViewModel @AssistedInject constructor(
+    @Assisted private val blockchainType: BlockchainType,
     private val repository: ContactsRepository,
-    private val blockchainType: BlockchainType
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(blockchainType: BlockchainType): ChooseContactViewModel
+    }
 
     var items: List<ContactViewItem> by mutableStateOf(listOf())
         private set
@@ -38,13 +46,6 @@ class ChooseContactViewModel(
             }
     }
 
-    class Factory(private val blockchainType: BlockchainType) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ChooseContactViewModel(App.contactsRepository, blockchainType) as T
-        }
-    }
 }
 
 data class ContactViewItem(val name: String, val address: String)

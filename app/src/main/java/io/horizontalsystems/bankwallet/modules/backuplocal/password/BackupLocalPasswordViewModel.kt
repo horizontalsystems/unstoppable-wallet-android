@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal.password
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.PasswordError
@@ -26,12 +30,18 @@ sealed class BackupType {
     class FullBackup(val accountIds: List<String>, val sections: Set<BackupSection> = BackupSection.entries.toSet()) : BackupType()
 }
 
-class BackupLocalPasswordViewModel(
-    private val type: BackupType,
+@HiltViewModel(assistedFactory = BackupLocalPasswordViewModel.Factory::class)
+class BackupLocalPasswordViewModel @AssistedInject constructor(
+    @Assisted private val type: BackupType,
     private val passphraseValidator: PassphraseValidator,
     private val accountManager: IAccountManager,
     private val backupProvider: BackupProvider,
 ) : ViewModelUiState<BackupLocalPasswordModule.UiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(type: BackupType): BackupLocalPasswordViewModel
+    }
 
     private var passphrase = ""
     private var passphraseConfirmation = ""

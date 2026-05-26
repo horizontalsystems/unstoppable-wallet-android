@@ -23,7 +23,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -64,7 +64,9 @@ fun ChooseContactScreen(
     navController: HSNavigation
 ) {
     val resultEventBus = LocalResultEventBus.current
-    val viewModel = viewModel<ChooseContactViewModel>(factory = ChooseContactViewModel.Factory(blockchainType))
+    val viewModel = hiltViewModel<ChooseContactViewModel, ChooseContactViewModel.Factory> { factory ->
+        factory.create(blockchainType)
+    }
 
     val items = viewModel.items
 

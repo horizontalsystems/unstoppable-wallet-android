@@ -20,7 +20,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -41,9 +41,9 @@ fun LocalBackupPasswordScreen(
     onBackClick: () -> Unit,
     onFinish: () -> Unit
 ) {
-    val viewModel = viewModel<BackupLocalPasswordViewModel>(
-        factory = BackupLocalPasswordModule.Factory(backupType)
-    )
+    val viewModel = hiltViewModel<BackupLocalPasswordViewModel, BackupLocalPasswordViewModel.Factory> { factory ->
+        factory.create(backupType)
+    }
 
     val view = LocalView.current
     val context = LocalContext.current

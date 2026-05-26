@@ -1,11 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains
 
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.IAccountFactory
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.WalletActivator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -16,11 +26,31 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains
 import io.horizontalsystems.bankwallet.modules.watchaddress.WatchAddressService
 import io.horizontalsystems.marketkit.models.Token
 
-class SelectBlockchainsViewModel(
-    private val accountType: AccountType,
-    private val accountName: String?,
-    private val service: WatchAddressService
+@HiltViewModel(assistedFactory = SelectBlockchainsViewModel.Factory::class)
+class SelectBlockchainsViewModel @AssistedInject constructor(
+    @Assisted private val accountType: AccountType,
+    @Assisted private val accountName: String?,
+    accountManager: IAccountManager,
+    walletActivator: WalletActivator,
+    accountFactory: IAccountFactory,
+    marketKit: MarketKitWrapper,
+    evmBlockchainManager: EvmBlockchainManager,
+    restoreSettingsManager: RestoreSettingsManager,
 ) : ViewModelUiState<SelectBlockchainsUiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(accountType: AccountType, accountName: String?): SelectBlockchainsViewModel
+    }
+
+    private val service = WatchAddressService(
+        accountManager,
+        walletActivator,
+        accountFactory,
+        marketKit,
+        evmBlockchainManager,
+        restoreSettingsManager,
+    )
 
     private var title: Int = R.string.Watch_Select_Blockchains
     private var coinViewItems = listOf<CoinViewItem<Token>>()

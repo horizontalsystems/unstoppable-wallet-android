@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -74,12 +74,9 @@ private fun SelectBlockchainsScreen(
     popUpToInclusiveId: KClass<out HSPage>,
     inclusive: Boolean
 ) {
-    val viewModel = viewModel<SelectBlockchainsViewModel>(
-        factory = SelectBlockchainsModule.Factory(
-            accountType,
-            accountName
-        )
-    )
+    val viewModel = hiltViewModel<SelectBlockchainsViewModel, SelectBlockchainsViewModel.Factory> { factory ->
+        factory.create(accountType, accountName)
+    }
 
     val view = LocalView.current
     val uiState = viewModel.uiState
