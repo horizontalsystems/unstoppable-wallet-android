@@ -1,14 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request.signtransaction
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
-import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.toHexString
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.evmfee.GasData
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldNonce
@@ -23,13 +29,20 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class WCSignEthereumTransactionRequestViewModel(
-    private val evmKit: EvmKitWrapper,
-    baseCoinService: EvmCoinService,
-    private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
-    private val dAppName: String,
-    transaction: WalletConnectTransaction
+@HiltViewModel(assistedFactory = WCSignEthereumTransactionRequestViewModel.Factory::class)
+class WCSignEthereumTransactionRequestViewModel @AssistedInject constructor(
+    @Assisted transaction: WalletConnectTransaction,
+    @Assisted blockchainType: BlockchainType,
+    evmBlockchainManager: EvmBlockchainManager,
+    marketKit: MarketKitWrapper,
+    currencyManager: CurrencyManager,
+    coinManager: ICoinManager,
+    evmLabelManager: EvmLabelManager,
+    contactsRepository: ContactsRepository,
 ) : ViewModelUiState<WCSignEthereumTransactionRequestUiState>() {
+
+    private val evmKit: EvmKitWrapper
+    private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory
 
     private val transactionData = TransactionData(
         transaction.to,
@@ -43,6 +56,14 @@ class WCSignEthereumTransactionRequestViewModel(
     private var fields: List<DataField>
 
     init {
+        val token = evmBlockchainManager.getBaseToken(blockchainType)!!
+        evmKit = evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!!
+        val coinServiceFactory = EvmCoinServiceFactory(token, marketKit, currencyManager, coinManager)
+        val baseCoinService = coinServiceFactory.baseCoinService
+        sendEvmTransactionViewItemFactory = SendEvmTransactionViewItemFactory(
+            evmLabelManager, coinServiceFactory, contactsRepository, blockchainType
+        )
+
         val gasPrice = transaction.getGasPriceObj()
 
         feeAmountData = if (gasPrice != null && transaction.gasLimit != null) {
@@ -108,38 +129,9 @@ class WCSignEthereumTransactionRequestViewModel(
         }
     }
 
-    class Factory(
-        private val blockchainType: BlockchainType,
-        private val transaction: WalletConnectTransaction,
-        private val peerName: String
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val token = App.evmBlockchainManager.getBaseToken(blockchainType)!!
-            val evmKitWrapper = App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!!
-            val coinServiceFactory = EvmCoinServiceFactory(
-                token,
-                App.marketKit,
-                App.currencyManager,
-                App.coinManager
-            )
-
-            val sendEvmTransactionViewItemFactory = SendEvmTransactionViewItemFactory(
-                App.evmLabelManager,
-                coinServiceFactory,
-                App.contactsRepository,
-                blockchainType
-            )
-
-
-            return WCSignEthereumTransactionRequestViewModel(
-                evmKitWrapper,
-                coinServiceFactory.baseCoinService,
-                sendEvmTransactionViewItemFactory,
-                peerName,
-                transaction
-            ) as T
-        }
+    @AssistedFactory
+    interface Factory {
+        fun create(transaction: WalletConnectTransaction, blockchainType: BlockchainType): WCSignEthereumTransactionRequestViewModel
     }
 }
 

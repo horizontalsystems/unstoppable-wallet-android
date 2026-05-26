@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoSheet
@@ -47,9 +47,9 @@ fun WcRequestScreen(
     sessionRequest: HSDAppRequest,
     wcAction: AbstractWCAction
 ) {
-    val viewModel = viewModel<WCRequestViewModel>(
-        factory = WCRequestViewModel.Factory(sessionRequest, wcAction)
-    )
+    val viewModel = hiltViewModel<WCRequestViewModel, WCRequestViewModel.Factory> { factory ->
+        factory.create(sessionRequest, wcAction)
+    }
 
     val uiState = viewModel.uiState
 

@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
@@ -65,13 +65,9 @@ fun WCSignEthereumTransactionRequestScreen(
     transaction: WalletConnectTransaction,
     sessionRequestUI: SessionRequestUI.Content,
 ) {
-    val viewModel = viewModel<WCSignEthereumTransactionRequestViewModel>(
-        factory = WCSignEthereumTransactionRequestViewModel.Factory(
-            blockchainType = blockchainType,
-            transaction = transaction,
-            peerName = sessionRequestUI.peerUI.peerName
-        )
-    )
+    val viewModel = hiltViewModel<WCSignEthereumTransactionRequestViewModel, WCSignEthereumTransactionRequestViewModel.Factory> { factory ->
+        factory.create(transaction, blockchainType)
+    }
     val uiState = viewModel.uiState
     val view = LocalView.current
     val coroutineScope = rememberCoroutineScope()
