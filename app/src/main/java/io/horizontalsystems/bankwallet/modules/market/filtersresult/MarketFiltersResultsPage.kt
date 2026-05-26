@@ -12,7 +12,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -47,9 +47,9 @@ data object MarketFiltersResultsPage : HSPage() {
     @Composable
     override fun GetContent(navController: HSNavigation) {
         val marketSearchFilterViewModel = navController.viewModelForScreen<MarketFiltersViewModel>(MarketFiltersPage::class)
-        val viewModel = viewModel<MarketFiltersResultViewModel>(
-            factory = MarketFiltersResultsModule.Factory(marketSearchFilterViewModel.service)
-        )
+        val viewModel = hiltViewModel<MarketFiltersResultViewModel, MarketFiltersResultViewModel.Factory> { factory ->
+            factory.create(marketSearchFilterViewModel.service)
+        }
 
         SearchResultsScreen(viewModel, navController)
     }

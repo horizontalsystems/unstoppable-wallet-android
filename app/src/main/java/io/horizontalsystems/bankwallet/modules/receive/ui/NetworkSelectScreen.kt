@@ -12,7 +12,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -43,12 +43,9 @@ fun NetworkSelectScreen(
     closeModule: () -> Unit,
     onSelect: (Wallet) -> Unit
 ) {
-    val viewModel = viewModel<NetworkSelectViewModel>(
-        factory = NetworkSelectViewModel.Factory(
-            activeAccount,
-            fullCoin
-        )
-    )
+    val viewModel = hiltViewModel<NetworkSelectViewModel, NetworkSelectViewModel.Factory> { factory ->
+        factory.create(activeAccount, fullCoin)
+    }
     val coroutineScope = rememberCoroutineScope()
 
     HSScaffold(

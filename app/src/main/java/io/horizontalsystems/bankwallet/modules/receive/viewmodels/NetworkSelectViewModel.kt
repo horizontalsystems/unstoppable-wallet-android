@@ -1,8 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.eligibleTokens
 import io.horizontalsystems.bankwallet.core.utils.Utils
@@ -11,11 +14,19 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 
-class NetworkSelectViewModel(
-    val activeAccount: Account,
-    val fullCoin: FullCoin,
-    private val walletManager: WalletManager
+@HiltViewModel(assistedFactory = NetworkSelectViewModel.Factory::class)
+class NetworkSelectViewModel @AssistedInject constructor(
+    @Assisted val activeAccount: Account,
+    @Assisted val fullCoin: FullCoin,
+    private val walletManager: WalletManager,
+    private val adapterManager: IAdapterManager,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(activeAccount: Account, fullCoin: FullCoin): NetworkSelectViewModel
+    }
+
     val eligibleTokens = fullCoin.eligibleTokens(activeAccount.type)
 
     suspend fun getOrCreateWallet(token: Token): Wallet {
@@ -31,19 +42,9 @@ class NetworkSelectViewModel(
         walletManager.save(listOf(wallet))
 
         Utils.waitUntil(1000L, 100L) {
-            App.adapterManager.getReceiveAdapterForWallet(wallet) != null
+            adapterManager.getReceiveAdapterForWallet(wallet) != null
         }
 
         return wallet
-    }
-
-    class Factory(
-        private val activeAccount: Account,
-        private val fullCoin: FullCoin
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return NetworkSelectViewModel(activeAccount, fullCoin, App.walletManager) as T
-        }
     }
 }
