@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputAddress
@@ -23,10 +23,11 @@ fun HSAddressInput(
     onError: ((Throwable?) -> Unit)? = null,
     onValueChange: ((Address?) -> Unit)? = null,
 ) {
-    val viewModel = viewModel<AddressViewModel>(
-        factory = AddressInputModule.FactoryToken(tokenQuery, coinCode, initial),
+    val viewModel = hiltViewModel<AddressViewModel, AddressViewModel.Factory>(
         key = "address_view_model_${tokenQuery.id}"
-    )
+    ) { factory ->
+        factory.create(tokenQuery, coinCode, initial)
+    }
 
     HSAddressInput(
         modifier = modifier,

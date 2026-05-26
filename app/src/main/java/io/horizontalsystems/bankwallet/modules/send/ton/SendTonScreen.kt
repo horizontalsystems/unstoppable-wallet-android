@@ -10,10 +10,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.address.HSAddressCell
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
@@ -53,9 +52,9 @@ fun SendTonScreen(
     val amountInputType = amountInputModeViewModel.inputType
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, amount)
-    )
+    val paymentAddressViewModel = hiltViewModel<AddressParserViewModel, AddressParserViewModel.Factory> { factory ->
+        factory.create(wallet.token, amount)
+    }
     val amountUnique = paymentAddressViewModel.amountUnique
 
 

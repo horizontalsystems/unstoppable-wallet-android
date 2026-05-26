@@ -4,13 +4,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import io.horizontalsystems.bankwallet.core.IAddressParser
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.core.utils.AddressUriResult
 import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessor
+import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.util.UUID
 
-class AddressParserViewModel(private val parser: IAddressParser, prefilledAmount: BigDecimal?) : ViewModel(), TextPreprocessor {
+@HiltViewModel(assistedFactory = AddressParserViewModel.Factory::class)
+class AddressParserViewModel @AssistedInject constructor(
+    @Assisted token: Token,
+    @Assisted prefilledAmount: BigDecimal?,
+) : ViewModel(), TextPreprocessor {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(token: Token, prefilledAmount: BigDecimal?): AddressParserViewModel
+    }
+
+    private val parser = AddressUriParser(token.blockchainType, token.type)
     private var lastEnteredText: String? = null
 
     var amountUnique by mutableStateOf<AmountUnique?>(prefilledAmount?.let { AmountUnique(it) })

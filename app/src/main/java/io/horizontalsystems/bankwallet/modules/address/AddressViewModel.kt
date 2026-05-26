@@ -5,25 +5,128 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.core.utils.AddressUriResult
 import io.horizontalsystems.bankwallet.core.utils.ToncoinUriParser
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
+import io.horizontalsystems.bitcoinkit.MainNet
+import io.horizontalsystems.dashkit.MainNetDash
+import io.horizontalsystems.ecash.MainNetECash
+import io.horizontalsystems.litecoinkit.MainNetLitecoin
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddressViewModel(
-    val blockchainType: BlockchainType,
-    private val addressUriParser: AddressUriParser,
-    private val addressParserChain: AddressParserChain,
-    initial: Address?
+@HiltViewModel(assistedFactory = AddressViewModel.Factory::class)
+class AddressViewModel @AssistedInject constructor(
+    @Assisted private val tokenQuery: TokenQuery,
+    @Assisted private val coinCode: String,
+    @Assisted initial: Address?,
+    appConfigProvider: AppConfigProvider,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(tokenQuery: TokenQuery, coinCode: String, initial: Address?): AddressViewModel
+    }
+
+    val blockchainType: BlockchainType = tokenQuery.blockchainType
+    private val addressUriParser: AddressUriParser
+    private val addressParserChain: AddressParserChain
+
+    init {
+        val ensHandler = AddressHandlerEns(blockchainType, EnsResolverHolder.resolver)
+        val udnHandler = AddressHandlerUdn(tokenQuery, coinCode, appConfigProvider.udnApiKey)
+        addressParserChain = AddressParserChain(domainHandlers = listOf(ensHandler, udnHandler))
+
+        when (blockchainType) {
+            BlockchainType.Bitcoin -> {
+                val network = MainNet()
+                addressParserChain.addHandler(AddressHandlerBase58(network, blockchainType))
+                addressParserChain.addHandler(AddressHandlerBech32(network, blockchainType))
+            }
+
+            BlockchainType.BitcoinCash -> {
+                val network = MainNetBitcoinCash()
+                addressParserChain.addHandler(AddressHandlerBase58(network, blockchainType))
+                addressParserChain.addHandler(AddressHandlerBitcoinCash(network, blockchainType))
+            }
+
+            BlockchainType.ECash -> {
+                val network = MainNetECash()
+                addressParserChain.addHandler(AddressHandlerBase58(network, blockchainType))
+                addressParserChain.addHandler(AddressHandlerBitcoinCash(network, blockchainType))
+            }
+
+            BlockchainType.Litecoin -> {
+                val network = MainNetLitecoin()
+                addressParserChain.addHandler(AddressHandlerBase58(network, blockchainType))
+                addressParserChain.addHandler(AddressHandlerBech32(network, blockchainType))
+            }
+
+            BlockchainType.Dash -> {
+                val network = MainNetDash()
+                addressParserChain.addHandler(AddressHandlerBase58(network, blockchainType))
+            }
+
+            BlockchainType.Zcash -> {
+                addressParserChain.addHandler(AddressHandlerZcash())
+            }
+            BlockchainType.Bitcoin,
+            BlockchainType.BitcoinCash,
+            BlockchainType.ECash,
+            BlockchainType.Litecoin,
+            BlockchainType.Dash,
+            BlockchainType.Zcash -> {
+                addressParserChain.addHandler(AddressHandlerPure(blockchainType))
+            }
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Avalanche,
+            BlockchainType.Optimism,
+            BlockchainType.Base,
+            BlockchainType.ZkSync,
+            BlockchainType.Gnosis,
+            BlockchainType.Fantom,
+            BlockchainType.ArbitrumOne -> {
+                addressParserChain.addHandler(AddressHandlerEvm(blockchainType))
+            }
+            BlockchainType.Solana -> {
+                addressParserChain.addHandler(AddressHandlerSolana())
+            }
+            BlockchainType.Tron -> {
+                addressParserChain.addHandler(AddressHandlerTron())
+            }
+            BlockchainType.Ton -> {
+                addressParserChain.addHandler(AddressHandlerTon())
+            }
+            BlockchainType.Stellar -> {
+                addressParserChain.addHandler(AddressHandlerStellar())
+            }
+            BlockchainType.Monero -> {
+                addressParserChain.addHandler(AddressHandlerMonero())
+            }
+            BlockchainType.Zano -> {
+                addressParserChain.addHandler(AddressHandlerZano())
+            }
+            is BlockchainType.Unsupported -> Unit
+        }
+
+        addressUriParser = AddressUriParser(blockchainType, tokenQuery.tokenType)
+    }
 
     var address by mutableStateOf<Address?>(initial)
         private set
