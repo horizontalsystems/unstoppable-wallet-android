@@ -71,6 +71,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
+import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsCacheDao
 import io.horizontalsystems.core.CoreApp
@@ -314,6 +315,9 @@ object AppModule {
 
     @Provides @Singleton
     fun provideEnabledWalletsCacheDao(): EnabledWalletsCacheDao = App.appDatabase.enabledWalletsCacheDao()
+
+    @Provides @Singleton
+    fun provideRecentAddressManager(): RecentAddressManager = App.recentAddressManager
 
     @Provides @Singleton
     fun providePredefinedBlockchainSettingsProvider(

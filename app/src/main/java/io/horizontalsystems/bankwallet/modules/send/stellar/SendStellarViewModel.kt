@@ -4,16 +4,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ISendStellarAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.isNative
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
@@ -22,49 +33,80 @@ import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
-class SendStellarViewModel(
-    val wallet: Wallet,
-    private val sendToken: Token,
-    val feeToken: Token,
-    private val adapter: ISendStellarAdapter,
-    val coinMaxAllowedDecimals: Int,
-    private val xRateService: XRateService,
-    private val address: Address,
-    private val showAddressInput: Boolean,
-    private val amountService: SendAmountService,
-    private val addressService: SendStellarAddressService,
+@HiltViewModel(assistedFactory = SendStellarViewModel.Factory::class)
+class SendStellarViewModel @AssistedInject constructor(
+    @Assisted val wallet: Wallet,
+    @Assisted private val address: Address,
+    @Assisted private val hideAddress: Boolean,
+    adapterManager: IAdapterManager,
+    marketKit: MarketKitWrapper,
+    currencyManager: CurrencyManager,
+    coinManager: ICoinManager,
     private val contactsRepo: ContactsRepository,
     private val recentAddressManager: RecentAddressManager,
-    private val minimumAmountService: SendStellarMinimumAmountService
+    appConfigProvider: AppConfigProvider,
 ) : ViewModelUiState<SendStellarUiState>() {
-    private val fee = adapter.fee
 
+    private val adapter: ISendStellarAdapter
+    private val xRateService: XRateService
+    private val amountService: SendAmountService
+    private val addressService: SendStellarAddressService
+    private val minimumAmountService: SendStellarMinimumAmountService
+    val feeToken: Token
+    val coinMaxAllowedDecimals = wallet.token.decimals
+    val fiatMaxAllowedDecimals: Int
     val blockchainType = wallet.token.blockchainType
-    val feeTokenMaxAllowedDecimals = feeToken.decimals
-    val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
+    val feeTokenMaxAllowedDecimals: Int
+    private val sendToken = wallet.token
+    private val showAddressInput = !hideAddress
+    private val fee: BigDecimal?
 
-    private var amountState = amountService.stateFlow.value
-    private var addressState = addressService.stateFlow.value
-    private var minimumAmountState = minimumAmountService.stateFlow.value
+    private var amountState: SendAmountService.State
+    private var addressState: SendStellarAddressService.State
+    private var minimumAmountState: SendStellarMinimumAmountService.State
     private var memo: String? = null
 
-    var coinRate by mutableStateOf(xRateService.getRate(sendToken.coin.uid))
-        private set
-    var feeCoinRate by mutableStateOf(xRateService.getRate(feeToken.coin.uid))
-        private set
+    var coinRate by mutableStateOf<CurrencyValue?>(null)
+    var feeCoinRate by mutableStateOf<CurrencyValue?>(null)
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
 
     private val logger: AppLogger = AppLogger("send-stellar")
 
     init {
-//        addCloseable(feeService)
+        adapter = adapterManager.getAdapterForWallet<ISendStellarAdapter>(wallet)
+            ?: throw IllegalStateException("ISendStellarAdapter is null")
+        xRateService = XRateService(marketKit, currencyManager.baseCurrency)
+        feeToken = coinManager.getToken(TokenQuery(BlockchainType.Stellar, TokenType.Native))
+            ?: throw IllegalArgumentException()
+        fiatMaxAllowedDecimals = appConfigProvider.fiatDecimal
+        feeTokenMaxAllowedDecimals = feeToken.decimals
+        fee = adapter.fee
+
+        val amountValidator = AmountValidator()
+        amountService = SendAmountService(
+            amountValidator = amountValidator,
+            coinCode = wallet.coin.code,
+            availableBalance = adapter.maxSendableBalance,
+            leaveSomeBalanceForFee = wallet.token.type.isNative
+        )
+        addressService = SendStellarAddressService()
+        minimumAmountService = SendStellarMinimumAmountService(adapter)
+
+        amountState = amountService.stateFlow.value
+        addressState = addressService.stateFlow.value
+        minimumAmountState = minimumAmountService.stateFlow.value
+
+        coinRate = xRateService.getRate(sendToken.coin.uid)
+        feeCoinRate = xRateService.getRate(feeToken.coin.uid)
 
         viewModelScope.launch(Dispatchers.Default) {
             amountService.stateFlow.collect {
@@ -171,7 +213,7 @@ class SendStellarViewModel(
             sendResult = SendResult.Sent()
             logger.info("success")
 
-            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Ton)
+            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Stellar)
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
             logger.warning("failed", e)
@@ -182,6 +224,11 @@ class SendStellarViewModel(
         is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
         is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(wallet: Wallet, address: Address, hideAddress: Boolean): SendStellarViewModel
     }
 }
 
@@ -195,4 +242,3 @@ data class SendStellarUiState(
     val fee: BigDecimal?,
     val address: Address,
 )
-

@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroViewModel
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaModule
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaScreen
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaViewModel
-import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarModule
 import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarScreen
 import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarViewModel
 import io.horizontalsystems.bankwallet.modules.send.ton.SendTonModule
@@ -169,8 +168,9 @@ data class SendPage(val input: Input) : HSPage() {
             }
 
             BlockchainType.Stellar -> {
-                val factory = SendStellarModule.Factory(wallet, address, hideAddress)
-                val sendStellarViewModel = viewModel<SendStellarViewModel>(factory = factory)
+                val sendStellarViewModel = hiltViewModel<SendStellarViewModel, SendStellarViewModel.Factory> { factory ->
+                    factory.create(wallet, address, hideAddress)
+                }
                 SendStellarScreen(
                     title,
                     navController,
