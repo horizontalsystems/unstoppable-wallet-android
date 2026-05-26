@@ -19,15 +19,12 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmViewModel
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroScreen
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroViewModel
-import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaModule
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaScreen
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaViewModel
 import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarScreen
 import io.horizontalsystems.bankwallet.modules.send.stellar.SendStellarViewModel
-import io.horizontalsystems.bankwallet.modules.send.ton.SendTonModule
 import io.horizontalsystems.bankwallet.modules.send.ton.SendTonScreen
 import io.horizontalsystems.bankwallet.modules.send.ton.SendTonViewModel
-import io.horizontalsystems.bankwallet.modules.send.tron.SendTronModule
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronScreen
 import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoModule
@@ -125,8 +122,9 @@ data class SendPage(val input: Input) : HSPage() {
             }
 
             BlockchainType.Solana -> {
-                val factory = SendSolanaModule.Factory(wallet, address, hideAddress)
-                val sendSolanaViewModel = viewModel<SendSolanaViewModel>(factory = factory)
+                val sendSolanaViewModel = hiltViewModel<SendSolanaViewModel, SendSolanaViewModel.Factory> { factory ->
+                    factory.create(wallet, address, hideAddress)
+                }
                 SendSolanaScreen(
                     title = title,
                     navController = navController,
@@ -139,8 +137,9 @@ data class SendPage(val input: Input) : HSPage() {
             }
 
             BlockchainType.Ton -> {
-                val factory = SendTonModule.Factory(wallet, address, hideAddress)
-                val sendTonViewModel = viewModel<SendTonViewModel>(factory = factory)
+                val sendTonViewModel = hiltViewModel<SendTonViewModel, SendTonViewModel.Factory> { factory ->
+                    factory.create(wallet, address, hideAddress)
+                }
                 SendTonScreen(
                     title,
                     navController,
@@ -153,8 +152,9 @@ data class SendPage(val input: Input) : HSPage() {
             }
 
             BlockchainType.Tron -> {
-                val factory = SendTronModule.Factory(wallet, address, hideAddress)
-                val sendTronViewModel = viewModel<SendTronViewModel>(factory = factory)
+                val sendTronViewModel = hiltViewModel<SendTronViewModel, SendTronViewModel.Factory> { factory ->
+                    factory.create(wallet, address, hideAddress)
+                }
                 SendTronScreen(
                     title = title,
                     navController = navController,
