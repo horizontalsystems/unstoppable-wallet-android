@@ -62,7 +62,8 @@ import java.math.BigDecimal
 class SendTransactionServiceEvm(
     blockchainType: BlockchainType,
     initialGasPrice: GasPrice? = null,
-    initialNonce: Long? = null
+    initialNonce: Long? = null,
+    minGasPrice: GasPrice? = null,
 ) : AbstractSendTransactionService(true, true) {
     private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
     private val evmKitWrapper by lazy {
@@ -78,12 +79,14 @@ class SendTransactionServiceEvm(
             Eip1559GasPriceService(
                 gasProvider = gasPriceProvider,
                 refreshSignalFlowable = Flowable.empty(),
+                minGasPrice = minGasPrice as? GasPrice.Eip1559,
                 initialGasPrice = initialGasPrice as? GasPrice.Eip1559
             )
         } else {
             val gasPriceProvider = LegacyGasPriceProvider(evmKit)
             LegacyGasPriceService(
                 gasPriceProvider = gasPriceProvider,
+                minRecommendedGasPrice = (minGasPrice as? GasPrice.Legacy)?.legacyGasPrice,
                 initialGasPrice = (initialGasPrice as? GasPrice.Legacy)?.legacyGasPrice
             )
         }

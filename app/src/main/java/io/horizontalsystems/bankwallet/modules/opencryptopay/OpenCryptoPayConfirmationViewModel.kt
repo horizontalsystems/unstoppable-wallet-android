@@ -40,6 +40,7 @@ class OpenCryptoPayConfirmationViewModel(
     private val assetAmount: String,
     private val merchant: String?,
     private val expirationIso: String,
+    private val minFee: Double?,
 ) : ViewModelUiState<OpenCryptoPayEvmConfirmationUiState>() {
 
     val sendTransactionService = SendTransactionServiceFactory.create(wallet.token)
@@ -219,7 +220,7 @@ class OpenCryptoPayConfirmationViewModel(
                     address = address,
                     memo = null,
                     amount = amount,
-                    recommendedGasRate = null,
+                    recommendedGasRate = minFee?.let { kotlin.math.ceil(it).toInt() },
                     minimumSendAmount = null,
                     changeToFirstInput = false,
                     utxoFilters = UtxoFilters(),
@@ -267,11 +268,12 @@ class OpenCryptoPayConfirmationViewModel(
         private val assetAmount: String,
         private val merchant: String?,
         private val expirationIso: String,
+        private val minFee: Double?,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return OpenCryptoPayConfirmationViewModel(
-                wallet, callbackUrl, quoteId, paymentId, method, asset, assetAmount, merchant, expirationIso
+                wallet, callbackUrl, quoteId, paymentId, method, asset, assetAmount, merchant, expirationIso, minFee
             ) as T
         }
     }

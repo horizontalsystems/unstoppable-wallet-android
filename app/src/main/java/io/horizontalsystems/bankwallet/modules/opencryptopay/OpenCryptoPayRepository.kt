@@ -34,6 +34,7 @@ data class OcpTransferAmount(
     val method: String,
     val assets: List<OcpAsset> = emptyList(),
     val available: Boolean = true,
+    val minFee: Double? = null,
 )
 
 data class OcpAsset(

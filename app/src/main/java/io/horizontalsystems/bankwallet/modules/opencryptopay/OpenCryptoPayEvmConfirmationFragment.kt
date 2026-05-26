@@ -64,6 +64,7 @@ class OpenCryptoPayEvmConfirmationFragment : BaseComposeFragment() {
         val blockchainType: BlockchainType,
         val merchant: String?,
         val expirationIso: String,
+        val minFee: Double?,
         val sendEntryPointDestId: Int,
     ) : Parcelable
 }
@@ -73,9 +74,9 @@ private fun OpenCryptoPayEvmConfirmationScreen(
     navController: NavController,
     input: OpenCryptoPayEvmConfirmationFragment.Input,
 ) {
-    val backStackEntry = navController.currentBackStackEntry?.takeIf {
-        it.destination.id == R.id.openCryptoPayEvmConfirmationFragment
-    } ?: return
+    val backStackEntry = remember(navController.currentBackStackEntry) {
+        navController.getBackStackEntry(R.id.openCryptoPayEvmConfirmationFragment)
+    }
     val viewModel = viewModel<OpenCryptoPayEvmConfirmationViewModel>(
         viewModelStoreOwner = backStackEntry,
         factory = OpenCryptoPayEvmConfirmationViewModel.Factory(
@@ -89,6 +90,7 @@ private fun OpenCryptoPayEvmConfirmationScreen(
             blockchainType = input.blockchainType,
             merchant = input.merchant,
             expirationIso = input.expirationIso,
+            minFee = input.minFee,
         )
     )
     val uiState = viewModel.uiState
