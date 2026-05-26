@@ -119,6 +119,7 @@ import cash.p.terminal.modules.walletconnect.storage.WCSessionStorage
 import cash.p.terminal.network.alphaaml.api.AlphaAmlApi
 import cash.p.terminal.network.data.AppHeadersProvider
 import cash.p.terminal.network.pirate.di.PREMIUM_API_BASE_URL_QUALIFIER
+import cash.p.terminal.premium.di.PREMIUM_IS_DEBUG_QUALIFIER
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.wallet.managers.ITransactionHiddenManager
@@ -316,6 +317,7 @@ val managerModule = module {
         )
     }
     single(named(PREMIUM_API_BASE_URL_QUALIFIER)) { AppConfigProvider.premiumApiBaseUrl }
+    single(named(PREMIUM_IS_DEBUG_QUALIFIER)) { AppConfigProvider.isDebug }
 
     // Market favorites
     singleOf(::MarketWidgetManager)
