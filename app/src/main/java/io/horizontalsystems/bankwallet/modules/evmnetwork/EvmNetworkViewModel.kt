@@ -5,6 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.uris
 import io.horizontalsystems.bankwallet.entities.EvmSyncSource
@@ -12,10 +16,16 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class EvmNetworkViewModel(
-    val blockchain: Blockchain,
-    private val evmSyncSourceManager: EvmSyncSourceManager
+@HiltViewModel(assistedFactory = EvmNetworkViewModel.Factory::class)
+class EvmNetworkViewModel @AssistedInject constructor(
+    @Assisted val blockchain: Blockchain,
+    private val evmSyncSourceManager: EvmSyncSourceManager,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(blockchain: Blockchain): EvmNetworkViewModel
+    }
 
     private var currentSyncSource = evmSyncSourceManager.getSyncSource(blockchain.type)
 

@@ -5,18 +5,35 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
-class CoinViewModel(
-    private val service: CoinService,
-    private val clearables: List<Clearable>,
+@HiltViewModel(assistedFactory = CoinViewModel.Factory::class)
+class CoinViewModel @AssistedInject constructor(
+    @Assisted private val coinUid: String,
+    private val marketKit: MarketKitWrapper,
+    private val marketFavoritesManager: MarketFavoritesManager,
     private val localStorage: ILocalStorage,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(coinUid: String): CoinViewModel
+    }
+
+    private val service = CoinService(
+        marketKit.fullCoins(coinUids = listOf(coinUid)).first(),
+        marketFavoritesManager,
+    )
 
     val tabs = CoinModule.Tab.values()
     val fullCoin by service::fullCoin
@@ -37,7 +54,7 @@ class CoinViewModel(
     }
 
     override fun onCleared() {
-        clearables.forEach(Clearable::clear)
+        service.clear()
     }
 
     fun onFavoriteClick() {

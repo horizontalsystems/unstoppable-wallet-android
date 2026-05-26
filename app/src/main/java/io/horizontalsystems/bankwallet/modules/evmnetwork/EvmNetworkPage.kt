@@ -32,7 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -98,9 +98,9 @@ private fun EvmNetworkScreen(
     blockchain: Blockchain,
     onBackPress: () -> Unit,
 ) {
-    val viewModel = viewModel<EvmNetworkViewModel>(
-        factory = EvmNetworkModule.Factory(blockchain)
-    )
+    val viewModel = hiltViewModel<EvmNetworkViewModel, EvmNetworkViewModel.Factory> { factory ->
+        factory.create(blockchain)
+    }
     var revealedCardId by remember { mutableStateOf<String?>(null) }
     val view = LocalView.current
 

@@ -5,6 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
@@ -17,11 +21,17 @@ import org.commonmark.parser.Parser
 import java.net.URL
 import java.util.Calendar
 
-class MarkdownViewModel(
+@HiltViewModel(assistedFactory = MarkdownViewModel.Factory::class)
+class MarkdownViewModel @AssistedInject constructor(
+    @Assisted private val contentUrl: String,
     private val networkManager: INetworkManager,
-    private val contentUrl: String,
     private val connectivityManager: ConnectivityManager,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(contentUrl: String): MarkdownViewModel
+    }
 
     var markdownBlocks by mutableStateOf<List<MarkdownBlock>>(listOf())
         private set

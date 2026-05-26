@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
@@ -46,7 +46,9 @@ private fun MarkdownScreen(
     markdownUrl: String,
     onCloseClick: () -> Unit,
     onUrlClick: (String) -> Unit,
-    viewModel: MarkdownViewModel = viewModel(factory = MarkdownModule.Factory(markdownUrl))
+    viewModel: MarkdownViewModel = hiltViewModel<MarkdownViewModel, MarkdownViewModel.Factory> { factory ->
+        factory.create(markdownUrl)
+    }
 ) {
     HSScaffold(
         title = "",

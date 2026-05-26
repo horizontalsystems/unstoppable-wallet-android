@@ -9,7 +9,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -39,7 +39,9 @@ data class CoinPage(val input: Input) : HSPage() {
     override fun GetContent(navController: HSNavigation) {
         CoinScreen(
             input.coinUid,
-            viewModel(factory = CoinModule.Factory(input.coinUid)),
+            hiltViewModel<CoinViewModel, CoinViewModel.Factory> { factory ->
+                factory.create(input.coinUid)
+            },
             navController
         )
     }
