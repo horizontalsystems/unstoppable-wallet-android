@@ -1,9 +1,11 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
@@ -29,34 +31,37 @@ import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class SwapViewModel(
-    private val quoteService: SwapQuoteService,
-    private val balanceService: TokenBalanceService,
-    private val priceImpactService: PriceImpactService,
+@HiltViewModel(assistedFactory = SwapViewModel.Factory::class)
+class SwapViewModel @AssistedInject constructor(
+    @Assisted("tokenIn") private val tokenIn: Token?,
+    @Assisted("tokenOut") private val tokenOut: Token?,
     private val currencyManager: CurrencyManager,
-    private val fiatServiceIn: FiatService,
-    private val fiatServiceOut: FiatService,
-    private val timerService: TimerService,
-    private val networkAvailabilityService: NetworkAvailabilityService,
-    private val defaultTokenService: SwapDefaultTokenService,
     private val swapTermsManager: SwapTermsManager,
     private val swapRecordManager: SwapRecordManager,
     private val marketKit: MarketKitWrapper,
     private val walletManager: WalletManager,
     private val adapterManager: IAdapterManager,
-    tokenIn: Token?,
-    tokenOut: Token? = null,
+    connectivityManager: ConnectivityManager,
 ) : ViewModelUiState<SwapUiState>() {
+
+    private val quoteService: SwapQuoteService
+    private val balanceService: TokenBalanceService
+    private val priceImpactService: PriceImpactService
+    private val fiatServiceIn: FiatService
+    private val fiatServiceOut: FiatService
+    private val timerService: TimerService
+    private val networkAvailabilityService: NetworkAvailabilityService
+    private val defaultTokenService: SwapDefaultTokenService
 
     private val quoteLifetime = 20
     private val hasExplicitTokens = tokenIn != null || tokenOut != null
     private var tokensManuallySet = false
 
-    private var networkState = networkAvailabilityService.stateFlow.value
-    private var quoteState = quoteService.stateFlow.value
-    private var balanceState = balanceService.stateFlow.value
-    private var priceImpactState = priceImpactService.stateFlow.value
-    private var timerState = timerService.stateFlow.value
+    private var networkState: NetworkAvailabilityService.State
+    private var quoteState: SwapQuoteService.State
+    private var balanceState: TokenBalanceService.State
+    private var priceImpactState: PriceImpactService.State
+    private var timerState: TimerService.State
     private var fiatAmountIn: BigDecimal? = null
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountInputEnabled = false
@@ -69,6 +74,21 @@ class SwapViewModel(
     val amlCheckEventFlow = MutableSharedFlow<AmlCheckEvent>(extraBufferCapacity = 1)
 
     init {
+        quoteService = SwapQuoteService()
+        balanceService = TokenBalanceService(adapterManager)
+        priceImpactService = PriceImpactService(PriceImpactLevel.Warning)
+        fiatServiceIn = FiatService(marketKit)
+        fiatServiceOut = FiatService(marketKit)
+        timerService = TimerService()
+        networkAvailabilityService = NetworkAvailabilityService(connectivityManager)
+        defaultTokenService = SwapDefaultTokenService(marketKit, walletManager)
+
+        networkState = networkAvailabilityService.stateFlow.value
+        quoteState = quoteService.stateFlow.value
+        balanceState = balanceService.stateFlow.value
+        priceImpactState = priceImpactService.stateFlow.value
+        timerState = timerService.stateFlow.value
+
         quoteService.start()
 
         viewModelScope.launch {
@@ -372,32 +392,12 @@ class SwapViewModel(
         requoteOnTimeout = false
     }
 
-    class Factory(private val tokenIn: Token?, private val tokenOut: Token? = null) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val swapQuoteService = SwapQuoteService()
-            val tokenBalanceService = TokenBalanceService(App.adapterManager)
-            val priceImpactService = PriceImpactService(PriceImpactLevel.Warning)
-
-            return SwapViewModel(
-                swapQuoteService,
-                tokenBalanceService,
-                priceImpactService,
-                App.currencyManager,
-                FiatService(App.marketKit),
-                FiatService(App.marketKit),
-                TimerService(),
-                NetworkAvailabilityService(App.connectivityManager),
-                SwapDefaultTokenService(App.marketKit, App.walletManager),
-                App.swapTermsManager,
-                App.swapRecordManager,
-                App.marketKit,
-                App.walletManager,
-                App.adapterManager,
-                tokenIn,
-                tokenOut,
-            ) as T
-        }
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            @Assisted("tokenIn") tokenIn: Token?,
+            @Assisted("tokenOut") tokenOut: Token?,
+        ): SwapViewModel
     }
 }
 

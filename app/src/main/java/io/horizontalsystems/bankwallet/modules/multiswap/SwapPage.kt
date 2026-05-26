@@ -59,7 +59,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -143,9 +143,9 @@ fun SwapScreen(
     bottomPadding: Dp = 0.dp,
     closeAfterSwap: Boolean = true
 ) {
-    val viewModel = viewModel<SwapViewModel>(
-        factory = SwapViewModel.Factory(tokenIn, tokenOut)
-    )
+    val viewModel = hiltViewModel<SwapViewModel, SwapViewModel.Factory> { factory ->
+        factory.create(tokenIn, tokenOut)
+    }
 
     LifecycleResumeEffect(Unit) {
         viewModel.refreshDefaultTokens()
