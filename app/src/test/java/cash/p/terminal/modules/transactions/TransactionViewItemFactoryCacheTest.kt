@@ -7,17 +7,24 @@ import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.storage.SwapProviderTransactionsStorage
 import cash.p.terminal.core.utils.SwapTransactionMatcher
+import cash.p.terminal.entities.SwapProviderTransaction
 import cash.p.terminal.entities.TransactionValue
+import cash.p.terminal.entities.transactionrecords.PendingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.TransactionRecordType
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
 import cash.p.terminal.modules.balance.token.addresspoisoning.AddressPoisoningViewMode
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
+import cash.p.terminal.network.swaprepository.SwapProvider
+import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.IAppNumberFormatter
+import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.helpers.DateHelper
 import io.mockk.coEvery
@@ -25,6 +32,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.unmockkAll
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -36,6 +44,14 @@ import org.junit.Test
 import java.math.BigDecimal
 
 class TransactionViewItemFactoryCacheTest {
+
+    private companion object {
+        const val PENDING_UID = "4392cdda-870d-46d7-8cc8-c06ac0be4bd3"
+        const val TX_HASH = "0e850ae3cb3963672d2880a4940172732ccab477f0ea3fc93a8914e912c670ad"
+        const val PENDING_TIMESTAMP = 1_779_766_789L
+
+        val ZEC_AMOUNT: BigDecimal = BigDecimal("0.01285429")
+    }
 
     private val evmLabelManager = mockk<EvmLabelManager>()
     private val contactsRepository = mockk<ContactsRepository>()
@@ -148,6 +164,75 @@ class TransactionViewItemFactoryCacheTest {
         assertSame(initialViewItem, detailsViewItem)
     }
 
+    @Test
+    fun convertToViewItemCached_pendingOutgoingFallbackWithHash_persistsTransactionHash() = runTest {
+        val record = createPendingRecord(
+            transactionHash = TX_HASH,
+        )
+        val swap = createSwapProviderTransaction(outgoingRecordUid = null)
+
+        every { swapProviderTransactionsStorage.getByOutgoingRecordUid(TX_HASH) } returns null
+        stubOutgoingFallback(swap)
+
+        val viewItem = factory.convertToViewItemCached(createTransactionItem(record))
+
+        assertEquals(swap.transactionId, viewItem.changeNowTransactionId)
+        verify {
+            swapProviderTransactionsStorage.setOutgoingRecordUid(
+                date = swap.date,
+                outgoingRecordUid = TX_HASH,
+            )
+        }
+        verify(exactly = 0) {
+            swapProviderTransactionsStorage.setOutgoingRecordUid(
+                date = swap.date,
+                outgoingRecordUid = record.uid,
+            )
+        }
+    }
+
+    @Test
+    fun convertToViewItemCached_pendingOutgoingMatchedByHash_doesNotPersistPendingUid() = runTest {
+        val record = createPendingRecord(
+            transactionHash = TX_HASH,
+        )
+        val swap = createSwapProviderTransaction(outgoingRecordUid = TX_HASH)
+
+        every { swapProviderTransactionsStorage.getByOutgoingRecordUid(TX_HASH) } returns swap
+        stubOutgoingFallback(swap)
+
+        val viewItem = factory.convertToViewItemCached(createTransactionItem(record))
+
+        assertEquals(swap.transactionId, viewItem.changeNowTransactionId)
+        verify(exactly = 0) {
+            swapProviderTransactionsStorage.setOutgoingRecordUid(
+                date = any(),
+                outgoingRecordUid = any(),
+            )
+        }
+    }
+
+    @Test
+    fun convertToViewItemCached_pendingOutgoingFallbackWithoutHash_doesNotPersistPendingUid() = runTest {
+        val record = createPendingRecord(
+            transactionHash = "",
+        )
+        val swap = createSwapProviderTransaction(outgoingRecordUid = null)
+
+        every { swapProviderTransactionsStorage.getByOutgoingRecordUid(record.uid) } returns null
+        stubOutgoingFallback(swap)
+
+        val viewItem = factory.convertToViewItemCached(createTransactionItem(record))
+
+        assertEquals(swap.transactionId, viewItem.changeNowTransactionId)
+        verify(exactly = 0) {
+            swapProviderTransactionsStorage.setOutgoingRecordUid(
+                date = any(),
+                outgoingRecordUid = any(),
+            )
+        }
+    }
+
     private fun createUnknownSwapRecord(
         uid: String,
         valueOut: TransactionValue?,
@@ -181,4 +266,78 @@ class TransactionViewItemFactoryCacheTest {
             valueOut = valueOut,
         )
     }
+
+    private fun createPendingRecord(
+        transactionHash: String,
+    ): PendingTransactionRecord {
+        val token = createZcashToken()
+
+        return PendingTransactionRecord(
+            uid = PENDING_UID,
+            transactionHash = transactionHash,
+            timestamp = PENDING_TIMESTAMP,
+            source = TransactionSource(
+                blockchain = token.blockchain,
+                account = mockk<Account>(relaxed = true),
+                meta = null,
+            ),
+            token = token,
+            amount = ZEC_AMOUNT,
+            toAddress = "t1Js8mMvZzCY2gUpTpKcNetJrMihqaPbSXF",
+            fromAddress = "from-address",
+            expiresAt = Long.MAX_VALUE,
+            memo = null,
+        )
+    }
+
+    private fun createZcashToken() = Token(
+        coin = Coin(
+            uid = "zcash",
+            name = "Zcash",
+            code = "ZEC",
+        ),
+        blockchain = Blockchain(
+            type = BlockchainType.Zcash,
+            name = "Zcash",
+            eip3091url = null,
+        ),
+        type = TokenType.AddressSpecTyped(TokenType.AddressSpecType.Transparent),
+        decimals = 8,
+    )
+
+    private fun createSwapProviderTransaction(
+        outgoingRecordUid: String?,
+    ) = SwapProviderTransaction(
+        date = 1_000L,
+        outgoingRecordUid = outgoingRecordUid,
+        transactionId = "b0dd9ce8a57c7e",
+        status = "new",
+        provider = SwapProvider.CHANGENOW,
+        coinUidIn = "zcash",
+        blockchainTypeIn = BlockchainType.Zcash.uid,
+        amountIn = ZEC_AMOUNT,
+        addressIn = "t1Js8mMvZzCY2gUpTpKcNetJrMihqaPbSXF",
+        coinUidOut = "binancecoin",
+        blockchainTypeOut = BlockchainType.BinanceSmartChain.uid,
+        amountOut = BigDecimal("0.01"),
+        addressOut = "0xRecipient",
+    )
+
+    private fun stubOutgoingFallback(swap: SwapProviderTransaction) {
+        every {
+            swapProviderTransactionsStorage.getByCoinUidIn(
+                coinUid = "zcash",
+                blockchainType = BlockchainType.Zcash.uid,
+                amountIn = ZEC_AMOUNT,
+                timestamp = PENDING_TIMESTAMP * 1_000,
+            )
+        } returns swap
+    }
+
+    private fun createTransactionItem(record: PendingTransactionRecord) = TransactionItem(
+        record = record,
+        currencyValue = null,
+        lastBlockInfo = null,
+        nftMetadata = emptyMap(),
+    )
 }

@@ -1435,17 +1435,20 @@ class TransactionViewItemFactory(
                 token = token
             )
         } else {
-            swapProviderTransactionsStorage.getByOutgoingRecordUid(transactionItem.record.uid)
+            val outgoingRecordUid = outgoingRecordUidForSwapMatching(transactionItem)
+            outgoingRecordUid?.let(swapProviderTransactionsStorage::getByOutgoingRecordUid)
                 ?: swapProviderTransactionsStorage.getByCoinUidIn(
                     coinUid = transactionItem.record.mainValue?.coinUid ?: token.coin.uid,
                     blockchainType = token.blockchainType.uid,
                     amountIn = transactionItem.record.mainValue?.decimalValue?.abs(),
                     timestamp = transactionItem.record.timestamp * 1000
                 )?.also { foundSwap ->
-                    swapProviderTransactionsStorage.setOutgoingRecordUid(
-                        date = foundSwap.date,
-                        outgoingRecordUid = transactionItem.record.uid
-                    )
+                    if (outgoingRecordUid != null && foundSwap.outgoingRecordUid != outgoingRecordUid) {
+                        swapProviderTransactionsStorage.setOutgoingRecordUid(
+                            date = foundSwap.date,
+                            outgoingRecordUid = outgoingRecordUid
+                        )
+                    }
                 }
         }
 
@@ -1456,6 +1459,13 @@ class TransactionViewItemFactory(
                 timestamp = transactionItem.record.timestamp,
                 direct = !isIncoming
             )
+        }
+    }
+
+    private fun outgoingRecordUidForSwapMatching(transactionItem: TransactionItem): String? {
+        return when (val record = transactionItem.record) {
+            is PendingTransactionRecord -> record.transactionHash.takeIf { it.isNotBlank() }
+            else -> record.uid
         }
     }
 
