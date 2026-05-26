@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -261,9 +262,9 @@ class SendTransactionServiceEvm(
         val nonceViewModel = viewModel<SendEvmNonceViewModel>(initializer = {
             SendEvmNonceViewModel(nonceService)
         })
-        val sendSettingsViewModel = viewModel<SendEvmSettingsViewModel>(
-            factory = SendEvmSettingsModule.Factory(settingsService, baseCoinService)
-        )
+        val sendSettingsViewModel = hiltViewModel<SendEvmSettingsViewModel, SendEvmSettingsViewModel.Factory> { factory ->
+            factory.create(settingsService, baseCoinService)
+        }
         SendEvmNonceSettingsScreen(
             viewModel = sendSettingsViewModel,
             nonceViewModel = nonceViewModel,
@@ -280,9 +281,9 @@ class SendTransactionServiceEvm(
                 baseCoinService
             )
         )
-        val sendSettingsViewModel = viewModel<SendEvmSettingsViewModel>(
-            factory = SendEvmSettingsModule.Factory(settingsService, baseCoinService)
-        )
+        val sendSettingsViewModel = hiltViewModel<SendEvmSettingsViewModel, SendEvmSettingsViewModel.Factory> { factory ->
+            factory.create(settingsService, baseCoinService)
+        }
         SendEvmFeeSettingsScreen(
             viewModel = sendSettingsViewModel,
             feeSettingsViewModel = feeSettingsViewModel,
