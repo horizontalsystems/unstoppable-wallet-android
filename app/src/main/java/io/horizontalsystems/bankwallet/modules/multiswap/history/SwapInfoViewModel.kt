@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.history
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
@@ -26,13 +28,19 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Date
 
-class SwapInfoViewModel(
-    private val recordId: Int,
+@HiltViewModel(assistedFactory = SwapInfoViewModel.Factory::class)
+class SwapInfoViewModel @AssistedInject constructor(
+    @Assisted private val recordId: Int,
     private val swapRecordManager: SwapRecordManager,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
     private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<SwapInfoUiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(recordId: Int): SwapInfoViewModel
+    }
 
     private var tokenInImageUrl: String = ""
     private var tokenInAlternativeImageUrl: String? = null
@@ -190,18 +198,6 @@ class SwapInfoViewModel(
             is BlockchainType.Unsupported -> null
         }
 
-    class Factory(private val recordId: Int) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapInfoViewModel(
-                recordId = recordId,
-                swapRecordManager = App.swapRecordManager,
-                marketKit = App.marketKit,
-                currencyManager = App.currencyManager,
-                numberFormatter = App.numberFormatter,
-            ) as T
-        }
-    }
 }
 
 data class SwapInfoUiState(

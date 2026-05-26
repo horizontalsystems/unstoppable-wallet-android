@@ -34,7 +34,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -78,10 +78,11 @@ data class SwapInfoPage(val input: Input) : HSPage() {
 
 @Composable
 fun SwapInfoScreen(recordId: Int, navController: HSNavigation) {
-    val viewModel = viewModel<SwapInfoViewModel>(
-        key = recordId.toString(),
-        factory = SwapInfoViewModel.Factory(recordId),
-    )
+    val viewModel = hiltViewModel<SwapInfoViewModel, SwapInfoViewModel.Factory>(
+        key = recordId.toString()
+    ) { factory ->
+        factory.create(recordId)
+    }
     val uiState = viewModel.uiState
     val view = LocalView.current
     val leah = ComposeAppTheme.colors.leah
