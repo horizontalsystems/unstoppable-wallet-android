@@ -72,6 +72,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.bankwallet.core.managers.ZanoKitManager
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsCacheDao
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.ILockoutStorage
@@ -310,6 +311,9 @@ object AppModule {
 
     @Provides @Singleton
     fun provideMoneroBirthdayProvider(): MoneroBirthdayProvider = App.moneroBirthdayProvider
+
+    @Provides @Singleton
+    fun provideEnabledWalletsCacheDao(): EnabledWalletsCacheDao = App.appDatabase.enabledWalletsCacheDao()
 
     @Provides @Singleton
     fun providePredefinedBlockchainSettingsProvider(

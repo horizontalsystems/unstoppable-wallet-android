@@ -1,7 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.EntryPage
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -14,7 +14,9 @@ data class TokenBalancePage(val wallet: Wallet) : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = viewModel<TokenBalanceViewModel>(factory = TokenBalanceModule.Factory(wallet))
+        val viewModel = hiltViewModel<TokenBalanceViewModel, TokenBalanceViewModel.Factory> { factory ->
+            factory.create(wallet)
+        }
         val transactionsViewModel = navController.viewModelForScreen<TransactionsViewModel>(EntryPage::class)
 
         TokenBalanceScreen(

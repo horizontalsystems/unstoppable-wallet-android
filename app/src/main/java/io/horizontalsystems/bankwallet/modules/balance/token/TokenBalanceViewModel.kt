@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IAdapterManager
@@ -11,20 +15,35 @@ import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
+import io.horizontalsystems.bankwallet.core.managers.SpamManager
+import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsCacheDao
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.AttentionIcon
 import io.horizontalsystems.bankwallet.modules.balance.AttentionIconType
+import io.horizontalsystems.bankwallet.modules.balance.BalanceAdapterRepository
+import io.horizontalsystems.bankwallet.modules.balance.BalanceCache
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
+import io.horizontalsystems.bankwallet.modules.balance.BalanceXRateRepository
 import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceModule.TokenBalanceUiState
+import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+import io.horizontalsystems.bankwallet.modules.transactions.NftMetadataService
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionRecordRepository
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionSyncStateRepository
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItemFactory
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionsRateRepository
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
@@ -34,12 +53,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
-class TokenBalanceViewModel(
-    val wallet: Wallet,
-    private val balanceService: TokenBalanceService,
-    private val balanceViewItemFactory: BalanceViewItemFactory,
-    private val transactionsService: TokenTransactionsService,
-    private val transactionViewItem2Factory: TransactionViewItemFactory,
+@HiltViewModel(assistedFactory = TokenBalanceViewModel.Factory::class)
+class TokenBalanceViewModel @AssistedInject constructor(
+    @Assisted val wallet: Wallet,
+    currencyManager: CurrencyManager,
+    marketKit: MarketKitWrapper,
+    enabledWalletsCacheDao: EnabledWalletsCacheDao,
+    transactionAdapterManager: TransactionAdapterManager,
+    contactsRepository: ContactsRepository,
+    nftMetadataManager: NftMetadataManager,
+    spamManager: SpamManager,
+    evmLabelManager: EvmLabelManager,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val adapterManager: IAdapterManager,
     private val connectivityManager: ConnectivityManager,
@@ -47,6 +71,11 @@ class TokenBalanceViewModel(
     private val coinManager: ICoinManager,
     private val restoreSettingsManager: RestoreSettingsManager,
 ) : ViewModelUiState<TokenBalanceUiState>() {
+
+    private val balanceService: TokenBalanceService
+    private val balanceViewItemFactory: BalanceViewItemFactory
+    private val transactionsService: TokenTransactionsService
+    private val transactionViewItem2Factory: TransactionViewItemFactory
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
 
@@ -62,6 +91,29 @@ class TokenBalanceViewModel(
     private var showTronNotActiveAlert: Boolean? = null
 
     init {
+        balanceService = TokenBalanceService(
+            wallet,
+            BalanceXRateRepository("wallet", currencyManager, marketKit),
+            BalanceAdapterRepository(adapterManager, BalanceCache(enabledWalletsCacheDao)),
+        )
+
+        balanceViewItemFactory = BalanceViewItemFactory()
+
+        transactionsService = TokenTransactionsService(
+            wallet,
+            TransactionRecordRepository(transactionAdapterManager),
+            TransactionsRateRepository(currencyManager, marketKit),
+            TransactionSyncStateRepository(transactionAdapterManager),
+            contactsRepository,
+            NftMetadataService(nftMetadataManager),
+            spamManager,
+            transactionAdapterManager
+        )
+
+        transactionViewItem2Factory = TransactionViewItemFactory(
+            evmLabelManager, contactsRepository, balanceHiddenManager, localStorage
+        )
+
         viewModelScope.launch(Dispatchers.IO) {
             balanceService.balanceItemFlow.collect { balanceItem ->
                 balanceItem?.let {
@@ -266,4 +318,8 @@ class TokenBalanceViewModel(
         balanceService.clear()
     }
 
+    @AssistedFactory
+    interface Factory {
+        fun create(wallet: Wallet): TokenBalanceViewModel
+    }
 }
