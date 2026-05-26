@@ -6,14 +6,29 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.onFirstWith
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 
-class AmountInputModeViewModel(
+@HiltViewModel(assistedFactory = AmountInputModeViewModel.Factory::class)
+class AmountInputModeViewModel @AssistedInject constructor(
+    @Assisted private val coinUid: String,
     private val localStorage: ILocalStorage,
-    private val xRateService: XRateService,
-    private val coinUid: String
+    private val marketKit: MarketKitWrapper,
+    private val currencyManager: CurrencyManager,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(coinUid: String): AmountInputModeViewModel
+    }
+
+    private val xRateService = XRateService(marketKit, currencyManager.baseCurrency)
 
     private var hasValidRate: Boolean = xRateService.getCoinPrice(coinUid)?.expired == false
 

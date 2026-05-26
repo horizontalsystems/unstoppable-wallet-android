@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.send
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
@@ -58,9 +59,9 @@ data class SendPage(val input: Input) : HSPage() {
         val amount = input.amount
         val memo = input.memo
 
-        val amountInputModeViewModel = viewModel<AmountInputModeViewModel>(
-            factory = AmountInputModeModule.Factory(wallet.coin.uid)
-        )
+        val amountInputModeViewModel = hiltViewModel<AmountInputModeViewModel, AmountInputModeViewModel.Factory> { factory ->
+            factory.create(wallet.coin.uid)
+        }
 
         when (wallet.token.blockchainType) {
             BlockchainType.Bitcoin,

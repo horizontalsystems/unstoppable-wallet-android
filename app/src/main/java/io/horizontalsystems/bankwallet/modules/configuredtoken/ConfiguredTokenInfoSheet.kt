@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -45,7 +45,9 @@ data class ConfiguredTokenInfoSheet(val token: Token) : HSBottomSheet() {
 
 @Composable
 private fun ConfiguredTokenInfo(navController: HSNavigation, token: Token) {
-    val viewModel = viewModel<ConfiguredTokenInfoViewModel>(factory = ConfiguredTokenInfoViewModel.Factory(token))
+    val viewModel = hiltViewModel<ConfiguredTokenInfoViewModel, ConfiguredTokenInfoViewModel.Factory> { factory ->
+        factory.create(token)
+    }
     val uiState = viewModel.uiState
 
     ComposeAppTheme {

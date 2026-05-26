@@ -4,6 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
@@ -15,10 +19,16 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import java.net.MalformedURLException
 import java.net.URI
 
-class AddRpcViewModel(
-    private val blockchain: Blockchain,
-    private val evmSyncSourceManager: EvmSyncSourceManager
+@HiltViewModel(assistedFactory = AddRpcViewModel.Factory::class)
+class AddRpcViewModel @AssistedInject constructor(
+    @Assisted private val blockchain: Blockchain,
+    private val evmSyncSourceManager: EvmSyncSourceManager,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(blockchain: Blockchain): AddRpcViewModel
+    }
 
     private var url = ""
     private var auth: String? = null

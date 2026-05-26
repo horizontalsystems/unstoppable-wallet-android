@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.configuredtoken
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.assetUrl
@@ -16,11 +18,17 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 
-class ConfiguredTokenInfoViewModel(
-    private val token: Token,
+@HiltViewModel(assistedFactory = ConfiguredTokenInfoViewModel.Factory::class)
+class ConfiguredTokenInfoViewModel @AssistedInject constructor(
+    @Assisted private val token: Token,
     private val accountManager: IAccountManager,
-    private val restoreSettingsManager: RestoreSettingsManager
+    private val restoreSettingsManager: RestoreSettingsManager,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(token: Token): ConfiguredTokenInfoViewModel
+    }
 
     val uiState: ConfiguredTokenInfoUiState
 
@@ -71,17 +79,6 @@ class ConfiguredTokenInfoViewModel(
         val restoreSettings = restoreSettingsManager.settings(account, token.blockchainType)
 
         return restoreSettings.birthdayHeight
-    }
-
-    class Factory(private val token: Token) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ConfiguredTokenInfoViewModel(
-                token,
-                App.accountManager,
-                App.restoreSettingsManager
-            ) as T
-        }
     }
 
 }
