@@ -1,14 +1,26 @@
 package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.WalletManager
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.accountTypeDerivation
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.modules.receive.ui.AddressFormatItem
 import io.horizontalsystems.marketkit.models.TokenType
 
-class DerivationSelectViewModel(coinUid: String, walletManager: WalletManager) : ViewModel() {
+@HiltViewModel(assistedFactory = DerivationSelectViewModel.Factory::class)
+class DerivationSelectViewModel @AssistedInject constructor(
+    @Assisted coinUid: String,
+    walletManager: WalletManager,
+) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(coinUid: String): DerivationSelectViewModel
+    }
+
     val items = walletManager.activeWallets
         .filter {
             it.coin.uid == coinUid
@@ -24,11 +36,4 @@ class DerivationSelectViewModel(coinUid: String, walletManager: WalletManager) :
                 wallet = wallet
             )
         }
-
-    class Factory(private val coinUid: String) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return DerivationSelectViewModel(coinUid, App.walletManager) as T
-        }
-    }
 }

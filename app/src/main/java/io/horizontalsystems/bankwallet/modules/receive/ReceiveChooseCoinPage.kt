@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.receive
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -70,9 +71,9 @@ data object BchAddressFormatPage : HSPage() {
             CloseWithMessage(navController)
             return
         }
-        val bchAddressViewModel = viewModel<BchAddressTypeSelectViewModel>(
-            factory = BchAddressTypeSelectViewModel.Factory(coinUid)
-        )
+        val bchAddressViewModel = hiltViewModel<BchAddressTypeSelectViewModel, BchAddressTypeSelectViewModel.Factory> { factory ->
+            factory.create(coinUid)
+        }
         AddressFormatSelectScreen(
             addressFormatItems = bchAddressViewModel.items,
             description = stringResource(R.string.Balance_Receive_AddressFormat_RecommendedAddressType),
@@ -94,9 +95,9 @@ data object DerivationSelectPage : HSPage() {
             CloseWithMessage(navController)
             return
         }
-        val derivationViewModel = viewModel<DerivationSelectViewModel>(
-            factory = DerivationSelectViewModel.Factory(coinUid)
-        )
+        val derivationViewModel = hiltViewModel<DerivationSelectViewModel, DerivationSelectViewModel.Factory> { factory ->
+            factory.create(coinUid)
+        }
         AddressFormatSelectScreen(
             addressFormatItems = derivationViewModel.items,
             description = stringResource(R.string.Balance_Receive_AddressFormat_RecommendedDerivation),

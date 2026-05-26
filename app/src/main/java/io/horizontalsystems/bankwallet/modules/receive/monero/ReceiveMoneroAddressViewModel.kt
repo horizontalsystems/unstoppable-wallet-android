@@ -1,10 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.receive.monero
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.MoneroAdapter
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -17,10 +20,17 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import java.math.BigDecimal
 
-class ReceiveMoneroAddressViewModel(
-    private val wallet: Wallet,
-    private val adapterManager: IAdapterManager
+@HiltViewModel(assistedFactory = ReceiveMoneroAddressViewModel.Factory::class)
+class ReceiveMoneroAddressViewModel @AssistedInject constructor(
+    @Assisted private val wallet: Wallet,
+    private val adapterManager: IAdapterManager,
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<ReceiveMoneroUiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(wallet: Wallet): ReceiveMoneroAddressViewModel
+    }
 
     private var viewState: ViewState = ViewState.Loading
     private var address = ""
@@ -79,7 +89,7 @@ class ReceiveMoneroAddressViewModel(
         blockchainName = blockchainName,
         watchAccount = watchAccount,
         amount = amount,
-        amountString = amount?.let { App.numberFormatter.formatCoinFull(it, wallet.token.coin.code, wallet.token.decimals) },
+        amountString = amount?.let { numberFormatter.formatCoinFull(it, wallet.token.coin.code, wallet.token.decimals) },
         subaddresses = subaddresses
     )
 
@@ -105,12 +115,6 @@ class ReceiveMoneroAddressViewModel(
         addressUriService.setAddress(address)
     }
 
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ReceiveMoneroAddressViewModel(wallet, App.adapterManager) as T
-        }
-    }
 }
 
 sealed class ReceiveMoneroError : Throwable() {

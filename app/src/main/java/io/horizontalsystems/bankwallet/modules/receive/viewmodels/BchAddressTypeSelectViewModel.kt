@@ -1,14 +1,26 @@
 package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.managers.WalletManager
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
+import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.modules.receive.ui.AddressFormatItem
 import io.horizontalsystems.marketkit.models.TokenType
 
-class BchAddressTypeSelectViewModel(coinUid: String, walletManager: WalletManager) : ViewModel() {
+@HiltViewModel(assistedFactory = BchAddressTypeSelectViewModel.Factory::class)
+class BchAddressTypeSelectViewModel @AssistedInject constructor(
+    @Assisted coinUid: String,
+    walletManager: WalletManager,
+) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(coinUid: String): BchAddressTypeSelectViewModel
+    }
+
     val items = walletManager.activeWallets
         .filter {
             it.coin.uid == coinUid
@@ -24,12 +36,5 @@ class BchAddressTypeSelectViewModel(coinUid: String, walletManager: WalletManage
                 wallet = wallet
             )
         }
-
-    class Factory(private val coinUid: String) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return BchAddressTypeSelectViewModel(coinUid, App.walletManager) as T
-        }
-    }
 }
 

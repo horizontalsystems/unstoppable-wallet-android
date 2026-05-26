@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
@@ -23,7 +23,9 @@ import kotlin.reflect.KClass
 
 @Composable
 fun ReceiveMoneroScreen(navController: HSNavigation, wallet: Wallet, receiveEntryPointDestId: KClass<out HSPage>?) {
-    val addressViewModel = viewModel<ReceiveMoneroAddressViewModel>(factory = ReceiveMoneroAddressViewModel.Factory(wallet))
+    val addressViewModel = hiltViewModel<ReceiveMoneroAddressViewModel, ReceiveMoneroAddressViewModel.Factory> { factory ->
+        factory.create(wallet)
+    }
 
     val uiState = addressViewModel.uiState
     ReceiveAddressScreen(
