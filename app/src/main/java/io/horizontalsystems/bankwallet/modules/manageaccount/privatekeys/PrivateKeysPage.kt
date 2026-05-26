@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -37,7 +37,9 @@ data class PrivateKeysPage(val input: Account) : HSPage() {
 
 @Composable
 fun ManageAccountScreen(navController: HSNavigation, account: Account) {
-    val viewModel = viewModel<PrivateKeysViewModel>(factory = PrivateKeysModule.Factory(account))
+    val viewModel = hiltViewModel<PrivateKeysViewModel, PrivateKeysViewModel.Factory> { factory ->
+        factory.create(account)
+    }
 
     HSScaffold(
         title = stringResource(R.string.PrivateKeys_Title),

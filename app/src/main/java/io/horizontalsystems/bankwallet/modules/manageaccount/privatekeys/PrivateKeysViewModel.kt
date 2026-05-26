@@ -4,6 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.toStellarWallet
 import io.horizontalsystems.bankwallet.core.toRawHexString
@@ -21,10 +25,16 @@ import io.horizontalsystems.tronkit.network.Network
 import java.math.BigInteger
 import io.horizontalsystems.tronkit.transaction.Signer as TronSigner
 
-class PrivateKeysViewModel(
-    account: Account,
+@HiltViewModel(assistedFactory = PrivateKeysViewModel.Factory::class)
+class PrivateKeysViewModel @AssistedInject constructor(
+    @Assisted account: Account,
     evmBlockchainManager: EvmBlockchainManager,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(account: Account): PrivateKeysViewModel
+    }
 
     var viewState by mutableStateOf(PrivateKeysModule.ViewState())
         private set

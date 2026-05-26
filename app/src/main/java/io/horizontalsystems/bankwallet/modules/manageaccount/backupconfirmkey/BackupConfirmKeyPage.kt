@@ -20,7 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.manageaccount.backupkey.BackupKeyPage
@@ -49,8 +49,9 @@ data class BackupConfirmKeyPage(val input: Account) : HSPage() {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RecoveryPhraseVerifyScreen(navController: HSNavigation, account: Account) {
-    val viewModel =
-        viewModel<BackupConfirmKeyViewModel>(factory = BackupConfirmKeyModule.Factory(account))
+    val viewModel = hiltViewModel<BackupConfirmKeyViewModel, BackupConfirmKeyViewModel.Factory> { factory ->
+        factory.create(account)
+    }
     val uiState = viewModel.uiState
     val contenView = LocalView.current
 

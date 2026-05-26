@@ -5,6 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.Account
@@ -15,10 +19,16 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ManageAccountModule
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 
-class ManageAccountViewModel(
-    accountId: String,
-    private val accountManager: IAccountManager
+@HiltViewModel(assistedFactory = ManageAccountViewModel.Factory::class)
+class ManageAccountViewModel @AssistedInject constructor(
+    @Assisted accountId: String,
+    private val accountManager: IAccountManager,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(accountId: String): ManageAccountViewModel
+    }
 
     val account: Account = accountManager.account(accountId)!!
 

@@ -1,17 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
 
 object ManageAccountModule {
-    class Factory(private val accountId: String) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ManageAccountViewModel(accountId, App.accountManager) as T
-        }
-    }
 
     data class ViewState(
         val title: String,

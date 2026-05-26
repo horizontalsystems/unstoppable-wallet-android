@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -78,8 +78,9 @@ data class ManageAccountPage(val input: Input) : HSPage() {
 
 @Composable
 fun ManageAccountScreen(navController: HSNavigation, accountId: String) {
-    val viewModel =
-        viewModel<ManageAccountViewModel>(factory = ManageAccountModule.Factory(accountId))
+    val viewModel = hiltViewModel<ManageAccountViewModel, ManageAccountViewModel.Factory> { factory ->
+        factory.create(accountId)
+    }
 
     val viewState = viewModel.viewState
     LaunchedEffect(viewState.closeScreen) {

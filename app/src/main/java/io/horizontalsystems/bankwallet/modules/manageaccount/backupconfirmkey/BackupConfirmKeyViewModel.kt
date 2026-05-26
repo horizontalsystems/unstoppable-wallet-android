@@ -1,18 +1,29 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.backupconfirmkey
 
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
-import io.horizontalsystems.bankwallet.core.IRandomProvider
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.RandomProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 
-class BackupConfirmKeyViewModel(
-    private val account: Account,
+@HiltViewModel(assistedFactory = BackupConfirmKeyViewModel.Factory::class)
+class BackupConfirmKeyViewModel @AssistedInject constructor(
+    @Assisted private val account: Account,
     private val accountManager: IAccountManager,
-    private val randomProvider: IRandomProvider
 ) : ViewModelUiState<BackupConfirmUiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(account: Account): BackupConfirmKeyViewModel
+    }
+
+    private val randomProvider = RandomProvider()
 
     private val wordsIndexed: List<Pair<Int, String>>
     private var hiddenWordItems = listOf<HiddenWordItem>()
