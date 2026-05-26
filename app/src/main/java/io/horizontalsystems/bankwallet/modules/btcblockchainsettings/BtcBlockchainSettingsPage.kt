@@ -22,7 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule.BlockchainSettingsIcon
@@ -49,9 +49,9 @@ data class BtcBlockchainSettingsPage(val blockchain: Blockchain) : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = viewModel<BtcBlockchainSettingsViewModel>(
-            factory = BtcBlockchainSettingsModule.Factory(blockchain)
-        )
+        val viewModel = hiltViewModel<BtcBlockchainSettingsViewModel, BtcBlockchainSettingsViewModel.Factory> { factory ->
+            factory.create(blockchain)
+        }
         BtcBlockchainSettingsScreen(viewModel, navController)
     }
 

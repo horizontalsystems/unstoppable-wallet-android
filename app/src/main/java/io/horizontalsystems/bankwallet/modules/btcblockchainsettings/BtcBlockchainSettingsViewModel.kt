@@ -5,18 +5,33 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule.BlockchainSettingsIcon
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule.ViewItem
+import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
-class BtcBlockchainSettingsViewModel(
-    private val service: BtcBlockchainSettingsService
+@HiltViewModel(assistedFactory = BtcBlockchainSettingsViewModel.Factory::class)
+class BtcBlockchainSettingsViewModel @AssistedInject constructor(
+    @Assisted blockchain: Blockchain,
+    btcBlockchainManager: BtcBlockchainManager,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(blockchain: Blockchain): BtcBlockchainSettingsViewModel
+    }
+
+    private val service = BtcBlockchainSettingsService(blockchain, btcBlockchainManager)
 
     var closeScreen by mutableStateOf(false)
         private set

@@ -4,10 +4,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 
-class RecoveryPhraseViewModel(account: Account) : ViewModel() {
+@HiltViewModel(assistedFactory = RecoveryPhraseViewModel.Factory::class)
+class RecoveryPhraseViewModel @AssistedInject constructor(
+    @Assisted account: Account,
+) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(account: Account): RecoveryPhraseViewModel
+    }
     val words: List<String>
     private val seed: ByteArray?
 

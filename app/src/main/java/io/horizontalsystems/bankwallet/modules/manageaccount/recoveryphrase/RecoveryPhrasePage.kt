@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -56,8 +56,9 @@ private fun RecoveryPhraseScreen(
     navController: HSNavigation,
     account: Account,
 ) {
-    val viewModel =
-        viewModel<RecoveryPhraseViewModel>(factory = RecoveryPhraseModule.Factory(account))
+    val viewModel = hiltViewModel<RecoveryPhraseViewModel, RecoveryPhraseViewModel.Factory> { factory ->
+        factory.create(account)
+    }
 
     val view = LocalView.current
     val scope = rememberCoroutineScope()
