@@ -36,7 +36,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.balance.ui.WheelDatePickerBottomSheet
@@ -91,9 +91,9 @@ fun EnterBirthdayHeightScreen(
     account: Account,
     currentBirthdayHeight: Long?,
     onCloseClick: () -> Unit,
-    viewModel: EnterBirthdayHeightViewModel = viewModel(
-        factory = EnterBirthdayHeightModule.Factory(blockchainType, account, currentBirthdayHeight)
-    )
+    viewModel: EnterBirthdayHeightViewModel = hiltViewModel<EnterBirthdayHeightViewModel, EnterBirthdayHeightViewModel.Factory> { factory ->
+        factory.create(blockchainType, account, currentBirthdayHeight)
+    }
 ) {
     val uiState = viewModel.uiState
     val focusRequester = remember { FocusRequester() }

@@ -2,6 +2,10 @@ package io.horizontalsystems.bankwallet.modules.restorelocal
 
 import androidx.lifecycle.viewModelScope
 import com.google.gson.GsonBuilder
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -27,14 +31,24 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class RestoreLocalViewModel(
-    private val backupJsonString: String?,
+@HiltViewModel(assistedFactory = RestoreLocalViewModel.Factory::class)
+class RestoreLocalViewModel @AssistedInject constructor(
+    @Assisted("backupJsonString") private val backupJsonString: String?,
+    @Assisted private val statPage: StatPage,
+    @Assisted("fileName") fileName: String?,
     private val accountFactory: IAccountFactory,
     private val backupProvider: BackupProvider,
     private val backupViewItemFactory: BackupViewItemFactory,
-    private val statPage: StatPage,
-    fileName: String?,
 ) : ViewModelUiState<UiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            @Assisted("backupJsonString") backupJsonString: String?,
+            statPage: StatPage,
+            @Assisted("fileName") fileName: String?,
+        ): RestoreLocalViewModel
+    }
 
     private var passphrase = ""
     private var passphraseState: DataState.Error? = null

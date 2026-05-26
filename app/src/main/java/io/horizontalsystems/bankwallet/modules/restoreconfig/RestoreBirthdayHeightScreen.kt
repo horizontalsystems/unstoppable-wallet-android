@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.modules.balance.token.BirthdayHeightInputField
@@ -52,9 +52,9 @@ fun RestoreBirthdayHeightScreen(
     blockchainType: BlockchainType,
     onCloseClick: () -> Unit,
     onCloseWithResult: (BirthdayHeightConfig) -> Unit,
-    viewModel: RestoreBirthdayHeightViewModel = viewModel(
-        factory = RestoreBirthdayHeightViewModel.Factory(blockchainType)
-    )
+    viewModel: RestoreBirthdayHeightViewModel = hiltViewModel<RestoreBirthdayHeightViewModel, RestoreBirthdayHeightViewModel.Factory> { factory ->
+        factory.create(blockchainType)
+    }
 ) {
     val uiState = viewModel.uiState
     val focusRequester = remember { FocusRequester() }

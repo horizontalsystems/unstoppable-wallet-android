@@ -1,26 +1,35 @@
 package io.horizontalsystems.bankwallet.modules.restoreconfig
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.BirthdayHeightHelper
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingType
+import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.BirthdayHeightConfig
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.Date
 
-class RestoreBirthdayHeightViewModel(
-    private val blockchainType: BlockchainType
+@HiltViewModel(assistedFactory = RestoreBirthdayHeightViewModel.Factory::class)
+class RestoreBirthdayHeightViewModel @AssistedInject constructor(
+    @Assisted private val blockchainType: BlockchainType,
+    restoreSettingsManager: RestoreSettingsManager,
 ) : ViewModelUiState<RestoreBirthdayHeightUiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(blockchainType: BlockchainType): RestoreBirthdayHeightViewModel
+    }
 
     private val minBirthdayHeight = BirthdayHeightHelper.minBirthdayHeight(blockchainType)
     private val firstBlockDate = BirthdayHeightHelper.getFirstBlockDate(blockchainType)
 
-    private val defaultBirthdayHeight: Long? = App.restoreSettingsManager
+    private val defaultBirthdayHeight: Long? = restoreSettingsManager
         .getSettingValueForCreatedAccount(RestoreSettingType.BirthdayHeight, blockchainType)
         ?.toLongOrNull()
 
@@ -115,14 +124,6 @@ class RestoreBirthdayHeightViewModel(
         }
     }
 
-    class Factory(
-        private val blockchainType: BlockchainType
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RestoreBirthdayHeightViewModel(blockchainType) as T
-        }
-    }
 }
 
 data class RestoreBirthdayHeightUiState(

@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.WalletManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -16,14 +20,24 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.util.Date
 
-class EnterBirthdayHeightViewModel(
-    private val blockchainType: BlockchainType,
-    private val account: Account,
-    private val currentBirthdayHeight: Long?,
+@HiltViewModel(assistedFactory = EnterBirthdayHeightViewModel.Factory::class)
+class EnterBirthdayHeightViewModel @AssistedInject constructor(
+    @Assisted private val blockchainType: BlockchainType,
+    @Assisted private val account: Account,
+    @Assisted private val currentBirthdayHeight: Long?,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val adapterManager: IAdapterManager,
-    private val walletManager: WalletManager
+    private val walletManager: WalletManager,
 ) : ViewModelUiState<EnterBirthdayHeightModule.UiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            blockchainType: BlockchainType,
+            account: Account,
+            currentBirthdayHeight: Long?,
+        ): EnterBirthdayHeightViewModel
+    }
 
     private val minBirthdayHeight = BirthdayHeightHelper.minBirthdayHeight(blockchainType)
     private val firstBlockDate = BirthdayHeightHelper.getFirstBlockDate(blockchainType)

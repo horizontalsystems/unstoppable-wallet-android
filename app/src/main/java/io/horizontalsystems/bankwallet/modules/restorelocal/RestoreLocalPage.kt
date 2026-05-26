@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -104,13 +105,9 @@ private fun RestoreLocalNavHost(
     popUpInclusive: Boolean,
 ) {
     val mainViewModel: RestoreViewModel = viewModel()
-    val viewModel = viewModel<RestoreLocalViewModel>(
-        factory = RestoreLocalModule.Factory(
-            backupJsonString,
-            fileName,
-            statPage
-        )
-    )
+    val viewModel = hiltViewModel<RestoreLocalViewModel, RestoreLocalViewModel.Factory> { factory ->
+        factory.create(backupJsonString, statPage, fileName)
+    }
 
     RestoreLocalScreen(
         viewModel = viewModel,
