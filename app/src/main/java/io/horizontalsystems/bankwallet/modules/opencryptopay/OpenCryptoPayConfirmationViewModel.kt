@@ -132,14 +132,11 @@ class OpenCryptoPayConfirmationViewModel(
             val rawHex = withContext(Dispatchers.IO) {
                 (sendTransactionService as SendTransactionServiceBtc).signTransaction()
             }
-            Timber.d("OCP BTC sign: quote=$quoteId method=$method hexPrefix=${rawHex.take(20)}")
             submitProofHexWithRetry(baseUrl, rawHex)
         } else {
-            Timber.d("OCP pay: wallet=${wallet.token.coin.code} address=$address amount=$amount")
             val result = withContext(Dispatchers.IO) { sendTransactionService.sendTransaction() }
             val txHash = extractTxHash(result)
                 ?: throw Exception("Could not get transaction hash")
-            Timber.d("OCP tx sent: hash=$txHash")
             ocpProofScope.launch {
                 submitProofWithRetry(baseUrl, txHash)
             }
@@ -155,19 +152,13 @@ class OpenCryptoPayConfirmationViewModel(
                     method = method,
                     hex = rawHex,
                 )
-                Timber.i("OCP BTC proof submitted: hexPrefix=${rawHex.take(20)}")
                 return
             } catch (e: HttpException) {
                 val body = e.response()?.errorBody()?.string()
                 Timber.e("OCP BTC proof HTTP ${e.code()}: $body")
                 throw Exception("HTTP ${e.code()}: $body")
             } catch (e: Exception) {
-                if (attempt < 2) {
-                    Timber.w("OCP BTC proof attempt ${attempt + 1}/3 failed (${e.javaClass.simpleName}: ${e.message}), retrying in 2000ms")
-                    delay(2000L)
-                } else {
-                    Timber.w("OCP BTC proof attempt ${attempt + 1}/3 failed (${e.javaClass.simpleName}: ${e.message})")
-                }
+                if (attempt < 2) delay(2000L)
             }
         }
         Timber.e("OCP BTC proof failed after retries")
@@ -178,21 +169,18 @@ class OpenCryptoPayConfirmationViewModel(
         val delays = listOf(2_000L, 5_000L, 10_000L, 30_000L, 60_000L)
         for ((attempt, delayMs) in delays.withIndex()) {
             try {
-                Timber.d("OCP submitting proof: tx=$txHash")
                 OcpProofService.service(baseUrl).submitProofTx(
                     url = proofUrl,
                     quote = quoteId,
                     method = method,
                     tx = txHash,
                 )
-                Timber.i("OCP proof submitted: tx=$txHash attempt=${attempt + 1}")
                 return
             } catch (e: HttpException) {
                 val body = e.response()?.errorBody()?.string()
                 Timber.e("OCP proof HTTP ${e.code()}: $body tx=$txHash")
                 return
             } catch (e: Exception) {
-                Timber.w("OCP proof attempt ${attempt + 1}/${delays.size} failed (${e.javaClass.simpleName}: ${e.message}) tx=$txHash, retrying in ${delayMs}ms")
                 delay(delayMs)
             }
         }

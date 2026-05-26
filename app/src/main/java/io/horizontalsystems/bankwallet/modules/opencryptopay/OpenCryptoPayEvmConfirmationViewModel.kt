@@ -126,7 +126,6 @@ class OpenCryptoPayEvmConfirmationViewModel(
     suspend fun pay() {
         val rawHex = sendTransactionService.signTransaction()
         val baseUrl = proofUrl.substringBefore("/tx/").let { it.trimEnd('/') + "/" }
-        Timber.d("OCP EVM pay: proofUrl=$proofUrl quote=$quoteId method=$method hexPrefix=${rawHex.take(20)}")
         submitProofWithRetry(baseUrl, rawHex)
     }
 
@@ -139,14 +138,12 @@ class OpenCryptoPayEvmConfirmationViewModel(
                     method = method,
                     hex = rawHex,
                 )
-                Timber.i("OCP EVM proof submitted successfully")
                 return
             } catch (e: HttpException) {
                 val body = e.response()?.errorBody()?.string()
                 Timber.e("OCP EVM proof failed: HTTP ${e.code()} body=$body")
                 throw Exception("HTTP ${e.code()}: $body")
             } catch (e: Exception) {
-                Timber.w("OCP EVM proof attempt ${attempt + 1}/3 failed: ${e.message}")
                 if (attempt < 2) delay(2000L)
             }
         }

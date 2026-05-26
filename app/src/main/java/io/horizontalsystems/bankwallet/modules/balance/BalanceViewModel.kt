@@ -35,7 +35,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.math.BigDecimal
 import androidx.core.net.toUri
 
@@ -286,7 +285,6 @@ class BalanceViewModel(
     }
 
     fun handleScannedData(scannedText: String) {
-        Timber.d("OCP scannedText=$scannedText")
         viewModelScope.launch {
             val lnurl: String? = when {
                 scannedText.uppercase().startsWith("LNURL") -> scannedText
@@ -297,7 +295,6 @@ class BalanceViewModel(
                         ?.takeIf { it.uppercase().startsWith("LNURL") }
                 } catch (_: Exception) { null }
             }
-            Timber.d("OCP lnurl=$lnurl")
             if (lnurl != null) {
                 openOcpPayment = lnurl
                 emitState()
