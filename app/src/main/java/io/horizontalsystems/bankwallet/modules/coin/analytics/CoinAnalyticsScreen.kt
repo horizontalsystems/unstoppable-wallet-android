@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -65,8 +65,9 @@ fun CoinAnalyticsScreen(
     fullCoin: FullCoin,
     navController: HSNavigation
 ) {
-    val viewModel =
-        viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin))
+    val viewModel = hiltViewModel<CoinAnalyticsViewModel, CoinAnalyticsViewModel.Factory> { factory ->
+        factory.create(fullCoin)
+    }
     val uiState = viewModel.uiState
 
     HSSwipeRefresh(

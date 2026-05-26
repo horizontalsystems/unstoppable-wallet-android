@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.coin.analytics
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule
@@ -19,30 +16,9 @@ import io.horizontalsystems.marketkit.models.Analytics
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainIssues
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.serialization.Serializable
 
 object CoinAnalyticsModule {
-
-    class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = CoinAnalyticsService(
-                fullCoin,
-                App.marketKit,
-                App.currencyManager,
-                App.accountManager,
-            )
-
-            return CoinAnalyticsViewModel(
-                service,
-                App.numberFormatter,
-                TechnicalAdviceViewItemFactory(App.numberFormatter),
-                fullCoin.coin.code
-            ) as T
-        }
-    }
 
     data class BlockViewItem(
         val title: Int?,

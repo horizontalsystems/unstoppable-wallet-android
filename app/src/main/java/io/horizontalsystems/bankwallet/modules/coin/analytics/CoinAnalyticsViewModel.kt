@@ -2,11 +2,18 @@ package io.horizontalsystems.bankwallet.modules.coin.analytics
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.brandColor
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatPremiumTrigger
@@ -41,6 +48,7 @@ import io.horizontalsystems.marketkit.models.Analytics
 import io.horizontalsystems.marketkit.models.BlockchainIssues
 import io.horizontalsystems.marketkit.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.Dispatchers
@@ -50,13 +58,23 @@ import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class CoinAnalyticsViewModel(
-    private val service: CoinAnalyticsService,
+@HiltViewModel(assistedFactory = CoinAnalyticsViewModel.Factory::class)
+class CoinAnalyticsViewModel @AssistedInject constructor(
+    @Assisted private val fullCoin: FullCoin,
+    private val marketKit: MarketKitWrapper,
+    private val currencyManager: CurrencyManager,
+    private val accountManager: IAccountManager,
     private val numberFormatter: IAppNumberFormatter,
-    private val technicalAdviceViewItemFactory: TechnicalAdviceViewItemFactory,
-    private val code: String
 ) : ViewModelUiState<CoinAnalyticsModule.UiState>() {
 
+    @AssistedFactory
+    interface Factory {
+        fun create(fullCoin: FullCoin): CoinAnalyticsViewModel
+    }
+
+    private val service = CoinAnalyticsService(fullCoin, marketKit, currencyManager, accountManager)
+    private val technicalAdviceViewItemFactory = TechnicalAdviceViewItemFactory(numberFormatter)
+    private val code = fullCoin.coin.code
     private val currency = service.currency
     val coin: Coin
         get() = service.fullCoin.coin
