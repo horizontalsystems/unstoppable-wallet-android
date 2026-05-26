@@ -4,9 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.eligibleTokens
 import io.horizontalsystems.bankwallet.core.isDefault
@@ -32,17 +34,24 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class ReceiveTokenSelectViewModel(
+@HiltViewModel(assistedFactory = ReceiveTokenSelectViewModel.Factory::class)
+class ReceiveTokenSelectViewModel @AssistedInject constructor(
+    @Assisted private val activeAccount: Account,
     private val walletManager: WalletManager,
-    private val activeAccount: Account,
-    private val fullCoinsProvider: FullCoinsProvider,
     private val adapterManager: IAdapterManager,
     private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
     private val zcashBirthdayProvider: ZcashBirthdayProvider,
     private val moneroBirthdayProvider: MoneroBirthdayProvider,
-    private val restoreSettingsManager: RestoreSettingsManager
+    private val restoreSettingsManager: RestoreSettingsManager,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(activeAccount: Account): ReceiveTokenSelectViewModel
+    }
+
+    private val fullCoinsProvider = FullCoinsProvider(marketKit, activeAccount)
     private var fullCoins: List<FullCoin> = listOf()
     private var searchQuery = ""
 
@@ -207,7 +216,7 @@ class ReceiveTokenSelectViewModel(
         walletManager.save(listOf(wallet))
 
         Utils.waitUntil(1000L, 100L) {
-            App.adapterManager.getReceiveAdapterForWallet(wallet) != null
+            adapterManager.getReceiveAdapterForWallet(wallet) != null
         }
 
         return wallet
@@ -232,26 +241,6 @@ class ReceiveTokenSelectViewModel(
         }
     }
 
-    class Factory(private val activeAccount: Account) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val fullCoinsProvider = FullCoinsProvider(
-                App.marketKit,
-                activeAccount
-            )
-            return ReceiveTokenSelectViewModel(
-                App.walletManager,
-                activeAccount,
-                fullCoinsProvider,
-                App.adapterManager,
-                App.currencyManager,
-                App.marketKit,
-                App.zcashBirthdayProvider,
-                App.moneroBirthdayProvider,
-                App.restoreSettingsManager
-            ) as T
-        }
-    }
 }
 
 sealed interface CoinForReceiveType {

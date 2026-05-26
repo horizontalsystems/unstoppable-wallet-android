@@ -20,7 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
@@ -54,9 +54,9 @@ fun ReceiveTokenSelectScreen(
     onCoinClick: (Wallet) -> Unit,
     onBackPress: () -> Unit,
 ) {
-    val viewModel = viewModel<ReceiveTokenSelectViewModel>(
-        factory = ReceiveTokenSelectViewModel.Factory(activeAccount)
-    )
+    val viewModel = hiltViewModel<ReceiveTokenSelectViewModel, ReceiveTokenSelectViewModel.Factory> { factory ->
+        factory.create(activeAccount)
+    }
     val uiState = viewModel.uiState
     val fullCoins = uiState.fullCoins
     val scope = rememberCoroutineScope()

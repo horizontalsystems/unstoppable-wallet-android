@@ -1,21 +1,25 @@
 package io.horizontalsystems.bankwallet.modules.coin.indicators
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import kotlinx.coroutines.launch
 
-class RsiSettingViewModel(
-    private var indicatorSetting: ChartIndicatorSetting,
-    private val chartIndicatorManager: ChartIndicatorManager
+@HiltViewModel(assistedFactory = RsiSettingViewModel.Factory::class)
+class RsiSettingViewModel @AssistedInject constructor(
+    @Assisted private var indicatorSetting: ChartIndicatorSetting,
+    private val chartIndicatorManager: ChartIndicatorManager,
 ) : ViewModelUiState<IndicatorSettingUiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(indicatorSetting: ChartIndicatorSetting): RsiSettingViewModel
+    }
+
     val name = indicatorSetting.name
     val defaultPeriod = indicatorSetting.defaultData["period"]
     private var period = indicatorSetting.extraData["period"]
@@ -71,13 +75,6 @@ class RsiSettingViewModel(
         period = null
 
         emitState()
-    }
-
-    class Factory(private val indicatorSetting: ChartIndicatorSetting) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RsiSettingViewModel(indicatorSetting, App.chartIndicatorManager) as T
-        }
     }
 }
 

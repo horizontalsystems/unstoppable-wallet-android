@@ -1,16 +1,24 @@
 package io.horizontalsystems.bankwallet.modules.coin.indicators
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 
-class MovingAverageSettingViewModel(
-    private var indicatorSetting: ChartIndicatorSetting,
-    private val chartIndicatorManager: ChartIndicatorManager
+@HiltViewModel(assistedFactory = MovingAverageSettingViewModel.Factory::class)
+class MovingAverageSettingViewModel @AssistedInject constructor(
+    @Assisted private var indicatorSetting: ChartIndicatorSetting,
+    private val chartIndicatorManager: ChartIndicatorManager,
 ) : ViewModelUiState<MovingAverageSettingUiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(indicatorSetting: ChartIndicatorSetting): MovingAverageSettingViewModel
+    }
+
     val name = indicatorSetting.name
     val maTypes = listOf("EMA", "SMA", "WMA")
     val defaultMaType = indicatorSetting.defaultData["maType"] ?: ""
@@ -81,13 +89,6 @@ class MovingAverageSettingViewModel(
         period = null
 
         emitState()
-    }
-
-    class Factory(private val indicatorSetting: ChartIndicatorSetting) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MovingAverageSettingViewModel(indicatorSetting, App.chartIndicatorManager) as T
-        }
     }
 }
 

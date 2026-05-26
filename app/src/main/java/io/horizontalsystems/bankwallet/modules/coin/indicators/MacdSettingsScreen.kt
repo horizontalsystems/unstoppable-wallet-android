@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
@@ -30,9 +30,9 @@ import io.horizontalsystems.bankwallet.uiv3.components.HSScaffold
 
 @Composable
 fun MacdSettingsScreen(navController: HSNavigation, indicatorSetting: ChartIndicatorSetting) {
-    val viewModel = viewModel<MacdSettingViewModel>(
-        factory = MacdSettingViewModel.Factory(indicatorSetting)
-    )
+    val viewModel = hiltViewModel<MacdSettingViewModel, MacdSettingViewModel.Factory> { factory ->
+        factory.create(indicatorSetting)
+    }
     val uiState = viewModel.uiState
 
     if (uiState.finish) {

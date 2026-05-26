@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
@@ -42,9 +42,9 @@ import io.horizontalsystems.bankwallet.uiv3.components.menu.MenuItemX
 
 @Composable
 fun EmaSettingsScreen(navController: HSNavigation, indicatorSetting: ChartIndicatorSetting) {
-    val viewModel = viewModel<MovingAverageSettingViewModel>(
-        factory = MovingAverageSettingViewModel.Factory(indicatorSetting)
-    )
+    val viewModel = hiltViewModel<MovingAverageSettingViewModel, MovingAverageSettingViewModel.Factory> { factory ->
+        factory.create(indicatorSetting)
+    }
     val uiState = viewModel.uiState
 
     if (uiState.finish) {
