@@ -5,9 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -22,12 +21,9 @@ data class ProChartSheet(val input: Input) : HSBottomSheet() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val chartViewModel = viewModel<ChartViewModel>(
-            factory = ProChartModule.Factory(
-                input.coinUid,
-                enumValues<ProChartModule.ChartType>()[input.chartType]
-            )
-        )
+        val chartViewModel = hiltViewModel<ProChartViewModel, ProChartViewModel.Factory> { factory ->
+            factory.create(input.coinUid, enumValues<ProChartModule.ChartType>()[input.chartType])
+        }
 
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_chart_24),
