@@ -117,6 +117,24 @@ class LocallyCreatedTransactionRepositoryTest {
     }
 
     @Test
+    fun markCreated_newRecord_emitsChangedFlow() = runTest {
+        val repository = createRepository()
+        val emissions = mutableListOf<Unit>()
+        val job = launch {
+            repository.changedFlow.collect {
+                emissions += Unit
+            }
+        }
+        advanceUntilIdle()
+
+        repository.markCreated("account-1", "ethereum", "hash")
+        advanceUntilIdle()
+
+        assertEquals(1, emissions.size)
+        job.cancel()
+    }
+
+    @Test
     fun markCreated_underLimit_doesNotTrim() = runTest {
         val dao = FakeLocallyCreatedTransactionDao()
         val repository = createRepository(dao)

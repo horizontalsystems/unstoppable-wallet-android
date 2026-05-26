@@ -2,8 +2,10 @@ package cash.p.terminal.modules.balance.token
 
 import cash.p.terminal.core.INativeBalanceProvider
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.managers.AmlStatusManager
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.core.managers.LocallyCreatedTransactionRepository
 import cash.p.terminal.core.managers.PoisonAddressManager
 import cash.p.terminal.core.usecase.UpdateSwapProviderTransactionsStatusUseCase
 import cash.p.terminal.modules.contacts.ContactsRepository
@@ -45,11 +47,14 @@ import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.WalletFactory
 import cash.p.terminal.wallet.tokenQueryId
+import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.toHexReversed
 import io.mockk.clearMocks
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
@@ -106,6 +111,8 @@ class TokenBalanceViewModelTest : KoinTest {
     private val localStorage = mockk<ILocalStorage>(relaxed = true)
     private val numberFormatter = mockk<io.horizontalsystems.core.IAppNumberFormatter>(relaxed = true)
     private val contactsRepository = mockk<ContactsRepository>(relaxed = true)
+    private val adapterManager = mockk<IAdapterManager>(relaxed = true)
+    private val locallyCreatedTransactionRepository = mockk<LocallyCreatedTransactionRepository>(relaxed = true)
 
     // Controllable flows
     private lateinit var transactionHiddenFlow: MutableStateFlow<TransactionHiddenState>
@@ -127,11 +134,8 @@ class TokenBalanceViewModelTest : KoinTest {
         modules(
             module {
                 single { mockk<UpdateSwapProviderTransactionsStatusUseCase>(relaxed = true) }
-                single {
-                    mockk<IAdapterManager>(relaxed = true) {
-                        coEvery { awaitAdapterForWallet<IReceiveAdapter>(any(), any()) } returns null
-                    }
-                }
+                single { adapterManager }
+                single { locallyCreatedTransactionRepository }
                 single {
                     mockk<SwapProviderTransactionsStorage>(relaxed = true) {
                         every { observeByToken(any(), any(), any()) } returns flowOf(emptyList())
@@ -199,6 +203,7 @@ class TokenBalanceViewModelTest : KoinTest {
         coEvery { transactionViewItemFactory.convertToViewItemCached(any(), any(), any()) } answers {
             createMockTransactionViewItem(firstArg<TransactionItem>().record.uid)
         }
+        coEvery { adapterManager.awaitAdapterForWallet<IReceiveAdapter>(any(), any()) } returns null
     }
 
     @After
@@ -783,6 +788,33 @@ class TokenBalanceViewModelTest : KoinTest {
         verify { localStorage.dismissNetworkFeeWarning(BlockchainType.BinanceSmartChain.uid) }
     }
 
+    @Test
+    fun proposeShielding_success_marksLocallyCreatedTransaction() = runTest(dispatcher) {
+        testWallet = createTestWallet(
+            coin = Coin(uid = "zcash", name = "Zcash", code = "ZEC"),
+            blockchainType = BlockchainType.Zcash,
+            blockchainName = "Zcash",
+            tokenType = TokenType.AddressSpecTyped(TokenType.AddressSpecType.Shielded),
+        )
+        val txId = FirstClassByteArray(ByteArray(32) { it.toByte() })
+        val zcashAdapter = mockk<ZcashAdapter> {
+            coEvery { proposeShielding() } returns txId
+        }
+        every { adapterManager.getAdapterForWallet<ZcashAdapter>(testWallet) } returns zcashAdapter
+
+        val viewModel = createViewModel()
+
+        viewModel.proposeShielding()
+        advanceUntilIdle()
+
+        coVerify {
+            locallyCreatedTransactionRepository.markCreated(
+                testWallet,
+                txId.byteArray.toHexReversed()
+            )
+        }
+    }
+
     private fun setupFeeWarningMocks() {
         val nativeToken = mockk<Token>(relaxed = true) {
             every { coin } returns Coin(uid = "bnb", name = "BNB", code = "BNB")
@@ -953,21 +985,26 @@ class TokenBalanceViewModelTest : KoinTest {
         transactionAutoHidePinExists = false
     )
 
-    private fun createTestWallet(account: Account = createAccount()): Wallet {
-        val testCoin = Coin(uid = "test-coin", name = "Test Coin", code = "TEST")
+    private fun createTestWallet(
+        account: Account = createAccount(),
+        coin: Coin = Coin(uid = "test-coin", name = "Test Coin", code = "TEST"),
+        blockchainType: BlockchainType = BlockchainType.Bitcoin,
+        blockchainName: String = "Bitcoin",
+        tokenType: TokenType = TokenType.Native,
+    ): Wallet {
         val testToken = Token(
-            coin = testCoin,
+            coin = coin,
             blockchain = Blockchain(
-                type = BlockchainType.Bitcoin,
-                name = "Bitcoin",
+                type = blockchainType,
+                name = blockchainName,
                 eip3091url = null
             ),
-            type = TokenType.Native,
+            type = tokenType,
             decimals = 8
         )
         return mockk<Wallet>(relaxed = true) {
             every { token } returns testToken
-            every { coin } returns testCoin
+            every { this@mockk.coin } returns coin
             every { this@mockk.account } returns account
             every { tokenQueryId } returns testToken.tokenQuery.id
         }

@@ -8,6 +8,9 @@ import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.core.DispatcherProvider
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -20,6 +23,8 @@ class LocallyCreatedTransactionRepository(
 ) {
     private val mutex = Mutex()
     private val readFailureLogged = AtomicBoolean(false)
+    private val _changedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val changedFlow: SharedFlow<Unit> = _changedFlow.asSharedFlow()
 
     suspend fun isCreated(record: TransactionRecord): Boolean {
         return isCreated(
@@ -94,6 +99,7 @@ class LocallyCreatedTransactionRepository(
                     )
                     if (inserted) {
                         trimAccountIfNeeded(accountId)
+                        _changedFlow.tryEmit(Unit)
                     }
                 }
             }
@@ -114,6 +120,7 @@ class LocallyCreatedTransactionRepository(
                 withContext(dispatcherProvider.io) {
                     storage.deleteByAccountIds(accountIds)
                 }
+                _changedFlow.tryEmit(Unit)
             }
         }
 

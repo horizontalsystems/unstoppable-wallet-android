@@ -12,9 +12,10 @@ import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.transactions.poison_status.PoisonStatus
 import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.entities.BlockchainType
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.withContext
 
 class PoisonAddressManager(
@@ -24,7 +25,10 @@ class PoisonAddressManager(
     private val dispatcherProvider: DispatcherProvider,
 ) {
     private val _poisonDbChangedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
-    val poisonDbChangedFlow: SharedFlow<Unit> = _poisonDbChangedFlow.asSharedFlow()
+    val poisonDbChangedFlow: Flow<Unit> = merge(
+        _poisonDbChangedFlow.asSharedFlow(),
+        locallyCreatedTransactionRepository.changedFlow,
+    )
 
     companion object {
         private const val SIMILARITY_CHARS = 3

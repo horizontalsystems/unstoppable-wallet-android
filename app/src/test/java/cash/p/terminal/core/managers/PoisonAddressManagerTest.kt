@@ -33,6 +33,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -62,6 +63,7 @@ class PoisonAddressManagerTest {
         every { contactsRepository.getContactsFiltered(any(), any(), any()) } returns emptyList()
         every { dao.get(any(), any(), any()) } returns null
         every { dao.getWhitelisted(any(), any(), any()) } returns emptyList()
+        every { locallyCreatedTransactionRepository.changedFlow } returns MutableSharedFlow()
         coEvery { locallyCreatedTransactionRepository.isCreated(any<TransactionRecord>()) } returns false
 
         val dispatcher = UnconfinedTestDispatcher()
