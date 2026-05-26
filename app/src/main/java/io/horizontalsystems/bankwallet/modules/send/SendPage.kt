@@ -17,7 +17,6 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmViewModel
-import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroModule
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroScreen
 import io.horizontalsystems.bankwallet.modules.send.monero.SendMoneroViewModel
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaModule
@@ -34,7 +33,6 @@ import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoModule
 import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoScreen
 import io.horizontalsystems.bankwallet.modules.send.zano.SendZanoViewModel
-import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
 import io.horizontalsystems.bankwallet.serializers.BigDecimalSerializer
@@ -82,8 +80,9 @@ data class SendPage(val input: Input) : HSPage() {
             }
 
             BlockchainType.Zcash -> {
-                val factory = SendZCashModule.Factory(wallet, address, hideAddress)
-                val sendZCashViewModel = viewModel<SendZCashViewModel>(factory = factory)
+                val sendZCashViewModel = hiltViewModel<SendZCashViewModel, SendZCashViewModel.Factory> { factory ->
+                    factory.create(wallet, address, hideAddress)
+                }
                 SendZCashScreen(
                     title = title,
                     navController = navController,
@@ -183,8 +182,9 @@ data class SendPage(val input: Input) : HSPage() {
             }
 
             BlockchainType.Monero -> {
-                val factory = SendMoneroModule.Factory(wallet, address, hideAddress)
-                val sendMoneroViewModel = viewModel<SendMoneroViewModel>(factory = factory)
+                val sendMoneroViewModel = hiltViewModel<SendMoneroViewModel, SendMoneroViewModel.Factory> { factory ->
+                    factory.create(wallet, address, hideAddress)
+                }
                 SendMoneroScreen(
                     title,
                     navController,

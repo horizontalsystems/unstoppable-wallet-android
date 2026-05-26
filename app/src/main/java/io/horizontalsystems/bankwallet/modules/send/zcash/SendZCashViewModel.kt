@@ -5,16 +5,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.ISendZcashAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
@@ -30,31 +39,38 @@ import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
-class SendZCashViewModel(
-    private val adapter: ISendZcashAdapter,
-    val wallet: Wallet,
-    private val xRateService: XRateService,
-    private val amountService: SendAmountService,
-    private val addressService: SendZCashAddressService,
-    private val memoService: SendZCashMemoService,
+@HiltViewModel(assistedFactory = SendZCashViewModel.Factory::class)
+class SendZCashViewModel @AssistedInject constructor(
+    @Assisted val wallet: Wallet,
+    @Assisted private val address: Address,
+    @Assisted private val hideAddress: Boolean,
+    adapterManager: IAdapterManager,
+    marketKit: MarketKitWrapper,
+    currencyManager: CurrencyManager,
     private val contactsRepo: ContactsRepository,
-    private val showAddressInput: Boolean,
-    private val address: Address,
-    private val recentAddressManager: RecentAddressManager
+    private val recentAddressManager: RecentAddressManager,
+    appConfigProvider: AppConfigProvider,
 ) : ViewModelUiState<SendZCashUiState>() {
-    private val feeService = SendZcashFeeService(adapter, wallet.coin.code)
+
+    private val adapter: ISendZcashAdapter
+    private val xRateService: XRateService
+    private val amountService: SendAmountService
+    private val addressService: SendZCashAddressService
+    private val memoService: SendZCashMemoService
+    private val feeService: SendZcashFeeService
 
     val blockchainType = wallet.token.blockchainType
     val coinMaxAllowedDecimals = wallet.token.decimals
-    val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
-    val memoMaxLength by memoService::memoMaxLength
+    val fiatMaxAllowedDecimals: Int
+    val memoMaxLength: Int get() = memoService.memoMaxLength
 
-    private var amountState = amountService.stateFlow.value
-    private var addressState = addressService.stateFlow.value
-    private var memoState = memoService.stateFlow.value
-    private var feeState = feeService.stateFlow.value
+    private var amountState: SendAmountService.State
+    private var addressState: SendZCashAddressService.State
+    private var memoState: SendZCashMemoService.State
+    private var feeState: SendZcashFeeService.State
+    private val showAddressInput = !hideAddress
 
-    var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
+    var coinRate by mutableStateOf<CurrencyValue?>(null)
         private set
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
@@ -62,6 +78,27 @@ class SendZCashViewModel(
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
     init {
+        adapter = adapterManager.getAdapterForWallet<ISendZcashAdapter>(wallet)
+            ?: throw IllegalStateException("SendZcashAdapter is null")
+        xRateService = XRateService(marketKit, currencyManager.baseCurrency)
+        fiatMaxAllowedDecimals = appConfigProvider.fiatDecimal
+
+        amountService = SendAmountService(
+            AmountValidator(),
+            wallet.coin.code,
+            adapter.availableBalance
+        )
+        addressService = SendZCashAddressService(adapter)
+        memoService = SendZCashMemoService()
+        feeService = SendZcashFeeService(adapter, wallet.coin.code)
+
+        amountState = amountService.stateFlow.value
+        addressState = addressService.stateFlow.value
+        memoState = memoService.stateFlow.value
+        feeState = feeService.stateFlow.value
+
+        coinRate = xRateService.getRate(wallet.coin.uid)
+
         xRateService.getRateFlow(wallet.coin.uid).collectWith(viewModelScope) {
             coinRate = it
         }
@@ -206,6 +243,11 @@ class SendZCashViewModel(
         is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
         is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(wallet: Wallet, address: Address, hideAddress: Boolean): SendZCashViewModel
     }
 }
 
