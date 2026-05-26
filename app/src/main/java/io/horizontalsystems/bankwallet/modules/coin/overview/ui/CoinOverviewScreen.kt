@@ -35,10 +35,9 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.modules.coin.indicators.IndicatorsPage
-import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewModule
+import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.CoinOverviewViewModel
 import io.horizontalsystems.bankwallet.modules.coin.overview.HudMessageType
 import io.horizontalsystems.bankwallet.modules.coin.ui.CoinScreenTitle
@@ -74,7 +73,9 @@ fun CoinOverviewScreen(
     val viewModel = hiltViewModel<CoinOverviewViewModel, CoinOverviewViewModel.Factory> { factory ->
         factory.create(fullCoin)
     }
-    val chartViewModel = viewModel<ChartViewModel>(factory = CoinOverviewModule.ChartFactory(fullCoin))
+    val chartViewModel = hiltViewModel<CoinOverviewChartViewModel, CoinOverviewChartViewModel.Factory> { factory ->
+        factory.create(fullCoin)
+    }
 
     val refreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val overview by viewModel.overviewLiveData.observeAsState()

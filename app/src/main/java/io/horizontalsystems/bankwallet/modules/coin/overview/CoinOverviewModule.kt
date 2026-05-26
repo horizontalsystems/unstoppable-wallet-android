@@ -1,34 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterSignificant
-import io.horizontalsystems.bankwallet.modules.chart.ChartModule
-import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinDataItem
 import io.horizontalsystems.bankwallet.modules.coin.CoinLink
 import io.horizontalsystems.bankwallet.modules.coin.RoiViewItem
-import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfoOverview
 import io.horizontalsystems.marketkit.models.Token
 
-object CoinOverviewModule {
-
-    class ChartFactory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val chartService = CoinOverviewChartService(
-                App.marketKit,
-                App.currencyManager,
-                fullCoin.coin.uid,
-                App.chartIndicatorManager
-            )
-            val chartNumberFormatter = ChartCurrencyValueFormatterSignificant()
-            return ChartModule.createViewModel(chartService, chartNumberFormatter) as T
-        }
-    }
-}
+object CoinOverviewModule
 
 data class CoinOverviewItem(
     val coinCode: String,
