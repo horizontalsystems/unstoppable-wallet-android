@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewItemFactory
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -164,10 +165,19 @@ class OpenCryptoPayEvmConfirmationViewModel(
         private val blockchainType: BlockchainType,
         private val merchant: String?,
         private val expirationIso: String,
+        private val minFee: Double?,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val sendTransactionService = SendTransactionServiceEvm(blockchainType)
+            val minGasPrice: GasPrice? = minFee?.let { fee ->
+                val feeLong = kotlin.math.ceil(fee).toLong()
+                if (App.evmBlockchainManager.getChain(blockchainType).isEIP1559Supported) {
+                    GasPrice.Eip1559(maxFeePerGas = feeLong, maxPriorityFeePerGas = 0)
+                } else {
+                    GasPrice.Legacy(feeLong)
+                }
+            }
+            val sendTransactionService = SendTransactionServiceEvm(blockchainType, minGasPrice = minGasPrice)
             val feeToken = App.evmBlockchainManager.getBaseToken(blockchainType)!!
             val coinServiceFactory = EvmCoinServiceFactory(
                 feeToken, App.marketKit, App.currencyManager, App.coinManager

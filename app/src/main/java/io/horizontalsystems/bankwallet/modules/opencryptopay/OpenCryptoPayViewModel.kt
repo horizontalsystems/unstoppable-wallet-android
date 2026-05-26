@@ -67,7 +67,7 @@ class OpenCryptoPayViewModel(
                     " expires=${response.quote?.expiration}" +
                     " merchant=${response.merchant}" +
                     " amount=${response.requestedAmount?.amount} ${response.requestedAmount?.asset}" +
-                    " methods=${response.transferAmounts.map { t -> "${t.method}:[${t.assets.joinToString { it.asset + "=" + it.amount }}]" }}"
+                    " methods=${response.transferAmounts.map { t -> "${t.method}(minFee=${t.minFee}):[${t.assets.joinToString { it.asset + "=" + it.amount }}]" }}"
                 )
 
                 if (response.statusCode == 404 || response.quote == null) {
@@ -108,6 +108,7 @@ class OpenCryptoPayViewModel(
                 startCountdown(response.quote.expiration)
                 emitState()
             } catch (e: Exception) {
+                Timber.e(e, "OCP payment fetch failed")
                 error = e.message ?: "Failed to fetch payment details"
                 loading = false
                 emitState()
@@ -154,6 +155,7 @@ class OpenCryptoPayViewModel(
             blockchainType = methodItem.blockchainType,
             merchant = response.merchant,
             expirationIso = quote.expiration,
+            minFee = methodItem.transfer.minFee,
         )
         if (isEvmMethod(methodItem.transfer.method)) {
             navigateToEvmConfirm = data
@@ -278,6 +280,7 @@ data class OcpEvmConfirmData(
     val blockchainType: BlockchainType,
     val merchant: String?,
     val expirationIso: String,
+    val minFee: Double?,
 )
 
 suspend fun fetchOcpTransactionDetails(

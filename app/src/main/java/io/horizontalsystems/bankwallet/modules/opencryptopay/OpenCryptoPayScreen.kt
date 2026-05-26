@@ -69,6 +69,7 @@ fun OpenCryptoPayScreen(
                 blockchainType = data.blockchainType,
                 merchant = data.merchant,
                 expirationIso = data.expirationIso,
+                minFee = data.minFee,
                 sendEntryPointDestId = R.id.openCryptoPayFragment,
             )
         )
@@ -88,6 +89,7 @@ fun OpenCryptoPayScreen(
                 assetAmount = data.assetAmount,
                 merchant = data.merchant,
                 expirationIso = data.expirationIso,
+                minFee = data.minFee,
                 sendEntryPointDestId = R.id.openCryptoPayFragment,
             )
         )
