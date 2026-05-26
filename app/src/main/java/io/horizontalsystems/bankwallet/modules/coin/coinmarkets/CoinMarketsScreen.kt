@@ -24,7 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -59,7 +59,9 @@ import kotlinx.coroutines.launch
 fun CoinMarketsScreen(
     fullCoin: FullCoin
 ) {
-    val viewModel = viewModel<CoinMarketsViewModel>(factory = CoinMarketsModule.Factory(fullCoin))
+    val viewModel = hiltViewModel<CoinMarketsViewModel, CoinMarketsViewModel.Factory> { factory ->
+        factory.create(fullCoin)
+    }
 
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
     var showExchangeTypeSelector by rememberSaveable { mutableStateOf(false) }

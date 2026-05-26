@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.nav3.HSNavigation
 import io.horizontalsystems.bankwallet.modules.nav3.HSPage
@@ -37,9 +37,9 @@ data class CoinAuditsPage(val input: Input) : HSPage() {
 
     @Composable
     override fun GetContent(navController: HSNavigation) {
-        val viewModel = viewModel<CoinAuditsViewModel>(
-            factory = CoinAuditsModule.Factory(input.audits)
-        )
+        val viewModel = hiltViewModel<CoinAuditsViewModel, CoinAuditsViewModel.Factory> { factory ->
+            factory.create(input.audits)
+        }
         val context = LocalContext.current
         CoinAuditsScreen(
             viewModel = viewModel,

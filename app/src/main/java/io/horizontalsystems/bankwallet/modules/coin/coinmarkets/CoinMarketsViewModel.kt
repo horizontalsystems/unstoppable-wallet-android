@@ -1,9 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -16,11 +21,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
 
-class CoinMarketsViewModel(
-    private val fullCoin: FullCoin,
-    private val baseCurrency: Currency,
+@HiltViewModel(assistedFactory = CoinMarketsViewModel.Factory::class)
+class CoinMarketsViewModel @AssistedInject constructor(
+    @Assisted private val fullCoin: FullCoin,
+    private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<CoinMarketsModule.CoinMarketUiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(fullCoin: FullCoin): CoinMarketsViewModel
+    }
+
+    private val baseCurrency: Currency get() = currencyManager.baseCurrency
 
     private var marketTickers = listOf<MarketTicker>()
     private var filteredMarketTickers = listOf<MarketTicker>()
@@ -82,12 +96,12 @@ class CoinMarketsViewModel(
             item.marketName,
             item.marketImageUrl,
             "${item.base}/${item.target}",
-            App.numberFormatter.formatFiatShort(
+            numberFormatter.formatFiatShort(
                 item.fiatVolume,
                 baseCurrency.symbol,
                 baseCurrency.decimal
             ),
-            App.numberFormatter.formatCoinShort(item.volume, item.base, 8),
+            numberFormatter.formatCoinShort(item.volume, item.base, 8),
             item.tradeUrl,
             if (item.verified) TranslatableString.ResString(R.string.CoinPage_MarketsLabel_Verified) else null
         )

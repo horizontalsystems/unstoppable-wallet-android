@@ -1,24 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.coin.coinmarkets
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.MarketTickerViewItem
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.marketkit.models.FullCoin
 
 object CoinMarketsModule {
-    class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return CoinMarketsViewModel(fullCoin, App.currencyManager.baseCurrency, App.marketKit) as T
-        }
-    }
 
     sealed class VolumeMenuType : WithTranslatableTitle {
         class Coin(val name: String) : VolumeMenuType()

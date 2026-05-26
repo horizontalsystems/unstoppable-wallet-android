@@ -1,18 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.coin.audits
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import kotlinx.serialization.Serializable
 import javax.annotation.concurrent.Immutable
 
 object CoinAuditsModule {
-    @Suppress("UNCHECKED_CAST")
-    class Factory(private val audits: List<AuditParcelable>) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return CoinAuditsViewModel(audits) as T
-        }
-    }
 
     @Immutable
     data class AuditorViewItem(

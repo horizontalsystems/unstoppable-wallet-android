@@ -6,6 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.AuditViewItem
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.AuditorViewItem
@@ -17,9 +21,15 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 
 @SuppressLint("SimpleDateFormat")
-class CoinAuditsViewModel(
-    audits: List<CoinAuditsModule.AuditParcelable>
+@HiltViewModel(assistedFactory = CoinAuditsViewModel.Factory::class)
+class CoinAuditsViewModel @AssistedInject constructor(
+    @Assisted audits: List<CoinAuditsModule.AuditParcelable>
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(audits: List<CoinAuditsModule.AuditParcelable>): CoinAuditsViewModel
+    }
 
     var uiState by mutableStateOf(CoinAuditsModule.UiState(emptyList()))
 
