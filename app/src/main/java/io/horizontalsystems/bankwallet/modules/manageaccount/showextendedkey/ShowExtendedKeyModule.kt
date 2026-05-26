@@ -1,28 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey
 
 import android.os.Parcelable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.hdwalletkit.HDExtendedKey
-import io.horizontalsystems.hdwalletkit.HDKeychain
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 object ShowExtendedKeyModule {
-    class Factory(
-        private val extendedRootKey: HDExtendedKey,
-        private val displayKeyType: DisplayKeyType
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ShowExtendedKeyViewModel(
-                keyChain = HDKeychain(extendedRootKey.key),
-                displayKeyType = displayKeyType,
-                purpose = extendedRootKey.purposes.first(),
-                extendedKeyCoinType = extendedRootKey.coinTypes.first()
-            ) as T
-        }
-    }
 
     @Serializable
     @Parcelize

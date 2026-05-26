@@ -1,15 +1,25 @@
 package io.horizontalsystems.bankwallet.modules.coin.detectors
 
 import androidx.lifecycle.viewModelScope
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.coin.detectors.DetectorsModule.IssueViewItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DetectorsViewModel(
-    private val title: String,
-    private val detectors: List<IssueParcelable>
+@HiltViewModel(assistedFactory = DetectorsViewModel.Factory::class)
+class DetectorsViewModel @AssistedInject constructor(
+    @Assisted private val title: String,
+    @Assisted private val detectors: List<IssueParcelable>,
 ) : ViewModelUiState<DetectorsModule.UiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(title: String, detectors: List<IssueParcelable>): DetectorsViewModel
+    }
 
     var coreIssues = emptyList<IssueViewItem>()
     var generalIssues = emptyList<IssueViewItem>()

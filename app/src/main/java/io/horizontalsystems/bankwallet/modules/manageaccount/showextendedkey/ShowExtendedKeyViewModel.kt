@@ -4,6 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -15,25 +19,35 @@ import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
 import io.horizontalsystems.bitcoinkit.MainNet
 import io.horizontalsystems.dashkit.MainNetDash
 import io.horizontalsystems.hdwalletkit.ExtendedKeyCoinType
+import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDExtendedKeyVersion
 import io.horizontalsystems.hdwalletkit.HDKeychain
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.litecoinkit.MainNetLitecoin
 
-class ShowExtendedKeyViewModel(
-    private val keyChain: HDKeychain,
-    val displayKeyType: DisplayKeyType,
-    purpose: HDWallet.Purpose,
-    extendedKeyCoinType: ExtendedKeyCoinType
+@HiltViewModel(assistedFactory = ShowExtendedKeyViewModel.Factory::class)
+class ShowExtendedKeyViewModel @AssistedInject constructor(
+    @Assisted extendedRootKey: HDExtendedKey,
+    @Assisted val displayKeyType: DisplayKeyType,
 ) : ViewModel() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(extendedRootKey: HDExtendedKey, displayKeyType: DisplayKeyType): ShowExtendedKeyViewModel
+    }
+
+    private val keyChain = HDKeychain(extendedRootKey.key)
+    private val purpose0 = extendedRootKey.purposes.first()
+    private val extendedKeyCoinType0 = extendedRootKey.coinTypes.first()
+
     val purposes = HDWallet.Purpose.values()
     val blockchains: Array<Blockchain>
         get() = if (purpose != HDWallet.Purpose.BIP44) arrayOf(Blockchain.Bitcoin, Blockchain.Litecoin) else Blockchain.values()
     val accounts = 0..5
 
-    var purpose: HDWallet.Purpose by mutableStateOf(purpose)
+    var purpose: HDWallet.Purpose by mutableStateOf(purpose0)
         private set
-    var blockchain: Blockchain by mutableStateOf(extendedKeyCoinType.blockchain)
+    var blockchain: Blockchain by mutableStateOf(extendedKeyCoinType0.blockchain)
         private set
     var account: Int by mutableStateOf(0)
         private set

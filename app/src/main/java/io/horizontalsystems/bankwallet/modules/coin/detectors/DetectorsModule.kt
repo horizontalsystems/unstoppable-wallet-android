@@ -1,21 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.coin.detectors
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import kotlinx.serialization.Serializable
 
 object DetectorsModule {
-    @Suppress("UNCHECKED_CAST")
-    class Factory(
-        private val title: String,
-        private val detectors: List<IssueParcelable>
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return DetectorsViewModel(title, detectors) as T
-        }
-    }
 
     data class UiState(
         val title: String,

@@ -25,7 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -99,12 +99,9 @@ private fun ShowExtendedKeyScreen(
     extendedKey: HDExtendedKey,
     displayKeyType: DisplayKeyType
 ) {
-    val viewModel = viewModel<ShowExtendedKeyViewModel>(
-        factory = ShowExtendedKeyModule.Factory(
-            extendedKey,
-            displayKeyType
-        )
-    )
+    val viewModel = hiltViewModel<ShowExtendedKeyViewModel, ShowExtendedKeyViewModel.Factory> { factory ->
+        factory.create(extendedKey, displayKeyType)
+    }
 
     val view = LocalView.current
     val scope = rememberCoroutineScope()
