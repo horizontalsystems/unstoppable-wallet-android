@@ -1,12 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -20,12 +25,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ActivateTokenViewModel(
-    wallet: Wallet,
-    feeToken: Token,
+@HiltViewModel(assistedFactory = ActivateTokenViewModel.Factory::class)
+class ActivateTokenViewModel @AssistedInject constructor(
+    @Assisted wallet: Wallet,
     adapterManager: IAdapterManager,
-    xRateService: XRateService,
+    coinManager: ICoinManager,
+    marketKit: MarketKitWrapper,
+    private val currencyManager: CurrencyManager,
 ) : ViewModelUiState<ActivateTokenUiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(wallet: Wallet): ActivateTokenViewModel
+    }
+
+    private val feeToken: Token = coinManager.getToken(TokenQuery(wallet.token.blockchainType, TokenType.Native))
+        ?: throw IllegalArgumentException()
+    private val xRateService = XRateService(marketKit, currencyManager.baseCurrency)
     private val token = wallet.token
     private val adapter = adapterManager.getAdapterForWallet<StellarAssetAdapter>(wallet)
     private var activateEnabled = false
@@ -67,7 +83,7 @@ class ActivateTokenViewModel(
 
     override fun createState() = ActivateTokenUiState(
         token = token,
-        currency = App.currencyManager.baseCurrency,
+        currency = currencyManager.baseCurrency,
         activateEnabled = activateEnabled,
         error = error,
         feeCoinValue = feeCoinValue,
@@ -76,23 +92,6 @@ class ActivateTokenViewModel(
 
     suspend fun activate() = withContext(Dispatchers.Default) {
         adapter?.activate()
-    }
-
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val feeToken =
-                App.coinManager.getToken(TokenQuery(wallet.token.blockchainType, TokenType.Native)) ?: throw IllegalArgumentException()
-
-            val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
-
-            return ActivateTokenViewModel(
-                wallet,
-                feeToken,
-                App.adapterManager,
-                xRateService
-            ) as T
-        }
     }
 }
 

@@ -1,10 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.receive
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.StellarAssetAdapter
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -14,10 +17,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class ReceiveStellarAssetViewModel(
-    private val wallet: Wallet,
+@HiltViewModel(assistedFactory = ReceiveStellarAssetViewModel.Factory::class)
+class ReceiveStellarAssetViewModel @AssistedInject constructor(
+    @Assisted private val wallet: Wallet,
     val adapterManager: IAdapterManager,
+    private val numberFormatter: IAppNumberFormatter,
 ) : ViewModelUiState<ReceiveStellarAssetUiState>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(wallet: Wallet): ReceiveStellarAssetViewModel
+    }
     private val watchAccount = wallet.account.isWatchAccount
     private val blockchainName = wallet.token.blockchain.name
     private var address: String = ""
@@ -71,7 +81,7 @@ class ReceiveStellarAssetViewModel(
         blockchainName = blockchainName,
         watchAccount = watchAccount,
         amount = amount,
-        amountString = amount?.let { App.numberFormatter.formatCoinFull(it, wallet.token.coin.code, wallet.token.decimals) },
+        amountString = amount?.let { numberFormatter.formatCoinFull(it, wallet.token.coin.code, wallet.token.decimals) },
         activationRequired = trustlineEstablished == false,
         coinCode = wallet.coin.code,
         trustlineEstablished = trustlineEstablished,
@@ -90,13 +100,6 @@ class ReceiveStellarAssetViewModel(
             fetchAddress()
 
             emitState()
-        }
-    }
-
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ReceiveStellarAssetViewModel(wallet, App.adapterManager) as T
         }
     }
 

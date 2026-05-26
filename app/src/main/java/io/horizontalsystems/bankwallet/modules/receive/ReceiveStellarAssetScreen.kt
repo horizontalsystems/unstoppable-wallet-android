@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.activatetoken.ActivateTokenPage
@@ -42,7 +42,9 @@ import kotlin.reflect.KClass
 
 @Composable
 fun ReceiveStellarAssetScreen(navController: HSNavigation, wallet: Wallet, receiveEntryPointDestId: KClass<out HSPage>?) {
-    val viewModel = viewModel<ReceiveStellarAssetViewModel>(factory = ReceiveStellarAssetViewModel.Factory(wallet))
+    val viewModel = hiltViewModel<ReceiveStellarAssetViewModel, ReceiveStellarAssetViewModel.Factory> { factory ->
+        factory.create(wallet)
+    }
     val uiState = viewModel.uiState
 
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)

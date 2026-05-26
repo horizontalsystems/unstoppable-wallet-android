@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
@@ -67,7 +67,9 @@ fun ActivateTokenScreen(
     wallet: Wallet,
 ) {
     val resultEventBus = LocalResultEventBus.current
-    val viewModel = viewModel<ActivateTokenViewModel>(factory = ActivateTokenViewModel.Factory(wallet))
+    val viewModel = hiltViewModel<ActivateTokenViewModel, ActivateTokenViewModel.Factory> { factory ->
+        factory.create(wallet)
+    }
 
     val uiState = viewModel.uiState
     val token = uiState.token
