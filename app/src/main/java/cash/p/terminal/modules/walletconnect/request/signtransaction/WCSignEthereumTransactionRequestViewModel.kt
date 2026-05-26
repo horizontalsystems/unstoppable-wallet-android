@@ -21,6 +21,8 @@ import cash.p.terminal.modules.sendevmtransaction.ViewItem
 import cash.p.terminal.modules.walletconnect.WCDelegate
 import cash.p.terminal.modules.walletconnect.WCSessionManager
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WalletConnectTransaction
+import io.horizontalsystems.ethereumkit.core.TransactionBuilder
+import io.horizontalsystems.ethereumkit.models.RawTransaction
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
@@ -97,21 +99,25 @@ class WCSignEthereumTransactionRequestViewModel(
     }
 
     suspend fun sign() = withContext(Dispatchers.Default) {
-        val signer = evmKit.signer ?: throw WCSessionManager.RequestDataError.NoSigner
+        evmKit.signer ?: throw WCSessionManager.RequestDataError.NoSigner
         val gasData = gasData ?: throw WCSessionManager.RequestDataError.InvalidGasPrice
         val nonce = nonce ?: throw WCSessionManager.RequestDataError.InvalidNonce
 
-        val signature = signer.signedTransaction(
-            address = transactionData.to,
-            value = transactionData.value,
-            transactionInput = transactionData.input,
+        val rawTransaction = RawTransaction(
             gasPrice = gasData.gasPrice,
             gasLimit = gasData.gasLimit,
-            nonce = nonce
+            to = transactionData.to,
+            value = transactionData.value,
+            nonce = nonce,
+            data = transactionData.input
         )
+        // Route through the wrapper so hardware wallets sign on-device. The base
+        // Signer.signedTransaction() would sign with a mock key for Trezor/Tangem.
+        val (signedRawTransaction, signature) = evmKit.signReconciled(rawTransaction)
+        val signedBytes = TransactionBuilder.encode(signedRawTransaction, signature, evmKit.evmKit.chain.id)
 
         WCDelegate.sessionRequestEvent?.let { sessionRequest ->
-            WCDelegate.respondPendingRequest(sessionRequest.request.id, sessionRequest.topic, signature.to0xHexString())
+            WCDelegate.respondPendingRequest(sessionRequest.request.id, sessionRequest.topic, signedBytes.to0xHexString())
         }
     }
 
