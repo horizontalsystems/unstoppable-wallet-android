@@ -8,6 +8,7 @@ import cash.p.terminal.core.EvmError
 import cash.p.terminal.core.LocalizedException
 import cash.p.terminal.core.ServiceState
 import cash.p.terminal.core.ethereum.CautionViewItem
+import cash.p.terminal.core.managers.LocallyCreatedTransactionRepository
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.send.SendModule
@@ -50,6 +51,9 @@ abstract class ISendTransactionService<T>(protected val token: Token) :
     protected var uuid = UUID.randomUUID().toString()
     private val marketKit: MarketKitWrapper by inject(MarketKitWrapper::class.java)
     protected val numberFormatter: IAppNumberFormatter by inject(IAppNumberFormatter::class.java)
+    private val locallyCreatedTransactionRepository: LocallyCreatedTransactionRepository by inject(
+        LocallyCreatedTransactionRepository::class.java
+    )
 
     protected val rate: CurrencyValue?
         get() {
@@ -99,6 +103,10 @@ abstract class ISendTransactionService<T>(protected val token: Token) :
         extraFees = feesMap.mapValues { (_, coinValue) ->
             getAmountData(coinValue)
         }
+    }
+
+    protected suspend fun markTransactionCreated(transactionHash: String?) {
+        locallyCreatedTransactionRepository.markCreated(wallet, transactionHash)
     }
 
     protected fun createCaution(

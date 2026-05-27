@@ -7,6 +7,7 @@ import io.horizontalsystems.core.IPinComponent
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import org.junit.Before
 import org.junit.Test
 
@@ -37,6 +38,7 @@ class CalculatorModeServiceTest {
         service.enable(pinExistedBefore = false)
 
         verify { localStorage.calculatorModeCreatedPin = true }
+        verify(exactly = 0) { localStorage.pushNotificationsEnabled = any() }
     }
 
     @Test
@@ -47,6 +49,7 @@ class CalculatorModeServiceTest {
         service.enable(pinExistedBefore = true)
 
         verify { localStorage.calculatorModeCreatedPin = false }
+        verify(exactly = 0) { localStorage.pushNotificationsEnabled = any() }
     }
 
     @Test
@@ -57,6 +60,19 @@ class CalculatorModeServiceTest {
 
         verify(exactly = 0) { localStorage.calculatorModeCreatedPin = any() }
         verify(exactly = 0) { appIconService.setAppIcon(any()) }
+    }
+
+    @Test
+    fun enable_disablePushNotifications_disablesPushBeforeModeSwitch() {
+        every { localStorage.isCalculatorModeEnabled } returns false
+        every { localStorage.appIcon } returns AppIcon.Main
+
+        service.enable(pinExistedBefore = true, disablePushNotifications = true)
+
+        verifyOrder {
+            localStorage.pushNotificationsEnabled = false
+            appIconService.setAppIcon(AppIcon.Calculator)
+        }
     }
 
     @Test

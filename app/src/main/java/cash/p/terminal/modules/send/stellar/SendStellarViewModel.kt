@@ -15,6 +15,7 @@ import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
+import cash.p.terminal.tangem.domain.isHardwareWalletUserCancelled
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.Token
@@ -27,7 +28,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import cash.p.terminal.R
-import cash.p.terminal.trezor.domain.TrezorCancelledException
 import cash.p.terminal.core.providers.AppConfigProvider
 import org.koin.java.KoinJavaComponent.inject
 import java.net.UnknownHostException
@@ -182,14 +182,22 @@ class SendStellarViewModel(
             sendResult = SendResult.Sending
             logger.info("sending tx")
 
-            adapter.send(amountState.amount!!, addressState.address?.hex!!, memo)
+            val amount = checkNotNull(amountState.amount)
+            val address = checkNotNull(addressState.address)
+            val txHash = adapter.send(amount, address.hex, memo)
+            locallyCreatedTransactionRepository.markCreated(wallet, txHash)
 
-            onSendSuccess(addressState.address?.hex)
-            sendResult = SendResult.Sent()
+            onSendSuccess(address.hex)
+            sendResult = SendResult.Sent(txHash)
             logger.info("success")
 
-            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Stellar)
+            recentAddressManager.setRecentAddress(address, BlockchainType.Stellar)
         } catch (e: Throwable) {
+            if (e.isHardwareWalletUserCancelled()) {
+                sendResult = null
+                logger.info("user cancelled")
+                return@withContext
+            }
             sendResult = SendResult.Failed(createCaution(e))
             logger.warning("failed", e)
         }
@@ -214,4 +222,3 @@ data class SendStellarUiState(
     val isPoisonAddress: Boolean = false,
     val riskAccepted: Boolean = false,
 )
-

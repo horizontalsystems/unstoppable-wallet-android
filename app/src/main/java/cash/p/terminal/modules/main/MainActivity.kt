@@ -15,6 +15,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -54,11 +56,20 @@ open class MainActivity : BaseActivity() {
     private val appIconService: AppIconService by inject()
     private val localStorage: ILocalStorage by inject()
     private val pinComponent: IPinComponent by inject()
-    private lateinit var pinLockComposeView: ComposeView
+    private var pinLockComposeView: ComposeView? = null
     private var showPinLockScreen by mutableStateOf(false)
 
     override fun onResume() {
         super.onResume()
+        // Refresh lock state synchronously: BackgroundManager → PinComponent emits
+        // EnterForeground on a different coroutine and may not have run yet, so the
+        // check below would otherwise race and briefly hide the calculator overlay.
+        pinComponent.willEnterForeground()
+        if (showPinLockScreen && !pinComponent.isLockedFlow.value) {
+            showPinLockScreen = false
+            pinLockComposeView?.visibility = GONE
+            applyLockWindowFlags(isLocked = false, calculatorMode = true)
+        }
         validate()
     }
 
@@ -171,8 +182,9 @@ open class MainActivity : BaseActivity() {
             }
         }
 
-        pinLockComposeView = findViewById(R.id.pinLockComposeView)
-        pinLockComposeView.setContent {
+        val composeView = findViewById<ComposeView>(R.id.pinLockComposeView)
+        pinLockComposeView = composeView
+        composeView.setContent {
             ComposeAppTheme {
                 val calculatorMode by localStorage.isCalculatorModeEnabledFlow
                     .collectAsStateWithLifecycle()
@@ -244,24 +256,45 @@ open class MainActivity : BaseActivity() {
             ) { locked, calculatorMode -> locked to calculatorMode }
                 .collect { (isLocked, calculatorMode) ->
                     showPinLockScreen = isLocked
-                    pinLockComposeView.visibility = if (isLocked) VISIBLE else GONE
+                    pinLockComposeView?.visibility = if (isLocked) VISIBLE else GONE
                     applyTaskDescription(calculatorMode)
                     applyLockWindowFlags(isLocked, calculatorMode)
+                    if (isLocked) {
+                        dismissOpenDialogFragments()
+                    }
                 }
         }
     }
 
+    // BottomSheet/DialogFragments live in their own Window — they render above the
+    // in-activity lock/calculator screen and would leak wallet UI through the disguise.
+    private fun dismissOpenDialogFragments() {
+        collectDialogFragments(supportFragmentManager).forEach {
+            it.dismissAllowingStateLoss()
+        }
+    }
+
+    private fun collectDialogFragments(fm: FragmentManager): List<DialogFragment> {
+        val result = mutableListOf<DialogFragment>()
+        fm.fragments.forEach { fragment ->
+            if (fragment is DialogFragment) {
+                result += fragment
+            }
+            if (fragment != null && fragment.isAdded) {
+                result += collectDialogFragments(fragment.childFragmentManager)
+            }
+        }
+        return result
+    }
+
     private fun showCalculatorLockScreenInRecents() {
-        if (!localStorage.isCalculatorModeEnabled ||
-            !pinComponent.isPinSet ||
-            !::pinLockComposeView.isInitialized
-        ) {
+        val composeView = pinLockComposeView ?: return
+        if (!localStorage.isCalculatorModeEnabled || !pinComponent.isPinSet) {
             return
         }
 
-        pinComponent.lock()
         showPinLockScreen = true
-        pinLockComposeView.visibility = VISIBLE
+        composeView.visibility = VISIBLE
         applyTaskDescription(calculatorMode = true)
         applyLockWindowFlags(isLocked = true, calculatorMode = true)
     }

@@ -14,6 +14,10 @@
     <string name="Button_Next">Next</string>
     <string name="Button_Enable">Enable</string>
     <string name="Button_Disable">Disable</string>
+    <string name="button_enable">Inschakelen</string>
+    <string name="button_disable">Uitschakelen</string>
+    <string name="button_do_not_enable">Niet inschakelen</string>
+    <string name="button_do_not_disable">Niet uitschakelen</string>
     <string name="Button_Close">Close</string>
     <string name="Button_Ok">OK</string>
     <string name="Button_Done">Done</string>
@@ -1581,6 +1585,8 @@ De app stelt u in staat een back-up te maken met een eenvoudig wachtwoord voor u
     <string name="push_notification">Pushmeldingen</string>
     <string name="premium_push_notifications_show">Meldingen tonen</string>
     <string name="premium_push_notifications_warning">Om transactiemeldingen te ontvangen, kan de app voor geselecteerde blockchains actief blijven op de achtergrond. Dit kan het batterijverbruik verhogen, ook wanneer u de app niet gebruikt.</string>
+    <string name="push_notifications_calculator_mode_warning">De rekenmachinemodus is ingeschakeld. Pushmeldingen kunnen onthullen dat er een crypto-app op dit apparaat staat. Weet u zeker dat u meldingen wilt inschakelen?</string>
+    <string name="calculator_mode_push_notifications_warning">Pushmeldingen zijn ingeschakeld. De app kan zelfs in de rekenmachinemodus walletmeldingen tonen. Wilt u pushmeldingen uitschakelen om de privacy te verbeteren?</string>
     <string name="push_notification_polling_interval">Controle-interval</string>
     <string name="push_notification_interval_realtime">Realtime</string>
     <string name="push_notification_interval_5min">Elke 5 minuten</string>

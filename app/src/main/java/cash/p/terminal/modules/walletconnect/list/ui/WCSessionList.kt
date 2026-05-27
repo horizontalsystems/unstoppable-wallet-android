@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,7 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,6 +41,8 @@ import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead1_grey
 import cash.p.terminal.ui_compose.components.HudHelper
+import cash.p.terminal.ui_compose.components.getShape
+import cash.p.terminal.ui_compose.components.showDivider
 
 @Composable
 fun WCSessionList(
@@ -157,16 +157,4 @@ private fun LazyListScope.WCSection(
             )
         }
     }
-}
-
-fun getShape(itemsCount: Int, index: Int): Shape = when {
-    itemsCount == 1 -> RoundedCornerShape(12.dp)
-    itemsCount - 1 == index -> RoundedCornerShape(0.dp, 0.dp, 12.dp, 12.dp)
-    0 == index -> RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp)
-    else -> RoundedCornerShape(0.dp)
-}
-
-fun showDivider(itemsCount: Int, index: Int): Boolean = when {
-    itemsCount == 1 || index == 0 -> false
-    else -> true
 }

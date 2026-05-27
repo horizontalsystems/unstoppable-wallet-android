@@ -11,9 +11,15 @@ class CalculatorModeService(
     private val pinComponent: IPinComponent,
 ) {
 
-    fun enable(pinExistedBefore: Boolean) {
+    fun enable(
+        pinExistedBefore: Boolean,
+        disablePushNotifications: Boolean = false,
+    ) {
         if (localStorage.isCalculatorModeEnabled) return
 
+        if (disablePushNotifications) {
+            localStorage.pushNotificationsEnabled = false
+        }
         localStorage.calculatorModeCreatedPin = !pinExistedBefore
 
         val currentIcon = localStorage.appIcon ?: AppIcon.Main

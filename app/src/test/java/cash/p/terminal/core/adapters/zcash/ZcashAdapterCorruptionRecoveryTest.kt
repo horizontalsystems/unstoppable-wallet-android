@@ -3,6 +3,7 @@ package cash.p.terminal.core.adapters.zcash
 import android.content.Context
 import android.database.sqlite.SQLiteDatabaseCorruptException
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.TestDispatcherProvider
 import cash.p.terminal.core.managers.BackgroundKeepAliveManager
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.domain.usecase.ClearZCashWalletDataUseCase
@@ -40,6 +41,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -178,6 +180,7 @@ class ZcashAdapterCorruptionRecoveryTest {
             localStorage = localStorage,
             backgroundManager = backgroundManager,
             singleUseAddressManager = singleUseAddressManager,
+            dispatcherProvider = TestDispatcherProvider(dispatcher, testScope),
         )
     }
 
@@ -186,6 +189,7 @@ class ZcashAdapterCorruptionRecoveryTest {
         if (::adapter.isInitialized) {
             adapter.stop()
         }
+        testScope.cancel()
         stopKoin()
         Dispatchers.resetMain()
         unmockkAll()

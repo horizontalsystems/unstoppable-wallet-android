@@ -54,8 +54,6 @@ import cash.p.terminal.modules.blockchainstatus.EvmBlockchainStatusProvider
 import cash.p.terminal.modules.btcblockchainsettings.BlockchainSettingCell
 import cash.p.terminal.modules.evmnetwork.addrpc.AddRpcScreen
 import cash.p.terminal.modules.walletconnect.list.ui.ActionsRow
-import cash.p.terminal.modules.walletconnect.list.ui.getShape
-import cash.p.terminal.modules.walletconnect.list.ui.showDivider
 import cash.p.terminal.navigation.navigateUpSafely
 import cash.p.terminal.navigation.popBackStackSafely
 import cash.p.terminal.strings.helpers.TranslatableString
@@ -71,8 +69,9 @@ import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_jacob
 import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.getShape
+import cash.p.terminal.ui_compose.components.showDivider
 import cash.p.terminal.ui_compose.components.subhead2_grey
-
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.chartview.rememberAsyncImagePainterWithFallback
 import io.horizontalsystems.core.entities.Blockchain

@@ -14,6 +14,8 @@ import cash.p.terminal.modules.pin.unlock.AttemptPinUnlockUseCase
 import cash.p.terminal.strings.helpers.Translator
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
 import java.text.DecimalFormatSymbols
 import java.util.Locale
 
@@ -43,8 +45,12 @@ class CalculatorLockScreenViewModel(
     fun onDigitClick(digit: Char) {
         if (!digit.isDigit()) return
         if (uiState.expression.lastOrNull() == '%') return
+        if (currentNumber().count { it.isDigit() } >= MAX_DIGITS_PER_NUMBER) return
         appendToExpression(digit.toString())
     }
+
+    private fun currentNumber(): String =
+        uiState.expression.takeLastWhile { it.isDigit() || it == decimalSeparator }
 
     fun onOperatorClick(operator: Char) {
         if (operator !in OPERATORS) return
@@ -76,9 +82,8 @@ class CalculatorLockScreenViewModel(
     }
 
     fun onDecimalClick() {
-        val current = uiState.expression
-        if (current.lastOrNull() == '%') return
-        val lastNumber = current.takeLastWhile { it.isDigit() || it == decimalSeparator }
+        if (uiState.expression.lastOrNull() == '%') return
+        val lastNumber = currentNumber()
         if (lastNumber.contains(decimalSeparator)) return
         if (lastNumber.isEmpty()) {
             appendToExpression("0$decimalSeparator")
@@ -125,13 +130,10 @@ class CalculatorLockScreenViewModel(
         return last !in BINARY_OPERATORS && last != '('
     }
 
-    private fun lastNumberStart(expression: String): Int {
-        var i = expression.length
-        while (i > 0 && (expression[i - 1].isDigit() || expression[i - 1] == decimalSeparator)) {
-            i--
-        }
-        return i
-    }
+    private fun lastNumberStart(expression: String): Int =
+        expression.length - expression.takeLastWhile {
+            it.isDigit() || it == decimalSeparator
+        }.length
 
     private fun stripTrailingUnaryMinus(expression: String) {
         if (expression.last() != '-') return
@@ -219,6 +221,7 @@ class CalculatorLockScreenViewModel(
     }
 
     private fun updateExpression(newExpression: String) {
+        if (newExpression.length > MAX_EXPRESSION_LENGTH) return
         val live = liveResultOrNull(newExpression)
         uiState = uiState.copy(
             expression = newExpression,
@@ -244,13 +247,35 @@ class CalculatorLockScreenViewModel(
     }
 
     private fun formatForDisplay(value: BigDecimal): String {
-        val stripped = value.stripTrailingZeros()
-        val plain = if (stripped.scale() <= 0) {
-            stripped.toBigInteger().toString()
+        val formatted = formatNumber(value)
+        return if (decimalSeparator == '.') formatted else formatted.replace('.', decimalSeparator)
+    }
+
+    private fun formatNumber(value: BigDecimal): String {
+        if (value.signum() == 0) return "0"
+        val rounded = value.round(DISPLAY_CONTEXT).stripTrailingZeros()
+        val absRounded = rounded.abs()
+        val needsScientific = absRounded >= SCIENTIFIC_THRESHOLD_LARGE ||
+            absRounded < SCIENTIFIC_THRESHOLD_SMALL
+        return if (needsScientific) scientificString(rounded) else plainString(rounded)
+    }
+
+    private fun plainString(value: BigDecimal): String =
+        if (value.scale() <= 0) {
+            value.toBigInteger().toString()
         } else {
-            stripped.toPlainString()
+            value.toPlainString()
         }
-        return if (decimalSeparator == '.') plain else plain.replace('.', decimalSeparator)
+
+    private fun scientificString(value: BigDecimal): String {
+        val formatted = String.format(
+            Locale.US,
+            "%." + (MAX_SIGNIFICANT_DIGITS - 1) + "e",
+            value,
+        )
+        val (mantissa, exponent) = formatted.split('e')
+        val cleanMantissa = mantissa.trimEnd('0').trimEnd('.')
+        return cleanMantissa + "e" + exponent
     }
 
     private fun BigDecimal.toPinCandidate(): String? {
@@ -263,6 +288,12 @@ class CalculatorLockScreenViewModel(
     }
 
     companion object {
+        private const val MAX_DIGITS_PER_NUMBER = 15
+        private const val MAX_EXPRESSION_LENGTH = 64
+        private const val MAX_SIGNIFICANT_DIGITS = 15
+        private val DISPLAY_CONTEXT = MathContext(MAX_SIGNIFICANT_DIGITS, RoundingMode.HALF_UP)
+        private val SCIENTIFIC_THRESHOLD_LARGE: BigDecimal = BigDecimal.TEN.pow(MAX_SIGNIFICANT_DIGITS)
+        private val SCIENTIFIC_THRESHOLD_SMALL: BigDecimal = BigDecimal("1E-6")
         private val BINARY_OPERATORS = setOf('+', '-', '×', '÷')
         private val OPERATORS = BINARY_OPERATORS + '%'
     }

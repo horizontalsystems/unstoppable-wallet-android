@@ -36,7 +36,6 @@ class TrezorDeepLinkManager(
     suspend fun call(
         method: TrezorMethod,
         params: JsonObject = JsonObject(emptyMap()),
-        clearSession: Boolean = true
     ): TrezorResponse = mutex.withLock {
         val deferred = CompletableDeferred<TrezorResponse>()
         val token = UUID.randomUUID().toString()
@@ -46,15 +45,12 @@ class TrezorDeepLinkManager(
         val callback = "$CALLBACK_SCHEME://$CALLBACK_HOST?$PARAM_REQUEST_TOKEN=$token"
         val url = buildUrl(method, params, callback)
 
-        val flags = if (clearSession) {
-            Intent.FLAG_ACTIVITY_NEW_TASK or
-                Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                Intent.FLAG_ACTIVITY_CLEAR_TASK
-        } else {
-            Intent.FLAG_ACTIVITY_NEW_TASK
-        }
+        // Trezor Suite's MainActivity uses launchMode=singleTask. FLAG_ACTIVITY_NEW_TASK is
+        // sufficient to route through onNewIntent when it's already running and to start it
+        // cold when it isn't. CLEAR_TASK/CLEAR_TOP would tear down the React Native bridge
+        // mid-flight and cause the USB session to detach with Device_Disconnected.
         val intent = Intent(Intent.ACTION_VIEW, url.toUri()).apply {
-            addFlags(flags)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             setPackage(TREZOR_SUITE_PACKAGE)
         }
         try {
@@ -113,7 +109,7 @@ class TrezorDeepLinkManager(
 
     companion object {
         private const val BASE_URL = "https://connect.trezor.io/9/deeplink/1/"
-        private const val CALLBACK_SCHEME = "pcash"
+        private const val CALLBACK_SCHEME = "pcash-trezor"
         private const val CALLBACK_HOST = "trezor-result"
         private const val APP_NAME = "P.CASH"
         internal const val PARAM_REQUEST_TOKEN = "requestToken"

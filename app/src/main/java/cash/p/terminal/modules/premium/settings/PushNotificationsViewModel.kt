@@ -45,6 +45,7 @@ internal class PushNotificationsViewModel(
         showFiatAmount = showFiatAmount,
         blockchains = blockchainViewItems,
         loading = loading,
+        isCalculatorModeEnabled = localStorage.isCalculatorModeEnabled,
     )
 
     fun setShowNotifications(enabled: Boolean) {
@@ -138,6 +139,7 @@ internal data class PushNotificationsUiState(
     val showFiatAmount: Boolean,
     val blockchains: List<PushNotificationBlockchainViewItem>,
     val loading: Boolean,
+    val isCalculatorModeEnabled: Boolean,
 )
 
 internal data class PushNotificationBlockchainViewItem(

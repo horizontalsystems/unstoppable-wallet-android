@@ -4,6 +4,7 @@ import android.content.Context
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ISendZcashAdapter
+import cash.p.terminal.core.managers.LocallyCreatedTransactionRepository
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.domain.usecase.ClearZCashWalletDataUseCase
 import cash.p.terminal.wallet.Account
@@ -20,6 +21,7 @@ import cash.p.terminal.wallet.WalletFactory
 import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
+import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.ISmsNotificationSettings
@@ -40,8 +42,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 import java.math.BigDecimal
 import kotlin.test.assertEquals
 
@@ -87,6 +93,9 @@ class SendZecOnDuressUseCaseTest {
     @MockK
     private lateinit var accountManager: IAccountManager
 
+    @MockK(relaxed = true)
+    private lateinit var locallyCreatedTransactionRepository: LocallyCreatedTransactionRepository
+
     private lateinit var testScope: TestScope
     private lateinit var useCase: SendZecOnDuressUseCase
 
@@ -95,6 +104,13 @@ class SendZecOnDuressUseCaseTest {
         MockKAnnotations.init(this, relaxUnitFun = true)
         testScope = TestScope()
         every { dispatcherProvider.applicationScope } returns testScope
+        startKoin {
+            modules(
+                module {
+                    single { locallyCreatedTransactionRepository }
+                }
+            )
+        }
 
         useCase = SendZecOnDuressUseCase(
             smsNotificationSettings = smsNotificationSettings,
@@ -109,8 +125,13 @@ class SendZecOnDuressUseCaseTest {
             coinManager = coinManager,
             walletFactory = walletFactory,
             clearZCashWalletDataUseCase = clearZCashWalletDataUseCase,
-            accountManager = accountManager
+            accountManager = accountManager,
         )
+    }
+
+    @After
+    fun tearDown() {
+        stopKoin()
     }
 
     // ==================== sendIfEnabled Early Exit Tests ====================
@@ -446,7 +467,7 @@ class SendZecOnDuressUseCaseTest {
             every { fee } returns feeFlow
             every { start() } just runs
             every { stop() } just runs
-            coEvery { send(any(), any(), any(), any()) } returns mockk()
+            coEvery { send(any(), any(), any(), any()) } returns FirstClassByteArray(ByteArray(32) { it.toByte() })
         }.also {
             if (synced) syncFlow.tryEmit(Unit)
         }

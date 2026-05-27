@@ -43,7 +43,7 @@ class HardwareWalletStellarSigner(private val hardwarePublicKey: HardwarePublicK
             }
 
             is CompletionResult.Failure -> {
-                throw Exception("Signing failed: ${signBytesResponse.error}")
+                throw signBytesResponse.error
             }
         }
     }

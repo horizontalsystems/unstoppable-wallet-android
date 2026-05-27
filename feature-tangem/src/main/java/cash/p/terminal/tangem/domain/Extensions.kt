@@ -1,12 +1,15 @@
 package cash.p.terminal.tangem.domain
 
 import cash.p.terminal.wallet.entities.TokenType
+import com.tangem.common.core.TangemSdkError
 import com.tangem.crypto.hdWallet.DerivationNode
 import com.tangem.crypto.hdWallet.DerivationPath
 import io.horizontalsystems.ethereumkit.crypto.CryptoUtils.CURVE
 import io.horizontalsystems.ethereumkit.crypto.CryptoUtils.HALF_CURVE_ORDER
 import io.horizontalsystems.hdwalletkit.ECDSASignature
 import io.horizontalsystems.hdwalletkit.HDWallet
+
+fun Throwable.isHardwareWalletUserCancelled(): Boolean = this is TangemSdkError.UserCancelled
 
 internal fun ECDSASignature.canonicalise() = if (s > HALF_CURVE_ORDER) {
     ECDSASignature(r, CURVE.n.subtract(s))
@@ -60,7 +63,7 @@ internal fun DerivationPath.replacePurpose(purpose: Long, isHardened: Boolean): 
 internal fun DerivationPath.getPurpose(): HDWallet.Purpose? {
     val segments = nodes.toMutableList()
     return if (segments.isNotEmpty()) {
-        return when (segments[0].pathDescription.removeSuffix("'").toIntOrNull()) {
+        when (segments[0].pathDescription.removeSuffix("'").toIntOrNull()) {
             HDWallet.Purpose.BIP44.value -> HDWallet.Purpose.BIP44
             HDWallet.Purpose.BIP49.value -> HDWallet.Purpose.BIP49
             HDWallet.Purpose.BIP84.value -> HDWallet.Purpose.BIP84

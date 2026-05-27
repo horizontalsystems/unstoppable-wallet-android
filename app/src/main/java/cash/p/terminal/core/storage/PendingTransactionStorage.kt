@@ -11,6 +11,8 @@ class PendingTransactionStorage(appDatabase: AppDatabase) {
 
     suspend fun updateTxId(id: String, txId: String) = dao.updateTxId(id, txId)
 
+    suspend fun getById(id: String): PendingTransactionEntity? = dao.getById(id)
+
     fun getActivePendingFlow(walletId: String): Flow<List<PendingTransactionEntity>> =
         dao.getActivePendingFlow(System.currentTimeMillis(), walletId)
 
