@@ -321,7 +321,8 @@ class SendZecOnDuressUseCase(
                     addressSpecTyped = addressType,
                     localStorage = localStorage,
                     backgroundManager = backgroundManager,
-                    singleUseAddressManager = singleUseAddressManager
+                    singleUseAddressManager = singleUseAddressManager,
+                    dispatcherProvider = getKoinInstance()
                 )
                 return AdapterInfo(adapter, addressType, alias)
             } catch (e: IllegalStateException) {

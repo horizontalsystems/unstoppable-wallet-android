@@ -15,8 +15,11 @@ import cash.p.terminal.premium.domain.usecase.GetBnbAddressUseCaseImpl
 import cash.p.terminal.premium.domain.usecase.SeedToEvmAddressUseCase
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
+
+const val PREMIUM_IS_DEBUG_QUALIFIER = "premiumIsDebug"
 
 val featurePremiumModule = module {
     // Database
@@ -36,6 +39,8 @@ val featurePremiumModule = module {
     singleOf(::CheckPremiumUseCaseImpl) bind CheckPremiumUseCase::class
     singleOf(::GetBnbAddressUseCaseImpl) bind GetBnbAddressUseCase::class
     factoryOf(::SeedToEvmAddressUseCase)
-    factoryOf(::CheckTrialPremiumUseCase)
+    factory {
+        CheckTrialPremiumUseCase(get(), get(), get(), get(named(PREMIUM_IS_DEBUG_QUALIFIER)))
+    }
     factoryOf(::ActivateTrialPremiumUseCase)
 }

@@ -60,6 +60,7 @@ import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
 import io.horizontalsystems.bitcoincore.extensions.toReversedHex
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
+import io.horizontalsystems.core.DispatcherProvider
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.logger.AppLogger
 import io.reactivex.BackpressureStrategy
@@ -103,6 +104,7 @@ class ZcashAdapter(
     private val localStorage: ILocalStorage,
     private val backgroundManager: BackgroundManager,
     private val singleUseAddressManager: ZcashSingleUseAddressManager,
+    private val dispatcherProvider: DispatcherProvider,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter,
     OneTimeReceiveAdapter {
     private var accountBirthday = 0L
@@ -464,7 +466,7 @@ class ZcashAdapter(
         closeSynchronizer()
     }
 
-    override suspend fun refresh() = withContext(Dispatchers.IO) {
+    override suspend fun refresh() = withContext(dispatcherProvider.io) {
         with(synchronizer as SdkSynchronizer) {
             refreshAllBalances()
             refreshTransactions()
@@ -615,7 +617,7 @@ class ZcashAdapter(
     private suspend fun calculateFee(
         balance: Zatoshi = walletBalance.available + walletBalance.pending,
         tryCounter: Int = 4
-    ): Unit = withContext(Dispatchers.IO) {
+    ): Unit = withContext(dispatcherProvider.io) {
         try {
             if (balance == Zatoshi(0)) {
                 _fee.value = MINERS_FEE
@@ -679,7 +681,7 @@ class ZcashAdapter(
         )
     }
 
-    suspend fun proposeShielding(): FirstClassByteArray = withContext(Dispatchers.IO) {
+    suspend fun proposeShielding(): FirstClassByteArray = withContext(dispatcherProvider.io) {
         val spendingKey =
             DerivationTool.getInstance()
                 .deriveUnifiedSpendingKey(seed, network, zcashAccount?.hdAccountIndex!!)
@@ -878,7 +880,7 @@ class ZcashAdapter(
         startOneTimeAddressBalanceCheck()
     }
 
-    private suspend fun checkTransparentAddressesBalance() = withContext(Dispatchers.IO) {
+    private suspend fun checkTransparentAddressesBalance() = withContext(dispatcherProvider.io) {
         val addresses = singleUseAddressManager.getAddressesForBalanceCheck()
         val sdk = synchronizer as? SdkSynchronizer ?: return@withContext
 
