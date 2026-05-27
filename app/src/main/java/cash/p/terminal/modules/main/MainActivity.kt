@@ -13,6 +13,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -240,8 +242,32 @@ open class MainActivity : BaseActivity() {
                     pinLockComposeView.visibility = if (isLocked) VISIBLE else GONE
                     applyTaskDescription(calculatorMode)
                     applyLockWindowFlags(isLocked, calculatorMode)
+                    if (isLocked) {
+                        dismissOpenDialogFragments()
+                    }
                 }
         }
+    }
+
+    // BottomSheet/DialogFragments live in their own Window — they render above the
+    // in-activity lock/calculator screen and would leak wallet UI through the disguise.
+    private fun dismissOpenDialogFragments() {
+        collectDialogFragments(supportFragmentManager).forEach {
+            it.dismissAllowingStateLoss()
+        }
+    }
+
+    private fun collectDialogFragments(fm: FragmentManager): List<DialogFragment> {
+        val result = mutableListOf<DialogFragment>()
+        fm.fragments.forEach { fragment ->
+            if (fragment is DialogFragment) {
+                result += fragment
+            }
+            if (fragment != null && fragment.isAdded) {
+                result += collectDialogFragments(fragment.childFragmentManager)
+            }
+        }
+        return result
     }
 
     private fun showCalculatorLockScreenInRecents() {
